@@ -20,6 +20,7 @@ namespace Wiwa
 	};
 }
 
+
 REFLECTION_BEGIN(Wiwa::Checkbox)
 	REFLECT_MEMBER(canClick)
 	REFLECT_MEMBER(elementImageid)

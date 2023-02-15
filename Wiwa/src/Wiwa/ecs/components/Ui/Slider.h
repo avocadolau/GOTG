@@ -26,6 +26,7 @@ namespace Wiwa
 	};
 }
 
+
 REFLECTION_BEGIN(Wiwa::Slider)
 	REFLECT_MEMBER(canClick)
 	REFLECT_MEMBER(elementImageid)
