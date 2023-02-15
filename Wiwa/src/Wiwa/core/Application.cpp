@@ -20,11 +20,11 @@
 #include "Renderer3D.h"
 #include "Renderer2D.h"
 
+// Systems
 #include <Wiwa/ecs/systems/SpriteRenderer.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
-
-#include <Wiwa/ecs/components/Transform3D.h>
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
 
 #include <Wiwa/scene/SceneManager.h>
 
