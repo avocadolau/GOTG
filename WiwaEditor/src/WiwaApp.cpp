@@ -21,7 +21,7 @@ public:
 
 		PushOverlay(new EditorLayer());
 
-		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>("assets/Textures/Building_V01_C.png");
+		/*ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>("assets/Textures/Building_V01_C.png");
 
 		Wiwa::Image* img = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
 
@@ -30,7 +30,7 @@ public:
 		Wiwa::Vector2i pos = { 0,0 };
 		Wiwa::Size2i size = img->GetSize();
 
-		r2d.CreateInstancedQuadTex(img->GetTextureId(), img->GetSize(), pos, size, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.CreateInstancedQuadTex(img->GetTextureId(), img->GetSize(), pos, size, Wiwa::Renderer2D::Pivot::UPLEFT);*/
 	}
 
 	~WiwaApp()
