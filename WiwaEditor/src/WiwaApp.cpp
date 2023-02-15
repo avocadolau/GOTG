@@ -8,7 +8,7 @@
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/core/Renderer3D.h>
-//A
+
 USE_REFLECTION;
 class WiwaApp : public Wiwa::Application
 {
