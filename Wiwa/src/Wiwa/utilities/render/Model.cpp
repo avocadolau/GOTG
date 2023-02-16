@@ -99,12 +99,12 @@ namespace Wiwa {
 
 						texture_path = std::filesystem::relative(texture_path);
 
-						id = Resources::Load<Shader>("resources/shaders/model_texture");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/model_texture");
+						id = Resources::Load<Shader>("resources/shaders/light/lit_model_textured");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_textured");
 						Resources::Import<Image>(texture_path.string().c_str());
 						uint32_t imgId = Resources::Load<Image>(texture_path.string().c_str());
 						Image* img = Resources::GetResourceById<Image>(imgId);
-						material.SetUniformData("u_Tex0", glm::ivec2(img->GetTextureId(), imgId));
+						material.SetUniformData("u_Texture", glm::ivec2(img->GetTextureId(), imgId));
 					}
 					else
 					{

@@ -27,11 +27,15 @@ namespace Wiwa {
 		SetOption(Options::CULL_FACE);
 
 		//Init default shaders with uniforms
-		ResourceId textShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/model_texture");
+		ResourceId textShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/lit_model_textured");
 		Shader* textShader = Wiwa::Resources::GetResourceById<Shader>(textShaderId);
-		textShader->Compile("resources/shaders/model_texture");
-		textShader->addUniform("u_Tex0", UniformType::Sampler2D);
-		Wiwa::Resources::Import<Shader>("resources/shaders/model_texture", textShader);
+		textShader->Compile("resources/shaders/light/lit_model_textured");
+		textShader->addUniform("u_Texture", UniformType::Sampler2D);
+		textShader->addUniform("u_SpecularValue", UniformType::Float);
+		textShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		textShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		textShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/lit_model_textured", textShader);
 
 		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/model_color");
 		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
@@ -165,8 +169,10 @@ namespace Wiwa {
 		model = parent_model * model;
 
 		// Material bind
-		material->getShader()->Bind();
-		material->getShader()->SetMVP(model, camera->getView(), camera->getProjection());
+		Shader* matShader = material->getShader();
+		matShader->Bind();
+		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+		SetUpLight(matShader, camera, directional, pointLights);
 
 		material->Bind();
 
@@ -260,8 +266,10 @@ namespace Wiwa {
 
 		camera->frameBuffer->Bind(clear);
 
-		material->getShader()->Bind();
-		material->getShader()->SetMVP(transform, camera->getView(), camera->getProjection());
+		Shader* matShader = material->getShader();
+		matShader->Bind();
+		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
+		SetUpLight(matShader, camera, directional, pointLights);
 
 		material->Bind();
 
@@ -423,8 +431,8 @@ namespace Wiwa {
 	}
 	void Renderer3D::SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights)
 	{
-		matShader->SetCameraPos(camera->getPosition());
-		if (directional > -1)
+		matShader->setUniform(matShader->getUniformLocation("u_CameraPosition"), camera->getPosition());
+		if (directional != -1)
 		{
 			DirectionalLight* dirLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<DirectionalLight>(directional);
 			if (dirLight)
@@ -432,7 +440,7 @@ namespace Wiwa {
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Color"), dirLight->Color);
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.AmbientIntensity"), dirLight->AmbientIntensity);
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.DiffuseIntensity"), dirLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), dirLight->Direction);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(dirLight->Direction));
 			}
 		}
 
