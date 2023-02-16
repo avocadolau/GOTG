@@ -13,7 +13,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiCheckbox(unsigned int id, Rect2i bounds, const char* text);
+		GuiCheckbox(unsigned int id, Rect2i bounds);
 		virtual ~GuiCheckbox();
 
 		bool Update(float dt);

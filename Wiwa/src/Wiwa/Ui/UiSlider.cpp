@@ -1,5 +1,5 @@
 #include <wipch.h>
-
+#include <Wiwa/core/Input.h>
 #include "UiSlider.h"
 
 
@@ -25,33 +25,33 @@ namespace Wiwa
 		{
 			if (canClick == true)
 			{
-				int mouseX, mouseY;
-				app->input->GetMousePosition(mouseX, mouseY);
+				float mouseX, mouseY;
+				mouseX = Wiwa::Input::GetMouseX();
+				mouseY = Wiwa::Input::GetMouseY();
 
-
-				if ((mouseX > bounds.x && mouseX < (bounds.x + bounds.w)) &&
-					(mouseY > bounds.y && mouseY < bounds.y + bounds.h))
+				if ((mouseX > bounds.x && mouseX < (bounds.x + bounds.width)) &&
+					(mouseY > bounds.y && mouseY < bounds.y + bounds.height))
 				{
 					state = GuiControlState::FOCUSED;
 					//extraBounds.x = mouseX;
-					if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+					if (Wiwa::Input::IsMouseButtonPressed(0))
 					{
 						state = GuiControlState::PRESSED;
 						extraBounds.x = extraBounds.x;
 						//cout << "Pressed " << endl;
 						//NotifyObserver();
 					}
-					else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+					else if (Wiwa::Input::IsMouseButtonPressed(0))
 					{
 						state = GuiControlState::SELECTED;
 						//cout << "Selected " << endl;
 						extraBounds.x = mouseX;
-						NotifyObserver();
+						/*NotifyObserver();*/
 					}
 					else
 					{
 						state = GuiControlState::NORMAL;
-						NotifyObserver();
+						/*NotifyObserver();*/
 					}
 				}
 			}

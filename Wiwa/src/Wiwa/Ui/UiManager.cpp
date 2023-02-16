@@ -5,36 +5,36 @@
 #include "UiButton.h"
 #include "UiCheckbox.h"
 #include "UiSlider.h"
+#include <Wiwa/core/Application.h>
 
 namespace Wiwa
 {
-	GuiManager::GuiManager(bool start_enabled)
+	GuiManager::GuiManager()
 	{
 
 	}
 
 	GuiManager::~GuiManager() {}
 
-	bool GuiManager::Start()
+	bool GuiManager::Init()
 	{
 		return true;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, const char* text, Rect2i bounds, Module* observer, Image* texture, Image* sliderTexture, Rect2i sliderBounds)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds,Image* texture, Image* sliderTexture, Rect2i sliderBounds)
 	{
-		// L14: TODO1_D: Create a GUI control and add it to the list of controls
-
+		
 		GuiControl* control = nullptr;
 
-		//Call the constructor according to the GuiControlType
+	
 		switch (type)
 		{
 		case GuiControlType::BUTTON:
-			control = new GuiButton(id, bounds, text, texture);
+			control = new GuiButton(id, bounds, texture);
 			break;
 
 		case GuiControlType::CHECKBOX:
-			control = new GuiCheckbox(id, bounds, text);
+			control = new GuiCheckbox(id, bounds);
 			break;
 		case GuiControlType::SLIDER:
 			control = new GuiSlider(id, bounds, sliderBounds, texture, sliderTexture);
@@ -43,76 +43,53 @@ namespace Wiwa
 			break;
 		}
 		//Set the observer
-		control->SetObserver(observer);
+		//control->SetObserver(observer);
 
 		// Created GuiControls are added to the list of controls
-		if (control != nullptr) controls.add(control);
+		if (control != nullptr) controls.push_back(control);
 		return control;
 	}
 
-	bool GuiManager::Update(float dt)
+	bool GuiManager::Update()
 	{
-		accumulatedTime += dt;
-		if (accumulatedTime >= updateMsCycle) doLogic = true;
-
-		UpdateAll(dt, doLogic);
-
-		if (doLogic == true)
+		
+		Wiwa::List<GuiControl*> control = controls;
+		for (int i = 0; i < control.size(); i++)
 		{
-			accumulatedTime = 0.0f;
-			doLogic = false;
+			control.at(i)->Update();
 		}
-
-		return true;
-	}
-
-	bool GuiManager::UpdateAll(float dt, bool doLogic) {
-
-		if (doLogic) {
-
-			ListItem<GuiControl*>* control = controls.start;
-
-			while (control != nullptr)
-			{
-				control->data->Update(dt);
-				control = control->next;
-			}
-
-		}
-		return true;
-
 	}
 
 	bool GuiManager::Draw()
 	{
-
-		ListItem<GuiControl*>* control = controls.start;
-
-		while (control != nullptr)
+		Wiwa::List<GuiControl*> control = controls;
+		
+		for (int i = 0; i < control.size(); i++)
 		{
-			control->data->Draw(app->render);
-			control = control->next;
+			control.at(i)->Draw(&Wiwa::Application::Get().GetRenderer2D());
 		}
-
 		return true;
 
 	}
 	void GuiManager::DestroyGuiControl(int id)
 	{
-		ListItem<GuiControl*>* control = controls.start;
-		while (control != nullptr)
-		{
-			if (control->data->id == id)
-			{
-				controls.del(control);
-			}
-			control = control->next;
-		}
+		Wiwa::List<GuiControl*> control = controls;
 
+		for (int i = 0; i < control.size(); i++)
+		{
+			if (control.at(i) != nullptr)
+			{
+				if (control.at(i)->id == id)
+				{
+					control.erase(i);
+				}
+			}
+			control.at(i)->Draw(&Wiwa::Application::Get().GetRenderer2D());
+		}
 	}
 	bool GuiManager::CleanUp()
 	{
-		ListItem<GuiControl*>* control = controls.start;
+		/*Wiwa::List<GuiControl*> control = controls;
 
 		while (control != nullptr)
 		{
@@ -121,6 +98,6 @@ namespace Wiwa
 
 		return true;
 
-		return false;
+		return false;*/
 	}
 }

@@ -24,12 +24,10 @@ namespace Wiwa
 		static bool Init();
 
 		// Update audio engine events
-		static bool Update();
+		bool Update();
 
 		// Terminate audio engine
 		static bool Terminate();
-
-		bool UpdateAll(float dt, bool logic);
 
 		bool Draw();
 
@@ -37,7 +35,7 @@ namespace Wiwa
 		bool CleanUp();
 
 		// Additional methods
-		GuiControl* CreateGuiControl(GuiControlType type, int id, const char* text, Rect2i bounds, Module* observer, Image* texture, Image* sliderTexture, Rect2i sliderBounds);
+		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,Image* texture, Image* sliderTexture, Rect2i sliderBounds);
 		void DestroyGuiControl(int id);
 		void AddGuiControl(GuiControl* entity);
 

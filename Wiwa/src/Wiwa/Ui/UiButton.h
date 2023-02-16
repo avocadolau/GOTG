@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiButton(unsigned int id, Rect2i bounds, char text[32], Image* texture);
+		GuiButton(unsigned int id, Rect2i bounds, Image* texture);
 		virtual ~GuiButton();
 
 		bool Update(float dt);

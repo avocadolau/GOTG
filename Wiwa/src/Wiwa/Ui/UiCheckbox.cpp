@@ -1,13 +1,12 @@
 #include <wipch.h>
-
+#include <Wiwa/core/Input.h>
 #include "UiCheckbox.h"
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(unsigned int id, Rect2i bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
+	GuiCheckbox::GuiCheckbox(unsigned int id, Rect2i bounds) : GuiControl(GuiControlType::BUTTON, id)
 	{
 		this->bounds = bounds;
-		this->text = text;
 
 		canClick = true;
 	}
@@ -22,21 +21,22 @@ namespace Wiwa
 		if (state != GuiControlState::DISABLED)
 		{
 			// L14: TODO 3_D: Update the state of the GUiButton according to the mouse position
-			int mouseX, mouseY;
-			app->input->GetMousePosition(mouseX, mouseY);
+			float mouseX, mouseY;
+			mouseX = Wiwa::Input::GetMouseX();
+			mouseY = Wiwa::Input::GetMouseY();
 
-			if ((mouseX > bounds.x && mouseX < (bounds.x + bounds.w)) &&
-				(mouseY > bounds.y && mouseY < bounds.y + bounds.h))
+			if ((mouseX > bounds.x && mouseX < (bounds.x + bounds.width)) &&
+				(mouseY > bounds.y && mouseY < bounds.y + bounds.height))
 			{
 				state = GuiControlState::FOCUSED;
 
-				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+				if (Wiwa::Input::IsMouseButtonPressed(0))
 				{
 					state = GuiControlState::PRESSED;
 					//cout << "Pressed " << endl;
-					NotifyObserver();
+					//NotifyObserver();
 				}
-				else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+				else if (Wiwa::Input::IsMouseButtonPressed(0))
 				{
 					state = GuiControlState::SELECTED;
 					//cout << "Selected " << endl;
@@ -63,7 +63,7 @@ namespace Wiwa
 		case GuiControlState::DISABLED:
 		{
 
-			render->DrawTexture2(texture, bounds.x, bounds.y, NULL); //<--Usar esto
+			render->CreateInstancedQuadTex(texture, bounds.x, bounds.y, NULL); //<--Usar esto
 		} break;
 
 		case GuiControlState::NORMAL:
