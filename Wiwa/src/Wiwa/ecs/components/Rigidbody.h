@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+
+
 namespace Wiwa {
 	struct WI_API Rigidbody {
 		int x;

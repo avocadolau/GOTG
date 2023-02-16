@@ -37,7 +37,8 @@ project "Wiwa"
 		"%{IncludeDirs.assimp}",
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.Wwise}",
-		"%{IncludeDirs.IconFontCppHeaders}"
+		"%{IncludeDirs.IconFontCppHeaders}",
+		"%{IncludeDirs.bullet}"
 	}
 
 	links
@@ -55,7 +56,10 @@ project "Wiwa"
 		"%{Library.Wwise_MMgr}",
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
-		"%{Library.Wwise_SA}"
+		"%{Library.Wwise_SA}",
+		"%{Library.bullet_dynamics_release}",
+		"%{Library.bullet_collision_release}",
+		"%{Library.bullet_linear_math}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
