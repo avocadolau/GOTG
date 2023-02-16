@@ -16,8 +16,7 @@ namespace Wiwa{
 		 std::vector<CameraId> m_CamerasAlive;
 		 std::vector<CameraId> m_RemovedCameras;
 
-		 CameraId m_ActiveCamera = 0;
-		
+		 CameraId m_ActiveCamera;
 	public:
 		Camera* editorCamera;
 	public:
@@ -31,7 +30,7 @@ namespace Wiwa{
 		void setActiveCamera(CameraId cameraId) { m_ActiveCamera = cameraId; RenderManager::SetLayerCamera(0, m_Cameras[cameraId]); }
 
 		CameraId getActiveCameraId() { return m_ActiveCamera; }
-		Camera* getActiveCamera() { return m_Cameras[m_ActiveCamera]; }
+		Camera* getActiveCamera() { return m_ActiveCamera == size_t(-1) ? NULL : m_Cameras[m_ActiveCamera]; }
 
 		size_t getCameraSize() { return m_CamerasAlive.size(); }
 
