@@ -758,9 +758,10 @@ namespace Wiwa {
 	std::vector<Bone> Model::ParseMeshBones(const aiMesh* mesh)
 	{
 		std::vector<Bone> bList;
-		for (int i = 0; i <= mesh->mNumBones; i++)
+		for (int i = 0; i < mesh->mNumBones; i++)
 		{
-			
+			// here it breaks for some reason at i = 65 for some reason (working with mixamo riggings)
+			// for the moment, we will skip that 65th iteration so it works
 			bList.push_back(ParseSingleBone(i, *mesh->mBones[i]));
 		}
 		return bList;
@@ -778,10 +779,12 @@ namespace Wiwa {
 		//pBone.offset = bone.mOffsetMatrix;
 		
 		for (int i = 0; i <= bone.mNumWeights; i++) {
-			
-			// weights should be well loaded now
-			pBone.weights[i].weight = bone.mWeights[i].mWeight;
-			pBone.weights[i].vertexId = bone.mWeights[i].mVertexId;
+			if (bone.mWeights != NULL)
+			{
+				// weights should be well loaded now
+				pBone.weights[i].weight = bone.mWeights[i].mWeight;
+				pBone.weights[i].vertexId = bone.mWeights[i].mVertexId;
+			}
 		}
 
 		// return our bone struct (pbone)
