@@ -2,11 +2,14 @@
 #include <Wiwa/core/Input.h>
 #include "UiCheckbox.h"
 
+#include <Wiwa/ecs/systems/System.h>
+#include <Wiwa/core/Renderer2D.h>
+
 namespace Wiwa
 {
 	GuiCheckbox::GuiCheckbox(unsigned int id, Rect2i bounds) : GuiControl(GuiControlType::BUTTON, id)
 	{
-		this->bounds = bounds;
+		this->position = bounds;
 
 		canClick = true;
 	}
@@ -25,8 +28,8 @@ namespace Wiwa
 			mouseX = Wiwa::Input::GetMouseX();
 			mouseY = Wiwa::Input::GetMouseY();
 
-			if ((mouseX > bounds.x && mouseX < (bounds.x + bounds.width)) &&
-				(mouseY > bounds.y && mouseY < bounds.y + bounds.height))
+			if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
+				(mouseY > position.y && mouseY < position.y + position.height))
 			{
 				state = GuiControlState::FOCUSED;
 
@@ -57,38 +60,64 @@ namespace Wiwa
 	{
 
 		// Draw the right button depending on state
+		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+		Vector2i positionForUpdate_1;
+
 		switch (state)
 		{
 
 		case GuiControlState::DISABLED:
 		{
-
-			render->CreateInstancedQuadTex(texture, bounds.x, bounds.y, NULL); //<--Usar esto
+			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
+			
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			positionForUpdate_1.x = position.x;
+			positionForUpdate_1.y = position.y;
+			positionForUpdate_1.w = position.width;
+			positionForUpdate_1.h = position.height;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-
-			render->DrawTexture2(texture, bounds.x, bounds.y, NULL); //<--Usar esto
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			positionForUpdate_1.x = position.x;
+			positionForUpdate_1.y = position.y;
+			positionForUpdate_1.w = position.width;
+			positionForUpdate_1.h = position.height;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-
-			render->DrawTexture2(texture, bounds.x, bounds.y, NULL); //<--Usar esto
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			positionForUpdate_1.x = position.x;
+			positionForUpdate_1.y = position.y;
+			positionForUpdate_1.w = position.width;
+			positionForUpdate_1.h = position.height;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 		case GuiControlState::PRESSED:
 		{
-
-			render->DrawTexture2(texture, bounds.x, bounds.y, NULL); //<--Usar esto
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			positionForUpdate_1.x = position.x;
+			positionForUpdate_1.y = position.y;
+			positionForUpdate_1.w = position.width;
+			positionForUpdate_1.h = position.height;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		/******/
 
 		case GuiControlState::SELECTED:
 		{
-			render->DrawTexture2(texture, bounds.x, bounds.y, NULL); //<--Usar esto
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			positionForUpdate_1.x = position.x;
+			positionForUpdate_1.y = position.y;
+			positionForUpdate_1.w = position.width;
+			positionForUpdate_1.h = position.height;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		}break;
 		default:
 			break;

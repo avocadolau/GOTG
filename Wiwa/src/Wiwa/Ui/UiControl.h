@@ -70,13 +70,14 @@ namespace Wiwa
 		GuiControlState state;
 
 		char text[32];           // Control text (if required)
-		Rect2i bounds;        // Position and size
-		Rect2i extraBounds;
-		//SDL_Color color;        // Tint color
+		Rect2i position;        // Position and size
+		Rect2i extraPosition;	// Position and size for the bar
+		Color4f color;        // Tint color
 
 		Image* texture;
 		Image* textureForSlider;	// Texture atlas reference
 		Rect2i section;       // Texture atlas base section
+		Rect2i extraSection;       // Texture atlas base section for the bar
 
 		//Font font;              // Text font
 
