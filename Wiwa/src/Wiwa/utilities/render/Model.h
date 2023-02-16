@@ -39,7 +39,16 @@ namespace Wiwa {
 			meshIndexes.clear();
 		}
 	};
-
+	struct VertexWeight {
+		unsigned int vertexId;
+		float weight;
+	};
+	struct Bone {
+		std::string name;
+		unsigned int nWeights;
+		glm::mat4 offest;
+		VertexWeight* weights;
+	};
 	class WI_API Model
 	{
 	private:
@@ -59,6 +68,8 @@ namespace Wiwa {
 		std::vector<std::string> materials;
 
 		ModelHierarchy* model_hierarchy;
+
+
 
 		void generateBuffers();
 	private:
@@ -104,6 +115,9 @@ namespace Wiwa {
 
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
+
+		void ParseMeshBones(const aiMesh* mesh);
+		void ParseSingleBone(int boneIndex, aiBone bone);
 
 		void IsRoot(bool root) { is_root = root; }
 

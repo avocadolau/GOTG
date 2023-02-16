@@ -249,6 +249,12 @@ namespace Wiwa {
 		{
 			WI_CORE_INFO("Index buffer generated correctly");
 		}
+
+		//LOAD BONES
+		if (mesh->HasBones())
+		{
+			//parse bones
+		}
 		
 		return model;
 	}
@@ -745,6 +751,19 @@ namespace Wiwa {
 	void Model::LoadWiMesh(const char* file)
 	{
 		getWiMeshFromFile(file);
+	}
+
+	void Model::ParseMeshBones(const aiMesh* mesh)
+	{
+		for (int i = 0; i <= mesh->mNumBones; i++)
+		{
+		//	ParseSingleBone(i, mesh->mBones[i]);
+		}
+	}
+
+	void Model::ParseSingleBone(int boneIndex, aiBone bone)
+	{ 
+		//for(int i = 0; i <= bone)
 	}
 
 	Model* Model::GetModelFromFile(const char* file, ModelSettings* settings)
