@@ -11,6 +11,7 @@ namespace Wiwa
 	enum class GuiControlType
 	{
 		BUTTON,
+		TEXT,
 		TOGGLE,
 		CHECKBOX,
 		SLIDER,
