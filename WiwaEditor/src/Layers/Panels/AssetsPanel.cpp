@@ -13,7 +13,7 @@
 #include "../EditorLayer.h"
 #include "../../Utils/EditorUtils.h"
 
-static const std::filesystem::path s_AssetsPath = "Assets";
+static const std::filesystem::path s_AssetsPath = "assets";
 
 std::vector<std::function<void()>> AssetsPanel::m_AssetsThreadQueue;
 std::mutex AssetsPanel::m_AssetsThreadQueueMutex;

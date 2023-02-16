@@ -55,5 +55,4 @@ Editor/.vs/AppAssembly/v17/.suo
 *.ngfx-proj
 
 # Dlls
-Editor/resources/scripts/Wiwa-AppAssembly.dll
 Editor/resources/scripts/Wiwa-ScriptCore.dll
