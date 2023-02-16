@@ -5,6 +5,7 @@
 #include "UiButton.h"
 #include "UiCheckbox.h"
 #include "UiSlider.h"
+#include "UiText.h"
 #include <Wiwa/core/Application.h>
 
 namespace Wiwa
