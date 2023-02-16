@@ -37,12 +37,6 @@ namespace Wiwa
 		float gpuVRAMReserve;
 	};
 
-	enum class ProjectTarget
-	{
-		None = 0,
-		Windows
-	};
-
 	class WI_API Application
 	{
 	public:
@@ -72,15 +66,6 @@ namespace Wiwa
 
 		inline SysInfo &GetSystemInfo() { return m_SysInfo; }
 		inline const char *GetVersion() { return m_EngineVersion; }
-
-		inline const char* GetProjectName() { return m_ProjectName.c_str(); }
-		inline void SetProjectName(const char* name) { m_ProjectName = name; }
-		inline const char* GetProjectCompany() { return m_ProjectCompany.c_str(); }
-		inline void SetProjectCompany(const char* name) { m_ProjectCompany = name; }
-		inline const char* GetProjectVersion() { return m_ProjectVersion.c_str(); }
-		inline void SetProjectVersion(const char* name) { m_ProjectVersion = name; }
-
-		inline ProjectTarget& GetProjectTarget() { return m_ProjectTarget; }
 
 		inline void SetTargetResolution(int width, int height) { m_TargetResolution = {width, height}; }
 		inline Size2i &GetTargetResolution() { return m_TargetResolution; }
@@ -132,11 +117,6 @@ namespace Wiwa
 		bool OnSave(OnSaveEvent &e);
 
 		const char *m_EngineVersion = "0.3";
-		std::string m_ProjectName = "New project";
-		std::string m_ProjectCompany = "Default Company";
-		std::string m_ProjectVersion = "0.1";
-		
-		ProjectTarget m_ProjectTarget = ProjectTarget::Windows;
 
 		Renderer2D *m_Renderer2D;
 		Renderer3D *m_Renderer3D;
