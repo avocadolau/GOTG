@@ -564,7 +564,7 @@ namespace filewatch
             }
         }
     };
-
+    //a
     template <class T>
     constexpr typename FileWatch<T>::C FileWatch<T>::_regex_all[];
     template <class T>

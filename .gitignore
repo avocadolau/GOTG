@@ -53,3 +53,6 @@ Editor/.vs/AppAssembly/v17/.suo
 Editor/.vs/AppAssembly/v17/.suo
 *.pdb
 *.ngfx-proj
+
+# Dlls
+Editor/resources/scripts/Wiwa-ScriptCore.dll
