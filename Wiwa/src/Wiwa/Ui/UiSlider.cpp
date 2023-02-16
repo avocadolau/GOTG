@@ -78,89 +78,89 @@ namespace Wiwa
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
 
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_2.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), extraPosition, textureForSlider->GetSize(), color, extraSection, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
 			positionForUpdate_2.h = extraPosition.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(textureForSlider->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_2.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), extraPosition, textureForSlider->GetSize(), color, extraSection, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
 			positionForUpdate_2.h = extraPosition.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(textureForSlider->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_2.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), extraPosition, textureForSlider->GetSize(), color, extraSection, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
 			positionForUpdate_2.h = extraPosition.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(textureForSlider->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_2.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), extraPosition, textureForSlider->GetSize(), color, extraSection, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
 			positionForUpdate_2.h = extraPosition.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(textureForSlider->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		/******/
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), position, texture->GetSize(), color, section, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_2.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), extraPosition, textureForSlider->GetSize(), color, extraSection, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
 			positionForUpdate_2.h = extraPosition.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(textureForSlider->GetTextureId(), positionForUpdate_2, Wiwa::Renderer2D::Pivot::UPLEFT);
 		}break;
 		default:
 			break;
