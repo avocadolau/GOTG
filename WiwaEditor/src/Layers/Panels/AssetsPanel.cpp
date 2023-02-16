@@ -19,7 +19,7 @@ std::vector<std::function<void()>> AssetsPanel::m_AssetsThreadQueue;
 std::mutex AssetsPanel::m_AssetsThreadQueueMutex;
 
 AssetsPanel::AssetsPanel(EditorLayer* instance)
-	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("Assets")
+	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("assets")
 {
 	ResourceId folderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/folder_icon.png");
 	ResourceId fileId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/file_icon.png");
