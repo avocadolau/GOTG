@@ -38,6 +38,8 @@
 
 #include <Wiwa/render/RenderManager.h>
 
+#include <Wiwa/core/ProjectManager.h>
+
 USE_REFLECTION;
 
 namespace Wiwa {
@@ -65,8 +67,9 @@ namespace Wiwa {
 		//m_ProjectCompany = project["company"].get<const char*>();
 		//m_ProjectTarget = (ProjectTarget)project["target"].get<int>();
 		//project.save_file("config/project.json");
-
-		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps("Wiwa Engine: " + m_ProjectName)));
+		std::string name = "Wiwa Engine: ";
+		name += ProjectManager::GetProjectName();
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name.c_str())));
 		m_Window->SetEventCallback({ &Application::OnEvent, this });
 
 		int min, major, rev;
@@ -365,14 +368,9 @@ namespace Wiwa {
 
 		config.save_file("config/application.json");
 
-		JSONDocument project;
-		project.AddMember("name", m_ProjectName.c_str());
-		project.AddMember("version", m_ProjectVersion.c_str());
-		project.AddMember("company", m_ProjectCompany.c_str());
-		
-		project.AddMember("target", (int)m_ProjectTarget);
-
-		project.save_file("config/project.json");
+		if (!Wiwa::ProjectManager::SaveProject()) {
+			WI_CORE_ERROR("Couldn't save project.");
+		}
 
 		return false;
 	}

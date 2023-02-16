@@ -13,7 +13,7 @@
 
 #include <Wiwa/core/Resources.h>
 
-#include "../Utils/ProjectManager.h"
+#include <Wiwa/core/ProjectManager.h>
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
@@ -273,7 +273,7 @@ void EditorLayer::MainMenuBar()
 			}
 			if (ImGui::MenuItem("Save", "Ctrl+S"))
 			{
-				Utils::ProjectManager::SaveProject();
+				SaveProject();
 			}
 			if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
 			{
@@ -396,6 +396,7 @@ void EditorLayer::MainMenuBar()
 						Wiwa::Time::Update();
 
 						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
+
 						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
 						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 						Wiwa::SceneManager::SetScene(m_SimulationSceneId);
@@ -408,12 +409,12 @@ void EditorLayer::MainMenuBar()
 				}
 				else {
 					Wiwa::Time::Stop();
+					Wiwa::SceneManager::StopScene();
 
 					// Unload simulated scene but keep resources for the editor
 					Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
 
 					Wiwa::SceneManager::SetScene(m_EditorSceneId);
-					Wiwa::SceneManager::StopScene();
 
 					Audio::StopAllEvents();
 				}
@@ -488,12 +489,19 @@ void EditorLayer::OpenCloseAssetsFolder()
 	m_Assets->active = !m_Assets->active;
 }
 
+void EditorLayer::SaveProject()
+{
+	if (!Wiwa::ProjectManager::SaveProject()) {
+		SaveProjectAs();
+	}
+}
+
 void EditorLayer::SaveProjectAs()
 {
 	std::string filePath = Wiwa::FileDialogs::SaveFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Utils::ProjectManager::SaveProjectAs(filePath.c_str());
+		Wiwa::ProjectManager::SaveProjectAs(filePath.c_str());
 		WI_INFO("Succesfully saved project at path {0}", filePath.c_str());
 	}
 }
@@ -503,7 +511,7 @@ void EditorLayer::OpenProject()
 	std::string filePath = Wiwa::FileDialogs::OpenFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Utils::ProjectManager::OpenProject(filePath.c_str());
+		Wiwa::ProjectManager::OpenProject(filePath.c_str());
 		WI_INFO("Succesfully opened project at path {0}", filePath.c_str());
 	}
 }
@@ -513,7 +521,7 @@ void EditorLayer::NewProject()
 	std::string filePath = Wiwa::FileDialogs::SaveFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Utils::ProjectManager::CreateProject(filePath.c_str());
+		Wiwa::ProjectManager::CreateProject(filePath.c_str());
 		WI_INFO("Succesfully created project at path {0}", filePath.c_str());
 	}
 }
@@ -684,7 +692,7 @@ bool EditorLayer::OnKeyPressed(Wiwa::KeyPressedEvent &e)
 			if (shift)
 				SaveProjectAs();
 			else
-				Utils::ProjectManager::SaveProject();
+				Wiwa::ProjectManager::SaveProject();
 		}
 
 		break;
