@@ -711,7 +711,6 @@ namespace Wiwa {
 		if (stype) {
 			System* system = (System*)stype->New();
 			system->SetEntity(eid);
-			system->OnSystemAdded();
 
 			m_EntitySystems[eid].push_back(system);
 			m_EntitySystemHashes[eid].push_back(system_hash);
@@ -748,7 +747,6 @@ namespace Wiwa {
 			}
 		}
 
-		system->OnSystemRemoved();
 		delete system;
 	}
 }

@@ -33,10 +33,6 @@ namespace Wiwa {
 		void Init();
 		void Update();
 
-		virtual void OnSystemAdded(){}
-
-		virtual void OnSystemRemoved(){}
-
 		void Destroy();
 	};
 

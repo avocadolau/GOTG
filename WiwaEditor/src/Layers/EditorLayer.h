@@ -62,7 +62,6 @@ public:
 private:
 	void MainMenuBar();
 	void OpenCloseAssetsFolder();
-	void SaveProject();
 	void SaveProjectAs();
 	void OpenProject();
 	void NewProject();

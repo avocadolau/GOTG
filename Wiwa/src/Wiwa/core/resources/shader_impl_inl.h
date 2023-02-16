@@ -82,10 +82,8 @@ namespace Wiwa {
 		return resource;
 	}
 	template<>
-	inline bool Resources::Import<Shader>(const char* file, Shader* shader)
+	inline void Resources::Import<Shader>(const char* file, Shader* shader)
 	{
-		if (!_file_exists(file)) return false;
-
 		JSONDocument document;
 		std::string filePath = file;
 		filePath += ".vs";
@@ -127,8 +125,6 @@ namespace Wiwa {
 		document.save_file(assets_file.string().c_str());
 		
 		WI_CORE_INFO("Shader at {} imported succesfully!", import_file.string().c_str());
-
-		return true;
 	}
 	template<>
 	inline bool Resources::CheckImport<Shader>(const char* file)

@@ -62,10 +62,8 @@ namespace Wiwa {
 		return material;
 	}
 	template<>
-	inline bool Resources::Import<Material>(const char* file)
+	inline void Resources::Import<Material>(const char* file)
 	{
-		if (!_file_exists(file)) return false;
-
 		std::filesystem::path import_file = file;
 		std::filesystem::path export_file = _assetToLibPath(file);
 		export_file.replace_extension(".wimaterial");
@@ -83,7 +81,6 @@ namespace Wiwa {
 		}
 
 		WI_CORE_INFO("Material at {} imported succesfully!", import_file.string().c_str());
-		return true;
 	}
 	template<>
 	inline bool Resources::CheckImport<Material>(const char* file)

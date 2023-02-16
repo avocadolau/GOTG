@@ -88,19 +88,14 @@ namespace Wiwa {
 		return model;
 	}
 	template<>
-	inline bool Resources::Import<Model>(const char* file, ModelSettings* settings)
+	inline void Resources::Import<Model>(const char* file, ModelSettings* settings)
 	{
-		if (!_file_exists(file)) return false;
-
 		std::filesystem::path import_path = file;
 		import_path = _import_path_impl(import_path, ".wimodel");
 		
 
 		_import_model_impl(file, import_path.string().c_str(), settings);
-
 		WI_CORE_INFO("Model at {} imported succesfully!", import_path.string().c_str());
-
-		return true;
 	}
 	template<>
 	inline bool Resources::CheckImport<Model>(const char* file)

@@ -147,11 +147,6 @@ namespace Wiwa {
 		}
 	}
 
-	bool Resources::_file_exists(const char* path)
-	{
-		return Wiwa::FileSystem::Exists(path);
-	}
-
 	void Resources::_import_image_impl(const char* origin, const char* destination)
 	{
 		int w, h, ch;

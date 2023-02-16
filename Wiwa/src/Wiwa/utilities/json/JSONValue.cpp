@@ -26,23 +26,6 @@ namespace Wiwa {
 		return JSONValue(&jval, m_Allocator);
 	}
 
-	JSONValue JSONValue::AddMemberArray(const char* mem)
-	{
-		rapidjson::Value key(mem, *m_Allocator);
-		rapidjson::Value v(rapidjson::kArrayType);
-
-		m_Value->AddMember(key, v, *m_Allocator);
-
-		rapidjson::Value& jval = m_Value->operator[](mem);
-
-		return JSONValue(&jval, m_Allocator);
-	}
-
-	void JSONValue::PushBack(JSONValue& value)
-	{
-
-	}
-
 	bool JSONValue::HasMember(const char* mem)
 	{
 		return m_Value->HasMember(mem);
