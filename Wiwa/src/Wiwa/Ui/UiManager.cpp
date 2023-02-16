@@ -5,7 +5,6 @@
 #include "UiButton.h"
 #include "UiCheckbox.h"
 #include "UiSlider.h"
-#include "UiText.h"
 #include <Wiwa/core/Application.h>
 
 namespace Wiwa
@@ -59,6 +58,8 @@ namespace Wiwa
 		{
 			control.at(i)->Update();
 		}
+
+		return true;
 	}
 
 	bool GuiManager::Draw()
@@ -100,5 +101,6 @@ namespace Wiwa
 		return true;
 
 		return false;*/
+		return true;
 	}
 }

@@ -33,7 +33,7 @@ namespace Wiwa
 
 		GuiControl(GuiControlType type, unsigned int id) : type(type), id(id), state(GuiControlState::NORMAL) {}
 
-		GuiControl(GuiControlType type, Rect2i bounds, char text[32]) :type(type), state(GuiControlState::NORMAL), bounds(bounds)
+		GuiControl(GuiControlType type, Rect2i bounds, char text[32]) :type(type), state(GuiControlState::NORMAL)
 		{
 			//color.r = 255; color.g = 255; color.b = 255;
 			texture = nullptr;
