@@ -459,6 +459,8 @@ namespace Wiwa {
 
 	byte* EntityManager::AddComponent(EntityId entity, const Type* type, byte* value)
 	{
+		if (type == NULL) return NULL;
+
 		// Get component ID
 		ComponentId cid = GetComponentId(type);
 
