@@ -91,6 +91,8 @@ namespace Wiwa {
 
 		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
+		//Init physics manager
+
 		bool res = Audio::Init();
 
 		if (!res) {
@@ -147,6 +149,9 @@ namespace Wiwa {
 
 			// Update scene manager
 			SceneManager::ModuleUpdate();
+
+			// Update physics manager
+
 
 			// Update audio
 			Audio::Update();
