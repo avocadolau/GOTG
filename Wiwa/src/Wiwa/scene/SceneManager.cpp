@@ -549,6 +549,8 @@ namespace Wiwa {
 	void SceneManager::SetScene(SceneId sceneId) {
 		m_ActiveScene = sceneId;
 
+		Wiwa::RenderManager::SetLayerCamera(0, getScene(sceneId)->GetCameraManager().getActiveCamera());
+
 		SceneChangeEvent event(sceneId);
 		Action<Wiwa::Event&> act = { &Application::OnEvent, &Application::Get() };
 		act(event);

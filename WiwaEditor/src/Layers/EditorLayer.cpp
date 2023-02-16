@@ -245,9 +245,9 @@ void EditorLayer::RegenSol()
 
 	s_RegenThread = new std::thread(RegenSolutionThread);
 	threadExec = true;
-	mutex.lock();
+	
 	finishedThread = false;
-	mutex.unlock();
+	
 }
 
 void EditorLayer::SubmitToMainThread(const std::function<void()> func)
@@ -395,7 +395,7 @@ void EditorLayer::MainMenuBar()
 						Wiwa::Time::Play();
 						Wiwa::Time::Update();
 
-						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str());
+						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
 						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
 						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 						Wiwa::SceneManager::SetScene(m_SimulationSceneId);
