@@ -443,15 +443,29 @@ namespace Wiwa {
 		if (directional != -1)
 		{
 			DirectionalLight* dirLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<DirectionalLight>(directional);
-			if (dirLight)
+			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(directional);
+			if (dirLight && transform)
 			{
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Color"), dirLight->Color);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.AmbientIntensity"), dirLight->AmbientIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.DiffuseIntensity"), dirLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(dirLight->Direction));
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), dirLight->Color);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), dirLight->AmbientIntensity);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), dirLight->DiffuseIntensity);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(transform->rotation));
 			}
 		}
-
+		matShader->setUniform(matShader->getUniformLocation("u_NumPointLights"), pointLights.size());
+		for (size_t i = 0; i < pointLights.size(); i++) 
+		{
+			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
+			PointLight* pointLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<PointLight>(pointLights[i]);
+			const char* num = std::to_string(i).c_str();
+			if (transform && pointLight)
+			{
+				matShader->setUniform(matShader->getUniformLocation("u_PointLights[" + num + "].Base.Color"), dirLight->Color);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), dirLight->AmbientIntensity);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), dirLight->DiffuseIntensity);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(transform->rotation));
+			}
+		}
 		
 	}
 }

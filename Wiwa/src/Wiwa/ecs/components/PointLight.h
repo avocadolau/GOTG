@@ -7,21 +7,20 @@
 
 namespace Wiwa {
 	struct WI_API PointLight {
-		float constant;
-		float linear;
-		float quadratic;
-
-		glm::vec3 ambient;
-		glm::vec3 diffuse;
-		glm::vec3 specular;
+		glm::vec3 Color;
+		float AmbientIntensity;
+		float DiffuseIntensity;
+		float Constant;
+		float Linear;
+		float Exp;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::PointLight)
-	REFLECT_MEMBER(constant)
-	REFLECT_MEMBER(linear)
-	REFLECT_MEMBER(quadratic)
-	REFLECT_MEMBER(ambient)
-	REFLECT_MEMBER(diffuse)
-	REFLECT_MEMBER(specular)
+	REFLECT_MEMBER(Color)
+	REFLECT_MEMBER(AmbientIntensity)
+	REFLECT_MEMBER(DiffuseIntensity)
+	REFLECT_MEMBER(Constant)
+	REFLECT_MEMBER(Linear)
+	REFLECT_MEMBER(Exp)
 REFLECTION_END;
