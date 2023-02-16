@@ -109,8 +109,8 @@ namespace Wiwa {
 					else
 					{
 						//Set the color of the material
-						id = Resources::Load<Shader>("resources/shaders/model_color");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/model_color");
+						id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
 
