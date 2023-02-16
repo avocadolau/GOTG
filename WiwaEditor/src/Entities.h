@@ -43,12 +43,13 @@ inline void CreatePointLight()
 	t3d.localScale = { 0.0f, 0.0f, 0.0f };
 
 	Wiwa::PointLight lightSource;
-	lightSource.linear = 1.0f;
-	lightSource.quadratic = 1.0f;
-	lightSource.constant = 1.0f;
-	lightSource.ambient = glm::vec3(1.f);
-	lightSource.diffuse = glm::vec3(1.f);
-	lightSource.specular = glm::vec3(1.f);
+
+	lightSource.Color = glm::vec3(1.0f);
+	lightSource.AmbientIntensity = 50.0f;
+	lightSource.DiffuseIntensity = 25.f;
+	lightSource.Constant = 0.5f;
+	lightSource.Exp = 0.5f;
+	lightSource.Linear = 0.5f;
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
@@ -67,7 +68,7 @@ inline void CreateDirectionalLight()
 	t3d.position = { 0.0f, 0.0f, 0.0f };
 	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
 	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
+	t3d.localRotation = { 0.0f, 0.0f, -75.0f };
 	t3d.scale = { 1.0f, 1.0f, 1.0f };
 	t3d.localScale = { 0.0f, 0.0f, 0.0f };
 
@@ -75,7 +76,6 @@ inline void CreateDirectionalLight()
 	lightSource.Color = glm::vec3(1.0f);
 	lightSource.AmbientIntensity = 1.f;
 	lightSource.DiffuseIntensity = 1.f;
-	lightSource.Direction = glm::vec3(0.f, 0.f, 45.0f);
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);

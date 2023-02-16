@@ -241,13 +241,13 @@ void InspectorPanel::DrawPointLightComponent(byte* data)
 {
 	Wiwa::PointLight* lsrc = (Wiwa::PointLight*)data;
 
-	ImGui::InputFloat("Constant", &lsrc->constant);
-	ImGui::InputFloat("Quadratic", &lsrc->quadratic);
-	ImGui::InputFloat("Linear", &lsrc->linear);
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
+	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
+	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
 
-	ImGui::ColorEdit3("Ambient", glm::value_ptr(lsrc->ambient));
-	ImGui::ColorEdit3("Diffuse", glm::value_ptr(lsrc->diffuse));
-	ImGui::ColorEdit3("Specular", glm::value_ptr(lsrc->specular));
 }
 
 void InspectorPanel::DrawDirectionalLightComponent(byte* data)
@@ -255,9 +255,8 @@ void InspectorPanel::DrawDirectionalLightComponent(byte* data)
 	Wiwa::DirectionalLight* lsrc = (Wiwa::DirectionalLight*)data;
 
 	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
-	ImGui::SliderFloat("Ambient intensity", &lsrc->AmbientIntensity, 0.0f, 30.0f, "%.2f");
-	ImGui::SliderFloat("Diffuse intensity", &lsrc->DiffuseIntensity, 0.0f, 30.0f, "%.2f");
-	DrawVec3Control("Direction", glm::value_ptr(lsrc->Direction));
+	ImGui::InputFloat("Ambient intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
 }
 //TODO: Implement when ready
 void InspectorPanel::DrawSpotLightComponent(byte* data)

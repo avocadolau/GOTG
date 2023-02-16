@@ -273,6 +273,7 @@ namespace Wiwa {
 		Shader* matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
+
 		SetUpLight(matShader, camera, directional, pointLights);
 
 		material->Bind();
@@ -449,21 +450,33 @@ namespace Wiwa {
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), dirLight->Color);
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), dirLight->AmbientIntensity);
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), dirLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(transform->rotation));
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::vec3(glm::radians(transform->rotation.x), glm::radians(transform->rotation.y), glm::radians(transform->rotation.z)));
 			}
 		}
-		matShader->setUniform(matShader->getUniformLocation("u_NumPointLights"), pointLights.size());
+		else
+		{
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), glm::vec3(0.0f));
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), 0.0f);
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), 0.0f);
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::vec3(0.0f));
+		}
+		matShader->setUniform(matShader->getUniformLocation("u_NumPointLights"), (int)pointLights.size());
 		for (size_t i = 0; i < pointLights.size(); i++) 
 		{
 			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
 			PointLight* pointLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<PointLight>(pointLights[i]);
-			const char* num = std::to_string(i).c_str();
+			std::string num = std::to_string(i);
+
 			if (transform && pointLight)
 			{
-				matShader->setUniform(matShader->getUniformLocation("u_PointLights[" + num + "].Base.Color"), dirLight->Color);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), dirLight->AmbientIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), dirLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(transform->rotation));
+
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.Color").c_str()), pointLight->Color);
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.AmbientIntensity").c_str()), pointLight->AmbientIntensity);
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.DiffuseIntensity").c_str()), pointLight->DiffuseIntensity);
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].LocalPos").c_str()), glm::vec3(transform->position.x, transform->position.z, transform->position.y));
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Constant").c_str()), pointLight->Constant);
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Linear").c_str()), pointLight->Linear);
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Exp").c_str()), pointLight->Exp);
 			}
 		}
 		

@@ -1,6 +1,6 @@
 #version 330 core
 
-#define MAX_POINT_LIGHTS 128
+const int MAX_POINT_LIGHTS = 128;
 
 out vec4 FragColor;
 
@@ -13,7 +13,7 @@ struct BaseLight
     vec3 Color;
     float AmbientIntensity;
     float DiffuseIntensity;
-}
+};
 
 struct DirectionalLight
 {
@@ -26,14 +26,14 @@ struct Attenuation
     float Constant;
     float Linear;
     float Exp;
-}
+};
 
 struct PointLight
 {
     BaseLight Base;
     vec3 LocalPos;
     Attenuation Atten;
-}
+};
 
 uniform vec4 u_MatAmbientColor;
 uniform vec4 u_MatDiffuseColor;
@@ -43,6 +43,7 @@ uniform DirectionalLight u_DirectionalLight;
 uniform PointLight[MAX_POINT_LIGHTS] u_PointLights;
 uniform int u_NumPointLights;
 
+uniform vec3 u_WorldPosition;
 uniform vec4 u_Color;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
@@ -50,7 +51,7 @@ uniform vec3 u_CameraPosition;
 
 vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal)
 {
-    vec4 ambientColor = vec3(light.Color, 1.0f) * light.AmbientIntensity * u_MatAmbientColor;
+    vec4 ambientColor = vec4(light.Color, 1.0f) * light.AmbientIntensity * u_MatAmbientColor;
 
     float diffuseFactor = dot(normal, -direction);
 
@@ -88,9 +89,9 @@ vec4 CalcPointLight(int index, vec3 normal)
 
     vec4 color = CalcLightInternal(u_PointLights[index].Base, lightDirection, normal);
 
-    float attenuation = u_DirectionalLight[index].Atten.Constant +
-                        u_DirectionalLight[index].Atten.Linear * distance *
-                        u_DirectionalLight[index].Atten.Exp * distance * distance;
+    float attenuation = u_PointLights[index].Atten.Constant +
+                        u_PointLights[index].Atten.Linear * distance *
+                        u_PointLights[index].Atten.Exp * distance * distance;
 
     return color / attenuation;
 }

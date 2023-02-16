@@ -123,8 +123,8 @@ namespace Wiwa {
 			hasGeometry = true;
 
 		bool ret = false;
-		CompileFiles(vertexShader.c_str(), fragmentShader.c_str(), hasGeometry, &geometryShader, ret);
 		m_Path = filename;
+		CompileFiles(vertexShader.c_str(), fragmentShader.c_str(), hasGeometry, &geometryShader, ret);
 	}
 
 	void Shader::CompileFiles(const char* vertexShaderSource, const char* fragmentShaderSource, bool hasGS, std::string* geometryShaderSourceStr, bool& retflag)
