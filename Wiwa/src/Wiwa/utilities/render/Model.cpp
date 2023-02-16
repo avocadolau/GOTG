@@ -253,6 +253,8 @@ namespace Wiwa {
 		//LOAD BONES
 		if (mesh->HasBones())
 		{
+			model->Bones = ParseMeshBones(mesh);
+			// we should recieve a list of bones
 			//parse bones
 		}
 		
@@ -753,17 +755,36 @@ namespace Wiwa {
 		getWiMeshFromFile(file);
 	}
 
-	void Model::ParseMeshBones(const aiMesh* mesh)
+	std::vector<Bone> Model::ParseMeshBones(const aiMesh* mesh)
 	{
+		std::vector<Bone> bList;
 		for (int i = 0; i <= mesh->mNumBones; i++)
 		{
-		//	ParseSingleBone(i, mesh->mBones[i]);
+			
+			bList.push_back(ParseSingleBone(i, *mesh->mBones[i]));
 		}
+		return bList;
 	}
 
-	void Model::ParseSingleBone(int boneIndex, aiBone bone)
+	Bone Model::ParseSingleBone(int boneIndex, aiBone bone)
 	{ 
-		//for(int i = 0; i <= bone)
+		// SEEMS LIKE WEIGHTS ARE NOT SAVING WELL
+		// save name, num weights, offset mat and wights
+		Bone pBone;
+		pBone.name = bone.mName.data;
+		pBone.nWeights = bone.mNumWeights;
+		//dunno how to convert aimatrix4x4 to mat4
+		//pBone.offset = bone.mOffsetMatrix;
+		
+		for (int i = 0; i <= bone.mNumWeights; i++) {
+			
+			// weights should be well loaded now
+			pBone.weights[i].weight = bone.mWeights[i].mWeight;
+			pBone.weights[i].vertexId = bone.mWeights[i].mVertexId;
+		}
+
+		// return our bone struct (pbone)
+		return pBone;
 	}
 
 	Model* Model::GetModelFromFile(const char* file, ModelSettings* settings)

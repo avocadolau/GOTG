@@ -8,8 +8,11 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
+
+
 struct aiMesh;
 struct aiNode;
+struct aiBone;
 
 namespace Wiwa {
 	struct ModelSettings;
@@ -46,7 +49,7 @@ namespace Wiwa {
 	struct Bone {
 		std::string name;
 		unsigned int nWeights;
-		glm::mat4 offest;
+		glm::mat4 offset;
 		VertexWeight* weights;
 	};
 	class WI_API Model
@@ -67,8 +70,10 @@ namespace Wiwa {
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
 
-		ModelHierarchy* model_hierarchy;
+		std::vector<Bone> Bones;
 
+		ModelHierarchy* model_hierarchy;
+		
 
 
 		void generateBuffers();
@@ -116,8 +121,8 @@ namespace Wiwa {
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
-		void ParseMeshBones(const aiMesh* mesh);
-		void ParseSingleBone(int boneIndex, aiBone bone);
+		std::vector<Bone> ParseMeshBones(const aiMesh* mesh);
+		Bone ParseSingleBone(int boneIndex, aiBone bone);
 
 		void IsRoot(bool root) { is_root = root; }
 
