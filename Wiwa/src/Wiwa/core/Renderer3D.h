@@ -64,11 +64,19 @@ namespace Wiwa {
 		void SetOption(Options option);
 		void DisableOption(Options option);
 
-		void RenderMesh(Model* mesh, const Transform3D& t3d, Material* material, bool clear=false, Camera* camera=NULL, bool cull = false);
-		void RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
-		void RenderMesh(Model* mesh, const Vector3f& position, const Vector3f& rotation, const Vector3f& scale, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+		void RenderMesh(Model* mesh, const Transform3D& t3d, Material* material,const size_t& directional,
+			const std::vector<size_t>& pointLights, bool clear=false, Camera* camera=NULL, bool cull = false);
 
-		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+		
+		void RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		void RenderMesh(Model* mesh, const Vector3f& position, const Vector3f& rotation, const Vector3f& scale, const size_t& directional,
+			const std::vector<size_t>& pointLights, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+
+		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		
+		void SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights);
 		
 		void RenderSkybox();
 

@@ -8,6 +8,8 @@
 #include <glew.h>
 #include <Wiwa/utilities/render/shaders/Shader.h>
 
+#include <Wiwa/ecs/systems/LightSystem.h>
+
 namespace Wiwa {
 	Renderer3D::Renderer3D() {
 	}
@@ -76,7 +78,8 @@ namespace Wiwa {
 
 
 
-	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, Material* material, bool clear/*=false*/, Camera* camera/*=NULL*/, bool cull /*= false*/)
+	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, Material* material, const size_t& directional,
+		const std::vector<size_t>& pointLights, bool clear/*=false*/, Camera* camera/*=NULL*/, bool cull /*= false*/)
 	{
 		if (!camera)
 		{
@@ -95,9 +98,11 @@ namespace Wiwa {
 		model = glm::rotate(model, glm::radians(t3d.rotation.z), glm::vec3(0, 0, 1));
 		model = glm::scale(model, glm::vec3(t3d.scale.x, t3d.scale.y, t3d.scale.z));
 
-		material->getShader()->Bind();
-		material->getShader()->SetMVP(model, camera->getView(), camera->getProjection());
-		
+		Shader* matShader = material->getShader();
+		matShader->Bind();
+		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+		SetUpLight(matShader, camera, directional, pointLights);
+
 		material->Bind();
 
 		mesh->Render();
@@ -127,7 +132,9 @@ namespace Wiwa {
 		camera->frameBuffer->Unbind();
 	}
 
-	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, bool clear, Camera* camera, bool cull)
+
+	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, const size_t& directional,
+		const std::vector<size_t>& pointLights, bool clear, Camera* camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -189,7 +196,8 @@ namespace Wiwa {
 
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::RenderMesh(Model* mesh, const Vector3f& position, const Vector3f& rotation, const Vector3f& scale, Material* material, bool clear, Camera* camera, bool cull)
+	void Renderer3D::RenderMesh(Model* mesh, const Vector3f& position, const Vector3f& rotation, const Vector3f& scale, const size_t& directional,
+		const std::vector<size_t>& pointLights, Material* material, bool clear, Camera* camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -209,7 +217,10 @@ namespace Wiwa {
 		material->getShader()->Bind();
 		material->getShader()->SetMVP(model, camera->getView(), camera->getProjection());
 
-		material->Bind();
+		Shader* matShader = material->getShader();
+		matShader->Bind();
+		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+		SetUpLight(matShader, camera, directional, pointLights);
 
 		mesh->Render();
 
@@ -237,7 +248,8 @@ namespace Wiwa {
 
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, bool clear, Camera* camera, bool cull)
+	void Renderer3D::RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
+		const std::vector<size_t>& pointLights, bool clear, Camera* camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -408,5 +420,22 @@ namespace Wiwa {
 			m_BBDisplayShader->UnBind();
 		}
 		camera->frameBuffer->Unbind();
+	}
+	void Renderer3D::SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights)
+	{
+		matShader->SetCameraPos(camera->getPosition());
+		if (directional > -1)
+		{
+			DirectionalLight* dirLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<DirectionalLight>(directional);
+			if (dirLight)
+			{
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Color"), dirLight->Color);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.AmbientIntensity"), dirLight->AmbientIntensity);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.DiffuseIntensity"), dirLight->DiffuseIntensity);
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), dirLight->Direction);
+			}
+		}
+
+		
 	}
 }

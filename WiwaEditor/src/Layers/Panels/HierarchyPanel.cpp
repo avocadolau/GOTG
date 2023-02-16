@@ -106,9 +106,17 @@ void HierarchyPanel::DrawAddMenu(Wiwa::EntityManager& entityManager)
 		float ar = res.w / (float)res.h;
 		Wiwa::SceneManager::getActiveScene()->GetCameraManager().CreatePerspectiveCamera(60, ar);
 	}
-	if (ImGui::MenuItem("Light source"))
+	if (ImGui::BeginMenu("Light"))
 	{
-		CreateLightSource();
+		if (ImGui::MenuItem("Directional light"))
+		{
+			CreateDirectionalLight();
+		}
+		if (ImGui::MenuItem("Point light"))
+		{
+			CreatePointLight();
+		}
+		ImGui::EndMenu();
 	}
 	if (m_CurrentID >= 0)
 	{

@@ -12,7 +12,8 @@
 
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/ecs/components/AudioSource.h>
-#include <Wiwa/ecs/components/LightSource.h>
+#include <Wiwa/ecs/components/PointLight.h>
+#include <Wiwa/ecs/components/DirectionalLight.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -40,7 +41,9 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::Mesh) {	DrawMeshComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Transform3D) { DrawTransform3dComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AudioSource) { DrawAudioSourceComponent(data); } else
-		if (type->hash == (size_t)TypeHash::LightSource) { DrawLightSourceComponent(data); } else
+		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -234,9 +237,9 @@ void InspectorPanel::DrawAudioSourceComponent(byte* data)
 	ImGui::InputText("Event", asrc->eventName, sizeof(asrc->eventName));
 }
 
-void InspectorPanel::DrawLightSourceComponent(byte* data)
+void InspectorPanel::DrawPointLightComponent(byte* data)
 {
-	Wiwa::LightSource* lsrc = (Wiwa::LightSource*)data;
+	Wiwa::PointLight* lsrc = (Wiwa::PointLight*)data;
 
 	ImGui::InputFloat("Constant", &lsrc->constant);
 	ImGui::InputFloat("Quadratic", &lsrc->quadratic);
@@ -245,6 +248,20 @@ void InspectorPanel::DrawLightSourceComponent(byte* data)
 	ImGui::ColorEdit3("Ambient", glm::value_ptr(lsrc->ambient));
 	ImGui::ColorEdit3("Diffuse", glm::value_ptr(lsrc->diffuse));
 	ImGui::ColorEdit3("Specular", glm::value_ptr(lsrc->specular));
+}
+
+void InspectorPanel::DrawDirectionalLightComponent(byte* data)
+{
+	Wiwa::DirectionalLight* lsrc = (Wiwa::DirectionalLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::SliderFloat("Ambient intensity", &lsrc->AmbientIntensity, 0.0f, 30.0f, "%.2f");
+	ImGui::SliderFloat("Diffuse intensity", &lsrc->DiffuseIntensity, 0.0f, 30.0f, "%.2f");
+	DrawVec3Control("Direction", glm::value_ptr(lsrc->Direction));
+}
+//TODO: Implement when ready
+void InspectorPanel::DrawSpotLightComponent(byte* data)
+{
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)

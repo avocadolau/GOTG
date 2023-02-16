@@ -12,11 +12,25 @@ Wiwa::LightSystem::LightSystem()
 
 Wiwa::LightSystem::~LightSystem()
 {
-	SceneManager::getActiveScene()->GetLightManager().RemoveLight(m_EntityId);
+	if (GetComponent<PointLight>())
+	{
+		SceneManager::getActiveScene()->GetLightManager().RemoveLight(m_EntityId);
+	}
+	else if (GetComponent<DirectionalLight>())
+	{
+		SceneManager::getActiveScene()->GetLightManager().SetDirectionalLight(-1);
+	}
 }
 
 void Wiwa::LightSystem::OnEntitySet()
 {
-	SceneManager::getActiveScene()->GetLightManager().AddLight(m_EntityId);
+	if (GetComponent<PointLight>())
+	{
+		SceneManager::getActiveScene()->GetLightManager().AddLight(m_EntityId);
+	}
+	else if (GetComponent<DirectionalLight>())
+	{
+		SceneManager::getActiveScene()->GetLightManager().SetDirectionalLight(m_EntityId);
+	}
 }
 

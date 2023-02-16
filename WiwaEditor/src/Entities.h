@@ -5,7 +5,6 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/ecs/components/Transform3D.h>
-#include <Wiwa/ecs/components/LightSource.h>
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
@@ -29,10 +28,10 @@ inline void CreateNew3DEnt()
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
 }
 
-inline void CreateLightSource()
+inline void CreatePointLight()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	EntityId myEntity = em.CreateEntity("Light source");
+	EntityId myEntity = em.CreateEntity("Point light");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
@@ -43,7 +42,7 @@ inline void CreateLightSource()
 	t3d.scale = { 1.0f, 1.0f, 1.0f };
 	t3d.localScale = { 0.0f, 0.0f, 0.0f };
 
-	Wiwa::LightSource lightSource;
+	Wiwa::PointLight lightSource;
 	lightSource.linear = 1.0f;
 	lightSource.quadratic = 1.0f;
 	lightSource.constant = 1.0f;
@@ -54,7 +53,34 @@ inline void CreateLightSource()
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
 
-	em.AddComponent<Wiwa::LightSource>(myEntity, lightSource);
+	em.AddComponent<Wiwa::PointLight>(myEntity, lightSource);
+	em.ApplySystem<Wiwa::LightSystem>(myEntity);
+}
+
+inline void CreateDirectionalLight()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	EntityId myEntity = em.CreateEntity("Directional light");
+
+	// Prepare default transform
+	Wiwa::Transform3D t3d;
+	t3d.position = { 0.0f, 0.0f, 0.0f };
+	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
+	t3d.rotation = { 0.0f,0.0f, 0.0f };
+	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
+	t3d.scale = { 1.0f, 1.0f, 1.0f };
+	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+
+	Wiwa::DirectionalLight lightSource;
+	lightSource.Color = glm::vec3(1.0f);
+	lightSource.AmbientIntensity = 1.f;
+	lightSource.DiffuseIntensity = 1.f;
+	lightSource.Direction = glm::vec3(0.f, 0.f, 45.0f);
+
+	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
+	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
+
+	em.AddComponent<Wiwa::DirectionalLight>(myEntity, lightSource);
 	em.ApplySystem<Wiwa::LightSystem>(myEntity);
 }
 

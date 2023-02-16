@@ -219,6 +219,7 @@ namespace Wiwa {
 		m_Model = glGetUniformLocation(m_IDprogram, "u_Model");
 		m_Proj = glGetUniformLocation(m_IDprogram, "u_Proj");
 		m_View = glGetUniformLocation(m_IDprogram, "u_View");
+		m_UCamera = glGetUniformLocation(m_IDprogram, "u_CameraPosition");
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)
@@ -413,6 +414,11 @@ namespace Wiwa {
 		glUniformMatrix4fv(m_Model, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(m_View, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(m_Proj, 1, GL_FALSE, glm::value_ptr(proj));
+	}
+
+	void Shader::SetCameraPos(const glm::vec3& position)
+	{
+		setUniform(m_UCamera, position);
 	}
 
 	Wiwa::UniformField* Shader::getUniform(const char* name)

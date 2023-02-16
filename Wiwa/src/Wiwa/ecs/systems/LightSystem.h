@@ -1,7 +1,8 @@
 #pragma once
 #include "System.h"
 #include "../components/Transform3D.h"
-#include "../components/LightSource.h"
+#include "../components/PointLight.h"
+#include "../components/DirectionalLight.h"
 
 #include <Wiwa/utilities/Reflection.h>
 

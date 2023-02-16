@@ -166,7 +166,7 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 	}
 	else if (ShaderExtensionComp(path) 
 		&& (!Wiwa::Resources::CheckImport<Wiwa::Shader>(p.c_str())
-		|| Wiwa::Resources::CheckMeta(p.c_str()) == Wiwa::Resources::TOUPDATE))
+		|| Wiwa::Resources::CheckMeta(p.c_str()) != Wiwa::Resources::UPDATED))
 	{
 		if (path.extension() == ".wishader")
 		{
@@ -465,8 +465,6 @@ void AssetsPanel::CheckMeta(const std::filesystem::path& path)
 			Wiwa::ModelSettings settings;
 			Wiwa::Resources::CreateMeta<Wiwa::Model>(p.c_str(), &settings);
 		}
-		else if (path.extension() == ".wishader")
-			Wiwa::Resources::CreateMeta<Wiwa::Shader>(p.c_str());
 		else if (MaterialExtensionComp(path))
 			Wiwa::Resources::CreateMeta<Wiwa::Material>(p.c_str());
 	}

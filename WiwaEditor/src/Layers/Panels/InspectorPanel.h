@@ -18,7 +18,9 @@ private:
 	void DrawMeshComponent(byte* data);
 	void DrawTransform3dComponent(byte* data);
 	void DrawAudioSourceComponent(byte* data);
-	void DrawLightSourceComponent(byte* data);
+	void DrawPointLightComponent(byte* data);
+	void DrawDirectionalLightComponent(byte* data);
+	void DrawSpotLightComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();
