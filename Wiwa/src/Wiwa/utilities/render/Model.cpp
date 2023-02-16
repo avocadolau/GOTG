@@ -771,6 +771,7 @@ namespace Wiwa {
 		// SEEMS LIKE WEIGHTS ARE NOT SAVING WELL
 		// save name, num weights, offset mat and wights
 		Bone pBone;
+		pBone.weights = new VertexWeight[bone.mNumWeights];
 		pBone.name = bone.mName.data;
 		pBone.nWeights = bone.mNumWeights;
 		//dunno how to convert aimatrix4x4 to mat4
