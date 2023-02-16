@@ -13,13 +13,13 @@
 #include "../EditorLayer.h"
 #include "../../Utils/EditorUtils.h"
 
-static const std::filesystem::path s_AssetsPath = "Assets";
+static const std::filesystem::path s_AssetsPath = "assets";
 
 std::vector<std::function<void()>> AssetsPanel::m_AssetsThreadQueue;
 std::mutex AssetsPanel::m_AssetsThreadQueueMutex;
 
 AssetsPanel::AssetsPanel(EditorLayer* instance)
-	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("Assets")
+	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("assets")
 {
 	ResourceId folderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/folder_icon.png");
 	ResourceId fileId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/file_icon.png");
@@ -35,6 +35,11 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	m_ScriptIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(scrptId)->GetTextureId();
 	m_ModelIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(modId)->GetTextureId();
 	m_ShaderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(shaderId)->GetTextureId();
+
+	if (!std::filesystem::exists(s_AssetsPath))
+	{
+		std::filesystem::create_directory(s_AssetsPath);
+	}
 
 	watcher = std::make_unique<filewatch::FileWatch<std::filesystem::path>>(s_AssetsPath, OnFolderEvent);
 
