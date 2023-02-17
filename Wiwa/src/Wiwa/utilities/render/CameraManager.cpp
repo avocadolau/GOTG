@@ -19,6 +19,8 @@ namespace Wiwa {
 		editorCamera->SetPerspective(60, ar, 0.1f, 10000.0f);
 		editorCamera->setPosition({ 0.0f, 1.0f, 5.0f });
 		editorCamera->lookat({ 0.0f, 0.0f, 0.0f });
+
+		m_ActiveCamera = -1;
 	}
 	void CameraManager::Update()
 	{
