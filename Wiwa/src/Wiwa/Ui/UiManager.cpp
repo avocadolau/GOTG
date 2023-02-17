@@ -6,6 +6,8 @@
 #include "UiCheckbox.h"
 #include "UiSlider.h"
 #include <Wiwa/core/Application.h>
+#include <freetype/ft2build.h>
+#include <freetype/freetype/freetype.h>
 
 namespace Wiwa
 {
@@ -18,6 +20,20 @@ namespace Wiwa
 
 	bool GuiManager::Init()
 	{
+		FT_Library ft;
+		FREETYPE_H_
+		if (FT_Init_FreeType(&ft))
+		{
+			std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+			return -1;
+		}
+
+		FT_Face face;
+		if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
+		{
+			std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+			return -1;
+		}
 		return true;
 	}
 
