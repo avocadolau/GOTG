@@ -22,7 +22,7 @@
 namespace Wiwa {
 	void Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
 	{
-		unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipUVs;
+		unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;//aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipUVs;
 
 		if (settings->preTranslatedVertices) {
 			//flags |= aiProcess_PreTransformVertices;
@@ -82,7 +82,7 @@ namespace Wiwa {
 				mat_path += ".wimaterial";
 
 				ResourceId matID = Resources::Load<Material>(mat_path.string().c_str());
-				if (matID == -1)
+				if (matID == size_t(-1))
 				{
 					Material material; // Default settings
 					size_t id;
@@ -776,8 +776,12 @@ namespace Wiwa {
 		pBone.name = bone.mName.data;
 		pBone.nWeights = bone.mNumWeights;
 		//dunno how to convert aimatrix4x4 to mat4
-		//pBone.offset = bone.mOffsetMatrix;
+
+		const float* matData = bone.mOffsetMatrix.ToPtr();
+		pBone.offset = glm::make_mat4(matData);
 		
+		delete matData;
+
 		for (int i = 0; i <= bone.mNumWeights; i++) {
 			if (bone.mWeights != NULL)
 			{
