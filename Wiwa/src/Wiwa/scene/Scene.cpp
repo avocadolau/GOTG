@@ -31,6 +31,7 @@ namespace Wiwa {
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
+		m_GuiManager->Init();
 	}
 
 	void Scene::Update()
@@ -45,7 +46,8 @@ namespace Wiwa {
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
-
+			
+			m_GuiManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -67,6 +69,7 @@ namespace Wiwa {
 
 		m_EntityManager.Update();
 
+		
 		if (!SceneManager::IsPlaying()) {
 			m_EntityManager.UpdateWhitelist();
 		}

@@ -6,7 +6,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
-
+#include <Wiwa/Ui/UiManager.h>
 namespace Wiwa {
 	class WI_API Scene {
 	public:
@@ -54,6 +54,7 @@ namespace Wiwa {
 
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
+		GuiManager* m_GuiManager;
 	private:
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;

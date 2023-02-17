@@ -56,10 +56,11 @@ namespace Wiwa
 		Wiwa::List<GuiControl*> control = controls;
 		for (int i = 0; i < control.size(); i++)
 		{
-			control.at(i)->Update();
+				control.at(i)->Update();
 		}
 
 		return true;
+	
 	}
 
 	bool GuiManager::Draw()
