@@ -82,7 +82,7 @@ namespace Wiwa {
 				mat_path += ".wimaterial";
 
 				ResourceId matID = Resources::Load<Material>(mat_path.string().c_str());
-				if (matID == size_t(-1))
+				if (matID == -1)
 				{
 					Material material; // Default settings
 					size_t id;

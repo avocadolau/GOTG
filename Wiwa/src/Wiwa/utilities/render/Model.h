@@ -70,7 +70,7 @@ namespace Wiwa {
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
 
-		std::vector<Bone> Bones;
+		std::vector<Bone> bones;
 
 		ModelHierarchy* model_hierarchy;
 		

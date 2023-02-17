@@ -123,7 +123,7 @@ public:
 
     const float* ToPtr() {
 
-        float* data;
+        float* data = new float[16];
         data[0] = a1;
         data[1] = a2;
         data[2] = a3;
