@@ -59,7 +59,10 @@ project "Wiwa"
 		"%{Library.Wwise_SA}",
 		"%{Library.bullet_dynamics_release}",
 		"%{Library.bullet_collision_release}",
-		"%{Library.bullet_linear_math}"
+		"%{Library.bullet_linear_math_release}",
+		"%{Library.bullet_dynamics_debug}",
+		"%{Library.bullet_collision_debug}",
+		"%{Library.bullet_linear_math_debug}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"

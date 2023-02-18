@@ -8,6 +8,17 @@
 #include <glm/gtc/type_ptr.hpp>
 
 bool PhysicsManager::s_Debug = true;
+btDefaultCollisionConfiguration* PhysicsManager::s_Collision_conf = new btDefaultCollisionConfiguration();
+btCollisionDispatcher* PhysicsManager::s_Dispatcher = new btCollisionDispatcher(s_Collision_conf);
+btBroadphaseInterface* PhysicsManager::s_Broad_phase = new btDbvtBroadphase();
+btSequentialImpulseConstraintSolver* PhysicsManager::s_Solver = new btSequentialImpulseConstraintSolver();
+DebugDrawer* PhysicsManager::s_Debug_draw = new DebugDrawer();
+
+btDiscreteDynamicsWorld* PhysicsManager::s_World = new btDiscreteDynamicsWorld(s_Dispatcher, s_Broad_phase, s_Solver, s_Collision_conf);
+std::vector<btCollisionShape*> PhysicsManager::s_Shapes;
+std::vector<btRigidBody*> PhysicsManager::s_Bodies;
+std::vector<btDefaultMotionState*> PhysicsManager::s_Motions;
+std::vector<btTypedConstraint*> PhysicsManager::s_Constraints;
 
 PhysicsManager::PhysicsManager()
 {
@@ -19,33 +30,26 @@ PhysicsManager::~PhysicsManager()
 
 bool PhysicsManager::InitWorld()
 {
-	s_Collision_conf = new btDefaultCollisionConfiguration();
-	s_Dispatcher = new btCollisionDispatcher(s_Collision_conf);
-	s_Broad_phase = new btDbvtBroadphase();
-	s_Solver = new btSequentialImpulseConstraintSolver();
-	s_Debug_draw = new DebugDrawer();
-
-	s_World = new btDiscreteDynamicsWorld(s_Dispatcher, s_Broad_phase, s_Solver, s_Collision_conf);
 	s_Debug_draw->setDebugMode(s_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 	s_World->setDebugDrawer(s_Debug_draw);
 	s_World->setGravity(GRAVITY * 2);
 
-	// Big plane as ground
-	{
-		btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+	//// Big plane as ground
+	//{
+	//	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
 
-		btDefaultMotionState* myMotionState = new btDefaultMotionState();
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
+	//	btDefaultMotionState* myMotionState = new btDefaultMotionState();
+	//	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
 
-		btRigidBody* body = new btRigidBody(rbInfo);
-		s_World->addRigidBody(body);
+	//	btRigidBody* body = new btRigidBody(rbInfo);
+	//	s_World->addRigidBody(body);
 
-	}
+	//}
 
 	return true;
 }
 
-bool PhysicsManager::UpdateSimulation()
+bool PhysicsManager::StepSimulation()
 {
 	s_World->stepSimulation(Wiwa::Time::GetDeltaTime(), 15);
 
@@ -82,28 +86,67 @@ bool PhysicsManager::UpdateSimulation()
 
 bool PhysicsManager::UpdateWorld()
 {
-	// Iterate each component rigidbody and get transform component
+	UpdateEngineToPhysics();
+	StepSimulation();
+	UpdatePhysicsToEngine();
+	return true;
+}
+
+bool PhysicsManager::UpdateEngineToPhysics()
+{
+	// Set the position offset
+	// Get the position from the engine
 	for (std::vector<btRigidBody*>::iterator item = s_Bodies.begin(); item != s_Bodies.end(); item++)
 	{
-		Wiwa::Transform3D* transform = (Wiwa::Transform3D*)(*item)->getUserPointer();
+		ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
+
+		// Get the position from the engine
+		glm::vec3 posEngine = WiwaToGLM(entityData->transform3d->localPosition);
+		glm::quat rotEngine = glm::quat(entityData->transform3d->localMatrix);
+		//glm::quat rotEngine = entityData->transform3d->rotation; old
+
+		// Get the offset
+		glm::vec3 finalOffset = rotEngine * entityData->rigidBody->positionOffset;
+		glm::vec3 finalPosBullet = posEngine + finalOffset;
+
+		// Apply the offset because offset, it is internal only(collider wise)
+		btTransform offsettedCollider;
+		offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));
+		offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
+		offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
+
+		(*item)->setWorldTransform(offsettedCollider);
+	}
+
+	return true;
+}
+
+bool PhysicsManager::UpdatePhysicsToEngine()
+{
+	// Physics to Engine
+	for (std::vector<btRigidBody*>::iterator item = s_Bodies.begin(); item != s_Bodies.end(); item++)
+	{
+		ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
 		
-		btTransform offsetedTransform((*item)->getWorldTransform());
+		btTransform bulletTransform((*item)->getWorldTransform());
 
-		// Get the transform fromn physyics
-		btVector3 posBullet = offsetedTransform.getOrigin();
-		btQuaternion rotBullet = offsetedTransform.getRotation();
+		// Get the transform from physics world
+		btVector3 posBullet = bulletTransform.getOrigin();
+		btQuaternion rotationBullet = bulletTransform.getRotation();
 
-		glm::quat rotEngine = glm::quat(rotBullet.w(), rotBullet.x(), rotBullet.y(), rotBullet.z());
-		glm::vec3 finalOffset = rotEngine * m_PositionOffset;
+		glm::quat rotationEngine = glm::quat(rotationBullet.w(), rotationBullet.x(), rotationBullet.y(), rotationBullet.z());
+		glm::vec3 finalOffset = rotationEngine * entityData->rigidBody->positionOffset;
 		glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
 
 		// Remove the offset because offset is internal only(collider wise)
-		offsetedTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
-		offsetedTransform.setRotation(rotBullet);
-		offsetedTransform.getOpenGLMatrix(glm::value_ptr(mat));
+		bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
+		bulletTransform.setRotation(rotationBullet);
+		bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));
 
-		transform.
+		(*item)->getCollisionShape()->setLocalScaling((btVector3(entityData->rigidBody->scalingOffset.x, entityData->rigidBody->scalingOffset.y, entityData->rigidBody->scalingOffset.z)));
+		s_World->updateSingleAabb((*item));
 	}
+
 	return true;
 }
 
@@ -254,6 +297,11 @@ bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cy
 	s_Bodies.push_back(body);
 
 	return true;
+}
+
+inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
+{
+	return glm::vec3(vector.x, vector.y, vector.z);
 }
 
 

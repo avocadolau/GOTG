@@ -15,7 +15,7 @@ namespace Wiwa {
 
 		virtual void OnAwake(){}
 
-		virtual void OnInit() {}
+		virtual void OnInit(){}
 
 		virtual void OnUpdate() {}
 
@@ -33,6 +33,10 @@ namespace Wiwa {
 		void Init();
 		void Update();
 
+		virtual void OnSystemAdded() {}
+
+		virtual void OnSystemRemoved() {}
+		
 		void Destroy();
 	};
 

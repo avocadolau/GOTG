@@ -33,9 +33,13 @@ public:
 
 	static bool InitWorld();
 
-	static bool UpdateSimulation();
+	static bool StepSimulation();
 
 	static bool UpdateWorld();
+
+	static bool UpdateEngineToPhysics();
+	
+	static bool UpdatePhysicsToEngine();
 
 	static bool CleanWorld();
 
@@ -79,3 +83,5 @@ public:
 
 	 DebugDrawModes s_Mode;
 };
+
+inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector);

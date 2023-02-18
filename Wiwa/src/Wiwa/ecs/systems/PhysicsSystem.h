@@ -13,7 +13,17 @@ namespace Wiwa {
 		PhysicsSystem();
 		~PhysicsSystem();
 
+		void OnAwake() override;
+
+		void OnInit() override;
+
 		void OnUpdate() override;
+
+		void OnDestroy() override;
+
+		void OnSystemAdded() override;
+
+		void OnSystemRemoved() override;
 	};
 }
 
