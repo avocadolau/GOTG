@@ -3,12 +3,13 @@
 #include <Wiwa/core/Core.h>
 
 #include <vector>
+#include <map>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/math/AABB.h>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
-
+#define MAX_NUM_BONES_PER_VERTEX 5
 
 struct aiMesh;
 struct aiNode;
@@ -45,12 +46,41 @@ namespace Wiwa {
 	struct VertexWeight {
 		unsigned int vertexId;
 		float weight;
+		
 	};
 	struct Bone {
 		std::string name;
 		unsigned int nWeights;
 		glm::mat4 offset;
 		VertexWeight* weights;
+	};
+	//Structure to save what bones affect each vertex for then apply transformations
+	struct VertexBoneData
+	{
+		unsigned int BoneIDs[MAX_NUM_BONES_PER_VERTEX] = { 0 };
+		float Weights[MAX_NUM_BONES_PER_VERTEX] = { 0 };
+		VertexBoneData()
+		{
+		}
+
+		void AddBoneData(unsigned int BoneID, float weight)
+		{
+			for (unsigned int i = 0; i < sizeof(BoneIDs)/sizeof(unsigned int); i++)
+			{
+				// weight has to be greater than 0 if the bone influences that vertex
+				// if 0 then we assume its empty
+				if (Weights[i] == 0.0)
+				{
+					BoneIDs[i] = BoneID;
+					Weights[i] = weight;
+					WI_INFO("bone {0} weight {1} index {2}\n", BoneID, weight, i);
+					return;
+				}
+			}
+
+			//we should never reach here, more bones than we have spce for
+			assert(0,"BONE INDEX TO VERTEX OUT OF SIZE");
+		}
 	};
 	class WI_API Model
 	{
@@ -71,6 +101,9 @@ namespace Wiwa {
 		std::vector<std::string> materials;
 
 		std::vector<Bone> bones;
+		std::vector<VertexBoneData> vertexToBones;
+		std::vector<int> meshBaseVertex;
+		std::map<std::string, unsigned int> boneNameToIndexMap;
 
 		ModelHierarchy* model_hierarchy;
 		
@@ -82,6 +115,7 @@ namespace Wiwa {
 
 		void getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers=true);
 		void getWiMeshFromFile(const char* file);
+		int getBoneId(const aiBone* pBone);
 
 		Model* loadmesh(const aiMesh* mesh);
 		ModelHierarchy* loadModelHierarchy(const aiNode* node);
@@ -121,8 +155,8 @@ namespace Wiwa {
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
-		std::vector<Bone> ParseMeshBones(const aiMesh* mesh);
-		Bone ParseSingleBone(int boneIndex, aiBone bone);
+		void LoadMeshBones(unsigned int index, const aiMesh* mesh);
+		void LoadSingleBone(int meshIndex, aiBone* bone);
 
 		void IsRoot(bool root) { is_root = root; }
 

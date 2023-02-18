@@ -128,11 +128,37 @@ namespace Wiwa {
 		// Load mesh list
 		if (scene->HasMeshes())
 		{
+
+			int totalVertices = 0;
+			int totalIndices = 0;
+			int totalBones = 0;
+			//resize the vector that will contain the number of base index
+			meshBaseVertex.resize(scene->mNumMeshes);
+
 			for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
-				Model* model = loadmesh(scene->mMeshes[i]);
+
+				const aiMesh* pMesh = scene->mMeshes[i];
+
+				int numVertices = pMesh->mNumVertices;
+				int numIndices = pMesh->mNumFaces * 3;
+				int numBones = pMesh->mNumBones;
+				meshBaseVertex[i] = totalVertices;
+				totalVertices += numVertices;
+				totalIndices += numIndices;
+				totalBones += numBones;
+
+				vertexToBones.resize(totalVertices);
+
+				Model* model = loadmesh(pMesh);
 
 				if (gen_buffers) { 
 					model->generateBuffers();
+				}
+
+				//Load bones
+				if (pMesh->HasBones())
+				{
+					LoadMeshBones(i,pMesh);
 				}
 
 				models.push_back(model);
@@ -203,6 +229,22 @@ namespace Wiwa {
 		f.Close();
 	}
 
+	int Model::getBoneId(const aiBone* pBone)
+	{
+		int boneid = 0;
+		std::string bone_name = (pBone->mName.C_Str());
+		if (boneNameToIndexMap.find(bone_name) == boneNameToIndexMap.end())
+		{
+			//allocate an index for a new bone
+			boneid = boneNameToIndexMap.size();
+			boneNameToIndexMap[bone_name] = boneid;
+		}
+		else {
+			boneid = boneNameToIndexMap[bone_name];
+		}
+		return boneid;
+	}
+
 	Model* Model::loadmesh(const aiMesh* mesh)
 	{
 		Model* model = new Model(NULL);
@@ -252,14 +294,6 @@ namespace Wiwa {
 		else
 		{
 			WI_CORE_INFO("Index buffer generated correctly");
-		}
-
-		//LOAD BONES
-		if (mesh->HasBones())
-		{
-			model->Bones = ParseMeshBones(mesh);
-			// we should recieve a list of bones
-			//parse bones
 		}
 		
 		return model;
@@ -759,44 +793,40 @@ namespace Wiwa {
 		getWiMeshFromFile(file);
 	}
 
-	std::vector<Bone> Model::ParseMeshBones(const aiMesh* mesh)
+	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)
 	{
-		std::vector<Bone> bList;
 		for (int i = 0; i < mesh->mNumBones; i++)
 		{
-			// here it breaks for some reason at i = 65 for some reason (working with mixamo riggings)
-			// for the moment, we will skip that 65th iteration so it works
-			bList.push_back(ParseSingleBone(i, *mesh->mBones[i]));
+			LoadSingleBone(meshIndex, mesh->mBones[i]);
 		}
-		return bList;
 	}
 
-	Bone Model::ParseSingleBone(int boneIndex, aiBone bone)
+	void Model::LoadSingleBone(int meshIndex, aiBone* bone)
 	{ 
-		// SEEMS LIKE WEIGHTS ARE NOT SAVING WELL
-		// save name, num weights, offset mat and wights
-		Bone pBone;
-		pBone.weights = new VertexWeight[bone.mNumWeights];
-		pBone.name = bone.mName.data;
-		pBone.nWeights = bone.mNumWeights;
-		//dunno how to convert aimatrix4x4 to mat4
-
-		const float* matData = bone.mOffsetMatrix.ToPtr();
-		pBone.offset = glm::make_mat4(matData);
 		
-		delete matData;
+		int bone_id = getBoneId(bone);
 
-		for (int i = 0; i <= bone.mNumWeights; i++) {
-			if (bone.mWeights != NULL)
+		WI_INFO("bone id {0}\n", bone_id);
+
+		for (int i = 0; i < bone->mNumWeights; i++) {
+			if (i == 0) WI_INFO("\n");
+
+			const aiVertexWeight& vw = bone->mWeights[i];
+
+			unsigned int globalVertexId = meshBaseVertex[meshIndex] + vw.mVertexId;
+			WI_INFO("Vertex id {0}", globalVertexId);
+
+
+			
+			if (globalVertexId > vertexToBones.size())
 			{
-				// weights should be well loaded now
-				pBone.weights[i].weight = bone.mWeights[i].mWeight;
-				pBone.weights[i].vertexId = bone.mWeights[i].mVertexId;
+				WI_ERROR("vertex to bones size error mesh id {0} at bone {1} at weight {2}", meshIndex,bone_id, i);
+				assert(0);
 			}
+			
+			
+			vertexToBones[globalVertexId].AddBoneData(bone_id, vw.mWeight);
 		}
-
-		// return our bone struct (pbone)
-		return pBone;
 	}
 
 	Model* Model::GetModelFromFile(const char* file, ModelSettings* settings)
