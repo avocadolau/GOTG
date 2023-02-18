@@ -91,6 +91,7 @@ namespace Wiwa {
 
 	void Resources::UnloadSceneResources()
 	{
+		return;
 		for (size_t i = 0; i < WRT_LAST; i++)
 		{
 			for (size_t j = 0; j < m_Resources[i].size(); j++)

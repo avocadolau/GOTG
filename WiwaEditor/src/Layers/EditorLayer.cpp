@@ -282,8 +282,14 @@ void EditorLayer::MainMenuBar()
 			ImGui::Separator();
 			if (ImGui::MenuItem(ICON_FK_FILE " New scene", ""))
 			{
-				size_t id = Wiwa::SceneManager::CreateScene();
-				Wiwa::SceneManager::ChangeScene(id);
+				Wiwa::SceneManager::UnloadScene(m_EditorSceneId);
+
+				m_EditorSceneId = Wiwa::SceneManager::CreateScene();
+				m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
+				m_OpenedScenePath = "";
+
+				Wiwa::SceneManager::SetScene(m_EditorSceneId);
+				m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
 			}
 			if (ImGui::MenuItem(ICON_FK_FOLDER " Open scene", ""))
 			{
