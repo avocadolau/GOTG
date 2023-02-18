@@ -16,7 +16,7 @@ namespace Wiwa
 		GuiCheckbox(unsigned int id, Rect2i bounds,const char* path);
 		virtual ~GuiCheckbox();
 
-		bool Update(float dt);
+		bool Update();
 		bool Draw(Renderer2D* render);
 
 		bool canClick = true;

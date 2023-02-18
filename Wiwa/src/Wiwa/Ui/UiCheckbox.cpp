@@ -23,7 +23,7 @@ namespace Wiwa
 
 	}
 
-	bool GuiCheckbox::Update(float dt)
+	bool GuiCheckbox::Update()
 	{
 		if (state != GuiControlState::DISABLED)
 		{

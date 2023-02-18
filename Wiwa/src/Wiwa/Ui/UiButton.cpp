@@ -24,7 +24,7 @@ namespace Wiwa
 
 	}
 
-	bool GuiButton::Update(float dt)
+	bool GuiButton::Update()
 	{
 		if (state != GuiControlState::DISABLED)
 		{

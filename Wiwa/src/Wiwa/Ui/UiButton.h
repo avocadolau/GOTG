@@ -17,7 +17,7 @@ namespace Wiwa
 		GuiButton(unsigned int id, Rect2i bounds, const char* path);
 		virtual ~GuiButton();
 
-		bool Update(float dt);
+		bool Update();
 		bool Draw(Renderer2D* render);
 
 		bool canClick = true;

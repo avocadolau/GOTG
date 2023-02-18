@@ -30,7 +30,7 @@ namespace Wiwa
 
 	}
 
-	bool GuiSlider::Update(float dt)
+	bool GuiSlider::Update()
 	{
 		if (state != GuiControlState::DISABLED)
 		{
