@@ -17,8 +17,8 @@ namespace Wiwa
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
 		r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 
-		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
-		textureForSlider = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+		ResourceId imgid2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
+		textureForSlider = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2);
 		r2d.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::CENTER);
 
 

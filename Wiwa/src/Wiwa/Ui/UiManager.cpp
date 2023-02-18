@@ -21,7 +21,7 @@ namespace Wiwa
 		return true;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds,Image* texture, Image* sliderTexture, Rect2i sliderBounds)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds)
 	{
 		
 		GuiControl* control = nullptr;
@@ -30,14 +30,14 @@ namespace Wiwa
 		switch (type)
 		{
 		case GuiControlType::BUTTON:
-			control = new GuiButton(id, bounds, texture);
+			control = new GuiButton(id, bounds, path);
 			break;
 
 		case GuiControlType::CHECKBOX:
-			control = new GuiCheckbox(id, bounds);
+			control = new GuiCheckbox(id, bounds, path);
 			break;
 		case GuiControlType::SLIDER:
-			control = new GuiSlider(id, bounds, sliderBounds, texture, sliderTexture);
+			control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
 			break;
 		default:
 			break;

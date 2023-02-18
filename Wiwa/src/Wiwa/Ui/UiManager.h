@@ -35,7 +35,7 @@ namespace Wiwa
 		bool CleanUp();
 
 		// Additional methods
-		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,Image* texture, Image* sliderTexture, Rect2i sliderBounds);
+		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds);
 		void DestroyGuiControl(int id);
 		void AddGuiControl(GuiControl* entity);
 
