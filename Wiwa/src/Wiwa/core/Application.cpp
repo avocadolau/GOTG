@@ -91,8 +91,6 @@ namespace Wiwa {
 
 		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
-		//Init physics manager
-
 		bool res = Audio::Init();
 
 		if (!res) {
@@ -146,12 +144,6 @@ namespace Wiwa {
 			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT);
-
-			// Update scene manager
-			SceneManager::ModuleUpdate();
-
-			// Update physics manager
-
 
 			// Update audio
 			Audio::Update();

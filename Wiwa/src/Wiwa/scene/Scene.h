@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/physics/PhysicsManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
@@ -37,6 +38,8 @@ namespace Wiwa {
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
+		PhysicsManager& GetPhysicsManager() { return m_PhysicsManager; }
+
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -54,6 +57,7 @@ namespace Wiwa {
 
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
+		PhysicsManager m_PhysicsManager;
 	private:
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;

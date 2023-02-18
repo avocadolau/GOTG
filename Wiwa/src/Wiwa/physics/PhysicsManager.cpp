@@ -1,24 +1,16 @@
 #include <wipch.h>
 #include "PhysicsManager.h"
+#include "Wiwa/ecs/EntityManager.h"
+#include "Wiwa/scene/SceneManager.h"
+
 #include <glew.h>
+
 #include <Wiwa/utilities/Log.h>
 #include "Wiwa/utilities/time/Time.h"
+
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-bool PhysicsManager::s_Debug = true;
-btDefaultCollisionConfiguration* PhysicsManager::s_Collision_conf = new btDefaultCollisionConfiguration();
-btCollisionDispatcher* PhysicsManager::s_Dispatcher = new btCollisionDispatcher(s_Collision_conf);
-btBroadphaseInterface* PhysicsManager::s_Broad_phase = new btDbvtBroadphase();
-btSequentialImpulseConstraintSolver* PhysicsManager::s_Solver = new btSequentialImpulseConstraintSolver();
-DebugDrawer* PhysicsManager::s_Debug_draw = new DebugDrawer();
-
-btDiscreteDynamicsWorld* PhysicsManager::s_World = new btDiscreteDynamicsWorld(s_Dispatcher, s_Broad_phase, s_Solver, s_Collision_conf);
-std::vector<btCollisionShape*> PhysicsManager::s_Shapes;
-std::vector<btRigidBody*> PhysicsManager::s_Bodies;
-std::vector<btDefaultMotionState*> PhysicsManager::s_Motions;
-std::vector<btTypedConstraint*> PhysicsManager::s_Constraints;
 
 PhysicsManager::PhysicsManager()
 {
@@ -30,33 +22,42 @@ PhysicsManager::~PhysicsManager()
 
 bool PhysicsManager::InitWorld()
 {
-	s_Debug_draw->setDebugMode(s_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
-	s_World->setDebugDrawer(s_Debug_draw);
-	s_World->setGravity(GRAVITY * 2);
+	m_Debug = true;
+	m_Collision_conf = new btDefaultCollisionConfiguration();
+	m_Dispatcher = new btCollisionDispatcher(m_Collision_conf);
+	m_Broad_phase = new btDbvtBroadphase();
+	m_Solver = new btSequentialImpulseConstraintSolver();
+	m_Debug_draw = new DebugDrawer();
 
-	//// Big plane as ground
-	//{
-	//	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+	m_World = new btDiscreteDynamicsWorld(m_Dispatcher, m_Broad_phase, m_Solver, m_Collision_conf);
 
-	//	btDefaultMotionState* myMotionState = new btDefaultMotionState();
-	//	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
+	m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
+	m_World->setDebugDrawer(m_Debug_draw);
+	m_World->setGravity(GRAVITY * 2);
 
-	//	btRigidBody* body = new btRigidBody(rbInfo);
-	//	s_World->addRigidBody(body);
+	// Big plane as ground
+	{
+		btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
 
-	//}
+		btDefaultMotionState* myMotionState = new btDefaultMotionState();
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
+
+		btRigidBody* body = new btRigidBody(rbInfo);
+		m_World->addRigidBody(body);
+
+	}
 
 	return true;
 }
 
 bool PhysicsManager::StepSimulation()
 {
-	s_World->stepSimulation(Wiwa::Time::GetDeltaTime(), 15);
+	m_World->stepSimulation(Wiwa::Time::GetDeltaTime(), 15);
 
-	int numManifolds = s_World->getDispatcher()->getNumManifolds();
+	int numManifolds = m_World->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
 	{
-		btPersistentManifold* contactManifold = s_World->getDispatcher()->getManifoldByIndexInternal(i);
+		btPersistentManifold* contactManifold = m_World->getDispatcher()->getManifoldByIndexInternal(i);
 		btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
 		btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
 
@@ -84,19 +85,11 @@ bool PhysicsManager::StepSimulation()
 	return true;
 }
 
-bool PhysicsManager::UpdateWorld()
-{
-	UpdateEngineToPhysics();
-	StepSimulation();
-	UpdatePhysicsToEngine();
-	return true;
-}
-
 bool PhysicsManager::UpdateEngineToPhysics()
 {
 	// Set the position offset
 	// Get the position from the engine
-	for (std::vector<btRigidBody*>::iterator item = s_Bodies.begin(); item != s_Bodies.end(); item++)
+	for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 	{
 		ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
 
@@ -124,7 +117,7 @@ bool PhysicsManager::UpdateEngineToPhysics()
 bool PhysicsManager::UpdatePhysicsToEngine()
 {
 	// Physics to Engine
-	for (std::vector<btRigidBody*>::iterator item = s_Bodies.begin(); item != s_Bodies.end(); item++)
+	for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 	{
 		ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
 		
@@ -144,7 +137,7 @@ bool PhysicsManager::UpdatePhysicsToEngine()
 		bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));
 
 		(*item)->getCollisionShape()->setLocalScaling((btVector3(entityData->rigidBody->scalingOffset.x, entityData->rigidBody->scalingOffset.y, entityData->rigidBody->scalingOffset.z)));
-		s_World->updateSingleAabb((*item));
+		m_World->updateSingleAabb((*item));
 	}
 
 	return true;
@@ -153,10 +146,10 @@ bool PhysicsManager::UpdatePhysicsToEngine()
 bool PhysicsManager::CleanWorld()
 {
 	// Remove from the world all collision bodies
-	for (int i = s_World->getNumCollisionObjects() - 1; i >= 0; i--)
+	for (int i = m_World->getNumCollisionObjects() - 1; i >= 0; i--)
 	{
-		btCollisionObject* obj = s_World->getCollisionObjectArray()[i];
-		s_World->removeCollisionObject(obj);
+		btCollisionObject* obj = m_World->getCollisionObjectArray()[i];
+		m_World->removeCollisionObject(obj);
 	}
 
 	//for (std::list<btTypedConstraint*>::iterator item = constraints.begin(); item != constraints.end(); item++)
@@ -174,44 +167,68 @@ bool PhysicsManager::CleanWorld()
 
 	/*constraints.clear();*/
 
-	for(std::vector<btDefaultMotionState*>::iterator item = s_Motions.begin(); item != s_Motions.end(); item++)
+	for(std::list<btDefaultMotionState*>::iterator item = m_Motions.begin(); item != m_Motions.end(); item++)
 	{
 		delete *item;
 		*item = nullptr;
 	}
 
-	s_Motions.clear();
+	m_Motions.clear();
 
-	for (std::vector<btCollisionShape*>::iterator item = s_Shapes.begin(); item != s_Shapes.end(); item++)
+	for (std::list<btCollisionShape*>::iterator item = m_Shapes.begin(); item != m_Shapes.end(); item++)
 	{
 		delete* item;
 		*item = nullptr;
 	}
 
-	s_Shapes.clear();
+	m_Shapes.clear();
 
-	for (std::vector<btRigidBody*>::iterator item = s_Bodies.begin(); item != s_Bodies.end(); item++)
+	for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 	{
 		delete (ObjectData*)(*item)->getUserPointer();
 		delete* item;
 		*item = nullptr;
 	}
 
-	s_Bodies.clear();
+	m_Bodies.clear();
 
-	delete s_Debug_draw;
-	delete s_Solver;
-	delete s_Broad_phase;
-	delete s_Dispatcher;
-	delete s_Collision_conf;
+	delete m_Debug_draw;
+	delete m_Solver;
+	delete m_Broad_phase;
+	delete m_Dispatcher;
+	delete m_Collision_conf;
 
+	return true;
+}
+
+bool PhysicsManager::DeleteBody(btRigidBody* body)
+{
+	//int constrainNums = body->m_Body->getNumConstraintRefs();
+	//if (constrainNums > 0)
+	//{
+	//	for (int i = 0; i < constrainNums; i++)
+	//	{
+	//		constraints.remove(body->m_Body->getConstraintRef(i));
+	//		world->removeConstraint(body->m_Body->getConstraintRef(i));
+	//		delete body->m_Body->getConstraintRef(i);
+	//	}
+	//}
+
+	m_Motions.remove((btDefaultMotionState*)body->getMotionState());
+	delete body->getMotionState();
+
+	m_Shapes.remove(body->getCollisionShape());
+	delete body->getCollisionShape();
+
+	m_World->removeRigidBody(body);
+	delete body;
 	return true;
 }
 
 bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform,  Wiwa::Rigidbody& rigid_body)
 {
 	btCollisionShape* colShape = new btSphereShape(sphere.radius);
-	s_Shapes.push_back(colShape);
+	m_Shapes.push_back(colShape);
 	btTransform startTransform;
 	startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
 
@@ -220,18 +237,25 @@ bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere
 		colShape->calculateLocalInertia(rigid_body.mass, localInertia);
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	s_Motions.push_back(myMotionState);
+	m_Motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
+	body->setUserIndex(id);
 
 	ObjectData* data = new ObjectData();
 	data->rigidBody = &rigid_body;
 	data->transform3d = &transform;
 	data->id = id;
 	
-	s_World->addRigidBody(body);
-	s_Bodies.push_back(body);
+	body->setUserPointer(data);
+	m_World->addRigidBody(body);
+	m_Bodies.push_back(body);
+
+	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	const char* e_name = entityManager.GetEntityName(id);
+	WI_INFO("New rigidbody for --> {}", e_name);
+
 	return true;
 }
 
@@ -244,7 +268,7 @@ bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa
 	glm::vec3 Translation;
 	glm::decompose(transform.worldMatrix, Scaling, Rotation, Translation, skew, perspective);
 	btCollisionShape* colShape = new btBoxShape(btVector3(cube.halfExtents.x, cube.halfExtents.y, cube.halfExtents.z));
-	s_Shapes.push_back(colShape);
+	m_Shapes.push_back(colShape);
 
 	btTransform startTransform;
 	startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
@@ -254,18 +278,24 @@ bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa
 		colShape->calculateLocalInertia(rigid_body.mass, localInertia);
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	s_Motions.push_back(myMotionState);
+	m_Motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
+	body->setUserIndex(id);
 
 	ObjectData* data = new ObjectData();
 	data->rigidBody = &rigid_body;
 	data->transform3d = &transform;
 	data->id = id;
 
-	s_World->addRigidBody(body);
-	s_Bodies.push_back(body);
+	body->setUserPointer(data);
+	m_World->addRigidBody(body);
+	m_Bodies.push_back(body);
+
+	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	const char* e_name = entityManager.GetEntityName(id);
+	WI_INFO("New rigidbody for --> {}", e_name);
 
 	return true;
 }
@@ -273,7 +303,7 @@ bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa
 bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 {
 	btCollisionShape* colShape = new btCylinderShapeX(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
-	s_Shapes.push_back(colShape);
+	m_Shapes.push_back(colShape);
 
 	btTransform startTransform;
 	startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
@@ -283,35 +313,44 @@ bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cy
 		colShape->calculateLocalInertia(rigid_body.mass, localInertia);
 
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-	s_Motions.push_back(myMotionState);
+	m_Motions.push_back(myMotionState);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
 	btRigidBody* body = new btRigidBody(rbInfo);
+	body->setUserIndex(id);
 
 	ObjectData* data = new ObjectData();
 	data->rigidBody = &rigid_body;
 	data->transform3d = &transform;
 	data->id = id;
 
-	s_World->addRigidBody(body);
-	s_Bodies.push_back(body);
+	body->setUserPointer(data);
+	m_World->addRigidBody(body);
+	m_Bodies.push_back(body);
+
+	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	const char* e_name = entityManager.GetEntityName(id);
+	WI_INFO("New rigidbody for --> {}", e_name);
 
 	return true;
 }
 
-inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
+btRigidBody* PhysicsManager::FindByEntityId(size_t id)
 {
-	return glm::vec3(vector.x, vector.y, vector.z);
+	for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+	{
+		if ((*item)->getUserIndex() == id)
+			return *item;
+	}
+	return nullptr;
 }
-
-
 
 // =============================================
 
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
 	glUseProgram(0);
-	glColor3f(0, 0, 255);
+	glColor3f(255, 0, 0);
 	glLineWidth(2.0f);
 	glBegin(GL_LINES);
 	glVertex3f(from.getX(), from.getY(), from.getZ());
@@ -339,10 +378,10 @@ void DebugDrawer::draw3dText(const btVector3& location, const char* text_string)
 
 void DebugDrawer::setDebugMode(int debug_mode)
 {
-	s_Mode = (DebugDrawModes)debug_mode;
+	mode = (DebugDrawModes)debug_mode;
 }
 
 int DebugDrawer::getDebugMode() const
 {
-	return s_Mode;
+	return mode;
 }

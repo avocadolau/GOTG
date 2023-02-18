@@ -26,6 +26,7 @@ namespace Wiwa {
 	void Scene::Awake()
 	{
 		m_EntityManager.SystemsAwake();
+		m_PhysicsManager.InitWorld();
 	}
 
 	void Scene::Init()
@@ -83,6 +84,7 @@ namespace Wiwa {
 	{
 		if (unload_resources) {
 			Wiwa::Resources::UnloadSceneResources();
+			m_PhysicsManager.CleanWorld();
 		}
 	}
 

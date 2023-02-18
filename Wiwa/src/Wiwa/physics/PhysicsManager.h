@@ -1,3 +1,5 @@
+#pragma once
+#pragma warning(disable : 4251)
 #include <wipch.h>
 #include <Wiwa/core/Core.h>
 
@@ -7,7 +9,7 @@
 #include <Wiwa/ecs/components/ColliderSphere.h>
 #include "Wiwa/ecs/components/Transform3D.h"
 
-#include <btBulletDynamicsCommon.h>
+#include "btBulletDynamicsCommon.h"
 #include <glm/glm.hpp>
 
 #include <vector>
@@ -18,9 +20,6 @@ class DebugDrawer;
 
 class WI_API PhysicsManager
 {
-private:
-	PhysicsManager();
-
 	struct ObjectData
 	{
 		Wiwa::Rigidbody* rigidBody;
@@ -29,43 +28,52 @@ private:
 	};
 
 public:
+	PhysicsManager();
+
 	~PhysicsManager();
 
-	static bool InitWorld();
+	bool InitWorld();
 
-	static bool StepSimulation();
+	bool StepSimulation();
 
-	static bool UpdateWorld();
+	bool UpdateEngineToPhysics();
 
-	static bool UpdateEngineToPhysics();
-	
-	static bool UpdatePhysicsToEngine();
+	bool UpdatePhysicsToEngine();
 
-	static bool CleanWorld();
+	bool CleanWorld();
 
-	static bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+	bool DeleteBody(btRigidBody* body);
 
-	static bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+	bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
-	static bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+	bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+
+	bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+
+	btRigidBody* FindByEntityId(size_t id);
+
+	inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
+	{
+		return glm::vec3(vector.x, vector.y, vector.z);
+	}
 
 private:
-	static bool s_Debug;
+	bool m_Debug;
 
-	static btDiscreteDynamicsWorld* s_World;
+	btDiscreteDynamicsWorld* m_World;
 
-	static btDefaultCollisionConfiguration* s_Collision_conf;
-	static btCollisionDispatcher* s_Dispatcher;
-	static btBroadphaseInterface* s_Broad_phase;
-	static btSequentialImpulseConstraintSolver* s_Solver;
+	btDefaultCollisionConfiguration* m_Collision_conf;
+	btCollisionDispatcher* m_Dispatcher;
+	btBroadphaseInterface* m_Broad_phase;
+	btSequentialImpulseConstraintSolver* m_Solver;
 
-	//static btDefaultVehicleRaycaster* v_Vehicle_raycaster;
-	static DebugDrawer* s_Debug_draw;
+	//  btDefaultVehicleRaycaster* v_Vehicle_raycaster;
+	DebugDrawer* m_Debug_draw;
 
-	static std::vector<btCollisionShape*> s_Shapes;
-	static std::vector<btRigidBody*> s_Bodies;
-	static std::vector<btDefaultMotionState*> s_Motions;
-	static std::vector<btTypedConstraint*> s_Constraints;
+	std::list<btCollisionShape*> m_Shapes;
+	std::list<btRigidBody*> m_Bodies;
+	std::list<btDefaultMotionState*> m_Motions;
+	std::list<btTypedConstraint*> m_Constraints;
 };
 
 class DebugDrawer : public btIDebugDraw
@@ -81,7 +89,7 @@ public:
 	 void setDebugMode(int debug_mode);
 	 int  getDebugMode() const;
 
-	 DebugDrawModes s_Mode;
+	 DebugDrawModes mode;
 };
 
-inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector);
+
