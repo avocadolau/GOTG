@@ -5,6 +5,7 @@
 #include "UiButton.h"
 #include "UiCheckbox.h"
 #include "UiSlider.h"
+#include "UiText.h"
 #include <Wiwa/core/Application.h>
 
 namespace Wiwa
@@ -38,6 +39,27 @@ namespace Wiwa
 			break;
 		case GuiControlType::SLIDER:
 			control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
+			break;
+		case GuiControlType::TEXT:
+			control = new GuiText(id,bounds,)
+		default:
+			break;
+		}
+		//Set the observer
+		//control->SetObserver(observer);
+
+		// Created GuiControls are added to the list of controls
+		if (control != nullptr) controls.push_back(control);
+		return control;
+	}
+
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text)
+	{
+		GuiControl* control = nullptr;
+		switch (type)
+		{
+		case GuiControlType::TEXT:
+			control = new GuiText(id, bounds, string_text);
 			break;
 		default:
 			break;

@@ -14,10 +14,10 @@ namespace Wiwa
 	{
 	public:
 
-		GuiText(unsigned int id, Rect2i bounds, Image* texture);
+		GuiText(unsigned int id, Rect2i bounds, const char* string_text);
 		virtual ~GuiText();
 
-		bool Update(float dt);
+		bool Update();
 		bool Draw(Renderer2D* render);
 
 		bool canClick = true;
