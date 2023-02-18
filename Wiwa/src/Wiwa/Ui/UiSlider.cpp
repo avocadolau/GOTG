@@ -7,12 +7,21 @@
 
 namespace Wiwa
 {
-	GuiSlider::GuiSlider(unsigned int id, Rect2i bounds, Rect2i sliderBounds, Image* texture, Image* sliderTexture) : GuiControl(GuiControlType::SLIDER, id)
+	GuiSlider::GuiSlider(unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path) : GuiControl(GuiControlType::SLIDER, id)
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
-		this->texture = texture;
-		this->textureForSlider = sliderTexture;
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
+		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(path);
+		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+		r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+
+		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
+		textureForSlider = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+		r2d.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::CENTER);
+
+
 		//canClick = true;
 	}
 
@@ -66,7 +75,6 @@ namespace Wiwa
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-		Wiwa::Renderer2D& r2d_2 = Wiwa::Application::Get().GetRenderer2D();
 		Vector2i positionForUpdate_1;
 		Vector2i positionForUpdate_2;
 
@@ -78,14 +86,12 @@ namespace Wiwa
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
 
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
@@ -95,14 +101,12 @@ namespace Wiwa
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
@@ -113,14 +117,12 @@ namespace Wiwa
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
@@ -129,14 +131,12 @@ namespace Wiwa
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;
@@ -148,14 +148,12 @@ namespace Wiwa
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
 			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-			r2d_1.CreateInstancedQuadTex(textureForSlider->GetTextureId(), textureForSlider->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_2.x = extraPosition.x;
 			positionForUpdate_2.y = extraPosition.y;
 			positionForUpdate_2.w = extraPosition.width;

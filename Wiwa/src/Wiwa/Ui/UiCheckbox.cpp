@@ -7,9 +7,13 @@
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(unsigned int id, Rect2i bounds) : GuiControl(GuiControlType::BUTTON, id)
+	GuiCheckbox::GuiCheckbox(unsigned int id, Rect2i bounds,const char* path) : GuiControl(GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
+		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(path);
+		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		canClick = true;
 	}
@@ -70,7 +74,6 @@ namespace Wiwa
 		{
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
@@ -80,7 +83,6 @@ namespace Wiwa
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
@@ -91,7 +93,6 @@ namespace Wiwa
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
@@ -100,7 +101,6 @@ namespace Wiwa
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
@@ -112,7 +112,6 @@ namespace Wiwa
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			positionForUpdate_1.x = position.x;
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
