@@ -308,6 +308,7 @@ namespace Wiwa {
 			eid = m_EntitiesRemoved[rsize - 1];
 
 			m_EntitiesRemoved.pop_back();
+			m_EntityActive[eid] = true;
 		}
 		else {
 			eid = m_EntityComponents.size();
@@ -459,6 +460,8 @@ namespace Wiwa {
 
 	byte* EntityManager::AddComponent(EntityId entity, const Type* type, byte* value)
 	{
+		if (type == NULL) return NULL;
+
 		// Get component ID
 		ComponentId cid = GetComponentId(type);
 
@@ -709,6 +712,7 @@ namespace Wiwa {
 		if (stype) {
 			System* system = (System*)stype->New();
 			system->SetEntity(eid);
+			system->OnSystemAdded();
 
 			m_EntitySystems[eid].push_back(system);
 			m_EntitySystemHashes[eid].push_back(system_hash);
@@ -745,6 +749,7 @@ namespace Wiwa {
 			}
 		}
 
+		system->OnSystemRemoved();
 		delete system;
 	}
 }

@@ -91,6 +91,7 @@ namespace Wiwa {
 
 	void Resources::UnloadSceneResources()
 	{
+		return;
 		for (size_t i = 0; i < WRT_LAST; i++)
 		{
 			for (size_t j = 0; j < m_Resources[i].size(); j++)
@@ -145,6 +146,11 @@ namespace Wiwa {
 			time_t fileTime = to_time_t(std::filesystem::last_write_time(filename));
 			metaFile["timeCreated"] = fileTime;
 		}
+	}
+
+	bool Resources::_file_exists(const char* path)
+	{
+		return Wiwa::FileSystem::Exists(path);
 	}
 
 	void Resources::_import_image_impl(const char* origin, const char* destination)

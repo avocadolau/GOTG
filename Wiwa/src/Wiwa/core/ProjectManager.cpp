@@ -4,23 +4,27 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/Scene.h>
 
-namespace Utils
+namespace Wiwa
 {
 	std::filesystem::path ProjectManager::m_CurrentProject = "";
+	std::string ProjectManager::m_Name;
+	std::string ProjectManager::m_Version;
+	std::string ProjectManager::m_Company;
+	ProjectManager::Target ProjectManager::m_Target;
 
 	void ProjectManager::CreateProject(const char* file)
 	{
+		m_Name = "New project";
+		m_Version = "0.1";
+		m_Company = "My company";
+		m_Target = Target::Windows;
+
 		Wiwa::JSONDocument doc;
-		doc.AddMember("name", Wiwa::Application::Get().GetProjectName());
-		doc.AddMember("version", Wiwa::Application::Get().GetProjectVersion());
-		doc.AddMember("company", Wiwa::Application::Get().GetProjectCompany());
-		std::vector<Wiwa::Scene*> ref = Wiwa::SceneManager::getScenes();
+		doc.AddMember("name", m_Name.c_str());
+		doc.AddMember("version", m_Version.c_str());
+		doc.AddMember("company", m_Company.c_str());
+		doc.AddMember("target", (int)m_Target);
 		
-		for (int i = 0; i < ref.size(); i++)
-		{
-			std::string name = "scene" + i;
-			//doc.AddMember(name, ref[i].);
-		}
 		std::string path = file;
 		path += ".wiproject";
 		doc.save_file(path.c_str());
@@ -31,26 +35,28 @@ namespace Utils
 		Wiwa::JSONDocument doc(file);
 		m_CurrentProject = file;
 		if (doc.HasMember("name"))
-			Wiwa::Application::Get().SetProjectName(doc["name"].get<const char*>());
+			m_Name = doc["name"].as_string();
 		if (doc.HasMember("version"))
-			Wiwa::Application::Get().SetProjectVersion(doc["version"].get<const char*>());
+			m_Version = doc["version"].as_string();
 		if (doc.HasMember("company"))
-			Wiwa::Application::Get().SetProjectCompany(doc["company"].get<const char*>());
+			m_Company = doc["company"].get<const char*>();
 
 		doc.save_file(file);
 	}
 
-	void ProjectManager::SaveProject()
+	bool ProjectManager::SaveProject()
 	{
 		if (m_CurrentProject.empty())
 		{
-			return;
+			return false;
 		}
 		Wiwa::JSONDocument doc(m_CurrentProject.string().c_str());
-		doc.AddMember("name", Wiwa::Application::Get().GetProjectName());
-		doc.AddMember("version", Wiwa::Application::Get().GetProjectVersion());
-		doc.AddMember("company", Wiwa::Application::Get().GetProjectCompany());
+		doc.AddMember("name", m_Name.c_str());
+		doc.AddMember("version", m_Version.c_str());
+		doc.AddMember("company", m_Company.c_str());
 		doc.save_file(m_CurrentProject.string().c_str());
+
+		return true;
 	}
 
 	void ProjectManager::SaveProjectAs(const char* file)
@@ -59,9 +65,9 @@ namespace Utils
 		path += ".wiproject";
 		Wiwa::JSONDocument doc(path.c_str());
 		m_CurrentProject = path;
-		doc.AddMember("name", Wiwa::Application::Get().GetProjectName());
-		doc.AddMember("version", Wiwa::Application::Get().GetProjectVersion());
-		doc.AddMember("company", Wiwa::Application::Get().GetProjectCompany());
+		doc.AddMember("name", m_Name.c_str());
+		doc.AddMember("version", m_Version.c_str());
+		doc.AddMember("company", m_Company.c_str());
 		doc.save_file(path.c_str());
 	}
 

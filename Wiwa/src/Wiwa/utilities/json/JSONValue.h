@@ -44,6 +44,9 @@ namespace Wiwa
 		JSONValue AddMember(const char *mem, T value);
 
 		JSONValue AddMemberObject(const char *mem);
+		JSONValue AddMemberArray(const char* mem);
+
+		void PushBack(JSONValue& value);
 
 		bool HasMember(const char *mem);
 
