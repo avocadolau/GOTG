@@ -308,6 +308,7 @@ namespace Wiwa {
 			eid = m_EntitiesRemoved[rsize - 1];
 
 			m_EntitiesRemoved.pop_back();
+			m_EntityActive[eid] = true;
 		}
 		else {
 			eid = m_EntityComponents.size();
