@@ -28,7 +28,6 @@ namespace Wiwa {
 	private:
 
 		void DeleteBody();
-		PhysicsManager* m_PhysicsManager;
 	};
 }
 

@@ -18,12 +18,13 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnInit()
 	{
-		m_PhysicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 	}
 
 	void PhysicsSystem::OnUpdate()
 	{
-		m_PhysicsManager->UpdateEngineToPhysics();
+		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
+		physicsManager->UpdateEngineToPhysics();
 
 		if (Time::IsPlaying())
 		{
@@ -31,10 +32,9 @@ namespace Wiwa {
 			const char* e_name = entityManager.GetEntityName(m_EntityId);
 			WI_INFO("Updating physics of --> {}", e_name);
 
-			m_PhysicsManager->StepSimulation();
-			m_PhysicsManager->UpdatePhysicsToEngine();
+			physicsManager->StepSimulation();
+			physicsManager->UpdatePhysicsToEngine();
 		}
-
 	}
 
 	void PhysicsSystem::OnDestroy()
@@ -48,14 +48,16 @@ namespace Wiwa {
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 		WI_INFO("Init physics of --> {}", e_name);
 
+		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		ColliderCube* cube = GetComponent<ColliderCube>();
 		Transform3D* transform = GetComponent<Transform3D>();
 
 		if (rb && cube)
 		{
-			m_PhysicsManager->AddBodyCube(m_EntityId, *cube, *transform, *rb);
-			m_PhysicsManager->UpdateEngineToPhysics();
+			physicsManager->AddBodyCube(m_EntityId, *cube, *transform, *rb);
+			physicsManager->UpdateEngineToPhysics();
 		}
 	}
 	void PhysicsSystem::OnSystemRemoved()
@@ -65,14 +67,18 @@ namespace Wiwa {
 
 	void PhysicsSystem::DeleteBody()
 	{
-		m_PhysicsManager->UpdateEngineToPhysics();
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 		WI_INFO("Deleting physics of --> {}", e_name);
 
-		btRigidBody* body = m_PhysicsManager->FindByEntityId(m_EntityId);
+		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 
-		if (body != nullptr)
-			m_PhysicsManager->DeleteBody(body);
+		if (physicsManager != NULL)
+		{
+			btRigidBody* body = physicsManager->FindByEntityId(m_EntityId);
+
+			if (body != nullptr)
+				physicsManager->DeleteBody(body);
+		}
 	}
 }

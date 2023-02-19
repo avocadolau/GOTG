@@ -14,12 +14,18 @@ namespace Wiwa {
 		mMaxTimeLeaving = 0;
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
+		m_PhysicsManager = new PhysicsManager();
+		m_PhysicsManager->InitWorld();
 	}
 
 	Scene::~Scene()
 	{
 		delete m_CameraManager;
 		delete m_LightManager;
+
+		m_PhysicsManager->CleanWorld();
+		delete m_PhysicsManager;
+		m_PhysicsManager = nullptr;
 	}
 
 	void Scene::Start()
@@ -29,7 +35,6 @@ namespace Wiwa {
 	void Scene::Awake()
 	{
 		m_EntityManager.SystemsAwake();
-		m_PhysicsManager.InitWorld();
 	}
 
 	void Scene::Init()
@@ -71,9 +76,10 @@ namespace Wiwa {
 
 		m_EntityManager.Update();
 
+		m_PhysicsManager->LogBodies();
+
 		if (!SceneManager::IsPlaying()) {
 			m_EntityManager.UpdateWhitelist();
-			
 		}
 	}
 
@@ -87,8 +93,7 @@ namespace Wiwa {
 	void Scene::Unload(bool unload_resources)
 	{
 		if (unload_resources) {
-			Wiwa::Resources::UnloadSceneResources();
-	
+			Wiwa::Resources::UnloadSceneResources();				
 		}
 	}
 

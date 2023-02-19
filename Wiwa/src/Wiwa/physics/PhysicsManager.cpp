@@ -35,7 +35,7 @@ namespace Wiwa {
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
-		m_World->setGravity(GRAVITY * 2);
+		m_World->setGravity(GRAVITY);
 
 		// Big plane as ground
 		{
@@ -49,6 +49,7 @@ namespace Wiwa {
 
 		}
 
+		WI_INFO("Physics Manager Init");
 		m_HasBeenInit = true;
 		return true;
 	}
@@ -97,7 +98,7 @@ namespace Wiwa {
 			ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
 
 			// Get the position from the engine
-			glm::vec3 posEngine = WiwaToGLM(entityData->transform3d->localPosition);
+			glm::vec3 posEngine = entityData->transform3d->localPosition;
 			glm::quat rotEngine = glm::quat(entityData->transform3d->localMatrix);
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
@@ -259,7 +260,6 @@ namespace Wiwa {
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(id);
-		WI_INFO("New rigidbody for --> {}", e_name);
 
 		return true;
 	}
@@ -300,7 +300,6 @@ namespace Wiwa {
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(id);
-		WI_INFO("New rigidbody for --> {}", e_name);
 
 		return true;
 	}
@@ -335,7 +334,6 @@ namespace Wiwa {
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(id);
-		WI_INFO("New rigidbody for --> {}", e_name);
 
 		return true;
 	}
@@ -355,18 +353,35 @@ namespace Wiwa {
 		return m_HasBeenInit;
 	}
 
+	bool PhysicsManager::LogBodies()
+	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+		WI_INFO("World has total of {} bodies", m_Bodies.size());
+		int num = 0;
+		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		{
+			int id = (*item)->getUserIndex();
+			btVector3 pos = (*item)->getWorldTransform().getOrigin();
+			const char* e_name = entityManager.GetEntityName(id);
+			WI_INFO("{} Position of {} is {} {} {}", num, e_name, pos.x(), pos.y(), pos.z()); 
+			num++;
+		}
+		return true;
+	}
+
 	// =============================================
 
 	void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 	{
-		/*glUseProgram(0);
+		glUseProgram(0);
 		glColor3f(255, 0, 0);
 		glLineWidth(2.0f);
 		glBegin(GL_LINES);
 		glVertex3f(from.getX(), from.getY(), from.getZ());
 		glVertex3f(to.getX(), to.getY(), to.getZ());
 		glEnd();
-		glLineWidth(1.0f);*/
+		glLineWidth(1.0f);
 	}
 
 	void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)

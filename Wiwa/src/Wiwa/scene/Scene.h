@@ -39,7 +39,7 @@ namespace Wiwa {
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
-		PhysicsManager& GetPhysicsManager() { return m_PhysicsManager; }
+		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
 
 		LightManager& GetLightManager() { return *m_LightManager; }
 		inline const char* getName() { return m_Name.c_str(); }
@@ -59,7 +59,7 @@ namespace Wiwa {
 
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
-		PhysicsManager m_PhysicsManager;
+		PhysicsManager* m_PhysicsManager;
 		LightManager* m_LightManager;
 	private:
 		State m_CurrentState = SCENE_ENTERING;

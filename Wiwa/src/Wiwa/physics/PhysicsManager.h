@@ -60,6 +60,8 @@ namespace Wiwa {
 
 		bool getInit();
 
+		bool LogBodies();
+
 	private:
 		bool m_Debug;
 		bool m_HasBeenInit;
