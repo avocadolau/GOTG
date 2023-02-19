@@ -48,8 +48,8 @@ void EditorLayer::OnAttach()
 	Wiwa::SceneManager::StopScene();
 
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
-	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
 	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("PhysicsSystem"));
+	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId);
 
