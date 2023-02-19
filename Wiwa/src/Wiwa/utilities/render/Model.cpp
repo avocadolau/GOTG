@@ -147,18 +147,17 @@ namespace Wiwa {
 				totalIndices += numIndices;
 				totalBones += numBones;
 
-				vertexToBones.resize(totalVertices);
-
 				Model* model = loadmesh(pMesh);
-
-				if (gen_buffers) { 
-					model->generateBuffers();
-				}
 
 				//Load bones
 				if (pMesh->HasBones())
 				{
-					LoadMeshBones(i,pMesh);
+					bones.resize(totalVertices);
+					LoadMeshBones(i, pMesh);
+				}
+
+				if (gen_buffers) { 
+					model->generateBuffers();
 				}
 
 				models.push_back(model);
@@ -218,6 +217,12 @@ namespace Wiwa {
 				f.Read(&ebo_size, sizeof(size_t));
 				model->ebo_data.resize(ebo_size);
 				f.Read(&model->ebo_data[0], ebo_size * sizeof(int));
+
+				//// Read Bones
+				//size_t bones_size;
+				//f.Read(&bones_size, sizeof(size_t));
+				//model->bones.resize(bones_size);
+				//f.Read(&model->bones[0], bones_size * sizeof(VertexBoneData));
 
 				model->generateBuffers();
 				models.push_back(model);
@@ -602,7 +607,7 @@ namespace Wiwa {
 		glGenBuffers(1, &ebo);
 		glGenVertexArrays(1, &vao);
 		//WI_CORE_INFO("Generating buffers DONE");
-		
+
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
@@ -636,6 +641,19 @@ namespace Wiwa {
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
 
+		//temporary method to load mesh if it has bones
+		bool skip = bones.empty();
+
+		if (!skip)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bonevb);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bones[0]) * bones.size(), &bones[0], GL_STATIC_DRAW);
+
+			if (glGetError() != 0)
+			{
+				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+			}
+		}
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
@@ -644,11 +662,18 @@ namespace Wiwa {
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
 
+		if (!skip) {
+			glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+			glEnableVertexAttribArray(3);
+			glVertexAttribPointer(4, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
+				(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
+			glEnableVertexAttribArray(4);
+		}
+
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
-
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
@@ -818,14 +843,13 @@ namespace Wiwa {
 
 
 			
-			if (globalVertexId > vertexToBones.size())
+			if (globalVertexId > bones.size())
 			{
 				WI_ERROR("vertex to bones size error mesh id {0} at bone {1} at weight {2}", meshIndex,bone_id, i);
 				assert(0);
 			}
 			
-			
-			vertexToBones[globalVertexId].AddBoneData(bone_id, vw.mWeight);
+			bones[globalVertexId].AddBoneData(bone_id, vw.mWeight);
 		}
 	}
 
@@ -875,6 +899,11 @@ namespace Wiwa {
 				size_t ebo_size = c_model->ebo_data.size();
 				f.Write(&ebo_size, sizeof(size_t));
 				f.Write(c_model->ebo_data.data(), ebo_size * sizeof(int));
+
+				////Model bones
+				//size_t bones_size = c_model->bones.size();
+				//f.Write(&bones_size, sizeof(size_t));
+				//f.Write(c_model->bones.data(), sizeof(size_t));
 			}
 
 			// Model hierarchy

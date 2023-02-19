@@ -9,7 +9,7 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
-#define MAX_NUM_BONES_PER_VERTEX 5
+#define MAX_NUM_BONES_PER_VERTEX 4
 
 struct aiMesh;
 struct aiNode;
@@ -100,8 +100,8 @@ namespace Wiwa {
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
 
-		std::vector<Bone> bones;
-		std::vector<VertexBoneData> vertexToBones;
+		std::vector<VertexBoneData> bones;
+		//std::vector<VertexBoneData> vertexToBones;
 		std::vector<int> meshBaseVertex;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
 
@@ -111,7 +111,7 @@ namespace Wiwa {
 
 		void generateBuffers();
 	private:
-		unsigned int vao, vbo, ebo, bbvao, bbvbo, bbebo;
+		unsigned int vao, vbo, ebo, bbvao, bbvbo, bbebo, bonevb;
 
 		void getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers=true);
 		void getWiMeshFromFile(const char* file);
