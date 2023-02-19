@@ -105,6 +105,7 @@ namespace Wiwa {
 			return m_Resources[type][id]->filePath.c_str();
 		}
 		
+		static bool _file_exists(const char* path);
 		
 		// Implementations
 		static void _import_image_impl(const char* origin, const char* destination);
@@ -152,7 +153,7 @@ namespace Wiwa {
 		template<class T> static ResourceId LoadNative(const char* file);
 		template<class T> static T* GetResourceById(ResourceId id);
 		template<class T> static bool CheckImport(const char* file);
-		template<class T, class... T2> static void Import(const char* file, T2... settings);
+		template<class T, class... T2> static bool Import(const char* file, T2... settings);
 		template<class T, class... T2> static void CreateMeta(const char* file, T2... settings);
 		template<class T, class... T2> static void LoadMeta(const char* file, T2... settings);
 
