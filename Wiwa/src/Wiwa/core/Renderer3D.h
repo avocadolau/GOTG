@@ -26,6 +26,8 @@
 
 #include <Wiwa/utilities/render/Uniforms.h>
 
+#include <Wiwa/utilities/render/Skybox.h>
+
 namespace Wiwa {
 	class WI_API Renderer3D {
 	public:
@@ -36,7 +38,8 @@ namespace Wiwa {
 			LIGHTING,
 			COLOR_MATERIAL,
 			TEXTURE_2D,
-			WIREFRAME
+			WIREFRAME,
+			GAMMA_CORRECTION
 		};
 	private:
 		glm::mat4 m_PersProj{ 0.0f };
@@ -50,6 +53,8 @@ namespace Wiwa {
 		Shader* m_NormalDisplayShader;
 		DefaultUnlitUniforms m_NDSUniforms;
 
+		Skybox m_DefaultSkybox;
+
 	public:
 		Renderer3D();
 		~Renderer3D();
@@ -60,15 +65,24 @@ namespace Wiwa {
 		void SetOption(Options option);
 		void DisableOption(Options option);
 
-		void RenderMesh(Model* mesh, const Transform3D& t3d, Material* material, bool clear=false, Camera* camera=NULL, bool cull = false);
-		void RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
-		void RenderMesh(Model* mesh, const Vector3f& position, const Vector3f& rotation, const Vector3f& scale, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+		void RenderMesh(Model* mesh, const Transform3D& t3d, Material* material,const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear=false, Camera* camera=NULL, bool cull = false);
 
-		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+		
+		void RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		void RenderMesh(Model* mesh, const glm::vec3& position, const glm::vec3 & rotation, const glm::vec3 & scale, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+
+		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		
+		void SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights);
+		
+		void RenderSkybox();
 
 		void Close();
 		void RenderFrustrums(Camera* camera = NULL);
-		inline void SetLight(const DirectionalLight& light) { SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer->setLight(light); }
 
 		// Getters
 		inline uint32_t getColorBufferTexture() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer->getColorBufferTexture(); }

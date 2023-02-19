@@ -1,7 +1,15 @@
 #pragma once
-
+#include <glm/glm.hpp>
 namespace Wiwa {
-	struct Vector3f {
+	typedef glm::vec3 Vector3f;
+	typedef Vector3f Size3f;
+	typedef Vector3f Color3f;
+
+	namespace Vector3F {
+		const Vector3f FRONT = { 0.0f, 0.0f, 1.0f };
+		const Vector3f UP = { 0.0f, 1.0f, 0.0f };
+	}
+	/*struct Vector3f {
 		union
 		{
 			struct { float x, y, z; };
@@ -63,5 +71,5 @@ namespace Wiwa {
 	namespace Vector3F {
 		const Vector3f FRONT = { 0.0f, 0.0f, 1.0f };
 		const Vector3f UP = { 0.0f, 1.0f, 0.0f };
-	}
+	}*/
 }

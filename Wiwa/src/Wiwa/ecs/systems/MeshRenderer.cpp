@@ -7,6 +7,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/render/Material.h>
 #include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/utilities/render/LightManager.h>
 namespace Wiwa {
 	MeshRenderer::MeshRenderer()
 	{
@@ -38,6 +39,7 @@ namespace Wiwa {
 
 		CameraManager& man = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
 		EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
 
 		size_t cameraCount = man.getCameraSize();
 		std::vector<CameraId>& cameras = man.getCameras();
@@ -53,9 +55,9 @@ namespace Wiwa {
 			if (camera->cull && !camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax()))
 				return;
 
-			r3d.RenderMesh(mod, t3d->worldMatrix, mat, false, camera);
+			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
 		}
 
-		r3d.RenderMesh(mod, t3d->worldMatrix, mat, false, man.editorCamera);
+		r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 	}
 }
