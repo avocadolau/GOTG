@@ -15,6 +15,8 @@
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
+	bool ret = true;
+
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	const Type* type = em.GetComponentType(componentId);
@@ -29,7 +31,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		{
 			if (ImGui::Button(del_label.c_str()))
 			{
-				return false;
+				ret = false;
 			}
 		}
 
@@ -52,7 +54,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		ImGui::TreePop();
 	}
 	
-	return true;
+	return ret;
 }
 
 void InspectorPanel::DrawField(unsigned char* data, const Field& field)
