@@ -17,6 +17,11 @@ namespace Wiwa {
 
 	EntityManager::~EntityManager()
 	{
+		
+	}
+
+	void EntityManager::Clear()
+	{
 		// Destroy entity systems
 		size_t entitySize = m_EntitySystems.size();
 
@@ -712,6 +717,7 @@ namespace Wiwa {
 		if (stype) {
 			System* system = (System*)stype->New();
 			system->SetEntity(eid);
+			system->SetScene(m_Scene);
 			system->OnSystemAdded();
 
 			m_EntitySystems[eid].push_back(system);

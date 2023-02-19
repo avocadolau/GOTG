@@ -206,7 +206,6 @@ void EditorLayer::LoadScene(const std::string& m_Path)
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str());
 	Wiwa::Scene* scene = Wiwa::SceneManager::getScene(id);
 	scene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
-	scene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("PhysicsSystem"));
 	Wiwa::SceneManager::SetScene(id);
 
 	// Update editor scene references
@@ -291,7 +290,7 @@ void EditorLayer::MainMenuBar()
 				m_OpenedScenePath = "";
 
 				Wiwa::SceneManager::SetScene(m_EditorSceneId);
-				m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
+				m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 			}
 			if (ImGui::MenuItem(ICON_FK_FOLDER " Open scene", ""))
 			{

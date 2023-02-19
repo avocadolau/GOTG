@@ -7,6 +7,7 @@ namespace Wiwa {
 	{
 
 	}
+
 	PhysicsSystem::~PhysicsSystem()
 	{
 
@@ -22,15 +23,11 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnUpdate()
 	{
-		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+		//PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 
-		if (Time::IsPlaying())
-		{
-			Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-			const char* e_name = entityManager.GetEntityName(m_EntityId);
-			WI_INFO("Updating physics of --> {}", e_name);
-
-		}
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* e_name = entityManager.GetEntityName(m_EntityId);
+		WI_INFO("Updating physics of --> {}", e_name);
 	}
 
 	void PhysicsSystem::OnDestroy()
@@ -40,11 +37,11 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnSystemAdded()
 	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 		WI_INFO("Init physics of --> {}", e_name);
 
-		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		ColliderCube* cube = GetComponent<ColliderCube>();
@@ -52,8 +49,8 @@ namespace Wiwa {
 
 		if (rb && cube)
 		{
-			physicsManager->AddBodyCube(m_EntityId, *cube, *transform, *rb);
-			physicsManager->UpdateEngineToPhysics();
+			physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
+			physicsManager.UpdateEngineToPhysics();
 		}
 	}
 	void PhysicsSystem::OnSystemRemoved()
@@ -63,18 +60,11 @@ namespace Wiwa {
 
 	void PhysicsSystem::DeleteBody()
 	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		const char* e_name = entityManager.GetEntityName(m_EntityId);
-		WI_INFO("Deleting physics of --> {}", e_name);
+		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+		btRigidBody* body = physicsManager.FindByEntityId(m_EntityId);
 
-		if (physicsManager != NULL)
-		{
-			btRigidBody* body = physicsManager->FindByEntityId(m_EntityId);
-
-			if (body != nullptr)
-				physicsManager->DeleteBody(body);
-		}
+		if (body != nullptr)
+			physicsManager.DeleteBody(body);
 	}
 }

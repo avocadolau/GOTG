@@ -19,6 +19,7 @@ typedef unsigned char byte;
 
 namespace Wiwa {
 	class System;
+	class Scene;
 
 	struct Transform3D;
 
@@ -29,6 +30,9 @@ namespace Wiwa {
 			const Type* ctype;
 			ComponentId cid;
 		};
+
+		// Scene where entity manager acts
+		Scene* m_Scene;
 
 		// Entity management
 		std::vector<std::string> m_EntityNames;
@@ -71,6 +75,11 @@ namespace Wiwa {
 	public:
 		EntityManager();
 		~EntityManager();
+
+		void SetScene(Scene* scene) { m_Scene = scene; }
+
+		// Clear all data related to entity manager
+		void Clear();
 
 		static const size_t INVALID_INDEX = -1;
 
