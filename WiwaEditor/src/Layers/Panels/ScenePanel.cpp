@@ -237,15 +237,15 @@ void ScenePanel::Draw()
                     {
                     case ImGuizmo::OPERATION::TRANSLATE:
                     {
-                        m_SelectedTransform->localPosition += Wiwa::Vector3f(translation[0], translation[1], translation[2]) - m_SelectedTransform->position;
+                        m_SelectedTransform->localPosition += glm::vec3(translation[0], translation[1], translation[2]) - m_SelectedTransform->position;
                     }break;
                     case ImGuizmo::OPERATION::ROTATE: 
                     {
-                        m_SelectedTransform->localRotation += Wiwa::Vector3f(rotation[0], rotation[1], rotation[2]) - m_SelectedTransform->rotation;
+                        m_SelectedTransform->localRotation += glm::vec3(rotation[0], rotation[1], rotation[2]) - m_SelectedTransform->rotation;
                     }break;
                     case ImGuizmo::OPERATION::SCALE: 
                     {
-                        m_SelectedTransform->localScale += Wiwa::Vector3f(scale[0], scale[1], scale[2]) - m_SelectedTransform->scale;
+                        m_SelectedTransform->localScale += glm::vec3(scale[0], scale[1], scale[2]) - m_SelectedTransform->scale;
                     }break;
                     default:
                         break;
@@ -279,7 +279,7 @@ void ScenePanel::Draw()
             direction.x = radius * cos(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.x;
             direction.y = radius * sin(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.y;
             direction.z = radius * cos(glm::radians(yaw)) + m_SelectedTransform->position.z;
-            m_Camera->setPosition({ direction.x, direction.y, direction.z });
+            m_Camera->setPosition(direction);
             m_Camera->lookat(m_SelectedTransform->position);
         }
 
@@ -319,7 +319,7 @@ void ScenePanel::Draw()
 
                 // Begin transformation
                 glm::mat4 transform(1.0f);
-                transform = glm::translate(transform, glm::vec3(trs->localPosition.x, trs->localPosition.y, trs->localPosition.z));
+                transform = glm::translate(transform, trs->localPosition);
                 transform = glm::rotate(transform, glm::radians(trs->localRotation.x), { 1,0,0 });
                 transform = glm::rotate(transform, glm::radians(trs->localRotation.y), { 0,1,0 });
                 transform = glm::rotate(transform, glm::radians(trs->localRotation.z), { 0,0,1 });
@@ -331,15 +331,15 @@ void ScenePanel::Draw()
                     Wiwa::Transform3D* parent_trns = entityManager.GetComponent<Wiwa::Transform3D>(parent);
 
                     glm::mat4 parent_transform(1.0f);
-                    parent_transform = glm::translate(parent_transform, glm::vec3(parent_trns->position.x, parent_trns->position.y, parent_trns->position.z));
+                    parent_transform = glm::translate(parent_transform, parent_trns->position);
                     parent_transform = glm::rotate(parent_transform, glm::radians(parent_trns->rotation.x), glm::vec3(1, 0, 0));
                     parent_transform = glm::rotate(parent_transform, glm::radians(parent_trns->rotation.y), glm::vec3(0, 1, 0));
                     parent_transform = glm::rotate(parent_transform, glm::radians(parent_trns->rotation.z), glm::vec3(0, 0, 1));
-                    //parent_transform = glm::scale(parent_transform, glm::vec3(parent_trns->scale.x, parent_trns->scale.y, parent_trns->scale.z));
+                    //parent_transform = glm::scale(parent_transform, parent_trns->scale);
 
                     transform = parent_transform * transform;
 
-                    scale = glm::vec3(trs->scale.x, trs->scale.y, trs->scale.z);
+                    scale = trs->scale;
                 }
 
                 // End transformation
@@ -401,7 +401,7 @@ void ScenePanel::Draw()
                     direction.x = radius * cos(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.x;
                     direction.y = radius * sin(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.y;
                     direction.z = radius * cos(glm::radians(yaw)) + m_SelectedTransform->position.z;
-                    m_Camera->setPosition({ direction.x, direction.y, direction.z });
+                    m_Camera->setPosition(direction);
                     m_Camera->lookat(m_SelectedTransform->position);
                 }
                 else
@@ -412,7 +412,7 @@ void ScenePanel::Draw()
                     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
                     glm::vec3 front = glm::normalize(direction);
-                    m_Camera->setFront({ front.x, front.y, front.z });
+                    m_Camera->setFront(front);
                 }
             }
 

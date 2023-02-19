@@ -57,8 +57,8 @@ void EditorLayer::OnAttach()
 	float ar = res.w / (float)res.h;
 	CameraId cam_id = m_EditorScene->GetCameraManager().CreatePerspectiveCamera(45, ar, 0.1f, 131.0f);
 	Wiwa::Camera *cam = m_EditorScene->GetCameraManager().getCamera(cam_id);
-	cam->setPosition({-52.5f, 30.2f, 26.2f});
-	cam->setRotation({-26.0f, -30.2f, 0.0f});
+	cam->setPosition(glm::vec3{-52.5f, 30.2f, 26.2f});
+	cam->setRotation(glm::vec3{-26.0f, -30.2f, 0.0f});
 
 	m_Configuration = std::make_unique<ConfigurationPanel>(this);
 	m_Console = std::make_unique<ConsolePanel>(this);
@@ -74,6 +74,7 @@ void EditorLayer::OnAttach()
 	m_ResourcesPanel = std::make_unique<ResourcesPanel>(this);
 	m_ImportPanel = std::make_unique<ImportPanel>(this);
 	m_ShaderPanel = std::make_unique<ShaderPanel>(this);
+	m_EnvPanel = std::make_unique<EnvironmentPanel>(this);
 
 	m_AudioPanel = std::make_unique<AudioPanel>(this);
 
@@ -94,6 +95,7 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_ResourcesPanel.get());
 	m_Panels.push_back(m_ImportPanel.get());
 	m_Panels.push_back(m_ShaderPanel.get());
+	m_Panels.push_back(m_EnvPanel.get());
 
 	m_Panels.push_back(m_AudioPanel.get());
 
@@ -480,8 +482,8 @@ void EditorLayer::MainMenuBar()
 			ImGui::PopStyleColor();
 			ImGui::Text(ICON_FK_EXCLAMATION_CIRCLE);
 
-			const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
-			ImGui::TextUnformatted(beg, log.Buf.end());
+			/*const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
+			ImGui::TextUnformatted(beg, log.Buf.end());*/
 
 			ImGui::EndMenuBar();
 		}

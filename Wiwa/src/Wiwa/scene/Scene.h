@@ -9,6 +9,7 @@
 #include <Wiwa/utilities/render/CameraManager.h>
 
 namespace Wiwa {
+	class LightManager;
 	class WI_API Scene {
 	public:
 		Scene();
@@ -40,6 +41,7 @@ namespace Wiwa {
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return m_PhysicsManager; }
 
+		LightManager& GetLightManager() { return *m_LightManager; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -58,6 +60,7 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		PhysicsManager m_PhysicsManager;
+		LightManager* m_LightManager;
 	private:
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;

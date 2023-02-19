@@ -25,6 +25,9 @@
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <Wiwa/ecs/systems/LightSystem.h>
+
+#include <Wiwa/ecs/components/Transform3D.h>
 
 #include <Wiwa/scene/SceneManager.h>
 

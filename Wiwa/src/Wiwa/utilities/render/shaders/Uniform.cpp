@@ -73,16 +73,16 @@ namespace Wiwa {
 			setData(0, m_Type);
 			break;
 		case Wiwa::UniformType::Float:
-			setData(0.0f, m_Type);
+			setData(1.0f, m_Type);
 			break;
 		case Wiwa::UniformType::fVec2:
 			setData(glm::vec2(), m_Type);
 			break;
 		case Wiwa::UniformType::fVec3:
-			setData(glm::vec3(), m_Type);
+			setData(glm::vec3(0.0f), m_Type);
 			break;
 		case Wiwa::UniformType::fVec4:
-			setData(glm::vec4(), m_Type);
+			setData(glm::vec4(1.0f), m_Type);
 			break;
 		case Wiwa::UniformType::Mat2:
 			setData(glm::mat2(), m_Type);

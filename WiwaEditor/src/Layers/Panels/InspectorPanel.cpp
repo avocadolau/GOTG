@@ -12,6 +12,9 @@
 
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/ecs/components/AudioSource.h>
+#include <Wiwa/ecs/components/PointLight.h>
+#include <Wiwa/ecs/components/SpotLight.h>
+#include <Wiwa/ecs/components/DirectionalLight.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -41,6 +44,9 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::Mesh) {	DrawMeshComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Transform3D) { DrawTransform3dComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AudioSource) { DrawAudioSourceComponent(data); } else
+		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -232,6 +238,42 @@ void InspectorPanel::DrawAudioSourceComponent(byte* data)
 
 	ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
 	ImGui::InputText("Event", asrc->eventName, sizeof(asrc->eventName));
+}
+
+void InspectorPanel::DrawPointLightComponent(byte* data)
+{
+	Wiwa::PointLight* lsrc = (Wiwa::PointLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
+	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
+	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
+
+}
+
+void InspectorPanel::DrawDirectionalLightComponent(byte* data)
+{
+	Wiwa::DirectionalLight* lsrc = (Wiwa::DirectionalLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+}
+//TODO: Implement when ready
+void InspectorPanel::DrawSpotLightComponent(byte* data)
+{
+	Wiwa::SpotLight* lsrc = (Wiwa::SpotLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
+	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
+	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
+	DrawVec3Control("Direction", &lsrc->Direction);
+	ImGui::InputFloat("Cutoff", &lsrc->Cutoff);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)

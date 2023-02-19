@@ -99,18 +99,22 @@ namespace Wiwa {
 
 						texture_path = std::filesystem::relative(texture_path);
 
-						id = Resources::Load<Shader>("resources/shaders/model_texture");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/model_texture");
-						Resources::Import<Image>(texture_path.string().c_str());
-						uint32_t imgId = Resources::Load<Image>(texture_path.string().c_str());
-						Image* img = Resources::GetResourceById<Image>(imgId);
-						material.SetUniformData("u_Tex0", glm::ivec2(img->GetTextureId(), imgId));
+						id = Resources::Load<Shader>("resources/shaders/light/lit_model_textured");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_textured");
+
+						bool imported = Resources::Import<Image>(texture_path.string().c_str());
+
+						if (imported) {
+							uint32_t imgId = Resources::Load<Image>(texture_path.string().c_str());
+							Image* img = Resources::GetResourceById<Image>(imgId);
+							material.SetUniformData("u_Tex0", glm::ivec2(img->GetTextureId(), imgId));
+						}
 					}
 					else
 					{
 						//Set the color of the material
-						id = Resources::Load<Shader>("resources/shaders/model_color");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/model_color");
+						id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
 
