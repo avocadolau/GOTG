@@ -359,14 +359,14 @@ namespace Wiwa {
 
 	void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 	{
-		glUseProgram(0);
+		/*glUseProgram(0);
 		glColor3f(255, 0, 0);
 		glLineWidth(2.0f);
 		glBegin(GL_LINES);
 		glVertex3f(from.getX(), from.getY(), from.getZ());
 		glVertex3f(to.getX(), to.getY(), to.getZ());
 		glEnd();
-		glLineWidth(1.0f);
+		glLineWidth(1.0f);*/
 	}
 
 	void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)

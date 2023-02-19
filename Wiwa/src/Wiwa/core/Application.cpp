@@ -148,6 +148,8 @@ namespace Wiwa {
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			SceneManager::ModuleUpdate();
+
 			// Update audio
 			Audio::Update();
 			
