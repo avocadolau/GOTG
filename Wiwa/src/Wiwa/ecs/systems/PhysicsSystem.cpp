@@ -24,16 +24,12 @@ namespace Wiwa {
 	{
 		PhysicsManager* physicsManager = &Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 
-		physicsManager->UpdateEngineToPhysics();
-
 		if (Time::IsPlaying())
 		{
 			Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 			const char* e_name = entityManager.GetEntityName(m_EntityId);
 			WI_INFO("Updating physics of --> {}", e_name);
 
-			physicsManager->StepSimulation();
-			physicsManager->UpdatePhysicsToEngine();
 		}
 	}
 

@@ -226,6 +226,7 @@ namespace Wiwa {
 		m_Shapes.remove(body->getCollisionShape());
 		delete body->getCollisionShape();
 
+		m_Bodies.remove(body);
 		m_World->removeRigidBody(body);
 		delete body;
 		return true;
