@@ -40,8 +40,6 @@ namespace Wiwa
 		case GuiControlType::SLIDER:
 			control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
 			break;
-		case GuiControlType::TEXT:
-			control = new GuiText(id,bounds,)
 		default:
 			break;
 		}

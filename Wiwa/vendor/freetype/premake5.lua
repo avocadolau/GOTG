@@ -4,7 +4,7 @@ project "freetype"
     
     includedirs
     {
-       "include/freetype"
+       "include/"
     }
     
     files

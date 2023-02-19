@@ -4,8 +4,6 @@
 
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
-#include <ft2build.h>
-#include <freetype/freetype.h>
 namespace Wiwa
 {
 	GuiText::GuiText(unsigned int id, Rect2i bounds, const char* string_text) : GuiControl(GuiControlType::BUTTON, id)
