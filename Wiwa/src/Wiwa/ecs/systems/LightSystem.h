@@ -3,6 +3,8 @@
 #include "../components/Transform3D.h"
 #include "../components/PointLight.h"
 #include "../components/DirectionalLight.h"
+#include "../components/SpotLight.h"
+
 
 #include <Wiwa/utilities/Reflection.h>
 

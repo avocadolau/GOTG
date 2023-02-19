@@ -119,39 +119,25 @@ namespace Wiwa {
 		UpdateFrustrum();
 	}
 
-	void Camera::setPosition(const Vector3f position)
+	void Camera::setPosition(const glm::vec3 position)
 	{
-		m_CameraPos = glm::vec3(position.x, position.y, position.z);
+		m_CameraPos = position;
 
 		updateView();
 	}
 
-	void Camera::setFront(const Vector3f front)
+	void Camera::setFront(const glm::vec3 front)
 	{
-		m_CameraFront = glm::vec3(front.x, front.y, front.z);
+		m_CameraFront = front;
 
 		updateView();
 	}
 
-	void Camera::lookat(const Vector3f position)
+	void Camera::lookat(const glm::vec3 position)
 	{
-		glm::vec3 pos = { position.x, position.y, position.z };
+		m_CameraFront = position - m_CameraPos;
 
-		m_CameraFront = pos - m_CameraPos;
-
-		m_View = glm::lookAt(m_CameraPos, pos, m_CameraUp);
-		UpdateFrustrum();
-	}
-
-	void Camera::lookat(const Vector3f cameraPos, const Vector3f position, const Vector3f camUp)
-	{
-		glm::vec3 pos = { position.x, position.y, position.z };
-
-		m_CameraPos = { cameraPos.x, cameraPos.y, cameraPos.z };
-		m_CameraUp = { camUp.x, camUp.y, camUp.z };
-		m_CameraFront = pos - m_CameraPos;
-
-		m_View = glm::lookAt(m_CameraPos, pos, m_CameraUp);
+		m_View = glm::lookAt(m_CameraPos, position, m_CameraUp);
 		UpdateFrustrum();
 	}
 

@@ -66,6 +66,7 @@ namespace Wiwa {
 	void FrameBuffer::Bind(bool clear)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		//glEnable(GL_FRAMEBUFFER_SRGB);
 		if (clear) {
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -75,6 +76,7 @@ namespace Wiwa {
 	void FrameBuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glDisable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void FrameBuffer::Clear()

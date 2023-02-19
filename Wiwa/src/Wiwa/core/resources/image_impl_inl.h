@@ -11,7 +11,7 @@ namespace Wiwa {
 			return;
 		filePath += ".meta";
 		JSONDocument doc(filePath.string().c_str());
-		if (!doc.HasMember("imageImportSettings"))
+		/*if (!doc.HasMember("imageImportSettings"))
 			return;
 		settings->Compression = (CompressionType)doc["imageImportSettings"]["compression"].get<int>();
 		settings->Interlaced = doc["imageImportSettings"]["interlaced"].get<bool>();
@@ -31,7 +31,7 @@ namespace Wiwa {
 		settings->Sharpen = doc["imageImportSettings"]["sharpen"].get<bool>();
 		settings->SharpenFactor = doc["imageImportSettings"]["sharpen_factor"].get<int>();
 		settings->SharpenIterations = doc["imageImportSettings"]["sharpen_iterations"].get<int>();
-		settings->Scale = doc["imageImportSettings"]["scale"].get<bool>();
+		settings->Scale = doc["imageImportSettings"]["scale"].get<bool>();*/
 		doc.save_file(filePath.string().c_str());
 	}
 	template<>
@@ -47,7 +47,7 @@ namespace Wiwa {
 		doc.AddMember("folderAsset", false);
 		std::time_t time = to_time_t(std::filesystem::last_write_time(file));
 		doc.AddMember("timeCreated", time);
-		JSONValue imageSettingsObj = doc.AddMemberObject("imageImportSettings");
+		/*JSONValue imageSettingsObj = doc.AddMemberObject("imageImportSettings");
 		imageSettingsObj.AddMember("compression", (int)settings->Compression);
 		imageSettingsObj.AddMember("interlaced", settings->Interlaced);
 		imageSettingsObj.AddMember("offset_x", (int)settings->OffsetX);
@@ -66,7 +66,7 @@ namespace Wiwa {
 		imageSettingsObj.AddMember("sharpen", settings->Sharpen);
 		imageSettingsObj.AddMember("sharpen_factor", (int)settings->SharpenFactor);
 		imageSettingsObj.AddMember("sharpen_iterations", (int)settings->SharpenIterations);
-		imageSettingsObj.AddMember("scale", settings->Scale);
+		imageSettingsObj.AddMember("scale", settings->Scale);*/
 		doc.save_file(filePath.string().c_str());
 	}
 	template<>

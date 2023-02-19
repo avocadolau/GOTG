@@ -9,18 +9,35 @@ Wiwa::LightManager::~LightManager()
 {
 }
 
-void Wiwa::LightManager::AddLight(size_t light)
+void Wiwa::LightManager::AddPointLight(size_t light)
 {
-	m_Lights.push_back(light);
+	m_PointLights.push_back(light);
 }
 
-void Wiwa::LightManager::RemoveLight(size_t light)
+void Wiwa::LightManager::RemovePointLight(size_t light)
 {
-	for (size_t i = 0; i < m_Lights.size(); i++)
+	for (size_t i = 0; i < m_PointLights.size(); i++)
 	{
-		if (m_Lights[i] == light)
+		if (m_PointLights[i] == light)
 		{
-			m_Lights.erase(m_Lights.begin() + i);
+			m_PointLights.erase(m_PointLights.begin() + i);
+			break;
+		}
+	}
+}
+
+void Wiwa::LightManager::AddSpotLight(size_t light)
+{
+	m_SpotLights.push_back(light);
+}
+
+void Wiwa::LightManager::RemoveSpotLight(size_t light)
+{
+	for (size_t i = 0; i < m_SpotLights.size(); i++)
+	{
+		if (m_SpotLights[i] == light)
+		{
+			m_SpotLights.erase(m_SpotLights.begin() + i);
 			break;
 		}
 	}

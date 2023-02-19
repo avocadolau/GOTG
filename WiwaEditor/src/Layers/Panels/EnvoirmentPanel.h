@@ -2,11 +2,11 @@
 
 #include "Panel.h"
 
-class EnvoirmentPanel : public Panel
+class EnvironmentPanel : public Panel
 {
 public:
-	EnvoirmentPanel(EditorLayer* instance);
-	virtual ~EnvoirmentPanel();
+	EnvironmentPanel(EditorLayer* instance);
+	virtual ~EnvironmentPanel();
 
 	void Draw() override;
 };

@@ -247,7 +247,7 @@ void AssetsPanel::Draw()
 				ImTextureID texID = directoryEntry.is_directory() ? m_FolderIcon : m_FileIcon;
 				if (ImageExtensionComp(directoryEntry.path()))
 				{
-					ResourceId pngID = Wiwa::Resources::Load<Wiwa::Image>(path.string().c_str());
+					ResourceId pngID = Wiwa::Resources::LoadNative<Wiwa::Image>(path.string().c_str());
 					texID = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(pngID)->GetTextureId();
 				}
 				if (ModelExtensionComp(directoryEntry.path()))

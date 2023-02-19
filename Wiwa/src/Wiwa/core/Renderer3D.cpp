@@ -87,7 +87,7 @@ namespace Wiwa {
 
 
 	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, Material* material, const size_t& directional,
-		const std::vector<size_t>& pointLights, bool clear/*=false*/, Camera* camera/*=NULL*/, bool cull /*= false*/)
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear/*=false*/, Camera* camera/*=NULL*/, bool cull /*= false*/)
 	{
 		if (!camera)
 		{
@@ -109,7 +109,7 @@ namespace Wiwa {
 		Shader* matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
-		SetUpLight(matShader, camera, directional, pointLights);
+		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
 
@@ -142,7 +142,7 @@ namespace Wiwa {
 
 
 	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, const size_t& directional,
-		const std::vector<size_t>& pointLights, bool clear, Camera* camera, bool cull)
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear, Camera* camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -176,7 +176,7 @@ namespace Wiwa {
 		Shader* matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
-		SetUpLight(matShader, camera, directional, pointLights);
+		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
 
@@ -206,8 +206,8 @@ namespace Wiwa {
 
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::RenderMesh(Model* mesh, const Vector3f& position, const Vector3f& rotation, const Vector3f& scale, const size_t& directional,
-		const std::vector<size_t>& pointLights, Material* material, bool clear, Camera* camera, bool cull)
+	void Renderer3D::RenderMesh(Model* mesh, const glm::vec3& position, const glm::vec3 & rotation, const glm::vec3 & scale, const size_t& directional,
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -219,18 +219,18 @@ namespace Wiwa {
 		camera->frameBuffer->Bind(clear);
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(position.x, position.y, position.z));
+		model = glm::translate(model, position);
 		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
 		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
 		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
-		model = glm::scale(model, glm::vec3(scale.x, scale.y, scale.z));
+		model = glm::scale(model, scale);
 		material->getShader()->Bind();
 		material->getShader()->SetMVP(model, camera->getView(), camera->getProjection());
 
 		Shader* matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
-		SetUpLight(matShader, camera, directional, pointLights);
+		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		mesh->Render();
 
@@ -259,7 +259,7 @@ namespace Wiwa {
 		camera->frameBuffer->Unbind();
 	}
 	void Renderer3D::RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
-		const std::vector<size_t>& pointLights, bool clear, Camera* camera, bool cull)
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear, Camera* camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -274,7 +274,7 @@ namespace Wiwa {
 		matShader->Bind();
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
-		SetUpLight(matShader, camera, directional, pointLights);
+		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
 
@@ -368,6 +368,8 @@ namespace Wiwa {
 		case Wiwa::Renderer3D::WIREFRAME:
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			break;
+		case Wiwa::Renderer3D::GAMMA_CORRECTION:
+			glEnable(GL_FRAMEBUFFER_SRGB);
 		default:
 			break;
 		}
@@ -394,6 +396,9 @@ namespace Wiwa {
 			break;
 		case Wiwa::Renderer3D::WIREFRAME:
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			break;
+		case Wiwa::Renderer3D::GAMMA_CORRECTION:
+			glDisable(GL_FRAMEBUFFER_SRGB);
 			break;
 		default:
 			break;
@@ -438,7 +443,7 @@ namespace Wiwa {
 		}
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights)
+	void Renderer3D::SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights)
 	{
 		matShader->setUniform(matShader->getUniformLocation("u_CameraPosition"), camera->getPosition());
 		if (directional != -1)
@@ -450,7 +455,7 @@ namespace Wiwa {
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), dirLight->Color);
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), dirLight->AmbientIntensity);
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), dirLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::vec3(glm::radians(transform->rotation.x), glm::radians(transform->rotation.y), glm::radians(transform->rotation.z)));
+				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(transform->localRotation));
 			}
 		}
 		else
@@ -473,10 +478,32 @@ namespace Wiwa {
 				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.Color").c_str()), pointLight->Color);
 				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.AmbientIntensity").c_str()), pointLight->AmbientIntensity);
 				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.DiffuseIntensity").c_str()), pointLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].LocalPos").c_str()), glm::vec3(transform->position.x, transform->position.z, transform->position.y));
+				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].LocalPos").c_str()), transform->position);
 				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Constant").c_str()), pointLight->Constant);
 				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Linear").c_str()), pointLight->Linear);
 				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Exp").c_str()), pointLight->Exp);
+			}
+		}
+
+		matShader->setUniform(matShader->getUniformLocation("u_NumSpotLights"), (int)spotLights.size());
+		for (size_t i = 0; i < pointLights.size(); i++)
+		{
+			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
+			SpotLight* spotLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<SpotLight>(pointLights[i]);
+			std::string num = std::to_string(i);
+
+			if (transform && spotLight)
+			{
+
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.Base.Color").c_str()), spotLight->Color);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.Base.AmbientIntensity").c_str()), spotLight->AmbientIntensity);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.Base.DiffuseIntensity").c_str()), spotLight->DiffuseIntensity);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.LocalPos").c_str()), transform->position);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.Atten.Constant").c_str()), spotLight->Constant);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.Atten.Linear").c_str()), spotLight->Linear);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Base.Atten.Exp").c_str()), spotLight->Exp);
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Direction").c_str()), glm::radians(spotLight->Direction));
+				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Cuttoff").c_str()), spotLight->Cutoff);
 			}
 		}
 		

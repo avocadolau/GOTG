@@ -116,6 +116,10 @@ void HierarchyPanel::DrawAddMenu(Wiwa::EntityManager& entityManager)
 		{
 			CreatePointLight();
 		}
+		if (ImGui::MenuItem("Spot light"))
+		{
+			CreateSpotLight();
+		}
 		ImGui::EndMenu();
 	}
 	if (m_CurrentID >= 0)

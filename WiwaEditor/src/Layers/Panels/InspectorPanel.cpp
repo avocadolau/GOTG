@@ -13,6 +13,7 @@
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/ecs/components/AudioSource.h>
 #include <Wiwa/ecs/components/PointLight.h>
+#include <Wiwa/ecs/components/SpotLight.h>
 #include <Wiwa/ecs/components/DirectionalLight.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
@@ -261,6 +262,16 @@ void InspectorPanel::DrawDirectionalLightComponent(byte* data)
 //TODO: Implement when ready
 void InspectorPanel::DrawSpotLightComponent(byte* data)
 {
+	Wiwa::SpotLight* lsrc = (Wiwa::SpotLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
+	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
+	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
+	DrawVec3Control("Direction", &lsrc->Direction);
+	ImGui::InputFloat("Cutoff", &lsrc->Cutoff);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)
