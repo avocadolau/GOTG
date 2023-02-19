@@ -16,20 +16,26 @@ namespace Wiwa {
 	PhysicsManager::PhysicsManager()
 	{
 		m_HasBeenInit = false;
-	}
-
-	PhysicsManager::~PhysicsManager()
-	{
-	}
-
-	bool PhysicsManager::InitWorld()
-	{
-		m_Debug = true;
 		m_Collision_conf = new btDefaultCollisionConfiguration();
 		m_Dispatcher = new btCollisionDispatcher(m_Collision_conf);
 		m_Broad_phase = new btDbvtBroadphase();
 		m_Solver = new btSequentialImpulseConstraintSolver();
 		m_Debug_draw = new DebugDrawer();
+	}
+
+	PhysicsManager::~PhysicsManager()
+	{
+		delete m_Debug_draw;
+		delete m_Solver;
+		delete m_Broad_phase;
+		delete m_Dispatcher;
+		delete m_Collision_conf;
+	}
+
+	bool PhysicsManager::InitWorld()
+	{
+		m_Debug = true;
+		m_HasBeenInit = true;
 
 		m_World = new btDiscreteDynamicsWorld(m_Dispatcher, m_Broad_phase, m_Solver, m_Collision_conf);
 
@@ -50,7 +56,7 @@ namespace Wiwa {
 		}
 
 		WI_INFO("Physics Manager Init");
-		m_HasBeenInit = true;
+		
 		return true;
 	}
 
@@ -114,7 +120,6 @@ namespace Wiwa {
 
 			(*item)->setWorldTransform(offsettedCollider);
 		}
-
 		return true;
 	}
 
@@ -196,11 +201,6 @@ namespace Wiwa {
 
 		m_Bodies.clear();
 
-		delete m_Debug_draw;
-		delete m_Solver;
-		delete m_Broad_phase;
-		delete m_Dispatcher;
-		delete m_Collision_conf;
 		delete m_World;
 
 		m_HasBeenInit = false;
@@ -371,46 +371,47 @@ namespace Wiwa {
 		return true;
 	}
 
-	// =============================================
-
-	void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+	void PhysicsManager::DebugDrawWorld()
 	{
-		glUseProgram(0);
-		glColor3f(255, 0, 0);
-		glLineWidth(2.0f);
-		glBegin(GL_LINES);
-		glVertex3f(from.getX(), from.getY(), from.getZ());
-		glVertex3f(to.getX(), to.getY(), to.getZ());
-		glEnd();
-		glLineWidth(1.0f);
-	}
-
-	void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
-	{
-		//point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
-		//point.color.Set(color.getX(), color.getY(), color.getZ());
-		//point.Render();
-	}
-
-	void DebugDrawer::reportErrorWarning(const char* warning_string)
-	{
-		WI_INFO("Bullet warning: {}", warning_string);
-	}
-
-	void DebugDrawer::draw3dText(const btVector3& location, const char* text_string)
-	{
-		WI_INFO("Bullet draw text: {}", text_string);
-	}
-
-	void DebugDrawer::setDebugMode(int debug_mode)
-	{
-		mode = (DebugDrawModes)debug_mode;
-	}
-
-	int DebugDrawer::getDebugMode() const
-	{
-		return mode;
+		m_World->debugDrawWorld();
 	}
 }
 
+void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+{
+	glUseProgram(0);
+	glColor3f(255, 0, 0);
+	glLineWidth(2.0f);
+	glBegin(GL_LINES);
+	glVertex3f(from.getX(), from.getY(), from.getZ());
+	glVertex3f(to.getX(), to.getY(), to.getZ());
+	glEnd();
+	glLineWidth(1.0f);
+}
 
+void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
+{
+	//point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
+	//point.color.Set(color.getX(), color.getY(), color.getZ());
+	//point.Render();
+}
+
+void DebugDrawer::reportErrorWarning(const char* warning_string)
+{
+	WI_INFO("Bullet warning: {}", warning_string);
+}
+
+void DebugDrawer::draw3dText(const btVector3& location, const char* text_string)
+{
+	WI_INFO("Bullet draw text: {}", text_string);
+}
+
+void DebugDrawer::setDebugMode(int debug_mode)
+{
+	mode = (DebugDrawModes)debug_mode;
+}
+
+int DebugDrawer::getDebugMode() const
+{
+	return mode;
+}

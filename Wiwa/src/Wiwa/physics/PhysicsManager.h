@@ -15,9 +15,9 @@
 #include <vector>
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
+class DebugDrawer;
 
 namespace Wiwa {
-	class DebugDrawer;
 
 	class WI_API PhysicsManager
 	{
@@ -62,6 +62,8 @@ namespace Wiwa {
 
 		bool LogBodies();
 
+		void DebugDrawWorld();
+
 	private:
 		bool m_Debug;
 		bool m_HasBeenInit;
@@ -80,23 +82,20 @@ namespace Wiwa {
 		std::list<btDefaultMotionState*> m_Motions;
 		std::list<btTypedConstraint*> m_Constraints;
 	};
-
-	class DebugDrawer : public btIDebugDraw
-	{
-	public:
-		DebugDrawer()
-		{}
-
-		void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
-		void drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color);
-		void reportErrorWarning(const char* warning_string);
-		void draw3dText(const btVector3& location, const char* text_string);
-		void setDebugMode(int debug_mode);
-		int  getDebugMode() const;
-
-		DebugDrawModes mode;
-	};
-
 }
 
+class DebugDrawer : public btIDebugDraw
+{
+public:
+	DebugDrawer()
+	{}
 
+	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
+	void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);
+	void reportErrorWarning(const char* warningString);
+	void draw3dText(const btVector3& location, const char* textString);
+	void setDebugMode(int debugMode);
+	int	 getDebugMode() const;
+
+	DebugDrawModes mode;
+};
