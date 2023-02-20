@@ -83,14 +83,14 @@ namespace Wiwa {
 
 		m_EntityManager.Update();
 
-		//m_PhysicsManager->DebugDrawWorld();
+		m_PhysicsManager->DebugDrawWorld();
 
-		//m_PhysicsManager->UpdateEngineToPhysics();
+		m_PhysicsManager->UpdateEngineToPhysics();
 		
 		if (SceneManager::IsPlaying())
 		{
-			//m_PhysicsManager->StepSimulation();
-			//m_PhysicsManager->UpdatePhysicsToEngine();
+			m_PhysicsManager->StepSimulation();
+			m_PhysicsManager->UpdatePhysicsToEngine();
 		}
 		m_PhysicsManager->LogBodies();
 

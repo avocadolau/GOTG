@@ -50,7 +50,7 @@ namespace Wiwa {
 		if (rb && cube)
 		{
 			physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
-			physicsManager.UpdateEngineToPhysics();
+			//physicsManager.UpdateEngineToPhysics();
 		}
 	}
 	void PhysicsSystem::OnSystemRemoved()

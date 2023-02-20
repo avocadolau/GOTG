@@ -43,17 +43,17 @@ namespace Wiwa {
 		m_World->setDebugDrawer(m_Debug_draw);
 		m_World->setGravity(GRAVITY);
 
-		// Big plane as ground
-		{
-			btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
+		//// Big plane as ground
+		//{
+		//	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
 
-			btDefaultMotionState* myMotionState = new btDefaultMotionState();
-			btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
+		//	btDefaultMotionState* myMotionState = new btDefaultMotionState();
+		//	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
 
-			btRigidBody* body = new btRigidBody(rbInfo);
-			m_World->addRigidBody(body);
+		//	btRigidBody* body = new btRigidBody(rbInfo);
+		//	m_World->addRigidBody(body);
 
-		}
+		//}
 
 		WI_INFO("Physics Manager Init");
 		
@@ -194,6 +194,7 @@ namespace Wiwa {
 
 		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
+			m_World->removeRigidBody(*item);
 			delete (ObjectData*)(*item)->getUserPointer();
 			delete* item;
 			*item = nullptr;
@@ -228,6 +229,7 @@ namespace Wiwa {
 
 		m_Bodies.remove(body);
 		m_World->removeRigidBody(body);
+		delete (ObjectData*)(body)->getUserPointer();
 		delete body;
 		return true;
 	}
@@ -365,7 +367,7 @@ namespace Wiwa {
 			int id = (*item)->getUserIndex();
 			btVector3 pos = (*item)->getWorldTransform().getOrigin();
 			const char* e_name = entityManager.GetEntityName(id);
-			WI_INFO("{} Position of {} is {} {} {}", num, e_name, pos.x(), pos.y(), pos.z()); 
+			WI_INFO("Index {} Position of {} is {} {} {}", num, e_name, pos.x(), pos.y(), pos.z()); 
 			num++;
 		}
 		return true;
