@@ -131,10 +131,10 @@ void main()
     {
         totalLight += CalcPointLight(u_PointLights[i], normal);
     }
-    for(int i = 0; i < u_NumSpotLights; i++)
-    {
-        totalLight += CalcSpotLight(u_SpotLights[i], normal);
-    }
+    // for(int i = 0; i < u_NumSpotLights; i++)
+    // {
+    //     totalLight += CalcSpotLight(u_SpotLights[i], normal);
+    // }
 
     FragColor = u_Color * totalLight;
 }
