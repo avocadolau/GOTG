@@ -1,6 +1,8 @@
-#version 330
-const int MAX_POINT_LIGHTS = 128;
-const int MAX_SPOT_LIGHTS = 128;
+#version 330 core
+
+const int MAX_POINT_LIGHTS = 32;
+const int MAX_SPOT_LIGHTS = 32;
+
 out vec4 FragColor;
 
 in vec2 TexCoord;
@@ -46,9 +48,9 @@ uniform vec4 u_MatDiffuseColor;
 uniform vec4 u_MatSpecularColor;
 
 uniform DirectionalLight u_DirectionalLight;
-uniform int u_NumPointLights;
+uniform int u_NumPointLights = 0;
 uniform PointLight[MAX_POINT_LIGHTS] u_PointLights;
-uniform int u_NumSpotLights;
+uniform int u_NumSpotLights = 0;
 uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 
 uniform sampler2D u_Texture;
@@ -112,6 +114,10 @@ vec4 CalcSpotLight(SpotLight light, vec3 normal)
         float spotLightIntensity = (1.0 - (1.0 - spotFactor) / (1.0 - light.Cutoff));
         return color * spotLightIntensity;
     }
+    else 
+    {
+        return vec4(0, 0, 0, 0);
+    }
 }
 
 void main()
@@ -125,10 +131,10 @@ void main()
         totalLight += CalcPointLight(u_PointLights[i], normal);
     }
 
-    // for(int i = 0; i < u_NumSpotLights; i++)
-    // {
-    //     totalLight += CalcSpotLight(u_SpotLights[i], normal);
-    // }
+    for(int i = 0; i < u_NumSpotLights; i++)
+    {
+        totalLight += CalcSpotLight(u_SpotLights[i], normal);
+    }
 
     FragColor = texture2D(u_Texture, TexCoord.xy) *
                 totalLight;
