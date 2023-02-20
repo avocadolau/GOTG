@@ -1,6 +1,6 @@
 #version 330
-const int MAX_POINT_LIGHTS = 128;
-const int MAX_SPOT_LIGHTS = 128;
+const int MAX_POINT_LIGHTS = 32;
+const int MAX_SPOT_LIGHTS = 32;
 out vec4 FragColor;
 
 in vec2 TexCoord;
@@ -136,10 +136,10 @@ void main()
         totalLight += CalcPointLight(u_PointLights[i], normal);
     }
 
-    // for(int i = 0; i < u_NumSpotLights; i++)
-    // {
-    //     totalLight += CalcSpotLight(u_SpotLights[i], normal);
-    // }
+    for(int i = 0; i < u_NumSpotLights; i++)
+    {
+        totalLight += CalcSpotLight(u_SpotLights[i], normal);
+    }
 
     FragColor = texture2D(u_Texture, TexCoord.xy) *
                 totalLight;
