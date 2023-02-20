@@ -2,6 +2,8 @@
 #include "CameraManager.h"
 #include <Wiwa/core/Application.h>
 #include <Wiwa/core/Renderer3D.h>
+#include <Wiwa/physics/PhysicsManager.h>
+#include <Wiwa/scene/SceneManager.h>
 namespace Wiwa {
 	CameraManager::CameraManager()
 	{
@@ -28,6 +30,7 @@ namespace Wiwa {
 		if (editorCamera->drawFrustrums)
 		{
 			Wiwa::Application::Get().GetRenderer3D().RenderFrustrums(editorCamera);
+			//Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
 		}
 
 		size_t cameraCount = m_CamerasAlive.size();

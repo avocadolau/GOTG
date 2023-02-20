@@ -2,7 +2,7 @@
 #include "PhysicsManager.h"
 #include "Wiwa/ecs/EntityManager.h"
 #include "Wiwa/scene/SceneManager.h"
-
+#include "Wiwa/utilities/render/CameraManager.h"
 #include <glew.h>
 
 #include <Wiwa/utilities/Log.h>
@@ -21,6 +21,14 @@ namespace Wiwa {
 		m_Broad_phase = new btDbvtBroadphase();
 		m_Solver = new btSequentialImpulseConstraintSolver();
 		m_Debug_draw = new DebugDrawer();
+
+		// Bullet Bounding box
+		m_Debug_draw->lineDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/line_display");
+		m_Debug_draw->lineDisplayShader = Resources::GetResourceById<Shader>(m_Debug_draw->lineDisplayShaderId);
+		m_Debug_draw->lineDisplayShader->Compile("resources/shaders/debug/line_display");
+		m_Debug_draw->lineDisplayShaderUniforms.Model = m_Debug_draw->lineDisplayShader->getUniformLocation("u_Model");
+		m_Debug_draw->lineDisplayShaderUniforms.View = m_Debug_draw->lineDisplayShader->getUniformLocation("u_View");
+		m_Debug_draw->lineDisplayShaderUniforms.Projection = m_Debug_draw->lineDisplayShader->getUniformLocation("u_Proj");
 	}
 
 	PhysicsManager::~PhysicsManager()
@@ -62,7 +70,7 @@ namespace Wiwa {
 
 	bool PhysicsManager::StepSimulation()
 	{
-		m_World->stepSimulation(Wiwa::Time::GetDeltaTime(), 15);
+		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 15);
 
 		int numManifolds = m_World->getDispatcher()->getNumManifolds();
 		for (int i = 0; i < numManifolds; i++)
@@ -102,6 +110,7 @@ namespace Wiwa {
 		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
 			ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
+			Wiwa::Transform3D*t = (Wiwa::Transform3D*)(*item)->getUserPointer2();
 
 			// Get the position from the engine
 			glm::vec3 posEngine = entityData->transform3d->localPosition;
@@ -141,9 +150,11 @@ namespace Wiwa {
 			glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
 
 			// Remove the offset because offset is internal only(collider wise)
+			entityData->transform3d->localPosition = posEngine;
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			bulletTransform.setRotation(rotationBullet);
-			bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));
+			bulletTransform.getRotation().getEulerZYX(entityData->transform3d->localRotation.z, entityData->transform3d->localRotation.y, entityData->transform3d->localRotation.z);
+			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
 			(*item)->getCollisionShape()->setLocalScaling((btVector3(entityData->rigidBody->scalingOffset.x, entityData->rigidBody->scalingOffset.y, entityData->rigidBody->scalingOffset.z)));
 			m_World->updateSingleAabb((*item));
@@ -297,10 +308,11 @@ namespace Wiwa {
 		data->transform3d = &transform;
 		data->id = id;
 
-		body->setUserPointer(data);
+		body->setUserPointer((ObjectData*)data);
+		body->setUserPointer2(&transform);
 		m_World->addRigidBody(body);
 		m_Bodies.push_back(body);
-
+		
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(id);
 
@@ -358,38 +370,104 @@ namespace Wiwa {
 
 	bool PhysicsManager::LogBodies()
 	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		if (m_Bodies.empty())
+			return false;
 
-		WI_INFO("World has total of {} bodies", m_Bodies.size());
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
+		WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
 		int num = 0;
 		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
-			int id = (*item)->getUserIndex();
+			
+			/*int id = (*item)->getUserIndex();*/
 			btVector3 pos = (*item)->getWorldTransform().getOrigin();
-			const char* e_name = entityManager.GetEntityName(id);
-			WI_INFO("Index {} Position of {} is {} {} {}", num, e_name, pos.x(), pos.y(), pos.z()); 
+			/*const char* e_name = entityManager.GetEntityName(id); */
+			WI_INFO("Index {} is {} {} {}", num, pos.x(), pos.y(), pos.z()); 
 			num++;
 		}
 		return true;
 	}
-
 	void PhysicsManager::DebugDrawWorld()
 	{
+		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		/*glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(glm::value_ptr(camera->getView()));*/
+
+		m_Debug_draw->lineDisplayShader->Bind();
+		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Model, transform);
+		m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+
 		m_World->debugDrawWorld();
+		m_Debug_draw->lineDisplayShader->UnBind();
+		camera->frameBuffer->Unbind();
 	}
 }
 
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	glUseProgram(0);
-	glColor3f(255, 0, 0);
-	glLineWidth(2.0f);
-	glBegin(GL_LINES);
-	glVertex3f(from.getX(), from.getY(), from.getZ());
-	glVertex3f(to.getX(), to.getY(), to.getZ());
-	glEnd();
-	glLineWidth(1.0f);
+	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+
+	// Create Vertex Array Object
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	// Create a Vertex Buffer Object and copy the vertex data to it
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	GLfloat lineVertices[] = {
+		from.x(), from.y(), from.z(),
+		to.x(), to.y(), to.z()
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
+
+	// Create an element array
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	GLuint elements[] = {
+		0, 1,
+	};
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(lineVertices), (void*)0);
+	
+	glBindVertexArray(vao);
+	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ebo);
 }
+
+//void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+//{
+//	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+//	//GLfloat lineVertices[] = {
+//	//	from.x(), from.y(), from.z(),
+//	//	to.x(), to.y(), to.z()
+//	//};
+//	//glEnableClientState(GL_VERTEX_ARRAY);
+//	//glVertexPointer
+//	glUseProgram(0);
+//	glColor3f(255, 0, 0);
+//	glLineWidth(3.0f);
+//	glBegin(GL_LINES);
+//	glVertex3f(from.getX(), from.getY(), from.getZ());
+//	glVertex3f(to.getX(), to.getY(), to.getZ());
+//	glEnd();
+//	glLineWidth(1.0f);
+//
+//}
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {

@@ -8,6 +8,9 @@
 #include <Wiwa/ecs/components/ColliderCylinder.h>
 #include <Wiwa/ecs/components/ColliderSphere.h>
 #include "Wiwa/ecs/components/Transform3D.h"
+#include <Wiwa/utilities/render/shaders/Shader.h>
+#include <Wiwa/utilities/render/Uniforms.h>
+#include <Wiwa/core/Resources.h>
 
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
@@ -16,7 +19,7 @@
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
 class DebugDrawer;
-
+class Camera;
 namespace Wiwa {
 
 	class WI_API PhysicsManager
@@ -63,7 +66,7 @@ namespace Wiwa {
 		bool LogBodies();
 
 		void DebugDrawWorld();
-
+		
 	private:
 		bool m_Debug;
 		bool m_HasBeenInit;
@@ -98,4 +101,8 @@ public:
 	int	 getDebugMode() const;
 
 	DebugDrawModes mode;
+
+	ResourceId lineDisplayShaderId;
+	Wiwa::Shader* lineDisplayShader;
+	DefaultUnlitUniforms lineDisplayShaderUniforms;
 };

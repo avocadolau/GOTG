@@ -1,6 +1,9 @@
 #include <wipch.h>
 #include "PhysicsSystem.h"
 #include "Wiwa/physics/PhysicsManager.h"
+#include "Wiwa/core/Resources.h"
+#include "Wiwa/utilities/render/Model.h"
+#include "Wiwa/ecs/components/Mesh.h"
 
 namespace Wiwa {
 	PhysicsSystem::PhysicsSystem()
@@ -41,14 +44,21 @@ namespace Wiwa {
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 		WI_INFO("Init physics of --> {}", e_name);
 
-		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
-
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		ColliderCube* cube = GetComponent<ColliderCube>();
 		Transform3D* transform = GetComponent<Transform3D>();
+		Mesh* mesh = GetComponent<Mesh>();
+
+		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		if (rb && cube)
 		{
+			if (mesh)
+			{
+				Model* root_mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
+				cube->halfExtents = root_mod->boundingBox.HalfSize();
+			}
+
 			physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
 			//physicsManager.UpdateEngineToPhysics();
 		}

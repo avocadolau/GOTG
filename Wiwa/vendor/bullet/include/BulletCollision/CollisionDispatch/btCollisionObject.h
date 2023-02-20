@@ -97,6 +97,7 @@ protected:
 	///users can point to their objects, m_userPointer is not used by Bullet, see setUserPointer/getUserPointer
 
 	void* m_userObjectPointer;
+	void* m_userObjectPointer2;
 
 	int m_userIndex2;
 
@@ -530,6 +531,11 @@ public:
 		return m_userObjectPointer;
 	}
 
+	void* getUserPointer2() const
+	{
+		return m_userObjectPointer2;
+	}
+
 	int getUserIndex() const
 	{
 		return m_userIndex;
@@ -549,6 +555,11 @@ public:
 	void setUserPointer(void* userPointer)
 	{
 		m_userObjectPointer = userPointer;
+	}
+
+	void setUserPointer2(void* userPointer)
+	{
+		m_userObjectPointer2 = userPointer;
 	}
 
 	///users can point to their objects, userPointer is not used by Bullet

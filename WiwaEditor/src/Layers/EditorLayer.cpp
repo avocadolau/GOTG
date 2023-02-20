@@ -404,6 +404,12 @@ void EditorLayer::MainMenuBar()
 
 						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
 						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+
+						// For debug purposes
+						std::string ex = sc->getName();
+						ex += "_execution";
+						sc->ChangeName(ex.c_str());
+
 						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 						Wiwa::SceneManager::SetScene(m_SimulationSceneId);
 

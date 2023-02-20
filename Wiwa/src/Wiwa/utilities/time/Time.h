@@ -38,6 +38,7 @@ namespace Wiwa
 		static inline float GetTimeScale() { return m_TimeScale; }
 		static void SetTimeScale(const int value);
 		static inline float GetDeltaTime() { return m_DeltaTime.count() * 1000.0f; }
+		static inline float GetDeltaTimeSeconds() { return m_DeltaTime.count(); }
 		static inline float GetRealTimeSinceStartup() { return m_RealTimeSinceStartup.count(); }
 		static inline float GetRealDeltaTime() { return m_RealTimeDeltaTime.count() * 1000.0f; }
 		static inline bool IsPlaying() { return m_IsPlaying; }
