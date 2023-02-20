@@ -48,11 +48,16 @@ namespace Wiwa {
 		float weight;
 		
 	};
-	struct Bone {
+	struct BoneInfo {
 		std::string name;
-		unsigned int nWeights;
-		glm::mat4 offset;
-		VertexWeight* weights;
+		glm::mat4 offsetMatrix;
+		glm::mat4 FinalTransformation;
+
+		BoneInfo(glm::mat4& offset)
+		{
+			offsetMatrix = offset;
+			FinalTransformation = glm::mat4();
+		}
 	};
 	//Structure to save what bones affect each vertex for then apply transformations
 	struct VertexBoneData
@@ -86,6 +91,7 @@ namespace Wiwa {
 	{
 	private:
 		std::string m_ModelPath;
+		//aiScene* pScene = nullptr;
 	protected:
 		bool is_root = false;
 
@@ -101,7 +107,7 @@ namespace Wiwa {
 		std::vector<std::string> materials;
 
 		std::vector<VertexBoneData> bones;
-		//std::vector<VertexBoneData> vertexToBones;
+		std::vector<BoneInfo> boneInfo;
 		std::vector<int> meshBaseVertex;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
 
@@ -120,6 +126,11 @@ namespace Wiwa {
 		Model* loadmesh(const aiMesh* mesh);
 		ModelHierarchy* loadModelHierarchy(const aiNode* node);
 		
+		void ReadNodeHeirarchy(const aiNode* pNode, const glm::mat4& parentTransform);
+
+		void LoadMeshBones(unsigned int index, const aiMesh* mesh);
+		void LoadSingleBone(int meshIndex, aiBone* bone);
+		
 		void CreateCube();
 		void CreatePlane();
 		void CreatePyramid();
@@ -127,6 +138,8 @@ namespace Wiwa {
 
 		static void SaveModelHierarchy(File file, ModelHierarchy* h);
 		static ModelHierarchy* LoadModelHierarchy(File file);
+
+		
 	public:
 		Model(const char* file);
 		~Model();
@@ -155,8 +168,7 @@ namespace Wiwa {
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
-		void LoadMeshBones(unsigned int index, const aiMesh* mesh);
-		void LoadSingleBone(int meshIndex, aiBone* bone);
+		void GetBoneTransforms(std::vector<glm::mat4> transforms);
 
 		void IsRoot(bool root) { is_root = root; }
 
