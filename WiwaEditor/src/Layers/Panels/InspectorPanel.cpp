@@ -236,7 +236,7 @@ void InspectorPanel::DrawAudioSourceComponent(byte* data)
 {
 	Wiwa::AudioSource* asrc = (Wiwa::AudioSource*)data;
 
-	ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
+	//ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
 	ImGui::InputText("Event", asrc->eventName, sizeof(asrc->eventName));
 }
 
