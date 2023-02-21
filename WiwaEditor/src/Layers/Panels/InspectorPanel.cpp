@@ -286,7 +286,7 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
 	ImGui::InputFloat("Mass", &rigidBody->mass);
-	ImGui::InputFloat("Gravity", &rigidBody->gravity);
+	DrawVec3Control("Gravity", &rigidBody->gravity, 0.0f, 100.0f);
 	ImGui::Checkbox("Is sensor?", &rigidBody->isSensor);
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
 }

@@ -329,6 +329,55 @@ namespace Wiwa {
 		return true;
 	}
 
+	void PhysicsManager::SetBodyMass(MyRigidBody* body, float mass)
+	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
+
+		rigidBody->mass = mass;
+
+		//Remove the rigid body from the dynamics world
+		m_World->removeRigidBody(body->btBody);
+
+		btVector3 inertia;
+		body->btBody->getCollisionShape()->calculateLocalInertia(mass, inertia);
+		body->btBody->setMassProps(mass, inertia);
+
+		//Add the rigid body to the dynamics world
+		m_World->addRigidBody(body->btBody);
+	}
+
+	void PhysicsManager::SetBodyGravity(MyRigidBody* body, btVector3 gravity)
+	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
+
+		rigidBody->gravity = glm::vec3(gravity.x(), gravity.y(), gravity.z());
+		body->btBody->setGravity(gravity);
+	}
+
+	void PhysicsManager::SetTrigger(MyRigidBody* body, bool isTrigger)
+	{
+		if (isTrigger == true)
+			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		else
+			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	}
+
+	void PhysicsManager::SetStatic(MyRigidBody* body, bool isStatic)
+	{
+		if (isStatic == true)
+		{
+			SetBodyMass(body, 0.0f);
+			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+		}
+		else
+		{
+			SetBodyMass(body, 1.0f);
+			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
+		}
+	}
+
 	PhysicsManager::MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
 	{
 		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)

@@ -13,7 +13,7 @@ namespace Wiwa {
 		glm::vec3 positionOffset;
 		glm::vec3 scalingOffset;
 		float mass;
-		float gravity;
+		glm::vec3 gravity;
 		bool isTrigger;
 		bool isSensor;
 	};

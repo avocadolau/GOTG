@@ -54,6 +54,14 @@ namespace Wiwa {
 
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
+		void SetBodyMass(MyRigidBody* body, float mass);
+
+		void SetBodyGravity(MyRigidBody* body, btVector3 gravity);
+
+		void SetTrigger(MyRigidBody* body, bool isTrigger);
+
+		void SetStatic(MyRigidBody* body, bool isStatic);
+
 		MyRigidBody* FindByEntityId(size_t id);
 
 		inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
