@@ -23,6 +23,8 @@ private:
 	void DrawSpotLightComponent(byte* data);
 	void DrawRigidBodyComponent(byte* data);
 	void DrawColliderCubeComponent(byte* data);
+	void DrawColliderSpehereComponent(byte* data);
+	void DrawColliderCylinderComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();

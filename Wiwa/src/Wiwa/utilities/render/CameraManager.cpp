@@ -30,7 +30,7 @@ namespace Wiwa {
 		if (editorCamera->drawFrustrums)
 		{
 			Wiwa::Application::Get().GetRenderer3D().RenderFrustrums(editorCamera);
-			//Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
+			Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
 		}
 
 		size_t cameraCount = m_CamerasAlive.size();

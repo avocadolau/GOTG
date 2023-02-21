@@ -49,6 +49,8 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Rigidbody) { DrawRigidBodyComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCube) { DrawColliderCubeComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ColliderSphere) { DrawColliderSpehereComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -283,6 +285,8 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
+	ImGui::InputFloat("Mass", &rigidBody->mass);
+	ImGui::InputFloat("Gravity", &rigidBody->gravity);
 	ImGui::Checkbox("Is sensor?", &rigidBody->isSensor);
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
 }
@@ -291,6 +295,19 @@ void InspectorPanel::DrawColliderCubeComponent(byte* data)
 {
 	Wiwa::ColliderCube* colliderCube = (Wiwa::ColliderCube*)data;
 	DrawVec3Control("HalfExtents", &colliderCube->halfExtents, 0.0f, 100.0f);
+}
+
+void InspectorPanel::DrawColliderSpehereComponent(byte* data)
+{
+	Wiwa::ColliderSphere* colliderSphere = (Wiwa::ColliderSphere*)data;
+	ImGui::InputFloat("Radius", &colliderSphere->radius);
+}
+
+void InspectorPanel::DrawColliderCylinderComponent(byte* data)
+{
+	Wiwa::ColliderCylinder* colliderCylinder = (Wiwa::ColliderCylinder*)data;
+	ImGui::InputFloat("Radius", &colliderCylinder->radius);
+	ImGui::InputFloat("Height", &colliderCylinder->height);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)

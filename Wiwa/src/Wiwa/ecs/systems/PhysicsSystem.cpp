@@ -45,22 +45,31 @@ namespace Wiwa {
 		WI_INFO("Init physics of --> {}", e_name);
 
 		Rigidbody* rb = GetComponent<Rigidbody>();
-		ColliderCube* cube = GetComponent<ColliderCube>();
 		Transform3D* transform = GetComponent<Transform3D>();
+
+		ColliderCube* cube = GetComponent<ColliderCube>();
+		ColliderSphere* sphere = GetComponent<ColliderSphere>();
+		ColliderCylinder* cylinder = GetComponent<ColliderCylinder>();
+
 		Mesh* mesh = GetComponent<Mesh>();
 
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		if (rb && cube)
+		if (rb)
 		{
-			if (mesh)
+			if (cube)
 			{
-				Model* root_mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
-				cube->halfExtents = root_mod->boundingBox.HalfSize();
+				if (mesh) cube->halfExtents = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId)->boundingBox.HalfSize();
+				physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
 			}
-
-			physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
-			//physicsManager.UpdateEngineToPhysics();
+			else if (sphere)
+			{
+				physicsManager.AddBodySphere(m_EntityId, *sphere, *transform, *rb);
+			}
+			else if (cylinder)
+			{
+				physicsManager.AddBodyCylinder(m_EntityId, *cylinder, *transform, *rb);
+			}
 		}
 	}
 	void PhysicsSystem::OnSystemRemoved()
@@ -72,7 +81,7 @@ namespace Wiwa {
 	{
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		btRigidBody* body = physicsManager.FindByEntityId(m_EntityId);
+		PhysicsManager::MyRigidBody* body = physicsManager.FindByEntityId(m_EntityId);
 
 		if (body != nullptr)
 			physicsManager.DeleteBody(body);

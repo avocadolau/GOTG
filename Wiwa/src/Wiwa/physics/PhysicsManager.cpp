@@ -107,57 +107,62 @@ namespace Wiwa {
 	{
 		// Set the position offset
 		// Get the position from the engine
-		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
-			ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
-			Wiwa::Transform3D*t = (Wiwa::Transform3D*)(*item)->getUserPointer2();
+			Transform3D*transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			Rigidbody*rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
 			// Get the position from the engine
-			glm::vec3 posEngine = entityData->transform3d->localPosition;
-			glm::quat rotEngine = glm::quat(entityData->transform3d->localMatrix);
+			glm::vec3 posEngine = transform3d->localPosition;
+			glm::quat rotEngine = glm::quat(transform3d->localMatrix);
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
 			// Get the offset
-			glm::vec3 finalOffset = rotEngine * entityData->rigidBody->positionOffset;
+			glm::vec3 finalOffset = rotEngine * rigidBody->positionOffset;
 			glm::vec3 finalPosBullet = posEngine + finalOffset;
 
 			// Apply the offset because offset, it is internal only(collider wise)
 			btTransform offsettedCollider;
-			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));
+			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d->localMatrix));
 			offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
 			offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
 
-			(*item)->setWorldTransform(offsettedCollider);
+			(*item)->btBody->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
+			(*item)->btBody->setWorldTransform(offsettedCollider);
 		}
 		return true;
 	}
 
 	bool PhysicsManager::UpdatePhysicsToEngine()
 	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		// Physics to Engine
-		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
-			ObjectData* entityData = (ObjectData*)(*item)->getUserPointer();
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
-			btTransform bulletTransform((*item)->getWorldTransform());
+			btTransform bulletTransform((*item)->btBody->getWorldTransform());
 
 			// Get the transform from physics world
 			btVector3 posBullet = bulletTransform.getOrigin();
 			btQuaternion rotationBullet = bulletTransform.getRotation();
 
 			glm::quat rotationEngine = glm::quat(rotationBullet.w(), rotationBullet.x(), rotationBullet.y(), rotationBullet.z());
-			glm::vec3 finalOffset = rotationEngine * entityData->rigidBody->positionOffset;
+			glm::vec3 finalOffset = rotationEngine * rigidBody->positionOffset;
 			glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
 
 			// Remove the offset because offset is internal only(collider wise)
-			entityData->transform3d->localPosition = posEngine;
+			transform3d->localPosition = posEngine;
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			bulletTransform.setRotation(rotationBullet);
-			bulletTransform.getRotation().getEulerZYX(entityData->transform3d->localRotation.z, entityData->transform3d->localRotation.y, entityData->transform3d->localRotation.z);
+			bulletTransform.getRotation().getEulerZYX(transform3d->localRotation.z, transform3d->localRotation.y, transform3d->localRotation.z);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
-			(*item)->getCollisionShape()->setLocalScaling((btVector3(entityData->rigidBody->scalingOffset.x, entityData->rigidBody->scalingOffset.y, entityData->rigidBody->scalingOffset.z)));
-			m_World->updateSingleAabb((*item));
+			(*item)->btBody->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
+			m_World->updateSingleAabb((*item)->btBody);
 		}
 
 		return true;
@@ -203,11 +208,12 @@ namespace Wiwa {
 
 		m_Shapes.clear();
 
-		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
-			m_World->removeRigidBody(*item);
-			delete (ObjectData*)(*item)->getUserPointer();
-			delete* item;
+			m_World->removeRigidBody((*item)->btBody);
+			//delete (ObjectData*)(*item)->getUserPointer();
+			delete (*item)->btBody;
+			delete*item;
 			*item = nullptr;
 		}
 
@@ -219,7 +225,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::DeleteBody(btRigidBody* body)
+	bool PhysicsManager::DeleteBody(MyRigidBody* body)
 	{
 		//int constrainNums = body->m_Body->getNumConstraintRefs();
 		//if (constrainNums > 0)
@@ -232,15 +238,16 @@ namespace Wiwa {
 		//	}
 		//}
 
-		m_Motions.remove((btDefaultMotionState*)body->getMotionState());
-		delete body->getMotionState();
+		m_Motions.remove((btDefaultMotionState*)body->btBody->getMotionState());
+		delete body->btBody->getMotionState();
 
-		m_Shapes.remove(body->getCollisionShape());
-		delete body->getCollisionShape();
+		m_Shapes.remove(body->btBody->getCollisionShape());
+		delete body->btBody->getCollisionShape();
 
 		m_Bodies.remove(body);
-		m_World->removeRigidBody(body);
-		delete (ObjectData*)(body)->getUserPointer();
+		m_World->removeRigidBody(body->btBody);
+		//delete (ObjectData*)(body)->getUserPointer();
+		delete body->btBody;
 		delete body;
 		return true;
 	}
@@ -260,21 +267,11 @@ namespace Wiwa {
 		m_Motions.push_back(myMotionState);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
-		btRigidBody* body = new btRigidBody(rbInfo);
-		body->setUserIndex(id);
+		btRigidBody* btBody = new btRigidBody(rbInfo);
 
-		ObjectData* data = new ObjectData();
-		data->rigidBody = &rigid_body;
-		data->transform3d = &transform;
-		data->id = id;
-
-		body->setUserPointer(data);
-		m_World->addRigidBody(body);
-		m_Bodies.push_back(body);
-
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		const char* e_name = entityManager.GetEntityName(id);
-
+		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
+		m_World->addRigidBody(btBody);
+		m_Bodies.push_back(myBodyData);
 		return true;
 	}
 
@@ -300,22 +297,11 @@ namespace Wiwa {
 		m_Motions.push_back(myMotionState);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
-		btRigidBody* body = new btRigidBody(rbInfo);
-		body->setUserIndex(id);
+		btRigidBody* btBody = new btRigidBody(rbInfo);
 
-		ObjectData* data = new ObjectData();
-		data->rigidBody = &rigid_body;
-		data->transform3d = &transform;
-		data->id = id;
-
-		body->setUserPointer((ObjectData*)data);
-		body->setUserPointer2(&transform);
-		m_World->addRigidBody(body);
-		m_Bodies.push_back(body);
-		
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		const char* e_name = entityManager.GetEntityName(id);
-
+		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
+		m_World->addRigidBody(btBody);
+		m_Bodies.push_back(myBodyData);
 		return true;
 	}
 
@@ -335,29 +321,19 @@ namespace Wiwa {
 		m_Motions.push_back(myMotionState);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
-		btRigidBody* body = new btRigidBody(rbInfo);
-		body->setUserIndex(id);
+		btRigidBody* btBody = new btRigidBody(rbInfo);
 
-		ObjectData* data = new ObjectData();
-		data->rigidBody = &rigid_body;
-		data->transform3d = &transform;
-		data->id = id;
-
-		body->setUserPointer(data);
-		m_World->addRigidBody(body);
-		m_Bodies.push_back(body);
-
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		const char* e_name = entityManager.GetEntityName(id);
-
+		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
+		m_World->addRigidBody(btBody);
+		m_Bodies.push_back(myBodyData);
 		return true;
 	}
 
-	btRigidBody* PhysicsManager::FindByEntityId(size_t id)
+	PhysicsManager::MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
 	{
-		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
-			if ((*item)->getUserIndex() == id)
+			if ((*item)->id == id)
 				return *item;
 		}
 		return nullptr;
@@ -377,11 +353,11 @@ namespace Wiwa {
 		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
 		WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
 		int num = 0;
-		for (std::list<btRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
 			
 			/*int id = (*item)->getUserIndex();*/
-			btVector3 pos = (*item)->getWorldTransform().getOrigin();
+			btVector3 pos = (*item)->btBody->getWorldTransform().getOrigin();
 			/*const char* e_name = entityManager.GetEntityName(id); */
 			WI_INFO("Index {} is {} {} {}", num, pos.x(), pos.y(), pos.z()); 
 			num++;
@@ -392,82 +368,83 @@ namespace Wiwa {
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		/*glMatrixMode(GL_PROJECTION);
+		camera->frameBuffer->Bind();
+		glMatrixMode(GL_PROJECTION);
 		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
 		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(glm::value_ptr(camera->getView()));*/
+		glLoadMatrixf(glm::value_ptr(camera->getView()));
 
-		m_Debug_draw->lineDisplayShader->Bind();
-		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Model, transform);
-		m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-		m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		//m_Debug_draw->lineDisplayShader->Bind();
+		////m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Model, transform);
+		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
 
 		m_World->debugDrawWorld();
-		m_Debug_draw->lineDisplayShader->UnBind();
+		//m_Debug_draw->lineDisplayShader->UnBind();
 		camera->frameBuffer->Unbind();
 	}
-}
-
-void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
-{
-	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-
-	// Create Vertex Array Object
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	// Create a Vertex Buffer Object and copy the vertex data to it
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	GLfloat lineVertices[] = {
-		from.x(), from.y(), from.z(),
-		to.x(), to.y(), to.z()
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
-
-	// Create an element array
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-	GLuint elements[] = {
-		0, 1,
-	};
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(lineVertices), (void*)0);
-	
-	glBindVertexArray(vao);
-	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
-	glDeleteBuffers(1, &ebo);
 }
 
 //void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 //{
 //	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-//	//GLfloat lineVertices[] = {
-//	//	from.x(), from.y(), from.z(),
-//	//	to.x(), to.y(), to.z()
-//	//};
-//	//glEnableClientState(GL_VERTEX_ARRAY);
-//	//glVertexPointer
-//	glUseProgram(0);
-//	glColor3f(255, 0, 0);
-//	glLineWidth(3.0f);
-//	glBegin(GL_LINES);
-//	glVertex3f(from.getX(), from.getY(), from.getZ());
-//	glVertex3f(to.getX(), to.getY(), to.getZ());
-//	glEnd();
-//	glLineWidth(1.0f);
 //
+//	// Create Vertex Array Object
+//	GLuint vao;
+//	glGenVertexArrays(1, &vao);
+//	glBindVertexArray(vao);
+//
+//	// Create a Vertex Buffer Object and copy the vertex data to it
+//	GLuint vbo;
+//	glGenBuffers(1, &vbo);
+//	GLfloat lineVertices[] = {
+//		from.x(), from.y(), from.z(),
+//		to.x(), to.y(), to.z()
+//	};
+//
+//	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
+//
+//	// Create an element array
+//	GLuint ebo;
+//	glGenBuffers(1, &ebo);
+//	GLuint elements[] = {
+//		0, 1,
+//	};
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
+//
+//	glEnableVertexAttribArray(0);
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(lineVertices), (void*)0);
+//	
+//	glBindVertexArray(vao);
+//	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+//	glBindVertexArray(0);
+//
+//	glDeleteVertexArrays(1, &vao);
+//	glDeleteBuffers(1, &vbo);
+//	glDeleteBuffers(1, &ebo);
 //}
+
+void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+{
+	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+	//GLfloat lineVertices[] = {
+	//	from.x(), from.y(), from.z(),
+	//	to.x(), to.y(), to.z()
+	//};
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glVertexPointer
+	glUseProgram(0);
+	glColor3f(255, 0, 0);
+	glLineWidth(3.0f);
+	glBegin(GL_LINES);
+	glVertex3f(from.getX(), from.getY(), from.getZ());
+	glVertex3f(to.getX(), to.getY(), to.getZ());
+	glEnd();
+	glLineWidth(1.0f);
+
+}
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {

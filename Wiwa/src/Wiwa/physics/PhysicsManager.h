@@ -24,13 +24,13 @@ namespace Wiwa {
 
 	class WI_API PhysicsManager
 	{
-		struct ObjectData
-		{
-			Wiwa::Rigidbody* rigidBody;
-			Wiwa::Transform3D* transform3d;
+	public:
+		struct MyRigidBody {
+			MyRigidBody(btRigidBody& body_, const size_t id_) : btBody(&body_), id(id_) {};
+
+			btRigidBody* btBody;
 			size_t id;
 		};
-
 	public:
 		PhysicsManager();
 
@@ -46,7 +46,7 @@ namespace Wiwa {
 
 		bool CleanWorld();
 
-		bool DeleteBody(btRigidBody* body);
+		bool DeleteBody(MyRigidBody* body);
 
 		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
@@ -54,7 +54,7 @@ namespace Wiwa {
 
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
-		btRigidBody* FindByEntityId(size_t id);
+		MyRigidBody* FindByEntityId(size_t id);
 
 		inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
 		{
@@ -81,7 +81,7 @@ namespace Wiwa {
 		DebugDrawer* m_Debug_draw;
 
 		std::list<btCollisionShape*> m_Shapes;
-		std::list<btRigidBody*> m_Bodies;
+		std::list<MyRigidBody*> m_Bodies;
 		std::list<btDefaultMotionState*> m_Motions;
 		std::list<btTypedConstraint*> m_Constraints;
 	};
