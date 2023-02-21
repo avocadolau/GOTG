@@ -9,7 +9,7 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
-#define MAX_NUM_BONES_PER_VERTEX 4
+#define MAX_NUM_BONES_PER_VERTEX 10
 
 struct aiMesh;
 struct aiNode;
@@ -94,6 +94,7 @@ namespace Wiwa {
 		//aiScene* pScene = nullptr;
 	protected:
 		bool is_root = false;
+		bool has_bones = false;
 
 		std::string model_name;
 		unsigned int model_mat;
@@ -102,11 +103,12 @@ namespace Wiwa {
 		std::vector<int> ebo_data;
 		std::vector<int> bbebo_data;
 		std::vector<float> bbvbo_data;
+		std::vector<VertexBoneData> bone_data;
 
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
 
-		std::vector<VertexBoneData> bones;
+
 		std::vector<BoneInfo> boneInfo;
 		std::vector<int> meshBaseVertex;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
@@ -116,6 +118,7 @@ namespace Wiwa {
 
 
 		void generateBuffers();
+		void generateAnimationBuffers();
 	private:
 		unsigned int vao, vbo, ebo, bbvao, bbvbo, bbebo, bonevb;
 
@@ -128,8 +131,8 @@ namespace Wiwa {
 		
 		void ReadNodeHeirarchy(const aiNode* pNode, const glm::mat4& parentTransform);
 
-		void LoadMeshBones(unsigned int index, const aiMesh* mesh);
-		void LoadSingleBone(int meshIndex, aiBone* bone);
+		void LoadMeshBones(unsigned int index, const aiMesh* mesh, Model* root);
+		void LoadSingleBone(int meshIndex, aiBone* bone, Model* root);
 		
 		void CreateCube();
 		void CreatePlane();
@@ -167,6 +170,9 @@ namespace Wiwa {
 
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
+
+		void LoadArmature(aiScene scene);
+		void LoadWiArmature(const char* file);
 
 		void GetBoneTransforms(std::vector<glm::mat4> transforms);
 

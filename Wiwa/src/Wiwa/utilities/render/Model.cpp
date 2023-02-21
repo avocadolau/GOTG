@@ -152,15 +152,22 @@ namespace Wiwa {
 				//Load bones
 				if (pMesh->HasBones())
 				{
-					bones.resize(totalVertices);
-					LoadMeshBones(i, pMesh);
+					model->has_bones = true;
+					model->bone_data.resize(totalVertices);
+					model->LoadMeshBones(i, pMesh, this);
 				}
 
-				if (gen_buffers) { 
+				// Filter the model if it has Bones ( can be animated ), 
+				// then generate buffers according to the model
+
+				if (gen_buffers && !has_bones) {
 					model->generateBuffers();
 				}
-
+				else {
+					model->generateAnimationBuffers();
+				}
 				models.push_back(model);
+
 			}
 		}
 
@@ -218,11 +225,11 @@ namespace Wiwa {
 				model->ebo_data.resize(ebo_size);
 				f.Read(&model->ebo_data[0], ebo_size * sizeof(int));
 
-				//// Read Bones
-				//size_t bones_size;
-				//f.Read(&bones_size, sizeof(size_t));
-				//model->bones.resize(bones_size);
-				//f.Read(&model->bones[0], bones_size * sizeof(VertexBoneData));
+				// Read Bones
+				size_t bones_size;
+				f.Read(&bones_size, sizeof(size_t));
+				model->bone_data.resize(bones_size);
+				f.Read(&model->bone_data[0], bones_size * sizeof(VertexBoneData));
 
 				model->generateBuffers();
 				models.push_back(model);
@@ -662,27 +669,12 @@ namespace Wiwa {
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bonevb);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bones[0]) * bones.size(), &bones[0], GL_STATIC_DRAW);
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
-
-		//bone attributes
-		glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(4, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
-				(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
-		glEnableVertexAttribArray(4);
 		
 
 		if (glGetError() != 0)
@@ -740,7 +732,125 @@ namespace Wiwa {
 		glBindVertexArray(0);
 	}
 
+	void Model::generateAnimationBuffers()
+	{
+		if (is_root) return;
+		WI_CORE_INFO("Generating buffers...");
+		glGenBuffers(1, &vbo);
+		glGenBuffers(1, &ebo);
+		glGenVertexArrays(1, &vao);
+		//WI_CORE_INFO("Generating buffers DONE");
 
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+		//WI_CORE_INFO("Binding the vertex array ...");
+		glBindVertexArray(vao);
+		//WI_CORE_INFO("Binding the vertex array DONE");
+
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+		//WI_CORE_INFO("Binding the vertex buffer ...");
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(float), vbo_data.data(), GL_STATIC_DRAW);
+		//WI_CORE_INFO("Binding the vertex buffer DONE");
+
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+		//WI_CORE_INFO("Binding the index buffer ...");
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebo_data.size() * sizeof(int), ebo_data.data(), GL_STATIC_DRAW);
+
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bonevb);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bone_data[0]) * bone_data.size(), &bone_data[0], GL_STATIC_DRAW);
+
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+
+		//bone attributes
+		glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(4, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
+			(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
+		glEnableVertexAttribArray(4);
+
+
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+
+		if (glGetError() != 0)
+		{
+			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+		}
+
+
+		for (int i = 0; i < vbo_data.size(); i += 8)
+		{
+			glm::vec3 vec = { vbo_data[i], vbo_data[i + 1], vbo_data[i + 2] };
+			boundingBox.extend(vec);
+		}
+		bbebo_data = {
+			0, 1, 1, 2, 2, 3, 3, 0, // Front
+			4, 5, 5, 6, 6, 7, 7, 4, // Back
+			0, 4, 1, 5, 2, 6, 3, 7
+		};
+		bbvbo_data = {
+			boundingBox.getMax().x, boundingBox.getMax().y, boundingBox.getMax().z, //TOP
+			boundingBox.getMin().x, boundingBox.getMax().y, boundingBox.getMax().z,
+			boundingBox.getMin().x, boundingBox.getMax().y, boundingBox.getMin().z,
+			boundingBox.getMax().x, boundingBox.getMax().y, boundingBox.getMin().z,
+
+			boundingBox.getMax().x, boundingBox.getMin().y, boundingBox.getMax().z, //Bottom
+			boundingBox.getMin().x, boundingBox.getMin().y, boundingBox.getMax().z,
+			boundingBox.getMin().x, boundingBox.getMin().y, boundingBox.getMin().z,
+			boundingBox.getMax().x, boundingBox.getMin().y, boundingBox.getMin().z,
+		};
+
+		glGenBuffers(1, &bbvbo);
+		glGenBuffers(1, &bbebo);
+		glGenVertexArrays(1, &bbvao);
+
+		glBindVertexArray(bbvao);
+		glBindBuffer(GL_ARRAY_BUFFER, bbvbo);
+		glBufferData(GL_ARRAY_BUFFER, bbvbo_data.size() * sizeof(float), bbvbo_data.data(), GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bbebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, bbebo_data.size() * sizeof(int), bbebo_data.data(), GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
 
 	Model::Model(const char* file)
 		: ebo(0), vbo(0), vao(0)
@@ -846,15 +956,15 @@ namespace Wiwa {
 		}
 	}
 
-	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)
+	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh, Model* root)
 	{
 		for (int i = 0; i < mesh->mNumBones; i++)
 		{
-			LoadSingleBone(meshIndex, mesh->mBones[i]);
+			LoadSingleBone(meshIndex, mesh->mBones[i],root);
 		}
 	}
 
-	void Model::LoadSingleBone(int meshIndex, aiBone* bone)
+	void Model::LoadSingleBone(int meshIndex, aiBone* bone, Model* root)
 	{ 
 		
 		int bone_id = getBoneId(bone);
@@ -874,18 +984,18 @@ namespace Wiwa {
 
 			const aiVertexWeight& vw = bone->mWeights[i];
 
-			unsigned int globalVertexId = meshBaseVertex[meshIndex] + vw.mVertexId;
+			unsigned int globalVertexId =  root->meshBaseVertex[meshIndex] + vw.mVertexId;
 			WI_INFO("Vertex id {0}", globalVertexId);
 
 
 			
-			if (globalVertexId > bones.size())
+			if (globalVertexId > bone_data.size())
 			{
 				WI_ERROR("vertex to bones size error mesh id {0} at bone {1} at weight {2}", meshIndex,bone_id, i);
 				assert(0);
 			}
 			
-			bones[globalVertexId].AddBoneData(bone_id, vw.mWeight);
+			bone_data[globalVertexId].AddBoneData(bone_id, vw.mWeight);
 		}
 	}
 
@@ -936,10 +1046,10 @@ namespace Wiwa {
 				f.Write(&ebo_size, sizeof(size_t));
 				f.Write(c_model->ebo_data.data(), ebo_size * sizeof(int));
 
-				////Model bones
-				//size_t bones_size = c_model->bones.size();
-				//f.Write(&bones_size, sizeof(size_t));
-				//f.Write(c_model->bones.data(), sizeof(size_t));
+				//Model bones
+				size_t bones_size = c_model->bone_data.size();
+				f.Write(&bones_size, sizeof(size_t));
+				f.Write(c_model->bone_data.data(), sizeof(size_t));
 			}
 
 			// Model hierarchy
