@@ -11,9 +11,11 @@
 
 #define MAX_NUM_BONES_PER_VERTEX 10
 
+struct aiScene;
 struct aiMesh;
 struct aiNode;
 struct aiBone;
+
 
 namespace Wiwa {
 	struct ModelSettings;
@@ -32,6 +34,8 @@ namespace Wiwa {
 		Vector3f rotation;
 		Vector3f scale;
 
+		glm::mat4 Transformation;
+
 		~ModelHierarchy() {
 			size_t len = children.size();
 
@@ -42,6 +46,25 @@ namespace Wiwa {
 			children.clear();
 			meshIndexes.clear();
 		}
+	};
+
+	struct Armature {
+		std::string name;
+		glm::mat4 offsetMatrix;
+		glm::mat4 transform;
+
+		std::vector<Armature*> bones;
+		~Armature()
+		{
+			size_t len = bones.size();
+
+			for (size_t i = 0; i < len; i++) {
+				delete bones[i];
+			}
+
+			bones.clear();
+		}
+
 	};
 	struct VertexWeight {
 		unsigned int vertexId;
@@ -78,7 +101,8 @@ namespace Wiwa {
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
-					WI_INFO("bone {0} weight {1} index {2}\n", BoneID, weight, i);
+					//DEBUG
+					//WI_INFO("bone {0} weight {1} index {2}\n", BoneID, weight, i);
 					return;
 				}
 			}
@@ -91,7 +115,12 @@ namespace Wiwa {
 	{
 	private:
 		std::string m_ModelPath;
-		//aiScene* pScene = nullptr;
+
+		//tmp scene, stores armature (bone hierarchy) to apply transofrmations
+		const aiScene* pScene = nullptr;
+
+		//DEBUG
+		int spaceCount = 0;
 	protected:
 		bool is_root = false;
 		bool has_bones = false;
@@ -108,17 +137,15 @@ namespace Wiwa {
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
 
-
+		//stores offest matrix and final bone transformation
 		std::vector<BoneInfo> boneInfo;
 		std::vector<int> meshBaseVertex;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
 
 		ModelHierarchy* model_hierarchy;
-		
-
 
 		void generateBuffers();
-		void generateAnimationBuffers();
+
 	private:
 		unsigned int vao, vbo, ebo, bbvao, bbvbo, bbebo, bonevb;
 
@@ -127,12 +154,13 @@ namespace Wiwa {
 		int getBoneId(const aiBone* pBone);
 
 		Model* loadmesh(const aiMesh* mesh);
-		ModelHierarchy* loadModelHierarchy(const aiNode* node);
+		ModelHierarchy* loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix);
 		
-		void ReadNodeHeirarchy(const aiNode* pNode, const glm::mat4& parentTransform);
+		void SetBoneInfo(const aiNode* pNode, const glm::mat4& parentTransform);
 
 		void LoadMeshBones(unsigned int index, const aiMesh* mesh, Model* root);
 		void LoadSingleBone(int meshIndex, aiBone* bone, Model* root);
+		void PrintAssimpMatrix(const aiBone* b);
 		
 		void CreateCube();
 		void CreatePlane();

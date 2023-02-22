@@ -32,6 +32,8 @@ namespace Wiwa {
 		uint32_t file_buf_size = FileSystem::ReadAll(file, &file_data);
 
 		const aiScene* scene = aiImportFileFromMemory(file_data, file_buf_size, flags, NULL);
+		pScene = scene;
+
 
 		delete[] file_data;
 
@@ -44,7 +46,9 @@ namespace Wiwa {
 		
 		is_root = true;
 
-		model_hierarchy = loadModelHierarchy(scene->mRootNode);
+		glm::mat4 identity = glm::mat4(1);
+
+		model_hierarchy = loadModelHierarchy(scene->mRootNode,identity);
 		std::filesystem::path p = file;
 		model_hierarchy->name = p.stem().string();
 
@@ -160,15 +164,19 @@ namespace Wiwa {
 				// Filter the model if it has Bones ( can be animated ), 
 				// then generate buffers according to the model
 
-				if (gen_buffers && !has_bones) {
+				if (gen_buffers) {
 					model->generateBuffers();
-				}
-				else {
-					model->generateAnimationBuffers();
 				}
 				models.push_back(model);
 
 			}
+		}
+
+		//TOOD import animations into an Animation structure
+
+		if (scene->HasAnimations())
+		{
+			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
 		}
 
 		aiReleaseImport(scene);
@@ -311,11 +319,14 @@ namespace Wiwa {
 		return model;
 	}
 
-	ModelHierarchy* Model::loadModelHierarchy(const aiNode* node)
+	ModelHierarchy* Model::loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix)
 	{
 		ModelHierarchy* h = new ModelHierarchy();
 
 		h->name = node->mName.C_Str();
+
+		//DEBUG
+		WI_INFO("\t name {0}", h->name.c_str());
 
 		/*if (node->mMetaData) {
 			std::cout << h->name << std::endl;
@@ -360,8 +371,8 @@ namespace Wiwa {
 		// Node transform
 		aiVector3D translate, scale, rot;
 		//aiQuaternion quat;
-
 		node->mTransformation.Decompose(scale, rot, translate);
+
 		//{
 		//	quat.Normalize();
 
@@ -391,6 +402,19 @@ namespace Wiwa {
 		h->rotation = { rot.x * 180.0f / PI_F, rot.y * 180.0f / PI_F, rot.z * 180.0f / PI_F };
 		h->scale = { scale.x, scale.y, scale.z };
 
+
+		//fill bone info data 
+		aiMatrix4x4 m = node->mTransformation;
+		h->Transformation = glm::make_mat4(m.ToPtr());
+		glm::mat4 globalTransformation = parentMatrix * h->Transformation;
+
+		if (boneNameToIndexMap.find(h->name) != boneNameToIndexMap.end())
+		{
+			unsigned int boneIndex = boneNameToIndexMap[h->name];
+			boneInfo[boneIndex].FinalTransformation = globalTransformation * boneInfo[boneIndex].offsetMatrix;
+		}
+
+
 		// Node meshes
 		for (size_t i = 0; i < node->mNumMeshes; i++) {
 			h->meshIndexes.push_back(node->mMeshes[i]);
@@ -398,32 +422,34 @@ namespace Wiwa {
 
 		// Node children
 		for (size_t i = 0; i < node->mNumChildren; i++) {
-			h->children.push_back(loadModelHierarchy(node->mChildren[i]));
+			//DEBUG
+			WI_INFO("child {0} {1}", i, node->mChildren[i]->mName.C_Str());
+			h->children.push_back(loadModelHierarchy(node->mChildren[i], globalTransformation));
 		}
 
 		return h;
 	}
 
-	void Model::ReadNodeHeirarchy(const aiNode* pNode, const glm::mat4& parentTransform)
-	{
-		std::string nodeName(pNode->mName.data);
-		aiMatrix4x4 m = pNode->mTransformation;
-		glm::mat4 nodeTransformation = glm::make_mat4(m.ToPtr());
+	//void Model::SetBoneInfo(const aiNode* pNode, const glm::mat4& parentTransform)
+	//{
+	//	std::string nodeName(pNode->mName.data);
+	//	aiMatrix4x4 m = pNode->mTransformation;
+	//	glm::mat4 nodeTransformation = glm::make_mat4(m.ToPtr());
 
-		WI_INFO("{0}", nodeName.c_str());
+	//	WI_INFO("{0}", nodeName.c_str());
 
-		glm::mat4 globalTransformation = parentTransform * nodeTransformation;
+	//	glm::mat4 globalTransformation = parentTransform * nodeTransformation;
 
-		if (boneNameToIndexMap.find(nodeName) != boneNameToIndexMap.end())
-		{
-			unsigned int boneIndex = boneNameToIndexMap[nodeName];
-			boneInfo[boneIndex].FinalTransformation = globalTransformation;
-		}
-		for (unsigned int i = 0; i < pNode->mNumChildren; i++)
-		{
-			ReadNodeHeirarchy(pNode->mChildren[i], globalTransformation);
-		}
-	}
+	//	if (boneNameToIndexMap.find(nodeName) != boneNameToIndexMap.end())
+	//	{
+	//		unsigned int boneIndex = boneNameToIndexMap[nodeName];
+	//		boneInfo[boneIndex].FinalTransformation = globalTransformation;
+	//	}
+	//	for (unsigned int i = 0; i < pNode->mNumChildren; i++)
+	//	{
+	//		SetBoneInfo(pNode->mChildren[i], globalTransformation);
+	//	}
+	//}
 
 	void Model::CreateCube()
 	{
@@ -675,132 +701,36 @@ namespace Wiwa {
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(2);
-		
 
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-
-		if (glGetError() != 0)
+		//if there are bones add bone vertex data
+		if (!bone_data.empty())
 		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-		
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bonevb);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bone_data[0]) * bone_data.size(), &bone_data[0], GL_STATIC_DRAW);
 
-		for (int i = 0; i < vbo_data.size(); i += 8)
-		{
-			glm::vec3 vec = { vbo_data[i], vbo_data[i + 1], vbo_data[i + 2] };
-			boundingBox.extend(vec);
-		}
-		bbebo_data = {
-			0, 1, 1, 2, 2, 3, 3, 0, // Front
-			4, 5, 5, 6, 6, 7, 7, 4, // Back
-			0, 4, 1, 5, 2, 6, 3, 7
-		};
-		bbvbo_data = {
-			boundingBox.getMax().x, boundingBox.getMax().y, boundingBox.getMax().z, //TOP
-			boundingBox.getMin().x, boundingBox.getMax().y, boundingBox.getMax().z,
-			boundingBox.getMin().x, boundingBox.getMax().y, boundingBox.getMin().z,
-			boundingBox.getMax().x, boundingBox.getMax().y, boundingBox.getMin().z,
+			if (glGetError() != 0)
+			{
+				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+			}
+			//bone attributes
+			glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+			glEnableVertexAttribArray(3);
+			glVertexAttribPointer(4, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
+				(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
+			glEnableVertexAttribArray(4);
 
-			boundingBox.getMax().x, boundingBox.getMin().y, boundingBox.getMax().z, //Bottom
-			boundingBox.getMin().x, boundingBox.getMin().y, boundingBox.getMax().z,
-			boundingBox.getMin().x, boundingBox.getMin().y, boundingBox.getMin().z,
-			boundingBox.getMax().x, boundingBox.getMin().y, boundingBox.getMin().z,
-		};
 
-		glGenBuffers(1, &bbvbo);
-		glGenBuffers(1, &bbebo);
-		glGenVertexArrays(1, &bbvao);
-
-		glBindVertexArray(bbvao);
-		glBindBuffer(GL_ARRAY_BUFFER, bbvbo);
-		glBufferData(GL_ARRAY_BUFFER, bbvbo_data.size() * sizeof(float), bbvbo_data.data(), GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bbebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, bbebo_data.size() * sizeof(int), bbebo_data.data(), GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-	}
-
-	void Model::generateAnimationBuffers()
-	{
-		if (is_root) return;
-		WI_CORE_INFO("Generating buffers...");
-		glGenBuffers(1, &vbo);
-		glGenBuffers(1, &ebo);
-		glGenVertexArrays(1, &vao);
-		//WI_CORE_INFO("Generating buffers DONE");
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+			if (glGetError() != 0)
+			{
+				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+			}
 		}
 
-		//WI_CORE_INFO("Binding the vertex array ...");
-		glBindVertexArray(vao);
-		//WI_CORE_INFO("Binding the vertex array DONE");
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
-		//WI_CORE_INFO("Binding the vertex buffer ...");
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(float), vbo_data.data(), GL_STATIC_DRAW);
-		//WI_CORE_INFO("Binding the vertex buffer DONE");
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
-		//WI_CORE_INFO("Binding the index buffer ...");
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebo_data.size() * sizeof(int), ebo_data.data(), GL_STATIC_DRAW);
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bonevb);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bone_data[0]) * bone_data.size(), &bone_data[0], GL_STATIC_DRAW);
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-		glEnableVertexAttribArray(2);
-
-		//bone attributes
-		glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(4, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
-			(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
-		glEnableVertexAttribArray(4);
-
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
@@ -943,6 +873,10 @@ namespace Wiwa {
 		getWiMeshFromFile(file);
 	}
 
+	void Model::LoadArmature(aiScene scene)
+	{
+	}
+
 	void Model::GetBoneTransforms(std::vector<glm::mat4> transforms)
 	{
 		transforms.resize(boneInfo.size());
@@ -968,8 +902,10 @@ namespace Wiwa {
 	{ 
 		
 		int bone_id = getBoneId(bone);
+		//DEBUG
+		WI_INFO("bone {0}: {1}\n", bone_id,bone->mName.C_Str());
 
-		WI_INFO("bone id {0}\n", bone_id);
+		PrintAssimpMatrix(bone);
 
 		//init bone info, using bone index to acces it
 		if (bone_id == boneInfo.size())
@@ -980,12 +916,13 @@ namespace Wiwa {
 		}
 
 		for (int i = 0; i < bone->mNumWeights; i++) {
+			//DEBUG
 			if (i == 0) WI_INFO("\n");
 
 			const aiVertexWeight& vw = bone->mWeights[i];
 
 			unsigned int globalVertexId =  root->meshBaseVertex[meshIndex] + vw.mVertexId;
-			WI_INFO("Vertex id {0}", globalVertexId);
+			//WI_INFO("Vertex id {0}", globalVertexId);
 
 
 			
@@ -997,6 +934,16 @@ namespace Wiwa {
 			
 			bone_data[globalVertexId].AddBoneData(bone_id, vw.mWeight);
 		}
+	}
+
+	void Model::PrintAssimpMatrix(const aiBone* bone)
+	{
+		const aiMatrix4x4 m = bone->mOffsetMatrix;
+		//DEBUG
+		WI_INFO("{0} {1} {2} {3}\n", m.a1, m.a2, m.a3, m.a4);
+		WI_INFO("{0} {1} {2} {3}\n", m.b1, m.b2, m.b3, m.b4);
+		WI_INFO("{0} {1} {2} {3}\n", m.c1, m.c2, m.c3, m.c4);
+		WI_INFO("{0} {1} {2} {3}\n", m.d1, m.d2, m.d3, m.d4);
 	}
 
 	Model* Model::GetModelFromFile(const char* file, ModelSettings* settings)
