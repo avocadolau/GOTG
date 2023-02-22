@@ -71,6 +71,8 @@ namespace Wiwa {
 
 	bool PhysicsManager::StepSimulation()
 	{
+		// Set collision booleans to false
+		 
 		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 15);
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
@@ -271,7 +273,7 @@ namespace Wiwa {
 
 		btRigidBody* btBody = new btRigidBody(rbInfo);
 		btBody->setUserIndex(id);
-
+		
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
 		m_World->addRigidBody(btBody);
 		m_Bodies.push_back(myBodyData);

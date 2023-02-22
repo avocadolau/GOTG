@@ -29,6 +29,12 @@ namespace Wiwa {
 		size_t id;
 	};
 
+	struct CollisionData {
+		size_t entityA;
+		size_t entityB;
+		bool collided;
+	};
+
 	class WI_API PhysicsManager
 	{
 	public:

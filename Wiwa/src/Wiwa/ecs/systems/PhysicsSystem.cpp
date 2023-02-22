@@ -81,7 +81,7 @@ namespace Wiwa {
 	{
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		PhysicsManager::MyRigidBody* body = physicsManager.FindByEntityId(m_EntityId);
+		MyRigidBody* body = physicsManager.FindByEntityId(m_EntityId);
 
 		if (body != nullptr)
 			physicsManager.DeleteBody(body);
