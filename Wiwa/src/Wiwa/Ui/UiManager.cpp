@@ -22,31 +22,40 @@ namespace Wiwa
 		return true;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath)
 	{
 		
 		GuiControl* control = nullptr;
-
-	
 		switch (type)
 		{
 		case GuiControlType::BUTTON:
-			control = new GuiButton(id, bounds, path);
+			control = new GuiButton(id, bounds, path,extraPath);
 			break;
 
 		case GuiControlType::CHECKBOX:
-			control = new GuiCheckbox(id, bounds, path);
+			control = new GuiCheckbox(id, bounds, path,extraPath);
 			break;
+		default:
+			break;
+		}
+		if (control != nullptr) controls.push_back(control);
+		return control;
+	}
+
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds)
+	{
+
+		GuiControl* control = nullptr;
+
+
+		switch (type)
+		{
 		case GuiControlType::SLIDER:
 			control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
 			break;
 		default:
 			break;
 		}
-		//Set the observer
-		//control->SetObserver(observer);
-
-		// Created GuiControls are added to the list of controls
 		if (control != nullptr) controls.push_back(control);
 		return control;
 	}
@@ -107,7 +116,6 @@ namespace Wiwa
 					control.erase(i);
 				}
 			}
-			control.at(i)->Draw(&Wiwa::Application::Get().GetRenderer2D());
 		}
 	}
 	bool GuiManager::CleanUp()
@@ -116,7 +124,7 @@ namespace Wiwa
 
 		for (int i = 0; i < control.size(); i++)
 		{
-			delete control.at(i);
+			control.erase(i);
 		}
 
 		return true;
