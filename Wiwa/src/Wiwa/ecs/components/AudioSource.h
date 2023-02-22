@@ -6,12 +6,10 @@
 
 namespace Wiwa {
 	struct WI_API AudioSource {
-		bool isDefaultListener;
 		char eventName[32];
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::AudioSource)
-	REFLECT_MEMBER(isDefaultListener)
 	REFLECT_MEMBER(eventName)
 REFLECTION_END;

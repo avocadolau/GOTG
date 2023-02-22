@@ -429,7 +429,7 @@ void DrawVec3Control(const std::string& label, float* values, float resetValue, 
 	ImGui::PopID();
 }
 
-void DrawVec3Control(const std::string& label, Wiwa::Vector3f* values, float resetValue, float columnWidth)
+void DrawVec3Control(const std::string& label, glm::vec3* values, float resetValue, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[0];

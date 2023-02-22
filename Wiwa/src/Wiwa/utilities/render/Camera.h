@@ -52,8 +52,8 @@ namespace Wiwa {
 		void setFOV(const float fov);
 		float getFOV() { return m_FOV; }
 
-		void setPosition(Vector3f position);
-		void setFront(Vector3f front);
+		void setPosition(const glm::vec3 position);
+		void setFront(const glm::vec3 front);
 
 
 		inline glm::vec3 getPosition() { return m_CameraPos; }
@@ -64,8 +64,7 @@ namespace Wiwa {
 		inline float getNear() { return m_NearPlaneDist; }
 
 		inline void setRotation(const glm::vec3 rot);
-		void lookat(const Vector3f position);
-		void lookat(const Vector3f cameraPos, const Vector3f position, const Vector3f camUp);
+		void lookat(const glm::vec3 position);
 		void SetPerspective(const float fov, const float aspectRatio, const float nearPlaneDistance=0.1f, const float farPlaneDistance=100.0f);
 		void UpdateFrustrum();
 		void SetOrthographic(const int width, const int height, const float nearPlaneDistance=0.1f, const float farPlaneDistance=100.0f);

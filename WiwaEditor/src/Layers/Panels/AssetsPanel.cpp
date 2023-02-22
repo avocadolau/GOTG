@@ -166,7 +166,7 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 	}
 	else if (ShaderExtensionComp(path) 
 		&& (!Wiwa::Resources::CheckImport<Wiwa::Shader>(p.c_str())
-		|| Wiwa::Resources::CheckMeta(p.c_str()) == Wiwa::Resources::TOUPDATE))
+		|| Wiwa::Resources::CheckMeta(p.c_str()) != Wiwa::Resources::UPDATED))
 	{
 		if (path.extension() == ".wishader")
 		{
@@ -247,7 +247,7 @@ void AssetsPanel::Draw()
 				ImTextureID texID = directoryEntry.is_directory() ? m_FolderIcon : m_FileIcon;
 				if (ImageExtensionComp(directoryEntry.path()))
 				{
-					ResourceId pngID = Wiwa::Resources::Load<Wiwa::Image>(path.string().c_str());
+					ResourceId pngID = Wiwa::Resources::LoadNative<Wiwa::Image>(path.string().c_str());
 					texID = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(pngID)->GetTextureId();
 				}
 				if (ModelExtensionComp(directoryEntry.path()))
@@ -383,7 +383,7 @@ void AssetsPanel::TopBar()
 				path /= dir;
 				std::string file = path.string() + ".wimaterial";
 
-				Wiwa::Material material;
+				Wiwa::Material material((Wiwa::Shader*)NULL);
 				Wiwa::Material::SaveMaterial(file.c_str(), &material);
 				Wiwa::Resources::CreateMeta<Wiwa::Material>(path.string().c_str());
 
@@ -465,8 +465,6 @@ void AssetsPanel::CheckMeta(const std::filesystem::path& path)
 			Wiwa::ModelSettings settings;
 			Wiwa::Resources::CreateMeta<Wiwa::Model>(p.c_str(), &settings);
 		}
-		else if (path.extension() == ".wishader")
-			Wiwa::Resources::CreateMeta<Wiwa::Shader>(p.c_str());
 		else if (MaterialExtensionComp(path))
 			Wiwa::Resources::CreateMeta<Wiwa::Material>(p.c_str());
 	}
