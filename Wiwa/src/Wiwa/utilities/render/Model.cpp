@@ -118,7 +118,6 @@ namespace Wiwa {
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
 
-
 					Material::SaveMaterial(mat_path.string().c_str(), &material);
 				}
 				materials.push_back(mat_path.string());
