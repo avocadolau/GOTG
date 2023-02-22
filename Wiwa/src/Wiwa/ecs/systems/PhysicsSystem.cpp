@@ -28,9 +28,9 @@ namespace Wiwa {
 	{
 		//PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	/*	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
-		WI_INFO("Updating physics of --> {}", e_name);
+		WI_INFO("Updating physics of --> {}", e_name);*/
 	}
 
 	void PhysicsSystem::OnDestroy()
@@ -75,6 +75,27 @@ namespace Wiwa {
 	void PhysicsSystem::OnSystemRemoved()
 	{
 		DeleteBody();
+	}
+
+	void PhysicsSystem::OnCollisionEnter(MyRigidBody* body1, MyRigidBody* body2)
+	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* e_name = entityManager.GetEntityName(body1->id);
+		WI_INFO("Collision enter of --> {}", e_name);
+	}
+
+	void PhysicsSystem::OnCollision(MyRigidBody* body1, MyRigidBody* body2)
+	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* e_name = entityManager.GetEntityName(body1->id);
+		WI_INFO("Collision continuwus of --> {}", e_name);
+	}
+
+	void PhysicsSystem::OnCollisionLeave(MyRigidBody* body1, MyRigidBody* body2)
+	{
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* e_name = entityManager.GetEntityName(body1->id);
+		WI_INFO("Collision leave of --> {}", e_name);
 	}
 
 	void PhysicsSystem::DeleteBody()

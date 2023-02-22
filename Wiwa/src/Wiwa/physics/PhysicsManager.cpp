@@ -72,7 +72,12 @@ namespace Wiwa {
 	bool PhysicsManager::StepSimulation()
 	{
 		// Set collision booleans to false
-		 
+		for (size_t i = 0; i < m_CollisionList.size(); i++)
+		{
+			m_CollisionList[i].collisionType = CT_LEAVE;
+		}
+
+		// Step simulation
 		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 15);
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
@@ -90,18 +95,47 @@ namespace Wiwa {
 				size_t idA = obA->getUserIndex();
 				size_t idB = obB->getUserIndex();
 
-				std::vector<System*>& vecA = entityManager.GetEntitySystems(idA);
-				std::vector<System*>& vecB = entityManager.GetEntitySystems(idB);
+				UpdateCollisionType(idA, idB);
+			}
+		}
 
-				for (size_t i = 0; i < vecA.size(); i++)
-				{
-					vecA[i]->OnCollision(FindByEntityId(idA), FindByEntityId(idB));
-				}
+		// Collision callbacks list update
+		for (size_t i = 0; i < m_CollisionList.size(); i++)
+		{
+			CollisionData& cData = m_CollisionList[i];
 
-				for (size_t i = 0; i < vecB.size(); i++)
-				{
-					vecB[i]->OnCollision(FindByEntityId(idB), FindByEntityId(idA));
+			std::vector<System*>& vecA = entityManager.GetEntitySystems(cData.entityA);
+			std::vector<System*>& vecB = entityManager.GetEntitySystems(cData.entityB);
+
+			switch (cData.collisionType) {
+			case CT_ENTER:
+				for (size_t k = 0; k < vecA.size(); k++) {
+					vecA[k]->OnCollisionEnter(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
 				}
+				for (size_t j = 0; j < vecA.size(); j++) {
+					vecA[j]->OnCollisionEnter(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
+				}
+				break;
+			case CT_LOOP:
+				for (size_t k = 0; k < vecA.size(); k++) {
+					vecA[k]->OnCollision(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
+				}
+				for (size_t j = 0; j < vecA.size(); j++) {
+					vecA[j]->OnCollision(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
+				}
+				break;
+			case CT_LEAVE:
+				for (size_t k = 0; k < vecA.size(); k++) {
+					vecA[k]->OnCollisionLeave(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
+				}
+				for (size_t j = 0; j < vecA.size(); j++) {
+					vecA[j]->OnCollisionLeave(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
+				}
+				m_CollisionList.erase(m_CollisionList.begin() + i);
+				i--;
+				break;
+			default:
+				break;
 			}
 		}
 		return true;
@@ -395,6 +429,26 @@ namespace Wiwa {
 		return nullptr;
 	}
 
+	void PhysicsManager::UpdateCollisionType(size_t first, size_t second)
+	{
+		size_t collision_list_size = m_CollisionList.size();
+
+		size_t i = collision_list_size;
+
+		for (i = 0; i < collision_list_size; i++) {
+			if (m_CollisionList[i].entityA == first && m_CollisionList[i].entityB == second) {
+				break;
+			}
+		}
+
+		if (i == collision_list_size) {
+			m_CollisionList.push_back({ first, second, CT_ENTER });
+		}
+		else {
+			m_CollisionList[i].collisionType = CT_LOOP;
+		}
+	}
+
 	bool PhysicsManager::getInit()
 	{
 		return m_HasBeenInit;
@@ -484,7 +538,7 @@ namespace Wiwa {
 
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
 	//GLfloat lineVertices[] = {
 	//	from.x(), from.y(), from.z(),
 	//	to.x(), to.y(), to.z()
