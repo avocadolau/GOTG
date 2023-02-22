@@ -81,15 +81,15 @@ namespace Wiwa {
 				mat_path += name.C_Str();
 				mat_path += ".wimaterial";
 
-				ResourceId matID = Resources::Load<Material>(mat_path.string().c_str());
-				if (matID == -1)
+				bool mat_imported = Resources::Import<Material>(mat_path.string().c_str());
+
+				if (!mat_imported)
 				{
-					Material material; // Default settings
+					Material material((Shader*)NULL); // Default settings
 					size_t id;
 
 					if (texture_diffuse.length > 0)
 					{
-
 						std::filesystem::current_path(path);
 
 						std::filesystem::path texture_path = texture_diffuse.C_Str();

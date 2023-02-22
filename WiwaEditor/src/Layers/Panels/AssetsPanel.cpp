@@ -383,7 +383,7 @@ void AssetsPanel::TopBar()
 				path /= dir;
 				std::string file = path.string() + ".wimaterial";
 
-				Wiwa::Material material;
+				Wiwa::Material material((Wiwa::Shader*)NULL);
 				Wiwa::Material::SaveMaterial(file.c_str(), &material);
 				Wiwa::Resources::CreateMeta<Wiwa::Material>(path.string().c_str());
 
