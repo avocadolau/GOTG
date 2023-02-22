@@ -37,7 +37,13 @@ namespace Wiwa {
 	{
 		m_EntityManager.SystemsInit();
 		m_GuiManager->Init();
-		m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, { 20,20,200,200 }, "assets/test.png", nullptr, { 20,20,0,0 });
+		//WAY TO CREATE THE POSITION
+		Rect2i test;
+		test.x = 500;
+		test.y = 100;
+		test.width = 200;
+		test.height = 100;
+		m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, test, "assets/test.png", nullptr, {0,0,0,0});
 	}
 
 	void Scene::Update()
@@ -54,7 +60,7 @@ namespace Wiwa {
 			m_EntityManager.SystemsUpdate();
 			
 			m_GuiManager->Update();
-			
+			m_GuiManager->Draw();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();

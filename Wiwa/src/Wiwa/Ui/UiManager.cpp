@@ -112,16 +112,13 @@ namespace Wiwa
 	}
 	bool GuiManager::CleanUp()
 	{
-		/*Wiwa::List<GuiControl*> control = controls;
+		Wiwa::List<GuiControl*> control = controls;
 
-		while (control != nullptr)
+		for (int i = 0; i < control.size(); i++)
 		{
-			RELEASE(control);
+			delete control.at(i);
 		}
 
-		return true;
-
-		return false;*/
 		return true;
 	}
 }
