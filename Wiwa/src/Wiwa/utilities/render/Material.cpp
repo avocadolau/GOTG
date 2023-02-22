@@ -60,7 +60,7 @@ namespace Wiwa {
 				Uniform* uniform = getUniform(p->name.GetString());
 				if (!uniform)
 				{
-					return;
+					continue;
 				}
 				const char* name = uniform->name.c_str();
 				switch (uniform->getType())
@@ -448,13 +448,14 @@ namespace Wiwa {
 
 		JSONDocument matFile(path);
 
-		if (matFile.HasMember("shader"))
-			mat->m_ShaderPath = matFile["shader"].get<const char*>();
+		if (matFile.HasMember("shader")) {
+			std::string shader_path = matFile["shader"].get<const char*>();
 
-		size_t shaderId = Resources::Load<Shader>(mat->m_ShaderPath.c_str());
-		Shader* shader = Resources::GetResourceById<Shader>(shaderId);
+			size_t shaderId = Resources::Load<Shader>(shader_path.c_str());
+			Shader* shader = Resources::GetResourceById<Shader>(shaderId);
 
-		mat->setShader(shader, mat->m_ShaderPath.c_str());
+			mat->setShader(shader, mat->m_ShaderPath.c_str());
+		}
 
 		if (matFile.HasMember("uniforms"))
 		{
