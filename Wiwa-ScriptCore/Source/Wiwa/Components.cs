@@ -1,5 +1,6 @@
 ﻿namespace Wiwa
 {
+    using ResourceId = System.UInt64;
     #region Transform3D
     [Component]
     public struct Transform3D
@@ -38,5 +39,11 @@
     //}
     #endregion
     #region Utils
+    [Component]
+    public struct TestComponent
+    {
+        public int val1;
+        public float val2;
+    }
     #endregion
 }

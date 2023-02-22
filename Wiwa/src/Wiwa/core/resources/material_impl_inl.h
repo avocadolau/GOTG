@@ -1,7 +1,5 @@
 #pragma once
 #include "resources_impl.h"
-#include "image_impl_inl.h"
-
 namespace Wiwa {
 	//--SPECIALIZATION FOR MATERIAL
 	template<>
@@ -74,29 +72,15 @@ namespace Wiwa {
 
 		std::filesystem::path export_path = export_file.parent_path();
 
-		if (!_preparePath(export_path.string())) return false;
+		if (_preparePath(export_path.string())) {
+			std::ifstream source(file, std::ios::binary);
+			std::ofstream dest(export_file.c_str(), std::ios::binary);
 
-		Material* mat = Material::LoadMaterialData(file);
-		std::vector<Uniform>& uniforms = mat->getUniforms();
-		size_t size = uniforms.size();
+			dest << source.rdbuf();
 
-		for (size_t i = 0; i < size; i++) {
-			if (uniforms[i].getType() == UniformType::Sampler2D) {
-				Uniform::SamplerData* sdata = uniforms[i].getPtrData<Uniform::SamplerData>();
-
-				if (!Resources::Import<Image>(sdata->tex_path.c_str())) {
-					return false;
-				}
-
-				sdata->tex_path = _assetToLibPath(sdata->tex_path);
-
-				//uniforms[i].setData(*sdata, UniformType::Sampler2D);
-			}
+			source.close();
+			dest.close();
 		}
-
-		mat->SaveLib(export_file.string().c_str());
-
-		delete mat;
 
 		WI_CORE_INFO("Material at {} imported succesfully!", import_file.string().c_str());
 		return true;

@@ -17,7 +17,11 @@ namespace Wiwa {
 	{
 		Audio::RegisterGameObject(m_EntityId);
 
-		if(GetComponent<AudioListener>()){
+		AudioSource* asrc = GetComponent<AudioSource>();
+
+		if (!asrc) return;
+
+		if(asrc->isDefaultListener){
 			Audio::AddDefaultListener(m_EntityId);
 		}
 	}
