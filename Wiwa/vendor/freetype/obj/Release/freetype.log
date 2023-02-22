@@ -1,8 +1,9 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: The intermediate directory (obj\Release\) contains files shared from another project (freetype2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  autofit.c
+﻿  autofit.c
   ftbase.c
   ftbbox.c
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftbase.c': No such file or directory
   ftbdf.c
+c1 : fatal  error C1083: Cannot open source file: 'src\autofit\autofit.c': No such file or directory
   ftbitmap.c
   ftcid.c
   ftfstype.c
@@ -10,12 +11,25 @@
   ftglyph.c
   ftgxval.c
   ftinit.c
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftbbox.c': No such file or directory
   ftmm.c
   ftotval.c
   ftpatent.c
   ftpfr.c
   ftstroke.c
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\base\ftcalc.c(1106,30): warning C4244: 'return': conversion from 'FT_Int64' to 'FT_Int32', possible loss of data (compiling source file src\base\ftbase.c)
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftbdf.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftcid.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftfstype.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftglyph.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftgasp.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftbitmap.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftinit.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftgxval.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftpfr.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftpatent.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftstroke.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftmm.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftotval.c': No such file or directory
   ftsynth.c
   fttype1.c
   ftwinfnt.c
@@ -32,29 +46,35 @@ F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\base\ftcalc.c(1106,30):
   pshinter.c
   psnames.c
   raster.c
+c1 : fatal  error C1083: Cannot open source file: 'src\gzip\ftgzip.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\cff\cff.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\bzip2\ftbzip2.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\pcf\pcf.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\fttype1.c': No such file or directory
   sdf.c
+c1 : fatal  error C1083: Cannot open source file: 'src\lzw\ftlzw.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\cache\ftcache.c': No such file or directory
   sfnt.c
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\psaux\t1decode.c(1996,23): warning C4267: '=': conversion from 'size_t' to 'FT_Int', possible loss of data (compiling source file src\psaux\psaux.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\psaux\psintrp.c(1005,25): warning C4267: '=': conversion from 'size_t' to 'FT_Fast', possible loss of data (compiling source file src\psaux\psaux.c)
+c1 : fatal  error C1083: Cannot open source file: 'src\bdf\bdf.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\pfr\pfr.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftsynth.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\base\ftwinfnt.c': No such file or directory
   smooth.c
+c1 : fatal  error C1083: Cannot open source file: 'src\psnames\psnames.c': No such file or directory
   svg.c
   truetype.c
+c1 : fatal  error C1083: Cannot open source file: 'src\pshinter\pshinter.c': No such file or directory
   type1.c
+c1 : fatal  error C1083: Cannot open source file: 'src\cid\type1cid.c': No such file or directory
   type42.c
   winfnt.c
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\smooth\ftgrays.c(1980,20): warning C4267: '+=': conversion from 'size_t' to 'TCoord', possible loss of data (compiling source file src\smooth\smooth.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\sfnt\sfdriver.c(859,13): warning C4267: '=': conversion from 'size_t' to 'FT_UInt', possible loss of data (compiling source file src\sfnt\sfnt.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\sfnt\sfdriver.c(1011,36): warning C4244: 'function': conversion from '__int64' to 'const unsigned int', possible loss of data (compiling source file src\sfnt\sfnt.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(287,48): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(308,55): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(340,62): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(370,19): warning C4267: '=': conversion from 'size_t' to 'FT_UInt', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(579,56): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(588,55): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(597,58): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(606,60): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1driver.c(616,55): warning C4267: '=': conversion from 'size_t' to 'FT_ULong', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1load.c(1776,64): warning C4244: '=': conversion from '__int64' to 'FT_Int', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type1\t1load.c(1946,36): warning C4244: '=': conversion from '__int64' to 'FT_Int', possible loss of data (compiling source file src\type1\type1.c)
-F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\src\type42\t42parse.c(870,62): warning C4244: '=': conversion from '__int64' to 'FT_Int', possible loss of data (compiling source file src\type42\type42.c)
-  freetype.vcxproj -> F:\TTC\Q6\ProjectIII\WiwaEngine\Wiwa\vendor\freetype\bin\Release\freetype2411mt.lib
+c1 : fatal  error C1083: Cannot open source file: 'src\psaux\psaux.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\raster\raster.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\sdf\sdf.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\sfnt\sfnt.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\type1\type1.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\type42\type42.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\smooth\smooth.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\winfonts\winfnt.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\svg\svg.c': No such file or directory
+c1 : fatal  error C1083: Cannot open source file: 'src\truetype\truetype.c': No such file or directory

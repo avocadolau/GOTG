@@ -8,6 +8,7 @@
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/LightSystem.h>
 
 inline void CreateNew3DEnt()
 {
@@ -25,6 +26,95 @@ inline void CreateNew3DEnt()
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
+}
+
+inline void CreatePointLight()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	EntityId myEntity = em.CreateEntity("Point light");
+
+	// Prepare default transform
+	Wiwa::Transform3D t3d;
+	t3d.position = { 0.0f, 0.0f, 0.0f };
+	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
+	t3d.rotation = { 0.0f,0.0f, 0.0f };
+	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
+	t3d.scale = { 1.0f, 1.0f, 1.0f };
+	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+
+	Wiwa::PointLight lightSource;
+
+	lightSource.Color = glm::vec3(1.0f);
+	lightSource.AmbientIntensity = 50.0f;
+	lightSource.DiffuseIntensity = 25.f;
+	lightSource.Constant = 0.5f;
+	lightSource.Exp = 0.5f;
+	lightSource.Linear = 0.5f;
+
+	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
+	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
+
+	em.AddComponent<Wiwa::PointLight>(myEntity, lightSource);
+	em.ApplySystem<Wiwa::LightSystem>(myEntity);
+}
+
+
+inline void CreateSpotLight()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	EntityId myEntity = em.CreateEntity("Spot light");
+
+	// Prepare default transform
+	Wiwa::Transform3D t3d;
+	t3d.position = { 0.0f, 0.0f, 0.0f };
+	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
+	t3d.rotation = { 0.0f,0.0f, 0.0f };
+	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
+	t3d.scale = { 1.0f, 1.0f, 1.0f };
+	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+
+	Wiwa::SpotLight lightSource;
+
+	lightSource.Color = glm::vec3(1.0f);
+	lightSource.AmbientIntensity = 50.0f;
+	lightSource.DiffuseIntensity = 25.f;
+	lightSource.Constant = 0.5f;
+	lightSource.Exp = 0.5f;
+	lightSource.Linear = 0.5f;
+	lightSource.Direction = glm::vec3{ 90.0f, 0.f, 0.f };
+	lightSource.Cutoff = 1.0f;
+
+	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
+	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
+
+	em.AddComponent<Wiwa::SpotLight>(myEntity, lightSource);
+	em.ApplySystem<Wiwa::LightSystem>(myEntity);
+}
+
+inline void CreateDirectionalLight()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	EntityId myEntity = em.CreateEntity("Directional light");
+
+	// Prepare default transform
+	Wiwa::Transform3D t3d;
+	t3d.position = { 0.0f, 0.0f, 0.0f };
+	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
+	t3d.rotation = { 0.0f,0.0f, 0.0f };
+	t3d.localRotation = { 0.0f, 0.0f, -75.0f };
+	t3d.scale = { 1.0f, 1.0f, 1.0f };
+	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+
+	Wiwa::DirectionalLight lightSource;
+	lightSource.Color = glm::vec3(1.0f);
+	lightSource.AmbientIntensity = 0.5f;
+	lightSource.DiffuseIntensity = 0.5f;
+
+	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
+	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
+
+	em.AddComponent<Wiwa::DirectionalLight>(myEntity, lightSource);
+	em.ApplySystem<Wiwa::LightSystem>(myEntity);
 }
 
 inline void CreateNewChild(EntityId parentId)
