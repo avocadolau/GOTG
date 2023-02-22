@@ -12,7 +12,6 @@ public:
 
 	void Draw() override;
 
-	//GuiManager* m_GuiManager;
 	int UI_element_selected = -1;
 	int buttonID = 0;
 	int sliderID = 0;
@@ -21,4 +20,6 @@ public:
 	int lastButtonID = 0;
 	int lastSliderID = 0;
 	int lastCheckboxID = 0;
+
+	GuiManager m_GuiManager;
 };
