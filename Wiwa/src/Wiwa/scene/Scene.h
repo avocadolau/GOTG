@@ -58,6 +58,7 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		LightManager* m_LightManager;
+	public:
 		GuiManager* m_GuiManager;
 	private:
 		State m_CurrentState = SCENE_ENTERING;
