@@ -10,12 +10,14 @@
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
 #define MAX_NUM_BONES_PER_VERTEX 10
+#define MAX_NUM_TEXTCOORDS_PER_ANIM 200 // ???? no idea, obviously needs more but I dunno
+
 
 struct aiScene;
 struct aiMesh;
 struct aiNode;
 struct aiBone;
-
+struct aiAnimMesh;
 
 namespace Wiwa {
 	struct ModelSettings;
@@ -82,6 +84,19 @@ namespace Wiwa {
 			FinalTransformation = glm::mat4();
 		}
 	};
+
+	struct AnimInfo {
+		std::vector<float> Bitangents;
+		std::vector<float> color; // 4 floats!
+		std::vector<float> Normals;
+		unsigned int numVertices;
+		std::vector<float> Tangents;
+		std::vector<float> TextCoords;
+		std::vector<float> Vertices;
+
+
+	};
+
 	//Structure to save what bones affect each vertex for then apply transformations
 	struct VertexBoneData
 	{
@@ -201,6 +216,9 @@ namespace Wiwa {
 
 		void LoadArmature(aiScene scene);
 		void LoadWiArmature(const char* file);
+
+		void LoadMeshAnim(unsigned int index, const aiMesh* mesh, Model* root);
+		void LoadSingleAnim(int meshIndex, aiAnimMesh* anim, Model* root);
 
 		void GetBoneTransforms(std::vector<glm::mat4> transforms);
 

@@ -952,6 +952,74 @@ namespace Wiwa {
 		WI_INFO("{0} {1} {2} {3}\n", m.d1, m.d2, m.d3, m.d4);
 	}
 
+	void Model::LoadMeshAnim(unsigned int index, const aiMesh* mesh, Model* root)
+	{
+		for (int i = 0; i < mesh->mNumAnimMeshes; i++)
+		{
+			//LoadSingleAnim();
+		}
+	}
+
+	void Model::LoadSingleAnim(int meshIndex, aiAnimMesh* anim, Model* root)
+	{
+		AnimInfo aInfo;
+		aInfo.numVertices = anim->mNumVertices;
+
+		// THIS NEEDS OPTIMIZATION
+
+		if (anim->HasPositions())
+		{
+			for (int i = 0; i < anim->mNumVertices; i++)
+			{
+				aInfo.Vertices.push_back(anim->mVertices[i].x);
+				aInfo.Vertices.push_back(anim->mVertices[i].y);
+				aInfo.Vertices.push_back(anim->mVertices[i].z);
+
+				if (anim->HasTangentsAndBitangents())
+				{
+					aInfo.Bitangents.push_back(anim->mBitangents[i].x);
+					aInfo.Bitangents.push_back(anim->mBitangents[i].y);
+					aInfo.Bitangents.push_back(anim->mBitangents[i].z);
+
+					aInfo.Tangents.push_back(anim->mTangents[i].x);
+					aInfo.Tangents.push_back(anim->mTangents[i].y);
+					aInfo.Tangents.push_back(anim->mTangents[i].z);
+				}
+
+				if (anim->HasNormals())
+				{
+					aInfo.Normals.push_back(anim->mNormals[i].x);
+					aInfo.Normals.push_back(anim->mNormals[i].y);
+					aInfo.Normals.push_back(anim->mNormals[i].z);
+				}
+
+				if (anim->HasPositions())
+				{
+					aInfo.Vertices.push_back(anim->mVertices[i].x);
+					aInfo.Vertices.push_back(anim->mVertices[i].y);
+					aInfo.Vertices.push_back(anim->mVertices[i].z);
+				}
+
+				if (anim->HasTextureCoords(i))
+				{
+					aInfo.TextCoords.push_back(anim->mTextureCoords[MAX_NUM_TEXTCOORDS_PER_ANIM][i].x);
+					aInfo.TextCoords.push_back(anim->mTextureCoords[MAX_NUM_TEXTCOORDS_PER_ANIM][i].y);
+					aInfo.TextCoords.push_back(anim->mTextureCoords[MAX_NUM_TEXTCOORDS_PER_ANIM][i].z);
+				}
+				else
+				{
+					aInfo.TextCoords.push_back(0);
+					aInfo.TextCoords.push_back(0);
+					aInfo.TextCoords.push_back(0);
+				}
+			}
+		}
+
+
+
+	}
+
+ 
 	Model* Model::GetModelFromFile(const char* file, ModelSettings* settings)
 	{
 		Model* model = new Model(NULL);
