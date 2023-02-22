@@ -84,7 +84,7 @@ AssetsPanel::~AssetsPanel()
 }
 
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
-{	
+{
 	std::filesystem::path assetsPath = "assets";
 	assetsPath /= path;
 
@@ -94,6 +94,7 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 	if (assetsPath.extension() == ".cs")
 	{
 		EditorLayer::Get().RegenSol();
+		return;
 	}
 	switch (change_type)
 	{
@@ -383,7 +384,7 @@ void AssetsPanel::TopBar()
 				path /= dir;
 				std::string file = path.string() + ".wimaterial";
 
-				Wiwa::Material material;
+				Wiwa::Material material((Wiwa::Shader*)NULL);
 				Wiwa::Material::SaveMaterial(file.c_str(), &material);
 				Wiwa::Resources::CreateMeta<Wiwa::Material>(path.string().c_str());
 
