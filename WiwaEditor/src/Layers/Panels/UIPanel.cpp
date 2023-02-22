@@ -29,19 +29,13 @@ void UIPanel::Draw()
 	{
 		if (ImGui::Button("Create Button"))
 		{
-			Rect2i* rect = new Rect2i;
-			rect->x = 500;
-			rect->y = 100;
-			rect->width = 200;
-			rect->height = 100;
+			Rect2i rect;
+			rect.x = 500;
+			rect.y = 100;
+			rect.width = 200;
+			rect.height = 100;
 
-			Wiwa::Scene::m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, &rect, "assets/test.png", nullptr, { 0,0,0,0 });
-			if (rect != nullptr)
-			{
-				UI_elements_rects.push_back(rect);
-			}
-
-			delete rect;
+			Wiwa::Scene::m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, rect, "assets/test.png", nullptr, { 0,0,0,0 });
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Create Slider"))

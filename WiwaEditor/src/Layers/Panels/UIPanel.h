@@ -13,7 +13,6 @@ public:
 	void Draw() override;
 
 	//GuiManager* m_GuiManager;
-	List<Rect2i*> UI_elements_rects;
 	int UI_element_selected = -1;
 	int buttonID = 0;
 	int sliderID = 0;
