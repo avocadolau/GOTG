@@ -43,6 +43,8 @@ namespace Wiwa {
 		for (size_t i = 0; i < scsize; i++) {
 			delete m_Scenes[i];
 		}
+
+		delete CameraManager::editorCamera;
 	}
 
 	SceneId SceneManager::CreateScene()

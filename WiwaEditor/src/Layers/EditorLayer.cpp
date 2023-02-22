@@ -20,6 +20,8 @@
 #include <Wiwa/ecs/components/Sprite.h>
 #include <Wiwa/scripting/ScriptEngine.h>
 
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
+
 #include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/audio/Audio.h>
@@ -103,7 +105,60 @@ void EditorLayer::OnAttach()
 	m_Settings.push_back(m_About.get());
 
 	// Test
-	//Wiwa::EntityManager &em = m_EditorScene->GetEntityManager();
+	Wiwa::EntityManager &em = m_EditorScene->GetEntityManager();
+	int k = 0;
+	for (size_t i = 0; i < 32; i++)
+	{
+		for (size_t j = 0; j < 32; j++)
+		{
+			std::string name = "Cube ";
+			name += std::to_string(k);
+			EntityId root = em.CreateEntity(name.c_str());
+			Wiwa::Transform3D t3d;
+			t3d.position = { 0, 0.0f, 0 };
+			t3d.localPosition = { 0, 20.0f + 2.5 * i, 2.5f * j };
+			t3d.rotation = { 0.0f,0.0f, 0.0f };
+			t3d.localRotation = { 0.0f, 0.0f, 0.0f };
+			t3d.scale = { 1.0f, 1.0f, 1.0f };
+			t3d.localScale = { 0.0f, 0.0f, 0.0f };
+
+			Wiwa::Rigidbody rb;
+			rb.gravity = glm::vec3(0.f, 10.f, 0.f);
+			rb.mass = 10;
+			rb.positionOffset = glm::vec3(0.0f);
+			rb.scalingOffset = glm::vec3(1.0f);
+			Wiwa::ColliderCube col;
+			col.halfExtents = glm::vec3(1.0f);
+
+			em.AddComponent<Wiwa::Transform3D>(root, t3d);
+			em.AddComponent<Wiwa::Rigidbody>(root, rb);
+			em.AddComponent<Wiwa::ColliderCube>(root, col);
+			em.ApplySystem<Wiwa::PhysicsSystem>(root);
+			k++;
+		}
+	}
+
+	EntityId id = em.CreateEntity("Plane");
+	Wiwa::Transform3D t3d;
+	t3d.position = { 0.0f, 0.0f, 0.0f };
+	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
+	t3d.rotation = { 0.0f,0.0f, 0.0f };
+	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
+	t3d.scale = { 1.0f, 1.0f, 1.0f };
+	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	
+	Wiwa::Rigidbody rb;
+	rb.gravity = glm::vec3(0.f, 0.f, 0.f);
+	rb.mass = 0.0f;
+	rb.positionOffset = glm::vec3(0.0f);
+	rb.scalingOffset = glm::vec3(1.0f);
+	
+	Wiwa::ColliderCube col;
+	col.halfExtents = glm::vec3(100.f, 2.f, 100.f);
+	em.AddComponent<Wiwa::Transform3D>(id, t3d);
+	em.AddComponent<Wiwa::ColliderCube>(id, col);
+	em.AddComponent<Wiwa::Rigidbody>(id, rb);
+	em.ApplySystem<Wiwa::PhysicsSystem>(id);
 	//CreateEntityWithModelHierarchy("models/street2");
 	// SceneId scene = Wiwa::SceneManager::CreateScene();//Wiwa::SceneManager::LoadScene("Assets/Scenes/SampleScene.wiscene");
 	// Wiwa::SceneManager::SetScene(scene);

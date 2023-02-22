@@ -242,7 +242,7 @@ inline void CreateSphere()
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
 }
 
-inline void CreateEntityWithModelHierarchy(const char* model_path) {
+inline EntityId CreateEntityWithModelHierarchy(const char* model_path) {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	// Prepare mesh data
@@ -313,4 +313,6 @@ inline void CreateEntityWithModelHierarchy(const char* model_path) {
 
 		process_h(child_h, e_root, process_h);
 	}
+
+	return e_root;
 }

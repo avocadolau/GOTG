@@ -82,7 +82,7 @@ namespace Wiwa {
 		void RenderSkybox();
 
 		void Close();
-		void RenderFrustrums(Camera* camera = NULL);
+		void RenderFrustrums();
 
 		// Getters
 		inline uint32_t getColorBufferTexture() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer->getColorBufferTexture(); }

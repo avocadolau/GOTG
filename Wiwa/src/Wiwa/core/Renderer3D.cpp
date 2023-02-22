@@ -410,38 +410,71 @@ namespace Wiwa {
 	{
 		
 	}
-	void Renderer3D::RenderFrustrums(Camera* camera)
+	void Renderer3D::RenderFrustrums()
 	{
-		if (!camera)
-		{
-			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
-		}
+		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		CameraManager& cameraManager = SceneManager::getActiveScene()->GetCameraManager();
 		camera->frameBuffer->Bind(false);
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(glm::value_ptr(camera->getView()));
+
+		CameraManager& cameraManager = SceneManager::getActiveScene()->GetCameraManager();
+		
 		size_t cameraCount = cameraManager.getCameraSize();
 		std::vector<CameraId>& cameras = cameraManager.getCameras();
 		for (size_t i = 0; i < cameraCount; i++)
 		{
-			CameraId cam_id = cameras[i];
-			Camera* cam = cameraManager.getCamera(cam_id);
-			if (camera == cam)
-				continue;
+			Camera* cam = cameraManager.getCamera(cameras[i]);
+			
+			glUseProgram(0);
+			glColor3f(0, 255, 0);
+			glLineWidth(3.0f);
+			glBegin(GL_LINES);
 
-			m_BBDisplayShader->Bind();
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cam->getPosition());
-			model = glm::rotate(model, 0.0f, glm::vec3(1, 0, 0));
-			model = glm::rotate(model, 0.0f, glm::vec3(0, 1, 0));
-			model = glm::rotate(model, 0.0f, glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(1.0f));
+			glm::vec3 bb_frustum[8];
+			cam->GetCornerPoints(bb_frustum);
 
-			m_BBDisplayShader->setUniform(m_BBDSUniforms.Model, model);
-			m_BBDisplayShader->setUniform(m_BBDSUniforms.View, camera->getView());
-			m_BBDisplayShader->setUniform(m_BBDSUniforms.Projection, camera->getProjection());
-			cam->DrawFrustrum();
+			glVertex3f((GLfloat)bb_frustum[0].x, (GLfloat)bb_frustum[0].y, (GLfloat)bb_frustum[0].z);
+			glVertex3f((GLfloat)bb_frustum[1].x, (GLfloat)bb_frustum[1].y, (GLfloat)bb_frustum[1].z);
 
-			m_BBDisplayShader->UnBind();
+			glVertex3f((GLfloat)bb_frustum[0].x, (GLfloat)bb_frustum[0].y, (GLfloat)bb_frustum[0].z);
+			glVertex3f((GLfloat)bb_frustum[4].x, (GLfloat)bb_frustum[4].y, (GLfloat)bb_frustum[4].z);
+
+			glVertex3f((GLfloat)bb_frustum[0].x, (GLfloat)bb_frustum[0].y, (GLfloat)bb_frustum[0].z);
+			glVertex3f((GLfloat)bb_frustum[2].x, (GLfloat)bb_frustum[2].y, (GLfloat)bb_frustum[2].z);
+
+			glVertex3f((GLfloat)bb_frustum[2].x, (GLfloat)bb_frustum[2].y, (GLfloat)bb_frustum[2].z);
+			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
+
+			glVertex3f((GLfloat)bb_frustum[1].x, (GLfloat)bb_frustum[1].y, (GLfloat)bb_frustum[1].z);
+			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
+
+			glVertex3f((GLfloat)bb_frustum[5].x, (GLfloat)bb_frustum[5].y, (GLfloat)bb_frustum[5].z);
+			glVertex3f((GLfloat)bb_frustum[4].x, (GLfloat)bb_frustum[4].y, (GLfloat)bb_frustum[4].z);
+
+			glVertex3f((GLfloat)bb_frustum[4].x, (GLfloat)bb_frustum[4].y, (GLfloat)bb_frustum[4].z);
+			glVertex3f((GLfloat)bb_frustum[6].x, (GLfloat)bb_frustum[6].y, (GLfloat)bb_frustum[6].z);
+
+			glVertex3f((GLfloat)bb_frustum[7].x, (GLfloat)bb_frustum[7].y, (GLfloat)bb_frustum[7].z);
+			glVertex3f((GLfloat)bb_frustum[5].x, (GLfloat)bb_frustum[5].y, (GLfloat)bb_frustum[5].z);
+
+			glVertex3f((GLfloat)bb_frustum[7].x, (GLfloat)bb_frustum[7].y, (GLfloat)bb_frustum[7].z);
+			glVertex3f((GLfloat)bb_frustum[6].x, (GLfloat)bb_frustum[6].y, (GLfloat)bb_frustum[6].z);
+
+			glVertex3f((GLfloat)bb_frustum[1].x, (GLfloat)bb_frustum[1].y, (GLfloat)bb_frustum[1].z);
+			glVertex3f((GLfloat)bb_frustum[5].x, (GLfloat)bb_frustum[5].y, (GLfloat)bb_frustum[5].z);
+
+			glVertex3f((GLfloat)bb_frustum[6].x, (GLfloat)bb_frustum[6].y, (GLfloat)bb_frustum[6].z);
+			glVertex3f((GLfloat)bb_frustum[2].x, (GLfloat)bb_frustum[2].y, (GLfloat)bb_frustum[2].z);
+
+			glVertex3f((GLfloat)bb_frustum[7].x, (GLfloat)bb_frustum[7].y, (GLfloat)bb_frustum[7].z);
+			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
+
+			glEnd();
+			glLineWidth(1.0f);
 		}
 		camera->frameBuffer->Unbind();
 	}

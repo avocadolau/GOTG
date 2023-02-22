@@ -26,11 +26,8 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnUpdate()
 	{
-		//PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
-		WI_INFO("Updating physics of --> {}", e_name);
 	}
 
 	void PhysicsSystem::OnDestroy()
@@ -42,7 +39,6 @@ namespace Wiwa {
 	{
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
-		WI_INFO("Init physics of --> {}", e_name);
 
 		Rigidbody* rb = GetComponent<Rigidbody>();
 		Transform3D* transform = GetComponent<Transform3D>();

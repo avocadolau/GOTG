@@ -51,19 +51,7 @@ namespace Wiwa {
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
 		m_World->setGravity(GRAVITY);
-
-		//// Big plane as ground
-		//{
-		//	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
-
-		//	btDefaultMotionState* myMotionState = new btDefaultMotionState();
-		//	btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
-
-		//	btRigidBody* body = new btRigidBody(rbInfo);
-		//	m_World->addRigidBody(body);
-
-		//}
-
+		
 		WI_INFO("Physics Manager Init");
 		
 		return true;
@@ -407,7 +395,7 @@ namespace Wiwa {
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
-		WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
+		//WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
 		int num = 0;
 		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
@@ -415,7 +403,7 @@ namespace Wiwa {
 			/*int id = (*item)->getUserIndex();*/
 			btVector3 pos = (*item)->btBody->getWorldTransform().getOrigin();
 			/*const char* e_name = entityManager.GetEntityName(id); */
-			WI_INFO("Index {} is {} {} {}", num, pos.x(), pos.y(), pos.z()); 
+			//WI_INFO("Index {} is {} {} {}", num, pos.x(), pos.y(), pos.z()); 
 			num++;
 		}
 		return true;
@@ -424,7 +412,7 @@ namespace Wiwa {
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		camera->frameBuffer->Bind();
+		camera->frameBuffer->Bind(false);
 		glMatrixMode(GL_PROJECTION);
 		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
 		glMatrixMode(GL_MODELVIEW);
@@ -484,7 +472,7 @@ namespace Wiwa {
 
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
 	//GLfloat lineVertices[] = {
 	//	from.x(), from.y(), from.z(),
 	//	to.x(), to.y(), to.z()

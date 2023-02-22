@@ -75,6 +75,35 @@ namespace Wiwa {
 		inline glm::mat4 getProjection() { return m_Projection; }
 		
 		void DrawFrustrum();
+
+		inline void GetCornerPoints(glm::vec3* outPointArray)
+		{
+			float tanhfov = glm::tan(m_FOV * 0.5f);
+			float tanvfov = glm::tan(m_FOV * 0.5f);
+			float frontPlaneHalfWidth = tanhfov * m_NearPlaneDist;
+			float frontPlaneHalfHeight = tanvfov * m_NearPlaneDist;
+			float farPlaneHalfWidth = tanhfov * m_FarPlaneDist;
+			float farPlaneHalfHeight = tanvfov * m_FarPlaneDist;
+
+			glm::vec3 right = glm::cross(m_CameraFront, m_CameraUp);
+
+			glm::vec3 nearCenter = m_CameraPos + m_CameraFront * m_NearPlaneDist;
+			glm::vec3 nearHalfWidth = frontPlaneHalfWidth * right;
+			glm::vec3 nearHalfHeight = frontPlaneHalfHeight * m_CameraUp;
+			outPointArray[0] = nearCenter - nearHalfWidth - nearHalfHeight;
+			outPointArray[1] = nearCenter + nearHalfWidth - nearHalfHeight;
+			outPointArray[2] = nearCenter - nearHalfWidth + nearHalfHeight;
+			outPointArray[3] = nearCenter + nearHalfWidth + nearHalfHeight;
+
+			glm::vec3 farCenter = m_CameraPos + m_CameraFront * m_FarPlaneDist;
+			glm::vec3 farHalfWidth = farPlaneHalfWidth * right;
+			glm::vec3 farHalfHeight = farPlaneHalfHeight * m_CameraUp;
+			outPointArray[4] = farCenter - farHalfWidth - farHalfHeight;
+			outPointArray[5] = farCenter + farHalfWidth - farHalfHeight;
+			outPointArray[6] = farCenter - farHalfWidth + farHalfHeight;
+			outPointArray[7] = farCenter + farHalfWidth + farHalfHeight;
+		}
+
 		inline glm::vec3 FarPlanePos(float x, float y) const
 		{
 			float farPlaneHalfWidth = glm::tan(m_FOV * 0.5f)* m_FarPlaneDist;
