@@ -21,5 +21,5 @@ public:
 	int lastSliderID = 0;
 	int lastCheckboxID = 0;
 
-	GuiManager m_GuiManager;
+	
 };

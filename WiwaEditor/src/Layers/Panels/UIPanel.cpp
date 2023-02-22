@@ -13,7 +13,6 @@ UIPanel::UIPanel(EditorLayer* instance)
 	: Panel("UI", ICON_FK_TELEVISION, instance)
 {
 
-	m_GuiManager = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 }
 
 UIPanel::~UIPanel()
@@ -22,6 +21,8 @@ UIPanel::~UIPanel()
 
 void UIPanel::Draw()
 {
+	Wiwa::GuiManager& m_GuiManager = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+
 	ImGui::Begin(iconName.c_str(), &active);
 
 	
