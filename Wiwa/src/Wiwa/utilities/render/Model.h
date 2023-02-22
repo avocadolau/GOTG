@@ -134,6 +134,7 @@ namespace Wiwa {
 		//tmp scene, stores armature (bone hierarchy) to apply transofrmations
 		const aiScene* pScene = nullptr;
 
+		glm::mat4 globalInverseTransform;
 		//DEBUG
 		int spaceCount = 0;
 	protected:

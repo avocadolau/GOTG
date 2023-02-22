@@ -49,6 +49,9 @@ namespace Wiwa {
 		glm::mat4 identity = glm::mat4(1);
 
 		model_hierarchy = loadModelHierarchy(scene->mRootNode,identity);
+
+		globalInverseTransform = glm::make_mat4(scene->mRootNode->mTransformation.Inverse().ToPtr());
+
 		std::filesystem::path p = file;
 		model_hierarchy->name = p.stem().string();
 
