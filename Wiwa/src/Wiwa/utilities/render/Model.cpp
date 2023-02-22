@@ -186,6 +186,11 @@ namespace Wiwa {
 		if (scene->HasAnimations())
 		{
 			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
+
+			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+			{
+				LoadAnimation(scene->mAnimations[i]);
+			}
 		}
 
 		aiReleaseImport(scene);
@@ -647,6 +652,8 @@ namespace Wiwa {
 			file.Read(&h->meshIndexes[0], mesh_ind_size);
 		}
 
+		//TODO Load bone needs
+
 		size_t child_size;
 
 		file.Read(&child_size, sizeof(size_t));
@@ -661,6 +668,158 @@ namespace Wiwa {
 
 		return h;
 	}
+
+	
+	void Model::ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* node, glm::mat4 parentTransform)
+	{
+		//std::string NodeName(node->name);
+
+		////Temporary we use aiAnimation 
+		//const aiAnimation* pAnimation = pScene->mAnimations[0];
+
+		//glm::mat4 NodeTransformation(node->Transformation);
+
+		//const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+
+		//if (pNodeAnim) {
+		//	// Interpolate scaling and generate scaling transformation matrix
+		//	aiVector3D Scaling;
+		//	CalcInterpolatedScaling(Scaling, AnimationTimeTicks, pNodeAnim);
+		//	glm::mat4 ScalingM;
+		//	ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
+
+		//	// Interpolate rotation and generate rotation transformation matrix
+		//	aiQuaternion RotationQ;
+		//	CalcInterpolatedRotation(RotationQ, AnimationTimeTicks, pNodeAnim);
+		//	Matrix4f RotationM = Matrix4f(RotationQ.GetMatrix());
+
+		//	// Interpolate translation and generate translation transformation matrix
+		//	aiVector3D Translation;
+		//	CalcInterpolatedPosition(Translation, AnimationTimeTicks, pNodeAnim);
+		//	Matrix4f TranslationM;
+		//	TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
+
+		//	// Combine the above transformations
+		//	NodeTransformation = TranslationM * RotationM * ScalingM;
+		//}
+
+		//Matrix4f GlobalTransformation = ParentTransform * NodeTransformation;
+
+		//if (m_BoneNameToIndexMap.find(NodeName) != m_BoneNameToIndexMap.end()) {
+		//	uint BoneIndex = m_BoneNameToIndexMap[NodeName];
+		//	m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * m_BoneInfo[BoneIndex].OffsetMatrix;
+		//}
+
+		//for (uint i = 0; i < pNode->mNumChildren; i++) {
+		//	ReadNodeHierarchy(AnimationTimeTicks, pNode->mChildren[i], GlobalTransformation);
+		//}
+	}
+
+	//unsigned int Model::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
+	//{
+	//	/*assert(pNodeAnim->mNumScalingKeys > 0);
+
+	//	for (uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
+	//		float t = (float)pNodeAnim->mScalingKeys[i + 1].mTime;
+	//		if (AnimationTimeTicks < t) {
+	//			return i;
+	//		}
+	//	}*/
+
+	//	return 0;
+	//}
+
+	//unsigned int Model::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
+	//{
+	//	/*assert(pNodeAnim->mNumRotationKeys > 0);
+
+	//	for (uint i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
+	//		float t = (float)pNodeAnim->mRotationKeys[i + 1].mTime;
+	//		if (AnimationTimeTicks < t) {
+	//			return i;
+	//		}
+	//	}*/
+
+	//	return 0;
+	//}
+
+	//unsigned int Model::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
+	//{
+	///*	for (uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
+	//		float t = (float)pNodeAnim->mPositionKeys[i + 1].mTime;
+	//		if (AnimationTimeTicks < t) {
+	//			return i;
+	//		}
+	//	}
+
+	//	return 0;*/
+	//}
+
+	//void Model::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+	//{
+	//	//// we need at least two values to interpolate...
+	//	//if (pNodeAnim->mNumScalingKeys == 1) {
+	//	//	Out = pNodeAnim->mScalingKeys[0].mValue;
+	//	//	return;
+	//	//}
+
+	//	//uint ScalingIndex = FindScaling(AnimationTimeTicks, pNodeAnim);
+	//	//uint NextScalingIndex = ScalingIndex + 1;
+	//	//assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
+	//	//float t1 = (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime;
+	//	//float t2 = (float)pNodeAnim->mScalingKeys[NextScalingIndex].mTime;
+	//	//float DeltaTime = t2 - t1;
+	//	//float Factor = (AnimationTimeTicks - (float)t1) / DeltaTime;
+	//	//assert(Factor >= 0.0f && Factor <= 1.0f);
+	//	//const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
+	//	//const aiVector3D& End = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
+	//	//aiVector3D Delta = End - Start;
+	//	//Out = Start + Factor * Delta;
+	//}
+
+	//void Model::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+	//{
+	//	//// we need at least two values to interpolate...
+	//	//if (pNodeAnim->mNumRotationKeys == 1) {
+	//	//	Out = pNodeAnim->mRotationKeys[0].mValue;
+	//	//	return;
+	//	//}
+
+	//	//uint RotationIndex = FindRotation(AnimationTimeTicks, pNodeAnim);
+	//	//uint NextRotationIndex = RotationIndex + 1;
+	//	//assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
+	//	//float t1 = (float)pNodeAnim->mRotationKeys[RotationIndex].mTime;
+	//	//float t2 = (float)pNodeAnim->mRotationKeys[NextRotationIndex].mTime;
+	//	//float DeltaTime = t2 - t1;
+	//	//float Factor = (AnimationTimeTicks - t1) / DeltaTime;
+	//	//assert(Factor >= 0.0f && Factor <= 1.0f);
+	//	//const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
+	//	//const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
+	//	//aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
+	//	//Out.Normalize();
+	//}
+
+	//void Model::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+	//{
+	//	//// we need at least two values to interpolate...
+	//	//if (pNodeAnim->mNumPositionKeys == 1) {
+	//	//	Out = pNodeAnim->mPositionKeys[0].mValue;
+	//	//	return;
+	//	//}
+
+	//	//uint PositionIndex = FindPosition(AnimationTimeTicks, pNodeAnim);
+	//	//uint NextPositionIndex = PositionIndex + 1;
+	//	//assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
+	//	//float t1 = (float)pNodeAnim->mPositionKeys[PositionIndex].mTime;
+	//	//float t2 = (float)pNodeAnim->mPositionKeys[NextPositionIndex].mTime;
+	//	//float DeltaTime = t2 - t1;
+	//	//float Factor = (AnimationTimeTicks - t1) / DeltaTime;
+	//	//assert(Factor >= 0.0f && Factor <= 1.0f);
+	//	//const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
+	//	//const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
+	//	//aiVector3D Delta = End - Start;
+	//	//Out = Start + Factor * Delta;
+	//}
 
 	void Model::generateBuffers()
 	{
@@ -886,12 +1045,12 @@ namespace Wiwa {
 	{
 	}
 
-	void Model::GetBoneTransforms(std::vector<glm::mat4> transforms)
+	void Model::GetBoneTransforms(float timeInSeconds, std::vector<glm::mat4> transforms)
 	{
 		transforms.resize(boneInfo.size());
 		glm::mat4 identity = glm::mat4(1);
 
-		//ReadNodeHeirarchy(pScene->mRootNode, identity);
+		ReadNodeHeirarchy(timeInSeconds, model_hierarchy, identity);
 
 		for (unsigned int i = 0; i < boneInfo.size(); i++)
 		{
@@ -953,6 +1112,69 @@ namespace Wiwa {
 		WI_INFO("{0} {1} {2} {3}\n", m.b1, m.b2, m.b3, m.b4);
 		WI_INFO("{0} {1} {2} {3}\n", m.c1, m.c2, m.c3, m.c4);
 		WI_INFO("{0} {1} {2} {3}\n", m.d1, m.d2, m.d3, m.d4);
+	}
+
+	void Model::LoadAnimation(const aiAnimation* animation)
+	{
+
+		Animation* anim = new Animation();
+
+		anim->name = animation->mName.C_Str();
+		anim->duration = animation->mDuration;
+		anim->ticksPerSecond = animation->mTicksPerSecond;
+		anim->numChannels = animation->mNumChannels;
+
+		for (unsigned int i = 0; i < anim->numChannels; i++)
+		{
+			anim->channels.push_back(LoadAnimationNode(animation->mChannels[i]));
+		}
+
+		animations.push_back(anim);
+	}
+
+	AnimNode* Model::LoadAnimationNode(const aiNodeAnim* aiNode)
+	{
+		AnimNode* node = new AnimNode();
+
+		node->name = aiNode->mNodeName.C_Str();
+
+		node->numPositionKeys = aiNode->mNumPositionKeys;
+		node->numRotationKeys = aiNode->mNumRotationKeys;
+		node->numScalingKeys = aiNode->mNumScalingKeys;
+
+
+		for (unsigned int i = 0; i < node->numPositionKeys; i++)
+		{
+			VectorKey posKey;
+
+			posKey.time = aiNode->mPositionKeys[i].mTime;
+			posKey.value.x = aiNode->mPositionKeys[i].mValue.x;
+			posKey.value.y = aiNode->mPositionKeys[i].mValue.y;
+			posKey.value.z = aiNode->mPositionKeys[i].mValue.z;
+			node->positionKeys.push_back(posKey);
+		}
+		for (unsigned int i = 0; i < node->numRotationKeys; i++)
+		{
+			QuatKey quatKey;
+
+			quatKey.time = aiNode->mRotationKeys[i].mTime;
+			quatKey.value.x = aiNode->mRotationKeys[i].mValue.x;
+			quatKey.value.y = aiNode->mRotationKeys[i].mValue.y;
+			quatKey.value.z = aiNode->mRotationKeys[i].mValue.z;
+			quatKey.value.w = aiNode->mRotationKeys[i].mValue.w;
+			node->rotationKeys.push_back(quatKey);
+		}
+		for (unsigned int i = 0; i < node->numScalingKeys; i++)
+		{
+			VectorKey scaleKey;
+
+			scaleKey.time = aiNode->mScalingKeys[i].mTime;
+			scaleKey.value.x = aiNode->mScalingKeys[i].mValue.x;
+			scaleKey.value.y = aiNode->mScalingKeys[i].mValue.y;
+			scaleKey.value.z = aiNode->mScalingKeys[i].mValue.z;
+			node->scalingKeys.push_back(scaleKey);
+		}
+
 	}
 
 	void Model::LoadMeshAnim(unsigned int index, const aiMesh* mesh, Model* root)

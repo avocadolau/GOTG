@@ -6,6 +6,7 @@
 #include <map>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/math/AABB.h>
+#include <Wiwa/utilities/render/Animation.h>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
@@ -17,6 +18,8 @@ struct aiScene;
 struct aiMesh;
 struct aiNode;
 struct aiBone;
+struct aiAnimation;
+struct aiNodeAnim;
 struct aiAnimMesh;
 
 namespace Wiwa {
@@ -152,6 +155,7 @@ namespace Wiwa {
 
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
+		std::vector<Animation*> animations;
 
 		//stores offest matrix and final bone transformation
 		std::vector<BoneInfo> boneInfo;
@@ -177,6 +181,9 @@ namespace Wiwa {
 		void LoadMeshBones(unsigned int index, const aiMesh* mesh, Model* root);
 		void LoadSingleBone(int meshIndex, aiBone* bone, Model* root);
 		void PrintAssimpMatrix(const aiBone* b);
+
+		void LoadAnimation(const aiAnimation* animation);
+		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
 		
 		void CreateCube();
 		void CreatePlane();
@@ -185,7 +192,15 @@ namespace Wiwa {
 
 		static void SaveModelHierarchy(File file, ModelHierarchy* h);
 		static ModelHierarchy* LoadModelHierarchy(File file);
-
+		void ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* root, glm::mat4 parentTransform);
+		//const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string& NodeName);
+		////animation
+		//unsigned int FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		//unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		//unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		//void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		//void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		//void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
 		
 	public:
 		Model(const char* file);
@@ -221,7 +236,7 @@ namespace Wiwa {
 		void LoadMeshAnim(unsigned int index, const aiMesh* mesh, Model* root);
 		void LoadSingleAnim(int meshIndex, aiAnimMesh* anim, Model* root);
 
-		void GetBoneTransforms(std::vector<glm::mat4> transforms);
+		void GetBoneTransforms(float timeInSeconds,std::vector<glm::mat4> transforms);
 
 		void IsRoot(bool root) { is_root = root; }
 
