@@ -62,7 +62,7 @@ inline void CreatePointLight()
 inline void CreateSpotLight()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	EntityId myEntity = em.CreateEntity("Point light");
+	EntityId myEntity = em.CreateEntity("Spot light");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
@@ -107,8 +107,8 @@ inline void CreateDirectionalLight()
 
 	Wiwa::DirectionalLight lightSource;
 	lightSource.Color = glm::vec3(1.0f);
-	lightSource.AmbientIntensity = 1.f;
-	lightSource.DiffuseIntensity = 1.f;
+	lightSource.AmbientIntensity = 0.5f;
+	lightSource.DiffuseIntensity = 0.5f;
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);

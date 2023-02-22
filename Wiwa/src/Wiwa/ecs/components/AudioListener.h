@@ -5,11 +5,10 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	struct WI_API AudioSource {
-		char eventName[32];
+	struct WI_API AudioListener {
+		
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::AudioSource)
-	REFLECT_MEMBER(eventName)
+REFLECTION_BEGIN(Wiwa::AudioListener)
 REFLECTION_END;

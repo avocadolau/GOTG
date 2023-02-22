@@ -236,7 +236,7 @@ void InspectorPanel::DrawAudioSourceComponent(byte* data)
 {
 	Wiwa::AudioSource* asrc = (Wiwa::AudioSource*)data;
 
-	ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
+	//ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
 	ImGui::InputText("Event", asrc->eventName, sizeof(asrc->eventName));
 }
 
@@ -245,8 +245,8 @@ void InspectorPanel::DrawPointLightComponent(byte* data)
 	Wiwa::PointLight* lsrc = (Wiwa::PointLight*)data;
 
 	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
-	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
-	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.05f, 0.5f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.05f, 0.5f, "%.2f");
 	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
 	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
 	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
