@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiButton::GuiButton(unsigned int id, Rect2i bounds,const char* path) : GuiControl(GuiControlType::BUTTON, id)
+	GuiButton::GuiButton(unsigned int id, Rect2i bounds,const char* path, const char* extraPath) : GuiControl(GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
 		this->texture = texture;

@@ -34,11 +34,14 @@ namespace Wiwa
 		// Called before quitting
 		bool CleanUp();
 
-		// Additional methods
+		//Method for sliders
 		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds);
+		//Method for buttons and checkboxes
+		GuiControl* CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath);
+		//Method for strings
 		GuiControl* CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text);
+
 		void DestroyGuiControl(int id);
-		void AddGuiControl(GuiControl* entity);
 
 	public:
 

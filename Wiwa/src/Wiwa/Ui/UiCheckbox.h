@@ -13,12 +13,17 @@ namespace Wiwa
 	{
 	public:
 
-		GuiCheckbox(unsigned int id, Rect2i bounds,const char* path);
+		GuiCheckbox(unsigned int id, Rect2i bounds,const char* path,const char* extraPath);
 		virtual ~GuiCheckbox();
 
 		bool Update();
 		bool Draw(Renderer2D* render);
 
 		bool canClick = true;
+
+		bool checked = false;
+
+		ResourceId imgid_nonChecked;
+		ResourceId imgid2_checked;
 	};
 }
