@@ -22,15 +22,15 @@ class DebugDrawer;
 class Camera;
 namespace Wiwa {
 
+	struct MyRigidBody {
+		MyRigidBody(btRigidBody& body_, const size_t id_) : btBody(&body_), id(id_) {};
+
+		btRigidBody* btBody;
+		size_t id;
+	};
+
 	class WI_API PhysicsManager
 	{
-	public:
-		struct MyRigidBody {
-			MyRigidBody(btRigidBody& body_, const size_t id_) : btBody(&body_), id(id_) {};
-
-			btRigidBody* btBody;
-			size_t id;
-		};
 	public:
 		PhysicsManager();
 

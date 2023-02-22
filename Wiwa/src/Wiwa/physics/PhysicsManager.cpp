@@ -1,5 +1,6 @@
 #include <wipch.h>
 #include "PhysicsManager.h"
+#include "Wiwa/ecs/systems/System.h"
 #include "Wiwa/ecs/EntityManager.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/utilities/render/CameraManager.h"
@@ -72,6 +73,8 @@ namespace Wiwa {
 	{
 		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 15);
 
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
 		int numManifolds = m_World->getDispatcher()->getNumManifolds();
 		for (int i = 0; i < numManifolds; i++)
 		{
@@ -82,22 +85,21 @@ namespace Wiwa {
 			int numContacts = contactManifold->getNumContacts();
 			if (numContacts > 0)
 			{
-				//ComponentCollider* pbodyA = (ComponentCollider*)obA->getUserPointer();
-				//ComponentCollider* pbodyB = (ComponentCollider*)obB->getUserPointer();
+				size_t idA = obA->getUserIndex();
+				size_t idB = obB->getUserIndex();
 
-				//if (pbodyA && pbodyB)
-				//{
-				//	//std::list<Module*>* item = pbodyA->collision_listeners.getFirst();
-				//	for (std::list<Module*>::iterator item = pbodyA->m_Collision_listeners.begin(); item != pbodyA->m_Collision_listeners.end(); item++)
-				//	{
-				//		(*item)->OnCollision(pbodyA, pbodyB);
-				//	}
+				std::vector<System*>& vecA = entityManager.GetEntitySystems(idA);
+				std::vector<System*>& vecB = entityManager.GetEntitySystems(idB);
 
-				//	for (std::list<Module*>::iterator item2 = pbodyB->m_Collision_listeners.begin(); item2 != pbodyB->m_Collision_listeners.end(); item2++)
-				//	{
-				//		(*item2)->OnCollision(pbodyB, pbodyA);
-				//	}
-				//}
+				for (size_t i = 0; i < vecA.size(); i++)
+				{
+					vecA[i]->OnCollision(FindByEntityId(idA), FindByEntityId(idB));
+				}
+
+				for (size_t i = 0; i < vecB.size(); i++)
+				{
+					vecB[i]->OnCollision(FindByEntityId(idB), FindByEntityId(idA));
+				}
 			}
 		}
 		return true;
@@ -268,6 +270,7 @@ namespace Wiwa {
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
 		btRigidBody* btBody = new btRigidBody(rbInfo);
+		btBody->setUserIndex(id);
 
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
 		m_World->addRigidBody(btBody);
@@ -298,6 +301,7 @@ namespace Wiwa {
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
 		btRigidBody* btBody = new btRigidBody(rbInfo);
+		btBody->setUserIndex(id);
 
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
 		m_World->addRigidBody(btBody);
@@ -322,6 +326,7 @@ namespace Wiwa {
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
 
 		btRigidBody* btBody = new btRigidBody(rbInfo);
+		btBody->setUserIndex(id);
 
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
 		m_World->addRigidBody(btBody);
@@ -378,7 +383,7 @@ namespace Wiwa {
 		}
 	}
 
-	PhysicsManager::MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
+	MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
 	{
 		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{

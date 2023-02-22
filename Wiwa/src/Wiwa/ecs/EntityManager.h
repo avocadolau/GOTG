@@ -144,6 +144,8 @@ namespace Wiwa {
 		inline std::map<ComponentId, size_t>& GetEntityComponents(EntityId id) { return m_EntityComponents[id]; }
 
 		inline std::vector<SystemHash>& GetEntitySystemHashes(EntityId id) { return m_EntitySystemHashes[id]; }
+
+		inline std::vector<System*>& GetEntitySystems(EntityId id) { return m_EntitySystems[id]; }
 		
 		inline const Type* GetComponentType(ComponentId id) { return m_ComponentTypes[id]; }
 

@@ -5,6 +5,7 @@
 #include <Wiwa/scene/SceneManager.h>
 
 namespace Wiwa {
+	class MyRigidBody;
 	class WI_API System {
 	private:
 
@@ -43,6 +44,9 @@ namespace Wiwa {
 		virtual void OnSystemRemoved() {}
 		
 		void Destroy();
+
+		virtual void OnCollision(MyRigidBody* body1, MyRigidBody* body2)
+		{}
 	};
 
 	template<class T>
