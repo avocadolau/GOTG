@@ -29,10 +29,17 @@ namespace Wiwa {
 		size_t id;
 	};
 
+	enum CollisionType {
+		CT_ENTER,
+		CT_LOOP,
+		CT_LEAVE,
+		CT_NONE
+	};
+
 	struct CollisionData {
 		size_t entityA;
 		size_t entityB;
-		bool collided;
+		CollisionType collisionType;
 	};
 
 	class WI_API PhysicsManager
@@ -70,6 +77,8 @@ namespace Wiwa {
 
 		MyRigidBody* FindByEntityId(size_t id);
 
+		void UpdateCollisionType(size_t first, size_t second);
+
 		inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
 		{
 			return glm::vec3(vector.x, vector.y, vector.z);
@@ -98,6 +107,8 @@ namespace Wiwa {
 		std::list<MyRigidBody*> m_Bodies;
 		std::list<btDefaultMotionState*> m_Motions;
 		std::list<btTypedConstraint*> m_Constraints;
+
+		std::vector<CollisionData> m_CollisionList;
 	};
 }
 

@@ -44,8 +44,11 @@ namespace Wiwa {
 		virtual void OnSystemRemoved() {}
 		
 		void Destroy();
-
+		virtual void OnCollisionEnter(MyRigidBody* body1, MyRigidBody* body2)
+		{}
 		virtual void OnCollision(MyRigidBody* body1, MyRigidBody* body2)
+		{}
+		virtual void OnCollisionLeave(MyRigidBody* body1, MyRigidBody* body2)
 		{}
 	};
 

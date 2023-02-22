@@ -25,6 +25,10 @@ namespace Wiwa {
 
 		void OnSystemRemoved() override;
 
+		void OnCollisionEnter(MyRigidBody* body1, MyRigidBody* body2) override;
+		void OnCollision(MyRigidBody* body1, MyRigidBody* body2) override;
+		void OnCollisionLeave(MyRigidBody* body1, MyRigidBody* body2) override;
+
 	private:
 
 		void DeleteBody();
