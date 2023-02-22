@@ -11,7 +11,7 @@ namespace Wiwa
 {
 	class WI_API GuiManager
 	{
-	private:
+	public:
 
 		// Constructor
 		GuiManager();
@@ -19,7 +19,7 @@ namespace Wiwa
 		// Destructor
 		virtual ~GuiManager();
 
-	public:
+	
 		// Init audio engine
 		static bool Init();
 

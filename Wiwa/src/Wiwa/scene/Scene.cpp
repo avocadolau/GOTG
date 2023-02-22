@@ -13,12 +13,14 @@ namespace Wiwa {
 		mMaxTimeLeaving = 0;
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
+		m_GuiManager = new GuiManager();
 	}
 
 	Scene::~Scene()
 	{
 		delete m_CameraManager;
 		delete m_LightManager;
+		delete m_GuiManager;
 	}
 
 	void Scene::Start()
@@ -35,6 +37,7 @@ namespace Wiwa {
 	{
 		m_EntityManager.SystemsInit();
 		m_GuiManager->Init();
+		m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, { 20,20,200,200 }, "assets/test.png", nullptr, { 20,20,0,0 });
 	}
 
 	void Scene::Update()
@@ -51,6 +54,7 @@ namespace Wiwa {
 			m_EntityManager.SystemsUpdate();
 			
 			m_GuiManager->Update();
+			
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
