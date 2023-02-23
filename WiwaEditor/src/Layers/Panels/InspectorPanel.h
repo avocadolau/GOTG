@@ -39,6 +39,7 @@ public:
 		id = m_CurrentID;
 		return m_EntitySet;
 	}
+
 private:
 	
 	int m_CurrentID = 0;
