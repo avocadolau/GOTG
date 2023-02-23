@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <bitset>
+#include <algorithm>
 
 #define MAX_BITS 32
 
@@ -93,7 +94,11 @@ namespace Wiwa {
 		bool LogBodies();
 
 		void DebugDrawWorld();
+
+		bool AddFilterTag(const char* str);
 		
+		void RemoveFilterTag(const int index);
+
 	private:
 		bool m_Debug;
 		bool m_HasBeenInit;
@@ -115,8 +120,16 @@ namespace Wiwa {
 		std::vector<CollisionData> m_CollisionList;
 
 	public:
-		std::list<std::string> filterStrings;
-		std::bitset<MAX_BITS> fliterBitsSet;
+		std::vector<std::string> filterStrings;
+		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;
+
+		void bin(unsigned n)
+		{
+			if (n > 1)
+				bin(n >> 1);
+
+			WI_INFO("{}", n & 1);
+		}
 	};
 }
 

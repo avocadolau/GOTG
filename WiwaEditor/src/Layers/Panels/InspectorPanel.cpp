@@ -154,6 +154,75 @@ void InspectorPanel::DrawField(unsigned char* data, const Field& field)
 	}
 }
 
+void InspectorPanel::DrawCollisionTags()
+{
+	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
+	if (ImGui::Button("Edit Tags"))
+		ImGui::OpenPopup("Edit Tags");
+
+	// Always center this window when appearing
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+	if (ImGui::BeginPopupModal("Edit Tags", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		static int selected = -1;
+		for (int n = 0; n < py.filterStrings.size(); n++)
+		{
+			std::string tempStr = py.filterStrings[n].c_str();
+			tempStr += "_" + py.fliterBitsSets[n].to_string();
+			if (ImGui::Selectable(tempStr.c_str(), selected == n, ImGuiSelectableFlags_DontClosePopups))
+				selected = n;
+		}
+
+		static char strBuf[64] = ""; ImGui::InputText("Write Tag", strBuf, 64, ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CharsNoBlank);
+
+		if (ImGui::Button("Add", ImVec2(120, 0)))
+		{
+			if (!(std::find(py.filterStrings.begin(), py.filterStrings.end(), strBuf) != py.filterStrings.end()))
+			{
+				py.AddFilterTag(strBuf);
+			}
+		}
+		ImGui::SetItemDefaultFocus();
+		ImGui::SameLine();
+		if (ImGui::Button("Remove", ImVec2(120, 0)))
+		{
+			// If only index > 0, because we don't want to erase the basic tag
+			if (selected > 0)
+				py.RemoveFilterTag(selected);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		ImGui::EndPopup();
+	}
+
+	// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
+		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
+		// stored in the object itself, etc.)
+	//const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };
+	//static int itemCurrentIdx = 0; // Here we store our selection data as an index.
+	//const char* comboPreviewValue = py.filterStrings[itemCurrentIdx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
+	//if (ImGui::BeginCombo("Collision Tags", comboPreviewValue))
+	//{
+	//	for (int n = 0; n < py.filterStrings.size(); n++)
+	//	{
+	//		const bool is_selected = (itemCurrentIdx == n);
+	//		if (ImGui::Selectable(py.filterStrings[n].c_str(), is_selected))
+	//			itemCurrentIdx = n;
+
+	//		// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+	//		if (is_selected)
+	//			ImGui::SetItemDefaultFocus();
+	//	}
+
+	//	
+
+	//	ImGui::EndCombo();
+	//}
+}
+
 void InspectorPanel::DrawMeshComponent(byte* data)
 {
 	Wiwa::Mesh* mesh = (Wiwa::Mesh*)data;
@@ -282,6 +351,7 @@ void InspectorPanel::DrawSpotLightComponent(byte* data)
 
 void InspectorPanel::DrawRigidBodyComponent(byte* data)
 {
+	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 	Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
@@ -289,6 +359,32 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	DrawVec3Control("Gravity", &rigidBody->gravity, 0.0f, 100.0f);
 	ImGui::Checkbox("Is sensor?", &rigidBody->isSensor);
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
+
+	static int itemCurrentIdx = 0; // Here we store our selection data as an index.
+	rigidBody->selfTag = itemCurrentIdx; // wen serialize here don't need to set to itemCurrent idx but 
+	const char* comboPreviewValue = py.filterStrings[itemCurrentIdx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
+	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
+	{
+		for (int n = 0; n < py.filterStrings.size(); n++)
+		{
+			const bool is_selected = (itemCurrentIdx == n);
+			if (ImGui::Selectable(py.filterStrings[n].c_str(), is_selected))
+				itemCurrentIdx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+		}
+
+		ImGui::EndCombo();
+	}
+
+	ImGui::Text("Do not collide with:");
+	for (int n = 0; n < py.filterStrings.size(); n++)
+	{
+		ImGui::Checkbox(py.filterStrings[n].c_str(), &rigidBody->filterBits[n]);
+	}
+
 }
 
 void InspectorPanel::DrawColliderCubeComponent(byte* data)
@@ -332,6 +428,9 @@ void InspectorPanel::Draw()
 		ImGui::InputText("Name", (char*)edit.c_str(), 64);
 		ImGui::SameLine();
 		ImGui::Text("(%i)", m_CurrentID);
+
+		DrawCollisionTags();
+
 		if (ImGui::Button("Delete##entity"))
 		{
 			m_EntitySet = false;

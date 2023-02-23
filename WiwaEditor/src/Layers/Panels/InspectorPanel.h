@@ -15,6 +15,8 @@ private:
 	bool DrawComponent(size_t componentId);
 	void DrawField(unsigned char* data, const Field& field);
 
+	void DrawCollisionTags();
+
 	void DrawMeshComponent(byte* data);
 	void DrawTransform3dComponent(byte* data);
 	void DrawAudioSourceComponent(byte* data);

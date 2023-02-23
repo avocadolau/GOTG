@@ -127,6 +127,10 @@ void EditorLayer::OnAttach()
 			rb.mass = 10;
 			rb.positionOffset = glm::vec3(0.0f);
 			rb.scalingOffset = glm::vec3(1.0f);
+			for (int i = 0; i < 32; i++)
+			{
+				rb.filterBits[i] = true;
+			}
 			Wiwa::ColliderCube col;
 			col.halfExtents = glm::vec3(1.0f);
 

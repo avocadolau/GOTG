@@ -51,7 +51,9 @@ namespace Wiwa {
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
 		m_World->setGravity(GRAVITY);
-		
+
+		AddFilterTag("COLLISION_EVERYTHING");
+
 		WI_INFO("Physics Manager Init");
 		
 		return true;
@@ -247,6 +249,8 @@ namespace Wiwa {
 
 		delete m_World;
 
+		filterStrings.clear();
+
 		m_HasBeenInit = false;
 		return true;
 	}
@@ -297,6 +301,7 @@ namespace Wiwa {
 		btBody->setUserIndex(id);
 		
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
+
 		m_World->addRigidBody(btBody);
 		m_Bodies.push_back(myBodyData);
 		return true;
@@ -327,6 +332,16 @@ namespace Wiwa {
 		btRigidBody* btBody = new btRigidBody(rbInfo);
 		btBody->setUserIndex(id);
 
+		int32_t collisionFinal = 0;
+		for (int i = 0; i < fliterBitsSets.size(); i++)
+		{
+			if (rigid_body.filterBits[i] == true)
+			{
+				collisionFinal |= fliterBitsSets.at(i).to_ulong();
+				//WI_INFO("{} --> {}", filterStrings.at(i).c_str(), fliterBitsSets.at(i).to_string());
+			}
+		}
+		//bin(collisionFinal);
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
 		m_World->addRigidBody(btBody);
 		m_Bodies.push_back(myBodyData);
@@ -480,6 +495,23 @@ namespace Wiwa {
 		m_World->debugDrawWorld();
 		//m_Debug_draw->lineDisplayShader->UnBind();
 		camera->frameBuffer->Unbind();
+	}
+
+	bool PhysicsManager::AddFilterTag(const char* str)
+	{
+		if (filterStrings.size() == 32)
+			return false;
+
+		filterStrings.emplace_back(str);
+		std::bitset<MAX_BITS> bset;
+		bset.set(filterStrings.size(), true);
+		fliterBitsSets.push_back(bset);
+		return true;
+	}
+	void PhysicsManager::RemoveFilterTag(const int index)
+	{
+		filterStrings.erase(filterStrings.begin() + index);
+		fliterBitsSets.erase(fliterBitsSets.begin() + index);
 	}
 }
 

@@ -16,7 +16,8 @@ namespace Wiwa {
 		glm::vec3 gravity;
 		bool isTrigger;
 		bool isSensor;
-		int filterBits;
+		uint8_t selfTag;
+		bool filterBits[32];
 	};
 }
 
