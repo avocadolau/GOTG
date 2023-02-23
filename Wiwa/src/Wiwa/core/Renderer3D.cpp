@@ -39,15 +39,15 @@ namespace Wiwa {
 		textShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured", textShader);
 
-		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/lit_model_color");
+		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/toon_color");
 		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
-		colorShader->Compile("resources/shaders/light/lit_model_color");
+		colorShader->Compile("resources/shaders/light/toon_color");
 		colorShader->addUniform("u_Color", UniformType::fVec4);
 		colorShader->addUniform("u_SpecularValue", UniformType::Float);
 		colorShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
-		Wiwa::Resources::Import<Shader>("resources/shaders/light/lit_model_color", colorShader);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_color", colorShader);
 
 
 		//Normal Display Shader
