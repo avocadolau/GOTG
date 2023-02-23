@@ -76,7 +76,7 @@ void EditorLayer::OnAttach()
 	m_EnvPanel = std::make_unique<EnvironmentPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
-
+	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
 
 	m_AudioPanel = std::make_unique<AudioPanel>(this);
 
@@ -99,10 +99,13 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_ShaderPanel.get());
 	m_Panels.push_back(m_EnvPanel.get());
 
+
 	m_Panels.push_back(m_AnimatorPanel.get());
+	m_Panels.push_back(m_AnimationPanel.get());
 
 	m_Panels.push_back(m_AudioPanel.get());
 
+	
 	m_Settings.push_back(m_ProjectPanel.get());
 	m_Settings.push_back(m_About.get());
 
