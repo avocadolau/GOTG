@@ -63,33 +63,45 @@ namespace Wiwa
 
 		case GuiControlState::DISABLED:
 		{
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), {position.x,position.y}, Wiwa::Renderer2D::Pivot::CENTER);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = position.x;
+			newPosition.y = position.y;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			Vector2i newPosition;
+			newPosition.x = position.x;
+			newPosition.y = position.y;
+			newPosition.w = position.width;
+			newPosition.h = position.height;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
 			
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = position.x;
+			newPosition.y = position.y;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
 		case GuiControlState::PRESSED:
 		{
 			
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = position.x;
+			newPosition.y = position.y;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
 
 		/******/
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
-		}break;
+			Vector2i newPosition;
+			newPosition.x = position.x;
+			newPosition.y = position.y;
+			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		}break;
 		default:
 			break;
 		}

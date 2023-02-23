@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Panel.h"
-//#include "Wiwa/scene/Scene.h"
-//#include <Wiwa/Ui/UiManager.h>
-
+#include "Wiwa/scene/Scene.h"
+#include <Wiwa/Ui/UiManager.h>
+#include <Wiwa/scene/SceneManager.h>
+#
 class UIPanel : public Panel
 {
 public:
@@ -19,7 +20,5 @@ public:
 
 	int lastButtonID = 0;
 	int lastSliderID = 0;
-	int lastCheckboxID = 0;
-
-	
+	int lastCheckboxID = 0;	
 };

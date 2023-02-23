@@ -1,8 +1,5 @@
 #include <wipch.h>
 #include "UIPanel.h"
-#include "Wiwa/scene/Scene.h"
-#include <Wiwa/Ui/UiManager.h>
-#include <Wiwa/scene/SceneManager.h>
 #include "imgui.h"
 
 #include <Wiwa/core/Application.h>
@@ -12,7 +9,7 @@ using namespace Wiwa;
 UIPanel::UIPanel(EditorLayer* instance)
 	: Panel("UI", ICON_FK_TELEVISION, instance)
 {
-
+	
 }
 
 UIPanel::~UIPanel()
@@ -59,7 +56,7 @@ void UIPanel::Draw()
 			sliderID = 0;
 			checkboxID = 0;
 
-			for (int i = 0; i <= m_GuiManager.controls.size(); i++)
+			for (int i = 0; i < m_GuiManager.controls.size(); i++)
 			{
 				ImGui::PushID(i);
 				if (m_GuiManager.controls.at(i)->type == GuiControlType::BUTTON)
@@ -71,7 +68,7 @@ void UIPanel::Draw()
 				{
 					ImGui::Text("Slider # %i", sliderID);
 					sliderID++;
-				}
+				} 
 				if (m_GuiManager.controls.at(i)->type == GuiControlType::CHECKBOX)
 				{
 					ImGui::Text("Checkbox # %i", checkboxID);
@@ -84,6 +81,12 @@ void UIPanel::Draw()
 					lastButtonID = buttonID;
 					lastSliderID = sliderID;
 					lastCheckboxID = checkboxID;
+
+					
+					/*startingPosition.x = m_GuiManager.controls.at(UI_element_selected)->GetPosition().x;
+					startingPosition.y = m_GuiManager.controls.at(UI_element_selected)->GetPosition().y;
+					startingPosition.width = m_GuiManager.controls.at(UI_element_selected)->GetPosition().width;
+					startingPosition.height = m_GuiManager.controls.at(UI_element_selected)->GetPosition().height;*/
 				}
 				ImGui::PopID();
 			}
@@ -95,51 +98,46 @@ void UIPanel::Draw()
 
 		if (UI_element_selected >= 0)
 		{
+			
 			ImGui::Spacing();
-			if (m_GuiManager.controls.at(UI_element_selected)->type == GuiControlType::BUTTON)
+			if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::BUTTON)
 			{
 				ImGui::Text("Edit button # %i", lastButtonID);
 			}
-			if (m_GuiManager.controls.at(UI_element_selected)->type == GuiControlType::SLIDER)
+			if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::SLIDER)
 			{
 				ImGui::Text("Edit slider # %i", lastSliderID);
 			}
-			if (m_GuiManager.controls.at(UI_element_selected)->type == GuiControlType::CHECKBOX)
+			if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::CHECKBOX)
 			{
 				ImGui::Text("Edit checkbox # %i", lastCheckboxID);
 			}
 
-			Rect2i rect2;
-			rect2.x = m_GuiManager.controls.at(UI_element_selected)->position.x;
-			rect2.y = m_GuiManager.controls.at(UI_element_selected)->position.y;
-			rect2.width = m_GuiManager.controls.at(UI_element_selected)->position.width;
-			rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
-
 			ImGui::PushID(UI_element_selected);
-			if (ImGui::DragFloat3("position x", (float*)&rect2.x, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::SliderInt("position x", &m_GuiManager.controls.at(UI_element_selected)->position.x, 0.05f, 200.0f, "%.3f", NULL))
 			{
-				m_GuiManager.controls.at(UI_element_selected)->position.x = rect2.x;
+				 m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(m_GuiManager.controls.at(UI_element_selected)->position.x);
 			}
 			ImGui::PopID();
 
 			ImGui::PushID(UI_element_selected);
-			if (ImGui::DragFloat3("position y", (float*)&rect2.y, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::SliderInt("position y",&m_GuiManager.controls.at(UI_element_selected)->position.y, 0.05f, 200.0f,"%.3f", NULL))
 			{
-				m_GuiManager.controls.at(UI_element_selected)->position.y = rect2.y;
+				m_GuiManager.controls.at(UI_element_selected)->SetPosition_y(m_GuiManager.controls.at(UI_element_selected)->position.y);
 			}
 			ImGui::PopID();
 
 			ImGui::PushID(UI_element_selected);
-			if (ImGui::DragFloat("Width", (float*)&rect2.width, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::SliderInt("Width", &m_GuiManager.controls.at(UI_element_selected)->position.width, 0.05f, 200.0f,"%.3f", NULL))
 			{
-				m_GuiManager.controls.at(UI_element_selected)->position.width = rect2.width;
+				m_GuiManager.controls.at(UI_element_selected)->SetPosition_width(m_GuiManager.controls.at(UI_element_selected)->position.width);
 			}
 			ImGui::PopID();
 
 			ImGui::PushID(UI_element_selected);
-			if (ImGui::DragFloat("Height", (float*)&rect2.height, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::SliderInt("Height", &m_GuiManager.controls.at(UI_element_selected)->position.height, 0.05f, 200.0f,"%.3f", NULL))
 			{
-				m_GuiManager.controls.at(UI_element_selected)->position.height = rect2.height;
+				m_GuiManager.controls.at(UI_element_selected)->SetPosition_height(m_GuiManager.controls.at(UI_element_selected)->position.height);
 			}
 			ImGui::PopID();
 		}

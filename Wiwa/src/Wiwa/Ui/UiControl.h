@@ -63,6 +63,36 @@ namespace Wiwa
 
 		}
 
+		Rect2i GetPosition()
+		{
+			return position;
+		}
+		GuiControlType ReturnType()
+		{
+			return type;
+		}
+
+		void SetPosition_x(int position_x)
+		{
+			position.x = position_x;
+			
+		}
+		void SetPosition_y(int position_y)
+		{
+			position.y = position_y;
+
+		}
+		void SetPosition_width(int position_width)
+		{
+			position.width = position_width;
+
+		}
+		void SetPosition_height(int position_height)
+		{
+			position.height = position_height;
+
+		}
+
 	public:
 
 		bool SelectedForDrawing;
