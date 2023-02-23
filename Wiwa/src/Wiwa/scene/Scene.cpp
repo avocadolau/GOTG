@@ -13,14 +13,12 @@ namespace Wiwa {
 		mMaxTimeLeaving = 0;
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
-		m_GuiManager = new GuiManager();
 	}
 
 	Scene::~Scene()
 	{
 		delete m_CameraManager;
 		delete m_LightManager;
-		delete m_GuiManager;
 	}
 
 	void Scene::Start()
@@ -36,7 +34,7 @@ namespace Wiwa {
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
-		m_GuiManager->Init();
+		m_GuiManager.Init();
 		//WAY TO CREATE THE POSITION
 		//Rect2i test;
 		//test.x = 500;
@@ -59,8 +57,6 @@ namespace Wiwa {
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
 			
-			m_GuiManager->Update();
-			m_GuiManager->Draw();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -79,6 +75,9 @@ namespace Wiwa {
 	void Scene::ModuleUpdate()
 	{
 		m_CameraManager->Update();
+
+		m_GuiManager.Update();
+		m_GuiManager.Draw();
 
 		m_EntityManager.Update();
 

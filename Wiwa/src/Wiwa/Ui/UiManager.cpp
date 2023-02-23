@@ -87,7 +87,7 @@ namespace Wiwa
 	bool GuiManager::Update()
 	{
 		
-		Wiwa::List<GuiControl*> control = controls;
+		std::vector<GuiControl*> control = controls;
 		for (int i = 0; i < control.size(); i++)
 		{
 				control.at(i)->Update();
@@ -99,7 +99,7 @@ namespace Wiwa
 
 	bool GuiManager::Draw()
 	{
-		Wiwa::List<GuiControl*> control = controls;
+		std::vector<GuiControl*> control = controls;
 		
 		for (int i = 0; i < control.size(); i++)
 		{
@@ -110,7 +110,7 @@ namespace Wiwa
 	}
 	void GuiManager::DestroyGuiControl(int id)
 	{
-		Wiwa::List<GuiControl*> control = controls;
+		std::vector<GuiControl*> control = controls;
 
 		for (int i = 0; i < control.size(); i++)
 		{
@@ -118,18 +118,18 @@ namespace Wiwa
 			{
 				if (control.at(i)->id == id)
 				{
-					control.erase(i);
+					//control.erase(i);
 				}
 			}
 		}
 	}
 	bool GuiManager::CleanUp()
 	{
-		Wiwa::List<GuiControl*> control = controls;
+		std::vector<GuiControl*> control = controls;
 
 		for (int i = 0; i < control.size(); i++)
 		{
-			control.erase(i);
+			//control.erase(i);
 		}
 
 		return true;

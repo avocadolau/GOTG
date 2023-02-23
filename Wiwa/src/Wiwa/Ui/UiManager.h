@@ -45,7 +45,7 @@ namespace Wiwa
 
 	public:
 
-		List<GuiControl*> controls;
+		std::vector<GuiControl*> controls;
 
 		float accumulatedTime = 0.0f;
 		float updateMsCycle = 0.0f;
