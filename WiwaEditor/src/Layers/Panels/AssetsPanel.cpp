@@ -84,7 +84,7 @@ AssetsPanel::~AssetsPanel()
 }
 
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
-{	
+{
 	std::filesystem::path assetsPath = "assets";
 	assetsPath /= path;
 
@@ -94,6 +94,7 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 	if (assetsPath.extension() == ".cs")
 	{
 		EditorLayer::Get().RegenSol();
+		return;
 	}
 	switch (change_type)
 	{
