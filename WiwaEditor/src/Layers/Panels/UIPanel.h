@@ -20,5 +20,7 @@ public:
 
 	int lastButtonID = 0;
 	int lastSliderID = 0;
-	int lastCheckboxID = 0;	
+	int lastCheckboxID = 0;
+
+	bool changingValue = false;
 };

@@ -101,6 +101,14 @@ void UIPanel::Draw()
 
 			if (UI_element_selected >= 0)
 			{
+				Rect2i rect2;
+				if (changingValue == false)
+				{
+					rect2.x = m_GuiManager.controls.at(UI_element_selected)->position.x;
+					rect2.y = m_GuiManager.controls.at(UI_element_selected)->position.y;
+					rect2.width = m_GuiManager.controls.at(UI_element_selected)->position.width;
+					rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
+				}
 
 				ImGui::Spacing();
 				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::BUTTON)
@@ -117,30 +125,50 @@ void UIPanel::Draw()
 				}
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("position x", &m_GuiManager.controls.at(UI_element_selected)->position.x, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("position x", &rect2.x, 0.05f, 200.0f, "%.3f", NULL))
 				{
-					m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(m_GuiManager.controls.at(UI_element_selected)->position.x);
+					m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(rect2.x);
+					changingValue = true;
+				}
+				else
+				{
+					changingValue = true;
 				}
 				ImGui::PopID();
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("position y", &m_GuiManager.controls.at(UI_element_selected)->position.y, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("position y", &rect2.y, 0.05f, 200.0f, "%.3f", NULL))
 				{
-					m_GuiManager.controls.at(UI_element_selected)->SetPosition_y(m_GuiManager.controls.at(UI_element_selected)->position.y);
+					m_GuiManager.controls.at(UI_element_selected)->SetPosition_y(rect2.y);
+					changingValue = true;
+				}
+				else
+				{
+					changingValue = true;
 				}
 				ImGui::PopID();
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("Width", &m_GuiManager.controls.at(UI_element_selected)->position.width, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("Width", &rect2.width, 0.05f, 200.0f, "%.3f", NULL))
 				{
-					m_GuiManager.controls.at(UI_element_selected)->SetPosition_width(m_GuiManager.controls.at(UI_element_selected)->position.width);
+					m_GuiManager.controls.at(UI_element_selected)->SetPosition_width(rect2.width);
+					changingValue = true;
+				}
+				else
+				{
+					changingValue = true;
 				}
 				ImGui::PopID();
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("Height", &m_GuiManager.controls.at(UI_element_selected)->position.height, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("Height", &rect2.height, 0.05f, 200.0f, "%.3f", NULL))
 				{
-					m_GuiManager.controls.at(UI_element_selected)->SetPosition_height(m_GuiManager.controls.at(UI_element_selected)->position.height);
+					m_GuiManager.controls.at(UI_element_selected)->SetPosition_height(rect2.height);
+					changingValue = true;
+				}
+				else
+				{
+					changingValue = true;
 				}
 				ImGui::PopID();
 			}
