@@ -28,6 +28,8 @@
 #include "Panels/AudioPanel.h"
 #include "Panels/EnvoirmentPanel.h"
 
+#include "Panels/AnimationPanel.h"
+
 #include <Wiwa/scene/SceneManager.h>
 
 #include <memory>
@@ -111,6 +113,7 @@ private:
 	std::unique_ptr<Panel> m_AudioPanel;
 	std::unique_ptr<Panel> m_EnvPanel;
 
+	std::unique_ptr<Panel> m_AnimationPanel;
 
 	std::vector<Panel *> m_Panels;
 	std::vector<Panel *> m_Settings;
