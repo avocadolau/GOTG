@@ -58,37 +58,40 @@ void UIPanel::Draw()
 
 			for (int i = 0; i < m_GuiManager.controls.size(); i++)
 			{
-				ImGui::PushID(i);
-				if (m_GuiManager.controls.at(i)->type == GuiControlType::BUTTON)
+				if (m_GuiManager.controls.at(i) != nullptr)
 				{
-					ImGui::Text("Button # %i", buttonID);
-					buttonID++;
-				}
-				if (m_GuiManager.controls.at(i)->type == GuiControlType::SLIDER)
-				{
-					ImGui::Text("Slider # %i", sliderID);
-					sliderID++;
-				} 
-				if (m_GuiManager.controls.at(i)->type == GuiControlType::CHECKBOX)
-				{
-					ImGui::Text("Checkbox # %i", checkboxID);
-					checkboxID++;
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Edit"))
-				{
-					UI_element_selected = i;
-					lastButtonID = buttonID;
-					lastSliderID = sliderID;
-					lastCheckboxID = checkboxID;
+					ImGui::PushID(i);
+					if (m_GuiManager.controls.at(i)->type == GuiControlType::BUTTON)
+					{
+						ImGui::Text("Button # %i", buttonID);
+						buttonID++;
+					}
+					if (m_GuiManager.controls.at(i)->type == GuiControlType::SLIDER)
+					{
+						ImGui::Text("Slider # %i", sliderID);
+						sliderID++;
+					}
+					if (m_GuiManager.controls.at(i)->type == GuiControlType::CHECKBOX)
+					{
+						ImGui::Text("Checkbox # %i", checkboxID);
+						checkboxID++;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Edit"))
+					{
+						UI_element_selected = i;
+						lastButtonID = buttonID;
+						lastSliderID = sliderID;
+						lastCheckboxID = checkboxID;
 
-					
-					/*startingPosition.x = m_GuiManager.controls.at(UI_element_selected)->GetPosition().x;
-					startingPosition.y = m_GuiManager.controls.at(UI_element_selected)->GetPosition().y;
-					startingPosition.width = m_GuiManager.controls.at(UI_element_selected)->GetPosition().width;
-					startingPosition.height = m_GuiManager.controls.at(UI_element_selected)->GetPosition().height;*/
+
+						/*startingPosition.x = m_GuiManager.controls.at(UI_element_selected)->GetPosition().x;
+						startingPosition.y = m_GuiManager.controls.at(UI_element_selected)->GetPosition().y;
+						startingPosition.width = m_GuiManager.controls.at(UI_element_selected)->GetPosition().width;
+						startingPosition.height = m_GuiManager.controls.at(UI_element_selected)->GetPosition().height;*/
+					}
+					ImGui::PopID();
 				}
-				ImGui::PopID();
 			}
 		}
 		else
@@ -96,7 +99,7 @@ void UIPanel::Draw()
 			ImGui::Text("	No UI elements created");
 		}
 
-		if (UI_element_selected >= 0)
+		if (UI_element_selected >= 0 && m_GuiManager.controls.at(UI_element_selected) != nullptr)
 		{
 			
 			ImGui::Spacing();
