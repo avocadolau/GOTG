@@ -20,7 +20,7 @@
 #include <Wiwa/core/Resources.h>
 
 namespace Wiwa {
-	void Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
+	bool Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
 	{
 		unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;//aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipUVs;
 
@@ -31,6 +31,8 @@ namespace Wiwa {
 		sbyte* file_data = NULL;
 		uint32_t file_buf_size = FileSystem::ReadAll(file, &file_data);
 
+		WI_INFO("Loaded with bytes: {}", file_buf_size);
+
 		const aiScene* scene = aiImportFileFromMemory(file_data, file_buf_size, flags, NULL);
 		pScene = scene;
 
@@ -39,7 +41,7 @@ namespace Wiwa {
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 			WI_ERROR("Couldn't load mesh file: {0}", file);
-			return;
+			return false;
 		}
 
 		WI_CORE_INFO("Loading mesh file at: {0} ...", file);
@@ -194,6 +196,7 @@ namespace Wiwa {
 		}
 
 		aiReleaseImport(scene);
+		return true;
 	}
 
 	void Model::getWiMeshFromFile(const char* file)
@@ -248,10 +251,10 @@ namespace Wiwa {
 				f.Read(&model->ebo_data[0], ebo_size * sizeof(int));
 
 				// Read Bones
-				size_t bones_size;
+	/*			size_t bones_size;
 				f.Read(&bones_size, sizeof(size_t));
 				model->bone_data.resize(bones_size);
-				f.Read(&model->bone_data[0], bones_size * sizeof(VertexBoneData));
+				f.Read(&model->bone_data[0], bones_size * sizeof(VertexBoneData));*/
 
 				model->generateBuffers();
 				models.push_back(model);
@@ -1250,7 +1253,12 @@ namespace Wiwa {
 	{
 		Model* model = new Model(NULL);
 
-		model->getMeshFromFile(file, settings, false);
+		if (!model->getMeshFromFile(file, settings, false)) 
+		{
+			delete model;
+			model = nullptr; 
+			WI_ERROR("Error loading {0}", file); 
+		}
 
 		return model;
 	}
@@ -1294,9 +1302,11 @@ namespace Wiwa {
 				f.Write(c_model->ebo_data.data(), ebo_size * sizeof(int));
 
 				//Model bones
-				size_t bones_size = c_model->bone_data.size();
-				f.Write(&bones_size, sizeof(size_t));
-				f.Write(c_model->bone_data.data(), sizeof(size_t));
+				//size_t bones_size = c_model->bone_data.size();
+				//f.Write(&bones_size, sizeof(size_t));
+				////f.Write(c_model->bone_data.data(), bones_size * sizeof(int));
+				//f.Write((byte*)&c_model->bone_data[0], bones_size * sizeof(VertexBoneData));
+
 			}
 
 			// Model hierarchy

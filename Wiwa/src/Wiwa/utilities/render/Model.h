@@ -169,7 +169,7 @@ namespace Wiwa {
 	private:
 		unsigned int vao, vbo, ebo, bbvao, bbvbo, bbebo, bonevb;
 
-		void getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers=true);
+		bool getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers=true);
 		void getWiMeshFromFile(const char* file);
 		int getBoneId(const aiBone* pBone);
 
@@ -242,6 +242,9 @@ namespace Wiwa {
 
 		static Model* GetModelFromFile(const char* file, ModelSettings* settings);
 		static void SaveModel(Model* model, const char* file);
+
+		static Model* SaveWiModel(Model* model, const char* file);
+		static void LoadWiModel(const char* file);
 	public:
 		bool showNormals = false;
 		Math::AABB boundingBox;
