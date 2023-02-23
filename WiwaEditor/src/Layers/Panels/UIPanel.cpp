@@ -122,28 +122,28 @@ void UIPanel::Draw()
 				}
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("position x", &rect2.x, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("position x", &rect2.x, 0.0f, 1920.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(rect2.x);
 				}
 				ImGui::PopID();
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("position y", &rect2.y, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("position y", &rect2.y, 0.0f, 1080.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_y(rect2.y);
 				}
 				ImGui::PopID();
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("Width", &rect2.width, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("Width", &rect2.width, 0.0f, 700.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_width(rect2.width);
 				}
 				ImGui::PopID();
 
 				ImGui::PushID(UI_element_selected);
-				if (ImGui::SliderInt("Height", &rect2.height, 0.05f, 200.0f, "%.3f", NULL))
+				if (ImGui::SliderInt("Height", &rect2.height, 0.0f, 700.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_height(rect2.height);
 				}
