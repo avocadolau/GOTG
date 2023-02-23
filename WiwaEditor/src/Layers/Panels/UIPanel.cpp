@@ -102,13 +102,10 @@ void UIPanel::Draw()
 			if (UI_element_selected >= 0)
 			{
 				Rect2i rect2;
-				if (changingValue == false)
-				{
-					rect2.x = m_GuiManager.controls.at(UI_element_selected)->position.x;
-					rect2.y = m_GuiManager.controls.at(UI_element_selected)->position.y;
-					rect2.width = m_GuiManager.controls.at(UI_element_selected)->position.width;
-					rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
-				}
+				rect2.x = m_GuiManager.controls.at(UI_element_selected)->position.x;
+				rect2.y = m_GuiManager.controls.at(UI_element_selected)->position.y;
+				rect2.width = m_GuiManager.controls.at(UI_element_selected)->position.width;
+				rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
 
 				ImGui::Spacing();
 				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::BUTTON)
@@ -128,11 +125,6 @@ void UIPanel::Draw()
 				if (ImGui::SliderInt("position x", &rect2.x, 0.05f, 200.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(rect2.x);
-					changingValue = true;
-				}
-				else
-				{
-					changingValue = true;
 				}
 				ImGui::PopID();
 
@@ -140,11 +132,6 @@ void UIPanel::Draw()
 				if (ImGui::SliderInt("position y", &rect2.y, 0.05f, 200.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_y(rect2.y);
-					changingValue = true;
-				}
-				else
-				{
-					changingValue = true;
 				}
 				ImGui::PopID();
 
@@ -152,11 +139,6 @@ void UIPanel::Draw()
 				if (ImGui::SliderInt("Width", &rect2.width, 0.05f, 200.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_width(rect2.width);
-					changingValue = true;
-				}
-				else
-				{
-					changingValue = true;
 				}
 				ImGui::PopID();
 
@@ -164,11 +146,6 @@ void UIPanel::Draw()
 				if (ImGui::SliderInt("Height", &rect2.height, 0.05f, 200.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_height(rect2.height);
-					changingValue = true;
-				}
-				else
-				{
-					changingValue = true;
 				}
 				ImGui::PopID();
 			}
