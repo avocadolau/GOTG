@@ -116,36 +116,28 @@ void UIPanel::Draw()
 			rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
 
 			ImGui::PushID(UI_element_selected);
-			ImGui::Text("X: ");
-			ImGui::SameLine();
-			if (ImGui::DragFloat3("", (float*)&rect2.x, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::DragFloat3("position x", (float*)&rect2.x, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
 			{
 				m_GuiManager.controls.at(UI_element_selected)->position.x = rect2.x;
 			}
 			ImGui::PopID();
 
 			ImGui::PushID(UI_element_selected);
-			ImGui::Text("Y: ");
-			ImGui::SameLine();
-			if (ImGui::DragFloat3("", (float*)&rect2.y, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::DragFloat3("position y", (float*)&rect2.y, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
 			{
 				m_GuiManager.controls.at(UI_element_selected)->position.y = rect2.y;
 			}
 			ImGui::PopID();
 
 			ImGui::PushID(UI_element_selected);
-			ImGui::Text("Width: ");
-			ImGui::SameLine();
-			if (ImGui::DragFloat3("", (float*)&rect2.width, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::DragFloat("Width", (float*)&rect2.width, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
 			{
 				m_GuiManager.controls.at(UI_element_selected)->position.width = rect2.width;
 			}
 			ImGui::PopID();
 
 			ImGui::PushID(UI_element_selected);
-			ImGui::Text("Height: ");
-			ImGui::SameLine();
-			if (ImGui::DragFloat3("", (float*)&rect2.height, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
+			if (ImGui::DragFloat("Height", (float*)&rect2.height, 0.05f, 0.0f, 0.0f, "%.3f", NULL))
 			{
 				m_GuiManager.controls.at(UI_element_selected)->position.height = rect2.height;
 			}
