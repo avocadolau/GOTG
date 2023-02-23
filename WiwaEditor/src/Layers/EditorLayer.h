@@ -27,6 +27,7 @@
 #include "Panels/ShaderPanel.h"
 #include "Panels/AudioPanel.h"
 #include "Panels/EnvoirmentPanel.h"
+#include "Panels/UIPanel.h"
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -110,7 +111,7 @@ private:
 	std::unique_ptr<Panel> m_ShaderPanel;
 	std::unique_ptr<Panel> m_AudioPanel;
 	std::unique_ptr<Panel> m_EnvPanel;
-
+	std::unique_ptr<Panel> m_UiPanel;
 
 	std::vector<Panel *> m_Panels;
 	std::vector<Panel *> m_Settings;

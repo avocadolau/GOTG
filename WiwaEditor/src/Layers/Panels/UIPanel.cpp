@@ -37,7 +37,7 @@ void UIPanel::Draw()
 			rect.y = 100;
 			rect.width = 200;
 			rect.height = 100;
-			m_GuiManager.CreateGuiControl(GuiControlType::BUTTON, 0, rect, "assets/test.png", nullptr, {0,0,0,0});
+			m_GuiManager.CreateGuiControl(GuiControlType::BUTTON, 0, rect, "assets/test.png", nullptr);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Create Slider"))
