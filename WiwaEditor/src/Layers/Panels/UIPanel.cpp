@@ -37,7 +37,7 @@ void UIPanel::Draw()
 			rect.y = 100;
 			rect.width = 200;
 			rect.height = 100;
-			m_GuiManager.CreateGuiControl(GuiControlType::BUTTON, 0, rect, "assets/test.png", nullptr, { 0,0,0,0 });
+			m_GuiManager.CreateGuiControl(GuiControlType::BUTTON, 1, rect, "assets/test.png", nullptr, { 0,0,0,0 });
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Create Slider"))
@@ -59,7 +59,7 @@ void UIPanel::Draw()
 			sliderID = 0;
 			checkboxID = 0;
 
-			for (int i = 0; i < m_GuiManager.controls.size(); i++)
+			for (int i = 0; i <= m_GuiManager.controls.size(); i++)
 			{
 				ImGui::PushID(i);
 				if (m_GuiManager.controls.at(i)->type == GuiControlType::BUTTON)

@@ -37,9 +37,9 @@ namespace Wiwa
 		//Method for sliders
 		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds);
 		//Method for buttons and checkboxes
-		GuiControl* CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath);
+		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath);
 		//Method for strings
-		GuiControl* CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text);
+		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text);
 
 		void DestroyGuiControl(int id);
 
