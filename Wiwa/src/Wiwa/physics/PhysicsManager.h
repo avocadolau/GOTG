@@ -16,6 +16,10 @@
 #include <glm/glm.hpp>
 
 #include <vector>
+#include <bitset>
+
+#define MAX_BITS 32
+
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
 class DebugDrawer;
@@ -109,6 +113,10 @@ namespace Wiwa {
 		std::list<btTypedConstraint*> m_Constraints;
 
 		std::vector<CollisionData> m_CollisionList;
+
+	public:
+		std::list<std::string> filterStrings;
+		std::bitset<MAX_BITS> fliterBitsSet;
 	};
 }
 

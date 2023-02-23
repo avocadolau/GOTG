@@ -16,6 +16,7 @@ namespace Wiwa {
 		glm::vec3 gravity;
 		bool isTrigger;
 		bool isSensor;
+		int filterBits;
 	};
 }
 
@@ -26,4 +27,5 @@ REFLECTION_BEGIN(Wiwa::Rigidbody)
 	REFLECT_MEMBER(gravity)
 	REFLECT_MEMBER(isTrigger)
 	REFLECT_MEMBER(isSensor)
+	REFLECT_MEMBER(filterBits)
 REFLECTION_END;
