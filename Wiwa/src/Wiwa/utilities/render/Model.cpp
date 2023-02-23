@@ -1175,6 +1175,7 @@ namespace Wiwa {
 			node->scalingKeys.push_back(scaleKey);
 		}
 
+		return node;
 	}
 
 	void Model::LoadMeshAnim(unsigned int index, const aiMesh* mesh, Model* root)

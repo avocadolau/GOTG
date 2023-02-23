@@ -1,10 +1,10 @@
 #pragma once
 #include <Wiwa/core/Core.h>
 
+#include <string>
 #include <vector>
 #include <map>
-#include <Wiwa/utilities/math/Math.h>
-#include <Wiwa/utilities/math/AABB.h>
+#include <glm/glm.hpp>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
@@ -54,12 +54,12 @@ namespace Wiwa {
 		std::vector<VectorKey> scalingKeys;
 	};
 
-	class Animation
+	class WI_API Animation
 	{
 	public:
 		Animation();
 		Animation(std::string name) { this->name = name; }
-	
+		
 		std::string name;
 		//animation key node tree 
 		std::vector<AnimNode*> channels;

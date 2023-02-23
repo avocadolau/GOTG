@@ -1,3 +1,4 @@
+#include <Wiwa/core/Core.h>
 #include <glm/glm.hpp>
 
 namespace Wiwa::Math {
