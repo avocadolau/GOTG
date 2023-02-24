@@ -19,6 +19,7 @@ typedef unsigned char byte;
 
 namespace Wiwa {
 	class System;
+	class Scene;
 
 	struct Transform3D;
 
@@ -29,6 +30,9 @@ namespace Wiwa {
 			const Type* ctype;
 			ComponentId cid;
 		};
+
+		// Scene where entity manager acts
+		Scene* m_Scene;
 
 		// Entity management
 		std::vector<std::string> m_EntityNames;
@@ -68,12 +72,16 @@ namespace Wiwa {
 		std::vector<SystemHash> m_SystemWhiteList;
 
 		size_t getSystemIndex(EntityId entityId, SystemHash system_hash);
-
-		void OnComponentAdded(EntityId entityId, byte* data, const Type* type);
-		void OnComponentRemoved(EntityId entityId, byte* data, const Type* type);
 	public:
 		EntityManager();
 		~EntityManager();
+
+		void SetScene(Scene* scene) { m_Scene = scene; }
+
+		// Clear all data related to entity manager
+		void Clear();
+
+		static const size_t INVALID_INDEX = -1;
 
 		// System registration functions
 		//Action<> registrations[10];
@@ -136,6 +144,8 @@ namespace Wiwa {
 		inline std::map<ComponentId, size_t>& GetEntityComponents(EntityId id) { return m_EntityComponents[id]; }
 
 		inline std::vector<SystemHash>& GetEntitySystemHashes(EntityId id) { return m_EntitySystemHashes[id]; }
+
+		inline std::vector<System*>& GetEntitySystems(EntityId id) { return m_EntitySystems[id]; }
 		
 		inline const Type* GetComponentType(ComponentId id) { return m_ComponentTypes[id]; }
 
