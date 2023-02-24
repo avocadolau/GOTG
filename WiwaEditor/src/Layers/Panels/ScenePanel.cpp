@@ -8,7 +8,6 @@
 
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/core/Application.h>
-#include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/core/Input.h>
@@ -29,10 +28,12 @@
 #include "../EditorLayer.h"
 #include "../../Entities.h"
 
+#include <Wiwa/core/Renderer2D.h>
+
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
 ScenePanel::ScenePanel(EditorLayer* instance)
-    : Panel("Scene", instance)
+    : Panel("Scene", ICON_FK_GLOBE_W, instance)
 {
     m_LocalMode = false;
     m_Shadings.push_back(new ShadingView("Depth Test", Wiwa::Renderer3D::Options::DEPTH_TEST, true));
@@ -46,9 +47,10 @@ ScenePanel::ScenePanel(EditorLayer* instance)
     m_Camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
    
     // Camera control
-    camSpeed = 0.005f;
-    sensitivity = 0.5f;
-
+    camSpeed = 0.085f;
+    sensitivity = 0.8f;
+    nearPlane = m_Camera->getNear();
+    farPlane = m_Camera->getFar();
     m_ScrollSpeed = 10.0f;
 
     yaw = -90.0f;
@@ -61,7 +63,7 @@ ScenePanel::~ScenePanel()
 
 void ScenePanel::Draw()
 {
-    ImGui::Begin(name, &active, ImGuiWindowFlags_MenuBar);
+    ImGui::Begin(iconName.c_str(), &active, ImGuiWindowFlags_MenuBar);
     m_Camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
     if (ImGui::BeginMenuBar())
     {
@@ -122,8 +124,9 @@ void ScenePanel::Draw()
     
     //Wiwa::Application::Get().GetRenderer3D().SetActiveCamera(m_Camera);
 
-    //ImTextureID tex = (ImTextureID)(intptr_t)m_Camera->frameBuffer->getColorBufferTexture();
-    ImTextureID tex = (ImTextureID)(intptr_t)Wiwa::Application::Get().GetRenderer2D().getColorBufferTexture();
+    ImTextureID tex = (ImTextureID)(intptr_t)m_Camera->frameBuffer->getColorBufferTexture();
+    //ImTextureID tex = (ImTextureID)(intptr_t)Wiwa::Application::Get().GetRenderer2D().getColorBufferTexture();
+
     ImGui::SetCursorPos(cpos);
     //Wiwa::Application::Get().GetRenderer3D().RenderGrid();
     ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
@@ -143,10 +146,8 @@ void ScenePanel::Draw()
             }
             if (p.extension() == ".wiscene")
             {
-                SceneId id = Wiwa::SceneManager::LoadScene(pathS.c_str());
-                Wiwa::SceneManager::SetScene(id);
+                EditorLayer::Get().LoadScene(pathS);
             }
-
         }
 
         ImGui::EndDragDropTarget();
@@ -156,7 +157,7 @@ void ScenePanel::Draw()
 
     if (m_ShowFPS)
     {
-        ImVec2 rectSize(rectPos.x + 150.0f, rectPos.y + 50.0f);
+        ImVec2 rectSize(rectPos.x + 200.0f, rectPos.y + 50.0f);
         ImGui::GetWindowDrawList()->AddRectFilled(
             ImVec2(rectPos.x + 10.0f, rectPos.y),
             rectSize,
@@ -177,7 +178,7 @@ void ScenePanel::Draw()
 
         ImGui::SetCursorPos(ImVec2(x, y + 20.0f));
         ImGui::TextColored(ImColor(255, 255, 255, 128), "Frame time");
-        ImGui::SetCursorPos(ImVec2(x + 70.0f, y + 20.0f));
+        ImGui::SetCursorPos(ImVec2(x + 100.0f, y + 20.0f));
         ImGui::TextColored(ImColor(255, 255, 255, 128), "%.3f ms", Wiwa::Time::GetRealDeltaTime());
     }
     //Gizmos
@@ -188,8 +189,7 @@ void ScenePanel::Draw()
         if (m_GizmoType != -1)
         {
             ImGuizmo::SetOrthographic(false);
-            ImVec2 winPos = ImGui::GetWindowPos();
-            ImVec2 cursorPos = ImGui::GetCursorPos();
+
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(rectPos.x, rectPos.y, isize.x, isize.y);
 
@@ -212,12 +212,7 @@ void ScenePanel::Draw()
 
                 scale[0] = m_SelectedTransform->scale.x;
                 scale[1] = m_SelectedTransform->scale.y;
-                scale[2] = m_SelectedTransform->scale.z;
-
-
-                
-                
-                
+                scale[2] = m_SelectedTransform->scale.z;                
 
                 ImGuizmo::RecomposeMatrixFromComponents(translation, rotation, scale, tmpMatrix);
                 ImGuizmo::MODE mode = isParent ? ImGuizmo::WORLD : ImGuizmo::LOCAL;
@@ -242,24 +237,15 @@ void ScenePanel::Draw()
                     {
                     case ImGuizmo::OPERATION::TRANSLATE:
                     {
-                        if (isParent)
-                            m_SelectedTransform->position = Wiwa::Vector3f(translation[0], translation[1], translation[2]);
-                        else
-                            m_SelectedTransform->localPosition += Wiwa::Vector3f(translation[0], translation[1], translation[2]) - m_SelectedTransform->position;
+                        m_SelectedTransform->localPosition += glm::vec3(translation[0], translation[1], translation[2]) - m_SelectedTransform->position;
                     }break;
                     case ImGuizmo::OPERATION::ROTATE: 
                     {
-                        if(isParent)
-                            m_SelectedTransform->position = Wiwa::Vector3f(rotation[0], rotation[1], rotation[2]);
-                        else
-                            m_SelectedTransform->localRotation += Wiwa::Vector3f(rotation[0], rotation[1], rotation[2]) - m_SelectedTransform->rotation;
+                        m_SelectedTransform->localRotation += glm::vec3(rotation[0], rotation[1], rotation[2]) - m_SelectedTransform->rotation;
                     }break;
                     case ImGuizmo::OPERATION::SCALE: 
                     {
-                        if (isParent)
-                            m_SelectedTransform->scale = Wiwa::Vector3f(scale[0], scale[1], scale[2]);
-                        else
-                            m_SelectedTransform->localScale += Wiwa::Vector3f(scale[0], scale[1], scale[2]) - m_SelectedTransform->scale;
+                        m_SelectedTransform->localScale += glm::vec3(scale[0], scale[1], scale[2]) - m_SelectedTransform->scale;
                     }break;
                     default:
                         break;
@@ -268,8 +254,6 @@ void ScenePanel::Draw()
             }
         }
     }
-    
-    
 
     if (ImGui::IsWindowHovered())
     {
@@ -277,11 +261,12 @@ void ScenePanel::Draw()
         ImVec2 mpos = ImGui::GetMousePos();
         ImVec2 cspos = ImGui::GetCursorScreenPos();
 
-        ImVec2 rpos = { mpos.x - cspos.x, mpos.y - cspos.y };
+        ImVec2 rpos = { mpos.x - rectPos.x, mpos.y - rectPos.y };
         CLAMP(rpos.x, 0.0f, isize.x);
         CLAMP(rpos.y, 0.0f, isize.y);
 
         Wiwa::Vector2f v2f = { rpos.x / (float)isize.x, rpos.y / (float)isize.y };
+
         Wiwa::Vector2f rel2f = lastPos - v2f;
         rel2f.x /= rel2f.x == 0.0f ? 1.0f : abs(rel2f.x);
         rel2f.y /= rel2f.y == 0.0f ? 1.0f : abs(rel2f.y);
@@ -294,7 +279,7 @@ void ScenePanel::Draw()
             direction.x = radius * cos(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.x;
             direction.y = radius * sin(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.y;
             direction.z = radius * cos(glm::radians(yaw)) + m_SelectedTransform->position.z;
-            m_Camera->setPosition({ direction.x, direction.y, direction.z });
+            m_Camera->setPosition(direction);
             m_Camera->lookat(m_SelectedTransform->position);
         }
 
@@ -310,31 +295,62 @@ void ScenePanel::Draw()
         {
             glm::vec3 out_dir;
             glm::vec3 out_origin;
-            rpos.y -= isize.y;
-            rpos.y = glm::abs(rpos.y);
 
-            Wiwa::Math::ScreenPosToWorldRay(rpos.x, rpos.y, isize.x, isize.y, m_Camera->getView(), m_Camera->getProjection(), out_origin, out_dir);
+            // Position on screen with pixels, invert Y for left-down origin
+            Wiwa::Vector2f pospixels = { lastPos.x * 1920, (1.0f - lastPos.y) * 1080 };
+
+            // Send mouse position in pixels with left-down origin coordinates and game resolution size
+            Wiwa::Math::ScreenPosToWorldRay(pospixels.x, pospixels.y, 1920, 1080, m_Camera->getView(), m_Camera->getProjection(), out_origin, out_dir);
             float minDist = FLT_MAX;
             int id = -1;
-            for (size_t i = 0; i < entityManager.GetEntityCount(); i++)
+            std::vector<EntityId>* entities_alive = entityManager.GetEntitiesAlive();
+            size_t entity_count = entities_alive->size();
+            for (size_t i = 0; i < entity_count; i++)
             {
-                if (!entityManager.HasComponent<Wiwa::Mesh>(i))
+                EntityId eid = entities_alive->at(i);
+
+                if (!entityManager.HasComponent<Wiwa::Mesh>(eid))
                     continue;
-                Wiwa::Mesh* mesh = entityManager.GetComponent<Wiwa::Mesh>(i);
+                Wiwa::Mesh* mesh = entityManager.GetComponent<Wiwa::Mesh>(eid);
                 Wiwa::Model* model = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
                 model = model->getModelAt(mesh->modelIndex);
-                Wiwa::Transform3D* trs = entityManager.GetComponent<Wiwa::Transform3D>(i);
-                glm::mat4 transform(1.0f);
-                glm::vec3 scale = glm::vec3(trs->scale.x, trs->scale.y, trs->scale.z);
-                transform = glm::translate(transform, glm::vec3(trs->position.x, trs->position.y, trs->position.z));
-                transform = glm::rotate(transform, trs->rotation.x, { 1,0,0 });
-                transform = glm::rotate(transform, trs->rotation.y, { 0,1,0 });
-                transform = glm::rotate(transform, trs->rotation.z, { 0,0,1 });
-                transform = glm::scale(transform, scale);
-                float intersectDist = 0.0f;
+                Wiwa::Transform3D* trs = entityManager.GetComponent<Wiwa::Transform3D>(eid);
+                glm::vec3 scale = glm::vec3(trs->localScale.x, trs->localScale.y, trs->localScale.z);
 
-                Wiwa::AABB& AABB = model->boundingBox;
-                AABB.scale(scale, AABB.getCenter());
+                // Begin transformation
+                glm::mat4 transform(1.0f);
+                transform = glm::translate(transform, trs->localPosition);
+                transform = glm::rotate(transform, glm::radians(trs->localRotation.x), { 1,0,0 });
+                transform = glm::rotate(transform, glm::radians(trs->localRotation.y), { 0,1,0 });
+                transform = glm::rotate(transform, glm::radians(trs->localRotation.z), { 0,0,1 });
+                //transform = glm::scale(transform, scale);
+
+                EntityId parent = entityManager.GetEntityParent(eid);
+
+                if (parent != eid) {
+                    Wiwa::Transform3D* parent_trns = entityManager.GetComponent<Wiwa::Transform3D>(parent);
+
+                    glm::mat4 parent_transform(1.0f);
+                    parent_transform = glm::translate(parent_transform, parent_trns->position);
+                    parent_transform = glm::rotate(parent_transform, glm::radians(parent_trns->rotation.x), glm::vec3(1, 0, 0));
+                    parent_transform = glm::rotate(parent_transform, glm::radians(parent_trns->rotation.y), glm::vec3(0, 1, 0));
+                    parent_transform = glm::rotate(parent_transform, glm::radians(parent_trns->rotation.z), glm::vec3(0, 0, 1));
+                    //parent_transform = glm::scale(parent_transform, parent_trns->scale);
+
+                    transform = parent_transform * transform;
+
+                    scale = trs->scale;
+                }
+
+                // End transformation
+
+                float intersectDist = 0.0f;
+                Wiwa::Math::AABB AABB = model->boundingBox;
+                AABB.scale(scale, {0.0f, 0.0f, 0.0f});
+
+                /*if (!m_Camera->frustrum.IsBoxVisible(AABB.getMin(), AABB.getMax()))
+                    continue;*/
+
                 if (Wiwa::Math::TestRayOBBIntersection(
                     out_origin,
                     out_dir,
@@ -344,12 +360,12 @@ void ScenePanel::Draw()
                     intersectDist
                 ))
                 {
-                    if (i == 0)
+                    /*if (i == 0)
                     {
                         minDist = intersectDist;
                         id = i;
                     }
-                    else if (intersectDist < minDist)
+                    else */if (intersectDist < minDist)
                     {
                         minDist = intersectDist;
                         id = i;
@@ -385,7 +401,7 @@ void ScenePanel::Draw()
                     direction.x = radius * cos(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.x;
                     direction.y = radius * sin(glm::radians(pitch)) * sin(glm::radians(yaw)) + m_SelectedTransform->position.y;
                     direction.z = radius * cos(glm::radians(yaw)) + m_SelectedTransform->position.z;
-                    m_Camera->setPosition({ direction.x, direction.y, direction.z });
+                    m_Camera->setPosition(direction);
                     m_Camera->lookat(m_SelectedTransform->position);
                 }
                 else
@@ -396,7 +412,7 @@ void ScenePanel::Draw()
                     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
                     glm::vec3 front = glm::normalize(direction);
-                    m_Camera->setFront({ front.x, front.y, front.z });
+                    m_Camera->setFront(front);
                 }
             }
 

@@ -29,7 +29,7 @@ namespace Wiwa {
 		}
 
 		sbyte* file_data = NULL;
-		size_t file_buf_size = FileSystem::ReadAll(file, &file_data);
+		uint32_t file_buf_size = FileSystem::ReadAll(file, &file_data);
 
 		const aiScene* scene = aiImportFileFromMemory(file_data, file_buf_size, flags, NULL);
 
@@ -76,42 +76,57 @@ namespace Wiwa {
 
 				float shininess = 0.1f;
 				aiGetMaterialFloat(mat, AI_MATKEY_SHININESS, &shininess);
-
-				Material material; // Default settings
-				material.setColor({diffuse.r, diffuse.g, diffuse.b, diffuse.a});
-				Material::MaterialSettings& mat_settings = material.getSettings();
-				mat_settings.diffuse.r = diffuse.r;
-				mat_settings.diffuse.g = diffuse.g;
-				mat_settings.diffuse.b = diffuse.b;
-				mat_settings.specular.r = specular.r;
-				mat_settings.specular.g = specular.g;
-				mat_settings.specular.b = specular.b;
-				mat_settings.shininess = shininess;
 				
-				if (texture_diffuse.length > 0) {
-					material.setType(Wiwa::Material::MaterialType::textured);
-
-					std::filesystem::current_path(path);
-
-					std::filesystem::path texture_path = texture_diffuse.C_Str();
-					texture_path = std::filesystem::absolute(texture_path);
-
-					std::filesystem::current_path(curr_path);
-
-					texture_path = std::filesystem::relative(texture_path);
-
-					material.setTexture(texture_path.string().c_str());
-				}
-				else {
-					material.setType(Wiwa::Material::MaterialType::color);
-				}
-
 				std::filesystem::path mat_path = path;
 				mat_path += name.C_Str();
 				mat_path += ".wimaterial";
 
-				Material::SaveMaterial(mat_path.string().c_str(), &material);
+				bool mat_imported = Resources::Import<Material>(mat_path.string().c_str());
 
+				if (!mat_imported)
+				{
+					Material material((Shader*)NULL); // Default settings
+					size_t id;
+
+					if (texture_diffuse.length > 0)
+					{
+						std::filesystem::current_path(path);
+
+						std::filesystem::path texture_path = texture_diffuse.C_Str();
+						texture_path = std::filesystem::absolute(texture_path);
+
+						std::filesystem::current_path(curr_path);
+
+						texture_path = std::filesystem::relative(texture_path);
+
+						//const char* default_shader = "resources/shaders/light/lit_model_textured";
+						const char* default_shader = "resources/shaders/light/toon_textured";
+
+						id = Resources::Load<Shader>(default_shader);
+						material.setShader(Resources::GetResourceById<Shader>(id), default_shader);
+
+						bool imported = Resources::Import<Image>(texture_path.string().c_str());
+
+						if (imported) {
+							Uniform::SamplerData sdata;
+							sdata.resource_id = Resources::Load<Image>(texture_path.string().c_str());
+							Image* img = Resources::GetResourceById<Image>(sdata.resource_id);
+							sdata.tex_id = img->GetTextureId();
+							sdata.tex_path = texture_path.string();				
+
+							material.SetUniformData("u_Tex0", sdata);
+						}
+					}
+					else
+					{
+						//Set the color of the material
+						id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
+						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+					}
+
+					Material::SaveMaterial(mat_path.string().c_str(), &material);
+				}
 				materials.push_back(mat_path.string());
 			}
 		}
@@ -329,12 +344,12 @@ namespace Wiwa {
 		h->scale = { scale.x, scale.y, scale.z };
 
 		// Node meshes
-		for (int i = 0; i < node->mNumMeshes; i++) {
+		for (size_t i = 0; i < node->mNumMeshes; i++) {
 			h->meshIndexes.push_back(node->mMeshes[i]);
 		}
 
 		// Node children
-		for (int i = 0; i < node->mNumChildren; i++) {
+		for (size_t i = 0; i < node->mNumChildren; i++) {
 			h->children.push_back(loadModelHierarchy(node->mChildren[i]));
 		}
 
@@ -406,7 +421,7 @@ namespace Wiwa {
 	void Model::CreatePyramid()
 	{
 		vbo_data = {
-			0.00,1.00,-1.00,0.67,0.67,0.33,0.25,0.51,0.00,0.00,1.00,0.67,0.67,0.33,0.25,0.75,1.00,-0.00,-1.00,0.67,0.67,0.33,0.49,0.75,1.00,-0.00,-1.00,0.67,-0.67,0.33,0.49,0.75,0.00,0.00,1.00,0.67,-0.67,0.33,0.25,0.75,-0.00,-1.00,-1.00,0.67,-0.67,0.33,0.25,0.99,0.00,1.00,-1.00,0.00,0.00,-1.00,0.75,0.51,1.00,-0.00,-1.00,0.00,0.00,-1.00,0.99,0.75,-0.00,-1.00,-1.00,0.00,0.00,-1.00,0.75,0.99,-1.00,0.00,-1.00,0.00,0.00,-1.00,0.51,0.75,-0.00,-1.00,-1.00,-0.67,-0.67,0.33,0.25,0.99,0.00,0.00,1.00,-0.67,-0.67,0.33,0.25,0.75,-1.00,0.00,-1.00,-0.67,-0.67,0.33,0.01,0.75,-1.00,0.00,-1.00,-0.67,0.67,0.33,0.01,0.75,0.00,0.00,1.00,-0.67,0.67,0.33,0.25,0.75,0.00,1.00,-1.00,-0.67,0.67,0.33,0.25,0.51
+			0.00f,1.00f,-1.00f,0.67f,0.67f,0.33f,0.25f,0.51f,0.00f,0.00f,1.00f,0.67,0.67,0.33,0.25,0.75,1.00,-0.00,-1.00,0.67,0.67,0.33,0.49,0.75,1.00,-0.00,-1.00,0.67,-0.67,0.33,0.49,0.75,0.00,0.00,1.00,0.67,-0.67,0.33,0.25,0.75,-0.00,-1.00,-1.00,0.67,-0.67,0.33,0.25,0.99,0.00,1.00,-1.00,0.00,0.00,-1.00,0.75,0.51,1.00,-0.00,-1.00,0.00,0.00,-1.00,0.99,0.75,-0.00,-1.00,-1.00,0.00,0.00,-1.00,0.75,0.99,-1.00,0.00,-1.00,0.00,0.00,-1.00,0.51,0.75,-0.00,-1.00,-1.00,-0.67,-0.67,0.33,0.25,0.99,0.00,0.00,1.00,-0.67,-0.67,0.33,0.25,0.75,-1.00,0.00,-1.00,-0.67,-0.67,0.33,0.01,0.75,-1.00,0.00,-1.00,-0.67,0.67,0.33,0.01,0.75,0.00,0.00,1.00,-0.67,0.67,0.33,0.25,0.75,0.00,1.00,-1.00,-0.67,0.67,0.33,0.25,0.51
 		};
 
 		ebo_data = {
@@ -546,48 +561,39 @@ namespace Wiwa {
 	void Model::generateBuffers()
 	{
 		if (is_root) return;
-#if 0
-		printf("Vertices\n");
-		for (float vert : vbo_data)
-			printf("%.2f,", vert);
-		printf("\nIndicies\n");
-		for (int ind : ebo_data)
-			printf("%i,", ind);
-#endif
 		WI_CORE_INFO("Generating buffers...");
 		glGenBuffers(1, &vbo);
 		glGenBuffers(1, &ebo);
 		glGenVertexArrays(1, &vao);
-		WI_CORE_INFO("Generating buffers DONE");
+		//WI_CORE_INFO("Generating buffers DONE");
 		
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
 
-		WI_CORE_INFO("Binding the vertex array ...");
+		//WI_CORE_INFO("Binding the vertex array ...");
 		glBindVertexArray(vao);
-		WI_CORE_INFO("Binding the vertex array DONE");
+		//WI_CORE_INFO("Binding the vertex array DONE");
 
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
 
-		WI_CORE_INFO("Binding the vertex buffer ...");
+		//WI_CORE_INFO("Binding the vertex buffer ...");
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(float), vbo_data.data(), GL_STATIC_DRAW);
-		WI_CORE_INFO("Binding the vertex buffer DONE");
+		//WI_CORE_INFO("Binding the vertex buffer DONE");
 
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
 
-		WI_CORE_INFO("Binding the index buffer ...");
+		//WI_CORE_INFO("Binding the index buffer ...");
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebo_data.size() * sizeof(int), ebo_data.data(), GL_STATIC_DRAW);
-		WI_CORE_INFO("Binding the index buffer DONE");
 
 		if (glGetError() != 0)
 		{

@@ -2,24 +2,32 @@
 #pragma warning(disable : 4311)
 #pragma warning(disable : 4302)
 #include <Wiwa/core/Core.h>
-#include <Wiwa/utilities/math/Vector3f.h>
+#include <glm/glm.hpp>
 #include <Wiwa/utilities/Reflection.h>
+
+#include <glm/mat4x4.hpp>
 
 namespace Wiwa {
 	struct WI_API Transform3D {
 		// Read-only world position
-		Vector3f position;
+		glm::vec3 position;
 		// Read-only world rotation
-		Vector3f rotation;
+		glm::vec3 rotation;
 		// Read-only world scale
-		Vector3f scale;
+		glm::vec3 scale;
 
 		// Local position
-		Vector3f localPosition;
+		glm::vec3 localPosition;
 		// Local rotation
-		Vector3f localRotation;
+		glm::vec3 localRotation;
 		// Local scale
-		Vector3f localScale;
+		glm::vec3 localScale;
+
+		// World matrix
+		glm::mat4 worldMatrix;
+
+		// Local matrix
+		glm::mat4 localMatrix;
 	};
 }
 
@@ -30,4 +38,5 @@ REFLECTION_BEGIN(Wiwa::Transform3D)
 	REFLECT_MEMBER(localPosition)
 	REFLECT_MEMBER(localRotation)
 	REFLECT_MEMBER(localScale)
+	REFLECT_MEMBER(worldMatrix)
 REFLECTION_END;

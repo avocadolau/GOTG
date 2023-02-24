@@ -4,9 +4,11 @@
 #include <Wiwa/core/Renderer3D.h>
 #include "../../Utils/EditorUtils.h"
 
+#include <Wiwa/render/RenderManager.h>
+#include <Wiwa/core/Renderer2D.h>
 
 GamePanel::GamePanel(EditorLayer* instance)
-	: Panel("Game",instance)
+	: Panel("Game", ICON_FK_GAMEPAD,instance)
 {
 }
 
@@ -18,7 +20,7 @@ void GamePanel::Draw()
 {
     Wiwa::CameraManager& cameraManager = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
 
-    ImGui::Begin(name, &active);
+    ImGui::Begin(iconName.c_str(), &active);
 
     ImGui::Checkbox("Show stats", &m_ShowStats);
     ImGui::Separator();
@@ -35,9 +37,9 @@ void GamePanel::Draw()
 
     if (cameraManager.getCameraSize() > 0)
     {
-        Wiwa::Camera* cam = cameraManager.getActiveCamera();
+        uint32_t cbt = Wiwa::Application::Get().GetRenderer2D().getColorBufferTexture();
 
-        ImTextureID tex = (ImTextureID)(intptr_t)cam->frameBuffer->getColorBufferTexture();
+        ImTextureID tex = (ImTextureID)(intptr_t)Wiwa::RenderManager::getColorTexture();
 
         ImVec2 cpos = ImGui::GetCursorPos();
         cpos.x = (viewportPanelSize.x - isize.x) / 2;
@@ -49,7 +51,7 @@ void GamePanel::Draw()
 
         if (m_ShowStats)
         {
-            ImVec2 rectSize(rectPos.x + 150.0f, rectPos.y + 90.0f);
+            ImVec2 rectSize(rectPos.x + 200.0f, rectPos.y + 90.0f);
             ImGui::GetWindowDrawList()->AddRectFilled(
                 ImVec2(rectPos.x + 10, rectPos.y),
                 rectSize,
@@ -70,17 +72,17 @@ void GamePanel::Draw()
 
             ImGui::SetCursorPos(ImVec2(x, y + 20.0f));
             ImGui::TextColored(ImColor(255, 255, 255, 128), "Frame time");
-            ImGui::SetCursorPos(ImVec2(x + 70.0f, y + 20.0f));
+            ImGui::SetCursorPos(ImVec2(x + 100.0f, y + 20.0f));
             ImGui::TextColored(ImColor(255, 255, 255, 128), "%.3f ms", Wiwa::Time::GetDeltaTime());
 
             ImGui::SetCursorPos(ImVec2(x, y + 40.0f));
             ImGui::TextColored(ImColor(255, 255, 255, 128), "Play time");
-            ImGui::SetCursorPos(ImVec2(x + 70.0f, y + 40.0f));
+            ImGui::SetCursorPos(ImVec2(x + 100.0f, y + 40.0f));
             ImGui::TextColored(ImColor(255, 255, 255, 128), "%.3f s", Wiwa::Time::GetTime());
 
             ImGui::SetCursorPos(ImVec2(x, y + 60.0f));
             ImGui::TextColored(ImColor(255, 255, 255, 128), "Time scale");
-            ImGui::SetCursorPos(ImVec2(x + 70.0f, y + 60.0f));
+            ImGui::SetCursorPos(ImVec2(x + 100.0f, y + 60.0f));
             ImGui::TextColored(ImColor(255, 255, 255, 128), "%.2f", Wiwa::Time::GetTimeScale());
         }
     }

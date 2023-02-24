@@ -9,7 +9,6 @@
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/core/Application.h>
 
-#include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/core/Renderer3D.h>
 
 #include <Wiwa/utilities/render/FrameBuffer.h>
@@ -24,7 +23,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 MeshViewPanel::MeshViewPanel(EditorLayer* instance)
-    : Panel("Mesh view", instance)
+    : Panel("Mesh view",ICON_FK_MALE, instance)
 {
     Wiwa::Size2i& res = Wiwa::Application::Get().GetTargetResolution();
     float ar = res.w / (float)res.h;
@@ -62,7 +61,7 @@ void MeshViewPanel::Update()
 
 void MeshViewPanel::Draw()
 {
-    ImGui::Begin(name, &active, ImGuiWindowFlags_MenuBar);
+    ImGui::Begin(iconName.c_str(), &active, ImGuiWindowFlags_MenuBar);
 
     
     // Calculate viewport aspect ratio
@@ -193,8 +192,8 @@ void MeshViewPanel::Draw()
     }
 
     // Render to frame buffer and imgui viewport
-    if(m_ActiveMaterial && m_ActiveMesh)
-        Wiwa::Application::Get().GetRenderer3D().RenderMeshMaterial(m_ActiveMesh, m_MeshPosition, m_MeshRotation, m_MeshScale, m_ActiveMaterial, true, &m_Camera);
+   /* if(m_ActiveMaterial && m_ActiveMesh)
+        Wiwa::Application::Get().GetRenderer3D().RenderMesh(m_ActiveMesh, m_MeshPosition, m_MeshRotation, m_MeshScale, m_ActiveMaterial, true, &m_Camera);*/
 
     ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
 

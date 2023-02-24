@@ -7,6 +7,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/render/Material.h>
 #include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/utilities/render/LightManager.h>
 namespace Wiwa {
 	MeshRenderer::MeshRenderer()
 	{
@@ -17,10 +18,10 @@ namespace Wiwa {
 
 	}
 
-	void MeshRenderer::OnUpdate(EntityId eid)
+	void MeshRenderer::OnUpdate()
 	{
-		Transform3D* t3d = GetComponent<Transform3D>(eid);
-		Mesh* mesh = GetComponent<Mesh>(eid);
+		Transform3D* t3d = GetComponent<Transform3D>();
+		Mesh* mesh = GetComponent<Mesh>();
 
 		if (!mesh) return;
 
@@ -37,21 +38,26 @@ namespace Wiwa {
 		Material* mat = Wiwa::Resources::GetResourceById<Wiwa::Material>(mesh->materialId);
 
 		CameraManager& man = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
-		
+		EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
 
 		size_t cameraCount = man.getCameraSize();
 		std::vector<CameraId>& cameras = man.getCameras();
+
+		EntityId parent = eman.GetEntityParent(m_EntityId);
+		Transform3D* parent_t3d = eman.GetComponent<Transform3D>(parent);
+
 		for (size_t i = 0; i < cameraCount; i++)
 		{
 			CameraId cam_id = cameras[i];
 			Camera* camera = man.getCamera(cam_id);
 
-			if (camera->cull &&
-				!camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax())
-			) return;
-			r3d.RenderMeshMaterial(mod, t3d->position, t3d->rotation, t3d->scale, mat, false, man.editorCamera);
+			if (camera->cull && !camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax()))
+				return;
 
-			r3d.RenderMeshMaterial(mod, t3d->position, t3d->rotation, t3d->scale, mat, false, camera);
+			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
 		}
+
+		r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 	}
 }

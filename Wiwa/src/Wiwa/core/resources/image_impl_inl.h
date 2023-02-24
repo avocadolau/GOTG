@@ -7,11 +7,11 @@ namespace Wiwa {
 	inline void Resources::LoadMeta<Image>(const char* file, ImageSettings* settings)
 	{
 		std::filesystem::path filePath = file;
-		filePath += ".meta";
 		if (!std::filesystem::exists(filePath))
 			return;
+		filePath += ".meta";
 		JSONDocument doc(filePath.string().c_str());
-		if (!doc.HasMember("imageImportSettings"))
+		/*if (!doc.HasMember("imageImportSettings"))
 			return;
 		settings->Compression = (CompressionType)doc["imageImportSettings"]["compression"].get<int>();
 		settings->Interlaced = doc["imageImportSettings"]["interlaced"].get<bool>();
@@ -31,7 +31,7 @@ namespace Wiwa {
 		settings->Sharpen = doc["imageImportSettings"]["sharpen"].get<bool>();
 		settings->SharpenFactor = doc["imageImportSettings"]["sharpen_factor"].get<int>();
 		settings->SharpenIterations = doc["imageImportSettings"]["sharpen_iterations"].get<int>();
-		settings->Scale = doc["imageImportSettings"]["scale"].get<bool>();
+		settings->Scale = doc["imageImportSettings"]["scale"].get<bool>();*/
 		doc.save_file(filePath.string().c_str());
 	}
 	template<>
@@ -45,9 +45,9 @@ namespace Wiwa {
 		doc.AddMember("fileFormatVersion", 1);
 		doc.AddMember("file", file);
 		doc.AddMember("folderAsset", false);
-		std::time_t time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-		doc.AddMember("timeCreated", std::ctime(&time));
-		JSONValue imageSettingsObj = doc.AddMemberObject("imageImportSettings");
+		std::time_t time = to_time_t(std::filesystem::last_write_time(file));
+		doc.AddMember("timeCreated", time);
+		/*JSONValue imageSettingsObj = doc.AddMemberObject("imageImportSettings");
 		imageSettingsObj.AddMember("compression", (int)settings->Compression);
 		imageSettingsObj.AddMember("interlaced", settings->Interlaced);
 		imageSettingsObj.AddMember("offset_x", (int)settings->OffsetX);
@@ -66,23 +66,27 @@ namespace Wiwa {
 		imageSettingsObj.AddMember("sharpen", settings->Sharpen);
 		imageSettingsObj.AddMember("sharpen_factor", (int)settings->SharpenFactor);
 		imageSettingsObj.AddMember("sharpen_iterations", (int)settings->SharpenIterations);
-		imageSettingsObj.AddMember("scale", settings->Scale);
+		imageSettingsObj.AddMember("scale", settings->Scale);*/
 		doc.save_file(filePath.string().c_str());
 	}
 	template<>
 	inline ResourceId Resources::Load<Image>(const char* file)
 	{
-		ResourceId position = getResourcePosition(WRT_IMAGE, file);
+		if (!_file_exists(file)) return WI_INVALID_INDEX;
+
+		std::filesystem::path file_path = _assetToLibPath(file);
+		file_path.replace_extension(".dds");
+		ResourceId position = getResourcePosition(WRT_IMAGE, file_path.string().c_str());
 		size_t size = m_Resources[WRT_IMAGE].size();
-		ImageSettings* settings = new ImageSettings();
-		//CreateMeta<Image>(file, settings);
+		
 		ResourceId resourceId;
 
 		if (position == size) {
 			Image* image = new Image();
-			image->Init(file);
 
-			PushResource(WRT_IMAGE, file, image);
+			image->InitDDS(file_path.string().c_str());
+
+			PushResource(WRT_IMAGE, file_path.string().c_str(), image);
 
 			resourceId = size;
 		}
@@ -95,16 +99,18 @@ namespace Wiwa {
 	template<>
 	inline ResourceId Resources::LoadNative<Image>(const char* file)
 	{
-		ResourceId position = getResourcePosition(WRT_IMAGE, file);
+		std::string path = file;
+		standarizePath(path);
+		ResourceId position = getResourcePosition(WRT_IMAGE, path.c_str());
 		size_t size = m_Resources[WRT_IMAGE].size();
 		ImageSettings* settings = new ImageSettings();
 		ResourceId resourceId;
 
 		if (position == size) {
 			Image* image = new Image();
-			image->Init(file);
+			image->Init(path.c_str());
 
-			PushResource(WRT_IMAGE, file, image, true);
+			PushResource(WRT_IMAGE, path.c_str(), image, true);
 
 			resourceId = size;
 		}
@@ -127,14 +133,24 @@ namespace Wiwa {
 	}
 
 	template<>
-	inline void Resources::Import<Image>(const char* file)
+	inline bool Resources::Import<Image>(const char* file)
 	{
-		std::filesystem::path load_path = file;
+		if (!_file_exists(file)) return false;
 
-		std::filesystem::path import_path = "library/";
-		import_path += load_path.filename();
-		import_path.replace_extension(".dds");
-
+		std::filesystem::path import_path = _import_path_impl(file, ".dds");
 		_import_image_impl(file, import_path.string().c_str());
+
+		WI_CORE_INFO("Image at {} imported succesfully!", import_path.string().c_str());
+		return true;
+	}
+	template<>
+	inline bool Resources::CheckImport<Image>(const char* file)
+	{
+		return _check_import_impl(file, ".dds");
+	}
+	template<>
+	inline const char* Resources::getResourcePathById<Image>(size_t id)
+	{
+		return getPathById(WRT_IMAGE, id);
 	}
 }

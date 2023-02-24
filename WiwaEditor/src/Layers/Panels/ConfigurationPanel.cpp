@@ -6,9 +6,10 @@
 #include "psapi.h"
 
 #include <Wiwa/utilities/AllocationMetrics.h>
+#include "../EditorLayer.h"
 
 ConfigurationPanel::ConfigurationPanel(EditorLayer* instance)
-	: Panel("Configuration", instance), info()
+	: Panel("Configuration", ICON_FK_COG, instance), info()
 {
 	
 }
@@ -25,9 +26,63 @@ void ConfigurationPanel::Draw()
 	m_MSLog.push_back(Wiwa::Time::GetRealDeltaTime());
 	m_FPSLog.push_back(1000.0f / Wiwa::Time::GetRealDeltaTime());
 	m_AllocLog.push_back((float)Wiwa::AllocationMetrics::allocation_count);
-	m_ByteLog.push_back((float)Wiwa::AllocationMetrics::bytes_allocated);
+	//m_ByteLog.push_back((float)Wiwa::AllocationMetrics::bytes_allocated);
 
-	ImGui::Begin(name, &active);
+	ImGui::Begin(iconName.c_str(), &active);
+
+	if (ImGui::CollapsingHeader("External tools"))
+	{
+		{		
+			const char* types[] = { "vs2022", "vs2019" };
+		static const char* currentItem =
+			instance->s_SolVersion == "vs2022" ? types[0] : types[1];
+		if (ImGui::BeginCombo("Solution version", currentItem))
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				bool isSelected = (currentItem == types[i]);
+				if (ImGui::Selectable(types[i], isSelected))
+				{
+					currentItem = types[i];
+					instance->s_SolVersion = currentItem;
+				}
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+		}
+		ImGui::Separator();
+		{
+			const char* types[] = { "Release", "Debug" };
+			static const char* currentItem =
+				instance->s_BuildConf == "Release" ? types[0] : types[1];
+			if (ImGui::BeginCombo("Build config", currentItem))
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					bool isSelected = (currentItem == types[i]);
+					if (ImGui::Selectable(types[i], isSelected))
+					{
+						currentItem = types[i];
+						instance->s_BuildConf = currentItem;
+					}
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::Button("Regenerate solution"))
+			{
+				instance->RegenSol();
+			}
+		}
+	}
+
+
 	if (ImGui::CollapsingHeader("Window"))
 	{
 		if (ImGui::Checkbox("Fullscreen", &m_Fullscreen))
@@ -49,8 +104,8 @@ void ConfigurationPanel::Draw()
 		ImGui::PlotHistogram("##memory", &m_MemLog[0], (int)m_MemLog.size(), 0, title, 0.0f, 10000.0f, ImVec2(200, 100));
 		sprintf_s(title, 25, "Current Allocations %.0f", m_AllocLog[m_AllocLog.size() - 1]);
 		ImGui::PlotHistogram("##memory", &m_AllocLog[0], (int)m_AllocLog.size(), 0, title, 0.0f, 10000.0f, ImVec2(200, 100));
-		sprintf_s(title, 25, "Bytes allocated %.0f", m_ByteLog[m_ByteLog.size() - 1]);
-		ImGui::PlotHistogram("##memory", &m_ByteLog[0], (int)m_ByteLog.size(), 0, title, 0.0f, 90000.0f, ImVec2(200, 100));
+		/*sprintf_s(title, 25, "Bytes allocated %.0f", m_ByteLog[m_ByteLog.size() - 1]);
+		ImGui::PlotHistogram("##memory", &m_ByteLog[0], (int)m_ByteLog.size(), 0, title, 0.0f, 90000.0f, ImVec2(200, 100));*/
 	
 	}
 	if (ImGui::CollapsingHeader("Time"))
@@ -62,6 +117,7 @@ void ConfigurationPanel::Draw()
 		{
 			ImGui::Text("Game time since startup %.2fs", Wiwa::Time::GetTime());
 			ImGui::Text("Game delta time %.2fms", Wiwa::Time::GetDeltaTime());
+			ImGui::Text("Game frame count %i", Wiwa::Time::GetGameFrameCount());
 			float timeScale = Wiwa::Time::GetTimeScale();
 			if (ImGui::SliderFloat("Time scale", &timeScale, -2.0f, 5.0f))
 			{

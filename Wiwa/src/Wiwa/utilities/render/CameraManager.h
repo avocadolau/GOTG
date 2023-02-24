@@ -4,6 +4,8 @@
 #include <Wiwa/utilities/render/Camera.h>
 #include <vector>
 
+#include <Wiwa/render/RenderManager.h>
+
 typedef size_t CameraId;
 
 namespace Wiwa{
@@ -14,8 +16,7 @@ namespace Wiwa{
 		 std::vector<CameraId> m_CamerasAlive;
 		 std::vector<CameraId> m_RemovedCameras;
 
-		 CameraId m_ActiveCamera = 0;
-		
+		 CameraId m_ActiveCamera;
 	public:
 		Camera* editorCamera;
 	public:
@@ -26,10 +27,10 @@ namespace Wiwa{
 		void Clear();
 		void CleanUp();
 
-		void setActiveCamera(CameraId cameraId) { m_ActiveCamera = cameraId; }
+		void setActiveCamera(CameraId cameraId) { m_ActiveCamera = cameraId; RenderManager::SetLayerCamera(0, m_Cameras[cameraId]); }
 
 		CameraId getActiveCameraId() { return m_ActiveCamera; }
-		Camera* getActiveCamera() { return m_Cameras[m_ActiveCamera]; }
+		Camera* getActiveCamera() { return m_ActiveCamera == size_t(-1) ? NULL : m_Cameras[m_ActiveCamera]; }
 
 		size_t getCameraSize() { return m_CamerasAlive.size(); }
 

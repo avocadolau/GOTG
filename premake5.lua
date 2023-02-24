@@ -18,6 +18,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDirs = {}
 IncludeDirs["Wiwa"] = "%{wks.location}/Wiwa/src"
 IncludeDirs["GLFW"] = "%{wks.location}/Wiwa/vendor/GLFW/include"
+IncludeDirs["filewatch"] = "%{wks.location}/Wiwa/vendor/filewatch"
 IncludeDirs["Glew"] = "%{wks.location}/Wiwa/vendor/Glew/include/GL"
 IncludeDirs["ImGui"] = "%{wks.location}/Wiwa/vendor/imgui"
 IncludeDirs["GLM"] = "%{wks.location}/Wiwa/vendor/glm"
@@ -31,6 +32,7 @@ IncludeDirs["assimp"] = "%{wks.location}/Wiwa/vendor/assimp/include"
 IncludeDirs["ImGuizmo"] = "%{wks.location}/Wiwa/vendor/imguizmo"
 IncludeDirs["GLI"] = "%{wks.location}/Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
+IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
 
 LibraryDirs = {}
 LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"

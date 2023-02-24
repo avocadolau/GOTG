@@ -11,16 +11,22 @@
 #include "../../Utils/EditorUtils.h"
 
 #include <Wiwa/ecs/components/Mesh.h>
+#include <Wiwa/ecs/components/AudioSource.h>
+#include <Wiwa/ecs/components/PointLight.h>
+#include <Wiwa/ecs/components/SpotLight.h>
+#include <Wiwa/ecs/components/DirectionalLight.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
+	bool ret = true;
+
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	const Type* type = em.GetComponentType(componentId);
 
 	std::string name = type->name;
 
-	if (ImGui::CollapsingHeader(name.c_str()))
+	if (ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		std::string del_label = "Delete##comp";
 		del_label += name.c_str();
@@ -28,15 +34,20 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		{
 			if (ImGui::Button(del_label.c_str()))
 			{
-				return false;
+				ret = false;
 			}
 		}
 
 		byte* data = em.GetComponent(m_CurrentID, componentId, type->size);
 
 		// Custom component interface
-		if (type->hash == FNV1A_HASH("Mesh")) {	DrawMeshComponent(data); } else
-		if (type->hash == FNV1A_HASH("Transform3D")) { DrawTransform3dComponent(data); } else
+		if (type->hash == (size_t)TypeHash::Mesh) {	DrawMeshComponent(data); } else
+		if (type->hash == (size_t)TypeHash::Transform3D) { DrawTransform3dComponent(data); } else
+		if (type->hash == (size_t)TypeHash::AudioSource) { DrawAudioSourceComponent(data); } else
+		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
+			
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -46,8 +57,10 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 				DrawField(data, cl->fields[i]);
 			}
 		}
+		ImGui::TreePop();
 	}
-	return true;
+	
+	return ret;
 }
 
 void InspectorPanel::DrawField(unsigned char* data, const Field& field)
@@ -205,43 +218,9 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 		ImGui::EndDragDropTarget();
 	}
 	ImGui::PushID("materialId");
-
 	ImGui::Text("Material at: ");
 	ImGui::SameLine();
 	ImGui::Text(mat->getMaterialPath());
-	ImGui::Image((ImTextureID)(intptr_t)mat->getTextureId(), { 64, 64 });
-	ImGui::Text("Texture size: ");
-	ImGui::SameLine();
-	ImGui::Text("%i", mat->getTextureSize().x);
-	ImGui::SameLine();
-	ImGui::Text("x %i", mat->getTextureSize().y);
-	const char* types[] = { "Color", "Textured" };
-	const char* currentItem = mat->getType() == Wiwa::Material::MaterialType::color ? types[0] : types[1];
-	ImGui::Text("Texture path: %s", mat->getTexturePath());
-	ImGui::Text("Type");
-
-	ImGui::SameLine();
-	ImGui::Text(currentItem);
-	static glm::vec4 color = { mat->getColor().r, mat->getColor().g,mat->getColor().b , mat->getColor().a };
-	ImGui::ColorEdit4("Color", glm::value_ptr(color));
-
-	Wiwa::Material::MaterialSettings& settings = mat->getSettings();
-	ImGui::ColorEdit3("Diffuse", glm::value_ptr(settings.diffuse));
-	ImGui::ColorEdit3("Specular", glm::value_ptr(settings.specular));
-	ImGui::DragFloat("Shininess", &settings.shininess, 0.1f, 0, 1);
-	ImGui::Text(mat->getTexturePath());
-	static bool checker = false;
-	if (ImGui::Checkbox("Set Checker", &checker))
-	{
-		mat->setTexture("checker");
-		if (!checker)
-		{
-			mat->setTexture(mat->getTexturePath());
-		}
-	}
-
-	const char* type = mat->getType() == 0 ? "Type: Color" : "Type: Texture";
-	ImGui::Text(type);
 	ImGui::PopID();
 }
 
@@ -250,11 +229,55 @@ void InspectorPanel::DrawTransform3dComponent(byte* data)
 	Wiwa::Transform3D* transform = (Wiwa::Transform3D*)data;
 	DrawVec3Control("Position", &transform->localPosition, 0.0f, 100.0f);
 	DrawVec3Control("Rotation", &transform->localRotation, 0.0f, 100.0f);
-	DrawVec3Control("Scale", &transform->localScale, 0.0f, 100.0f);
+	DrawVec3Control("Scale", &transform->localScale, 1.0f, 100.0f);
+}
+
+void InspectorPanel::DrawAudioSourceComponent(byte* data)
+{
+	Wiwa::AudioSource* asrc = (Wiwa::AudioSource*)data;
+
+	//ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
+	ImGui::InputText("Event", asrc->eventName, sizeof(asrc->eventName));
+}
+
+void InspectorPanel::DrawPointLightComponent(byte* data)
+{
+	Wiwa::PointLight* lsrc = (Wiwa::PointLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.05f, 0.5f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.05f, 0.5f, "%.2f");
+	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
+	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
+	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
+
+}
+
+void InspectorPanel::DrawDirectionalLightComponent(byte* data)
+{
+	Wiwa::DirectionalLight* lsrc = (Wiwa::DirectionalLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+}
+//TODO: Implement when ready
+void InspectorPanel::DrawSpotLightComponent(byte* data)
+{
+	Wiwa::SpotLight* lsrc = (Wiwa::SpotLight*)data;
+
+	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
+	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::InputFloat("Diffuse Intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
+	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
+	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
+	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
+	DrawVec3Control("Direction", &lsrc->Direction);
+	ImGui::InputFloat("Cutoff", &lsrc->Cutoff);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)
-	: Panel("Inspector", instance)
+	: Panel("Inspector", ICON_FK_INFO_CIRCLE, instance)
 {
 }
 
@@ -266,7 +289,7 @@ void InspectorPanel::Draw()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
-	ImGui::Begin(name, &active);
+	ImGui::Begin(iconName.c_str(), &active);
 	if (m_EntitySet && m_CurrentID >= 0)
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
@@ -283,58 +306,117 @@ void InspectorPanel::Draw()
 		if (strcmp(edit.c_str(), entName) != 0)
 			em.SetEntityName(m_CurrentID, edit.c_str());
 		
-		std::map<ComponentId, size_t>& map = em.GetEntityComponents(m_CurrentID);
-		bool removed = false;
-		size_t idToRemove;
+		if(ImGui::CollapsingHeader("Components"))
+			DrawComponents(em);
 
-		for (std::map<ComponentId, size_t>::iterator comp = map.begin(); comp != map.end(); comp++)
-		{
-			if (!DrawComponent(comp->first))
-			{
-				idToRemove = comp->first;
-				removed = true;
-			}
-		}
-
-		if (removed) { 
-			em.RemoveComponentById(m_CurrentID, idToRemove);
-		}
-
-		if (ButtonCenteredOnLine("Add component"))
-			ImGui::OpenPopup("Components");
-
-		size_t c_count = Wiwa::Application::Get().GetComponentTypeCount();
-
-		if (ImGui::BeginPopup("Components"))
-		{
-			static ImGuiTextFilter filter;
-			ImGui::Text("Search:");
-			filter.Draw("##searchbar", 340.f);
-			ImGui::BeginChild("listbox child", ImVec2(300, 200));
-			for (size_t i = 0; i < c_count; i++) {
-				const Type* type = Wiwa::Application::Get().GetComponentType(i);
-				const char* paintkit = type->name.c_str();
-				if (filter.PassFilter(paintkit))
-				{
-					std::string label = paintkit;
-
-					label += "##" + std::to_string(i);
-					if (ImGui::MenuItem(label.c_str()))
-					{
-						em.AddComponent(m_CurrentID, type);
-						ImGui::CloseCurrentPopup();
-					}
-				}
-			}
-			ImGui::EndChild();
-			ImGui::EndPopup();
-		}
+		if (ImGui::CollapsingHeader("Systems"))
+			DrawSystems(em);
 	}
 	else
 	{
 		TextCentered("Select an entity to inspect");
 	}
 	ImGui::End();
+}
+
+void InspectorPanel::DrawComponents(Wiwa::EntityManager& em)
+{
+	std::map<ComponentId, size_t>& map = em.GetEntityComponents(m_CurrentID);
+	bool removed = false;
+	size_t idToRemove;
+
+	for (std::map<ComponentId, size_t>::iterator comp = map.begin(); comp != map.end(); comp++)
+	{
+		if (!DrawComponent(comp->first))
+		{
+			idToRemove = comp->first;
+			removed = true;
+		}
+	}
+
+	if (removed) {
+		em.RemoveComponentById(m_CurrentID, idToRemove);
+	}
+	
+	ImGui::Separator();
+
+	if (ButtonCenteredOnLine("Add component"))
+		ImGui::OpenPopup("Components");
+
+	size_t c_count = Wiwa::Application::Get().GetComponentTypeCount();
+
+	if (ImGui::BeginPopup("Components"))
+	{
+		static ImGuiTextFilter filter;
+		ImGui::Text("Search:");
+		filter.Draw("##searchbar", 340.f);
+		ImGui::BeginChild("listbox child", ImVec2(300, 200));
+		for (size_t i = 0; i < c_count; i++) {
+			const Type* type = Wiwa::Application::Get().GetComponentType(i);
+			const char* paintkit = type->name.c_str();
+			if (filter.PassFilter(paintkit))
+			{
+				std::string label = paintkit;
+
+				label += "##" + std::to_string(i);
+				if (ImGui::MenuItem(label.c_str()))
+				{
+					em.AddComponent(m_CurrentID, type);
+					ImGui::CloseCurrentPopup();
+				}
+			}
+		}
+		ImGui::EndChild();
+		ImGui::EndPopup();
+	}
+}
+
+void InspectorPanel::DrawSystems(Wiwa::EntityManager& em)
+{
+	std::vector<SystemHash>& systems = em.GetEntitySystemHashes(m_CurrentID);
+
+	for (size_t i = 0; i < systems.size(); i++)
+	{
+		ImGui::PushID(i);
+		const Type* system = Wiwa::Application::Get().GetSystemTypeH(systems[i]);
+		ImGui::Text(system->name.c_str());
+		ImGui::SameLine();
+		if (ImGui::Button("Delete"))
+		{
+			em.RemoveSystem(m_CurrentID, system->hash);
+		}
+		ImGui::PopID();
+	}
+
+	if (ButtonCenteredOnLine("Add System"))
+		ImGui::OpenPopup("System");
+
+	size_t c_count = Wiwa::Application::Get().GetSystemTypeCount();
+
+	if (ImGui::BeginPopup("System"))
+	{
+		static ImGuiTextFilter filter;
+		ImGui::Text("Search:");
+		filter.Draw("##searchbar", 340.f);
+		ImGui::BeginChild("listbox child", ImVec2(300, 200));
+		for (size_t i = 0; i < c_count; i++) {
+			const Type* type = Wiwa::Application::Get().GetSystemType(i);
+			const char* paintkit = type->name.c_str();
+			if (filter.PassFilter(paintkit))
+			{
+				std::string label = paintkit;
+
+				label += "##" + std::to_string(i);
+				if (ImGui::MenuItem(label.c_str()))
+				{
+					em.ApplySystem(m_CurrentID, type);
+					ImGui::CloseCurrentPopup();
+				}
+			}
+		}
+		ImGui::EndChild();
+		ImGui::EndPopup();
+	}
 }
 
 void InspectorPanel::Update()

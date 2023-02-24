@@ -68,6 +68,19 @@ namespace Wiwa {
 		UpdateFrustrum();
 	}
 
+	void Camera::setRotation(const glm::vec3 rot)
+	{
+		m_CameraRot = rot;
+
+		glm::vec3 direction;
+		direction.x = cos(glm::radians(rot.x)) * cos(glm::radians(rot.y));
+		direction.y = sin(glm::radians(rot.y));
+		direction.z = sin(glm::radians(rot.x)) * cos(glm::radians(rot.y));
+
+		glm::vec3 front = glm::normalize(direction);
+		setFront({ front.x, front.y, front.z });
+	}
+
 	void Camera::setPlanes(const float nearPlane, const float farPlane)
 	{
 		m_NearPlaneDist = nearPlane;
@@ -106,41 +119,25 @@ namespace Wiwa {
 		UpdateFrustrum();
 	}
 
-	void Camera::setPosition(const Vector3f position)
+	void Camera::setPosition(const glm::vec3 position)
 	{
-		m_CameraPos = glm::vec3(position.x, position.y, position.z);
+		m_CameraPos = position;
 
 		updateView();
 	}
 
-	void Camera::setFront(const Vector3f front)
+	void Camera::setFront(const glm::vec3 front)
 	{
-		m_CameraFront = glm::vec3(front.x, front.y, front.z);
+		m_CameraFront = front;
 
 		updateView();
 	}
 
-
-
-	void Camera::lookat(const Vector3f position)
+	void Camera::lookat(const glm::vec3 position)
 	{
-		glm::vec3 pos = { position.x, position.y, position.z };
+		m_CameraFront = position - m_CameraPos;
 
-		m_CameraFront = pos - m_CameraPos;
-
-		m_View = glm::lookAt(m_CameraPos, pos, m_CameraUp);
-		UpdateFrustrum();
-	}
-
-	void Camera::lookat(const Vector3f cameraPos, const Vector3f position, const Vector3f camUp)
-	{
-		glm::vec3 pos = { position.x, position.y, position.z };
-
-		m_CameraPos = { cameraPos.x, cameraPos.y, cameraPos.z };
-		m_CameraUp = { camUp.x, camUp.y, camUp.z };
-		m_CameraFront = pos - m_CameraPos;
-
-		m_View = glm::lookAt(m_CameraPos, pos, m_CameraUp);
+		m_View = glm::lookAt(m_CameraPos, position, m_CameraUp);
 		UpdateFrustrum();
 	}
 
@@ -159,12 +156,11 @@ namespace Wiwa {
 		Size2i res = Application::Get().GetTargetResolution();
 		frameBuffer = new FrameBuffer();
 		frameBuffer->Init(res.w, res.h);
-		
 	}
 
 	void Camera::UpdateFrustrum()
 	{
-		frustrum = Frustum(m_Projection * m_View);
+		frustrum = Math::Frustum(m_Projection * m_View);
 	}
 
 	void Camera::SetOrthographic(const int width, const int height, const float nearPlaneDistance, const float farPlaneDistance)
@@ -176,13 +172,16 @@ namespace Wiwa {
 		m_AspectRatio = width / (float)height;
 		m_NearPlaneDist = nearPlaneDistance;
 		m_FarPlaneDist = farPlaneDistance;
+
+		frameBuffer = new FrameBuffer();
+		frameBuffer->Init(width, height);
 	}
 	void Camera::DrawFrustrum()
 	{
 		glLineWidth(5.0f);
 
 		// Generate frustum data
-		GetCornerPoints(m_FrustumPoints);
+		
 
 		glBindVertexArray(vao);
 

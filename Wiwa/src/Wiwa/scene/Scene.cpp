@@ -4,6 +4,7 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa\utilities\render\LightManager.h>
 
 namespace Wiwa {
 	Scene::Scene()
@@ -11,16 +12,32 @@ namespace Wiwa {
 		mMaxTimeEntering = 0;
 		mMaxTimeLeaving = 0;
 		m_CameraManager = new CameraManager();
+		m_LightManager = new LightManager();
 	}
 
 	Scene::~Scene()
 	{
+		delete m_CameraManager;
+		delete m_LightManager;
+	}
+
+	void Scene::Start()
+	{
 		
+	}
+
+	void Scene::Awake()
+	{
+		m_EntityManager.SystemsAwake();
+	}
+
+	void Scene::Init()
+	{
+		m_EntityManager.SystemsInit();
 	}
 
 	void Scene::Update()
 	{
-		m_CameraManager->Update();
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
@@ -30,7 +47,7 @@ namespace Wiwa {
 			RenderEnter();
 			break;
 		case Scene::SCENE_LOOP:
-			m_EntityManager.Update();
+			m_EntityManager.SystemsUpdate();
 
 			ProcessInput();
 			UpdateLoop();
@@ -47,14 +64,15 @@ namespace Wiwa {
 		}
 	}
 
-	void Scene::Start()
+	void Scene::ModuleUpdate()
 	{
-		m_EntityManager.RegisterSystem<MeshRenderer>();
-	}
+		m_CameraManager->Update();
 
-	void Scene::Init()
-	{
-		m_EntityManager.RegisterSystem<MeshRenderer>();
+		m_EntityManager.Update();
+
+		if (!SceneManager::IsPlaying()) {
+			m_EntityManager.UpdateWhitelist();
+		}
 	}
 
 	void Scene::Load()
@@ -64,9 +82,11 @@ namespace Wiwa {
 		m_CurrentState = SCENE_ENTERING;
 	}
 
-	void Scene::Unload()
+	void Scene::Unload(bool unload_resources)
 	{
-		Wiwa::Resources::UnloadSceneResources();
+		if (unload_resources) {
+			Wiwa::Resources::UnloadSceneResources();
+		}
 	}
 
 	void Scene::ChangeScene(size_t scene)

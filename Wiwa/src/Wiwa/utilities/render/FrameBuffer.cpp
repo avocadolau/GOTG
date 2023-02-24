@@ -19,16 +19,11 @@ namespace Wiwa {
 		}
 	}
 
-	void FrameBuffer::Init(int width, int height)
+	void FrameBuffer::Init(int width, int height, bool depth/*depth=true*/)
 	{
 		m_Init = true;
 
-		m_Light = {
-			glm::vec3{0.0f, 0.0f, 0.0f},	//Direction
-			glm::vec3{1.0f, 1.0f, 1.0f},		//Ambient
-			glm::vec3{1.0f, 1.0f, 1.0f},		//Diffuse
-			glm::vec3{1.0f, 1.0f, 1.0f}		//Specular
-		};
+		
 
 		m_Width = width;
 		m_Height = height;
@@ -41,19 +36,23 @@ namespace Wiwa {
 		glGenTextures(1, &m_ColorBufferTexture);
 		glBindTexture(GL_TEXTURE_2D, m_ColorBufferTexture);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBufferTexture, 0);
-		// Render buffer object for depth
-		glGenRenderbuffers(1, &m_RBO);
-		glBindRenderbuffer(GL_RENDERBUFFER, m_RBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RBO);
+		if (depth) {
+			// Render buffer object for depth
+			glGenRenderbuffers(1, &m_RBO);
+			glBindRenderbuffer(GL_RENDERBUFFER, m_RBO);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+			glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RBO);
+		}
+
+		// Check framebuffer status
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		{
 			WI_CORE_ASSERT_MSG("Framebuffer not completed")
@@ -67,17 +66,23 @@ namespace Wiwa {
 	void FrameBuffer::Bind(bool clear)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-		if(clear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glEnable(GL_FRAMEBUFFER_SRGB);
+		if (clear) {
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
 	}
 
 	void FrameBuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glDisable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void FrameBuffer::Clear()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

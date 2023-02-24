@@ -11,22 +11,26 @@ namespace Wiwa {
 	{
 	public:
 		SystemScriptClass() = default;
-		~SystemScriptClass() = default;
+		~SystemScriptClass();
 
-		SystemScriptClass(const std::string& classNamespace, const std::string& className);
+		SystemScriptClass(MonoAssembly* assembly,const std::string& classNamespace, const std::string& className);
 
-		void OnAwake(EntityId eid) override;
+		void OnAwake() override;
 
-		void OnInit(EntityId eid) override;
+		void OnInit() override;
 
-		void OnUpdate(EntityId eid) override;
+		void OnUpdate() override;
 
+		void OnEntitySet() override;
 	private:
 		ScriptClass scriptClass;
+
 		MonoObject* m_SystemObject;
 
 		MonoMethod* m_AwakeMethod;
 		MonoMethod* m_InitMethod;
 		MonoMethod* m_UpdateMethod;
+
+		MonoClassField* m_EntityIdField;
 	};
 }

@@ -37,17 +37,11 @@ namespace Wiwa
 		float gpuVRAMReserve;
 	};
 
-	enum class ProjectTarget
-	{
-		None = 0,
-		Windows
-	};
-
 	class WI_API Application
 	{
 	public:
 		Application(int argc, char** argv);
-		virtual ~Application();
+		~Application();
 
 		void Run();
 
@@ -73,15 +67,6 @@ namespace Wiwa
 		inline SysInfo &GetSystemInfo() { return m_SysInfo; }
 		inline const char *GetVersion() { return m_EngineVersion; }
 
-		inline const char* GetProjectName() { return m_ProjectName.c_str(); }
-		inline void SetProjectName(const char* name) { m_ProjectName = name; }
-		inline const char* GetProjectCompany() { return m_ProjectCompany.c_str(); }
-		inline void SetProjectCompany(const char* name) { m_ProjectCompany = name; }
-		inline const char* GetProjectVersion() { return m_ProjectVersion.c_str(); }
-		inline void SetProjectVersion(const char* name) { m_ProjectVersion = name; }
-
-		inline ProjectTarget& GetProjectTarget() { return m_ProjectTarget; }
-
 		inline void SetTargetResolution(int width, int height) { m_TargetResolution = {width, height}; }
 		inline Size2i &GetTargetResolution() { return m_TargetResolution; }
 
@@ -98,10 +83,15 @@ namespace Wiwa
 		const Type* GetComponentTypeH(size_t hash) const;
 		const Type* GetComponentType(size_t index) const;
 		void RegisterComponentType(const Type* component);
+		void DeleteComponentType(const Type* component);
 		// System reflection
+		size_t GetSystemTypeCount() const { return m_SystemTypes.size(); }
 		const Type* GetSystemTypeH(size_t hash) const;
 		const Type* GetSystemType(size_t index) const;
+		bool HasSystemH(size_t hash) const;
+
 		void RegisterSystemType(const Type* system);
+		void DeleteSystemType(const Type* system);
 
 		inline void SetRenderColor(Vector4f color) { m_RenderColor = color; }
 		inline Vector4f GetRenderColor() { return m_RenderColor; }
@@ -109,6 +99,10 @@ namespace Wiwa
 		void OpenDir(const char *url);
 		void Quit();
 
+		void SubmitToMainThread(const std::function<void()> func);
+
+	private:
+		void ExecuteMainThreadQueue();
 	private:
 		int m_ArgC;
 		std::vector<std::string> m_Argv;
@@ -116,18 +110,13 @@ namespace Wiwa
 		std::vector<const Type*> m_ComponentTypes;
 		std::vector<const Type*> m_SystemTypes;
 
-		Size2i m_TargetResolution;		
+		Size2i m_TargetResolution;
 
 		bool OnWindowClose(WindowCloseEvent &e);
 		bool OnLoad(OnLoadEvent &e);
 		bool OnSave(OnSaveEvent &e);
 
-		const char *m_EngineVersion = "0.1";
-		std::string m_ProjectName = "New project";
-		std::string m_ProjectCompany = "Default Company";
-		std::string m_ProjectVersion = "0.1";
-		
-		ProjectTarget m_ProjectTarget = ProjectTarget::Windows;
+		const char *m_EngineVersion = "0.3";
 
 		Renderer2D *m_Renderer2D;
 		Renderer3D *m_Renderer3D;
@@ -140,6 +129,9 @@ namespace Wiwa
 
 		LayerStack m_LayerStack;
 		ImGuiLayer *m_ImGuiLayer;
+
+		std::vector<std::function<void()>> m_MainThreadQueue;
+		std::mutex m_MainThreadQueueMutex;
 
 	private:
 		static Application *s_Instance;

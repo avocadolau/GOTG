@@ -4,7 +4,7 @@
 #include <Wiwa/core/Core.h>
 
 // Resources
-#include <Wiwa/utilities/render/Shader.h>
+#include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Image.h>
 #include <Wiwa/utilities/render/Model.h>
 #include <Wiwa/utilities/render/Material.h>
@@ -16,6 +16,9 @@
 #include <fstream>
 #include <filesystem>
 #include <sstream>
+#include <time.h>
+
+#define RES_NOT_LOADED -1
 
 typedef size_t ResourceId;
 
@@ -68,7 +71,13 @@ namespace Wiwa {
 			WRT_MATERIAL,
 			WRT_LAST
 		};
-
+		enum MetaResult
+		{
+			NOTFOUND,
+			DELETED,
+			UPDATED,
+			TOUPDATE
+		};
 		struct Resource {
 			// Path to resource
 			std::string filePath;
@@ -88,27 +97,78 @@ namespace Wiwa {
 		static ResourceId getResourcePosition(ResourceType rt, const char* file);
 
 		// Resource path for importing
-		static std::string _assetToLibPath(std::string path);
-		static bool _preparePath(std::string path);
-
+		inline static const char* getPathById(ResourceType type, size_t id)
+		{
+			if (id >= m_Resources[type].size())
+				return "";
+			
+			return m_Resources[type][id]->filePath.c_str();
+		}
+		
+		static bool _file_exists(const char* path);
+		
 		// Implementations
 		static void _import_image_impl(const char* origin, const char* destination);
 		static void _import_model_impl(const char* origin, const char* destination, ModelSettings* settings);
+		static bool _check_import_impl(const char* file, const char* extension);
+		
 	public:
+		static bool _preparePath(std::string path);
+		static std::string _assetToLibPath(std::string path);
+		static std::filesystem::path _import_path_impl(const std::filesystem::path& path, const char* extension);
+		template <typename TP>
+		static inline std::time_t to_time_t(TP tp)
+		{
+			using namespace std::chrono;
+			auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now()
+				+ system_clock::now());
+			return system_clock::to_time_t(sctp);
+		}
+		static inline void standarizePath(std::string& file_path)
+		{
+			size_t index = 0;
+
+			while ((index = file_path.find('\\', index)) != std::string::npos) {
+				file_path.replace(index, 1, "/");
+				index++;
+			}
+			_toLower(file_path);
+		}
+
+
 		static void _toLower(std::string& path);
 		inline static std::vector<Resource*>& GetResourcesOf(ResourceType rt) { return m_Resources[rt]; }
 		static void UnloadSceneResources();
 
+		// Returns the state of the meta file
+		// Deleted: the meta file is deleted due to the reference file not existing
+		// Updated: the meta files are up to date
+		// ToUpdate: the meta last updated doesnt equal the file reference
+		// Not found: there's no meta file for the reference
+		static MetaResult CheckMeta(const char* filename);
+		static void UpdateMeta(const char* filename);
+		template<class T> static const char* getResourcePathById(size_t id);
+
 		template<class T> static ResourceId Load(const char* file);
 		template<class T> static ResourceId LoadNative(const char* file);
 		template<class T> static T* GetResourceById(ResourceId id);
-		template<class T, class... T2> static void Import(const char* file, T2... settings);
+		template<class T> static bool CheckImport(const char* file);
+		template<class T, class... T2> static bool Import(const char* file, T2... settings);
 		template<class T, class... T2> static void CreateMeta(const char* file, T2... settings);
 		template<class T, class... T2> static void LoadMeta(const char* file, T2... settings);
 
 		inline static void SaveFile(const char* file, std::string& shaderFile)
 		{
-			std::string path = "Library/";
+			std::string path = SetLibraryPath(file);
+
+			std::ofstream outFile(path.c_str(), std::ios::out | std::ios::binary);
+			outFile.write(shaderFile.c_str(), shaderFile.size());
+			outFile.close();
+		}
+
+		inline static std::string SetLibraryPath(const char* file)
+		{
+			std::string path = "library/";
 			path += file;
 			size_t index = path.rfind('/');
 			path = path.substr(0, index);
@@ -117,13 +177,13 @@ namespace Wiwa {
 				if (std::filesystem::create_directories(path))
 					WI_CORE_ERROR("Can't create a folder at {0}", path.c_str());
 			}
-			path = "Library/";
+			path = "library/";
 			path += file;
 			path += ".wiasset";
-			std::ofstream outFile(path.c_str(), std::ios::out | std::ios::binary);
-			outFile.write(shaderFile.c_str(), shaderFile.size());
-			outFile.close();
+
+			return path;
 		}
+		static void SetAssetPath(std::string& path);
 		inline static std::string* getFileData(const char* file)
 		{
 			std::fstream shaderFile;
@@ -141,6 +201,7 @@ namespace Wiwa {
 			return new std::string(buffer.str());
 		}
 		static void Clear();
+		
 	};
 }
 

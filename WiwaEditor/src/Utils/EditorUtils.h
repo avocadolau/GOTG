@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <Wiwa/utilities/math/Vector3f.h>
 
+
 struct Field;
 
 inline void TextCentered(const char* text) {
@@ -43,11 +44,17 @@ inline void AssetContainer(const char* label)
 	ImGui::InputText("##label", (char*)label, 64, ImGuiInputTextFlags_ReadOnly);
 	ImGui::PopStyleVar();
 }
+
 void DrawVec3Control(const char* label, unsigned char* data, const Field field, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawVec3Control(const std::string& label,float* values, float resetValue = 0.0f, float columnWidth = 100.0f);
-void DrawVec3Control(const std::string& label, Wiwa::Vector3f* values, float resetValue = 0.0f, float columnWidth = 100.0f);
+void DrawVec3Control(const std::string& label, glm::vec3* values, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawVec2Control(const char* label, unsigned char* data, const Field field, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawInt2Control(const char* label, unsigned char* data, const Field field, int resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawRect2Control(const char* label, unsigned char* data, const Field field, int resetValue = 0.0f, float columnWidth = 100.0f);
+
 bool ImageExtensionComp(const std::filesystem::path file);
 bool ModelExtensionComp(const std::filesystem::path file);
+bool ShaderExtensionComp(const std::filesystem::path file);
+bool MaterialExtensionComp(const std::filesystem::path file);
+
+void CreateScriptFile(const char* filePath, const char* name);

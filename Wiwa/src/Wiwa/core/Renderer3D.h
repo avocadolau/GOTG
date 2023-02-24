@@ -18,10 +18,15 @@
 //#include "Empathy/headers/utilities/renderer/Batch.h"
 #include <Wiwa/utilities/render/FrameBuffer.h>
 #include <Wiwa/utilities/render/Camera.h>
+#include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/utilities/render/Model.h>
 #include <Wiwa/utilities/render/Material.h>
+#include <Wiwa/ecs/components/Transform3D.h>
 
 #include <Wiwa/utilities/render/Uniforms.h>
+
+#include <Wiwa/utilities/render/Skybox.h>
 
 namespace Wiwa {
 	class WI_API Renderer3D {
@@ -33,35 +38,22 @@ namespace Wiwa {
 			LIGHTING,
 			COLOR_MATERIAL,
 			TEXTURE_2D,
-			WIREFRAME
+			WIREFRAME,
+			GAMMA_CORRECTION
 		};
 	private:
-
-		// Color shader
-		ResourceId m_ColorShaderId;
-		Shader* m_ColorShader;
-		uint32_t m_CSColorUniformLocation;
-		DefaultLitUniforms m_CSUniforms;
-		DirLightUniforms m_CSDLUniforms;
-
-		ResourceId m_TextureShaderId;
-		Shader* m_TextureShader;
-		DefaultLitUniforms m_TSUniforms;
-		DirLightUniforms m_TSDLUniforms;
-		PointLightUniforms m_TSPLUniforms;
-
-		ResourceId m_NormalDisplayShaderId;
-		Shader* m_NormalDisplayShader;
-		DefaultUnlitUniforms m_NDSUniforms;
+		glm::mat4 m_PersProj{ 0.0f };
+		glm::mat4 m_View{ 0.0f };
 
 		ResourceId m_BBDisplayShaderId;
 		Shader* m_BBDisplayShader;
 		DefaultUnlitUniforms m_BBDSUniforms;
 
+		ResourceId m_NormalDisplayShaderId;
+		Shader* m_NormalDisplayShader;
+		DefaultUnlitUniforms m_NDSUniforms;
 
-		glm::mat4 m_PersProj{ 0.0f };
-		glm::mat4 m_View{ 0.0f };
-		Camera* m_ActiveCamera;
+		Skybox m_DefaultSkybox;
 
 	public:
 		Renderer3D();
@@ -70,24 +62,34 @@ namespace Wiwa {
 		bool Init();
 		void Update();
 
-		inline void SetActiveCamera(Camera* cam) 
-		{
-			m_ActiveCamera = cam; 
-		}
 		void SetOption(Options option);
 		void DisableOption(Options option);
-		void RenderMeshColor(Model* mesh, Vector3f position, Vector3f rotation, Vector3f scale, Material* material, bool clear=false, Camera* camera=NULL , bool cull = false);
-		void RenderMeshMaterial(Model* mesh, Vector3f position, Vector3f rotation, Vector3f scale, Material* material, bool clear=false, Camera* camera=NULL, bool cull = false);
+
+		void RenderMesh(Model* mesh, const Transform3D& t3d, Material* material,const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear=false, Camera* camera=NULL, bool cull = false);
+
+		
+		void RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		void RenderMesh(Model* mesh, const glm::vec3& position, const glm::vec3 & rotation, const glm::vec3 & scale, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
+
+		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		
+		void SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights);
+		
+		void RenderSkybox();
+
 		void Close();
 		void RenderFrustrums(Camera* camera = NULL);
-		inline void SetLight(const DirectionalLight& light) { m_ActiveCamera->frameBuffer->setLight(light); }
 
 		// Getters
-		inline uint32_t getColorBufferTexture() { return m_ActiveCamera->frameBuffer->getColorBufferTexture(); }
+		inline uint32_t getColorBufferTexture() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer->getColorBufferTexture(); }
 
-		inline FrameBuffer* getFrameBuffer() { return m_ActiveCamera->frameBuffer; }
+		inline FrameBuffer* getFrameBuffer() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer; }
 
-		glm::mat4 GetPersProjection() { return m_ActiveCamera->getProjection(); }
-		glm::mat4 GetView() { return m_ActiveCamera->getView(); }
+		glm::mat4 GetPersProjection() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getProjection(); }
+		glm::mat4 GetView() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView(); }
 	};
 }

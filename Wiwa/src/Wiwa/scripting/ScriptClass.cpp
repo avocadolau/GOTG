@@ -7,10 +7,10 @@
 #include <mono/metadata/object.h>
 
 namespace Wiwa {
-	ScriptClass::ScriptClass(const std::string& classNamespace, const std::string& className)
+	ScriptClass::ScriptClass(MonoAssembly* assembly, const std::string& classNamespace, const std::string& className)
 		: m_ClassNamespace(classNamespace), m_ClassName(className)
 	{
-		m_MonoClass = Utils::GetClassInAssembly(ScriptEngine::s_Data->CoreAssembly, classNamespace.c_str(), className.c_str());
+		m_MonoClass = Utils::GetClassInAssembly(assembly, classNamespace.c_str(), className.c_str());
 	}
 
 	MonoObject* ScriptClass::Instantiate()
@@ -26,5 +26,15 @@ namespace Wiwa {
 	MonoObject* ScriptClass::InvokeMethod(MonoObject* instance, MonoMethod* method, void** params)
 	{
 		return mono_runtime_invoke(method, instance, params, nullptr);
+	}
+
+	MonoClassField* ScriptClass::GetField(const std::string& name)
+	{
+		return mono_class_get_field_from_name(m_MonoClass, name.c_str());
+	}
+
+	void ScriptClass::SetFieldValue(MonoObject* instance, MonoClassField* field, void* value)
+	{
+		mono_field_set_value(instance, field, value);
 	}
 }

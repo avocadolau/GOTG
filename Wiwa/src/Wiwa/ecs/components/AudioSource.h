@@ -6,10 +6,6 @@
 
 namespace Wiwa {
 	struct WI_API AudioSource {
-		uint32_t radius;
-		uint32_t volume;
-		Vector3f direction;
-		bool posted;
 		char eventName[32];
 		bool playOnAwake;
 		bool isPlaying;
@@ -17,7 +13,5 @@ namespace Wiwa {
 }
 
 REFLECTION_BEGIN(Wiwa::AudioSource)
-	REFLECT_MEMBER(radius)
-	REFLECT_MEMBER(volume)
-	REFLECT_MEMBER(direction)
+	REFLECT_MEMBER(eventName)
 REFLECTION_END;

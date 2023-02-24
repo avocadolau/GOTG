@@ -9,24 +9,41 @@
 #include <Wiwa/core/Renderer3D.h>
 
 namespace Wiwa {
+	
 	EntityManager::EntityManager()
 	{
 		m_ComponentIdCount = 0;
-		m_SystemIdCount = 0;
 	}
 
 	EntityManager::~EntityManager()
 	{
-		size_t size = m_Systems.size();
+		// Destroy entity systems
+		size_t entitySize = m_EntitySystems.size();
 
-		for (size_t i = 0; i < size; i++) {
-			delete m_Systems[i];
+		for (size_t i = 0; i < entitySize; i++) {
+			size_t system_size = m_EntitySystems[i].size();
+
+			for (size_t j = 0; j < system_size; j++) {
+				System* s = m_EntitySystems[i][j];
+
+				s->Destroy();
+				delete s;
+			}
+		}
+
+		// Destroy all components at once
+		size_t c_size = m_Components.size();
+
+		for (size_t i = 0; i < c_size; i++) {
+			delete[] m_Components[i];
 		}
 	}
 
 	void EntityManager::RemoveEntity(EntityId eid)
 	{
 		m_EntitiesRemoved.push_back(eid);
+
+		m_EntityActive[eid] = false;
 
 		// Remove entity from alive entities vector
 		size_t ealive = m_EntitiesAlive.size();
@@ -51,6 +68,7 @@ namespace Wiwa {
 				}
 			}
 		}
+
 		// Remove entity from parent's child list
 		else {
 			std::vector<EntityId>& p_entities = m_EntityChildren[p_ent];
@@ -65,12 +83,29 @@ namespace Wiwa {
 		}
 
 		// Callback for systems
-		size_t systems = m_EntitySystems[eid].size();
+		size_t systems_size = m_EntitySystems[eid].size();
 
-		for (size_t i = 0; i < systems; i++) {
-			m_Systems[i]->RemoveEntity(eid);
+		for (size_t i = 0; i < systems_size; i++) {
+			System* system = m_EntitySystems[eid][i];
+			system->Destroy();
+
+			SystemHash s_hash = m_EntitySystemHashes[eid][i];
+
+			std::vector<System*>& system_list = m_SystemsByHash[s_hash];
+
+			size_t s_size = system_list.size();
+
+			for (size_t i = 0; i < s_size; i++) {
+				if (system_list[i] == system) {
+					system_list.erase(system_list.begin() + i);
+					break;
+				}
+			}
+
+			delete system;
 		}
 
+		m_EntitySystemHashes[eid].clear();
 		m_EntitySystems[eid].clear();
 
 		// Add to removed component indexes
@@ -101,6 +136,17 @@ namespace Wiwa {
 		t3d->rotation = t3dparent->rotation + t3d->localRotation;
 		t3d->scale = t3dparent->scale * t3d->localScale;
 
+		// Calculate local matrix
+		t3d->localMatrix = glm::mat4(1.0f);
+		t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z));
+		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->localScale.x, t3d->localScale.y, t3d->localScale.z));
+
+		// Calculate world matrix
+		t3d->worldMatrix = t3dparent->worldMatrix * t3d->localMatrix;
+
 		// Update children
 		std::vector<EntityId>& children = m_EntityChildren[eid];
 		size_t c_size = children.size();
@@ -123,12 +169,73 @@ namespace Wiwa {
 			t3d->rotation = t3d->localRotation;
 			t3d->scale = t3d->localScale;
 
+			// Calculate local matrix
+			t3d->localMatrix = glm::mat4(1.0f);
+			t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z));
+			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->localScale.x, t3d->localScale.y, t3d->localScale.z));
+
+			// Calculate world matrix
+			t3d->worldMatrix = t3d->localMatrix;
+
 			// Update children
 			std::vector<EntityId>& children = m_EntityChildren[p_ent];
 			size_t c_size = children.size();
 
 			for (size_t i = 0; i < c_size; i++) {
 				UpdateChildTransforms(children[i], t3d);
+			}
+		}
+	}
+
+	void EntityManager::SystemsAwake()
+	{
+		// Awake entity systems
+		size_t entitySize = m_EntitySystems.size();
+
+		for (size_t i = 0; i < entitySize; i++) {
+			size_t system_size = m_EntitySystems[i].size();
+
+			for (size_t j = 0; j < system_size; j++) {
+				System* s = m_EntitySystems[i][j];
+
+				s->Awake();
+			}
+		}
+	}
+
+	void EntityManager::SystemsInit()
+	{
+		// Init entity systems
+		size_t entitySize = m_EntitySystems.size();
+
+		for (size_t i = 0; i < entitySize; i++) {
+			size_t system_size = m_EntitySystems[i].size();
+
+			for (size_t j = 0; j < system_size; j++) {
+				System* s = m_EntitySystems[i][j];
+
+				s->Init();
+			}
+		}
+	}
+
+	void EntityManager::SystemsUpdate()
+	{
+		// Update entity systems
+		size_t entitySize = m_EntitySystems.size();
+
+		for (size_t i = 0; i < entitySize; i++) {
+			if (IsActive(i)) {
+				size_t system_size = m_EntitySystems[i].size();
+
+				for (size_t j = 0; j < system_size; j++) {
+					System* s = m_EntitySystems[i][j];
+
+					s->Update();
+				}
 			}
 		}
 	}
@@ -146,13 +253,49 @@ namespace Wiwa {
 
 		// Update transforms
 		UpdateTransforms();
+	}
 
-		// Update systems
-		size_t sysize = m_Systems.size();
+	void EntityManager::UpdateWhitelist()
+	{
+		size_t sw_size = m_SystemWhiteList.size();
 
-		for (size_t i = 0; i < sysize; i++) {
-			m_Systems[i]->Update();
+		for (size_t i = 0; i < sw_size; i++) {
+			std::vector<System*>& system_list = m_SystemsByHash[m_SystemWhiteList[i]];
+
+			size_t s_count = system_list.size();
+
+			for (size_t j = 0; j < s_count; j++) {
+				if (IsActive(system_list[j]->GetEntity())) {
+					system_list[j]->Update();
+				}
+			}
 		}
+	}
+
+	void EntityManager::AddSystemToWhitelist(SystemHash system_hash)
+	{
+		if (IsWhitelistedSystem(system_hash)) return;
+		if (!Application::Get().HasSystemH(system_hash)) return;
+
+		m_SystemWhiteList.push_back(system_hash);
+	}
+
+	void EntityManager::AddSystemToWhitelist(const char* system_name)
+	{
+		AddSystemToWhitelist(FNV1A_HASH(system_name));
+	}
+
+	bool EntityManager::IsWhitelistedSystem(SystemHash system_hash)
+	{
+		size_t sw_size = m_SystemWhiteList.size();
+
+		for (size_t i = 0; i < sw_size; i++) {
+			if (m_SystemWhiteList[i] == system_hash) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	EntityId EntityManager::CreateEntity_impl()
@@ -165,15 +308,18 @@ namespace Wiwa {
 			eid = m_EntitiesRemoved[rsize - 1];
 
 			m_EntitiesRemoved.pop_back();
+			m_EntityActive[eid] = true;
 		}
 		else {
 			eid = m_EntityComponents.size();
 
 			m_EntityComponents.emplace_back();
+			m_EntitySystemHashes.emplace_back();
 			m_EntitySystems.emplace_back();
 			m_EntityNames.emplace_back();
 			m_EntityParent.emplace_back();
 			m_EntityChildren.emplace_back();
+			m_EntityActive.emplace_back(true);
 		}
 
 		m_EntitiesAlive.push_back(eid);
@@ -263,12 +409,13 @@ namespace Wiwa {
 	void EntityManager::ReserveEntities(size_t amount)
 	{
 		m_EntityComponents.reserve(amount);
-		m_EntitySystems.reserve(amount);
+		m_EntitySystemHashes.reserve(amount);
 		m_EntityParent.reserve(amount);
 		m_EntityChildren.reserve(amount);
 		m_EntitiesAlive.reserve(amount);
 		m_EntitiesRemoved.reserve(amount);
 		m_ParentEntitiesAlive.reserve(amount);
+		m_EntityActive.reserve(amount);
 	}
 
 	void EntityManager::ReserveComponent(ComponentHash hash, size_t amount)
@@ -306,13 +453,15 @@ namespace Wiwa {
 	}
 
 	byte* EntityManager::AddComponent(EntityId entityId, ComponentHash hash, byte* value) {
-		const Type* ctype = Application::Get().getCoreTypeH(hash);
+		const Type* ctype = Application::Get().GetComponentTypeH(hash);
 
 		return AddComponent(entityId, ctype, value);
 	}
 
 	byte* EntityManager::AddComponent(EntityId entity, const Type* type, byte* value)
 	{
+		if (type == NULL) return NULL;
+
 		// Get component ID
 		ComponentId cid = GetComponentId(type);
 
@@ -411,6 +560,8 @@ namespace Wiwa {
 					m_ComponentsSize[cid]++;
 				}
 			}
+
+			OnComponentAdded(entity, component, type);
 		}
 
 		return component;
@@ -431,6 +582,8 @@ namespace Wiwa {
 
 				c_map.erase(c_it);
 
+				OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
+
 				break;
 			}
 		}
@@ -443,6 +596,10 @@ namespace Wiwa {
 
 		if (c_it != c_map.end()) {
 			m_ComponentsRemoved[c_it->first].push_back(c_it->second);
+
+			const Type* c_type = m_ComponentTypes[c_it->first];
+
+			OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
 
 			c_map.erase(c_it);
 		}
@@ -524,45 +681,103 @@ namespace Wiwa {
 
 		return hasComponents;
 	}
-	bool EntityManager::HasSystem(EntityId eid, SystemId sid)
+
+	bool EntityManager::HasSystem(EntityId eid, SystemHash system_hash)
 	{
-		size_t size = m_EntitySystems[eid].size();
+		size_t size = m_EntitySystemHashes[eid].size();
 
 		for (size_t i = 0; i < size; i++) {
-			if (m_EntitySystems[eid][i] == sid)
+			if (m_EntitySystemHashes[eid][i] == system_hash)
 				return true;
 		}
 
 		return false;
 	}
 
-	SystemId EntityManager::GetSystemId(SystemHash system_hash)
+	size_t EntityManager::getSystemIndex(EntityId entityId, SystemHash system_hash)
 	{
-		SystemId system_id = -1;
-		std::unordered_map<size_t, SystemId>::iterator sid = m_SystemIds.find(system_hash);
+		size_t index = WI_INVALID_INDEX;
 
-		if (sid == m_SystemIds.end()) {
-			system_id = m_SystemIdCount++;
+		size_t size = m_EntitySystemHashes[entityId].size();
 
-			m_SystemIds[system_hash] = system_id;
+		for (size_t i = 0; i < size; i++) {
+			if (m_EntitySystemHashes[entityId][i] == system_hash)
+			{
+				index = i;
+				break;
+			}
 		}
-		else {
-			system_id = sid->second;
-		}
 
-		return system_id;
+		return index;
 	}
 
-	SystemId EntityManager::GetSystemId(const Type* type)
+	void EntityManager::OnComponentAdded(EntityId entityId, byte* data, const Type* type)
 	{
-		return GetSystemId(type->hash);
+		std::vector<System*>& systems = m_EntitySystems[entityId];
+		size_t s_size = systems.size();
+
+		for (size_t i = 0; i < s_size; i++) {
+			systems[i]->OnComponentAdded(data, type);
+		}
+	}
+
+	void EntityManager::OnComponentRemoved(EntityId entityId, byte* data, const Type* type)
+	{
+		std::vector<System*>& systems = m_EntitySystems[entityId];
+		size_t s_size = systems.size();
+
+		for (size_t i = 0; i < s_size; i++) {
+			systems[i]->OnComponentRemoved(data, type);
+		}
 	}
 
 	void EntityManager::ApplySystem(EntityId eid, SystemHash system_hash)
 	{
-		SystemId sid = GetSystemId(system_hash);
+		if (HasSystem(eid, system_hash)) return;
 
-		m_Systems[sid]->AddEntity(eid);
-		m_EntitySystems[eid].push_back(sid);
+		const Type* stype = Application::Get().GetSystemTypeH(system_hash);
+
+		if (stype) {
+			System* system = (System*)stype->New();
+			system->SetEntity(eid);
+			system->OnSystemAdded();
+
+			m_EntitySystems[eid].push_back(system);
+			m_EntitySystemHashes[eid].push_back(system_hash);
+			m_SystemsByHash[stype->hash].push_back(system);
+		}
+		else {
+			WI_CORE_ERROR("System hash not found [{}]", system_hash);
+		}
+	}
+
+	void EntityManager::ApplySystem(EntityId eid, const Type* system_type)
+	{
+		ApplySystem(eid, system_type->hash);
+	}
+
+	void EntityManager::RemoveSystem(EntityId eid, SystemHash system_hash)
+	{
+		size_t sindex = getSystemIndex(eid, system_hash);
+
+		if (sindex == WI_INVALID_INDEX) return;
+
+		System* system = m_EntitySystems[eid][sindex];
+
+		m_EntitySystems[eid].erase(m_EntitySystems[eid].begin() + sindex);
+		m_EntitySystemHashes[eid].erase(m_EntitySystemHashes[eid].begin() + sindex);
+
+		std::vector<System*>& sys = m_SystemsByHash[system_hash];
+		size_t size = sys.size();
+
+		for (size_t i = 0; i < size; i++){
+			if (sys[i] == system) {
+				sys.erase(sys.begin() + i);
+				break;
+			}
+		}
+
+		system->OnSystemRemoved();
+		delete system;
 	}
 }

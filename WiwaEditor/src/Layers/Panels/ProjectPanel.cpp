@@ -3,8 +3,10 @@
 #include <imgui.h>
 
 #include <Wiwa/core/Application.h>
+#include <Wiwa/core/ProjectManager.h>
 
-ProjectPanel::ProjectPanel(EditorLayer* instance) : Panel("Project", instance)
+ProjectPanel::ProjectPanel(EditorLayer* instance) 
+	: Panel("Project", ICON_FK_DATABASE, instance)
 {
 }
 
@@ -14,32 +16,32 @@ ProjectPanel::~ProjectPanel()
 
 void ProjectPanel::Draw()
 {
-	ImGui::Begin(name, &active, ImGuiWindowFlags_NoDocking);
-	const char* buff = Wiwa::Application::Get().GetProjectName();
+	ImGui::Begin(iconName.c_str(), &active, ImGuiWindowFlags_NoDocking);
+	const char* buff = Wiwa::ProjectManager::GetProjectName();
 	std::string edit = buff;
 
 	ImGui::InputText("Project Name", (char*)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::Application::Get().SetProjectName(edit.c_str());
+		Wiwa::ProjectManager::SetProjectName(edit.c_str());
 
-	buff = Wiwa::Application::Get().GetProjectVersion();
+	buff = Wiwa::ProjectManager::GetProjectVersion();
 	edit = buff;
 
 	ImGui::InputText("Project Version", (char*)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::Application::Get().SetProjectVersion(edit.c_str());
+		Wiwa::ProjectManager::SetProjectVersion(edit.c_str());
 
-	buff = Wiwa::Application::Get().GetProjectCompany();
+	buff = Wiwa::ProjectManager::GetProjectCompany();
 	edit = buff;
 
 	ImGui::InputText("Company Name", (char*)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::Application::Get().SetProjectCompany(edit.c_str());
+		Wiwa::ProjectManager::SetProjectCompany(edit.c_str());
 
 	ImGui::Separator();
 	const char* types[] = { "Windows", "We don't support more platforms you fool" };
 	static const char* currentItem =
-		Wiwa::Application::Get().GetProjectTarget() == Wiwa::ProjectTarget::Windows ? types[0] : types[1];
+		Wiwa::ProjectManager::GetProjectTarget() == Wiwa::ProjectManager::Target::Windows ? types[0] : types[1];
 	if (ImGui::BeginCombo("Target", currentItem))
 	{
 		for (int i = 0; i < 2; i++)

@@ -13,7 +13,6 @@
 typedef size_t EntityId;
 typedef size_t ComponentId;
 typedef size_t ComponentHash;
-typedef size_t SystemId;
 typedef size_t SystemHash;
 
 typedef unsigned char byte;
@@ -34,8 +33,10 @@ namespace Wiwa {
 		// Entity management
 		std::vector<std::string> m_EntityNames;
 		std::vector<std::map<ComponentId, size_t>> m_EntityComponents;
-		std::vector<std::vector<SystemId>> m_EntitySystems;
+		std::vector<std::vector<SystemHash>> m_EntitySystemHashes;
+		std::vector<std::vector<System*>> m_EntitySystems;
 		std::vector<EntityId> m_EntityParent;
+		std::vector<bool> m_EntityActive;
 		std::vector<std::vector<EntityId>> m_EntityChildren;
 
 		std::vector<EntityId> m_EntitiesRemoved;
@@ -57,16 +58,19 @@ namespace Wiwa {
 		
 		template<class T> bool HasComponents(EntityId entityId);
 
-		// System variables
-		std::unordered_map<size_t, SystemId> m_SystemIds;
-		size_t m_SystemIdCount;
-
-		std::vector<System*> m_Systems;
-
 		void RemoveEntity(EntityId eid);
 
 		void UpdateChildTransforms(EntityId eid, Transform3D* t3dparent);
 		void UpdateTransforms();
+
+		// System management
+		std::unordered_map<SystemHash, std::vector<System*>> m_SystemsByHash;
+		std::vector<SystemHash> m_SystemWhiteList;
+
+		size_t getSystemIndex(EntityId entityId, SystemHash system_hash);
+
+		void OnComponentAdded(EntityId entityId, byte* data, const Type* type);
+		void OnComponentRemoved(EntityId entityId, byte* data, const Type* type);
 	public:
 		EntityManager();
 		~EntityManager();
@@ -74,8 +78,32 @@ namespace Wiwa {
 		// System registration functions
 		//Action<> registrations[10];
 
+		// Systems awake
+		void SystemsAwake();
+
+		// Systems init
+		void SystemsInit();
+
+		// Systems update
+		void SystemsUpdate();
+
 		// Update entity manager
 		void Update();
+
+		// Update whitelist
+		void UpdateWhitelist();
+
+		// Add system to whitelist
+		void AddSystemToWhitelist(SystemHash system_hash);
+
+		// Add system to whitelist by name
+		void AddSystemToWhitelist(const char* system_name);
+
+		// Add system to whitelist by type
+		template<class T> void AddSystemToWhitelist();
+
+		// Checks if a system is whitelisted
+		bool IsWhitelistedSystem(SystemHash system_hash);
 
 		// Create entity
 		EntityId CreateEntity();
@@ -86,6 +114,10 @@ namespace Wiwa {
 		void SetParent(EntityId entity, EntityId parent);
 
 		bool IsParent(EntityId entity) { return m_EntityParent[entity] == entity; }
+
+		void SetActive(EntityId entity, bool active) { m_EntityActive[entity] = active; }
+
+		bool IsActive(EntityId entity) { return m_EntityActive[entity]; }
 
 		// Remove entity
 		void DestroyEntity(EntityId entity);
@@ -102,6 +134,8 @@ namespace Wiwa {
 		inline std::vector<EntityId>* GetEntityChildren(EntityId eid) { return &m_EntityChildren[eid]; }
 
 		inline std::map<ComponentId, size_t>& GetEntityComponents(EntityId id) { return m_EntityComponents[id]; }
+
+		inline std::vector<SystemHash>& GetEntitySystemHashes(EntityId id) { return m_EntitySystemHashes[id]; }
 		
 		inline const Type* GetComponentType(ComponentId id) { return m_ComponentTypes[id]; }
 
@@ -159,28 +193,16 @@ namespace Wiwa {
 		template<class T> ComponentId GetComponentId();
 
 		// System functions
-		bool HasSystem(EntityId eid, SystemId sid);
-
-		template<class T> SystemId GetSystemId();
-		SystemId GetSystemId(SystemHash system_hash);
-		SystemId GetSystemId(const Type* type);
+		bool HasSystem(EntityId eid, SystemHash sid);
 
 		// Register systems
 		template<class T> void ApplySystem(EntityId eid);
 		void ApplySystem(EntityId eid, SystemHash system_hash);
+		void ApplySystem(EntityId eid, const Type* system_type);
 
-		template<class T> void RegisterSystem();
-		template<class T> void ReserveSystem(size_t amount);
+		// Remove system from entity
+		void RemoveSystem(EntityId eid, SystemHash system_hash);
 	};
-
-	// Get system ID using Reflection
-	template<class T>
-	inline SystemId EntityManager::GetSystemId()
-	{
-		const Type* stype = GetType<T>();
-		
-		return GetSystemId(stype->hash);
-	}
 
 	// Get component ID using Reflection
 	template<class T>
@@ -364,6 +386,16 @@ namespace Wiwa {
 		return HasComponent<T>(entityId);
 	}
 
+	template<class T>
+	inline void EntityManager::AddSystemToWhitelist()
+	{
+		const Type* stype = GetType<T>();
+
+		assert(stype->custom_id == 1);
+
+		AddSystemToWhitelist(stype->hash);
+	}
+
 	template<class T, class T2, class ...TArgs>
 	inline bool EntityManager::HasComponents(EntityId entityId)
 	{
@@ -375,30 +407,8 @@ namespace Wiwa {
 	{
 		const Type* stype = GetType<T>();
 
+		assert(stype->custom_id == 1);
+
 		ApplySystem(eid, stype->hash);
-	}
-
-	template<class T>
-	inline void EntityManager::RegisterSystem()
-	{
-		SystemId sid = GetSystemId<T>();
-
-		if (sid >= m_Systems.size()) {
-			m_Systems.resize(sid + 1, NULL);
-		}
-
-		if (m_Systems[sid] == NULL) {
-			m_Systems[sid] = new T();
-		}
-	}
-
-	template<class T>
-	inline void EntityManager::ReserveSystem(size_t amount)
-	{
-		SystemId sid = GetSystemId<T>();
-
-		if (sid < m_Systems.size()) {
-			((T*)m_Systems[sid])->Reserve(amount);
-		}
 	}
 }

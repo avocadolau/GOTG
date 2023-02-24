@@ -25,6 +25,7 @@ project "Wiwa"
 		"src",
 		"%{IncludeDirs.SPDLOG}",
 		"%{IncludeDirs.GLFW}",
+		"%{IncludeDirs.filewatch}",
 		"%{IncludeDirs.ImGui}",
 		"%{IncludeDirs.GLM}",
 		"%{IncludeDirs.Glew}",
@@ -35,7 +36,8 @@ project "Wiwa"
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.assimp}",
 		"%{IncludeDirs.ImGuizmo}",
-		"%{IncludeDirs.Wwise}"
+		"%{IncludeDirs.Wwise}",
+		"%{IncludeDirs.IconFontCppHeaders}"
 	}
 
 	links

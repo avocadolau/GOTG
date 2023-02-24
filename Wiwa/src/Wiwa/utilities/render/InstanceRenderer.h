@@ -13,34 +13,41 @@
 
 namespace Wiwa {
 	class WI_API InstanceRenderer {
-		private:
-			ResourceId m_InstanceShaderId;
-			Shader* m_InstanceShader;
+	private:
+		ResourceId m_InstanceShaderId;
+		Shader m_InstanceShader;
 
-			std::vector<int> m_Textures;
+		std::vector<uint32_t> m_RemovedInstances;
+		std::vector<int> m_Textures;
 
-			VertexInstanceTexture* m_InstanceVertex;
+		VertexInstanceTexture* m_InstanceVertex;
 
-			uint32_t m_VAO, m_VBO, m_EBO;
-			uint32_t m_IVBO;
+		uint32_t m_VAO, m_VBO, m_EBO;
+		uint32_t m_IVBO;
 
-			uint32_t m_InstanceCount;
-			uint32_t m_MaxInstances;
+		uint32_t m_InstanceCount;
+		uint32_t m_MaxInstances;
 
-			uint32_t m_OrthoLocation;
-			uint32_t m_ViewLocation;
-		public:
-			InstanceRenderer(uint32_t maxInstances);
-			~InstanceRenderer();
+		uint32_t m_OrthoLocation;
+		uint32_t m_ViewLocation;
+	public:
+		InstanceRenderer(uint32_t maxInstances);
+		~InstanceRenderer();
 
-			void Init(const char* shader_path);
-			void Update();
-			void Render();
+		void Init(const char* shader_path);
+		void Update();
+		void Render(glm::mat4& proj, glm::mat4& view);
 
-			uint32_t AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		uint32_t AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
 
-			void UpdateInstance(uint32_t id, const Vector2i& position, const Size2i& size, const Color4f& color, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
-			void UpdateInstance(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
-			int AddTexture(uint32_t texture);
+		void UpdateInstance(uint32_t id, const Vector2i& position, const Size2i& size, const Color4f& color, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		void UpdateInstance(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		int AddTexture(uint32_t texture);
+
+		void DisableInstance(uint32_t instance);
+		void EnableInstance(uint32_t instance);
+		void SetEnabled(uint32_t instance, bool enabled);
+
+		void RemoveInstance(uint32_t instance);
 	};
 }

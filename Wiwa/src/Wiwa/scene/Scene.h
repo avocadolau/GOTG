@@ -8,6 +8,7 @@
 #include <Wiwa/utilities/render/CameraManager.h>
 
 namespace Wiwa {
+	class LightManager;
 	class WI_API Scene {
 	public:
 		Scene();
@@ -19,13 +20,17 @@ namespace Wiwa {
 			SCENE_LEAVING
 		};
 
-		void Update();
 
 		void Start();
 
+		void Awake();
 		void Init();
+		void Update();
+
+		void ModuleUpdate();
+
 		void Load();
-		void Unload();
+		void Unload(bool unload_resources=true);
 
 		State getState() { return m_CurrentState; }
 
@@ -33,6 +38,7 @@ namespace Wiwa {
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
+		LightManager& GetLightManager() { return *m_LightManager; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -50,6 +56,7 @@ namespace Wiwa {
 
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
+		LightManager* m_LightManager;
 	private:
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;

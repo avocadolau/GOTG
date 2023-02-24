@@ -24,8 +24,8 @@ namespace Wiwa {
 		doc.AddMember("fileFormatVersion", 1);
 		doc.AddMember("file", file);
 		doc.AddMember("folderAsset", false);
-		std::time_t time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-		doc.AddMember("timeCreated", std::ctime(&time));
+		std::time_t time = to_time_t(std::filesystem::last_write_time(file));
+		doc.AddMember("timeCreated", time);
 		JSONValue modelSettignsObject = doc.AddMemberObject("modelImportSettings");
 		modelSettignsObject.AddMember("pre_translated_vertices", settings->preTranslatedVertices);
 		doc.save_file(filePath.string().c_str());
@@ -54,19 +54,19 @@ namespace Wiwa {
 	template<>
 	inline ResourceId Resources::Load<Model>(const char* file)
 	{
-		ResourceId position = getResourcePosition(WRT_MODEL, file);
+		std::filesystem::path file_path = _assetToLibPath(file);
+		file_path.replace_extension(".wimodel");
+		ResourceId position = getResourcePosition(WRT_MODEL, file_path.string().c_str());
 		size_t size = m_Resources[WRT_MODEL].size();
 
 		ResourceId resourceId;
 
 		if (position == size) {
 			Model* model = new Model(NULL);
-			std::string file_path = "library/";
-			file_path += file;
-			file_path += ".wimodel";
-			model->LoadWiMesh(file_path.c_str());
+			
+			model->LoadWiMesh(file_path.string().c_str());
 
-			PushResource(WRT_MODEL, file, model);
+			PushResource(WRT_MODEL, file_path.string().c_str(), model);
 
 			resourceId = size;
 		}
@@ -88,16 +88,29 @@ namespace Wiwa {
 		return model;
 	}
 	template<>
-	inline void Resources::Import<Model>(const char* file, ModelSettings* settings)
+	inline bool Resources::Import<Model>(const char* file, ModelSettings* settings)
 	{
-		std::filesystem::path import_file = file;
-		std::filesystem::path export_file = _assetToLibPath(file);
-		export_file.replace_extension(".wimodel");
+		if (!_file_exists(file)) return false;
 
-		std::filesystem::path export_path = export_file.parent_path();
+		std::filesystem::path import_path = file;
+		import_path = _import_path_impl(import_path, ".wimodel");
+		
 
-		if (_preparePath(export_path.string())) {
-			_import_model_impl(import_file.string().c_str(), export_file.string().c_str(), settings);
-		}
+		_import_model_impl(file, import_path.string().c_str(), settings);
+
+		WI_CORE_INFO("Model at {} imported succesfully!", import_path.string().c_str());
+
+		return true;
+	}
+	template<>
+	inline bool Resources::CheckImport<Model>(const char* file)
+	{
+		return _check_import_impl(file, ".wimodel");
+	}
+
+	template<>
+	inline const char* Resources::getResourcePathById<Model>(size_t id)
+	{
+		return getPathById(WRT_MODEL, id);
 	}
 }

@@ -24,11 +24,13 @@ namespace Wiwa {
 		Application& app = Application::Get();
 
 		// Load shader
-		m_InstanceShaderId = Resources::Load<Shader>(shader_path);
-		m_InstanceShader = Resources::GetResourceById<Shader>(m_InstanceShaderId);
+		// TODO: Use shader pipeline
+		//m_InstanceShaderId = Resources::Load<Shader>(shader_path);
+		//m_InstanceShader = new Shader();//Resources::GetResourceById<Shader>(m_InstanceShaderId);
+		m_InstanceShader.Init(shader_path);
 
-		m_InstanceShader->Bind();
-		uint32_t texs_id = glGetUniformLocation(m_InstanceShader->getID(), "u_Textures");
+		m_InstanceShader.Bind();
+		uint32_t texs_id = glGetUniformLocation(m_InstanceShader.getID(), "u_Textures");
 
 		// Set samplers id
 		int samplers[MAX_INSTANCE_TEXTURES];
@@ -102,12 +104,18 @@ namespace Wiwa {
 		glVertexAttribPointer(9, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(15 * sizeof(float)));
 		glVertexAttribDivisor(9, 1);
 
+		glEnableVertexAttribArray(10);
+		glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(17 * sizeof(float)));
+		glVertexAttribDivisor(10, 1);
+
 		m_InstanceVertex = new VertexInstanceTexture[m_MaxInstances];
 
-		m_OrthoLocation = m_InstanceShader->getUniformLocation("u_Proj");
-		m_ViewLocation = m_InstanceShader->getUniformLocation("u_View");
+		m_OrthoLocation = m_InstanceShader.getUniformLocation("u_Proj");
+		m_ViewLocation = m_InstanceShader.getUniformLocation("u_View");
 
 		m_InstanceCount = 0;
+
+		m_InstanceShader.UnBind();
 	}
 
 	void InstanceRenderer::Update()
@@ -117,11 +125,11 @@ namespace Wiwa {
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex);
 	}
 
-	void InstanceRenderer::Render()
+	void InstanceRenderer::Render(glm::mat4& proj, glm::mat4& view)
 	{
-		m_InstanceShader->Bind();
-		m_InstanceShader->setUniform(m_OrthoLocation, Application::Get().GetRenderer2D().GetOrthoProjection());
-		m_InstanceShader->setUniform(m_ViewLocation, Application::Get().GetRenderer2D().GetView());
+		m_InstanceShader.Bind();
+		m_InstanceShader.setUniform(m_OrthoLocation, proj);
+		m_InstanceShader.setUniform(m_ViewLocation, view);
 
 		GLuint texSize = static_cast<GLuint>(m_Textures.size());
 
@@ -132,26 +140,39 @@ namespace Wiwa {
 		}
 
 		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, m_InstanceCount);
+
+		m_InstanceShader.UnBind();
 	}
 
 	uint32_t InstanceRenderer::AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot)
 	{
-		if (m_InstanceCount == m_MaxInstances)
-			return -1;
+		uint32_t remove_size = m_RemovedInstances.size();
+		uint32_t instance_id = WI_INVALID_INDEX;
 
-		m_InstanceVertex[m_InstanceCount].position = Renderer2D::CalculateScreenGlPos(position, size, pivot);
-		m_InstanceVertex[m_InstanceCount].scale = { static_cast<float>(size.x), static_cast<float>(size.y) };
-		m_InstanceVertex[m_InstanceCount].color = color;
+		if (remove_size > 0) {
+			instance_id = m_RemovedInstances[remove_size - 1];
+			m_RemovedInstances.pop_back();
+		}
+		else {
+			if (m_InstanceCount == m_MaxInstances)
+				return instance_id;
 
-		Image* spr = Resources::GetResourceById<Image>(textureId);
+			instance_id = m_InstanceCount++;
+		}
 
-		int texid = AddTexture(spr->GetTextureId());
+		m_InstanceVertex[instance_id].position = Renderer2D::CalculateScreenGlPos(position, size, pivot);
+		m_InstanceVertex[instance_id].scale = { static_cast<float>(size.x), static_cast<float>(size.y) };
+		m_InstanceVertex[instance_id].color = color;
 
-		m_InstanceVertex[m_InstanceCount].textureId = static_cast<float>(texid);
+		int texid = AddTexture(textureId);
 
-		m_InstanceVertex[m_InstanceCount].textureClip = clip;
+		m_InstanceVertex[instance_id].textureId = static_cast<float>(texid);
 
-		return m_InstanceCount++;
+		m_InstanceVertex[instance_id].textureClip = clip;
+
+		m_InstanceVertex[instance_id].active = 1.0f;
+
+		return instance_id;
 	}
 
 	void InstanceRenderer::UpdateInstance(uint32_t id, const Vector2i& position, const  Size2i& size, const Color4f& color, Renderer2D::Pivot pivot)
@@ -189,5 +210,27 @@ namespace Wiwa {
 		}
 
 		return index;
+	}
+
+	void InstanceRenderer::DisableInstance(uint32_t instance)
+	{
+		m_InstanceVertex[instance].active = 0.0f;
+	}
+
+	void InstanceRenderer::EnableInstance(uint32_t instance)
+	{
+		m_InstanceVertex[instance].active = 1.0f;
+	}
+
+	void InstanceRenderer::SetEnabled(uint32_t instance, bool enabled)
+	{
+		m_InstanceVertex[instance].active = enabled ? 1.0f : 0.0f;
+	}
+
+	void InstanceRenderer::RemoveInstance(uint32_t instance)
+	{
+		m_InstanceVertex[instance].active = 0.0f;
+
+		m_RemovedInstances.push_back(instance);
 	}
 }

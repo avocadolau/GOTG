@@ -19,6 +19,8 @@ namespace Wiwa {
 		editorCamera->SetPerspective(60, ar, 0.1f, 10000.0f);
 		editorCamera->setPosition({ 0.0f, 1.0f, 5.0f });
 		editorCamera->lookat({ 0.0f, 0.0f, 0.0f });
+
+		m_ActiveCamera = -1;
 	}
 	void CameraManager::Update()
 	{
@@ -80,7 +82,7 @@ namespace Wiwa {
 		size_t ncam = -1;
 
 		if (m_ActiveCamera == ncam) {
-			m_ActiveCamera = cameraId;
+			setActiveCamera(cameraId);
 		}
 
 		return cameraId;
@@ -112,10 +114,11 @@ namespace Wiwa {
 
 		if (cameraId == m_ActiveCamera) {
 			if (m_CamerasAlive.size() > 0) {
-				m_ActiveCamera = m_CamerasAlive[0];
+				setActiveCamera(m_CamerasAlive[0]);
 			}
 			else {
 				m_ActiveCamera = -1;
+				RenderManager::SetLayerCamera(0, NULL);
 			}
 		}
 	}

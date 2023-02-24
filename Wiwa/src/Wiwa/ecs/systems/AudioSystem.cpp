@@ -13,14 +13,17 @@ namespace Wiwa {
 
 	}
 
-	void AudioSystem::OnEntityAdded(EntityId eid)
+	void AudioSystem::OnAwake()
 	{
-		Audio::RegisterGameObject(eid);
+		Audio::RegisterGameObject(m_EntityId);
+
+		if(GetComponent<AudioListener>()){
+			Audio::AddDefaultListener(m_EntityId);
+		}
 	}
 
-	void AudioSystem::OnEntityRemoved(EntityId eid)
+	void AudioSystem::OnInit()
 	{
-		Audio::UnregisterGameObject(eid);
 		AudioSource* asrc = GetComponent<AudioSource>();
 
 		if (!asrc) return;
@@ -36,24 +39,34 @@ namespace Wiwa {
 
 	void AudioSystem::OnUpdate(EntityId eid)
 	{
-		Transform3D* t3d = GetComponent<Transform3D>(eid);
-		AudioSource* asrc = GetComponent<AudioSource>(eid);
+		AudioSource* asrc = GetComponent<AudioSource>();
 
 		if (!asrc) return;
 
-		if (!Audio::SetPosition(eid, t3d->position, Vector3F::FRONT, Vector3F::UP)) {
+		if (!Audio::PostEvent(asrc->eventName, m_EntityId)) {
+			WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
+		}
+	}
+
+	void AudioSystem::OnUpdate()
+	{
+		Transform3D* t3d = GetComponent<Transform3D>();		
+
+		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Vector3F::FRONT, Vector3F::UP)) {
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());
 		}
+	}
 
-		if (!asrc->posted) {
-			if (!Audio::PostEvent("Ruido", eid)) {
-				WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
-			}
+	void AudioSystem::OnDestroy()
+	{
+		AudioSource* asrc = GetComponent<AudioSource>();
 
-			asrc->posted = true;
+		if (!asrc) return;
+		
+		if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
+			WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
 		}
 
-		// Execute audios
-		WI_INFO("Audio");
+		Audio::UnregisterGameObject(m_EntityId);
 	}
 }

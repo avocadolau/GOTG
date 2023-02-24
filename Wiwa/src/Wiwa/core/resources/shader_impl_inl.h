@@ -11,14 +11,17 @@ namespace Wiwa {
 	template<>
 	inline void Resources::CreateMeta<Shader>(const char* file)
 	{
-		std::string filePath = file;
+		std::filesystem::path filePath = file;
+		if (!std::filesystem::exists(filePath))
+			return;
 		filePath += ".meta";
-		std::ofstream metaFile(filePath.c_str(), std::ios::out | std::ios::binary);
-		metaFile.write(file, filePath.size());
-		metaFile.close();
+		JSONDocument doc;
+		std::time_t time = to_time_t(std::filesystem::last_write_time(file));
+		doc.AddMember("timeCreated", time);
+		doc.save_file(filePath.string().c_str());
 	}
 	template<>
-	inline ResourceId Resources::Load<Shader>(const char* file) {
+	inline ResourceId Resources::LoadNative<Shader>(const char* file) {
 		ResourceId position = getResourcePosition(WRT_SHADER, file);
 		size_t size = m_Resources[WRT_SHADER].size();
 
@@ -26,8 +29,8 @@ namespace Wiwa {
 
 		if (position == size) {
 			Shader* shader = new Shader();
-			shader->Init(file);
 
+			shader->Init(file);
 			PushResource(WRT_SHADER, file, shader);
 
 			resourceId = size;
@@ -39,6 +42,36 @@ namespace Wiwa {
 		return resourceId;
 	}
 	template<>
+	inline ResourceId Resources::Load<Shader>(const char* file) {
+		
+		std::filesystem::path library_file = _assetToLibPath(file);
+		std::string file_path = library_file.string();
+		standarizePath(file_path);
+
+		ResourceId position = getResourcePosition(WRT_SHADER, file_path.c_str());
+		size_t size = m_Resources[WRT_SHADER].size();
+
+		ResourceId resourceId;
+
+		if (position == size) {
+			Shader* shader = new Shader();
+			
+			shader->LoadFromWiasset(file_path.c_str());
+
+			//shader->Compile(file);
+			PushResource(WRT_SHADER, file_path.c_str(), shader);
+
+			resourceId = size;
+		}
+		else {
+			resourceId = position;
+		}
+
+		return resourceId;
+	}
+
+
+	template<>
 	inline Shader* Resources::GetResourceById<Shader>(ResourceId id) {
 		Shader* resource = NULL;
 
@@ -49,8 +82,11 @@ namespace Wiwa {
 		return resource;
 	}
 	template<>
-	inline void Resources::Import<Shader>(const char* file)
+	inline bool Resources::Import<Shader>(const char* file, Shader* shader)
 	{
+		if (!_file_exists(file)) return false;
+
+		JSONDocument document;
 		std::string filePath = file;
 		filePath += ".vs";
 		std::string* vertexShader = getFileData(filePath.c_str());
@@ -63,35 +99,45 @@ namespace Wiwa {
 		filePath += ".gs";
 		std::string* geometryShader = getFileData(filePath.c_str());
 
-		std::string shaderFile;
-
 		if (vertexShader)
-		{
-			shaderFile += "SV\n";
-			shaderFile += vertexShader->c_str();
-			shaderFile += "\nEV\n";
-		}
+			document.AddMember("vertex", vertexShader->c_str());
 		if (fragmentShader)
-		{
-			shaderFile += "SF\n";
-			shaderFile += fragmentShader->c_str();
-			shaderFile += "\nEF\n";
-		}
+			document.AddMember("fragment", fragmentShader->c_str());
 		if (geometryShader)
+			document.AddMember("geometry", geometryShader->c_str());
+		JSONValue uniformObj = document.AddMemberObject("uniforms");
+		if (!shader->getUniforms().empty())
 		{
-			shaderFile += "SG\n";
-			shaderFile += geometryShader->c_str();
-			shaderFile += "\nEG\n";
+			std::vector<UniformField>& uniforms = shader->getUniforms();
+			for(UniformField& uniform : uniforms)
+			{
+				uniformObj.AddMember(uniform.name.c_str(), (int)uniform.type);
+			}
 		}
-
 
 		delete vertexShader;
 		delete fragmentShader;
 		delete geometryShader;
 
-		if (shaderFile.empty())
-			return;
-		SaveFile(file, shaderFile);
-		CreateMeta<Shader>(file, NULL);
+		std::filesystem::path import_file = _import_path_impl(file, ".wishader");
+		std::filesystem::path assets_file = file;
+		assets_file.replace_extension(".wishader");
+
+		document.save_file(import_file.string().c_str());
+		document.save_file(assets_file.string().c_str());
+		
+		WI_CORE_INFO("Shader at {} imported succesfully!", import_file.string().c_str());
+
+		return true;
+	}
+	template<>
+	inline bool Resources::CheckImport<Shader>(const char* file)
+	{
+		return _check_import_impl(file, ".wishader");
+	}
+	template<>
+	inline const char* Resources::getResourcePathById<Shader>(size_t id)
+	{
+		return getPathById(WRT_SHADER, id);
 	}
 }

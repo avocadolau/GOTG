@@ -17,11 +17,17 @@ private:
 
 	void DrawMeshComponent(byte* data);
 	void DrawTransform3dComponent(byte* data);
+	void DrawAudioSourceComponent(byte* data);
+	void DrawPointLightComponent(byte* data);
+	void DrawDirectionalLightComponent(byte* data);
+	void DrawSpotLightComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();
 
 	void Draw() override;
+	void DrawComponents(Wiwa::EntityManager& em);
+	void DrawSystems(Wiwa::EntityManager& em);
 	void Update() override;
 
 	void OnEvent(Wiwa::Event&) override;

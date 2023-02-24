@@ -6,7 +6,7 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/core/Application.h>
 CamerasPanel::CamerasPanel(EditorLayer* instance)
-	: Panel("Cameras", instance)
+	: Panel("Cameras", ICON_FK_CAMERA, instance)
 {
 }
 
@@ -16,7 +16,7 @@ CamerasPanel::~CamerasPanel()
 
 void CamerasPanel::Draw()
 {
-	ImGui::Begin(name, &active);
+	ImGui::Begin(iconName.c_str(), &active);
 	Wiwa::CameraManager& cameraManager = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
 	Wiwa::Camera* editorCam = cameraManager.editorCamera;
 	if (ImGui::Button("Create Camera"))
@@ -83,13 +83,6 @@ void CamerasPanel::Draw()
 			ImGui::DragFloat("Near", &nearP);
 			ImGui::DragFloat("Far", &farP);
 			cam->setPosition({ pos.x, pos.y, pos.z });
-			glm::vec3 direction;
-			direction.x = cos(glm::radians(angles.x)) * cos(glm::radians(angles.y));
-			direction.y = sin(glm::radians(angles.y));
-			direction.z = sin(glm::radians(angles.x)) * cos(glm::radians(angles.y));
-
-			glm::vec3 front = glm::normalize(direction);
-			cam->setFront({ front.x, front.y, front.z });
 			
 			cam->setFOV(fov);
 			cam->setPlanes(nearP, farP);

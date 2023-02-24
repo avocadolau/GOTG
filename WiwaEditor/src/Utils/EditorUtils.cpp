@@ -313,6 +313,62 @@ bool ModelExtensionComp(const std::filesystem::path file)
 
 	return false;
 }
+bool ShaderExtensionComp(const std::filesystem::path file)
+{
+	std::string path = file.string();
+	Wiwa::Resources::_toLower(path);
+	std::filesystem::path formatedFile = path.c_str();
+
+	if (formatedFile.extension() == ".vs"
+		|| formatedFile.extension() == ".wishader")
+		return true;
+
+	return false;
+}
+
+bool MaterialExtensionComp(const std::filesystem::path file)
+{
+	std::string path = file.string();
+	Wiwa::Resources::_toLower(path);
+	std::filesystem::path formatedFile = path.c_str();
+
+	if (formatedFile.extension() == ".wimaterial")
+		return true;
+
+	return false;
+}
+
+void CreateScriptFile(const char* filePath, const char* name)
+{
+	std::string file = filePath;
+	file += ".cs";
+
+	std::ofstream scriptFile(file.c_str());
+	scriptFile << "using Wiwa;\n";
+	scriptFile << "namespace Wiwa\n";
+	scriptFile << "{\n";
+	scriptFile << "	public class ";
+	scriptFile << name;
+	scriptFile << " : Behaviour\n";
+	scriptFile << "	{\n";
+	scriptFile << "		//Called the first frame\n";
+	scriptFile << "		void Awake()\n";
+	scriptFile << "		{\n";
+	scriptFile << "		}\n";
+	scriptFile << "		//Called after Awake()\n";
+	scriptFile << "		void Init()\n";
+	scriptFile << "		{\n";
+	scriptFile << "		}\n";
+	scriptFile << "		//Called every frame\n";
+	scriptFile << "		void Update()\n";
+	scriptFile << "		{\n";
+	scriptFile << "		}\n";
+	scriptFile << "	}\n";
+	scriptFile << "}\n";
+	scriptFile.close();
+
+
+}
 
 void DrawVec3Control(const std::string& label, float* values, float resetValue, float columnWidth)
 {
@@ -373,7 +429,7 @@ void DrawVec3Control(const std::string& label, float* values, float resetValue, 
 	ImGui::PopID();
 }
 
-void DrawVec3Control(const std::string& label, Wiwa::Vector3f* values, float resetValue, float columnWidth)
+void DrawVec3Control(const std::string& label, glm::vec3* values, float resetValue, float columnWidth)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto boldFont = io.Fonts->Fonts[0];

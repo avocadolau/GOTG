@@ -7,43 +7,46 @@
 #include <mono/metadata/object.h>
 
 namespace Wiwa {
-	SystemScriptClass::SystemScriptClass(const std::string& classNamespace, const std::string& className) :
-		scriptClass(classNamespace, className)
+	SystemScriptClass::~SystemScriptClass()
+	{
+
+	}
+
+	SystemScriptClass::SystemScriptClass(MonoAssembly* assembly, const std::string& classNamespace, const std::string& className) :
+		scriptClass(assembly, classNamespace, className)
 	{
 		m_SystemObject = scriptClass.Instantiate();
 
-		m_AwakeMethod = scriptClass.GetMethod("Awake", 1);
-		m_InitMethod = scriptClass.GetMethod("Init", 1);
-		m_UpdateMethod = scriptClass.GetMethod("Update", 1);
+		m_AwakeMethod = scriptClass.GetMethod("Awake", 0);
+		m_InitMethod = scriptClass.GetMethod("Init", 0);
+		m_UpdateMethod = scriptClass.GetMethod("Update", 0);
+
+		m_EntityIdField = scriptClass.GetField("m_EntityId");
 	}
 
-	void SystemScriptClass::OnAwake(EntityId eid)
+	void SystemScriptClass::OnAwake()
 	{
 		if (!m_AwakeMethod) return;
 
-		void* params[]{
-			&eid
-		};
-		scriptClass.InvokeMethod(m_SystemObject, m_AwakeMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_AwakeMethod, NULL);
 	}
 
-	void SystemScriptClass::OnInit(EntityId eid)
+	void SystemScriptClass::OnInit()
 	{
 		if (!m_InitMethod) return;
 
-		void* params[]{
-			&eid
-		};
-		scriptClass.InvokeMethod(m_SystemObject, m_InitMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_InitMethod, NULL);
 	}
 
-	void SystemScriptClass::OnUpdate(EntityId eid)
+	void SystemScriptClass::OnUpdate()
 	{
 		if (!m_UpdateMethod) return;
 
-		void* params[]{
-			&eid
-		};
-		scriptClass.InvokeMethod(m_SystemObject, m_UpdateMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_UpdateMethod, NULL);
+	}
+
+	void SystemScriptClass::OnEntitySet()
+	{
+		scriptClass.SetFieldValue(m_SystemObject, m_EntityIdField, &m_EntityId);
 	}
 }

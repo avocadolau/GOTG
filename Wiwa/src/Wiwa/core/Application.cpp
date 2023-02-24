@@ -17,12 +17,13 @@
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
-#include "Renderer2D.h"
 #include "Renderer3D.h"
+#include "Renderer2D.h"
 
 #include <Wiwa/ecs/systems/SpriteRenderer.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/LightSystem.h>
 
 #include <Wiwa/ecs/components/Transform3D.h>
 
@@ -35,6 +36,10 @@
 #include <Wiwa/scripting/ScriptEngine.h>
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/audio/Audio.h>
+
+#include <Wiwa/render/RenderManager.h>
+
+#include <Wiwa/core/ProjectManager.h>
 
 USE_REFLECTION;
 
@@ -63,8 +68,9 @@ namespace Wiwa {
 		//m_ProjectCompany = project["company"].get<const char*>();
 		//m_ProjectTarget = (ProjectTarget)project["target"].get<int>();
 		//project.save_file("config/project.json");
-
-		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps("Wiwa Engine: " + m_ProjectName)));
+		std::string name = "Wiwa Engine: ";
+		name += ProjectManager::GetProjectName();
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name.c_str())));
 		m_Window->SetEventCallback({ &Application::OnEvent, this });
 
 		int min, major, rev;
@@ -72,25 +78,31 @@ namespace Wiwa {
 		sprintf_s(m_SysInfo.glfwVer, 32, "%i.%i.%i", min, major, rev);
 
 		SetHwInfo();
-
+		WI_CORE_WARN("=======Initializing systems=======");
 		m_Renderer2D = new Renderer2D();
 		m_Renderer2D->Init();
 		
 		m_Renderer3D = new Renderer3D();
 		m_Renderer3D->Init();
 
+		m_Renderer2D = new Renderer2D();
+		m_Renderer2D->Init();
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
 		m_RenderColor = { 0.1f, 0.1f, 0.1f, 1.0f };
+
+		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
 		bool res = Audio::Init();
 
 		if (!res) {
 			WI_CORE_ERROR("Audio engine error: [{}]", Audio::GetLastError());
 		}
-
 		ScriptEngine::Init();
+
+		WI_CORE_WARN("=======Systems initialized=======");
 	}
 
 	void Application::SetHwInfo()
@@ -122,6 +134,7 @@ namespace Wiwa {
 	Application::~Application()
 	{
 		SceneManager::CleanUp();
+		RenderManager::Destroy();
 		ScriptEngine::ShutDown();
 		Audio::Terminate();
 	}
@@ -131,22 +144,37 @@ namespace Wiwa {
 		while (m_Running)
 		{
 			OPTICK_FRAME("Application Loop");
+
+			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// Update scene manager
-			SceneManager::Update();
+			SceneManager::ModuleUpdate();
+
+			// Update audio
 			Audio::Update();
 			
+			// Execute main thread queue
+			ExecuteMainThreadQueue();
+
+			// Update inputs
+			Input::Update();
+
+			// Update renderers
 			m_Renderer2D->Update();
 			m_Renderer3D->Update();
+
+			RenderManager::Update();
 
 			// Update time
 			Time::Update();
 
+			// Update layers
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
+			// Render layers
 			m_ImGuiLayer->Begin();
 			{
 				//TODO: Optick On ImGuiRender call
@@ -155,6 +183,7 @@ namespace Wiwa {
 			}
 			m_ImGuiLayer->End();
 
+			// Update main window
 			m_Window->OnUpdate();
 		}
 	}
@@ -213,6 +242,21 @@ namespace Wiwa {
 		if (!type) m_ComponentTypes.push_back(component);
 	}
 
+	void Application::DeleteComponentType(const Type* component)
+	{
+		const Type* type = GetSystemTypeH(component->hash);
+
+		for (size_t i = 0; i < m_ComponentTypes.size(); i++)
+		{
+			if (m_ComponentTypes[i] == type)
+			{
+				m_ComponentTypes.erase(m_ComponentTypes.begin() + i);
+				i--;
+				break;
+			}
+		}
+	}
+
 	const Type* Application::GetSystemTypeH(size_t hash) const
 	{
 		size_t size = m_SystemTypes.size();
@@ -234,11 +278,33 @@ namespace Wiwa {
 		return m_SystemTypes[index];
 	}
 
+	bool Application::HasSystemH(size_t hash) const
+	{
+		const Type* stype = GetSystemTypeH(hash);
+
+		return stype != NULL;
+	}
+
 	void Application::RegisterSystemType(const Type* system)
 	{
 		const Type* type = GetSystemTypeH(system->hash);
 
 		if (!type) m_SystemTypes.push_back(system);
+	}
+
+	void Application::DeleteSystemType(const Type* system)
+	{
+		const Type* type = GetSystemTypeH(system->hash);
+
+		for (size_t i = 0; i < m_SystemTypes.size(); i++)
+		{
+			if (m_SystemTypes[i] == type)
+			{
+				m_SystemTypes.erase(m_SystemTypes.begin() + i);
+				i--;
+				break;
+			}
+		}
 	}
 
 	void Application::OpenDir(const char* path)
@@ -251,6 +317,21 @@ namespace Wiwa {
 		OnSaveEvent event;
 		OnEvent(event);
 		m_Running = false;
+	}
+
+	void Application::SubmitToMainThread(const std::function<void()> func)
+	{
+		std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
+
+		m_MainThreadQueue.emplace_back(func);
+	}
+
+	void Application::ExecuteMainThreadQueue()
+	{
+		for (auto& func : m_MainThreadQueue)
+			func();
+
+		m_MainThreadQueue.clear();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
@@ -283,14 +364,9 @@ namespace Wiwa {
 
 		config.save_file("config/application.json");
 
-		JSONDocument project;
-		project.AddMember("name", m_ProjectName.c_str());
-		project.AddMember("version", m_ProjectVersion.c_str());
-		project.AddMember("company", m_ProjectCompany.c_str());
-		
-		project.AddMember("target", (int)m_ProjectTarget);
-
-		project.save_file("config/project.json");
+		if (!Wiwa::ProjectManager::SaveProject()) {
+			WI_CORE_ERROR("Couldn't save project.");
+		}
 
 		return false;
 	}

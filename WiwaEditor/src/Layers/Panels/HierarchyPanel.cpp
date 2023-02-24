@@ -18,7 +18,7 @@
 #include "../../Utils/EditorUtils.h"
 
 HierarchyPanel::HierarchyPanel(EditorLayer* instance)
-	: Panel("Hierarchy", instance)
+	: Panel("Hierarchy", ICON_FK_LIST_UL, instance)
 {
 	
 }
@@ -31,15 +31,14 @@ void HierarchyPanel::Draw()
 {
 	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
-	ImGui::Begin(name, &active);
+	ImGui::Begin(iconName.c_str(), &active);
 	if (ImGui::BeginPopupContextWindow("Context Menu"))
 	{
 		DrawAddMenu(entityManager);
 		ImGui::EndPopup();
 	}
-
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-	if (ImGui::Button("+"))
+	if (ImGui::Button(ICON_FK_PLUS))
 	{
 		ImGui::OpenPopup("Add menu");
 	}
@@ -55,8 +54,9 @@ void HierarchyPanel::Draw()
 	static ImGuiTextFilter filter;
 	filter.Draw("##searchbar", 200.f);
 	ImGui::Separator();
-
-	ImGui::Text(Wiwa::SceneManager::getActiveScene()->getName());
+	std::string sceneName = ICON_FK_CUBES " ";
+	sceneName += Wiwa::SceneManager::getActiveScene()->getName();
+	ImGui::Text(sceneName.c_str());
 	std::vector<EntityId>* entities = entityManager.GetParentEntitiesAlive();
 	size_t count = entities->size();
 	int id = 0;
@@ -106,6 +106,22 @@ void HierarchyPanel::DrawAddMenu(Wiwa::EntityManager& entityManager)
 		float ar = res.w / (float)res.h;
 		Wiwa::SceneManager::getActiveScene()->GetCameraManager().CreatePerspectiveCamera(60, ar);
 	}
+	if (ImGui::BeginMenu("Light"))
+	{
+		if (ImGui::MenuItem("Directional light"))
+		{
+			CreateDirectionalLight();
+		}
+		if (ImGui::MenuItem("Point light"))
+		{
+			CreatePointLight();
+		}
+		if (ImGui::MenuItem("Spot light"))
+		{
+			CreateSpotLight();
+		}
+		ImGui::EndMenu();
+	}
 	if (m_CurrentID >= 0)
 	{
 		ImGui::Separator();
@@ -146,14 +162,18 @@ void HierarchyPanel::DrawAddMenu(Wiwa::EntityManager& entityManager)
 void HierarchyPanel::CreateNode(const EntityId& eid, const char* entName, ImGuiTextFilter& filter, Wiwa::EntityManager& entityManager)
 {
 	std::vector<EntityId>* childs = entityManager.GetEntityChildren(eid);
+	std::string name = ICON_FK_CUBE " ";
+	name += entName;
 	if (!childs->empty())
 	{
+		
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 		if (eid == m_CurrentID)
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
 		}
-		bool open = ImGui::TreeNodeEx(entName, flags);
+		
+		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
 		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
 		{
 			EntityChangeEvent event((uint32_t)eid);
@@ -185,7 +205,7 @@ void HierarchyPanel::CreateNode(const EntityId& eid, const char* entName, ImGuiT
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
 		}
-		bool open = ImGui::TreeNodeEx(entName, flags);
+		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
 		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
 		{
 			EntityChangeEvent event((uint32_t)eid);
