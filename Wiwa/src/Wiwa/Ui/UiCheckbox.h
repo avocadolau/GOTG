@@ -25,5 +25,8 @@ namespace Wiwa
 
 		ResourceId imgid_nonChecked;
 		ResourceId imgid2_checked;
+
+		uint32_t id_quad;
+
 	};
 }

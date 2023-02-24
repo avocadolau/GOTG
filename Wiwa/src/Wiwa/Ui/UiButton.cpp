@@ -14,7 +14,7 @@ namespace Wiwa
 		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), {position.x,position.y}, {position.width,position.height}, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), {position.x,position.y}, {position.width,position.height}, Wiwa::Renderer2D::Pivot::CENTER);
 		state = GuiControlState::NORMAL;
 		canClick = true;
 	}
@@ -66,13 +66,12 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
+			r2d_1.UpdateInstancedQuadTex(id_quad, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
 
 		case GuiControlState::NORMAL:
 		{
 			Wiwa::Vector2i newPosition = Wiwa::Vector2i{ position.x,position.y };
-			//r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), {position.x,position.y}, Wiwa::Renderer2D::Pivot::CENTER);
-			r2d_1.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d_1.UpdateInstancedQuadTex(id_quad, {position.x,position.y}, Wiwa::Renderer2D::Pivot::CENTER);
 
 		} break;
 
@@ -83,14 +82,14 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
+			r2d_1.UpdateInstancedQuadTex(id_quad, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
 		case GuiControlState::PRESSED:
 		{
 			
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
+			r2d_1.UpdateInstancedQuadTex(id_quad, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
 
 		/******/
 
@@ -99,7 +98,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), newPosition, Wiwa::Renderer2D::Pivot::CENTER);		}break;
+			r2d_1.UpdateInstancedQuadTex(id_quad, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		}break;
 		default:
 			break;
 		}

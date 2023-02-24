@@ -21,6 +21,8 @@ namespace Wiwa
 		bool Draw(Renderer2D* render);
 
 		bool canClick = true;
+
+		uint32_t id_quad;
 	};
 }
 

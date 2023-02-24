@@ -17,7 +17,7 @@ namespace Wiwa
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		//We create only once the texture
-		r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		
 		canClick = true;
 	}
@@ -84,29 +84,29 @@ namespace Wiwa
 		{
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		/******/
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		}break;
 		default:
 			break;
