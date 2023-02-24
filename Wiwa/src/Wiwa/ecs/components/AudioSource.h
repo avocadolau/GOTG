@@ -14,4 +14,6 @@ namespace Wiwa {
 
 REFLECTION_BEGIN(Wiwa::AudioSource)
 	REFLECT_MEMBER(eventName)
+	REFLECT_MEMBER(playOnAwake)
+	REFLECT_MEMBER(isPlaying)
 REFLECTION_END;
