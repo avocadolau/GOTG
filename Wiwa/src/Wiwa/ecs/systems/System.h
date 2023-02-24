@@ -5,51 +5,43 @@
 #include <Wiwa/scene/SceneManager.h>
 
 namespace Wiwa {
-	class MyRigidBody;
 	class WI_API System {
 	private:
 
 	protected:
 		EntityId m_EntityId;
-		Scene* m_Scene;
 
 		template<class T> T* GetComponent();
 
 		virtual void OnAwake(){}
 
-		virtual void OnInit(){}
+		virtual void OnInit() {}
 
 		virtual void OnUpdate() {}
 
 		virtual void OnDestroy(){}
 
 		virtual void OnEntitySet() {}
-
-		virtual void OnSceneSet(){}
 	public:
 		System();
 		virtual ~System(); // Virtual destructor, so that child destructor is called
 
 		void SetEntity(EntityId entity) { m_EntityId = entity; OnEntitySet(); }
-		void SetScene(Scene* scene) { m_Scene = scene; OnSceneSet(); }
-
 		EntityId GetEntity() { return m_EntityId; }
 
 		void Awake();
 		void Init();
 		void Update();
 
-		virtual void OnSystemAdded() {}
+		virtual void OnSystemAdded(){}
 
-		virtual void OnSystemRemoved() {}
-		
+		virtual void OnSystemRemoved(){}
+
+		virtual void OnComponentAdded(byte* data, const Type* type) {}
+
+		virtual void OnComponentRemoved(byte* data, const Type* type) {}
+
 		void Destroy();
-		virtual void OnCollisionEnter(MyRigidBody* body1, MyRigidBody* body2)
-		{}
-		virtual void OnCollision(MyRigidBody* body1, MyRigidBody* body2)
-		{}
-		virtual void OnCollisionLeave(MyRigidBody* body1, MyRigidBody* body2)
-		{}
 	};
 
 	template<class T>

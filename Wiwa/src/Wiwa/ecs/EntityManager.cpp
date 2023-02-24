@@ -565,6 +565,8 @@ namespace Wiwa {
 					m_ComponentsSize[cid]++;
 				}
 			}
+
+			OnComponentAdded(entity, component, type);
 		}
 
 		return component;
@@ -585,6 +587,8 @@ namespace Wiwa {
 
 				c_map.erase(c_it);
 
+				OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
+
 				break;
 			}
 		}
@@ -597,6 +601,10 @@ namespace Wiwa {
 
 		if (c_it != c_map.end()) {
 			m_ComponentsRemoved[c_it->first].push_back(c_it->second);
+
+			const Type* c_type = m_ComponentTypes[c_it->first];
+
+			OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
 
 			c_map.erase(c_it);
 		}
@@ -693,7 +701,7 @@ namespace Wiwa {
 
 	size_t EntityManager::getSystemIndex(EntityId entityId, SystemHash system_hash)
 	{
-		size_t index = INVALID_INDEX;
+		size_t index = WI_INVALID_INDEX;
 
 		size_t size = m_EntitySystemHashes[entityId].size();
 
@@ -706,6 +714,26 @@ namespace Wiwa {
 		}
 
 		return index;
+	}
+
+	void EntityManager::OnComponentAdded(EntityId entityId, byte* data, const Type* type)
+	{
+		std::vector<System*>& systems = m_EntitySystems[entityId];
+		size_t s_size = systems.size();
+
+		for (size_t i = 0; i < s_size; i++) {
+			systems[i]->OnComponentAdded(data, type);
+		}
+	}
+
+	void EntityManager::OnComponentRemoved(EntityId entityId, byte* data, const Type* type)
+	{
+		std::vector<System*>& systems = m_EntitySystems[entityId];
+		size_t s_size = systems.size();
+
+		for (size_t i = 0; i < s_size; i++) {
+			systems[i]->OnComponentRemoved(data, type);
+		}
 	}
 
 	void EntityManager::ApplySystem(EntityId eid, SystemHash system_hash)
@@ -738,7 +766,7 @@ namespace Wiwa {
 	{
 		size_t sindex = getSystemIndex(eid, system_hash);
 
-		if (sindex == INVALID_INDEX) return;
+		if (sindex == WI_INVALID_INDEX) return;
 
 		System* system = m_EntitySystems[eid][sindex];
 
