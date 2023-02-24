@@ -43,6 +43,8 @@ namespace Wiwa {
 		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
 		colorShader->Compile("resources/shaders/light/toon_color");
 		colorShader->addUniform("u_Color", UniformType::fVec4);
+		colorShader->addUniform("u_ToonLevels", UniformType::Float);
+		colorShader->addUniform("u_RimLightPower", UniformType::Float);
 		colorShader->addUniform("u_SpecularValue", UniformType::Float);
 		colorShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);

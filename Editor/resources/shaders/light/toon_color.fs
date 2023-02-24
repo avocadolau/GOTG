@@ -70,7 +70,7 @@ float CalcRimLightFactor(vec3 pixelToCamera, vec3 normal)
 
 vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal)
 {
-    vec4 ambientColor = vec4(light.Color, 1.0f) * light.AmbientIntensity * u_MatAmbientColor;
+  vec4 ambientColor = vec4(light.Color, 1.0f) * light.AmbientIntensity * u_MatAmbientColor;
 
     float diffuseFactor = dot(normal, -direction);
 
