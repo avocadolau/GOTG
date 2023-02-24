@@ -21,6 +21,17 @@ namespace Wiwa {
 	void AudioSystem::OnEntityRemoved(EntityId eid)
 	{
 		Audio::UnregisterGameObject(eid);
+		AudioSource* asrc = GetComponent<AudioSource>();
+
+		if (!asrc) return;
+
+		if (asrc->playOnAwake)
+		{
+			if (!Audio::PostEvent(asrc->eventName, m_EntityId)) {
+				WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
+			}
+			asrc->isPlaying = true;
+		}
 	}
 
 	void AudioSystem::OnUpdate(EntityId eid)

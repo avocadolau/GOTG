@@ -10,6 +10,9 @@ namespace Wiwa {
 		uint32_t volume;
 		Vector3f direction;
 		bool posted;
+		char eventName[32];
+		bool playOnAwake;
+		bool isPlaying;
 	};
 }
 
