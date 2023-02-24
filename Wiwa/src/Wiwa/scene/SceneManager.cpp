@@ -491,6 +491,9 @@ namespace Wiwa {
 				SaveEntity(scene_file, eid, em);
 			}
 
+			// Save Physics Manager json Data
+			sc->GetPhysicsManager().OnSave();
+
 			WI_CORE_INFO("Saved scene in file \"{0}\" successfully!", scene_path);
 		}
 		else {
@@ -531,6 +534,9 @@ namespace Wiwa {
 				SetScene(sceneid);
 			}
 			
+			// Load Physics Manager json Data
+			sc->GetPhysicsManager().OnLoad();
+
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else {

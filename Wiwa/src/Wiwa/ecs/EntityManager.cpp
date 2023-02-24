@@ -732,6 +732,7 @@ namespace Wiwa {
 			rigidBody->gravity = { GRAVITY.x() , GRAVITY.y(), GRAVITY.z()};
 			rigidBody->isTrigger = false;
 			rigidBody->isSensor = false;
+			rigidBody->selfTag = 1UL << 0;
 			for (int i = 0; i < 32; i++)
 				rigidBody->filterBits[i] = false;
 		}

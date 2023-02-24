@@ -89,6 +89,10 @@ namespace Wiwa {
 			return glm::vec3(vector.x, vector.y, vector.z);
 		}
 
+		bool OnSave();
+
+		bool OnLoad();
+
 		bool getInit();
 
 		bool LogBodies();

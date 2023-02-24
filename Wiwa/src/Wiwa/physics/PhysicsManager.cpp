@@ -13,6 +13,8 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <Wiwa/utilities/json/JSONDocument.h>
+
 namespace Wiwa {
 	PhysicsManager::PhysicsManager()
 	{
@@ -250,6 +252,7 @@ namespace Wiwa {
 		delete m_World;
 
 		filterStrings.clear();
+		fliterBitsSets.clear();
 
 		m_HasBeenInit = false;
 		return true;
@@ -450,6 +453,47 @@ namespace Wiwa {
 		else {
 			m_CollisionList[i].collisionType = CT_LOOP;
 		}
+	}
+
+	bool PhysicsManager::OnSave()
+	{
+		JSONDocument physics;
+		int count = filterStrings.size();
+
+		physics.AddMember("tags_count", count);
+		std::string tag = "tag_";
+		for (int i = 0; i < count; i++)
+		{
+			std::string newTag = tag;
+			newTag += std::to_string(i);
+			physics.AddMember(newTag.c_str(), filterStrings[i].c_str());
+		}
+		std::string path = "assets/Scenes/";
+		path += SceneManager::getActiveScene()->getName();
+		path += "_physics.json";
+		physics.save_file(path.c_str());
+		return true;
+	}
+
+	bool PhysicsManager::OnLoad()
+	{
+		std::string path = "assets/Scenes/";
+		path += SceneManager::getActiveScene()->getName();
+		path += "_physics.json";
+
+		JSONDocument physics(path.c_str());
+		for (int i = 1; i < filterStrings.size(); i++)
+			RemoveFilterTag(i);
+
+		int count = physics["tags_count"].get<int>();
+		std::string tag = "tag_";
+		for (int i = 1; i < count; i++)
+		{
+			std::string newTag = tag;
+			newTag += std::to_string(i);
+			AddFilterTag(physics[newTag.c_str()].get<const char*>());
+		}
+		return false;
 	}
 
 	bool PhysicsManager::getInit()

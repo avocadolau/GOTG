@@ -360,7 +360,7 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	ImGui::Checkbox("Is sensor?", &rigidBody->isSensor);
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
 
-	static int itemCurrentIdx = 0; // Here we store our selection data as an index.
+	static int itemCurrentIdx = rigidBody->selfTag; // Here we store our selection data as an index.
 	rigidBody->selfTag = itemCurrentIdx; // wen serialize here don't need to set to itemCurrent idx but 
 	const char* comboPreviewValue = py.filterStrings[itemCurrentIdx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
