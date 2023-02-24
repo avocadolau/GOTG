@@ -69,4 +69,13 @@ namespace Wiwa {
 
 		Audio::UnregisterGameObject(m_EntityId);
 	}
+
+	void AudioSystem::OnEventFinish(AudioEventData* aed)
+	{
+		AudioSource* asrc = GetComponent<AudioSource>();
+
+		if (!asrc) return;
+
+		
+	}
 }

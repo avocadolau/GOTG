@@ -7,6 +7,10 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
+	struct AudioEventData {
+		std::string event_name;
+	};
+
 	class WI_API AudioSystem : public System {
 	private:
 
@@ -21,6 +25,8 @@ namespace Wiwa {
 		void OnUpdate() override;
 
 		void OnDestroy() override;
+
+		void OnEventFinish(AudioEventData* aed);
 	};
 }
 
