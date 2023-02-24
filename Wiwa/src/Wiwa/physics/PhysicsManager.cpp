@@ -335,18 +335,22 @@ namespace Wiwa {
 		btRigidBody* btBody = new btRigidBody(rbInfo);
 		btBody->setUserIndex(id);
 
-		int32_t collisionFinal = 0;
-		for (int i = 0; i < fliterBitsSets.size(); i++)
+		int32_t collisionFinal;
+		std::bitset<32> b, self;
+		b.set();
+		self[rigid_body.selfTag] = true;
+		collisionFinal |= b.to_ulong();
+		for (int i = 1; i < fliterBitsSets.size(); i++)
 		{
 			if (rigid_body.filterBits[i] == true)
 			{
-				collisionFinal |= fliterBitsSets.at(i).to_ulong();
-				//WI_INFO("{} --> {}", filterStrings.at(i).c_str(), fliterBitsSets.at(i).to_string());
+				collisionFinal &= ~fliterBitsSets.at(i).to_ulong();
+				WI_INFO("{} --> {}", filterStrings.at(i).c_str(), fliterBitsSets.at(i).to_string());
 			}
 		}
-		//bin(collisionFinal);
+		bin(collisionFinal);
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
-		m_World->addRigidBody(btBody);
+		m_World->addRigidBody(btBody, self.to_ulong(), collisionFinal);
 		m_Bodies.push_back(myBodyData);
 		return true;
 	}
@@ -481,7 +485,10 @@ namespace Wiwa {
 		path += SceneManager::getActiveScene()->getName();
 		path += "_physics.json";
 
-		JSONDocument physics(path.c_str());
+		JSONDocument physics;
+		if (!physics.load_file(path.c_str()))
+			return false;
+
 		for (int i = 1; i < filterStrings.size(); i++)
 			RemoveFilterTag(i);
 

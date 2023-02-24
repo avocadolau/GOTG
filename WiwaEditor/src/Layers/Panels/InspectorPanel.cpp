@@ -360,16 +360,14 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	ImGui::Checkbox("Is sensor?", &rigidBody->isSensor);
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
 
-	static int itemCurrentIdx = rigidBody->selfTag; // Here we store our selection data as an index.
-	rigidBody->selfTag = itemCurrentIdx; // wen serialize here don't need to set to itemCurrent idx but 
-	const char* comboPreviewValue = py.filterStrings[itemCurrentIdx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
+	const char* comboPreviewValue = py.filterStrings[rigidBody->selfTag].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
 	{
 		for (int n = 0; n < py.filterStrings.size(); n++)
 		{
-			const bool is_selected = (itemCurrentIdx == n);
+			const bool is_selected = (rigidBody->selfTag == n);
 			if (ImGui::Selectable(py.filterStrings[n].c_str(), is_selected))
-				itemCurrentIdx = n;
+				rigidBody->selfTag = n;
 
 			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 			if (is_selected)
