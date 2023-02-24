@@ -37,7 +37,7 @@ void UIPanel::Draw()
 				rect.y = 100;
 				rect.width = 200;
 				rect.height = 100;
-				m_GuiManager.CreateGuiControl(GuiControlType::BUTTON, 1, rect, "assets/test.png", nullptr, { 0,0,0,0 });
+				m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, "assets/test.png", nullptr);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Slider"))
@@ -47,7 +47,12 @@ void UIPanel::Draw()
 			ImGui::SameLine();
 			if (ImGui::Button("Create Checkbox"))
 			{
-
+				Rect2i rect;
+				rect.x = 500;
+				rect.y = 100;
+				rect.width = 200;
+				rect.height = 100;
+				m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.controls.size(), rect, "assets/test2.png", "assets/test.png");
 			}
 		}
 
@@ -84,12 +89,6 @@ void UIPanel::Draw()
 						lastButtonID = buttonID;
 						lastSliderID = sliderID;
 						lastCheckboxID = checkboxID;
-
-
-						/*startingPosition.x = m_GuiManager.controls.at(UI_element_selected)->GetPosition().x;
-						startingPosition.y = m_GuiManager.controls.at(UI_element_selected)->GetPosition().y;
-						startingPosition.width = m_GuiManager.controls.at(UI_element_selected)->GetPosition().width;
-						startingPosition.height = m_GuiManager.controls.at(UI_element_selected)->GetPosition().height;*/
 					}
 					ImGui::PopID();
 				}
