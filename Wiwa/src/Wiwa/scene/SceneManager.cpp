@@ -9,6 +9,7 @@ namespace Wiwa {
 	std::vector<Scene*> SceneManager::m_Scenes;
 	SceneId SceneManager::m_ActiveScene = -1;
 	bool SceneManager::m_PlayScene = true;
+	bool SceneManager::isLoadingScene = false;
 
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
@@ -206,6 +207,8 @@ namespace Wiwa {
 
 	bool SceneManager::_loadSceneImpl(Scene* scene, File& scene_file)
 	{
+		isLoadingScene = true;
+
 		// Load cameras
 		CameraManager& cm = scene->GetCameraManager();
 		size_t camera_count;
@@ -347,6 +350,8 @@ namespace Wiwa {
 		for (size_t i = 0; i < p_entity_count; i++) {
 			LoadEntity(scene_file, i, em, true);
 		}
+
+		isLoadingScene = false;
 
 		return true;
 	}

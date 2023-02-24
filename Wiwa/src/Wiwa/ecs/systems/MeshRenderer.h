@@ -15,6 +15,10 @@ namespace Wiwa {
 		~MeshRenderer();
 
 		void OnUpdate() override;
+
+		bool OnComponentAdded(byte* data, const Type* type) override { return true; }
+
+		bool OnComponentRemoved(byte* data, const Type* type) override { return true; }
 	};
 }
 

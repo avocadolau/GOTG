@@ -565,6 +565,7 @@ namespace Wiwa {
 					m_ComponentsSize[cid]++;
 				}
 			}
+			OnComponentAdded(entity, component, type);
 		}
 
 		return component;
@@ -585,6 +586,8 @@ namespace Wiwa {
 
 				c_map.erase(c_it);
 
+				OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
+
 				break;
 			}
 		}
@@ -599,6 +602,10 @@ namespace Wiwa {
 			m_ComponentsRemoved[c_it->first].push_back(c_it->second);
 
 			c_map.erase(c_it);
+
+			const Type* c_type = m_ComponentTypes[c_it->first];
+
+			OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
 		}
 	}
 
@@ -706,6 +713,62 @@ namespace Wiwa {
 		}
 
 		return index;
+	}
+
+	bool EntityManager::OnComponentAdded(EntityId entityId, byte* data, const Type* type)
+	{
+		if (SceneManager::isLoadingScene)
+			return false;
+
+		std::vector<System*>& systems = m_EntitySystems[entityId];
+		size_t s_size = systems.size();
+
+		if (type->hash == (size_t)TypeHash::Rigidbody)
+		{
+			Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
+			rigidBody->positionOffset = { 0,0,0 };
+			rigidBody->scalingOffset = { 1,1,1 };
+			rigidBody->mass = 1;
+			rigidBody->gravity = { GRAVITY.x() , GRAVITY.y(), GRAVITY.z()};
+			rigidBody->isTrigger = false;
+			rigidBody->isSensor = false;
+			for (int i = 0; i < 32; i++)
+				rigidBody->filterBits[i] = false;
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCube)
+		{ 
+			Wiwa::ColliderCube* colliderCube = (Wiwa::ColliderCube*)data;
+			colliderCube->halfExtents= { 2,2,2 };
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderSphere) 
+		{
+			Wiwa::ColliderSphere* colliderCube = (Wiwa::ColliderSphere*)data;
+			colliderCube->radius = 1;
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCylinder) 
+		{ 
+			Wiwa::ColliderCylinder* colliderCube = (Wiwa::ColliderCylinder*)data;
+			colliderCube->height = 1;
+			colliderCube->radius = 1;
+		}
+
+		for (size_t i = 0; i < s_size; i++) {
+			systems[i]->OnComponentAdded(data, type);
+		}
+
+		return true;
+	}
+
+	bool EntityManager::OnComponentRemoved(EntityId entityId, byte* data, const Type* type)
+	{
+		std::vector<System*>& systems = m_EntitySystems[entityId];
+		size_t s_size = systems.size();
+
+		for (size_t i = 0; i < s_size; i++) {
+			systems[i]->OnComponentRemoved(data, type);
+		}
+
+		return true;
 	}
 
 	void EntityManager::ApplySystem(EntityId eid, SystemHash system_hash)

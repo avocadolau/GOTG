@@ -50,6 +50,10 @@ namespace Wiwa {
 		{}
 		virtual void OnCollisionLeave(MyRigidBody* body1, MyRigidBody* body2)
 		{}
+
+		virtual bool OnComponentAdded(byte* data, const Type* type) { return true; }
+
+		virtual bool OnComponentRemoved(byte* data, const Type* type) { return true; }
 	};
 
 	template<class T>
