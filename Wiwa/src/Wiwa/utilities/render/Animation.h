@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 #include <glm/glm.hpp>
-
+#include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
 namespace Wiwa {
@@ -28,12 +28,12 @@ namespace Wiwa {
 	struct QuatKey {
 		//time of this key when the transformation should happen
 		double time;
-		glm::vec4 value;
+		glm::quat value;
 		QuatKey()
 		{
 			time = 0; value = { 0,0,0,0 };
 		}
-		QuatKey(double time, const glm::vec4& value)
+		QuatKey(double time, const glm::quat& value)
 		{
 			this->time = time;
 			this->value = value;

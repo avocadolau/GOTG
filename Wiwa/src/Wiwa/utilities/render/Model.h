@@ -133,13 +133,7 @@ namespace Wiwa {
 	{
 	private:
 		std::string m_ModelPath;
-
-		//tmp scene, stores armature (bone hierarchy) to apply transofrmations
-		const aiScene* pScene = nullptr;
-
 		glm::mat4 globalInverseTransform;
-		//DEBUG
-		int spaceCount = 0;
 	protected:
 		bool is_root = false;
 		bool has_bones = false;
@@ -193,13 +187,13 @@ namespace Wiwa {
 		static void SaveModelHierarchy(File file, ModelHierarchy* h);
 		static ModelHierarchy* LoadModelHierarchy(File file);
 		void ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* root, glm::mat4 parentTransform);
-		//const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string& NodeName);
+		const AnimNode* FindNodeAnim(const Animation* animation, const std::string& NodeName);
 		////animation
-		//unsigned int FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		//unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned int FindScaling(float AnimationTime, const AnimNode* pNodeAnim);
+		unsigned int FindRotation(float AnimationTime, const AnimNode* pNodeAnim);
 		//unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-		//void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-		//void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim);
+		void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
 		//void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
 		
 	public:
