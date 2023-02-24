@@ -123,7 +123,7 @@ namespace Wiwa {
 			time_t metaTime = metaFile["timeCreated"].get<time_t>();
 			time_t fileTime = to_time_t(std::filesystem::last_write_time(filename));
 
-			if (metaTime != fileTime)
+			if (metaTime < fileTime)
 				return TOUPDATE;
 		}
 		return UPDATED;
