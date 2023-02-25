@@ -63,22 +63,22 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static ulong LoadResourceModel(string str);
         #endregion
-        #region Audio
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void PlayMusic(string str);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void StopMusic(string str);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void PlaySound(string str, EntityId entity);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void StopSound(string str, EntityId entity);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void StopAllEvents();
-        #endregion
+        //#region Audio
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void PlayMusic(string str);
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void StopMusic(string str);
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void PlaySound(string str, EntityId entity);
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void StopSound(string str, EntityId entity);
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void StopAllEvents();
+        //#endregion
 
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool AddBodyCube(EntityId id, ref ColliderCube colliderCube, ref Transform3D transform, ref RigidBody rigidBody);
+        internal extern static bool AddBodyCube(EntityId id, ref ColliderCube colliderCube, ref Transform3D transform, ref Rigidbody rigidBody);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
         #endregion

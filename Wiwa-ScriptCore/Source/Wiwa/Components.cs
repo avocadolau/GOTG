@@ -28,7 +28,7 @@
     #endregion
     #region RigidBody
     [Component]
-    public struct RigidBody
+    public struct Rigidbody
     {
         public Vector3 positionOffset;
         public Vector3 scalingOffset;
