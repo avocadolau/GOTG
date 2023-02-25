@@ -151,7 +151,7 @@ struct CustomFilterCallBack : public btOverlapFilterCallback
 		//add some additional logic here that modified 'collides'
 
 
-		return collides;
+		return true;
 	}
 };
 

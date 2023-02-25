@@ -378,9 +378,14 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	}
 
 	ImGui::Text("Do not collide with:");
-	for (int n = 0; n < py.filterStrings.size(); n++)
+	for (int i = 0; i < py.filterStrings.size(); i++)
 	{
-		ImGui::Checkbox(py.filterStrings[n].c_str(), &rigidBody->filterBits[n]);
+		bool local = (rigidBody->filterBits >> i) & 1U; //Checking a bit
+		ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
+		if (local)
+			rigidBody->filterBits |= 1UL << i;
+		else
+			rigidBody->filterBits &= ~(1UL << i);
 	}
 
 }

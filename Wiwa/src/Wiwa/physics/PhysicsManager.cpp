@@ -53,7 +53,7 @@ namespace Wiwa {
 
 		m_World = new btDiscreteDynamicsWorld(m_Dispatcher, m_Broad_phase, m_Solver, m_Collision_conf);
 
-		m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
+		//m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
@@ -339,23 +339,9 @@ namespace Wiwa {
 
 		btRigidBody* btBody = new btRigidBody(rbInfo);
 		btBody->setUserIndex(id);
-
-		int32_t collisionFinal;
-		std::bitset<32> b, self;
-		b.set();
-		self[rigid_body.selfTag] = true;
-		collisionFinal |= b.to_ulong();
-		for (int i = 1; i < fliterBitsSets.size(); i++)
-		{
-			if (rigid_body.filterBits[i] == true)
-			{
-				collisionFinal &= ~fliterBitsSets.at(i).to_ulong();
-				WI_INFO("{} --> {}", filterStrings.at(i).c_str(), fliterBitsSets.at(i).to_string());
-			}
-		}
-		bin(collisionFinal);
+		
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
-		m_World->addRigidBody(btBody, self.to_ulong(), collisionFinal);
+		m_World->addRigidBody(btBody);
 		m_Bodies.push_back(myBodyData);
 		return true;
 	}

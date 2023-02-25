@@ -17,7 +17,7 @@ namespace Wiwa {
 		bool isTrigger;
 		bool isSensor;
 		int selfTag;
-		bool filterBits[32];
+		int filterBits;
 	};
 }
 

@@ -733,8 +733,7 @@ namespace Wiwa {
 			rigidBody->isTrigger = false;
 			rigidBody->isSensor = false;
 			rigidBody->selfTag = 0;
-			for (int i = 0; i < 32; i++)
-				rigidBody->filterBits[i] = false;
+			rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
 		}
 		else if (type->hash == (size_t)TypeHash::ColliderCube)
 		{ 

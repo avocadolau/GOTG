@@ -26,6 +26,20 @@
         public Vector4 local_mat_r4;
     }
     #endregion
+    #region RigidBody
+    [Component]
+    public struct RigidBody
+    {
+        public Vector3 positionOffset;
+        public Vector3 scalingOffset;
+        public float mass;
+        public Vector3 gravity;
+        public bool isTrigger;
+        public bool isSensor;
+        public int selfTag;
+        public int filterBits;
+    }
+    #endregion
     #region Mesh
     //[Component]
     //public unsafe struct Mesh

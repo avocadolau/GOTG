@@ -58,7 +58,7 @@ namespace Wiwa {
 		{
 			if (cube)
 			{
-				if (mesh) cube->halfExtents = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId)->boundingBox.HalfSize();
+				//if (mesh) cube->halfExtents = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId)->boundingBox.HalfSize();
 				physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
 			}
 			else if (sphere)
