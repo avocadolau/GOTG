@@ -14,6 +14,7 @@
 #include "embed_functions/embed_input_functions.h"
 #include "embed_functions/embed_log_functions.h"
 #include "embed_functions/embed_time_functions.h"
+#include "embed_functions/embed_audio_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -54,5 +55,14 @@ namespace Wiwa
 		// Resources
 		WI_ADD_INTERNAL_CALL(LoadResourceModel);
 		WI_ADD_INTERNAL_CALL(AddMeshToEntity);
+
+		// Audio
+		WI_ADD_INTERNAL_CALL(PlayMusic);
+		WI_ADD_INTERNAL_CALL(StopMusic);
+
+		WI_ADD_INTERNAL_CALL(PlaySound);
+		WI_ADD_INTERNAL_CALL(StopSound);
+
+		WI_ADD_INTERNAL_CALL(StopAllEvents);
 	}
 }
