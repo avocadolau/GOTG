@@ -17,8 +17,10 @@ public:
 	int buttonID = 0;
 	int sliderID = 0;
 	int checkboxID = 0;
+	int imageID = 0;
 
 	int lastButtonID = 0;
 	int lastSliderID = 0;
 	int lastCheckboxID = 0;
+	int lastImageID = 0;
 };

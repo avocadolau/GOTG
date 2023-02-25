@@ -64,6 +64,16 @@ void UIPanel::Draw()
 				rect.height = 100;
 				m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.controls.size(), rect, "assets/test2.png", "assets/test.png");
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Create Image"))
+			{
+				Rect2i rect;
+				rect.x = 500;
+				rect.y = 100;
+				rect.width = 200;
+				rect.height = 100;
+				m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, "assets/test2.png", nullptr);
+			}
 		}
 
 		if (ImGui::CollapsingHeader("Edit UI element"))
@@ -73,6 +83,7 @@ void UIPanel::Draw()
 				buttonID = 0;
 				sliderID = 0;
 				checkboxID = 0;
+				imageID = 0;
 
 				for (int i = 0; i < m_GuiManager.controls.size(); i++)
 				{
@@ -92,6 +103,11 @@ void UIPanel::Draw()
 						ImGui::Text("Checkbox # %i", checkboxID);
 						checkboxID++;
 					}
+					if (m_GuiManager.controls.at(i)->type == GuiControlType::IMAGE)
+					{
+						ImGui::Text("Image # %i", imageID);
+						imageID++;
+					}
 					ImGui::SameLine();
 					if (ImGui::Button("Edit"))
 					{
@@ -99,6 +115,7 @@ void UIPanel::Draw()
 						lastButtonID = buttonID;
 						lastSliderID = sliderID;
 						lastCheckboxID = checkboxID;
+						lastImageID = imageID;
 					}
 					ImGui::PopID();
 				}
@@ -128,6 +145,10 @@ void UIPanel::Draw()
 				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::CHECKBOX)
 				{
 					ImGui::Text("Edit checkbox # %i", lastCheckboxID);
+				}
+				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::IMAGE)
+				{
+					ImGui::Text("Edit checkbox # %i", lastImageID);
 				}
 
 				ImGui::PushID(UI_element_selected);

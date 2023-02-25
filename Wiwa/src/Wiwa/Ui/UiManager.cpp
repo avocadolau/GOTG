@@ -6,6 +6,7 @@
 #include "UiCheckbox.h"
 #include "UiSlider.h"
 #include "UiText.h"
+#include "UiImage.h"
 #include <Wiwa/core/Application.h>
 
 namespace Wiwa
@@ -33,6 +34,9 @@ namespace Wiwa
 			break;
 		case GuiControlType::CHECKBOX:
 			control = new GuiCheckbox(id, bounds, path,extraPath);
+			break;
+		case GuiControlType::IMAGE:
+			control = new GuiImage(id, bounds, path);
 			break;
 		default:
 			break;

@@ -15,7 +15,8 @@ namespace Wiwa
 		TOGGLE,
 		CHECKBOX,
 		SLIDER,
-		INPUTBOX
+		INPUTBOX,
+		IMAGE
 	};
 
 	enum class GuiControlState
