@@ -149,7 +149,7 @@ namespace Wiwa {
 
 		std::vector<Model*> models;
 		std::vector<std::string> materials;
-		std::vector<Animation*> animations;
+		
 
 		//stores offest matrix and final bone transformation
 		std::vector<BoneInfo> boneInfo;
@@ -240,6 +240,10 @@ namespace Wiwa {
 		static Model* SaveWiModel(Model* model, const char* file);
 		static void LoadWiModel(const char* file);
 	public:
+
+		// for the moment i'll put the anim here, i'll change it
+		std::vector<Animation*> animations;
+
 		bool showNormals = false;
 		Math::AABB boundingBox;
 	};

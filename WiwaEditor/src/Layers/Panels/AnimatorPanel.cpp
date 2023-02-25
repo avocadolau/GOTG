@@ -6,7 +6,7 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/ecs/components/Mesh.h>
 
-using namespace ImGui;
+
 
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
 	: Panel("Animator", ICON_FK_MALE, instance)
@@ -21,7 +21,7 @@ void AnimatorPanel::Draw()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
-	Begin(iconName.c_str(), &active);
+	ImGui::Begin(iconName.c_str(), &active);
 	if (m_EntitySet && (m_CurrentID >= 0))
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
@@ -32,19 +32,27 @@ void AnimatorPanel::Draw()
 		ImGui::Text("(%i)", m_CurrentID);
 		
 		Wiwa::Mesh* meshId = em.GetComponent<Wiwa::Mesh>(m_CurrentID);
-		Wiwa::Model* mesh = Wiwa::Resources::GetResourceById<Wiwa::Model>(meshId->meshId);
-		mesh = mesh->getModelAt(meshId->modelIndex);
-
+		Wiwa::Model* model = Wiwa::Resources::GetResourceById<Wiwa::Model>(meshId->meshId);
+		model = model->getModelAt(meshId->modelIndex);
+		
 		ImGui::Text("Model path: ");
 		ImGui::SameLine();
-		ImGui::Text(mesh->getModelPath());
+		ImGui::Text(model->getModelPath());
+
+		if (model->animations[0] != nullptr)
+		{
+			for (int i = 0; i > model->animations.size(); i++)
+			{
+				ImGui::Button(model->animations[i]->name.c_str());
+			}
+		}
 	}
 	else
 	{
-		Text("Select an entity!");
+		ImGui::Text("Select an entity!");
 	}
 
-	End();
+	ImGui::End();
 }
 
 	
