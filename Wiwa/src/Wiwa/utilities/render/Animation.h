@@ -39,19 +39,21 @@ namespace Wiwa {
 			this->value = value;
 		}
 	};
-	//realition between the aiNode
+	//relation between the aiNode
 	//and the animNode is the name
 	//to find the node affected by the animation
 	// just find the name of the node to apply the animation
 	struct AnimNode {
 		std::string name;
-		unsigned int numPositionKeys;
-		unsigned int numRotationKeys;
-		unsigned int numScalingKeys;
+		unsigned int numPositionKeys = 0;
+		unsigned int numRotationKeys = 0;
+		unsigned int numScalingKeys = 0;
 
 		std::vector<VectorKey> positionKeys;
 		std::vector<QuatKey> rotationKeys;
 		std::vector<VectorKey> scalingKeys;
+
+		AnimNode() {}
 	};
 
 	class WI_API Animation
@@ -61,7 +63,6 @@ namespace Wiwa {
 		Animation(std::string name) { this->name = name; }
 		
 		std::string name;
-		//animation key node tree 
 		std::vector<AnimNode*> channels;
 		unsigned int numChannels;
 		double duration;

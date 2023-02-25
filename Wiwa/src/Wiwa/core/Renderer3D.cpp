@@ -18,6 +18,8 @@ namespace Wiwa {
 	{
 	}
 
+	//DEBUG
+	static long long startTime;
 	bool Renderer3D::Init()
 	{
 		Size2i& resolution = Application::Get().GetTargetResolution();
@@ -78,6 +80,9 @@ namespace Wiwa {
 		
 		m_DefaultSkybox.LoadCubemap(faces);
 
+		//DEBUG
+		startTime = Time::GetRealTimeSinceStartup();
+
 		return true;
 	}
 
@@ -111,6 +116,7 @@ namespace Wiwa {
 		Shader* matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
@@ -275,6 +281,16 @@ namespace Wiwa {
 		Shader* matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
+
+		//DEBUG 
+		long long CurrentTimeMillis = Time::GetRealTimeSinceStartup();
+		float AnimationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
+		std::vector<glm::mat4> transforms;
+		mesh->GetBoneTransforms(AnimationTimeSec, transforms);
+
+		for (unsigned int i = 0; i < transforms.size(); i++) {
+			matShader->SetBoneTransform(i, transforms[i]);
+		}
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 

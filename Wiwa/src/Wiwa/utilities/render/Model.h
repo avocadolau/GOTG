@@ -79,12 +79,17 @@ namespace Wiwa {
 	struct BoneInfo {
 		std::string name;
 		glm::mat4 offsetMatrix;
-		glm::mat4 FinalTransformation;
+		glm::mat4 finalTransformation;
 
+		BoneInfo()
+		{
+			offsetMatrix = glm::mat4();
+			finalTransformation = glm::mat4();
+		}
 		BoneInfo(glm::mat4& offset)
 		{
 			offsetMatrix = offset;
-			FinalTransformation = glm::mat4();
+			finalTransformation = glm::mat4();
 		}
 	};
 
@@ -156,7 +161,10 @@ namespace Wiwa {
 		std::vector<int> meshBaseVertex;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
 
+		Animation* currentAnimation;
+
 		ModelHierarchy* model_hierarchy;
+		Model* parent;
 
 		void generateBuffers();
 
@@ -178,6 +186,10 @@ namespace Wiwa {
 
 		void LoadAnimation(const aiAnimation* animation);
 		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
+		AnimNode* LoadWiAnimNode(File file);
+		Animation* LoadWiAnimation(File file);
+		static void SaveWiAnimation(File file, Animation* anim);
+		static void SaveWiAnimNode(File file, AnimNode* node);
 		
 		void CreateCube();
 		void CreatePlane();
@@ -191,10 +203,10 @@ namespace Wiwa {
 		////animation
 		unsigned int FindScaling(float AnimationTime, const AnimNode* pNodeAnim);
 		unsigned int FindRotation(float AnimationTime, const AnimNode* pNodeAnim);
-		//unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+		unsigned int FindPosition(float AnimationTime, const AnimNode* pNodeAnim);
 		void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim);
 		void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
-		//void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+		void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);
 		
 	public:
 		Model(const char* file);
@@ -219,26 +231,21 @@ namespace Wiwa {
 		unsigned int getMaterialIndex() { return model_mat; }
 
 		const ModelHierarchy* getModelHierarchy() { return model_hierarchy; }
+
 		std::string getModelName() { return model_name; }
+
+		void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
+		Animation* GetCurrentAnimation() { return currentAnimation; }
 
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
-		void LoadArmature(aiScene scene);
-		void LoadWiArmature(const char* file);
-
-		void LoadMeshAnim(unsigned int index, const aiMesh* mesh, Model* root);
-		void LoadSingleAnim(int meshIndex, aiAnimMesh* anim, Model* root);
-
-		void GetBoneTransforms(float timeInSeconds,std::vector<glm::mat4> transforms);
+		void GetBoneTransforms(float timeInSeconds,std::vector<glm::mat4>& transforms);
 
 		void IsRoot(bool root) { is_root = root; }
 
 		static Model* GetModelFromFile(const char* file, ModelSettings* settings);
 		static void SaveModel(Model* model, const char* file);
-
-		static Model* SaveWiModel(Model* model, const char* file);
-		static void LoadWiModel(const char* file);
 	public:
 
 		// for the moment i'll put the anim here, i'll change it
