@@ -25,6 +25,8 @@ namespace Wiwa {
 		m_Solver = new btSequentialImpulseConstraintSolver();
 		m_Debug_draw = new DebugDrawer();
 
+		m_filterCallback = new CustomFilterCallBack();
+
 		// Bullet Bounding box
 		m_Debug_draw->lineDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/line_display");
 		m_Debug_draw->lineDisplayShader = Resources::GetResourceById<Shader>(m_Debug_draw->lineDisplayShaderId);
@@ -41,6 +43,7 @@ namespace Wiwa {
 		delete m_Broad_phase;
 		delete m_Dispatcher;
 		delete m_Collision_conf;
+		delete m_filterCallback;
 	}
 
 	bool PhysicsManager::InitWorld()
@@ -49,6 +52,8 @@ namespace Wiwa {
 		m_HasBeenInit = true;
 
 		m_World = new btDiscreteDynamicsWorld(m_Dispatcher, m_Broad_phase, m_Solver, m_Collision_conf);
+
+		m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);

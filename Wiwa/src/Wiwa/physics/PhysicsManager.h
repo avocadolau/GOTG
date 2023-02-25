@@ -113,6 +113,8 @@ namespace Wiwa {
 		btBroadphaseInterface* m_Broad_phase;
 		btSequentialImpulseConstraintSolver* m_Solver;
 
+		btOverlapFilterCallback* m_filterCallback;
+
 		//  btDefaultVehicleRaycaster* v_Vehicle_raycaster;
 		DebugDrawer* m_Debug_draw;
 
@@ -136,6 +138,22 @@ namespace Wiwa {
 		}
 	};
 }
+
+// write your own collision group / mask functionality using broadphase callbacks rather than use Bullet's
+struct CustomFilterCallBack : public btOverlapFilterCallback
+{
+	// return true when pairs need collision
+	virtual bool needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
+	{
+		bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
+		collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
+
+		//add some additional logic here that modified 'collides'
+
+
+		return collides;
+	}
+};
 
 class DebugDrawer : public btIDebugDraw
 {
