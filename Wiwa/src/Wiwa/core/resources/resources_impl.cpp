@@ -89,17 +89,14 @@ namespace Wiwa {
 		}
 	}
 
-	void Resources::UnloadSceneResources()
+	void Resources::UnloadAllResources()
 	{
 		return;
-		for (size_t i = 0; i < WRT_LAST; i++)
-		{
-			for (size_t j = 0; j < m_Resources[i].size(); j++)
-			{
-				if (!m_Resources[i][j]->isNative)
-					m_Resources[i].erase(m_Resources[i].begin() + j);
-			}
-		}
+		//TODO: EVENT OF UNLOADED RESOURCES
+		UnloadResources<Image>();
+		UnloadResources<Material>();
+		UnloadResources<Shader>();
+		UnloadResources<Model>();
 	}
 	
 	Resources::MetaResult Resources::CheckMeta(const char* filename)

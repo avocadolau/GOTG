@@ -106,14 +106,30 @@ namespace Wiwa {
 		WI_CORE_INFO("Material at {} imported succesfully!", import_file.string().c_str());
 		return true;
 	}
+
 	template<>
 	inline bool Resources::CheckImport<Material>(const char* file)
 	{
 		return _check_import_impl(file, ".wimaterial");
 	}
+
 	template<>
 	inline const char* Resources::getResourcePathById<Material>(size_t id)
 	{
 		return getPathById(WRT_MATERIAL, id);
+	}
+
+	template<>
+	inline void Resources::UnloadResources<Material>() {
+		std::vector<Resource*>& rvec = m_Resources[WRT_MATERIAL];
+		size_t count = rvec.size();
+
+		for (size_t i = 0; i < count; i++) {
+			Material* mat = (Material*)rvec[i]->resource;
+
+			delete mat;
+		}
+
+		rvec.clear();
 	}
 }

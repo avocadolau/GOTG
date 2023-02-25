@@ -102,6 +102,7 @@ namespace Wiwa {
 
 		return true;
 	}
+
 	template<>
 	inline bool Resources::CheckImport<Model>(const char* file)
 	{
@@ -112,5 +113,19 @@ namespace Wiwa {
 	inline const char* Resources::getResourcePathById<Model>(size_t id)
 	{
 		return getPathById(WRT_MODEL, id);
+	}
+
+	template<>
+	inline void Resources::UnloadResources<Model>() {
+		std::vector<Resource*>& rvec = m_Resources[WRT_MODEL];
+		size_t count = rvec.size();
+
+		for (size_t i = 0; i < count; i++) {
+			Model* mat = (Model*)rvec[i]->resource;
+
+			delete mat;
+		}
+
+		rvec.clear();
 	}
 }

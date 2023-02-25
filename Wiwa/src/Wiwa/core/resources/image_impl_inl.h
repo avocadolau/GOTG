@@ -153,4 +153,18 @@ namespace Wiwa {
 	{
 		return getPathById(WRT_IMAGE, id);
 	}
+
+	template<>
+	inline void Resources::UnloadResources<Image>() {
+		std::vector<Resource*>& rvec = m_Resources[WRT_IMAGE];
+		size_t count = rvec.size();
+
+		for (size_t i = 0; i < count; i++) {
+			Image* img = (Image*)rvec[i]->resource;
+
+			delete img;
+		}
+
+		rvec.clear();
+	}
 }
