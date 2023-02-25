@@ -20,14 +20,8 @@
 #include "Renderer3D.h"
 #include "Renderer2D.h"
 
-// Systems
-#include <Wiwa/ecs/systems/SpriteRenderer.h>
-#include <Wiwa/ecs/systems/MeshRenderer.h>
-#include <Wiwa/ecs/systems/AudioSystem.h>
-#include <Wiwa/ecs/systems/PhysicsSystem.h>
-#include <Wiwa/ecs/systems/LightSystem.h>
-
-#include <Wiwa/ecs/components/Transform3D.h>
+#include <Wiwa/ecs/Components.h>
+#include <Wiwa/ecs/Systems.h>
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -40,6 +34,8 @@
 #include <Wiwa/audio/Audio.h>
 
 #include <Wiwa/render/RenderManager.h>
+
+#include <Wiwa/core/ProjectManager.h>
 
 USE_REFLECTION;
 
@@ -68,8 +64,9 @@ namespace Wiwa {
 		//m_ProjectCompany = project["company"].get<const char*>();
 		//m_ProjectTarget = (ProjectTarget)project["target"].get<int>();
 		//project.save_file("config/project.json");
-
-		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps("Wiwa Engine: " + m_ProjectName)));
+		std::string name = "Wiwa Engine: ";
+		name += ProjectManager::GetProjectName();
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name.c_str())));
 		m_Window->SetEventCallback({ &Application::OnEvent, this });
 
 		int min, major, rev;
@@ -148,6 +145,7 @@ namespace Wiwa {
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			// Update scene manager
 			SceneManager::ModuleUpdate();
 
 			// Update audio
@@ -158,7 +156,6 @@ namespace Wiwa {
 
 			// Update inputs
 			Input::Update();
-
 
 			// Update renderers
 			m_Renderer2D->Update();
@@ -363,14 +360,9 @@ namespace Wiwa {
 
 		config.save_file("config/application.json");
 
-		JSONDocument project;
-		project.AddMember("name", m_ProjectName.c_str());
-		project.AddMember("version", m_ProjectVersion.c_str());
-		project.AddMember("company", m_ProjectCompany.c_str());
-		
-		project.AddMember("target", (int)m_ProjectTarget);
-
-		project.save_file("config/project.json");
+		if (!Wiwa::ProjectManager::SaveProject()) {
+			WI_CORE_ERROR("Couldn't save project.");
+		}
 
 		return false;
 	}
