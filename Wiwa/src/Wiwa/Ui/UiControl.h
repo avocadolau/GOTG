@@ -82,6 +82,16 @@ namespace Wiwa
 			position.y = position_y;
 
 		}
+		void SetExtraPosition_x(int position_x)
+		{
+			extraPosition.x = position_x;
+
+		}
+		void SetExtraPosition_y(int position_y)
+		{
+			extraPosition.y = position_y;
+
+		}
 		void SetPosition_width(int position_width)
 		{
 			position.width = position_width;

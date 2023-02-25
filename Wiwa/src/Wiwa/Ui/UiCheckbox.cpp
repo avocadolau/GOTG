@@ -29,6 +29,7 @@ namespace Wiwa
 
 	bool GuiCheckbox::Update()
 	{
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		if (state != GuiControlState::DISABLED)
 		{
 			// L14: TODO 3_D: Update the state of the GUiButton according to the mouse position
@@ -38,11 +39,11 @@ namespace Wiwa
 
 			if (checked)
 			{
-				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
+				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
 			}
 			else
 			{
-				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
+				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
 			}
 
 			if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
