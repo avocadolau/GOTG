@@ -30,7 +30,8 @@ void MaterialPanel::Draw()
     {
 		ImGui::Text(m_Material->getMaterialPath());
 		std::string str = m_Material->getShader()->getPath();
-		if (ButtonCenteredOnLine(std::filesystem::path(str).filename().string().c_str()))
+		if (ButtonCenteredOnLine(std::filesystem::path(str).filename().string() == "" ?
+			"Shader" : std::filesystem::path(str).filename().string().c_str()))
 			ImGui::OpenPopup("Shaders");
 
 		if (ImGui::BeginPopup("Shaders"))

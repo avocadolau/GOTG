@@ -53,6 +53,10 @@ namespace Wiwa {
 		Shader* m_NormalDisplayShader;
 		DefaultUnlitUniforms m_NDSUniforms;
 
+		ResourceId m_DepthShaderId;
+		Shader* m_DepthShader;
+		DefaultUnlitUniforms m_DepthShaderUniforms;
+
 		Skybox m_DefaultSkybox;
 
 	public:
@@ -78,7 +82,7 @@ namespace Wiwa {
 			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
 		
 		void SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights);
-		
+		void RenderShadows(Camera* camera, const size_t& directional);
 		void RenderSkybox();
 
 		void Close();
