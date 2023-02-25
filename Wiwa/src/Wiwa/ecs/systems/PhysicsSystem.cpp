@@ -58,6 +58,7 @@ namespace Wiwa {
 		{
 			if (cube)
 			{
+				WI_INFO("NEW BODY OF ENTITY--> {} AND ID {}", e_name, m_EntityId);
 				//if (mesh) cube->halfExtents = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId)->boundingBox.HalfSize();
 				physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
 			}

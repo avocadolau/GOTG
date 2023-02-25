@@ -39,6 +39,24 @@
         public int selfTag;
         public int filterBits;
     }
+    [Component]
+    public struct ColliderCube
+    {
+        public Vector3 halfExtents;
+    }
+
+    [Component]
+    public struct ColliderCylinder
+    {
+        public float height;
+        public float radius;
+    }
+
+    [Component]
+    public struct ColliderSphere
+    {
+        public float radius;
+    }
     #endregion
     #region Mesh
     //[Component]

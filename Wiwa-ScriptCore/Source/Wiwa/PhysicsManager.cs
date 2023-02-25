@@ -3,12 +3,15 @@
     using EntityId = System.UInt64;
     public class PhysicsManager
     {
-        //public static void AddBodyCube(EntityId id, RigidBody rigidBody)
-        //{
-        //    rigidBody.filterBits = new bool[32];
-        //    return InternalCalls.
-        //}
+        public static bool AddBodyCube(EntityId id, ref ColliderCube colliderCube, ref Transform3D transform , ref RigidBody rigidBody)
+        {
+            return InternalCalls.AddBodyCube(id, ref colliderCube, ref transform , ref rigidBody); 
+        }
 
+        public static void SetLinearVelocity(EntityId id, Vector3 velocity) 
+        {
+            InternalCalls.SetLinearVelocity(id, velocity);
+        }
         //public static CameraId GetActiveCamera()
         //{
         //    return InternalCalls.GetActiveCamera();

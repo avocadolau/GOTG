@@ -54,6 +54,7 @@ namespace Wiwa {
 
 		~PhysicsManager();
 
+		// Init & Delete World
 		bool InitWorld();
 
 		bool StepSimulation();
@@ -66,12 +67,14 @@ namespace Wiwa {
 
 		bool DeleteBody(MyRigidBody* body);
 
+		// Add bodies
 		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
+		// Manipulate bodies
 		void SetBodyMass(MyRigidBody* body, float mass);
 
 		void SetBodyGravity(MyRigidBody* body, btVector3 gravity);
@@ -79,6 +82,8 @@ namespace Wiwa {
 		void SetTrigger(MyRigidBody* body, bool isTrigger);
 
 		void SetStatic(MyRigidBody* body, bool isStatic);
+
+		void SetLinearVelocity(MyRigidBody* body, glm::vec3 velocity);
 
 		MyRigidBody* FindByEntityId(size_t id);
 

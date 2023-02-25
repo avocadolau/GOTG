@@ -317,6 +317,7 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
+		WI_INFO("New body cube has been created");
 		glm::vec3 skew;
 		glm::vec4 perspective;
 		glm::vec3 Scaling;
@@ -418,6 +419,11 @@ namespace Wiwa {
 			SetBodyMass(body, 1.0f);
 			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
 		}
+	}
+
+	void PhysicsManager::SetLinearVelocity(MyRigidBody* body, glm::vec3 velocity)
+	{
+		body->btBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
 	}
 
 	MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
