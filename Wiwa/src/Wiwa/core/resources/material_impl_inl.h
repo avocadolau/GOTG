@@ -89,7 +89,10 @@ namespace Wiwa {
 						return false;
 					}
 
-					sdata->tex_path = _assetToLibPath(sdata->tex_path);
+					std::filesystem::path p = _assetToLibPath(sdata->tex_path);
+					p.replace_extension(".dds");
+
+					sdata->tex_path = p.string();
 				}
 
 				//uniforms[i].setData(*sdata, UniformType::Sampler2D);
