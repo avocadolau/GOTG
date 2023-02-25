@@ -26,53 +26,79 @@ void UIPanel::Draw()
 	
 	ImGui::Text("UI editor panel");
 
-	if (Time::IsPlaying() == false)
+	if (!Time::IsPlaying())
 	{
 		if (ImGui::CollapsingHeader("Create UI element"))
 		{
+			ImGui::SliderInt2("position", position, 0.0f, 1080.0f, "%.3f", NULL);
+			ImGui::SliderInt2("width", size, 0.0f, 1080.0f, "%.3f", NULL);
+			Rect2i rect;
+			rect.x = position[0];
+			rect.y = position[1];
+			rect.width = size[0];
+			rect.height = size[1];
+			AssetContainer(tex_path.c_str());
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::wstring ws(path);
+					std::string pathS(ws.begin(), ws.end());
+					std::filesystem::path p = pathS.c_str();
+					if (p.extension() == ".png")
+					{
+						tex_path = pathS;
+					}
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::SameLine();
+			ImGui::Text("Main texture path");
+			AssetContainer(tex2_path.c_str());
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::wstring ws(path);
+					std::string pathS(ws.begin(), ws.end());
+					std::filesystem::path p = pathS.c_str();
+					if (p.extension() == ".png")
+					{
+						tex2_path = pathS;
+					}
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::SameLine();
+			ImGui::Text("Secondary texture path");
 			if (ImGui::Button("Create Button"))
 			{
-				Rect2i rect;
-				rect.x = 500;
-				rect.y = 100;
-				rect.width = 200;
-				rect.height = 100;
-				m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, "assets/test.png", nullptr);
+				
+				m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Slider"))
 			{
-				Rect2i rect;
-				rect.x = 500;
-				rect.y = 100;
-				rect.width = 200;
-				rect.height = 100;
 				Rect2i rect2;
-				rect2.x = 500;
-				rect2.y = 100;
-				rect2.width = 50;
-				rect2.height = 25;
-				m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.controls.size(), rect, "assets/test.png", "assets/test2.png", rect2);
+				rect2.x = rect.x - rect.width;
+				rect2.y = ((rect.y/2)+rect.height);
+				rect2.width = (rect.width/100);
+				rect2.height = (rect.height/5);
+				m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str(), rect2);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Checkbox"))
 			{
-				Rect2i rect;
-				rect.x = 500;
-				rect.y = 100;
-				rect.width = 200;
-				rect.height = 100;
-				m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.controls.size(), rect, "assets/test2.png", "assets/test.png");
+				m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Image"))
 			{
-				Rect2i rect;
-				rect.x = 500;
-				rect.y = 100;
-				rect.width = 200;
-				rect.height = 100;
-				m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, "assets/test2.png", nullptr);
+				m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
 			}
 		}
 

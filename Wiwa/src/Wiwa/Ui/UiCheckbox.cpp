@@ -85,29 +85,29 @@ namespace Wiwa
 		{
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			
-			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		} break;
 
 		/******/
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(id_quad, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		}break;
 		default:
 			break;
