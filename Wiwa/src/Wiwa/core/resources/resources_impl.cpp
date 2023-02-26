@@ -3,6 +3,12 @@
 
 #include "../vendor/stb/stb_image.h"
 
+// Resource implementations
+#include "image_impl_inl.h"
+#include "material_impl_inl.h"
+#include "model_impl_inl.h"
+#include "shader_impl_inl.h"
+
 namespace Wiwa {
 	std::vector<Resources::Resource*> Resources::m_Resources[Resources::WRT_LAST];
 
@@ -91,11 +97,9 @@ namespace Wiwa {
 
 	void Resources::UnloadAllResources()
 	{
-		return;
-		//TODO: EVENT OF UNLOADED RESOURCES
 		UnloadResourcesOf<Image>();
 		UnloadResourcesOf<Material>();
-		UnloadResourcesOf<Shader>();
+		//UnloadResourcesOf<Shader>();
 		UnloadResourcesOf<Model>();
 	}
 	
@@ -131,7 +135,6 @@ namespace Wiwa {
 		std::filesystem::path metaPath = filename;
 		metaPath.replace_extension(".meta");
 
-
 		if (!std::filesystem::exists(filename))
 			return;
 		JSONDocument metaFile;
@@ -161,6 +164,7 @@ namespace Wiwa {
 			WI_ERROR("Image at {0} needs to be square in order to be imported", origin);
 			return;
 		}
+
 		Image::raw_to_dds_file(destination, image, w, h, 32);
 
 		stbi_image_free(image);

@@ -125,11 +125,15 @@ namespace Wiwa {
 		size_t count = rvec.size();
 
 		for (size_t i = 0; i < count; i++) {
-			Material* mat = (Material*)rvec[i]->resource;
+			if (!rvec[i]->isNative) {
+				Material* mat = (Material*)rvec[i]->resource;
 
-			delete mat;
+				delete mat;
+
+				rvec.erase(rvec.begin() + i);
+				i--;
+				count--;
+			}
 		}
-
-		rvec.clear();
 	}
 }

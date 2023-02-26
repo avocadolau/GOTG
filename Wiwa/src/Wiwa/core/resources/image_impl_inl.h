@@ -160,11 +160,15 @@ namespace Wiwa {
 		size_t count = rvec.size();
 
 		for (size_t i = 0; i < count; i++) {
-			Image* img = (Image*)rvec[i]->resource;
+			if (!rvec[i]->isNative) {
+				Image* img = (Image*)rvec[i]->resource;
 
-			delete img;
+				delete img;
+
+				rvec.erase(rvec.begin() + i);
+				i--;
+				count--;
+			}
 		}
-
-		rvec.clear();
 	}
 }
