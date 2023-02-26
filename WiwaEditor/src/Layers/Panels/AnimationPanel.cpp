@@ -30,17 +30,7 @@ void AnimationPanel::Draw()
 		std::string edit = entName;
 
 		ImGui::Text("Entity:%s", (char*)edit.c_str());
-		/*ImGui::SameLine();
-		ImGui::Text("(%i)", m_CurrentID);
-
-		Wiwa::Mesh* meshId = em.GetComponent<Wiwa::Mesh>(m_CurrentID);
-		Wiwa::Model* mesh = Wiwa::Resources::GetResourceById<Wiwa::Model>(meshId->meshId);
-		mesh = mesh->getModelAt(meshId->modelIndex);
-
-		ImGui::Text("Model path: ");
-		ImGui::SameLine();
-		ImGui::Text(mesh->getModelPath());
-		ImGui::Text("ola caracola");*/
+		
 	}
 	else
 	{
