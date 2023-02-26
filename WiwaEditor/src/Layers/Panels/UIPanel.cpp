@@ -84,10 +84,10 @@ void UIPanel::Draw()
 			if (ImGui::Button("Create Slider"))
 			{
 				Rect2i rect2;
-				rect2.x = rect.x - rect.width;
-				rect2.y = ((rect.y/2)+rect.height);
+				rect2.x = rect.x-(rect.width/2);
+				rect2.y = rect.y;
 				rect2.width = (rect.width/100);
-				rect2.height = (rect.height/5);
+				rect2.height = rect.height;
 				m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str(), rect2);
 			}
 			ImGui::SameLine();
@@ -183,7 +183,7 @@ void UIPanel::Draw()
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(rect2.x);
 					if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::SLIDER)
 					{
-						m_GuiManager.controls.at(UI_element_selected)->SetExtraPosition_x(rect2.x);
+						m_GuiManager.controls.at(UI_element_selected)->SetExtraPosition_x((rect2.x - (rect2.width / 2)));
 					}
 				}
 				ImGui::PopID();
