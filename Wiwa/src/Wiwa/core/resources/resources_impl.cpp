@@ -89,17 +89,14 @@ namespace Wiwa {
 		}
 	}
 
-	void Resources::UnloadSceneResources()
+	void Resources::UnloadAllResources()
 	{
 		return;
-		for (size_t i = 0; i < WRT_LAST; i++)
-		{
-			for (size_t j = 0; j < m_Resources[i].size(); j++)
-			{
-				if (!m_Resources[i][j]->isNative)
-					m_Resources[i].erase(m_Resources[i].begin() + j);
-			}
-		}
+		//TODO: EVENT OF UNLOADED RESOURCES
+		UnloadResourcesOf<Image>();
+		UnloadResourcesOf<Material>();
+		UnloadResourcesOf<Shader>();
+		UnloadResourcesOf<Model>();
 	}
 	
 	Resources::MetaResult Resources::CheckMeta(const char* filename)
@@ -123,7 +120,7 @@ namespace Wiwa {
 			time_t metaTime = metaFile["timeCreated"].get<time_t>();
 			time_t fileTime = to_time_t(std::filesystem::last_write_time(filename));
 
-			if (metaTime != fileTime)
+			if (metaTime < fileTime)
 				return TOUPDATE;
 		}
 		return UPDATED;

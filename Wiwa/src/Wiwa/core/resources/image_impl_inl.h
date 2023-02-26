@@ -72,6 +72,8 @@ namespace Wiwa {
 	template<>
 	inline ResourceId Resources::Load<Image>(const char* file)
 	{
+		if (!_file_exists(file)) return WI_INVALID_INDEX;
+
 		std::filesystem::path file_path = _assetToLibPath(file);
 		file_path.replace_extension(".dds");
 		ResourceId position = getResourcePosition(WRT_IMAGE, file_path.string().c_str());
@@ -150,5 +152,19 @@ namespace Wiwa {
 	inline const char* Resources::getResourcePathById<Image>(size_t id)
 	{
 		return getPathById(WRT_IMAGE, id);
+	}
+
+	template<>
+	inline void Resources::UnloadResourcesOf<Image>() {
+		std::vector<Resource*>& rvec = m_Resources[WRT_IMAGE];
+		size_t count = rvec.size();
+
+		for (size_t i = 0; i < count; i++) {
+			Image* img = (Image*)rvec[i]->resource;
+
+			delete img;
+		}
+
+		rvec.clear();
 	}
 }
