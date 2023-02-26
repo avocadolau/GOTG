@@ -30,8 +30,8 @@ void UIPanel::Draw()
 	{
 		if (ImGui::CollapsingHeader("Create UI element"))
 		{
-			ImGui::SliderInt2("position", position, 0.0f, 1080.0f, "%.3f", NULL);
-			ImGui::SliderInt2("width", size, 0.0f, 1080.0f, "%.3f", NULL);
+			ImGui::InputInt2("position", position);
+			ImGui::InputInt2("size", size);
 			Rect2i rect;
 			rect.x = position[0];
 			rect.y = position[1];
@@ -55,7 +55,7 @@ void UIPanel::Draw()
 				ImGui::EndDragDropTarget();
 			}
 			ImGui::SameLine();
-			ImGui::Text("Main texture path");
+			ImGui::Text("Main tex path");
 			AssetContainer(tex2_path.c_str());
 			if (ImGui::BeginDragDropTarget())
 			{
@@ -74,7 +74,7 @@ void UIPanel::Draw()
 				ImGui::EndDragDropTarget();
 			}
 			ImGui::SameLine();
-			ImGui::Text("Secondary texture path");
+			ImGui::Text("Secondary tex path");
 			if (ImGui::Button("Create Button"))
 			{
 				
