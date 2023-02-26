@@ -201,13 +201,11 @@ void EditorLayer::OnEvent(Wiwa::Event &e)
 
 void EditorLayer::LoadScene(const std::string& m_Path)
 {
-	// Unload editor scene before loading new scene into editor
-	//Wiwa::SceneManager::UnloadScene(m_EditorSceneId);
-
 	// Load scene and prepare it
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str());
 	Wiwa::Scene* scene = Wiwa::SceneManager::getScene(id);
-	scene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
+	scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+
 	Wiwa::SceneManager::SetScene(id);
 
 	// Update editor scene references
@@ -291,7 +289,7 @@ void EditorLayer::MainMenuBar()
 				m_OpenedScenePath = "";
 
 				Wiwa::SceneManager::SetScene(m_EditorSceneId);
-				m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
+				m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 			}
 			if (ImGui::MenuItem(ICON_FK_FOLDER " Open scene", ""))
 			{

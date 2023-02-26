@@ -121,11 +121,15 @@ namespace Wiwa {
 		size_t count = rvec.size();
 
 		for (size_t i = 0; i < count; i++) {
-			Model* mat = (Model*)rvec[i]->resource;
+			if (!rvec[i]->isNative) {
+				Model* mat = (Model*)rvec[i]->resource;
 
-			delete mat;
+				delete mat;
+
+				rvec.erase(rvec.begin() + i);
+				i--;
+				count--;
+			}
 		}
-
-		rvec.clear();
 	}
 }
