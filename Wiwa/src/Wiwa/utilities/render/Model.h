@@ -188,8 +188,8 @@ namespace Wiwa {
 		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
 		AnimNode* LoadWiAnimNode(File file);
 		Animation* LoadWiAnimation(File file);
-		static void SaveWiAnimation(File file, Animation* anim);
-		static void SaveWiAnimNode(File file, AnimNode* node);
+		static void SaveWiAnimation(File& file, Animation* anim);
+		static void SaveWiAnimNode(File& file, AnimNode* node);
 		
 		void CreateCube();
 		void CreatePlane();

@@ -53,20 +53,20 @@ namespace Wiwa {
 		std::vector<QuatKey> rotationKeys;
 		std::vector<VectorKey> scalingKeys;
 
-		AnimNode() {}
+		AnimNode();
 	};
 
 	class WI_API Animation
 	{
-	public:
+	public: 
 		Animation();
 		Animation(std::string name) { this->name = name; }
 		
-		std::string name;
+		std::string name = "";
 		std::vector<AnimNode*> channels;
-		unsigned int numChannels;
-		double duration;
-		double ticksPerSecond;
+		unsigned int numChannels = 0;
+		double duration = 0.0f;
+		double ticksPerSecond = 0.0f;
 	};
 }
 

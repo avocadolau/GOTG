@@ -4,5 +4,9 @@
 namespace Wiwa {
 	Animation::Animation()
 	{
+		name = "new animation";
+	}
+	AnimNode::AnimNode()
+	{
 	}
 }

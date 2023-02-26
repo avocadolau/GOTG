@@ -217,12 +217,12 @@ namespace Wiwa {
 			size_t anim_size;
 			f.Read(&anim_size, sizeof(size_t));
 			animations.resize(anim_size);
-			f.Read(&animations[0], anim_size * sizeof(Animation));
-	/*		for (size_t i = 0; i < anim_size; i++)
+			//f.Read(&animations[0], anim_size * sizeof(Animation));
+			for (size_t i = 0; i < anim_size; i++)
 			{
-				animations.push_back(LoadWiAnimation(f));
+				animations[i] = LoadWiAnimation(f);
 			}
-		*/
+		
 
 			// Material size
 			size_t mat_size;
@@ -563,6 +563,11 @@ namespace Wiwa {
 		file.Write(&h->rotation, sizeof(Vector3f));
 		file.Write(&h->scale, sizeof(Vector3f));
 
+		//save transform
+		file.Write(&h->Transformation, sizeof(glm::mat4));
+
+
+
 		size_t mesh_ind_size = h->meshIndexes.size();
 
 		file.Write(&mesh_ind_size, sizeof(size_t));
@@ -595,6 +600,8 @@ namespace Wiwa {
 		file.Read(&h->translation, sizeof(Vector3f));
 		file.Read(&h->rotation, sizeof(Vector3f));
 		file.Read(&h->scale, sizeof(Vector3f));
+
+		file.Read(&h->Transformation, sizeof(glm::mat4));
 
 		size_t mesh_ind_size;
 
@@ -1008,7 +1015,7 @@ namespace Wiwa {
 	void Model::GetBoneTransforms(float timeInSeconds, std::vector<glm::mat4>& transforms)
 	{
 		transforms.resize(boneInfo.size());
-		glm::mat4 identity = glm::mat4(1);
+		glm::mat4 identity = glm::mat4(1.0f);
 		//Set current anim
 		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
 		float TimeInTicks = timeInSeconds * TicksPerSecond;
@@ -1048,7 +1055,7 @@ namespace Wiwa {
 
 		for (int i = 0; i < bone->mNumWeights; i++) {
 			//DEBUG
-			if (i == 0) WI_INFO("\n");
+			//if (i == 0) WI_INFO("\n");
 
 			const aiVertexWeight& vw = bone->mWeights[i];
 
@@ -1152,14 +1159,20 @@ namespace Wiwa {
 		file.Read(&node->numScalingKeys, sizeof(unsigned int));
 
 		// Read position keys
-		node->positionKeys.resize(node->numPositionKeys);
-		file.Read(&node->positionKeys[0], node->numPositionKeys * sizeof(VectorKey));
+		size_t position_key_size;
+		file.Read(&position_key_size, sizeof(size_t));
+		node->positionKeys.resize(position_key_size);
+		file.Read(&node->positionKeys[0], position_key_size* sizeof(VectorKey));
 		// Read Rotation keys
-		node->rotationKeys.resize(node->numRotationKeys);
-		file.Read(&node->rotationKeys[0], node->numRotationKeys* sizeof(QuatKey));
+		size_t rotation_key_size;
+		file.Read(&rotation_key_size, sizeof(size_t));
+		node->rotationKeys.resize(rotation_key_size);
+		file.Read(&node->rotationKeys[0], rotation_key_size*sizeof(QuatKey));
 		// Read scaling keys
-		node->scalingKeys.resize(node->numScalingKeys);
-		file.Read(&node->scalingKeys[0], node->numScalingKeys * sizeof(VectorKey));
+		size_t scaling_key_size;
+		file.Read(&scaling_key_size, sizeof(size_t));
+		node->scalingKeys.resize(scaling_key_size);
+		file.Read(&node->scalingKeys[0], scaling_key_size* sizeof(VectorKey));
 		return node;
 	}
 
@@ -1176,7 +1189,10 @@ namespace Wiwa {
 		file.Read(&anim->ticksPerSecond, sizeof(double));
 		file.Read(&anim->numChannels, sizeof(unsigned int));
 
-		for (unsigned int i = 0; i < anim->numChannels; i++)
+		size_t channels_size;
+		file.Read(&channels_size, sizeof(size_t));
+
+		for (unsigned int i = 0; i < channels_size; i++)
 		{
 			anim->channels.push_back(LoadWiAnimNode(file));
 		}
@@ -1185,7 +1201,7 @@ namespace Wiwa {
 		return anim;
 	}
 
-	void Model::SaveWiAnimation(File file, Animation* anim)
+	void Model::SaveWiAnimation(File& file, Animation* anim)
 	{
 		size_t name_len = anim->name.size();
 
@@ -1196,15 +1212,20 @@ namespace Wiwa {
 		file.Write(&anim->ticksPerSecond, sizeof(double));
 		file.Write(&anim->numChannels, sizeof(unsigned int));
 
-		for (unsigned int i = 0; i < anim->numChannels; i++)
+		size_t channels_size = anim->channels.size();
+		file.Write(&channels_size, sizeof(size_t));
+
+
+		for (unsigned int i = 0; i < channels_size; i++)
 		{
 			SaveWiAnimNode(file, anim->channels[i]);
 		}
 
 	}
 
-	void Model::SaveWiAnimNode(File file, AnimNode* node)
+	void Model::SaveWiAnimNode(File& file, AnimNode* node)
 	{
+		if (node == NULL) return;
 		size_t name_len = node->name.size();
 		file.Write(&name_len, sizeof(size_t));
 		file.Write(node->name.c_str(), name_len);
@@ -1257,12 +1278,12 @@ namespace Wiwa {
 			//Animations
 			size_t anim_size = model->animations.size();
 			f.Write(&anim_size, sizeof(size_t));
-			f.Write(model->animations.data(), anim_size * sizeof(Animation));
+			//f.Write(model->animations.data(), anim_size * sizeof(Animation));
 			
-		/*	for (size_t i = 0; i < anim_size; i++)
+			for (size_t i = 0; i < anim_size; i++)
 			{
 				SaveWiAnimation(f,model->animations[i]);
-			}*/
+			}
 
 			// Material size
 			size_t mat_size = model->materials.size();
