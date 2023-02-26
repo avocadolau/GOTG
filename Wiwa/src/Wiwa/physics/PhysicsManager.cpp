@@ -75,7 +75,7 @@ namespace Wiwa {
 		}
 
 		// Step simulation
-		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 15);
+		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
@@ -253,7 +253,7 @@ namespace Wiwa {
 		}
 
 		m_Bodies.clear();
-
+		m_BodiesToLog.clear();
 		delete m_World;
 
 		filterStrings.clear();
@@ -283,6 +283,7 @@ namespace Wiwa {
 		delete body->btBody->getCollisionShape();
 
 		m_Bodies.remove(body);
+		m_BodiesToLog.remove(body);
 		m_World->removeRigidBody(body->btBody);
 		//delete (ObjectData*)(body)->getUserPointer();
 		delete body->btBody;
@@ -317,7 +318,6 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
-		WI_INFO("New body cube has been created");
 		glm::vec3 skew;
 		glm::vec4 perspective;
 		glm::vec3 Scaling;
@@ -372,7 +372,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	void PhysicsManager::SetBodyMass(MyRigidBody* body, float mass)
+	void PhysicsManager::SetBodyMass(MyRigidBody* body, const float mass)
 	{
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
@@ -390,7 +390,7 @@ namespace Wiwa {
 		m_World->addRigidBody(body->btBody);
 	}
 
-	void PhysicsManager::SetBodyGravity(MyRigidBody* body, btVector3 gravity)
+	void PhysicsManager::SetBodyGravity(MyRigidBody* body, const btVector3 gravity)
 	{
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
@@ -399,7 +399,7 @@ namespace Wiwa {
 		body->btBody->setGravity(gravity);
 	}
 
-	void PhysicsManager::SetTrigger(MyRigidBody* body, bool isTrigger)
+	void PhysicsManager::SetTrigger(MyRigidBody* body, const bool isTrigger)
 	{
 		if (isTrigger == true)
 			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -407,7 +407,7 @@ namespace Wiwa {
 			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	}
 
-	void PhysicsManager::SetStatic(MyRigidBody* body, bool isStatic)
+	void PhysicsManager::SetStatic(MyRigidBody* body, const bool isStatic)
 	{
 		if (isStatic == true)
 		{
@@ -421,10 +421,11 @@ namespace Wiwa {
 		}
 	}
 
-	void PhysicsManager::SetLinearVelocity(MyRigidBody* body, glm::vec3 velocity)
-	{
-		body->btBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
-	}
+	//void SetLinearVelocity(MyRigidBody* body, const glm::vec3 velocity)
+	//{
+	//	//body->btBody->applyCentralImpulse(btVector3(velocity.x, velocity.y, velocity.z));
+	//	//body->btBody->setLinearVelocity(a);
+	//}
 
 	MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
 	{
@@ -505,26 +506,6 @@ namespace Wiwa {
 		return m_HasBeenInit;
 	}
 
-	bool PhysicsManager::LogBodies()
-	{
-		if (m_Bodies.empty())
-			return false;
-
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
-		//WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
-		int num = 0;
-		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
-		{
-			
-			/*int id = (*item)->getUserIndex();*/
-			btVector3 pos = (*item)->btBody->getWorldTransform().getOrigin();
-			/*const char* e_name = entityManager.GetEntityName(id); */
-			//WI_INFO("Index {} is {} {} {}", num, pos.x(), pos.y(), pos.z()); 
-			num++;
-		}
-		return true;
-	}
 	void PhysicsManager::DebugDrawWorld()
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
@@ -560,6 +541,37 @@ namespace Wiwa {
 	{
 		filterStrings.erase(filterStrings.begin() + index);
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);
+	}
+
+	bool PhysicsManager::AddBodyToLog(MyRigidBody* body_to_log)
+	{
+		m_BodiesToLog.emplace_back(body_to_log);
+		return true;
+	}
+
+	bool PhysicsManager::RemoveBodyFromLog(MyRigidBody* body_to_log)
+	{
+		m_BodiesToLog.remove(body_to_log);
+		return true;
+	}
+
+	bool PhysicsManager::LogBodies()
+	{
+		if (m_BodiesToLog.empty())
+			return false;
+
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
+		//WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
+		int num = 0;
+		for (std::list<MyRigidBody*>::iterator item = m_BodiesToLog.begin(); item != m_BodiesToLog.end(); item++)
+		{
+			btVector3 pos = (*item)->btBody->getWorldTransform().getOrigin();
+			/*const char* e_name = entityManager.GetEntityName(id); */
+			WI_INFO("Id {} is at {} {} {}", (*item)->id, pos.x(), pos.y(), pos.z()); 
+			num++;
+		}
+		return true;
 	}
 }
 

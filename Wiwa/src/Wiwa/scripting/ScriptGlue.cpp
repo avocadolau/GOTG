@@ -40,6 +40,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(AddComponent);
 		WI_ADD_INTERNAL_CALL(ApplySystem);
 		WI_ADD_INTERNAL_CALL(CreateEntity);
+		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
 
 		//Time
@@ -69,5 +70,7 @@ namespace Wiwa
 		// Physics
 		WI_ADD_INTERNAL_CALL(AddBodyCube);
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
+		WI_ADD_INTERNAL_CALL(AddBodyToLog);
+		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 	}
 }

@@ -21,6 +21,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static EntityId CreateEntity();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId CreateEntityNamed(string name_entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void DestroyEntity(EntityId eid);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat);
@@ -81,6 +83,10 @@ namespace Wiwa
         internal extern static bool AddBodyCube(EntityId id, ref ColliderCube colliderCube, ref Transform3D transform, ref Rigidbody rigidBody);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool AddBodyToLog(EntityId id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool RemoveBodyFromLog(EntityId id);
         #endregion
     }
 }

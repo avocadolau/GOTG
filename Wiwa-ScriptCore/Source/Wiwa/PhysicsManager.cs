@@ -12,6 +12,16 @@
         {
             InternalCalls.SetLinearVelocity(id, velocity);
         }
+
+        public static bool AddBodyToLog(EntityId id)
+        {
+            return InternalCalls.AddBodyToLog(id);
+        }
+
+        public static bool RemoveBodyFromLog(EntityId id)
+        {
+            return InternalCalls.RemoveBodyFromLog(id);
+        }
         //public static CameraId GetActiveCamera()
         //{
         //    return InternalCalls.GetActiveCamera();

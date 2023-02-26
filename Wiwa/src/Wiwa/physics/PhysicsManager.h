@@ -20,7 +20,6 @@
 #include <algorithm>
 
 #define MAX_BITS 32
-
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
 class DebugDrawer;
@@ -75,21 +74,19 @@ namespace Wiwa {
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		// Manipulate bodies
-		void SetBodyMass(MyRigidBody* body, float mass);
+		void SetBodyMass(MyRigidBody* body, const float mass);
 
-		void SetBodyGravity(MyRigidBody* body, btVector3 gravity);
+		void SetBodyGravity(MyRigidBody* body, const btVector3 gravity);
 
-		void SetTrigger(MyRigidBody* body, bool isTrigger);
+		void SetTrigger(MyRigidBody* body, const bool isTrigger);
 
-		void SetStatic(MyRigidBody* body, bool isStatic);
-
-		void SetLinearVelocity(MyRigidBody* body, glm::vec3 velocity);
+		void SetStatic(MyRigidBody* body, const bool isStatic);
 
 		MyRigidBody* FindByEntityId(size_t id);
 
 		void UpdateCollisionType(size_t first, size_t second);
 
-		inline glm::vec3 WiwaToGLM(Wiwa::Vector3f vector)
+		inline glm::vec3 WiwaToGLM(const Wiwa::Vector3f vector)
 		{
 			return glm::vec3(vector.x, vector.y, vector.z);
 		}
@@ -99,8 +96,6 @@ namespace Wiwa {
 		bool OnLoad();
 
 		bool getInit();
-
-		bool LogBodies();
 
 		void DebugDrawWorld();
 
@@ -129,6 +124,14 @@ namespace Wiwa {
 		std::list<btTypedConstraint*> m_Constraints;
 
 		std::vector<CollisionData> m_CollisionList;
+
+	private:
+		std::list<MyRigidBody*> m_BodiesToLog;
+
+	public:
+		bool AddBodyToLog(MyRigidBody* body_to_log);
+		bool RemoveBodyFromLog(MyRigidBody* body_to_log);
+		bool LogBodies();
 
 	public:
 		std::vector<std::string> filterStrings;

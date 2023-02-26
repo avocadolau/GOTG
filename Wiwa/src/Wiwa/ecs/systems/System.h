@@ -5,7 +5,7 @@
 #include <Wiwa/scene/SceneManager.h>
 
 namespace Wiwa {
-	class MyRigidBody;
+	struct MyRigidBody;
 	class WI_API System {
 	private:
 

@@ -11,6 +11,8 @@ void ApplySystem(size_t id, MonoReflectionType* type);
 
 size_t CreateEntity();
 
+size_t CreateEntityNamed(MonoString* name_entity);
+
 void DestroyEntity(size_t eid);
 
 // Help functions
