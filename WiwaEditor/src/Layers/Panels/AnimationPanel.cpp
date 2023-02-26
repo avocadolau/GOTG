@@ -31,10 +31,29 @@ void AnimationPanel::Draw()
 
 		ImGui::Text("Entity:%s", (char*)edit.c_str());
 		
+		
+		Wiwa::Mesh* meshId = em.GetComponent<Wiwa::Mesh>(m_CurrentID);
+		if (meshId != nullptr)
+		{
+			Wiwa::Model* model = Wiwa::Resources::GetResourceById<Wiwa::Model>(meshId->meshId);
+			model = model->getModelAt(meshId->modelIndex);
+			if (ImGui::CollapsingHeader("Animations "))
+			{
+				ImGui::Button("Animation");
+			}
+
+		}
+		
+		
 	}
 	else
 	{
 		ImGui::Text("Entity:Select an entity!");
+		if (ImGui::CollapsingHeader("Animations "))
+		{
+			ImGui::Text("No animations (no entity selected)");
+			
+		}
 	}
 
 
