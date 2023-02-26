@@ -4,6 +4,7 @@
 #include <Wiwa/events/Event.h>
 #include <Wiwa/events/ApplicationEvent.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/utilities/render/LightManager.h>
 
 namespace Wiwa {
 	std::vector<Scene*> SceneManager::m_Scenes;
@@ -473,6 +474,8 @@ namespace Wiwa {
 				}
 			}
 			
+
+
 			// Save entities
 			EntityManager& em = sc->GetEntityManager();
 			std::vector<EntityId>* pentities = em.GetParentEntitiesAlive();
