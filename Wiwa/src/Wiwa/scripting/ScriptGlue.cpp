@@ -57,12 +57,12 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(AddMeshToEntity);
 
 		// Audio
-		WI_ADD_INTERNAL_CALL(PlayMusic);
+		/*WI_ADD_INTERNAL_CALL(PlayMusic);
 		WI_ADD_INTERNAL_CALL(StopMusic);
 
 		WI_ADD_INTERNAL_CALL(PlaySound);
 		WI_ADD_INTERNAL_CALL(StopSound);
 
-		WI_ADD_INTERNAL_CALL(StopAllEvents);
+		WI_ADD_INTERNAL_CALL(StopAllEvents);*/
 	}
 }
