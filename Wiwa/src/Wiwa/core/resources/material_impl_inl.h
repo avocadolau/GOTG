@@ -120,7 +120,7 @@ namespace Wiwa {
 	}
 
 	template<>
-	inline void Resources::UnloadResources<Material>() {
+	inline void Resources::UnloadResourcesOf<Material>() {
 		std::vector<Resource*>& rvec = m_Resources[WRT_MATERIAL];
 		size_t count = rvec.size();
 

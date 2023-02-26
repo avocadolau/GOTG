@@ -116,7 +116,7 @@ namespace Wiwa {
 	}
 
 	template<>
-	inline void Resources::UnloadResources<Model>() {
+	inline void Resources::UnloadResourcesOf<Model>() {
 		std::vector<Resource*>& rvec = m_Resources[WRT_MODEL];
 		size_t count = rvec.size();
 

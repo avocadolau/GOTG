@@ -155,7 +155,7 @@ namespace Wiwa {
 	}
 
 	template<>
-	inline void Resources::UnloadResources<Image>() {
+	inline void Resources::UnloadResourcesOf<Image>() {
 		std::vector<Resource*>& rvec = m_Resources[WRT_IMAGE];
 		size_t count = rvec.size();
 

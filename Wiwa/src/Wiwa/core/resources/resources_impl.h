@@ -157,7 +157,7 @@ namespace Wiwa {
 		template<class T, class... T2> static void CreateMeta(const char* file, T2... settings);
 		template<class T, class... T2> static void LoadMeta(const char* file, T2... settings);
 
-		template<class T> static void UnloadResources();
+		template<class T> static void UnloadResourcesOf();
 
 		inline static void SaveFile(const char* file, std::string& shaderFile)
 		{

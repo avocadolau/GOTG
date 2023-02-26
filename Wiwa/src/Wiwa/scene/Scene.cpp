@@ -85,7 +85,7 @@ namespace Wiwa {
 	void Scene::Unload(bool unload_resources)
 	{
 		if (unload_resources) {
-			Wiwa::Resources::UnloadSceneResources();
+			Wiwa::Resources::UnloadAllResources();
 		}
 	}
 

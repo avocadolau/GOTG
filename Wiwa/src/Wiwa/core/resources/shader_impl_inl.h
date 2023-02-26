@@ -144,7 +144,7 @@ namespace Wiwa {
 	}
 
 	template<>
-	inline void Resources::UnloadResources<Shader>() {
+	inline void Resources::UnloadResourcesOf<Shader>() {
 		std::vector<Resource*>& rvec = m_Resources[WRT_SHADER];
 		size_t count = rvec.size();
 

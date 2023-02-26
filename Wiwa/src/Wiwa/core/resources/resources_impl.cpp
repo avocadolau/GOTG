@@ -93,10 +93,10 @@ namespace Wiwa {
 	{
 		return;
 		//TODO: EVENT OF UNLOADED RESOURCES
-		UnloadResources<Image>();
-		UnloadResources<Material>();
-		UnloadResources<Shader>();
-		UnloadResources<Model>();
+		UnloadResourcesOf<Image>();
+		UnloadResourcesOf<Material>();
+		UnloadResourcesOf<Shader>();
+		UnloadResourcesOf<Model>();
 	}
 	
 	Resources::MetaResult Resources::CheckMeta(const char* filename)
