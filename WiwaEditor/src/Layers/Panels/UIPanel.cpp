@@ -184,7 +184,7 @@ void UIPanel::Draw()
 					ImGui::SameLine();
 					if (ImGui::Button("Delete"))
 					{
-						m_GuiManager.DestroyGuiControl(UI_element_selected);
+						m_GuiManager.DestroyGuiControl(m_GuiManager.controls.at(i));
 					}
 					ImGui::PopID();
 				}

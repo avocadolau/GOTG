@@ -121,6 +121,10 @@ namespace Wiwa
 		Rect2i section;       // Texture atlas base section
 		Rect2i extraSection;       // Texture atlas base section for the bar
 
+		uint32_t id_quad;
+
+		uint32_t id_quad2;
+
 		//Font font;              // Text font
 
 		//Module* observer;        // Observer module (it should probably be an array/list)

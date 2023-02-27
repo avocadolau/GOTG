@@ -22,7 +22,5 @@ namespace Wiwa
 
 
 		bool canClick = true;
-		uint32_t id_quad;
-		uint32_t id_quad2;
 	};
 }

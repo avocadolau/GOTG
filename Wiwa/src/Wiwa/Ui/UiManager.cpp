@@ -97,6 +97,14 @@ namespace Wiwa
 				control.at(i)->Update();
 		}
 
+		size_t rsize = controlsToDestroy.size();
+
+		for (size_t i = 0; i < rsize; i++) {
+			RemoveControl(controlsToDestroy[i]);
+		}
+
+		controlsToDestroy.clear();
+
 		return true;
 	
 	}
@@ -112,20 +120,9 @@ namespace Wiwa
 		return true;
 
 	}
-	void GuiManager::DestroyGuiControl(int id)
+	void GuiManager::DestroyGuiControl(GuiControl* control)
 	{
-		std::vector<GuiControl*> control = controls;
-
-		for (int i = 0; i < control.size(); i++)
-		{
-			if (control.at(i) != nullptr)
-			{
-				if (control.at(i)->id == id)
-				{
-					control.erase(control.begin() + i);
-				}
-			}
-		}
+		controlsToDestroy.push_back(control);
 	}
 	bool GuiManager::CleanUp()
 	{
@@ -137,5 +134,22 @@ namespace Wiwa
 		}
 
 		return true;
+	}
+
+	void GuiManager::RemoveControl(GuiControl* control)
+	{
+		size_t ealive = controls.size();
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		for (size_t i = 0; i < ealive; i++) {
+			if (controls[i] == control) {
+				r2d.RemoveInstance(controls.at(i)->id_quad);
+				if (controls.at(i)->type == GuiControlType::SLIDER)
+				{
+					r2d.RemoveInstance(controls.at(i)->id_quad2);
+				}
+				controls.erase(controls.begin() + i);
+				break;
+			}
+		}
 	}
 }

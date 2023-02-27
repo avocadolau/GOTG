@@ -41,12 +41,14 @@ namespace Wiwa
 		//Method for strings
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text);
 
-		void DestroyGuiControl(int id);
+		void DestroyGuiControl(GuiControl* control);
+
+		void RemoveControl(GuiControl* control);
 
 	public:
 
 		std::vector<GuiControl*> controls;
-
+		std::vector<GuiControl*> controlsToDestroy;
 		float accumulatedTime = 0.0f;
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;
