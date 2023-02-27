@@ -59,9 +59,12 @@ namespace Wiwa {
 		{
 			if (cube)
 			{
+				std::string name = "City_building_004";
 				WI_INFO("NEW BODY OF ENTITY--> {} AND ID {}", e_name, m_EntityId);
 				//if (mesh) cube->halfExtents = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId)->boundingBox.HalfSize();
 				physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
+				if (name == e_name)
+					physicsManager.AddBodyToLog(physicsManager.FindByEntityId(m_EntityId));
 			}
 			else if (sphere)
 			{
