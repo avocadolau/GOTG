@@ -1048,7 +1048,7 @@ namespace Wiwa {
 	void Model::GetBoneTransforms(float timeInSeconds, std::vector<glm::mat4>& transforms)
 	{
 		transforms.resize(parent->boneInfo.size());
-		glm::mat4 identity = glm::mat4(1.0f);
+		glm::mat4 identity (1.0f);
 		//Set current anim
 		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
 		float TimeInTicks = timeInSeconds * TicksPerSecond;

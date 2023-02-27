@@ -20,7 +20,7 @@ namespace Wiwa {
 		static glm::mat4 m_OrthoProj;
 		static glm::mat4 m_View;
 		static glm::mat4 m_Model;
-
+		static uint32_t m_BoneLocation[MAX_BONES];
 		static RenderLayer m_RenderLayers[MAX_LAYERS];
 
 		static Shader m_Shader;

@@ -220,7 +220,12 @@ namespace Wiwa {
 		m_Proj = glGetUniformLocation(m_IDprogram, "u_Proj");
 		m_View = glGetUniformLocation(m_IDprogram, "u_View");
 		m_UCamera = glGetUniformLocation(m_IDprogram, "u_CameraPosition");
-		m_BoneLocation[MAX_BONES] = glGetUniformLocation(m_IDprogram,"u_Bones");
+		for (unsigned int i = 0; i < MAX_BONES; i++) {
+			char Name[128];
+			memset(Name, 0, sizeof(Name));
+			snprintf(Name, sizeof(Name), "u_Bones[%d]", i);
+			m_BoneLocation[i] = glGetUniformLocation(m_IDprogram, Name);
+		}
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)
