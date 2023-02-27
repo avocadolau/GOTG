@@ -384,6 +384,9 @@ void EditorLayer::MainMenuBar()
 				
 			}*/
 
+			static size_t save_ind = 0;
+			static LayoutData* save_ldata = nullptr;
+
 			size_t csize = m_CustomLayouts.size();
 
 			for (size_t i = 0; i < csize; i++) {
@@ -398,8 +401,12 @@ void EditorLayer::MainMenuBar()
 				ImGui::SameLine();
 
 				ImGui::PushID(i);
+
 				if (ImGui::Button("Save")) {
-					SaveLayout(ldata);
+					save_ldata = &ldata;
+					save_ind = i;
+
+					ImGui::OpenPopup("save_layout");
 				}
 
 				ImGui::SameLine();
@@ -420,6 +427,30 @@ void EditorLayer::MainMenuBar()
 			if (ImGui::Button("New layout")) {
 				ImGui::OpenPopup("create_layout");
 			}
+
+			ImGui::PushID(save_ind);
+			if (ImGui::BeginPopup("save_layout")) {
+				ImGui::Text("Save layout");
+
+				std::string msg = "Are you sure you want to override layout [";
+				msg += save_ldata->name;
+				msg += "] with the current layout setup? This change can't be undone.";
+
+				ImGui::Text(msg.c_str());
+
+				if (ImGui::Button("Save")) {
+					SaveLayout(*save_ldata);
+					ImGui::CloseCurrentPopup();
+				}
+				
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel")) {
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+			ImGui::PopID();
 
 			if (ImGui::BeginPopup("create_layout")) {
 				static char name[64] = { 0 };
