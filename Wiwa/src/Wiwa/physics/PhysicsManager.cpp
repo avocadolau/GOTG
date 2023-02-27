@@ -372,6 +372,31 @@ namespace Wiwa {
 		return true;
 	}
 
+	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
+	{
+		btCollisionShape* colShape = new btCylinderShapeX(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
+		m_Shapes.push_back(colShape);
+
+		btTransform startTransform;
+		startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
+
+		btVector3 localInertia(0, 0, 0);
+		if (rigid_body.mass != 0.f)
+			colShape->calculateLocalInertia(rigid_body.mass, localInertia);
+
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+		m_Motions.push_back(myMotionState);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
+
+		btRigidBody* btBody = new btRigidBody(rbInfo);
+		btBody->setUserIndex(id);
+
+		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
+		m_World->addRigidBody(btBody);
+		m_Bodies.push_back(myBodyData);
+		return true;
+	}
+
 	void PhysicsManager::SetBodyMass(MyRigidBody* body, const float mass)
 	{
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();

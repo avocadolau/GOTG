@@ -7,6 +7,7 @@
 #include <Wiwa/ecs/components/ColliderCube.h>
 #include <Wiwa/ecs/components/ColliderCylinder.h>
 #include <Wiwa/ecs/components/ColliderSphere.h>
+#include <Wiwa/ecs/components/ColliderCapsule.h>
 #include "Wiwa/ecs/components/Transform3D.h"
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
@@ -72,6 +73,8 @@ namespace Wiwa {
 		bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+
+		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		// Manipulate bodies
 		void SetBodyMass(MyRigidBody* body, const float mass);
