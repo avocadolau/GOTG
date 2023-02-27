@@ -77,7 +77,9 @@ void AnimatorPanel::Draw()
 	ImGui::BeginChild("child2", ImVec2(0, h), true);
 	for (int i = 0; i < animButtons.size(); i++)
 	{
-		ImGui::Button(animButtons[i].name.c_str());
+		//ImGui::Button(animButtons[i].name.c_str());
+		ImGui::BeginChild(animButtons[i].name.c_str(), ImVec2(100, 100), true);
+		ImGui::EndChild();
 	}
 	ImGui::EndChild();
 	
