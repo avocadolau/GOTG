@@ -16,6 +16,7 @@ namespace Wiwa {
 	uint32_t RenderManager::m_OrthoLoc;
 	uint32_t RenderManager::m_ViewLoc;
 	uint32_t RenderManager::m_ModelLoc;
+	bool RenderManager::m_RenderOnMainWindow = false;
 
 	void RenderManager::Init(int width, int height)
 	{
@@ -110,6 +111,17 @@ namespace Wiwa {
 		// Unbind shader and framebuffer
 		m_Shader.UnBind();
 		m_FrameBuffer.Unbind();
+
+		if (m_RenderOnMainWindow) {
+			m_Shader.Bind();
+
+			glBindTexture(GL_TEXTURE_2D, m_FrameBuffer.getColorBufferTexture());
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			m_Shader.UnBind();
+		}
+
+		glBindVertexArray(0);
 	}
 
 	void RenderManager::Destroy()
