@@ -29,13 +29,15 @@ namespace Wiwa {
 	}
 	void CameraManager::Update()
 	{
-		editorCamera->frameBuffer->Clear();
-		if (editorCamera->drawFrustrums)
+		if (editorCamera)
 		{
-			Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
-			Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
+			editorCamera->frameBuffer->Clear();
+			if (editorCamera->drawFrustrums)
+			{
+				Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
+				Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
+			}
 		}
-
 		size_t cameraCount = m_CamerasAlive.size();
 		for (size_t i = 0; i < cameraCount; i++)
 		{

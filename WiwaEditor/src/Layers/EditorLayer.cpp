@@ -62,9 +62,9 @@ void EditorLayer::OnAttach()
 	cam->setPosition(glm::vec3{-52.5f, 30.2f, 26.2f});
 	cam->setRotation(glm::vec3{-26.0f, -30.2f, 0.0f});
 
+	m_Scene = std::make_unique<ScenePanel>(this);
 	m_Configuration = std::make_unique<ConfigurationPanel>(this);
 	m_Console = std::make_unique<ConsolePanel>(this);
-	m_Scene = std::make_unique<ScenePanel>(this);
 	m_Hierarchy = std::make_unique<HierarchyPanel>(this);
 	m_Assets = std::make_unique<AssetsPanel>(this);
 	m_Inspector = std::make_unique<InspectorPanel>(this);
@@ -300,7 +300,8 @@ void EditorLayer::RegenSol()
 	
 		mutex.unlock();
 
-		delete s_RegenThread;
+		if(finishedThread)
+			delete s_RegenThread;
 	}
 
 	s_RegenThread = new std::thread(RegenSolutionThread);

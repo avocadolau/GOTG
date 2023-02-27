@@ -68,6 +68,13 @@ namespace Wiwa {
 		m_BBDSUniforms.View = m_BBDisplayShader->getUniformLocation("u_View");
 		m_BBDSUniforms.Projection = m_BBDisplayShader->getUniformLocation("u_Proj");
 
+		m_DepthShaderId = Resources::Load<Shader>("resources/shaders/light/depth");
+		m_DepthShader = Resources::GetResourceById<Shader>(m_DepthShaderId);
+		m_DepthShader->Compile("resources/shaders/light/depth");
+		m_DepthShaderUniforms.Model = m_DepthShader->getUniformLocation("u_Model");
+		m_DepthShaderUniforms.View = m_DepthShader->getUniformLocation("u_View");
+		m_DepthShaderUniforms.Projection = m_DepthShader->getUniformLocation("u_Proj");
+
 
 		std::vector<const char*> faces = {
 			"resources/images/skybox/right.jpg",
@@ -269,6 +276,34 @@ namespace Wiwa {
 		{
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
+		// Setting the shadow map buffer
+		camera->frameBuffer->BindDepth(true);
+
+		Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
+		glm::mat4 view;
+		glm::mat4 projection;
+		if (lightTrans)
+		{
+			view = glm::lookAt(
+				lightTrans->localPosition,
+				lightTrans->localPosition + glm::radians(lightTrans->localRotation),
+				glm::vec3(0.0f, 1.0f, 0.0f));
+			projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+
+			m_DepthShader->Bind();
+			m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
+			m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
+
+			m_DepthShader->setUniform(m_DepthShaderUniforms.Model, lightTrans->localMatrix);
+		}
+
+		mesh->Render();
+
+		m_DepthShader->UnBind();
+
+		camera->frameBuffer->UnbindDepth();
+
+		//Set up color buffer
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
@@ -278,6 +313,19 @@ namespace Wiwa {
 		matShader->Bind();
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
+
+		if (lightTrans)
+		{
+			glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
+
+			matShader->setUniform(matShader->getUniformLocation("u_Light"), lightMVP);
+		}
+
+
+
+
+		camera->frameBuffer->SetupDepth(GL_TEXTURE1);
+
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
@@ -285,6 +333,8 @@ namespace Wiwa {
 		mesh->Render();
 
 		material->UnBind();
+
+		//Debug
 
 		if (mesh->showNormals)
 		{
@@ -315,7 +365,6 @@ namespace Wiwa {
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-
 				camera->frameBuffer->Bind(false);
 				glDepthFunc(GL_LEQUAL);
 				Shader* shader = m_DefaultSkybox.m_Material->getShader();
@@ -374,6 +423,7 @@ namespace Wiwa {
 			break;
 		case Wiwa::Renderer3D::GAMMA_CORRECTION:
 			glEnable(GL_FRAMEBUFFER_SRGB);
+			break;
 		default:
 			break;
 		}
@@ -543,6 +593,10 @@ namespace Wiwa {
 				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Cuttoff").c_str()), spotLight->Cutoff);
 			}
 		}
+		
+	}
+	void Renderer3D::RenderShadows(Camera* camera, const size_t& directional)
+	{
 		
 	}
 }

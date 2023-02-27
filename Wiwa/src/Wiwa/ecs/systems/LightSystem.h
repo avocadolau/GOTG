@@ -16,7 +16,7 @@ namespace Wiwa {
 		LightSystem();
 		~LightSystem();
 
-		virtual void OnEntitySet() override;
+		virtual void OnSystemAdded() override;
 	};
 }
 

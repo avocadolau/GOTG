@@ -14,31 +14,31 @@ Wiwa::LightSystem::~LightSystem()
 {
 	if (GetComponent<PointLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().RemovePointLight(m_EntityId);
+		m_Scene->GetLightManager().RemovePointLight(m_EntityId);
 	}
 	else if (GetComponent<DirectionalLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().SetDirectionalLight(-1);
+		m_Scene->GetLightManager().SetDirectionalLight(-1);
 	}
 	else if (GetComponent<SpotLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().RemoveSpotLight(m_EntityId);
+		m_Scene->GetLightManager().RemoveSpotLight(m_EntityId);
 	}
 }
 
-void Wiwa::LightSystem::OnEntitySet()
+void Wiwa::LightSystem::OnSystemAdded()
 {
 	if (GetComponent<PointLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().AddPointLight(m_EntityId);
+		m_Scene->GetLightManager().AddPointLight(m_EntityId);
 	}
 	else if (GetComponent<DirectionalLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().SetDirectionalLight(m_EntityId);
+		m_Scene->GetLightManager().SetDirectionalLight(m_EntityId);
 	}
 	else if (GetComponent<SpotLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().AddSpotLight(m_EntityId);
+		m_Scene->GetLightManager().AddSpotLight(m_EntityId);
 	}
 }
 
