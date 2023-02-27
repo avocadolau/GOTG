@@ -122,7 +122,7 @@ namespace Wiwa
 			{
 				if (control.at(i)->id == id)
 				{
-					//control.erase(i);
+					control.erase(control.begin() + i);
 				}
 			}
 		}

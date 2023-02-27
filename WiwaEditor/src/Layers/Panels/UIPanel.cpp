@@ -32,6 +32,16 @@ void UIPanel::Draw()
 		{
 			ImGui::InputInt2("position", position);
 			ImGui::InputInt2("size", size);
+			if (ImGui::BeginPopupModal("WARNING"))
+			{
+				ImGui::Text("Check if all the requirements were filled \nbefore creating the UI element \nall elements need 2 textures.");
+				if(ImGui::Button("Close"))
+				{
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+				
+			}
 			Rect2i rect;
 			rect.x = position[0];
 			rect.y = position[1];
@@ -77,28 +87,56 @@ void UIPanel::Draw()
 			ImGui::Text("Secondary tex path");
 			if (ImGui::Button("Create Button"))
 			{
-				
-				m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				{
+					m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+				}
+				else
+				{
+					ImGui::OpenPopup("WARNING");
+				}
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Slider"))
 			{
-				Rect2i rect2;
-				rect2.x = rect.x-(rect.width/2);
-				rect2.y = rect.y;
-				rect2.width = (rect.width/100);
-				rect2.height = rect.height;
-				m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str(), rect2);
+				
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				{
+					Rect2i rect2;
+					rect2.x = rect.x - (rect.width / 2);
+					rect2.y = rect.y;
+					rect2.width = (rect.width / 100);
+					rect2.height = rect.height;
+					m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str(), rect2);
+				}
+				else
+				{
+					ImGui::OpenPopup("WARNING");
+				}
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Checkbox"))
 			{
-				m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				{
+					m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+				}
+				else
+				{
+					ImGui::OpenPopup("WARNING");
+				}
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Create Image"))
 			{
-				m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				{
+					m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+				}
+				else
+				{
+					ImGui::OpenPopup("WARNING");
+				}
 			}
 		}
 
@@ -142,6 +180,11 @@ void UIPanel::Draw()
 						lastSliderID = sliderID;
 						lastCheckboxID = checkboxID;
 						lastImageID = imageID;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Delete"))
+					{
+						m_GuiManager.DestroyGuiControl(UI_element_selected);
 					}
 					ImGui::PopID();
 				}
