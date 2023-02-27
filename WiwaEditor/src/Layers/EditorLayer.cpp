@@ -414,7 +414,7 @@ void EditorLayer::MainMenuBar()
 					std::filesystem::path p = ldata.path;
 					p.replace_extension(".ini");
 
-					Wiwa::FileSystem::Remove(ldata.name.c_str());
+					Wiwa::FileSystem::Remove(ldata.path.c_str());
 					Wiwa::FileSystem::Remove(p.string().c_str());
 
 					m_CustomLayouts.erase(m_CustomLayouts.begin() + i);
