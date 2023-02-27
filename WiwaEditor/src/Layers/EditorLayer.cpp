@@ -299,8 +299,8 @@ void EditorLayer::RegenSol()
 			s_RegenThread->join();
 	
 		mutex.unlock();
-		if(finishedThread)
-			delete s_RegenThread;
+
+		delete s_RegenThread;
 	}
 
 	s_RegenThread = new std::thread(RegenSolutionThread);
