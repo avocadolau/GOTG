@@ -74,7 +74,7 @@ namespace Wiwa {
 
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
-		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		// Manipulate bodies
 		void SetBodyMass(MyRigidBody* body, const float mass);
