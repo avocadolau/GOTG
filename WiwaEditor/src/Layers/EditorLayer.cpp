@@ -665,7 +665,7 @@ void EditorLayer::LoadPanelConfig()
 	if (config.HasMember("sol_version"))
 		s_SolVersion = config["sol_version"].get<const char*>();
 	if (config.HasMember("build_conf"))
-		s_SolVersion = config["build_conf"].get<const char*>();
+		s_BuildConf = config["build_conf"].get<const char*>();
 	if (config.HasMember("active_layout")) {
 		m_ActiveLayout = config["active_layout"].as_string();
 
