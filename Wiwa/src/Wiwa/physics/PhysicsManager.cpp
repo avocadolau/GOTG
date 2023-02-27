@@ -462,6 +462,11 @@ namespace Wiwa {
 		return nullptr;
 	}
 
+	void PhysicsManager::ManipulateBody(MyRigidBody* body, const btVector3& vector)
+	{
+		body->btBody->setLinearVelocity(vector);
+	}
+
 	void PhysicsManager::UpdateCollisionType(size_t first, size_t second)
 	{
 		size_t collision_list_size = m_CollisionList.size();

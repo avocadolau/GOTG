@@ -87,6 +87,8 @@ namespace Wiwa {
 
 		MyRigidBody* FindByEntityId(size_t id);
 
+		void ManipulateBody(MyRigidBody* body, const btVector3& vector);
+
 		void UpdateCollisionType(size_t first, size_t second);
 
 		inline glm::vec3 WiwaToGLM(const Wiwa::Vector3f vector)
