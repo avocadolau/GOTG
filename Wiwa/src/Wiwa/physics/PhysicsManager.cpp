@@ -349,7 +349,7 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
-		btCollisionShape* colShape = new btCylinderShape(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
+		btCollisionShape* colShape = new btCylinderShapeX(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
 		m_Shapes.push_back(colShape);
 
 		btTransform startTransform;
@@ -372,9 +372,9 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
+	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
-		btCollisionShape* colShape = new btCapsuleShape(capsule.radius, capsule.radius);
+		btCollisionShape* colShape = new btCylinderShapeX(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
 		m_Shapes.push_back(colShape);
 
 		btTransform startTransform;

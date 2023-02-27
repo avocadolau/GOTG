@@ -49,7 +49,6 @@ namespace Wiwa {
 		ColliderCube* cube = GetComponent<ColliderCube>();
 		ColliderSphere* sphere = GetComponent<ColliderSphere>();
 		ColliderCylinder* cylinder = GetComponent<ColliderCylinder>();
-		ColliderCapsule* capsule = GetComponent<ColliderCapsule>();
 
 		Mesh* mesh = GetComponent<Mesh>();
 
@@ -70,10 +69,6 @@ namespace Wiwa {
 			else if (cylinder)
 			{
 				physicsManager.AddBodyCylinder(m_EntityId, *cylinder, *transform, *rb);
-			}
-			else if (capsule)
-			{
-				physicsManager.AddBodyCapsule(m_EntityId, *capsule, *transform, *rb);
 			}
 		}
 	}
