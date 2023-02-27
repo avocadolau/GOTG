@@ -4,6 +4,19 @@
 
 #include <Wiwa/events/ApplicationEvent.h>
 
+struct buttonInfo {
+	std::string name;
+	int x;
+	int y;
+	// conections? maybe we save them in a map or smthing
+	buttonInfo(std::string name)
+	{
+		this->name = name;
+		x = 0;
+		y = 0;
+	}
+};
+
 class AnimatorPanel : public Panel
 {
 public:
@@ -18,6 +31,7 @@ public:
 	bool OnSceneChangeEvent(Wiwa::SceneChangeEvent& e);
 
 private:
+	std::vector<buttonInfo> animButtons;
 
 	int m_CurrentID = 0;
 	bool m_EntitySet = false;

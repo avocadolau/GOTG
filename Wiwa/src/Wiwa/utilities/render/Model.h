@@ -161,6 +161,9 @@ namespace Wiwa {
 		std::vector<int> meshBaseVertex;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
 
+		// for the moment i'll put the anim here, i'll change it
+		std::vector<Animation*> animations;
+
 		Animation* currentAnimation;
 
 		ModelHierarchy* model_hierarchy;
@@ -208,6 +211,7 @@ namespace Wiwa {
 		void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
 		void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);
 		
+		
 	public:
 		Model(const char* file);
 		~Model();
@@ -236,7 +240,7 @@ namespace Wiwa {
 
 		void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
 		Animation* GetCurrentAnimation() { return currentAnimation; }
-
+		std::vector<Animation*> GetAnimations() {return animations; }
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
@@ -246,10 +250,11 @@ namespace Wiwa {
 
 		static Model* GetModelFromFile(const char* file, ModelSettings* settings);
 		static void SaveModel(Model* model, const char* file);
+
+		bool HasBones() { return has_bones; }
 	public:
 
-		// for the moment i'll put the anim here, i'll change it
-		std::vector<Animation*> animations;
+		
 
 		bool showNormals = false;
 		Math::AABB boundingBox;
