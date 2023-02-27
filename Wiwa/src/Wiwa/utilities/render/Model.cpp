@@ -46,14 +46,6 @@ namespace Wiwa {
 		
 		is_root = true;
 
-		glm::mat4 identity = glm::mat4(1);
-
-		model_hierarchy = loadModelHierarchy(scene->mRootNode,identity);
-
-		globalInverseTransform = glm::make_mat4(scene->mRootNode->mTransformation.Inverse().ToPtr());
-
-		std::filesystem::path p = file;
-		model_hierarchy->name = p.stem().string();
 
 		m_ModelPath = file;
 
@@ -161,7 +153,7 @@ namespace Wiwa {
 				totalBones += numBones;
 
 				Model* model = loadmesh(pMesh);
-				
+				model->parent = this;
 				//Load bones
 				if (pMesh->HasBones())
 				{
@@ -190,6 +182,16 @@ namespace Wiwa {
 			}
 		}
 
+		//load hierarchy after for animation pourpuses
+		glm::mat4 identity = glm::mat4(1);
+
+		model_hierarchy = loadModelHierarchy(scene->mRootNode, identity);
+		globalInverseTransform = glm::make_mat4(scene->mRootNode->mTransformation.Inverse().ToPtr());
+
+		std::filesystem::path p = file;
+		model_hierarchy->name = p.stem().string();
+
+
 		aiReleaseImport(scene);
 		return true;
 	}
@@ -212,6 +214,36 @@ namespace Wiwa {
 
 			//load hierarchy
 			model_hierarchy = LoadModelHierarchy(f);
+
+			//load map name to index bone
+			size_t bone_index_size;
+			f.Read(&bone_index_size, sizeof(size_t));
+			for (size_t i = 0; i < bone_index_size; i++)
+			{
+				std::pair<std::string, unsigned int> item;
+				size_t name_size;
+				f.Read(&name_size, sizeof(size_t));
+				item.first.resize(name_size);
+				f.Read(&item.first[0], name_size);
+				f.Read(&item.second, sizeof(unsigned int));
+
+				boneNameToIndexMap.insert(item);
+				//FIX
+				//std::string name;
+				//size_t name_size;
+				//f.Read(&name_size, sizeof(size_t));
+				//name.resize(name_size);
+				//f.Read(&name, name_size);
+				//unsigned int value;
+				//f.Read(&value, sizeof(unsigned int));
+
+				//boneNameToIndexMap.insert({ name,value });
+			}
+			//bone info
+			size_t bones_info_size;
+			f.Read(&bones_info_size, sizeof(size_t));
+			boneInfo.resize(bones_info_size);
+			f.Read(&boneInfo[0], bones_info_size * sizeof(BoneInfo));
 
 			//load animations
 			size_t anim_size;
@@ -265,12 +297,7 @@ namespace Wiwa {
 				model->bone_data.resize(bones_size);
 				f.Read(&model->bone_data[0], bones_size * sizeof(VertexBoneData));
 
-				//bone info
-				size_t bones_info_size;
-				f.Read(&bones_info_size, sizeof(size_t));
-				model->boneInfo.resize(bones_info_size);
-				f.Read(&model->boneInfo[0], bones_info_size * sizeof(BoneInfo));
-
+			
 				//hold reference to root
 				model->parent = this;
 	
@@ -288,14 +315,14 @@ namespace Wiwa {
 	{
 		int boneid = 0;
 		std::string bone_name = (pBone->mName.C_Str());
-		if (boneNameToIndexMap.find(bone_name) == boneNameToIndexMap.end())
+		if (parent->boneNameToIndexMap.find(bone_name) == parent->boneNameToIndexMap.end())
 		{
 			//allocate an index for a new bone
-			boneid = boneNameToIndexMap.size();
-			boneNameToIndexMap[bone_name] = boneid;
+			boneid = parent->boneNameToIndexMap.size();
+			parent->boneNameToIndexMap[bone_name] = boneid;
 		}
 		else {
-			boneid = boneNameToIndexMap[bone_name];
+			boneid = parent->boneNameToIndexMap[bone_name];
 		}
 		return boneid;
 	}
@@ -566,8 +593,6 @@ namespace Wiwa {
 		//save transform
 		file.Write(&h->Transformation, sizeof(glm::mat4));
 
-
-
 		size_t mesh_ind_size = h->meshIndexes.size();
 
 		file.Write(&mesh_ind_size, sizeof(size_t));
@@ -663,9 +688,9 @@ namespace Wiwa {
 
 		glm::mat4 GlobalTransformation = parentTransform * nodeTransformation;
 
-		if (boneNameToIndexMap.find(NodeName) != boneNameToIndexMap.end()) {
-			unsigned int BoneIndex = boneNameToIndexMap[NodeName];
-			boneInfo[BoneIndex].finalTransformation = globalInverseTransform * GlobalTransformation * boneInfo[BoneIndex].offsetMatrix;
+		if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
+			unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
+			parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
 		}
 
 		for (unsigned int i = 0; i < node->children.size(); i++) {
@@ -1022,7 +1047,7 @@ namespace Wiwa {
 
 	void Model::GetBoneTransforms(float timeInSeconds, std::vector<glm::mat4>& transforms)
 	{
-		transforms.resize(boneInfo.size());
+		transforms.resize(parent->boneInfo.size());
 		glm::mat4 identity = glm::mat4(1.0f);
 		//Set current anim
 		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
@@ -1031,9 +1056,9 @@ namespace Wiwa {
 
 		ReadNodeHeirarchy(timeInSeconds, parent->model_hierarchy, identity);
 
-		for (unsigned int i = 0; i < boneInfo.size(); i++)
+		for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
 		{
-			transforms[i] = boneInfo[i].finalTransformation;
+			transforms[i] = parent->boneInfo[i].finalTransformation;
 		}
 	}
 
@@ -1054,11 +1079,11 @@ namespace Wiwa {
 		//PrintAssimpMatrix(bone);
 
 		//init bone info, using bone index to acces it
-		if (bone_id == boneInfo.size())
+		if (bone_id == parent->boneInfo.size())
 		{
 			glm::mat4 offset = glm::make_mat4(bone->mOffsetMatrix.ToPtr());
 			BoneInfo binfo(offset);
-			boneInfo.push_back(binfo);
+			parent->boneInfo.push_back(binfo);
 		}
 
 		for (int i = 0; i < bone->mNumWeights; i++) {
@@ -1091,7 +1116,6 @@ namespace Wiwa {
 
 	void Model::LoadAnimation(const aiAnimation* animation)
 	{
-
 		Animation* anim = new Animation();
 
 		anim->name = animation->mName.C_Str();
@@ -1228,7 +1252,6 @@ namespace Wiwa {
 		{
 			SaveWiAnimNode(file, anim->channels[i]);
 		}
-
 	}
 
 	void Model::SaveWiAnimNode(File& file, AnimNode* node)
@@ -1283,11 +1306,30 @@ namespace Wiwa {
 			// Model hierarchy
 			SaveModelHierarchy(f, model->model_hierarchy);
 
+			//bone to index map			
+			size_t bone_index_size = model->boneNameToIndexMap.size();
+			f.Write(&bone_index_size, sizeof(size_t));
+			std::map<std::string, unsigned int>::iterator it;
+			for (it = model->boneNameToIndexMap.begin(); it != model->boneNameToIndexMap.end();it++)
+			{
+
+				//size_t name_size = model->materials[i].size();
+				//f.Write(&name_size, sizeof(size_t));
+				//f.Write(model->materials[i].c_str(), name_size);
+				size_t name_size = it->first.size();
+				f.Write(&name_size, sizeof(size_t));
+				f.Write(it->first.c_str(), name_size);
+				f.Write(&it->second, sizeof(unsigned int));
+			}
+
+			//Model Bones info
+			size_t bones_info_size = model->boneInfo.size();
+			f.Write(&bones_info_size, sizeof(size_t));
+			f.Write(model->boneInfo.data(), bones_info_size * sizeof(BoneInfo));
+
 			//Animations
 			size_t anim_size = model->animations.size();
-			f.Write(&anim_size, sizeof(size_t));
-			//f.Write(model->animations.data(), anim_size * sizeof(Animation));
-			
+			f.Write(&anim_size, sizeof(size_t));		
 			for (size_t i = 0; i < anim_size; i++)
 			{
 				SaveWiAnimation(f,model->animations[i]);
@@ -1327,10 +1369,7 @@ namespace Wiwa {
 				f.Write(&bones_size, sizeof(size_t));
 				f.Write(c_model->bone_data.data(), bones_size * sizeof(VertexBoneData));
 
-				//Model Bones info
-				size_t bones_info_size = c_model->boneInfo.size();
-				f.Write(&bones_info_size, sizeof(size_t));
-				f.Write(c_model->boneInfo.data(), bones_info_size * sizeof(BoneInfo));
+
 			}
 
 		}

@@ -10,7 +10,7 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
-#define MAX_NUM_BONES_PER_VERTEX 10
+#define MAX_NUM_BONES_PER_VERTEX 8
 #define MAX_NUM_TEXTCOORDS_PER_ANIM 200 // ???? no idea, obviously needs more but I dunno
 
 
