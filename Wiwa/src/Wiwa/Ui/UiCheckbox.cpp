@@ -37,14 +37,6 @@ namespace Wiwa
 			mouseX = Wiwa::Input::GetMouseX();
 			mouseY = Wiwa::Input::GetMouseY();
 
-			if (checked)
-			{
-				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
-			}
-			else
-			{
-				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
-			}
 
 			if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
 				(mouseY > position.y && mouseY < position.y + position.height))
@@ -54,15 +46,8 @@ namespace Wiwa
 				if (Wiwa::Input::IsMouseButtonPressed(0))
 				{
 					state = GuiControlState::PRESSED;
-					//cout << "Pressed " << endl;
-					//NotifyObserver();
 					checked = !checked;
-				}
-				else if (Wiwa::Input::IsMouseButtonPressed(0))
-				{
-					state = GuiControlState::SELECTED;
-					//cout << "Selected " << endl;
-					//NotifyObserver();
+					SwapTexture();
 				}
 				else
 				{
@@ -114,5 +99,22 @@ namespace Wiwa
 		}
 
 		return false;
+	}
+	bool GuiCheckbox::SwapTexture()
+	{
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
+		if (checked)
+		{
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
+		}
+		else
+		{
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
+		}
+		r2d.RemoveInstance(id_quad);
+		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+
+		return true;
 	}
 }
