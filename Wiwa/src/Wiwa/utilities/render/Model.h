@@ -72,11 +72,13 @@ namespace Wiwa {
 		}
 
 	};
+
 	struct VertexWeight {
 		unsigned int vertexId;
 		float weight;
 		
 	};
+
 	struct BoneInfo {
 		std::string name;
 		glm::mat4 offsetMatrix;
@@ -135,6 +137,7 @@ namespace Wiwa {
 			assert(0,"BONE INDEX TO VERTEX OUT OF SIZE");
 		}
 	};
+
 	class WI_API Model
 	{
 	private:

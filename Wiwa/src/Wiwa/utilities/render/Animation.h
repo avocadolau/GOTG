@@ -97,7 +97,9 @@ namespace Wiwa {
 		double ticksPerSecond = 0.0f;
 
 
-
+		NodeData GetRootNode() {
+			return m_RootNode;
+		}
 
 	private: 
 		float m_Duration;

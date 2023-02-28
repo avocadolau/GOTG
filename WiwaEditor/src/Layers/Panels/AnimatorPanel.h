@@ -33,6 +33,7 @@ public:
 private:
 	std::vector<buttonInfo> animButtons;
 
+	
 	int m_CurrentID = 0;
 	bool m_EntitySet = false;
 
