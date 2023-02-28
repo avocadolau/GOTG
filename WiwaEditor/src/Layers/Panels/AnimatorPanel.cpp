@@ -5,7 +5,7 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/ecs/components/Mesh.h>
-//#include <Wiwa/utilities/render/Animation.h>
+#include <Wiwa/utilities/render/Animation.h>
 
 
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
