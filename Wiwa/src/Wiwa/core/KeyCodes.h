@@ -5,7 +5,7 @@ namespace Wiwa
 	using KeyCode = uint16_t;
 	using GamepadAxis = uint16_t;
 	using GamepadNum = uint16_t;
-	namespace Key
+	namespace Gamepad
 	{
 		enum : GamepadNum
 		{
@@ -36,6 +36,9 @@ namespace Wiwa
 			LeftTrigger = 4,
 			RightTrigger = 5
 		};
+	}
+	namespace Key
+	{
 		enum : KeyCode
 		{
 			// From glfw3.h
