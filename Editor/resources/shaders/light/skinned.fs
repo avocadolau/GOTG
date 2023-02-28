@@ -6,7 +6,8 @@ out vec4 FragColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 LocalPos;
-
+flat in ivec4 BoneIDs;
+in vec4 Weights;
 
 struct BaseLight
 {

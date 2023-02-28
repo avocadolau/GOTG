@@ -41,6 +41,19 @@ namespace Wiwa {
 		textShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured", textShader);
 
+		//Init skinned
+		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/skinned");
+		Shader* skinnedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedShaderId);
+		skinnedShader->Compile("resources/shaders/light/skinned");
+		skinnedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedShader->addUniform("u_ToonLevels", UniformType::Float);
+		skinnedShader->addUniform("u_RimLightPower", UniformType::Float);
+		skinnedShader->addUniform("u_SpecularValue", UniformType::Float);
+		skinnedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		skinnedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		skinnedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/skinned", skinnedShader);
+
 		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/lit_model_color");
 		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
 		colorShader->Compile("resources/shaders/light/lit_model_color");
@@ -284,9 +297,9 @@ namespace Wiwa {
 
 		//DEBUG 
 		long long CurrentTimeMillis = Time::GetRealTimeSinceStartup();
-		float AnimationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
+		float animationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
 		std::vector<glm::mat4> transforms;
-		mesh->GetBoneTransforms(AnimationTimeSec, transforms);
+		mesh->GetBoneTransforms(animationTimeSec, transforms);
 
 		for (unsigned int i = 0; i < transforms.size(); i++) {
 			matShader->SetBoneTransform(i, transforms[i]);

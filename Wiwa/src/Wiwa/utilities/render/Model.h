@@ -11,8 +11,6 @@
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
 #define MAX_NUM_BONES_PER_VERTEX 8
-#define MAX_NUM_TEXTCOORDS_PER_ANIM 200 // ???? no idea, obviously needs more but I dunno
-
 
 struct aiScene;
 struct aiMesh;
@@ -77,7 +75,7 @@ namespace Wiwa {
 		
 	};
 	struct BoneInfo {
-		std::string name;
+		unsigned int id = 0;
 		glm::mat4 offsetMatrix;
 		glm::mat4 finalTransformation;
 
@@ -124,16 +122,15 @@ namespace Wiwa {
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
-					//DEBUG
-					//WI_INFO("bone {0} weight {1} index {2}\n", BoneID, weight, i);
 					return;
 				}
 			}
-
-			//we should never reach here, more bones than we have spce for
-			assert(0,"BONE INDEX TO VERTEX OUT OF SIZE");
+			//we should never reach here, more bones than we have space for
+			WI_ERROR("BONE INDEX TO VERTEX OUT OF SIZE");
+			assert(0);
 		}
 	};
+	
 	class WI_API Model
 	{
 	private:
@@ -186,6 +183,7 @@ namespace Wiwa {
 		void LoadMeshBones(unsigned int index, const aiMesh* mesh, Model* root);
 		void LoadSingleBone(int meshIndex, aiBone* bone, Model* root);
 		void PrintAssimpMatrix(const aiBone* b);
+		void PrintGlmMatrix(const glm::mat4& mat);
 
 		void LoadAnimation(const aiAnimation* animation);
 		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
@@ -237,6 +235,10 @@ namespace Wiwa {
 		const ModelHierarchy* getModelHierarchy() { return model_hierarchy; }
 
 		std::string getModelName() { return model_name; }
+
+		Model* GetParent() { return parent; }
+
+		std::vector<BoneInfo> GetBoneInfo() { return boneInfo; }
 
 		void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
 		Animation* GetCurrentAnimation() { return currentAnimation; }
