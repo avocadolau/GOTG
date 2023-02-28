@@ -90,6 +90,12 @@ namespace Wiwa {
 		//	//ReadMissingBones(animation, *model);
 		//}
 		~Animation();
+
+		void LoadAnimationNode(const aiNodeAnim* aiNode);
+
+
+		std::vector<Animation*> animations;
+
 		std::string name = "";
 		std::vector<AnimNode*> channels;
 		unsigned int numChannels = 0;
