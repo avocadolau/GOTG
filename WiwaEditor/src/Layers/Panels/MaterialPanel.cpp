@@ -28,11 +28,11 @@ void MaterialPanel::Draw()
 
 	if (m_Material)
 	{
-		ImGui::Text(m_Material->getMaterialPath());
+		ImGui::Text("Material path: %s",m_Material->getMaterialPath());
 		std::string str = m_Material->getShader()->getPath();
 		if (ButtonCenteredOnLine("Shaders"))
 			ImGui::OpenPopup("Shaders");
-
+		ImGui::Text("Shader: %s", str.c_str());
 		if (ImGui::BeginPopup("Shaders"))
 		{
 			static ImGuiTextFilter filter;
@@ -44,7 +44,7 @@ void MaterialPanel::Draw()
 			{
 				if (filter.PassFilter(shaders[i]->filePath.c_str()))
 				{
-					std::string label = shaders[i]->filePath.c_str();
+					std::string label = std::filesystem::path(shaders[i]->filePath).filename().string();
 
 					label += "##" + std::to_string(i);
 					if (ImGui::MenuItem(label.c_str()))
