@@ -45,6 +45,8 @@ namespace Wiwa
 
 		void RemoveControl(GuiControl* control);
 
+		static bool InitFont(const char* path);
+
 	public:
 
 		std::vector<GuiControl*> controls;
