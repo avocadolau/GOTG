@@ -23,7 +23,7 @@ namespace Wiwa {
 	{
 	}
 
-	void JSONDocument::Parse(const char * string)
+	void JSONDocument::Parse(const char* string)
 	{
 		m_Document.Parse(string);
 	}
@@ -42,6 +42,18 @@ namespace Wiwa {
 	{
 		rapidjson::Value key(mem, m_Document.GetAllocator());
 		rapidjson::Value v(rapidjson::kObjectType);
+
+		m_Document.AddMember(key, v, m_Document.GetAllocator());
+
+		rapidjson::Value& jval = m_Document[mem];
+
+		return JSONValue(&jval, &m_Document.GetAllocator());
+	}
+
+	JSONValue JSONDocument::AddMemberArray(const char* mem)
+	{
+		rapidjson::Value key(mem, m_Document.GetAllocator());
+		rapidjson::Value v(rapidjson::kArrayType);
 
 		m_Document.AddMember(key, v, m_Document.GetAllocator());
 
@@ -89,7 +101,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	JSONValue JSONDocument::operator[](const char * key)
+	JSONValue JSONDocument::operator[](const char* key)
 	{
 		return JSONValue(&m_Document[key], &m_Document.GetAllocator());
 	}

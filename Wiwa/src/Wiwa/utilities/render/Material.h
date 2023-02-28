@@ -15,7 +15,8 @@ namespace Wiwa {
 	class WI_API Material
 	{
 	public:
-		Material(Shader* shader = nullptr);
+		Material();
+		Material(Shader* shader);
 		Material(const char* file);
 		~Material();
 
@@ -24,8 +25,13 @@ namespace Wiwa {
 
 		void Load(const char* path);
 		void Save(const char* path);
+		void SaveLib(const char* path);
+
 		static void SaveMaterial(const char* path, Material* mat);
 		static Material* LoadMaterial(const char* path);
+
+		// Only loads material data, doesn't load anything else
+		static Material* LoadMaterialData(const char* path);
 
 		void Refresh();
 		inline Shader* getShader() const { return m_Shader; }
@@ -64,7 +70,7 @@ namespace Wiwa {
 	void Wiwa::Material::SetUniformData(const char* name, const T& value)
 	{
 		Uniform* uniform = getUniform(name);
-		if(!uniform)
+		if (!uniform)
 		{
 			WI_CORE_CRITICAL("Uniform name {0} doesn't exist in the current material", name);
 			return;
