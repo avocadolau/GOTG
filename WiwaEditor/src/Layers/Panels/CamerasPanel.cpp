@@ -48,6 +48,7 @@ void CamerasPanel::Draw()
 		{
 			CameraId cam_id = cameras[row];
 			Wiwa::Camera* cam = cameraManager.getCamera(cam_id);
+			
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			ImGui::Text("%i", cam_id);
@@ -55,11 +56,11 @@ void CamerasPanel::Draw()
 			ImGui::PushID(cam_id);
 			ImGui::Checkbox("Cull##culling", &cam->cull);
 			ImGui::Checkbox("BoudingBoxes##culling", &cam->drawBoundingBoxes);
-			bool selected =
-				cameraManager.getActiveCamera() == cameraManager.getCamera(cam_id) ?
-				true : false;
+			
+			bool selected = cameraManager.getActiveCamera() == cameraManager.getCamera(cam_id);
 
 			ImGui::Checkbox("Active", &selected);
+			
 			if (selected)
 			{
 				cameraManager.setActiveCamera(cam_id);
@@ -69,19 +70,25 @@ void CamerasPanel::Draw()
 				remove_cam_id = cam_id;
 				remove_cam = true;
 			}
+
 			ImGui::TableSetColumnIndex(2);
+			
 			glm::vec3 pos = cam->getPosition();
 			glm::vec3 angles = cam->getRotation();
 			
 			float fov = cam->getFOV();
 			float nearP = cam->getNear();
 			float farP = cam->getFar();
+
 			DrawVec3Control("Position", glm::value_ptr(pos), 0.0f, 50.0f);
 			DrawVec3Control("Angles", glm::value_ptr(angles), 0.0f, 50.0f);
+
 			cam->setRotation(angles);
+			
 			ImGui::DragFloat("Fov", &fov);
 			ImGui::DragFloat("Near", &nearP);
 			ImGui::DragFloat("Far", &farP);
+			
 			cam->setPosition({ pos.x, pos.y, pos.z });
 			
 			cam->setFOV(fov);
