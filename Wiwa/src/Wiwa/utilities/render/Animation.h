@@ -92,8 +92,14 @@ namespace Wiwa {
 		//}
 		~Animation();
 
-		void LoadAnimationNode(const aiNodeAnim* aiNode);
+		
 
+		void LoadAnimation(const aiNodeAnim* aiNode);
+		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
+		AnimNode* LoadWiAnimNode(File file);
+		Animation* LoadWiAnimation(File file);
+		static void SaveWiAnimation(File& file, Animation* anim);
+		static void SaveWiAnimNode(File& file, AnimNode* node);
 
 		std::vector<Animation*> animations;
 
@@ -104,7 +110,8 @@ namespace Wiwa {
 		double ticksPerSecond = 0.0f;
 
 
-		NodeData GetRootNode() {
+		NodeData GetRootNode() 
+		{
 			return m_RootNode;
 		}
 
