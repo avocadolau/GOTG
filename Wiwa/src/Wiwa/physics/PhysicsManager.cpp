@@ -74,8 +74,10 @@ namespace Wiwa {
 			m_CollisionList[i].collisionType = CT_LEAVE;
 		}
 
-		// Step simulation
-		m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
+		//Step simulation
+		float dt = 1.0f/60.0f;
+		m_World->stepSimulation(dt, 10);
+		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
@@ -176,6 +178,7 @@ namespace Wiwa {
 		// Physics to Engine
 		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
+			WI_INFO("{}", (*item)->btBody->getActivationState());
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
@@ -445,12 +448,6 @@ namespace Wiwa {
 			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
 		}
 	}
-
-	//void SetLinearVelocity(MyRigidBody* body, const glm::vec3 velocity)
-	//{
-	//	//body->btBody->applyCentralImpulse(btVector3(velocity.x, velocity.y, velocity.z));
-	//	//body->btBody->setLinearVelocity(a);
-	//}
 
 	MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
 	{

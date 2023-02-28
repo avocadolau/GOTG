@@ -41,6 +41,7 @@ namespace Wiwa
 		static inline float GetDeltaTimeSeconds() { return m_DeltaTime.count(); }
 		static inline float GetRealTimeSinceStartup() { return m_RealTimeSinceStartup.count(); }
 		static inline float GetRealDeltaTime() { return m_RealTimeDeltaTime.count() * 1000.0f; }
+		static inline float GetRealDeltaTimeSeconds() { return m_RealTimeDeltaTime.count(); }
 		static inline bool IsPlaying() { return m_IsPlaying; }
 		static inline bool IsPaused() { return m_IsPaused; }
 	};

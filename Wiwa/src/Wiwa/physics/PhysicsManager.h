@@ -91,11 +91,6 @@ namespace Wiwa {
 
 		void UpdateCollisionType(size_t first, size_t second);
 
-		inline glm::vec3 WiwaToGLM(const Wiwa::Vector3f vector)
-		{
-			return glm::vec3(vector.x, vector.y, vector.z);
-		}
-
 		bool OnSave();
 
 		bool OnLoad();
