@@ -6,6 +6,7 @@
 #include "Wiwa/Events/ApplicationEvent.h"
 #include "Wiwa/Events/MouseEvent.h"
 #include "Wiwa/Events/KeyEvent.h"
+#include "Wiwa/Events/GamepadEvent.h"
 #include "Wiwa/ImGui/ImGuiLayer.h"
 
 #include <glew.h>
@@ -72,7 +73,7 @@ namespace Wiwa {
 		WI_CORE_ASSERT(!status, "Failed to initialize Glew!");
 		WI_CORE_WARN("=========Window intialized========");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-	
+
 		//Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
@@ -117,6 +118,7 @@ namespace Wiwa {
 				}
 			}
 		});
+
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

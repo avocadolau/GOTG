@@ -13,7 +13,7 @@ namespace Wiwa {
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
 		OnLoad, OnSave, OnMaterialChange, OnEntityChange,
 		SceneChange,
-		AxisChanged
+		GamepadConnect, GamepadDisconnect
 	};
 
 	enum EventCategory
@@ -24,7 +24,7 @@ namespace Wiwa {
 		EventCategoryKeyboard		= BIT(2),
 		EventCategoryMouse			= BIT(3),
 		EventCategoryMouseButton	= BIT(4),
-		EventCategoryJoystickAxis	= BIT(5),
+		EventCategoryGamepad		= BIT(5),
 		EventCategoryEditor			= BIT(6)
 	};
 

@@ -75,12 +75,25 @@ namespace Wiwa
 
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
-	float WindowsInput::GetAxisImpl()
+	float WindowsInput::GetAxisImpl(int gamepadIndx, int axis)
 	{
-		return 0.0f;
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(gamepadIndx, &state))
+		{
+			return state.axes[axis];
+		}
+		return 0.f;
 	}
-	bool WindowsInput::IsButtonPressedImpl(int keycode)
+	bool WindowsInput::IsButtonPressedImpl(int gamepadIndx, int keycode)
 	{
+		GLFWgamepadstate state;
+		if(glfwGetGamepadState(gamepadIndx, &state))
+		{
+			if (state.buttons[keycode])
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 }
