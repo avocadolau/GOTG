@@ -57,7 +57,6 @@ namespace Wiwa
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-		
 		switch (state)
 		{
 

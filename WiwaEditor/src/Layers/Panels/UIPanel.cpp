@@ -187,6 +187,12 @@ void UIPanel::Draw()
 						UI_element_selected = -1;
 						m_GuiManager.DestroyGuiControl(m_GuiManager.controls.at(i));
 					}
+
+					ImGui::SameLine();
+					if (ImGui::Button("Active"))
+					{
+						m_GuiManager.controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
+					}
 					ImGui::PopID();
 				}
 			}

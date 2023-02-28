@@ -96,7 +96,10 @@ namespace Wiwa
 		std::vector<GuiControl*> control = controls;
 		for (int i = 0; i < control.size(); i++)
 		{
+			if (control.at(i)->active)
+			{
 				control.at(i)->Update();
+			}
 		}
 
 		size_t rsize = controlsToDestroy.size();

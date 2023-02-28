@@ -104,9 +104,31 @@ namespace Wiwa
 
 		}
 
+		void SwapActive(Wiwa::Renderer2D& r2d)
+		{
+			active = !active;
+
+			if (active)
+			{
+				r2d.EnableInstance(id_quad);
+				if (type == GuiControlType::SLIDER)
+				{
+					r2d.EnableInstance(id_quad2);
+				}
+			}
+			else
+			{
+				r2d.DisableInstance(id_quad);
+				if (type == GuiControlType::SLIDER)
+				{
+					r2d.DisableInstance(id_quad2);
+				}
+			}
+		}
+
 	public:
 
-		bool SelectedForDrawing;
+		bool active;
 		int id;
 		GuiControlType type;
 		GuiControlState state;
@@ -124,9 +146,5 @@ namespace Wiwa
 		uint32_t id_quad;
 
 		uint32_t id_quad2;
-
-		//Font font;              // Text font
-
-		//Module* observer;        // Observer module (it should probably be an array/list)
 	};
 }
