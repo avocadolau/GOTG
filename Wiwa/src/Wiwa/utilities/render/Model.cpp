@@ -18,6 +18,7 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 #include <Wiwa/core/Resources.h>
+#include <Wiwa/utilities/render/Animation.h>
 
 namespace Wiwa {
 	bool Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
@@ -178,6 +179,7 @@ namespace Wiwa {
 
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
+				//Animation::loadAnimation
 				LoadAnimation(scene->mAnimations[i]);
 			}
 		}
@@ -381,7 +383,7 @@ namespace Wiwa {
 		return model;
 	}
 
-	ModelHierarchy* Model::loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix)
+	ModelHierarchy* Model::loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix) //animation
 	{
 		ModelHierarchy* h = new ModelHierarchy();
 

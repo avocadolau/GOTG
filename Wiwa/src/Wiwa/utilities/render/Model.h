@@ -6,7 +6,6 @@
 #include <map>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/math/AABB.h>
-#include <Wiwa/utilities/render/Animation.h>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
@@ -24,6 +23,8 @@ struct aiAnimMesh;
 
 namespace Wiwa {
 	struct ModelSettings;
+	class Animation;
+	struct AnimNode;
 
 	struct ModelHierarchy {
 		std::string name;

@@ -1,5 +1,6 @@
 #include "wipch.h"
-#include <Wiwa/utilities/render/Animation.h>
+#include "Animation.h"
+#include <assimp/anim.h>
 
 namespace Wiwa {
 	Animation::Animation()
@@ -8,5 +9,11 @@ namespace Wiwa {
 	}
 	AnimNode::AnimNode()
 	{
+	}
+	
+	Animation::Animation(aiAnimation* anim, Model* model)
+	{
+		m_Duration = anim->mDuration;
+		m_TicksPerSecond = anim->mTicksPerSecond;
 	}
 }

@@ -39,6 +39,7 @@ void AnimationPanel::Draw()
 			model = model->getModelAt(meshId->modelIndex);
 			if (ImGui::CollapsingHeader("Animations "))
 			{
+				//for(int i = 0; i < model->GetAnimations().
 				ImGui::Button("Animation");
 			}
 

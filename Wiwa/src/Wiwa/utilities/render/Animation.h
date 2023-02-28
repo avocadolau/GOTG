@@ -7,6 +7,14 @@
 #include <glm/glm.hpp>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/filesystem/FileSystem.h>
+//#include <assimp/cimport.h>
+//#include <assimp/importer.hpp>
+#include "Model.h"
+
+
+struct Model;
+struct BoneInfo;
+struct aiAnimation;
 
 namespace Wiwa {
 
@@ -56,17 +64,47 @@ namespace Wiwa {
 		AnimNode();
 	};
 
+	struct NodeData
+	{
+		glm::mat4 transformation;
+		std::string name;
+		int childrenCount;
+		std::vector<NodeData> children;
+	};
+
 	class WI_API Animation
 	{
 	public: 
 		Animation();
 		Animation(std::string name) { this->name = name; }
-		
+		Animation(aiAnimation* anim, Model* model);
+		//Animation(aiAnimation* anim, Model* model)
+		//{
+		//	//Assimp::Importer importer;
+		//	//const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
+		//	//assert(scene && scene->mRootNode);
+		//	//auto animation = scene->mAnimations[0];
+		//	//m_Duration = anim->mDuration;
+		//	//m_TicksPerSecond = anim->mTicksPerSecond;
+		//	//ReadHeirarchyData(m_RootNode, scene->mRootNode);
+		//	//ReadMissingBones(animation, *model);
+		//}
+		~Animation();
 		std::string name = "";
 		std::vector<AnimNode*> channels;
 		unsigned int numChannels = 0;
 		double duration = 0.0f;
 		double ticksPerSecond = 0.0f;
+
+
+
+
+	private: 
+		float m_Duration;
+		int m_TicksPerSecond;
+		//std::vector<Bone> m_Bones;
+		NodeData m_RootNode;
+		std::map<std::string, BoneInfo> m_BoneInfoMap;
 	};
 }
 
