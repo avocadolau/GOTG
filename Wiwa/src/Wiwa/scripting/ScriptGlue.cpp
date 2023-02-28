@@ -34,6 +34,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetMouseYIntr);
 		WI_ADD_INTERNAL_CALL(GetMouseXDeltaIntr);
 		WI_ADD_INTERNAL_CALL(GetMouseYDeltaIntr);
+		WI_ADD_INTERNAL_CALL(IsButtonPressedIntr);
+		WI_ADD_INTERNAL_CALL(GetAxisIntr);
 
 		// ECS
 		WI_ADD_INTERNAL_CALL(GetComponent);
@@ -43,7 +45,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
 
-		//Time
+		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
 		WI_ADD_INTERNAL_CALL(GetTimeIntr);
 

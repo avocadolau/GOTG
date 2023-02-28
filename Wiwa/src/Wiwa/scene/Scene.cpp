@@ -6,8 +6,8 @@
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/utilities/render/LightManager.h>
 
-
-namespace Wiwa {
+namespace Wiwa
+{
 	Scene::Scene()
 	{
 		mMaxTimeEntering = 0;
@@ -55,7 +55,8 @@ namespace Wiwa {
 		{
 		case Scene::SCENE_ENTERING:
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeEntering) m_CurrentState = SCENE_LOOP;
+			if (m_TransitionTimer >= mMaxTimeEntering)
+				m_CurrentState = SCENE_LOOP;
 			UpdateEnter();
 			RenderEnter();
 			break;
@@ -68,7 +69,8 @@ namespace Wiwa {
 			break;
 		case Scene::SCENE_LEAVING:
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeLeaving) SceneManager::ChangeScene(m_SceneToChange);
+			if (m_TransitionTimer >= mMaxTimeLeaving)
+				SceneManager::ChangeScene(m_SceneToChange);
 			UpdateLeave();
 			RenderLeave();
 			break;
@@ -91,9 +93,10 @@ namespace Wiwa {
 			m_PhysicsManager->UpdatePhysicsToEngine();
 			m_PhysicsManager->LogBodies();
 		}
-		//m_PhysicsManager->LogBodies();
+		// m_PhysicsManager->LogBodies();
 
-		if (!SceneManager::IsPlaying()) {
+		if (!SceneManager::IsPlaying())
+		{
 			m_EntityManager.UpdateWhitelist();
 		}
 	}
@@ -108,8 +111,9 @@ namespace Wiwa {
 	void Scene::Unload(bool unload_resources)
 	{
 		return;
-		if (unload_resources) {
-			Wiwa::Resources::UnloadSceneResources();				
+		if (unload_resources)
+		{
+			Wiwa::Resources::UnloadAllResources();
 		}
 	}
 
