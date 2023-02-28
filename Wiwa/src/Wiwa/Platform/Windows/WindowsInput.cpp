@@ -75,4 +75,12 @@ namespace Wiwa
 
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
+	float WindowsInput::GetAxisImpl()
+	{
+		return 0.0f;
+	}
+	bool WindowsInput::IsButtonPressedImpl(int keycode)
+	{
+		return false;
+	}
 }
