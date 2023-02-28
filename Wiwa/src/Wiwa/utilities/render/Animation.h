@@ -17,6 +17,7 @@ struct aiAnimation;
 struct aiNodeAnim;
 struct BoneInfo;
 
+
 namespace Wiwa {
 
 	struct VectorKey
@@ -76,7 +77,7 @@ namespace Wiwa {
 	class WI_API Animation
 	{
 	public: 
-		Animation();
+		   Animation();
 		Animation(std::string name) { this->name = name; }
 		Animation(aiAnimation* anim, Model* model);
 		//Animation(aiAnimation* anim, Model* model)

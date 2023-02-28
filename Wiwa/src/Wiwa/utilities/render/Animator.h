@@ -25,6 +25,11 @@ namespace Wiwa {
 		void PlayAnimation(Animation* pAnimation);
 
 		void CalculateBoneTransform(const NodeData* node, glm::mat4 parentTransform);
+
+		std::vector<glm::mat4> GetFinalBoneMatrices()
+		{
+			return m_FinalBoneMatrices;
+		}
 	private:
 
 		Wiwa::Animation* m_CurrentAnimation;

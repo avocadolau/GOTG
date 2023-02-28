@@ -34,13 +34,27 @@ namespace Wiwa {
 	{
 		std::string nodeName = node->name;
 		glm::mat4 nodeTransform = node->transformation;
-
+		// CANT WORK UNLESS I HAVE THE BONES STRUCTURE, BUT THE LOGIC SHUOLD BE	SOMEWHAT THIS
 		//Bone* Bone = m_CurrentAnimation->FindBone(nodeName);
-
+		//
 		//if (Bone)
 		//{
-		//	Bone->
+		//	Bone->Update(m_CurrentTime);
+		//	nodeTransform = Bone->GetLocalTransform();
 		//}
+		//
+		//glm::mat4 globalTransformation = parentTransform * nodeTransform;
+		//
+		//auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
+		//if (boneInfoMap.find(nodeName) != boneInfoMap.end())
+		//{
+		//	int index = boneInfoMap[nodeName].id;
+		//	glm::mat4 offset = boneInfoMap[nodeName].offset;
+		//	m_FinalBoneMatrices[index] = globalTransformation * offset;
+		//}
+		//
+		//for (int i = 0; i < node->childrenCount; i++)
+		//	CalculateBoneTransform(&node->children[i], globalTransformation);
 	}
 }
 
