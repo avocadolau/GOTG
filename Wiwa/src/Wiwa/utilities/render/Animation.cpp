@@ -11,9 +11,20 @@ namespace Wiwa {
 	{
 	}
 	
-	Animation::Animation(aiAnimation* anim, Model* model)
+	Animation::Animation(aiAnimation* animation, Model* model)
 	{
-		m_Duration = anim->mDuration;
-		m_TicksPerSecond = anim->mTicksPerSecond;
+		Animation* anim = new Animation();
+		m_Duration = animation->mDuration;
+		m_TicksPerSecond = animation->mTicksPerSecond;
+		ticksPerSecond = animation->mTicksPerSecond;
+		numChannels = animation->mNumChannels;
+
+		for (unsigned int i = 0; i < animation->mNumChannels; i++)
+		{
+			//anim->channels.push_back(LoadAnimationNode(animation->mChannels[i]));
+			
+		}
+
+		animations.push_back(anim);
 	}
 }
