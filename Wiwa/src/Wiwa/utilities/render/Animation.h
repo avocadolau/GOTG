@@ -9,12 +9,13 @@
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 //#include <assimp/cimport.h>
 //#include <assimp/importer.hpp>
-#include "Model.h"
+//#include "Model.h"
 
 
 struct Model;
-struct BoneInfo;
 struct aiAnimation;
+struct aiNodeAnim;
+struct BoneInfo;
 
 namespace Wiwa {
 
@@ -112,7 +113,7 @@ namespace Wiwa {
 		int m_TicksPerSecond;
 		//std::vector<Bone> m_Bones;
 		NodeData m_RootNode;
-		std::map<std::string, BoneInfo> m_BoneInfoMap;
+		//std::map<std::string, BoneInfo> m_BoneInfoMap;
 	};
 }
 
