@@ -80,7 +80,11 @@ namespace Wiwa
 		GLFWgamepadstate state;
 		if (glfwGetGamepadState(gamepadIndx, &state))
 		{
-			return state.axes[axis];
+			float input = state.axes[axis];
+			if (input >= -1 || input <= 1)
+			{
+				return input;
+			}
 		}
 		return 0.f;
 	}
