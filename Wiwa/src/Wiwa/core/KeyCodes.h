@@ -3,9 +3,14 @@
 namespace Wiwa
 {
 	using KeyCode = uint16_t;
-
+	using JoystickAxis = uint16_t;
 	namespace Key
 	{
+		enum : JoystickAxis
+		{
+			Horizontal = 32
+
+		};
 		enum : KeyCode
 		{
 			// From glfw3.h
