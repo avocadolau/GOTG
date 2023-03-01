@@ -51,13 +51,12 @@ namespace Wiwa {
 		m_Debug = true;
 		m_HasBeenInit = true;
 
-		m_World = new btDiscreteDynamicsWorld(m_Dispatcher, m_Broad_phase, m_Solver, m_Collision_conf);
-
+		m_World = new btCollisionWorld(m_Dispatcher,m_Broad_phase,m_Collision_conf);
 		//m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
-		m_World->setGravity(GRAVITY);
+		//m_World->(GRAVITY);
 
 		AddFilterTag("COLLISION_EVERYTHING");
 
@@ -76,9 +75,18 @@ namespace Wiwa {
 
 		//Step simulation
 		float dt = 1.0f/60.0f;
-		m_World->stepSimulation(dt, 10, Wiwa::Time::GetDeltaTimeSeconds());
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
+		for (int i = 0; i < 6; i++)
+		{
+			m_World->performDiscreteCollisionDetection();
+			ResolveContacts();
+		}
+		
+		return true;
+	}
 
+	bool PhysicsManager::ResolveContacts()
+	{
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 		int numManifolds = m_World->getDispatcher()->getNumManifolds();
@@ -87,10 +95,25 @@ namespace Wiwa {
 			btPersistentManifold* contactManifold = m_World->getDispatcher()->getManifoldByIndexInternal(i);
 			btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
 			btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
-
 			int numContacts = contactManifold->getNumContacts();
 			if (numContacts > 0)
 			{
+				//WI_INFO("normal : {} {} {}", contactManifold->getContactPoint(0).m_normalWorldOnB.x(), contactManifold->getContactPoint(0).m_normalWorldOnB.y(), contactManifold->getContactPoint(0).m_normalWorldOnB.z());
+				//WI_INFO("c2 : {}", contactManifold->getContactPoint(0).m_contactMotion2);
+				btVector3 toSubstract = contactManifold->getContactPoint(0).m_normalWorldOnB * contactManifold->getContactPoint(0).getDistance();
+
+				if (obA->getUserIndex2() == 0) // 1 is static and 0 is not
+				{
+					btVector3 aNew = obA->getWorldTransform().getOrigin() - toSubstract;
+					obA->getWorldTransform().setOrigin(aNew);
+				}
+
+				if (obB->getUserIndex2() == 0)
+				{
+					btVector3 bNew = obB->getWorldTransform().getOrigin() + toSubstract;
+					obB->getWorldTransform().setOrigin(bNew);
+				}
+				//WI_INFO("d : {}", contactManifold->getContactPoint(0).getDistance());
 				size_t idA = obA->getUserIndex();
 				size_t idB = obB->getUserIndex();
 
@@ -146,7 +169,7 @@ namespace Wiwa {
 		// Get the position from the engine
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
-		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D*transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			Rigidbody*rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
@@ -166,8 +189,8 @@ namespace Wiwa {
 			offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
 			offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
 
-			(*item)->btBody->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
-			(*item)->btBody->setWorldTransform(offsettedCollider);
+			(*item)->m_CollisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
+			(*item)->m_CollisionObject->setWorldTransform(offsettedCollider);
 		}
 		return true;
 	}
@@ -176,12 +199,12 @@ namespace Wiwa {
 	{
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		// Physics to Engine
-		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
-			btTransform bulletTransform((*item)->btBody->getWorldTransform());
+			btTransform bulletTransform((*item)->m_CollisionObject->getWorldTransform());
 
 			// Get the transform from physics world
 			btVector3 posBullet = bulletTransform.getOrigin();
@@ -200,8 +223,8 @@ namespace Wiwa {
 			transform3d->localRotation = glm::degrees(eulerAngles);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
-			(*item)->btBody->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
-			m_World->updateSingleAabb((*item)->btBody);
+			(*item)->m_CollisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
+			m_World->updateSingleAabb((*item)->m_CollisionObject);
 		}
 
 		return true;
@@ -231,13 +254,13 @@ namespace Wiwa {
 
 		/*constraints.clear();*/
 
-		for (std::list<btDefaultMotionState*>::iterator item = m_Motions.begin(); item != m_Motions.end(); item++)
+	/*	for (std::list<btDefaultMotionState*>::iterator item = m_Motions.begin(); item != m_Motions.end(); item++)
 		{
 			delete* item;
 			*item = nullptr;
 		}
 
-		m_Motions.clear();
+		m_Motions.clear();*/
 
 		for (std::list<btCollisionShape*>::iterator item = m_Shapes.begin(); item != m_Shapes.end(); item++)
 		{
@@ -247,16 +270,16 @@ namespace Wiwa {
 
 		m_Shapes.clear();
 
-		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
-			m_World->removeRigidBody((*item)->btBody);
+			m_World->removeCollisionObject((*item)->m_CollisionObject);
 			//delete (ObjectData*)(*item)->getUserPointer();
-			delete (*item)->btBody;
+			delete (*item)->m_CollisionObject;
 			delete*item;
 			*item = nullptr;
 		}
 
-		m_Bodies.clear();
+		m_CollObjects.clear();
 		m_BodiesToLog.clear();
 		delete m_World;
 
@@ -267,7 +290,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::DeleteBody(MyRigidBody* body)
+	bool PhysicsManager::DeleteBody(MyObject* body)
 	{
 		//int constrainNums = body->m_Body->getNumConstraintRefs();
 		//if (constrainNums > 0)
@@ -280,17 +303,17 @@ namespace Wiwa {
 		//	}
 		//}
 
-		m_Motions.remove((btDefaultMotionState*)body->btBody->getMotionState());
-		delete body->btBody->getMotionState();
+		/*m_Motions.remove((btDefaultMotionState*)body->m_CollisionObject->getMotionState());
+		delete body->m_CollisionObject->getMotionState();*/
 
-		m_Shapes.remove(body->btBody->getCollisionShape());
-		delete body->btBody->getCollisionShape();
+		m_Shapes.remove(body->m_CollisionObject->getCollisionShape());
+		delete body->m_CollisionObject->getCollisionShape();
 
-		m_Bodies.remove(body);
+		m_CollObjects.remove(body);
 		m_BodiesToLog.remove(body);
-		m_World->removeRigidBody(body->btBody);
+		m_World->removeCollisionObject(body->m_CollisionObject);
 		//delete (ObjectData*)(body)->getUserPointer();
-		delete body->btBody;
+		delete body->m_CollisionObject;
 		delete body;
 		return true;
 	}
@@ -302,21 +325,15 @@ namespace Wiwa {
 		btTransform startTransform;
 		startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
 
-		btVector3 localInertia(0, 0, 0);
-		if (rigid_body.mass != 0.f)
-			colShape->calculateLocalInertia(rigid_body.mass, localInertia);
+		btCollisionObject* m_CollisionObject = new btCollisionObject();
+		m_CollisionObject->setUserIndex(id); // id
+		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
 
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-		m_Motions.push_back(myMotionState);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
+		m_CollisionObject->setCollisionShape(colShape);
+		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
 
-		btRigidBody* btBody = new btRigidBody(rbInfo);
-		btBody->setUserIndex(id);
-		
-		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
-
-		m_World->addRigidBody(btBody);
-		m_Bodies.push_back(myBodyData);
+		m_World->addCollisionObject(m_CollisionObject);
+		m_CollObjects.push_back(myObjData);
 		return true;
 	}
 
@@ -334,21 +351,15 @@ namespace Wiwa {
 		btTransform startTransform;
 		startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
 
-		btVector3 localInertia(0, 0, 0);
-		if (rigid_body.mass != 0.f)
-			colShape->calculateLocalInertia(rigid_body.mass, localInertia);
+		btCollisionObject* m_CollisionObject = new btCollisionObject();
+		m_CollisionObject->setUserIndex(id);
+		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
 
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-		m_Motions.push_back(myMotionState);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
+		m_CollisionObject->setCollisionShape(colShape);
+		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
 
-		btRigidBody* btBody = new btRigidBody(rbInfo);
-		btBody->setUserIndex(id);
-		btBody->setActivationState(DISABLE_DEACTIVATION);
-
-		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
-		m_World->addRigidBody(btBody);
-		m_Bodies.push_back(myBodyData);
+		m_World->addCollisionObject(m_CollisionObject);
+		m_CollObjects.push_back(myObjData);
 		return true;
 	}
 
@@ -360,20 +371,15 @@ namespace Wiwa {
 		btTransform startTransform;
 		startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
 
-		btVector3 localInertia(0, 0, 0);
-		if (rigid_body.mass != 0.f)
-			colShape->calculateLocalInertia(rigid_body.mass, localInertia);
+		btCollisionObject* m_CollisionObject = new btCollisionObject();
+		m_CollisionObject->setUserIndex(id);
+		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
 
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-		m_Motions.push_back(myMotionState);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
+		m_CollisionObject->setCollisionShape(colShape);
+		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
 
-		btRigidBody* btBody = new btRigidBody(rbInfo);
-		btBody->setUserIndex(id);
-
-		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
-		m_World->addRigidBody(btBody);
-		m_Bodies.push_back(myBodyData);
+		m_World->addCollisionObject(m_CollisionObject);
+		m_CollObjects.push_back(myObjData);
 		return true;
 	}
 
@@ -385,75 +391,70 @@ namespace Wiwa {
 		btTransform startTransform;
 		startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
 
-		btVector3 localInertia(0, 0, 0);
-		if (rigid_body.mass != 0.f)
-			colShape->calculateLocalInertia(rigid_body.mass, localInertia);
+		btCollisionObject* m_CollisionObject = new btCollisionObject();
+		m_CollisionObject->setUserIndex(id);
+		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
 
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-		m_Motions.push_back(myMotionState);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(rigid_body.mass, myMotionState, colShape, localInertia);
+		m_CollisionObject->setCollisionShape(colShape);
+		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
 
-		btRigidBody* btBody = new btRigidBody(rbInfo);
-		btBody->setUserIndex(id);
-
-		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
-		m_World->addRigidBody(btBody);
-		m_Bodies.push_back(myBodyData);
+		m_World->addCollisionObject(m_CollisionObject);
+		m_CollObjects.push_back(myObjData);
 		return true;
 	}
 
-	void PhysicsManager::SetBodyMass(MyRigidBody* body, const float mass)
+	//void PhysicsManager::SetBodyMass(MyObject* body, const float mass)
+	//{
+	//	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	//	Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
+
+	//	rigidBody->mass = mass;
+
+	//	//Remove the rigid body from the dynamics world
+	//	m_World->removeRigidBody(body->m_CollisionObject);
+
+	//	btVector3 inertia;
+	//	body->m_CollisionObject->getCollisionShape()->calculateLocalInertia(mass, inertia);
+	//	body->m_CollisionObject->setMassProps(mass, inertia);
+
+	//	//Add the rigid body to the dynamics world
+	//	m_World->addRigidBody(body->m_CollisionObject);
+	//}
+
+	//void PhysicsManager::SetBodyGravity(MyObject* body, const btVector3 gravity)
+	//{
+	//	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	//	Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
+
+	//	rigidBody->gravity = glm::vec3(gravity.x(), gravity.y(), gravity.z());
+	//	body->m_CollisionObject->setGravity(gravity);
+	//}
+
+	//void PhysicsManager::SetTrigger(MyObject* body, const bool isTrigger)
+	//{
+	//	if (isTrigger == true)
+	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	//	else
+	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	//}
+
+	//void PhysicsManager::SetStatic(MyObject* body, const bool isStatic)
+	//{
+	//	if (isStatic == true)
+	//	{
+	//		SetBodyMass(body, 0.0f);
+	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+	//	}
+	//	else
+	//	{
+	//		SetBodyMass(body, 1.0f);
+	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
+	//	}
+	//}
+
+	MyObject* PhysicsManager::FindByEntityId(size_t id)
 	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
-
-		rigidBody->mass = mass;
-
-		//Remove the rigid body from the dynamics world
-		m_World->removeRigidBody(body->btBody);
-
-		btVector3 inertia;
-		body->btBody->getCollisionShape()->calculateLocalInertia(mass, inertia);
-		body->btBody->setMassProps(mass, inertia);
-
-		//Add the rigid body to the dynamics world
-		m_World->addRigidBody(body->btBody);
-	}
-
-	void PhysicsManager::SetBodyGravity(MyRigidBody* body, const btVector3 gravity)
-	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
-
-		rigidBody->gravity = glm::vec3(gravity.x(), gravity.y(), gravity.z());
-		body->btBody->setGravity(gravity);
-	}
-
-	void PhysicsManager::SetTrigger(MyRigidBody* body, const bool isTrigger)
-	{
-		if (isTrigger == true)
-			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		else
-			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	}
-
-	void PhysicsManager::SetStatic(MyRigidBody* body, const bool isStatic)
-	{
-		if (isStatic == true)
-		{
-			SetBodyMass(body, 0.0f);
-			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-		}
-		else
-		{
-			SetBodyMass(body, 1.0f);
-			body->btBody->setCollisionFlags(body->btBody->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
-		}
-	}
-
-	MyRigidBody* PhysicsManager::FindByEntityId(size_t id)
-	{
-		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
+		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			if ((*item)->id == id)
 				return *item;
@@ -461,11 +462,11 @@ namespace Wiwa {
 		return nullptr;
 	}
 
-	void PhysicsManager::ManipulateBody(MyRigidBody* body, const btVector3& vector)
-	{
-		body->btBody->activate();
-		body->btBody->setLinearVelocity(vector);
-	}
+	//void PhysicsManager::ManipulateBody(MyObject* body, const btVector3& vector)
+	//{
+	//	body->m_CollisionObject->activate();
+	//	body->m_CollisionObject->setLinearVelocity(vector);
+	//}
 
 	void PhysicsManager::UpdateCollisionType(size_t first, size_t second)
 	{
@@ -573,13 +574,13 @@ namespace Wiwa {
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);
 	}
 
-	bool PhysicsManager::AddBodyToLog(MyRigidBody* body_to_log)
+	bool PhysicsManager::AddBodyToLog(MyObject* body_to_log)
 	{
 		m_BodiesToLog.emplace_back(body_to_log);
 		return true;
 	}
 
-	bool PhysicsManager::RemoveBodyFromLog(MyRigidBody* body_to_log)
+	bool PhysicsManager::RemoveBodyFromLog(MyObject* body_to_log)
 	{
 		m_BodiesToLog.remove(body_to_log);
 		return true;
@@ -592,11 +593,11 @@ namespace Wiwa {
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
-		//WI_INFO("SCENE {} World has total of {} bodies", name, m_Bodies.size());
+		//WI_INFO("SCENE {} World has total of {} bodies", name, m_CollObjects.size());
 		int num = 0;
-		for (std::list<MyRigidBody*>::iterator item = m_BodiesToLog.begin(); item != m_BodiesToLog.end(); item++)
+		for (std::list<MyObject*>::iterator item = m_BodiesToLog.begin(); item != m_BodiesToLog.end(); item++)
 		{
-			btVector3 pos = (*item)->btBody->getWorldTransform().getOrigin();
+			btVector3 pos = (*item)->m_CollisionObject->getWorldTransform().getOrigin();
 			/*const char* e_name = entityManager.GetEntityName(id); */
 			WI_INFO("Id {} is at {} {} {}", (*item)->id, pos.x(), pos.y(), pos.z()); 
 			num++;

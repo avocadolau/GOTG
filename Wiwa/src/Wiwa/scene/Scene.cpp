@@ -91,7 +91,7 @@ namespace Wiwa
 		{
 			m_PhysicsManager->StepSimulation();
 			m_PhysicsManager->UpdatePhysicsToEngine();
-			m_PhysicsManager->LogBodies();
+			//m_PhysicsManager->LogBodies();
 		}
 		// m_PhysicsManager->LogBodies();
 

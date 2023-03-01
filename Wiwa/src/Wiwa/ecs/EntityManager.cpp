@@ -731,7 +731,7 @@ namespace Wiwa {
 			rigidBody->mass = 1;
 			rigidBody->gravity = { GRAVITY.x() , GRAVITY.y(), GRAVITY.z()};
 			rigidBody->isTrigger = false;
-			rigidBody->isSensor = false;
+			rigidBody->isStatic = false;
 			rigidBody->selfTag = 0;
 			rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
 		}

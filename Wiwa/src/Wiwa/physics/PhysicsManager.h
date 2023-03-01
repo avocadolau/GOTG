@@ -27,10 +27,10 @@ class DebugDrawer;
 class Camera;
 namespace Wiwa {
 
-	struct MyRigidBody {
-		MyRigidBody(btRigidBody& body_, const size_t id_) : btBody(&body_), id(id_) {};
+	struct MyObject {
+		MyObject(btCollisionObject& body_, const size_t id_) : m_CollisionObject(&body_), id(id_) {};
 
-		btRigidBody* btBody;
+		btCollisionObject* m_CollisionObject;
 		size_t id;
 	};
 
@@ -59,13 +59,15 @@ namespace Wiwa {
 
 		bool StepSimulation();
 
+		bool ResolveContacts();
+
 		bool UpdateEngineToPhysics();
 
 		bool UpdatePhysicsToEngine();
 
 		bool CleanWorld();
 
-		bool DeleteBody(MyRigidBody* body);
+		bool DeleteBody(MyObject* body);
 
 		// Add bodies
 		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
@@ -77,17 +79,17 @@ namespace Wiwa {
 		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		// Manipulate bodies
-		void SetBodyMass(MyRigidBody* body, const float mass);
+		//void SetBodyMass(MyObject* body, const float mass);
 
-		void SetBodyGravity(MyRigidBody* body, const btVector3 gravity);
+		//void SetBodyGravity(MyObject* body, const btVector3 gravity);
 
-		void SetTrigger(MyRigidBody* body, const bool isTrigger);
+		//void SetTrigger(MyObject* body, const bool isTrigger);
 
-		void SetStatic(MyRigidBody* body, const bool isStatic);
+		//void SetStatic(MyObject* body, const bool isStatic);
 
-		MyRigidBody* FindByEntityId(size_t id);
+		MyObject* FindByEntityId(size_t id);
 
-		void ManipulateBody(MyRigidBody* body, const btVector3& vector);
+		//void ManipulateBody(MyObject* body, const btVector3& vector);
 
 		void UpdateCollisionType(size_t first, size_t second);
 
@@ -106,7 +108,7 @@ namespace Wiwa {
 	private:
 		bool m_Debug;
 		bool m_HasBeenInit;
-		btDiscreteDynamicsWorld* m_World;
+		btCollisionWorld* m_World;
 
 		btDefaultCollisionConfiguration* m_Collision_conf;
 		btCollisionDispatcher* m_Dispatcher;
@@ -119,18 +121,18 @@ namespace Wiwa {
 		DebugDrawer* m_Debug_draw;
 
 		std::list<btCollisionShape*> m_Shapes;
-		std::list<MyRigidBody*> m_Bodies;
-		std::list<btDefaultMotionState*> m_Motions;
+		std::list<MyObject*> m_CollObjects;
+		//std::list<btDefaultMotionState*> m_Motions;
 		std::list<btTypedConstraint*> m_Constraints;
 
 		std::vector<CollisionData> m_CollisionList;
 
 	private:
-		std::list<MyRigidBody*> m_BodiesToLog;
+		std::list<MyObject*> m_BodiesToLog;
 
 	public:
-		bool AddBodyToLog(MyRigidBody* body_to_log);
-		bool RemoveBodyFromLog(MyRigidBody* body_to_log);
+		bool AddBodyToLog(MyObject* body_to_log);
+		bool RemoveBodyFromLog(MyObject* body_to_log);
 		bool LogBodies();
 
 	public:

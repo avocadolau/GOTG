@@ -11,7 +11,7 @@ bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& t
 void SetLinearVelocity(size_t id, glm::vec3 velocity)
 {
     Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-    physicsManager.ManipulateBody(physicsManager.FindByEntityId(id), btVector3(velocity.x, velocity.y, velocity.z));
+    //physicsManager.ManipulateBody(physicsManager.FindByEntityId(id), btVector3(velocity.x, velocity.y, velocity.z));
 }
 
 bool AddBodyToLog(size_t id)
