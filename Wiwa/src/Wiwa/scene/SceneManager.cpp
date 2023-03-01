@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/events/Event.h>
+#include <Wiwa/core/Resources.h>
 #include <Wiwa/events/ApplicationEvent.h>
 #include <Wiwa/audio/Audio.h>
 
@@ -217,8 +218,15 @@ namespace Wiwa {
 			GuiControlType guiType;
 			GuiControlState state;
 			Rect2i position;
-			std::string texture;
-			std::string extraTexture;
+			std::string textureGui;
+			std::string extraTextureGui;
+
+			
+			size_t textureGui_len;
+			char* textureGui_c;
+			size_t extraTextureGui_len;
+			char* extraTextureGui_c;
+
 			Rect2i extraPosition;
 
 			scene_file.Read(&id, sizeof(int));
@@ -226,8 +234,19 @@ namespace Wiwa {
 			scene_file.Read(&guiType, sizeof(GuiControlType));
 			scene_file.Read(&state, sizeof(GuiControlState));
 			scene_file.Read(&position, sizeof(Rect2i));
-			scene_file.Read(&texture, sizeof(std::string));
-			scene_file.Read(&extraTexture, sizeof(std::string));
+
+			scene_file.Read(&textureGui_len, sizeof(size_t));
+			textureGui_c = new char[textureGui_len];
+			scene_file.Read(textureGui_c, textureGui_len);
+			textureGui = textureGui_c;
+			delete[] textureGui_c;
+
+			scene_file.Read(&extraTextureGui_len, sizeof(size_t));
+			extraTextureGui_c = new char[extraTextureGui_len];
+			scene_file.Read(extraTextureGui_c, extraTextureGui_len);
+			extraTextureGui = extraTextureGui_c;
+			delete[] extraTextureGui_c;
+
 
 			if (guiType == GuiControlType::SLIDER)
 			{
@@ -236,19 +255,19 @@ namespace Wiwa {
 			switch (guiType)
 			{
 			case Wiwa::GuiControlType::BUTTON:
-				gm.CreateGuiControl_Simple(guiType, id, position, texture.c_str(), extraTexture.c_str());
+				gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str());
 				break;
 			case Wiwa::GuiControlType::TEXT:
 				//WP
 				break;
 			case Wiwa::GuiControlType::CHECKBOX:
-				gm.CreateGuiControl_Simple(guiType, id, position, texture.c_str(), extraTexture.c_str());
+				gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str());
 				break;
 			case Wiwa::GuiControlType::SLIDER:
-				gm.CreateGuiControl(guiType, id, position, texture.c_str(), extraTexture.c_str(), extraPosition);
+				gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition);
 				break;
 			case Wiwa::GuiControlType::IMAGE:
-				gm.CreateGuiControl_Simple(guiType, id, position, texture.c_str(),nullptr);
+				gm.CreateGuiControl_Simple(guiType, id, position, extraTextureGui.c_str(),nullptr);
 				break;
 			default:
 				break;
@@ -427,16 +446,25 @@ namespace Wiwa {
 				GuiControlType guiType = control->GetType();
 				GuiControlState guiState = control->GetState();
 				Rect2i position = control->GetPosition();
-				std::string texture = Wiwa::Resources::getResourcePathById<Image>(control->GetTexture()->GetTextureId());
-				std::string extraTexture = Wiwa::Resources::getResourcePathById<Image>(control->GetExtraTexture()->GetTextureId());
 				
+				const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
+				const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+
+				size_t textureGui_len = strlen(textureGui) + 1;
+				size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
+
 				scene_file.Write(&id, sizeof(int));
 				scene_file.Write(&active, 1);
 				scene_file.Write(&guiType, sizeof(GuiControlType));
 				scene_file.Write(&guiState, sizeof(GuiControlState));
 				scene_file.Write(&position, sizeof(Rect2i));
-				scene_file.Write(&texture, sizeof(std::string));
-				scene_file.Write(&extraTexture, sizeof(std::string));
+
+				// Save texture
+				scene_file.Write(&textureGui_len, sizeof(size_t));
+				scene_file.Write(textureGui, textureGui_len);
+				// Save extraTexture
+				scene_file.Write(&extraTextureGui_len, sizeof(size_t));
+				scene_file.Write(extraTextureGui, extraTextureGui_len);
 
 				if (guiType == GuiControlType::SLIDER)
 				{

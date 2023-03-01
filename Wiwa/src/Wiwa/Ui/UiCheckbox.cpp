@@ -11,11 +11,11 @@ namespace Wiwa
 	{
 		this->position = bounds;
 
-		imgid_nonChecked = Wiwa::Resources::Load<Wiwa::Image>(path);
-		imgid2_checked = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
+		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
+		textId2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
 
-		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
-		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
+		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
+		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
@@ -109,11 +109,11 @@ namespace Wiwa
 
 		if (checked)
 		{
-			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 		}
 		else
 		{
-			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		}
 		r2d.RemoveInstance(id_quad);
 		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);

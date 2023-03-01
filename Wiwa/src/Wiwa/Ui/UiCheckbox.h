@@ -24,8 +24,5 @@ namespace Wiwa
 
 		bool checked = false;
 
-		ResourceId imgid_nonChecked;
-		ResourceId imgid2_checked;
-
 	};
 }

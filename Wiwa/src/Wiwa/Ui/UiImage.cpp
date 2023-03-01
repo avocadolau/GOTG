@@ -11,8 +11,8 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		this->texture = texture;
-		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(path);
-		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
+		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		state = GuiControlState::NORMAL;

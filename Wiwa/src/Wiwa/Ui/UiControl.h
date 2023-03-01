@@ -36,8 +36,6 @@ namespace Wiwa
 
 		GuiControl(GuiControlType type, Rect2i bounds, char text[32]) :type(type), state(GuiControlState::NORMAL)
 		{
-			//color.r = 255; color.g = 255; color.b = 255;
-			texture = nullptr;
 		}
 		
 
@@ -154,6 +152,9 @@ namespace Wiwa
 		}
 
 	public:
+
+		ResourceId textId1;
+		ResourceId textId2;
 
 		bool active;
 		int id;
