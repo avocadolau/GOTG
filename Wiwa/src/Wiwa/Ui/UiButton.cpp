@@ -10,9 +10,13 @@ namespace Wiwa
 	GuiButton::GuiButton(unsigned int id, Rect2i bounds,const char* path, const char* extraPath) : GuiControl(GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
-		this->texture = texture;
+		
 		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+
+		ResourceId imgid2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
+		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2);
+
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), {position.x,position.y}, {position.width,position.height}, Wiwa::Renderer2D::Pivot::CENTER);
 		state = GuiControlState::NORMAL;

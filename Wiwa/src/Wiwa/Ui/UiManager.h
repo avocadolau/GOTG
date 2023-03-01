@@ -47,6 +47,8 @@ namespace Wiwa
 
 		static bool InitFont(const char* path);
 
+		std::vector<GuiControl*> ReturnControls() { return controls; }
+
 	public:
 
 		std::vector<GuiControl*> controls;

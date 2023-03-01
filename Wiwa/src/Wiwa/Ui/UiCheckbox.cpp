@@ -15,7 +15,10 @@ namespace Wiwa
 		imgid2_checked = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
 
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid_nonChecked);
+		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid2_checked);
+
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
 		//We create only once the texture
 		id_quad = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		

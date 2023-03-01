@@ -60,17 +60,44 @@ namespace Wiwa
 		}
 		void SetSliderTexture(Image* tex)
 		{
-			textureForSlider = tex;
+			extraTexture = tex;
 
 		}
-
+		bool GetActive()
+		{
+			return active;
+		}
 		Rect2i GetPosition()
 		{
 			return position;
 		}
-		GuiControlType ReturnType()
+		Rect2i GetExtraPosition()
+		{
+			return extraPosition;
+		}
+		GuiControlType GetType()
 		{
 			return type;
+		}
+		GuiControlState GetState()
+		{
+			return state;
+		}
+		Image* GetTexture()
+		{
+			return texture;
+		}
+		Image* GetExtraTexture()
+		{
+			return extraTexture;
+		}
+		uint32_t GetIdQuad()
+		{
+			return id_quad;
+		}
+		uint32_t GetExtraIdQuad()
+		{
+			return id_quad2;
 		}
 
 		void SetPosition_x(int position_x)
@@ -139,10 +166,7 @@ namespace Wiwa
 		Color4f color;        // Tint color
 
 		Image* texture;
-		Image* textureForSlider;	// Texture atlas reference
-		Rect2i section;       // Texture atlas base section
-		Rect2i extraSection;       // Texture atlas base section for the bar
-
+		Image* extraTexture;	// Texture atlas reference
 		uint32_t id_quad;
 
 		uint32_t id_quad2;

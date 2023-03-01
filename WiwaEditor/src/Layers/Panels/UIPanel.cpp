@@ -210,19 +210,19 @@ void UIPanel::Draw()
 				rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
 
 				ImGui::Spacing();
-				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::BUTTON)
+				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::BUTTON)
 				{
 					ImGui::Text("Edit button # %i", lastButtonID);
 				}
-				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::SLIDER)
+				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::SLIDER)
 				{
 					ImGui::Text("Edit slider # %i", lastSliderID);
 				}
-				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::CHECKBOX)
+				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::CHECKBOX)
 				{
 					ImGui::Text("Edit checkbox # %i", lastCheckboxID);
 				}
-				if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::IMAGE)
+				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::IMAGE)
 				{
 					ImGui::Text("Edit checkbox # %i", lastImageID);
 				}
@@ -231,7 +231,7 @@ void UIPanel::Draw()
 				if (ImGui::SliderInt("position x", &rect2.x, 0.0f, 1920.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_x(rect2.x);
-					if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::SLIDER)
+					if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::SLIDER)
 					{
 						m_GuiManager.controls.at(UI_element_selected)->SetExtraPosition_x((rect2.x - (rect2.width / 2)));
 					}
@@ -242,7 +242,7 @@ void UIPanel::Draw()
 				if (ImGui::SliderInt("position y", &rect2.y, 0.0f, 1080.0f, "%.3f", NULL))
 				{
 					m_GuiManager.controls.at(UI_element_selected)->SetPosition_y(rect2.y);
-					if (m_GuiManager.controls.at(UI_element_selected)->ReturnType() == GuiControlType::SLIDER)
+					if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::SLIDER)
 					{
 						m_GuiManager.controls.at(UI_element_selected)->SetExtraPosition_y(rect2.y);
 					}

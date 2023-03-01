@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 
+#include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
