@@ -314,12 +314,12 @@ namespace Wiwa {
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 
-		if (lightTrans)
-		{
-			glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
+		//if (lightTrans)
+		//{
+		//	glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
 
-			matShader->setUniform(matShader->getUniformLocation("u_Light"), lightMVP);
-		}
+		//	matShader->setUniform(matShader->getUniformLocation("u_Light"), lightMVP);
+		//}
 
 
 
