@@ -320,11 +320,11 @@ namespace Wiwa {
 
 		//	matShader->setUniform(matShader->getUniformLocation("u_Light"), lightMVP);
 		//}
+		//camera->frameBuffer->SetupDepth(GL_TEXTURE1);
 
 
 
 
-		camera->frameBuffer->SetupDepth(GL_TEXTURE1);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
