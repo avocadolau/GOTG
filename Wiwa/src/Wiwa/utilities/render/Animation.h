@@ -95,7 +95,7 @@ namespace Wiwa {
 
 		
 
-		void LoadAnimation(const aiNodeAnim* aiNode);
+		void LoadAnimation(const aiAnimation* animation);
 		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
 		AnimNode* LoadWiAnimNode(File file);
 		Animation* LoadWiAnimation(File file);

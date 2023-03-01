@@ -28,6 +28,23 @@ namespace Wiwa {
 		animations.push_back(anim);
 	}
 
+	void Animation::LoadAnimation(const aiAnimation* animation)
+	{
+		Animation* anim = new Animation();
+		m_Duration = animation->mDuration;
+		m_TicksPerSecond = animation->mTicksPerSecond;
+		ticksPerSecond = animation->mTicksPerSecond;
+		numChannels = animation->mNumChannels;
+
+		for (unsigned int i = 0; i < animation->mNumChannels; i++)
+		{
+			anim->channels.push_back(LoadAnimationNode(animation->mChannels[i]));
+
+		}
+
+		animations.push_back(anim);
+	}
+
 	AnimNode* Animation::LoadAnimationNode(const aiNodeAnim* aiAnimNode)
 	{
 		AnimNode* node = new AnimNode();
