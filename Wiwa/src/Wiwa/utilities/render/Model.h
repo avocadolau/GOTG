@@ -182,7 +182,8 @@ namespace Wiwa {
 
 		void LoadMeshBones(unsigned int index, const aiMesh* mesh, Model* root);
 		void LoadSingleBone(int meshIndex, aiBone* bone, Model* root);
-		void PrintAssimpMatrix(const aiBone* b);
+		void PrintAssimpBoneMatrix(const aiBone* mat);
+		void PrintAssimpNodeMatrix(const aiNode* mat);
 		void PrintGlmMatrix(const glm::mat4& mat);
 
 		void LoadAnimation(const aiAnimation* animation);

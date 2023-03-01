@@ -385,8 +385,8 @@ namespace Wiwa {
 		h->name = node->mName.C_Str();
 
 		//DEBUG
-		WI_INFO("\t name {0}", h->name.c_str());
-
+		WI_INFO("Name {0}, num children {1}, num meshes{2}",node->mName.C_Str(),node->mNumChildren, node->mNumMeshes);
+		PrintAssimpNodeMatrix(node);
 		// Node transform
 		aiVector3D translate, scale, rot;
 		//aiQuaternion quat;
@@ -413,8 +413,7 @@ namespace Wiwa {
 
 		// Node children
 		for (size_t i = 0; i < node->mNumChildren; i++) {
-			//DEBUG
-			WI_INFO("child {0} {1}", i, node->mChildren[i]->mName.C_Str());
+
 			h->children.push_back(loadModelHierarchy(node->mChildren[i], globalTransformation));
 		}
 
@@ -1099,9 +1098,17 @@ namespace Wiwa {
 		}
 	}
 
-	void Model::PrintAssimpMatrix(const aiBone* bone)
+	void Model::PrintAssimpBoneMatrix(const aiBone* mat)
 	{
-		const aiMatrix4x4 m = bone->mOffsetMatrix;
+		const aiMatrix4x4 m = mat->mOffsetMatrix;
+		WI_INFO("{0} {1} {2} {3}\n", m.a1, m.a2, m.a3, m.a4);
+		WI_INFO("{0} {1} {2} {3}\n", m.b1, m.b2, m.b3, m.b4);
+		WI_INFO("{0} {1} {2} {3}\n", m.c1, m.c2, m.c3, m.c4);
+		WI_INFO("{0} {1} {2} {3}\n", m.d1, m.d2, m.d3, m.d4);
+	}
+	void Model::PrintAssimpNodeMatrix(const aiNode* mat)
+	{
+		const aiMatrix4x4 m = mat->mTransformation;
 		WI_INFO("{0} {1} {2} {3}\n", m.a1, m.a2, m.a3, m.a4);
 		WI_INFO("{0} {1} {2} {3}\n", m.b1, m.b2, m.b3, m.b4);
 		WI_INFO("{0} {1} {2} {3}\n", m.c1, m.c2, m.c3, m.c4);
