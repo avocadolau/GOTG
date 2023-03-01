@@ -3,7 +3,6 @@
 #include "Wiwa/Ui/UiControl.h"
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-#include <Wiwa/scene/SceneManager.h>
 #include <vector>
 #include <string>
 
