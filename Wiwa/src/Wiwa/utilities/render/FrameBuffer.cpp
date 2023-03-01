@@ -57,7 +57,7 @@ namespace Wiwa {
 		}
 		else
 			WI_CORE_INFO("Framebuffer completed");
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	/*	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glGenBuffers(1, &m_DBO);
 
@@ -70,7 +70,7 @@ namespace Wiwa {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_DBO);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ShadowMap, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ShadowMap, 0);*/
 
 		
 
