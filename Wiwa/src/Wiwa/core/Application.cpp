@@ -139,6 +139,7 @@ namespace Wiwa {
 	{
 		while (m_Running)
 		{
+			Time::Update();
 			OPTICK_FRAME("Application Loop");
 
 			// Clear main window
@@ -164,7 +165,6 @@ namespace Wiwa {
 			RenderManager::Update();
 
 			// Update time
-			Time::Update();
 
 			// Update layers
 			for (Layer* layer : m_LayerStack)
@@ -181,6 +181,7 @@ namespace Wiwa {
 
 			// Update main window
 			m_Window->OnUpdate();
+			Time::PostUpdate();
 		}
 	}
 

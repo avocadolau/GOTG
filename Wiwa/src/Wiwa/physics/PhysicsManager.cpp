@@ -76,7 +76,7 @@ namespace Wiwa {
 
 		//Step simulation
 		float dt = 1.0f/60.0f;
-		m_World->stepSimulation(dt, 10);
+		m_World->stepSimulation(dt, 10, Wiwa::Time::GetDeltaTimeSeconds());
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
@@ -178,7 +178,6 @@ namespace Wiwa {
 		// Physics to Engine
 		for (std::list<MyRigidBody*>::iterator item = m_Bodies.begin(); item != m_Bodies.end(); item++)
 		{
-			WI_INFO("{}", (*item)->btBody->getActivationState());
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
@@ -195,8 +194,10 @@ namespace Wiwa {
 			// Remove the offset because offset is internal only(collider wise)
 			transform3d->localPosition = posEngine;
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
-			bulletTransform.setRotation(rotationBullet);
-			bulletTransform.getRotation().getEulerZYX(transform3d->localRotation.z, transform3d->localRotation.y, transform3d->localRotation.z);
+			//bulletTransform.setRotation(rotationBullet);
+			glm::vec3 eulerAngles;
+			bulletTransform.getRotation().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
+			transform3d->localRotation = glm::degrees(eulerAngles);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
 			(*item)->btBody->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
@@ -343,7 +344,8 @@ namespace Wiwa {
 
 		btRigidBody* btBody = new btRigidBody(rbInfo);
 		btBody->setUserIndex(id);
-		
+		btBody->setActivationState(DISABLE_DEACTIVATION);
+
 		MyRigidBody* myBodyData = new MyRigidBody(*btBody, id);
 		m_World->addRigidBody(btBody);
 		m_Bodies.push_back(myBodyData);
@@ -461,6 +463,7 @@ namespace Wiwa {
 
 	void PhysicsManager::ManipulateBody(MyRigidBody* body, const btVector3& vector)
 	{
+		body->btBody->activate();
 		body->btBody->setLinearVelocity(vector);
 	}
 

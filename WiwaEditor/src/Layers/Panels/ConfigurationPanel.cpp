@@ -25,7 +25,7 @@ void ConfigurationPanel::Draw()
 	m_VSync = Wiwa::Application::Get().GetWindow().IsVSync();
 	m_MSLog.push_back(Wiwa::Time::GetRealDeltaTime());
 	m_FPSLog.push_back(1000.0f / Wiwa::Time::GetRealDeltaTime());
-	m_AllocLog.push_back((float)Wiwa::AllocationMetrics::allocation_count);
+	m_AllocLog.push_back(Wiwa::AllocationMetrics::allocation_count);
 	//m_ByteLog.push_back((float)Wiwa::AllocationMetrics::bytes_allocated);
 
 	ImGui::Begin(iconName.c_str(), &active);
@@ -165,6 +165,7 @@ void ConfigurationPanel::Draw()
 void ConfigurationPanel::Update()
 {
 	info = Wiwa::Application::Get().GetSystemInfo();
+
 	if (m_MSLog.size() > 64)
 		m_MSLog.erase(0);
 
