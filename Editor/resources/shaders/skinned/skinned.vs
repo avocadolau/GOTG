@@ -32,7 +32,7 @@ void main()
 
    
     vec4 PosL = BoneTransform * vec4(aPos, 1.0);
-	gl_Position = u_Proj * u_View * u_Model * vec4(aPos, 1.0);
+	gl_Position = u_Proj * u_View * u_Model * PosL;
 	TexCoord = aTex;
 	Normal = aNormal;
 	LocalPos = aPos;

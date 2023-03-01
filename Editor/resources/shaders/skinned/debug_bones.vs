@@ -1,17 +1,17 @@
 #version 330
 
-// Positions/Coordinates
+
 layout (location = 0) in vec3 aPos;
-// Normals
 layout (location = 1) in vec3 aNormal;
-// Texture Coordinates
 layout (location = 2) in vec2 aTex;
+layout (location = 3) in ivec4 aBoneIDs;
+layout (location = 4) in vec4 aWeights;
 
 out vec3 Normal;
 out vec3 LocalPos;
 out vec2 TexCoord;
-
-const int MAX_BONES = 200;
+flat out ivec4 BoneIDs;
+out vec4 Weights;
 
 uniform mat4 u_Model;
 uniform mat4 u_Proj;
@@ -23,4 +23,6 @@ void main()
 	TexCoord = aTex;
 	Normal = aNormal;
 	LocalPos = aPos;
+	BoneIDs = aBoneIDs;
+    Weights = aWeights;
 }

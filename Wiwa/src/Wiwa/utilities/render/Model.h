@@ -10,7 +10,13 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
-#define MAX_NUM_BONES_PER_VERTEX 8
+#define MAX_NUM_BONES_PER_VERTEX 4
+
+#define POSITION_DATA   0
+#define NORMAL_DATA     1
+#define TEXTURE_DATA    2
+#define BONE_DATA       3
+#define WEIGHT_DATA     4
 
 struct aiScene;
 struct aiMesh;
@@ -107,14 +113,14 @@ namespace Wiwa {
 	struct VertexBoneData
 	{
 		unsigned int BoneIDs[MAX_NUM_BONES_PER_VERTEX] = { 0 };
-		float Weights[MAX_NUM_BONES_PER_VERTEX] = { 0 };
+		float Weights[MAX_NUM_BONES_PER_VERTEX] = { 0.0f };
 		VertexBoneData()
 		{
 		}
 
 		void AddBoneData(unsigned int BoneID, float weight)
 		{
-			for (unsigned int i = 0; i < sizeof(BoneIDs)/sizeof(unsigned int); i++)
+			for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++)
 			{
 				// weight has to be greater than 0 if the bone influences that vertex
 				// if 0 then we assume its empty
@@ -122,8 +128,11 @@ namespace Wiwa {
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
+					//WI_INFO("bone: {0}, weight: {1}, index: {2}", BoneIDs[i],Weights[i],i);
 					return;
 				}
+				if (i == MAX_NUM_BONES_PER_VERTEX - 1)
+					return;
 			}
 			//we should never reach here, more bones than we have space for
 			WI_ERROR("BONE INDEX TO VERTEX OUT OF SIZE");
@@ -180,8 +189,8 @@ namespace Wiwa {
 		
 		void SetBoneInfo(const aiNode* pNode, const glm::mat4& parentTransform);
 
-		void LoadMeshBones(unsigned int index, const aiMesh* mesh, Model* root);
-		void LoadSingleBone(int meshIndex, aiBone* bone, Model* root);
+		void LoadMeshBones(unsigned int index, const aiMesh* mesh);
+		void LoadSingleBone(int meshIndex, aiBone* bone);
 		void PrintAssimpBoneMatrix(const aiBone* mat);
 		void PrintAssimpNodeMatrix(const aiNode* mat);
 		void PrintGlmMatrix(const glm::mat4& mat);

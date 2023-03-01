@@ -113,6 +113,8 @@ namespace Wiwa {
 		uint32_t m_Proj;
 		uint32_t m_UCamera;
 		uint32_t m_BoneLocation[MAX_BONES];
+		//debug 
+		uint32_t m_DisplayBoneIndex;
 	};
 
 	template<>

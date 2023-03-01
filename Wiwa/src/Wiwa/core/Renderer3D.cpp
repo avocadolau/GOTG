@@ -42,9 +42,9 @@ namespace Wiwa {
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured", textShader);
 
 		//Init skinned
-		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/skinned");
+		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned");
 		Shader* skinnedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedShaderId);
-		skinnedShader->Compile("resources/shaders/light/skinned");
+		skinnedShader->Compile("resources/shaders/skinned/skinned");
 		skinnedShader->addUniform("u_Texture", UniformType::Sampler2D);
 		skinnedShader->addUniform("u_ToonLevels", UniformType::Float);
 		skinnedShader->addUniform("u_RimLightPower", UniformType::Float);
@@ -52,7 +52,14 @@ namespace Wiwa {
 		skinnedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		skinnedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		skinnedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
-		Wiwa::Resources::Import<Shader>("resources/shaders/light/skinned", skinnedShader);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned", skinnedShader);
+
+		//Init bone debug 
+		ResourceId debugBonesShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
+		Shader* debugBoneShader = Wiwa::Resources::GetResourceById<Shader>(debugBonesShaderId);
+		debugBoneShader->Compile("resources/shaders/skinned/debug_bones");
+		debugBoneShader->addUniform("u_DisplayBoneIndex", UniformType::Int);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/debug_bones", debugBoneShader);
 
 		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/lit_model_color");
 		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
@@ -302,7 +309,7 @@ namespace Wiwa {
 		mesh->GetBoneTransforms(animationTimeSec, transforms);
 
 		for (unsigned int i = 0; i < transforms.size(); i++) {
-			//matShader->SetBoneTransform(i, transforms[i]);
+			matShader->SetBoneTransform(i, transforms[i]);
 		}
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);

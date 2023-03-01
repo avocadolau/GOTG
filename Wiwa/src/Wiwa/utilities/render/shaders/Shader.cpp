@@ -226,6 +226,7 @@ namespace Wiwa {
 			snprintf(Name, sizeof(Name), "u_Bones[%d]", i);
 			m_BoneLocation[i] = glGetUniformLocation(m_IDprogram, Name);
 		}
+		m_DisplayBoneIndex = glGetUniformLocation(m_IDprogram, "u_DisplayBoneIndex");
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)

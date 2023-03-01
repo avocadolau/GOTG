@@ -101,7 +101,8 @@ namespace Wiwa {
 						texture_path = std::filesystem::relative(texture_path);
 
 						//const char* default_shader = "resources/shaders/light/lit_model_textured";
-						const char* default_shader = "resources/shaders/light/skinned";
+						//const char* default_shader = "resources/shaders/light/skinned";
+						const char* default_shader = "resources/shaders/skinned/debug_bones";
 
 						id = Resources::Load<Shader>(default_shader);
 						material.setShader(Resources::GetResourceById<Shader>(id), default_shader);
@@ -122,8 +123,8 @@ namespace Wiwa {
 					{
 						//Set the color of the material
 						//id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
-						id = Resources::Load<Shader>("resources/shaders/light/skinned");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/skinned");
+						id = Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/debug_bones");
 						//material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
@@ -163,7 +164,7 @@ namespace Wiwa {
 				{
 					model->has_bones = true;
 					model->bone_data.resize(totalVertices);
-					model->LoadMeshBones(i, pMesh, this);
+					model->LoadMeshBones(i, pMesh);
 				}
 
 			
@@ -311,7 +312,7 @@ namespace Wiwa {
 	int Model::getBoneId(const aiBone* pBone)
 	{
 		int boneid = 0;
-		std::string bone_name = (pBone->mName.C_Str());
+		std::string bone_name(pBone->mName.C_Str());
 		if (parent->boneNameToIndexMap.find(bone_name) == parent->boneNameToIndexMap.end())
 		{
 			//allocate an index for a new bone
@@ -855,20 +856,18 @@ namespace Wiwa {
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(POSITION_DATA);
+		glVertexAttribPointer(POSITION_DATA, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(NORMAL_DATA);
+		glVertexAttribPointer(NORMAL_DATA, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(TEXTURE_DATA);
+		glVertexAttribPointer(TEXTURE_DATA, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));	
 
 		if (glGetError() != 0)
 		{
 			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 		}
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+
 		//if there are bones add bone vertex data
 		if (!bone_data.empty())
 		{
@@ -881,13 +880,16 @@ namespace Wiwa {
 				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
 			}
 			//bone location
-			glEnableVertexAttribArray(3);
-			glVertexAttribIPointer(3, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+			glEnableVertexAttribArray(BONE_DATA);
+			glVertexAttribIPointer(BONE_DATA, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
 			//weights location
-			glEnableVertexAttribArray(4);
-			glVertexAttribPointer(4, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
+			glEnableVertexAttribArray(WEIGHT_DATA);
+			glVertexAttribPointer(WEIGHT_DATA, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
 				(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
-			
+			if (glGetError() != 0)
+			{
+				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
+			}
 			if(bonevb == -1)
 			{
 				WI_CORE_ERROR("Error generating bone vertex buffer");
@@ -1061,15 +1063,15 @@ namespace Wiwa {
 		}
 	}
 
-	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh, Model* root)
+	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)
 	{
 		for (int i = 0; i < mesh->mNumBones; i++)
 		{
-			LoadSingleBone(meshIndex, mesh->mBones[i],root);
+			LoadSingleBone(meshIndex, mesh->mBones[i]);
 		}
 	}
 
-	void Model::LoadSingleBone(int meshIndex, aiBone* bone, Model* root)
+	void Model::LoadSingleBone(int meshIndex, aiBone* bone)
 	{ 
 		
 		int bone_id = getBoneId(bone);
@@ -1087,13 +1089,13 @@ namespace Wiwa {
 		for (int i = 0; i < bone->mNumWeights; i++) {
 			const aiVertexWeight& vw = bone->mWeights[i];
 
-			unsigned int globalVertexId =  root->meshBaseVertex[meshIndex] + vw.mVertexId;
+			unsigned int globalVertexId =  parent->meshBaseVertex[meshIndex] + vw.mVertexId;
 			if (globalVertexId > bone_data.size())
 			{
 				WI_ERROR("vertex to bones size error mesh id {0} at bone {1} at weight {2}", meshIndex,bone_id, i);
 				assert(0);
 			}
-			
+		//	WI_INFO("Vertex id:{0}", globalVertexId);
 			bone_data[globalVertexId].AddBoneData(bone_id, vw.mWeight);
 		}
 	}
