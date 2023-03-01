@@ -207,12 +207,13 @@ namespace Wiwa {
 	{
 		//Load GuiControls
 		GuiManager& gm = scene->GetGuiManager();
+		
+		std::vector<GuiControl*> controls = gm.ReturnControls();
 		size_t controls_count;
-
 		scene_file.Read(&controls_count, sizeof(size_t));
-
 		for (size_t i = 0; i < controls_count; i++)
 		{
+
 			int id;
 			bool active;
 			GuiControlType guiType;
@@ -221,7 +222,7 @@ namespace Wiwa {
 			std::string textureGui;
 			std::string extraTextureGui;
 
-			
+
 			size_t textureGui_len;
 			char* textureGui_c;
 			size_t extraTextureGui_len;
@@ -248,10 +249,8 @@ namespace Wiwa {
 			delete[] extraTextureGui_c;
 
 
-			if (guiType == GuiControlType::SLIDER)
-			{
-				scene_file.Read(&extraPosition, sizeof(Rect2i));
-			}
+			scene_file.Read(&extraPosition, sizeof(Rect2i));
+
 			switch (guiType)
 			{
 			case Wiwa::GuiControlType::BUTTON:
@@ -267,12 +266,16 @@ namespace Wiwa {
 				gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition);
 				break;
 			case Wiwa::GuiControlType::IMAGE:
-				gm.CreateGuiControl_Simple(guiType, id, position, extraTextureGui.c_str(),nullptr);
+				gm.CreateGuiControl_Simple(guiType, id, position, extraTextureGui.c_str(), nullptr);
 				break;
 			default:
 				break;
 			}
+
+
 		}
+		
+		
 		// Load cameras
 		CameraManager& cm = scene->GetCameraManager();
 		size_t camera_count;
@@ -424,7 +427,6 @@ namespace Wiwa {
 
 		if (scene_file.IsOpen()) {
 			Scene* sc = m_Scenes[scene_id];
-			
 			// Save scene data
 			// TODO: Save scene info??
 			// Scene name, etc
@@ -447,8 +449,8 @@ namespace Wiwa {
 				GuiControlState guiState = control->GetState();
 				Rect2i position = control->GetPosition();
 				
-				const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
-				const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+				const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+				const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 
 				size_t textureGui_len = strlen(textureGui) + 1;
 				size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
@@ -466,13 +468,10 @@ namespace Wiwa {
 				scene_file.Write(&extraTextureGui_len, sizeof(size_t));
 				scene_file.Write(extraTextureGui, extraTextureGui_len);
 
-				if (guiType == GuiControlType::SLIDER)
-				{
-					Rect2i extraPosition = control->GetExtraPosition();
-					scene_file.Write(&extraPosition, sizeof(Rect2i));
-				}		
+				Rect2i extraPosition = control->GetExtraPosition();
+				scene_file.Write(&extraPosition, sizeof(Rect2i));
+					
 			}
-
 			// Save cameras
 			CameraManager& cm = sc->GetCameraManager();
 			std::vector<CameraId>& cameras = cm.getCameras();

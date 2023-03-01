@@ -27,66 +27,84 @@ namespace Wiwa
 
 	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath)
 	{
-		
 		GuiControl* control = nullptr;
-		switch (type)
+		if (CheckId(id))
 		{
-		case GuiControlType::BUTTON:
-			control = new GuiButton(id, bounds, path,extraPath);
-			break;
-		case GuiControlType::CHECKBOX:
-			control = new GuiCheckbox(id, bounds, path,extraPath);
-			break;
-		case GuiControlType::IMAGE:
-			control = new GuiImage(id, bounds, path);
-			break;
-		default:
-			break;
+			return nullptr;
 		}
-		if (control != nullptr) controls.push_back(control);
+		else
+		{
+			switch (type)
+			{
+			case GuiControlType::BUTTON:
+				control = new GuiButton(id, bounds, path, extraPath);
+				break;
+			case GuiControlType::CHECKBOX:
+				control = new GuiCheckbox(id, bounds, path, extraPath);
+				break;
+			case GuiControlType::IMAGE:
+				control = new GuiImage(id, bounds, path);
+				break;
+			default:
+				break;
+			}
+			if (control != nullptr) controls.push_back(control);
+		}
+
 		return control;
 	}
 
 	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds)
 	{
-
 		GuiControl* control = nullptr;
-
-
-		switch (type)
+		if (CheckId(id))
 		{
-		case GuiControlType::BUTTON:
-			control = new GuiButton(id, bounds, path, slider_path);
-			break;
-		case GuiControlType::SLIDER:
-			control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
-			break;
-		case GuiControlType::CHECKBOX:
-			control = new GuiCheckbox(id, bounds, path, slider_path);
-			break;
-		default:
-			break;
+			return nullptr;
 		}
-		if (control != nullptr) controls.push_back(control);
+		else
+		{
+			switch (type)
+			{
+			case GuiControlType::BUTTON:
+				control = new GuiButton(id, bounds, path, slider_path);
+				break;
+			case GuiControlType::SLIDER:
+				control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
+				break;
+			case GuiControlType::CHECKBOX:
+				control = new GuiCheckbox(id, bounds, path, slider_path);
+				break;
+			default:
+				break;
+			}
+			if (control != nullptr) controls.push_back(control);
+		}
 		return control;
 	}
 
 	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text)
 	{
 		GuiControl* control = nullptr;
-		switch (type)
+		if (CheckId(id))
 		{
-		case GuiControlType::TEXT:
-			control = new GuiText(id, bounds, string_text);
-			break;
-		default:
-			break;
+			return nullptr;
 		}
-		//Set the observer
-		//control->SetObserver(observer);
+		else
+		{
+			switch (type)
+			{
+			case GuiControlType::TEXT:
+				control = new GuiText(id, bounds, string_text);
+				break;
+			default:
+				break;
+			}
+			//Set the observer
+			//control->SetObserver(observer);
 
-		// Created GuiControls are added to the list of controls
-		if (control != nullptr) controls.push_back(control);
+			// Created GuiControls are added to the list of controls
+			if (control != nullptr) controls.push_back(control);
+		}
 		return control;
 	}
 
@@ -181,5 +199,22 @@ namespace Wiwa
 		//	return -1;
 		//}
 		return true;
+	}
+
+	bool GuiManager::CheckId(int id)
+	{
+		bool ret = false;
+		for (size_t i = 0; i < controls.size(); i++)
+		{
+			if (controls.at(i)->id == id)
+			{
+				ret = true;
+			}
+			else
+			{
+				ret = false;
+			}
+		}
+		return ret;
 	}
 }

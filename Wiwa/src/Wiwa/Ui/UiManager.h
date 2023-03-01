@@ -3,7 +3,7 @@
 #include "Wiwa/Ui/UiControl.h"
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-
+#include <Wiwa/scene/SceneManager.h>
 #include <vector>
 #include <string>
 
@@ -42,12 +42,13 @@ namespace Wiwa
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text);
 
 		void DestroyGuiControl(GuiControl* control);
-
 		void RemoveControl(GuiControl* control);
 
 		static bool InitFont(const char* path);
 
 		std::vector<GuiControl*> ReturnControls() { return controls; }
+
+		bool CheckId(int id);
 
 	public:
 
@@ -58,6 +59,7 @@ namespace Wiwa
 		bool doLogic = false;
 
 		Image* texture;
+
 
 	};
 }
