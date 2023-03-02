@@ -70,7 +70,6 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(StopAllEvents);*/
 
 		// Physics
-		WI_ADD_INTERNAL_CALL(AddBodyCube);
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(AddBodyToLog);
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);

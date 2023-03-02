@@ -23,14 +23,16 @@
 #define MAX_BITS 32
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
+#define SUB_STEPS 6
 class DebugDrawer;
 class Camera;
 namespace Wiwa {
 
-	struct MyObject {
-		MyObject(btCollisionObject& body_, const size_t id_) : m_CollisionObject(&body_), id(id_) {};
+	struct Object {
+		Object(btCollisionObject& body_, const size_t id_) : m_CollisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_) {};
 
 		btCollisionObject* m_CollisionObject;
+		btVector3 velocity;
 		size_t id;
 	};
 
@@ -61,13 +63,15 @@ namespace Wiwa {
 
 		bool ResolveContacts();
 
+		bool UpdateObjects(const float dt);
+
 		bool UpdateEngineToPhysics();
 
 		bool UpdatePhysicsToEngine();
 
 		bool CleanWorld();
 
-		bool DeleteBody(MyObject* body);
+		bool DeleteBody(Object* body);
 
 		// Add bodies
 		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
@@ -79,17 +83,11 @@ namespace Wiwa {
 		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		// Manipulate bodies
-		//void SetBodyMass(MyObject* body, const float mass);
-
-		//void SetBodyGravity(MyObject* body, const btVector3 gravity);
+		bool SetVelocity(Object*body, const glm::vec3 velocity);
 
 		//void SetTrigger(MyObject* body, const bool isTrigger);
 
-		//void SetStatic(MyObject* body, const bool isStatic);
-
-		MyObject* FindByEntityId(size_t id);
-
-		//void ManipulateBody(MyObject* body, const btVector3& vector);
+		Object* FindByEntityId(size_t id);
 
 		void UpdateCollisionType(size_t first, size_t second);
 
@@ -121,18 +119,18 @@ namespace Wiwa {
 		DebugDrawer* m_Debug_draw;
 
 		std::list<btCollisionShape*> m_Shapes;
-		std::list<MyObject*> m_CollObjects;
+		std::list<Object*> m_CollObjects;
 		//std::list<btDefaultMotionState*> m_Motions;
 		std::list<btTypedConstraint*> m_Constraints;
 
 		std::vector<CollisionData> m_CollisionList;
 
 	private:
-		std::list<MyObject*> m_BodiesToLog;
+		std::list<Object*> m_BodiesToLog;
 
 	public:
-		bool AddBodyToLog(MyObject* body_to_log);
-		bool RemoveBodyFromLog(MyObject* body_to_log);
+		bool AddBodyToLog(Object* body_to_log);
+		bool RemoveBodyFromLog(Object* body_to_log);
 		bool LogBodies();
 
 	public:

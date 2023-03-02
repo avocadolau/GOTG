@@ -84,8 +84,6 @@ namespace Wiwa
 
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool AddBodyCube(EntityId id, ref ColliderCube colliderCube, ref Transform3D transform, ref Rigidbody rigidBody);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool AddBodyToLog(EntityId id);

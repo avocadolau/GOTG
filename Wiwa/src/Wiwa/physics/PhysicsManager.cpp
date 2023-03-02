@@ -76,8 +76,9 @@ namespace Wiwa {
 		//Step simulation
 		float dt = 1.0f/60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < SUB_STEPS; i++)
 		{
+			UpdateObjects(dt / SUB_STEPS);
 			m_World->performDiscreteCollisionDetection();
 			ResolveContacts();
 		}
@@ -163,13 +164,27 @@ namespace Wiwa {
 		return true;
 	}
 
+	bool PhysicsManager::UpdateObjects(const float dt)
+	{
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		{
+			if ((*item)->velocity.isZero())
+				continue;
+
+			btVector3 position = (*item)->m_CollisionObject->getWorldTransform().getOrigin();
+			position += (*item)->velocity * dt;
+			(*item)->m_CollisionObject->getWorldTransform().setOrigin(position);
+		}
+		return true;
+	}
+
 	bool PhysicsManager::UpdateEngineToPhysics()
 	{
 		// Set the position offset
 		// Get the position from the engine
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
-		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D*transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			Rigidbody*rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
@@ -199,7 +214,7 @@ namespace Wiwa {
 	{
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		// Physics to Engine
-		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
@@ -270,7 +285,7 @@ namespace Wiwa {
 
 		m_Shapes.clear();
 
-		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			m_World->removeCollisionObject((*item)->m_CollisionObject);
 			//delete (ObjectData*)(*item)->getUserPointer();
@@ -290,7 +305,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::DeleteBody(MyObject* body)
+	bool PhysicsManager::DeleteBody(Object* body)
 	{
 		//int constrainNums = body->m_Body->getNumConstraintRefs();
 		//if (constrainNums > 0)
@@ -328,9 +343,10 @@ namespace Wiwa {
 		btCollisionObject* m_CollisionObject = new btCollisionObject();
 		m_CollisionObject->setUserIndex(id); // id
 		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
+		if (rigid_body.isStatic) m_CollisionObject->setCollisionFlags(m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
 		m_CollisionObject->setCollisionShape(colShape);
-		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
+		Object* myObjData = new Object(*m_CollisionObject, id);
 
 		m_World->addCollisionObject(m_CollisionObject);
 		m_CollObjects.push_back(myObjData);
@@ -354,9 +370,10 @@ namespace Wiwa {
 		btCollisionObject* m_CollisionObject = new btCollisionObject();
 		m_CollisionObject->setUserIndex(id);
 		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
+		if (rigid_body.isStatic) m_CollisionObject->setCollisionFlags(m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
 		m_CollisionObject->setCollisionShape(colShape);
-		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
+		Object* myObjData = new Object(*m_CollisionObject, id);
 
 		m_World->addCollisionObject(m_CollisionObject);
 		m_CollObjects.push_back(myObjData);
@@ -374,9 +391,10 @@ namespace Wiwa {
 		btCollisionObject* m_CollisionObject = new btCollisionObject();
 		m_CollisionObject->setUserIndex(id);
 		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
+		if (rigid_body.isStatic) m_CollisionObject->setCollisionFlags(m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
 		m_CollisionObject->setCollisionShape(colShape);
-		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
+		Object* myObjData = new Object(*m_CollisionObject, id);
 
 		m_World->addCollisionObject(m_CollisionObject);
 		m_CollObjects.push_back(myObjData);
@@ -394,43 +412,23 @@ namespace Wiwa {
 		btCollisionObject* m_CollisionObject = new btCollisionObject();
 		m_CollisionObject->setUserIndex(id);
 		m_CollisionObject->setUserIndex2(rigid_body.isStatic); // 1 if static and 0 if not static
+		if (rigid_body.isStatic) m_CollisionObject->setCollisionFlags(m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
 		m_CollisionObject->setCollisionShape(colShape);
-		MyObject* myObjData = new MyObject(*m_CollisionObject, id);
+		Object* myObjData = new Object(*m_CollisionObject, id);
 
 		m_World->addCollisionObject(m_CollisionObject);
 		m_CollObjects.push_back(myObjData);
 		return true;
 	}
 
-	//void PhysicsManager::SetBodyMass(MyObject* body, const float mass)
-	//{
-	//	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	//	Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
+	bool PhysicsManager::SetVelocity(Object* body, const glm::vec3 velocity)
+	{
+		body->velocity = btVector3(velocity.x, velocity.y, velocity.z);
+		return true;
+	}
 
-	//	rigidBody->mass = mass;
-
-	//	//Remove the rigid body from the dynamics world
-	//	m_World->removeRigidBody(body->m_CollisionObject);
-
-	//	btVector3 inertia;
-	//	body->m_CollisionObject->getCollisionShape()->calculateLocalInertia(mass, inertia);
-	//	body->m_CollisionObject->setMassProps(mass, inertia);
-
-	//	//Add the rigid body to the dynamics world
-	//	m_World->addRigidBody(body->m_CollisionObject);
-	//}
-
-	//void PhysicsManager::SetBodyGravity(MyObject* body, const btVector3 gravity)
-	//{
-	//	Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	//	Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>(body->id);
-
-	//	rigidBody->gravity = glm::vec3(gravity.x(), gravity.y(), gravity.z());
-	//	body->m_CollisionObject->setGravity(gravity);
-	//}
-
-	//void PhysicsManager::SetTrigger(MyObject* body, const bool isTrigger)
+	//void PhysicsManager::SetTrigger(Object* body, const bool isTrigger)
 	//{
 	//	if (isTrigger == true)
 	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -438,35 +436,15 @@ namespace Wiwa {
 	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	//}
 
-	//void PhysicsManager::SetStatic(MyObject* body, const bool isStatic)
-	//{
-	//	if (isStatic == true)
-	//	{
-	//		SetBodyMass(body, 0.0f);
-	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-	//	}
-	//	else
-	//	{
-	//		SetBodyMass(body, 1.0f);
-	//		body->m_CollisionObject->setCollisionFlags(body->m_CollisionObject->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
-	//	}
-	//}
-
-	MyObject* PhysicsManager::FindByEntityId(size_t id)
+	Object* PhysicsManager::FindByEntityId(size_t id)
 	{
-		for (std::list<MyObject*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			if ((*item)->id == id)
 				return *item;
 		}
 		return nullptr;
 	}
-
-	//void PhysicsManager::ManipulateBody(MyObject* body, const btVector3& vector)
-	//{
-	//	body->m_CollisionObject->activate();
-	//	body->m_CollisionObject->setLinearVelocity(vector);
-	//}
 
 	void PhysicsManager::UpdateCollisionType(size_t first, size_t second)
 	{
@@ -574,13 +552,13 @@ namespace Wiwa {
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);
 	}
 
-	bool PhysicsManager::AddBodyToLog(MyObject* body_to_log)
+	bool PhysicsManager::AddBodyToLog(Object* body_to_log)
 	{
 		m_BodiesToLog.emplace_back(body_to_log);
 		return true;
 	}
 
-	bool PhysicsManager::RemoveBodyFromLog(MyObject* body_to_log)
+	bool PhysicsManager::RemoveBodyFromLog(Object* body_to_log)
 	{
 		m_BodiesToLog.remove(body_to_log);
 		return true;
@@ -595,7 +573,7 @@ namespace Wiwa {
 		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
 		//WI_INFO("SCENE {} World has total of {} bodies", name, m_CollObjects.size());
 		int num = 0;
-		for (std::list<MyObject*>::iterator item = m_BodiesToLog.begin(); item != m_BodiesToLog.end(); item++)
+		for (std::list<Object*>::iterator item = m_BodiesToLog.begin(); item != m_BodiesToLog.end(); item++)
 		{
 			btVector3 pos = (*item)->m_CollisionObject->getWorldTransform().getOrigin();
 			/*const char* e_name = entityManager.GetEntityName(id); */
@@ -669,6 +647,13 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {
+	glUseProgram(0);
+	glColor3f(0, 0, 255);
+	glPointSize(8.0f);
+	glBegin(GL_POINT);
+	glVertex3f(point_onB.getX(), point_onB.getY(), point_onB.getZ());
+	glEnd();
+	glPointSize(1.0f);
 	//point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
 	//point.color.Set(color.getX(), color.getY(), color.getZ());
 	//point.Render();
