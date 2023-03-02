@@ -35,7 +35,7 @@
         public float mass;
         public Vector3 gravity;
         public bool isTrigger;
-        public bool isSensor;
+        public bool isStatic;
         public int selfTag;
         public int filterBits;
     }
