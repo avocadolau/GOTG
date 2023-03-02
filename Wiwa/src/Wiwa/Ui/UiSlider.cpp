@@ -20,11 +20,11 @@ namespace Wiwa
 
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
-		id_quad_disabled = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		//id_quad_disabled = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		id_quad_normal = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		id_quad_focused = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		id_quad_pressed = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		id_quad_selected = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		//id_quad_focused = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		//id_quad_pressed = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		//id_quad_selected = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		
 		state = GuiControlState::NORMAL;
@@ -80,7 +80,7 @@ namespace Wiwa
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
 			r2d_1.UpdateInstancedQuadTex(id_quad_extra, { extraPosition.x,extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
-			r2d_1.UpdateInstancedQuadTex(id_quad_disabled, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d_1.UpdateInstancedQuadTex(id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 			
 		} break;
@@ -98,7 +98,7 @@ namespace Wiwa
 		{
 			r2d_1.UpdateInstancedQuadTex(id_quad_extra, { extraPosition.x,extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
-			r2d_1.UpdateInstancedQuadTex(id_quad_focused, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d_1.UpdateInstancedQuadTex(id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		} break;
 		case GuiControlState::PRESSED:
@@ -106,7 +106,7 @@ namespace Wiwa
 			r2d_1.UpdateInstancedQuadTex(id_quad_extra, { extraPosition.x,extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 
-			r2d_1.UpdateInstancedQuadTex(id_quad_pressed, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d_1.UpdateInstancedQuadTex(id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 
 		} break;
@@ -118,7 +118,7 @@ namespace Wiwa
 			r2d_1.UpdateInstancedQuadTex(id_quad_extra, { extraPosition.x,extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 
-			r2d_1.UpdateInstancedQuadTex(id_quad_selected, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d_1.UpdateInstancedQuadTex(id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		}break;
 		default:
