@@ -1,5 +1,6 @@
 #include <wipch.h>
 #include <Wiwa/render/RenderManager.h>
+#include <Wiwa/core/Application.h>
 
 #include <glew.h>
 
@@ -113,6 +114,10 @@ namespace Wiwa {
 		m_FrameBuffer.Unbind();
 
 		if (m_RenderOnMainWindow) {
+			uint32_t w = Wiwa::Application::Get().GetWindow().GetWidth();
+			uint32_t h = Wiwa::Application::Get().GetWindow().GetHeight();
+			glViewport(0, 0, w, h);
+
 			m_Shader.Bind();
 
 			glBindTexture(GL_TEXTURE_2D, m_FrameBuffer.getColorBufferTexture());
