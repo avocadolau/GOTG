@@ -89,13 +89,29 @@ namespace Wiwa
 		{
 			return extraTexture;
 		}
-		uint32_t GetIdQuad()
+		uint32_t GetDisabledIdQuad()
 		{
-			return id_quad;
+			return id_quad_disabled;
+		}
+		uint32_t GetNormalIdQuad()
+		{
+			return id_quad_normal;
+		}
+		uint32_t GetFocusedIdQuad()
+		{
+			return id_quad_focused;
+		}
+		uint32_t GetPressedIdQuad()
+		{
+			return id_quad_pressed;
+		}
+		uint32_t GetSelectedIdQuad()
+		{
+			return id_quad_selected;
 		}
 		uint32_t GetExtraIdQuad()
 		{
-			return id_quad2;
+			return id_quad_extra;
 		}
 
 		void SetPosition_x(int position_x)
@@ -135,18 +151,28 @@ namespace Wiwa
 
 			if (active)
 			{
-				r2d.EnableInstance(id_quad);
+				r2d.EnableInstance(id_quad_disabled);
+				r2d.EnableInstance(id_quad_normal);
+				r2d.EnableInstance(id_quad_focused);
+				r2d.EnableInstance(id_quad_pressed);
+				r2d.EnableInstance(id_quad_selected);
+
 				if (type == GuiControlType::SLIDER)
 				{
-					r2d.EnableInstance(id_quad2);
+					r2d.EnableInstance(id_quad_extra);
 				}
 			}
 			else
 			{
-				r2d.DisableInstance(id_quad);
+				r2d.DisableInstance(id_quad_disabled);
+				r2d.DisableInstance(id_quad_normal);
+				r2d.DisableInstance(id_quad_focused);
+				r2d.DisableInstance(id_quad_pressed);
+				r2d.DisableInstance(id_quad_selected);
+
 				if (type == GuiControlType::SLIDER)
 				{
-					r2d.DisableInstance(id_quad2);
+					r2d.DisableInstance(id_quad_extra);
 				}
 			}
 		}
@@ -168,8 +194,12 @@ namespace Wiwa
 
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
-		uint32_t id_quad;
+		uint32_t id_quad_disabled;
+		uint32_t id_quad_normal;
+		uint32_t id_quad_focused;
+		uint32_t id_quad_pressed;
+		uint32_t id_quad_selected;
 
-		uint32_t id_quad2;
+		uint32_t id_quad_extra;
 	};
 }

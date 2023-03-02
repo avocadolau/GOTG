@@ -165,10 +165,15 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		for (size_t i = 0; i < ealive; i++) {
 			if (controls[i] == control) {
-				r2d.RemoveInstance(controls.at(i)->id_quad);
+				r2d.RemoveInstance(controls.at(i)->id_quad_disabled);
+				r2d.RemoveInstance(controls.at(i)->id_quad_normal);
+				r2d.RemoveInstance(controls.at(i)->id_quad_focused);
+				r2d.RemoveInstance(controls.at(i)->id_quad_pressed);
+				r2d.RemoveInstance(controls.at(i)->id_quad_selected);
+
 				if (controls.at(i)->type == GuiControlType::SLIDER)
 				{
-					r2d.RemoveInstance(controls.at(i)->id_quad2);
+					r2d.RemoveInstance(controls.at(i)->id_quad_extra);
 				}
 				controls.erase(controls.begin() + i);
 				break;
