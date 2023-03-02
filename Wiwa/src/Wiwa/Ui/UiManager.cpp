@@ -8,6 +8,9 @@
 #include "UiText.h"
 #include "UiImage.h"
 #include <Wiwa/core/Application.h>
+
+#include <Wiwa/scene/Scene.h>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H  
 namespace Wiwa
@@ -19,8 +22,9 @@ namespace Wiwa
 
 	GuiManager::~GuiManager() {}
 
-	bool GuiManager::Init()
+	bool GuiManager::Init(Scene* scene)
 	{
+		m_Scene = scene;
 		InitFont("assets/arial.ttf");
 		return true;
 	}
@@ -37,13 +41,13 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(id, bounds, path, extraPath);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(id, bounds, path, extraPath);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(id, bounds, path);
+				control = new GuiImage(m_Scene, id, bounds, path);
 				break;
 			default:
 				break;
@@ -66,13 +70,13 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(id, bounds, path, slider_path);
+				control = new GuiButton(m_Scene, id, bounds, path, slider_path);
 				break;
 			case GuiControlType::SLIDER:
-				control = new GuiSlider(id, bounds, sliderBounds, path, slider_path);
+				control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(id, bounds, path, slider_path);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, slider_path);
 				break;
 			default:
 				break;
@@ -94,7 +98,7 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::TEXT:
-				control = new GuiText(id, bounds, string_text);
+				control = new GuiText(m_Scene, id, bounds, string_text);
 				break;
 			default:
 				break;
@@ -165,15 +169,15 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		for (size_t i = 0; i < ealive; i++) {
 			if (controls[i] == control) {
-				r2d.RemoveInstance(controls.at(i)->id_quad_disabled);
-				r2d.RemoveInstance(controls.at(i)->id_quad_normal);
-				r2d.RemoveInstance(controls.at(i)->id_quad_focused);
-				r2d.RemoveInstance(controls.at(i)->id_quad_pressed);
-				r2d.RemoveInstance(controls.at(i)->id_quad_selected);
+				r2d.RemoveInstance(m_Scene, controls.at(i)->id_quad_disabled);
+				r2d.RemoveInstance(m_Scene, controls.at(i)->id_quad_normal);
+				r2d.RemoveInstance(m_Scene, controls.at(i)->id_quad_focused);
+				r2d.RemoveInstance(m_Scene, controls.at(i)->id_quad_pressed);
+				r2d.RemoveInstance(m_Scene, controls.at(i)->id_quad_selected);
 
 				if (controls.at(i)->type == GuiControlType::SLIDER)
 				{
-					r2d.RemoveInstance(controls.at(i)->id_quad_extra);
+					r2d.RemoveInstance(m_Scene, controls.at(i)->id_quad_extra);
 				}
 				controls.erase(controls.begin() + i);
 				break;

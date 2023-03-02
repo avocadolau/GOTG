@@ -10,6 +10,8 @@ namespace Wiwa
 {
 	class WI_API GuiManager
 	{
+	private:
+		Scene* m_Scene;
 	public:
 
 		// Constructor
@@ -19,14 +21,11 @@ namespace Wiwa
 		virtual ~GuiManager();
 
 	
-		// Init audio engine
-		static bool Init();
+		// Init gui manager
+		bool Init(Scene* scene);
 
-		// Update audio engine events
+		// Update gui manager
 		bool Update();
-
-		// Terminate audio engine
-		static bool Terminate();
 
 		bool Draw();
 
@@ -43,7 +42,7 @@ namespace Wiwa
 		void DestroyGuiControl(GuiControl* control);
 		void RemoveControl(GuiControl* control);
 
-		static bool InitFont(const char* path);
+		bool InitFont(const char* path);
 
 		std::vector<GuiControl*> ReturnControls() { return controls; }
 

@@ -6,6 +6,8 @@
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa\utilities\render\LightManager.h>
 
+#include <Wiwa/Ui/UiManager.h>
+
 namespace Wiwa {
 	Scene::Scene() : m_InstanceRenderer(40500)
 	{
@@ -14,6 +16,9 @@ namespace Wiwa {
 
 		// Initialize instance renderer with shader
 		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
+
+		m_GuiManager = new GuiManager();
+		m_GuiManager->Init(this);
 
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
@@ -24,6 +29,7 @@ namespace Wiwa {
 	{
 		delete m_CameraManager;
 		delete m_LightManager;
+		delete m_GuiManager;
 	}
 
 	void Scene::Start()
@@ -39,7 +45,7 @@ namespace Wiwa {
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
-		m_GuiManager.Init();
+		
 		//WAY TO CREATE THE POSITION
 		//Rect2i test;
 		//test.x = 500;
@@ -61,7 +67,7 @@ namespace Wiwa {
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
-			
+			m_GuiManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -81,11 +87,13 @@ namespace Wiwa {
 	{
 		m_CameraManager->Update();
 
-		m_GuiManager.Update();
-		m_GuiManager.Draw();
+		
+		m_GuiManager->Draw();
+
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		r2d.UpdateInstanced(this);
 
 		m_EntityManager.Update();
-
 		
 		if (!SceneManager::IsPlaying()) {
 			m_EntityManager.UpdateWhitelist();

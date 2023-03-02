@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include <Wiwa/scene/Scene.h>
+
 namespace Wiwa
 {
 	enum class GuiControlType
@@ -30,11 +32,13 @@ namespace Wiwa
 
 	class WI_API GuiControl
 	{
+	protected:
+		Scene* m_Scene;
 	public:
 
-		GuiControl(GuiControlType type, unsigned int id) : type(type), id(id), state(GuiControlState::NORMAL) {}
+		GuiControl(Scene* scene, GuiControlType type, unsigned int id) : m_Scene(scene), type(type), id(id), state(GuiControlState::NORMAL) {}
 
-		GuiControl(GuiControlType type, Rect2i bounds, char text[32]) :type(type), state(GuiControlState::NORMAL)
+		GuiControl(Scene* scene, GuiControlType type, Rect2i bounds, char text[32]) : m_Scene(scene), type(type), state(GuiControlState::NORMAL)
 		{
 		}
 		
@@ -151,28 +155,28 @@ namespace Wiwa
 
 			if (active)
 			{
-				r2d.EnableInstance(id_quad_disabled);
-				r2d.EnableInstance(id_quad_normal);
-				r2d.EnableInstance(id_quad_focused);
-				r2d.EnableInstance(id_quad_pressed);
-				r2d.EnableInstance(id_quad_selected);
+				r2d.EnableInstance(m_Scene, id_quad_disabled);
+				r2d.EnableInstance(m_Scene, id_quad_normal);
+				r2d.EnableInstance(m_Scene, id_quad_focused);
+				r2d.EnableInstance(m_Scene, id_quad_pressed);
+				r2d.EnableInstance(m_Scene, id_quad_selected);
 
 				if (type == GuiControlType::SLIDER)
 				{
-					r2d.EnableInstance(id_quad_extra);
+					r2d.EnableInstance(m_Scene, id_quad_extra);
 				}
 			}
 			else
 			{
-				r2d.DisableInstance(id_quad_disabled);
-				r2d.DisableInstance(id_quad_normal);
-				r2d.DisableInstance(id_quad_focused);
-				r2d.DisableInstance(id_quad_pressed);
-				r2d.DisableInstance(id_quad_selected);
+				r2d.DisableInstance(m_Scene, id_quad_disabled);
+				r2d.DisableInstance(m_Scene, id_quad_normal);
+				r2d.DisableInstance(m_Scene, id_quad_focused);
+				r2d.DisableInstance(m_Scene, id_quad_pressed);
+				r2d.DisableInstance(m_Scene, id_quad_selected);
 
 				if (type == GuiControlType::SLIDER)
 				{
-					r2d.DisableInstance(id_quad_extra);
+					r2d.DisableInstance(m_Scene, id_quad_extra);
 				}
 			}
 		}

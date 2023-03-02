@@ -25,6 +25,7 @@
 
 namespace Wiwa {
 	class InstanceRenderer;
+	class Scene;
 
 	class WI_API Renderer2D {
 	public:
@@ -52,20 +53,21 @@ namespace Wiwa {
 
 		void Close();
 
-		uint32_t CreateInstancedQuadTex(uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, const Color4f& color, const Rect2i& clip, Pivot pivot = Pivot::CENTER);
-		uint32_t CreateInstancedQuadTex(uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, Pivot pivot = Pivot::CENTER);
-		uint32_t CreateInstancedQuadTex(uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, const Rect2i& clip, Pivot pivot = Pivot::CENTER);
+		// Instance rendering functions
+		uint32_t CreateInstancedQuadTex(Scene* scene, uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, const Color4f& color, const Rect2i& clip, Pivot pivot = Pivot::CENTER);
+		uint32_t CreateInstancedQuadTex(Scene* scene, uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, Pivot pivot = Pivot::CENTER);
+		uint32_t CreateInstancedQuadTex(Scene* scene, uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, const Rect2i& clip, Pivot pivot = Pivot::CENTER);
 
-		void RemoveInstance(uint32_t instance);
-		void EnableInstance(uint32_t instance);
-		void DisableInstance(uint32_t instance);
-		void SetInstanceEnabled(uint32_t instance, bool enabled);
+		void RemoveInstance(Scene* scene, uint32_t instance);
+		void EnableInstance(Scene* scene, uint32_t instance);
+		void DisableInstance(Scene* scene, uint32_t instance);
+		void SetInstanceEnabled(Scene* scene, uint32_t instance, bool enabled);
 
-		void UpdateInstancedQuadTex(uint32_t id, const Vector2i& position, Pivot pivot = Pivot::CENTER);
+		void UpdateInstancedQuadTex(Scene* scene, uint32_t id, const Vector2i& position, Pivot pivot = Pivot::CENTER);
 
 		void UpdateInstancedQuad(uint32_t id, const Vector2i& position, const Size2i& size, const Color4f& color);
 
-		void UpdateInstanced();
+		void UpdateInstanced(Scene* scene);
 
 		// Getters
 		uint32_t getRenderInstancedCalls() { return m_RenderCallsInstancedCount; }

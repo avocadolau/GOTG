@@ -6,12 +6,14 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
-#include <Wiwa/Ui/UiManager.h>
 
 #include <Wiwa/utilities/render/InstanceRenderer.h>
 
 namespace Wiwa {
 	class LightManager;
+	class GuiManager;
+
+
 	class WI_API Scene {
 	public:
 		Scene();
@@ -42,7 +44,7 @@ namespace Wiwa {
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		LightManager& GetLightManager() { return *m_LightManager; }
-		GuiManager& GetGuiManager() { return m_GuiManager; }
+		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
@@ -62,7 +64,7 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		LightManager* m_LightManager;
-		GuiManager m_GuiManager;
+		GuiManager* m_GuiManager;
 
 	public:
 	private:

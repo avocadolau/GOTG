@@ -6,7 +6,7 @@
 #include <Wiwa/core/Renderer2D.h>
 namespace Wiwa
 {
-	GuiText::GuiText(unsigned int id, Rect2i bounds, const char* string_text) : GuiControl(GuiControlType::BUTTON, id)
+	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
 		this->texture = texture;
@@ -71,7 +71,7 @@ namespace Wiwa
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(m_Scene, texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		case GuiControlState::NORMAL:
@@ -80,7 +80,7 @@ namespace Wiwa
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(m_Scene, texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
@@ -90,7 +90,7 @@ namespace Wiwa
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(m_Scene, texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 		case GuiControlState::PRESSED:
 		{
@@ -98,7 +98,7 @@ namespace Wiwa
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(m_Scene, texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		} break;
 
 		/******/
@@ -109,7 +109,7 @@ namespace Wiwa
 			positionForUpdate_1.y = position.y;
 			positionForUpdate_1.w = position.width;
 			positionForUpdate_1.h = position.height;
-			r2d_1.UpdateInstancedQuadTex(texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
+			r2d_1.UpdateInstancedQuadTex(m_Scene, texture->GetTextureId(), positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
 		}break;
 		default:
 			break;
