@@ -81,10 +81,11 @@ namespace Wiwa
 		if (glfwGetGamepadState(gamepadIndx, &state))
 		{
 			float input = state.axes[axis];
-			if (input >= -1 || input <= 1)
-			{
-				return input;
-			}
+			input = round(input * 10) / 10;
+			if (input >= -1 && input <= -0.6)
+				return -1;
+			else if (input >= 0.6 && input <= 1)
+				return 1;
 		}
 		return 0.f;
 	}
