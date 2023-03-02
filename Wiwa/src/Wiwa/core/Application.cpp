@@ -335,6 +335,7 @@ namespace Wiwa {
 		m_Running = false;
 		return true;
 	}
+
 	bool Application::OnLoad(OnLoadEvent& e)
 	{
 		JSONDocument config("config/application.json");
@@ -348,8 +349,13 @@ namespace Wiwa {
 		if (config.HasMember("resizable"))
 			m_Window->SetVSync(config["resizable"].get<bool>());
 
+		if (config.HasMember("project_file")) {
+			ProjectManager::OpenProject(config["project_file"].as_string());
+		}
+
 		return false;
 	}
+
 	bool Application::OnSave(OnSaveEvent& e)
 	{
 		JSONDocument config;
@@ -357,6 +363,7 @@ namespace Wiwa {
 		config.AddMember("vsync", m_Window->IsVSync());
 		config.AddMember("fullscreen", m_Window->GetFullScreen());
 		config.AddMember("resizable", m_Window->GetResizable());
+		config.AddMember("project_file", ProjectManager::GetProjectPath().c_str());
 
 		config.save_file("config/application.json");
 

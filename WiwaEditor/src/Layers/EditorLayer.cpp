@@ -152,6 +152,17 @@ void EditorLayer::OnUpdate()
 		m_ReloadLayout = false;
 	}
 
+	/*static bool t = false;
+
+	if (!t) {
+		if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Space)) {
+			SceneId sid = Wiwa::SceneManager::LoadScene((uint32_t)0);
+			Wiwa::Scene* sc = Wiwa::SceneManager::getScene(sid);
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+			t = true;
+		}
+	}*/
+
 	for (auto &p : m_Panels)
 	{
 		if (p->active)
@@ -279,6 +290,17 @@ void EditorLayer::SaveLayout(LayoutData& ldata)
 	Wiwa::FileSystem::Copy("imgui.ini", p.string().c_str());
 }
 
+void EditorLayer::BuildProject()
+{
+	// On save callback
+	Wiwa::OnSaveEvent ev;
+	Action<Wiwa::Event&> action = { &Wiwa::Application::OnEvent, &Wiwa::Application::Get() };
+	action.execute(ev);
+
+	// Build game
+	system("call tools\\buildgame.bat");
+}
+
 void EditorLayer::RegenSol()
 {
 	if (threadExec)
@@ -354,6 +376,12 @@ void EditorLayer::MainMenuBar()
 			if (ImGui::MenuItem(ICON_FK_TIMES " Close", "ALT + Q"))
 				Wiwa::Application::Get().Quit();
 
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Project")) {
+			if (ImGui::MenuItem("Build")) {
+				BuildProject();
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))
@@ -697,6 +725,16 @@ void EditorLayer::SaveSceneAs()
 		}
 		Wiwa::SceneManager::SaveScene(Wiwa::SceneManager::getActiveSceneId(), filePath.c_str());
 		m_OpenedScenePath = filePath;
+		std::filesystem::path name = filePath;
+		name = name.filename();
+		name.replace_extension();
+
+		std::filesystem::path curpath = std::filesystem::current_path();
+
+		std::filesystem::path path = filePath;
+		path = path.lexically_relative(curpath);
+
+		Wiwa::ProjectManager::AddScene(name.string().c_str(), path.string().c_str());
 		WI_INFO("Succesfully saved scene at path {0}", filePath.c_str());
 	}
 }

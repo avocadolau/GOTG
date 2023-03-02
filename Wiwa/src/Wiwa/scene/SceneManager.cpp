@@ -4,6 +4,7 @@
 #include <Wiwa/events/Event.h>
 #include <Wiwa/events/ApplicationEvent.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/core/ProjectManager.h>
 
 namespace Wiwa {
 	std::vector<Scene*> SceneManager::m_Scenes;
@@ -71,6 +72,7 @@ namespace Wiwa {
 		char* e_name_c;
 		std::string e_name;
 
+		
 		// Read entity name
 		scene_file.Read(&e_name_len, sizeof(size_t));
 		e_name_c = new char[e_name_len];
@@ -88,7 +90,7 @@ namespace Wiwa {
 		}
 
 		size_t component_size;
-
+		
 		// Read component count
 		scene_file.Read(&component_size, sizeof(size_t));
 
@@ -119,24 +121,23 @@ namespace Wiwa {
 				if(matpath_size > 0) mesh->materialId = Resources::Load<Material>(mesh->mat_path);
 			}
 		}
-
+		
 		size_t system_count;
 		
 		// Read system count
 		scene_file.Read(&system_count, sizeof(size_t));
 		
 		if (system_count > 0) {
-			std::vector<SystemHash> system_hashes;
-			system_hashes.resize(system_count);
+			SystemHash* system_hashes = new SystemHash[system_count];
 
 			// Read system hashes
-			scene_file.Read(&system_hashes[0], system_count * sizeof(SystemHash));
+			scene_file.Read(system_hashes, system_count * sizeof(SystemHash));
 
 			for (size_t i = 0; i < system_count; i++) {
 				em.ApplySystem(eid, system_hashes[i]);
 			}
 		}
-
+		
 		// Check for child entities
 		size_t children_size;
 
@@ -210,7 +211,6 @@ namespace Wiwa {
 
 		// Read camera count
 		scene_file.Read(&camera_count, sizeof(size_t));
-
 		for (size_t i = 0; i < camera_count; i++) {
 			Wiwa::Camera::CameraType camtype;
 			float fov;
@@ -533,6 +533,13 @@ namespace Wiwa {
 		scene_file.Close();
 
 		return sceneid;
+	}
+
+	SceneId SceneManager::LoadScene(uint32_t scene_index, int flags)
+	{
+		ProjectManager::SceneData& sd = ProjectManager::getSceneDataAt(scene_index);
+
+		return LoadScene(sd.scene_path.c_str(), flags);
 	}
 
 	void SceneManager::UnloadScene(SceneId scene_id, bool unload_resources)

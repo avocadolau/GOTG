@@ -14,7 +14,7 @@ Wiwa::LightSystem::~LightSystem()
 {
 	if (GetComponent<PointLight>())
 	{
-		SceneManager::getActiveScene()->GetLightManager().RemovePointLight(m_EntityId);
+		m_Scene->GetLightManager().RemovePointLight(m_EntityId);
 	}
 	else if (GetComponent<DirectionalLight>())
 	{
