@@ -11,4 +11,6 @@ public:
 	void Update() override;
 private:
 	bool m_ShowStats = true;
+
+	Wiwa::Vector2f m_LastPos;
 };
