@@ -77,7 +77,7 @@ project "Wiwa"
 		postbuildcommands
 		{
 			"{COPY} \"%{cfg.buildtarget.relpath}\" \"%{wks.location}Editor\"",
-			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}WiwaGame\\Wiwa.lib\""
+			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game\\Wiwa.lib\""
 		}
 		links
 		{

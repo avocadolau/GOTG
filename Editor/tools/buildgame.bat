@@ -1,7 +1,7 @@
 @echo off
 cd %~dp0
 cd
-set build_path="..\..\WiwaGame\build"
+set build_path="..\game\build"
 set config_path=%build_path%\config
 set mono_path=%build_path%\mono
 set lib_path=%build_path%\library
@@ -30,4 +30,4 @@ md %rsc_path%
 
 xcopy /e /v /s "..\resources" %rsc_path%
 
-call buildsln.bat "..\..\WiwaGame\WiwaGame.sln" "Debug"
+call buildsln.bat "..\game\WiwaGame.sln" "Debug"
