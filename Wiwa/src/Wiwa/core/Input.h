@@ -18,6 +18,14 @@ namespace Wiwa
 		inline static void UnlockCursor() { s_Instance->UnlockCursorImpl(); }
 
 		inline static void Update() { return s_Instance->UpdateImpl(); }
+		inline static void OverrideMouseInputs(float mx, float my, float px, float py, float dx, float dy) {
+			MouseX = mx;
+			MouseY = my;
+			prevMouseX = px;
+			prevMouseY = py;
+			MouseXDelta = dx;
+			MouseYDelta = dy;
+		}
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) = 0;
 		virtual bool IsMouseButtonPressedImpl(int button) = 0;
@@ -32,6 +40,12 @@ namespace Wiwa
 	private:
 		static Input* s_Instance;
 	protected:
+		static float MouseXDelta;
+		static float MouseYDelta;
+
+		static float MouseX;
+		static float MouseY;
+
 		static float prevMouseX;
 		static float prevMouseY;
 	};
