@@ -242,8 +242,12 @@ namespace Wiwa {
 			size_t bones_info_size;
 			f.Read(&bones_info_size, sizeof(size_t));
 			boneInfo.resize(bones_info_size);
-			f.Read(&boneInfo[0], bones_info_size * sizeof(BoneInfo));
+			
+			if (bones_info_size != 0) {
 
+
+				f.Read(&boneInfo[0], bones_info_size * sizeof(BoneInfo));
+			}
 			//load animations
 			size_t anim_size;
 			f.Read(&anim_size, sizeof(size_t));
@@ -293,6 +297,8 @@ namespace Wiwa {
 				size_t bones_size;
 				f.Read(&bones_size, sizeof(size_t));
 				model->bone_data.resize(bones_size);
+				
+				if (bones_size != 0)
 				f.Read(&model->bone_data[0], bones_size * sizeof(VertexBoneData));
 
 			

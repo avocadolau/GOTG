@@ -306,12 +306,15 @@ namespace Wiwa {
 		long long CurrentTimeMillis = Time::GetRealTimeSinceStartup();
 		float animationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
 		std::vector<glm::mat4> transforms;
-		mesh->GetBoneTransforms(animationTimeSec, transforms);
+		
+		if (mesh->HasBones())
+		{
+			mesh->GetBoneTransforms(animationTimeSec, transforms);
 
-		for (unsigned int i = 0; i < transforms.size(); i++) {
-			matShader->SetBoneTransform(i, transforms[i]);
+			for (unsigned int i = 0; i < transforms.size(); i++) {
+				matShader->SetBoneTransform(i, transforms[i]);
+			}
 		}
-
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
