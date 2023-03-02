@@ -147,3 +147,4 @@ void GraphEditorClear();
 bool EditOptions(Options& options);
 
 } // namespace
+

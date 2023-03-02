@@ -6,6 +6,8 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/utilities/render/Animation.h>
+#include <ImGuizmo.h>
+#include <GraphEditor.h>
 
 
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
@@ -41,19 +43,26 @@ void AnimatorPanel::Draw()
 
 		ImGui::NewLine();
 
-		if (model->GetAnimations()[0] != NULL)
-		{
-			std::vector<Wiwa::Animation*> aux = model->GetAnimations();
-			if (aux[0] != nullptr)
+		if (model != NULL) {
+			if (model->GetAnimations().size() != NULL)
 			{
-				for (int i = 0; i < aux.size(); i++)
+				std::vector<Wiwa::Animation*> aux = model->GetAnimations();
+				if (aux[0] != nullptr)
 				{
-					
-					if (ImGui::Button(aux[i]->name.c_str()))
+					for (int i = 0; i < aux.size(); i++)
 					{
-						animButtons.push_back(buttonInfo(aux[i]->name.c_str()));
+
+						if (ImGui::Button(aux[i]->name.c_str()))
+						{
+							GraphEditor::Node node = GraphEditor::Node();
+							node.mName = aux[i]->name.c_str();
+							node.mRect = ImRect(0, 0, 100, 100);
+							node.mSelected = false;
+							
+							animNode.push_back(node);
+						}
+
 					}
-				
 				}
 			}
 		}
@@ -71,16 +80,16 @@ void AnimatorPanel::Draw()
 	
 	if (ImGui::InvisibleButton("splitter", ImVec2(8.0f, h))) 
 	{
-		w += ImGui::GetIO().MouseDelta.x;
+		//GraphEditor::Show(delegate, options, viewState, true, &fit);
 	}
 	ImGui::SameLine();
 	ImGui::BeginChild("child2", ImVec2(0, h), true);
-	for (int i = 0; i < animButtons.size(); i++)
+	
+	for (int i = 0; i < animNode.size(); i++)
 	{
-		//ImGui::Button(animButtons[i].name.c_str());
-		ImGui::BeginChild(animButtons[i].name.c_str(), ImVec2(100, 100), true);
-		ImGui::EndChild();
+		
 	}
+
 	ImGui::EndChild();
 	
 	ImGui::PopStyleVar();
