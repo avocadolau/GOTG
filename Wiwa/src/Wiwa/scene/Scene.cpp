@@ -7,12 +7,17 @@
 #include <Wiwa\utilities\render\LightManager.h>
 
 namespace Wiwa {
-	Scene::Scene()
+	Scene::Scene() : m_InstanceRenderer(40500)
 	{
 		mMaxTimeEntering = 0;
 		mMaxTimeLeaving = 0;
+
+		// Initialize instance renderer with shader
+		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
+
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
+
 	}
 
 	Scene::~Scene()

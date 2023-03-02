@@ -39,8 +39,6 @@ namespace Wiwa {
 		uint32_t m_RenderCallsInstancedCount;
 
 		Camera m_ActiveCamera;
-
-		InstanceRenderer* instanceRenderer;
 	public:
 		Renderer2D();
 		~Renderer2D();
