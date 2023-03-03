@@ -346,14 +346,8 @@ void EditorLayer::MainMenuBar()
 			if (ImGui::MenuItem("Build")) {
 				BuildProject();
 			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Edit"))
-		{
 			if (ImGui::MenuItem("Project settings"))
-			{
 				m_ProjectPanel->SwitchActive();
-			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("View"))
