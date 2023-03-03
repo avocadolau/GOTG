@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Panel.h"
+
 #include "Wiwa/scene/Scene.h"
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/scene/SceneManager.h>
 #include "../../Utils/EditorUtils.h"
+#include "Wiwa/Events/ApplicationEvent.h"
 
 class UIPanel : public Panel
 {
@@ -13,6 +15,10 @@ public:
 	virtual ~UIPanel();
 
 	void Draw() override;
+
+
+	void OnEvent(Wiwa::Event& e) override;
+	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
 
 	int UI_element_selected = -1;
 	int buttonID = 0;

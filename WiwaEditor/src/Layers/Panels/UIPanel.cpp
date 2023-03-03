@@ -274,3 +274,16 @@ void UIPanel::Draw()
 
 	ImGui::End();
 }
+
+void UIPanel::OnEvent(Wiwa::Event& e)
+{
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<SceneChangeEvent>({ &UIPanel::OnSceneChange, this });
+
+}
+
+bool UIPanel::OnSceneChange(SceneChangeEvent& e)
+{
+	UI_element_selected = -1;
+	return true;
+}
