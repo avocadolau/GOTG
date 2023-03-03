@@ -104,31 +104,6 @@ void EditorLayer::OnAttach()
 	m_Settings.push_back(m_ProjectPanel.get());
 	m_Settings.push_back(m_About.get());
 
-	// Test
-	//Wiwa::EntityManager &em = m_EditorScene->GetEntityManager();
-	//CreateEntityWithModelHierarchy("models/street2");
-	// SceneId scene = Wiwa::SceneManager::CreateScene();//Wiwa::SceneManager::LoadScene("Assets/Scenes/SampleScene.wiscene");
-	// Wiwa::SceneManager::SetScene(scene);
-	/*Wiwa::Vector2i pos = Wiwa::Vector2i{0, 0};
-	Wiwa::Size2i size = Wiwa::Size2i{20, 20};*/
-	//uint32_t id = Wiwa::Application::Get().GetRenderer2D().CreateInstancedQuadTex(stopId, pos, size, Wiwa::Renderer2D::Pivot::CENTER);
-
-	/*for (size_t i = 0; i < children_size; i++) {
-		const Wiwa::ModelHierarchy* child_h = model_h->children[i];
-
-		EntityId e_child = em.CreateEntity(child_h->name.c_str(), e_root);
-		em.AddComponent(e_child, t3d);
-
-		size_t c_mesh_size = child_h->meshIndexes.size();
-		size_t c_child_size = child_h->children.size();
-
-		if (child_h->meshIndexes.size() > 0) {
-			mesh.modelIndex = child_h->meshIndexes[0];
-			em.AddComponent(e_child, mesh);
-			em.ApplySystem<Wiwa::MeshRenderer>(e_child);
-		}
-	}*/
-
 	m_EventCallback = {&Wiwa::Application::OnEvent, &Wiwa::Application::Get()};
 
 	LoadCallback();
@@ -151,17 +126,6 @@ void EditorLayer::OnUpdate()
 		ImGui::LoadIniSettingsFromDisk(m_ActiveLayout.c_str());
 		m_ReloadLayout = false;
 	}
-
-	/*static bool t = false;
-
-	if (!t) {
-		if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Space)) {
-			SceneId sid = Wiwa::SceneManager::LoadScene((uint32_t)0);
-			Wiwa::Scene* sc = Wiwa::SceneManager::getScene(sid);
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-			t = true;
-		}
-	}*/
 
 	for (auto &p : m_Panels)
 	{
