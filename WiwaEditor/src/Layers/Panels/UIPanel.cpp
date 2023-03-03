@@ -103,7 +103,7 @@ void UIPanel::Draw()
 				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
 				{
 					Rect2i rect2;
-					rect2.x = rect.x - (rect.width / 2);
+					rect2.x = rect.x - (rect.width/2);
 					rect2.y = rect.y;
 					rect2.width = (rect.width / 100);
 					rect2.height = rect.height;
