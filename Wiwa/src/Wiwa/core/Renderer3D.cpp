@@ -31,7 +31,7 @@ namespace Wiwa {
 		Shader* textShader = Wiwa::Resources::GetResourceById<Shader>(textShaderId);
 		textShader->Compile("resources/shaders/light/toon_textured");
 		textShader->addUniform("u_Texture", UniformType::Sampler2D);
-		textShader->addUniform("u_ToonLevels", UniformType::Float);
+		textShader->addUniform("u_ToonLevels", UniformType::Int);
 		textShader->addUniform("u_RimLightPower", UniformType::Float);
 		textShader->addUniform("u_SpecularValue", UniformType::Float);
 		textShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
@@ -43,6 +43,8 @@ namespace Wiwa {
 		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
 		colorShader->Compile("resources/shaders/light/lit_model_color");
 		colorShader->addUniform("u_Color", UniformType::fVec4);
+		colorShader->addUniform("u_ToonLevels", UniformType::Int);
+		colorShader->addUniform("u_RimLightPower", UniformType::Float);
 		colorShader->addUniform("u_SpecularValue", UniformType::Float);
 		colorShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
