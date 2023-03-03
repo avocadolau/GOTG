@@ -105,6 +105,7 @@ namespace Wiwa {
 
 	void Renderer2D::Update()
 	{
+		OPTICK_EVENT("Renderer 2D Update");
 		m_RenderCallsInstancedCount = 0;
 		UpdateInstanced();
 	}

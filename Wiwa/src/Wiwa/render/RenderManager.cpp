@@ -77,6 +77,7 @@ namespace Wiwa {
 
 	void RenderManager::Update()
 	{
+		OPTICK_EVENT("Renderer manager Update");
 		// Set viewport
 		glViewport(0, 0, m_FrameBuffer.getWidth(), m_FrameBuffer.getHeight());
 

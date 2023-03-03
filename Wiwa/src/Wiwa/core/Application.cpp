@@ -324,6 +324,7 @@ namespace Wiwa {
 
 	void Application::ExecuteMainThreadQueue()
 	{
+		OPTICK_EVENT("Execute Main thread");
 		for (auto& func : m_MainThreadQueue)
 			func();
 

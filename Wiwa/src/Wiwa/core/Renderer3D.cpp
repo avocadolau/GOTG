@@ -85,6 +85,7 @@ namespace Wiwa {
 
 	void Renderer3D::Update()
 	{
+		OPTICK_EVENT("Renderer 3D Update");
 		RenderSkybox();
 	}
 
