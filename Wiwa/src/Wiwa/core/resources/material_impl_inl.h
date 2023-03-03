@@ -86,7 +86,13 @@ namespace Wiwa {
 				Uniform::SamplerData* sdata = uniforms[i].getPtrData<Uniform::SamplerData>();
 
 				if (sdata->tex_path != "") {
-					if (!Resources::Import<Image>(sdata->tex_path.c_str())) {
+					std::string texpath = sdata->tex_path;
+
+					Resources::SetAssetPath(texpath);
+
+					if (!Resources::Import<Image>(texpath.c_str())) {
+						delete mat;
+
 						return false;
 					}
 
