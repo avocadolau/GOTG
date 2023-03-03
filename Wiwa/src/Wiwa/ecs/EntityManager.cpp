@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/Model.h>
 #include <Wiwa/utilities/render/Material.h>
 #include <Wiwa/core/Renderer3D.h>
+#include <Wiwa/scene/Scene.h>
 
 namespace Wiwa {
 	
@@ -740,6 +741,7 @@ namespace Wiwa {
 		if (stype) {
 			System* system = (System*)stype->New();
 			system->SetEntity(eid);
+			system->SetScene(m_Scene);
 			system->OnSystemAdded();
 
 			m_EntitySystems[eid].push_back(system);

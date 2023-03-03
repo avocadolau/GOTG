@@ -11,7 +11,6 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/utilities/render/shaders/Uniform.h>
 
-
 MaterialPanel::MaterialPanel(EditorLayer* instance)
 	: Panel("Material Editor", ICON_FK_CIRCLE_O, instance)
 {
@@ -123,7 +122,7 @@ void MaterialPanel::OnEvent(Wiwa::Event& e)
 {
     Wiwa::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<MaterialChangeEvent>({ &MaterialPanel::OnMaterialChange, this });
-
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({&MaterialPanel::OnSceneChange, this});
 }
 
 bool MaterialPanel::OnMaterialChange(MaterialChangeEvent& e)
@@ -131,6 +130,13 @@ bool MaterialPanel::OnMaterialChange(MaterialChangeEvent& e)
     m_Material = Wiwa::Resources::GetResourceById<Wiwa::Material>(e.GetResourceId());
 	s_Path = m_Material->getMaterialPath();
     return true;
+}
+
+bool MaterialPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
+{
+	m_Material = NULL;
+
+	return true;
 }
 
 void MaterialPanel::RenderUniform(Wiwa::Uniform* uniform)

@@ -11,6 +11,9 @@ namespace Wiwa {
 	{
 		mMaxTimeEntering = 0;
 		mMaxTimeLeaving = 0;
+
+		m_EntityManager.SetScene(this);
+
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
 	}
