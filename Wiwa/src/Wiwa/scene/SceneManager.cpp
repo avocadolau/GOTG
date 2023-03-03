@@ -30,6 +30,7 @@ namespace Wiwa {
 
 	void SceneManager::ModuleUpdate()
 	{
+		OPTICK_EVENT("Scene Update");
 		m_Scenes[m_ActiveScene]->ModuleUpdate();
 
 		if (m_PlayScene) {

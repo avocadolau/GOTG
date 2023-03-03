@@ -23,6 +23,7 @@ namespace Wiwa
 		static bool m_IsPlaying;
 		static bool m_IsPaused;
 		static bool m_Step;
+		static int m_TargetFPS;
 	private:
 		Time();
 	public:
@@ -42,6 +43,8 @@ namespace Wiwa
 		static inline float GetRealDeltaTime() { return m_RealTimeDeltaTime.count() * 1000.0f; }
 		static inline bool IsPlaying() { return m_IsPlaying; }
 		static inline bool IsPaused() { return m_IsPaused; }
+		static inline int GetTargetFPS() { return m_TargetFPS; }
+		static inline void SetTargetFPS(int target) { m_TargetFPS = target; }
 	};
 }
 
