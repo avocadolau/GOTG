@@ -45,7 +45,6 @@ imgui.ini
 bin
 bin-int
 /.vs
-Editor/game/.vs
 Intermediates/
 *.vsidx
 *.lock
@@ -58,8 +57,6 @@ Editor/.vs/AppAssembly/v17/.suo
 # Dlls
 Editor/resources/scripts/Wiwa-ScriptCore.dll
 
-# Game build
-Editor/game/build/
 Editor/.vs/AppAssembly/v16/.suo
 
 # Game build
