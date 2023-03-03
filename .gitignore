@@ -45,7 +45,7 @@ imgui.ini
 bin
 bin-int
 /.vs
-WiwaGame/.vs
+Editor/game/.vs
 Intermediates/
 *.vsidx
 *.lock
@@ -59,4 +59,4 @@ Editor/.vs/AppAssembly/v17/.suo
 Editor/resources/scripts/Wiwa-ScriptCore.dll
 
 # Game build
-WiwaGame/build/
+Editor/game/build/
