@@ -10,6 +10,8 @@
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/LightSystem.h>
 
+#include <Wiwa/core/Resources.h>
+
 inline void CreateNew3DEnt()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
@@ -243,11 +245,13 @@ inline void CreateSphere()
 }
 
 inline void CreateEntityWithModelHierarchy(const char* model_path) {
+	std::string libpath = Wiwa::Resources::_assetToLibPath(model_path);
+
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	// Prepare mesh data
 	Wiwa::Mesh mesh;
-	sprintf_s(mesh.mesh_path, "%s", model_path);
+	sprintf_s(mesh.mesh_path, "%s", libpath.c_str());
 
 	mesh.meshId = Wiwa::Resources::Load<Wiwa::Model>(mesh.mesh_path);
 	mesh.drawChildren = false;
@@ -292,6 +296,7 @@ inline void CreateEntityWithModelHierarchy(const char* model_path) {
 			
 			Wiwa::Model* c_model = model->getModelAt(mesh.modelIndex);
 			std::string mat_file = model->getMaterialAt(c_model->getMaterialIndex());
+			mat_file = Wiwa::Resources::_assetToLibPath(mat_file);
 			sprintf_s(mesh.mat_path, "%s", mat_file.c_str());
 
 			mesh.materialId = Wiwa::Resources::Load<Wiwa::Material>(mesh.mat_path);

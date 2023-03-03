@@ -140,9 +140,7 @@ void ScenePanel::Draw()
             std::filesystem::path p = pathS;
             if (p.extension() == ".fbx" || p.extension() == ".FBX")
             {
-                std::filesystem::path src = Wiwa::FileSystem::RemoveFolderFromPath("assets", pathS);
-                src.replace_extension();
-                CreateEntityWithModelHierarchy(src.string().c_str());
+                CreateEntityWithModelHierarchy(pathS.c_str());
             }
             if (p.extension() == ".wiscene")
             {
