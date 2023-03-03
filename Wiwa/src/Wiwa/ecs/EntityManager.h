@@ -19,6 +19,7 @@ typedef unsigned char byte;
 
 namespace Wiwa {
 	class System;
+	class Scene;
 
 	struct Transform3D;
 
@@ -29,6 +30,8 @@ namespace Wiwa {
 			const Type* ctype;
 			ComponentId cid;
 		};
+
+		Scene* m_Scene;
 
 		// Entity management
 		std::vector<std::string> m_EntityNames;
@@ -77,6 +80,8 @@ namespace Wiwa {
 
 		// System registration functions
 		//Action<> registrations[10];
+
+		void SetScene(Scene* scene) { m_Scene = scene; }
 
 		// Systems awake
 		void SystemsAwake();
