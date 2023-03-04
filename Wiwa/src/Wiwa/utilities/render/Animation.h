@@ -91,9 +91,7 @@ namespace Wiwa {
 		//	//ReadHeirarchyData(m_RootNode, scene->mRootNode);
 		//	//ReadMissingBones(animation, *model);
 		//}
-		~Animation();
-
-		
+		~Animation();		
 
 		void LoadAnimation(const aiAnimation* animation);
 		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);

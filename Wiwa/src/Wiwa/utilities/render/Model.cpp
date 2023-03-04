@@ -659,7 +659,6 @@ namespace Wiwa {
 	void Model::ReadNodeHeirarchy(float animationTimeTicks, ModelHierarchy* node, glm::mat4 parentTransform)
 	{
 		std::string NodeName(node->name.data());
-
 		//SetCurrent anim
 		const Animation* animation = parent->animations[0];
 
@@ -667,38 +666,41 @@ namespace Wiwa {
 
 		const AnimNode* pNodeAnim = FindNodeAnim(animation, NodeName);
 
-		if (pNodeAnim) {
-			
-			glm::mat4 identity(1.0f);
-			// Interpolate scaling and generate scaling transformation matrix
-			glm::vec3 Scaling;
-			CalcInterpolatedScaling(Scaling, animationTimeTicks, pNodeAnim);
-			glm::mat4 scalingM = glm::scale(identity, Scaling);
+		//if (pNodeAnim) {
+		//	
+		//	glm::mat4 identity(1.0f);
+		//	// Interpolate scaling and generate scaling transformation matrix
+		//	glm::vec3 Scaling;
+		//	CalcInterpolatedScaling(Scaling, animationTimeTicks, pNodeAnim);
+		//	glm::mat4 scalingM = glm::scale(identity, Scaling);
 
-			// Interpolate rotation and generate rotation transformation matrix
-			glm::quat RotationQ;
-			CalcInterpolatedRotation(RotationQ, animationTimeTicks, pNodeAnim);
-			glm::mat4 rotationM = glm::mat4_cast(RotationQ);
+		//	// Interpolate rotation and generate rotation transformation matrix
+		//	glm::quat RotationQ;
+		//	CalcInterpolatedRotation(RotationQ, animationTimeTicks, pNodeAnim);
+		//	glm::mat4 rotationM = glm::mat4_cast(RotationQ);
 
-			// Interpolate translation and generate translation transformation matrix
-			glm::vec3 Translation;
-			CalcInterpolatedPosition(Translation, animationTimeTicks, pNodeAnim);
-			glm::mat4 translationM = glm::translate(identity, Translation);
+		//	// Interpolate translation and generate translation transformation matrix
+		//	glm::vec3 Translation;
+		//	CalcInterpolatedPosition(Translation, animationTimeTicks, pNodeAnim);
+		//	glm::mat4 translationM = glm::translate(identity, Translation);
 
-			// Combine the above transformations
-			nodeTransformation = translationM * rotationM * scalingM;
+		//	// Combine the above transformations
+		//	nodeTransformation = translationM * rotationM * scalingM;
 
-		}
+		//}
 
 		glm::mat4 GlobalTransformation = parentTransform * nodeTransformation;
 
 		if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
 			unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
-			parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation 
-				* parent->boneInfo[BoneIndex].offsetMatrix;
+			//parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
+			parent->boneInfo[BoneIndex].finalTransformation =  GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
+			//WI_INFO("{}", NodeName.c_str());
+			//PrintGlmMatrix(parent->boneInfo[BoneIndex].finalTransformation);
 		}
 
 		for (unsigned int i = 0; i < node->children.size(); i++) {
+			
 			ReadNodeHeirarchy(animationTimeTicks, node->children[i], GlobalTransformation);
 		}
 	}
@@ -721,7 +723,7 @@ namespace Wiwa {
 		assert(NodeAnim->numScalingKeys > 0);
 
 		for (unsigned int i = 0; i < NodeAnim->numScalingKeys - 1; i++) {
-			float t = (float)NodeAnim->scalingKeys[i + 1].time;
+			float t = (float)NodeAnim->scalingKeys[(i + 1)].time;
 			if (AnimationTime < t) {
 				return i;
 			}
@@ -735,7 +737,7 @@ namespace Wiwa {
 		assert(NodeAnim->numRotationKeys > 0);
 
 		for (unsigned int i = 0; i < NodeAnim->numRotationKeys - 1; i++) {
-			float t = (float)NodeAnim->rotationKeys[i + 1].time;
+			float t = (float)NodeAnim->rotationKeys[(i + 1)].time;
 			if (AnimationTime < t) {
 				return i;
 			}
@@ -747,7 +749,7 @@ namespace Wiwa {
 	unsigned int Model::FindPosition(float AnimationTime, const AnimNode* NodeAnim)
 	{
 		for (unsigned int i = 0; i < NodeAnim->numPositionKeys - 1; i++) {
-			float t = (float)NodeAnim->positionKeys[i + 1].time;
+			float t = (float)NodeAnim->positionKeys[(i + 1)].time;
 			if (AnimationTime < t) {
 				return i;
 			}
@@ -880,7 +882,7 @@ namespace Wiwa {
 		{
 			glGenBuffers(1, &bonevb);
 			glBindBuffer(GL_ARRAY_BUFFER, bonevb);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(bone_data[0]) * bone_data.size(), &bone_data[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(VertexBoneData) * bone_data.size(), bone_data.data(), GL_STATIC_DRAW);
 			
 			if (glGetError() != 0)
 			{
@@ -1082,9 +1084,9 @@ namespace Wiwa {
 		int BoneId = GetBoneId(bone);
 
 		if (BoneId == parent->boneInfo.size()) {
-
-		//	glm::mat4 offset = glm::make_mat4(bone->mOffsetMatrix.ToPtr());
 			glm::mat4 offset = mat4_cast(bone->mOffsetMatrix);
+			//WI_INFO("bone id {}", BoneId);
+			//PrintGlmMatrix(offset);
 			BoneInfo binfo(offset);
 			parent->boneInfo.push_back(binfo);
 		}

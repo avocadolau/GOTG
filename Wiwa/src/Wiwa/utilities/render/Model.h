@@ -129,7 +129,7 @@ namespace Wiwa {
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
-					WI_INFO("bone: {0}, weight: {1}, index: {2}", BoneIDs[i],Weights[i],i);
+					//WI_INFO("bone: {0}, weight: {1}, index: {2}", BoneIDs[i],Weights[i],i);
 					return;
 				}
 				if (i == MAX_NUM_BONES_PER_VERTEX - 1)
