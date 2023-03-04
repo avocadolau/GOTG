@@ -135,24 +135,24 @@ namespace Wiwa {
 				for (size_t k = 0; k < vecA.size(); k++) {
 					vecA[k]->OnCollisionEnter(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
 				}
-				for (size_t j = 0; j < vecA.size(); j++) {
-					vecA[j]->OnCollisionEnter(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
+				for (size_t j = 0; j < vecB.size(); j++) {
+					vecB[j]->OnCollisionEnter(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
 				}
 				break;
 			case CT_LOOP:
 				for (size_t k = 0; k < vecA.size(); k++) {
 					vecA[k]->OnCollision(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
 				}
-				for (size_t j = 0; j < vecA.size(); j++) {
-					vecA[j]->OnCollision(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
+				for (size_t j = 0; j < vecB.size(); j++) {
+					vecB[j]->OnCollision(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
 				}
 				break;
 			case CT_LEAVE:
 				for (size_t k = 0; k < vecA.size(); k++) {
-					vecA[k]->OnCollisionLeave(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
+					vecA[k]->OnCollisionExit(FindByEntityId(cData.entityA), FindByEntityId(cData.entityB));
 				}
-				for (size_t j = 0; j < vecA.size(); j++) {
-					vecA[j]->OnCollisionLeave(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
+				for (size_t j = 0; j < vecB.size(); j++) {
+					vecB[j]->OnCollisionExit(FindByEntityId(cData.entityB), FindByEntityId(cData.entityA));
 				}
 				m_CollisionList.erase(m_CollisionList.begin() + i);
 				i--;

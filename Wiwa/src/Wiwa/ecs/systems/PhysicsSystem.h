@@ -27,7 +27,7 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 		void OnCollision(Object* body1, Object* body2) override;
-		void OnCollisionLeave(Object* body1, Object* body2) override;
+		void OnCollisionExit(Object* body1, Object* body2) override;
 
 	private:
 
