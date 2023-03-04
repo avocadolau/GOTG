@@ -45,13 +45,13 @@ namespace Wiwa {
 		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned");
 		Shader* skinnedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedShaderId);
 		skinnedShader->Compile("resources/shaders/skinned/skinned");
-		skinnedShader->addUniform("u_Texture", UniformType::Sampler2D);
-		skinnedShader->addUniform("u_ToonLevels", UniformType::Float);
-		skinnedShader->addUniform("u_RimLightPower", UniformType::Float);
-		skinnedShader->addUniform("u_SpecularValue", UniformType::Float);
-		skinnedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
-		skinnedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
-		skinnedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		//skinnedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		//skinnedShader->addUniform("u_ToonLevels", UniformType::Float);
+		//skinnedShader->addUniform("u_RimLightPower", UniformType::Float);
+		//skinnedShader->addUniform("u_SpecularValue", UniformType::Float);
+		//skinnedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		//skinnedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		//skinnedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned", skinnedShader);
 
 		//Init bone debug 
@@ -306,15 +306,13 @@ namespace Wiwa {
 		long long CurrentTimeMillis = Time::GetRealTimeSinceStartup();
 		float animationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
 		std::vector<glm::mat4> transforms;
-		
-		if (mesh->HasBones())
-		{
-			mesh->GetBoneTransforms(animationTimeSec, transforms);
 
-			for (unsigned int i = 0; i < transforms.size(); i++) {
-				matShader->SetBoneTransform(i, transforms[i]);
-			}
+		mesh->GetBoneTransforms(animationTimeSec, transforms);
+
+		for (unsigned int i = 0; i < transforms.size(); i++) {
+			matShader->SetBoneTransform(i, transforms[i]);
 		}
+
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();

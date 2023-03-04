@@ -26,6 +26,7 @@ struct aiAnimation;
 struct aiNodeAnim;
 struct aiAnimMesh;
 
+
 namespace Wiwa {
 	struct ModelSettings;
 
@@ -128,7 +129,7 @@ namespace Wiwa {
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
-					//WI_INFO("bone: {0}, weight: {1}, index: {2}", BoneIDs[i],Weights[i],i);
+					WI_INFO("bone: {0}, weight: {1}, index: {2}", BoneIDs[i],Weights[i],i);
 					return;
 				}
 				if (i == MAX_NUM_BONES_PER_VERTEX - 1)
@@ -164,7 +165,7 @@ namespace Wiwa {
 
 		//stores offest matrix and final bone transformation
 		std::vector<BoneInfo> boneInfo;
-		std::vector<int> meshBaseVertex;
+		std::vector<int> meshes;
 		std::map<std::string, unsigned int> boneNameToIndexMap;
 
 		// for the moment i'll put the anim here, i'll change it
@@ -182,7 +183,7 @@ namespace Wiwa {
 
 		bool getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers=true);
 		void getWiMeshFromFile(const char* file);
-		int getBoneId(const aiBone* pBone);
+		int GetBoneId(const aiBone* pBone);
 
 		Model* loadmesh(const aiMesh* mesh);
 		ModelHierarchy* loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix);

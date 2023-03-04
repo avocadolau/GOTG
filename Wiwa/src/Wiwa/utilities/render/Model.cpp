@@ -21,6 +21,18 @@
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/utilities/render/Animation.h>
 
+
+
+
+
+// For converting between ASSIMP and glm
+static inline glm::vec3 vec3_cast(const aiVector3D& v) { return glm::vec3(v.x, v.y, v.z); }
+static inline glm::vec2 vec2_cast(const aiVector3D& v) { return glm::vec2(v.x, v.y); } // it's aiVector3D because assimp's texture coordinates use that
+static inline glm::quat quat_cast(const aiQuaternion& q) { return glm::quat(q.w, q.x, q.y, q.z); }
+static inline glm::mat4 mat4_cast(const aiMatrix4x4& m) { return glm::transpose(glm::make_mat4(&m.a1)); }
+static inline glm::mat4 mat4_cast(const aiMatrix3x3& m) { return glm::transpose(glm::make_mat3(&m.a1)); }
+
+
 namespace Wiwa {
 	bool Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
 	{
@@ -143,7 +155,7 @@ namespace Wiwa {
 			int totalIndices = 0;
 			int totalBones = 0;
 			//resize the vector that will contain the number of base index
-			meshBaseVertex.resize(scene->mNumMeshes);
+			meshes.resize(scene->mNumMeshes);
 
 			for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
 
@@ -152,7 +164,7 @@ namespace Wiwa {
 				int numVertices = pMesh->mNumVertices;
 				int numIndices = pMesh->mNumFaces * 3;
 				int numBones = pMesh->mNumBones;
-				meshBaseVertex[i] = totalVertices;
+				meshes[i] = totalVertices;
 				totalVertices += numVertices;
 				totalIndices += numIndices;
 				totalBones += numBones;
@@ -166,8 +178,6 @@ namespace Wiwa {
 					model->bone_data.resize(totalVertices);
 					model->LoadMeshBones(i, pMesh);
 				}
-
-			
 				if (gen_buffers) {
 					model->generateBuffers();
 				}
@@ -183,16 +193,16 @@ namespace Wiwa {
 
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
-				//Animation::loadAnimation
 				LoadAnimation(scene->mAnimations[i]);
 			}
 		}
 
-		//load hierarchy after for animation pourpuses
+		//load hierarchy after, animation pourpuses
 		glm::mat4 identity = glm::mat4(1);
 
 		model_hierarchy = loadModelHierarchy(scene->mRootNode, identity);
-		globalInverseTransform = glm::make_mat4(scene->mRootNode->mTransformation.Inverse().ToPtr());
+		globalInverseTransform = mat4_cast(scene->mRootNode->mTransformation);
+		globalInverseTransform = glm::inverse(globalInverseTransform);
 
 		std::filesystem::path p = file;
 		model_hierarchy->name = p.stem().string();
@@ -244,8 +254,6 @@ namespace Wiwa {
 			boneInfo.resize(bones_info_size);
 			
 			if (bones_info_size != 0) {
-
-
 				f.Read(&boneInfo[0], bones_info_size * sizeof(BoneInfo));
 			}
 			//load animations
@@ -308,14 +316,11 @@ namespace Wiwa {
 				model->generateBuffers();
 				models.push_back(model);
 			}
-
-			
 		}
-
 		f.Close();
 	}
 
-	int Model::getBoneId(const aiBone* pBone)
+	int Model::GetBoneId(const aiBone* pBone)
 	{
 		int boneid = 0;
 		std::string bone_name(pBone->mName.C_Str());
@@ -392,8 +397,8 @@ namespace Wiwa {
 		h->name = node->mName.C_Str();
 
 		//DEBUG
-		WI_INFO("Name {0}, num children {1}, num meshes{2}",node->mName.C_Str(),node->mNumChildren, node->mNumMeshes);
-		PrintAssimpNodeMatrix(node);
+		//WI_INFO("Name {0}, num children {1}, num meshes{2}",node->mName.C_Str(),node->mNumChildren, node->mNumMeshes);
+		//PrintAssimpNodeMatrix(node);
 		// Node transform
 		aiVector3D translate, scale, rot;
 		//aiQuaternion quat;
@@ -403,16 +408,11 @@ namespace Wiwa {
 		h->scale = { scale.x, scale.y, scale.z };
 
 		//fill bone info data 
-		aiMatrix4x4 m = node->mTransformation;
-		h->Transformation = glm::make_mat4(m.ToPtr());
+		//aiMatrix4x4 m = node->mTransformation;
+		//h->Transformation = glm::make_mat4(m.ToPtr());
+		h->Transformation = mat4_cast(node->mTransformation);
 		glm::mat4 globalTransformation = parentMatrix * h->Transformation;
 		
-		if (boneNameToIndexMap.find(h->name) != boneNameToIndexMap.end())
-		{
-			unsigned int boneIndex = boneNameToIndexMap[h->name];
-			boneInfo[boneIndex].finalTransformation = globalTransformation * boneInfo[boneIndex].offsetMatrix;
-		}		
-
 		// Node meshes
 		for (size_t i = 0; i < node->mNumMeshes; i++) {
 			h->meshIndexes.push_back(node->mMeshes[i]);
@@ -656,7 +656,7 @@ namespace Wiwa {
 	}
 
 	
-	void Model::ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* node, glm::mat4 parentTransform)
+	void Model::ReadNodeHeirarchy(float animationTimeTicks, ModelHierarchy* node, glm::mat4 parentTransform)
 	{
 		std::string NodeName(node->name.data());
 
@@ -672,17 +672,17 @@ namespace Wiwa {
 			glm::mat4 identity(1.0f);
 			// Interpolate scaling and generate scaling transformation matrix
 			glm::vec3 Scaling;
-			CalcInterpolatedScaling(Scaling, timeInSeconds, pNodeAnim);
+			CalcInterpolatedScaling(Scaling, animationTimeTicks, pNodeAnim);
 			glm::mat4 scalingM = glm::scale(identity, Scaling);
 
 			// Interpolate rotation and generate rotation transformation matrix
 			glm::quat RotationQ;
-			CalcInterpolatedRotation(RotationQ, timeInSeconds, pNodeAnim);
+			CalcInterpolatedRotation(RotationQ, animationTimeTicks, pNodeAnim);
 			glm::mat4 rotationM = glm::mat4_cast(RotationQ);
 
 			// Interpolate translation and generate translation transformation matrix
 			glm::vec3 Translation;
-			CalcInterpolatedPosition(Translation, timeInSeconds, pNodeAnim);
+			CalcInterpolatedPosition(Translation, animationTimeTicks, pNodeAnim);
 			glm::mat4 translationM = glm::translate(identity, Translation);
 
 			// Combine the above transformations
@@ -694,11 +694,12 @@ namespace Wiwa {
 
 		if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
 			unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
-			parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
+			parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation 
+				* parent->boneInfo[BoneIndex].offsetMatrix;
 		}
 
 		for (unsigned int i = 0; i < node->children.size(); i++) {
-			ReadNodeHeirarchy(timeInSeconds, node->children[i], GlobalTransformation);
+			ReadNodeHeirarchy(animationTimeTicks, node->children[i], GlobalTransformation);
 		}
 	}
 
@@ -1052,17 +1053,16 @@ namespace Wiwa {
 
 	void Model::GetBoneTransforms(float timeInSeconds, std::vector<glm::mat4>& transforms)
 	{
-	
+		
 		glm::mat4 identity (1.0f);
+
 		//Set current anim
 		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
 		float TimeInTicks = timeInSeconds * TicksPerSecond;
 		float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
 
-		ReadNodeHeirarchy(timeInSeconds, parent->model_hierarchy, identity);
-		
+		ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
 		transforms.resize(parent->boneInfo.size());
-
 		for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
 		{
 			transforms[i] = parent->boneInfo[i].finalTransformation;
@@ -1078,31 +1078,21 @@ namespace Wiwa {
 	}
 
 	void Model::LoadSingleBone(int meshIndex, aiBone* bone)
-	{ 
-		
-		int bone_id = getBoneId(bone);
+	{ 		
+		int BoneId = GetBoneId(bone);
 
-		//init bone info, using bone index to acces it
-		if (bone_id == parent->boneInfo.size())
-		{
-			
-			glm::mat4 offset = glm::make_mat4(bone->mOffsetMatrix.ToPtr());
+		if (BoneId == parent->boneInfo.size()) {
+
+		//	glm::mat4 offset = glm::make_mat4(bone->mOffsetMatrix.ToPtr());
+			glm::mat4 offset = mat4_cast(bone->mOffsetMatrix);
 			BoneInfo binfo(offset);
-			binfo.id = bone_id;
 			parent->boneInfo.push_back(binfo);
 		}
 
-		for (int i = 0; i < bone->mNumWeights; i++) {
+		for (unsigned int i = 0; i < bone->mNumWeights; i++) {
 			const aiVertexWeight& vw = bone->mWeights[i];
-
-			unsigned int globalVertexId =  parent->meshBaseVertex[meshIndex] + vw.mVertexId;
-			if (globalVertexId > bone_data.size())
-			{
-				WI_ERROR("vertex to bones size error mesh id {0} at bone {1} at weight {2}", meshIndex,bone_id, i);
-				assert(0);
-			}
-		//	WI_INFO("Vertex id:{0}", globalVertexId);
-			bone_data[globalVertexId].AddBoneData(bone_id, vw.mWeight);
+			unsigned int GlobalVertexID = parent->meshes[meshIndex] + bone->mWeights[i].mVertexId;
+			bone_data[GlobalVertexID].AddBoneData(BoneId, vw.mWeight);
 		}
 	}
 
