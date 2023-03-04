@@ -41,23 +41,26 @@ struct SpotLight
     float Cutoff;
 };
 
-uniform vec4 u_MatAmbientColor;
-uniform vec4 u_MatDiffuseColor;
-uniform vec4 u_MatSpecularColor;
-uniform int u_ToonLevels = 4;
-uniform float u_RimLightPower = 4.0;
 
-float ToonScaleFactor = 1.0f / u_ToonLevels;
+
 
 uniform DirectionalLight u_DirectionalLight;
 uniform int u_NumPointLights;
 uniform PointLight[MAX_POINT_LIGHTS] u_PointLights;
 uniform int u_NumSpotLights;
 uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
-
-uniform vec3 u_Color;
-uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
+
+uniform vec4 u_Color;
+uniform int u_ToonLevels = 4;
+uniform float u_RimLightPower = 4.0;
+uniform float u_SpecularValue;
+uniform vec4 u_MatAmbientColor;
+uniform vec4 u_MatDiffuseColor;
+uniform vec4 u_MatSpecularColor;
+
+float ToonScaleFactor = 1.0f / u_ToonLevels;
+
 
 float CalcRimLightFactor(vec3 pixelToCamera, vec3 normal)
 {
@@ -90,7 +93,7 @@ vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal)
         rimColor = diffuseColor * rimFactor;
     }
 
-    return ambientColor + diffuseColor + specularColor;
+   return (ambientColor * (diffuseColor + specularColor + rimColor));
 }
 
 vec4 CalcDirectionalLight(vec3 normal)
@@ -141,6 +144,5 @@ void main()
         totalLight += CalcSpotLight(u_SpotLights[i], normal);
     }
 
-    FragColor = vec4(u_Color, 1.0f) *
-                totalLight;
+    FragColor = u_Color;
 }

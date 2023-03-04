@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/Model.h>
 #include <Wiwa/utilities/render/Material.h>
 #include <Wiwa/core/Renderer3D.h>
+#include <Wiwa/scene/Scene.h>
 
 namespace Wiwa {
 	

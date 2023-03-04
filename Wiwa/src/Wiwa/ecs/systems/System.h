@@ -4,34 +4,45 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/scene/SceneManager.h>
 
-namespace Wiwa {
+namespace Wiwa
+{
 	struct Object;
-	class WI_API System {
+	class WI_API System
+	{
 	private:
-
 	protected:
 		EntityId m_EntityId;
-		Scene* m_Scene;
+		Scene *m_Scene;
 
-		template<class T> T* GetComponent();
+		template <class T>
+		T *GetComponent();
 
-		virtual void OnAwake(){}
+		virtual void OnAwake() {}
 
-		virtual void OnInit(){}
+		virtual void OnInit() {}
 
 		virtual void OnUpdate() {}
 
-		virtual void OnDestroy(){}
+		virtual void OnDestroy() {}
 
 		virtual void OnEntitySet() {}
 
-		virtual void OnSceneSet(){}
+		virtual void OnSceneSet() {}
+
 	public:
 		System();
 		virtual ~System(); // Virtual destructor, so that child destructor is called
 
-		void SetEntity(EntityId entity) { m_EntityId = entity; OnEntitySet(); }
-		void SetScene(Scene* scene) { m_Scene = scene; OnSceneSet(); }
+		void SetEntity(EntityId entity)
+		{
+			m_EntityId = entity;
+			OnEntitySet();
+		}
+		void SetScene(Scene *scene)
+		{
+			m_Scene = scene;
+			OnSceneSet();
+		}
 
 		EntityId GetEntity() { return m_EntityId; }
 
@@ -42,26 +53,29 @@ namespace Wiwa {
 		virtual void OnSystemAdded() {}
 
 		virtual void OnSystemRemoved() {}
-		
+
 		void Destroy();
-		virtual void OnCollisionEnter(Object* body1, Object* body2)
-		{}
-		virtual void OnCollision(Object* body1, Object* body2)
-		{}
-		virtual void OnCollisionExit(Object* body1, Object* body2)
-		{}
+		virtual void OnCollisionEnter(Object *body1, Object *body2)
+		{
+		}
+		virtual void OnCollision(Object *body1, Object *body2)
+		{
+		}
+		virtual void OnCollisionExit(Object *body1, Object *body2)
+		{
+		}
 
-		virtual bool OnComponentAdded(byte* data, const Type* type) { return true; }
+		virtual bool OnComponentAdded(byte *data, const Type *type) { return true; }
 
-		virtual bool OnComponentRemoved(byte* data, const Type* type) { return true; }
+		virtual bool OnComponentRemoved(byte *data, const Type *type) { return true; }
 	};
 
-	template<class T>
-	inline T* System::GetComponent()
+	template <class T>
+	inline T *System::GetComponent()
 	{
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager &em = m_Scene->GetEntityManager();
 
-		T* component = em.GetComponent<T>(m_EntityId);
+		T *component = em.GetComponent<T>(m_EntityId);
 
 		return component;
 	}

@@ -93,6 +93,8 @@ private:
 	// Layouts
 	void LoadLayout(const char* path);
 	void SaveLayout(LayoutData& ldata);
+
+	void BuildProject();
 private:
 	bool m_ShowConsole = false;
 	bool m_ShowDemo = false;

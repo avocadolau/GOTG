@@ -23,9 +23,13 @@ namespace Wiwa
 		static bool m_IsPlaying;
 		static bool m_IsPaused;
 		static bool m_Step;
+		static int m_TargetFPS;	
+		static double m_TargetDT;
 	private:
 		Time();
 	public:
+		static int s_NoFrameCap;
+
 		static void Play();
 		static void PauseUnPause();
 		static void Step();
@@ -45,6 +49,15 @@ namespace Wiwa
 		static inline float GetRealDeltaTimeSeconds() { return m_RealTimeDeltaTime.count(); }
 		static inline bool IsPlaying() { return m_IsPlaying; }
 		static inline bool IsPaused() { return m_IsPaused; }
+		static inline int GetTargetFPS() { return m_TargetFPS; }
+		static inline double GetTargetDT() { return m_TargetDT * 1000; }
+		static inline double GetTargetDTSeconds() { return m_TargetDT; }
+		static inline bool IsFrameCap() { return m_TargetFPS != s_NoFrameCap; }
+		static inline void SetTargetFPS(int target)
+		{
+			m_TargetFPS = target;
+			m_TargetDT = (1.0 / m_TargetFPS);
+		}
 	};
 }
 

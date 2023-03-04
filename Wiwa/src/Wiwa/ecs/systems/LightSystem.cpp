@@ -28,6 +28,11 @@ Wiwa::LightSystem::~LightSystem()
 
 void Wiwa::LightSystem::OnSystemAdded()
 {
+	
+}
+
+void Wiwa::LightSystem::OnSystemAdded()
+{
 	if (GetComponent<PointLight>())
 	{
 		m_Scene->GetLightManager().AddPointLight(m_EntityId);
@@ -41,4 +46,3 @@ void Wiwa::LightSystem::OnSystemAdded()
 		m_Scene->GetLightManager().AddSpotLight(m_EntityId);
 	}
 }
-

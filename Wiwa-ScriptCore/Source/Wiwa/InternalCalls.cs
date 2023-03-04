@@ -52,6 +52,8 @@ namespace Wiwa
         internal extern static float GetDeltaTimeIntr();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static float GetTimeIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetFPSIntr(int fps);
         #endregion
         #region Camera
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

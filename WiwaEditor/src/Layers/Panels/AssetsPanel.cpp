@@ -81,6 +81,7 @@ void AssetsPanel::UpdateImports(const std::filesystem::directory_entry& path)
 }
 AssetsPanel::~AssetsPanel()
 {
+
 }
 
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
@@ -94,6 +95,13 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 	if (assetsPath.extension() == ".cs")
 	{
 		EditorLayer::Get().RegenSol();
+	}
+	if (assetsPath.extension() == ".wiscene") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(assetsPath.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(assetsPath.string().c_str(), rpath.string().c_str());
+		return;
 	}
 	switch (change_type)
 	{

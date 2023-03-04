@@ -48,6 +48,7 @@ namespace Wiwa
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
 		WI_ADD_INTERNAL_CALL(GetTimeIntr);
+		WI_ADD_INTERNAL_CALL(SetFPSIntr);
 
 		// Camera
 		WI_ADD_INTERNAL_CALL(GetActiveCamera);

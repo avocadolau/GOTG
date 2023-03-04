@@ -18,6 +18,9 @@ namespace Wiwa
 	std::chrono::time_point<std::chrono::steady_clock>  Time::m_LastTime;
 	std::chrono::duration<float>  Time::m_RealTimeSinceStartup;
 	std::chrono::duration<float>  Time::m_RealTimeDeltaTime;
+	int Time::s_NoFrameCap = -1;
+	int Time::m_TargetFPS = s_NoFrameCap;
+	double Time::m_TargetDT = 1.0 / m_TargetFPS;
 	void Time::Play()
 	{
 		m_IsPlaying = true;
@@ -36,6 +39,7 @@ namespace Wiwa
 	}
 	void Time::Update()
 	{
+		OPTICK_EVENT("Time Update");
 		m_FrameCount++;
 		m_RealTimeDeltaTime = std::chrono::high_resolution_clock::now() - m_RealLastTime;
 		m_RealLastTime = std::chrono::high_resolution_clock::now();

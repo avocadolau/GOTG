@@ -104,88 +104,6 @@ void EditorLayer::OnAttach()
 	m_Settings.push_back(m_ProjectPanel.get());
 	m_Settings.push_back(m_About.get());
 
-	// Test
-	// Wiwa::EntityManager &em = m_EditorScene->GetEntityManager();
-	// int k = 0;
-	// for (size_t i = 0; i < 32; i++)
-	//{
-	//	for (size_t j = 0; j < 32; j++)
-	//	{
-	//		std::string name = "Cube ";
-	//		name += std::to_string(k);
-	//		EntityId root = em.CreateEntity(name.c_str());
-	//		Wiwa::Transform3D t3d;
-	//		t3d.position = { 0, 0.0f, 0 };
-	//		t3d.localPosition = { 0, 20.0f + 2.5 * i, 2.5f * j };
-	//		t3d.rotation = { 0.0f,0.0f, 0.0f };
-	//		t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	//		t3d.scale = { 1.0f, 1.0f, 1.0f };
-	//		t3d.localScale = { 0.0f, 0.0f, 0.0f };
-
-	//		Wiwa::Rigidbody rb;
-	//		rb.gravity = glm::vec3(0.f, 10.f, 0.f);
-	//		rb.mass = 10;
-	//		rb.positionOffset = glm::vec3(0.0f);
-	//		rb.scalingOffset = glm::vec3(1.0f);
-	//		for (int i = 0; i < 32; i++)
-	//		{
-	//			rb.filterBits[i] = true;
-	//		}
-	//		Wiwa::ColliderCube col;
-	//		col.halfExtents = glm::vec3(1.0f);
-
-	//		em.AddComponent<Wiwa::Transform3D>(root, t3d);
-	//		em.AddComponent<Wiwa::Rigidbody>(root, rb);
-	//		em.AddComponent<Wiwa::ColliderCube>(root, col);
-	//		em.ApplySystem<Wiwa::PhysicsSystem>(root);
-	//		k++;
-	//	}
-	//}
-
-	// EntityId id = em.CreateEntity("Plane");
-	// Wiwa::Transform3D t3d;
-	// t3d.position = { 0.0f, 0.0f, 0.0f };
-	// t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	// t3d.rotation = { 0.0f,0.0f, 0.0f };
-	// t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	// t3d.scale = { 1.0f, 1.0f, 1.0f };
-	// t3d.localScale = { 0.0f, 0.0f, 0.0f };
-	//
-	// Wiwa::Rigidbody rb;
-	// rb.gravity = glm::vec3(0.f, 0.f, 0.f);
-	// rb.mass = 0.0f;
-	// rb.positionOffset = glm::vec3(0.0f);
-	// rb.scalingOffset = glm::vec3(1.0f);
-	//
-	// Wiwa::ColliderCube col;
-	// col.halfExtents = glm::vec3(100.f, 2.f, 100.f);
-	// em.AddComponent<Wiwa::Transform3D>(id, t3d);
-	// em.AddComponent<Wiwa::ColliderCube>(id, col);
-	// em.AddComponent<Wiwa::Rigidbody>(id, rb);
-	// em.ApplySystem<Wiwa::PhysicsSystem>(id);
-	// CreateEntityWithModelHierarchy("models/street2");
-	//  SceneId scene = Wiwa::SceneManager::CreateScene();//Wiwa::SceneManager::LoadScene("Assets/Scenes/SampleScene.wiscene");
-	//  Wiwa::SceneManager::SetScene(scene);
-	/*Wiwa::Vector2i pos = Wiwa::Vector2i{0, 0};
-	Wiwa::Size2i size = Wiwa::Size2i{20, 20};*/
-	// uint32_t id = Wiwa::Application::Get().GetRenderer2D().CreateInstancedQuadTex(stopId, pos, size, Wiwa::Renderer2D::Pivot::CENTER);
-
-	/*for (size_t i = 0; i < children_size; i++) {
-		const Wiwa::ModelHierarchy* child_h = model_h->children[i];
-
-		EntityId e_child = em.CreateEntity(child_h->name.c_str(), e_root);
-		em.AddComponent(e_child, t3d);
-
-		size_t c_mesh_size = child_h->meshIndexes.size();
-		size_t c_child_size = child_h->children.size();
-
-		if (child_h->meshIndexes.size() > 0) {
-			mesh.modelIndex = child_h->meshIndexes[0];
-			em.AddComponent(e_child, mesh);
-			em.ApplySystem<Wiwa::MeshRenderer>(e_child);
-		}
-	}*/
-
 	m_EventCallback = {&Wiwa::Application::OnEvent, &Wiwa::Application::Get()};
 
 	LoadCallback();
@@ -337,6 +255,17 @@ void EditorLayer::SaveLayout(LayoutData &ldata)
 	Wiwa::FileSystem::Copy("imgui.ini", p.string().c_str());
 }
 
+void EditorLayer::BuildProject()
+{
+	// On save callback
+	Wiwa::OnSaveEvent ev;
+	Action<Wiwa::Event &> action = {&Wiwa::Application::OnEvent, &Wiwa::Application::Get()};
+	action.execute(ev);
+
+	// Build game
+	system("call tools\\buildgame.bat");
+}
+
 void EditorLayer::RegenSol()
 {
 	if (threadExec)
@@ -415,12 +344,14 @@ void EditorLayer::MainMenuBar()
 
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit"))
+		if (ImGui::BeginMenu("Project"))
 		{
-			if (ImGui::MenuItem("Project settings"))
+			if (ImGui::MenuItem("Build"))
 			{
-				m_ProjectPanel->SwitchActive();
+				BuildProject();
 			}
+			if (ImGui::MenuItem("Project settings"))
+				m_ProjectPanel->SwitchActive();
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("View"))
@@ -775,6 +706,16 @@ void EditorLayer::SaveSceneAs()
 		}
 		Wiwa::SceneManager::SaveScene(Wiwa::SceneManager::getActiveSceneId(), filePath.c_str());
 		m_OpenedScenePath = filePath;
+		std::filesystem::path name = filePath;
+		name = name.filename();
+		name.replace_extension();
+
+		std::filesystem::path curpath = std::filesystem::current_path();
+
+		std::filesystem::path path = filePath;
+		path = path.lexically_relative(curpath);
+
+		Wiwa::ProjectManager::AddScene(name.string().c_str(), path.string().c_str());
 		WI_INFO("Succesfully saved scene at path {0}", filePath.c_str());
 	}
 }

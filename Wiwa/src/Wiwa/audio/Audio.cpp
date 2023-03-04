@@ -382,6 +382,7 @@ bool Audio::Init()
 
 bool Audio::Update()
 {
+    OPTICK_EVENT("Audio Update");
     AK::SoundEngine::RenderAudio();
 
     return true;

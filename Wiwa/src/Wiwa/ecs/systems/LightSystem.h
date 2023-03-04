@@ -5,16 +5,18 @@
 #include "../components/DirectionalLight.h"
 #include "../components/SpotLight.h"
 
-
 #include <Wiwa/utilities/Reflection.h>
 
-namespace Wiwa {
-	class WI_API LightSystem : public System {
+namespace Wiwa
+{
+	class WI_API LightSystem : public System
+	{
 	private:
-
 	public:
 		LightSystem();
 		~LightSystem();
+
+		virtual void OnEntitySet() override;
 
 		virtual void OnSystemAdded() override;
 	};

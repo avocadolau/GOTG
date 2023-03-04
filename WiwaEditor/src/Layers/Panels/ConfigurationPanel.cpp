@@ -8,10 +8,9 @@
 #include <Wiwa/utilities/AllocationMetrics.h>
 #include "../EditorLayer.h"
 
-ConfigurationPanel::ConfigurationPanel(EditorLayer* instance)
+ConfigurationPanel::ConfigurationPanel(EditorLayer *instance)
 	: Panel("Configuration", ICON_FK_COG, instance), info()
 {
-	
 }
 
 ConfigurationPanel::~ConfigurationPanel()
@@ -24,39 +23,39 @@ void ConfigurationPanel::Draw()
 	m_Fullscreen = Wiwa::Application::Get().GetWindow().GetFullScreen();
 	m_VSync = Wiwa::Application::Get().GetWindow().IsVSync();
 	m_MSLog.push_back(Wiwa::Time::GetRealDeltaTime());
-	m_FPSLog.push_back(1000.0f / Wiwa::Time::GetRealDeltaTime());
-	m_AllocLog.push_back(Wiwa::AllocationMetrics::allocation_count);
-	//m_ByteLog.push_back((float)Wiwa::AllocationMetrics::bytes_allocated);
+	m_FPSLog.push_back(1.0f / Wiwa::Time::GetRealDeltaTimeSeconds());
+	m_AllocLog.push_back((float)Wiwa::AllocationMetrics::allocation_count);
+	// m_ByteLog.push_back((float)Wiwa::AllocationMetrics::bytes_allocated);
 
 	ImGui::Begin(iconName.c_str(), &active);
 
 	if (ImGui::CollapsingHeader("External tools"))
 	{
-		{		
-			const char* types[] = { "vs2022", "vs2019" };
-		static const char* currentItem =
-			instance->s_SolVersion == "vs2022" ? types[0] : types[1];
-		if (ImGui::BeginCombo("Solution version", currentItem))
 		{
-			for (int i = 0; i < 2; i++)
+			const char *types[] = {"vs2022", "vs2019"};
+			static const char *currentItem =
+				instance->s_SolVersion == "vs2022" ? types[0] : types[1];
+			if (ImGui::BeginCombo("Solution version", currentItem))
 			{
-				bool isSelected = (currentItem == types[i]);
-				if (ImGui::Selectable(types[i], isSelected))
+				for (int i = 0; i < 2; i++)
 				{
-					currentItem = types[i];
-					instance->s_SolVersion = currentItem;
+					bool isSelected = (currentItem == types[i]);
+					if (ImGui::Selectable(types[i], isSelected))
+					{
+						currentItem = types[i];
+						instance->s_SolVersion = currentItem;
+					}
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
 				}
-				if (isSelected)
-					ImGui::SetItemDefaultFocus();
-			}
 
-			ImGui::EndCombo();
-		}
+				ImGui::EndCombo();
+			}
 		}
 		ImGui::Separator();
 		{
-			const char* types[] = { "Release", "Debug" };
-			static const char* currentItem =
+			const char *types[] = {"Release", "Debug"};
+			static const char *currentItem =
 				instance->s_BuildConf == "Release" ? types[0] : types[1];
 			if (ImGui::BeginCombo("Build config", currentItem))
 			{
@@ -82,7 +81,6 @@ void ConfigurationPanel::Draw()
 		}
 	}
 
-
 	if (ImGui::CollapsingHeader("Window"))
 	{
 		if (ImGui::Checkbox("Fullscreen", &m_Fullscreen))
@@ -92,6 +90,11 @@ void ConfigurationPanel::Draw()
 			Wiwa::Application::Get().GetWindow().SetResizable(m_Resizable);
 		if (ImGui::Checkbox("VSync", &m_VSync))
 			Wiwa::Application::Get().GetWindow().SetVSync(m_VSync);
+
+		int FPSCap = Wiwa::Time::GetTargetFPS();
+		ImGui::SliderInt("FPS", &FPSCap, 1, 250);
+		if (FPSCap > 1)
+			Wiwa::Time::SetTargetFPS(FPSCap);
 	}
 	char title[25];
 	if (ImGui::CollapsingHeader("Info"))
@@ -106,13 +109,14 @@ void ConfigurationPanel::Draw()
 		ImGui::PlotHistogram("##memory", &m_AllocLog[0], (int)m_AllocLog.size(), 0, title, 0.0f, 10000.0f, ImVec2(200, 100));
 		/*sprintf_s(title, 25, "Bytes allocated %.0f", m_ByteLog[m_ByteLog.size() - 1]);
 		ImGui::PlotHistogram("##memory", &m_ByteLog[0], (int)m_ByteLog.size(), 0, title, 0.0f, 90000.0f, ImVec2(200, 100));*/
-	
 	}
 	if (ImGui::CollapsingHeader("Time"))
 	{
+
 		ImGui::Text("Time since startup %.2fs", Wiwa::Time::GetRealTimeSinceStartup());
 		ImGui::Text("Real time delta time %.3fms", Wiwa::Time::GetRealDeltaTime());
 		ImGui::Text("Frame count %i", Wiwa::Time::GetFrameCount());
+
 		if (Wiwa::Time::IsPlaying())
 		{
 			ImGui::Text("Game time since startup %.2fs", Wiwa::Time::GetTime());
@@ -124,8 +128,8 @@ void ConfigurationPanel::Draw()
 				Wiwa::Time::SetTimeScale(timeScale);
 			}
 		}
-		//static ImVec2 curves[64];
-		//ImGui::Editor("Chuchawiwa", ImVec2{ 64, 64 }, 64, curves);
+		// static ImVec2 curves[64];
+		// ImGui::Editor("Chuchawiwa", ImVec2{ 64, 64 }, 64, curves);
 	}
 	if (ImGui::CollapsingHeader("Hardware"))
 	{
@@ -182,7 +186,7 @@ void ConfigurationPanel::Update()
 		m_ByteLog.erase(0);
 
 	PROCESS_MEMORY_COUNTERS_EX pmc;
-	GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+	GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS *)&pmc, sizeof(pmc));
 	SIZE_T virtualMemUsedByMe = pmc.WorkingSetSize >> 20;
 	m_MemLog.push_back((float)virtualMemUsedByMe);
 }
