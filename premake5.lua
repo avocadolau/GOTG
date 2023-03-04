@@ -33,7 +33,6 @@ IncludeDirs["ImGuizmo"] = "%{wks.location}/Wiwa/vendor/imguizmo"
 IncludeDirs["GLI"] = "%{wks.location}/Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
 IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
-IncludeDirs["freetype"] = "%{wks.location}/Wiwa/vendor/freetype/include"
 
 LibraryDirs = {}
 LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"
@@ -60,7 +59,6 @@ group "Dependencies"
 	include "Wiwa/vendor/imgui"
 	include "Wiwa/vendor/Optick"
 	include "Wiwa/vendor/imguizmo"
-	include "Wiwa/vendor/freetype"
 group ""
 
 group "Core"

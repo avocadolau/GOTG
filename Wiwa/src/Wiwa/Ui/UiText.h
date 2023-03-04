@@ -17,10 +17,7 @@ namespace Wiwa
 		GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text);
 		virtual ~GuiText();
 
-		bool Update();
 		bool Draw(Renderer2D* render);
-
-		bool canClick = true;
 	};
 }
 

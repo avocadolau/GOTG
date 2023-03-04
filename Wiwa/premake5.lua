@@ -37,8 +37,7 @@ project "Wiwa"
 		"%{IncludeDirs.assimp}",
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.Wwise}",
-		"%{IncludeDirs.IconFontCppHeaders}",
-		"%{IncludeDirs.freetype}"
+		"%{IncludeDirs.IconFontCppHeaders}"
 	}
 
 	links
@@ -50,7 +49,6 @@ project "Wiwa"
 		"%{wks.location}/Wiwa/vendor/Glew/lib/glew32.lib",
 		"Optick",
 		"ImGuizmo",
-		"freetype",
 		"%{Library.mono}",
 		"%{wks.location}/Wiwa/vendor/assimp/lib/x64/release/assimp-vc143-mt.lib",
 		"%{Library.Wwise_SE}",

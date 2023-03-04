@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+
+
 namespace Wiwa
 {
 	class WI_API GuiManager
@@ -56,8 +58,6 @@ namespace Wiwa
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;
 
-		Image* texture;
-
-
+		Image* texture = nullptr;
 	};
 }

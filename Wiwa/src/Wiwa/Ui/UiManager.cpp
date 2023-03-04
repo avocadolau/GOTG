@@ -11,8 +11,6 @@
 
 #include <Wiwa/scene/Scene.h>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H  
 namespace Wiwa
 {
 	GuiManager::GuiManager()
@@ -188,25 +186,7 @@ namespace Wiwa
 	bool GuiManager::InitFont(const char* path)
 	{
 		
-		//FT_Library ft;
-		//if (FT_Init_FreeType(&ft))
-		//{
-		//	//std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-		//	return -1;
-		//}
-		//
-		//FT_Face face;
-		//if (FT_New_Face(ft, path, 0, &face))
-		//{
-		//	//std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-		//	return -1;
-		//}
-		//FT_Set_Pixel_Sizes(face, 0, 48);
-		//if (FT_Load_Char(face, 'X', FT_LOAD_RENDER))
-		//{
-		//	//std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-		//	return -1;
-		//}
+	
 		return true;
 	}
 
