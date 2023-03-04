@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include <Wiwa/core/Application.h>
+#include <Wiwa/core/ProjectManager.h>
 #include <Wiwa/utilities/json/JSONDocument.h>
 
 #include <Wiwa/core/Input.h>

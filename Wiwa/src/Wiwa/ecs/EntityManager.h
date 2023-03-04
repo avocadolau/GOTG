@@ -90,11 +90,6 @@ namespace Wiwa
 
 		static const size_t INVALID_INDEX = -1;
 
-		// System registration functions
-		// Action<> registrations[10];
-
-		void SetScene(Scene *scene) { m_Scene = scene; }
-
 		// Systems awake
 		void SystemsAwake();
 

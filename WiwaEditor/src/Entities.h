@@ -243,7 +243,7 @@ inline void CreateSphere()
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
 }
 
-inline void CreateEntityWithModelHierarchy(const char *model_path)
+inline EntityId CreateEntityWithModelHierarchy(const char *model_path)
 {
 	std::string libpath = Wiwa::Resources::_assetToLibPath(model_path);
 

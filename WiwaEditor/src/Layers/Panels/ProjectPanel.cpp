@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 #include <Wiwa/core/Application.h>
+#include <Wiwa/core/ProjectManager.h>
 
 ProjectPanel::ProjectPanel(EditorLayer *instance)
 	: Panel("Project", ICON_FK_DATABASE, instance)
