@@ -651,25 +651,26 @@ int DebugDrawer::getDebugMode() const
 
 bool CustomFilterCallBack::needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
 {
-	Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterMask, "A filter mask");
+	/*Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterMask, "A filter mask");
 	Wiwa::PhysicsManager::bin(proxy1->m_collisionFilterMask, "B filter mask");
 	Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterGroup, "A tag");
 	Wiwa::PhysicsManager::bin(proxy1->m_collisionFilterGroup, "B tag");
-	std::cout << std::endl;
+	std::cout << std::endl;*/
+
 	// Check if A group is inside B mask
 	bool aCanCollide = (proxy0->m_collisionFilterMask & proxy1->m_collisionFilterGroup);
-	WI_INFO("A Can Collide {}", aCanCollide);
+	//WI_INFO("A Can Collide {}", aCanCollide);
 	// Check if B group is inside A mask
 	bool bCanCollide = (proxy1->m_collisionFilterMask & proxy0->m_collisionFilterGroup);
-	WI_INFO("B Can Collide {}", bCanCollide);
+	//WI_INFO("B Can Collide {}", bCanCollide);
 
 	if (aCanCollide && bCanCollide)
 		return true;
 
 	bool everyThingA = ((proxy0->m_collisionFilterMask >> 0) & 1); // Check if collider 0 has EVERYTHING_FLAG in filter mask
 	bool everyThingB = ((proxy1->m_collisionFilterMask >> 0) & 1); // Check if collider 1 has EVERYTHING_FLAG in filter mask
-	WI_INFO("A Everything {}", aCanCollide);
-	WI_INFO("B Everything {}", aCanCollide);
+	/*WI_INFO("A Everything {}", aCanCollide);
+	WI_INFO("B Everything {}", aCanCollide);*/
 
 	if (everyThingA && everyThingB)
 		return true;
