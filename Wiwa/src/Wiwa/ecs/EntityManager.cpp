@@ -732,7 +732,8 @@ namespace Wiwa {
 			rigidBody->isStatic = false;
 			rigidBody->doContinuousCollision = false;
 			rigidBody->selfTag = 0;
-			rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
+			rigidBody->filterBits |= 1 << 0;
+			//rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
 		}
 		else if (type->hash == (size_t)TypeHash::ColliderCube)
 		{ 

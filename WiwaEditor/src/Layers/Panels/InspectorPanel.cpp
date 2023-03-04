@@ -377,16 +377,27 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 		ImGui::EndCombo();
 	}
 
-	ImGui::Text("Do not collide with:");
+	ImGui::Text("Collide with:");
 	for (int i = 0; i < py.filterStrings.size(); i++)
 	{
-		bool local = (rigidBody->filterBits >> i) & 1U; //Checking a bit
+		bool local = (rigidBody->filterBits >> i) & 1; //Checking a bit
 		ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
 		if (local)
-			rigidBody->filterBits |= 1UL << i;
+			rigidBody->filterBits |= 1 << i;
 		else
-			rigidBody->filterBits &= ~(1UL << i);
+			rigidBody->filterBits &= ~(1 << i);
 	}
+
+	//ImGui::Text("Do not collide with:");
+	//for (int i = 0; i < py.filterStrings.size(); i++)
+	//{
+	//	bool local = (rigidBody->filterBits >> i) & 1U; //Checking a bit
+	//	ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
+	//	if (local)
+	//		rigidBody->filterBits |= 1UL << i;
+	//	else
+	//		rigidBody->filterBits &= ~(1UL << i);
+	//}
 
 }
 

@@ -52,7 +52,7 @@ namespace Wiwa {
 		m_HasBeenInit = true;
 
 		m_World = new btCollisionWorld(m_Dispatcher,m_Broad_phase,m_Collision_conf);
-		//m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
+		m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
@@ -292,20 +292,6 @@ namespace Wiwa {
 
 	bool PhysicsManager::DeleteBody(Object* body)
 	{
-		//int constrainNums = body->m_Body->getNumConstraintRefs();
-		//if (constrainNums > 0)
-		//{
-		//	for (int i = 0; i < constrainNums; i++)
-		//	{
-		//		constraints.remove(body->m_Body->getConstraintRef(i));
-		//		world->removeConstraint(body->m_Body->getConstraintRef(i));
-		//		delete body->m_Body->getConstraintRef(i);
-		//	}
-		//}
-
-		/*m_Motions.remove((btDefaultMotionState*)body->collisionObject->getMotionState());
-		delete body->collisionObject->getMotionState();*/
-
 		m_Shapes.remove(body->collisionObject->getCollisionShape());
 		delete body->collisionObject->getCollisionShape();
 
@@ -404,7 +390,12 @@ namespace Wiwa {
 		collision_object->setCollisionShape(collision_shape);
 		Object* myObjData = new Object(*collision_object, id, rigid_body.doContinuousCollision);
 
-		m_World->addCollisionObject(collision_object);
+		//collision_object->setCollisionFlags(rigid_body.)
+
+		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
+		int bits = 0;
+		bits |= (1 << rigid_body.selfTag);
+		m_World->addCollisionObject(collision_object, bits, rigid_body.filterBits);
 		m_CollObjects.push_back(myObjData);
 		return true;
 	}
@@ -414,14 +405,6 @@ namespace Wiwa {
 		body->velocity = btVector3(velocity.x, velocity.y, velocity.z);
 		return true;
 	}
-
-	//void PhysicsManager::SetTrigger(Object* body, const bool isTrigger)
-	//{
-	//	if (isTrigger == true)
-	//		body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	//	else
-	//		body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	//}
 
 	Object* PhysicsManager::FindByEntityId(size_t id)
 	{
@@ -664,4 +647,36 @@ void DebugDrawer::setDebugMode(int debug_mode)
 int DebugDrawer::getDebugMode() const
 {
 	return mode;
+}
+
+bool CustomFilterCallBack::needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
+{
+	Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterMask, "A filter mask");
+	Wiwa::PhysicsManager::bin(proxy1->m_collisionFilterMask, "B filter mask");
+	Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterGroup, "A tag");
+	Wiwa::PhysicsManager::bin(proxy1->m_collisionFilterGroup, "B tag");
+	std::cout << std::endl;
+	// Check if A group is inside B mask
+	bool aCanCollide = (proxy0->m_collisionFilterMask & proxy1->m_collisionFilterGroup);
+	WI_INFO("A Can Collide {}", aCanCollide);
+	// Check if B group is inside A mask
+	bool bCanCollide = (proxy1->m_collisionFilterMask & proxy0->m_collisionFilterGroup);
+	WI_INFO("B Can Collide {}", bCanCollide);
+
+	if (aCanCollide && bCanCollide)
+		return true;
+
+	bool everyThingA = ((proxy0->m_collisionFilterMask >> 0) & 1); // Check if collider 0 has EVERYTHING_FLAG in filter mask
+	bool everyThingB = ((proxy1->m_collisionFilterMask >> 0) & 1); // Check if collider 1 has EVERYTHING_FLAG in filter mask
+	WI_INFO("A Everything {}", aCanCollide);
+	WI_INFO("B Everything {}", aCanCollide);
+
+	if (everyThingA && everyThingB)
+		return true;
+
+	if (everyThingA)
+		return (everyThingA && bCanCollide);
+	else if (everyThingB)
+		return (everyThingB && aCanCollide);
+	return false;
 }

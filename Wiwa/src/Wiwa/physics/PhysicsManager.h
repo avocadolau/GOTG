@@ -141,12 +141,30 @@ namespace Wiwa {
 		std::vector<std::string> filterStrings;
 		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;
 
-		void bin(unsigned n)
+		/*void bin(unsigned n)
 		{
 			if (n > 1)
 				bin(n >> 1);
 
 			WI_INFO("{}", n & 1);
+		}*/
+
+		static void bin(int n, const char* str)
+		{
+			std::cout << std::endl << std::endl;
+			int i;
+			std::cout << str << " --> " << "0";
+			for (i = 1 << 30; i > 0; i = i / 2)
+			{
+				if ((n & i) != 0)
+				{
+					std::cout << "1";
+				}
+				else
+				{
+					std::cout << "0";
+				}
+			}
 		}
 	};
 }
@@ -155,16 +173,7 @@ namespace Wiwa {
 struct CustomFilterCallBack : public btOverlapFilterCallback
 {
 	// return true when pairs need collision
-	virtual bool needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
-	{
-		bool collides = (proxy0->m_collisionFilterGroup & proxy1->m_collisionFilterMask) != 0;
-		collides = collides && (proxy1->m_collisionFilterGroup & proxy0->m_collisionFilterMask);
-
-		//add some additional logic here that modified 'collides'
-
-
-		return true;
-	}
+	virtual bool needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const;
 };
 
 class DebugDrawer : public btIDebugDraw
