@@ -428,7 +428,7 @@ namespace Wiwa {
 			WI_ERROR("Bone index is greater than max bones");
 			return;
 		}
-		glUniformMatrix4fv(m_BoneLocation[index], 1, GL_TRUE, (const GLfloat*)glm::value_ptr(transform));
+		glUniformMatrix4fv(m_BoneLocation[index], 1, GL_FALSE, glm::value_ptr(transform));
 	}
 
 	void Shader::SetCameraPos(const glm::vec3& position)
