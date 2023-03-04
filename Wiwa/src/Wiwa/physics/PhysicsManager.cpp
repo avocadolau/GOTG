@@ -103,17 +103,8 @@ namespace Wiwa {
 				//WI_INFO("c2 : {}", contactManifold->getContactPoint(0).m_contactMotion2);
 				btVector3 toSubstract = contactManifold->getContactPoint(0).m_normalWorldOnB * contactManifold->getContactPoint(0).getDistance();
 
-				if (!(obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT) || !(obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE))
-				{
-					btVector3 aNew = obA->getWorldTransform().getOrigin() - toSubstract;
-					obA->getWorldTransform().setOrigin(aNew);
-				}
-
-				if (!(obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT) || !(obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE))
-				{
-					btVector3 bNew = obB->getWorldTransform().getOrigin() + toSubstract;
-					obB->getWorldTransform().setOrigin(bNew);
-				}
+				ResolveContactA(obA, toSubstract, (obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
+				ResolveContactB(obB, toSubstract, (obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
 				//WI_INFO("d : {}", contactManifold->getContactPoint(0).getDistance());
 				size_t idA = obA->getUserIndex();
 				size_t idB = obB->getUserIndex();
@@ -169,6 +160,28 @@ namespace Wiwa {
 				break;
 			}
 		}
+		return true;
+	}
+
+	bool PhysicsManager::ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger)
+	{
+		if (is_static)
+			return false;
+		if (is_trigger)
+			return false;
+
+		obj_a->getWorldTransform().setOrigin(obj_a->getWorldTransform().getOrigin() - vec);
+		return true;
+	}
+
+	bool PhysicsManager::ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger)
+	{
+		if (is_static)
+			return false;
+		if (is_trigger)
+			return false;
+
+		obj_a->getWorldTransform().setOrigin(obj_a->getWorldTransform().getOrigin() + vec);
 		return true;
 	}
 
@@ -377,15 +390,9 @@ namespace Wiwa {
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
 		if (rigid_body.isStatic)
-		{
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-			collision_object->setCollisionFlags(collision_object->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		}
 		else
-		{
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
-			collision_object->setCollisionFlags(collision_object->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		}
 
 		collision_object->setCollisionShape(collision_shape);
 		Object* myObjData = new Object(*collision_object, id, rigid_body.doContinuousCollision);
