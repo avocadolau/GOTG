@@ -5,7 +5,7 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/core/ProjectManager.h>
 
-ProjectPanel::ProjectPanel(EditorLayer* instance) 
+ProjectPanel::ProjectPanel(EditorLayer *instance)
 	: Panel("Project", ICON_FK_DATABASE, instance)
 {
 }
@@ -17,34 +17,34 @@ ProjectPanel::~ProjectPanel()
 void ProjectPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active, ImGuiWindowFlags_NoDocking);
-	const char* buff = Wiwa::ProjectManager::GetProjectName();
+	const char *buff = Wiwa::Application::Get().GetProjectName();
 	std::string edit = buff;
 
-	ImGui::InputText("Project Name", (char*)edit.c_str(), 64);
+	ImGui::InputText("Project Name", (char *)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::ProjectManager::SetProjectName(edit.c_str());
+		Wiwa::Application::Get().SetProjectName(edit.c_str());
 
-	buff = Wiwa::ProjectManager::GetProjectVersion();
+	buff = Wiwa::Application::Get().GetProjectVersion();
 	edit = buff;
 
-	ImGui::InputText("Project Version", (char*)edit.c_str(), 64);
+	ImGui::InputText("Project Version", (char *)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::ProjectManager::SetProjectVersion(edit.c_str());
+		Wiwa::Application::Get().SetProjectVersion(edit.c_str());
 
-	buff = Wiwa::ProjectManager::GetProjectCompany();
+	buff = Wiwa::Application::Get().GetProjectCompany();
 	edit = buff;
 
-	ImGui::InputText("Company Name", (char*)edit.c_str(), 64);
+	ImGui::InputText("Company Name", (char *)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::ProjectManager::SetProjectCompany(edit.c_str());
+		Wiwa::Application::Get().SetProjectCompany(edit.c_str());
 
 	ImGui::Separator();
 
 	Wiwa::ProjectManager::Target target = Wiwa::ProjectManager::GetProjectTarget();
 
-	const char* types[] = { "Windows", "We don't support more platforms you fool" };
+	const char *types[] = {"Windows", "We don't support more platforms you fool"};
 
-	static const char* currentItem = types[(int)target];
+	static const char *currentItem = types[(int)target];
 
 	if (ImGui::BeginCombo("Target", currentItem))
 	{
@@ -55,7 +55,8 @@ void ProjectPanel::Draw()
 			{
 				currentItem = types[i];
 			}
-			if (isSelected) {
+			if (isSelected)
+			{
 				Wiwa::ProjectManager::SetProjectTarget((Wiwa::ProjectManager::Target)i);
 				ImGui::SetItemDefaultFocus();
 			}
@@ -67,12 +68,12 @@ void ProjectPanel::Draw()
 
 	ImGui::Text("Scene list");
 
-	std::vector<Wiwa::ProjectManager::SceneData>& scene_list = Wiwa::ProjectManager::getSceneDataList();
+	std::vector<Wiwa::ProjectManager::SceneData> &scene_list = Wiwa::ProjectManager::getSceneDataList();
 	size_t scene_count = scene_list.size();
 
 	for (int i = 0; i < scene_count; i++)
 	{
-		Wiwa::ProjectManager::SceneData& sdata = scene_list[i];
+		Wiwa::ProjectManager::SceneData &sdata = scene_list[i];
 
 		ImGui::Selectable(sdata.scene_name.c_str());
 

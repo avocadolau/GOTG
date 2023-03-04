@@ -31,6 +31,7 @@ namespace Wiwa
 	void Time::Step()
 	{
 		m_Step = true;
+		m_IsPlaying = true;
 	}
 	void Time::PauseUnPause()
 	{
@@ -46,15 +47,22 @@ namespace Wiwa
 
 		if (m_IsPlaying)
 		{
+			m_DeltaTime = (std::chrono::high_resolution_clock::now() - m_LastTime) * m_TimeScale;
+			m_Time = (std::chrono::high_resolution_clock::now() - m_GameClock) * m_TimeScale;
+			m_LastTime = std::chrono::high_resolution_clock::now();
 			if (m_IsPaused && !m_Step)
 				return;
-			m_DeltaTime = (std::chrono::high_resolution_clock::now() - m_LastTime) * m_TimeScale;
-			m_LastTime = std::chrono::high_resolution_clock::now();
-			m_Time = (std::chrono::high_resolution_clock::now() - m_GameClock) * m_TimeScale;
 			m_GameFrameCount++;
 		}
-		if (m_Step)
+		
+	}
+	void Time::PostUpdate()
+	{
+		if (m_Step && m_IsPlaying)
+		{
 			m_Step = false;
+			m_IsPlaying = false;
+		}
 	}
 	void Time::Stop()
 	{

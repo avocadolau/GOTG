@@ -25,18 +25,18 @@ inline void RemoveWordFromLine(std::string& line, const std::string& word)
 		line.erase(n, word.length());
 	}
 }
-inline bool ButtonCenteredOnLine(const char* label, float alignment = 0.5f)
+inline bool ButtonCenteredOnLine(std::string label, float alignment = 0.5f)
 {
 	ImGuiStyle& style = ImGui::GetStyle();
 
-	float size = ImGui::CalcTextSize(label).x + style.FramePadding.x * 2.0f;
+	float size = ImGui::CalcTextSize(label.c_str()).x + style.FramePadding.x * 2.0f;
 	float avail = ImGui::GetContentRegionAvail().x;
 
 	float off = (avail - size) * alignment;
 	if (off > 0.0f)
 		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
 
-	return ImGui::Button(label);
+	return ImGui::Button(label.c_str());
 }
 inline void AssetContainer(const char* label)
 {

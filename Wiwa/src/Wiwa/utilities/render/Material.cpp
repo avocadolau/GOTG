@@ -16,35 +16,35 @@ namespace Wiwa {
 	}
 
 	Material::Material(Shader* shader)
-    {
+	{
 		if (!shader)
 		{
-			size_t id =	Wiwa::Resources::Load<Shader>("resources/shaders/model_color");
+			size_t id = Wiwa::Resources::Load<Shader>("resources/shaders/model_color");
 			setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/model_color");
 		}
 		else
 			setShader(shader, shader->getPath());
-		
-    }
 
-    Material::Material(const char* file)
-    {
-        Load(file);
-    }
+	}
 
-    Material::~Material()
-    {
+	Material::Material(const char* file)
+	{
+		Load(file);
+	}
+
+	Material::~Material()
+	{
 		if (m_Shader)
 			m_Shader->DeleteRef(this);
-    }
+	}
 
-    void Material::Load(const char* path)
-    {
-        JSONDocument matFile(path);
+	void Material::Load(const char* path)
+	{
+		JSONDocument matFile(path);
 
-		if(matFile.HasMember("shader"))
-			m_ShaderPath = matFile["shader"].get<const char*>();
-		
+		if (matFile.HasMember("shader"))
+			m_ShaderPath = matFile["shader"].as_string();
+
 		size_t shaderId = Resources::Load<Shader>(m_ShaderPath.c_str());
 		Shader* shader = Resources::GetResourceById<Shader>(shaderId);
 
@@ -101,65 +101,65 @@ namespace Wiwa {
 					data.w = p->value["a"].GetFloat();
 					uniform->setData(data, uniform->getType());
 				}break;
-			/*	case Wiwa::UniformType::Mat2:
-				{
-					Wiwa::JSONValue mat = uniforms.AddMemberObject(name));
+				/*	case Wiwa::UniformType::Mat2:
+					{
+						Wiwa::JSONValue mat = uniforms.AddMemberObject(name));
 
-					Wiwa::JSONValue vec1 = mat.AddMemberObject("vec1");
-					vec1.AddMember("x", uniform->getData<glm::mat2>()[0].x);
-					vec1.AddMember("y", uniform->getData<glm::mat2>()[0].y);
+						Wiwa::JSONValue vec1 = mat.AddMemberObject("vec1");
+						vec1.AddMember("x", uniform->getData<glm::mat2>()[0].x);
+						vec1.AddMember("y", uniform->getData<glm::mat2>()[0].y);
 
-					Wiwa::JSONValue vec2 = mat.AddMemberObject("vec2");
-					vec2.AddMember("x", uniform->getData<glm::mat2>()[1].x);
-					vec2.AddMember("y", uniform->getData<glm::mat2>()[1].y);
-				}break;
-				case Wiwa::UniformType::Mat3:
-				{
-					Wiwa::JSONValue mat = uniforms.AddMemberObject(name);
+						Wiwa::JSONValue vec2 = mat.AddMemberObject("vec2");
+						vec2.AddMember("x", uniform->getData<glm::mat2>()[1].x);
+						vec2.AddMember("y", uniform->getData<glm::mat2>()[1].y);
+					}break;
+					case Wiwa::UniformType::Mat3:
+					{
+						Wiwa::JSONValue mat = uniforms.AddMemberObject(name);
 
-					Wiwa::JSONValue vec1 = mat.AddMemberObject("vec1");
-					vec1.AddMember("x", uniform->getData<glm::mat3>()[0].x);
-					vec1.AddMember("y", uniform->getData<glm::mat3>()[0].y);
-					vec1.AddMember("z", uniform->getData<glm::mat3>()[0].z);
+						Wiwa::JSONValue vec1 = mat.AddMemberObject("vec1");
+						vec1.AddMember("x", uniform->getData<glm::mat3>()[0].x);
+						vec1.AddMember("y", uniform->getData<glm::mat3>()[0].y);
+						vec1.AddMember("z", uniform->getData<glm::mat3>()[0].z);
 
-					Wiwa::JSONValue vec2 = mat.AddMemberObject("vec2");
-					vec2.AddMember("x", uniform->getData<glm::mat3>()[1].x);
-					vec2.AddMember("y", uniform->getData<glm::mat3>()[1].y);
-					vec2.AddMember("z", uniform->getData<glm::mat3>()[1].z);
+						Wiwa::JSONValue vec2 = mat.AddMemberObject("vec2");
+						vec2.AddMember("x", uniform->getData<glm::mat3>()[1].x);
+						vec2.AddMember("y", uniform->getData<glm::mat3>()[1].y);
+						vec2.AddMember("z", uniform->getData<glm::mat3>()[1].z);
 
-					Wiwa::JSONValue vec3 = mat.AddMemberObject("vec3");
-					vec3.AddMember("x", uniform.getData<glm::mat3>()[2].x);
-					vec3.AddMember("y", uniform.getData<glm::mat3>()[2].y);
-					vec3.AddMember("z", uniform.getData<glm::mat3>()[2].z);
-				}break;
-				case Wiwa::UniformType::Mat4:
-				{
-					Wiwa::JSONValue mat = uniforms.AddMemberObject(name);
+						Wiwa::JSONValue vec3 = mat.AddMemberObject("vec3");
+						vec3.AddMember("x", uniform.getData<glm::mat3>()[2].x);
+						vec3.AddMember("y", uniform.getData<glm::mat3>()[2].y);
+						vec3.AddMember("z", uniform.getData<glm::mat3>()[2].z);
+					}break;
+					case Wiwa::UniformType::Mat4:
+					{
+						Wiwa::JSONValue mat = uniforms.AddMemberObject(name);
 
-					Wiwa::JSONValue vec1 = mat.AddMemberObject("vec1");
-					vec1.AddMember("x", uniform->getData<glm::mat4>()[0].x);
-					vec1.AddMember("y", uniform->getData<glm::mat4>()[0].y);
-					vec1.AddMember("z", uniform->getData<glm::mat4>()[0].z);
-					vec1.AddMember("w", uniform->getData<glm::mat4>()[0].w);
+						Wiwa::JSONValue vec1 = mat.AddMemberObject("vec1");
+						vec1.AddMember("x", uniform->getData<glm::mat4>()[0].x);
+						vec1.AddMember("y", uniform->getData<glm::mat4>()[0].y);
+						vec1.AddMember("z", uniform->getData<glm::mat4>()[0].z);
+						vec1.AddMember("w", uniform->getData<glm::mat4>()[0].w);
 
-					Wiwa::JSONValue vec2 = mat.AddMemberObject("vec2");
-					vec2.AddMember("x", uniform->getData<glm::mat4>()[1].x);
-					vec2.AddMember("y", uniform->getData<glm::mat4>()[1].y);
-					vec2.AddMember("z", uniform->getData<glm::mat4>()[1].z);
-					vec2.AddMember("w", uniform->getData<glm::mat4>()[1].w);
+						Wiwa::JSONValue vec2 = mat.AddMemberObject("vec2");
+						vec2.AddMember("x", uniform->getData<glm::mat4>()[1].x);
+						vec2.AddMember("y", uniform->getData<glm::mat4>()[1].y);
+						vec2.AddMember("z", uniform->getData<glm::mat4>()[1].z);
+						vec2.AddMember("w", uniform->getData<glm::mat4>()[1].w);
 
-					Wiwa::JSONValue vec3 = mat.AddMemberObject("vec3");
-					vec3.AddMember("x", uniform->getData<glm::mat4>()[2].x);
-					vec3.AddMember("y", uniform->getData<glm::mat4>()[2].y);
-					vec3.AddMember("z", uniform->getData<glm::mat4>()[2].z);
-					vec3.AddMember("w", uniform->getData<glm::mat4>()[2].w);
+						Wiwa::JSONValue vec3 = mat.AddMemberObject("vec3");
+						vec3.AddMember("x", uniform->getData<glm::mat4>()[2].x);
+						vec3.AddMember("y", uniform->getData<glm::mat4>()[2].y);
+						vec3.AddMember("z", uniform->getData<glm::mat4>()[2].z);
+						vec3.AddMember("w", uniform->getData<glm::mat4>()[2].w);
 
-					Wiwa::JSONValue vec4 = mat.AddMemberObject("vec4");
-					vec4.AddMember("x", uniform->getData<glm::mat4>()[2].x);
-					vec4.AddMember("y", uniform->getData<glm::mat4>()[2].y);
-					vec4.AddMember("z", uniform->getData<glm::mat4>()[2].z);
-					vec4.AddMember("w", uniform->getData<glm::mat4>()[2].w);
-				}break;*/
+						Wiwa::JSONValue vec4 = mat.AddMemberObject("vec4");
+						vec4.AddMember("x", uniform->getData<glm::mat4>()[2].x);
+						vec4.AddMember("y", uniform->getData<glm::mat4>()[2].y);
+						vec4.AddMember("z", uniform->getData<glm::mat4>()[2].z);
+						vec4.AddMember("w", uniform->getData<glm::mat4>()[2].w);
+					}break;*/
 				case Wiwa::UniformType::Time:
 				{
 
@@ -181,19 +181,19 @@ namespace Wiwa {
 				default:
 					break;
 				}
-				}
 			}
-        m_MaterialPath = path;
-    }
+		}
+		m_MaterialPath = path;
+	}
 
 	void Material::Save(const char* path)
 	{
 		std::string file = path;
 		Resources::SetAssetPath(file);
-        Wiwa::JSONDocument doc;
+		Wiwa::JSONDocument doc;
 		Wiwa::Resources::standarizePath(m_ShaderPath);
 		doc.AddMember("shader", m_ShaderPath.c_str());
-        Wiwa::JSONValue uniforms = doc.AddMemberObject("uniforms");
+		Wiwa::JSONValue uniforms = doc.AddMemberObject("uniforms");
 		for (Wiwa::Uniform uniform : m_Uniforms)
 		{
 			const char* name = uniform.name.c_str();
@@ -306,7 +306,7 @@ namespace Wiwa {
 				break;
 			}
 		}
-        doc.save_file(file.c_str());
+		doc.save_file(file.c_str());
 		m_MaterialPath = path;
 		Resources::Import<Material>(file.c_str());
 	}
@@ -314,7 +314,7 @@ namespace Wiwa {
 	void Material::SaveLib(const char* path)
 	{
 		std::string file = path;
-		
+
 		Wiwa::JSONDocument doc;
 		Wiwa::Resources::standarizePath(m_ShaderPath);
 		doc.AddMember("shader", m_ShaderPath.c_str());
@@ -436,14 +436,14 @@ namespace Wiwa {
 	}
 
 	void Material::SaveMaterial(const char* path, Material* mat)
-    {
-        mat->Save(path);
-    }
+	{
+		mat->Save(path);
+	}
 
-    Material* Material::LoadMaterial(const char* path)
-    {
-        return new Material(path);
-    }
+	Material* Material::LoadMaterial(const char* path)
+	{
+		return new Material(path);
+	}
 
 	Material* Material::LoadMaterialData(const char* path)
 	{
@@ -589,12 +589,12 @@ namespace Wiwa {
 
 		return mat;
 	}
-    void Material::Refresh()
-    {
+	void Material::Refresh()
+	{
 		std::vector<UniformField>& fields = m_Shader->getUniforms();
 		for (UniformField& field : fields)
 		{
-			
+
 			Uniform* uniform = getUniform(field.name.c_str());
 			if (uniform)
 			{
@@ -616,7 +616,7 @@ namespace Wiwa {
 			for (; j < fields.size(); j++)
 			{
 				if (m_Uniforms[i].name == fields[j].name
-					&& m_Uniforms[i].getType() == fields[j].type)	
+					&& m_Uniforms[i].getType() == fields[j].type)
 					break;
 			}
 			if (j == fields.size())
@@ -625,7 +625,7 @@ namespace Wiwa {
 				i--;
 			}
 		}
-    }
+	}
 
 	void Material::setShader(Shader* shader, const char* path)
 	{
@@ -654,7 +654,7 @@ namespace Wiwa {
 	void Material::Bind()
 	{
 		int texureId = GL_TEXTURE0;
-		for(size_t i = 0; i < m_Uniforms.size(); i++)
+		for (size_t i = 0; i < m_Uniforms.size(); i++)
 		{
 			m_Uniforms[i].sendToShader(m_Shader->getID(), texureId);
 		}

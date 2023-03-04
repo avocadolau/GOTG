@@ -10,8 +10,10 @@
 
 #include <Wiwa/ecs/systems/LightSystem.h>
 
-namespace Wiwa {
-	Renderer3D::Renderer3D() {
+namespace Wiwa
+{
+	Renderer3D::Renderer3D()
+	{
 	}
 
 	Renderer3D::~Renderer3D()
@@ -20,15 +22,15 @@ namespace Wiwa {
 
 	bool Renderer3D::Init()
 	{
-		Size2i& resolution = Application::Get().GetTargetResolution();
+		Size2i &resolution = Application::Get().GetTargetResolution();
 
 		WI_CORE_INFO("Renderer3D initialized");
 		SetOption(Options::DEPTH_TEST);
 		SetOption(Options::CULL_FACE);
 
-		//Init default shaders with uniforms
+		// Init default shaders with uniforms
 		ResourceId textShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/toon_textured");
-		Shader* textShader = Wiwa::Resources::GetResourceById<Shader>(textShaderId);
+		Shader *textShader = Wiwa::Resources::GetResourceById<Shader>(textShaderId);
 		textShader->Compile("resources/shaders/light/toon_textured");
 		textShader->addUniform("u_Texture", UniformType::Sampler2D);
 		textShader->addUniform("u_ToonLevels", UniformType::Int);
@@ -39,9 +41,9 @@ namespace Wiwa {
 		textShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured", textShader);
 
-		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/lit_model_color");
-		Shader* colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
-		colorShader->Compile("resources/shaders/light/lit_model_color");
+		ResourceId colorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/toon_color");
+		Shader *colorShader = Wiwa::Resources::GetResourceById<Shader>(colorShaderId);
+		colorShader->Compile("resources/shaders/light/toon_color");
 		colorShader->addUniform("u_Color", UniformType::fVec4);
 		colorShader->addUniform("u_ToonLevels", UniformType::Int);
 		colorShader->addUniform("u_RimLightPower", UniformType::Float);
@@ -49,10 +51,9 @@ namespace Wiwa {
 		colorShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
-		Wiwa::Resources::Import<Shader>("resources/shaders/light/lit_model_color", colorShader);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_color", colorShader);
 
-
-		//Normal Display Shader
+		// Normal Display Shader
 		m_NormalDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/normal_display");
 		m_NormalDisplayShader = Resources::GetResourceById<Shader>(m_NormalDisplayShaderId);
 		m_NormalDisplayShader->Compile("resources/shaders/debug/normal_display");
@@ -60,7 +61,7 @@ namespace Wiwa {
 		m_NDSUniforms.Model = m_NormalDisplayShader->getUniformLocation("u_Model");
 		m_NDSUniforms.View = m_NormalDisplayShader->getUniformLocation("u_View");
 		m_NDSUniforms.Projection = m_NormalDisplayShader->getUniformLocation("u_Projection");
-		//Bounding box
+		// Bounding box
 		m_BBDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/boundingbox_display");
 		m_BBDisplayShader = Resources::GetResourceById<Shader>(m_BBDisplayShaderId);
 		m_BBDisplayShader->Compile("resources/shaders/debug/boundingbox_display");
@@ -68,16 +69,21 @@ namespace Wiwa {
 		m_BBDSUniforms.View = m_BBDisplayShader->getUniformLocation("u_View");
 		m_BBDSUniforms.Projection = m_BBDisplayShader->getUniformLocation("u_Proj");
 
+		m_DepthShaderId = Resources::Load<Shader>("resources/shaders/light/depth");
+		m_DepthShader = Resources::GetResourceById<Shader>(m_DepthShaderId);
+		m_DepthShader->Compile("resources/shaders/light/depth");
+		m_DepthShaderUniforms.Model = m_DepthShader->getUniformLocation("u_Model");
+		m_DepthShaderUniforms.View = m_DepthShader->getUniformLocation("u_View");
+		m_DepthShaderUniforms.Projection = m_DepthShader->getUniformLocation("u_Proj");
 
-		std::vector<const char*> faces = {
+		std::vector<const char *> faces = {
 			"resources/images/skybox/right.jpg",
 			"resources/images/skybox/left.jpg",
 			"resources/images/skybox/top.jpg",
 			"resources/images/skybox/bottom.jpg",
 			"resources/images/skybox/front.jpg",
-			"resources/images/skybox/back.jpg"
-		};
-		
+			"resources/images/skybox/back.jpg"};
+
 		m_DefaultSkybox.LoadCubemap(faces);
 
 		return true;
@@ -89,10 +95,8 @@ namespace Wiwa {
 		RenderSkybox();
 	}
 
-
-
-	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, Material* material, const size_t& directional,
-		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear/*=false*/, Camera* camera/*=NULL*/, bool cull /*= false*/)
+	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
+								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, bool clear /*=false*/, Camera *camera /*=NULL*/, bool cull /*= false*/)
 	{
 		if (!camera)
 		{
@@ -111,7 +115,7 @@ namespace Wiwa {
 		model = glm::rotate(model, glm::radians(t3d.rotation.z), glm::vec3(0, 0, 1));
 		model = glm::scale(model, glm::vec3(t3d.scale.x, t3d.scale.y, t3d.scale.z));
 
-		Shader* matShader = material->getShader();
+		Shader *matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
@@ -141,17 +145,17 @@ namespace Wiwa {
 			mesh->DrawBoudingBox();
 			m_BBDisplayShader->UnBind();
 		}
-		
+
 		camera->frameBuffer->Unbind();
 	}
 
-
-	void Renderer3D::RenderMesh(Model* mesh, const Transform3D& t3d, const Transform3D& parent, Material* material, const size_t& directional,
-		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear, Camera* camera, bool cull)
+	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, const Transform3D &parent, Material *material, const size_t &directional,
+								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, bool clear, Camera *camera, bool cull)
 	{
 		if (!camera)
 		{
-			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();;
+			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			;
 		}
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
@@ -178,7 +182,7 @@ namespace Wiwa {
 		model = parent_model * model;
 
 		// Material bind
-		Shader* matShader = material->getShader();
+		Shader *matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
@@ -211,8 +215,8 @@ namespace Wiwa {
 
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::RenderMesh(Model* mesh, const glm::vec3& position, const glm::vec3 & rotation, const glm::vec3 & scale, const size_t& directional,
-		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull)
+	void Renderer3D::RenderMesh(Model *mesh, const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, const size_t &directional,
+								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, Material *material, bool clear, Camera *camera, bool cull)
 	{
 		if (!camera)
 		{
@@ -232,7 +236,7 @@ namespace Wiwa {
 		material->getShader()->Bind();
 		material->getShader()->SetMVP(model, camera->getView(), camera->getProjection());
 
-		Shader* matShader = material->getShader();
+		Shader *matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
@@ -263,21 +267,57 @@ namespace Wiwa {
 
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
-		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear, Camera* camera, bool cull)
+	void Renderer3D::RenderMesh(Model *mesh, const glm::mat4 &transform, Material *material, const size_t &directional,
+								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, bool clear, Camera *camera, bool cull)
 	{
 		if (!camera)
 		{
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
+		//// Setting the shadow map buffer
+		// camera->frameBuffer->BindDepth(true);
+
+		// Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
+		// glm::mat4 view;
+		// glm::mat4 projection;
+		// if (lightTrans)
+		//{
+		//	view = glm::lookAt(
+		//		lightTrans->localPosition,
+		//		lightTrans->localPosition + glm::radians(lightTrans->localRotation),
+		//		glm::vec3(0.0f, 1.0f, 0.0f));
+		//	projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+
+		//	m_DepthShader->Bind();
+		//	m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
+		//	m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
+
+		//	m_DepthShader->setUniform(m_DepthShaderUniforms.Model, lightTrans->localMatrix);
+		//}
+
+		// mesh->Render();
+
+		// m_DepthShader->UnBind();
+
+		// camera->frameBuffer->UnbindDepth();
+
+		// Set up color buffer
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 		camera->frameBuffer->Bind(clear);
 
-		Shader* matShader = material->getShader();
+		Shader *matShader = material->getShader();
 		matShader->Bind();
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
+
+		// if (lightTrans)
+		//{
+		//	glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
+
+		//	matShader->setUniform(matShader->getUniformLocation("u_Light"), lightMVP);
+		//}
+		// camera->frameBuffer->SetupDepth(GL_TEXTURE1);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
@@ -286,6 +326,8 @@ namespace Wiwa {
 		mesh->Render();
 
 		material->UnBind();
+
+		// Debug
 
 		if (mesh->showNormals)
 		{
@@ -312,14 +354,13 @@ namespace Wiwa {
 	void Renderer3D::RenderSkybox()
 	{
 		{
-			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			Camera *camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-
 				camera->frameBuffer->Bind(false);
 				glDepthFunc(GL_LEQUAL);
-				Shader* shader = m_DefaultSkybox.m_Material->getShader();
+				Shader *shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
 				shader->setUniform(shader->getViewLoc(), camera->getView());
@@ -331,14 +372,14 @@ namespace Wiwa {
 			}
 		}
 		{
-			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+			Camera *camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 				camera->frameBuffer->Bind(false);
 				glDepthFunc(GL_LEQUAL);
-				Shader* shader = m_DefaultSkybox.m_Material->getShader();
+				Shader *shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
 				glm::mat4 view = glm::mat4(glm::mat3(camera->getView()));
@@ -375,10 +416,10 @@ namespace Wiwa {
 			break;
 		case Wiwa::Renderer3D::GAMMA_CORRECTION:
 			glEnable(GL_FRAMEBUFFER_SRGB);
+			break;
 		default:
 			break;
 		}
-		
 	}
 	void Renderer3D::DisableOption(Options option)
 	{
@@ -411,50 +452,82 @@ namespace Wiwa {
 	}
 	void Renderer3D::Close()
 	{
-		
 	}
-	void Renderer3D::RenderFrustrums(Camera* camera)
+	void Renderer3D::RenderFrustrums()
 	{
-		if (!camera)
-		{
-			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
-		}
+		Camera *camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		CameraManager& cameraManager = SceneManager::getActiveScene()->GetCameraManager();
 		camera->frameBuffer->Bind(false);
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(glm::value_ptr(camera->getView()));
+
+		CameraManager &cameraManager = SceneManager::getActiveScene()->GetCameraManager();
+
 		size_t cameraCount = cameraManager.getCameraSize();
-		std::vector<CameraId>& cameras = cameraManager.getCameras();
+		std::vector<CameraId> &cameras = cameraManager.getCameras();
 		for (size_t i = 0; i < cameraCount; i++)
 		{
-			CameraId cam_id = cameras[i];
-			Camera* cam = cameraManager.getCamera(cam_id);
-			if (camera == cam)
-				continue;
+			Camera *cam = cameraManager.getCamera(cameras[i]);
 
-			m_BBDisplayShader->Bind();
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cam->getPosition());
-			model = glm::rotate(model, 0.0f, glm::vec3(1, 0, 0));
-			model = glm::rotate(model, 0.0f, glm::vec3(0, 1, 0));
-			model = glm::rotate(model, 0.0f, glm::vec3(0, 0, 1));
-			model = glm::scale(model, glm::vec3(1.0f));
+			glUseProgram(0);
+			glColor3f(0, 255, 0);
+			glLineWidth(3.0f);
+			glBegin(GL_LINES);
 
-			m_BBDisplayShader->setUniform(m_BBDSUniforms.Model, model);
-			m_BBDisplayShader->setUniform(m_BBDSUniforms.View, camera->getView());
-			m_BBDisplayShader->setUniform(m_BBDSUniforms.Projection, camera->getProjection());
-			cam->DrawFrustrum();
+			glm::vec3 bb_frustum[8];
+			cam->GetCornerPoints(bb_frustum);
 
-			m_BBDisplayShader->UnBind();
+			glVertex3f((GLfloat)bb_frustum[0].x, (GLfloat)bb_frustum[0].y, (GLfloat)bb_frustum[0].z);
+			glVertex3f((GLfloat)bb_frustum[1].x, (GLfloat)bb_frustum[1].y, (GLfloat)bb_frustum[1].z);
+
+			glVertex3f((GLfloat)bb_frustum[0].x, (GLfloat)bb_frustum[0].y, (GLfloat)bb_frustum[0].z);
+			glVertex3f((GLfloat)bb_frustum[4].x, (GLfloat)bb_frustum[4].y, (GLfloat)bb_frustum[4].z);
+
+			glVertex3f((GLfloat)bb_frustum[0].x, (GLfloat)bb_frustum[0].y, (GLfloat)bb_frustum[0].z);
+			glVertex3f((GLfloat)bb_frustum[2].x, (GLfloat)bb_frustum[2].y, (GLfloat)bb_frustum[2].z);
+
+			glVertex3f((GLfloat)bb_frustum[2].x, (GLfloat)bb_frustum[2].y, (GLfloat)bb_frustum[2].z);
+			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
+
+			glVertex3f((GLfloat)bb_frustum[1].x, (GLfloat)bb_frustum[1].y, (GLfloat)bb_frustum[1].z);
+			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
+
+			glVertex3f((GLfloat)bb_frustum[5].x, (GLfloat)bb_frustum[5].y, (GLfloat)bb_frustum[5].z);
+			glVertex3f((GLfloat)bb_frustum[4].x, (GLfloat)bb_frustum[4].y, (GLfloat)bb_frustum[4].z);
+
+			glVertex3f((GLfloat)bb_frustum[4].x, (GLfloat)bb_frustum[4].y, (GLfloat)bb_frustum[4].z);
+			glVertex3f((GLfloat)bb_frustum[6].x, (GLfloat)bb_frustum[6].y, (GLfloat)bb_frustum[6].z);
+
+			glVertex3f((GLfloat)bb_frustum[7].x, (GLfloat)bb_frustum[7].y, (GLfloat)bb_frustum[7].z);
+			glVertex3f((GLfloat)bb_frustum[5].x, (GLfloat)bb_frustum[5].y, (GLfloat)bb_frustum[5].z);
+
+			glVertex3f((GLfloat)bb_frustum[7].x, (GLfloat)bb_frustum[7].y, (GLfloat)bb_frustum[7].z);
+			glVertex3f((GLfloat)bb_frustum[6].x, (GLfloat)bb_frustum[6].y, (GLfloat)bb_frustum[6].z);
+
+			glVertex3f((GLfloat)bb_frustum[1].x, (GLfloat)bb_frustum[1].y, (GLfloat)bb_frustum[1].z);
+			glVertex3f((GLfloat)bb_frustum[5].x, (GLfloat)bb_frustum[5].y, (GLfloat)bb_frustum[5].z);
+
+			glVertex3f((GLfloat)bb_frustum[6].x, (GLfloat)bb_frustum[6].y, (GLfloat)bb_frustum[6].z);
+			glVertex3f((GLfloat)bb_frustum[2].x, (GLfloat)bb_frustum[2].y, (GLfloat)bb_frustum[2].z);
+
+			glVertex3f((GLfloat)bb_frustum[7].x, (GLfloat)bb_frustum[7].y, (GLfloat)bb_frustum[7].z);
+			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
+
+			glEnd();
+			glLineWidth(1.0f);
 		}
 		camera->frameBuffer->Unbind();
 	}
-	void Renderer3D::SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights)
+	void Renderer3D::SetUpLight(Wiwa::Shader *matShader, Wiwa::Camera *camera, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights)
 	{
 		matShader->setUniform(matShader->getUniformLocation("u_CameraPosition"), camera->getPosition());
 		if (directional != -1)
 		{
-			DirectionalLight* dirLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<DirectionalLight>(directional);
-			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(directional);
+			DirectionalLight *dirLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<DirectionalLight>(directional);
+			Transform3D *transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(directional);
 			if (dirLight && transform)
 			{
 				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), dirLight->Color);
@@ -471,10 +544,10 @@ namespace Wiwa {
 			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::vec3(0.0f));
 		}
 		matShader->setUniform(matShader->getUniformLocation("u_NumPointLights"), (int)pointLights.size());
-		for (size_t i = 0; i < pointLights.size(); i++) 
+		for (size_t i = 0; i < pointLights.size(); i++)
 		{
-			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
-			PointLight* pointLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<PointLight>(pointLights[i]);
+			Transform3D *transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
+			PointLight *pointLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<PointLight>(pointLights[i]);
 			std::string num = std::to_string(i);
 
 			if (transform && pointLight)
@@ -493,8 +566,8 @@ namespace Wiwa {
 		matShader->setUniform(matShader->getUniformLocation("u_NumSpotLights"), (int)spotLights.size());
 		for (size_t i = 0; i < pointLights.size(); i++)
 		{
-			Transform3D* transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
-			SpotLight* spotLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<SpotLight>(pointLights[i]);
+			Transform3D *transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
+			SpotLight *spotLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<SpotLight>(pointLights[i]);
 			std::string num = std::to_string(i);
 
 			if (transform && spotLight)
@@ -511,6 +584,8 @@ namespace Wiwa {
 				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Cuttoff").c_str()), spotLight->Cutoff);
 			}
 		}
-		
+	}
+	void Renderer3D::RenderShadows(Camera *camera, const size_t &directional)
+	{
 	}
 }

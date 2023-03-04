@@ -26,11 +26,6 @@ Wiwa::LightSystem::~LightSystem()
 	}
 }
 
-void Wiwa::LightSystem::OnEntitySet()
-{
-	
-}
-
 void Wiwa::LightSystem::OnSystemAdded()
 {
 	if (GetComponent<PointLight>())

@@ -4,29 +4,39 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
-#include <Wiwa\utilities\render\LightManager.h>
+#include <Wiwa/utilities/render/LightManager.h>
 
-namespace Wiwa {
+namespace Wiwa
+{
 	Scene::Scene()
 	{
 		mMaxTimeEntering = 0;
 		mMaxTimeLeaving = 0;
 
 		m_EntityManager.SetScene(this);
-
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
+		m_PhysicsManager = new PhysicsManager();
+
+		m_PhysicsManager->InitWorld();
 	}
 
 	Scene::~Scene()
 	{
 		delete m_CameraManager;
 		delete m_LightManager;
+
+		// Clear entity manager
+		m_EntityManager.Clear();
+
+		// Clear physics world
+		m_PhysicsManager->CleanWorld();
+		delete m_PhysicsManager;
+		m_PhysicsManager = nullptr;
 	}
 
 	void Scene::Start()
 	{
-		
 	}
 
 	void Scene::Awake()
@@ -45,7 +55,8 @@ namespace Wiwa {
 		{
 		case Scene::SCENE_ENTERING:
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeEntering) m_CurrentState = SCENE_LOOP;
+			if (m_TransitionTimer >= mMaxTimeEntering)
+				m_CurrentState = SCENE_LOOP;
 			UpdateEnter();
 			RenderEnter();
 			break;
@@ -58,7 +69,8 @@ namespace Wiwa {
 			break;
 		case Scene::SCENE_LEAVING:
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeLeaving) SceneManager::ChangeScene(m_SceneToChange);
+			if (m_TransitionTimer >= mMaxTimeLeaving)
+				SceneManager::ChangeScene(m_SceneToChange);
 			UpdateLeave();
 			RenderLeave();
 			break;
@@ -73,7 +85,18 @@ namespace Wiwa {
 
 		m_EntityManager.Update();
 
-		if (!SceneManager::IsPlaying()) {
+		m_PhysicsManager->UpdateEngineToPhysics();
+
+		if (SceneManager::IsPlaying())
+		{
+			m_PhysicsManager->StepSimulation();
+			m_PhysicsManager->UpdatePhysicsToEngine();
+			// m_PhysicsManager->LogBodies();
+		}
+		// m_PhysicsManager->LogBodies();
+
+		if (!SceneManager::IsPlaying())
+		{
 			m_EntityManager.UpdateWhitelist();
 		}
 	}
@@ -87,7 +110,9 @@ namespace Wiwa {
 
 	void Scene::Unload(bool unload_resources)
 	{
-		if (unload_resources) {
+		return;
+		if (unload_resources)
+		{
 			Wiwa::Resources::UnloadAllResources();
 		}
 	}

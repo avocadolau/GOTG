@@ -56,6 +56,13 @@ size_t CreateEntity()
 	return em.CreateEntity();
 }
 
+size_t CreateEntityNamed(MonoString* name_entity)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	char* name_p = mono_string_to_utf8(name_entity);
+	return em.CreateEntity(name_p);
+}
+
 void DestroyEntity(size_t eid)
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();

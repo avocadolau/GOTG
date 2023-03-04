@@ -34,6 +34,7 @@ namespace Wiwa
 		static void PauseUnPause();
 		static void Step();
 		static void Update();
+		static void PostUpdate();
 		static void Stop();
 
 		static inline uint32_t GetFrameCount() { return m_FrameCount; }

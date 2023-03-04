@@ -75,6 +75,9 @@ namespace Wiwa {
 		inline glm::mat4 getProjection() { return m_Projection; }
 		
 		void DrawFrustrum();
+
+		void GetCornerPoints(glm::vec3* outPointArray);
+
 		inline glm::vec3 FarPlanePos(float x, float y) const
 		{
 			float farPlaneHalfWidth = glm::tan(m_FOV * 0.5f)* m_FarPlaneDist;

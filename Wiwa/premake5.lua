@@ -37,7 +37,8 @@ project "Wiwa"
 		"%{IncludeDirs.assimp}",
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.Wwise}",
-		"%{IncludeDirs.IconFontCppHeaders}"
+		"%{IncludeDirs.IconFontCppHeaders}",
+		"%{IncludeDirs.bullet}"
 	}
 
 	links
@@ -55,7 +56,7 @@ project "Wiwa"
 		"%{Library.Wwise_MMgr}",
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
-		"%{Library.Wwise_SA}"
+		"%{Library.Wwise_SA}",
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
@@ -97,6 +98,12 @@ project "Wiwa"
 		}	
 		runtime "Debug"
 		symbols "On"
+		links
+		{
+			"%{Library.bullet_dynamics_debug}",
+			"%{Library.bullet_collision_debug}",
+			"%{Library.bullet_linear_math_debug}"
+		}
 
 
 	filter "configurations:Release"
@@ -104,6 +111,12 @@ project "Wiwa"
 		runtime "Release"
 		optimize "On"
 		symbols "On"
+		links
+		{
+			"%{Library.bullet_dynamics_release}",
+			"%{Library.bullet_collision_release}",
+			"%{Library.bullet_linear_math_release}"
+		}
 
 	filter "configurations:Dist"
 		defines "WI_DIST"

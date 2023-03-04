@@ -14,17 +14,17 @@
 
 inline void CreateNew3DEnt()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	EntityId myEntity = em.CreateEntity("New Entity");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
@@ -32,17 +32,17 @@ inline void CreateNew3DEnt()
 
 inline void CreatePointLight()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	EntityId myEntity = em.CreateEntity("Point light");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	Wiwa::PointLight lightSource;
 
@@ -60,20 +60,19 @@ inline void CreatePointLight()
 	em.ApplySystem<Wiwa::LightSystem>(myEntity);
 }
 
-
 inline void CreateSpotLight()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	EntityId myEntity = em.CreateEntity("Spot light");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	Wiwa::SpotLight lightSource;
 
@@ -83,7 +82,7 @@ inline void CreateSpotLight()
 	lightSource.Constant = 0.5f;
 	lightSource.Exp = 0.5f;
 	lightSource.Linear = 0.5f;
-	lightSource.Direction = glm::vec3{ 90.0f, 0.f, 0.f };
+	lightSource.Direction = glm::vec3{90.0f, 0.f, 0.f};
 	lightSource.Cutoff = 1.0f;
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
@@ -95,17 +94,17 @@ inline void CreateSpotLight()
 
 inline void CreateDirectionalLight()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	EntityId myEntity = em.CreateEntity("Directional light");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, -75.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, -75.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	Wiwa::DirectionalLight lightSource;
 	lightSource.Color = glm::vec3(1.0f);
@@ -121,17 +120,17 @@ inline void CreateDirectionalLight()
 
 inline void CreateNewChild(EntityId parentId)
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	EntityId myEntity = em.CreateEntity("New entity", parentId);
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
@@ -139,18 +138,18 @@ inline void CreateNewChild(EntityId parentId)
 
 inline void CreateCube()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	EntityId myEntity = em.CreateEntity("Cube");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	Wiwa::Mesh mesh;
@@ -165,18 +164,18 @@ inline void CreateCube()
 
 inline void CreatePlane()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	EntityId myEntity = em.CreateEntity("Plane");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	Wiwa::Mesh mesh;
@@ -192,18 +191,18 @@ inline void CreatePlane()
 
 inline void CreatePyramid()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	EntityId myEntity = em.CreateEntity("Pyramid");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	Wiwa::Mesh mesh;
@@ -219,18 +218,18 @@ inline void CreatePyramid()
 
 inline void CreateSphere()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	EntityId myEntity = em.CreateEntity("Sphere");
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	em.AddComponent<Wiwa::Transform3D>(myEntity, t3d);
 	Wiwa::Mesh mesh;
@@ -244,10 +243,11 @@ inline void CreateSphere()
 	em.ApplySystem<Wiwa::MeshRenderer>(myEntity);
 }
 
-inline void CreateEntityWithModelHierarchy(const char* model_path) {
+inline EntityId CreateEntityWithModelHierarchy(const char *model_path)
+{
 	std::string libpath = Wiwa::Resources::_assetToLibPath(model_path);
 
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	// Prepare mesh data
 	Wiwa::Mesh mesh;
@@ -258,18 +258,18 @@ inline void CreateEntityWithModelHierarchy(const char* model_path) {
 
 	// Prepare default transform
 	Wiwa::Transform3D t3d;
-	t3d.position = { 0.0f, 0.0f, 0.0f };
-	t3d.localPosition = { 0.0f, 0.0f, 0.0f };
-	t3d.rotation = { 0.0f,0.0f, 0.0f };
-	t3d.localRotation = { 0.0f, 0.0f, 0.0f };
-	t3d.scale = { 1.0f, 1.0f, 1.0f };
-	t3d.localScale = { 0.0f, 0.0f, 0.0f };
+	t3d.position = {0.0f, 0.0f, 0.0f};
+	t3d.localPosition = {0.0f, 0.0f, 0.0f};
+	t3d.rotation = {0.0f, 0.0f, 0.0f};
+	t3d.localRotation = {0.0f, 0.0f, 0.0f};
+	t3d.scale = {1.0f, 1.0f, 1.0f};
+	t3d.localScale = {0.0f, 0.0f, 0.0f};
 
 	// Take root model
-	Wiwa::Model* model = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh.meshId);
+	Wiwa::Model *model = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh.meshId);
 
 	// Create entity with model's hierarchy
-	const Wiwa::ModelHierarchy* model_h = model->getModelHierarchy();
+	const Wiwa::ModelHierarchy *model_h = model->getModelHierarchy();
 	size_t children_size = model_h->children.size();
 
 	EntityId e_root = em.CreateEntity(model_h->name.c_str());
@@ -280,7 +280,8 @@ inline void CreateEntityWithModelHierarchy(const char* model_path) {
 	em.ApplySystem<Wiwa::MeshRenderer>(e_root);
 	em.ApplySystem<Wiwa::AudioSystem>(e_root);
 
-	auto process_h = [&](const Wiwa::ModelHierarchy* m_h, EntityId parent, auto&& process_h) -> void {
+	auto process_h = [&](const Wiwa::ModelHierarchy *m_h, EntityId parent, auto &&process_h) -> void
+	{
 		EntityId e_child = em.CreateEntity(m_h->name.c_str(), parent);
 		t3d.localPosition = m_h->translation;
 		t3d.localRotation = m_h->rotation;
@@ -291,10 +292,11 @@ inline void CreateEntityWithModelHierarchy(const char* model_path) {
 		size_t c_mesh_size = m_h->meshIndexes.size();
 		size_t c_child_size = m_h->children.size();
 
-		if (c_mesh_size > 0) {
+		if (c_mesh_size > 0)
+		{
 			mesh.modelIndex = m_h->meshIndexes[0];
-			
-			Wiwa::Model* c_model = model->getModelAt(mesh.modelIndex);
+
+			Wiwa::Model *c_model = model->getModelAt(mesh.modelIndex);
 			std::string mat_file = model->getMaterialAt(c_model->getMaterialIndex());
 			mat_file = Wiwa::Resources::_assetToLibPath(mat_file);
 			sprintf_s(mesh.mat_path, "%s", mat_file.c_str());
@@ -306,16 +308,21 @@ inline void CreateEntityWithModelHierarchy(const char* model_path) {
 			em.ApplySystem<Wiwa::AudioSystem>(e_child);
 		}
 
-		if (c_child_size > 0) {
-			for (size_t i = 0; i < c_child_size; i++) {
+		if (c_child_size > 0)
+		{
+			for (size_t i = 0; i < c_child_size; i++)
+			{
 				process_h(m_h->children[i], e_child, process_h);
 			}
 		}
 	};
 
-	for (size_t i = 0; i < children_size; i++) {
-		const Wiwa::ModelHierarchy* child_h = model_h->children[i];
+	for (size_t i = 0; i < children_size; i++)
+	{
+		const Wiwa::ModelHierarchy *child_h = model_h->children[i];
 
 		process_h(child_h, e_root, process_h);
 	}
+
+	return e_root;
 }

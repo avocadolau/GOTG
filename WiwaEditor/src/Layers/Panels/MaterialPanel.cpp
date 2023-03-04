@@ -11,7 +11,7 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/utilities/render/shaders/Uniform.h>
 
-MaterialPanel::MaterialPanel(EditorLayer* instance)
+MaterialPanel::MaterialPanel(EditorLayer *instance)
 	: Panel("Material Editor", ICON_FK_CIRCLE_O, instance)
 {
 }
@@ -24,26 +24,25 @@ void MaterialPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
 
-    
-    if (m_Material)
-    {
-		ImGui::Text(m_Material->getMaterialPath());
+	if (m_Material)
+	{
+		ImGui::Text("Material path: %s", m_Material->getMaterialPath());
 		std::string str = m_Material->getShader()->getPath();
 		if (ButtonCenteredOnLine("Shaders"))
 			ImGui::OpenPopup("Shaders");
-
+		ImGui::Text("Shader: %s", str.c_str());
 		if (ImGui::BeginPopup("Shaders"))
 		{
 			static ImGuiTextFilter filter;
 			ImGui::Text("Search:");
 			filter.Draw("##searchbar", 340.f);
 			ImGui::BeginChild("listbox child", ImVec2(300, 200));
-			std::vector<Wiwa::Resources::Resource*>& shaders = Wiwa::Resources::GetResourcesOf(Wiwa::Resources::WRT_SHADER);
+			std::vector<Wiwa::Resources::Resource *> &shaders = Wiwa::Resources::GetResourcesOf(Wiwa::Resources::WRT_SHADER);
 			for (size_t i = 0; i < shaders.size(); i++)
 			{
 				if (filter.PassFilter(shaders[i]->filePath.c_str()))
 				{
-					std::string label = shaders[i]->filePath.c_str();
+					std::string label = std::filesystem::path(shaders[i]->filePath).filename().string();
 
 					label += "##" + std::to_string(i);
 					if (ImGui::MenuItem(label.c_str()))
@@ -57,24 +56,21 @@ void MaterialPanel::Draw()
 			ImGui::EndChild();
 			ImGui::EndPopup();
 		}
-        std::vector<Wiwa::Uniform>& uniforms = m_Material->getUniforms();
-        for (size_t i = 0; i < uniforms.size(); i++)
-        {
-            RenderUniform(&uniforms[i]);
-        }
+		std::vector<Wiwa::Uniform> &uniforms = m_Material->getUniforms();
+		for (size_t i = 0; i < uniforms.size(); i++)
+		{
+			RenderUniform(&uniforms[i]);
+		}
 		if (ImGui::Button("Refresh"))
 			m_Material->Refresh();
 
 		ImGui::SameLine();
-        if (ImGui::Button("Save"))
-            m_Material->Save(s_Path.string().c_str());
+		if (ImGui::Button("Save"))
+			m_Material->Save(s_Path.string().c_str());
+	}
+	else
+		TextCentered("Select a material to begin editing");
 
-    }
-    else
-       TextCentered("Select a material to begin editing");
-
-
-   
 	ImGui::End();
 
 	/* ImGui::Begin("Light Debugger");
@@ -85,61 +81,58 @@ void MaterialPanel::Draw()
 	 ImGui::ColorEdit3("Specular", glm::value_ptr(directionalLight.Specular));
 	 Wiwa::Application::Get().GetRenderer3D().getFrameBuffer()->setLight(directionalLight);*/
 
-    //Wiwa::List<Wiwa::PointLight>* pLights = Wiwa::Application::Get().GetRenderer3D().getFrameBuffer().getPointLights();
-    /*if (ImGui::Button("+"))
-    {
-        Wiwa::PointLight light{
-            glm::vec3{0.0f},
-            glm::vec3{1.0f},
-            glm::vec3{1.0f},
-            glm::vec3{1.0f},
-            1.0f,
-            0.09f,
-            0.032f
-        };
-        Wiwa::Application::Get().GetRenderer3D().getFrameBuffer().addPointLight(light);
-    }
-    for (int i = 0; i < pLights->size(); i++)
-    {
-        ImGui::PushID(i);
-        ImGui::DragFloat3("Position", glm::value_ptr(pLights->at(i).Position));
-        ImGui::ColorEdit3("Ambient", glm::value_ptr(pLights->at(i).Ambient));
-        ImGui::ColorEdit3("Diffuse", glm::value_ptr(pLights->at(i).Diffuse));
-        ImGui::ColorEdit3("Specular", glm::value_ptr(pLights->at(i).Specular));
-        ImGui::DragFloat("Constant", &pLights->at(i).Constant);
-        ImGui::DragFloat("Linear", &pLights->at(i).Linear);
-        ImGui::DragFloat("Quadratic", &pLights->at(i).Quadratic);
-        ImGui::PopID();
-    }*/
+	// Wiwa::List<Wiwa::PointLight>* pLights = Wiwa::Application::Get().GetRenderer3D().getFrameBuffer().getPointLights();
+	/*if (ImGui::Button("+"))
+	{
+		Wiwa::PointLight light{
+			glm::vec3{0.0f},
+			glm::vec3{1.0f},
+			glm::vec3{1.0f},
+			glm::vec3{1.0f},
+			1.0f,
+			0.09f,
+			0.032f
+		};
+		Wiwa::Application::Get().GetRenderer3D().getFrameBuffer().addPointLight(light);
+	}
+	for (int i = 0; i < pLights->size(); i++)
+	{
+		ImGui::PushID(i);
+		ImGui::DragFloat3("Position", glm::value_ptr(pLights->at(i).Position));
+		ImGui::ColorEdit3("Ambient", glm::value_ptr(pLights->at(i).Ambient));
+		ImGui::ColorEdit3("Diffuse", glm::value_ptr(pLights->at(i).Diffuse));
+		ImGui::ColorEdit3("Specular", glm::value_ptr(pLights->at(i).Specular));
+		ImGui::DragFloat("Constant", &pLights->at(i).Constant);
+		ImGui::DragFloat("Linear", &pLights->at(i).Linear);
+		ImGui::DragFloat("Quadratic", &pLights->at(i).Quadratic);
+		ImGui::PopID();
+	}*/
 
-
-    //ImGui::End();
+	// ImGui::End();
 }
 
-
-
-void MaterialPanel::OnEvent(Wiwa::Event& e)
+void MaterialPanel::OnEvent(Wiwa::Event &e)
 {
-    Wiwa::EventDispatcher dispatcher(e);
-    dispatcher.Dispatch<MaterialChangeEvent>({ &MaterialPanel::OnMaterialChange, this });
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<MaterialChangeEvent>({&MaterialPanel::OnMaterialChange, this});
 	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({&MaterialPanel::OnSceneChange, this});
 }
 
-bool MaterialPanel::OnMaterialChange(MaterialChangeEvent& e)
+bool MaterialPanel::OnMaterialChange(MaterialChangeEvent &e)
 {
-    m_Material = Wiwa::Resources::GetResourceById<Wiwa::Material>(e.GetResourceId());
+	m_Material = Wiwa::Resources::GetResourceById<Wiwa::Material>(e.GetResourceId());
 	s_Path = m_Material->getMaterialPath();
-    return true;
+	return true;
 }
 
-bool MaterialPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
+bool MaterialPanel::OnSceneChange(Wiwa::SceneChangeEvent &e)
 {
 	m_Material = NULL;
 
 	return true;
 }
 
-void MaterialPanel::RenderUniform(Wiwa::Uniform* uniform)
+void MaterialPanel::RenderUniform(Wiwa::Uniform *uniform)
 {
 	switch (uniform->getType())
 	{
@@ -176,39 +169,39 @@ void MaterialPanel::RenderUniform(Wiwa::Uniform* uniform)
 		ImGui::Text(uniform->name.c_str());
 		ImGui::SameLine();
 		ImGui::Text("%f", uniform->getPtrData<float>());
-	}break;
+	}
+	break;
 	case Wiwa::UniformType::Sampler2D:
 	{
-		Wiwa::Uniform::SamplerData* sdata = uniform->getPtrData<Wiwa::Uniform::SamplerData>();
+		Wiwa::Uniform::SamplerData *sdata = uniform->getPtrData<Wiwa::Uniform::SamplerData>();
 
 		ImGui::Text(uniform->name.c_str());
 		ImGui::SameLine();
-		ImGui::Image((ImTextureID)(intptr_t)sdata->tex_id, { 64, 64 });
+		ImGui::Image((ImTextureID)(intptr_t)sdata->tex_id, {64, 64});
 
 		if (ImGui::BeginDragDropTarget())
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
-				const wchar_t* path = (const wchar_t*)payload->Data;
+				const wchar_t *path = (const wchar_t *)payload->Data;
 				std::wstring ws(path);
 				std::string pathS(ws.begin(), ws.end());
 				std::filesystem::path p = pathS;
 				if (m_Material)
 				{
-					if (ImageExtensionComp(p)) 
+					if (ImageExtensionComp(p))
 					{
 						sdata->resource_id = Wiwa::Resources::Load<Wiwa::Image>(p.string().c_str());
-						Wiwa::Image* img = Wiwa::Resources::GetResourceById<Wiwa::Image>(sdata->resource_id);
+						Wiwa::Image *img = Wiwa::Resources::GetResourceById<Wiwa::Image>(sdata->resource_id);
 						sdata->tex_id = img->GetTextureId();
 						sdata->tex_path = p.string().c_str();
 					}
 				}
-
 			}
 			ImGui::EndDragDropTarget();
-
 		}
-	}break;
+	}
+	break;
 	default:
 		break;
 	}

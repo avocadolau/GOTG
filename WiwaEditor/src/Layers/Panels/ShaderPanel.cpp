@@ -34,14 +34,14 @@ void ShaderPanel::Draw()
 		{
 			if (filter.PassFilter(shaders[i]->filePath.c_str()))
 			{
-				std::string label = shaders[i]->filePath.c_str();
+				std::string label = std::filesystem::path(shaders[i]->filePath).filename().string();
 
 				label += "##" + std::to_string(i);
 				if (ImGui::MenuItem(label.c_str()))
 				{
 					size_t id = Wiwa::Resources::Load<Wiwa::Shader>(shaders[i]->filePath.c_str());
 					m_Shader = Wiwa::Resources::GetResourceById<Wiwa::Shader>(id);
-					m_ShaderPath = shaders[i]->filePath;
+					m_ShaderPath = std::filesystem::path(shaders[i]->filePath).filename().string();
 					ImGui::CloseCurrentPopup();
 				}
 			}

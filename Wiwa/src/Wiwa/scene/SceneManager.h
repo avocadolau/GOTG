@@ -78,5 +78,7 @@ namespace Wiwa {
 
 		// Unload a scene id
 		static void UnloadScene(SceneId scene_id, bool unload_resources=true);
+
+		static bool isLoadingScene;
 	};
 }

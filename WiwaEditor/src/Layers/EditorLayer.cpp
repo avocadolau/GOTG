@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include <Wiwa/core/Application.h>
+#include <Wiwa/core/ProjectManager.h>
 #include <Wiwa/utilities/json/JSONDocument.h>
 
 #include <Wiwa/core/Input.h>
@@ -13,25 +14,24 @@
 
 #include <Wiwa/core/Resources.h>
 
-#include <Wiwa/core/ProjectManager.h>
+#include "../Utils/ProjectManager.h"
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/components/Sprite.h>
 #include <Wiwa/scripting/ScriptEngine.h>
 
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
+
 #include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/audio/Audio.h>
 
 #include "../Entities.h"
-EditorLayer* EditorLayer::s_Instance = nullptr;
-
+EditorLayer *EditorLayer::s_Instance = nullptr;
 std::string EditorLayer::s_SolVersion = "vs2022";
 std::string EditorLayer::s_BuildConf = "Release";
-
-std::thread* EditorLayer::s_RegenThread;
-
+std::thread *EditorLayer::s_RegenThread;
 EditorLayer::EditorLayer()
 	: Layer("Editor Layer")
 {
@@ -51,6 +51,7 @@ void EditorLayer::OnAttach()
 	Wiwa::SceneManager::StopScene();
 
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
+	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("PhysicsSystem"));
 	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId);
@@ -62,9 +63,9 @@ void EditorLayer::OnAttach()
 	cam->setPosition(glm::vec3{-52.5f, 30.2f, 26.2f});
 	cam->setRotation(glm::vec3{-26.0f, -30.2f, 0.0f});
 
+	m_Scene = std::make_unique<ScenePanel>(this);
 	m_Configuration = std::make_unique<ConfigurationPanel>(this);
 	m_Console = std::make_unique<ConsolePanel>(this);
-	m_Scene = std::make_unique<ScenePanel>(this);
 	m_Hierarchy = std::make_unique<HierarchyPanel>(this);
 	m_Assets = std::make_unique<AssetsPanel>(this);
 	m_Inspector = std::make_unique<InspectorPanel>(this);
@@ -122,7 +123,8 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate()
 {
-	if (m_ReloadLayout) {
+	if (m_ReloadLayout)
+	{
 		ImGui::LoadIniSettingsFromDisk(m_ActiveLayout.c_str());
 		m_ReloadLayout = false;
 	}
@@ -141,7 +143,7 @@ void EditorLayer::OnUpdate()
 
 void EditorLayer::OnImGuiRender()
 {
-	ImGuiContext* ctx = Wiwa::Application::Get().GetImGuiContext();
+	ImGuiContext *ctx = Wiwa::Application::Get().GetImGuiContext();
 	ImGui::SetCurrentContext(ctx);
 
 	MainMenuBar();
@@ -176,11 +178,11 @@ void EditorLayer::OnEvent(Wiwa::Event &e)
 	}
 }
 
-void EditorLayer::LoadScene(const std::string& m_Path)
+void EditorLayer::LoadScene(const std::string &m_Path)
 {
 	// Load scene and prepare it
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str());
-	Wiwa::Scene* scene = Wiwa::SceneManager::getScene(id);
+	Wiwa::Scene *scene = Wiwa::SceneManager::getScene(id);
 	scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
 	Wiwa::SceneManager::SetScene(id);
@@ -190,7 +192,6 @@ void EditorLayer::LoadScene(const std::string& m_Path)
 	m_EditorSceneId = id;
 	m_EditorScene = scene;
 }
-
 
 static bool threadExec = false;
 static bool finishedThread = false;
@@ -208,18 +209,19 @@ void EditorLayer::RegenSolutionThread()
 	mutex.unlock();
 }
 
-void EditorLayer::LoadLayout(const char* path)
+void EditorLayer::LoadLayout(const char *path)
 {
 	Wiwa::JSONDocument layout(path);
 
-	if (layout.HasMember("imgui_file")) {
+	if (layout.HasMember("imgui_file"))
+	{
 		m_ActiveLayout = layout["imgui_file"].as_string();
 
 		size_t psize = m_Panels.size();
 
 		for (size_t i = 0; i < psize; i++)
 		{
-			Panel* p = m_Panels[i];
+			Panel *p = m_Panels[i];
 
 			if (layout.HasMember(p->GetName()))
 			{
@@ -231,20 +233,20 @@ void EditorLayer::LoadLayout(const char* path)
 	}
 }
 
-void EditorLayer::SaveLayout(LayoutData& ldata)
+void EditorLayer::SaveLayout(LayoutData &ldata)
 {
 	Wiwa::JSONDocument layout;
-	
+
 	std::filesystem::path p = ldata.path;
 	p.replace_extension(".ini");
 
 	layout.AddMember("imgui_file", p.string().c_str());
-	
+
 	size_t psize = m_Panels.size();
 
 	for (size_t i = 0; i < psize; i++)
 	{
-		Panel* panel = m_Panels[i];
+		Panel *panel = m_Panels[i];
 
 		layout.AddMember(panel->GetName(), panel->active);
 	}
@@ -258,7 +260,7 @@ void EditorLayer::BuildProject()
 {
 	// On save callback
 	Wiwa::OnSaveEvent ev;
-	Action<Wiwa::Event&> action = { &Wiwa::Application::OnEvent, &Wiwa::Application::Get() };
+	Action<Wiwa::Event &> action = {&Wiwa::Application::OnEvent, &Wiwa::Application::Get()};
 	action.execute(ev);
 
 	// Build game
@@ -271,16 +273,17 @@ void EditorLayer::RegenSol()
 	{
 		mutex.lock();
 		if (finishedThread)
-		{
 			s_RegenThread->join();
-		}
+
 		mutex.unlock();
-		if(finishedThread)
+
+		if (finishedThread)
 			delete s_RegenThread;
 	}
 
 	s_RegenThread = new std::thread(RegenSolutionThread);
 	threadExec = true;
+
 	finishedThread = false;
 }
 
@@ -307,7 +310,7 @@ void EditorLayer::MainMenuBar()
 			}
 			if (ImGui::MenuItem("Save", "Ctrl+S"))
 			{
-				SaveProject();
+				Utils::ProjectManager::SaveProject();
 			}
 			if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
 			{
@@ -342,8 +345,10 @@ void EditorLayer::MainMenuBar()
 
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Project")) {
-			if (ImGui::MenuItem("Build")) {
+		if (ImGui::BeginMenu("Project"))
+		{
+			if (ImGui::MenuItem("Build"))
+			{
 				BuildProject();
 			}
 			if (ImGui::MenuItem("Project settings"))
@@ -361,25 +366,29 @@ void EditorLayer::MainMenuBar()
 
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Layout")) {
-			if (ImGui::MenuItem("Scene layout")) {
+		if (ImGui::BeginMenu("Layout"))
+		{
+			if (ImGui::MenuItem("Scene layout"))
+			{
 				LoadLayout("config/layouts/scene_layout.wilayout");
 			}
 
 			/*if (ImGui::MenuItem("UI layout")) {
-				
+
 			}*/
 
 			static size_t save_ind = 0;
-			static LayoutData* save_ldata = nullptr;
+			static LayoutData *save_ldata = nullptr;
 
 			size_t csize = m_CustomLayouts.size();
 
-			for (size_t i = 0; i < csize; i++) {
-				LayoutData& ldata = m_CustomLayouts[i];
+			for (size_t i = 0; i < csize; i++)
+			{
+				LayoutData &ldata = m_CustomLayouts[i];
 
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-				if (ImGui::Button(ldata.name.c_str())) {
+				if (ImGui::Button(ldata.name.c_str()))
+				{
 					LoadLayout(ldata.path.c_str());
 				}
 				ImGui::PopStyleColor();
@@ -388,7 +397,8 @@ void EditorLayer::MainMenuBar()
 
 				ImGui::PushID(i);
 
-				if (ImGui::Button("Save")) {
+				if (ImGui::Button("Save"))
+				{
 					save_ldata = &ldata;
 					save_ind = i;
 
@@ -396,7 +406,8 @@ void EditorLayer::MainMenuBar()
 				}
 
 				ImGui::SameLine();
-				if (ImGui::Button("Delete")) {
+				if (ImGui::Button("Delete"))
+				{
 					std::filesystem::path p = ldata.path;
 					p.replace_extension(".ini");
 
@@ -410,12 +421,14 @@ void EditorLayer::MainMenuBar()
 				ImGui::PopID();
 			}
 
-			if (ImGui::Button("New layout")) {
+			if (ImGui::Button("New layout"))
+			{
 				ImGui::OpenPopup("create_layout");
 			}
 
 			ImGui::PushID(save_ind);
-			if (ImGui::BeginPopup("save_layout")) {
+			if (ImGui::BeginPopup("save_layout"))
+			{
 				ImGui::Text("Save layout");
 
 				std::string msg = "Are you sure you want to override layout [";
@@ -424,13 +437,15 @@ void EditorLayer::MainMenuBar()
 
 				ImGui::Text(msg.c_str());
 
-				if (ImGui::Button("Save")) {
+				if (ImGui::Button("Save"))
+				{
 					SaveLayout(*save_ldata);
 					ImGui::CloseCurrentPopup();
 				}
-				
+
 				ImGui::SameLine();
-				if (ImGui::Button("Cancel")) {
+				if (ImGui::Button("Cancel"))
+				{
 					ImGui::CloseCurrentPopup();
 				}
 
@@ -438,21 +453,25 @@ void EditorLayer::MainMenuBar()
 			}
 			ImGui::PopID();
 
-			if (ImGui::BeginPopup("create_layout")) {
-				static char name[64] = { 0 };
+			if (ImGui::BeginPopup("create_layout"))
+			{
+				static char name[64] = {0};
 
 				ImGui::Text("Create Layout");
 				ImGui::InputText("Layout name", name, 64);
 
-				if (ImGui::Button("Create")) {
+				if (ImGui::Button("Create"))
+				{
 					std::string compact_name = name;
 
 					size_t index = 0;
 
-					do { 
+					do
+					{
 						index = compact_name.find(' ', index);
 
-						if (index != compact_name.npos) {
+						if (index != compact_name.npos)
+						{
 							compact_name[index] = '_';
 						}
 					} while (index != compact_name.npos);
@@ -527,23 +546,30 @@ void EditorLayer::MainMenuBar()
 				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 
 			ImGui::SetCursorPosX(Wiwa::Application::Get().GetWindow().GetWidth() / 2 - 15.0f);
-			const char* play = Wiwa::Time::IsPlaying() ? ICON_FK_STOP : ICON_FK_PLAY;
+			const char *play = Wiwa::Time::IsPlaying() ? ICON_FK_STOP : ICON_FK_PLAY;
 
 			bool is_playing = Wiwa::Time::IsPlaying();
 
 			// Play button
 			if (ImGui::Button(play))
 			{
-				if (!is_playing) {
+				if (!is_playing)
+				{
 					SaveScene();
 
-					if (m_OpenedScenePath != "") {
+					if (m_OpenedScenePath != "")
+					{
 						Wiwa::Time::Play();
 						Wiwa::Time::Update();
 
 						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
+						Wiwa::Scene *sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
 
-						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+						// For debug purposes
+						std::string ex = sc->getName();
+						ex += "_execution";
+						sc->ChangeName(ex.c_str());
+
 						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 						Wiwa::SceneManager::SetScene(m_SimulationSceneId);
 
@@ -553,14 +579,15 @@ void EditorLayer::MainMenuBar()
 						Wiwa::SceneManager::PlayScene();
 					}
 				}
-				else {
+				else
+				{
 					Wiwa::Time::Stop();
-					Wiwa::SceneManager::StopScene();
 
 					// Unload simulated scene but keep resources for the editor
 					Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
 
 					Wiwa::SceneManager::SetScene(m_EditorSceneId);
+					Wiwa::SceneManager::StopScene();
 
 					Audio::StopAllEvents();
 				}
@@ -568,13 +595,16 @@ void EditorLayer::MainMenuBar()
 
 			if (ImGui::Button(ICON_FK_PAUSE))
 			{
-				if (is_playing) {
+				if (is_playing)
+				{
 					Wiwa::Time::PauseUnPause();
 
-					if (Wiwa::SceneManager::IsPlaying()) {
+					if (Wiwa::SceneManager::IsPlaying())
+					{
 						Wiwa::SceneManager::StopScene();
 					}
-					else {
+					else
+					{
 						Wiwa::SceneManager::PlayScene();
 					}
 				}
@@ -582,7 +612,8 @@ void EditorLayer::MainMenuBar()
 
 			if (ImGui::Button(ICON_FK_STEP_FORWARD))
 			{
-				if (is_playing) {
+				if (is_playing)
+				{
 					Wiwa::Time::Step();
 				}
 			}
@@ -611,11 +642,11 @@ void EditorLayer::MainMenuBar()
 			sprintf_s(buff, 16, "%i", log.infoCount);
 			ImGui::Text(buff);
 			ImGui::Text(ICON_FK_INFO_CIRCLE);
-			
+
 			sprintf_s(buff, 16, "%i", log.warnCount);
 			ImGui::Text(buff);
 			ImGui::Text(ICON_FK_EXCLAMATION_TRIANGLE);
-		
+
 			sprintf_s(buff, 16, "%i", log.errorCount);
 			ImGui::Text(buff);
 			ImGui::PopStyleColor();
@@ -635,19 +666,12 @@ void EditorLayer::OpenCloseAssetsFolder()
 	m_Assets->active = !m_Assets->active;
 }
 
-void EditorLayer::SaveProject()
-{
-	if (!Wiwa::ProjectManager::SaveProject()) {
-		SaveProjectAs();
-	}
-}
-
 void EditorLayer::SaveProjectAs()
 {
 	std::string filePath = Wiwa::FileDialogs::SaveFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Wiwa::ProjectManager::SaveProjectAs(filePath.c_str());
+		Utils::ProjectManager::SaveProjectAs(filePath.c_str());
 		WI_INFO("Succesfully saved project at path {0}", filePath.c_str());
 	}
 }
@@ -657,7 +681,7 @@ void EditorLayer::OpenProject()
 	std::string filePath = Wiwa::FileDialogs::OpenFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Wiwa::ProjectManager::OpenProject(filePath.c_str());
+		Utils::ProjectManager::OpenProject(filePath.c_str());
 		WI_INFO("Succesfully opened project at path {0}", filePath.c_str());
 	}
 }
@@ -667,7 +691,7 @@ void EditorLayer::NewProject()
 	std::string filePath = Wiwa::FileDialogs::SaveFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Wiwa::ProjectManager::CreateProject(filePath.c_str());
+		Utils::ProjectManager::CreateProject(filePath.c_str());
 		WI_INFO("Succesfully created project at path {0}", filePath.c_str());
 	}
 }
@@ -699,10 +723,12 @@ void EditorLayer::SaveSceneAs()
 
 void EditorLayer::SaveScene()
 {
-	if (m_OpenedScenePath.empty()) {
+	if (m_OpenedScenePath.empty())
+	{
 		SaveSceneAs();
 	}
-	else {
+	else
+	{
 		Wiwa::SceneManager::SaveScene(Wiwa::SceneManager::getActiveSceneId(), m_OpenedScenePath.c_str());
 	}
 }
@@ -753,16 +779,18 @@ void EditorLayer::LoadPanelConfig()
 	Wiwa::JSONDocument config("config/panels.json");
 
 	if (config.HasMember("sol_version"))
-		s_SolVersion = config["sol_version"].as_string();
+		s_SolVersion = config["sol_version"].get<const char *>();
 	if (config.HasMember("build_conf"))
 		s_BuildConf = config["build_conf"].as_string();
-	
-	if (config.HasMember("custom_layouts")) {
+
+	if (config.HasMember("custom_layouts"))
+	{
 		Wiwa::JSONValue clayouts = config["custom_layouts"];
 
 		uint32_t size = clayouts.Size();
 
-		for (uint32_t i = 0; i < size; i++) {
+		for (uint32_t i = 0; i < size; i++)
+		{
 			Wiwa::JSONValue layout = clayouts[i];
 
 			LayoutData ldata;
@@ -797,8 +825,9 @@ void EditorLayer::SavePanelConfig()
 
 	size_t lsize = m_CustomLayouts.size();
 
-	for (size_t i = 0; i < lsize; i++) {
-		LayoutData& ldata = m_CustomLayouts[i];
+	for (size_t i = 0; i < lsize; i++)
+	{
+		LayoutData &ldata = m_CustomLayouts[i];
 
 		Wiwa::JSONValue val = clayouts.PushBackObject();
 		val.AddMember("name", ldata.name.c_str());
@@ -867,7 +896,7 @@ bool EditorLayer::OnKeyPressed(Wiwa::KeyPressedEvent &e)
 			if (shift)
 				SaveProjectAs();
 			else
-				Wiwa::ProjectManager::SaveProject();
+				Utils::ProjectManager::SaveProject();
 		}
 
 		break;
@@ -954,9 +983,8 @@ bool EditorLayer::OnWindowClose(Wiwa::WindowCloseEvent &e)
 
 void EditorLayer::ExecuteMainThreadQueue()
 {
-	for (auto& func : m_EditorThreadQueue)
+	for (auto &func : m_EditorThreadQueue)
 		func();
 
 	m_EditorThreadQueue.clear();
 }
-

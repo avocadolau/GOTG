@@ -3,7 +3,6 @@
 #include "System.h"
 #include "../components/Transform3D.h"
 #include "../components/Mesh.h"
-#include "../components/AudioSource.h"
 
 #include <Wiwa/utilities/Reflection.h>
 
@@ -17,9 +16,9 @@ namespace Wiwa {
 
 		void OnUpdate() override;
 
-		void OnComponentAdded(byte* data, const Type* type) override {}
+		bool OnComponentAdded(byte* data, const Type* type) override { return true; }
 
-		void OnComponentRemoved(byte* data, const Type* type) override {}
+		bool OnComponentRemoved(byte* data, const Type* type) override { return true; }
 	};
 }
 

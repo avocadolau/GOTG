@@ -15,12 +15,18 @@ private:
 	bool DrawComponent(size_t componentId);
 	void DrawField(unsigned char* data, const Field& field);
 
+	void DrawCollisionTags();
+
 	void DrawMeshComponent(byte* data);
 	void DrawTransform3dComponent(byte* data);
 	void DrawAudioSourceComponent(byte* data);
 	void DrawPointLightComponent(byte* data);
 	void DrawDirectionalLightComponent(byte* data);
 	void DrawSpotLightComponent(byte* data);
+	void DrawRigidBodyComponent(byte* data);
+	void DrawColliderCubeComponent(byte* data);
+	void DrawColliderSpehereComponent(byte* data);
+	void DrawColliderCylinderComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();

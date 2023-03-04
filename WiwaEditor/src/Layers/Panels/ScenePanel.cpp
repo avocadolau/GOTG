@@ -293,12 +293,13 @@ void ScenePanel::Draw()
         {
             glm::vec3 out_dir;
             glm::vec3 out_origin;
+            Wiwa::Size2i& screen_resolution = Wiwa::Application::Get().GetTargetResolution();
 
             // Position on screen with pixels, invert Y for left-down origin
-            Wiwa::Vector2f pospixels = { lastPos.x * 1920, (1.0f - lastPos.y) * 1080 };
+            Wiwa::Vector2f pospixels = { lastPos.x * screen_resolution.w, (1.0f - lastPos.y) * screen_resolution.h };
 
             // Send mouse position in pixels with left-down origin coordinates and game resolution size
-            Wiwa::Math::ScreenPosToWorldRay(pospixels.x, pospixels.y, 1920, 1080, m_Camera->getView(), m_Camera->getProjection(), out_origin, out_dir);
+            Wiwa::Math::ScreenPosToWorldRay(pospixels.x, pospixels.y, screen_resolution.w, screen_resolution.h, m_Camera->getView(), m_Camera->getProjection(), out_origin, out_dir);
             float minDist = FLT_MAX;
             int id = -1;
             std::vector<EntityId>* entities_alive = entityManager.GetEntitiesAlive();

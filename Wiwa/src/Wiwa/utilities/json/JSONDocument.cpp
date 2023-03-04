@@ -23,7 +23,7 @@ namespace Wiwa {
 	{
 	}
 
-	void JSONDocument::Parse(const char * string)
+	void JSONDocument::Parse(const char* string)
 	{
 		m_Document.Parse(string);
 	}
@@ -101,7 +101,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	JSONValue JSONDocument::operator[](const char * key)
+	JSONValue JSONDocument::operator[](const char* key)
 	{
 		return JSONValue(&m_Document[key], &m_Document.GetAllocator());
 	}

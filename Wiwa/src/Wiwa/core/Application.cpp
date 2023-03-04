@@ -39,10 +39,11 @@
 
 USE_REFLECTION;
 
-namespace Wiwa {
-	Application* Application::s_Instance = nullptr;
+namespace Wiwa
+{
+	Application *Application::s_Instance = nullptr;
 
-	Application::Application(int argc, char** argv)
+	Application::Application(int argc, char **argv)
 	{
 		WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 
@@ -50,24 +51,25 @@ namespace Wiwa {
 
 		m_ArgC = argc;
 
-		for (int i = 0; i < argc; i++) {
+		for (int i = 0; i < argc; i++)
+		{
 			m_Argv.push_back(argv[i]);
 		}
 
 		s_Instance = this;
 
-		m_TargetResolution = { 1920, 1080 };
-		
-		//JSONDocument project("config/project.json");
-		//m_ProjectName = project["name"].get<const char*>();
-		//m_ProjectVersion = project["version"].get<const char*>();
-		//m_ProjectCompany = project["company"].get<const char*>();
-		//m_ProjectTarget = (ProjectTarget)project["target"].get<int>();
-		//project.save_file("config/project.json");
+		m_TargetResolution = {1920, 1080};
+
+		// JSONDocument project("config/project.json");
+		// m_ProjectName = project["name"].get<const char*>();
+		// m_ProjectVersion = project["version"].get<const char*>();
+		// m_ProjectCompany = project["company"].get<const char*>();
+		// m_ProjectTarget = (ProjectTarget)project["target"].get<int>();
+		// project.save_file("config/project.json");
 		std::string name = "Wiwa Engine: ";
 		name += ProjectManager::GetProjectName();
 		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name.c_str())));
-		m_Window->SetEventCallback({ &Application::OnEvent, this });
+		m_Window->SetEventCallback({&Application::OnEvent, this});
 
 		int min, major, rev;
 		glfwGetVersion(&min, &major, &rev);
@@ -77,7 +79,7 @@ namespace Wiwa {
 		WI_CORE_WARN("=======Initializing systems=======");
 		m_Renderer2D = new Renderer2D();
 		m_Renderer2D->Init();
-		
+
 		m_Renderer3D = new Renderer3D();
 		m_Renderer3D->Init();
 
@@ -87,13 +89,14 @@ namespace Wiwa {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		m_RenderColor = { 0.1f, 0.1f, 0.1f, 1.0f };
+		m_RenderColor = {0.1f, 0.1f, 0.1f, 1.0f};
 
 		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
 		bool res = Audio::Init();
 
-		if (!res) {
+		if (!res)
+		{
 			WI_CORE_ERROR("Audio engine error: [{}]", Audio::GetLastError());
 		}
 		ScriptEngine::Init();
@@ -119,7 +122,7 @@ namespace Wiwa {
 
 		m_SysInfo.numCores = info.dwNumberOfProcessors;
 		m_SysInfo.ram = (float)(memInfo.ullTotalPhys >> 20);
-		m_SysInfo.gpu = (const unsigned char*)glGetString(GL_VENDOR);
+		m_SysInfo.gpu = (const unsigned char *)glGetString(GL_VENDOR);
 		m_SysInfo.gpuBrand = glGetString(GL_RENDERER);
 		m_SysInfo.gpuVRAM = (float)(total_mem_kb >> 10);
 		m_SysInfo.gpuVRAMAV = (float)(cur_avail_mem_kb >> 10);
@@ -142,15 +145,14 @@ namespace Wiwa {
 		{
 			OPTICK_FRAME("Application Loop");
 
-			//Limit the frame time if needed
+			// Limit the frame time if needed
 			if (Time::IsFrameCap())
 			{
 				if ((glfwGetTime() - lastTime) < Time::GetTargetDTSeconds())
 					continue;
 			}
 			lastTime = glfwGetTime();
-			
-			// Update time
+
 			Time::Update();
 			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
@@ -161,7 +163,7 @@ namespace Wiwa {
 
 			// Update audio
 			Audio::Update();
-			
+
 			// Execute main thread queue
 			ExecuteMainThreadQueue();
 
@@ -174,22 +176,22 @@ namespace Wiwa {
 
 			RenderManager::Update();
 
-
 			// Update layers
-			for (Layer* layer : m_LayerStack)
+			for (Layer *layer : m_LayerStack)
 				layer->OnUpdate();
 
 			// Render layers
 			m_ImGuiLayer->Begin();
 			{
-				//TODO: Optick On ImGuiRender call
-				for (Layer* layer : m_LayerStack)
+				// TODO: Optick On ImGuiRender call
+				for (Layer *layer : m_LayerStack)
 					layer->OnImGuiRender();
 			}
 			m_ImGuiLayer->End();
 
 			// Update main window
 			m_Window->OnUpdate();
+			Time::PostUpdate();
 		}
 	}
 
@@ -198,19 +200,21 @@ namespace Wiwa {
 		return TYPE_COUNT;
 	}
 
-	const Type* Application::getCoreType(size_t index) const
+	const Type *Application::getCoreType(size_t index) const
 	{
 		return GET_TYPES()->at(index);
 	}
 
-	const Type* Application::getCoreTypeH(size_t hash) const
+	const Type *Application::getCoreTypeH(size_t hash) const
 	{
-		const Wiwa::Array<const Type*, TYPE_COUNT>* types = GET_TYPES();
+		const Wiwa::Array<const Type *, TYPE_COUNT> *types = GET_TYPES();
 
-		const Type* type = NULL;
+		const Type *type = NULL;
 
-		for (size_t i = 0; i < TYPE_COUNT; i++) {
-			if (types->at(i)->hash == hash) {
+		for (size_t i = 0; i < TYPE_COUNT; i++)
+		{
+			if (types->at(i)->hash == hash)
+			{
 				type = types->at(i);
 				break;
 			}
@@ -219,14 +223,16 @@ namespace Wiwa {
 		return type;
 	}
 
-	const Type* Application::GetComponentTypeH(size_t hash) const
+	const Type *Application::GetComponentTypeH(size_t hash) const
 	{
 		size_t size = m_ComponentTypes.size();
 
-		const Type* type = NULL;
+		const Type *type = NULL;
 
-		for (size_t i = 0; i < size; i++) {
-			if (m_ComponentTypes[i]->hash == hash) {
+		for (size_t i = 0; i < size; i++)
+		{
+			if (m_ComponentTypes[i]->hash == hash)
+			{
 				type = m_ComponentTypes[i];
 				break;
 			}
@@ -235,21 +241,22 @@ namespace Wiwa {
 		return type;
 	}
 
-	const Type* Application::GetComponentType(size_t index) const
+	const Type *Application::GetComponentType(size_t index) const
 	{
 		return m_ComponentTypes[index];
 	}
 
-	void Application::RegisterComponentType(const Type* component)
+	void Application::RegisterComponentType(const Type *component)
 	{
-		const Type* type = GetComponentTypeH(component->hash);
+		const Type *type = GetComponentTypeH(component->hash);
 
-		if (!type) m_ComponentTypes.push_back(component);
+		if (!type)
+			m_ComponentTypes.push_back(component);
 	}
 
-	void Application::DeleteComponentType(const Type* component)
+	void Application::DeleteComponentType(const Type *component)
 	{
-		const Type* type = GetSystemTypeH(component->hash);
+		const Type *type = GetSystemTypeH(component->hash);
 
 		for (size_t i = 0; i < m_ComponentTypes.size(); i++)
 		{
@@ -262,14 +269,16 @@ namespace Wiwa {
 		}
 	}
 
-	const Type* Application::GetSystemTypeH(size_t hash) const
+	const Type *Application::GetSystemTypeH(size_t hash) const
 	{
 		size_t size = m_SystemTypes.size();
 
-		const Type* type = NULL;
+		const Type *type = NULL;
 
-		for (size_t i = 0; i < size; i++) {
-			if (m_SystemTypes[i]->hash == hash) {
+		for (size_t i = 0; i < size; i++)
+		{
+			if (m_SystemTypes[i]->hash == hash)
+			{
 				type = m_SystemTypes[i];
 				break;
 			}
@@ -278,28 +287,29 @@ namespace Wiwa {
 		return type;
 	}
 
-	const Type* Application::GetSystemType(size_t index) const
+	const Type *Application::GetSystemType(size_t index) const
 	{
 		return m_SystemTypes[index];
 	}
 
 	bool Application::HasSystemH(size_t hash) const
 	{
-		const Type* stype = GetSystemTypeH(hash);
+		const Type *stype = GetSystemTypeH(hash);
 
 		return stype != NULL;
 	}
 
-	void Application::RegisterSystemType(const Type* system)
+	void Application::RegisterSystemType(const Type *system)
 	{
-		const Type* type = GetSystemTypeH(system->hash);
+		const Type *type = GetSystemTypeH(system->hash);
 
-		if (!type) m_SystemTypes.push_back(system);
+		if (!type)
+			m_SystemTypes.push_back(system);
 	}
 
-	void Application::DeleteSystemType(const Type* system)
+	void Application::DeleteSystemType(const Type *system)
 	{
-		const Type* type = GetSystemTypeH(system->hash);
+		const Type *type = GetSystemTypeH(system->hash);
 
 		for (size_t i = 0; i < m_SystemTypes.size(); i++)
 		{
@@ -312,7 +322,7 @@ namespace Wiwa {
 		}
 	}
 
-	void Application::OpenDir(const char* path)
+	void Application::OpenDir(const char *path)
 	{
 		ShellExecuteA(0, "open", path, NULL, NULL, SW_SHOWNORMAL);
 	}
@@ -334,39 +344,43 @@ namespace Wiwa {
 	void Application::ExecuteMainThreadQueue()
 	{
 		OPTICK_EVENT("Execute Main thread");
-		for (auto& func : m_MainThreadQueue)
+		for (auto &func : m_MainThreadQueue)
 			func();
 
 		m_MainThreadQueue.clear();
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& e)
+	bool Application::OnWindowClose(WindowCloseEvent &e)
 	{
 		m_Running = false;
 		return true;
 	}
 
-	bool Application::OnLoad(OnLoadEvent& e)
+	bool Application::OnLoad(OnLoadEvent &e)
 	{
 		JSONDocument config("config/application.json");
 
 		if (config.HasMember("vsync"))
-			m_Window->SetVSync(config["vsync"].get<bool>());
+			m_Window->SetVSync(config["vsync"].as_bool());
 
 		if (config.HasMember("fullscreen"))
-			m_Window->SetFullScreen(config["fullscreen"].get<bool>());
-
+		{
+			bool fullscreen = config["fullscreen"].as_bool();
+			if (fullscreen)
+				m_Window->SetFullScreen(fullscreen);
+		}
 		if (config.HasMember("resizable"))
-			m_Window->SetResizable(config["resizable"].get<bool>());
+			m_Window->SetResizable(config["resizable"].as_bool());
 
-		if (config.HasMember("project_file")) {
+		if (config.HasMember("project_file"))
+		{
 			ProjectManager::OpenProject(config["project_file"].as_string());
 		}
 
 		return false;
 	}
 
-	bool Application::OnSave(OnSaveEvent& e)
+	bool Application::OnSave(OnSaveEvent &e)
 	{
 		JSONDocument config;
 
@@ -377,18 +391,19 @@ namespace Wiwa {
 
 		config.save_file("config/application.json");
 
-		if (!Wiwa::ProjectManager::SaveProject()) {
+		if (!Wiwa::ProjectManager::SaveProject())
+		{
 			WI_CORE_ERROR("Couldn't save project.");
 		}
 
 		return false;
 	}
-	void Application::OnEvent(Event& e)
+	void Application::OnEvent(Event &e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>({ &Application::OnWindowClose, this });
-		dispatcher.Dispatch<OnSaveEvent>({ &Application::OnSave, this });
-		dispatcher.Dispatch<OnLoadEvent>({ &Application::OnLoad, this });
+		dispatcher.Dispatch<WindowCloseEvent>({&Application::OnWindowClose, this});
+		dispatcher.Dispatch<OnSaveEvent>({&Application::OnSave, this});
+		dispatcher.Dispatch<OnLoadEvent>({&Application::OnLoad, this});
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -397,12 +412,12 @@ namespace Wiwa {
 				break;
 		}
 	}
-	void Application::PushLayer(Layer* layer)
+	void Application::PushLayer(Layer *layer)
 	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
-	void Application::PushOverlay(Layer* overlay)
+	void Application::PushOverlay(Layer *overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
