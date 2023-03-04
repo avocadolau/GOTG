@@ -15,5 +15,10 @@
         {
             return InternalCalls.GetTimeIntr();
         }
+
+        public static void SetFPS(int fps)
+        {
+
+        }
     }
 }

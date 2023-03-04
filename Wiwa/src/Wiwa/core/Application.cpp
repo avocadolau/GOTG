@@ -137,10 +137,21 @@ namespace Wiwa {
 
 	void Application::Run()
 	{
+		double lastTime = glfwGetTime();
 		while (m_Running)
 		{
 			OPTICK_FRAME("Application Loop");
 
+			//Limit the frame time if needed
+			if (Time::IsFrameCap())
+			{
+				if ((glfwGetTime() - lastTime) < Time::GetTargetDTSeconds())
+					continue;
+			}
+			lastTime = glfwGetTime();
+			
+			// Update time
+			Time::Update();
 			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -163,8 +174,6 @@ namespace Wiwa {
 
 			RenderManager::Update();
 
-			// Update time
-			Time::Update();
 
 			// Update layers
 			for (Layer* layer : m_LayerStack)

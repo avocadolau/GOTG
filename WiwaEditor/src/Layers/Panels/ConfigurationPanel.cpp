@@ -24,7 +24,7 @@ void ConfigurationPanel::Draw()
 	m_Fullscreen = Wiwa::Application::Get().GetWindow().GetFullScreen();
 	m_VSync = Wiwa::Application::Get().GetWindow().IsVSync();
 	m_MSLog.push_back(Wiwa::Time::GetRealDeltaTime());
-	m_FPSLog.push_back(1000.0f / Wiwa::Time::GetRealDeltaTime());
+	m_FPSLog.push_back(1.0f / Wiwa::Time::GetRealDeltaTimeSeconds());
 	m_AllocLog.push_back((float)Wiwa::AllocationMetrics::allocation_count);
 	//m_ByteLog.push_back((float)Wiwa::AllocationMetrics::bytes_allocated);
 
@@ -92,6 +92,11 @@ void ConfigurationPanel::Draw()
 			Wiwa::Application::Get().GetWindow().SetResizable(m_Resizable);
 		if (ImGui::Checkbox("VSync", &m_VSync))
 			Wiwa::Application::Get().GetWindow().SetVSync(m_VSync);
+
+		int FPSCap = Wiwa::Time::GetTargetFPS();
+		ImGui::SliderInt("FPS", &FPSCap, 1, 250);
+		if(FPSCap > 1)
+			Wiwa::Time::SetTargetFPS(FPSCap);
 	}
 	char title[25];
 	if (ImGui::CollapsingHeader("Info"))
@@ -110,9 +115,13 @@ void ConfigurationPanel::Draw()
 	}
 	if (ImGui::CollapsingHeader("Time"))
 	{
+
 		ImGui::Text("Time since startup %.2fs", Wiwa::Time::GetRealTimeSinceStartup());
 		ImGui::Text("Real time delta time %.3fms", Wiwa::Time::GetRealDeltaTime());
 		ImGui::Text("Frame count %i", Wiwa::Time::GetFrameCount());
+
+
+
 		if (Wiwa::Time::IsPlaying())
 		{
 			ImGui::Text("Game time since startup %.2fs", Wiwa::Time::GetTime());

@@ -11,7 +11,6 @@ namespace Wiwa
 	bool Time::m_IsPlaying = false;
 	bool Time::m_IsPaused = false;
 	bool Time::m_Step = false;
-	int Time::m_TargetFPS = -1;
 	std::chrono::time_point<std::chrono::steady_clock> Time::m_GameClock;
 	std::chrono::duration<float>  Time::m_Time;
 	std::chrono::duration<float>  Time::m_DeltaTime;
@@ -19,6 +18,9 @@ namespace Wiwa
 	std::chrono::time_point<std::chrono::steady_clock>  Time::m_LastTime;
 	std::chrono::duration<float>  Time::m_RealTimeSinceStartup;
 	std::chrono::duration<float>  Time::m_RealTimeDeltaTime;
+	int Time::s_NoFrameCap = -1;
+	int Time::m_TargetFPS = s_NoFrameCap;
+	double Time::m_TargetDT = 1.0 / m_TargetFPS;
 	void Time::Play()
 	{
 		m_IsPlaying = true;
