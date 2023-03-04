@@ -354,10 +354,10 @@ namespace Wiwa {
 			m_Window->SetVSync(config["vsync"].get<bool>());
 
 		if (config.HasMember("fullscreen"))
-			m_Window->SetVSync(config["fullscreen"].get<bool>());
+			m_Window->SetFullScreen(config["fullscreen"].get<bool>());
 
 		if (config.HasMember("resizable"))
-			m_Window->SetVSync(config["resizable"].get<bool>());
+			m_Window->SetResizable(config["resizable"].get<bool>());
 
 		if (config.HasMember("project_file")) {
 			ProjectManager::OpenProject(config["project_file"].as_string());

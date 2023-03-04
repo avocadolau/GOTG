@@ -2,6 +2,7 @@
 {
     public class Time
     {
+        public static int NoFrameCap = -1;
         //Time returned in seconds
         public static float DeltaTime()
         {
@@ -18,7 +19,7 @@
 
         public static void SetFPS(int fps)
         {
-
+            InternalCalls.SetFPSIntr(fps);
         }
     }
 }
