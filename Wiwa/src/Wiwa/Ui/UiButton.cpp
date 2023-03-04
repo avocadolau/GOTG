@@ -57,6 +57,7 @@ namespace Wiwa
 			}
 
 		}
+		SwapTexture();
 
 		return false;
 	}
@@ -111,5 +112,76 @@ namespace Wiwa
 		}
 
 		return false;
+	}
+
+	bool GuiButton::SwapTexture()
+	{
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
+		if (state == GuiControlState::DISABLED)
+		{
+			const Color4f color = { 0.1f, 0.1f, 0.1f, 0.5f };
+
+			Rect2i rect;
+			rect.x = texture->GetSize().x;
+			rect.y = texture->GetSize().y;
+			rect.width = texture->GetSize().w;
+			rect.height = texture->GetSize().h;
+
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, color, rect, Wiwa::Renderer2D::Pivot::CENTER);
+		}
+		if (state == GuiControlState::NORMAL)
+		{
+			Rect2i rect;
+			rect.x = texture->GetSize().x;
+			rect.y = texture->GetSize().y;
+			rect.width = texture->GetSize().w;
+			rect.height = texture->GetSize().h;
+
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Color::WHITE, rect, Wiwa::Renderer2D::Pivot::CENTER);
+		}
+		if (state == GuiControlState::FOCUSED)
+		{
+			const Color4f color = { 0.6f, 0.6f, 0.6f, 1.0f };
+
+			Rect2i rect;
+			rect.x = texture->GetSize().x;
+			rect.y = texture->GetSize().y;
+			rect.width = texture->GetSize().w;
+			rect.height = texture->GetSize().h;
+
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, color, rect, Wiwa::Renderer2D::Pivot::CENTER);
+		}
+		if (state == GuiControlState::PRESSED)
+		{
+			const Color4f color = { 0.1f, 0.1f, 0.1f, 1.0f };
+
+			Rect2i rect;
+			rect.x = texture->GetSize().x;
+			rect.y = texture->GetSize().y;
+			rect.width = texture->GetSize().w;
+			rect.height = texture->GetSize().h;
+
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, color, rect, Wiwa::Renderer2D::Pivot::CENTER);
+		}
+		if (state == GuiControlState::SELECTED)
+		{
+			const Color4f color = { 0.6f, 0.6f, 0.6f, 1.0f };
+
+			Rect2i rect;
+			rect.x = texture->GetSize().x;
+			rect.y = texture->GetSize().y;
+			rect.width = texture->GetSize().w;
+			rect.height = texture->GetSize().h;
+
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, color, rect, Wiwa::Renderer2D::Pivot::CENTER);
+		}
+
+		return true;
 	}
 }

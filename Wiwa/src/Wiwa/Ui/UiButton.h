@@ -20,6 +20,8 @@ namespace Wiwa
 		bool Update();
 		bool Draw(Renderer2D* render);
 
+		bool SwapTexture();
+
 		bool canClick = true;
 
 	};
