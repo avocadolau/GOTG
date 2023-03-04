@@ -728,10 +728,9 @@ namespace Wiwa {
 			Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
 			rigidBody->positionOffset = { 0,0,0 };
 			rigidBody->scalingOffset = { 1,1,1 };
-			rigidBody->mass = 1;
-			rigidBody->gravity = { GRAVITY.x() , GRAVITY.y(), GRAVITY.z()};
 			rigidBody->isTrigger = false;
 			rigidBody->isStatic = false;
+			rigidBody->doContinuousCollision = false;
 			rigidBody->selfTag = 0;
 			rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
 		}

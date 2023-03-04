@@ -356,10 +356,9 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
-	ImGui::InputFloat("Mass", &rigidBody->mass);
-	DrawVec3Control("Gravity", &rigidBody->gravity, 0.0f, 100.0f);
 	ImGui::Checkbox("Is static?", &rigidBody->isStatic);
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
+	ImGui::Checkbox("Do continuous?", &rigidBody->doContinuousCollision);
 
 	const char* comboPreviewValue = py.filterStrings[rigidBody->selfTag].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))

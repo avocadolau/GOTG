@@ -29,11 +29,12 @@ class Camera;
 namespace Wiwa {
 
 	struct Object {
-		Object(btCollisionObject& body_, const size_t id_) : m_CollisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_) {};
+		Object(btCollisionObject& body_, const size_t id_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_), doContinuousCollision(doContinuousCollision_){};
 
-		btCollisionObject* m_CollisionObject;
+		btCollisionObject* collisionObject;
 		btVector3 velocity;
 		size_t id;
+		bool doContinuousCollision;
 	};
 
 	enum CollisionType {
@@ -81,6 +82,9 @@ namespace Wiwa {
 		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
 		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
+	private:
+		bool AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::Rigidbody& rigid_body);
+	public:
 
 		// Manipulate bodies
 		bool SetVelocity(Object*body, const glm::vec3 velocity);

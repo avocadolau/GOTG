@@ -13,10 +13,9 @@ namespace Wiwa {
 	struct WI_API Rigidbody {
 		glm::vec3 positionOffset;
 		glm::vec3 scalingOffset;
-		float mass;
-		glm::vec3 gravity;
 		bool isTrigger;
 		bool isStatic;
+		bool doContinuousCollision;
 		int selfTag;
 		int filterBits;
 	};
@@ -25,8 +24,6 @@ namespace Wiwa {
 REFLECTION_BEGIN(Wiwa::Rigidbody)
 	REFLECT_MEMBER(positionOffset)
 	REFLECT_MEMBER(scalingOffset)
-	REFLECT_MEMBER(mass)
-	REFLECT_MEMBER(gravity)
 	REFLECT_MEMBER(isTrigger)
 	REFLECT_MEMBER(isStatic)
 	REFLECT_MEMBER(filterBits)
