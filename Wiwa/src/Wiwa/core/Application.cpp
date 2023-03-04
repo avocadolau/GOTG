@@ -143,7 +143,6 @@ namespace Wiwa
 		double lastTime = glfwGetTime();
 		while (m_Running)
 		{
-			Time::Update();
 			OPTICK_FRAME("Application Loop");
 
 			// Limit the frame time if needed
@@ -154,7 +153,6 @@ namespace Wiwa
 			}
 			lastTime = glfwGetTime();
 
-			// Update time
 			Time::Update();
 			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
@@ -363,13 +361,16 @@ namespace Wiwa
 		JSONDocument config("config/application.json");
 
 		if (config.HasMember("vsync"))
-			m_Window->SetVSync(config["vsync"].get<bool>());
+			m_Window->SetVSync(config["vsync"].as_bool());
 
 		if (config.HasMember("fullscreen"))
-			m_Window->SetFullScreen(config["fullscreen"].get<bool>());
-
+		{
+			bool fullscreen = config["fullscreen"].as_bool();
+			if (fullscreen)
+				m_Window->SetFullScreen(fullscreen);
+		}
 		if (config.HasMember("resizable"))
-			m_Window->SetResizable(config["resizable"].get<bool>());
+			m_Window->SetResizable(config["resizable"].as_bool());
 
 		if (config.HasMember("project_file"))
 		{
