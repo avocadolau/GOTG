@@ -8,6 +8,7 @@
 #include <Wiwa/ecs/components/ColliderCylinder.h>
 #include <Wiwa/ecs/components/ColliderSphere.h>
 #include <Wiwa/ecs/components/ColliderCapsule.h>
+#include <Wiwa/ecs/components/RayCast.h>
 #include "Wiwa/ecs/components/Transform3D.h"
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
@@ -106,11 +107,14 @@ namespace Wiwa {
 
 		bool getInit();
 
+		// Query world
 		void DebugDrawWorld();
 
 		bool AddFilterTag(const char* str);
 		
 		void RemoveFilterTag(const int index);
+
+		void RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
 	private:
 		bool m_Debug;

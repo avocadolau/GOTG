@@ -60,7 +60,7 @@ namespace Wiwa {
 
 		AddFilterTag("COLLISION_EVERYTHING");
 
-		WI_INFO("Physics Manager Init");
+		//WI_INFO("Physics Manager Init");
 		
 		return true;
 	}
@@ -497,18 +497,13 @@ namespace Wiwa {
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 		camera->frameBuffer->Bind(false);
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(glm::value_ptr(camera->getView()));
 
-		//m_Debug_draw->lineDisplayShader->Bind();
-		////m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Model, transform);
-		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
 		m_World->debugDrawWorld();
-		//m_Debug_draw->lineDisplayShader->UnBind();
+		m_Debug_draw->lineDisplayShader->UnBind();
 		camera->frameBuffer->Unbind();
 	}
 
@@ -527,6 +522,26 @@ namespace Wiwa {
 	{
 		filterStrings.erase(filterStrings.begin() + index);
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);
+	}
+
+	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
+	{
+		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		camera->frameBuffer->Bind(false);
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+
+		
+		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
+		btCollisionWorld::ClosestRayResultCallback rayResults = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
+		m_World->rayTest(ray_from_world, ray_to_world, rayResults);
+		if (rayResults.hasHit())
+			WI_INFO("Ray cast hit!");
+
+		camera->frameBuffer->Unbind();
 	}
 
 	bool PhysicsManager::AddBodyToLog(Object* body_to_log)
@@ -561,66 +576,66 @@ namespace Wiwa {
 	}
 }
 
-//void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
-//{
-//	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-//
-//	// Create Vertex Array Object
-//	GLuint vao;
-//	glGenVertexArrays(1, &vao);
-//	glBindVertexArray(vao);
-//
-//	// Create a Vertex Buffer Object and copy the vertex data to it
-//	GLuint vbo;
-//	glGenBuffers(1, &vbo);
-//	GLfloat lineVertices[] = {
-//		from.x(), from.y(), from.z(),
-//		to.x(), to.y(), to.z()
-//	};
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
-//
-//	// Create an element array
-//	GLuint ebo;
-//	glGenBuffers(1, &ebo);
-//	GLuint elements[] = {
-//		0, 1,
-//	};
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
-//
-//	glEnableVertexAttribArray(0);
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(lineVertices), (void*)0);
-//	
-//	glBindVertexArray(vao);
-//	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
-//	glBindVertexArray(0);
-//
-//	glDeleteVertexArrays(1, &vao);
-//	glDeleteBuffers(1, &vbo);
-//	glDeleteBuffers(1, &ebo);
-//}
-
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
 	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-	//GLfloat lineVertices[] = {
-	//	from.x(), from.y(), from.z(),
-	//	to.x(), to.y(), to.z()
-	//};
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glVertexPointer
-	glUseProgram(0);
-	glColor3f(255, 0, 0);
-	glLineWidth(3.0f);
-	glBegin(GL_LINES);
-	glVertex3f(from.getX(), from.getY(), from.getZ());
-	glVertex3f(to.getX(), to.getY(), to.getZ());
-	glEnd();
-	glLineWidth(1.0f);
 
+	// Create Vertex Array Object
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	// Create a Vertex Buffer Object and copy the vertex data to it
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	GLfloat lineVertices[] = {
+		from.x(), from.y(), from.z(),
+		to.x(), to.y(), to.z()
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
+
+	// Create an element array
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	GLuint elements[] = {
+		0, 1,
+	};
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	
+	glBindVertexArray(vao);
+	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ebo);
 }
+
+//void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+//{
+//	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+//	//GLfloat lineVertices[] = {
+//	//	from.x(), from.y(), from.z(),
+//	//	to.x(), to.y(), to.z()
+//	//};
+//	//glEnableClientState(GL_VERTEX_ARRAY);
+//	//glVertexPointer
+//	/*glUseProgram(0);
+//	glColor3f(255, 0, 0);
+//	glLineWidth(3.0f);
+//	glBegin(GL_LINES);
+//	glVertex3f(from.getX(), from.getY(), from.getZ());
+//	glVertex3f(to.getX(), to.getY(), to.getZ());
+//	glEnd();
+//	glLineWidth(1.0f);*/
+//
+//}
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {

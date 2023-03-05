@@ -51,6 +51,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ColliderCube) { DrawColliderCubeComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderSphere) { DrawColliderSpehereComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
+		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -418,6 +419,14 @@ void InspectorPanel::DrawColliderCylinderComponent(byte* data)
 	Wiwa::ColliderCylinder* colliderCylinder = (Wiwa::ColliderCylinder*)data;
 	ImGui::InputFloat("Radius", &colliderCylinder->radius);
 	ImGui::InputFloat("Height", &colliderCylinder->height);
+}
+
+void InspectorPanel::DrawRayCastComponent(byte* data)
+{
+	Wiwa::RayCast* rayCast = (Wiwa::RayCast*)data;
+	DrawVec3Control("Ray From", &rayCast->rayFromWorld, 0.0f, 100.0f);
+	DrawVec3Control("Ray To", &rayCast->rayToWorld, 0.0f, 100.0f);
+	ImGui::Checkbox("Enabled", &rayCast->doRayCasting);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)
