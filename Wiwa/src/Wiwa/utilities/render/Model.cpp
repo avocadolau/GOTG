@@ -664,35 +664,35 @@ namespace Wiwa {
 
 		const AnimNode* pNodeAnim = FindNodeAnim(animation, NodeName);
 
-		//if (pNodeAnim) {
-		//	
-		//	glm::mat4 identity(1.0f);
-		//	// Interpolate scaling and generate scaling transformation matrix
-		//	glm::vec3 Scaling;
-		//	CalcInterpolatedScaling(Scaling, animationTimeTicks, pNodeAnim);
-		//	glm::mat4 scalingM = glm::scale(identity, Scaling);
+		if (pNodeAnim) {
+			
+			glm::mat4 identity(1.0f);
+			// Interpolate scaling and generate scaling transformation matrix
+			glm::vec3 Scaling;
+			CalcInterpolatedScaling(Scaling, animationTimeTicks, pNodeAnim);
+			glm::mat4 scalingM = glm::scale(identity, Scaling);
 
-		//	// Interpolate rotation and generate rotation transformation matrix
-		//	glm::quat RotationQ;
-		//	CalcInterpolatedRotation(RotationQ, animationTimeTicks, pNodeAnim);
-		//	glm::mat4 rotationM = glm::mat4_cast(RotationQ);
+			// Interpolate rotation and generate rotation transformation matrix
+			glm::quat RotationQ;
+			CalcInterpolatedRotation(RotationQ, animationTimeTicks, pNodeAnim);
+			glm::mat4 rotationM = glm::mat4_cast(RotationQ);
 
-		//	// Interpolate translation and generate translation transformation matrix
-		//	glm::vec3 Translation;
-		//	CalcInterpolatedPosition(Translation, animationTimeTicks, pNodeAnim);
-		//	glm::mat4 translationM = glm::translate(identity, Translation);
+			// Interpolate translation and generate translation transformation matrix
+			glm::vec3 Translation;
+			CalcInterpolatedPosition(Translation, animationTimeTicks, pNodeAnim);
+			glm::mat4 translationM = glm::translate(identity, Translation);
 
-		//	// Combine the above transformations
-		//	nodeTransformation = translationM * rotationM * scalingM;
+			// Combine the above transformations
+			nodeTransformation = translationM * rotationM * scalingM;
 
-		//}
+		}
 
 		glm::mat4 GlobalTransformation = parentTransform * nodeTransformation;
 
 		if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
 			unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
-			//parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
-			parent->boneInfo[BoneIndex].finalTransformation = GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
+			parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
+			//parent->boneInfo[BoneIndex].finalTransformation = GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
 			//WI_INFO("{}", NodeName.c_str());
 			//PrintGlmMatrix(parent->boneInfo[BoneIndex].finalTransformation);
 		}
