@@ -408,8 +408,6 @@ namespace Wiwa {
 		h->scale = { scale.x, scale.y, scale.z };
 
 		//fill bone info data 
-		//aiMatrix4x4 m = node->mTransformation;
-		//h->Transformation = glm::make_mat4(m.ToPtr());
 		h->Transformation = mat4_cast(node->mTransformation);
 		glm::mat4 globalTransformation = parentMatrix * h->Transformation;
 		
@@ -694,7 +692,7 @@ namespace Wiwa {
 		if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
 			unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
 			//parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
-			parent->boneInfo[BoneIndex].finalTransformation =  GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
+			parent->boneInfo[BoneIndex].finalTransformation = GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
 			//WI_INFO("{}", NodeName.c_str());
 			//PrintGlmMatrix(parent->boneInfo[BoneIndex].finalTransformation);
 		}
@@ -1085,8 +1083,8 @@ namespace Wiwa {
 
 		if (BoneId == parent->boneInfo.size()) {
 			glm::mat4 offset = mat4_cast(bone->mOffsetMatrix);
-			//WI_INFO("bone id {}", BoneId);
-			//PrintGlmMatrix(offset);
+			WI_INFO("bone id {}", BoneId);
+			PrintGlmMatrix(offset);
 			BoneInfo binfo(offset);
 			parent->boneInfo.push_back(binfo);
 		}

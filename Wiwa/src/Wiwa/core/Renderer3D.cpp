@@ -307,9 +307,10 @@ namespace Wiwa {
 		float animationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
 		std::vector<glm::mat4> transforms;
 
-		mesh->GetBoneTransforms(animationTimeSec, transforms);
+		mesh->GetBoneTransforms(0, transforms);
 
  		for (unsigned int i = 0; i < transforms.size(); i++) {
+			mesh->PrintGlmMatrix(transforms[i]);
 			matShader->SetBoneTransform(i,transforms[i]);
 		}
 

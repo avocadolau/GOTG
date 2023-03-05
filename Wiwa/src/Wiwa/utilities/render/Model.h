@@ -194,7 +194,7 @@ namespace Wiwa {
 		void LoadSingleBone(int meshIndex, aiBone* bone);
 		void PrintAssimpBoneMatrix(const aiBone* mat);
 		void PrintAssimpNodeMatrix(const aiNode* mat);
-		void PrintGlmMatrix(const glm::mat4& mat);
+
 
 		void LoadAnimation(const aiAnimation* animation);
 		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
@@ -265,6 +265,9 @@ namespace Wiwa {
 		static void SaveModel(Model* model, const char* file);
 
 		bool HasBones() { return has_bones; }
+
+		//DEBUG
+		void PrintGlmMatrix(const glm::mat4& mat);
 	public:
 
 		
