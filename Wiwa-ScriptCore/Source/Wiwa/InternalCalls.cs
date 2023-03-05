@@ -71,6 +71,27 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static ulong LoadResourceModel(string str);
         #endregion
+        #region Screen
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetFullscreenIntr(bool value);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool GetFullscreenIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetVsyncIntr(bool value);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool GetVsyncIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetResolutionIntr(int width, int height);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static int GetWidthIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static int GetHeightIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetResizableIntr(bool value);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool GetResizableIntr();
+
+        #endregion
         //#region Audio
         //[MethodImplAttribute(MethodImplOptions.InternalCall)]
         //internal extern static void PlayMusic(string str);

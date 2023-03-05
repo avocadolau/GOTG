@@ -16,6 +16,7 @@
 #include "embed_functions/embed_time_functions.h"
 #include "embed_functions/embed_audio_functions.h"
 #include "embed_functions/embed_physics_functions.h"
+#include "embed_functions/embed_screen_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -60,6 +61,21 @@ namespace Wiwa
 		// Resources
 		WI_ADD_INTERNAL_CALL(LoadResourceModel);
 		WI_ADD_INTERNAL_CALL(AddMeshToEntity);
+
+		//Screen
+
+		WI_ADD_INTERNAL_CALL(SetFullscreenIntr);
+		WI_ADD_INTERNAL_CALL(GetFullscreenIntr);
+
+		WI_ADD_INTERNAL_CALL(SetVsyncIntr);
+		WI_ADD_INTERNAL_CALL(GetVsyncIntr);
+
+		WI_ADD_INTERNAL_CALL(SetResizableIntr);
+		WI_ADD_INTERNAL_CALL(GetResizableIntr);
+
+		WI_ADD_INTERNAL_CALL(SetResolutionIntr);
+		WI_ADD_INTERNAL_CALL(GetWidthIntr);
+		WI_ADD_INTERNAL_CALL(GetHeightIntr);
 
 		// Audio
 		/*WI_ADD_INTERNAL_CALL(PlayMusic);
