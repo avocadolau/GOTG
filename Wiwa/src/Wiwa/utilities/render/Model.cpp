@@ -1059,16 +1059,19 @@ namespace Wiwa {
 		glm::mat4 identity (1.0f);
 
 		//Set current anim
-		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
-		float TimeInTicks = timeInSeconds * TicksPerSecond;
-		float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
+		if (parent->animations.size() != 0) {
+			float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
+			float TimeInTicks = timeInSeconds * TicksPerSecond;
+			float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
 
-		ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
-		transforms.resize(parent->boneInfo.size());
-		for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
-		{
-			transforms[i] = parent->boneInfo[i].finalTransformation;
+			ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
+			transforms.resize(parent->boneInfo.size());
+			for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
+			{
+				transforms[i] = parent->boneInfo[i].finalTransformation;
+			}
 		}
+		
 	}
 
 	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)

@@ -309,10 +309,11 @@ namespace Wiwa {
 
 		mesh->GetBoneTransforms(animationTimeSec, transforms);
 
- 		for (unsigned int i = 0; i < transforms.size(); i++) {
-			matShader->SetBoneTransform(i,transforms[i]);
+		if (transforms.size() != 0) {
+			for (unsigned int i = 0; i < transforms.size(); i++) {
+				matShader->SetBoneTransform(i, transforms[i]);
+			}
 		}
-
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
