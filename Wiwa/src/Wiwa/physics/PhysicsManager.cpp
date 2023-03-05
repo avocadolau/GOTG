@@ -502,6 +502,8 @@ namespace Wiwa {
 		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
 		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
 		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
+
 		m_World->debugDrawWorld();
 		m_Debug_draw->lineDisplayShader->UnBind();
 		camera->frameBuffer->Unbind();
@@ -533,13 +535,17 @@ namespace Wiwa {
 		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
 		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
 		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
 		
 		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
-		btCollisionWorld::ClosestRayResultCallback rayResults = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
-		m_World->rayTest(ray_from_world, ray_to_world, rayResults);
-		if (rayResults.hasHit())
-			WI_INFO("Ray cast hit!");
+		btCollisionWorld::ClosestRayResultCallback closestHit = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
+		m_World->rayTest(ray_from_world, ray_to_world, closestHit);
+		if (closestHit.hasHit())
+		{
+			btVector3 p = ray_from_world.lerp(ray_to_world, closestHit.m_closestHitFraction);
+			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
+			m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
+		}
 
 		camera->frameBuffer->Unbind();
 	}
