@@ -66,8 +66,8 @@ namespace Wiwa {
 		bool ResolveContacts();
 
 	private:
-		bool ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger);
-		bool ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger);
+		bool ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b);
+		bool ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b);
 	public:
 
 		bool UpdateObjects(const float dt);

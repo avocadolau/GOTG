@@ -103,8 +103,8 @@ namespace Wiwa {
 				//WI_INFO("c2 : {}", contactManifold->getContactPoint(0).m_contactMotion2);
 				btVector3 toSubstract = contactManifold->getContactPoint(0).m_normalWorldOnB * contactManifold->getContactPoint(0).getDistance();
 
-				ResolveContactA(obA, toSubstract, (obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
-				ResolveContactB(obB, toSubstract, (obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
+				ResolveContactA(obA, toSubstract, (obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
+				ResolveContactB(obB, toSubstract, (obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
 				//WI_INFO("d : {}", contactManifold->getContactPoint(0).getDistance());
 				size_t idA = obA->getUserIndex();
 				size_t idB = obB->getUserIndex();
@@ -163,22 +163,22 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger)
+	bool PhysicsManager::ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b)
 	{
 		if (is_static)
 			return false;
-		if (is_trigger)
+		if (is_trigger_a || is_trigger_b)
 			return false;
 
 		obj_a->getWorldTransform().setOrigin(obj_a->getWorldTransform().getOrigin() - vec);
 		return true;
 	}
 
-	bool PhysicsManager::ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger)
+	bool PhysicsManager::ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b)
 	{
 		if (is_static)
 			return false;
-		if (is_trigger)
+		if (is_trigger_a || is_trigger_b)
 			return false;
 
 		obj_a->getWorldTransform().setOrigin(obj_a->getWorldTransform().getOrigin() + vec);
@@ -645,16 +645,19 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {
-	glUseProgram(0);
+	drawSphere(point_onB, 0.1, btVector4(0, 1, 1, 1));
+	drawLine(point_onB, point_onB + normal_onB, btVector4(0, 1, 1, 1));
+	/*glUseProgram(0);
 	glColor3f(0, 0, 255);
 	glPointSize(8.0f);
 	glBegin(GL_POINT);
 	glVertex3f(point_onB.getX(), point_onB.getY(), point_onB.getZ());
 	glEnd();
-	glPointSize(1.0f);
+	glPointSize(1.0f);*/
 	//point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
 	//point.color.Set(color.getX(), color.getY(), color.getZ());
 	//point.Render();
+
 }
 
 void DebugDrawer::reportErrorWarning(const char* warning_string)
