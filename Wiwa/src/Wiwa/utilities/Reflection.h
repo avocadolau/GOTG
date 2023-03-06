@@ -244,5 +244,10 @@ enum class TypeHash : size_t {
 	AudioSource = FNV1A_HASH("AudioSource"),
 	PointLight = FNV1A_HASH("PointLight"),
 	DirectionalLight = FNV1A_HASH("DirectionalLight"),
-	SpotLight = FNV1A_HASH("SpotLight")
+	SpotLight = FNV1A_HASH("SpotLight"),
+	Rigidbody = FNV1A_HASH("Rigidbody"),
+	ColliderCube = FNV1A_HASH("ColliderCube"),
+	ColliderCylinder = FNV1A_HASH("ColliderCylinder"),
+	ColliderSphere = FNV1A_HASH("ColliderSphere"),
+	ColliderCapsule = FNV1A_HASH("ColliderCapsule")
 };

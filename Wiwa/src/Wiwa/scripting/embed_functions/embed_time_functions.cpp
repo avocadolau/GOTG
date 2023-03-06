@@ -11,3 +11,8 @@ float GetTimeIntr()
 {
     return Wiwa::Time::GetTime();
 }
+
+void SetFPSIntr(int fps)
+{
+    Wiwa::Time::SetTargetFPS(fps);
+}

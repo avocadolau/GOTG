@@ -56,3 +56,9 @@ Editor/.vs/AppAssembly/v17/.suo
 
 # Dlls
 Editor/resources/scripts/Wiwa-ScriptCore.dll
+
+Editor/.vs/AppAssembly/v16/.suo
+
+# Game build
+Editor/game/build
+Editor/game/.vs

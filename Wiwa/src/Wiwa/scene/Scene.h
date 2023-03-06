@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/physics/PhysicsManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
@@ -43,6 +44,8 @@ namespace Wiwa {
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
+		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
+
 		LightManager& GetLightManager() { return *m_LightManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
@@ -63,6 +66,7 @@ namespace Wiwa {
 
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
+		PhysicsManager* m_PhysicsManager;
 		LightManager* m_LightManager;
 		GuiManager* m_GuiManager;
 

@@ -70,7 +70,7 @@ namespace Wiwa {
 	void Wiwa::Material::SetUniformData(const char* name, const T& value)
 	{
 		Uniform* uniform = getUniform(name);
-		if(!uniform)
+		if (!uniform)
 		{
 			WI_CORE_CRITICAL("Uniform name {0} doesn't exist in the current material", name);
 			return;

@@ -32,6 +32,8 @@ namespace Wiwa {
 		static uint32_t m_OrthoLoc;
 		static uint32_t m_ViewLoc;
 		static uint32_t m_ModelLoc;
+
+		static bool m_RenderOnMainWindow;
 	public:
 		// Initialize render manager
 		static void Init(int width, int height);
@@ -41,6 +43,9 @@ namespace Wiwa {
 
 		// Render all layers into one framebuffer
 		static void Update();
+
+		// Set if it should render the output to the main window
+		static void SetRenderOnMainWindow(bool render_on_main_window) { m_RenderOnMainWindow = render_on_main_window; }
 
 		// Get color texture
 		static uint32_t getColorTexture() { return m_FrameBuffer.getColorBufferTexture(); }

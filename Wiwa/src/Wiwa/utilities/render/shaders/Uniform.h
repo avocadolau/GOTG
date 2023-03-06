@@ -34,11 +34,11 @@ namespace Wiwa {
 			std::string tex_path;
 		};
 
-		Uniform() 
+		Uniform()
 			: m_Type(UniformType::Bool), name(), m_Data(nullptr), m_UniformID(NULL)
 		{}
-		
-		
+
+
 		Uniform(std::string name, UniformType type)
 			: m_Type(type), m_Data(nullptr), name(name), m_UniformID(NULL)
 		{
@@ -64,7 +64,7 @@ namespace Wiwa {
 
 		void setEmptyData();
 
-		template <class T> 
+		template <class T>
 		void getData(T* data)
 		{
 			data = (T*)this->m_Data;

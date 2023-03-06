@@ -28,32 +28,32 @@ namespace Wiwa {
 		// Start camera as INVALID
 		m_CameraType = CameraType::INVALID;
 
-		int indicies[IND_COUNT] = {
-			0, 1, 1, 2, 2, 3, 3, 0, // Front
-			4, 5, 5, 6, 6, 7, 7, 4, // Back
-			0, 4, 1, 5, 2, 6, 3, 7
-		};
+		//int indicies[IND_COUNT] = {
+		//	0, 1, 1, 2, 2, 3, 3, 0, // Front
+		//	4, 5, 5, 6, 6, 7, 7, 4, // Back
+		//	0, 4, 1, 5, 2, 6, 3, 7
+		//};
 
-		// Generate frustum opengl buffers
-		glGenBuffers(1, &vbo);
-		glGenBuffers(1, &ebo);
-		glGenVertexArrays(1, &vao);
+		//// Generate frustum opengl buffers
+		//glGenBuffers(1, &vbo);
+		//glGenBuffers(1, &ebo);
+		//glGenVertexArrays(1, &vao);
 
-		// Dynamic VAO to update frustum vertices
-		glBindVertexArray(vao);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(m_FrustumPoints), nullptr, GL_DYNAMIC_DRAW);
+		//// Dynamic VAO to update frustum vertices
+		//glBindVertexArray(vao);
+		//glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(m_FrustumPoints), nullptr, GL_DYNAMIC_DRAW);
 
-		// Static indicies
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
+		//// Static indicies
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
+		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		//glEnableVertexAttribArray(0);
 
-		// Unbind buffers
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+		//// Unbind buffers
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//glBindVertexArray(0);
 	}
 
 
@@ -178,24 +178,53 @@ namespace Wiwa {
 	}
 	void Camera::DrawFrustrum()
 	{
-		glLineWidth(5.0f);
+		//glLineWidth(5.0f);
 
-		// Generate frustum data
-		
+		//// Generate frustum data
+		//
 
-		glBindVertexArray(vao);
+		//glBindVertexArray(vao);
 
-		// Update frumstum data
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(m_FrustumPoints), m_FrustumPoints);
+		//// Update frumstum data
+		//glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(m_FrustumPoints), m_FrustumPoints);
 
-		// Draw frustum
-		glDrawElements(GL_LINES, (GLsizei)IND_COUNT, GL_UNSIGNED_INT, 0);
+		//// Draw frustum
+		//glDrawElements(GL_LINES, (GLsizei)IND_COUNT, GL_UNSIGNED_INT, 0);
 
-		// Unbind buffers
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+		//// Unbind buffers
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//glBindVertexArray(0);
 
-		glLineWidth(1.0f);
+		//glLineWidth(1.0f);
+	}
+	void Camera::GetCornerPoints(glm::vec3* outPointArray)
+	{
+		Wiwa::Size2i& res = Wiwa::Application::Get().GetTargetResolution();
+		float verticalFOV = 2 * glm::atan(glm::tan(glm::radians(m_FOV) / 2) * ((float)res.h / (float)res.w));
+		float tanhfov = glm::tan(glm::radians(m_FOV) * 0.5f);
+		float tanvfov = glm::tan(verticalFOV * 0.5f);
+		float frontPlaneHalfWidth = tanhfov * m_NearPlaneDist;
+		float frontPlaneHalfHeight = tanvfov * m_NearPlaneDist;
+		float farPlaneHalfWidth = tanhfov * m_FarPlaneDist;
+		float farPlaneHalfHeight = tanvfov * m_FarPlaneDist;
+
+		glm::vec3 right = glm::cross(m_CameraFront, m_CameraUp);
+
+		glm::vec3 nearCenter = m_CameraPos + m_CameraFront * m_NearPlaneDist;
+		glm::vec3 nearHalfWidth = frontPlaneHalfWidth * right;
+		glm::vec3 nearHalfHeight = frontPlaneHalfHeight * m_CameraUp;
+		outPointArray[0] = nearCenter - nearHalfWidth - nearHalfHeight;
+		outPointArray[1] = nearCenter + nearHalfWidth - nearHalfHeight;
+		outPointArray[2] = nearCenter - nearHalfWidth + nearHalfHeight;
+		outPointArray[3] = nearCenter + nearHalfWidth + nearHalfHeight;
+
+		glm::vec3 farCenter = m_CameraPos + m_CameraFront * m_FarPlaneDist;
+		glm::vec3 farHalfWidth = farPlaneHalfWidth * right;
+		glm::vec3 farHalfHeight = farPlaneHalfHeight * m_CameraUp;
+		outPointArray[4] = farCenter - farHalfWidth - farHalfHeight;
+		outPointArray[5] = farCenter + farHalfWidth - farHalfHeight;
+		outPointArray[6] = farCenter - farHalfWidth + farHalfHeight;
+		outPointArray[7] = farCenter + farHalfWidth + farHalfHeight;
 	}
 }

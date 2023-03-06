@@ -74,7 +74,12 @@ namespace Wiwa {
 		// Load a scene file to memory
 		static SceneId LoadScene(const char* scene_path, int flags=LOAD_DEFAULT);
 
+		// Load scene to memory
+		static SceneId LoadScene(uint32_t scene_index, int flags = LOAD_DEFAULT);
+
 		// Unload a scene id
 		static void UnloadScene(SceneId scene_id, bool unload_resources=true);
+
+		static bool isLoadingScene;
 	};
 }

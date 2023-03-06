@@ -4,11 +4,12 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
-#include <Wiwa\utilities\render\LightManager.h>
+#include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
 
-namespace Wiwa {
+namespace Wiwa
+{
 	Scene::Scene() : m_InstanceRenderer(40500)
 	{
 		mMaxTimeEntering = 0;
@@ -20,9 +21,12 @@ namespace Wiwa {
 		m_GuiManager = new GuiManager();
 		m_GuiManager->Init(this);
 
+		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
+		m_PhysicsManager = new PhysicsManager();
 
+		m_PhysicsManager->InitWorld();
 	}
 
 	Scene::~Scene()
@@ -30,11 +34,18 @@ namespace Wiwa {
 		delete m_CameraManager;
 		delete m_LightManager;
 		delete m_GuiManager;
+
+		// Clear entity manager
+		m_EntityManager.Clear();
+
+		// Clear physics world
+		m_PhysicsManager->CleanWorld();
+		delete m_PhysicsManager;
+		m_PhysicsManager = nullptr;
 	}
 
 	void Scene::Start()
 	{
-		
 	}
 
 	void Scene::Awake()
@@ -45,14 +56,14 @@ namespace Wiwa {
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
-		
-		//WAY TO CREATE THE POSITION
-		//Rect2i test;
-		//test.x = 500;
-		//test.y = 100;
-		//test.width = 200;
-		//test.height = 100;
-		//m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, test, "assets/test.png", nullptr, {0,0,0,0});
+
+		// WAY TO CREATE THE POSITION
+		// Rect2i test;
+		// test.x = 500;
+		// test.y = 100;
+		// test.width = 200;
+		// test.height = 100;
+		// m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, test, "assets/test.png", nullptr, {0,0,0,0});
 	}
 
 	void Scene::Update()
@@ -61,7 +72,8 @@ namespace Wiwa {
 		{
 		case Scene::SCENE_ENTERING:
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeEntering) m_CurrentState = SCENE_LOOP;
+			if (m_TransitionTimer >= mMaxTimeEntering)
+				m_CurrentState = SCENE_LOOP;
 			UpdateEnter();
 			RenderEnter();
 			break;
@@ -74,7 +86,8 @@ namespace Wiwa {
 			break;
 		case Scene::SCENE_LEAVING:
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeLeaving) SceneManager::ChangeScene(m_SceneToChange);
+			if (m_TransitionTimer >= mMaxTimeLeaving)
+				SceneManager::ChangeScene(m_SceneToChange);
 			UpdateLeave();
 			RenderLeave();
 			break;
@@ -87,15 +100,25 @@ namespace Wiwa {
 	{
 		m_CameraManager->Update();
 
-		
 		m_GuiManager->Draw();
 
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
 		r2d.UpdateInstanced(this);
 
 		m_EntityManager.Update();
-		
-		if (!SceneManager::IsPlaying()) {
+
+		m_PhysicsManager->UpdateEngineToPhysics();
+
+		if (SceneManager::IsPlaying())
+		{
+			m_PhysicsManager->StepSimulation();
+			m_PhysicsManager->UpdatePhysicsToEngine();
+			// m_PhysicsManager->LogBodies();
+		}
+		// m_PhysicsManager->LogBodies();
+
+		if (!SceneManager::IsPlaying())
+		{
 			m_EntityManager.UpdateWhitelist();
 		}
 	}
@@ -109,7 +132,9 @@ namespace Wiwa {
 
 	void Scene::Unload(bool unload_resources)
 	{
-		if (unload_resources) {
+		return;
+		if (unload_resources)
+		{
 			Wiwa::Resources::UnloadAllResources();
 		}
 	}

@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/Model.h>
 #include <Wiwa/utilities/render/Material.h>
 #include <Wiwa/core/Renderer3D.h>
+#include <Wiwa/scene/Scene.h>
 
 namespace Wiwa {
 	
@@ -16,6 +17,11 @@ namespace Wiwa {
 	}
 
 	EntityManager::~EntityManager()
+	{
+		
+	}
+
+	void EntityManager::Clear()
 	{
 		// Destroy entity systems
 		size_t entitySize = m_EntitySystems.size();
@@ -560,7 +566,6 @@ namespace Wiwa {
 					m_ComponentsSize[cid]++;
 				}
 			}
-
 			OnComponentAdded(entity, component, type);
 		}
 
@@ -597,11 +602,11 @@ namespace Wiwa {
 		if (c_it != c_map.end()) {
 			m_ComponentsRemoved[c_it->first].push_back(c_it->second);
 
+			c_map.erase(c_it);
+
 			const Type* c_type = m_ComponentTypes[c_it->first];
 
 			OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
-
-			c_map.erase(c_it);
 		}
 	}
 
@@ -696,7 +701,7 @@ namespace Wiwa {
 
 	size_t EntityManager::getSystemIndex(EntityId entityId, SystemHash system_hash)
 	{
-		size_t index = WI_INVALID_INDEX;
+		size_t index = INVALID_INDEX;
 
 		size_t size = m_EntitySystemHashes[entityId].size();
 
@@ -711,17 +716,57 @@ namespace Wiwa {
 		return index;
 	}
 
-	void EntityManager::OnComponentAdded(EntityId entityId, byte* data, const Type* type)
+	bool EntityManager::OnComponentAdded(EntityId entityId, byte* data, const Type* type)
 	{
+		if (SceneManager::isLoadingScene)
+			return false;
+
 		std::vector<System*>& systems = m_EntitySystems[entityId];
 		size_t s_size = systems.size();
+
+		if (type->hash == (size_t)TypeHash::Rigidbody)
+		{
+			Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
+			rigidBody->positionOffset = { 0,0,0 };
+			rigidBody->scalingOffset = { 1,1,1 };
+			rigidBody->isTrigger = false;
+			rigidBody->isStatic = false;
+			rigidBody->doContinuousCollision = false;
+			rigidBody->selfTag = 0;
+			rigidBody->filterBits |= 1 << 0;
+			//rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCube)
+		{ 
+			Wiwa::ColliderCube* colliderCube = (Wiwa::ColliderCube*)data;
+			colliderCube->halfExtents= { 2,2,2 };
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderSphere) 
+		{
+			Wiwa::ColliderSphere* colliderCube = (Wiwa::ColliderSphere*)data;
+			colliderCube->radius = 1;
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCylinder) 
+		{ 
+			Wiwa::ColliderCylinder* colliderCube = (Wiwa::ColliderCylinder*)data;
+			colliderCube->height = 1;
+			colliderCube->radius = 1;
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCapsule)
+		{
+			Wiwa::ColliderCapsule* colliderCapsule = (Wiwa::ColliderCapsule*)data;
+			colliderCapsule->height = 1;
+			colliderCapsule->radius = 1;
+		}
 
 		for (size_t i = 0; i < s_size; i++) {
 			systems[i]->OnComponentAdded(data, type);
 		}
+
+		return true;
 	}
 
-	void EntityManager::OnComponentRemoved(EntityId entityId, byte* data, const Type* type)
+	bool EntityManager::OnComponentRemoved(EntityId entityId, byte* data, const Type* type)
 	{
 		std::vector<System*>& systems = m_EntitySystems[entityId];
 		size_t s_size = systems.size();
@@ -729,6 +774,8 @@ namespace Wiwa {
 		for (size_t i = 0; i < s_size; i++) {
 			systems[i]->OnComponentRemoved(data, type);
 		}
+
+		return true;
 	}
 
 	void EntityManager::ApplySystem(EntityId eid, SystemHash system_hash)
@@ -740,6 +787,7 @@ namespace Wiwa {
 		if (stype) {
 			System* system = (System*)stype->New();
 			system->SetEntity(eid);
+			system->SetScene(m_Scene);
 			system->OnSystemAdded();
 
 			m_EntitySystems[eid].push_back(system);
@@ -760,7 +808,7 @@ namespace Wiwa {
 	{
 		size_t sindex = getSystemIndex(eid, system_hash);
 
-		if (sindex == WI_INVALID_INDEX) return;
+		if (sindex == INVALID_INDEX) return;
 
 		System* system = m_EntitySystems[eid][sindex];
 

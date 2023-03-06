@@ -1,5 +1,6 @@
 ﻿namespace Wiwa
 {
+    using System.Reflection;
     using EntityId = System.UInt64;
 
     public class Behaviour
@@ -46,6 +47,13 @@
         public EntityId CreateEntity()
         {
             EntityId id = InternalCalls.CreateEntity();
+            AddComponent<Transform3D>(id);
+            return id;
+        }
+
+        public EntityId CreateEntityNamed(string name_entity)
+        {
+            EntityId id = InternalCalls.CreateEntityNamed(name_entity);
             AddComponent<Transform3D>(id);
             return id;
         }

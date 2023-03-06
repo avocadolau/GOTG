@@ -54,10 +54,6 @@ namespace Wiwa {
 		s_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath.string().c_str());
 		s_Data->SystemAssembly = Utils::LoadMonoAssembly("mono/lib/mono/4.5/mscorlib.dll");
 		LoadAssemblyTypes(s_Data->CoreAssembly);
-		//Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
-		//Utils::PrintAssemblyTypes(s_Data->SystemAssembly);
-		
-		//WI_CORE_ASSERT(false, "");
 	}
 	//Function not called in the main thread
 	static void OnAppAssemblyFSEvent(const std::string& path, const filewatch::Event change_type)

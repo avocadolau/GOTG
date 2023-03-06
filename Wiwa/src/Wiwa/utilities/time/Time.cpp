@@ -18,6 +18,9 @@ namespace Wiwa
 	std::chrono::time_point<std::chrono::steady_clock>  Time::m_LastTime;
 	std::chrono::duration<float>  Time::m_RealTimeSinceStartup;
 	std::chrono::duration<float>  Time::m_RealTimeDeltaTime;
+	int Time::s_NoFrameCap = -1;
+	int Time::m_TargetFPS = s_NoFrameCap;
+	double Time::m_TargetDT = 1.0 / m_TargetFPS;
 	void Time::Play()
 	{
 		m_IsPlaying = true;
@@ -28,6 +31,7 @@ namespace Wiwa
 	void Time::Step()
 	{
 		m_Step = true;
+		m_IsPlaying = true;
 	}
 	void Time::PauseUnPause()
 	{
@@ -35,6 +39,7 @@ namespace Wiwa
 	}
 	void Time::Update()
 	{
+		OPTICK_EVENT("Time Update");
 		m_FrameCount++;
 		m_RealTimeDeltaTime = std::chrono::high_resolution_clock::now() - m_RealLastTime;
 		m_RealLastTime = std::chrono::high_resolution_clock::now();
@@ -42,15 +47,22 @@ namespace Wiwa
 
 		if (m_IsPlaying)
 		{
+			m_DeltaTime = (std::chrono::high_resolution_clock::now() - m_LastTime) * m_TimeScale;
+			m_Time = (std::chrono::high_resolution_clock::now() - m_GameClock) * m_TimeScale;
+			m_LastTime = std::chrono::high_resolution_clock::now();
 			if (m_IsPaused && !m_Step)
 				return;
-			m_DeltaTime = (std::chrono::high_resolution_clock::now() - m_LastTime) * m_TimeScale;
-			m_LastTime = std::chrono::high_resolution_clock::now();
-			m_Time = (std::chrono::high_resolution_clock::now() - m_GameClock) * m_TimeScale;
 			m_GameFrameCount++;
 		}
-		if (m_Step)
+		
+	}
+	void Time::PostUpdate()
+	{
+		if (m_Step && m_IsPlaying)
+		{
 			m_Step = false;
+			m_IsPlaying = false;
+		}
 	}
 	void Time::Stop()
 	{

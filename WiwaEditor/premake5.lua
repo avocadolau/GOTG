@@ -22,7 +22,8 @@ project "WiwaEditor"
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.filewatch}",
-		"%{IncludeDirs.IconFontCppHeaders}"
+		"%{IncludeDirs.IconFontCppHeaders}",
+		"%{IncludeDirs.bullet}"
 	}
 
 	links
