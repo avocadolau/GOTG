@@ -162,7 +162,7 @@ void EditorLayer::OnImGuiRender()
 	if (m_ShowDemo)
 		ImGui::ShowDemoWindow(&m_ShowDemo);
 
-	WI_INFO("{}, {}", Wiwa::Input::GetMouseX(), Wiwa::Input::GetMouseY());
+	
 }
 
 void EditorLayer::OnEvent(Wiwa::Event &e)
