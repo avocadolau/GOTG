@@ -202,6 +202,13 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		Wiwa::Resources::CreateMeta<Wiwa::Material>(p.c_str());
 		Wiwa::Resources::Import<Wiwa::Material>(p.c_str());
 	}
+	else if (path.extension() == ".bnk") {
+		std::filesystem::path libfile = Wiwa::Resources::_assetToLibPath(path.string());
+		std::filesystem::path libpath = libfile.parent_path();
+
+		Wiwa::FileSystem::CreateDirs(libpath.string().c_str());
+		Wiwa::FileSystem::Copy(path.string().c_str(), libfile.string().c_str());
+	}
 }
 
 void AssetsPanel::Draw()

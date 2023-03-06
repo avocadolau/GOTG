@@ -56,6 +56,7 @@ project "WiwaGame"
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.filewatch}",
+		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.bullet}"
 	}
 

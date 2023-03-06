@@ -422,6 +422,8 @@ bool Audio::LoadProject(const char* init_bnk)
     m_InitBankPath = init_bnk;
     m_LoadedProject = true;
 
+    WI_CORE_INFO("Loaded audio project: {}", init_bnk);
+
     return true;
 }
 
@@ -498,6 +500,8 @@ bool Audio::LoadBank(const char* bank)
     std::string filename = Wiwa::FileSystem::GetFileName(bank);
 
     m_LoadedBanks.emplace_back(BankData{ filename, bank_id, bank });
+
+    WI_CORE_INFO("Loaded audio bank: {}", bank);
 
     return true;
 }

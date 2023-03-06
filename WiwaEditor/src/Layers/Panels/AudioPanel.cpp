@@ -4,6 +4,8 @@
 
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
+#include <Wiwa/utilities/filesystem/FileSystem.h>
+#include <Wiwa/core/Resources.h>
 
 AudioPanel::AudioPanel(EditorLayer* instance) 
 	: Panel("Audio", ICON_FK_HEADPHONES, instance)
@@ -32,6 +34,11 @@ void AudioPanel::Draw()
 		std::string filename = Wiwa::FileDialogs::OpenFile("Wwise bank (*.bnk)\0*.bnk\0");
 
 		if (filename != "") {
+			filename = Wiwa::Resources::_assetToLibPath(filename);
+
+			std::filesystem::path p = std::filesystem::relative(filename);
+			filename = p.string();
+
 			bool ret = Audio::LoadProject(filename.c_str());
 
 			if (!ret) {
@@ -63,6 +70,9 @@ void AudioPanel::Draw()
 			std::string filename = Wiwa::FileDialogs::OpenFile("Wwise bank (*.bnk)\0*.bnk\0");
 
 			if (filename != "") {
+				filename = Wiwa::Resources::_assetToLibPath(filename);
+				std::filesystem::path p = std::filesystem::relative(filename);
+				filename = p.string();
 				bool ret = Audio::LoadBank(filename.c_str());
 
 				if (!ret) {
