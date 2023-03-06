@@ -92,18 +92,22 @@ namespace Wiwa
         internal extern static bool GetResizableIntr();
 
         #endregion
-        //#region Audio
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void PlayMusic(string str);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopMusic(string str);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void PlaySound(string str, EntityId entity);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopSound(string str, EntityId entity);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopAllEvents();
-        //#endregion
+        #region Audio
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayMusic(string str);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopMusic(string str);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlaySound(string str, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopSound(string str, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlaySoundEntity(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopSoundEntity(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopAllEvents();
+        #endregion
 
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

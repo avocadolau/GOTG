@@ -78,13 +78,16 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetHeightIntr);
 
 		// Audio
-		/*WI_ADD_INTERNAL_CALL(PlayMusic);
+		WI_ADD_INTERNAL_CALL(PlayMusic);
 		WI_ADD_INTERNAL_CALL(StopMusic);
 
 		WI_ADD_INTERNAL_CALL(PlaySound);
 		WI_ADD_INTERNAL_CALL(StopSound);
 
-		WI_ADD_INTERNAL_CALL(StopAllEvents);*/
+		WI_ADD_INTERNAL_CALL(PlaySoundEntity);
+		WI_ADD_INTERNAL_CALL(StopSoundEntity);
+
+		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
