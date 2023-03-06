@@ -161,8 +161,6 @@ void EditorLayer::OnImGuiRender()
 	}
 	if (m_ShowDemo)
 		ImGui::ShowDemoWindow(&m_ShowDemo);
-
-	
 }
 
 void EditorLayer::OnEvent(Wiwa::Event &e)
