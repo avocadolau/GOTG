@@ -28,7 +28,7 @@ void UIPanel::Draw()
 
 	if (!Time::IsPlaying())
 	{
-		/*
+		
 		if (ImGui::CollapsingHeader("Create UI element"))
 		{
 			ImGui::InputInt2("position", position);
@@ -88,9 +88,9 @@ void UIPanel::Draw()
 			ImGui::Text("Secondary tex path");
 			if (ImGui::Button("Create Button"))
 			{
-				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()))
 				{
-					m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+					m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), nullptr);
 				}
 				else
 				{
@@ -130,9 +130,9 @@ void UIPanel::Draw()
 			ImGui::SameLine();
 			if (ImGui::Button("Create Image"))
 			{
-				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()))
 				{
-					m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+					m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), nullptr);
 				}
 				else
 				{
@@ -140,9 +140,9 @@ void UIPanel::Draw()
 				}
 			}
 		}
-		*/
+		
 
-		if (ImGui::CollapsingHeader("Create UI element"))
+		/*if (ImGui::CollapsingHeader("Create UI element"))
 		{
 			if (ImGui::CollapsingHeader("Create Button"))
 			{
@@ -185,9 +185,9 @@ void UIPanel::Draw()
 				ImGui::Text("Tex path");
 				if (ImGui::Button("Create Button"))
 				{
-					if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+					if (Wiwa::FileSystem::Exists(tex_path.c_str()))
 					{
-						m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+						m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.controls.size(), rect, tex_path.c_str(), nullptr);
 					}
 					else
 					{
@@ -393,7 +393,7 @@ void UIPanel::Draw()
 					}
 				}
 			}
-		}
+		}*/
 
 		if (ImGui::CollapsingHeader("Edit UI element"))
 		{
@@ -479,7 +479,7 @@ void UIPanel::Draw()
 				}
 				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::IMAGE)
 				{
-					ImGui::Text("Edit checkbox # %i", lastImageID);
+					ImGui::Text("Edit image # %i", lastImageID);
 				}
 
 				ImGui::PushID(UI_element_selected);

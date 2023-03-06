@@ -30,12 +30,7 @@ namespace Wiwa
 	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath)
 	{
 		GuiControl* control = nullptr;
-		if (CheckId(id))
-		{
-			return nullptr;
-		}
-		else
-		{
+	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
@@ -51,20 +46,15 @@ namespace Wiwa
 				break;
 			}
 			if (control != nullptr) controls.push_back(control);
-		}
-
+	
 		return control;
 	}
 
 	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds)
 	{
 		GuiControl* control = nullptr;
-		if (CheckId(id))
-		{
-			return nullptr;
-		}
-		else
-		{
+		
+		
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
@@ -80,19 +70,15 @@ namespace Wiwa
 				break;
 			}
 			if (control != nullptr) controls.push_back(control);
-		}
+		
 		return control;
 	}
 
 	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text)
 	{
 		GuiControl* control = nullptr;
-		if (CheckId(id))
-		{
-			return nullptr;
-		}
-		else
-		{
+		
+		
 			switch (type)
 			{
 			case GuiControlType::TEXT:
@@ -106,7 +92,7 @@ namespace Wiwa
 
 			// Created GuiControls are added to the list of controls
 			if (control != nullptr) controls.push_back(control);
-		}
+		
 		return control;
 	}
 
@@ -190,20 +176,5 @@ namespace Wiwa
 		return true;
 	}
 
-	bool GuiManager::CheckId(int id)
-	{
-		bool ret = false;
-		for (size_t i = 0; i < controls.size(); i++)
-		{
-			if (controls.at(i)->id == id)
-			{
-				ret = true;
-			}
-			else
-			{
-				ret = false;
-			}
-		}
-		return ret;
-	}
+	
 }

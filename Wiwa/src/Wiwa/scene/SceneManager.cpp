@@ -266,7 +266,7 @@ namespace Wiwa {
 				gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition);
 				break;
 			case Wiwa::GuiControlType::IMAGE:
-				gm.CreateGuiControl_Simple(guiType, id, position, extraTextureGui.c_str(), nullptr);
+				gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr);
 				break;
 			default:
 				break;

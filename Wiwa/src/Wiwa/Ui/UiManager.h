@@ -48,7 +48,7 @@ namespace Wiwa
 
 		std::vector<GuiControl*> ReturnControls() { return controls; }
 
-		bool CheckId(int id);
+	
 
 	public:
 
@@ -58,6 +58,6 @@ namespace Wiwa
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;
 
-		Image* texture = nullptr;
+		Image* texture;
 	};
 }
