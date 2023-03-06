@@ -758,6 +758,13 @@ namespace Wiwa {
 			colliderCapsule->height = 1;
 			colliderCapsule->radius = 1;
 		}
+		else if (type->hash == (size_t)TypeHash::RayCast)
+		{
+			Wiwa::RayCast* rayCast = (Wiwa::RayCast*)data;
+			rayCast->rayFromWorld = { 0,0,0 };
+			rayCast->rayToWorld = { 0,0,0 };
+			rayCast->doRayCasting = false;
+		}
 
 		for (size_t i = 0; i < s_size; i++) {
 			systems[i]->OnComponentAdded(data, type);
