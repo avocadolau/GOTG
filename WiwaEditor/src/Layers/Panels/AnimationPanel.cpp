@@ -5,6 +5,7 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/ecs/components/Mesh.h>
+#include <ImSequencer.h>
 
 AnimationPanel::AnimationPanel(EditorLayer* instance)
 	: Panel("Animation Editor", ICON_FK_SKATE, instance)
@@ -24,6 +25,13 @@ void AnimationPanel::Draw()
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	ImGui::Begin(iconName.c_str(), &active);
+	
+
+	static float w = 400.0f;
+	static float h = 300.0f;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+	ImGui::BeginChild("select", ImVec2(w, h), true);
 	if (m_EntitySet && (m_CurrentID >= 0))
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
@@ -55,8 +63,13 @@ void AnimationPanel::Draw()
 			
 		}
 	}
+	ImGui::EndChild();
+	ImGui::SameLine();
+	ImGui::BeginChild("Editor", ImVec2(w, h), true);
+	//ImSequencer::Sequencer()
 
-
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
 	ImGui::End();
 }
 
