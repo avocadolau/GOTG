@@ -79,7 +79,15 @@ namespace Wiwa {
 		UpdateObjects(dt);
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
-
+		static int o = 0;
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		{
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
+			o++;
+		}
+		
 		// Commented because it causes clipping :(
 		/*for (int i = 0; i < SUB_STEPS; i++)
 		{
@@ -218,7 +226,7 @@ namespace Wiwa {
 			// Get the position from the engine
 			glm::vec3 posEngine = transform3d->localPosition;
 			//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
-			glm::quat rotEngine = glm::quat(glm::radians(transform3d->localRotation)); // Newer version where you can do that but still have gimble lock
+			glm::quat rotEngine = glm::quat(glm::radians(transform3d->localRotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
 			// Get the offset
@@ -262,6 +270,7 @@ namespace Wiwa {
 			//bulletTransform.setRotation(rotationBullet);
 			glm::vec3 eulerAngles;
 			bulletTransform.getRotation().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
+		//	WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
 			transform3d->localRotation = glm::degrees(eulerAngles);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
@@ -385,6 +394,7 @@ namespace Wiwa {
 		collisionObject->setUserIndex(id);
 
 		AddBodyInternal(id, collisionObject, colShape, rigid_body);
+		AddBodyToLog(FindByEntityId(id));
 		return true;
 	}
 
@@ -421,7 +431,8 @@ namespace Wiwa {
 
 	bool PhysicsManager::SetRotation(Object* body, const glm::vec3 euler_angles)
 	{
-		//body->collisionObject->getWorldTransform().setRotation(btQuaternion()
+		glm::quat newRot = glm::quat(glm::radians(euler_angles));;
+		body->collisionObject->getWorldTransform().setRotation(btQuaternion(newRot.x, newRot.y, newRot.z, newRot.w));
 		return true;
 	}
 
