@@ -54,12 +54,12 @@ void AnimatorPanel::Draw()
 
 						if (ImGui::Button(aux[i]->name.c_str()))
 						{
-							GraphEditor::Node node = GraphEditor::Node();
-							node.mName = aux[i]->name.c_str();
-							node.mRect = ImRect(0, 0, 100, 100);
+							GraphEditorDelegate::Node node = GraphEditorDelegate::Node();
+							node.name = aux[i]->name.c_str();
+							node.mRect = { 0, 0, 100, 100 };
 							node.mSelected = false;
-							
-							animNode.push_back(node);
+						
+							delegate.mNodes.push_back(node);
 						}
 
 					}
@@ -80,15 +80,12 @@ void AnimatorPanel::Draw()
 	
 	if (ImGui::InvisibleButton("splitter", ImVec2(8.0f, h))) 
 	{
-		//GraphEditor::Show(delegate, options, viewState, true, &fit);
+		w += ImGui::GetIO().MouseDelta.x;
 	}
 	ImGui::SameLine();
 	ImGui::BeginChild("child2", ImVec2(0, h), true);
 	
-	for (int i = 0; i < animNode.size(); i++)
-	{
-		
-	}
+	GraphEditor::Show(delegate, options, viewState, true);
 
 	ImGui::EndChild();
 	
