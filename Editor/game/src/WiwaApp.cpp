@@ -1,14 +1,5 @@
 #include <Wiwa.h>
 
-#include <Wiwa/ecs/systems/System.h>
-#include <Wiwa/scripting/ScriptEngine.h>
-
-#include <Wiwa/audio/Audio.h>
-#include <Wiwa/core/Renderer2D.h>
-#include <Wiwa/core/Renderer3D.h>
-
-#include <Wiwa/core/Input.h>
-
 #include "game/GameLayer.h"
 
 USE_REFLECTION;
