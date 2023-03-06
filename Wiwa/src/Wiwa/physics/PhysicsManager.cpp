@@ -76,12 +76,17 @@ namespace Wiwa {
 		//Step simulation
 		float dt = 1.0f/60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
-		for (int i = 0; i < SUB_STEPS; i++)
+		UpdateObjects(dt);
+		m_World->performDiscreteCollisionDetection();
+		ResolveContacts();
+
+		// Commented because it causes clipping :(
+		/*for (int i = 0; i < SUB_STEPS; i++)
 		{
 			UpdateObjects(dt / SUB_STEPS);
 			m_World->performDiscreteCollisionDetection();
 			ResolveContacts();
-		}
+		}*/
 		
 		return true;
 	}
@@ -212,7 +217,8 @@ namespace Wiwa {
 
 			// Get the position from the engine
 			glm::vec3 posEngine = transform3d->localPosition;
-			glm::quat rotEngine = glm::quat(transform3d->localMatrix);
+			//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
+			glm::quat rotEngine = glm::quat(glm::radians(transform3d->localRotation)); // Newer version where you can do that but still have gimble lock
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
 			// Get the offset
@@ -410,6 +416,12 @@ namespace Wiwa {
 	bool PhysicsManager::SetVelocity(Object* body, const glm::vec3 velocity)
 	{
 		body->velocity = btVector3(velocity.x, velocity.y, velocity.z);
+		return true;
+	}
+
+	bool PhysicsManager::SetRotation(Object* body, const glm::vec3 euler_angles)
+	{
+		//body->collisionObject->getWorldTransform().setRotation(btQuaternion()
 		return true;
 	}
 

@@ -24,7 +24,7 @@
 #define MAX_BITS 32
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
-#define SUB_STEPS 6
+#define SUB_STEPS 3
 class DebugDrawer;
 class Camera;
 namespace Wiwa {
@@ -94,6 +94,8 @@ namespace Wiwa {
 
 		// Manipulate bodies
 		bool SetVelocity(Object*body, const glm::vec3 velocity);
+
+		bool SetRotation(Object* body, const glm::vec3 euler_angles);
 
 		//void SetTrigger(MyObject* body, const bool isTrigger);
 
