@@ -8,8 +8,13 @@
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
+#include <Wiwa/utilities/render/InstanceRenderer.h>
+
 namespace Wiwa {
 	class LightManager;
+	class GuiManager;
+
+
 	class WI_API Scene {
 	public:
 		Scene();
@@ -42,6 +47,8 @@ namespace Wiwa {
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
 
 		LightManager& GetLightManager() { return *m_LightManager; }
+		GuiManager& GetGuiManager() { return *m_GuiManager; }
+		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -61,7 +68,12 @@ namespace Wiwa {
 		CameraManager* m_CameraManager;
 		PhysicsManager* m_PhysicsManager;
 		LightManager* m_LightManager;
+		GuiManager* m_GuiManager;
+
+	public:
 	private:
+		InstanceRenderer m_InstanceRenderer;
+
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;
 		size_t m_SceneToChange = 0;

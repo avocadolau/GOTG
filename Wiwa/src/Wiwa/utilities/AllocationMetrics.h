@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include <cstdlib>
 #include <Wiwa/core/Core.h>
 #pragma warning(disable : 4595)

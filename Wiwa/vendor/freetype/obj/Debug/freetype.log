@@ -1,0 +1,80 @@
+﻿  autofit.c
+  ftbase.c
+  ftbbox.c
+  ftbdf.c
+  ftbitmap.c
+  ftcid.c
+  ftfstype.c
+  ftgasp.c
+  ftglyph.c
+  ftgxval.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftbbox.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftbitmap.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftbdf.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftgxval.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftgasp.c': No such file or directory
+  ftinit.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftcid.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\autofit\autofit.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftbase.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftglyph.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftfstype.c': No such file or directory
+  ftmm.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftinit.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftmm.c': No such file or directory
+  ftotval.c
+  ftpatent.c
+  ftpfr.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftotval.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftpatent.c': No such file or directory
+  ftstroke.c
+  ftsynth.c
+  fttype1.c
+  ftwinfnt.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftstroke.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftsynth.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\fttype1.c': No such file or directory
+  bdf.c
+  ftbzip2.c
+  ftcache.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftwinfnt.c': No such file or directory
+  cff.c
+  type1cid.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\bzip2\ftbzip2.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\cache\ftcache.c': No such file or directory
+  ftgzip.c
+  ftlzw.c
+  pcf.c
+  pfr.c
+  psaux.c
+  pshinter.c
+  psnames.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\cff\cff.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\cid\type1cid.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\gzip\ftgzip.c': No such file or directory
+  raster.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\pcf\pcf.c': No such file or directory
+  sdf.c
+  sfnt.c
+  smooth.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\psaux\psaux.c': No such file or directory
+  svg.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\pshinter\pshinter.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\psnames\psnames.c': No such file or directory
+  truetype.c
+  type1.c
+  type42.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\smooth\smooth.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\sdf\sdf.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\base\ftpfr.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\truetype\truetype.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\bdf\bdf.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\pfr\pfr.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\lzw\ftlzw.c': No such file or directory
+  winfnt.c
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\raster\raster.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\sfnt\sfnt.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\type1\type1.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\type42\type42.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\svg\svg.c': No such file or directory
+c1 : fatal  error C1083: No se puede abrir el archivo origen: 'src\winfonts\winfnt.c': No such file or directory

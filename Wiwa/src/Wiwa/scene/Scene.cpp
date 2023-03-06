@@ -6,12 +6,20 @@
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/utilities/render/LightManager.h>
 
+#include <Wiwa/Ui/UiManager.h>
+
 namespace Wiwa
 {
-	Scene::Scene()
+	Scene::Scene() : m_InstanceRenderer(40500)
 	{
 		mMaxTimeEntering = 0;
 		mMaxTimeLeaving = 0;
+
+		// Initialize instance renderer with shader
+		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
+
+		m_GuiManager = new GuiManager();
+		m_GuiManager->Init(this);
 
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
@@ -25,6 +33,7 @@ namespace Wiwa
 	{
 		delete m_CameraManager;
 		delete m_LightManager;
+		delete m_GuiManager;
 
 		// Clear entity manager
 		m_EntityManager.Clear();
@@ -47,6 +56,14 @@ namespace Wiwa
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
+
+		// WAY TO CREATE THE POSITION
+		// Rect2i test;
+		// test.x = 500;
+		// test.y = 100;
+		// test.width = 200;
+		// test.height = 100;
+		// m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, test, "assets/test.png", nullptr, {0,0,0,0});
 	}
 
 	void Scene::Update()
@@ -62,7 +79,7 @@ namespace Wiwa
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
-
+			m_GuiManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -82,6 +99,11 @@ namespace Wiwa
 	void Scene::ModuleUpdate()
 	{
 		m_CameraManager->Update();
+
+		m_GuiManager->Draw();
+
+		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
+		r2d.UpdateInstanced(this);
 
 		m_EntityManager.Update();
 
