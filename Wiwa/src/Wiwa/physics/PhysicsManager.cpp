@@ -268,10 +268,11 @@ namespace Wiwa {
 			transform3d->localPosition = posEngine;
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			//bulletTransform.setRotation(rotationBullet);
+
 			glm::vec3 eulerAngles;
-			bulletTransform.getRotation().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
-		//	WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
-			transform3d->localRotation = glm::degrees(eulerAngles);
+			bulletTransform.getRotation().normalized().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
+			//WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
+			//transform3d->localRotation = glm::degrees(eulerAngles);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
 			(*item)->collisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
