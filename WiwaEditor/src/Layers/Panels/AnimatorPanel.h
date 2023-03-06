@@ -59,13 +59,13 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
     const GraphEditor::Node GetNode(GraphEditor::NodeIndex index) override
     {
         const auto& myNode = mNodes[index];
-
         return GraphEditor::Node
         {
             myNode.name,
             myNode.templateIndex,
             myNode.mRect,
             myNode.mSelected
+            
         };
     }
 
@@ -78,18 +78,18 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
     {
         return mTemplates[index];
     }
-
-    static const inline GraphEditor::Template mTemplates[] = {
+    
+    static inline GraphEditor::Template mTemplates[] = {
        {
-            //IM_COL32(160, 160, 180, 255),
-            //IM_COL32(100, 100, 140, 255),
-            //IM_COL32(110, 110, 150, 255),
-            //1,
-            //Array{"MyInput"},
-            //nullptr,
-            //2,
-            //Array{"MyOutput0", "MyOuput1"},
-            //nullptr
+            IM_COL32(160, 160, 180, 255),
+            IM_COL32(100, 100, 140, 255),
+            IM_COL32(110, 110, 150, 255),
+            0,
+            nullptr,
+            nullptr,
+            0,
+            nullptr,
+            nullptr
         },
 
         {
@@ -129,7 +129,7 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
         {
             "Test",
             0,
-            {0, 0, 100, 100},
+            {0, 0, 100, 75},
             false
         },
     };

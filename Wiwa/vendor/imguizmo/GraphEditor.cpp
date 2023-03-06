@@ -556,7 +556,7 @@ static bool DrawNode(ImDrawList* drawList,
     const size_t InputsCount = nodeTemplate.mInputCount;
     const size_t OutputsCount = nodeTemplate.mOutputCount;
 
-    /*
+    
     for (int i = 0; i < 2; i++)
     {
         const size_t slotCount[2] = {InputsCount, OutputsCount};
@@ -564,11 +564,11 @@ static bool DrawNode(ImDrawList* drawList,
         for (size_t slotIndex = 0; slotIndex < slotCount[i]; slotIndex++)
         {
             const char* con = i ? nodeTemplate.mOutputNames[slotIndex] : nodeTemplate.mInputNames[slotIndex];//node.mOutputs[slot_idx] : node->mInputs[slot_idx];
-            if (!delegate->IsIOPinned(nodeIndex, slot_idx, i == 1))
-            {
-               
-            }
-            continue;
+            //if (!delegate->IsIOPinned(nodeIndex, slot_idx, i == 1))
+            //{
+            //   
+            //}
+            //continue;
 
             ImVec2 p = offset + (i ? GetOutputSlotPos(delegate, node, slotIndex, factor) : GetInputSlotPos(delegate, node, slotIndex, factor));
             const float arc = 28.f * (float(i) * 0.3f + 1.0f) * (i ? 1.f : -1.f);
@@ -579,7 +579,7 @@ static bool DrawNode(ImDrawList* drawList,
             drawList->AddTriangle(pts[0], pts[1], pts[2], 0xFF000000, 2.f);
         }
     }
-    */
+    
 
     ImGui::SetCursorScreenPos(nodeRectangleMin);
     float maxHeight = ImMin(viewPort.Max.y, nodeRectangleMin.y + nodeSize.y) - nodeRectangleMin.y;
@@ -927,7 +927,7 @@ void Show(Delegate& delegate, const Options& options, ViewState& viewState, bool
                 SlotIndex inputSlot = -1;
                 SlotIndex outputSlot = -1;
 
-                bool overInput = (!inMinimap) && HandleConnections(drawList, nodeIndex, offset, viewState.mFactor, delegate, options, false, inputSlot, outputSlot, inMinimap);
+                  bool overInput = (!inMinimap) && HandleConnections(drawList, nodeIndex, offset, viewState.mFactor, delegate, options, false, inputSlot, outputSlot, inMinimap);
 
                 // shadow
                 

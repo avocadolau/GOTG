@@ -52,11 +52,12 @@ void AnimatorPanel::Draw()
 					for (int i = 0; i < aux.size(); i++)
 					{
 
-						if (ImGui::Button(aux[i]->name.c_str()))
+						if (ImGui::Button(aux[i]->name.c_str(), ImVec2(150, 40)))
 						{
 							GraphEditorDelegate::Node node = GraphEditorDelegate::Node();
 							node.name = aux[i]->name.c_str();
-							node.mRect = { 0, 0, 100, 100 };
+							node.templateIndex = 0;
+							node.mRect = { 0, 0, 100, 75 };
 							node.mSelected = false;
 						
 							delegate.mNodes.push_back(node);
