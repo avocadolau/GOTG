@@ -76,7 +76,7 @@ namespace Wiwa {
 		//Step simulation
 		float dt = 1.0f/60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
-		UpdateObjects(dt);
+		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
 		static int o = 0;
@@ -268,10 +268,11 @@ namespace Wiwa {
 			transform3d->localPosition = posEngine;
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			//bulletTransform.setRotation(rotationBullet);
+
 			glm::vec3 eulerAngles;
-			bulletTransform.getRotation().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
-		//	WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
-			transform3d->localRotation = glm::degrees(eulerAngles);
+			bulletTransform.getRotation().normalized().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
+			//WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
+			//transform3d->localRotation = glm::degrees(eulerAngles);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
 			(*item)->collisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
