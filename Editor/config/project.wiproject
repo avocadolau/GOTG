@@ -1,1 +1,1 @@
-{"name":"Wiwa game","version":"0.1","company":"My company","target":0,"scene_list":[]}
+{"name":"Wiwa game","version":"0.1","company":"My company","target":0,"scene_list":[{"name":"street_scene","path":"library/scenes/street_scene.wiscene"}]}
