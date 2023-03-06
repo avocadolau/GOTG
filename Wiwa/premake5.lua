@@ -95,7 +95,7 @@ project "Wiwa"
 		{ 
 			"WI_DEBUG",
 			"WI_ENABLE_ASSERTS"
-		}	
+		}
 		runtime "Debug"
 		symbols "On"
 		links

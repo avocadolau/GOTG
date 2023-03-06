@@ -9,6 +9,10 @@
 namespace Wiwa
 {
 	Input* Input::s_Instance = new WindowsInput();
+	float Input::MouseXDelta = 0;
+	float Input::MouseYDelta = 0;
+	float Input::MouseX = 0;
+	float Input::MouseY = 0;
 	float Input::prevMouseX = 0;
 	float Input::prevMouseY = 0;
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
@@ -25,41 +29,43 @@ namespace Wiwa
 	}
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
-
-		return {(float)xpos, (float)ypos};
+		return {MouseX, MouseY};
 	}
 	float WindowsInput::GetMouseXImpl()
 	{
-		auto [x, y] = GetMousePosition();
-		return x;
+		return MouseX;
 	}
 	float WindowsInput::GetMouseYImpl()
 	{
-		auto [x, y] = GetMousePosition();
-		return y;
+		return MouseY;
 	}
 
 	float WindowsInput::GetMouseXDeltaImpl()
 	{
-		float res = GetMouseX() - prevMouseX;
-		CLAMP(res, -1.0f, 1.0f);
-		return res;
+		return MouseXDelta;
 	}
 
 	float WindowsInput::GetMouseYDeltaImpl()
 	{
-		float res = GetMouseY() - prevMouseY;
-		CLAMP(res, -1.0f, 1.0f);
-		return res;
+		return MouseYDelta;
 	}
 
 	void WindowsInput::UpdateImpl()
 	{
-		prevMouseY = GetMouseY();
-		prevMouseX = GetMouseX();
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+
+		MouseX = (float)xpos;
+		MouseY = (float)ypos;
+
+		MouseXDelta = MouseX - prevMouseX;
+		MouseYDelta = MouseY - prevMouseY;
+		CLAMP(MouseXDelta, -1.0f, 1.0f);
+		CLAMP(MouseYDelta, -1.0f, 1.0f);
+
+		prevMouseX = MouseX;
+		prevMouseY = MouseY;
 	}
 
 	void WindowsInput::LockCursorImpl()
