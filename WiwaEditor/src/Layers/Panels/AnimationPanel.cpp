@@ -39,13 +39,12 @@ void AnimationPanel::Draw()
 			model = model->getModelAt(meshId->modelIndex);
 			if (ImGui::CollapsingHeader("Animations "))
 			{
-				//for(int i = 0; i < model->GetAnimations().
-				ImGui::Button("Animation");
-			}
+				ImGui::Text(model->GetParent()->GetAnimations()[0]->name.c_str());
+				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
+				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
 
-		}
-		
-		
+			}
+		}	
 	}
 	else
 	{

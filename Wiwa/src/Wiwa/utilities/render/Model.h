@@ -82,7 +82,6 @@ namespace Wiwa {
 		
 	};
 	struct BoneInfo {
-		unsigned int id = 0;
 		glm::mat4 offsetMatrix;
 		glm::mat4 finalTransformation;
 
@@ -129,7 +128,6 @@ namespace Wiwa {
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
-					//WI_INFO("bone: {0}, weight: {1}, index: {2}", BoneIDs[i],Weights[i],i);
 					return;
 				}
 				if (i == MAX_NUM_BONES_PER_VERTEX - 1)
@@ -186,7 +184,7 @@ namespace Wiwa {
 		int GetBoneId(const aiBone* pBone);
 
 		Model* loadmesh(const aiMesh* mesh);
-		ModelHierarchy* loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix);
+		ModelHierarchy* loadModelHierarchy(const aiNode* node);
 		
 		void SetBoneInfo(const aiNode* pNode, const glm::mat4& parentTransform);
 
@@ -269,7 +267,8 @@ namespace Wiwa {
 		//DEBUG
 		void PrintGlmMatrix(const glm::mat4& mat);
 	public:
-
+		//DEBUG
+		float animationTime;
 		
 
 		bool showNormals = false;

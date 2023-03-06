@@ -303,16 +303,13 @@ namespace Wiwa {
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 		//DEBUG 
-		long long CurrentTimeMillis = Time::GetRealTimeSinceStartup();
-		float animationTimeSec = ((float)(CurrentTimeMillis - startTime)) / 1000.0f;
+		long long CurrentTimeSeconds = Time::GetRealTimeSinceStartup();
+		float animationTimeSec = ((float)(CurrentTimeSeconds - startTime));
 		std::vector<glm::mat4> transforms;
 
-		mesh->GetBoneTransforms(0, transforms);
+		mesh->GetBoneTransforms(animationTimeSec, transforms);
 
- 		for (unsigned int i = 0; i < transforms.size(); i++) {
-			mesh->PrintGlmMatrix(transforms[i]);
-			matShader->SetBoneTransform(i,transforms[i]);
-		}
+		matShader->SetBoneTransform(transforms);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 

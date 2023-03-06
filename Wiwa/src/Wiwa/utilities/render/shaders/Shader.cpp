@@ -220,12 +220,7 @@ namespace Wiwa {
 		m_Proj = glGetUniformLocation(m_IDprogram, "u_Proj");
 		m_View = glGetUniformLocation(m_IDprogram, "u_View");
 		m_UCamera = glGetUniformLocation(m_IDprogram, "u_CameraPosition");
-		for (unsigned int i = 0; i < MAX_BONES; i++) {
-			char Name[128];
-			memset(Name, 0, sizeof(Name));
-			snprintf(Name, sizeof(Name), "u_Bones[%d]", i);
-			m_BoneLocation[i] = glGetUniformLocation(m_IDprogram, Name);
-		}
+		m_BoneLocation = glGetUniformLocation(m_IDprogram, "u_Bones");
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)
@@ -422,13 +417,9 @@ namespace Wiwa {
 		glUniformMatrix4fv(m_Proj, 1, GL_FALSE, glm::value_ptr(proj));
 	}
 
-	void Shader::SetBoneTransform(const unsigned int index, const glm::mat4& transform)
+	void Shader::SetBoneTransform(const std::vector<glm::mat4>& transform)
 	{
-		if (index >= MAX_BONES) {
-			WI_ERROR("Bone index is greater than max bones");
-			return;
-		}
-		glUniformMatrix4fv(m_BoneLocation[index], 1, GL_FALSE, glm::value_ptr(transform));
+		glUniformMatrix4fv(m_BoneLocation,(GLsizei)transform.size(), GL_FALSE, glm::value_ptr(transform[0]));
 	}
 
 	void Shader::SetCameraPos(const glm::vec3& position)

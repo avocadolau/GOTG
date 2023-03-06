@@ -27,7 +27,8 @@ void main()
     BoneTransform     += u_Bones[aBoneIDs[2]] * aWeights[2];
     BoneTransform     += u_Bones[aBoneIDs[3]] * aWeights[3];
 
-	gl_Position = u_Proj * u_View * u_Model  * BoneTransform * vec4(aPos, 1.0);
+	//gl_Position = u_Proj * u_View * u_Model  * BoneTransform * vec4(aPos, 1.0);
+    gl_Position = u_Proj * u_View   * BoneTransform * vec4(aPos, 1.0);
 	TexCoord = aTex;
 	Normal = aNormal;
 	LocalPos = aPos;

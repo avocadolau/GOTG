@@ -198,9 +198,7 @@ namespace Wiwa {
 		}
 
 		//load hierarchy after, animation pourpuses
-		glm::mat4 identity = glm::mat4(1);
-
-		model_hierarchy = loadModelHierarchy(scene->mRootNode, identity);
+		model_hierarchy = loadModelHierarchy(scene->mRootNode);
 		globalInverseTransform = mat4_cast(scene->mRootNode->mTransformation);
 		globalInverseTransform = glm::inverse(globalInverseTransform);
 
@@ -390,7 +388,7 @@ namespace Wiwa {
 		return model;
 	}
 
-	ModelHierarchy* Model::loadModelHierarchy(const aiNode* node, const glm::mat4& parentMatrix) //animation
+	ModelHierarchy* Model::loadModelHierarchy(const aiNode* node) //animation
 	{
 		ModelHierarchy* h = new ModelHierarchy();
 
@@ -407,10 +405,9 @@ namespace Wiwa {
 		h->rotation = { rot.x * 180.0f / PI_F, rot.y * 180.0f / PI_F, rot.z * 180.0f / PI_F };
 		h->scale = { scale.x, scale.y, scale.z };
 
-		//fill bone info data 
+		//Store the transformation matrix for aniamtion
 		h->Transformation = mat4_cast(node->mTransformation);
-		glm::mat4 globalTransformation = parentMatrix * h->Transformation;
-		
+	
 		// Node meshes
 		for (size_t i = 0; i < node->mNumMeshes; i++) {
 			h->meshIndexes.push_back(node->mMeshes[i]);
@@ -419,7 +416,7 @@ namespace Wiwa {
 		// Node children
 		for (size_t i = 0; i < node->mNumChildren; i++) {
 
-			h->children.push_back(loadModelHierarchy(node->mChildren[i], globalTransformation));
+			h->children.push_back(loadModelHierarchy(node->mChildren[i]));
 		}
 
 		return h;
@@ -654,7 +651,7 @@ namespace Wiwa {
 	}
 
 	
-	void Model::ReadNodeHeirarchy(float animationTimeTicks, ModelHierarchy* node, glm::mat4 parentTransform)
+	void Model::ReadNodeHeirarchy(float AnimationTime, ModelHierarchy* node, glm::mat4 parentTransform)
 	{
 		std::string NodeName(node->name.data());
 		//SetCurrent anim
@@ -666,25 +663,23 @@ namespace Wiwa {
 
 		if (pNodeAnim) {
 			
-			glm::mat4 identity(1.0f);
 			// Interpolate scaling and generate scaling transformation matrix
 			glm::vec3 Scaling;
-			CalcInterpolatedScaling(Scaling, animationTimeTicks, pNodeAnim);
-			glm::mat4 scalingM = glm::scale(identity, Scaling);
+			CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
+			glm::mat4 scalingM = glm::scale(glm::mat4(1.0f), Scaling);
 
-			// Interpolate rotation and generate rotation transformation matrix
+			//Interpolate rotation and generate rotation transformation matrix
 			glm::quat RotationQ;
-			CalcInterpolatedRotation(RotationQ, animationTimeTicks, pNodeAnim);
+			CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
 			glm::mat4 rotationM = glm::mat4_cast(RotationQ);
 
 			// Interpolate translation and generate translation transformation matrix
 			glm::vec3 Translation;
-			CalcInterpolatedPosition(Translation, animationTimeTicks, pNodeAnim);
-			glm::mat4 translationM = glm::translate(identity, Translation);
+			CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
+			glm::mat4 translationM = glm::translate(glm::mat4(1.0f), Translation);
 
 			// Combine the above transformations
 			nodeTransformation = translationM * rotationM * scalingM;
-
 		}
 
 		glm::mat4 GlobalTransformation = parentTransform * nodeTransformation;
@@ -692,14 +687,12 @@ namespace Wiwa {
 		if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
 			unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
 			parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
-			//parent->boneInfo[BoneIndex].finalTransformation = GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
-			//WI_INFO("{}", NodeName.c_str());
-			//PrintGlmMatrix(parent->boneInfo[BoneIndex].finalTransformation);
+
 		}
 
 		for (unsigned int i = 0; i < node->children.size(); i++) {
 			
-			ReadNodeHeirarchy(animationTimeTicks, node->children[i], GlobalTransformation);
+			ReadNodeHeirarchy(AnimationTime, node->children[i], GlobalTransformation);
 		}
 	}
 
@@ -758,19 +751,16 @@ namespace Wiwa {
 
 	void Model::CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim)
 	{
-		// we need at least two values to interpolate...
 		if (NodeAnim->numScalingKeys == 1) {
 			Out = NodeAnim->scalingKeys[0].value;
 			return;
 		}
-	
+
 		unsigned int ScalingIndex = FindScaling(AnimationTime, NodeAnim);
-		unsigned int NextScalingIndex = ScalingIndex + 1;
+		unsigned int NextScalingIndex = (ScalingIndex + 1);
 		assert(NextScalingIndex < NodeAnim->numScalingKeys);
-		float t1 = (float)NodeAnim->scalingKeys[ScalingIndex].time;
-		float t2 = (float)NodeAnim->scalingKeys[NextScalingIndex].time;
-		float DeltaTime = t2 - t1;
-		float Factor = (AnimationTime - (float)t1) / DeltaTime;
+		float DeltaTime = (float)(NodeAnim->scalingKeys[NextScalingIndex].time - NodeAnim->scalingKeys[ScalingIndex].time);
+		float Factor = (AnimationTime - (float)NodeAnim->scalingKeys[ScalingIndex].time) / DeltaTime;
 		assert(Factor >= 0.0f && Factor <= 1.0f);
 		const glm::vec3& Start = NodeAnim->scalingKeys[ScalingIndex].value;
 		const glm::vec3& End = NodeAnim->scalingKeys[NextScalingIndex].value;
@@ -787,12 +777,10 @@ namespace Wiwa {
 		}
 
 		unsigned int RotationIndex = FindRotation(AnimationTime, NodeAnim);
-		unsigned int NextRotationIndex = RotationIndex + 1;
+		unsigned int NextRotationIndex = (RotationIndex + 1);
 		assert(NextRotationIndex < NodeAnim->numRotationKeys);
-		float t1 = (float)NodeAnim->rotationKeys[RotationIndex].time;
-		float t2 = (float)NodeAnim->rotationKeys[NextRotationIndex].time;
-		float DeltaTime = t2 - t1;
-		float Factor = (AnimationTime- t1) / DeltaTime;
+		float DeltaTime = (float)(NodeAnim->rotationKeys[NextRotationIndex].time - NodeAnim->rotationKeys[RotationIndex].time);
+		float Factor = (AnimationTime - (float)NodeAnim->rotationKeys[RotationIndex].time) / DeltaTime;
 		assert(Factor >= 0.0f && Factor <= 1.0f);
 		const glm::quat& StartRotationQ = NodeAnim->rotationKeys[RotationIndex].value;
 		const glm::quat& EndRotationQ = NodeAnim->rotationKeys[NextRotationIndex].value;
@@ -802,19 +790,16 @@ namespace Wiwa {
 
 	void Model::CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim)
 	{
-		// we need at least two values to interpolate...
 		if (NodeAnim->numPositionKeys == 1) {
 			Out = NodeAnim->positionKeys[0].value;
 			return;
 		}
 
 		unsigned int PositionIndex = FindPosition(AnimationTime, NodeAnim);
-		unsigned int NextPositionIndex = PositionIndex + 1;
+		unsigned int NextPositionIndex = (PositionIndex + 1);
 		assert(NextPositionIndex < NodeAnim->numPositionKeys);
-		float t1 = (float)NodeAnim->positionKeys[PositionIndex].time;
-		float t2 = (float)NodeAnim->positionKeys[NextPositionIndex].time;
-		float DeltaTime = t2 - t1;
-		float Factor = (AnimationTime - t1) / DeltaTime;
+		float DeltaTime = (float)(NodeAnim->positionKeys[NextPositionIndex].time - NodeAnim->positionKeys[PositionIndex].time);
+		float Factor = (AnimationTime - (float)NodeAnim->positionKeys[PositionIndex].time) / DeltaTime;
 		assert(Factor >= 0.0f && Factor <= 1.0f);
 		const glm::vec3& Start = NodeAnim->positionKeys[PositionIndex].value;
 		const glm::vec3& End = NodeAnim->positionKeys[NextPositionIndex].value;
@@ -1057,19 +1042,17 @@ namespace Wiwa {
 		glm::mat4 identity (1.0f);
 
 		//Set current anim
-		if (parent->animations.size() != 0) {
-			float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
-			float TimeInTicks = timeInSeconds * TicksPerSecond;
-			float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
-
-			ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
-			transforms.resize(parent->boneInfo.size());
-			for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
-			{
-				transforms[i] = parent->boneInfo[i].finalTransformation;
-			}
-		}
+		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
+		float TimeInTicks = timeInSeconds * TicksPerSecond;
+		float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
+		parent->animationTime = AnimationTimeTicks;
 		
+		ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
+		transforms.resize(parent->boneInfo.size());
+		for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
+		{
+			transforms[i] = parent->boneInfo[i].finalTransformation;
+		}
 	}
 
 	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)
