@@ -118,6 +118,15 @@ namespace Wiwa
 		}
 	}
 
+	void ProjectManager::RemoveScene(const char* name)
+	{
+		size_t ind = getSceneIndexByName(name);
+
+		if (ind != WI_INVALID_INDEX) {
+			m_SceneList.erase(m_SceneList.begin() + ind);
+		}
+	}
+
 	ProjectManager::SceneData* ProjectManager::getSceneByName(const char* name)
 	{
 		SceneData* sdata = NULL;
@@ -132,5 +141,21 @@ namespace Wiwa
 		}
 
 		return sdata;
+	}
+
+	size_t ProjectManager::getSceneIndexByName(const char* name)
+	{
+		size_t ind = WI_INVALID_INDEX;
+
+		size_t s = m_SceneList.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (m_SceneList[i].scene_name == name) {
+				ind = i;
+				break;
+			}
+		}
+
+		return ind;
 	}
 }
