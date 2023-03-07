@@ -11,6 +11,7 @@
 #include <Wiwa/ecs/systems/LightSystem.h>
 
 namespace Wiwa {
+
 	Renderer3D::Renderer3D() {
 	}
 
@@ -295,12 +296,15 @@ namespace Wiwa {
 
 		Shader* matShader = material->getShader();
 		matShader->Bind();
+
+
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 		//DEBUG
 		std::vector<glm::mat4> transforms;
 
-		mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
+	//	mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
+		mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
 
 		matShader->SetBoneTransform(transforms);
 

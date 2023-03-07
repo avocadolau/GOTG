@@ -159,8 +159,18 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 	ImGui::PushID("meshId");
 
 
+
 	Wiwa::Model* mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 	mod = mod->getModelAt(mesh->modelIndex);
+
+
+	//DEBUG
+	ImGui::SliderFloat("Animation time: ", &mod->GetParent()->animationTime, 0, mod->GetParent()->GetAnimations()[0]->duration);
+	
+
+	
+
+
 	AssetContainer(std::filesystem::path(mod->getModelPath()).stem().string().c_str());
 	if (ImGui::BeginDragDropTarget())
 	{

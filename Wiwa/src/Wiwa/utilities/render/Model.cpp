@@ -876,8 +876,7 @@ namespace Wiwa {
 			glVertexAttribIPointer(BONE_DATA, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
 			//weights location
 			glEnableVertexAttribArray(WEIGHT_DATA);
-			glVertexAttribPointer(WEIGHT_DATA, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),
-				(const GLvoid*)(MAX_NUM_BONES_PER_VERTEX * sizeof(int32_t)));
+			glVertexAttribPointer(WEIGHT_DATA, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),(const GLvoid*)16);
 			if (glGetError() != 0)
 			{
 				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
@@ -1045,7 +1044,7 @@ namespace Wiwa {
 		float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
 		float TimeInTicks = timeInSeconds * TicksPerSecond;
 		float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
-		parent->animationTime = AnimationTimeTicks;
+	//	parent->animationTime = AnimationTimeTicks;
 		
 		ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
 		transforms.resize(parent->boneInfo.size());

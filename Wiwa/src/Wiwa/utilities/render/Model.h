@@ -268,7 +268,7 @@ namespace Wiwa {
 		void PrintGlmMatrix(const glm::mat4& mat);
 	public:
 		//DEBUG
-		float animationTime;
+		float animationTime = 0;
 		
 
 		bool showNormals = false;

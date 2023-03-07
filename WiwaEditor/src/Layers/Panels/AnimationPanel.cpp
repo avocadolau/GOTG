@@ -49,8 +49,6 @@ void AnimationPanel::Draw()
 			{
 				ImGui::Text(model->GetParent()->GetAnimations()[0]->name.c_str());
 				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
-				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
-
 			}
 		}	
 	}
