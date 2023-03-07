@@ -59,7 +59,7 @@ namespace Wiwa
 					sd.scene_path = scene["path"].as_string();
 
 					if (Wiwa::FileSystem::Exists(sd.scene_path.c_str())) {
-						m_SceneList.push_back(sd);
+						AddScene(sd.scene_name.c_str(), sd.scene_path.c_str());
 					}
 				}
 			}
@@ -110,6 +110,27 @@ namespace Wiwa
 	void ProjectManager::AddScene(const char* name, const char* path)
 	{
 		std::string p = Wiwa::Resources::_assetToLibPath(path);
-		m_SceneList.emplace_back(SceneData{ name, p });
+
+		SceneData* sdata = getSceneByName(name);
+
+		if (!sdata) {
+			m_SceneList.emplace_back(SceneData{ name, p });
+		}
+	}
+
+	ProjectManager::SceneData* ProjectManager::getSceneByName(const char* name)
+	{
+		SceneData* sdata = NULL;
+
+		size_t s = m_SceneList.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (m_SceneList[i].scene_name == name) {
+				sdata = &m_SceneList[i];
+				break;
+			}
+		}
+
+		return sdata;
 	}
 }

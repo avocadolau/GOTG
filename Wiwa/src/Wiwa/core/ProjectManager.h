@@ -51,7 +51,9 @@ namespace Wiwa
 
 		static std::vector<SceneData>& getSceneDataList() { return m_SceneList; }
 		static size_t getSceneDataSize() { return m_SceneList.size(); }
+
 		static SceneData& getSceneDataAt(uint32_t index) { return m_SceneList[index]; }
+		static SceneData* getSceneByName(const char* name);
 	private:
 		ProjectManager();
 	};
