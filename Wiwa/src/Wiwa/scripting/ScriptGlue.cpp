@@ -17,6 +17,7 @@
 #include "embed_functions/embed_audio_functions.h"
 #include "embed_functions/embed_physics_functions.h"
 #include "embed_functions/embed_screen_functions.h"
+#include "embed_functions/embed_ui_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -90,5 +91,9 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(AddBodyToLog);
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
+
+		// UI
+		WI_ADD_INTERNAL_CALL(Activate);
+		WI_ADD_INTERNAL_CALL(SwapTexture);
 	}
 }

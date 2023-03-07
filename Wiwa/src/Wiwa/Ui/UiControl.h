@@ -30,6 +30,12 @@ namespace Wiwa
 		SELECTED
 	};
 
+	enum class GuiEvent
+	{
+		PLAY,
+		TEST,
+	};
+
 	class WI_API GuiControl
 	{
 	protected:
@@ -181,6 +187,20 @@ namespace Wiwa
 			}
 		}
 
+		void GetEventFunction()
+		{
+			//meter aqui el codigo en especifico para cada event
+			switch (event)
+			{
+			case Wiwa::GuiEvent::PLAY:
+				break;
+			case Wiwa::GuiEvent::TEST:
+				break;
+			default:
+				break;
+			}
+		}
+
 	public:
 
 		ResourceId textId1;
@@ -190,6 +210,7 @@ namespace Wiwa
 		int id;
 		GuiControlType type;
 		GuiControlState state;
+		GuiEvent event;
 
 		char text[32];           // Control text (if required)
 		Rect2i position;        // Position and size
