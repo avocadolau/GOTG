@@ -62,7 +62,8 @@ project "WiwaGame"
 
 	links
 	{
-		"Wiwa"
+		"Wiwa",
+		"ImGui"
 	}
 
 	debugdir "%{wks.location}/build"

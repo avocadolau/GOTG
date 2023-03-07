@@ -600,8 +600,6 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object)
         return false;
     }
 
-    WI_CORE_INFO("Executing event [{}]", event_name);
-
     return true;
 }
 

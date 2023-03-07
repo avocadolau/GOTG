@@ -46,6 +46,9 @@ void EditorLayer::OnAttach()
 	WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 	RegenSol();
 	s_Instance = this;
+
+	Wiwa::Time::Stop();
+
 	// Editor scene
 	m_EditorSceneId = Wiwa::SceneManager::CreateScene();
 	Wiwa::SceneManager::StopScene();

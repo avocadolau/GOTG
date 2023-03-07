@@ -1,1 +1,1 @@
-{"name":"Wiwa game","version":"0.1","company":"My company","target":0,"scene_list":[{"name":"audio_scene","path":"library/scenes/audio_scene.wiscene"}]}
+{"name":"Wiwa game","version":"0.1","company":"My company","target":0,"scene_list":[{"name":"vertical_slice_1","path":"library/scenes/vertical_slice_1.wiscene"}]}

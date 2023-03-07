@@ -8,10 +8,10 @@ namespace Wiwa
 	uint32_t Time::m_FrameCount = 0;
 	uint32_t Time::m_GameFrameCount = 0;
 	float Time::m_TimeScale = 1.0f;
-	bool Time::m_IsPlaying = false;
+	bool Time::m_IsPlaying = true;
 	bool Time::m_IsPaused = false;
 	bool Time::m_Step = false;
-	std::chrono::time_point<std::chrono::steady_clock> Time::m_GameClock;
+	std::chrono::time_point<std::chrono::steady_clock> Time::m_GameClock = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float>  Time::m_Time;
 	std::chrono::duration<float>  Time::m_DeltaTime;
 	std::chrono::time_point<std::chrono::steady_clock>  Time::m_RealLastTime;
