@@ -4,7 +4,7 @@
 
 #include <Wiwa/events/ApplicationEvent.h>
 #include <GraphEditor.h>
-
+#include <array>
 
 
 struct GraphEditorDelegate : public GraphEditor::Delegate
@@ -79,13 +79,15 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
         return mTemplates[index];
     }
     
+    //static const char* input;
+    
     static inline GraphEditor::Template mTemplates[] = {
        {
             IM_COL32(160, 160, 180, 255),
             IM_COL32(100, 100, 140, 255),
             IM_COL32(110, 110, 150, 255),
             0,
-            nullptr,
+           nullptr,
             nullptr,
             0,
             nullptr,
