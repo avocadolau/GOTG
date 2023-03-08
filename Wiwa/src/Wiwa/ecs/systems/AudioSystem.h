@@ -5,10 +5,12 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
+#include <Wiwa/ecs/EntityManager.h>
+
 namespace Wiwa {
 	class WI_API AudioSystem : public System {
 	private:
-
+		EntityManager::ComponentIterator m_AudioSource;
 	public:
 		AudioSystem();
 		~AudioSystem();

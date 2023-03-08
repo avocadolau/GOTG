@@ -26,6 +26,12 @@ namespace Wiwa
 
 	class WI_API EntityManager
 	{
+	public:
+		struct ComponentIterator {
+			ComponentId c_id;
+			size_t c_index;
+			size_t c_size;
+		};
 	private:
 		struct componentData
 		{
@@ -180,14 +186,20 @@ namespace Wiwa
 		void RemoveComponent(EntityId entity);
 
 		// Component get functions
-		byte *GetComponent(EntityId entityId, ComponentId componentId, size_t componentSize);
+		byte* GetComponent(EntityId entityId, ComponentId componentId, size_t componentSize);
 		template <class T>
-		T *GetComponent(EntityId entityId);
+		T* GetComponent(EntityId entityId);
 
-		inline byte **GetComponentsPtr(ComponentId id) { return &m_Components[id]; }
-		inline byte *GetComponents(ComponentId id) { return m_Components[id]; }
+		byte* GetComponentByIterator(ComponentIterator c_it) { return m_Components[c_it.c_id] + c_it.c_index * c_it.c_size; }
+
+		ComponentIterator GetComponentIterator(EntityId eid, ComponentHash c_hash);
+		template<class T>
+		ComponentIterator GetComponentIterator(EntityId eid);
+
+		inline byte** GetComponentsPtr(ComponentId id) { return &m_Components[id]; }
+		inline byte* GetComponents(ComponentId id) { return m_Components[id]; }
 		template <class T>
-		T *GetComponents(size_t *size);
+		T* GetComponents(size_t *size);
 
 		inline std::vector<byte *> *GetComponentsList() { return &m_Components; }
 
@@ -254,6 +266,14 @@ namespace Wiwa
 		T *component = (T *)AddComponent(entity, type, data);
 
 		return component;
+	}
+
+	template<class T>
+	inline EntityManager::ComponentIterator EntityManager::GetComponentIterator(EntityId eid)
+	{
+		const Type* ctype = GetType<T>();
+
+		return GetComponentIterator(eid, ctype->hash);
 	}
 
 	template <class T>

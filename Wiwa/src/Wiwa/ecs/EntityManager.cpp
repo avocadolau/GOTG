@@ -625,6 +625,27 @@ namespace Wiwa {
 		return c;
 	}
 
+	EntityManager::ComponentIterator EntityManager::GetComponentIterator(EntityId eid, ComponentHash c_hash)
+	{
+		ComponentIterator c_it = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+
+		ComponentId c_id = GetComponentId(c_hash);
+
+		if (c_id == WI_INVALID_INDEX) return c_it;
+
+		std::map<ComponentId, size_t>::iterator it = m_EntityComponents[eid].find(c_id);
+
+		if (it == m_EntityComponents[eid].end()) return c_it;
+
+		const Type* c_type = m_ComponentTypes[c_id];
+
+		c_it.c_id = it->first;
+		c_it.c_index = it->second;
+		c_it.c_size = c_type->size;
+
+		return c_it;
+	}
+
 	size_t EntityManager::GetComponentIndex(EntityId entityId, ComponentId componentId, size_t componentSize)
 	{
 		size_t index = -1;
@@ -642,7 +663,9 @@ namespace Wiwa {
 
 	ComponentId EntityManager::GetComponentId(const Type* type)
 	{
-		size_t component_id = 0;
+		if (!type) return WI_INVALID_INDEX;
+
+		size_t component_id = WI_INVALID_INDEX;
 
 		std::unordered_map<size_t, componentData>::iterator cid = m_ComponentIds.find(type->hash);
 
