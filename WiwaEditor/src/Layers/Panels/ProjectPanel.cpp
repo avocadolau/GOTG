@@ -4,6 +4,7 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/core/ProjectManager.h>
+#include "../EditorLayer.h"
 
 ProjectPanel::ProjectPanel(EditorLayer *instance)
 	: Panel("Project", ICON_FK_DATABASE, instance)
@@ -89,6 +90,19 @@ void ProjectPanel::Draw()
 
 				ImGui::ResetMouseDragDelta();
 			}
+		}
+	}
+
+	if(ImGui::Button("Add current scene")) {
+		EditorLayer& editor = EditorLayer::Get();
+		std::filesystem::path scene_path = editor.getOpenedScenePath();
+
+		if (scene_path != "") {
+
+			std::filesystem::path name = scene_path.filename();
+			name.replace_extension();
+
+			Wiwa::ProjectManager::AddScene(name.string().c_str(), scene_path.string().c_str());
 		}
 	}
 

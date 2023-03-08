@@ -59,6 +59,8 @@ public:
 	void SubmitToMainThread(const std::function<void()> func);
 
 	static void RegenSol();
+
+	std::string getOpenedScenePath() { return m_OpenedScenePath; };
 private:
 	struct LayoutData {
 		std::string name;
