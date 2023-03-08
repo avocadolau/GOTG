@@ -680,6 +680,10 @@ namespace Wiwa
 
 			if (flags & LOAD_SEPARATE)
 			{
+				if (flags & UNLOAD_CURRENT) {
+					Audio::Init();
+				}
+
 				SetScene(sceneid);
 			}
 

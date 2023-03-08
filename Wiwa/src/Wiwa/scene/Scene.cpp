@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -132,9 +133,12 @@ namespace Wiwa
 
 	void Scene::Unload(bool unload_resources)
 	{
-		return;
 		if (unload_resources)
 		{
+			Audio::Terminate();
+
+			// TODO: Fix unloading for the editor
+			return;
 			Wiwa::Resources::UnloadAllResources();
 		}
 	}

@@ -587,13 +587,23 @@ void EditorLayer::MainMenuBar()
 				{
 					Wiwa::Time::Stop();
 
+					// Terminate engine immediately
+					Audio::Terminate();
+
 					// Unload simulated scene but keep resources for the editor
 					Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
 
+					// Set editor scene again
 					Wiwa::SceneManager::SetScene(m_EditorSceneId);
+
+					// Stop scene from being played
 					Wiwa::SceneManager::StopScene();
 
-					Audio::StopAllEvents();
+					// Re-init engine immediately
+					Audio::Init();
+
+					// Reload audio project for the editor
+					Audio::ReloadProject();
 				}
 			}
 

@@ -282,7 +282,6 @@ bool Audio::Init()
         return false;
     }
 
-
     // Initialize stream manager
     AkStreamMgrSettings stmSettings;
     AK::StreamMgr::GetDefaultSettings(stmSettings);
@@ -323,8 +322,10 @@ bool Audio::Init()
 
     // Initialize sound engine
     AkInitSettings initSettings;
-    AkPlatformInitSettings platformInitSettings;
     AK::SoundEngine::GetDefaultInitSettings(initSettings);
+    //initSettings.bUseLEngineThread = false;
+
+    AkPlatformInitSettings platformInitSettings;
     AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
 
     if (AK::SoundEngine::Init(&initSettings, &platformInitSettings) != AK_Success)
@@ -383,6 +384,7 @@ bool Audio::Init()
 bool Audio::Update()
 {
     OPTICK_EVENT("Audio Update");
+
     AK::SoundEngine::RenderAudio();
 
     return true;
@@ -644,6 +646,9 @@ bool Audio::StopEvent(const char* event_name, uint64_t game_object)
 bool Audio::StopAllEvents()
 {
     AK::SoundEngine::StopAll();
+
+    // Instantly stop them
+    AK::SoundEngine::RenderAudio();
 
     return true;
 }
