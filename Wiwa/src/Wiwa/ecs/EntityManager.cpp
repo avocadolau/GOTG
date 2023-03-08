@@ -602,11 +602,11 @@ namespace Wiwa {
 		if (c_it != c_map.end()) {
 			m_ComponentsRemoved[c_it->first].push_back(c_it->second);
 
-			c_map.erase(c_it);
-
 			const Type* c_type = m_ComponentTypes[c_it->first];
 
 			OnComponentRemoved(entity, m_Components[c_it->first] + c_it->second * c_type->size, c_type);
+
+			c_map.erase(c_it);
 		}
 	}
 
