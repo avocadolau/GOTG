@@ -47,8 +47,18 @@ void AnimationPanel::Draw()
 			model = model->getModelAt(meshId->modelIndex);
 			if (ImGui::CollapsingHeader("Animations "))
 			{
-				ImGui::Text(model->GetParent()->GetAnimations()[0]->name.c_str());
-				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
+				model->GetParent()->GetAnimations().size();
+				for (int i = 0; model->GetParent()->GetAnimations().size(); i++)
+				{
+					if (model->GetParent()->GetAnimations()[i] != nullptr)
+					{
+						ImGui::Text(model->GetParent()->GetAnimations()[i]->name.c_str());
+						ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
+					}
+					
+				}
+				
+				
 			}
 		}	
 	}
@@ -64,8 +74,27 @@ void AnimationPanel::Draw()
 	ImGui::EndChild();
 	ImGui::SameLine();
 	ImGui::BeginChild("Editor", ImVec2(w, h), true);
-	//ImSequencer::Sequencer()
+	////ImSequencer::Sequencer()
+	//static int selectedEntry = -1;
+	//static int firstFrame = 0;
+	//static bool expanded = true;
+	//static int currentFrame = 100;
 
+	//ImGui::PushItemWidth(130);
+	//ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
+	//ImGui::SameLine();
+	//ImGui::InputInt("Frame ", &currentFrame);
+	//ImGui::SameLine();
+	//ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
+	//ImGui::PopItemWidth();
+	//ImSequencer::Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
+	//// add a UI to edit that particular item
+	//if (selectedEntry != -1)
+	//{
+	//	const MySequence::MySequenceItem& item = mySequence.myItems[selectedEntry];
+	//	ImGui::Text("I am a %s, please edit me", SequencerItemTypeNames[item.mType]);
+	//	// switch (type) ....
+	//}
 	ImGui::EndChild();
 	ImGui::PopStyleVar();
 	ImGui::End();
