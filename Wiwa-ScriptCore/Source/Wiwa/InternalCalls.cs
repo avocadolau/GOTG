@@ -112,7 +112,6 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void StopAllEvents();
         #endregion
-
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
@@ -120,6 +119,12 @@ namespace Wiwa
         internal extern static bool AddBodyToLog(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool RemoveBodyFromLog(EntityId id);
+        #endregion
+        #region Scene
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadSceneByIndex(ulong index, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadSceneByName(string scene_name, int flags);
         #endregion
     }
 }

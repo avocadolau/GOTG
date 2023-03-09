@@ -27,6 +27,11 @@ namespace Wiwa {
 		SceneManager();
 
 		static bool m_PlayScene;
+
+		// For scene loading inside systems
+		static bool m_LoadScene;
+		static std::string m_LoadPath;
+		static int m_LoadFlags;
 	public:
 		enum LoadFlags {
 			// Unloads current scene
@@ -74,8 +79,11 @@ namespace Wiwa {
 		// Load a scene file to memory
 		static SceneId LoadScene(const char* scene_path, int flags=LOAD_DEFAULT);
 
-		// Load scene to memory
-		static SceneId LoadScene(uint32_t scene_index, int flags = LOAD_DEFAULT);
+		// Load scene to memory by index
+		static void LoadSceneByIndex(uint32_t scene_index, int flags = LOAD_DEFAULT);
+
+		// Load scene to memory by name
+		static void LoadSceneByName(const char* scene_name, int flags = LOAD_DEFAULT);
 
 		// Unload a scene id
 		static void UnloadScene(SceneId scene_id, bool unload_resources=true);

@@ -17,6 +17,7 @@
 #include "embed_functions/embed_audio_functions.h"
 #include "embed_functions/embed_physics_functions.h"
 #include "embed_functions/embed_screen_functions.h"
+#include "embed_functions/embed_scene_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -63,6 +64,10 @@ namespace Wiwa
 		// Resources
 		WI_ADD_INTERNAL_CALL(LoadResourceModel);
 		WI_ADD_INTERNAL_CALL(AddMeshToEntity);
+
+		// Scene
+		WI_ADD_INTERNAL_CALL(LoadSceneByIndex);
+		WI_ADD_INTERNAL_CALL(LoadSceneByName);
 
 		//Screen
 
