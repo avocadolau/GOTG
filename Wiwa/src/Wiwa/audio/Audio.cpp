@@ -648,7 +648,7 @@ bool Audio::StopAllEvents()
     AK::SoundEngine::StopAll();
 
     // Instantly stop them
-    AK::SoundEngine::RenderAudio();
+    AK::SoundEngine::RenderAudio(true);
 
     return true;
 }

@@ -133,10 +133,13 @@ namespace Wiwa
 
 	void Scene::Unload(bool unload_resources)
 	{
+		Audio::StopAllEvents();
+		
+		// Sleep to wait till Audio thread stops all events
+		Sleep(10);
+
 		if (unload_resources)
 		{
-			Audio::Terminate();
-
 			// TODO: Fix unloading for the editor
 			return;
 			Wiwa::Resources::UnloadAllResources();
