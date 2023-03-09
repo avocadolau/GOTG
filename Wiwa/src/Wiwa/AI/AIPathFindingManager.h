@@ -44,20 +44,20 @@ namespace Wiwa {
 	{
 		int g;
 		int h;
-		glm::vec2 pos;
+		glm::lowp_uvec2 pos;
 		const PathNode* parent; // needed to reconstruct the path in the end
 
 		// Convenient constructors
 		PathNode();
-		PathNode(int g, int h, const glm::vec2& pos, const PathNode* parent);
+		PathNode(int g, int h, const glm::lowp_uvec2& pos, const PathNode* parent);
 		PathNode(const PathNode& node);
 
 		// Fills a list (PathList) of all valid adjacent pathnodes
-		uint32_t FindWalkableAdjacents(PathList& list_to_fill) const;
+		uint32_t FindWalkableAdjacents(PathList& listToFill) const;
 		// Calculates this tile score
 		int Score() const;
 		// Calculate the F for a specific destination tile
-		int CalculateF(const glm::vec2& destination);
+		int CalculateF(const glm::lowp_uvec2& destination);
 	};
 
 	// ---------------------------------------------------------------------
@@ -66,20 +66,58 @@ namespace Wiwa {
 	struct PathList
 	{
 		// Looks for a node in this list and returns it's list node or NULL
-		std::_Vector_iterator<PathNode>* Find(const glm::vec2& point) const;
+		PathNode* Find(const glm::lowp_uvec2& point) const;
 		
 		// Returns the Pathnode with lowest score in this list or NULL if empty
-		std::_Vector_iterator<PathNode>* GetNodeLowestScore() const;
+		PathNode* GetNodeLowestScore() const;
 
 		// The list itself, note they are not pointers!
 		std::vector<PathNode> pathList;
 	};
 
-	class WI_API AIMapManager
+	class WI_API AIPathFindingManager
 	{
 
+		public:
 
+		AIPathFindingManager();
 
+		// Destructor
+		~AIPathFindingManager();
+
+		// Called before quitting
+		bool CleanUp();
+
+		// Sets up the walkability map
+		void SetMap(uint32_t width, uint32_t height, char32_t* data);
+
+		// Main function to request a path from A to B
+		int CreatePath(const glm::lowp_uvec2& origin, const glm::lowp_uvec2& destination);
+
+		// To request all tiles involved in the last generated path
+		const std::vector<glm::lowp_uvec2>* GetLastPath() const;
+
+		// Utility: return true if pos is inside the map boundaries
+		bool CheckBoundaries(const glm::lowp_uvec2& pos) const;
+
+		// Utility: returns true is the tile is walkable
+		bool IsWalkable(const glm::lowp_uvec2& pos) const;
+
+		// Utility: return the walkability value of a tile
+		char32_t GetTileAt(const glm::lowp_uvec2& pos) const;
+
+		private:
+
+		// size of the map
+		uint32_t m_width;
+		uint32_t m_height;
+			
+		// all map walkability values [0..255]
+		char32_t* m_map;
+
+		// we store the created path here
+		std::vector<glm::lowp_uvec2> m_lastPath;
+		
 	};
 }
 
