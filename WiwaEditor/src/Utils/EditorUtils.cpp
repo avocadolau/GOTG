@@ -345,7 +345,7 @@ void CreateScriptFile(const char* filePath, const char* name)
 
 	std::ofstream scriptFile(file.c_str());
 	scriptFile << "using Wiwa;\n";
-	scriptFile << "namespace Wiwa\n";
+	scriptFile << "namespace Game\n";
 	scriptFile << "{\n";
 	scriptFile << "	public class ";
 	scriptFile << name;
