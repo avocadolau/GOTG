@@ -1,6 +1,14 @@
 ﻿namespace Wiwa
 {
     using ResourceId = System.UInt64;
+
+    public struct ComponentIterator
+    {
+        public ulong componentId;
+        public ulong componentIndex;
+        public ulong componentSize;
+    }
+
     #region Transform3D
     [Component]
     public struct Transform3D

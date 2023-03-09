@@ -18,6 +18,7 @@ namespace Wiwa {
 		Audio::RegisterGameObject(m_EntityId);
 
 		m_AudioSource = GetComponentIterator<AudioSource>();
+		m_Transform = GetComponentIterator<Transform3D>();
 
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
@@ -48,7 +49,7 @@ namespace Wiwa {
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
-		Transform3D* t3d = GetComponent<Transform3D>();		
+		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_Transform);		
 
 		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Vector3F::FRONT, Vector3F::UP)) {
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());

@@ -40,6 +40,8 @@ namespace Wiwa
 
 		// ECS
 		WI_ADD_INTERNAL_CALL(GetComponent);
+		WI_ADD_INTERNAL_CALL(GetComponentIterator);
+		WI_ADD_INTERNAL_CALL(GetComponentByIterator);
 		WI_ADD_INTERNAL_CALL(AddComponent);
 		WI_ADD_INTERNAL_CALL(ApplySystem);
 		WI_ADD_INTERNAL_CALL(CreateEntity);
