@@ -1002,6 +1002,7 @@ namespace Wiwa {
 			}
 		}
 		else {
+			this;
 			glBindVertexArray(vao);
 			glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
@@ -1077,6 +1078,7 @@ namespace Wiwa {
 		for (unsigned int i = 0; i < bone->mNumWeights; i++) {
 			const aiVertexWeight& vw = bone->mWeights[i];
 			unsigned int GlobalVertexID = parent->meshes[meshIndex] + bone->mWeights[i].mVertexId;
+			WI_INFO("vertex id {}", GlobalVertexID);
 			bone_data[GlobalVertexID].AddBoneData(BoneId, vw.mWeight);
 		}
 	}

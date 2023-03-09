@@ -24,9 +24,11 @@ void main()
              {
                  FragColor = vec4(1.0,0.0,0.0,1.0)* Weights[i];
              }else if(Weights[i] >= 0.4 && Weights[i] <= 0.6){
-                 FragColor = vec4(0.0,1.0,0.0,1.0)* Weights[i];
-             }else if(Weights[i] >= 0.1){
                  FragColor = vec4(1.0,1.0,0.0,1.0)* Weights[i];
+             }else if(Weights[i] >= 0.1){
+                 FragColor = vec4(0.0,1.0,0.0,1.0)* Weights[i];
+             }else{
+                 FragColor =  vec4(0.0,0.0,1.0,1.0);
              }
              found = true;
              break;

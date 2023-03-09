@@ -120,19 +120,72 @@ namespace Wiwa {
 
 		void AddBoneData(unsigned int BoneID, float weight)
 		{
+			int lowerWeight = 0;
+			float lWeight = 0;
 			for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++)
 			{
-				// weight has to be greater than 0 if the bone influences that vertex
-				// if 0 then we assume its empty
 				if (Weights[i] == 0.0)
 				{
 					BoneIDs[i] = BoneID;
 					Weights[i] = weight;
 					return;
 				}
-				if (i == MAX_NUM_BONES_PER_VERTEX - 1)
-					return;
 			}
+			//if no free slot get the lower weight
+			for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++)
+			{
+				if (i == 0)
+				{
+					lWeight = Weights[i];
+					lowerWeight = i;
+				}
+
+				if (Weights[i] <= lowerWeight)
+				{
+					lWeight = Weights[i];
+					lowerWeight = i;
+				}
+			}
+			//Set the lower weight
+			if (lWeight < weight)
+			{
+				BoneIDs[lowerWeight] = BoneID;
+				Weights[lowerWeight] = weight;
+			}
+			//DEBUG
+			//check sum
+			float totalWeight = 0;
+			for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++)
+			{
+				totalWeight += Weights[i];
+			}
+
+			if (totalWeight > 1)
+				WI_ERROR("Sum of weight higher than 1");
+			
+			return;
+
+			//for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++)
+			//{
+			//	// weight has to be greater than 0 if the bone influences that vertex
+			//	// if 0 then we assume its empty
+			//	if (Weights[i] == 0.0)
+			//	{
+			//		BoneIDs[i] = BoneID;
+			//		Weights[i] = weight;
+			//		WI_INFO("weight {0} bone id {1}", weight, BoneID);
+			//		return;
+			//	}
+			//	
+			//	if (weight > Weights[i])
+			//	{
+			//		BoneIDs[i] = BoneID;
+			//		Weights[i] = weight;
+			//		WI_INFO("weight {0} bone id {1}", weight, BoneID);
+			//		return;
+			//	}
+
+			//}
 			//we should never reach here, more bones than we have space for
 			WI_ERROR("BONE INDEX TO VERTEX OUT OF SIZE");
 			assert(0);
