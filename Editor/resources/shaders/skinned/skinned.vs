@@ -2,6 +2,7 @@
 #extension GL_ARB_explicit_uniform_location : enable
 #extension GL_ARB_separate_shader_objects : enable
 const int MAX_BONES = 200;
+const int MAX_BONE_INFLUENCE = 4;
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
@@ -27,11 +28,13 @@ void main()
     BoneTransform     += u_Bones[aBoneIDs[2]] * aWeights[2];
     BoneTransform     += u_Bones[aBoneIDs[3]] * aWeights[3];
 
-	//gl_Position = u_Proj * u_View * u_Model  * BoneTransform * vec4(aPos, 1.0);
-    	gl_Position = u_Proj * u_View   * BoneTransform * vec4(aPos, 1.0);
-	TexCoord = aTex;
-	Normal = aNormal;
-	LocalPos = aPos;
-	BoneIDs = aBoneIDs;
+    gl_Position = u_Proj * u_View * u_Model  * BoneTransform * vec4(aPos, 1.0);
+
+   // gl_Position = u_Proj * u_View   * BoneTransform * vec4(aPos, 1.0);
+
+    TexCoord = aTex;
+    Normal = aNormal;
+    LocalPos = aPos;
+    BoneIDs = aBoneIDs;
     Weights = aWeights;
 }
