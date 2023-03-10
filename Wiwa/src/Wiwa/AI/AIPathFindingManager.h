@@ -45,15 +45,15 @@ namespace Wiwa {
 		int g;
 		int h;
 		glm::ivec2 pos;
-		const PathNode* parent; // needed to reconstruct the path in the end
+		const Wiwa::PathNode* parent; // needed to reconstruct the path in the end
 
 		// Convenient constructors
 		PathNode();
-		PathNode(int g, int h, const glm::ivec2& pos, const PathNode* parent);
-		PathNode(const PathNode& node);
+		PathNode(int g, int h, const glm::ivec2& pos, const Wiwa::PathNode* parent);
+		PathNode(const Wiwa::PathNode& node);
 
 		// Fills a list (PathList) of all valid adjacent pathnodes
-		uint32_t FindWalkableAdjacents(PathList& listToFill) const;
+		uint32_t FindWalkableAdjacents(Wiwa::PathList& listToFill) const;
 		// Calculates this tile score
 		int Score() const;
 		// Calculate the F for a specific destination tile
@@ -72,7 +72,7 @@ namespace Wiwa {
 		Wiwa::PathNode* GetNodeLowestScore();
 
 		// The list itself, note they are not pointers!
-		std::vector<PathNode> pathList;
+		std::vector<Wiwa::PathNode> pathList;
 	};
 
 	class WI_API AIPathFindingManager
@@ -89,7 +89,7 @@ namespace Wiwa {
 		bool CleanUp();
 
 		// Sets up the walkability map
-		void SetMap(uint32_t width, uint32_t height, char32_t* data);
+		void SetMap(uint32_t width, uint32_t height, unsigned char* data);
 
 		// Main function to request a path from A to B
 		int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
@@ -104,16 +104,16 @@ namespace Wiwa {
 		bool IsWalkable(const glm::ivec2& pos) const;
 
 		// Utility: return the walkability value of a tile
-		char32_t GetTileAt(const glm::ivec2& pos) const;
+		unsigned char GetTileAt(const glm::ivec2& pos) const;
 
 		private:
 
 		// size of the map
-		uint32_t m_width;
-		uint32_t m_height;
+		uint32_t m_width = 0;
+		uint32_t m_height = 0;
 			
 		// all map walkability values [0..255]
-		char32_t* m_map;
+		unsigned char* m_map;
 
 		// we store the created path here
 		std::vector<glm::ivec2> m_lastPath;
