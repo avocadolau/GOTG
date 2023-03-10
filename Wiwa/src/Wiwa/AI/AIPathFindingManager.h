@@ -44,12 +44,12 @@ namespace Wiwa {
 	{
 		int g;
 		int h;
-		glm::lowp_uvec2 pos;
+		glm::ivec2 pos;
 		const PathNode* parent; // needed to reconstruct the path in the end
 
 		// Convenient constructors
 		PathNode();
-		PathNode(int g, int h, const glm::lowp_uvec2& pos, const PathNode* parent);
+		PathNode(int g, int h, const glm::ivec2& pos, const PathNode* parent);
 		PathNode(const PathNode& node);
 
 		// Fills a list (PathList) of all valid adjacent pathnodes
@@ -57,7 +57,7 @@ namespace Wiwa {
 		// Calculates this tile score
 		int Score() const;
 		// Calculate the F for a specific destination tile
-		int CalculateF(const glm::lowp_uvec2& destination);
+		int CalculateF(const glm::ivec2& destination);
 	};
 
 	// ---------------------------------------------------------------------
@@ -66,10 +66,10 @@ namespace Wiwa {
 	struct PathList
 	{
 		// Looks for a node in this list and returns it's list node or NULL
-		PathNode* Find(const glm::lowp_uvec2& point) const;
+		Wiwa::PathNode* Wiwa::PathList::Find(const glm::ivec2& point);
 		
 		// Returns the Pathnode with lowest score in this list or NULL if empty
-		PathNode* GetNodeLowestScore() const;
+		Wiwa::PathNode* GetNodeLowestScore();
 
 		// The list itself, note they are not pointers!
 		std::vector<PathNode> pathList;
@@ -92,19 +92,19 @@ namespace Wiwa {
 		void SetMap(uint32_t width, uint32_t height, char32_t* data);
 
 		// Main function to request a path from A to B
-		int CreatePath(const glm::lowp_uvec2& origin, const glm::lowp_uvec2& destination);
+		int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
 
 		// To request all tiles involved in the last generated path
-		const std::vector<glm::lowp_uvec2>* GetLastPath() const;
+		const std::vector<glm::ivec2>* GetLastPath() const;
 
 		// Utility: return true if pos is inside the map boundaries
-		bool CheckBoundaries(const glm::lowp_uvec2& pos) const;
+		bool CheckBoundaries(const glm::ivec2& pos) const;
 
 		// Utility: returns true is the tile is walkable
-		bool IsWalkable(const glm::lowp_uvec2& pos) const;
+		bool IsWalkable(const glm::ivec2& pos) const;
 
 		// Utility: return the walkability value of a tile
-		char32_t GetTileAt(const glm::lowp_uvec2& pos) const;
+		char32_t GetTileAt(const glm::ivec2& pos) const;
 
 		private:
 
@@ -116,7 +116,7 @@ namespace Wiwa {
 		char32_t* m_map;
 
 		// we store the created path here
-		std::vector<glm::lowp_uvec2> m_lastPath;
+		std::vector<glm::ivec2> m_lastPath;
 		
 	};
 }

@@ -16,14 +16,13 @@
 
 //#include <Wiwa/utilities/json/JSONDocument.h>
 
-struct PathNode; // forward declaration
 
 // PathNode Defintitions
 
 Wiwa::PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
 {}
 
-Wiwa::PathNode::PathNode(int g, int h, const const glm::lowp_uvec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
+Wiwa::PathNode::PathNode(int g, int h, const const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
 {}
 
 Wiwa::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
@@ -31,7 +30,7 @@ Wiwa::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.
 
 uint32_t Wiwa::PathNode::FindWalkableAdjacents(PathList & listToFill) const
 {
-	glm::lowp_uvec2 cell;
+	glm::ivec2 cell;
 	uint32_t before = listToFill.pathList.size();
 
 	// north
@@ -68,7 +67,7 @@ int Wiwa::PathNode::Score() const
 	
 }
 
-int Wiwa::PathNode::CalculateF(const glm::lowp_uvec2& destination)
+int Wiwa::PathNode::CalculateF(const glm::ivec2& destination)
 {
 	g = parent->g + 1;	
 
@@ -83,7 +82,7 @@ int Wiwa::PathNode::CalculateF(const glm::lowp_uvec2& destination)
 
 // PathList Definitions
 
-PathNode* Wiwa::PathList::Find(const glm::lowp_uvec2& point) const
+Wiwa::PathNode* Wiwa::PathList::Find(const glm::ivec2& point) 
 {
 	for (int i = 0; i < pathList.size(); i++)
 	{
@@ -92,4 +91,19 @@ PathNode* Wiwa::PathList::Find(const glm::lowp_uvec2& point) const
 	}
 
 	return nullptr;
+}
+
+Wiwa::PathNode* Wiwa::PathList::GetNodeLowestScore()
+{
+	Wiwa::PathNode ret = PathNode();
+	int min = 65535;
+
+	for (int i = 0; i < pathList.size(); i++)
+	{
+		if (pathList.at(i).Score() < min)
+			ret = pathList.at(i);
+	}
+
+	return &ret;
+
 }
