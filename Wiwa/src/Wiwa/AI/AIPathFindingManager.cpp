@@ -36,6 +36,7 @@ uint32_t Wiwa::PathNode::FindWalkableAdjacents(Wiwa::PathList & listToFill) cons
 	// north
 	cell = pos;
 	cell.y = pos.y + 1;
+	
 	if (IsWalkable(cell))
 		listToFill.pathList.push_back(Wiwa::PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
@@ -112,6 +113,8 @@ Wiwa::PathNode* Wiwa::PathList::GetNodeLowestScore()
 
 }
 
+// AIPathFindingManager Definitions
+
 Wiwa::AIPathFindingManager::AIPathFindingManager()
 {
 }
@@ -161,65 +164,61 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			closed.pathList.push_back(*lowest);
 			Wiwa::PathNode* node = lowest;
 
-			for (int i = 0, i < open.pathList.size(); i++)
-			{
-				if (open.pathList.at(i) == lowest)
-				{
+			// Using std::remove() algorithm to move the value to be deleted to the end of the vector
+			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
 
-				}
-			}
 			
 
 			// L12b: TODO 4: If we just added the destination, we are done!
-			if (node->data.pos == destination)
+			if (node->pos == destination)
 			{
-				lastPath.Clear();
+				m_lastPath.clear();
 
 				// Backtrack to create the final path
 				// Use the Pathnode::parent and Flip() the path when you are finish
-				const PathNode* pathNode = &node->data;
+				const PathNode* pathNode = node;
 
 				while (pathNode)
 				{
-					lastPath.PushBack(pathNode->pos);
+					m_lastPath.push_back(pathNode->pos);
 					pathNode = pathNode->parent;
 				}
 
-				lastPath.Flip();
-				ret = lastPath.Count();
+				std::reverse(m_lastPath.begin(), m_lastPath.end());
+				ret = m_lastPath.size();
 				//LOG("Created path of %d steps in %d iterations", ret, iterations);
 				break;
 			}
 
 			// L12b: TODO 5: Fill a list of all adjancent nodes
-			PathList adjacent;
-			node->data.FindWalkableAdjacents(adjacent);
+			Wiwa::PathList adjacent;
+			node->FindWalkableAdjacents(adjacent);
 
 			// L12b: TODO 6: Iterate adjancent nodes:
 			// If it is a better path, Update the parent
-			ListItem<PathNode>* item = adjacent.list.start;
-			for (; item; item = item->next)
+			for (int i = 0; i < adjacent.pathList.size(); i++)
 			{
-				// ignore nodes in the closed list
-				if (closed.Find(item->data.pos) != NULL)
+				adjacent.pathList.at(i);
+
+				if (closed.Find(adjacent.pathList.at(i).pos) != NULL)
 					continue;
 
-				// If it is NOT found, calculate its F and add it to the open list
-				ListItem<PathNode>* adjacentInOpen = open.Find(item->data.pos);
+				Wiwa::PathNode* adjacentInOpen = open.Find(adjacent.pathList.at(i).pos);
+
 				if (adjacentInOpen == NULL)
 				{
-					item->data.CalculateF(destination);
-					open.list.add(item->data);
+					adjacent.pathList.at(i).CalculateF(destination);
+					open.pathList.push_back(adjacent.pathList.at(i));
 				}
 				else
 				{
-					// If it is already in the open list, check if it is a better path (compare G)
-					if (adjacentInOpen->data.g > item->data.g + 1)
+					if (adjacentInOpen->g > adjacent.pathList.at(i).g + 1)
 					{
-						adjacentInOpen->data.parent = item->data.parent;
-						adjacentInOpen->data.CalculateF(destination);
+						adjacentInOpen->parent = adjacent.pathList.at(i).parent;
+						adjacentInOpen->CalculateF(destination);
 					}
 				}
+
 			}
 
 			++iterations;
@@ -227,4 +226,29 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	}
 
 	return ret;
+}
+
+const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath() const
+{
+	return &m_lastPath;
+}
+
+bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos) const
+{
+	return (pos.x >= 0 && pos.x <= (int)m_width &&
+		pos.y >= 0 && pos.y <= (int)m_height);
+}
+
+bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos) const
+{
+	unsigned char t = GetTileAt(pos);
+	return t != INVALID_WALK_CODE && t > 0;
+}
+
+unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos) const
+{
+	if (CheckBoundaries(pos))
+		return m_map[(pos.y * m_width) + pos.x];
+
+	return INVALID_WALK_CODE;
 }

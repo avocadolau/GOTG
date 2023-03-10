@@ -21,6 +21,8 @@
 //#include <bitset>
 //#include <algorithm>
 
+#define DEFAULT_PATH_LENGTH 50
+#define INVALID_WALK_CODE 255
 
 namespace Wiwa {
 
