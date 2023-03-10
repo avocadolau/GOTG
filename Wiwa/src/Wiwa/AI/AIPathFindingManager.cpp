@@ -36,7 +36,8 @@ uint32_t Wiwa::PathNode::FindWalkableAdjacents(Wiwa::PathList & listToFill) cons
 	// north
 	cell = pos;
 	cell.y = pos.y + 1;
-	
+	// AIPathFindingManager* test;
+	// test sexo->IsWalkable(cell)
 	if (IsWalkable(cell))
 		listToFill.pathList.push_back(Wiwa::PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
