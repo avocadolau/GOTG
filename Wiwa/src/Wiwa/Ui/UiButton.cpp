@@ -120,7 +120,7 @@ namespace Wiwa
 
 		if (state == GuiControlState::DISABLED)
 		{
-			const Color4f color = { 0.1f, 0.1f, 0.1f, 0.5f };
+			/*const Color4f color = { 0.1f, 0.1f, 0.1f, 0.5f };
 
 			Rect2i rect;
 			rect.x = texture->GetSize().x;
@@ -129,7 +129,7 @@ namespace Wiwa
 			rect.height = texture->GetSize().h;
 
 			r2d.RemoveInstance(m_Scene, id_quad_normal);
-			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, color, rect, Wiwa::Renderer2D::Pivot::UPLEFT);
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, color, rect, Wiwa::Renderer2D::Pivot::UPLEFT);*/
 		}
 		if (state == GuiControlState::NORMAL)
 		{

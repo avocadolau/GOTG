@@ -56,14 +56,6 @@ namespace Wiwa
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
-
-		// WAY TO CREATE THE POSITION
-		// Rect2i test;
-		// test.x = 500;
-		// test.y = 100;
-		// test.width = 200;
-		// test.height = 100;
-		// m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, test, "assets/test.png", nullptr, {0,0,0,0});
 	}
 
 	void Scene::Update()
@@ -79,7 +71,7 @@ namespace Wiwa
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
-			m_GuiManager->Update();
+			
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -100,10 +92,13 @@ namespace Wiwa
 	{
 		m_CameraManager->Update();
 
-		m_GuiManager->Draw();
+		
 
 		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
 		r2d.UpdateInstanced(this);
+
+		m_GuiManager->Draw();
+		m_GuiManager->Update();
 
 		m_EntityManager.Update();
 
