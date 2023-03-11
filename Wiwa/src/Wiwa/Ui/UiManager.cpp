@@ -11,8 +11,8 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/scene/Scene.h>
 
-//#include "../vendor/stb/stb_image_write.h"
-//#define STB_TRUETYPE_IMPLEMENTATION 
+
+#define STB_TRUETYPE_IMPLEMENTATION 
 #include "../vendor/stb/stb_truetype.h"
 
 
@@ -28,7 +28,9 @@ namespace Wiwa
 	bool GuiManager::Init(Scene* scene)
 	{
 		m_Scene = scene;
-		InitFont("assets/arial.ttf");
+		//InitFont("assets/arial.ttf");
+		//Test remove once done
+		InitFont("assets/fonts/Roboto-Italic.ttf");
 		return true;
 	}
 
@@ -179,16 +181,32 @@ namespace Wiwa
 		
 		/* load font file */
 		long size;
-		unsigned char* fontBuffer;
-		Wiwa::File fontFile = Wiwa::FileSystem::OpenI(path);
+		byte* fontBuffer;
+		
+		//Extracted from https://github.com/justinmeiners/stb-truetype-example/blob/master/main.c
+		//Read the fontFile lines 19 to 27
+		FILE* fontFile = fopen(path, "rb");
+		if (!fontFile)
+		{
+			WI_CORE_INFO("Seems like font at {} doesn't exist", path);
+			return false;
+		}
+		fseek(fontFile, 0, SEEK_END);
+		size = ftell(fontFile);
+		fseek(fontFile, 0, SEEK_SET);
 
-		fontFile.Read(fontBuffer, size);
+		fontBuffer = (byte*)malloc(size);
+
+		fread(fontBuffer, size, 1, fontFile);
+		fclose(fontFile);
+
 
 		/* prepare font */
 		stbtt_fontinfo info;
 		if (!stbtt_InitFont(&info, fontBuffer, 0))
 		{
-			//printf("failed\n");
+			WI_CORE_ERROR("Failed to load font at {}", path);
+			return false;
 		}
 
 		int b_w = 512; /* bitmap width */
@@ -196,7 +214,7 @@ namespace Wiwa
 		int l_h = 64; /* line height */
 
 		/* create a bitmap for the phrase */
-		unsigned char* bitmap = new unsigned char[b_w * b_h, sizeof(unsigned char)];
+		byte* bitmap = (byte*)calloc(b_w * b_h, sizeof(unsigned char));
 
 		/* calculate font scaling */
 		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
@@ -240,7 +258,9 @@ namespace Wiwa
 			x += roundf(kern * scale);
 		}
 
-		//stbi_write_png("out.png", b_w, b_h, 1, bitmap, b_w);
+		
+		free(fontBuffer);
+		free(bitmap);
 
 		return true;
 	}
