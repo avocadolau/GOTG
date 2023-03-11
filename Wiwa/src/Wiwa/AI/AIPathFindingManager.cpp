@@ -17,18 +17,24 @@
 //#include <Wiwa/utilities/json/JSONDocument.h>
 
 
+uint32_t Wiwa::AIPathFindingManager::m_width = 0;
+uint32_t Wiwa::AIPathFindingManager::m_height = 0;
+unsigned char* Wiwa::AIPathFindingManager::m_map = nullptr;
+std::vector<glm::ivec2> Wiwa::AIPathFindingManager::m_lastPath = {};
+
+
 // PathNode Defintitions
 
-Wiwa::PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
+Wiwa::AIPathFindingManager::PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
 {}
 
-Wiwa::PathNode::PathNode(int g, int h, const const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
+Wiwa::AIPathFindingManager::PathNode::PathNode(int g, int h, const const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
 {}
 
-Wiwa::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
+Wiwa::AIPathFindingManager::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
 {}
 
-uint32_t Wiwa::PathNode::FindWalkableAdjacents(Wiwa::PathList & listToFill) const
+uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPathFindingManager::PathList& listToFill) const
 {
 	glm::ivec2 cell;
 	uint32_t before = listToFill.pathList.size();
@@ -38,38 +44,39 @@ uint32_t Wiwa::PathNode::FindWalkableAdjacents(Wiwa::PathList & listToFill) cons
 	cell.y = pos.y + 1;
 	// AIPathFindingManager* test;
 	// test sexo->IsWalkable(cell)
-	if (IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::PathNode(-1, -1, cell, this)); // Pushes an element at the back
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
 	// south
 	cell = pos;
 	cell.y = pos.y - 1;
-	if (IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::PathNode(-1, -1, cell, this));
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this));
 
 	// east
 	cell = pos;
 	cell.x = pos.x + 1;
-	if (IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::PathNode(-1, -1, cell, this));
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this));
 
 	// west
 	cell = pos;
 	cell.x = pos.x - 1;
-	if (IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::PathNode(-1, -1, cell, this));
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this));
 
 	return listToFill.pathList.size();
 }
 
-int Wiwa::PathNode::Score() const
+
+int Wiwa::AIPathFindingManager::PathNode::Score() const
 {
 	
 	return g + h;
 	
 }
 
-int Wiwa::PathNode::CalculateF(const glm::ivec2& destination)
+int Wiwa::AIPathFindingManager::PathNode::CalculateF(const glm::ivec2& destination)
 {
 	g = parent->g + 1;	
 
@@ -84,7 +91,7 @@ int Wiwa::PathNode::CalculateF(const glm::ivec2& destination)
 
 // PathList Definitions
 
-Wiwa::PathNode* Wiwa::PathList::Find(const glm::ivec2& point) 
+Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::Find(const glm::ivec2& point)
 {
 	for (int i = 0; i < pathList.size(); i++)
 	{
@@ -95,9 +102,9 @@ Wiwa::PathNode* Wiwa::PathList::Find(const glm::ivec2& point)
 	return nullptr;
 }
 
-Wiwa::PathNode* Wiwa::PathList::GetNodeLowestScore()
+Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetNodeLowestScore()
 {
-	Wiwa::PathNode ret = Wiwa::PathNode();
+	PathNode ret = PathNode();
 	int min = 65535;
 
 	for (int i = pathList.size(); i > 0; i--)
@@ -120,10 +127,6 @@ Wiwa::AIPathFindingManager::AIPathFindingManager()
 {
 }
 
-Wiwa::AIPathFindingManager::~AIPathFindingManager()
-{
-
-}
 
 bool Wiwa::AIPathFindingManager::CleanUp()
 {	
@@ -155,15 +158,15 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		PathList closed;
 
 		// Add the origin tile to open
-		open.pathList.push_back(Wiwa::PathNode(0, 0, origin, nullptr));
+		open.pathList.push_back(PathNode(0, 0, origin, nullptr));
 
 		// Iterate while we have tile in the open list
 		while (open.pathList.size() > 0)
 		{
 			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
-			Wiwa::PathNode* lowest = open.GetNodeLowestScore();			
+			PathNode* lowest = open.GetNodeLowestScore();
 			closed.pathList.push_back(*lowest);
-			Wiwa::PathNode* node = lowest;
+			PathNode* node = lowest;
 
 			// Using std::remove() algorithm to move the value to be deleted to the end of the vector
 			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
@@ -192,7 +195,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			}
 
 			// L12b: TODO 5: Fill a list of all adjancent nodes
-			Wiwa::PathList adjacent;
+			PathList adjacent;
 			node->FindWalkableAdjacents(adjacent);
 
 			// L12b: TODO 6: Iterate adjancent nodes:
@@ -204,7 +207,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				if (closed.Find(adjacent.pathList.at(i).pos) != NULL)
 					continue;
 
-				Wiwa::PathNode* adjacentInOpen = open.Find(adjacent.pathList.at(i).pos);
+				PathNode* adjacentInOpen = open.Find(adjacent.pathList.at(i).pos);
 
 				if (adjacentInOpen == NULL)
 				{
@@ -229,24 +232,24 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	return ret;
 }
 
-const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath() const
+const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath()
 {
 	return &m_lastPath;
 }
 
-bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos) const
+bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 {
 	return (pos.x >= 0 && pos.x <= (int)m_width &&
 		pos.y >= 0 && pos.y <= (int)m_height);
 }
 
-bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos) const
+bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 {
 	unsigned char t = GetTileAt(pos);
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
-unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos) const
+unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
 		return m_map[(pos.y * m_width) + pos.x];
