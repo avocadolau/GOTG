@@ -45,25 +45,25 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	// AIPathFindingManager* test;
 	// test sexo->IsWalkable(cell)
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this)); // Pushes an element at the back
+		listToFill.pathList.push_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
 	// south
 	cell = pos;
 	cell.y = pos.y - 1;
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this));
+		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
 	// east
 	cell = pos;
 	cell.x = pos.x + 1;
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this));
+		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
 	// west
 	cell = pos;
 	cell.x = pos.x - 1;
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-		listToFill.pathList.push_back(Wiwa::AIPathFindingManager::PathNode(-1, -1, cell, this));
+		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
 	return listToFill.pathList.size();
 }
