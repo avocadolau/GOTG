@@ -22,6 +22,8 @@
 //#include <algorithm>
 
 #define DEFAULT_PATH_LENGTH 50
+
+#define DEFAULT_WALK_CODE 1
 #define INVALID_WALK_CODE 255
 
 namespace Wiwa {	
@@ -117,7 +119,7 @@ namespace Wiwa {
 		*/
 
 		// Generate the grid of the map
-		static bool CreateWalkabilityMap(int& width, int& height, unsigned char** buffer, int navLayerId);
+		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight);
 
 		// Space translations for the pathfinding
 		static glm::ivec2 MapToWorld(int x, int y);
@@ -127,6 +129,7 @@ namespace Wiwa {
 		private:
 
 		// size of the map
+			// Aren't they needed inside the agent?
 		static uint32_t m_width;
 		static uint32_t m_height;
 			
@@ -136,6 +139,7 @@ namespace Wiwa {
 		// we store the created path here
 		static std::vector<glm::ivec2> m_lastPath;
 
+		// data of the map
 		static MapData m_mapData;
 		
 	};

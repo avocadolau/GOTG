@@ -257,9 +257,39 @@ bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_map[(pos.y * m_width) + pos.x];
+		return m_map[(pos.y * m_width) + pos.x]; // returns the id of the tile
 
 	return INVALID_WALK_CODE;
+}
+
+bool Wiwa::AIPathFindingManager::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight)
+{
+	bool ret = false;
+
+	bool isWalkable = true;
+
+	m_mapData.width = width;
+	m_mapData.height = height;
+	m_mapData.tileHeight = tileHeight;
+	m_mapData.tileWidth = tileWidth;
+	
+	m_map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
+	memset(m_map, 1, width * height);
+
+	for (int z = 0; z < m_mapData.height; z++)
+	{
+		for (int x = 0; x < m_mapData.width; x++)
+		{
+			// if collision then invalid walking code
+			
+			// if not collision then default walking code
+			m_map[z + x] = DEFAULT_WALK_CODE;
+		}
+	}
+	
+	ret = true;
+
+	return ret;
 }
 
 glm::ivec2 Wiwa::AIPathFindingManager::MapToWorld(int x, int y)
