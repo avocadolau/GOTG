@@ -36,6 +36,7 @@ namespace Wiwa {
 		// Data from the map
 		struct MapData
 		{
+			float startingPosition;
 			int width;
 			int	height;
 			int	tileWidth;
@@ -97,7 +98,7 @@ namespace Wiwa {
 		static bool CleanUp();
 
 		// Sets up the walkability map
-		static void SetMap(uint32_t width, uint32_t height, unsigned char* data);
+		static void SetMap(uint32_t width, uint32_t height, unsigned char* data); // set map for each agent as well?
 
 		// Main function to request a path from A to B
 		static int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
@@ -108,7 +109,7 @@ namespace Wiwa {
 		// Utility: return true if pos is inside the map boundaries
 		static bool CheckBoundaries(const glm::ivec2& pos);
 
-		// Utility: returns true is the tile is walkable
+		// Utility: returns true if the tile is walkable
 		static bool IsWalkable(const glm::ivec2& pos);
 
 		// Utility: return the walkability value of a tile
@@ -118,8 +119,8 @@ namespace Wiwa {
 		// Map Related functions
 		*/
 
-		// Generate the grid of the map
-		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight);
+		// Generate the grid of the map, stores it inside map data and set the navigation values to walkable or non walkable
+		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos);
 
 		// Space translations for the pathfinding
 		static glm::ivec2 MapToWorld(int x, int y);
@@ -128,8 +129,7 @@ namespace Wiwa {
 
 		private:
 
-		// size of the map
-			// Aren't they needed inside the agent?
+		// total size of the map in world coords if i am not mistaken
 		static uint32_t m_width;
 		static uint32_t m_height;
 			

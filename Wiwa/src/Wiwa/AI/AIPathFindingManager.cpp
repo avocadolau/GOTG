@@ -262,16 +262,17 @@ unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 	return INVALID_WALK_CODE;
 }
 
-bool Wiwa::AIPathFindingManager::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight)
+bool Wiwa::AIPathFindingManager::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos)
 {
 	bool ret = false;
 
 	bool isWalkable = true;
 
+	m_mapData.startingPosition = startPos;
 	m_mapData.width = width;
 	m_mapData.height = height;
-	m_mapData.tileHeight = tileHeight;
-	m_mapData.tileWidth = tileWidth;
+	m_mapData.tileHeight = (int)tileHeight;
+	m_mapData.tileWidth = (int)tileWidth;
 	
 	m_map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
 	memset(m_map, 1, width * height);
