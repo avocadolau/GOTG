@@ -32,7 +32,6 @@
 
 # User content
 /Editor/WiwaEditor.exe
-/Editor/Assets
 /Editor/Wiwa.dll
 /Editor/Library
 imgui.ini
