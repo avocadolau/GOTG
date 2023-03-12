@@ -35,6 +35,8 @@ namespace Wiwa {
 		// Pathnode: Helper struct to represent a node in the path creation
 		// ---------------------------------------------------------------------
 
+		struct PathList;
+
 		struct PathNode
 		{
 			int g;
@@ -47,6 +49,8 @@ namespace Wiwa {
 			PathNode(int g, int h, const glm::ivec2& pos, const PathNode* parent);
 			PathNode(const PathNode& node);
 
+			bool operator==(const PathNode& other) const;
+
 			// Fills a list (PathList) of all valid adjacent pathnodes
 			uint32_t FindWalkableAdjacents(Wiwa::AIPathFindingManager::PathList& listToFill) const;
 			// Calculates this tile score
@@ -58,6 +62,7 @@ namespace Wiwa {
 		// ---------------------------------------------------------------------
 		// Helper struct to include a list of path nodes
 		// ---------------------------------------------------------------------
+
 		struct PathList
 		{
 			// Looks for a node in this list and returns it's list node or NULL

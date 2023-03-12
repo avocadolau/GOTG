@@ -34,6 +34,11 @@ Wiwa::AIPathFindingManager::PathNode::PathNode(int g, int h, const const glm::iv
 Wiwa::AIPathFindingManager::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
 {}
 
+bool Wiwa::AIPathFindingManager::PathNode::operator==(const PathNode& other) const
+{
+	return (pos == other.pos && g == other.g && h == other.h && parent == other.parent);
+}
+
 uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPathFindingManager::PathList& listToFill) const
 {
 	glm::ivec2 cell;
