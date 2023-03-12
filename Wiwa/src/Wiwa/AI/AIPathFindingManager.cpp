@@ -21,7 +21,7 @@ uint32_t Wiwa::AIPathFindingManager::m_width = 0;
 uint32_t Wiwa::AIPathFindingManager::m_height = 0;
 unsigned char* Wiwa::AIPathFindingManager::m_map = nullptr;
 std::vector<glm::ivec2> Wiwa::AIPathFindingManager::m_lastPath = {};
-
+Wiwa::AIPathFindingManager::MapData Wiwa::AIPathFindingManager::m_mapData = MapData();
 
 // PathNode Defintitions
 
@@ -260,4 +260,24 @@ unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 		return m_map[(pos.y * m_width) + pos.x];
 
 	return INVALID_WALK_CODE;
+}
+
+glm::ivec2 Wiwa::AIPathFindingManager::MapToWorld(int x, int y)
+{
+	glm::ivec2 ret;
+
+	ret.x = x * m_mapData.tileWidth;
+	ret.y = y * m_mapData.tileHeight;
+
+	return ret;
+}
+
+glm::ivec2 Wiwa::AIPathFindingManager::WorldToMap(int x, int y)
+{
+	glm::ivec2 ret;
+
+	ret.x = x / m_mapData.tileWidth;
+	ret.y = y / m_mapData.tileHeight;
+
+	return ret;
 }

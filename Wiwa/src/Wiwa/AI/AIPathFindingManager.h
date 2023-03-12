@@ -31,6 +31,16 @@ namespace Wiwa {
 
 	public:
 
+		// Data from the map
+		struct MapData
+		{
+			int width;
+			int	height;
+			int	tileWidth;
+			int	tileHeight;
+		};
+
+
 		// ---------------------------------------------------------------------
 		// Pathnode: Helper struct to represent a node in the path creation
 		// ---------------------------------------------------------------------
@@ -102,6 +112,18 @@ namespace Wiwa {
 		// Utility: return the walkability value of a tile
 		static unsigned char GetTileAt(const glm::ivec2& pos);
 
+		/*
+		// Map Related functions
+		*/
+
+		// Generate the grid of the map
+		static bool CreateWalkabilityMap(int& width, int& height, unsigned char** buffer, int navLayerId);
+
+		// Space translations for the pathfinding
+		static glm::ivec2 MapToWorld(int x, int y);
+		static glm::ivec2 WorldToMap(int x, int y);
+
+
 		private:
 
 		// size of the map
@@ -113,6 +135,8 @@ namespace Wiwa {
 
 		// we store the created path here
 		static std::vector<glm::ivec2> m_lastPath;
+
+		static MapData m_mapData;
 		
 	};
 }
