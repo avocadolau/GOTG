@@ -4,7 +4,7 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/SceneManager.h>
-#include <Wiwa/ecs/components/Mesh.h>
+
 #include <ImSequencer.h>
 
 AnimationPanel::AnimationPanel(EditorLayer* instance)
@@ -36,7 +36,8 @@ void AnimationPanel::Draw()
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
 		std::string edit = entName;
-
+		//std::vector<EntityId>* entities = em.GetParentEntitiesAlive();
+		//EntityId entID = em.GetParentEntitiesAlive()->at(m_CurrentID);
 		ImGui::Text("Entity:%s", (char*)edit.c_str());
 		
 		
@@ -47,16 +48,27 @@ void AnimationPanel::Draw()
 			model = model->getModelAt(meshId->modelIndex);
 			if (ImGui::CollapsingHeader("Animations "))
 			{
-				model->GetParent()->GetAnimations().size();
-				for (int i = 0; model->GetParent()->GetAnimations().size(); i++)
+				//model->GetParent()->GetAnimations().size();
+				ImGui::Dummy(ImVec2(20.0f, 0.0f));
+				ImGui::SameLine();
+				ImGui::BeginChild("Names");
+				
+				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
+				for (int i = 0; i< model->GetParent()->GetAnimations().size(); i++)
 				{
 					if (model->GetParent()->GetAnimations()[i] != nullptr)
 					{
-						ImGui::Text(model->GetParent()->GetAnimations()[i]->name.c_str());
-						ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
+						if (ImGui::CollapsingHeader(model->GetParent()->GetAnimations()[i]->name.c_str()))
+						{
+							
+							DisplayBones(model, meshId, i);
+						}
+
+						
 					}
 					
 				}
+				ImGui::EndChild();
 				
 				
 			}
@@ -122,4 +134,14 @@ bool AnimationPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
 
 
 	return false;
+}
+
+void AnimationPanel::DisplayBones(Wiwa::Model* model, Wiwa::Mesh* meshId, int animationNum)
+{
+	
+	
+	//ImGui::Button(model->GetParent()->GetAnimations()[animationNum]->name.c_str());
+	//model->GetBoneInfo().size();
+	ImGui::Text("test");
+	
 }

@@ -3,8 +3,8 @@
 #include "Panel.h"
 
 #include <Wiwa/events/ApplicationEvent.h>
-
-
+#include <Wiwa/utilities/render/Animation.h>
+#include <Wiwa/ecs/components/Mesh.h>
 
 
 
@@ -124,6 +124,7 @@ public:
 
 	void Draw() override;
 
+	void DisplayBones(Wiwa::Model* model, Wiwa::Mesh* meshId, int animationNum);
 
 private:
 
