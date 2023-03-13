@@ -303,7 +303,7 @@ namespace Wiwa {
 		//DEBUG
 		std::vector<glm::mat4> transforms;
 
-		mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
+		//mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
 		//mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
 
 		matShader->SetBoneTransform(transforms);

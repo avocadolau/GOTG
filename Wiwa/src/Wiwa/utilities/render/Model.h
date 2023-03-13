@@ -6,7 +6,6 @@
 #include <map>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/math/AABB.h>
-#include <Wiwa/utilities/render/Animation.h>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
@@ -25,7 +24,7 @@ struct aiBone;
 struct aiAnimation;
 struct aiNodeAnim;
 struct aiAnimMesh;
-
+class Animation;
 
 namespace Wiwa {
 	struct ModelSettings;
@@ -84,7 +83,7 @@ namespace Wiwa {
 	struct BoneInfo {
 		glm::mat4 offsetMatrix;
 		glm::mat4 finalTransformation;
-
+		unsigned int id;
 		BoneInfo()
 		{
 			offsetMatrix = glm::mat4();
@@ -164,31 +163,6 @@ namespace Wiwa {
 				WI_ERROR("Sum of weight higher than 1");
 			
 			return;
-
-			//for (unsigned int i = 0; i < MAX_NUM_BONES_PER_VERTEX; i++)
-			//{
-			//	// weight has to be greater than 0 if the bone influences that vertex
-			//	// if 0 then we assume its empty
-			//	if (Weights[i] == 0.0)
-			//	{
-			//		BoneIDs[i] = BoneID;
-			//		Weights[i] = weight;
-			//		WI_INFO("weight {0} bone id {1}", weight, BoneID);
-			//		return;
-			//	}
-			//	
-			//	if (weight > Weights[i])
-			//	{
-			//		BoneIDs[i] = BoneID;
-			//		Weights[i] = weight;
-			//		WI_INFO("weight {0} bone id {1}", weight, BoneID);
-			//		return;
-			//	}
-
-			//}
-			//we should never reach here, more bones than we have space for
-			WI_ERROR("BONE INDEX TO VERTEX OUT OF SIZE");
-			assert(0);
 		}
 	};
 	
@@ -217,12 +191,13 @@ namespace Wiwa {
 		//stores offest matrix and final bone transformation
 		std::vector<BoneInfo> boneInfo;
 		std::vector<int> meshes;
-		std::map<std::string, unsigned int> boneNameToIndexMap;
-
+	//	std::map<std::string, unsigned int> boneNameToIndexMap;
+		std::map<std::string, BoneInfo> m_BoneInfoMap; //
+		int m_BoneCounter = 0;
 		// for the moment i'll put the anim here, i'll change it
 		std::vector<Animation*> animations;
 
-		Animation* currentAnimation;
+		//Animation* currentAnimation;
 
 		ModelHierarchy* model_hierarchy;
 		Model* parent;
@@ -247,12 +222,12 @@ namespace Wiwa {
 		void PrintAssimpNodeMatrix(const aiNode* mat);
 
 
-		void LoadAnimation(const aiAnimation* animation);
-		AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
-		AnimNode* LoadWiAnimNode(File file);
-		Animation* LoadWiAnimation(File file);
-		static void SaveWiAnimation(File& file, Animation* anim);
-		static void SaveWiAnimNode(File& file, AnimNode* node);
+		//void LoadAnimation(const aiAnimation* animation);
+		//AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
+		//AnimNode* LoadWiAnimNode(File file);
+		//Animation* LoadWiAnimation(File file);
+		//static void SaveWiAnimation(File& file, Animation* anim);
+		//static void SaveWiAnimNode(File& file, AnimNode* node);
 		
 		void CreateCube();
 		void CreatePlane();
@@ -261,15 +236,15 @@ namespace Wiwa {
 
 		static void SaveModelHierarchy(File file, ModelHierarchy* h);
 		static ModelHierarchy* LoadModelHierarchy(File file);
-		void ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* root, glm::mat4 parentTransform);
-		const AnimNode* FindNodeAnim(const Animation* animation, const std::string& NodeName);
-		////animation
-		unsigned int FindScaling(float AnimationTime, const AnimNode* pNodeAnim);
-		unsigned int FindRotation(float AnimationTime, const AnimNode* pNodeAnim);
-		unsigned int FindPosition(float AnimationTime, const AnimNode* pNodeAnim);
-		void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim);
-		void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
-		void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);
+		//void ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* root, glm::mat4 parentTransform);
+		//const AnimNode* FindNodeAnim(const Animation* animation, const std::string& NodeName);
+		//////animation
+		//unsigned int FindScaling(float AnimationTime, const AnimNode* pNodeAnim);
+		//unsigned int FindRotation(float AnimationTime, const AnimNode* pNodeAnim);
+		//unsigned int FindPosition(float AnimationTime, const AnimNode* pNodeAnim);
+		//void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim);
+		//void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
+		//void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);
 		
 		
 	public:
@@ -302,9 +277,9 @@ namespace Wiwa {
 
 		std::vector<BoneInfo> GetBoneInfo() { return boneInfo; }
 
-		void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
+	/*	void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
 		Animation* GetCurrentAnimation() { return currentAnimation; }
-		std::vector<Animation*> GetAnimations() {return animations; }
+		std::vector<Animation*> GetAnimations() {return animations; }*/
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
@@ -316,7 +291,8 @@ namespace Wiwa {
 		static void SaveModel(Model* model, const char* file);
 
 		bool HasBones() { return has_bones; }
-
+		auto& GetBoneInfoMap() { return m_BoneInfoMap; }
+		int& GetBoneCount() { return m_BoneCounter; }
 		//DEBUG
 		void PrintGlmMatrix(const glm::mat4& mat);
 	public:

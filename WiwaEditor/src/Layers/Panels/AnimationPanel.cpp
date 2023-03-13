@@ -54,20 +54,20 @@ void AnimationPanel::Draw()
 				ImGui::BeginChild("Names");
 				
 				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
-				for (int i = 0; i< model->GetParent()->GetAnimations().size(); i++)
-				{
-					if (model->GetParent()->GetAnimations()[i] != nullptr)
-					{
-						if (ImGui::CollapsingHeader(model->GetParent()->GetAnimations()[i]->name.c_str()))
-						{
-							
-							DisplayBones(model, meshId, i);
-						}
+				//for (int i = 0; i< model->GetParent()->GetAnimations().size(); i++)
+				//{
+				//	if (model->GetParent()->GetAnimations()[i] != nullptr)
+				//	{
+				//		if (ImGui::CollapsingHeader(model->GetParent()->GetAnimations()[i]->name.c_str()))
+				//		{
+				//			
+				//			DisplayBones(model, meshId, i);
+				//		}
 
-						
-					}
-					
-				}
+				//		
+				//	}
+				//	
+				//}
 				ImGui::EndChild();
 				
 				

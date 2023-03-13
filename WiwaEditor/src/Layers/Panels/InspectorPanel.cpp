@@ -165,7 +165,7 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 
 
 	//DEBUG
-	ImGui::SliderFloat("Animation time: ", &mod->GetParent()->animationTime, 0, mod->GetParent()->GetAnimations()[0]->duration);
+	//ImGui::SliderFloat("Animation time: ", &mod->GetParent()->animationTime, 0, mod->GetParent()->GetAnimations()[0]->duration);
 	
 
 	
