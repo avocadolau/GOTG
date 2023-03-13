@@ -25,11 +25,13 @@ public:
 	int sliderID = 0;
 	int checkboxID = 0;
 	int imageID = 0;
+	int textID = 0;
 
 	int lastButtonID = 0;
 	int lastSliderID = 0;
 	int lastCheckboxID = 0;
 	int lastImageID = 0;
+	int lastTextID = 0;
 
 	int position[2] = {0,0};
 	int size[2] = {0,0};

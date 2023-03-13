@@ -44,11 +44,10 @@ namespace Wiwa
 		void DestroyGuiControl(GuiControl* control);
 		void RemoveControl(GuiControl* control);
 
-		bool InitFont(const char* path);
+		const char* InitFont(const char* path,char* word);
 
 		std::vector<GuiControl*> ReturnControls() { return controls; }
 
-	
 
 	public:
 
@@ -59,5 +58,6 @@ namespace Wiwa
 		bool doLogic = false;
 
 		Image* texture;
+
 	};
 }

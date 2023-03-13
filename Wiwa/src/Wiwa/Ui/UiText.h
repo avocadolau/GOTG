@@ -18,6 +18,7 @@ namespace Wiwa
 		virtual ~GuiText();
 
 		bool Draw(Renderer2D* render);
+
 	};
 }
 

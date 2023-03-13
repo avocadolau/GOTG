@@ -201,6 +201,12 @@ namespace Wiwa
 			}
 		}
 
+		bool LoadText(std::string text)
+		{
+
+			return true;
+		}
+
 	public:
 
 		ResourceId textId1;

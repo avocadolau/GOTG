@@ -11,6 +11,8 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/scene/Scene.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "../vendor/stb/stb_image_write.h"
 
 #define STB_TRUETYPE_IMPLEMENTATION 
 #include "../vendor/stb/stb_truetype.h"
@@ -30,7 +32,7 @@ namespace Wiwa
 		m_Scene = scene;
 		//InitFont("assets/arial.ttf");
 		//Test remove once done
-		InitFont("assets/fonts/Roboto-Italic.ttf");
+		//InitFont("assets/arial.ttf","prueba1");
 		return true;
 	}
 
@@ -176,7 +178,7 @@ namespace Wiwa
 		
 	}
 
-	bool GuiManager::InitFont(const char* path)
+	const char* GuiManager::InitFont(const char* path, char* _word)
 	{
 		
 		/* load font file */
@@ -210,7 +212,7 @@ namespace Wiwa
 		}
 
 		int b_w = 512; /* bitmap width */
-		int b_h = 128; /* bitmap height */
+		int b_h = 512; /* bitmap height */
 		int l_h = 64; /* line height */
 
 		/* create a bitmap for the phrase */
@@ -219,7 +221,7 @@ namespace Wiwa
 		/* calculate font scaling */
 		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
 
-		char* word = "the quick brown fox";
+		char* word = _word;
 
 		int x = 0;
 
@@ -257,12 +259,16 @@ namespace Wiwa
 			kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
 			x += roundf(kern * scale);
 		}
-
-		
+	
+		std::string filePath = "assets/";
+		filePath.append(word);
+		filePath.append(".png");
+		stbi_write_png(filePath.c_str(), b_w, b_h, 1, bitmap, b_w);
+		std::string textToReturn = filePath;
 		free(fontBuffer);
 		free(bitmap);
 
-		return true;
+		return textToReturn.c_str();
 	}
 
 	

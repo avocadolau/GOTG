@@ -27,7 +27,7 @@ void UIPanel::Draw()
 
 	if (!Time::IsPlaying())
 	{
-		const char* items[] = { "Button", "Slider", "CheckBox", "Image"};
+		const char* items[] = { "Button", "Slider", "CheckBox", "Image","Text"};
 		static const char* current_item = NULL;
 		if (ImGui::CollapsingHeader("Create UI element"))
 		{
@@ -311,6 +311,43 @@ void UIPanel::Draw()
 			}
 		}
 
+		if (current_item == "Text")
+		{
+			ImGui::Text("UI text creator:");
+			ImGui::NewLine();
+
+			ImGui::InputInt2("position", position);
+			ImGui::InputInt2("size", size);
+			ImGui::InputText("String", (char*)tex_path.c_str(),64);
+			if (ImGui::BeginPopupModal("WARNING"))
+			{
+				ImGui::Text("Check if all the requirements were filled \nbefore creating the UI element \nall elements need 2 textures.");
+				if (ImGui::Button("Close"))
+				{
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+
+			}
+			Rect2i rect;
+			rect.x = position[0];
+			rect.y = position[1];
+			rect.width = size[0];
+			rect.height = size[1];
+			
+			if (ImGui::Button("Create Text"))
+			{
+				if (tex_path.c_str() != nullptr)
+				{
+					m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.controls.size(), rect, tex_path.c_str());
+				}
+				else
+				{
+					ImGui::OpenPopup("WARNING");
+				}
+			}
+		}
+
 		if (ImGui::CollapsingHeader("Edit UI element"))
 		{
 			if (m_GuiManager.controls.size() > 0)
@@ -319,7 +356,7 @@ void UIPanel::Draw()
 				sliderID = 0;
 				checkboxID = 0;
 				imageID = 0;
-
+				textID = 0;
 				for (int i = 0; i < m_GuiManager.controls.size(); i++)
 				{
 					ImGui::PushID(i);
@@ -343,6 +380,11 @@ void UIPanel::Draw()
 						ImGui::Text("Image # %i", imageID);
 						imageID++;
 					}
+					if (m_GuiManager.controls.at(i)->type == GuiControlType::TEXT)
+					{
+						ImGui::Text("Text # %i", textID);
+						textID++;
+					}
 					ImGui::SameLine();
 					if (ImGui::Button("Edit"))
 					{
@@ -351,6 +393,7 @@ void UIPanel::Draw()
 						lastSliderID = sliderID;
 						lastCheckboxID = checkboxID;
 						lastImageID = imageID;
+						lastTextID = textID;
 					}
 					ImGui::SameLine();
 					if (ImGui::Button("Delete"))
@@ -396,6 +439,10 @@ void UIPanel::Draw()
 				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::IMAGE)
 				{
 					ImGui::Text("Edit image # %i", lastImageID);
+				}
+				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::TEXT)
+				{
+					ImGui::Text("Edit text # %i", lastTextID);
 				}
 
 				ImGui::PushID(UI_element_selected);
