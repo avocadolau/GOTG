@@ -58,8 +58,8 @@ uniform PointLight[MAX_POINT_LIGHTS] u_PointLights;
 uniform int u_NumSpotLights;
 uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 
-uniform sampler2D u_Texture;
 uniform sampler2D u_ShadowMap;
+uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
 
