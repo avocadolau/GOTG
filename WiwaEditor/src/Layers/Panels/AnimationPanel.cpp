@@ -85,28 +85,40 @@ void AnimationPanel::Draw()
 	}
 	ImGui::EndChild();
 	ImGui::SameLine();
-	ImGui::BeginChild("Editor", ImVec2(w, h), true);
-	////ImSequencer::Sequencer()
-	//static int selectedEntry = -1;
-	//static int firstFrame = 0;
-	//static bool expanded = true;
-	//static int currentFrame = 100;
+	ImGui::BeginChild("Editor", ImVec2(2000, 700), true);
+	
+	MySequence mySequence;
+	mySequence.mFrameMin = -100;
+	mySequence.mFrameMax = 1000;
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 0, 10, 30, false });
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 1, 20, 30, true });
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 3, 12, 60, false });
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 2, 61, 90, false });
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 4, 90, 99, false });
+	
+	
+	static int selectedEntry = -1;
+	static int firstFrame = 0;
+	static bool expanded = true;
+	static int currentFrame = 100;
 
-	//ImGui::PushItemWidth(130);
-	//ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
-	//ImGui::SameLine();
-	//ImGui::InputInt("Frame ", &currentFrame);
-	//ImGui::SameLine();
-	//ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
-	//ImGui::PopItemWidth();
-	//ImSequencer::Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
-	//// add a UI to edit that particular item
-	//if (selectedEntry != -1)
-	//{
-	//	const MySequence::MySequenceItem& item = mySequence.myItems[selectedEntry];
-	//	ImGui::Text("I am a %s, please edit me", SequencerItemTypeNames[item.mType]);
-	//	// switch (type) ....
-	//}
+	ImGui::PushItemWidth(130);
+	ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
+	ImGui::SameLine();
+	ImGui::InputInt("Frame ", &currentFrame);
+	ImGui::SameLine();
+	ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
+	ImGui::PopItemWidth();
+	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
+	// add a UI to edit that particular item
+	if (selectedEntry != -1)
+	{
+		const MySequence::MySequenceItem& item = mySequence.myItems[selectedEntry];
+		ImGui::Text("I am a %s, please edit me", SequencerItemTypeNames[item.mType]);
+		// switch (type) ....
+	}
+
+	
 	ImGui::EndChild();
 	ImGui::PopStyleVar();
 	ImGui::End();
@@ -144,4 +156,45 @@ void AnimationPanel::DisplayBones(Wiwa::Model* model, Wiwa::Mesh* meshId, int an
 	//model->GetBoneInfo().size();
 	ImGui::Text("test");
 	
+}
+
+void MySequence::CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& legendRect, const ImRect& clippingRect, const ImRect& legendClippingRect)
+{
+	static const char* labels[] = { "Translation", "Rotation" , "Scale" };
+
+	rampEdit.mMax = ImVec2(float(mFrameMax), 1.f);
+	rampEdit.mMin = ImVec2(float(mFrameMin), 0.f);
+	draw_list->PushClipRect(legendClippingRect.Min, legendClippingRect.Max, true);
+	for (int i = 0; i < 3; i++)
+	{
+		ImVec2 pta(legendRect.Min.x + 30, legendRect.Min.y + i * 14.f);
+		ImVec2 ptb(legendRect.Max.x, legendRect.Min.y + (i + 1) * 14.f);
+		draw_list->AddText(pta, rampEdit.mbVisible[i] ? 0xFFFFFFFF : 0x80FFFFFF, labels[i]);
+		if (ImRect(pta, ptb).Contains(ImGui::GetMousePos()) && ImGui::IsMouseClicked(0))
+			rampEdit.mbVisible[i] = !rampEdit.mbVisible[i];
+	}
+	draw_list->PopClipRect();
+
+	ImGui::SetCursorScreenPos(rc.Min);
+	ImCurveEdit::Edit(rampEdit, ImVec2(rc.Max.x - rc.Min.x, rc.Max.y - rc.Min.y), 137 + index, &clippingRect);
+}
+
+void MySequence::CustomDrawCompact(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& clippingRect)
+{
+	rampEdit.mMax = ImVec2(float(mFrameMax), 1.f);
+	rampEdit.mMin = ImVec2(float(mFrameMin), 0.f);
+	draw_list->PushClipRect(clippingRect.Min, clippingRect.Max, true);
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < rampEdit.mPointCount[i]; j++)
+		{
+			float p = rampEdit.mPts[i][j].x;
+			if (p < myItems[index].mFrameStart || p > myItems[index].mFrameEnd)
+				continue;
+			float r = (p - mFrameMin) / float(mFrameMax - mFrameMin);
+			float x =  ImLerp(rc.Min.x, rc.Max.x, r);
+			draw_list->AddLine(ImVec2(x, rc.Min.y + 6), ImVec2(x, rc.Max.y - 4), 0xAA000000, 4.f);
+		}
+	}
+	draw_list->PopClipRect();
 }
