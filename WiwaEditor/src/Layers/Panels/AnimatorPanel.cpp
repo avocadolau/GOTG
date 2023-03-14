@@ -74,7 +74,11 @@ void AnimatorPanel::Draw()
 	}
 
 	
-
+	if (ImGui::Button("add"))
+	{
+		delegate.test++;
+		WI_INFO("{}", delegate.test);
+	}
 	
 	ImGui::EndChild();
 	ImGui::SameLine();

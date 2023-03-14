@@ -9,6 +9,9 @@
 
 struct GraphEditorDelegate : public GraphEditor::Delegate
 {
+
+    static inline int test = 1;
+
     bool AllowedLink(GraphEditor::NodeIndex from, GraphEditor::NodeIndex to) override
     {
         return true;
@@ -86,10 +89,10 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
             IM_COL32(160, 160, 180, 255),
             IM_COL32(100, 100, 140, 255),
             IM_COL32(110, 110, 150, 255),
-            0,
-           nullptr,
+            test,
             nullptr,
-            0,
+            nullptr,
+            2,
             nullptr,
             nullptr
         },
@@ -129,7 +132,13 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 
     std::vector<Node> mNodes = {
         {
-            "Test",
+            "Test01",
+            0,
+            {0, 0, 100, 75},
+            false
+        },
+        {
+            "Test02",
             0,
             {0, 0, 100, 75},
             false

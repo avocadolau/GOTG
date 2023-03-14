@@ -563,7 +563,15 @@ static bool DrawNode(ImDrawList* drawList,
         
         for (size_t slotIndex = 0; slotIndex < slotCount[i]; slotIndex++)
         {
-            const char* con = i ? nodeTemplate.mOutputNames[slotIndex] : nodeTemplate.mInputNames[slotIndex];//node.mOutputs[slot_idx] : node->mInputs[slot_idx];
+           const char* con;
+           if (nodeTemplate.mInputNames != NULL)
+           {
+              con = i ? nodeTemplate.mOutputNames[slotIndex] : nodeTemplate.mInputNames[slotIndex];//node.mOutputs[slot_idx] : node->mInputs[slot_idx];
+           }
+           else
+           {
+              con = "test";
+           }
             //if (!delegate->IsIOPinned(nodeIndex, slot_idx, i == 1))
             //{
             //   
@@ -575,8 +583,8 @@ static bool DrawNode(ImDrawList* drawList,
             const float ofs = 0.f;
 
             ImVec2 pts[3] = {p + ImVec2(arc + ofs, 0.f), p + ImVec2(0.f + ofs, -arc), p + ImVec2(0.f + ofs, arc)};
-            drawList->AddTriangleFilled(pts[0], pts[1], pts[2], i ? 0xFFAA5030 : 0xFF30AA50);
-            drawList->AddTriangle(pts[0], pts[1], pts[2], 0xFF000000, 2.f);
+            //drawList->AddTriangleFilled(pts[0], pts[1], pts[2], i ? 0xFFAA5030 : 0xFF30AA50);
+            //drawList->AddTriangle(pts[0], pts[1], pts[2], 0xFF000000, 2.f);
         }
     }
     
