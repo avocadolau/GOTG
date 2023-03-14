@@ -9,6 +9,7 @@
 
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa/utilities/functions/Action.h>
+#include <Wiwa/utilities/filesystem/FileSystem.h>
 
 typedef size_t EntityId;
 typedef size_t ComponentId;
@@ -85,6 +86,8 @@ namespace Wiwa
 		bool OnComponentAdded(EntityId entityId, byte *data, const Type *type);
 		bool OnComponentRemoved(EntityId entityId, byte *data, const Type *type);
 
+		void _saveEntityImpl(File& file, EntityId eid);
+		EntityId _loadEntityImpl(File& file, EntityId parent, bool is_parent);
 	public:
 		EntityManager();
 		~EntityManager();
@@ -135,6 +138,12 @@ namespace Wiwa
 		bool IsParent(EntityId entity) { return m_EntityParent[entity] == entity; }
 
 		void SetActive(EntityId entity, bool active) { m_EntityActive[entity] = active; }
+
+		// Save entity in a file for prefab purposes
+		void SavePrefab(EntityId entity, const char* path);
+
+		// Load prefab from file
+		EntityId LoadPrefab(const char* path);
 
 		bool IsActive(EntityId entity) { return m_EntityActive[entity]; }
 
