@@ -107,15 +107,17 @@ namespace Wiwa {
 		//save NodeAnim structure
 		animation->SaveNodeData(file, &animation->m_RootNode);
 		//save bone info map
-		file.Write(&animation->m_BoneCount, sizeof(unsigned int));
-		for (auto& bone : animation->m_BoneInfoMap)
+		size_t bone_index_size = animation->m_BoneInfoMap.size();
+		file.Write(&bone_index_size, sizeof(size_t));
+		std::map<std::string, BoneInfo>::iterator it;
+		for (it = animation->m_BoneInfoMap.begin(); it != animation->m_BoneInfoMap.end(); it++)
 		{
-			name_len = bone.first.size();
-			file.Write(&name_len, sizeof(size_t));
-			file.Write(animation->m_Name.c_str(), name_len);
-
-			file.Write(&bone.second.id, sizeof(unsigned int));
-			file.Write(&bone.second.offsetMatrix, sizeof(glm::mat4));
+			size_t name_size = it->first.size();
+			file.Write(&name_size, sizeof(size_t));
+			file.Write(it->first.c_str(), name_size);
+			file.Write(&it->second.id, sizeof(unsigned int));
+			file.Write(&it->second.offsetMatrix, sizeof(glm::mat4));
+			file.Write(&it->second.finalTransformation, sizeof(glm::mat4));
 		}
 
 		size_t channels_size = animation->m_Bones.size();
@@ -180,16 +182,18 @@ namespace Wiwa {
 		anim->m_RootNode = *anim->LoadNodeData(file);
 
 		//save bone info map
-		file.Read(&anim->m_BoneCount, sizeof(unsigned int));
-		for (unsigned int i = 0; i < anim->m_BoneCount; i++)
+		size_t bone_index_size;
+		file.Read(&bone_index_size, sizeof(size_t));
+		for (size_t i = 0; i < bone_index_size; i++)
 		{
 			std::pair<std::string, BoneInfo> item;
-			file.Read(&name_len, sizeof(size_t));
-			item.first.resize(name_len);
-			file.Read(&item.first[0], name_len);
-
+			size_t name_size;
+			file.Read(&name_size, sizeof(size_t));
+			item.first.resize(name_size);
+			file.Read(&item.first[0], name_size);
 			file.Read(&item.second.id, sizeof(unsigned int));
 			file.Read(&item.second.offsetMatrix, sizeof(glm::mat4));
+			file.Read(&item.second.finalTransformation, sizeof(glm::mat4));
 
 			anim->m_BoneInfoMap.insert(item);
 		}
