@@ -244,9 +244,7 @@ namespace Wiwa {
 		//unsigned int FindPosition(float AnimationTime, const AnimNode* pNodeAnim);
 		//void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim);
 		//void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
-		//void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);
-		
-		
+		//void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);	
 	public:
 		Model(const char* file);
 		~Model();
