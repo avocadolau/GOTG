@@ -79,37 +79,57 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
 
     const GraphEditor::Template GetTemplate(GraphEditor::TemplateIndex index) override
     {
-        return mTemplates[index];
+        return  mTemplates.at(index); //mTemplates[index];
     }
     
-    //static const char* input;
-    
-    static inline GraphEditor::Template mTemplates[] = {
-       {
-            IM_COL32(160, 160, 180, 255),
-            IM_COL32(100, 100, 140, 255),
-            IM_COL32(110, 110, 150, 255),
-            test,
-            nullptr,
-            nullptr,
-            2,
-            nullptr,
-            nullptr
-        },
+    void ChangeInputCount(int index, int num) override 
+    {
+        mTemplates[index].mInputCount += num;
+    }
 
-        {
-            // IM_COL32(180, 160, 160, 255),
-            // IM_COL32(140, 100, 100, 255),
-            // IM_COL32(150, 110, 110, 255),
-            // 3,
-            // nullptr,
-            // Array{ IM_COL32(200,100,100,255), IM_COL32(100,200,100,255), IM_COL32(100,100,200,255) },
-            // 1,
-            // Array{"MyOutput0"},
-            // Array{ IM_COL32(200,200,200,255)}
-         }
+    std::vector<GraphEditor::Template> mTemplates;
+    
+    void AddTemplate() {
+        GraphEditor::Template tem;
+        tem.mHeaderColor = IM_COL32(160, 160, 180, 255);
+        tem.mBackgroundColor = IM_COL32(100, 100, 140, 255);
+        tem.mBackgroundColorOver = IM_COL32(110, 110, 150, 255);
+        tem.mInputCount = test;
+        tem.mInputNames = nullptr;
+        tem.mInputColors = nullptr;
+        tem.mOutputCount = 2;
+        tem.mOutputNames = nullptr;
+        tem.mOutputColors = nullptr;
+        mTemplates.push_back(tem);
     };
 
+    //static inline GraphEditor::Template mTemplates[] = {
+    //   {
+    //        IM_COL32(160, 160, 180, 255),
+    //        IM_COL32(100, 100, 140, 255),
+    //        IM_COL32(110, 110, 150, 255),
+    //        test,
+    //        nullptr,
+    //        nullptr,
+    //        2,
+    //        nullptr,
+    //        nullptr
+    //    },
+    //
+    //    {
+    //        // IM_COL32(180, 160, 160, 255),
+    //        // IM_COL32(140, 100, 100, 255),
+    //        // IM_COL32(150, 110, 110, 255),
+    //        // 3,
+    //        // nullptr,
+    //        // Array{ IM_COL32(200,100,100,255), IM_COL32(100,200,100,255), IM_COL32(100,100,200,255) },
+    //        // 1,
+    //        // Array{"MyOutput0"},
+    //        // Array{ IM_COL32(200,200,200,255)}
+    //     }
+    //};
+
+    
     const size_t GetLinkCount() override
     {
         return mLinks.size();

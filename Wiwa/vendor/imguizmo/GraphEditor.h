@@ -134,6 +134,8 @@ struct Delegate
     virtual const size_t GetTemplateCount() = 0;
     virtual const Template GetTemplate(TemplateIndex index) = 0;
 
+    virtual void ChangeInputCount(int index, int num) = 0;
+
     virtual const size_t GetNodeCount() = 0;
     virtual const Node GetNode(NodeIndex index) = 0;
     
