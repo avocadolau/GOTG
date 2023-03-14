@@ -90,14 +90,15 @@ void AnimationPanel::Draw()
 	MySequence mySequence;
 	mySequence.mFrameMin = -100;
 	mySequence.mFrameMax = 1000;
-	mySequence.myItems.push_back(MySequence::MySequenceItem{ 0, 10, 30, false });
-	mySequence.myItems.push_back(MySequence::MySequenceItem{ 1, 20, 30, true });
-	mySequence.myItems.push_back(MySequence::MySequenceItem{ 3, 12, 60, false });
-	mySequence.myItems.push_back(MySequence::MySequenceItem{ 2, 61, 90, false });
-	mySequence.myItems.push_back(MySequence::MySequenceItem{ 4, 90, 99, false });
+	
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 0, 10, 30, true });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 1, 20, 30, true });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 3, 12, 60, false });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 2, 61, 90, false });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 4, 90, 99, false });
 	
 	
-	static int selectedEntry = -1;
+	static int selectedEntry = 0;
 	static int firstFrame = 0;
 	static bool expanded = true;
 	static int currentFrame = 100;

@@ -34,7 +34,7 @@ private:
 
 };
 
-static const char* SequencerItemTypeNames[] = { "Camera","Music", "ScreenEffect", "FadeIn", "Animation" };
+static const char* SequencerItemTypeNames[] = {"Animation", "w"};
 
 struct RampEdit : public ImCurveEdit::Delegate
 {
