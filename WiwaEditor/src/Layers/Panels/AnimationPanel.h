@@ -23,7 +23,7 @@ public:
 	void Draw() override;
 
 	void DisplayBones(Wiwa::Model* model, Wiwa::Mesh* meshId, int animationNum);
-
+    void CreateSequencer();
 private:
 
 	int m_CurrentID = 0;

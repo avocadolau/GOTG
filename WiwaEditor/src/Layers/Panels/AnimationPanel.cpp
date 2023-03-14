@@ -85,42 +85,9 @@ void AnimationPanel::Draw()
 	}
 	ImGui::EndChild();
 	ImGui::SameLine();
-	ImGui::BeginChild("Editor", ImVec2(2000, 700), true);
 	
-	MySequence mySequence;
-	mySequence.mFrameMin = -100;
-	mySequence.mFrameMax = 1000;
-	
-	mySequence.myItems.push_back(MySequence::MySequenceItem{ 0, 10, 30, true });
-	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 1, 20, 30, true });
-	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 3, 12, 60, false });
-	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 2, 61, 90, false });
-	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 4, 90, 99, false });
-	
-	
-	static int selectedEntry = 0;
-	static int firstFrame = 0;
-	static bool expanded = true;
-	static int currentFrame = 100;
+	CreateSequencer();
 
-	ImGui::PushItemWidth(130);
-	ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
-	ImGui::SameLine();
-	ImGui::InputInt("Frame ", &currentFrame);
-	ImGui::SameLine();
-	ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
-	ImGui::PopItemWidth();
-	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
-	// add a UI to edit that particular item
-	if (selectedEntry != -1)
-	{
-		const MySequence::MySequenceItem& item = mySequence.myItems[selectedEntry];
-		ImGui::Text("I am a %s, please edit me", SequencerItemTypeNames[item.mType]);
-		// switch (type) ....
-	}
-
-	
-	ImGui::EndChild();
 	ImGui::PopStyleVar();
 	ImGui::End();
 }
@@ -158,6 +125,51 @@ void AnimationPanel::DisplayBones(Wiwa::Model* model, Wiwa::Mesh* meshId, int an
 	ImGui::Text("test");
 	
 }
+
+void AnimationPanel::CreateSequencer()
+{
+	ImGui::BeginChild("Editor", ImVec2(2000, 700), true);
+
+	MySequence mySequence;
+	mySequence.mFrameMin = -100;
+	mySequence.mFrameMax = 1000;
+
+	mySequence.myItems.push_back(MySequence::MySequenceItem{ 0, 10, 30, true });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 1, 20, 30, true });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 3, 12, 60, false });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 2, 61, 90, false });
+	//mySequence.myItems.push_back(MySequence::MySequenceItem{ 4, 90, 99, false });
+
+
+	static int selectedEntry = 0;
+	static int firstFrame = 0;
+	static bool expanded = true;
+	static int currentFrame = 100;
+
+	ImGui::PushItemWidth(130);
+	ImGui::InputInt("Frame Min", &mySequence.mFrameMin);
+	ImGui::SameLine();
+	ImGui::InputInt("Frame ", &currentFrame);
+	ImGui::SameLine();
+	ImGui::InputInt("Frame Max", &mySequence.mFrameMax);
+	ImGui::PopItemWidth();
+	Sequencer(&mySequence, &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_COPYPASTE | ImSequencer::SEQUENCER_CHANGE_FRAME);
+	// add a UI to edit that particular item
+	if (selectedEntry != -1)
+	{
+		const MySequence::MySequenceItem& item = mySequence.myItems[selectedEntry];
+		ImGui::Text("I am a %s, please edit me", SequencerItemTypeNames[item.mType]);
+		// switch (type) ....
+	}
+
+
+	ImGui::EndChild();
+}
+
+
+
+
+
 
 void MySequence::CustomDraw(int index, ImDrawList* draw_list, const ImRect& rc, const ImRect& legendRect, const ImRect& clippingRect, const ImRect& legendClippingRect)
 {
@@ -199,3 +211,5 @@ void MySequence::CustomDrawCompact(int index, ImDrawList* draw_list, const ImRec
 	}
 	draw_list->PopClipRect();
 }
+
+
