@@ -11,6 +11,7 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
+		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);

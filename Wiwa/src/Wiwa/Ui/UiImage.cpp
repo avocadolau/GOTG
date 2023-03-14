@@ -11,6 +11,7 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		this->texture = texture;
+		m_Scene = scene;
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();

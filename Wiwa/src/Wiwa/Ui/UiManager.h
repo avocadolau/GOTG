@@ -3,6 +3,7 @@
 #include "Wiwa/Ui/UiControl.h"
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
 
@@ -44,7 +45,7 @@ namespace Wiwa
 		void DestroyGuiControl(GuiControl* control);
 		void RemoveControl(GuiControl* control);
 
-		const char* InitFont(const char* path,char* word);
+		Text* InitFont(const char* path,char* word);
 
 		std::vector<GuiControl*> ReturnControls() { return controls; }
 

@@ -3,7 +3,7 @@
 #include "Wiwa/Ui/UiControl.h"
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-
+#include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
 
@@ -19,6 +19,7 @@ namespace Wiwa
 
 		bool Draw(Renderer2D* render);
 
+		Text* text;
 	};
 }
 

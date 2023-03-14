@@ -405,7 +405,7 @@ void UIPanel::Draw()
 					ImGui::SameLine();
 					if (ImGui::Button("Active"))
 					{
-						m_GuiManager.controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D(),!m_GuiManager.controls.at(i)->active);
+						m_GuiManager.controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
 					}
 					ImGui::PopID();
 				}

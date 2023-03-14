@@ -8,21 +8,14 @@ namespace Wiwa
 {
 	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text) : GuiControl(scene, GuiControlType::TEXT, id)
 	{
-		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		this->position = bounds;
-		this->texture = texture;
-		gm.InitFont("assets/Arial.ttf", (char*)string_text);
-		std::string path = "assets/";
-		path.append(string_text);
-		path.append(".png");
-	
-		Wiwa::Resources::CheckImport<Image>(path.c_str());
+		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+		text = new Text();
+		text = gm.InitFont("assets/Arial.ttf", (char*)string_text);
+		m_Scene = scene;
 		
-		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path.c_str());
-		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
-
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		
 		
 	}

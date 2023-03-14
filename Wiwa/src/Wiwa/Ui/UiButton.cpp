@@ -10,7 +10,7 @@ namespace Wiwa
 	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
-		
+		m_Scene = scene;
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 

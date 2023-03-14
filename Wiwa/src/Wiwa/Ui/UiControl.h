@@ -99,26 +99,6 @@ namespace Wiwa
 		{
 			return extraTexture;
 		}
-		uint32_t GetDisabledIdQuad()
-		{
-			return id_quad_disabled;
-		}
-		uint32_t GetNormalIdQuad()
-		{
-			return id_quad_normal;
-		}
-		uint32_t GetFocusedIdQuad()
-		{
-			return id_quad_focused;
-		}
-		uint32_t GetPressedIdQuad()
-		{
-			return id_quad_pressed;
-		}
-		uint32_t GetSelectedIdQuad()
-		{
-			return id_quad_selected;
-		}
 		uint32_t GetExtraIdQuad()
 		{
 			return id_quad_extra;
@@ -155,10 +135,10 @@ namespace Wiwa
 
 		}
 
-		void SwapActive(Wiwa::Renderer2D& r2d,bool _active)
+		void SwapActive(Wiwa::Renderer2D& r2d)
 		{
-			active = _active;
-
+			
+			active = !active;
 			if (active)
 			{
 				
@@ -169,6 +149,7 @@ namespace Wiwa
 				{
 					r2d.EnableInstance(m_Scene, id_quad_extra);
 				}
+				
 			}
 			else
 			{
@@ -195,9 +176,16 @@ namespace Wiwa
 			}
 		}
 
-		bool LoadText(std::string text)
+		bool SwapToNewTexture(const char* path)
 		{
+			/*Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
+
+			
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);*/
 			return true;
 		}
 
@@ -219,11 +207,8 @@ namespace Wiwa
 
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
-		uint32_t id_quad_disabled;
+		
 		uint32_t id_quad_normal;
-		uint32_t id_quad_focused;
-		uint32_t id_quad_pressed;
-		uint32_t id_quad_selected;
 
 		uint32_t id_quad_extra;
 	};

@@ -18,6 +18,7 @@
 #include "../vendor/stb/stb_truetype.h"
 
 
+
 namespace Wiwa
 {
 	GuiManager::GuiManager()
@@ -107,15 +108,18 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
-		
-		std::vector<GuiControl*> control = controls;
-		for (int i = 0; i < control.size(); i++)
+		if (Time::IsPlaying())
 		{
-			if (control.at(i)->active)
+			std::vector<GuiControl*> control = controls;
+			for (int i = 0; i < control.size(); i++)
 			{
-				control.at(i)->Update();
+				if (control.at(i)->active)
+				{
+					control.at(i)->Update();
+				}
 			}
 		}
+		
 		
 		size_t rsize = controlsToDestroy.size();
 
@@ -178,7 +182,7 @@ namespace Wiwa
 		
 	}
 
-	const char* GuiManager::InitFont(const char* path, char* _word)
+	Text* GuiManager::InitFont(const char* path, char* _word)
 	{
 		
 		/* load font file */
@@ -260,15 +264,14 @@ namespace Wiwa
 			x += roundf(kern * scale);
 		}
 	
-		std::string filePath = "assets/";
-		filePath.append(word);
-		filePath.append(".png");
-		stbi_write_png(filePath.c_str(), b_w, b_h, 1, bitmap, b_w);
-		std::string textToReturn = filePath;
+		
+		Text* text = new Text();
+		text->Init(b_w, b_h, bitmap);
+
 		free(fontBuffer);
 		free(bitmap);
 
-		return textToReturn.c_str();
+		return text;
 	}
 
 	

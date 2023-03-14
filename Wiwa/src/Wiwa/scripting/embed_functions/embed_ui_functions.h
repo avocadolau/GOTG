@@ -1,6 +1,6 @@
 #pragma once
 
 
-void Activate(int GuiID,bool active);
+void Activate(int GuiID);
 
 void SwapTexture(int GuiID, std::string path);
