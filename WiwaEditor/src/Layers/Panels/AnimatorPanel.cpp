@@ -13,6 +13,7 @@
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
 	: Panel("Animator", ICON_FK_MALE, instance)
 {
+	delegate.AddTemplate();
 }
 
 AnimatorPanel::~AnimatorPanel()
@@ -77,6 +78,7 @@ void AnimatorPanel::Draw()
 	if (ImGui::Button("add"))
 	{
 		delegate.test++;
+		delegate.mTemplates[0].mInputCount++;
 		WI_INFO("{}", delegate.test);
 	}
 	
