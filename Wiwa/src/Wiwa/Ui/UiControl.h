@@ -155,17 +155,15 @@ namespace Wiwa
 
 		}
 
-		void SwapActive(Wiwa::Renderer2D& r2d)
+		void SwapActive(Wiwa::Renderer2D& r2d,bool _active)
 		{
-			active = !active;
+			active = _active;
 
 			if (active)
 			{
-				r2d.EnableInstance(m_Scene, id_quad_disabled);
+				
 				r2d.EnableInstance(m_Scene, id_quad_normal);
-				r2d.EnableInstance(m_Scene, id_quad_focused);
-				r2d.EnableInstance(m_Scene, id_quad_pressed);
-				r2d.EnableInstance(m_Scene, id_quad_selected);
+				
 
 				if (type == GuiControlType::SLIDER)
 				{
@@ -174,11 +172,7 @@ namespace Wiwa
 			}
 			else
 			{
-				r2d.DisableInstance(m_Scene, id_quad_disabled);
 				r2d.DisableInstance(m_Scene, id_quad_normal);
-				r2d.DisableInstance(m_Scene, id_quad_focused);
-				r2d.DisableInstance(m_Scene, id_quad_pressed);
-				r2d.DisableInstance(m_Scene, id_quad_selected);
 
 				if (type == GuiControlType::SLIDER)
 				{

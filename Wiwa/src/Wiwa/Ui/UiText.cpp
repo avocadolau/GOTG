@@ -11,10 +11,11 @@ namespace Wiwa
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		this->position = bounds;
 		this->texture = texture;
-		gm.InitFont("assets/arial.ttf", (char*)string_text);
+		gm.InitFont("assets/Arial.ttf", (char*)string_text);
 		std::string path = "assets/";
 		path.append(string_text);
 		path.append(".png");
+	
 		Wiwa::Resources::CheckImport<Image>(path.c_str());
 		
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path.c_str());
