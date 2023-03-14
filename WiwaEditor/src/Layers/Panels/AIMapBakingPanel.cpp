@@ -37,12 +37,25 @@ void AIMapBakingPanel::Draw()
 		
 		//
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		
+		std::unique_ptr<std::vector<SystemHash>> entityList  = std::make_unique<std::vector<SystemHash>>(entityManager);
+		
+		EntityId eid = EntityId();
 
-		//for()
+		for(int i = 0; i < entityList->size(); i++)
 		{
-
+			eid = entityList->at(i);
+			if (entityManager.GetEntityName(eid) == "Floor")
+			{
+				// entityManager.GetComponent<Wiwa::tra>();
+				// Get the transform component and call the generation map funtion
+			}
+			else {
+				continue;
+			}
 		}
 	}
 
+	
 	ImGui::End();
 }
