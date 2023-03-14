@@ -283,6 +283,8 @@ namespace Wiwa {
 
 		std::vector<BoneInfo> GetBoneInfo() { return boneInfo; }
 
+		std::map<std::string, BoneInfo> GetBoneMap() { return m_BoneInfoMap; }
+
 	/*	void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
 		Animation* GetCurrentAnimation() { return currentAnimation; }
 		std::vector<Animation*> GetAnimations() {return animations; }*/

@@ -45,9 +45,10 @@ namespace Wiwa {
 		}
 
 		void LoadAnimation(const aiAnimation* animation);
-		Animation* LoadWiAnimation(File file);
+		static Animation* LoadWiAnimation(File file);
 		static void SaveWiAnimation(File& file, Animation* animation);
-
+		void SaveNodeData(File& file, NodeData* node);
+		NodeData* LoadNodeData(File& file);
 
 		float m_Duration = 0;
 		int m_TicksPerSecond = 0;
@@ -58,9 +59,10 @@ namespace Wiwa {
 
 		void ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root);
 
-		std::vector<Bone> m_Bones;
+		std::vector<Bone*> m_Bones;
 		NodeData m_RootNode;
 		std::map<std::string, BoneInfo> m_BoneInfoMap;
+		unsigned int m_BoneCount;
 	};
 	//struct VectorKey
 	//{

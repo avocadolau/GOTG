@@ -192,13 +192,12 @@ namespace Wiwa {
 
 		if (scene->HasAnimations())
 		{
-			//WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
-			//animator = new Animator();
-			//for (unsigned int i = 0; i < scene->mNumAnimations; i++)
-			//{
-			//	animator->animations.push_back(new Animation(scene->mAnimations[i], this));
-			//}
-			//animator->PlayAnimationIndex(0);
+			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
+			animator = new Animator();
+			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+			{
+				animator->animations.push_back(new Animation(scene->mAnimations[i], this));
+			}
 		}
 
 
@@ -245,7 +244,8 @@ namespace Wiwa {
 				m_BoneInfoMap.insert(item);
 			}
 
-		//	animator = Animator::LoadWiAnimator(f);
+			animator = Animator::LoadWiAnimator(f);
+			animator->PlayAnimationIndex(0);
 			//bone info
 			//size_t bones_info_size;
 			//f.Read(&bones_info_size, sizeof(size_t));
@@ -1334,8 +1334,7 @@ namespace Wiwa {
 				f.Write(&it->second.finalTransformation, sizeof(glm::mat4));
 			}
 			
-			//model->animator->SaveWiAnimator(f, model->animator);
-
+			model->animator->SaveWiAnimator(f, model->animator);
 			//Model Bones info
 			//size_t bones_info_size = model->boneInfo.size();
 			//f.Write(&bones_info_size, sizeof(size_t));

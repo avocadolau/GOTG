@@ -143,30 +143,6 @@ namespace Wiwa {
         return glm::scale(glm::mat4(1.0f), finalScale);
     }
 
-
-    void Bone::SaveWiAnimNode(File& file, Bone node)
-    {
-        size_t name_len = node.m_Name.size();
-        file.Write(&name_len, sizeof(size_t));
-        file.Write(node.m_Name.c_str(), name_len);
-
-        file.Write(&node.m_NumPositionKeys, sizeof(unsigned int));
-        file.Write(&node.m_NumRotationKeys, sizeof(unsigned int));
-        file.Write(&node.m_NumScalingKeys, sizeof(unsigned int));
-
-        //Position keys
-        size_t position_size = node.m_Positions.size();
-        file.Write(&position_size, sizeof(size_t));
-        file.Write(node.m_Positions.data(), position_size * sizeof(VectorKey));
-        //Rotation keys
-        size_t rotation_size = node.m_Rotations.size();
-        file.Write(&rotation_size, sizeof(size_t));
-        file.Write(node.m_Rotations.data(), rotation_size * sizeof(QuatKey));
-        //Scale keys
-        size_t scale_size = node.m_Scales.size();
-        file.Write(&scale_size, sizeof(size_t));
-        file.Write(node.m_Scales.data(), scale_size * sizeof(VectorKey));
-    }
     void Bone::LoadAnimationNode(const aiNodeAnim* aiAnimNode)
     {
         m_Name = aiAnimNode->mNodeName.C_Str();
@@ -211,6 +187,30 @@ namespace Wiwa {
         //return this;
     }
 
+    void Bone::SaveWiAnimNode(File& file, Bone* node)
+    {
+        size_t name_len = node->m_Name.size();
+        file.Write(&name_len, sizeof(size_t));
+        file.Write(node->m_Name.c_str(), name_len);
+
+        file.Write(&node->m_NumPositionKeys, sizeof(unsigned int));
+        file.Write(&node->m_NumRotationKeys, sizeof(unsigned int));
+        file.Write(&node->m_NumScalingKeys, sizeof(unsigned int));
+
+        //Position keys
+        size_t position_size = node->m_Positions.size();
+        file.Write(&position_size, sizeof(size_t));
+        file.Write(node->m_Positions.data(), position_size * sizeof(VectorKey));
+        //Rotation keys
+        size_t rotation_size = node->m_Rotations.size();
+        file.Write(&rotation_size, sizeof(size_t));
+        file.Write(node->m_Rotations.data(), rotation_size * sizeof(QuatKey));
+        //Scale keys
+        size_t scale_size = node->m_Scales.size();
+        file.Write(&scale_size, sizeof(size_t));
+        file.Write(node->m_Scales.data(), scale_size * sizeof(VectorKey));
+    }
+ 
     Bone* Bone::LoadWiAnimNode(File& file)
     {
         Bone* node = new Bone();

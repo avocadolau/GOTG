@@ -1,7 +1,7 @@
 #version 330
 #extension GL_ARB_explicit_uniform_location : enable
 #extension GL_ARB_separate_shader_objects : enable
-const int MAX_BONES = 200;
+const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
 
 layout (location = 0) in vec3 aPos;

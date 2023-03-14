@@ -25,9 +25,9 @@ namespace Wiwa {
 
 	void Animator::UpdateAnimation(float dt)
 	{
+		m_DeltaTime = dt;
 		if (m_CurrentAnimation)
 		{
-			m_DeltaTime = dt;
 			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
 			m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
@@ -47,7 +47,9 @@ namespace Wiwa {
 		file.Write(&name_len, sizeof(size_t));
 		file.Write(animator->m_Name.c_str(), name_len);
 
-		file.Write(&animator->m_NumAnimations, sizeof(unsigned int));
+		size_t animations_size = animator->animations.size();
+		file.Write(&animations_size, sizeof(size_t));
+
 
 		for (auto& animation : animator->animations)
 		{
@@ -57,9 +59,21 @@ namespace Wiwa {
 
 	Animator* Animator::LoadWiAnimator(File& file)
 	{
-		Animator* anim = new Animator();
+		Animator* animator = new Animator();
+		size_t name_size;
+		file.Read(&name_size, sizeof(size_t));
+		animator->m_Name.resize(name_size);
+		file.Read(&animator->m_Name[0], name_size);
+		
+		size_t animations_size;
+		file.Read(&animations_size, sizeof(size_t));
 
-		return anim;
+		for (int i = 0; i < animations_size; i++)
+		{
+			animator->animations.push_back(Animation::LoadWiAnimation(file));
+		}
+
+		return animator;
 	}
 
 	void Animator::PlayAnimationName(std::string name)
@@ -101,8 +115,7 @@ namespace Wiwa {
 		if (boneInfoMap.find(nodeName) != boneInfoMap.end())
 		{
 			int index = boneInfoMap[nodeName].id;
-			glm::mat4 offset = boneInfoMap[nodeName].offsetMatrix;
-			m_FinalBoneMatrices[index] = globalTransformation * offset;
+			m_FinalBoneMatrices[index] = globalTransformation * boneInfoMap[nodeName].offsetMatrix;
 		}
 
 		for (int i = 0; i < node->childrenCount; i++)

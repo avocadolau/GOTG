@@ -302,15 +302,15 @@ namespace Wiwa {
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 		//DEBUG
-		//std::vector<glm::mat4> transforms;
+		std::vector<glm::mat4> transforms;
 
-		//Model* root = mesh->GetParent();
-		//root->animator->UpdateAnimation(Time::GetDeltaTime());
+		Model* root = mesh->GetParent();
+		root->animator->UpdateAnimation(0.16);
 		//mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
 		//mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
-		//transforms = root->animator->GetFinalBoneMatrices();
+		transforms = root->animator->GetFinalBoneMatrices();
 
-		//matShader->SetBoneTransform(transforms);
+		matShader->SetBoneTransform(transforms);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 

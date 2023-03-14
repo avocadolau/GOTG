@@ -84,9 +84,9 @@ namespace Wiwa {
         int GetScaleIndex(float animationTime);
 
     public:
-        static void SaveWiAnimNode(File& file, Bone node);
+        static void SaveWiAnimNode(File& file, Bone* node);
         void LoadAnimationNode(const aiNodeAnim* aiAnimNode);
-        Bone* LoadWiAnimNode(File& file);
+        static Bone* LoadWiAnimNode(File& file);
         /* Gets normalized value for Lerp & Slerp*/
         float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
 
