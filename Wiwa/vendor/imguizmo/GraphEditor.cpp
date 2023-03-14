@@ -587,14 +587,18 @@ static bool DrawNode(ImDrawList* drawList,
             //drawList->AddTriangle(pts[0], pts[1], pts[2], 0xFF000000, 2.f);
         }
     }
-    
+
+   
 
     ImGui::SetCursorScreenPos(nodeRectangleMin);
     float maxHeight = ImMin(viewPort.Max.y, nodeRectangleMin.y + nodeSize.y) - nodeRectangleMin.y;
     float maxWidth = ImMin(viewPort.Max.x, nodeRectangleMin.x + nodeSize.x) - nodeRectangleMin.x;
     ImGui::InvisibleButton("node", ImVec2(maxWidth, maxHeight));
+
+
     // must be called right after creating the control we want to be able to move
     bool nodeMovingActive = ImGui::IsItemActive();
+
 
     // Save the size of what we have emitted and whether any of the widgets are being used
     bool nodeWidgetsActive = (!old_any_active && ImGui::IsAnyItemActive());
@@ -689,7 +693,34 @@ static bool DrawNode(ImDrawList* drawList,
     {
         delegate.CustomDraw(drawList, customDrawRect, nodeIndex);
     }
-/*
+
+    ImVec2 cursorPos = nodeRectangleMin;
+    cursorPos.x += 5;
+    cursorPos.y += 60;
+    ImGui::SetCursorScreenPos(cursorPos);
+
+    if (ImGui::Button("+", ImVec2(20, 20)))
+    {
+       delegate.ChangeInputCount(nodeIndex, 1);
+    }
+
+    cursorPos.x += 25;
+    ImGui::SetCursorScreenPos(cursorPos);
+
+    if (ImGui::Button("-", ImVec2(20, 20)))
+    {
+       delegate.ChangeInputCount(nodeIndex, -1);
+    }
+
+    //ImVec2 cursorPos = ImGui::GetCursorPos();
+    //ImGui::SetCursorPos(ImVec2(nodeRectangleMin));
+    //if (ImGui::Button("+", ImVec2(300, 100)))
+    //{
+    //   //delegate.mTemplates[0].mInputCount++;
+    //   //WI_INFO("{}", delegate.test);
+    //}
+    //ImGui::SetCursorPos(cursorPos);
+/* 
     const ImTextureID bmpInfo = (ImTextureID)(uint64_t)delegate->GetBitmapInfo(nodeIndex).idx;
     if (bmpInfo)
     {

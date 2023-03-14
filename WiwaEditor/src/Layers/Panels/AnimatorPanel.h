@@ -82,6 +82,11 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
         return  mTemplates.at(index); //mTemplates[index];
     }
     
+    void ChangeInputCount(int index, int num) override 
+    {
+        mTemplates[index].mInputCount += num;
+    }
+
     std::vector<GraphEditor::Template> mTemplates;
     
     void AddTemplate() {
