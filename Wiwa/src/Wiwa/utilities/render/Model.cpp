@@ -233,19 +233,21 @@ namespace Wiwa {
 			f.Read(&globalInverseTransform, sizeof(glm::mat4));
 
 			//load map name to index bone
-			//size_t bone_index_size;
-			//f.Read(&bone_index_size, sizeof(size_t));
-			//for (size_t i = 0; i < bone_index_size; i++)
-			//{
-			//	std::pair<std::string, unsigned int> item;
-			//	size_t name_size;
-			//	f.Read(&name_size, sizeof(size_t));
-			//	item.first.resize(name_size);
-			//	f.Read(&item.first[0], name_size);
-			//	f.Read(&item.second, sizeof(unsigned int));
+			size_t bone_index_size;
+			f.Read(&bone_index_size, sizeof(size_t));
+			for (size_t i = 0; i < bone_index_size; i++)
+			{
+				std::pair<std::string, BoneInfo> item;
+				size_t name_size;
+				f.Read(&name_size, sizeof(size_t));
+				item.first.resize(name_size);
+				f.Read(&item.first[0], name_size);
+				f.Read(&item.second.id, sizeof(unsigned int));
+				f.Read(&item.second.offsetMatrix, sizeof(glm::mat4));
+				f.Read(&item.second.finalTransformation, sizeof(glm::mat4));
 
-			//	boneNameToIndexMap.insert(item);
-			//}
+				m_BoneInfoMap.insert(item);
+			}
 			//bone info
 			//size_t bones_info_size;
 			//f.Read(&bones_info_size, sizeof(size_t));
@@ -1072,13 +1074,13 @@ namespace Wiwa {
 			newBoneInfo.id = m_BoneCounter;
 			glm::mat4 offset = mat4_cast(bone->mOffsetMatrix);
 			newBoneInfo.offsetMatrix = mat4_cast(bone->mOffsetMatrix);
-			m_BoneInfoMap[bone->mName.C_Str()] = newBoneInfo;
+			parent->m_BoneInfoMap[bone->mName.C_Str()] = newBoneInfo;
 			BoneId = m_BoneCounter;
 			m_BoneCounter++;
 		}
 		else
 		{
-			BoneId = m_BoneInfoMap[bone->mName.C_Str()].id;
+			BoneId = parent->m_BoneInfoMap[bone->mName.C_Str()].id;
 		}
 		/*int BoneId = GetBoneId(bone);
 		if (BoneId == boneInfo.size()) {
@@ -1320,16 +1322,18 @@ namespace Wiwa {
 			f.Write(&model->globalInverseTransform, sizeof(glm::mat4));
 
 			//bone to index map			
-			//size_t bone_index_size = model->boneNameToIndexMap.size();
-			//f.Write(&bone_index_size, sizeof(size_t));
-			//std::map<std::string, unsigned int>::iterator it;
-			//for (it = model->boneNameToIndexMap.begin(); it != model->boneNameToIndexMap.end();it++)
-			//{
-			//	size_t name_size = it->first.size();
-			//	f.Write(&name_size, sizeof(size_t));
-			//	f.Write(it->first.c_str(), name_size);
-			//	f.Write(&it->second, sizeof(unsigned int));
-			//}
+			size_t bone_index_size = model->m_BoneInfoMap.size();
+			f.Write(&bone_index_size, sizeof(size_t));
+			std::map<std::string, BoneInfo>::iterator it;
+			for (it = model->m_BoneInfoMap.begin(); it != model->m_BoneInfoMap.end();it++)
+			{
+				size_t name_size = it->first.size();
+				f.Write(&name_size, sizeof(size_t));
+				f.Write(it->first.c_str(), name_size);
+				f.Write(&it->second.id, sizeof(unsigned int));
+				f.Write(&it->second.offsetMatrix, sizeof(glm::mat4));
+				f.Write(&it->second.finalTransformation, sizeof(glm::mat4));
+			}
 
 			//Model Bones info
 			//size_t bones_info_size = model->boneInfo.size();

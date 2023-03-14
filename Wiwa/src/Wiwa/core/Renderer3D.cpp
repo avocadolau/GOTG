@@ -306,7 +306,7 @@ namespace Wiwa {
 		//mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
 		//mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
 
-		matShader->SetBoneTransform(transforms);
+		//matShader->SetBoneTransform(transforms);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
