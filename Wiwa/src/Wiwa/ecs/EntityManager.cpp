@@ -16,6 +16,7 @@ namespace Wiwa {
 	EntityManager::EntityManager()
 	{
 		m_ComponentIdCount = 0;
+		m_InitSystemsOnApply = true;
 	}
 
 	EntityManager::~EntityManager()
@@ -999,6 +1000,11 @@ namespace Wiwa {
 			system->SetEntity(eid);
 			system->SetScene(m_Scene);
 			system->OnSystemAdded();
+
+			if (m_InitSystemsOnApply) {
+				system->Awake();
+				system->Init();
+			}
 
 			m_EntitySystems[eid].push_back(system);
 			m_EntitySystemHashes[eid].push_back(system_hash);

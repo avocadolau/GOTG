@@ -22,6 +22,8 @@ namespace Wiwa {
 
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
+		WI_INFO("OnAwake AudioSystem [{}]", m_Scene->GetEntityManager().GetEntityName(m_EntityId));
+
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if(asrc->isDefaultListener){

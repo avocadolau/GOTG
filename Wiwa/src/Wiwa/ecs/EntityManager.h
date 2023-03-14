@@ -43,6 +43,9 @@ namespace Wiwa
 		// Scene where entity manager acts
 		Scene *m_Scene;
 
+		// Init and awake systems on apply
+		bool m_InitSystemsOnApply;
+
 		// Entity management
 		std::vector<std::string> m_EntityNames;
 		std::vector<std::map<ComponentId, size_t>> m_EntityComponents;
@@ -91,6 +94,8 @@ namespace Wiwa
 	public:
 		EntityManager();
 		~EntityManager();
+
+		void SetInitSystemsOnApply(bool init) { m_InitSystemsOnApply = init; }
 
 		void SetScene(Scene *scene) { m_Scene = scene; }
 

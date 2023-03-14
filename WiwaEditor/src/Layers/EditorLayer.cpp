@@ -54,6 +54,7 @@ void EditorLayer::OnAttach()
 	Wiwa::SceneManager::StopScene();
 
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
+	m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
 	m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
@@ -326,8 +327,11 @@ void EditorLayer::MainMenuBar()
 				m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 				m_OpenedScenePath = "";
 
-				Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
 				m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+				m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
+
+				Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
+
 			}
 			if (ImGui::MenuItem(ICON_FK_FOLDER " Open scene", ""))
 			{

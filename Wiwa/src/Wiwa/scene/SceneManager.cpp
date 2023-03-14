@@ -684,6 +684,8 @@ namespace Wiwa
 		{
 			Scene *sc = m_Scenes[sceneid];
 
+			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+
 			_loadSceneImpl(sc, scene_file);
 
 			std::filesystem::path path = scene_path;
