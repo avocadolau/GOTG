@@ -157,7 +157,7 @@ namespace Wiwa {
 
 		for (unsigned int i = 0; i < channels_size; i++)
 		{
-			anim->m_Bones.push_back(LoadWiAnimNode(file));
+		//	anim->m_Bones.push_back(LoadWiAnimNode(file));
 		}
 
 

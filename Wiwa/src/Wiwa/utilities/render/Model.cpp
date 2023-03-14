@@ -109,7 +109,7 @@ namespace Wiwa {
 
 						//const char* default_shader = "resources/shaders/light/lit_model_textured";
 						//const char* default_shader = "resources/shaders/light/skinned";
-						const char* default_shader = "resources/shaders/skinned/skinned";
+						const char* default_shader = "resources/shaders/skinned/debug_bones";
 						//const char* default_shader = "resources/shaders/skinned/debug_bones";
 
 						id = Resources::Load<Shader>(default_shader);
@@ -131,8 +131,8 @@ namespace Wiwa {
 					{
 						//Set the color of the material
 						//id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
-						id = Resources::Load<Shader>("resources/shaders/skinned/skinned");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/skinned");
+						id = Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/debug_bones");
 						//material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
@@ -192,13 +192,13 @@ namespace Wiwa {
 
 		if (scene->HasAnimations())
 		{
-			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
-			animator = new Animator();
-			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
-			{
-				animator->animations.push_back(new Animation(scene->mAnimations[i], this));
-			}
-			animator->PlayAnimationIndex(0);
+			//WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
+			//animator = new Animator();
+			//for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+			//{
+			//	animator->animations.push_back(new Animation(scene->mAnimations[i], this));
+			//}
+			//animator->PlayAnimationIndex(0);
 		}
 
 
@@ -245,7 +245,7 @@ namespace Wiwa {
 				m_BoneInfoMap.insert(item);
 			}
 
-			animator = Animator::LoadWiAnimator(f);
+		//	animator = Animator::LoadWiAnimator(f);
 			//bone info
 			//size_t bones_info_size;
 			//f.Read(&bones_info_size, sizeof(size_t));
@@ -1334,7 +1334,7 @@ namespace Wiwa {
 				f.Write(&it->second.finalTransformation, sizeof(glm::mat4));
 			}
 			
-			model->animator->Save(f, model->animator);
+			//model->animator->SaveWiAnimator(f, model->animator);
 
 			//Model Bones info
 			//size_t bones_info_size = model->boneInfo.size();
