@@ -18,12 +18,8 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
-#include <Wiwa/core/Resources.h>
 #include <Wiwa/utilities/render/Animation.h>
-
-
-
-
+#include <Wiwa/core/Resources.h>
 
 // For converting between ASSIMP and glm
 static inline glm::vec3 vec3_cast(const aiVector3D& v) { return glm::vec3(v.x, v.y, v.z); }
@@ -31,7 +27,6 @@ static inline glm::vec2 vec2_cast(const aiVector3D& v) { return glm::vec2(v.x, v
 static inline glm::quat quat_cast(const aiQuaternion& q) { return glm::quat(q.w, q.x, q.y, q.z); }
 static inline glm::mat4 mat4_cast(const aiMatrix4x4& m) { return glm::transpose(glm::make_mat4(&m.a1)); }
 static inline glm::mat4 mat4_cast(const aiMatrix3x3& m) { return glm::transpose(glm::make_mat3(&m.a1)); }
-
 
 namespace Wiwa {
 	bool Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
@@ -150,7 +145,6 @@ namespace Wiwa {
 		// Load mesh list
 		if (scene->HasMeshes())
 		{
-
 			int totalVertices = 0;
 			int totalIndices = 0;
 			int totalBones = 0;
@@ -193,7 +187,8 @@ namespace Wiwa {
 
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
-			//	animations.push_back(new Animation(scene->mAnimations[i], this));
+				//Animation* newAnim = new Animation(scene->mAnimations[i],this);
+				//animations.push_back(newAnim);
 			}
 		}
 
@@ -204,7 +199,6 @@ namespace Wiwa {
 
 		std::filesystem::path p = file;
 		model_hierarchy->name = p.stem().string();
-
 
 		aiReleaseImport(scene);
 		return true;
