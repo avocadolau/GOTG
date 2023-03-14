@@ -3,6 +3,16 @@
 #include "Animator.h"
 
 namespace Wiwa {
+	Animator::Animator()
+	{
+		m_CurrentTime = 0.0;
+		m_CurrentAnimation = nullptr;
+
+		m_FinalBoneMatrices.reserve(100);
+
+		for (int i = 0; i < 100; i++)
+			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
+	}
 	Animator::Animator(Animation* animation) {
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = animation;
@@ -15,9 +25,9 @@ namespace Wiwa {
 
 	void Animator::UpdateAnimation(float dt)
 	{
-		m_DeltaTime = dt;
 		if (m_CurrentAnimation)
 		{
+			m_DeltaTime = dt;
 			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
 			m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
@@ -29,6 +39,48 @@ namespace Wiwa {
 		m_CurrentAnimation = pAnimation;	
 		m_CurrentTime = 0;
 	}
+
+	void Animator::SaveWiAnimator(File& file,Animator* animator)
+	{
+		size_t name_len = animator->m_Name.size();
+
+		file.Write(&name_len, sizeof(size_t));
+		file.Write(animator->m_Name.c_str(), name_len);
+
+		file.Write(&animator->m_NumAnimations, sizeof(unsigned int));
+
+		for (auto& animation : animator->animations)
+		{
+			animation->SaveWiAnimation(file, animation);
+		}
+	}
+
+	Animator* Animator::LoadWiAnimator(File& file)
+	{
+		Animator* anim = new Animator();
+
+		return anim;
+	}
+
+	void Animator::PlayAnimationName(std::string name)
+	{
+		for (auto& animation : animations)
+		{
+			if (animation->m_Name == name)
+			{
+				m_CurrentAnimation = animation;
+				m_CurrentTime = 0;
+				return;
+			}
+		}
+	}
+
+	void Animator::PlayAnimationIndex(unsigned int index)
+	{
+		if (index > animations.size()) return;
+		m_CurrentAnimation = animations[index];
+	}
+
 
 	void Animator::CalculateBoneTransform(const NodeData* node, glm::mat4 parentTransform)
 	{

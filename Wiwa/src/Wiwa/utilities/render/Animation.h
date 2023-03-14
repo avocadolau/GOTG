@@ -7,16 +7,12 @@
 #include <glm/glm.hpp>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/filesystem/FileSystem.h>
-#include <Wiwa/utilities/render/Model.h>
 #include <Wiwa/utilities/render/Bone.h>
+#include <Wiwa/utilities/render/Model.h>
 
-
-
-struct Model;
 struct aiAnimation;
-struct aiNodeAnim;
 struct BoneInfo;
-
+class ModelHierarchy;
 
 namespace Wiwa {
 	struct NodeData
@@ -30,17 +26,10 @@ namespace Wiwa {
 	class WI_API Animation
 	{
 	public:
-		Animation() = default;
-
+		Animation();
 		Animation(const aiAnimation* animation, Model* model);
-		Animation(const char* filePath, Model* model)
-		{
-
-		}
-
-		~Animation()
-		{
-		}
+		Animation(const char* filePath, Model* model);
+		~Animation();
 
 		Bone* FindBone(const std::string& name);
 
@@ -54,8 +43,16 @@ namespace Wiwa {
 		{
 			return m_BoneInfoMap;
 		}
-		float m_Duration;
-		int m_TicksPerSecond;
+
+		void LoadAnimation(const aiAnimation* animation);
+		Animation* LoadWiAnimation(File file);
+		static void SaveWiAnimation(File& file, Animation* animation);
+
+
+		float m_Duration = 0;
+		int m_TicksPerSecond = 0;
+		int m_NumChannels = 0;
+		std::string m_Name;
 	private:
 		void ReadMissingBones(const aiAnimation* animation, Model& model);
 

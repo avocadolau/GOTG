@@ -7,6 +7,7 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <glew.h>
 #include <Wiwa/utilities/render/shaders/Shader.h>
+#include <Wiwa/utilities/render/animator.h>
 
 #include <Wiwa/ecs/systems/LightSystem.h>
 
@@ -303,10 +304,13 @@ namespace Wiwa {
 		//DEBUG
 		std::vector<glm::mat4> transforms;
 
+		Model* root = mesh->GetParent();
+		root->animator->UpdateAnimation(Time::GetDeltaTime());
 		//mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
 		//mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
+		transforms = root->animator->GetFinalBoneMatrices();
 
-		//matShader->SetBoneTransform(transforms);
+		matShader->SetBoneTransform(transforms);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 

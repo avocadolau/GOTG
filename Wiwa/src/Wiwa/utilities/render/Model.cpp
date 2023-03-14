@@ -18,7 +18,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
-#include <Wiwa/utilities/render/Animation.h>
+#include <Wiwa/utilities/render/Animator.h>
 #include <Wiwa/core/Resources.h>
 
 // For converting between ASSIMP and glm
@@ -109,7 +109,8 @@ namespace Wiwa {
 
 						//const char* default_shader = "resources/shaders/light/lit_model_textured";
 						//const char* default_shader = "resources/shaders/light/skinned";
-						const char* default_shader = "resources/shaders/skinned/debug_bones";
+						const char* default_shader = "resources/shaders/skinned/skinned";
+						//const char* default_shader = "resources/shaders/skinned/debug_bones";
 
 						id = Resources::Load<Shader>(default_shader);
 						material.setShader(Resources::GetResourceById<Shader>(id), default_shader);
@@ -130,8 +131,8 @@ namespace Wiwa {
 					{
 						//Set the color of the material
 						//id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
-						id = Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/debug_bones");
+						id = Resources::Load<Shader>("resources/shaders/skinned/skinned");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/skinned");
 						//material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
@@ -171,6 +172,7 @@ namespace Wiwa {
 					model->has_bones = true;
 					model->bone_data.resize(totalVertices);
 					model->LoadMeshBones(i, pMesh);
+					m_BoneCounter = model->m_BoneCounter;
 				}
 				if (gen_buffers) {
 					model->generateBuffers();
@@ -179,26 +181,26 @@ namespace Wiwa {
 			}
 		}
 
-		//TOOD import animations into an Animation structure
-
-		if (scene->HasAnimations())
-		{
-			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
-
-			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
-			{
-				//Animation* newAnim = new Animation(scene->mAnimations[i],this);
-				//animations.push_back(newAnim);
-			}
-		}
-
-		//load hierarchy after, animation pourpuses
 		model_hierarchy = loadModelHierarchy(scene->mRootNode);
 		globalInverseTransform = mat4_cast(scene->mRootNode->mTransformation);
 		globalInverseTransform = glm::inverse(globalInverseTransform);
 
 		std::filesystem::path p = file;
 		model_hierarchy->name = p.stem().string();
+
+		//TOOD import animations into an Animation structure
+
+		if (scene->HasAnimations())
+		{
+			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
+			animator = new Animator();
+			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+			{
+				animator->animations.push_back(new Animation(scene->mAnimations[i], this));
+			}
+			animator->PlayAnimationIndex(0);
+		}
+
 
 		aiReleaseImport(scene);
 		return true;
@@ -242,6 +244,8 @@ namespace Wiwa {
 
 				m_BoneInfoMap.insert(item);
 			}
+
+			animator = Animator::LoadWiAnimator(f);
 			//bone info
 			//size_t bones_info_size;
 			//f.Read(&bones_info_size, sizeof(size_t));
@@ -1093,6 +1097,7 @@ namespace Wiwa {
 			WI_INFO("vertex id {}", GlobalVertexID);
 			bone_data[GlobalVertexID].AddBoneData(BoneId, vw.mWeight);
 		}
+
 	}
 
 	void Model::PrintAssimpBoneMatrix(const aiBone* mat)
@@ -1328,6 +1333,8 @@ namespace Wiwa {
 				f.Write(&it->second.offsetMatrix, sizeof(glm::mat4));
 				f.Write(&it->second.finalTransformation, sizeof(glm::mat4));
 			}
+			
+			model->animator->Save(f, model->animator);
 
 			//Model Bones info
 			//size_t bones_info_size = model->boneInfo.size();
@@ -1375,8 +1382,6 @@ namespace Wiwa {
 				size_t bones_size = c_model->bone_data.size();
 				f.Write(&bones_size, sizeof(size_t));
 				f.Write(c_model->bone_data.data(), bones_size * sizeof(VertexBoneData));
-
-
 			}
 
 		}

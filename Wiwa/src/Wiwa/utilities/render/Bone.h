@@ -5,7 +5,7 @@
 #include <string>
 #include <Wiwa/utilities/math/Math.h>
 #include <glm/glm.hpp>
-
+#include <Wiwa/utilities/filesystem/FileSystem.h>
 struct aiNodeAnim;
 
 namespace Wiwa {
@@ -38,7 +38,7 @@ namespace Wiwa {
             this->value = value;
         }
     };
-
+    //change to AnimNode
     class WI_API Bone
     {
     public:
@@ -58,6 +58,7 @@ namespace Wiwa {
 
         /*reads keyframes from aiNodeAnim*/
         Bone(const std::string& name, int ID, const aiNodeAnim* channel);
+        Bone() {};
 
 
         /*interpolates  b/w positions,rotations & scaling keys based on the curren time of
@@ -83,7 +84,9 @@ namespace Wiwa {
         int GetScaleIndex(float animationTime);
 
     public:
-
+        static void SaveWiAnimNode(File& file, Bone node);
+        void LoadAnimationNode(const aiNodeAnim* aiAnimNode);
+        Bone* LoadWiAnimNode(File& file);
         /* Gets normalized value for Lerp & Slerp*/
         float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
 

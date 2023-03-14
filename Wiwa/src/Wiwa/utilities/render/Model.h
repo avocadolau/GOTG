@@ -24,11 +24,11 @@ struct aiBone;
 struct aiAnimation;
 struct aiNodeAnim;
 struct aiAnimMesh;
-class Animation;
+
 
 namespace Wiwa {
 	struct ModelSettings;
-
+	class Animator;
 	struct ModelHierarchy {
 		std::string name;
 
@@ -168,9 +168,17 @@ namespace Wiwa {
 	
 	class WI_API Model
 	{
+	public:
+		//DEBUG
+		float animationTime = 0;
+		Animator* animator;
+
+		bool showNormals = false;
+		Math::AABB boundingBox;
 	private:
 		std::string m_ModelPath;
 		glm::mat4 globalInverseTransform;
+	
 	protected:
 		bool is_root = false;
 		bool has_bones = false;
@@ -194,8 +202,8 @@ namespace Wiwa {
 	//	std::map<std::string, unsigned int> boneNameToIndexMap;
 		std::map<std::string, BoneInfo> m_BoneInfoMap; //
 		int m_BoneCounter = 0;
-		// for the moment i'll put the anim here, i'll change it
-		std::vector<Animation*> animations;
+
+
 
 		//Animation* currentAnimation;
 
@@ -293,12 +301,6 @@ namespace Wiwa {
 		int& GetBoneCount() { return m_BoneCounter; }
 		//DEBUG
 		void PrintGlmMatrix(const glm::mat4& mat);
-	public:
-		//DEBUG
-		float animationTime = 0;
-		
 
-		bool showNormals = false;
-		Math::AABB boundingBox;
 	};
 }

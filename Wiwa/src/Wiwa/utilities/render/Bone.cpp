@@ -9,6 +9,7 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/anim.h>
 
 namespace Wiwa {
     Bone::Bone(const std::string& name, int ID, const aiNodeAnim* aiNode) :m_Name(name), m_ID(ID), m_LocalTransform(1.0f)
@@ -141,4 +142,104 @@ namespace Wiwa {
         glm::vec3 finalScale = glm::mix(m_Scales[p0Index].value, m_Scales[p1Index].value, scaleFactor);
         return glm::scale(glm::mat4(1.0f), finalScale);
     }
+
+
+    void Bone::SaveWiAnimNode(File& file, Bone node)
+    {
+        size_t name_len = node.m_Name.size();
+        file.Write(&name_len, sizeof(size_t));
+        file.Write(node.m_Name.c_str(), name_len);
+
+        file.Write(&node.m_NumPositionKeys, sizeof(unsigned int));
+        file.Write(&node.m_NumRotationKeys, sizeof(unsigned int));
+        file.Write(&node.m_NumScalingKeys, sizeof(unsigned int));
+
+        //Position keys
+        size_t position_size = node.m_Positions.size();
+        file.Write(&position_size, sizeof(size_t));
+        file.Write(node.m_Positions.data(), position_size * sizeof(VectorKey));
+        //Rotation keys
+        size_t rotation_size = node.m_Rotations.size();
+        file.Write(&rotation_size, sizeof(size_t));
+        file.Write(node.m_Rotations.data(), rotation_size * sizeof(QuatKey));
+        //Scale keys
+        size_t scale_size = node.m_Scales.size();
+        file.Write(&scale_size, sizeof(size_t));
+        file.Write(node.m_Scales.data(), scale_size * sizeof(VectorKey));
+    }
+    void Bone::LoadAnimationNode(const aiNodeAnim* aiAnimNode)
+    {
+        m_Name = aiAnimNode->mNodeName.C_Str();
+
+        m_NumPositionKeys = aiAnimNode->mNumPositionKeys;
+        m_NumRotationKeys = aiAnimNode->mNumRotationKeys;
+        m_NumScalingKeys = aiAnimNode->mNumScalingKeys;
+
+
+        for (unsigned int i = 0; i < m_NumPositionKeys; i++)
+        {
+            VectorKey posKey;
+
+            posKey.time = aiAnimNode->mPositionKeys[i].mTime;
+            posKey.value.x = aiAnimNode->mPositionKeys[i].mValue.x;
+            posKey.value.y = aiAnimNode->mPositionKeys[i].mValue.y;
+            posKey.value.z = aiAnimNode->mPositionKeys[i].mValue.z;
+            m_Positions.push_back(posKey);
+        }
+        for (unsigned int i = 0; i < m_NumRotationKeys; i++)
+        {
+            QuatKey quatKey;
+
+            quatKey.time = aiAnimNode->mRotationKeys[i].mTime;
+            quatKey.value.x = aiAnimNode->mRotationKeys[i].mValue.x;
+            quatKey.value.y = aiAnimNode->mRotationKeys[i].mValue.y;
+            quatKey.value.z = aiAnimNode->mRotationKeys[i].mValue.z;
+            quatKey.value.w = aiAnimNode->mRotationKeys[i].mValue.w;
+            m_Rotations.push_back(quatKey);
+        }
+        for (unsigned int i = 0; i < m_NumScalingKeys; i++)
+        {
+            VectorKey scaleKey;
+
+            scaleKey.time = aiAnimNode->mScalingKeys[i].mTime;
+            scaleKey.value.x = aiAnimNode->mScalingKeys[i].mValue.x;
+            scaleKey.value.y = aiAnimNode->mScalingKeys[i].mValue.y;
+            scaleKey.value.z = aiAnimNode->mScalingKeys[i].mValue.z;
+            m_Scales.push_back(scaleKey);
+        }
+
+        //return this;
+    }
+
+    Bone* Bone::LoadWiAnimNode(File& file)
+    {
+        Bone* node = new Bone();
+
+        size_t name_len;
+        file.Read(&name_len, sizeof(size_t));
+        node->m_Name.resize(name_len);
+        file.Read(&node->m_Name[0], name_len);
+
+        file.Read(&node->m_NumPositionKeys, sizeof(unsigned int));
+        file.Read(&node->m_NumRotationKeys, sizeof(unsigned int));
+        file.Read(&node->m_NumScalingKeys, sizeof(unsigned int));
+
+        // Read position keys
+        size_t position_key_size;
+        file.Read(&position_key_size, sizeof(size_t));
+        node->m_Positions.resize(position_key_size);
+        file.Read(&node->m_Positions[0], position_key_size * sizeof(VectorKey));
+        // Read Rotation keys
+        size_t rotation_key_size;
+        file.Read(&rotation_key_size, sizeof(size_t));
+        node->m_Rotations.resize(rotation_key_size);
+        file.Read(&node->m_Rotations[0], rotation_key_size * sizeof(QuatKey));
+        // Read scaling keys
+        size_t scaling_key_size;
+        file.Read(&scaling_key_size, sizeof(size_t));
+        node->m_Scales.resize(scaling_key_size);
+        file.Read(&node->m_Scales[0], scaling_key_size * sizeof(VectorKey));
+        return node;
+    }
+
 }
