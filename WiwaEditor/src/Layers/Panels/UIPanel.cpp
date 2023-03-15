@@ -83,7 +83,6 @@ void UIPanel::Draw()
 					if (p.extension() == ".png")
 					{
 						tex_path = pathS;
-						tex2_path = pathS;
 					}
 				}
 
@@ -302,7 +301,7 @@ void UIPanel::Draw()
 			{
 				if (Wiwa::FileSystem::Exists(tex_path.c_str()))
 				{
-					m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
+					m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), nullptr);
 				}
 				else
 				{

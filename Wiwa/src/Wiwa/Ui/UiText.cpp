@@ -31,13 +31,14 @@ namespace Wiwa
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
 
-		Vector2i positionForUpdate_1;
-		
-		positionForUpdate_1.x = position.x;
-		positionForUpdate_1.y = position.y;
-		positionForUpdate_1.w = position.width;
-		positionForUpdate_1.h = position.height;
-		r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, positionForUpdate_1, Wiwa::Renderer2D::Pivot::UPLEFT);
+		Vector2i newPosition;
+		newPosition.x = this->position.x;
+		newPosition.y = this->position.y;
+		Size2i newSize;
+		newSize.w = this->position.width;
+		newSize.h = this->position.height;
+		r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);
+	
 
 		return false;
 	}

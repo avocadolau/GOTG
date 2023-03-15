@@ -72,14 +72,20 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition,newSize, color);		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			Wiwa::Vector2i newPosition = Wiwa::Vector2i{ position.x,position.y };
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
-
-		} break;
+			Vector2i newPosition;
+			newPosition.x = this->position.x;
+			newPosition.y = this->position.y;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
@@ -88,14 +94,20 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		case GuiControlState::PRESSED:
 		{
 
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		} break;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		/******/
 
@@ -104,7 +116,10 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::CENTER);		}break;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		default:
 			break;
 		}

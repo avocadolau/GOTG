@@ -179,9 +179,9 @@ namespace Wiwa
 		instanceRenderer.UpdateInstance(id, position, pivot);
 	}
 
-	void Renderer2D::UpdateInstancedQuad(uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color)
+	void Renderer2D::UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color)
 	{
-		InstanceRenderer &instanceRenderer = Wiwa::SceneManager::getActiveScene()->GetInstanceRenderer();
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
 		instanceRenderer.UpdateInstance(id, position, size, color);
 	}
 

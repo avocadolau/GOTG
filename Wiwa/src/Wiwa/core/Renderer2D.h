@@ -70,7 +70,7 @@ namespace Wiwa
 
 		void UpdateInstancedQuadTex(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
 
-		void UpdateInstancedQuad(uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color);
+		void UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color);
 
 		void UpdateInstanced(Scene *scene);
 

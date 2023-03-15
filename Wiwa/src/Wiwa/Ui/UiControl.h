@@ -203,7 +203,7 @@ namespace Wiwa
 		char text[32];           // Control text (if required)
 		Rect2i position;        // Position and size
 		Rect2i extraPosition;	// Position and size for the bar
-		Color4f color;        // Tint color
+		Color4f color = Color::WHITE;        // Tint color
 
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
