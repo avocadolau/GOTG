@@ -2,7 +2,7 @@
 
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-
+#include <Wiwa/utilities/functions/Callback.h>
 #include <vector>
 #include <string>
 
@@ -210,5 +210,9 @@ namespace Wiwa
 		uint32_t id_quad_normal;
 
 		uint32_t id_quad_extra;
+
+		int callbackID;
+
+		Callback* callback;
 	};
 }

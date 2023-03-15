@@ -249,7 +249,7 @@ namespace Wiwa
 			//controls.resize(controls_count);
 			for (size_t j = 0; j < controls_count; j++)
 			{
-
+				
 				int id;
 				bool active;
 				GuiControlType guiType;
@@ -265,7 +265,10 @@ namespace Wiwa
 
 				Rect2i extraPosition;
 
+				int callbackID;// = 1;
+
 				scene_file.Read(&id, sizeof(int));
+				scene_file.Read(&callbackID, sizeof(int));
 				scene_file.Read(&active, 1);
 				scene_file.Read(&guiType, sizeof(GuiControlType));
 				scene_file.Read(&state, sizeof(GuiControlState));
@@ -285,22 +288,23 @@ namespace Wiwa
 
 				scene_file.Read(&extraPosition, sizeof(Rect2i));
 
+
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id);
+					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					// WP
+					gm.CreateGuiControl_Text(guiType, id, position, textureGui.c_str(),canvas.at(i)->id, callbackID);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id);
+					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
-					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id);
+					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id);
+					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID);
 					break;
 				default:
 					break;
@@ -507,7 +511,8 @@ namespace Wiwa
 					GuiControlType guiType = control->GetType();
 					GuiControlState guiState = control->GetState();
 					Rect2i position = control->GetPosition();
-
+					int callbackID = control->callbackID;
+					
 					const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
 					const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 
@@ -520,6 +525,10 @@ namespace Wiwa
 					scene_file.Write(&guiState, sizeof(GuiControlState));
 					scene_file.Write(&position, sizeof(Rect2i));
 
+					scene_file.Write(&callbackID, sizeof(int));
+					Rect2i extraPosition = control->GetExtraPosition();
+					scene_file.Write(&extraPosition, sizeof(Rect2i));
+
 					// Save texture
 					scene_file.Write(&textureGui_len, sizeof(size_t));
 					scene_file.Write(textureGui, textureGui_len);
@@ -527,8 +536,7 @@ namespace Wiwa
 					scene_file.Write(&extraTextureGui_len, sizeof(size_t));
 					scene_file.Write(extraTextureGui, extraTextureGui_len);
 
-					Rect2i extraPosition = control->GetExtraPosition();
-					scene_file.Write(&extraPosition, sizeof(Rect2i));
+					
 				}
 			}
 			// Iterate through all controls

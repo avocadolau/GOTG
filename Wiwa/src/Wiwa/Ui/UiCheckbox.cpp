@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath) : GuiControl(scene, GuiControlType::CHECKBOX, id)
+	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, int callbackID) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
 		m_Scene = scene;
@@ -16,7 +16,8 @@ namespace Wiwa
 
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
-
+		this->callbackID = callbackID;
+		callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		//We create only once the texture

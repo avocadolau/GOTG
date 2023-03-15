@@ -27,7 +27,7 @@ void UIPanel::Draw()
 	if (ImGui::Button("TEST CREATE"))
 	{
 		m_GuiManager.CreateGuiCanvas(0, true);
-		m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, 0, { 200,200,100,100 }, "assets/hola.png", nullptr, 0);
+		m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, 0, { 200,200,100,100 }, "assets/hola.png", nullptr, 0,1);
 
 	}
 	if (ImGui::Button("TEST DELETE"))

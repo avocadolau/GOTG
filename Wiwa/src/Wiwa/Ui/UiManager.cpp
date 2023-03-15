@@ -46,20 +46,20 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID)
 	{
 		GuiControl* control = nullptr;
 	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, extraPath);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(m_Scene, id, bounds, path);
+				control = new GuiImage(m_Scene, id, bounds, path, callbackID);
 				break;
 			default:
 				break;
@@ -69,7 +69,7 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID)
 	{
 		GuiControl* control = nullptr;
 		
@@ -77,13 +77,13 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, slider_path);
+				control = new GuiButton(m_Scene, id, bounds, path, slider_path, callbackID);
 				break;
 			case GuiControlType::SLIDER:
-				control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path);
+				control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, slider_path);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, slider_path, callbackID);
 				break;
 			default:
 				break;
@@ -93,7 +93,7 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id)
+	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, int callbackID)
 	{
 		GuiControl* control = nullptr;
 		
@@ -101,7 +101,7 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::TEXT:
-				control = new GuiText(m_Scene, id, bounds, string_text);
+				control = new GuiText(m_Scene, id, bounds, string_text, callbackID);
 				break;
 			default:
 				break;
@@ -198,7 +198,6 @@ namespace Wiwa
 		}
 		
 	}
-
 	Text* GuiManager::InitFont(const char* path, char* _word)
 	{
 		
