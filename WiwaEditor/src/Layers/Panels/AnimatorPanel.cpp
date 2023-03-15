@@ -31,6 +31,9 @@ void AnimatorPanel::Draw()
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 	ImGui::BeginChild("child1", ImVec2(w, h), true);
 
+	ImGui::NewLine();
+
+
 	if (m_EntitySet && (m_CurrentID >= 0))
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
@@ -41,6 +44,8 @@ void AnimatorPanel::Draw()
 		ImGui::Text("(%i)", m_CurrentID);
 
 		Wiwa::Model* model = Wiwa::Resources::GetResourceById<Wiwa::Model>(m_CurrentID);
+
+		
 
 		ImGui::NewLine();
 
@@ -75,12 +80,12 @@ void AnimatorPanel::Draw()
 	}
 
 	
-	if (ImGui::Button("add"))
-	{
-		delegate.test++;
-		delegate.mTemplates[0].mInputCount++;
-		WI_INFO("{}", delegate.test);
-	}
+	//if (ImGui::Button("add"))
+	//{
+	//	delegate.test++;
+	//	delegate.mTemplates[0].mInputCount++;
+	//	WI_INFO("{}", delegate.test);
+	//}
 	
 	ImGui::EndChild();
 	ImGui::SameLine();
@@ -120,4 +125,10 @@ bool AnimatorPanel::OnSceneChangeEvent(Wiwa::SceneChangeEvent& e)
 	m_CurrentID = -1;
 	m_EntitySet = false;
 	return false;
+}
+
+void AnimatorPanel::SaveOnFile(const char* modelName)
+{
+	//const char finalName = "library/" + modelName;
+	//WI_INFO("{}", finalName);
 }

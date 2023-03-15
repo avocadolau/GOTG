@@ -87,6 +87,11 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
         mTemplates[index].mInputCount += num;
     }
 
+    void ChangeOutputCount(int index, int num) override
+    {
+        mTemplates[index].mOutputCount += num;
+    }
+
     std::vector<GraphEditor::Template> mTemplates;
     
     void AddTemplate() {
@@ -181,6 +186,7 @@ public:
 	bool OnEntityChangeEvent(EntityChangeEvent& e);
 	bool OnSceneChangeEvent(Wiwa::SceneChangeEvent& e);
 
+    void SaveOnFile(const char* modelName);
 private:
 
 
