@@ -148,7 +148,7 @@ void AnimatorPanel::SaveOnFile(const char* modelName)
 	for (int i = 0; i < delegate.mNodes.size(); i++)
 	{
 		
-		//SaveNode(animFile, i);
+		SaveNode(&animFile, i);
 	}
 
 
@@ -157,9 +157,10 @@ void AnimatorPanel::SaveOnFile(const char* modelName)
 	
 }
 
-void AnimatorPanel::SaveNode(Wiwa::JSONDocument file, int index)
+void AnimatorPanel::SaveNode(Wiwa::JSONDocument *file, int index)
 {
-	file.AddMemberObject("name").AddMember("id", index).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
+	std::string name = std::to_string(index);
+	file->AddMemberObject("nodes").AddMemberObject(name.c_str()).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
 		.AddMemberObject("Rect").AddMember("min_x", delegate.mNodes[index].mRect.Min.x).AddMember("min_y", delegate.mNodes[index].mRect.Min.y)
 		.AddMember("max_x", delegate.mNodes[index].mRect.Max.x).AddMember("max_y", delegate.mNodes[index].mRect.Max.y);
 	

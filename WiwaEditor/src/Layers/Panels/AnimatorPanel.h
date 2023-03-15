@@ -188,7 +188,7 @@ public:
 	bool OnSceneChangeEvent(Wiwa::SceneChangeEvent& e);
 
     void SaveOnFile(const char* modelName);
-    void SaveNode(Wiwa::JSONDocument file, int index);
+    void SaveNode(Wiwa::JSONDocument *file, int index);
 private:
 
 
