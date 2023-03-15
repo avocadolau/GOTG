@@ -15,6 +15,11 @@ namespace Wiwa
 	bool SceneManager::m_PlayScene = true;
 	bool SceneManager::isLoadingScene = false;
 
+	// For loading inside systems
+	bool SceneManager::m_LoadScene = false;
+	std::string SceneManager::m_LoadPath = "";
+	int SceneManager::m_LoadFlags = 0;
+
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
 	void SceneManager::Awake()
@@ -35,6 +40,12 @@ namespace Wiwa
 	void SceneManager::ModuleUpdate()
 	{
 		OPTICK_EVENT("Scene Update");
+
+		if (m_LoadScene) {
+			LoadScene(m_LoadPath.c_str(), m_LoadFlags);
+			m_LoadScene = false;
+		}
+
 		m_Scenes[m_ActiveScene]->ModuleUpdate();
 
 		if (m_PlayScene)
@@ -673,6 +684,8 @@ namespace Wiwa
 		{
 			Scene *sc = m_Scenes[sceneid];
 
+			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+
 			_loadSceneImpl(sc, scene_file);
 
 			std::filesystem::path path = scene_path;
@@ -680,11 +693,7 @@ namespace Wiwa
 
 			if (flags & LOAD_SEPARATE)
 			{
-				if (flags & UNLOAD_CURRENT) {
-					Audio::Init();
-				}
-
-				SetScene(sceneid);
+				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
 			// Load Physics Manager json Data
@@ -702,11 +711,28 @@ namespace Wiwa
 		return sceneid;
 	}
 
-	SceneId SceneManager::LoadScene(uint32_t scene_index, int flags)
+	void SceneManager::LoadSceneByIndex(uint32_t scene_index, int flags)
 	{
 		ProjectManager::SceneData &sd = ProjectManager::getSceneDataAt(scene_index);
+		
+		m_LoadScene = true;
+		m_LoadPath = sd.scene_path;
+		m_LoadFlags = flags;
 
-		return LoadScene(sd.scene_path.c_str(), flags);
+		//LoadScene(sd.scene_path.c_str(), flags);
+	}
+
+	void SceneManager::LoadSceneByName(const char* scene_name, int flags)
+	{
+		ProjectManager::SceneData* sd = ProjectManager::getSceneByName(scene_name);
+
+		if (!sd) return;
+
+		m_LoadScene = true;
+		m_LoadPath = sd->scene_path;
+		m_LoadFlags = flags;
+
+		//LoadScene(sd->scene_path.c_str(), flags);
 	}
 
 	void SceneManager::UnloadScene(SceneId scene_id, bool unload_resources)
@@ -721,11 +747,16 @@ namespace Wiwa
 		m_RemovedSceneIds.push_back(scene_id);
 	}
 
-	void SceneManager::SetScene(SceneId sceneId)
+	void SceneManager::SetScene(SceneId sceneId, bool init)
 	{
 		m_ActiveScene = sceneId;
 
 		Wiwa::RenderManager::SetLayerCamera(0, getScene(sceneId)->GetCameraManager().getActiveCamera());
+
+		if (init) {
+			m_Scenes[sceneId]->Awake();
+			m_Scenes[sceneId]->Init();
+		}
 
 		SceneChangeEvent event(sceneId);
 		Action<Wiwa::Event &> act = {&Application::OnEvent, &Application::Get()};

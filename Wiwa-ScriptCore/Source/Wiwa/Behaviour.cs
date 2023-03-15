@@ -12,6 +12,16 @@
             return ref InternalCalls.GetComponent<T>(entity, typeof(T));
         }
 
+        public ComponentIterator GetComponentIterator<T>() where T : unmanaged
+        {
+            return InternalCalls.GetComponentIterator(m_EntityId, typeof(T));
+        }
+
+        public ref T GetComponentByIterator<T>(ComponentIterator iterator) where T : unmanaged
+        {
+            return ref InternalCalls.GetComponentByIterator<T>(iterator);
+        }
+
         public ref T AddComponent<T>(EntityId entity) where T : unmanaged
         {
             return ref InternalCalls.AddComponent<T>(entity, typeof(T));
