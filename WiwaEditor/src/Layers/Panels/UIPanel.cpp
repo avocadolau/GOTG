@@ -300,7 +300,7 @@ void UIPanel::Draw()
 			ImGui::Text("Image tex path");
 			if (ImGui::Button("Create Image"))
 			{
-				if (Wiwa::FileSystem::Exists(tex_path.c_str()) && Wiwa::FileSystem::Exists(tex2_path.c_str()))
+				if (Wiwa::FileSystem::Exists(tex_path.c_str()))
 				{
 					m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.controls.size(), rect, tex_path.c_str(), tex2_path.c_str());
 				}

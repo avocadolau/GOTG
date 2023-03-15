@@ -225,6 +225,7 @@ namespace Wiwa
 		/* calculate font scaling */
 		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
 
+		
 		char* word = _word;
 
 		int x = 0;
