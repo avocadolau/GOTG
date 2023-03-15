@@ -127,6 +127,11 @@ namespace Wiwa {
 		static glm::ivec2 WorldToMap(int x, int y);
 
 
+		static MapData& GetMapData()
+		{
+			return m_mapData;
+		}
+
 		private:
 
 		// total size of the map in world coords if i am not mistaken
