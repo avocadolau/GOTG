@@ -16,6 +16,7 @@
 #include <Wiwa/core/Application.h>
 
 #include "SystemScriptClass.h"
+#include "CSCallback.h"
 
 #include "MonoWiwaTranslations.h"
 
@@ -146,6 +147,7 @@ namespace Wiwa {
 		int32_t numTypes = mono_table_info_get_rows(typeDefinitionsTable);
 		MonoClass* systemClass = Utils::GetClassInAssembly(s_Data->CoreAssembly, "Wiwa", "Behaviour");
 		MonoClass* componentClass = Utils::GetClassInAssembly(s_Data->CoreAssembly, "Wiwa", "Component");
+		MonoClass* callbackClass = Utils::GetClassInAssembly(s_Data->CoreAssembly, "Wiwa", "Callback");
 
 		for (int32_t i = 0; i < numTypes; i++)
 		{
@@ -195,6 +197,13 @@ namespace Wiwa {
 				Class* c = (Class*)type;
 				Application::Get().RegisterComponentType(type);
 			}
+
+			mono_bool isCallback = mono_custom_attrs_has_attr(attributes, callbackClass);
+			if (isCallback == 1) {
+				Callback* cb = new CSCallback(assembly, nameSpace, name);
+				
+				Application::Get().RegisterCallback(cb);
+			}
 		}
 	}
 	void ScriptEngine::ClearAssemblyTypes()
@@ -209,5 +218,7 @@ namespace Wiwa {
 		}
 		s_Data->Systems.clear();
 		s_Data->Components.clear();
+
+		Application::Get().ClearCallbacks();
 	}
 }

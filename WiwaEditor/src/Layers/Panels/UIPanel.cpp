@@ -420,16 +420,18 @@ void UIPanel::Draw()
 				rect2.width = m_GuiManager.controls.at(UI_element_selected)->position.width;
 				rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
 
+				Wiwa::GuiControlType type = m_GuiManager.controls.at(UI_element_selected)->GetType();
+
 				ImGui::Spacing();
-				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::BUTTON)
+				if (type == GuiControlType::BUTTON)
 				{
 					ImGui::Text("Edit button # %i", lastButtonID);
 				}
-				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::SLIDER)
+				if (type == GuiControlType::SLIDER)
 				{
 					ImGui::Text("Edit slider # %i", lastSliderID);
 				}
-				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::CHECKBOX)
+				if (type == GuiControlType::CHECKBOX)
 				{
 					ImGui::Text("Edit checkbox # %i", lastCheckboxID);
 				}
