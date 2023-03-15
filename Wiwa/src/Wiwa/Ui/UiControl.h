@@ -176,16 +176,15 @@ namespace Wiwa
 			}
 		}
 
-		bool SwapToNewTexture(const char* path)
+		bool SwapToNewTexture(const char* path, Wiwa::Renderer2D& r2d)
 		{
-			/*Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
+			
 			r2d.RemoveInstance(m_Scene, id_quad_normal);
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 
 			
-			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);*/
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 			return true;
 		}
 
