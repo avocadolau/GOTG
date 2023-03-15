@@ -68,7 +68,10 @@ namespace Wiwa
 		void DisableInstance(Scene *scene, uint32_t instance);
 		void SetInstanceEnabled(Scene *scene, uint32_t instance, bool enabled);
 
-		void UpdateInstancedQuadTex(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
+		void UpdateInstancedQuadTexPosition(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
+		void UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Size2i& size);
+		void UpdateInstancedQuadTexClip(Scene* scene, uint32_t id, const Size2i& srcSize, const Rect2i& clip);
+		void UpdateInstancedQuadTexTexture(Scene* scene, uint32_t id, uint32_t tex_id);
 
 		void UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color);
 

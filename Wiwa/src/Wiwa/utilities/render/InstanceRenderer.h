@@ -41,7 +41,12 @@ namespace Wiwa {
 		uint32_t AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
 
 		void UpdateInstance(uint32_t id, const Vector2i& position, const Size2i& size, const Color4f& color, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
-		void UpdateInstance(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		
+		void UpdateInstancePosition(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		void UpdateInstanceSize(uint32_t id, const Size2i& size);
+		void UpdateInstanceTexture(uint32_t id, uint32_t textureId);
+		void UpdateInstanceClip(uint32_t id, const TextureClip& clip);
+
 		int AddTexture(uint32_t texture);
 
 		void DisableInstance(uint32_t instance);
