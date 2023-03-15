@@ -41,7 +41,7 @@ namespace Wiwa
 	{
 		GuiCanvas* canvas_ = new GuiCanvas(m_Scene, id,active);
 
-		if (canvas_ != nullptr) canvas.push_back(canvas_);
+		canvas.push_back(canvas_);
 
 
 		return canvas_;
@@ -113,40 +113,32 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
-		if (Time::IsPlaying())
+		
+		std::vector<GuiCanvas*> canva = canvas;
+		for (int i = 0; i < canva.size(); i++)
 		{
-			std::vector<GuiCanvas*> canva = canvas;
-			for (int i = 0; i < canva.size(); i++)
+			size_t rsize = canvas.at(i)->controlsToDestroy.size();
+
+			for (size_t k = 0; k < rsize; k++) {
+				RemoveControl(canvas.at(i)->controlsToDestroy[k]);
+			}
+
+			canvas.at(i)->controlsToDestroy.clear();
+
+
+			if (canva.at(i)->active)
 			{
-				if (canva.at(i)->active)
+				std::vector<GuiControl*> control = canva.at(i)->controls;
+				for (int j = 0; j < control.size(); j++)
 				{
-					std::vector<GuiControl*> control = canva.at(i)->controls;
-					for (int j = 0; j < control.size(); j++)
+					if (control.at(j)->active)
 					{
-						if (control.at(j)->active)
-						{
-							control.at(j)->Update();
-						}
+						control.at(j)->Update();
 					}
 				}
-
-				size_t rsize = canvas.at(i)->controlsToDestroy.size();
-
-				for (size_t k = 0; k < rsize; k++) {
-					RemoveControl(canvas.at(i)->controlsToDestroy[k]);
-				}
-
-				canvas.at(i)->controlsToDestroy.clear();
-				
 			}
-			
 		}
-		
-		
-		
-
 		return true;
-	
 	}
 
 	bool GuiManager::Draw()
@@ -197,7 +189,7 @@ namespace Wiwa
 
 			for (size_t j = 0; j < ealive; j++)
 			{
-				if (canvas.at(i)->controls.at(j)->id == control->id)
+				if (canvas.at(i)->controls.at(j) == control)
 				{
 					canvas.at(i)->controls.erase(canvas.at(i)->controls.begin() + j);
 					break;

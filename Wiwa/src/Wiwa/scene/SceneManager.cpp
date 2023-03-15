@@ -230,7 +230,7 @@ namespace Wiwa
 		// Load GuiControls
 		GuiManager &gm = scene->GetGuiManager();
 
-		std::vector<GuiCanvas *> canvas = gm.ReturnCanvas();
+		std::vector<GuiCanvas*> &canvas = gm.ReturnCanvas();
 		size_t canvas_count;
 		scene_file.Read(&canvas_count, sizeof(size_t));
 		for (size_t i = 0; i < canvas_count; i++)
@@ -243,9 +243,10 @@ namespace Wiwa
 
 			gm.CreateGuiCanvas(id_canvas,active_canvas);
 
-			std::vector<GuiControl*> controls = canvas.at(i)->controls;
+			std::vector<GuiControl*> &controls = canvas.at(i)->controls;
 			size_t controls_count;
 			scene_file.Read(&controls_count, sizeof(size_t));
+			//controls.resize(controls_count);
 			for (size_t j = 0; j < controls_count; j++)
 			{
 
@@ -479,7 +480,7 @@ namespace Wiwa
 			// Scene name, etc
 			// Save GuiControls
 			GuiManager &gm = sc->GetGuiManager();
-			std::vector<GuiCanvas *> canvas = gm.ReturnCanvas();
+			std::vector<GuiCanvas*> &canvas = gm.ReturnCanvas();
 			size_t canvas_count = canvas.size();
 
 			// Save GuiControl count
@@ -496,6 +497,7 @@ namespace Wiwa
 				scene_file.Write(&active_canvas, 1);
 
 				size_t controls_count = canvas.at(i)->controls.size();
+				scene_file.Write(&controls_count, sizeof(size_t));
 				for (size_t j = 0; j < controls_count; j++)
 				{
 					GuiControl* control = canvas.at(i)->controls.at(j);

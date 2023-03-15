@@ -51,7 +51,7 @@ namespace Wiwa
 		Text* InitFont(const char* path,char* word);
 
 		
-		std::vector<GuiCanvas*> ReturnCanvas() { return canvas; }
+		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
 
 
 	public:
