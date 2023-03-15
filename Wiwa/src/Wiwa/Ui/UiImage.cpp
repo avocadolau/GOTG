@@ -75,7 +75,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition,newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition,newSize, color);		} break;
 
 		case GuiControlState::NORMAL:
 		{
@@ -85,7 +85,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
@@ -97,7 +97,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		case GuiControlState::PRESSED:
 		{
 
@@ -107,7 +107,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		/******/
 
@@ -119,7 +119,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		default:
 			break;
 		}

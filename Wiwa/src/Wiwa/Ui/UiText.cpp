@@ -37,7 +37,7 @@ namespace Wiwa
 		Size2i newSize;
 		newSize.w = this->position.width;
 		newSize.h = this->position.height;
-		r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);
+		render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);
 	
 
 		return false;

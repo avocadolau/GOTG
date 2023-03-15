@@ -65,7 +65,7 @@ namespace Wiwa
 	bool GuiButton::Draw(Renderer2D* render)
 	{
 		// Draw the right button depending on state
-		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+		//Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
 		switch (state)
 		{
 
@@ -77,7 +77,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		case GuiControlState::NORMAL:
 		{
@@ -87,7 +87,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		
 
@@ -101,7 +101,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		case GuiControlState::PRESSED:
 		{
 			
@@ -111,7 +111,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		/******/
 
@@ -123,7 +123,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			r2d_1.UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		default:
 			break;
 		}

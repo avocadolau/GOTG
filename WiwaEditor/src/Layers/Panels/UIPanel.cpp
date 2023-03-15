@@ -25,9 +25,7 @@ void UIPanel::Draw()
 	
 	ImGui::Text("UI editor panel");
 
-	if (!Time::IsPlaying())
-	{
-		const char* items[] = { "Button", "Slider", "CheckBox", "Image","Text"};
+		const char* items[] = { "Canvas","Button", "Slider", "CheckBox", "Image","Text"};
 		static const char* current_item = NULL;
 		if (ImGui::CollapsingHeader("Create UI element"))
 		{
@@ -481,13 +479,6 @@ void UIPanel::Draw()
 				ImGui::PopID();
 			}
 		}
-	}
-	else
-	{
-		ImGui::NewLine();
-		ImGui::Text("	Buttons cannot be created or edited during play mode.");
-	}
-	
 
 	ImGui::End();
 }

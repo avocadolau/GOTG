@@ -37,7 +37,16 @@ namespace Wiwa
 		return true;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath)
+	GuiCanvas* GuiManager::CreateGuiCanvas(unsigned int id,bool active)
+	{
+		GuiCanvas* canvas_ = new GuiCanvas(m_Scene, id,active);
+
+		if (canvas_ != nullptr) canvas.push_back(canvas_);
+
+
+		return canvas_;
+	}
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id)
 	{
 		GuiControl* control = nullptr;
 	
@@ -55,12 +64,12 @@ namespace Wiwa
 			default:
 				break;
 			}
-			if (control != nullptr) controls.push_back(control);
+			if (control != nullptr) canvas.at(canvas_id)->controls.push_back(control);
 	
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id)
 	{
 		GuiControl* control = nullptr;
 		
@@ -79,12 +88,12 @@ namespace Wiwa
 			default:
 				break;
 			}
-			if (control != nullptr) controls.push_back(control);
+			if (control != nullptr) canvas.at(canvas_id)->controls.push_back(control);
 		
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text)
+	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id)
 	{
 		GuiControl* control = nullptr;
 		
@@ -97,11 +106,7 @@ namespace Wiwa
 			default:
 				break;
 			}
-			//Set the observer
-			//control->SetObserver(observer);
-
-			// Created GuiControls are added to the list of controls
-			if (control != nullptr) controls.push_back(control);
+			if (control != nullptr) canvas.at(canvas_id)->controls.push_back(control);
 		
 		return control;
 	}
@@ -110,24 +115,35 @@ namespace Wiwa
 	{
 		if (Time::IsPlaying())
 		{
-			std::vector<GuiControl*> control = controls;
-			for (int i = 0; i < control.size(); i++)
+			std::vector<GuiCanvas*> canva = canvas;
+			for (int i = 0; i < canva.size(); i++)
 			{
-				if (control.at(i)->active)
+				if (canva.at(i)->active)
 				{
-					control.at(i)->Update();
+					std::vector<GuiControl*> control = canva.at(i)->controls;
+					for (int j = 0; j < control.size(); j++)
+					{
+						if (control.at(j)->active)
+						{
+							control.at(j)->Update();
+						}
+					}
 				}
+
+				size_t rsize = canvas.at(i)->controlsToDestroy.size();
+
+				for (size_t k = 0; k < rsize; k++) {
+					RemoveControl(canvas.at(i)->controlsToDestroy[k]);
+				}
+
+				canvas.at(i)->controlsToDestroy.clear();
+				
 			}
+			
 		}
 		
 		
-		size_t rsize = controlsToDestroy.size();
-
-		for (size_t i = 0; i < rsize; i++) {
-			RemoveControl(controlsToDestroy[i]);
-		}
-
-		controlsToDestroy.clear();
+		
 
 		return true;
 	
@@ -135,50 +151,59 @@ namespace Wiwa
 
 	bool GuiManager::Draw()
 	{
-		std::vector<GuiControl*> control = controls;
-		
-		for (int i = 0; i < control.size(); i++)
-		{
-			control.at(i)->Draw(&Wiwa::Application::Get().GetRenderer2D());
-		}
-		return true;
 
+		std::vector<GuiCanvas*> canva = canvas;
+		for (int i = 0; i < canva.size(); i++)
+		{
+			std::vector<GuiControl*> control = canva.at(i)->controls;
+
+			for (int j = 0; j < control.size(); j++)
+			{
+				control.at(j)->Draw(&Wiwa::Application::Get().GetRenderer2D());
+			}
+			return true;
+		}
+		
+		return false;
 	}
-	void GuiManager::DestroyGuiControl(GuiControl* control)
+	void GuiManager::DestroyGuiControl(GuiControl* control,GuiCanvas* canvas)
 	{
-		controlsToDestroy.push_back(control);
+		canvas->controlsToDestroy.push_back(control);
 	}
 	bool GuiManager::CleanUp()
 	{
-		std::vector<GuiControl*> control = controls;
+		//std::vector<GuiControl*> control = controls;
 
-		for (int i = 0; i < control.size(); i++)
-		{
-			//control.erase(i);
-		}
+		//for (int i = 0; i < control.size(); i++)
+		//{
+		//	//control.erase(i);
+		//}
 
 		return true;
 	}
 
 	void GuiManager::RemoveControl(GuiControl* control)
 	{
-		size_t ealive = controls.size();
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		r2d.RemoveInstance(m_Scene, control->id_quad_normal);
-		if (control->type == GuiControlType::SLIDER)
+		std::vector<GuiCanvas*> canva = canvas;
+		for (int i = 0; i < canva.size(); i++)
 		{
-			r2d.RemoveInstance(m_Scene, control->id_quad_extra);
-		}
-				
-		for (size_t i = 0; i < ealive; i++)
-		{
-			if (controls.at(i)->id == control->id)
+			size_t ealive = canvas.at(i)->controls.size();
+			Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+			r2d.RemoveInstance(m_Scene, control->id_quad_normal);
+			if (control->type == GuiControlType::SLIDER)
 			{
-				controls.erase(controls.begin() + i);
-				break;
+				r2d.RemoveInstance(m_Scene, control->id_quad_extra);
+			}
+
+			for (size_t j = 0; j < ealive; j++)
+			{
+				if (canvas.at(i)->controls.at(j)->id == control->id)
+				{
+					canvas.at(i)->controls.erase(canvas.at(i)->controls.begin() + j);
+					break;
+				}
 			}
 		}
-			
 		
 	}
 
