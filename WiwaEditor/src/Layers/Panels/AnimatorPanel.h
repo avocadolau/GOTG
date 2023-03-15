@@ -6,6 +6,7 @@
 #include <GraphEditor.h>
 #include <array>
 
+#include <Wiwa/utilities/json/JSONDocument.h>
 
 struct GraphEditorDelegate : public GraphEditor::Delegate
 {
@@ -187,6 +188,7 @@ public:
 	bool OnSceneChangeEvent(Wiwa::SceneChangeEvent& e);
 
     void SaveOnFile(const char* modelName);
+    void SaveNode(Wiwa::JSONDocument file, int index);
 private:
 
 

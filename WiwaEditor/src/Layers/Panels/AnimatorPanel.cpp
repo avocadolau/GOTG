@@ -10,6 +10,8 @@
 #include <GraphEditor.h>
 
 
+#include <Wiwa/core/ProjectManager.h>
+
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
 	: Panel("Animator", ICON_FK_MALE, instance)
 {
@@ -31,8 +33,14 @@ void AnimatorPanel::Draw()
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 	ImGui::BeginChild("child1", ImVec2(w, h), true);
 
+
+
 	ImGui::NewLine();
 
+	if (ImGui::Button("Save file"))
+	{
+		SaveOnFile("try");
+	}
 
 	if (m_EntitySet && (m_CurrentID >= 0))
 	{
@@ -47,7 +55,7 @@ void AnimatorPanel::Draw()
 
 		
 
-		ImGui::NewLine();
+		
 
 		if (model != NULL) {
 			//if (model->GetAnimations().size() != NULL)
@@ -67,6 +75,7 @@ void AnimatorPanel::Draw()
 			//				node.mSelected = false;
 			//			
 			//				delegate.mNodes.push_back(node);
+			//														NEED TO ADD TEMPLATE WITH NODE AND ADD ID TEMPLATE TO NODE, I FEEL LIKE THIS IS SUPER INEFICIENT
 			//			}
 
 			//		}
@@ -131,4 +140,27 @@ void AnimatorPanel::SaveOnFile(const char* modelName)
 {
 	//const char finalName = "library/" + modelName;
 	//WI_INFO("{}", finalName);
+
+	// save library and assets
+
+	Wiwa::JSONDocument animFile;
+
+	for (int i = 0; i < delegate.mNodes.size(); i++)
+	{
+		
+		//SaveNode(animFile, i);
+	}
+
+
+	animFile.save_file("library/wry.json");
+	//animFile.save_file("assets/wry.json");
+	
+}
+
+void AnimatorPanel::SaveNode(Wiwa::JSONDocument file, int index)
+{
+	file.AddMemberObject("name").AddMember("id", index).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
+		.AddMemberObject("Rect").AddMember("min_x", delegate.mNodes[index].mRect.Min.x).AddMember("min_y", delegate.mNodes[index].mRect.Min.y)
+		.AddMember("max_x", delegate.mNodes[index].mRect.Max.x).AddMember("max_y", delegate.mNodes[index].mRect.Max.y);
+	
 }
