@@ -16,4 +16,9 @@ namespace Wiwa
 	{
 
 	}
+
+	void GuiCanvas::SwapActive()
+	{
+		active = !active;
+	}
 }

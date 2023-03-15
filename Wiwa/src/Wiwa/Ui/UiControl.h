@@ -188,6 +188,10 @@ namespace Wiwa
 			return true;
 		}
 
+		void SwapCallback(int callback_id)
+		{
+			//callback = Wiwa::Application::Get().getCallbackAt(callback_id);
+		}
 	public:
 
 		ResourceId textId1;

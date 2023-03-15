@@ -268,12 +268,12 @@ namespace Wiwa
 				int callbackID;// = 1;
 
 				scene_file.Read(&id, sizeof(int));
-				scene_file.Read(&callbackID, sizeof(int));
 				scene_file.Read(&active, 1);
 				scene_file.Read(&guiType, sizeof(GuiControlType));
 				scene_file.Read(&state, sizeof(GuiControlState));
 				scene_file.Read(&position, sizeof(Rect2i));
-
+				scene_file.Read(&callbackID, sizeof(int));
+				scene_file.Read(&extraPosition, sizeof(Rect2i));
 				scene_file.Read(&textureGui_len, sizeof(size_t));
 				textureGui_c = new char[textureGui_len];
 				scene_file.Read(textureGui_c, textureGui_len);
@@ -286,7 +286,7 @@ namespace Wiwa
 				extraTextureGui = extraTextureGui_c;
 				delete[] extraTextureGui_c;
 
-				scene_file.Read(&extraPosition, sizeof(Rect2i));
+				
 
 
 				switch (guiType)
