@@ -80,34 +80,34 @@ namespace Wiwa
 		{
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width /2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_extra, { extraPosition.x - (position.width /2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 			
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 
 		} break;
@@ -116,10 +116,10 @@ namespace Wiwa
 
 		case GuiControlState::SELECTED:
 		{
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 
-			render->UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		}break;
 		default:
