@@ -422,31 +422,6 @@ void UIPanel::Draw()
 		//		ImGui::Text("	No UI elements created");
 		//	}
 
-<<<<<<< Updated upstream
-				Wiwa::GuiControlType type = m_GuiManager.controls.at(UI_element_selected)->GetType();
-
-				ImGui::Spacing();
-				if (type == GuiControlType::BUTTON)
-				{
-					ImGui::Text("Edit button # %i", lastButtonID);
-				}
-				if (type == GuiControlType::SLIDER)
-				{
-					ImGui::Text("Edit slider # %i", lastSliderID);
-				}
-				if (type == GuiControlType::CHECKBOX)
-				{
-					ImGui::Text("Edit checkbox # %i", lastCheckboxID);
-				}
-				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::IMAGE)
-				{
-					ImGui::Text("Edit image # %i", lastImageID);
-				}
-				if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::TEXT)
-				{
-					ImGui::Text("Edit text # %i", lastTextID);
-				}
-=======
 		//	if (UI_element_selected >= 0)
 		//	{
 		//		Rect2i rect2;
@@ -454,7 +429,6 @@ void UIPanel::Draw()
 		//		rect2.y = m_GuiManager.controls.at(UI_element_selected)->position.y;
 		//		rect2.width = m_GuiManager.controls.at(UI_element_selected)->position.width;
 		//		rect2.height = m_GuiManager.controls.at(UI_element_selected)->position.height;
->>>>>>> Stashed changes
 
 		//		ImGui::Spacing();
 		//		if (m_GuiManager.controls.at(UI_element_selected)->GetType() == GuiControlType::BUTTON)
