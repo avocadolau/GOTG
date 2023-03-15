@@ -305,7 +305,7 @@ namespace Wiwa {
 		std::vector<glm::mat4> transforms;
 
 		Model* root = mesh->GetParent();
-		root->animator->UpdateAnimation(Time::GetRealDeltaTime());
+		root->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
 		//mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
 		//mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
 		transforms = root->animator->GetFinalBoneMatrices();
