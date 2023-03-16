@@ -33,10 +33,11 @@ void Wiwa::AgentAISystem::OnUpdate()
 	m_DirectionPoint = { m_DirectionPoint.x + (localMapData.tileWidth*0.5f), m_DirectionPoint.y + (localMapData.tileHeight * 0.5f) };
 
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
+	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 
 	if (m_DirectionPoint.x + (localMapData.tileWidth * 0.5f) < agent->target.x) // target position
 	{
-
+		//transform->position.x += m_AgentAI;
 	}
 	else if (m_DirectionPoint.x + (localMapData.tileWidth * 0.5f) > agent->target.x)
 	{
