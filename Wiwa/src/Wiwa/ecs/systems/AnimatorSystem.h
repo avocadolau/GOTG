@@ -9,7 +9,8 @@
 namespace Wiwa {
 	class WI_API AnimatorSystem : public System {
 	private:
-		Animator* animator;
+		Animator* m_Animator;
+		EntityManager::ComponentIterator m_AnimatorComponent;
 	public:
 		AnimatorSystem();
 		~AnimatorSystem();
@@ -23,6 +24,8 @@ namespace Wiwa {
 		void OnDestroy() override;
 
 		void OnEventFinish();
+
+		Bone* bone;
 	};
 }
 

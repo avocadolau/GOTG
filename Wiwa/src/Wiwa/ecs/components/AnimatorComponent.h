@@ -7,12 +7,12 @@
 namespace Wiwa {
 	struct WI_API AnimatorComponent
 	{
-		//Animation currentAnimation;
-		unsigned int numAnimations;
+		int currentAnimation;
+		char animationName[54];
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::AnimatorComponent)
-	//REFLECT_MEMBER(name)
-	REFLECT_MEMBER(numAnimations)
+	REFLECT_MEMBER(currentAnimation)
+	REFLECT_MEMBER(animationName)
 REFLECTION_END;

@@ -366,9 +366,8 @@ void InspectorPanel::DrawSpotLightComponent(byte* data)
 
 void InspectorPanel::DrawAnimatorComponent(byte * data)
 {
-
 	Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
-	ImGui::Text(std::to_string(animator->numAnimations).c_str());
+	ImGui::SliderInt("Animation by index", & animator->currentAnimation,0,10);
 }
 
 void InspectorPanel::DrawRigidBodyComponent(byte* data)
