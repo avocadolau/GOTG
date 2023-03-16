@@ -3,6 +3,6 @@
 
 void Play();
 
-void ChangeScene();
+void ChangeScene(int scene_id);
 
 void Quit();

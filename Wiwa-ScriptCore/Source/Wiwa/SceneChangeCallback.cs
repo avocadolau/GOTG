@@ -9,6 +9,7 @@ namespace Wiwa
         static void OnExecute()
         {
             System.Console.WriteLine("PlayGame called");
+            Wiwa.InternalCalls.ChangeScene(0);
            
         }
     }
@@ -19,6 +20,7 @@ namespace Wiwa
         static void OnExecute()
         {
             System.Console.WriteLine("PlayGame called");
+            Wiwa.InternalCalls.Play();
         }
     }
 

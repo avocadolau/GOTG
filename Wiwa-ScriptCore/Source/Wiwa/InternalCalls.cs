@@ -118,7 +118,7 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Play();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool ChangeScene();
+        internal extern static bool ChangeScene(int scene_id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Quit();
         #endregion
