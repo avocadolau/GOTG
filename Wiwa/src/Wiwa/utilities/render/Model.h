@@ -28,7 +28,7 @@ struct aiAnimMesh;
 
 namespace Wiwa {
 	struct ModelSettings;
-	class Animator;
+	//class Animator;
 	struct ModelHierarchy {
 		std::string name;
 
@@ -169,10 +169,6 @@ namespace Wiwa {
 	class WI_API Model
 	{
 	public:
-		//DEBUG
-		float animationTime = 0;
-		Animator* animator;
-
 		bool showNormals = false;
 		Math::AABB boundingBox;
 	private:

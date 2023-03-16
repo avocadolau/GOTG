@@ -14,3 +14,6 @@
 #include "components/DirectionalLight.h"
 #include "components/PointLight.h"
 #include "components/SpotLight.h"
+
+//Animations
+#include "components/AnimatorComponent.h"

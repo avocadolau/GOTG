@@ -53,7 +53,6 @@ void AnimationPanel::Draw()
 				ImGui::SameLine();
 				ImGui::BeginChild("Names");
 				
-				ImGui::Text(std::to_string(model->GetParent()->animationTime).c_str());
 				//for (int i = 0; i< model->GetParent()->GetAnimations().size(); i++)
 				//{
 				//	if (model->GetParent()->GetAnimations()[i] != nullptr)

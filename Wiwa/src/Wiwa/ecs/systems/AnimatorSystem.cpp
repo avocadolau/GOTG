@@ -1,7 +1,6 @@
 #include "wipch.h"
 #include "AnimatorSystem.h"
-#include "Wiwa/utilities/render/Animator.h"
-#include "Wiwa/utilities/render/Model.h"
+
 namespace Wiwa {
 	AnimatorSystem::AnimatorSystem()
 	{

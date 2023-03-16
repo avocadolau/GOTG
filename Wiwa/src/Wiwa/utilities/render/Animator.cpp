@@ -6,6 +6,7 @@
 namespace Wiwa {
 	Animator::Animator()
 	{
+		m_Name = "New Animator";
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = nullptr;
 
@@ -15,6 +16,7 @@ namespace Wiwa {
 			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
 	}
 	Animator::Animator(Animation* animation) {
+		m_Name = "New Animator";
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = animation;
 

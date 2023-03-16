@@ -48,7 +48,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
-		if (type->hash == (size_t)TypeHash::Animator) { DrawAnimatorComponent(data); } else
+		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -293,17 +293,7 @@ void InspectorPanel::DrawAnimatorComponent(byte* data)
 {
 
 	Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
-	&animator->currentAnimation;
-	const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO", "PPPP", "QQQQQQQQQQ", "RRR", "SSSS" };
-	static const char* current_item = NULL;
-
-	ImGui::Text(animator->currentAnimation.m_Name.c_str());
-
-	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-	{
-		ImGui::EndCombo();
-	}
-
+	ImGui::Text(std::to_string(animator->numAnimations).c_str());
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)
