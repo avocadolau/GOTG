@@ -53,6 +53,7 @@ namespace Wiwa {
 		NodeData* LoadNodeData(File& file);
 		static Animation* GetAnimationFromFile(const char* filepath);
 
+		std::string m_SavePath;
 		float m_Duration = 0;
 		int m_TicksPerSecond = 0;
 		int m_NumChannels = 0;

@@ -11,9 +11,7 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnAwake()
 	{
-
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
-
 	}
 	void AnimatorSystem::OnInit()
 	{
@@ -22,15 +20,20 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnUpdate()
 	{
-		//AnimatorComponent* animatorComponent = GetComponentByIterator<AnimatorComponent>(AnimatorComponent);
-		//animator->PlayAnimationIndex()
-
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		if(anim->Play)
+			anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
 	}
 	void AnimatorSystem::OnDestroy()
 	{
-		delete bone;
 	}
 	void AnimatorSystem::OnEventFinish()
+	{
+	}
+	void AnimatorSystem::OnSystemAdded()
+	{
+	}
+	void AnimatorSystem::OnSystemRemoved()
 	{
 	}
 }

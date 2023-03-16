@@ -42,6 +42,8 @@ namespace Wiwa {
 
 	Animation::~Animation()
 	{
+		m_Bones.clear();
+		m_BoneInfoMap.clear();
 	}
 
 	Bone* Animation::FindBone(const std::string& name)
@@ -107,13 +109,15 @@ namespace Wiwa {
 	}
 	void Animation::SaveWiAnimation(Animation* animation, const char* path)
 	{
-
+		std::filesystem::path name = animation->m_Name;
 		std::filesystem::path filepath = path;
 		filepath.replace_filename(animation->m_Name.c_str());
 		filepath.replace_extension("wianim");
+		animation->m_SavePath = filepath.string();
+		
 		File file = FileSystem::OpenOB(filepath.string().c_str());
-		size_t name_len = animation->m_Name.size();
 
+		size_t name_len = animation->m_Name.size();
 		file.Write(&name_len, sizeof(size_t));
 		file.Write(animation->m_Name.c_str(), name_len);
 
@@ -192,7 +196,7 @@ namespace Wiwa {
 	Animation* Animation::LoadWiAnimation(const char* filepath)
 	{
 
-		File file = Wiwa::FileSystem::OpenOB(filepath);
+		File file = Wiwa::FileSystem::OpenIB(filepath);
 		Animation* anim = new Animation();
 
 		size_t name_len;

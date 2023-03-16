@@ -11,6 +11,8 @@ namespace Wiwa {
 
         Animator(Animation* animation);
 
+        ~Animator();
+
         void UpdateAnimation(float dt);
 
         void PlayAnimation(Animation* pAnimation);
@@ -19,17 +21,18 @@ namespace Wiwa {
 
         void CalculateBoneTransform(const NodeData* node, glm::mat4 parentTransform);
 
+
+        static void SaveWiAnimator(Animator* animator, const char* path);
+        static Animator* LoadWiAnimator(const char* path);
+
+        Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
         std::vector<glm::mat4> GetFinalBoneMatrices()
         {
             return m_FinalBoneMatrices;
         }
 
-        Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
 
-       static void SaveWiAnimator(Animator* animator, const char* path);
-       static Animator* LoadWiAnimator(File& file);
-
-        std::vector<Animation*> animations;
+        std::vector<Animation*> m_Animations;
         std::string m_Name;
         unsigned int m_NumAnimations;
     private:

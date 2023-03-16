@@ -183,12 +183,18 @@ namespace Wiwa {
 
 		if (scene->HasAnimations())
 		{
+			Animator* animator = new Animator();
+
+	
 			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
 				Animation* anim = new Animation(scene->mAnimations[i], this);
 				anim->SaveWiAnimation(anim, file);
+				animator->m_Animations.push_back(anim);
 			}
+			Animator::SaveWiAnimator(animator,file);
+			delete animator;
 		}
 
 

@@ -45,55 +45,57 @@ namespace Wiwa {
 		m_CurrentTime = 0;
 	}
 
-	void Animator::SaveWiAnimator(Animator* animator, const char* path)
+	Animator::~Animator()
 	{
-		//size_t name_len = animator->m_Name.size();
-
-		//file.Write(&name_len, sizeof(size_t));
-		//file.Write(animator->m_Name.c_str(), name_len);
-
-		//size_t animations_size = animator->animations.size();
-		//file.Write(&animations_size, sizeof(size_t));
-		// 
-		// 
-		//std::filesystem::path filePath = path;
-		//std::string name = filePath.filename().string();
-		//name += "Animator";
-		//filePath.replace_filename(name);
-		//filePath.replace_extension("animator");
-		//JSONDocument doc(filePath.string().c_str());
-		//JSONValue animations = doc.AddMemberObject("Animations");
-
-
-
-		//for (auto& animation : animator->animations)
-		//{
-		//	animation->SaveWiAnimation(animation,path);
-		//}
+		m_Animations.clear();
+		delete m_CurrentAnimation;
 	}
 
-	Animator* Animator::LoadWiAnimator(File& file)
+	void Animator::SaveWiAnimator(Animator* animator, const char* path)
 	{
-		Animator* animator = new Animator();
-		/*size_t name_size;
-		file.Read(&name_size, sizeof(size_t));
-		animator->m_Name.resize(name_size);
-		file.Read(&animator->m_Name[0], name_size);
+		std::filesystem::path filePath = path;
+		std::string name = filePath.filename().string();
+		filePath.replace_filename(name);
+		filePath.replace_extension();
+		filePath += ".wianimator";
+		JSONDocument doc;
+		doc.AddMember("fileFormatVersion", 1);
+		doc.AddMember("file", path);
+		doc.AddMember("folderAsset", false);
+		JSONValue animations = doc.AddMemberArray("animations");
 		
-		size_t animations_size;
-		file.Read(&animations_size, sizeof(size_t));*/
+		for (auto& anim : animator->m_Animations)
+		{
+			animations.PushBack(anim->m_SavePath.c_str());
+		}
 
-		//for (int i = 0; i < animations_size; i++)
-		//{
-		//	animator->animations.push_back(Animation::LoadWiAnimation(file));
-		//}
+		doc.save_file(filePath.string().c_str());
+	}
 
+	Animator* Animator::LoadWiAnimator(const char* path)
+	{
+		std::filesystem::path filePath = path;
+		if (!std::filesystem::exists(filePath))
+			return nullptr;
+		Animator* animator = new Animator();
+		JSONDocument doc(filePath.string().c_str());
+		if (doc.HasMember("animations"))
+		{
+			JSONValue animations = doc["animations"];
+
+			for (size_t i = 0; i < animations.Size(); i++)
+			{
+				std::string path = animations[i].as_string();
+				if(!FileSystem::Exists(path.c_str()))continue;
+				animator->m_Animations.push_back( Animation::LoadWiAnimation(path.c_str()));	
+			}
+		}
 		return animator;
 	}
 
 	void Animator::PlayAnimationName(std::string name)
 	{
-		for (auto& animation : animations)
+		for (auto& animation : m_Animations)
 		{
 			if (animation->m_Name == name)
 			{
@@ -106,10 +108,9 @@ namespace Wiwa {
 
 	void Animator::PlayAnimationIndex(unsigned int index)
 	{
-		if (index > animations.size()) return;
-		m_CurrentAnimation = animations[index];
+		if (index > m_Animations.size()) return;
+		m_CurrentAnimation = m_Animations[index];
 	}
-
 
 	void Animator::CalculateBoneTransform(const NodeData* node, glm::mat4 parentTransform)
 	{

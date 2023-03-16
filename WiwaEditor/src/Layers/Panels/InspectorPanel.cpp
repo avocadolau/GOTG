@@ -242,10 +242,6 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 
 	//DEBUG
 	//ImGui::SliderFloat("Animation time: ", &mod->GetParent()->animationTime, 0, mod->GetParent()->GetAnimations()[0]->duration);
-	
-
-	
-
 
 	AssetContainer(std::filesystem::path(mod->getModelPath()).stem().string().c_str());
 	if (ImGui::BeginDragDropTarget())
@@ -367,7 +363,47 @@ void InspectorPanel::DrawSpotLightComponent(byte* data)
 void InspectorPanel::DrawAnimatorComponent(byte * data)
 {
 	Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
-	ImGui::SliderInt("Animation by index", & animator->currentAnimation,0,10);
+
+	AssetContainer(animator->filePath);
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".wianimator")
+			{
+				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+				strcpy(animator->filePath, pathS.c_str());	
+				animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+	if (animator->animator == nullptr) return;
+	//if (ImGui::ListBox("Animations",0,animator->animator->m_Animations.data(),animator->animator->m_Animations.size()))
+	//{
+
+	//}
+	//if (ImGui::ListBox("Animations"))
+	//{
+
+	//}
+
+	//for (auto& anim : animator->animator->m_Animations)
+	//{
+	//	//std::string& item_name = anim->m_Name;
+	//	//const bool isSelected = (item_name == anim->m_Name);
+	//	//if (ImGui::Selectable(anim->m_Name.c_str(),isSelected))
+	//	//{
+	//	//	// handle selection
+	//	//}
+	//}
+	//ImGui::ListBoxFooter();
+	ImGui::Checkbox("Play", &animator->Play);
 }
 
 void InspectorPanel::DrawRigidBodyComponent(byte* data)

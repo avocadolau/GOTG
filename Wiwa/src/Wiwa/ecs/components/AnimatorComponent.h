@@ -2,17 +2,19 @@
 #include <Wiwa/core/Core.h>
 #include <Wiwa/utilities/math/Vector3f.h>
 #include <Wiwa/utilities/Reflection.h>
-#include <Wiwa/utilities/render/Animation.h>
+#include <Wiwa/utilities/render/Animator.h>
 
 namespace Wiwa {
 	struct WI_API AnimatorComponent
 	{
-		int currentAnimation;
-		char animationName[54];
+		char filePath[128];
+		bool Play;
+		Animator* animator;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::AnimatorComponent)
-	REFLECT_MEMBER(currentAnimation)
-	REFLECT_MEMBER(animationName)
+	REFLECT_MEMBER(filePath)
+	REFLECT_MEMBER(Play)
+	REFLECT_MEMBER(animator)
 REFLECTION_END;

@@ -18,6 +18,7 @@
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/components/Sprite.h>
 #include <Wiwa/scripting/ScriptEngine.h>
 
@@ -56,6 +57,7 @@ void EditorLayer::OnAttach()
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 	m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
 	m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+	
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
 

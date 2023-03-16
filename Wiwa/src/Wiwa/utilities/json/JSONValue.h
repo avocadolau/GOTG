@@ -129,4 +129,13 @@ namespace Wiwa
 
 		return {&jval, m_Allocator};
 	}
+
+	template<>
+	inline JSONValue JSONValue::PushBack<const char*>(const char* value) {
+		rapidjson::Value v(value, *m_Allocator);
+
+		rapidjson::Value& jval = m_Value->PushBack(v, *m_Allocator);
+
+		return { &jval, m_Allocator };
+	}
 }
