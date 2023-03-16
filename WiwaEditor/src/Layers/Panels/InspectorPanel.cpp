@@ -297,6 +297,8 @@ void InspectorPanel::DrawAnimatorComponent(byte* data)
 	const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO", "PPPP", "QQQQQQQQQQ", "RRR", "SSSS" };
 	static const char* current_item = NULL;
 
+	ImGui::Text(animator->currentAnimation.m_Name.c_str());
+
 	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
 	{
 		ImGui::EndCombo();

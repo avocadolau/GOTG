@@ -2,13 +2,13 @@
 #include "System.h"
 #include "../components/Transform3D.h"
 #include "../components/AnimatorComponent.h"
-
+#include "../components/Mesh.h"
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
 	class WI_API AnimatorSystem : public System {
 	private:
-
+		Animator* animator;
 	public:
 		AnimatorSystem();
 		~AnimatorSystem();

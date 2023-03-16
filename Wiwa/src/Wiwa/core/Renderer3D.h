@@ -77,6 +77,9 @@ namespace Wiwa {
 		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
 			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
 		
+		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, const std::vector<glm::mat4>& finalBoneMatrices, bool clear = false, Camera* camera = NULL, bool cull = false);
+		
 		void SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights);
 		
 		void RenderSkybox();

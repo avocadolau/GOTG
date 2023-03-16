@@ -22,14 +22,15 @@ namespace Wiwa {
 	{
 		Transform3D* t3d = GetComponent<Transform3D>();
 		Mesh* mesh = GetComponent<Mesh>();
+		AnimatorComponent* animator = GetComponent<AnimatorComponent>();
 
 		if (!mesh) return;
 
 		Renderer3D& r3d = Application::Get().GetRenderer3D();
-
+		
 		Model* root_mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 		Model* mod = root_mod;
-
+	
 		if (root_mod->IsRoot()) {
 			if(!mesh->drawChildren)
 				mod = root_mod->getModelAt(mesh->modelIndex);
@@ -59,5 +60,7 @@ namespace Wiwa {
 		}
 
 		r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
+		
+	//	r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), , false, man.editorCamera);
 	}
 }

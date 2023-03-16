@@ -301,7 +301,7 @@ namespace Wiwa {
 
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
-		//DEBUG
+		//DEBUG Animations
 		std::vector<glm::mat4> transforms;
 
 		Model* root = mesh->GetParent();
@@ -309,6 +309,55 @@ namespace Wiwa {
 		transforms = root->animator->GetFinalBoneMatrices();
 
 		matShader->SetBoneTransform(transforms);
+
+		SetUpLight(matShader, camera, directional, pointLights, spotLights);
+
+		material->Bind();
+
+		mesh->Render();
+
+		material->UnBind();
+
+		if (mesh->showNormals)
+		{
+			m_NormalDisplayShader->Bind();
+			m_NormalDisplayShader->setUniform(m_NDSUniforms.Model, transform);
+			m_NormalDisplayShader->setUniform(m_NDSUniforms.View, camera->getView());
+			m_NormalDisplayShader->setUniform(m_NDSUniforms.Projection, camera->getProjection());
+
+			mesh->Render();
+			m_NormalDisplayShader->UnBind();
+		}
+		if (camera->drawBoundingBoxes)
+		{
+			m_BBDisplayShader->Bind();
+			m_BBDisplayShader->setUniform(m_BBDSUniforms.Model, transform);
+			m_BBDisplayShader->setUniform(m_BBDSUniforms.View, camera->getView());
+			m_BBDisplayShader->setUniform(m_BBDSUniforms.Projection, camera->getProjection());
+			mesh->DrawBoudingBox();
+			m_BBDisplayShader->UnBind();
+		}
+
+		camera->frameBuffer->Unbind();
+	}
+	void Renderer3D::RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, const std::vector<glm::mat4>& finalBoneMatrices, bool clear, Camera* camera, bool cull)
+	{
+		if (!camera)
+		{
+			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+		}
+
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		camera->frameBuffer->Bind(clear);
+
+		Shader* matShader = material->getShader();
+		matShader->Bind();
+
+
+		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
+
+		matShader->SetBoneTransform(finalBoneMatrices);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
