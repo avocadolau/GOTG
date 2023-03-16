@@ -38,7 +38,8 @@ void AIMapBakingPanel::Draw()
 		//
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		
-		std::unique_ptr<std::vector<SystemHash>> entityList  = std::make_unique<std::vector<SystemHash>>(entityManager);
+		//std::unique_ptr<std::vector<SystemHash>> entityList  = std::make_unique<std::vector<SystemHash>>(entityManager);
+		std::vector<EntityId>* entityList = entityManager.GetEntitiesAlive();
 		
 		EntityId eid = EntityId();
 

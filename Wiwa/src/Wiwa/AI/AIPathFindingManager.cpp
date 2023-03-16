@@ -207,8 +207,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			// If it is a better path, Update the parent
 			for (int i = 0; i < adjacent.pathList.size(); i++)
 			{
-				adjacent.pathList.at(i);
-
+				
 				if (closed.Find(adjacent.pathList.at(i).pos) != NULL)
 					continue;
 
