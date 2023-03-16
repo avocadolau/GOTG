@@ -26,6 +26,7 @@ namespace Wiwa {
 		m_OnCollisionExitMethod = scriptClass.GetMethod("OnCollisionExit", 2);
 
 		m_EntityIdField = scriptClass.GetField("m_EntityId");
+		m_SceneField = scriptClass.GetField("m_Scene");
 	}
 
 	void SystemScriptClass::OnAwake()
@@ -88,5 +89,10 @@ namespace Wiwa {
 	void SystemScriptClass::OnEntitySet()
 	{
 		scriptClass.SetFieldValue(m_SystemObject, m_EntityIdField, &m_EntityId);
+	}
+
+	void SystemScriptClass::OnSceneSet()
+	{
+		scriptClass.SetFieldValue(m_SystemObject, m_SceneField, &m_Scene);
 	}
 }

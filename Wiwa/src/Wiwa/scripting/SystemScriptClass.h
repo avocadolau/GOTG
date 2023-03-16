@@ -26,6 +26,7 @@ namespace Wiwa {
 		void OnCollisionExit(Object* obj1, Object* obj2) override;
 
 		void OnEntitySet() override;
+		void OnSceneSet() override;
 	private:
 		ScriptClass scriptClass;
 
@@ -40,5 +41,6 @@ namespace Wiwa {
 		MonoMethod* m_OnCollisionExitMethod;
 
 		MonoClassField* m_EntityIdField;
+		MonoClassField* m_SceneField;
 	};
 }

@@ -1,4 +1,6 @@
-﻿namespace Wiwa
+﻿using System;
+
+namespace Wiwa
 {
     using System.Reflection;
     using EntityId = System.UInt64;
@@ -6,71 +8,72 @@
     public class Behaviour
     {
         protected EntityId m_EntityId;
+        private System.Int64 m_Scene;
 
         public ref T GetComponent<T>(EntityId entity) where T : unmanaged
         {
-            return ref InternalCalls.GetComponent<T>(entity, typeof(T));
+            return ref InternalCalls.GetComponent<T>(entity, typeof(T), m_Scene);
         }
 
         public ComponentIterator GetComponentIterator<T>() where T : unmanaged
         {
-            return InternalCalls.GetComponentIterator(m_EntityId, typeof(T));
+            return InternalCalls.GetComponentIterator(m_EntityId, typeof(T), m_Scene);
         }
 
         public ref T GetComponentByIterator<T>(ComponentIterator iterator) where T : unmanaged
         {
-            return ref InternalCalls.GetComponentByIterator<T>(iterator);
+            return ref InternalCalls.GetComponentByIterator<T>(iterator, m_Scene);
         }
 
         public ref T AddComponent<T>(EntityId entity) where T : unmanaged
         {
-            return ref InternalCalls.AddComponent<T>(entity, typeof(T));
+            return ref InternalCalls.AddComponent<T>(entity, typeof(T), m_Scene);
         }
         public void ApplySystem<T>(EntityId entity)
         {
-            InternalCalls.ApplySystem(entity, typeof(T));
+            InternalCalls.ApplySystem(entity, typeof(T), m_Scene);
         }
         public void DestroyEntity(EntityId entity)
         {
-            InternalCalls.DestroyEntity(entity);
+            InternalCalls.DestroyEntity(entity, m_Scene);
         }
 
         public ref T GetComponent<T>() where T : unmanaged
         {
-            return ref InternalCalls.GetComponent<T>(m_EntityId, typeof(T));
+            return ref InternalCalls.GetComponent<T>(m_EntityId, typeof(T), m_Scene);
         }
 
         public ref T AddComponent<T>() where T : unmanaged
         {
-            return ref InternalCalls.AddComponent<T>(m_EntityId, typeof(T));
+            return ref InternalCalls.AddComponent<T>(m_EntityId, typeof(T), m_Scene);
         }
 
         public void ApplySystem<T>()
         {
-            InternalCalls.ApplySystem(m_EntityId, typeof(T));
+            InternalCalls.ApplySystem(m_EntityId, typeof(T), m_Scene);
         }
         public void DestroyEntity()
         {
-            InternalCalls.DestroyEntity(m_EntityId);
+            InternalCalls.DestroyEntity(m_EntityId, m_Scene);
         }
 
         public EntityId CreateEntity()
         {
-            EntityId id = InternalCalls.CreateEntity();
+            EntityId id = InternalCalls.CreateEntity(m_Scene);
             AddComponent<Transform3D>(id);
             return id;
         }
 
         public EntityId CreateEntityNamed(string name_entity)
         {
-            EntityId id = InternalCalls.CreateEntityNamed(name_entity);
+            EntityId id = InternalCalls.CreateEntityNamed(name_entity, m_Scene);
             AddComponent<Transform3D>(id);
             return id;
         }
 
-        public static void AddMesh(EntityId eid, string model, string material)
+        public void AddMesh(EntityId eid, string model, string material)
         {
-            InternalCalls.AddMeshToEntity(eid, model, material);
+            InternalCalls.AddMeshToEntity(eid, model, material, m_Scene);
         }
 
         public void PlayMusic(string ev_name)
