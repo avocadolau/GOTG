@@ -155,6 +155,10 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	int ret = -1;
 	int iterations = 0;
 
+	// they are not defined, IsWalkable returns NULL
+	bool ori = IsWalkable(origin);
+	bool desti = IsWalkable(destination);
+
 	// L12b: TODO 1: if origin or destination are not walkable, return -1
 	if (IsWalkable(origin) && IsWalkable(destination))
 	{
