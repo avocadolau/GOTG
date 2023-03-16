@@ -33,6 +33,7 @@ namespace Game
     {
         Vector3 campos;
         bool collision = false;
+        int lastDirection = -1;
         void Init()
         {
             ref CharacterController character = ref GetComponent<CharacterController>();
@@ -131,21 +132,25 @@ namespace Game
             {
                 PlayAudioEvent("player_walk");
                 direction += forward * translation;
+                lastDirection = 1;
             }
             else if (Input.IsKeyDown(KeyCode.S))
             {
                 PlayAudioEvent("player_walk");
                 direction -= forward * translation;
+                lastDirection = 2;
             }
             if (Input.IsKeyDown(KeyCode.A))
             {
                 PlayAudioEvent("player_walk");
                 direction += right * translation;
+                lastDirection = 3;
             }
             else if (Input.IsKeyDown(KeyCode.D))
             {
                 PlayAudioEvent("player_walk");
                 direction -= right * translation;
+                lastDirection = 4;
             }
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
@@ -167,6 +172,46 @@ namespace Game
                 else if (Input.IsKeyDown(KeyCode.D))
                 {
                     campos.x += direction.x / 300; // -
+                }
+            }
+
+            if(collision == true)
+            {
+                Console.WriteLine("Z direction: " + direction.z);
+                Console.WriteLine("X direction: " + direction.x);
+
+                //if (lastDirection == 2)
+                //{
+                //    direction.z--;
+                //}
+                //if (lastDirection == 1)
+                //{
+                //    direction.z++;
+                //}
+                //if (lastDirection == 4)
+                //{
+                //    direction.x--;
+                //}
+                //if (lastDirection == 3)
+                //{
+                //    direction.x++;
+                //}
+
+                if (lastDirection == 2)
+                {
+                    direction.z += 10;
+                }
+                if (lastDirection == 1)
+                {
+                    direction.z -= 10;
+                }
+                if (lastDirection == 4)
+                {
+                    direction.x += 10;
+                }
+                if (lastDirection == 3)
+                {
+                    direction.x -= 10;
                 }
             }
 
