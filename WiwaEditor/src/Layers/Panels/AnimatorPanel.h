@@ -11,7 +11,7 @@
 struct GraphEditorDelegate : public GraphEditor::Delegate
 {
 
-    static inline int test = 1;
+    
 
     bool AllowedLink(GraphEditor::NodeIndex from, GraphEditor::NodeIndex to) override
     {
@@ -100,7 +100,7 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
         tem.mHeaderColor = IM_COL32(160, 160, 180, 255);
         tem.mBackgroundColor = IM_COL32(100, 100, 140, 255);
         tem.mBackgroundColorOver = IM_COL32(110, 110, 150, 255);
-        tem.mInputCount = test;
+        tem.mInputCount = 2;
         tem.mInputNames = nullptr;
         tem.mInputColors = nullptr;
         tem.mOutputCount = 2;
@@ -189,6 +189,9 @@ public:
 
     void SaveOnFile(const char* modelName);
     void SaveNode(Wiwa::JSONDocument *file, int index);
+    void SaveLink(Wiwa::JSONDocument *file, int index);
+    void SaveTemplate(Wiwa::JSONDocument* file, int index);
+    void SaveColor(Wiwa::JSONValue value, ImColor color, std::string name);
 private:
 
 

@@ -151,17 +151,53 @@ void AnimatorPanel::SaveOnFile(const char* modelName)
 		SaveNode(&animFile, i);
 	}
 
+	for (int i = 0; i < delegate.mLinks.size(); i++)
+	{
+		SaveLink(&animFile, i);
+	}
 
+	for (int i = 0; i < delegate.mTemplates.size(); i++)
+	{
+		SaveTemplate(&animFile, i);
+	}
 	animFile.save_file("library/wry.json");
-	//animFile.save_file("assets/wry.json");
+	animFile.save_file("assets/wry.json");
 	
 }
 
 void AnimatorPanel::SaveNode(Wiwa::JSONDocument *file, int index)
 {
-	std::string name = std::to_string(index);
-	file->AddMemberObject("nodes").AddMemberObject(name.c_str()).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
+	std::string name = "node" + std::to_string(index);
+	file->AddMemberObject(name.c_str()).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
 		.AddMemberObject("Rect").AddMember("min_x", delegate.mNodes[index].mRect.Min.x).AddMember("min_y", delegate.mNodes[index].mRect.Min.y)
 		.AddMember("max_x", delegate.mNodes[index].mRect.Max.x).AddMember("max_y", delegate.mNodes[index].mRect.Max.y);
 	
+}
+
+void AnimatorPanel::SaveTemplate(Wiwa::JSONDocument* file, int index)
+{
+	std::string name = "template" + std::to_string(index);
+	Wiwa::JSONValue value = file->AddMemberObject(name.c_str());
+
+	SaveColor(value, delegate.mTemplates[index].mBackgroundColor, "background_color");
+	SaveColor(value, delegate.mTemplates[index].mBackgroundColorOver, "background_color_over");
+	SaveColor(value, delegate.mTemplates[index].mHeaderColor, "header_color");
+	//SaveColor(value, *delegate.mTemplates[index].mInputColors, "input_color"); // this needs to be fixed, is an array
+	//SaveColor(value, *delegate.mTemplates[index].mOutputColors, "output_color"); // this needs to be fixed, is an array
+
+	value.AddMember("input_count", delegate.mTemplates[index].mInputCount).AddMember("output_count", delegate.mTemplates[index].mOutputCount);
+}
+
+void AnimatorPanel::SaveColor(Wiwa::JSONValue value, ImColor color, std::string name)
+{
+	
+	value.AddMemberObject(name.c_str()).AddMember("r", color.Value.x).AddMember("g", color.Value.y).AddMember("b", color.Value.z).AddMember("a", color.Value.w);
+
+}
+
+void AnimatorPanel::SaveLink(Wiwa::JSONDocument* file, int index)
+{
+	std::string name = "link" + std::to_string(index);
+	file->AddMemberObject(name.c_str()).AddMember("input node index", delegate.mLinks[index].mInputNodeIndex).AddMember( "input slot index", delegate.mLinks[index].mInputSlotIndex)
+		.AddMember("output node index", delegate.mLinks[index].mOutputNodeIndex).AddMember("output slot index", delegate.mLinks[index].mOutputSlotIndex);
 }
