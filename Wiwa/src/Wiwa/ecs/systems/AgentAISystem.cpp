@@ -25,8 +25,9 @@ void Wiwa::AgentAISystem::OnInit()
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
-	
-
+	//
+	GoToPosition({49,0,49});
+	//
 	m_DirectionPoint = Wiwa::AIPathFindingManager::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
 
 	Wiwa::AIPathFindingManager::MapData& localMapData = Wiwa::AIPathFindingManager::GetMapData();
@@ -35,24 +36,19 @@ void Wiwa::AgentAISystem::OnUpdate()
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 
-	if (m_DirectionPoint.x + (localMapData.tileWidth * 0.5f) < agent->target.x) // target position
-	{
-		//transform->position.x += m_AgentAI;
-	}
-	else if (m_DirectionPoint.x + (localMapData.tileWidth * 0.5f) > agent->target.x)
-	{
+	/*if (transform->position.x < m_DirectionPoint.x && transform->position.z < m_DirectionPoint.y) {
+		agent->hasArrived = true; 
+	}*/
 
-	}
+	float dirX = m_DirectionPoint.x - transform->position.x;
+	dirX /= abs(dirX);
 
-	if (m_DirectionPoint.y + (localMapData.tileHeight * 0.5f) < agent->target.z) // target position
-	{
+	float dirY = m_DirectionPoint.y - transform->position.z;
+	dirY /= abs(dirY);
 
-	}
-	else if (m_DirectionPoint.y + (localMapData.tileHeight * 0.5f) > agent->target.z)
-	{
-
-	}
-
+	// Move to direction
+	transform->localPosition.x += agent->speed * dirX;
+	transform->localPosition.z += agent->speed * dirY;
 }
 
 void Wiwa::AgentAISystem::OnDestroy()

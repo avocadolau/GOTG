@@ -5,3 +5,4 @@
 #include "systems/LightSystem.h"
 #include "systems/PhysicsSystem.h"
 #include "systems/RayCastSystem.h"
+#include "systems/AgentAISystem.h"
