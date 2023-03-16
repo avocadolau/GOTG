@@ -11,6 +11,7 @@
 
 
 #include <Wiwa/core/ProjectManager.h>
+#include <Wiwa/utilities/filesystem/FileSystem.h>
 
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
 	: Panel("Animator", ICON_FK_MALE, instance)
@@ -26,14 +27,18 @@ void AnimatorPanel::Draw()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
+	
+
 	ImGui::Begin(iconName.c_str(), &active);
+
+	
 
 	static float w = 200.0f;
 	static float h = 300.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 	ImGui::BeginChild("child1", ImVec2(w, h), true);
 
-
+	
 
 	ImGui::NewLine();
 
@@ -106,12 +111,37 @@ void AnimatorPanel::Draw()
 	ImGui::SameLine();
 	ImGui::BeginChild("child2", ImVec2(0, h), true);
 	
+
 	GraphEditor::Show(delegate, options, viewState, true);
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS;
+			if (p.extension() == ".json" || p.extension() == ".JSON")
+			{
+				//std::filesystem::path src = Wiwa::FileSystem::RemoveFolderFromPath("assets", pathS);
+				//src.replace_extension();
+				
+				LoadOnFile(p.string().c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
 
 	ImGui::EndChild();
 	
 	ImGui::PopStyleVar();
 	ImGui::End();
+
+
+	
+
 }
 
 	
@@ -151,17 +181,59 @@ void AnimatorPanel::SaveOnFile(const char* modelName)
 		SaveNode(&animFile, i);
 	}
 
+	for (int i = 0; i < delegate.mLinks.size(); i++)
+	{
+		SaveLink(&animFile, i);
+	}
+
+	for (int i = 0; i < delegate.mTemplates.size(); i++)
+	{
+		SaveTemplate(&animFile, i);
+	}
 
 	animFile.save_file("library/wry.json");
-	//animFile.save_file("assets/wry.json");
+	animFile.save_file("assets/wry.json");
 	
 }
 
 void AnimatorPanel::SaveNode(Wiwa::JSONDocument *file, int index)
 {
-	std::string name = std::to_string(index);
-	file->AddMemberObject("nodes").AddMemberObject(name.c_str()).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
+	std::string name = "node" + std::to_string(index);
+	file->AddMemberObject(name.c_str()).AddMember("name", delegate.mNodes[index].name).AddMember("template", delegate.mNodes[index].templateIndex)
 		.AddMemberObject("Rect").AddMember("min_x", delegate.mNodes[index].mRect.Min.x).AddMember("min_y", delegate.mNodes[index].mRect.Min.y)
 		.AddMember("max_x", delegate.mNodes[index].mRect.Max.x).AddMember("max_y", delegate.mNodes[index].mRect.Max.y);
 	
+}
+
+void AnimatorPanel::SaveTemplate(Wiwa::JSONDocument* file, int index)
+{
+	std::string name = "template" + std::to_string(index);
+	Wiwa::JSONValue value = file->AddMemberObject(name.c_str());
+
+	SaveColor(value, delegate.mTemplates[index].mBackgroundColor, "background_color");
+	SaveColor(value, delegate.mTemplates[index].mBackgroundColorOver, "background_color_over");
+	SaveColor(value, delegate.mTemplates[index].mHeaderColor, "header_color");
+
+	value.AddMember("input_count", delegate.mTemplates[index].mInputCount).AddMember("output_count", delegate.mTemplates[index].mOutputCount);
+}
+
+void AnimatorPanel::LoadOnFile(const char* name)
+{
+	Wiwa::File f = Wiwa::FileSystem::OpenO(name);
+
+	WI_INFO("LETS SEE");
+}
+
+void AnimatorPanel::SaveColor(Wiwa::JSONValue value, ImColor color, std::string name)
+{
+	
+	value.AddMemberObject(name.c_str()).AddMember("r", color.Value.x).AddMember("g", color.Value.y).AddMember("b", color.Value.z).AddMember("a", color.Value.w);
+
+}
+
+void AnimatorPanel::SaveLink(Wiwa::JSONDocument* file, int index)
+{
+	std::string name = "link" + std::to_string(index);
+	file->AddMemberObject(name.c_str()).AddMember("input node index", delegate.mLinks[index].mInputNodeIndex).AddMember( "input slot index", delegate.mLinks[index].mInputSlotIndex)
+		.AddMember("output node index", delegate.mLinks[index].mOutputNodeIndex).AddMember("output slot index", delegate.mLinks[index].mOutputSlotIndex);
 }
