@@ -699,17 +699,35 @@ static bool DrawNode(ImDrawList* drawList,
     cursorPos.y += 60;
     ImGui::SetCursorScreenPos(cursorPos);
 
-    if (ImGui::Button("+", ImVec2(20, 20)))
+    if (ImGui::Button("+I", ImVec2(20, 20)))
     {
-       delegate.ChangeInputCount(nodeIndex, 1);
+       delegate.ChangeInputCount(0, 1);
     }
-
+    
     cursorPos.x += 25;
     ImGui::SetCursorScreenPos(cursorPos);
-
-    if (ImGui::Button("-", ImVec2(20, 20)))
+    
+    if (ImGui::Button("-I", ImVec2(20, 20)))
     {
-       delegate.ChangeInputCount(nodeIndex, -1);
+       delegate.ChangeInputCount(0, -1);
+    }
+
+
+    cursorPos.x += 30;
+
+    ImGui::SetCursorScreenPos(cursorPos);
+    
+    if (ImGui::Button("+O", ImVec2(20, 20)))
+    {
+       delegate.ChangeOutputCount(0, 1);
+    }
+    
+    cursorPos.x += 25;
+    ImGui::SetCursorScreenPos(cursorPos);
+    
+    if (ImGui::Button("-O", ImVec2(20, 20)))
+    {
+       delegate.ChangeOutputCount(0, -1);
     }
 
     //ImVec2 cursorPos = ImGui::GetCursorPos();

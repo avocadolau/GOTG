@@ -6,6 +6,7 @@
 #include <GraphEditor.h>
 #include <array>
 
+#include <Wiwa/utilities/json/JSONDocument.h>
 
 struct GraphEditorDelegate : public GraphEditor::Delegate
 {
@@ -85,6 +86,11 @@ struct GraphEditorDelegate : public GraphEditor::Delegate
     void ChangeInputCount(int index, int num) override 
     {
         mTemplates[index].mInputCount += num;
+    }
+
+    void ChangeOutputCount(int index, int num) override
+    {
+        mTemplates[index].mOutputCount += num;
     }
 
     std::vector<GraphEditor::Template> mTemplates;
@@ -181,6 +187,8 @@ public:
 	bool OnEntityChangeEvent(EntityChangeEvent& e);
 	bool OnSceneChangeEvent(Wiwa::SceneChangeEvent& e);
 
+    void SaveOnFile(const char* modelName);
+    void SaveNode(Wiwa::JSONDocument *file, int index);
 private:
 
 
