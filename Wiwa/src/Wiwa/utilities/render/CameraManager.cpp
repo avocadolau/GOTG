@@ -32,6 +32,7 @@ namespace Wiwa {
 		if (editorCamera)
 		{
 			editorCamera->frameBuffer->Clear();
+			editorCamera->shadowBuffer->Clear();
 			/*if (editorCamera->drawFrustrums)
 			{
 				Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
@@ -43,6 +44,7 @@ namespace Wiwa {
 		{
 			CameraId cam_id = m_CamerasAlive[i];
 			m_Cameras[cam_id]->frameBuffer->Clear();
+			m_Cameras[cam_id]->shadowBuffer->Clear();
 		}
 	}
 	void CameraManager::Clear()

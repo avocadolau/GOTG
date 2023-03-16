@@ -275,16 +275,17 @@ namespace Wiwa
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
 		//// Setting the shadow map buffer
-		 camera->shadowBuffer->Bind(true);
+		 camera->shadowBuffer->Bind(clear);
 
-		 Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
-		 glm::mat4 view;
-		 glm::mat4 projection;
-		 if (lightTrans)
+		Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
+		glm::mat4 view;
+		glm::mat4 projection;
+		
+		if (lightTrans)
 		{
 			view = glm::lookAt(
 				lightTrans->localPosition,
-				lightTrans->localPosition + glm::radians(lightTrans->localRotation),
+				lightTrans->localPosition + lightTrans->localRotation,
 				glm::vec3(0.0f, 1.0f, 0.0f));
 			projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
 
