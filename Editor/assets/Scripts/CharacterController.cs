@@ -5,6 +5,8 @@ using WiwaApp;
 
 namespace Game
 {
+    using EntityId = System.UInt64;
+
     [Component]
     public struct CharacterController
     {
@@ -29,6 +31,23 @@ namespace Game
     }
     class CharacterControllerSystem : Behaviour
     {
+        Vector3 campos;
+        bool collision = false;
+        void Init()
+        {
+            ref CharacterController character = ref GetComponent<CharacterController>();
+            ref Transform3D transform = ref GetComponent<Transform3D>();
+
+            System.UInt64 cam_id = CameraManager.GetActiveCamera();
+
+            campos.y = transform.Position.y + 20 + 35;
+            campos.x = transform.Position.x + 0 + 0;
+            campos.z = transform.Position.z -40 + 20;
+
+            CameraManager.SetPosition(cam_id, campos);
+            CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
+        }
+
         void InitCollisionFlags(ref CollisionBody rb, ref CharacterController character)
         {
             int bitsSelf = 0;
@@ -36,25 +55,25 @@ namespace Game
             rb.selfTag = bitsSelf;
 
             int bitsColl = 0;
-            bitsColl = 1 << character.collisionTag1; 
+            bitsColl = 1 << character.collisionTag1;
             rb.filterBits = bitsColl;
         }
 
         void Update()
         {
-            Console.WriteLine("Starting Update character controller");
+            //Console.WriteLine("Starting Update character controller");
             ref CharacterController character = ref GetComponent<CharacterController>();
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
-            UpdateCamera(ref character, ref transform);
+            //UpdateCamera(ref character, ref transform);
             UpdateInput(ref character, ref transform);
 
             Fire(ref character);
-            Console.WriteLine("Finish Update character controller");
+            //Console.WriteLine("Finish Update character controller");
         }
         private void Fire(ref CharacterController character)
         {
-            Console.WriteLine("Fire");
+            //Console.WriteLine("Fire");
             float shootX = -Input.GetAxis(Gamepad.GamePad1, GamepadAxis.RightX);
             float shootY = -Input.GetAxis(Gamepad.GamePad1, GamepadAxis.RightY);
 
@@ -82,7 +101,7 @@ namespace Game
         }
         private void UpdateInput(ref CharacterController character, ref Transform3D transform)
         {
-            Console.WriteLine("Update Input");
+            //Console.WriteLine("Update Input");
             Vector3 forward = Wiwa.Math.CalculateForward(ref transform);
             Vector3 right = Wiwa.Math.CalculateRight(ref transform);
             //ref Rigidbody rigidbody = ref GetComponent<Rigidbody>();
@@ -129,12 +148,41 @@ namespace Game
                 direction -= right * translation;
             }
 
+            System.UInt64 cam_id = CameraManager.GetActiveCamera();
+
+            if(collision == false)
+            {
+                if (Input.IsKeyDown(KeyCode.W))
+                {
+                    campos.z += direction.z / 300; // +
+                }
+                else if (Input.IsKeyDown(KeyCode.S))
+                {
+                    campos.z += direction.z / 300; // -
+                }
+                if (Input.IsKeyDown(KeyCode.A))
+                {
+                    campos.x += direction.x / 300; // +
+                }
+                else if (Input.IsKeyDown(KeyCode.D))
+                {
+                    campos.x += direction.x / 300; // -
+                }
+            }
+
+            //campos.x = transform.Position.x + character.camXOffset + 0;
+            //campos.y = transform.Position.y + character.camYOffset + 35;
+            //campos.z = transform.Position.z + character.camZOffset + 20;
+
+            CameraManager.SetPosition(cam_id, campos);
+            CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
+
             return direction;
         }
 
         private void UpdateCamera(ref CharacterController character, ref Transform3D transform)
         {
-            Console.WriteLine("Update camera");
+            //Console.WriteLine("Update camera");
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
             Vector3 campos = transform.Position;
@@ -166,7 +214,7 @@ namespace Game
             rb.isStatic = false;
             rb.doContinuousCollision = false;
             rb.selfTag = 0;
-           //rb.filterBits |= 1 << 0;
+            //rb.filterBits |= 1 << 0;
             rb.filterBits = 0;
             InitCollisionFlags(ref rb, ref character);
             ref ColliderSphere collSph = ref AddComponent<ColliderSphere>(entity);
@@ -187,7 +235,7 @@ namespace Game
             newEntityTransform.LocalPosition.y += 1;
             newEntityTransform.LocalRotation.y = 90.0f + rot;
             //newEntityTransform.LocalScale.x = newEntityTransform.LocalScale.y = newEntityTransform.LocalScale.z = 0.1f;
-            Console.WriteLine("entity: " + entity + " pos " + newEntityTransform.LocalPosition.x + " " + newEntityTransform.LocalPosition.y + " " + newEntityTransform.LocalPosition.z);
+            //Console.WriteLine("entity: " + entity + " pos " + newEntityTransform.LocalPosition.x + " " + newEntityTransform.LocalPosition.y + " " + newEntityTransform.LocalPosition.z);
             // Add bullet component
             //bc.Velocity = 20.0f;
             bc.TimeToDestroy = character.bulletLifeTime;
@@ -198,12 +246,30 @@ namespace Game
             ApplySystem<MeshRenderer>(entity);
             ApplySystem<PhysicsSystem>(entity);
             PhysicsManager.SetLinearVelocity(entity, direction * character.bulletSpeed);
-            Console.WriteLine("entity: " + entity + " direction " + direction.x + " " + direction.y + " " + direction.z);
+            //Console.WriteLine("entity: " + entity + " direction " + direction.x + " " + direction.y + " " + direction.z);
             PhysicsManager.AddBodyToLog(entity);
 
             // Activate controller
             ApplySystem<MeshRenderer>(entity);
 
+        }
+
+        void OnCollisionEnter(EntityId id1, EntityId id2)
+        {
+            if (id1 == m_EntityId && PhysicsManager.GetEntityTagString(id2) == "COLLISION_WALL")
+            {
+                collision = true;
+                Console.WriteLine("wall hit!!! ");
+            }
+        }
+        
+        void OnCollisionExit(EntityId id1, EntityId id2)
+        {
+            if (id1 == m_EntityId && PhysicsManager.GetEntityTagString(id2) == "COLLISION_WALL")
+            {
+                collision = false;
+                Console.WriteLine("wall UN-hit!!! ");
+            }
         }
     }
 }

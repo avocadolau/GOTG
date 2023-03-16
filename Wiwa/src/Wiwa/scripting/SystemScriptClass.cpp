@@ -71,7 +71,7 @@ namespace Wiwa {
 			&obj2->id
 		};
 
-		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionMethod, params);
 	}
 
 	void SystemScriptClass::OnCollisionExit(Object* obj1, Object* obj2)
@@ -83,7 +83,7 @@ namespace Wiwa {
 			&obj2->id
 		};
 
-		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionExitMethod, params);
 	}
 
 	void SystemScriptClass::OnEntitySet()

@@ -37,7 +37,7 @@ namespace Wiwa
 
 	void GameStateManager::UpdateRoomState()
 	{
-		LogRoomState();
+		//LogRoomState();
 
 		if (s_HasFinshedLevel && s_CanPassNextLevel == false)
 			ChangeRoomState(RoomState::STATE_FINISHED);
