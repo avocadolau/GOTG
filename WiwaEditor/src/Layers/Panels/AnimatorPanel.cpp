@@ -124,10 +124,11 @@ void AnimatorPanel::Draw()
 			std::filesystem::path p = pathS;
 			if (p.extension() == ".json" || p.extension() == ".JSON")
 			{
-				//std::filesystem::path src = Wiwa::FileSystem::RemoveFolderFromPath("assets", pathS);
-				//src.replace_extension();
+				std::filesystem::path src = Wiwa::FileSystem::RemoveFolderFromPath("assets\\", pathS);
 				
-				LoadOnFile(p.string().c_str());
+				
+				LoadOnFile(src.string());
+				//LoadOnFile(p.string().c_str());
 			}
 		}
 
@@ -217,11 +218,42 @@ void AnimatorPanel::SaveTemplate(Wiwa::JSONDocument* file, int index)
 	value.AddMember("input_count", delegate.mTemplates[index].mInputCount).AddMember("output_count", delegate.mTemplates[index].mOutputCount);
 }
 
-void AnimatorPanel::LoadOnFile(const char* name)
+void AnimatorPanel::LoadOnFile(std::string name)
 {
-	Wiwa::File f = Wiwa::FileSystem::OpenO(name);
+	std::string finalName = "library/" + name;
+	Wiwa::JSONDocument file(finalName.c_str());
 
-	WI_INFO("LETS SEE");
+	if (file.HasMember("node0"))
+	{
+		Wiwa::JSONValue node(file["node0"]);
+		if (node.HasMember("name"))
+		{
+			WI_INFO("bazinga");
+		}
+	}
+	
+	// LOAD NODES
+	int index = 0;
+	bool keepLoop = true;
+	std::string nName = "";
+	while (keepLoop)
+	{
+		nName = "node" + std::to_string(index);
+		if (file.HasMember(nName.c_str()))
+		{
+			// LOAD NODE
+			index++;
+		}
+		else
+		{
+			keepLoop = false;
+		}
+
+	}
+}
+
+void AnimatorPanel::LoadNode(Wiwa::JSONValue value)
+{
 }
 
 void AnimatorPanel::SaveColor(Wiwa::JSONValue value, ImColor color, std::string name)
