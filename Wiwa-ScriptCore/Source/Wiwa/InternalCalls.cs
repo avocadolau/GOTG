@@ -113,5 +113,14 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool RemoveBodyFromLog(EntityId id);
         #endregion
+
+        #region UI
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Play();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool ChangeScene();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Quit();
+        #endregion
     }
 }

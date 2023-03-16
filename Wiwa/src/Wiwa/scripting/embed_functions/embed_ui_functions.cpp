@@ -4,16 +4,17 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/Ui/UiManager.h>
 
-void Activate(int GuiID)
+void Play()
 {
-    Wiwa::GuiManager& guiManager = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-
-    //guiManager.controls.at(GuiID)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
+    
 }
 
-void SwapTexture(int GuiID,std::string path)
+void ChangeScene()
 {
-    Wiwa::GuiManager& guiManager = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+   
+}
 
-    //guiManager.controls.at(GuiID).SwapTexture(path.c_str());
+void Quit()
+{
+    Wiwa::Application::Get().Quit();
 }

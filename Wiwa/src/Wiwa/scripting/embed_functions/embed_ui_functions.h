@@ -1,6 +1,8 @@
 #pragma once
 
 
-void Activate(int GuiID);
+void Play();
 
-void SwapTexture(int GuiID, std::string path);
+void ChangeScene();
+
+void Quit();
