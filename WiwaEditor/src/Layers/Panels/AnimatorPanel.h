@@ -192,6 +192,8 @@ public:
     void SaveLink(Wiwa::JSONDocument *file, int index);
     void SaveTemplate(Wiwa::JSONDocument* file, int index);
     void SaveColor(Wiwa::JSONValue value, ImColor color, std::string name);
+
+    void LoadOnFile(const char* name);
 private:
 
 

@@ -11,6 +11,7 @@
 
 
 #include <Wiwa/core/ProjectManager.h>
+#include <Wiwa/utilities/filesystem/FileSystem.h>
 
 AnimatorPanel::AnimatorPanel(EditorLayer* instance)
 	: Panel("Animator", ICON_FK_MALE, instance)
@@ -26,14 +27,18 @@ void AnimatorPanel::Draw()
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
+	
+
 	ImGui::Begin(iconName.c_str(), &active);
+
+	
 
 	static float w = 200.0f;
 	static float h = 300.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 	ImGui::BeginChild("child1", ImVec2(w, h), true);
 
-
+	
 
 	ImGui::NewLine();
 
@@ -106,12 +111,37 @@ void AnimatorPanel::Draw()
 	ImGui::SameLine();
 	ImGui::BeginChild("child2", ImVec2(0, h), true);
 	
+
 	GraphEditor::Show(delegate, options, viewState, true);
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS;
+			if (p.extension() == ".json" || p.extension() == ".JSON")
+			{
+				//std::filesystem::path src = Wiwa::FileSystem::RemoveFolderFromPath("assets", pathS);
+				//src.replace_extension();
+				
+				LoadOnFile(p.string().c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
 
 	ImGui::EndChild();
 	
 	ImGui::PopStyleVar();
 	ImGui::End();
+
+
+	
+
 }
 
 	
@@ -160,6 +190,7 @@ void AnimatorPanel::SaveOnFile(const char* modelName)
 	{
 		SaveTemplate(&animFile, i);
 	}
+
 	animFile.save_file("library/wry.json");
 	animFile.save_file("assets/wry.json");
 	
@@ -182,10 +213,15 @@ void AnimatorPanel::SaveTemplate(Wiwa::JSONDocument* file, int index)
 	SaveColor(value, delegate.mTemplates[index].mBackgroundColor, "background_color");
 	SaveColor(value, delegate.mTemplates[index].mBackgroundColorOver, "background_color_over");
 	SaveColor(value, delegate.mTemplates[index].mHeaderColor, "header_color");
-	//SaveColor(value, *delegate.mTemplates[index].mInputColors, "input_color"); // this needs to be fixed, is an array
-	//SaveColor(value, *delegate.mTemplates[index].mOutputColors, "output_color"); // this needs to be fixed, is an array
 
 	value.AddMember("input_count", delegate.mTemplates[index].mInputCount).AddMember("output_count", delegate.mTemplates[index].mOutputCount);
+}
+
+void AnimatorPanel::LoadOnFile(const char* name)
+{
+	Wiwa::File f = Wiwa::FileSystem::OpenO(name);
+
+	WI_INFO("LETS SEE");
 }
 
 void AnimatorPanel::SaveColor(Wiwa::JSONValue value, ImColor color, std::string name)
