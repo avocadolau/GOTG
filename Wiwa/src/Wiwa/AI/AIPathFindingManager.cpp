@@ -254,7 +254,12 @@ bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 {
 	unsigned char t = GetTileAt(pos);
-	return t != INVALID_WALK_CODE && t > 0;
+	if (t != INVALID_WALK_CODE && t > 0) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
