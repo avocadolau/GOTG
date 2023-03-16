@@ -5,6 +5,8 @@ namespace Wiwa {
 	//-------- CONSTRUCTOR --------
 	System::System() : m_EntityId(EntityManager::INVALID_INDEX)
 	{
+		m_Awaken = false;
+		m_Inited = false;
 	}
 
 	//-------- DESTRUCTOR --------
@@ -17,12 +19,20 @@ namespace Wiwa {
 	//-------- Sub-system functions --------
 	void System::Awake()
 	{
+		if (m_Awaken) return;
+
 		OnAwake();
+		
+		m_Awaken = true;
 	}
 
 	void System::Init()
 	{
+		if (m_Inited) return;
+
 		OnInit();
+
+		m_Inited = true;
 	}
 
 	void System::Update()

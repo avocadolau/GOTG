@@ -10,6 +10,8 @@ namespace Wiwa
 	class WI_API System
 	{
 	private:
+		bool m_Awaken;
+		bool m_Inited;
 	protected:
 		EntityId m_EntityId;
 		Scene *m_Scene;

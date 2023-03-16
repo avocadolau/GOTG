@@ -54,10 +54,10 @@ void EditorLayer::OnAttach()
 	Wiwa::SceneManager::StopScene();
 
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
-	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("PhysicsSystem"));
-	m_EditorScene->GetEntityManager().AddSystemToWhitelist(FNV1A_HASH("MeshRenderer"));
+	m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
+	m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
-	Wiwa::SceneManager::SetScene(m_EditorSceneId);
+	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
 
 	Wiwa::Size2i &res = Wiwa::Application::Get().GetTargetResolution();
 	float ar = res.w / (float)res.h;
@@ -82,6 +82,7 @@ void EditorLayer::OnAttach()
 	m_ShaderPanel = std::make_unique<ShaderPanel>(this);
 	m_EnvPanel = std::make_unique<EnvironmentPanel>(this);
 	m_UiPanel = std::make_unique<UIPanel>(this);
+	m_AIMapBakingPanel = std::make_unique<AIMapBakingPanel>(this);
 
 	m_AudioPanel = std::make_unique<AudioPanel>(this);
 
@@ -105,6 +106,7 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_EnvPanel.get());
 	m_Panels.push_back(m_UiPanel.get());
 	m_Panels.push_back(m_AudioPanel.get());
+	m_Panels.push_back(m_AIMapBakingPanel.get());
 
 	m_Settings.push_back(m_ProjectPanel.get());
 	m_Settings.push_back(m_About.get());
@@ -185,11 +187,9 @@ void EditorLayer::OnEvent(Wiwa::Event &e)
 void EditorLayer::LoadScene(const std::string &m_Path)
 {
 	// Load scene and prepare it
-	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str());
+	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str(), Wiwa::SceneManager::LoadFlags::LOAD_DEFAULT | Wiwa::SceneManager::LoadFlags::LOAD_NO_INIT);
 	Wiwa::Scene *scene = Wiwa::SceneManager::getScene(id);
 	scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-
-	Wiwa::SceneManager::SetScene(id);
 
 	// Update editor scene references
 	m_OpenedScenePath = m_Path;
@@ -329,8 +329,11 @@ void EditorLayer::MainMenuBar()
 				m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 				m_OpenedScenePath = "";
 
-				Wiwa::SceneManager::SetScene(m_EditorSceneId);
 				m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+				m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
+
+				Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
+
 			}
 			if (ImGui::MenuItem(ICON_FK_FOLDER " Open scene", ""))
 			{
@@ -568,17 +571,12 @@ void EditorLayer::MainMenuBar()
 
 						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
 						Wiwa::Scene *sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
 						// For debug purposes
 						std::string ex = sc->getName();
 						ex += "_execution";
 						sc->ChangeName(ex.c_str());
-
-						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-						Wiwa::SceneManager::SetScene(m_SimulationSceneId);
-
-						Wiwa::SceneManager::Awake();
-						Wiwa::SceneManager::Init();
 
 						Wiwa::SceneManager::PlayScene();
 					}
@@ -591,7 +589,7 @@ void EditorLayer::MainMenuBar()
 					Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
 
 					// Set editor scene again
-					Wiwa::SceneManager::SetScene(m_EditorSceneId);
+					Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
 
 					// Stop scene from being played
 					Wiwa::SceneManager::StopScene();

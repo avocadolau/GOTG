@@ -5,6 +5,7 @@
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/physics/PhysicsManager.h>
+#include <Wiwa/AI/AIPathFindingManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
@@ -45,6 +46,7 @@ namespace Wiwa {
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
+		AIPathFindingManager& GetAIPathFindingManager() { return *m_AIPathFindingManager; }
 
 		LightManager& GetLightManager() { return *m_LightManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
@@ -67,6 +69,7 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		PhysicsManager* m_PhysicsManager;
+		AIPathFindingManager* m_AIPathFindingManager;
 		LightManager* m_LightManager;
 		GuiManager* m_GuiManager;
 
