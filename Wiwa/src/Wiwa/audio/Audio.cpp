@@ -605,21 +605,31 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object)
     return true;
 }
 
+struct AkCallbackCookie {
+    std::string ev_name;
+    Action<const char*> action;
+};
+
 void PostEventCallback(AkCallbackType type, AkCallbackInfo* cbinfo) {
-    Action<>* naction = (Action<>*)cbinfo->pCookie;
+    AkEventCallbackInfo* ecbinfo = (AkEventCallbackInfo*)cbinfo;
+    ecbinfo->eventID;
+
+    AkCallbackCookie* cbcookie = (AkCallbackCookie*)cbinfo->pCookie;
 
     if (type == AkCallbackType::AK_EndOfEvent) {
-        naction->execute();
+        cbcookie->action.execute(cbcookie->ev_name.c_str());
     }
 
-    delete naction;
+    delete cbcookie;
 }
 
-bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<> action)
+bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const char*> action)
 {
-    Action<>* naction = new Action(action);
+    AkCallbackCookie* cbcookie = new AkCallbackCookie();
+    cbcookie->ev_name = event_name;
+    cbcookie->action = action;
 
-    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object, AK_EndOfEvent, PostEventCallback, naction);
+    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object, AK_EndOfEvent, PostEventCallback, cbcookie);
 
     if (play_id == AK_INVALID_PLAYING_ID) {
         m_LastErrorMsg = "Couldn't post event [";

@@ -102,13 +102,13 @@ public:
 	static bool PostEvent(const char* event_name, uint64_t game_object);
 
 	// Post an event into the audio engine for a specific gameobject and callback
-	static bool PostEvent(const char* event_name, uint64_t game_object, Action<> callback);
+	static bool PostEvent(const char* event_name, uint64_t game_object, Action<const char*> callback);
 
 	// Post an event into the default gameobject
 	static bool PostEvent(const char* event_name) { return PostEvent(event_name, m_DefaultListener); }
 
 	// Post an event into the default gameobject with callback
-	static bool PostEvent(const char* event_name, Action<> callback) { return PostEvent(event_name, m_DefaultListener, callback); }
+	static bool PostEvent(const char* event_name, Action<const char*> callback) { return PostEvent(event_name, m_DefaultListener, callback); }
 
 	// Stop event for a specific gameobject
 	static bool StopEvent(const char* event_name, uint64_t game_object);

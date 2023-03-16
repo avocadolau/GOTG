@@ -753,6 +753,23 @@ namespace Wiwa {
 		return false;
 	}
 
+	System* EntityManager::GetSystem(EntityId eid, SystemHash system_hash)
+	{
+		System* sys = NULL;
+
+		size_t size = m_EntitySystemHashes[eid].size();
+
+		for (size_t i = 0; i < size; i++) {
+			if (m_EntitySystemHashes[eid][i] == system_hash)
+			{
+				sys = m_EntitySystems[eid][i];
+				break;
+			}
+		}
+
+		return sys;
+	}
+
 	size_t EntityManager::getSystemIndex(EntityId entityId, SystemHash system_hash)
 	{
 		size_t index = INVALID_INDEX;
