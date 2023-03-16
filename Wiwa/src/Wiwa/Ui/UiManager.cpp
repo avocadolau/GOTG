@@ -113,10 +113,18 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
-		
+		size_t Csize = canvasToDestroy.size();
+		for (size_t x = 0; x < Csize; x++)
+		{
+			RemoveCanvas(canvasToDestroy.at(x));
+		}
+		canvasToDestroy.clear();
+
 		std::vector<GuiCanvas*> canva = canvas;
 		for (int i = 0; i < canva.size(); i++)
 		{
+			
+			
 			size_t rsize = canvas.at(i)->controlsToDestroy.size();
 
 			for (size_t k = 0; k < rsize; k++) {
@@ -124,7 +132,6 @@ namespace Wiwa
 			}
 
 			canvas.at(i)->controlsToDestroy.clear();
-
 
 			if (canva.at(i)->active)
 			{
@@ -137,6 +144,8 @@ namespace Wiwa
 					}
 				}
 			}
+			
+			
 		}
 		return true;
 	}
@@ -158,6 +167,10 @@ namespace Wiwa
 		
 		return false;
 	}
+	void GuiManager::DestroyCanvas(GuiCanvas* canvas)
+	{
+		canvasToDestroy.push_back(canvas);
+	}
 	void GuiManager::DestroyGuiControl(GuiControl* control,GuiCanvas* canvas)
 	{
 		canvas->controlsToDestroy.push_back(control);
@@ -174,6 +187,28 @@ namespace Wiwa
 		return true;
 	}
 
+	void GuiManager::RemoveCanvas(GuiCanvas* canvasToDestroy)
+	{
+		for (int i = 0; i < canvasToDestroy->controls.size(); i++)
+		{
+			size_t ealive = canvasToDestroy->controls.size();
+			Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+			r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_normal);
+			if (canvasToDestroy->controls.at(i)->type == GuiControlType::SLIDER)
+			{
+				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_extra);
+			}
+			RemoveControl(canvasToDestroy->controls.at(i));
+		}
+		for (size_t j = 0; j < this->canvasToDestroy.size(); j++)
+		{
+			if (canvas.at(j) == canvasToDestroy)
+			{
+				canvas.erase(canvas.begin() + j);
+				break;
+			}
+		}
+	}
 	void GuiManager::RemoveControl(GuiControl* control)
 	{
 		std::vector<GuiCanvas*> canva = canvas;
@@ -291,5 +326,13 @@ namespace Wiwa
 		return text;
 	}
 
+	void GuiManager::SwapSelectedCanvas(GuiCanvas* canvasToSelect)
+	{
+		for (size_t i = 0; i < canvas.size(); i++)
+		{
+			canvas.at(i)->selected = false;
+		}
+		canvasToSelect->active = true;
+	}
 	
 }

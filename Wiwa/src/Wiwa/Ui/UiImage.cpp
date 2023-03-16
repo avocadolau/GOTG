@@ -11,6 +11,7 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		this->texture = texture;
+		name = "Image";
 		m_Scene = scene;
 		this->callbackID = callbackID;
 		callback = Wiwa::Application::Get().getCallbackAt(callbackID);

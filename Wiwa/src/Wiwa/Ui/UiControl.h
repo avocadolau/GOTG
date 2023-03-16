@@ -137,7 +137,6 @@ namespace Wiwa
 
 		void SwapActive(Wiwa::Renderer2D& r2d)
 		{
-			
 			active = !active;
 			if (active)
 			{
@@ -217,6 +216,7 @@ namespace Wiwa
 
 		int callbackID;
 
+		std::string name;
 		Callback* callback;
 	};
 }

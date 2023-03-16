@@ -23,7 +23,7 @@ namespace Wiwa
 
 		 void SwapActive();
 		 bool active;
-
+		 bool selected;
 		 int id;
 	};
 }

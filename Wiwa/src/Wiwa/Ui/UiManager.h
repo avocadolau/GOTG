@@ -45,7 +45,10 @@ namespace Wiwa
 		//Method for strings
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, int callbackID);
 
+		void SwapSelectedCanvas(GuiCanvas* canvasToSelect);
 		void DestroyGuiControl(GuiControl* control, GuiCanvas* canvas);
+		void DestroyCanvas(GuiCanvas* canvas);
+		void RemoveCanvas(GuiCanvas* canvasToDestroy);
 		void RemoveControl(GuiControl* control);
 
 		Text* InitFont(const char* path,char* word);
@@ -57,7 +60,7 @@ namespace Wiwa
 		void SetCallback(GuiCanvas* canvas, GuiControl* control, size_t hash);
 	public:
 		std::vector<GuiCanvas*> canvas;
-		
+		std::vector<GuiCanvas*> canvasToDestroy;
 		float accumulatedTime = 0.0f;
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;

@@ -11,6 +11,7 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
+		name = "Slider";
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;

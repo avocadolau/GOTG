@@ -42,6 +42,7 @@ public:
 	void DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 
+	void ResetAllValues();
 	GuiType type;
 	
 
@@ -51,6 +52,7 @@ public:
 	float size[2] = { 0.0f,0.0f };
 	int callbackID;
 	std::string pathForAsset;
+	std::string pathForExtraAsset;
 	/*int UI_element_selected = -1;
 	int buttonID = 0;
 	int sliderID = 0;

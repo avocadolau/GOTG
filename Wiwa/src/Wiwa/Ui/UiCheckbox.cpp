@@ -10,6 +10,7 @@ namespace Wiwa
 	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, int callbackID) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
+		name = "Checkbox";
 		m_Scene = scene;
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
