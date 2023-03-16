@@ -13,7 +13,7 @@ public:
 
 	void Draw() override;
 
-	int canvasSelectedID;
+	int canvasSelectedID = -1;
 	
 	void GetSelectedCanvas();
 

@@ -46,6 +46,8 @@ void UIEditorPanel::GetSelectedCanvas()
 			canvasSelectedID = i;
 		}
 	}
+
+	if (gm.canvas.size() <= 0) canvasSelectedID = -1;
 }
 
 void UIEditorPanel::DrawCanvasItems()
@@ -100,27 +102,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		ImGui::NewLine();
 		ImGui::InputFloat2("position",pos);
 		ImGui::InputFloat2("size", size);
-
-		AssetContainer(pathForAsset.c_str());
-		if (ImGui::BeginDragDropTarget())
+		if (control->type != Wiwa::GuiControlType::TEXT)
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				std::wstring ws(path);
-				std::string pathS(ws.begin(), ws.end());
-				std::filesystem::path p = pathS.c_str();
-				if (p.extension() == ".png")
-				{
-					pathForAsset = pathS;
-				}
-			}
-
-			ImGui::EndDragDropTarget();
-		}
-		if (control->type == Wiwa::GuiControlType::CHECKBOX || control->type == Wiwa::GuiControlType::SLIDER)
-		{
-			AssetContainer(pathForExtraAsset.c_str());
+			AssetContainer(pathForAsset.c_str());
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -131,17 +115,37 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 					std::filesystem::path p = pathS.c_str();
 					if (p.extension() == ".png")
 					{
-						pathForExtraAsset = pathS;
+						pathForAsset = pathS;
 					}
 				}
 
 				ImGui::EndDragDropTarget();
 			}
+			if (control->type == Wiwa::GuiControlType::CHECKBOX || control->type == Wiwa::GuiControlType::SLIDER)
+			{
+				AssetContainer(pathForExtraAsset.c_str());
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS.c_str();
+						if (p.extension() == ".png")
+						{
+							pathForExtraAsset = pathS;
+						}
+					}
+
+					ImGui::EndDragDropTarget();
+				}
+			}
 		}
-		
-		
-		UpdateElements(control);
-		
+		if (ImGui::Button("Update"))
+		{
+			UpdateElements(control);
+		}
 	}
 }
 

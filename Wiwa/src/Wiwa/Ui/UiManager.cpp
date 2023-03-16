@@ -200,7 +200,7 @@ namespace Wiwa
 			}
 			RemoveControl(canvasToDestroy->controls.at(i));
 		}
-		for (size_t j = 0; j < this->canvasToDestroy.size(); j++)
+		for (size_t j = 0; j < canvas.size(); j++)
 		{
 			if (canvas.at(j) == canvasToDestroy)
 			{
@@ -332,7 +332,7 @@ namespace Wiwa
 		{
 			canvas.at(i)->selected = false;
 		}
-		canvasToSelect->active = true;
+		canvasToSelect->selected = true;
 	}
 	
 }

@@ -40,6 +40,7 @@ void UIPanel::Draw()
 			if(ImGui::Button("Select canvas"))
 			{
 				canvasSelected = i;
+				Wiwa::SceneManager::getActiveScene()->GetGuiManager().SwapSelectedCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i));
 			}
 			ImGui::SameLine();
 			if(ImGui::Button("Swap active"))
