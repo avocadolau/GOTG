@@ -26,7 +26,7 @@ namespace Wiwa {
 
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
 
-       static void SaveWiAnimator(File& file, Animator* animator);
+       static void SaveWiAnimator(Animator* animator, const char* path);
        static Animator* LoadWiAnimator(File& file);
 
         std::vector<Animation*> animations;

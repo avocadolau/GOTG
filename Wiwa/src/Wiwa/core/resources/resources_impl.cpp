@@ -8,6 +8,7 @@
 #include "material_impl_inl.h"
 #include "model_impl_inl.h"
 #include "shader_impl_inl.h"
+#include "animation_impl_in.h"
 
 namespace Wiwa {
 	std::vector<Resources::Resource*> Resources::m_Resources[Resources::WRT_LAST];
@@ -101,6 +102,7 @@ namespace Wiwa {
 		UnloadResourcesOf<Material>();
 		//UnloadResourcesOf<Shader>();
 		UnloadResourcesOf<Model>();
+		UnloadResourcesOf<Animation>();
 	}
 	
 	Resources::MetaResult Resources::CheckMeta(const char* filename)
@@ -177,6 +179,15 @@ namespace Wiwa {
 		Model::SaveModel(model, destination);
 
 		delete model;
+	}
+
+	void Resources::_import_animation_impl(const char* origin, const char* destination)
+	{
+		Animation* animation = Animation::GetAnimationFromFile(origin);
+
+		Animation::SaveWiAnimation(animation, destination);
+
+		delete animation;
 	}
 	
 	bool Resources::_check_import_impl(const char* file, const char* extension)

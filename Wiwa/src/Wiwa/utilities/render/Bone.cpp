@@ -51,6 +51,49 @@ namespace Wiwa {
         }
     }
 
+    Bone::Bone(const aiNodeAnim* aiAnimNode)
+    {
+        m_Name = aiAnimNode->mNodeName.C_Str();
+
+        m_NumPositionKeys = aiAnimNode->mNumPositionKeys;
+        m_NumRotationKeys = aiAnimNode->mNumRotationKeys;
+        m_NumScalingKeys = aiAnimNode->mNumScalingKeys;
+
+
+        for (unsigned int i = 0; i < m_NumPositionKeys; i++)
+        {
+            VectorKey posKey;
+
+            posKey.time = aiAnimNode->mPositionKeys[i].mTime;
+            posKey.value.x = aiAnimNode->mPositionKeys[i].mValue.x;
+            posKey.value.y = aiAnimNode->mPositionKeys[i].mValue.y;
+            posKey.value.z = aiAnimNode->mPositionKeys[i].mValue.z;
+            m_Positions.push_back(posKey);
+        }
+        for (unsigned int i = 0; i < m_NumRotationKeys; i++)
+        {
+            QuatKey quatKey;
+
+            quatKey.time = aiAnimNode->mRotationKeys[i].mTime;
+            quatKey.value.x = aiAnimNode->mRotationKeys[i].mValue.x;
+            quatKey.value.y = aiAnimNode->mRotationKeys[i].mValue.y;
+            quatKey.value.z = aiAnimNode->mRotationKeys[i].mValue.z;
+            quatKey.value.w = aiAnimNode->mRotationKeys[i].mValue.w;
+            m_Rotations.push_back(quatKey);
+        }
+        for (unsigned int i = 0; i < m_NumScalingKeys; i++)
+        {
+            VectorKey scaleKey;
+
+            scaleKey.time = aiAnimNode->mScalingKeys[i].mTime;
+            scaleKey.value.x = aiAnimNode->mScalingKeys[i].mValue.x;
+            scaleKey.value.y = aiAnimNode->mScalingKeys[i].mValue.y;
+            scaleKey.value.z = aiAnimNode->mScalingKeys[i].mValue.z;
+            m_Scales.push_back(scaleKey);
+        }
+
+    }
+
     void Bone::Update(float animationTime)
     {
         glm::mat4 translation = InterpolatePosition(animationTime);

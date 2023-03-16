@@ -20,11 +20,24 @@ namespace Wiwa {
 		ReadMissingBones(animation, *model);
 	}
 
+	Animation::Animation(const aiAnimation* animation)
+	{
+		m_Duration = animation->mDuration;
+		m_TicksPerSecond = animation->mTicksPerSecond;
+		m_NumChannels = animation->mNumChannels;
+		m_Name = animation->mName.C_Str();
+	}
+
 	Animation::Animation(const char* filePath, Model* model)
 	{
 		m_Duration = 0;
 		m_TicksPerSecond = 0;
 		m_Name = "new animation";
+	}
+
+	Animation::Animation(const char* filePath)
+	{
+		//Load animation from assimp
 	}
 
 	Animation::~Animation()
@@ -89,12 +102,16 @@ namespace Wiwa {
 
 		for (unsigned int i = 0; i < animation->mNumChannels; i++)
 		{
-			Bone bone;
-			//m_Bones.push_back(bone.LoadAnimationNode(animation->mChannels[i]));
+			m_Bones.push_back(new Bone(animation->mChannels[i]));
 		}
 	}
-	void Animation::SaveWiAnimation(File& file, Animation* animation)
+	void Animation::SaveWiAnimation(Animation* animation, const char* path)
 	{
+
+		std::filesystem::path filepath = path;
+		filepath.replace_filename(animation->m_Name.c_str());
+		filepath.replace_extension("wianim");
+		File file = FileSystem::OpenOB(filepath.string().c_str());
 		size_t name_len = animation->m_Name.size();
 
 		file.Write(&name_len, sizeof(size_t));
@@ -128,6 +145,7 @@ namespace Wiwa {
 		{
 			animation->m_Bones[i]->SaveWiAnimNode(file, animation->m_Bones[i]);
 		}
+		file.Close();
 	}
 
 	void Animation::SaveNodeData(File& file, NodeData* node)
@@ -163,9 +181,18 @@ namespace Wiwa {
 		}
 		return node;
 	}
-	
-	Animation* Animation::LoadWiAnimation(File file)
+
+	Animation* Animation::GetAnimationFromFile(const char* filepath)
 	{
+		Animation* anim = new Animation();
+
+		return nullptr;
+	}
+	
+	Animation* Animation::LoadWiAnimation(const char* filepath)
+	{
+
+		File file = Wiwa::FileSystem::OpenOB(filepath);
 		Animation* anim = new Animation();
 
 		size_t name_len;

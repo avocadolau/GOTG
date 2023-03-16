@@ -58,6 +58,7 @@ namespace Wiwa {
 
         /*reads keyframes from aiNodeAnim*/
         Bone(const std::string& name, int ID, const aiNodeAnim* channel);
+        Bone(const aiNodeAnim* channel);
         Bone() {};
 
 

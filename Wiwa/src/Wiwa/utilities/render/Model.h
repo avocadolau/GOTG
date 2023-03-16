@@ -229,14 +229,6 @@ namespace Wiwa {
 		void PrintAssimpBoneMatrix(const aiBone* mat);
 		void PrintAssimpNodeMatrix(const aiNode* mat);
 
-
-		//void LoadAnimation(const aiAnimation* animation);
-		//AnimNode* LoadAnimationNode(const aiNodeAnim* aiAnimNode);
-		//AnimNode* LoadWiAnimNode(File file);
-		//Animation* LoadWiAnimation(File file);
-		//static void SaveWiAnimation(File& file, Animation* anim);
-		//static void SaveWiAnimNode(File& file, AnimNode* node);
-		
 		void CreateCube();
 		void CreatePlane();
 		void CreatePyramid();
@@ -244,15 +236,6 @@ namespace Wiwa {
 
 		static void SaveModelHierarchy(File file, ModelHierarchy* h);
 		static ModelHierarchy* LoadModelHierarchy(File file);
-		//void ReadNodeHeirarchy(float timeInSeconds, ModelHierarchy* root, glm::mat4 parentTransform);
-		//const AnimNode* FindNodeAnim(const Animation* animation, const std::string& NodeName);
-		//////animation
-		//unsigned int FindScaling(float AnimationTime, const AnimNode* pNodeAnim);
-		//unsigned int FindRotation(float AnimationTime, const AnimNode* pNodeAnim);
-		//unsigned int FindPosition(float AnimationTime, const AnimNode* pNodeAnim);
-		//void CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim);
-		//void CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* pNodeAnim);
-		//void CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* pNodeAnim);	
 	public:
 		Model(const char* file);
 		~Model();

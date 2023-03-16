@@ -193,10 +193,10 @@ namespace Wiwa {
 		if (scene->HasAnimations())
 		{
 			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
-			animator = new Animator();
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
-				animator->animations.push_back(new Animation(scene->mAnimations[i], this));
+				Animation* anim = new Animation(scene->mAnimations[i], this);
+				anim->SaveWiAnimation(anim, file);
 			}
 		}
 
@@ -244,25 +244,8 @@ namespace Wiwa {
 				m_BoneInfoMap.insert(item);
 			}
 
-			animator = Animator::LoadWiAnimator(f);
-			animator->PlayAnimationIndex(0);
-			//bone info
-			//size_t bones_info_size;
-			//f.Read(&bones_info_size, sizeof(size_t));
-			//boneInfo.resize(bones_info_size);
-			//
-			//if (bones_info_size != 0) {
-			//	f.Read(&boneInfo[0], bones_info_size * sizeof(BoneInfo));
-			//}
-			//load animations
-			//size_t anim_size;
-			//f.Read(&anim_size, sizeof(size_t));
-			//animations.resize(anim_size);
-			//for (size_t i = 0; i < anim_size; i++)
-			//{
-			//	animations[i] = LoadWiAnimation(f);
-			//}
-		
+			//animator = Animator::LoadWiAnimator(f);
+			//animator->PlayAnimationIndex(0);
 
 			// Material size
 			size_t mat_size;
@@ -394,9 +377,6 @@ namespace Wiwa {
 
 		h->name = node->mName.C_Str();
 
-		//DEBUG
-		//WI_INFO("Name {0}, num children {1}, num meshes{2}",node->mName.C_Str(),node->mNumChildren, node->mNumMeshes);
-		//PrintAssimpNodeMatrix(node);
 		// Node transform
 		aiVector3D translate, scale, rot;
 		//aiQuaternion quat;
@@ -650,163 +630,6 @@ namespace Wiwa {
 		return h;
 	}
 
-	//
-	//void Model::ReadNodeHeirarchy(float AnimationTime, ModelHierarchy* node, glm::mat4 parentTransform)
-	//{
-	//	std::string NodeName(node->name.data());
-	//	//SetCurrent anim
-	//	const Animation* animation = parent->animations[0];
-
-	//	glm::mat4 nodeTransformation(node->Transformation);
-
-	//	const AnimNode* pNodeAnim = FindNodeAnim(animation, NodeName);
-
-	//	if (pNodeAnim) {
-	//		
-	//		// Interpolate scaling and generate scaling transformation matrix
-	//		glm::vec3 Scaling;
-	//		CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
-	//		glm::mat4 scalingM = glm::scale(glm::mat4(1.0f), Scaling);
-
-	//		//Interpolate rotation and generate rotation transformation matrix
-	//		glm::quat RotationQ;
-	//		CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
-	//		glm::mat4 rotationM = glm::mat4_cast(RotationQ);
-
-	//		// Interpolate translation and generate translation transformation matrix
-	//		glm::vec3 Translation;
-	//		CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
-	//		glm::mat4 translationM = glm::translate(glm::mat4(1.0f), Translation);
-
-	//		// Combine the above transformations
-	//		nodeTransformation = translationM * rotationM * scalingM;
-	//	}
-
-	//	glm::mat4 GlobalTransformation = parentTransform * nodeTransformation;
-
-	//	if (parent->boneNameToIndexMap.find(NodeName) != parent->boneNameToIndexMap.end()) {
-	//		unsigned int BoneIndex = parent->boneNameToIndexMap[NodeName];
-	//		parent->boneInfo[BoneIndex].finalTransformation = parent->globalInverseTransform * GlobalTransformation * parent->boneInfo[BoneIndex].offsetMatrix;
-
-	//	}
-
-	//	for (unsigned int i = 0; i < node->children.size(); i++) {
-	//		
-	//		ReadNodeHeirarchy(AnimationTime, node->children[i], GlobalTransformation);
-	//	}
-	//}
-
-	//const AnimNode* Model::FindNodeAnim(const Animation* animation, const std::string& NodeName)
-	//{
-	//	for (unsigned int  i = 0; i < animation->numChannels; i++) {
-	//		const AnimNode* nodeAnim = animation->channels[i];
-
-	//		if (std::string(nodeAnim->name.data()) == NodeName) {
-	//			return nodeAnim;
-	//		}
-	//	}
-
-	//	return NULL;
-	//}
-
-	//unsigned int Model::FindScaling(float AnimationTime, const AnimNode* NodeAnim)
-	//{
-	//	assert(NodeAnim->numScalingKeys > 0);
-
-	//	for (unsigned int i = 0; i < NodeAnim->numScalingKeys - 1; i++) {
-	//		float t = (float)NodeAnim->scalingKeys[(i + 1)].time;
-	//		if (AnimationTime < t) {
-	//			return i;
-	//		}
-	//	}
-
-	//	return 0;
-	//}
-
-	//unsigned int Model::FindRotation(float AnimationTime, const AnimNode* NodeAnim)
-	//{
-	//	assert(NodeAnim->numRotationKeys > 0);
-
-	//	for (unsigned int i = 0; i < NodeAnim->numRotationKeys - 1; i++) {
-	//		float t = (float)NodeAnim->rotationKeys[(i + 1)].time;
-	//		if (AnimationTime < t) {
-	//			return i;
-	//		}
-	//	}
-
-	//	return 0;
-	//}
-
-	//unsigned int Model::FindPosition(float AnimationTime, const AnimNode* NodeAnim)
-	//{
-	//	for (unsigned int i = 0; i < NodeAnim->numPositionKeys - 1; i++) {
-	//		float t = (float)NodeAnim->positionKeys[(i + 1)].time;
-	//		if (AnimationTime < t) {
-	//			return i;
-	//		}
-	//	}
-
-	//	return 0;
-	//}
-
-	//void Model::CalcInterpolatedScaling(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim)
-	//{
-	//	if (NodeAnim->numScalingKeys == 1) {
-	//		Out = NodeAnim->scalingKeys[0].value;
-	//		return;
-	//	}
-
-	//	unsigned int ScalingIndex = FindScaling(AnimationTime, NodeAnim);
-	//	unsigned int NextScalingIndex = (ScalingIndex + 1);
-	//	assert(NextScalingIndex < NodeAnim->numScalingKeys);
-	//	float DeltaTime = (float)(NodeAnim->scalingKeys[NextScalingIndex].time - NodeAnim->scalingKeys[ScalingIndex].time);
-	//	float Factor = (AnimationTime - (float)NodeAnim->scalingKeys[ScalingIndex].time) / DeltaTime;
-	//	assert(Factor >= 0.0f && Factor <= 1.0f);
-	//	const glm::vec3& Start = NodeAnim->scalingKeys[ScalingIndex].value;
-	//	const glm::vec3& End = NodeAnim->scalingKeys[NextScalingIndex].value;
-	//	glm::vec3 Delta = End - Start;
-	//	Out = Start + Factor * Delta;
-	//}
-
-	//void Model::CalcInterpolatedRotation(glm::quat& Out, float AnimationTime, const AnimNode* NodeAnim)
-	//{
-	//	// we need at least two values to interpolate...
-	//	if (NodeAnim->numRotationKeys == 1) {
-	//		Out = NodeAnim->rotationKeys[0].value;
-	//		return;
-	//	}
-
-	//	unsigned int RotationIndex = FindRotation(AnimationTime, NodeAnim);
-	//	unsigned int NextRotationIndex = (RotationIndex + 1);
-	//	assert(NextRotationIndex < NodeAnim->numRotationKeys);
-	//	float DeltaTime = (float)(NodeAnim->rotationKeys[NextRotationIndex].time - NodeAnim->rotationKeys[RotationIndex].time);
-	//	float Factor = (AnimationTime - (float)NodeAnim->rotationKeys[RotationIndex].time) / DeltaTime;
-	//	assert(Factor >= 0.0f && Factor <= 1.0f);
-	//	const glm::quat& StartRotationQ = NodeAnim->rotationKeys[RotationIndex].value;
-	//	const glm::quat& EndRotationQ = NodeAnim->rotationKeys[NextRotationIndex].value;
-	//	Out = glm::mix(StartRotationQ, EndRotationQ, Factor);
-	//	Out = glm::normalize(Out);
-	//}
-
-	//void Model::CalcInterpolatedPosition(glm::vec3& Out, float AnimationTime, const AnimNode* NodeAnim)
-	//{
-	//	if (NodeAnim->numPositionKeys == 1) {
-	//		Out = NodeAnim->positionKeys[0].value;
-	//		return;
-	//	}
-
-	//	unsigned int PositionIndex = FindPosition(AnimationTime, NodeAnim);
-	//	unsigned int NextPositionIndex = (PositionIndex + 1);
-	//	assert(NextPositionIndex < NodeAnim->numPositionKeys);
-	//	float DeltaTime = (float)(NodeAnim->positionKeys[NextPositionIndex].time - NodeAnim->positionKeys[PositionIndex].time);
-	//	float Factor = (AnimationTime - (float)NodeAnim->positionKeys[PositionIndex].time) / DeltaTime;
-	//	assert(Factor >= 0.0f && Factor <= 1.0f);
-	//	const glm::vec3& Start = NodeAnim->positionKeys[PositionIndex].value;
-	//	const glm::vec3& End = NodeAnim->positionKeys[NextPositionIndex].value;
-	//	glm::vec3 Delta = End - Start;
-	//	Out = Start + Factor * Delta;
-	//}
-
 	void Model::generateBuffers()
 	{
 		if (is_root) return;
@@ -1036,25 +859,6 @@ namespace Wiwa {
 		getWiMeshFromFile(file);
 	}
 
-	void Model::GetBoneTransforms(float timeInSeconds, std::vector<glm::mat4>& transforms)
-	{
-		
-	//	glm::mat4 identity (1.0f);
-
-	//	//Set current anim
-	//	float TicksPerSecond = (float)(parent->animations[0]->ticksPerSecond != 0 ? parent->animations[0]->ticksPerSecond : 25.0f);
-	//	float TimeInTicks = timeInSeconds * TicksPerSecond;
-	//	float AnimationTimeTicks = fmod(TimeInTicks, (float)parent->animations[0]->duration);
-	////	parent->animationTime = AnimationTimeTicks;
-	//	
-	//	ReadNodeHeirarchy(AnimationTimeTicks, parent->model_hierarchy, identity);
-	//	transforms.resize(parent->boneInfo.size());
-	//	for (unsigned int i = 0; i < parent->boneInfo.size(); i++)
-	//	{
-	//		transforms[i] = parent->boneInfo[i].finalTransformation;
-	//	}
-	}
-
 	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)
 	{
 		for (int i = 0; i < mesh->mNumBones; i++)
@@ -1080,21 +884,10 @@ namespace Wiwa {
 		{
 			BoneId = parent->m_BoneInfoMap[bone->mName.C_Str()].id;
 		}
-		/*int BoneId = GetBoneId(bone);
-		if (BoneId == boneInfo.size()) {
-			glm::mat4 offset = mat4_cast(bone->mOffsetMatrix);
-			WI_INFO("bone id {}", BoneId);
-			PrintGlmMatrix(offset);
-			BoneInfo binfo(offset);
-			binfo.id = BoneId;
-			m_BoneInfoMap[](binfo);
-			m_BoneCounter++;
-		}*/
 
 		for (unsigned int i = 0; i < bone->mNumWeights; i++) {
 			const aiVertexWeight& vw = bone->mWeights[i];
 			unsigned int GlobalVertexID = parent->meshes[meshIndex] + bone->mWeights[i].mVertexId;
-			WI_INFO("vertex id {}", GlobalVertexID);
 			bone_data[GlobalVertexID].AddBoneData(BoneId, vw.mWeight);
 		}
 
@@ -1125,172 +918,6 @@ namespace Wiwa {
 		WI_INFO("\n");
 	}
 
-	//void Model::LoadAnimation(const aiAnimation* animation)
-	//{
-	//	Animation* anim = new Animation();
-
-	//	anim->name = animation->mName.C_Str();
-	//	anim->duration = animation->mDuration;
-	//	anim->ticksPerSecond = animation->mTicksPerSecond;
-	//	anim->numChannels = animation->mNumChannels;
-
-	//	for (unsigned int i = 0; i < anim->numChannels; i++)
-	//	{
-	//		anim->channels.push_back(LoadAnimationNode(animation->mChannels[i]));
-	//	}
-
-	//	animations.push_back(anim);
-	//}
-
-	//AnimNode* Model::LoadAnimationNode(const aiNodeAnim* aiNode)
-	//{
-	//	AnimNode* node = new AnimNode();
-
-	//	node->name = aiNode->mNodeName.C_Str();
-
-	//	node->numPositionKeys = aiNode->mNumPositionKeys;
-	//	node->numRotationKeys = aiNode->mNumRotationKeys;
-	//	node->numScalingKeys = aiNode->mNumScalingKeys;
-
-
-	//	for (unsigned int i = 0; i < node->numPositionKeys; i++)
-	//	{
-	//		VectorKey posKey;
-
-	//		posKey.time = aiNode->mPositionKeys[i].mTime;
-	//		posKey.value.x = aiNode->mPositionKeys[i].mValue.x;
-	//		posKey.value.y = aiNode->mPositionKeys[i].mValue.y;
-	//		posKey.value.z = aiNode->mPositionKeys[i].mValue.z;
-	//		node->positionKeys.push_back(posKey);
-	//	}
-	//	for (unsigned int i = 0; i < node->numRotationKeys; i++)
-	//	{
-	//		QuatKey quatKey;
-
-	//		quatKey.time = aiNode->mRotationKeys[i].mTime;
-	//		quatKey.value.x = aiNode->mRotationKeys[i].mValue.x;
-	//		quatKey.value.y = aiNode->mRotationKeys[i].mValue.y;
-	//		quatKey.value.z = aiNode->mRotationKeys[i].mValue.z;
-	//		quatKey.value.w = aiNode->mRotationKeys[i].mValue.w;
-	//		node->rotationKeys.push_back(quatKey);
-	//	}
-	//	for (unsigned int i = 0; i < node->numScalingKeys; i++)
-	//	{
-	//		VectorKey scaleKey;
-
-	//		scaleKey.time = aiNode->mScalingKeys[i].mTime;
-	//		scaleKey.value.x = aiNode->mScalingKeys[i].mValue.x;
-	//		scaleKey.value.y = aiNode->mScalingKeys[i].mValue.y;
-	//		scaleKey.value.z = aiNode->mScalingKeys[i].mValue.z;
-	//		node->scalingKeys.push_back(scaleKey);
-	//	}
-
-	//	return node;
-	//}
-
-	//AnimNode* Model::LoadWiAnimNode(File file)
-	//{
-	//	AnimNode* node = new AnimNode();
-
-	//	size_t name_len;
-	//	file.Read(&name_len, sizeof(size_t));
-	//	node->name.resize(name_len);
-	//	file.Read(&node->name[0], name_len);
-
-	//	file.Read(&node->numPositionKeys, sizeof(unsigned int));
-	//	file.Read(&node->numRotationKeys, sizeof(unsigned int));
-	//	file.Read(&node->numScalingKeys, sizeof(unsigned int));
-
-	//	// Read position keys
-	//	size_t position_key_size;
-	//	file.Read(&position_key_size, sizeof(size_t));
-	//	node->positionKeys.resize(position_key_size);
-	//	file.Read(&node->positionKeys[0], position_key_size* sizeof(VectorKey));
-	//	// Read Rotation keys
-	//	size_t rotation_key_size;
-	//	file.Read(&rotation_key_size, sizeof(size_t));
-	//	node->rotationKeys.resize(rotation_key_size);
-	//	file.Read(&node->rotationKeys[0], rotation_key_size*sizeof(QuatKey));
-	//	// Read scaling keys
-	//	size_t scaling_key_size;
-	//	file.Read(&scaling_key_size, sizeof(size_t));
-	//	node->scalingKeys.resize(scaling_key_size);
-	//	file.Read(&node->scalingKeys[0], scaling_key_size* sizeof(VectorKey));
-	//	return node;
-	//}
-
-	//Animation* Model::LoadWiAnimation(File file)
-	//{
-	//	Animation* anim = new Animation();
-
-	//	size_t name_len;
-	//	file.Read(&name_len, sizeof(size_t));
-	//	anim->name.resize(name_len);
-	//	file.Read(&anim->name[0], name_len);
-
-	//	file.Read(&anim->duration, sizeof(double));
-	//	file.Read(&anim->ticksPerSecond, sizeof(double));
-	//	file.Read(&anim->numChannels, sizeof(unsigned int));
-
-	//	size_t channels_size;
-	//	file.Read(&channels_size, sizeof(size_t));
-
-	//	for (unsigned int i = 0; i < channels_size; i++)
-	//	{
-	//		anim->channels.push_back(LoadWiAnimNode(file));
-	//	}
-
-
-	//	return anim;
-	//}
-
-	//void Model::SaveWiAnimation(File& file, Animation* anim)
-	//{
-	//	size_t name_len = anim->name.size();
-
-	//	file.Write(&name_len, sizeof(size_t));
-	//	file.Write(anim->name.c_str(), name_len);
-
-	//	file.Write(&anim->duration, sizeof(double));
-	//	file.Write(&anim->ticksPerSecond, sizeof(double));
-	//	file.Write(&anim->numChannels, sizeof(unsigned int));
-
-	//	size_t channels_size = anim->channels.size();
-	//	file.Write(&channels_size, sizeof(size_t));
-
-
-	//	for (unsigned int i = 0; i < channels_size; i++)
-	//	{
-	//		SaveWiAnimNode(file, anim->channels[i]);
-	//	}
-	//}
-
-	//void Model::SaveWiAnimNode(File& file, AnimNode* node)
-	//{
-	//	if (node == NULL) return;
-	//	size_t name_len = node->name.size();
-	//	file.Write(&name_len, sizeof(size_t));
-	//	file.Write(node->name.c_str(), name_len);
-
-	//	file.Write(&node->numPositionKeys, sizeof(unsigned int));
-	//	file.Write(&node->numRotationKeys, sizeof(unsigned int));
-	//	file.Write(&node->numScalingKeys, sizeof(unsigned int));
-
-
-	//	//Position keys
-	//	size_t position_size = node->positionKeys.size();
-	//	file.Write(&position_size, sizeof(size_t));
-	//	file.Write(node->positionKeys.data(), position_size * sizeof(VectorKey));
-	//	//Rotation keys
-	//	size_t rotation_size = node->rotationKeys.size();
-	//	file.Write(&rotation_size, sizeof(size_t));
-	//	file.Write(node->rotationKeys.data(), rotation_size * sizeof(QuatKey));
-	//	//Scale keys
-	//	size_t scale_size = node->scalingKeys.size();
-	//	file.Write(&scale_size, sizeof(size_t));
-	//	file.Write(node->scalingKeys.data(), scale_size * sizeof(VectorKey));
-	//}
- //
 	Model* Model::GetModelFromFile(const char* file, ModelSettings* settings)
 	{
 		Model* model = new Model(NULL);
@@ -1334,19 +961,7 @@ namespace Wiwa {
 				f.Write(&it->second.finalTransformation, sizeof(glm::mat4));
 			}
 			
-			model->animator->SaveWiAnimator(f, model->animator);
-			//Model Bones info
-			//size_t bones_info_size = model->boneInfo.size();
-			//f.Write(&bones_info_size, sizeof(size_t));
-			//f.Write(model->boneInfo.data(), bones_info_size * sizeof(BoneInfo));
-
-			//Animations
-			//size_t anim_size = model->animations.size();
-			//f.Write(&anim_size, sizeof(size_t));		
-			//for (size_t i = 0; i < anim_size; i++)
-			//{
-			//	SaveWiAnimation(f,model->animations[i]);
-			//}
+			//model->animator->SaveWiAnimator(model->animator, file);
 
 			// Material size
 			size_t mat_size = model->materials.size();
