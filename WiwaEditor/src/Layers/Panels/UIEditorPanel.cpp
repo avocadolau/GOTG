@@ -142,10 +142,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 				}
 			}
 		}
-		if (ImGui::Button("Update"))
-		{
-			UpdateElements(control);
-		}
+		
+		UpdateElements(control);
+		
 	}
 }
 
