@@ -37,9 +37,9 @@
         public Vector4 local_mat_r4;
     }
     #endregion
-    #region RigidBody
+    #region CollisionBody
     [Component]
-    public struct Rigidbody
+    public struct CollisionBody
     {
         public Vector3 positionOffset;
         public Vector3 scalingOffset;
@@ -88,5 +88,45 @@
         public int val1;
         public float val2;
     }
+    #endregion
+    #region Game
+    [Component]
+    public struct Wave
+    {
+        public int maxEnemies;
+        public int currentEnemiesAlive;
+        public bool hasFinished;
+    }
+    //[Component]
+    //public struct EnemySpawner
+    //{
+    //    public int maxEnemiesPerWave;
+    //    public int maxWaveCount;
+    //    public int currentWaveCount;
+    //    public float timeBetweenWaves;
+    //    public bool hasFinished;
+    //}
+    //[Component]
+    //public struct CharacterController
+    //{
+    //    public float velocity;
+    //    public float camYOffset;
+    //    public float camXOffset;
+    //    public float camZOffset;
+
+    //    public float camXAngle;
+    //    public float camYAngle;
+    //    public float camZAngle;
+
+    //    public float fireInterval;
+    //    public float fireTimer;
+
+    //    public float bulletLifeTime;
+    //    public float bulletSpeed;
+    //    public float bulletScale;
+
+    //    public int bulletTag;
+    //    public int collisionTag1;
+    //}
     #endregion
 }

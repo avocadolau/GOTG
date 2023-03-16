@@ -17,7 +17,14 @@
         {
             return InternalCalls.RemoveBodyFromLog(id);
         }
-
+        public static string GetEntityTagString(EntityId id)
+        {
+            return InternalCalls.GetEntityTagString(id);
+        }
+        public static int GetEntityTagBits(EntityId id)
+        {
+            return InternalCalls.GetEntityTagBits(id);
+        }
     }
 }
 

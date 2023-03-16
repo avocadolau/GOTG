@@ -109,6 +109,12 @@ size_t CreateEntityNamed(MonoString* name_entity, void* scene)
 	return em.CreateEntity(name_p);
 }
 
+MonoString* GetEntityName(size_t id, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	return 	Wiwa::ScriptEngine::CreateString(_scene->GetEntityManager().GetEntityName(id));
+}
+
 void DestroyEntity(size_t eid, void* scene)
 {
 	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;

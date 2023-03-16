@@ -28,6 +28,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static EntityId CreateEntityNamed(string name_entity, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static string GetEntityName(EntityId id, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
@@ -124,6 +126,10 @@ namespace Wiwa
         internal extern static bool AddBodyToLog(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool RemoveBodyFromLog(EntityId id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static string GetEntityTagString(EntityId id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static int GetEntityTagBits(EntityId id);
         #endregion
         #region Scene
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

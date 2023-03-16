@@ -47,7 +47,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
-		if (type->hash == (size_t)TypeHash::Rigidbody) { DrawRigidBodyComponent(data); } else
+		if (type->hash == (size_t)TypeHash::CollisionBody) { DrawRigidBodyComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCube) { DrawColliderCubeComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderSphere) { DrawColliderSpehereComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
@@ -354,7 +354,7 @@ void InspectorPanel::DrawSpotLightComponent(byte* data)
 void InspectorPanel::DrawRigidBodyComponent(byte* data)
 {
 	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-	Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
+	Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
 	ImGui::Checkbox("Is static?", &rigidBody->isStatic);

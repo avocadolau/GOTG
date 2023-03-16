@@ -5,6 +5,15 @@
 //namespace WiwaApp
 //{
 //    using EntityId = System.UInt64;
+//    [Component]
+//    public struct EnemySpawner
+//    {
+//        public int maxEnemiesPerWave;
+//        public int maxWaveCount;
+//        public int currentWaveCount;
+//        public float timeBetweenWaves;
+//        public bool hasFinished;
+//    }
 //    class EnemySpawnerSystem : Behaviour
 //    {
 //        ComponentIterator enemySpawnerIt;
@@ -51,18 +60,17 @@
 //                if (debug) Console.WriteLine("Getting wave");
 //                ref Wave currentWave = ref GetComponent<Wave>(currentWaveEntityId);
 //                if (debug) Console.WriteLine("Checking wave");
-//                if (currentWave.isAssigned == true)
-//                {
-//                    if (debug) Console.WriteLine("No Wave");
-//                    if (!previousWaveDestroy)
-//                        previousWaveDestroy = CheckFinishWave(currentWave);
+        
+//                if (debug) Console.WriteLine("No Wave");
+//                if (!previousWaveDestroy)
+//                    previousWaveDestroy = CheckFinishWave(currentWave);
 
-//                    // Finish the spawner
-//                    if (enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount && previousWaveDestroy)
-//                    {
-//                        enemySpawner.hasFinished = true;
-//                    }
+//                // Finish the spawner
+//                if (enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount && previousWaveDestroy)
+//                {
+//                    enemySpawner.hasFinished = true;
 //                }
+                
 //            }
 
 //            // Timer before deploying next wave
@@ -78,13 +86,13 @@
 //            }
 //            if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
 //        }
-    
+
 
 
 //        private bool CheckFinishWave(Wave wave)
 //        {
 //            // Finish terminated waves
-//            if (wave.isAssigned)
+//            if (wave.hasFinished)
 //            {
 //                if (debug) Console.WriteLine("Destroying wave " + currentWaveEntityId);
 //                currentWaveIt.componentId = Constants.WI_INVALID_INDEX;
@@ -120,7 +128,6 @@
 //            wave.currentEnemiesAlive = enemySpawner.maxEnemiesPerWave;
 //            wave.maxEnemies = enemySpawner.maxEnemiesPerWave;
 //            wave.hasFinished = false;
-//            wave.isAssigned = true;
 //            if (debug) Console.WriteLine("Adding wave sys");
 //            ApplySystem<WaveSystem>(currentWaveEntityId);
 
@@ -136,19 +143,11 @@
 //            }
 //            ref Wave currentWave = ref GetComponentByIterator<Wave>(currentWaveIt);
 //            if (debug) Console.WriteLine("testing it");
-//            if (currentWave.isAssigned == true)
-//            {
-//                if (debug) Console.WriteLine(":)");
-//            }
-//            else
-//            {
-//                if (debug) Console.WriteLine(":(");
-//            }
-//                previousWaveDestroy = false;
+//            previousWaveDestroy = false;
 //        }
 //        void OnCollisionEnter(EntityId id1, EntityId id2)
 //        {
-       
+
 //        }
 //    }
 //}

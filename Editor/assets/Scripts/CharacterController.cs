@@ -29,7 +29,7 @@ namespace Game
     }
     class CharacterControllerSystem : Behaviour
     {
-        void InitCollisionFlags(ref Rigidbody rb, ref CharacterController character)
+        void InitCollisionFlags(ref CollisionBody rb, ref CharacterController character)
         {
             int bitsSelf = 0;
             bitsSelf |= 1 << character.bulletTag;
@@ -158,7 +158,7 @@ namespace Game
             ref BulletComponent bc = ref AddComponent<BulletComponent>(entity);
             AddMesh(entity, "Models/bullet", "assets/Models/03_mat_addelements.wimaterial");
 
-            ref Rigidbody rb = ref AddComponent<Rigidbody>(entity);
+            ref CollisionBody rb = ref AddComponent<CollisionBody>(entity);
             rb.scalingOffset.x = 1;
             rb.scalingOffset.y = 1;
             rb.scalingOffset.z = 1;

@@ -105,5 +105,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(AddBodyToLog);
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
+		WI_ADD_INTERNAL_CALL(GetEntityTagString);
+		WI_ADD_INTERNAL_CALL(GetEntityTagBits);
 	}
 }

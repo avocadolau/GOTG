@@ -79,14 +79,15 @@ namespace Wiwa {
 		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
-		static int o = 0;
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
-		{
-			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
-			o++;
-		}
+	
+		//static int o = 0;
+		//Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		//for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		//{
+		//	Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+		//	//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
+		//	o++;
+		//}
 		
 		// Commented because it causes clipping :(
 		/*for (int i = 0; i < SUB_STEPS; i++)
@@ -221,7 +222,7 @@ namespace Wiwa {
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D*transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			Rigidbody*rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
+			CollisionBody*rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			// Get the position from the engine
 			glm::vec3 posEngine = transform3d->localPosition;
@@ -252,7 +253,7 @@ namespace Wiwa {
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
+			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			btTransform bulletTransform((*item)->collisionObject->getWorldTransform());
 
@@ -333,7 +334,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
+	bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		btCollisionShape* colShape = new btSphereShape(sphere.radius);
 		m_Shapes.push_back(colShape);
@@ -347,7 +348,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
+	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		glm::vec3 skew;
 		glm::vec4 perspective;
@@ -368,7 +369,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
+	bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		btCollisionShape* colShape = new btCylinderShape(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
 		m_Shapes.push_back(colShape);
@@ -383,7 +384,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
+	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		btCollisionShape* colShape = new btCapsuleShape(capsule.radius, capsule.radius);
 		m_Shapes.push_back(colShape);
@@ -399,7 +400,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::Rigidbody& rigid_body)
+	bool PhysicsManager::AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body)
 	{
 		if (rigid_body.isTrigger)
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -519,18 +520,21 @@ namespace Wiwa {
 	void PhysicsManager::DebugDrawWorld()
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		camera->frameBuffer->Bind(false);
+		if (camera->drawBoundingBoxes)
+		{
+			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+			camera->frameBuffer->Bind(false);
 
-		m_Debug_draw->lineDisplayShader->Bind();
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
+			m_Debug_draw->lineDisplayShader->Bind();
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
-		m_World->debugDrawWorld();
-		m_Debug_draw->lineDisplayShader->UnBind();
-		camera->frameBuffer->Unbind();
+			m_World->debugDrawWorld();
+			m_Debug_draw->lineDisplayShader->UnBind();
+			camera->frameBuffer->Unbind();
+		}
 	}
 
 	bool PhysicsManager::AddFilterTag(const char* str)
@@ -548,6 +552,11 @@ namespace Wiwa {
 	{
 		filterStrings.erase(filterStrings.begin() + index);
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);
+	}
+
+	const char* PhysicsManager::GetFilterTag(const int index)
+	{
+		return filterStrings[index].c_str();
 	}
 
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)

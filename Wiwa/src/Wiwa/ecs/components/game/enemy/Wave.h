@@ -8,7 +8,6 @@ namespace Wiwa {
 		int maxEnemies;
 		int currentEnemiesAlive;
 		bool hasFinished;
-		bool isAssigned;
 	};
 }
 
@@ -16,5 +15,4 @@ REFLECTION_BEGIN(Wiwa::Wave)
 REFLECT_MEMBER(maxEnemies)
 REFLECT_MEMBER(currentEnemiesAlive)
 REFLECT_MEMBER(hasFinished)
-REFLECT_MEMBER(isAssigned)
 REFLECTION_END;

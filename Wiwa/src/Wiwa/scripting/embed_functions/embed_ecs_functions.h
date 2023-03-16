@@ -19,6 +19,8 @@ size_t CreateEntity(void* scene);
 
 size_t CreateEntityNamed(MonoString* name_entity, void* scene);
 
+MonoString* GetEntityName(size_t id, void* scene);
+
 void DestroyEntity(size_t eid, void* scene);
 
 // Help functions

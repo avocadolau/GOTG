@@ -116,6 +116,8 @@ namespace Wiwa
 			m_PhysicsManager->UpdatePhysicsToEngine();
 			// m_PhysicsManager->LogBodies();
 		}
+		m_PhysicsManager->DebugDrawWorld();
+
 		// m_PhysicsManager->LogBodies();
 
 		if (!SceneManager::IsPlaying())

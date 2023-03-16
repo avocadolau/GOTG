@@ -69,7 +69,7 @@
 //        capsule.height = 1;
 //        capsule.radius = 1;
 //
-//        Rigidbody rigidBody;
+//        CollisionBody rigidBody;
 //        rigidBody.positionOffset = { 0,0,0 };
 //        rigidBody.scalingOffset = { 1,1,1 };
 //        rigidBody.isTrigger = false;
@@ -80,7 +80,7 @@
 //        rigidBody.filterBits |= 1 << 4;
 //
 //        entityManager.AddComponent<ColliderCapsule>(m_PlayerId, capsule);
-//        entityManager.AddComponent<Rigidbody>(m_PlayerId, rigidBody);
+//        entityManager.AddComponent<CollisionBody>(m_PlayerId, rigidBody);
 //        entityManager.ApplySystem<PhysicsSystem>(m_PlayerId);
 //
 //        entityManager.AddComponent<Wiwa::CharacterController>(m_PlayerId, stats_);
