@@ -306,8 +306,6 @@ namespace Wiwa {
 
 		Model* root = mesh->GetParent();
 		root->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
-		//mesh->GetBoneTransforms(Time::GetRealTimeSinceStartup(), transforms);
-		//mesh->GetBoneTransforms(mesh->GetParent()->animationTime, transforms);
 		transforms = root->animator->GetFinalBoneMatrices();
 
 		matShader->SetBoneTransform(transforms);

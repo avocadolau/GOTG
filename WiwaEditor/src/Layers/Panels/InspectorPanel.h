@@ -21,6 +21,7 @@ private:
 	void DrawPointLightComponent(byte* data);
 	void DrawDirectionalLightComponent(byte* data);
 	void DrawSpotLightComponent(byte* data);
+	void DrawAnimatorComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();

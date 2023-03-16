@@ -15,6 +15,7 @@
 #include <Wiwa/ecs/components/PointLight.h>
 #include <Wiwa/ecs/components/SpotLight.h>
 #include <Wiwa/ecs/components/DirectionalLight.h>
+#include <Wiwa/ecs/components/AnimatorComponent.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -47,6 +48,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::Animator) { DrawAnimatorComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -285,6 +287,21 @@ void InspectorPanel::DrawSpotLightComponent(byte* data)
 	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
 	DrawVec3Control("Direction", &lsrc->Direction);
 	ImGui::InputFloat("Cutoff", &lsrc->Cutoff);
+}
+
+void InspectorPanel::DrawAnimatorComponent(byte* data)
+{
+
+	Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
+	&animator->currentAnimation;
+	const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO", "PPPP", "QQQQQQQQQQ", "RRR", "SSSS" };
+	static const char* current_item = NULL;
+
+	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
+	{
+		ImGui::EndCombo();
+	}
+
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)

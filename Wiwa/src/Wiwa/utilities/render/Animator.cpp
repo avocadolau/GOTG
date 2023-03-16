@@ -32,8 +32,6 @@ namespace Wiwa {
 			float TimeInTicks = dt * TicksPerSecond;
 			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
 			m_CurrentTime = AnimationTimeTicks;
-			//m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
-			//m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 		}
 	}
