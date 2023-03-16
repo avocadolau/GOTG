@@ -20,6 +20,10 @@ namespace Wiwa {
 		m_AwakeMethod = scriptClass.GetMethod("Awake", 0);
 		m_InitMethod = scriptClass.GetMethod("Init", 0);
 		m_UpdateMethod = scriptClass.GetMethod("Update", 0);
+		
+		m_OnCollisionEnterMethod = scriptClass.GetMethod("OnCollisionEnter", 2);
+		m_OnCollisionMethod = scriptClass.GetMethod("OnCollision", 2);
+		m_OnCollisionExitMethod = scriptClass.GetMethod("OnCollisionExit", 2);
 
 		m_EntityIdField = scriptClass.GetField("m_EntityId");
 	}
@@ -43,6 +47,42 @@ namespace Wiwa {
 		if (!m_UpdateMethod) return;
 
 		scriptClass.InvokeMethod(m_SystemObject, m_UpdateMethod, NULL);
+	}
+
+	void SystemScriptClass::OnCollisionEnter(Object* obj1, Object* obj2)
+	{
+		if (!m_OnCollisionEnterMethod) return;
+
+		void* params[] = {
+			&obj1->id,
+			&obj2->id
+		};
+
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
+	}
+
+	void SystemScriptClass::OnCollision(Object* obj1, Object* obj2)
+	{
+		if (!m_OnCollisionMethod) return;
+
+		void* params[] = {
+			&obj1->id,
+			&obj2->id
+		};
+
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
+	}
+
+	void SystemScriptClass::OnCollisionExit(Object* obj1, Object* obj2)
+	{
+		if (!m_OnCollisionExitMethod) return;
+
+		void* params[] = {
+			&obj1->id,
+			&obj2->id
+		};
+
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
 	}
 
 	void SystemScriptClass::OnEntitySet()

@@ -1,15 +1,22 @@
 #pragma once
 #include "../MonoDefinitions.h"
+#include <Wiwa/ecs/EntityManager.h>
 
 typedef unsigned char byte;
 
 byte* GetComponent(size_t id, MonoReflectionType* type);
+
+Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoReflectionType* type);
+
+byte* GetComponentByIterator(Wiwa::EntityManager::ComponentIterator iterator);
 
 byte* AddComponent(size_t id, MonoReflectionType* type);
 
 void ApplySystem(size_t id, MonoReflectionType* type);
 
 size_t CreateEntity();
+
+size_t CreateEntityNamed(MonoString* name_entity);
 
 void DestroyEntity(size_t eid);
 

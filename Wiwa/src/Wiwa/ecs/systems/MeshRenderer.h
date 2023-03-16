@@ -6,6 +6,7 @@
 #include "../components/AudioSource.h"
 #include "../components/AnimatorComponent.h"
 
+
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
@@ -18,9 +19,9 @@ namespace Wiwa {
 
 		void OnUpdate() override;
 
-		void OnComponentAdded(byte* data, const Type* type) override {}
+		bool OnComponentAdded(byte* data, const Type* type) override { return true; }
 
-		void OnComponentRemoved(byte* data, const Type* type) override {}
+		bool OnComponentRemoved(byte* data, const Type* type) override { return true; }
 	};
 }
 

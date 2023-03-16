@@ -2,7 +2,10 @@
 #include "CameraManager.h"
 #include <Wiwa/core/Application.h>
 #include <Wiwa/core/Renderer3D.h>
+#include <Wiwa/physics/PhysicsManager.h>
+#include <Wiwa/scene/SceneManager.h>
 namespace Wiwa {
+	Camera* CameraManager::editorCamera = nullptr;
 	CameraManager::CameraManager()
 	{
 		Init();
@@ -13,28 +16,35 @@ namespace Wiwa {
 	}
 	void CameraManager::Init()
 	{
-		editorCamera = new Camera();
-		Wiwa::Size2i& res = Wiwa::Application::Get().GetTargetResolution();
-		float ar = res.w / (float)res.h;
-		editorCamera->SetPerspective(60, ar, 0.1f, 10000.0f);
-		editorCamera->setPosition({ 0.0f, 1.0f, 5.0f });
-		editorCamera->lookat({ 0.0f, 0.0f, 0.0f });
-
+		if (!editorCamera)
+		{
+			editorCamera = new Camera();
+			Wiwa::Size2i& res = Wiwa::Application::Get().GetTargetResolution();
+			float ar = res.w / (float)res.h;
+			editorCamera->SetPerspective(60, ar, 0.1f, 10000.0f);
+			editorCamera->setPosition({ 0.0f, 1.0f, 5.0f });
+			editorCamera->lookat({ 0.0f, 0.0f, 0.0f });
+		}
 		m_ActiveCamera = -1;
 	}
 	void CameraManager::Update()
 	{
-		editorCamera->frameBuffer->Clear();
-		if (editorCamera->drawFrustrums)
+		if (editorCamera)
 		{
-			Wiwa::Application::Get().GetRenderer3D().RenderFrustrums(editorCamera);
+			editorCamera->frameBuffer->Clear();
+			editorCamera->shadowBuffer->Clear();
+			/*if (editorCamera->drawFrustrums)
+			{
+				Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
+				Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
+			}*/
 		}
-
 		size_t cameraCount = m_CamerasAlive.size();
 		for (size_t i = 0; i < cameraCount; i++)
 		{
 			CameraId cam_id = m_CamerasAlive[i];
 			m_Cameras[cam_id]->frameBuffer->Clear();
+			m_Cameras[cam_id]->shadowBuffer->Clear();
 		}
 	}
 	void CameraManager::Clear()
@@ -55,8 +65,6 @@ namespace Wiwa {
 	void CameraManager::CleanUp()
 	{
 		Clear();
-
-		delete editorCamera;
 	}
 
 	size_t CameraManager::CreateCamera()

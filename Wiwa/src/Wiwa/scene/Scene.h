@@ -4,11 +4,18 @@
 
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/physics/PhysicsManager.h>
+#include <Wiwa/AI/AIPathFindingManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
+#include <Wiwa/utilities/render/InstanceRenderer.h>
+
 namespace Wiwa {
 	class LightManager;
+	class GuiManager;
+
+
 	class WI_API Scene {
 	public:
 		Scene();
@@ -38,7 +45,12 @@ namespace Wiwa {
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
+		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
+		AIPathFindingManager& GetAIPathFindingManager() { return *m_AIPathFindingManager; }
+
 		LightManager& GetLightManager() { return *m_LightManager; }
+		GuiManager& GetGuiManager() { return *m_GuiManager; }
+		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -56,8 +68,15 @@ namespace Wiwa {
 
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
+		PhysicsManager* m_PhysicsManager;
+		AIPathFindingManager* m_AIPathFindingManager;
 		LightManager* m_LightManager;
+		GuiManager* m_GuiManager;
+
+	public:
 	private:
+		InstanceRenderer m_InstanceRenderer;
+
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;
 		size_t m_SceneToChange = 0;

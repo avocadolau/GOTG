@@ -209,5 +209,15 @@ namespace Wiwa::Math {
         return true;
     }
 
+    glm::vec3 AABB::Size() const
+    {
+        return mMax - mMin;
+    }
+
+    glm::vec3 AABB::HalfSize() const
+    {
+        return Size() / 2.f;
+    }
+
 }
 

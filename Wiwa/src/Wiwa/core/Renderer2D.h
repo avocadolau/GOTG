@@ -1,38 +1,43 @@
 #pragma once
-#pragma warning( disable : 4251 )
+#pragma warning(disable : 4251)
 
 #include <Wiwa/core/Core.h>
 
 // 3D maths lib
-//#include <MathGeoLib.h>
+// #include <MathGeoLib.h>
 // 2D maths lib
 #include <Wiwa/utilities/math/Math.h>
 
 #include <Wiwa/utilities/Log.h>
 #include <Wiwa/core/Resources.h>
 
-//#include "utilities/gui/Texture.h"
+// #include "utilities/gui/Texture.h"
 
 #include <Wiwa/utilities/render/VertexBuffer.h>
 
-//#include "Empathy/headers/utilities/renderer/Batch.h"
+// #include "Empathy/headers/utilities/renderer/Batch.h"
 #include <Wiwa/utilities/render/FrameBuffer.h>
 #include <Wiwa/utilities/render/Camera.h>
 
 #define MAXQUADS 40500
-#define MAXVERTEX MAXQUADS*4
-#define MAXINDICES MAXQUADS*6
+#define MAXVERTEX MAXQUADS * 4
+#define MAXINDICES MAXQUADS * 6
 
-namespace Wiwa {
+namespace Wiwa
+{
 	class InstanceRenderer;
+	class Scene;
 
-	class WI_API Renderer2D {
+	class WI_API Renderer2D
+	{
 	public:
-		enum class Pivot {
+		enum class Pivot
+		{
 			UPLEFT,
 			DOWNLEFT,
 			CENTER
 		};
+
 	private:
 		// Default FrameBuffer
 
@@ -40,34 +45,34 @@ namespace Wiwa {
 
 		Camera m_ActiveCamera;
 
-		InstanceRenderer* instanceRenderer;
 	public:
 		Renderer2D();
 		~Renderer2D();
-		
-		static Vector2f CalculateScreenGlPos(const Rect2i &rect,  Pivot pivot);
-		static Vector2f CalculateScreenGlPos(const Vector2i &position, const Size2i &size,  Pivot pivot);
-		static TextureClip CalculateTextureClip(const Rect2i& rect, const Size2i& texSize);
+
+		static Vector2f CalculateScreenGlPos(const Rect2i &rect, Pivot pivot);
+		static Vector2f CalculateScreenGlPos(const Vector2i &position, const Size2i &size, Pivot pivot);
+		static TextureClip CalculateTextureClip(const Rect2i &rect, const Size2i &texSize);
 
 		bool Init();
 		void Update();
 
 		void Close();
 
-		uint32_t CreateInstancedQuadTex(uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, const Color4f& color, const Rect2i& clip, Pivot pivot = Pivot::CENTER);
-		uint32_t CreateInstancedQuadTex(uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, Pivot pivot = Pivot::CENTER);
-		uint32_t CreateInstancedQuadTex(uint32_t textureId, const Size2i& srcSize, const Vector2i& position, const Size2i& size, const Rect2i& clip, Pivot pivot = Pivot::CENTER);
+		// Instance rendering functions
+		uint32_t CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot = Pivot::CENTER);
+		uint32_t CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot = Pivot::CENTER);
+		uint32_t CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot = Pivot::CENTER);
 
-		void RemoveInstance(uint32_t instance);
-		void EnableInstance(uint32_t instance);
-		void DisableInstance(uint32_t instance);
-		void SetInstanceEnabled(uint32_t instance, bool enabled);
+		void RemoveInstance(Scene *scene, uint32_t instance);
+		void EnableInstance(Scene *scene, uint32_t instance);
+		void DisableInstance(Scene *scene, uint32_t instance);
+		void SetInstanceEnabled(Scene *scene, uint32_t instance, bool enabled);
 
-		void UpdateInstancedQuadTex(uint32_t id, const Vector2i& position, Pivot pivot = Pivot::CENTER);
+		void UpdateInstancedQuadTex(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
 
-		void UpdateInstancedQuad(uint32_t id, const Vector2i& position, const Size2i& size, const Color4f& color);
+		void UpdateInstancedQuad(uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color);
 
-		void UpdateInstanced();
+		void UpdateInstanced(Scene *scene);
 
 		// Getters
 		uint32_t getRenderInstancedCalls() { return m_RenderCallsInstancedCount; }

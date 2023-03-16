@@ -10,19 +10,28 @@ namespace Wiwa
 	class WI_API ProjectManager
 	{
 	public:
+		struct SceneData {
+			std::string scene_name;
+			std::string scene_path;
+		};
+
 		enum class Target
 		{
-			None = 0,
-			Windows
+			Windows,
+			None
 		};
 	private:
 		static std::filesystem::path m_CurrentProject;
+
+		static std::vector<SceneData> m_SceneList;
 
 		static std::string m_Name;
 		static std::string m_Version;
 		static std::string m_Company;
 		static Target m_Target;
 	public:
+		static std::string GetProjectPath() { return m_CurrentProject.string(); }
+
 		static void CreateProject(const char* file);
 		static void OpenProject(const char* file);
 		static bool SaveProject();
@@ -38,8 +47,15 @@ namespace Wiwa
 		static const char* GetProjectCompany() { return m_Company.c_str(); }
 		static Target GetProjectTarget() { return m_Target; }
 
-		static void SaveScene(const char* file);
-		static void LoadScene(const char* file);
+		static void AddScene(const char* name, const char* path);
+		static void RemoveScene(const char* name);
+
+		static std::vector<SceneData>& getSceneDataList() { return m_SceneList; }
+		static size_t getSceneDataSize() { return m_SceneList.size(); }
+
+		static SceneData& getSceneDataAt(uint32_t index) { return m_SceneList[index]; }
+		static SceneData* getSceneByName(const char* name);
+		static size_t getSceneIndexByName(const char* name);
 	private:
 		ProjectManager();
 	};

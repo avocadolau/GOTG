@@ -27,9 +27,13 @@
 #include "Panels/ShaderPanel.h"
 #include "Panels/AudioPanel.h"
 #include "Panels/EnvoirmentPanel.h"
-#include "Panels/AnimatorPanel.h"
 
+#include "Panels/AnimatorPanel.h"
 #include "Panels/AnimationPanel.h"
+
+#include "Panels/UIPanel.h"
+#include "Panels/AIMapBakingPanel.h"
+
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -62,11 +66,15 @@ public:
 
 	static void RegenSol();
 
-
+	std::string getOpenedScenePath() { return m_OpenedScenePath; };
 private:
+	struct LayoutData {
+		std::string name;
+		std::string path;
+	};
+
 	void MainMenuBar();
 	void OpenCloseAssetsFolder();
-	void SaveProject();
 	void SaveProjectAs();
 	void OpenProject();
 	void NewProject();
@@ -91,6 +99,11 @@ private:
 	void ExecuteMainThreadQueue();
 	static void RegenSolutionThread();
 
+	// Layouts
+	void LoadLayout(const char* path);
+	void SaveLayout(LayoutData& ldata);
+
+	void BuildProject();
 private:
 	bool m_ShowConsole = false;
 	bool m_ShowDemo = false;
@@ -113,9 +126,11 @@ private:
 	std::unique_ptr<Panel> m_ShaderPanel;
 	std::unique_ptr<Panel> m_AudioPanel;
 	std::unique_ptr<Panel> m_EnvPanel;
-
 	std::unique_ptr<Panel>  m_AnimatorPanel;
 	std::unique_ptr<Panel> m_AnimationPanel;
+	std::unique_ptr<Panel> m_UiPanel;
+	std::unique_ptr<Panel> m_AIMapBakingPanel;
+
 
 	std::vector<Panel *> m_Panels;
 	std::vector<Panel *> m_Settings;
@@ -123,6 +138,8 @@ private:
 	// Editor layouts
 	std::string m_ActiveLayout;
 	bool m_ReloadLayout;
+
+	std::vector<LayoutData> m_CustomLayouts;
 
 	Action<Wiwa::Event &> m_EventCallback;
 

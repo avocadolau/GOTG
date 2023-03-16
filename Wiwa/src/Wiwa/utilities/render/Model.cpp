@@ -89,15 +89,15 @@ namespace Wiwa {
 				mat_path += name.C_Str();
 				mat_path += ".wimaterial";
 
-				bool mat_imported = Resources::Import<Material>(mat_path.string().c_str());
-
-				if (!mat_imported)
+				ResourceId matID = Resources::Load<Material>(mat_path.string().c_str());
+				if (matID == -1)
 				{
-					Material material((Shader*)NULL); // Default settings
+					Material material; // Default settings
 					size_t id;
 
 					if (texture_diffuse.length > 0)
 					{
+
 						std::filesystem::current_path(path);
 
 						std::filesystem::path texture_path = texture_diffuse.C_Str();
@@ -107,35 +107,26 @@ namespace Wiwa {
 
 						texture_path = std::filesystem::relative(texture_path);
 
-						//const char* default_shader = "resources/shaders/light/lit_model_textured";
-						//const char* default_shader = "resources/shaders/light/skinned";
 						const char* default_shader = "resources/shaders/skinned/debug_bones";
-						//const char* default_shader = "resources/shaders/skinned/debug_bones";
 
 						id = Resources::Load<Shader>(default_shader);
 						material.setShader(Resources::GetResourceById<Shader>(id), default_shader);
-
 						bool imported = Resources::Import<Image>(texture_path.string().c_str());
 
 						if (imported) {
-							Uniform::SamplerData sdata;
-							sdata.resource_id = Resources::Load<Image>(texture_path.string().c_str());
-							Image* img = Resources::GetResourceById<Image>(sdata.resource_id);
-							sdata.tex_id = img->GetTextureId();
-							sdata.tex_path = texture_path.string();				
-
-							material.SetUniformData("u_Tex0", sdata);
+							uint32_t imgId = Resources::Load<Image>(texture_path.string().c_str());
+							Image* img = Resources::GetResourceById<Image>(imgId);
+							material.SetUniformData("u_Texture", glm::ivec2(img->GetTextureId(), imgId));
 						}
 					}
 					else
 					{
-						//Set the color of the material
-						//id = Resources::Load<Shader>("resources/shaders/light/lit_model_color");
 						id = Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
 						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/debug_bones");
-						//material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/lit_model_color");
+
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
+
 
 					Material::SaveMaterial(mat_path.string().c_str(), &material);
 				}

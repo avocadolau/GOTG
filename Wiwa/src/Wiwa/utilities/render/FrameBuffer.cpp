@@ -21,9 +21,7 @@ namespace Wiwa {
 
 	void FrameBuffer::Init(int width, int height, bool depth/*depth=true*/)
 	{
-		m_Init = true;
-
-		
+		m_Init = true;		
 
 		m_Width = width;
 		m_Height = height;
@@ -41,7 +39,7 @@ namespace Wiwa {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBufferTexture, 0);
-
+		
 		if (depth) {
 			// Render buffer object for depth
 			glGenRenderbuffers(1, &m_RBO);
@@ -59,6 +57,7 @@ namespace Wiwa {
 		}
 		else
 			WI_CORE_INFO("Framebuffer completed");
+	
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -72,6 +71,7 @@ namespace Wiwa {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 	}
+
 
 	void FrameBuffer::Unbind()
 	{

@@ -6,6 +6,7 @@
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/math/Frustum.h>
 #include <Wiwa/utilities/render/FrameBuffer.h>
+#include <Wiwa/utilities/render/buffers/ShadowBuffer.h>
 namespace Wiwa {
 	class WI_API Camera
 	{
@@ -17,6 +18,9 @@ namespace Wiwa {
 		};
 		Math::Frustum frustrum;
 		FrameBuffer* frameBuffer;
+		ShadowBuffer* shadowBuffer;
+
+
 		bool cull = false;
 		bool drawBoundingBoxes = false;
 		bool drawFrustrums = true;
@@ -75,6 +79,9 @@ namespace Wiwa {
 		inline glm::mat4 getProjection() { return m_Projection; }
 		
 		void DrawFrustrum();
+
+		void GetCornerPoints(glm::vec3* outPointArray);
+
 		inline glm::vec3 FarPlanePos(float x, float y) const
 		{
 			float farPlaneHalfWidth = glm::tan(m_FOV * 0.5f)* m_FarPlaneDist;

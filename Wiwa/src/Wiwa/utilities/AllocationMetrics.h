@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include <cstdlib>
 #include <Wiwa/core/Core.h>
 #pragma warning(disable : 4595)
@@ -12,12 +12,12 @@ namespace Wiwa {
 
 // Allocation overloads
 inline void* operator new(size_t size) {
+	
 	if (size <= 0) return NULL;
 
 	Wiwa::AllocationMetrics::allocation_count++;
 	Wiwa::AllocationMetrics::bytes_allocated += size;
-	if (Wiwa::AllocationMetrics::bytes_allocated > FLT_MAX)
-		Wiwa::AllocationMetrics::bytes_allocated = FLT_MAX;
+
 	return malloc(size);
 }
 

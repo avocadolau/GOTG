@@ -2,14 +2,16 @@
 #include "System.h"
 #include "../components/Transform3D.h"
 #include "../components/AudioSource.h"
-#include "../components/AudioListener.h"
 
 #include <Wiwa/utilities/Reflection.h>
+
+#include <Wiwa/ecs/EntityManager.h>
 
 namespace Wiwa {
 	class WI_API AudioSystem : public System {
 	private:
-
+		EntityManager::ComponentIterator m_AudioSource;
+		EntityManager::ComponentIterator m_Transform;
 	public:
 		AudioSystem();
 		~AudioSystem();

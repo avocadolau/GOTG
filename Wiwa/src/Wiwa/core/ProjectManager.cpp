@@ -3,6 +3,7 @@
 #include <Wiwa/utilities/json/JSONDocument.h>
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/Scene.h>
+#include <Wiwa/core/Resources.h>
 
 namespace Wiwa
 {
@@ -11,6 +12,7 @@ namespace Wiwa
 	std::string ProjectManager::m_Version;
 	std::string ProjectManager::m_Company;
 	ProjectManager::Target ProjectManager::m_Target;
+	std::vector<ProjectManager::SceneData> ProjectManager::m_SceneList;
 
 	void ProjectManager::CreateProject(const char* file)
 	{
@@ -40,6 +42,28 @@ namespace Wiwa
 			m_Version = doc["version"].as_string();
 		if (doc.HasMember("company"))
 			m_Company = doc["company"].get<const char*>();
+		if (doc.HasMember("target"))
+			m_Target = (Target)doc["target"].as_int();
+
+		if (doc.HasMember("scene_list")) {
+			JSONValue scene_list = doc["scene_list"];
+
+			if (scene_list.IsArray()) {
+				size_t size = scene_list.Size();
+				SceneData sd;
+
+				for (size_t i = 0; i < size; i++) {
+					JSONValue scene = scene_list[i];
+					
+					sd.scene_name = scene["name"].as_string();
+					sd.scene_path = scene["path"].as_string();
+
+					if (Wiwa::FileSystem::Exists(sd.scene_path.c_str())) {
+						AddScene(sd.scene_name.c_str(), sd.scene_path.c_str());
+					}
+				}
+			}
+		}
 
 		doc.save_file(file);
 	}
@@ -50,11 +74,23 @@ namespace Wiwa
 		{
 			return false;
 		}
-		Wiwa::JSONDocument doc(m_CurrentProject.string().c_str());
-		doc.AddMember("name", m_Name.c_str());
-		doc.AddMember("version", m_Version.c_str());
-		doc.AddMember("company", m_Company.c_str());
-		doc.save_file(m_CurrentProject.string().c_str());
+		Wiwa::JSONDocument proj_file;
+		proj_file.AddMember("name", m_Name.c_str());
+		proj_file.AddMember("version", m_Version.c_str());
+		proj_file.AddMember("company", m_Company.c_str());
+		proj_file.AddMember("target", (int)m_Target);
+
+		Wiwa::JSONValue scene_list = proj_file.AddMemberArray("scene_list");
+
+		size_t slsize = m_SceneList.size();
+
+		for (size_t i = 0; i < slsize; i++) {
+			Wiwa::JSONValue scene = scene_list.PushBackObject();
+			scene.AddMember("name", m_SceneList[i].scene_name.c_str());
+			scene.AddMember("path", m_SceneList[i].scene_path.c_str());
+		}
+
+		proj_file.save_file(m_CurrentProject.string().c_str());
 
 		return true;
 	}
@@ -71,11 +107,55 @@ namespace Wiwa
 		doc.save_file(path.c_str());
 	}
 
-	void ProjectManager::SaveScene(const char* file)
+	void ProjectManager::AddScene(const char* name, const char* path)
 	{
+		std::string p = Wiwa::Resources::_assetToLibPath(path);
+
+		SceneData* sdata = getSceneByName(name);
+
+		if (!sdata) {
+			m_SceneList.emplace_back(SceneData{ name, p });
+		}
 	}
 
-	void ProjectManager::LoadScene(const char* file)
+	void ProjectManager::RemoveScene(const char* name)
 	{
+		size_t ind = getSceneIndexByName(name);
+
+		if (ind != WI_INVALID_INDEX) {
+			m_SceneList.erase(m_SceneList.begin() + ind);
+		}
+	}
+
+	ProjectManager::SceneData* ProjectManager::getSceneByName(const char* name)
+	{
+		SceneData* sdata = NULL;
+
+		size_t s = m_SceneList.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (m_SceneList[i].scene_name == name) {
+				sdata = &m_SceneList[i];
+				break;
+			}
+		}
+
+		return sdata;
+	}
+
+	size_t ProjectManager::getSceneIndexByName(const char* name)
+	{
+		size_t ind = WI_INVALID_INDEX;
+
+		size_t s = m_SceneList.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (m_SceneList[i].scene_name == name) {
+				ind = i;
+				break;
+			}
+		}
+
+		return ind;
 	}
 }

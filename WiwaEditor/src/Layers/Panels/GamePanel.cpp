@@ -6,6 +6,8 @@
 
 #include <Wiwa/render/RenderManager.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/core/Input.h>
+
 
 GamePanel::GamePanel(EditorLayer* instance)
 	: Panel("Game", ICON_FK_GAMEPAD,instance)
@@ -34,6 +36,29 @@ void GamePanel::Draw()
 
     float scale = scales.x < scales.y ? scales.x : scales.y;
     ImVec2 isize = { resolution.w * scale, resolution.h * scale };
+
+    Wiwa::Input::OverrideMouseInputs(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    if (ImGui::IsWindowHovered()) {
+        ImVec2 rectPos = ImGui::GetItemRectMin();
+
+        // Calculate mouse position in viewport (0 to 1)
+        ImVec2 mpos = ImGui::GetMousePos();
+        ImVec2 cspos = ImGui::GetCursorScreenPos();
+
+        ImVec2 rpos = { mpos.x - rectPos.x, mpos.y - rectPos.y };
+        CLAMP(rpos.x, 0.0f, isize.x);
+        CLAMP(rpos.y, 0.0f, isize.y);
+
+        Wiwa::Vector2f v2f = { rpos.x / (float)isize.x, rpos.y / (float)isize.y };
+
+        Wiwa::Vector2f rel2f = m_LastPos - v2f;
+        rel2f.x /= rel2f.x == 0.0f ? 1.0f : abs(rel2f.x);
+        rel2f.y /= rel2f.y == 0.0f ? 1.0f : abs(rel2f.y);
+
+        Wiwa::Input::OverrideMouseInputs(v2f.x * 1920, v2f.y * 1080, m_LastPos.x * 1920, m_LastPos.y * 1080, rel2f.x, rel2f.y);
+
+        m_LastPos = v2f;
+    }
 
     if (cameraManager.getCameraSize() > 0)
     {

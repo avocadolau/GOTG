@@ -1,5 +1,14 @@
 ﻿namespace Wiwa
 {
+    using ResourceId = System.UInt64;
+
+    public struct ComponentIterator
+    {
+        public ulong componentId;
+        public ulong componentIndex;
+        public ulong componentSize;
+    }
+
     #region Transform3D
     [Component]
     public struct Transform3D
@@ -25,6 +34,38 @@
         public Vector4 local_mat_r4;
     }
     #endregion
+    #region RigidBody
+    [Component]
+    public struct Rigidbody
+    {
+        public Vector3 positionOffset;
+        public Vector3 scalingOffset;
+        public bool isTrigger;
+        public bool isStatic;
+        public bool doContinuousCollision;
+        public int selfTag;
+        public int filterBits;
+
+    }
+    [Component]
+    public struct ColliderCube
+    {
+        public Vector3 halfExtents;
+    }
+
+    [Component]
+    public struct ColliderCylinder
+    {
+        public float height;
+        public float radius;
+    }
+
+    [Component]
+    public struct ColliderSphere
+    {
+        public float radius;
+    }
+    #endregion
     #region Mesh
     //[Component]
     //public unsafe struct Mesh
@@ -38,5 +79,11 @@
     //}
     #endregion
     #region Utils
+    [Component]
+    public struct TestComponent
+    {
+        public int val1;
+        public float val2;
+    }
     #endregion
 }

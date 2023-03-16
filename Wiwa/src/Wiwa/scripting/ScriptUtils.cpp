@@ -38,11 +38,6 @@ namespace Wiwa {
 		}
 		MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath)
 		{
-			if (!std::filesystem::exists(assemblyPath))
-			{
-				WI_CRITICAL("Can't find assembly at {}", assemblyPath);
-				return nullptr;
-			}
 			uint32_t fileSize = 0;
 			char* fileData = ReadBytes(assemblyPath, &fileSize);
 

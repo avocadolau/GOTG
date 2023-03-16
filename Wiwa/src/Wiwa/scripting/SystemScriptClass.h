@@ -21,6 +21,10 @@ namespace Wiwa {
 
 		void OnUpdate() override;
 
+		void OnCollisionEnter(Object* obj1, Object* obj2) override;
+		void OnCollision(Object* obj1, Object* obj2) override;
+		void OnCollisionExit(Object* obj1, Object* obj2) override;
+
 		void OnEntitySet() override;
 	private:
 		ScriptClass scriptClass;
@@ -30,6 +34,10 @@ namespace Wiwa {
 		MonoMethod* m_AwakeMethod;
 		MonoMethod* m_InitMethod;
 		MonoMethod* m_UpdateMethod;
+
+		MonoMethod* m_OnCollisionEnterMethod;
+		MonoMethod* m_OnCollisionMethod;
+		MonoMethod* m_OnCollisionExitMethod;
 
 		MonoClassField* m_EntityIdField;
 	};

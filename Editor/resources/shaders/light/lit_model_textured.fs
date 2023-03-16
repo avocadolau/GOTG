@@ -93,7 +93,7 @@ vec4 CalcPointLight(PointLight light, vec3 normal)
 {
     vec3 lightDirection = LocalPos - light.LocalPos;
     float distance = length(lightDirection);
-    lightDirection = normalize(lightDirection);
+    lightDirection = normalize(-lightDirection);
 
     vec4 color = CalcLightInternal(light.Base, lightDirection, normal);
 

@@ -7,6 +7,8 @@ project "WiwaEditor"
 
 	files
 	{
+		"resource.h",
+		"WiwaEditor.rc",
 		"src/**.h",
 		"src/**.cpp"
 	}
@@ -20,7 +22,8 @@ project "WiwaEditor"
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.filewatch}",
-		"%{IncludeDirs.IconFontCppHeaders}"
+		"%{IncludeDirs.IconFontCppHeaders}",
+		"%{IncludeDirs.bullet}"
 	}
 
 	links

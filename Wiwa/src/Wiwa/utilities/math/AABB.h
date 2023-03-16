@@ -98,6 +98,17 @@ namespace Wiwa::Math {
         /// \xxx Untested -- This function is not represented in our unit tests.
         bool isSimilarTo(const AABB& b, glm::float32_t diff = 0.5) const;
 
+        /// Returns the side lengths of this AABB in x, y and z directions.
+        /** The returned vector is equal to the diagonal vector of this AABB, i.e. it spans from the
+        minimum corner of the AABB to the maximum corner of the AABB.
+        @see HalfSize(), Diagonal(). */
+        glm::vec3 Size() const;
+
+        /// [similarOverload: Size]
+        /** Returns Size()/2.
+        @see Size(), HalfDiagonal(). */
+        glm::vec3 HalfSize() const;
+
     private:
 
         glm::vec3 mMin;   ///< Minimum point.

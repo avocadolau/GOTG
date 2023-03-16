@@ -18,6 +18,6 @@ void main()
 {
 	gl_Position = u_Proj * u_View * u_Model * vec4(aPos, 1.0);
 	TexCoord = aTex;
-	Normal = aNormal;
-	LocalPos = aPos;
+	Normal = mat3(transpose(inverse(u_Model))) * aNormal;
+	LocalPos = vec3(u_Model * vec4(aPos, 1.0f));
 }
