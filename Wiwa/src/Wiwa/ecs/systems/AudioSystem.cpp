@@ -22,8 +22,6 @@ namespace Wiwa {
 
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
-		WI_INFO("OnAwake AudioSystem [{}]", m_Scene->GetEntityManager().GetEntityName(m_EntityId));
-
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if(asrc->isDefaultListener){
@@ -71,14 +69,16 @@ namespace Wiwa {
 		Audio::UnregisterGameObject(m_EntityId);
 	}
 
-	void AudioSystem::OnEventFinish()
+	void AudioSystem::OnEventFinish(const char* ev_name)
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
-		asrc->isPlaying = false;
+		if (strcmp(ev_name, asrc->eventName) == 0) {
+			asrc->isPlaying = false;
+		}
 
-		WI_CORE_INFO("Audio finished");
+		WI_CORE_INFO("Audio finished [{}]", ev_name);
 	}
 }

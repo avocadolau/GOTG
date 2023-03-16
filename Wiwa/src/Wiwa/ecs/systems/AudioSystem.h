@@ -24,7 +24,7 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void OnEventFinish();
+		void OnEventFinish(const char* ev_name);
 	};
 }
 

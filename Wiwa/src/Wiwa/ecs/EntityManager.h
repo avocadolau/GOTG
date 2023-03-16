@@ -251,6 +251,11 @@ namespace Wiwa
 		// System functions
 		bool HasSystem(EntityId eid, SystemHash sid);
 
+		template<class T>
+		T* GetSystem(EntityId eid);
+
+		System* GetSystem(EntityId eid, SystemHash system_hash);
+
 		// Register systems
 		template <class T>
 		void ApplySystem(EntityId eid);
@@ -268,6 +273,14 @@ namespace Wiwa
 		const Type *ctype = GetType<T>();
 
 		return GetComponentId(ctype);
+	}
+
+	template<class T>
+	inline T* EntityManager::GetSystem(EntityId eid)
+	{
+		const Type* stype = GetType<T>();
+
+		return (T*)GetSystem(eid, stype->hash);
 	}
 
 	template <class T>

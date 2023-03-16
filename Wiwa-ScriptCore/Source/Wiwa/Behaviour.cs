@@ -87,6 +87,16 @@
             InternalCalls.PlaySoundEntity(m_EntityId);
         }
 
+        public bool IsPlaying()
+        {
+            return InternalCalls.IsPlaying(m_EntityId);
+        }
+
+        public bool IsPlaying(EntityId entity)
+        {
+            return InternalCalls.IsPlaying(entity);
+        }
+
         public void PlayAudioEvent(string ev_name)
         {
             InternalCalls.PlaySound(ev_name, m_EntityId);
@@ -104,6 +114,16 @@
         public void StopAllAudio()
         {
             InternalCalls.StopAllEvents();
+        }
+
+        public void AddAudioSource(EntityId entity, string ev_name, bool playOnAwake, bool isDefaultListener)
+        {
+            InternalCalls.AddAudioSource(entity, ev_name, playOnAwake, isDefaultListener);
+        }
+
+        public void AddAudioSource(string ev_name, bool playOnAwake, bool isDefaultListener)
+        {
+            InternalCalls.AddAudioSource(m_EntityId, ev_name, playOnAwake, isDefaultListener);
         }
     }
 }
