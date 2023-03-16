@@ -414,7 +414,7 @@ namespace Wiwa {
 
 		collision_object->setCollisionShape(collision_shape);
 		Object* myObjData = new Object(*collision_object, id, rigid_body.doContinuousCollision);
-
+		collision_object->setUserPointer((Object*)myObjData);
 		//collision_object->setCollisionFlags(rigid_body.)
 
 		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
@@ -559,6 +559,18 @@ namespace Wiwa {
 		return filterStrings[index].c_str();
 	}
 
+	int PhysicsManager::GetFilterTag(const char* str)
+	{
+		int count = filterStrings.size();
+		std::string strcmp = str;
+		for (int i = 0; i < count; i++)
+		{
+			if (filterStrings[i] == strcmp)
+				return i;
+		}
+		return 0;
+	}
+
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
@@ -579,8 +591,47 @@ namespace Wiwa {
 			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
 			m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
 		}
+		
+		camera->frameBuffer->Unbind();
+	}
+
+	int PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
+	{
+		std::string wall = "COLLISION_WALL";
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		camera->frameBuffer->Bind(false);
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
+
+		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
+		btCollisionWorld::AllHitsRayResultCallback allResults = btCollisionWorld::AllHitsRayResultCallback(ray_from_world, ray_to_world);
+		m_World->rayTest(ray_from_world, ray_to_world, allResults);
+
+		for (int i = 0; i < allResults.m_hitFractions.size(); i++)
+		{
+			btVector3 p = ray_from_world.lerp(ray_to_world, allResults.m_hitFractions[i]);
+			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
+			m_World->getDebugDrawer()->drawLine(p, p + allResults.m_hitNormalWorld[i], btVector4(0, 0, 1, 1));
+
+			int dist = ray_from_world.distance2(p);
+
+			Object* obj = (Object*)allResults.m_collisionObject[i].getUserPointer();
+			std::string str = GetFilterTag(em.GetComponent<Wiwa::CollisionBody>(obj->id)->selfTag);
+			if (str == wall)
+				return dist;
+			else
+				return -1;
+		}
 
 		camera->frameBuffer->Unbind();
+
+		return -1;
 	}
 
 	bool PhysicsManager::AddBodyToLog(Object* body_to_log)

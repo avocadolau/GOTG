@@ -130,6 +130,8 @@ namespace Wiwa
         internal extern static string GetEntityTagString(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static int GetEntityTagBits(EntityId id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static int RayCastDistanceWalls(Vector3 from, Vector3 to);
         #endregion
         #region Scene
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

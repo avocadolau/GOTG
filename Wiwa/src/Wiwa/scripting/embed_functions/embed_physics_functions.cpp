@@ -37,3 +37,9 @@ int GetEntityTagBits(size_t id)
     int selfTag = em.GetComponent<Wiwa::CollisionBody>(id)->selfTag;
     return selfTag;
 }
+
+int RayCastDistanceWalls(glm::vec3 from, glm::vec3 to)
+{
+    Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+    return physicsManager.RayTestWalls(btVector3(from.x, from.y, from.z), btVector3(to.x, to.y, to.z));
+}

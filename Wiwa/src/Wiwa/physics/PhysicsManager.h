@@ -118,7 +118,11 @@ namespace Wiwa {
 
 		const char* GetFilterTag(const int index);
 
+		int GetFilterTag(const char* str);
+
 		void RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world);
+
+		int RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
 	private:
 		bool m_Debug;

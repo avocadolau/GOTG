@@ -23,6 +23,7 @@ namespace Wiwa {
 
 		int bulletTag;
 		int collisionTag1;
+		int collisionTag2;
 	};
 }
 
@@ -40,4 +41,5 @@ REFLECT_MEMBER(bulletSpeed)
 REFLECT_MEMBER(bulletScale)
 REFLECT_MEMBER(bulletTag)
 REFLECT_MEMBER(collisionTag1)
+REFLECT_MEMBER(collisionTag2)
 REFLECTION_END;

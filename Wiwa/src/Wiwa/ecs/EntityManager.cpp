@@ -823,12 +823,12 @@ namespace Wiwa {
 			colliderCube->height = 1;
 			colliderCube->radius = 1;
 		}
-		else if (type->hash == (size_t)TypeHash::ColliderCapsule)
+		/*else if (type->hash == (size_t)TypeHash::ColliderCapsule)
 		{
 			Wiwa::ColliderCapsule* colliderCapsule = (Wiwa::ColliderCapsule*)data;
 			colliderCapsule->height = 1;
 			colliderCapsule->radius = 1;
-		}
+		}*/
 		else if (type->hash == (size_t)TypeHash::RayCast)
 		{
 			Wiwa::RayCast* rayCast = (Wiwa::RayCast*)data;

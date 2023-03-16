@@ -97,6 +97,16 @@
         public int currentEnemiesAlive;
         public bool hasFinished;
     }
+    [Component]
+    public struct Character
+    {
+        public int healthPoints;
+        public int damage;
+        public float speed;
+        public int shieldRegeneration;
+        public int range;
+        public int rof;
+    }
     //[Component]
     //public struct EnemySpawner
     //{

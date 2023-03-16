@@ -25,6 +25,11 @@
         {
             return InternalCalls.GetEntityTagBits(id);
         }
+
+        public static int RayCastDistanceWalls(Vector3 from, Vector3 to)
+        {
+            return InternalCalls.RayCastDistanceWalls(from, to);
+        }
     }
 }
 

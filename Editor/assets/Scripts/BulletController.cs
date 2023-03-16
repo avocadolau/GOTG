@@ -10,6 +10,7 @@ namespace WiwaApp
         public float Velocity;
         public float TimeToDestroy;
         public float Timer;
+        public int Damage;
 
         public Vector3 direction;
     }
@@ -34,7 +35,6 @@ namespace WiwaApp
 
         void OnCollisionEnter(EntityId id1, EntityId id2)
         {
-            Console.WriteLine("hit!!! ");
             DestroyEntity();
         }
     }

@@ -28,6 +28,7 @@ namespace Game
 
         public int bulletTag;
         public int collisionTag1;
+        public int collisionTag2;
     }
     class CharacterControllerSystem : Behaviour
     {
@@ -51,13 +52,12 @@ namespace Game
 
         void InitCollisionFlags(ref CollisionBody rb, ref CharacterController character)
         {
-            int bitsSelf = 0;
-            bitsSelf |= 1 << character.bulletTag;
-            rb.selfTag = bitsSelf;
+            //int bitsSelf = 0;
+            //bitsSelf |= 1 << character.bulletTag;
+            rb.selfTag = character.bulletTag;
 
-            int bitsColl = 0;
-            bitsColl = 1 << character.collisionTag1;
-            rb.filterBits = bitsColl;
+            rb.filterBits |= 1 << character.collisionTag1;
+            rb.filterBits |= 1 << character.collisionTag2;
         }
 
         void Update()
@@ -284,6 +284,7 @@ namespace Game
             // Add bullet component
             //bc.Velocity = 20.0f;
             bc.TimeToDestroy = character.bulletLifeTime;
+            bc.Damage = 20;
             //bc.direction = direction;
 
             // Activate controller
