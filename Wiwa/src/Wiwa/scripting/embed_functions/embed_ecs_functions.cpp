@@ -12,6 +12,8 @@
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/core/Application.h>
 
+#include <Wiwa/scripting/ScriptEngine.h>
+
 #include <Wiwa/ecs/components/Mesh.h>
 
 #include "../MonoWiwaTranslations.h"
@@ -95,6 +97,12 @@ size_t CreateEntityNamed(MonoString* name_entity)
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	char* name_p = mono_string_to_utf8(name_entity);
 	return em.CreateEntity(name_p);
+}
+
+MonoString* GetEntityName(size_t id)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	return 	Wiwa::ScriptEngine::CreateString(em.GetEntityName(id));
 }
 
 void DestroyEntity(size_t eid)

@@ -16,12 +16,13 @@
 #include <Wiwa/core/Application.h>
 
 #include "SystemScriptClass.h"
+//#include "CSCallback.h"
 
 #include "MonoWiwaTranslations.h"
 
 namespace Wiwa {
 	ScriptEngine::ScriptEngineData* ScriptEngine::s_Data = nullptr;
-	
+
 	void ScriptEngine::Init()
 	{
 		s_Data = new ScriptEngineData();
@@ -30,13 +31,13 @@ namespace Wiwa {
 
 		LoadAssembly("resources/scripts/Wiwa-ScriptCore.dll");
 		LoadAppAssembly("resources/scripts/Wiwa-AppAssembly.dll");
-		
+
 		//Debug
 		WI_CORE_WARN("Components");
 		Utils::PrintReflectionTypes(s_Data->Components);
 		WI_CORE_WARN("Systems");
 		Utils::PrintReflectionTypes(s_Data->Systems);
-		
+
 		ScriptGlue::RegisterFunctions();
 	}
 	void ScriptEngine::ShutDown()
@@ -64,11 +65,11 @@ namespace Wiwa {
 			std::this_thread::sleep_for(500ms);
 			//Add reload to main thread queue
 			Application::Get().SubmitToMainThread([]()
-			{
-				ScriptEngine::s_Data->AssemblyReloadPending = true;
-				ScriptEngine::s_Data->AppAssemblyFileWatcher.reset();
-				ScriptEngine::ReloadAssembly();
-			});
+				{
+					ScriptEngine::s_Data->AssemblyReloadPending = true;
+			ScriptEngine::s_Data->AppAssemblyFileWatcher.reset();
+			ScriptEngine::ReloadAssembly();
+				});
 		}
 	}
 
@@ -78,16 +79,16 @@ namespace Wiwa {
 		s_Data->AppAssemblyFilePath = filepath;
 		LoadAssemblyTypes(s_Data->AppAssembly);
 
-		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>(filepath.string(),OnAppAssemblyFSEvent);
+		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>(filepath.string(), OnAppAssemblyFSEvent);
 		s_Data->AssemblyReloadPending = false;
 	}
-	
+
 	void ScriptEngine::InitMono()
 	{
 		mono_set_assemblies_path("mono/lib");
 
 		MonoDomain* rootDomain = mono_jit_init("WiwaJITRuntime");
-		
+
 		WI_CORE_ASSERT(rootDomain, "Mono root domain not initialized!");
 
 		// Store the root domain pointer
@@ -107,6 +108,11 @@ namespace Wiwa {
 	MonoArray* ScriptEngine::CreateArray(MonoClass* type, uint32_t size)
 	{
 		return mono_array_new(s_Data->AppDomain, type, (uintptr_t)size);
+	}
+
+	MonoString* ScriptEngine::CreateString(const char* str)
+	{
+		return mono_string_new(s_Data->AppDomain, str);
 	}
 
 	void ScriptEngine::ReloadAssembly()
@@ -146,6 +152,7 @@ namespace Wiwa {
 		int32_t numTypes = mono_table_info_get_rows(typeDefinitionsTable);
 		MonoClass* systemClass = Utils::GetClassInAssembly(s_Data->CoreAssembly, "Wiwa", "Behaviour");
 		MonoClass* componentClass = Utils::GetClassInAssembly(s_Data->CoreAssembly, "Wiwa", "Component");
+		//MonoClass* callbackClass = Utils::GetClassInAssembly(s_Data->CoreAssembly, "Wiwa", "Callback");
 
 		for (int32_t i = 0; i < numTypes; i++)
 		{
@@ -164,19 +171,19 @@ namespace Wiwa {
 
 			if (monoClass == systemClass || monoClass == componentClass)
 				continue;
-			
+
 			mono_bool isEnum = mono_class_is_enum(monoClass);
 			if (isEnum == 1)
 				continue;
 
 			bool isSystem = mono_class_is_subclass_of(monoClass, systemClass, false);
-			Type* type = nullptr;
 
 			MonoType* monoType = mono_class_get_type(monoClass);
 
+			Type* type = ConvertType(monoType);
+
 			if (isSystem)
 			{
-				type = ConvertType(monoType);
 				type->New = [assembly, nameSpace, name]() -> void* { return new SystemScriptClass(assembly, nameSpace, name); };
 				s_Data->Systems[type->hash] = type;
 
@@ -191,11 +198,17 @@ namespace Wiwa {
 			mono_bool isComponent = mono_custom_attrs_has_attr(attributes, componentClass);
 			if (isComponent == 1)
 			{
-				type = ConvertType(monoType);
 				s_Data->Components[type->hash] = type;
 				Class* c = (Class*)type;
 				Application::Get().RegisterComponentType(type);
 			}
+
+			/*	mono_bool isCallback = mono_custom_attrs_has_attr(attributes, callbackClass);
+				if (isCallback == 1) {
+					Callback* cb = new CSCallback(assembly, nameSpace, name);
+
+					Application::Get().RegisterCallback(cb);
+				}*/
 		}
 	}
 	void ScriptEngine::ClearAssemblyTypes()
@@ -210,5 +223,7 @@ namespace Wiwa {
 		}
 		s_Data->Systems.clear();
 		s_Data->Components.clear();
+
+		//Application::Get().ClearCallbacks();
 	}
 }

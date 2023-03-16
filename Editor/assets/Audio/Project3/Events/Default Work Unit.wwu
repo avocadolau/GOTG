@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" SchemaVersion="110">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}">
+					<ChildrenList>
+						<Action Name="" ID="{A1EB4EDE-9453-4B5F-A546-30F43C603E09}" ShortID="805077965">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Sci_Fi_Shot_Element" ID="{AC073A32-40C4-4F5B-AB8A-C52A985CA6F7}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}">
+					<ChildrenList>
+						<Action Name="" ID="{8068FEBF-7723-4489-A44B-DF20CBD99D67}" ShortID="915690533">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="default_footsteps_random" ID="{0DD4C1C8-B173-4CD7-8A86-BA99C55D9B35}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

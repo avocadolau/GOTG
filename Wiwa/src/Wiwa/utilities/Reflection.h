@@ -251,5 +251,13 @@ enum class TypeHash : size_t {
 	ColliderSphere = FNV1A_HASH("ColliderSphere"),
 	ColliderCapsule = FNV1A_HASH("ColliderCapsule"),
 	RayCast = FNV1A_HASH("RayCast"),
-	AgentAI = FNV1A_HASH("AgentAI")
+	AgentAI = FNV1A_HASH("AgentAI"),
+
+	// Game Controller
+	Character = FNV1A_HASH("Character"),
+	Player = FNV1A_HASH("Player"),
+	PlayerSpawner = FNV1A_HASH("PlayerSpawner"),
+	Enemy = FNV1A_HASH("Enemy"),
+	EnemySpawner = FNV1A_HASH("EnemySpawner"),
+	Wave = FNV1A_HASH("Wave")
 };

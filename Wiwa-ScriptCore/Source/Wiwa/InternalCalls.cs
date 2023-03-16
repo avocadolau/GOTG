@@ -29,6 +29,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void DestroyEntity(EntityId eid);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static string GetEntityName(EntityId eid);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat);
         #endregion
         #region Input

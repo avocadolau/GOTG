@@ -51,6 +51,7 @@ namespace Wiwa
 		if (m_PlayScene)
 		{
 			Update();
+			GameStateManager::UpdateRoomState();
 		}
 	}
 

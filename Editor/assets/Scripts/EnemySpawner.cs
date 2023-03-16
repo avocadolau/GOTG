@@ -1,0 +1,154 @@
+﻿//using System;
+//using System.Linq;
+//using Wiwa;
+
+//namespace WiwaApp
+//{
+//    using EntityId = System.UInt64;
+//    class EnemySpawnerSystem : Behaviour
+//    {
+//        ComponentIterator enemySpawnerIt;
+//        ComponentIterator currentWaveIt;
+//        EntityId currentWaveEntityId;
+//        float timer = 0.0f;
+//        bool previousWaveDestroy = false;
+//        bool debug = true;
+//        void Awake()
+//        {
+//            if (debug) Console.WriteLine("-- Starting Awake -- Enemy spawner");
+//            enemySpawnerIt.componentId = Constants.WI_INVALID_INDEX;
+//            enemySpawnerIt.componentIndex = Constants.WI_INVALID_INDEX;
+//            currentWaveIt.componentId = Constants.WI_INVALID_INDEX;
+//            currentWaveIt.componentIndex = Constants.WI_INVALID_INDEX;
+
+//            currentWaveEntityId = 0;
+//            previousWaveDestroy = false;
+//        }
+
+//        void Init()
+//        {
+//            if (debug) Console.WriteLine("-- Starting Init -- Enemy spawner");
+//            enemySpawnerIt = GetComponentIterator<EnemySpawner>();
+//            EnemySpawner enemySpawner = GetComponentByIterator<EnemySpawner>(enemySpawnerIt);
+//            timer = enemySpawner.timeBetweenWaves;
+//            SpawnWave();
+//        }
+
+//        void Update()
+//        {
+//            if (debug) Console.WriteLine("-- Starting Update -- Enemy spawner");
+//            ref EnemySpawner enemySpawner = ref GetComponentByIterator<EnemySpawner>(enemySpawnerIt);
+//            if (debug)
+//            {
+//                Console.WriteLine("waveID");
+//                Console.WriteLine(currentWaveIt.componentId);
+//                Console.WriteLine(currentWaveIt.componentIndex);
+//                Console.WriteLine(currentWaveIt.componentSize);
+//            }
+
+//            if (currentWaveIt.componentId != Constants.WI_INVALID_INDEX)
+//            {
+//                if (debug) Console.WriteLine("Getting wave");
+//                ref Wave currentWave = ref GetComponent<Wave>(currentWaveEntityId);
+//                if (debug) Console.WriteLine("Checking wave");
+//                if (currentWave.isAssigned == true)
+//                {
+//                    if (debug) Console.WriteLine("No Wave");
+//                    if (!previousWaveDestroy)
+//                        previousWaveDestroy = CheckFinishWave(currentWave);
+
+//                    // Finish the spawner
+//                    if (enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount && previousWaveDestroy)
+//                    {
+//                        enemySpawner.hasFinished = true;
+//                    }
+//                }
+//            }
+
+//            // Timer before deploying next wave
+//            if (previousWaveDestroy && enemySpawner.hasFinished == false)
+//            {
+//                timer -= Time.DeltaTime();
+//                if (debug) Console.WriteLine("Timer -> " + timer);
+//                if (timer < 0)
+//                {
+//                    SpawnWave();
+//                    timer = enemySpawner.timeBetweenWaves;
+//                }
+//            }
+//            if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
+//        }
+    
+
+
+//        private bool CheckFinishWave(Wave wave)
+//        {
+//            // Finish terminated waves
+//            if (wave.isAssigned)
+//            {
+//                if (debug) Console.WriteLine("Destroying wave " + currentWaveEntityId);
+//                currentWaveIt.componentId = Constants.WI_INVALID_INDEX;
+//                // Delete the wave entity entirely
+//                DestroyEntity(currentWaveEntityId);
+//                return true;
+//            }
+//            return false;
+//        }
+
+//        private void SpawnWave()
+//        {
+//            if (debug) Console.WriteLine("New wave and getting spawner comp");
+//            ref EnemySpawner enemySpawner = ref GetComponentByIterator<EnemySpawner>(enemySpawnerIt);
+
+//            enemySpawner.currentWaveCount += 1;
+
+//            // Create an empty entity
+//            string waveName = GetEntityName(m_EntityId);
+//            waveName += "_wave_" + enemySpawner.currentWaveCount;
+//            currentWaveEntityId = CreateEntityNamed(waveName);
+
+//            if (debug) Console.WriteLine("Getting transforms comp");
+//            ref Transform3D parent = ref GetComponent<Transform3D>(m_EntityId);
+//            ref Transform3D waveTransform = ref GetComponent<Transform3D>(currentWaveEntityId); ;
+//            waveTransform.LocalPosition.x = parent.LocalPosition.x;
+//            waveTransform.LocalPosition.y = parent.LocalPosition.y;
+//            waveTransform.LocalPosition.z = parent.LocalPosition.z;
+
+//            if (debug) Console.WriteLine("Adding wave comp");
+//            // Create a wave component and wave system
+//            ref Wave wave = ref AddComponent<Wave>(currentWaveEntityId);
+//            wave.currentEnemiesAlive = enemySpawner.maxEnemiesPerWave;
+//            wave.maxEnemies = enemySpawner.maxEnemiesPerWave;
+//            wave.hasFinished = false;
+//            wave.isAssigned = true;
+//            if (debug) Console.WriteLine("Adding wave sys");
+//            ApplySystem<WaveSystem>(currentWaveEntityId);
+
+//            // Save the wave as current wave
+//            if (debug) Console.WriteLine("Getting wave comp it");
+//            currentWaveIt = GetComponentIterator<Wave>(currentWaveEntityId);
+//            if (debug)
+//            {
+//                Console.WriteLine("waveID");
+//                Console.WriteLine(currentWaveIt.componentId);
+//                Console.WriteLine(currentWaveIt.componentIndex);
+//                Console.WriteLine(currentWaveIt.componentSize);
+//            }
+//            ref Wave currentWave = ref GetComponentByIterator<Wave>(currentWaveIt);
+//            if (debug) Console.WriteLine("testing it");
+//            if (currentWave.isAssigned == true)
+//            {
+//                if (debug) Console.WriteLine(":)");
+//            }
+//            else
+//            {
+//                if (debug) Console.WriteLine(":(");
+//            }
+//                previousWaveDestroy = false;
+//        }
+//        void OnCollisionEnter(EntityId id1, EntityId id2)
+//        {
+       
+//        }
+//    }
+//}

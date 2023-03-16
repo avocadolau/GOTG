@@ -18,6 +18,8 @@ size_t CreateEntity();
 
 size_t CreateEntityNamed(MonoString* name_entity);
 
+MonoString* GetEntityName(size_t id);
+
 void DestroyEntity(size_t eid);
 
 // Help functions

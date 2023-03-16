@@ -7,7 +7,7 @@
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/filesystem/FileSystem.h>
-
+#include <Wiwa/game/GameStateManager.h>
 #include <vector>
 
 typedef size_t SceneId;

@@ -48,6 +48,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CreateEntity);
 		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
+		WI_ADD_INTERNAL_CALL(GetEntityName);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);

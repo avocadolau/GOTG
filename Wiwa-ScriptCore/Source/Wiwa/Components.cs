@@ -1,7 +1,10 @@
 ﻿namespace Wiwa
 {
     using ResourceId = System.UInt64;
-
+    public struct Constants
+    {
+        public const ulong WI_INVALID_INDEX = 18446744073709551615;
+    }
     public struct ComponentIterator
     {
         public ulong componentId;
