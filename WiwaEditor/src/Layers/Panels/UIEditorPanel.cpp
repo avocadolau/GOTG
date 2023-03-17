@@ -7,7 +7,7 @@
 UIEditorPanel::UIEditorPanel(EditorLayer* instance)
 	: Panel("UI editor", ICON_FK_MAGIC, instance)
 {
-
+	elementSelected = -1;
 }
 
 UIEditorPanel::~UIEditorPanel()
