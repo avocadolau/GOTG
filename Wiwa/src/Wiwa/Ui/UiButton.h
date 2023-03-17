@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiButton(Scene* scene, unsigned int id, Rect2i bounds, const char* path, const char* extraPath);
+		GuiButton(Scene* scene, unsigned int id, Rect2i bounds, const char* path, const char* extraPath,int callbackID);
 		virtual ~GuiButton();
 
 		bool Update();

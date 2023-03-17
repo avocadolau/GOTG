@@ -2,7 +2,7 @@
 
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-
+#include <Wiwa/utilities/functions/Callback.h>
 #include <vector>
 #include <string>
 
@@ -28,6 +28,12 @@ namespace Wiwa
 		FOCUSED,
 		PRESSED,
 		SELECTED
+	};
+
+	enum class GuiEvent
+	{
+		PLAY,
+		TEST,
 	};
 
 	class WI_API GuiControl
@@ -93,26 +99,6 @@ namespace Wiwa
 		{
 			return extraTexture;
 		}
-		uint32_t GetDisabledIdQuad()
-		{
-			return id_quad_disabled;
-		}
-		uint32_t GetNormalIdQuad()
-		{
-			return id_quad_normal;
-		}
-		uint32_t GetFocusedIdQuad()
-		{
-			return id_quad_focused;
-		}
-		uint32_t GetPressedIdQuad()
-		{
-			return id_quad_pressed;
-		}
-		uint32_t GetSelectedIdQuad()
-		{
-			return id_quad_selected;
-		}
 		uint32_t GetExtraIdQuad()
 		{
 			return id_quad_extra;
@@ -152,27 +138,21 @@ namespace Wiwa
 		void SwapActive(Wiwa::Renderer2D& r2d)
 		{
 			active = !active;
-
 			if (active)
 			{
-				r2d.EnableInstance(m_Scene, id_quad_disabled);
+				
 				r2d.EnableInstance(m_Scene, id_quad_normal);
-				r2d.EnableInstance(m_Scene, id_quad_focused);
-				r2d.EnableInstance(m_Scene, id_quad_pressed);
-				r2d.EnableInstance(m_Scene, id_quad_selected);
+				
 
 				if (type == GuiControlType::SLIDER)
 				{
 					r2d.EnableInstance(m_Scene, id_quad_extra);
 				}
+				
 			}
 			else
 			{
-				r2d.DisableInstance(m_Scene, id_quad_disabled);
 				r2d.DisableInstance(m_Scene, id_quad_normal);
-				r2d.DisableInstance(m_Scene, id_quad_focused);
-				r2d.DisableInstance(m_Scene, id_quad_pressed);
-				r2d.DisableInstance(m_Scene, id_quad_selected);
 
 				if (type == GuiControlType::SLIDER)
 				{
@@ -181,6 +161,36 @@ namespace Wiwa
 			}
 		}
 
+		void GetEventFunction()
+		{
+			//meter aqui el codigo en especifico para cada event
+			switch (event)
+			{
+			case Wiwa::GuiEvent::PLAY:
+				break;
+			case Wiwa::GuiEvent::TEST:
+				break;
+			default:
+				break;
+			}
+		}
+
+		bool SwapToNewTexture(const char* path, Wiwa::Renderer2D& r2d)
+		{
+			
+			r2d.RemoveInstance(m_Scene, id_quad_normal);
+			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
+
+			
+			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+			return true;
+		}
+
+		void SwapCallback(int callback_id)
+		{
+			//callback = Wiwa::Application::Get().getCallbackAt(callback_id);
+		}
 	public:
 
 		ResourceId textId1;
@@ -190,20 +200,23 @@ namespace Wiwa
 		int id;
 		GuiControlType type;
 		GuiControlState state;
+		GuiEvent event;
 
 		char text[32];           // Control text (if required)
 		Rect2i position;        // Position and size
 		Rect2i extraPosition;	// Position and size for the bar
-		Color4f color;        // Tint color
+		Color4f color = Color::WHITE;        // Tint color
 
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
-		uint32_t id_quad_disabled;
+		
 		uint32_t id_quad_normal;
-		uint32_t id_quad_focused;
-		uint32_t id_quad_pressed;
-		uint32_t id_quad_selected;
 
 		uint32_t id_quad_extra;
+
+		int callbackID;
+
+		std::string name;
+		Callback* callback;
 	};
 }
