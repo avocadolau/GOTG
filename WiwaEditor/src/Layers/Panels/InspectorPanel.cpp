@@ -384,25 +384,33 @@ void InspectorPanel::DrawAnimatorComponent(byte * data)
 		ImGui::EndDragDropTarget();
 	}
 	if (animator->animator == nullptr) return;
-	//if (ImGui::ListBox("Animations",0,animator->animator->m_Animations.data(),animator->animator->m_Animations.size()))
-	//{
+	//get animaitons
+	const char* animationItems[10];
+	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+	{
+		animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+	}
 
-	//}
-	//if (ImGui::ListBox("Animations"))
-	//{
+	const char* current_item = NULL;
+	if (animator->animator->GetCurrentAnimation() != nullptr)
+		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
 
-	//}
 
-	//for (auto& anim : animator->animator->m_Animations)
-	//{
-	//	//std::string& item_name = anim->m_Name;
-	//	//const bool isSelected = (item_name == anim->m_Name);
-	//	//if (ImGui::Selectable(anim->m_Name.c_str(),isSelected))
-	//	//{
-	//	//	// handle selection
-	//	//}
-	//}
-	//ImGui::ListBoxFooter();
+	if (ImGui::BeginCombo("animaiton", current_item)) 
+	{
+		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+		{
+			bool is_selected = (current_item == animationItems[n]); 
+			if (ImGui::Selectable(animationItems[n], is_selected))
+			{
+				current_item = animationItems[n];
+				ImGui::SetItemDefaultFocus();
+				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+			}
+		}
+		ImGui::EndCombo();
+	}
+
 	ImGui::Checkbox("Play", &animator->Play);
 }
 

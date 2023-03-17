@@ -62,5 +62,7 @@ namespace Wiwa {
 		if(man.editorCamera)
 			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 
+		if(animator != nullptr && animator->animator != nullptr)
+			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(),animator->animator->GetFinalBoneMatrices(), false, man.editorCamera);
 	}
 }
