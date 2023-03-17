@@ -6,7 +6,7 @@
 //#include "Wiwa/utilities/render/CameraManager.h"
 //#include <glew.h>
 
-//#include <Wiwa/utilities/Log.h>
+#include <Wiwa/utilities/Log.h>
 //#include "Wiwa/utilities/time/Time.h"
 
 //#include <glm/gtc/quaternion.hpp>
@@ -42,8 +42,7 @@ bool Wiwa::AIPathFindingManager::PathNode::operator==(const PathNode& other) con
 uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPathFindingManager::PathList& listToFill) const
 {
 	glm::ivec2 cell;
-	uint32_t before = listToFill.pathList.size();
-
+	
 	// north
 	cell = pos;
 	cell.y = pos.y + 1;
@@ -112,7 +111,7 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetN
 	PathNode ret = PathNode();
 	int min = 65535;
 
-	for (int i = pathList.size(); i > 0; i--)
+	for (int i = pathList.size()-1; i > 0; --i)
 	{
 		if (pathList.at(i).Score() < min)
 		{
@@ -140,16 +139,6 @@ bool Wiwa::AIPathFindingManager::CleanUp()
 	return false;
 }
 
-void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, unsigned char* data)
-{
-	m_width = width;
-	m_height = height;
-
-	
-	m_map = new unsigned char[width * height];
-	memcpy(m_map, data, width * height);
-}
-
 int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::ivec2& destination)
 {
 	int ret = -1;
@@ -160,17 +149,19 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	bool desti = IsWalkable(destination);
 
 	// L12b: TODO 1: if origin or destination are not walkable, return -1
-	if (IsWalkable(origin) && IsWalkable(destination))
+	if (ori && desti)
 	{
 		// L12b: TODO 2: Create two lists: open, close
 		PathList open;
 		PathList closed;
 
 		// Add the origin tile to open
-		open.pathList.push_back(PathNode(0, 0, origin, nullptr));
+		open.pathList.push_back(PathNode(0, 0, origin, nullptr));	
 
+		iterations = open.pathList.size();
+		
 		// Iterate while we have tile in the open list
-		while (open.pathList.size() > 0)
+		while (iterations > 0)
 		{
 			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
 			PathNode* lowest = open.GetNodeLowestScore();
@@ -205,7 +196,8 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			// L12b: TODO 5: Fill a list of all adjancent nodes
 			PathList adjacent;
-			node->FindWalkableAdjacents(adjacent);
+			int yes = (int)node->FindWalkableAdjacents(adjacent);
+
 
 			// L12b: TODO 6: Iterate adjancent nodes:
 			// If it is a better path, Update the parent
@@ -233,7 +225,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			}
 
-			++iterations;
+			iterations--;
 		}
 	}
 
@@ -247,17 +239,27 @@ const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath()
 
 bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 {
-	return (pos.x >= 0 && pos.x <= (int)m_width &&
-		pos.y >= 0 && pos.y <= (int)m_height);
+	bool ret = false;
+
+	if ((pos.x >= 0) && (pos.x <= (int)m_mapData.width) &&
+		(pos.y >= 0) && (pos.y <= (int)m_mapData.width))
+	{
+		ret = true;
+	}
+
+	return ret;
 }
 
 bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 {
 	unsigned char t = GetTileAt(pos);
+
 	if (t != INVALID_WALK_CODE && t > 0) {
+		WI_INFO(" IsWalkable True");
 		return true;
 	}
 	else {
+		WI_INFO(" IsWalkable False");
 		return false;
 	}
 }
@@ -265,7 +267,12 @@ bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_map[(pos.y * m_width) + pos.x]; // returns the id of the tile
+	{
+		WI_INFO(" m_map at {} is equal to {}", pos.y + pos.x, m_map[pos.y + pos.x]);
+		return m_map[pos.y + pos.x]; // returns the walk code of the tile
+	}	
+
+	WI_INFO(" Invalid Code", pos.y + pos.x, m_map[pos.y + pos.x]);
 
 	return INVALID_WALK_CODE;
 }
@@ -273,8 +280,6 @@ unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 bool Wiwa::AIPathFindingManager::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos)
 {
 	bool ret = false;
-
-	bool isWalkable = true;
 
 	m_mapData.startingPosition = startPos;
 	m_mapData.width = width;
