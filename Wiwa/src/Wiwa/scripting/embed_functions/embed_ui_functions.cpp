@@ -6,12 +6,12 @@
 
 void Play()
 {
-    Wiwa::SceneManager::ChangeScene((Wiwa::SceneManager::getActiveSceneId() + 1));
+    //Wiwa::SceneManager::ChangeScene((Wiwa::SceneManager::getActiveSceneId() + 1));
 }
 
 void ChangeScene(int scene_id)
 {
-    Wiwa::SceneManager::ChangeScene(scene_id);
+    //Wiwa::SceneManager::ChangeScene(scene_id);
 }
 
 void Quit()
