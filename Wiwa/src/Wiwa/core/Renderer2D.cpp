@@ -173,15 +173,35 @@ namespace Wiwa
 		instanceRenderer.SetEnabled(instance, enabled);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTex(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot)
+	void Renderer2D::UpdateInstancedQuadTexPosition(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot)
 	{
 		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstance(id, position, pivot);
+		instanceRenderer.UpdateInstancePosition(id, position, pivot);
 	}
 
-	void Renderer2D::UpdateInstancedQuad(uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color)
+	void Renderer2D::UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Size2i& size)
 	{
-		InstanceRenderer &instanceRenderer = Wiwa::SceneManager::getActiveScene()->GetInstanceRenderer();
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
+		instanceRenderer.UpdateInstanceSize(id, size);
+	}
+
+	void Renderer2D::UpdateInstancedQuadTexClip(Scene* scene, uint32_t id, const Size2i& srcSize, const Rect2i& clip)
+	{
+		TextureClip tclip = CalculateTextureClip(clip, srcSize);
+
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
+		instanceRenderer.UpdateInstanceClip(id, tclip);
+	}
+
+	void Renderer2D::UpdateInstancedQuadTexTexture(Scene* scene, uint32_t id, uint32_t tex_id)
+	{
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
+		instanceRenderer.UpdateInstanceTexture(id, tex_id);
+	}
+
+	void Renderer2D::UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color)
+	{
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
 		instanceRenderer.UpdateInstance(id, position, size, color);
 	}
 
