@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -127,9 +128,15 @@ namespace Wiwa
 
 	void Scene::Unload(bool unload_resources)
 	{
-		return;
+		Audio::StopAllEvents();
+		
+		// Sleep to wait till Audio thread stops all events
+		Sleep(10);
+
 		if (unload_resources)
 		{
+			// TODO: Fix unloading for the editor
+			return;
 			Wiwa::Resources::UnloadAllResources();
 		}
 	}

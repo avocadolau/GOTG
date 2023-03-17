@@ -12,6 +12,16 @@
             return ref InternalCalls.GetComponent<T>(entity, typeof(T));
         }
 
+        public ComponentIterator GetComponentIterator<T>() where T : unmanaged
+        {
+            return InternalCalls.GetComponentIterator(m_EntityId, typeof(T));
+        }
+
+        public ref T GetComponentByIterator<T>(ComponentIterator iterator) where T : unmanaged
+        {
+            return ref InternalCalls.GetComponentByIterator<T>(iterator);
+        }
+
         public ref T AddComponent<T>(EntityId entity) where T : unmanaged
         {
             return ref InternalCalls.AddComponent<T>(entity, typeof(T));
@@ -61,6 +71,39 @@
         public static void AddMesh(EntityId eid, string model, string material)
         {
             InternalCalls.AddMeshToEntity(eid, model, material);
+        }
+
+        public void PlayMusic(string ev_name)
+        {
+            InternalCalls.PlayMusic(ev_name);
+        }
+        public void StopMusic(string ev_name)
+        {
+            InternalCalls.StopMusic(ev_name);
+        }
+
+        public void PlayAudioEvent()
+        {
+            InternalCalls.PlaySoundEntity(m_EntityId);
+        }
+
+        public void PlayAudioEvent(string ev_name)
+        {
+            InternalCalls.PlaySound(ev_name, m_EntityId);
+        }
+
+        public void StopAudioEvent()
+        {
+            InternalCalls.StopSoundEntity(m_EntityId);
+        }
+        public void StopAudioEvent(string ev_name)
+        {
+            InternalCalls.StopSound(ev_name, m_EntityId);
+        }
+
+        public void StopAllAudio()
+        {
+            InternalCalls.StopAllEvents();
         }
     }
 }

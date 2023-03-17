@@ -10,6 +10,7 @@
 #include <Wiwa/utilities/Log.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/core/Resources.h>
+#include <Wiwa/core/Application.h>
 
 #include <Wiwa/ecs/components/Mesh.h>
 
@@ -17,36 +18,69 @@
 
 byte* GetComponent(size_t id, MonoReflectionType* type)
 {
-	static std::unordered_map<size_t, Type*> s_ConvertedTypes;
-
+	// Take monotype
 	MonoType* compType = mono_reflection_type_get_type(type);
+
+	// Take type name
 	std::string typeName = mono_type_get_name(compType);
+
+	// Clear type's name
 	ClearName(typeName);
+
+	// Generate hash of type
 	size_t typeHash = FNV1A_HASH(typeName.c_str());
 
-	std::unordered_map<size_t, Type*>::iterator converted_type = s_ConvertedTypes.find(typeHash);
+	Wiwa::Application& app = Wiwa::Application::Get();
+	
+	const Type* t = app.GetComponentTypeH(typeHash);
 
-	Type* t = NULL;
-
-	if (converted_type == s_ConvertedTypes.end())
-	{
-		t = ConvertType(compType);
-
-		s_ConvertedTypes[typeHash] = t;
-	}
-	else
-	{
-		t = converted_type->second;
-	}
-
-	int alingment;
+	// If reflected type is not a component, return NULL
+	if (!t) return nullptr;
 
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	ComponentId compID = em.GetComponentId(t);
+
 	byte* comp = em.GetComponent(id, compID, t->size);
 
 	return comp;
+}
+
+Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoReflectionType* type)
+{
+	Wiwa::EntityManager::ComponentIterator c_it = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+
+	// Take monotype
+	MonoType* compType = mono_reflection_type_get_type(type);
+
+	// Take type name
+	std::string typeName = mono_type_get_name(compType);
+
+	// Clear type's name
+	ClearName(typeName);
+
+	// Generate hash of type
+	size_t typeHash = FNV1A_HASH(typeName.c_str());
+
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	const Type* t = app.GetComponentTypeH(typeHash);
+
+	// If reflected type is not a component, return invalid iterator
+	if (!t) return c_it;
+
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	c_it = em.GetComponentIterator(eid, typeHash);
+
+	return c_it;
+}
+
+byte* GetComponentByIterator(Wiwa::EntityManager::ComponentIterator iterator)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	return em.GetComponentByIterator(iterator);
 }
 
 size_t CreateEntity()

@@ -30,4 +30,4 @@ md %rsc_path%
 
 xcopy /e /v /s "..\resources" %rsc_path%
 
-call buildsln.bat "..\game\WiwaGame.sln" "Debug"
+call buildsln.bat "..\game\WiwaGame.sln" "Release"

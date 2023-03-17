@@ -12,6 +12,7 @@
 #include "MaterialPanel.h"
 #include "../EditorLayer.h"
 #include "../../Utils/EditorUtils.h"
+#include <Wiwa/core/ProjectManager.h>
 
 static const std::filesystem::path s_AssetsPath = "assets";
 
@@ -96,13 +97,6 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 	{
 		EditorLayer::Get().RegenSol();
 	}
-	if (assetsPath.extension() == ".wiscene") {
-		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(assetsPath.string().c_str());
-		std::filesystem::path rp = rpath.remove_filename();
-		std::filesystem::create_directories(rp);
-		Wiwa::FileSystem::Copy(assetsPath.string().c_str(), rpath.string().c_str());
-		return;
-	}
 	switch (change_type)
 	{
 	case filewatch::Event::added:
@@ -145,6 +139,12 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 		extension = ".wimaterial";
 	else if (ShaderExtensionComp(assetsPath))
 		extension = ".wishader";
+	else if (assetsPath.extension() == ".wiscene") {
+		std::filesystem::path name = assetsPath.filename();
+		name.replace_extension();
+
+		Wiwa::ProjectManager::RemoveScene(name.string().c_str());
+	}
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -201,6 +201,19 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 	{
 		Wiwa::Resources::CreateMeta<Wiwa::Material>(p.c_str());
 		Wiwa::Resources::Import<Wiwa::Material>(p.c_str());
+	}
+	else if (path.extension() == ".bnk") {
+		std::filesystem::path libfile = Wiwa::Resources::_assetToLibPath(path.string());
+		std::filesystem::path libpath = libfile.parent_path();
+
+		Wiwa::FileSystem::CreateDirs(libpath.string().c_str());
+		Wiwa::FileSystem::Copy(path.string().c_str(), libfile.string().c_str());
+	}
+	else if (path.extension() == ".wiscene") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
 }
 

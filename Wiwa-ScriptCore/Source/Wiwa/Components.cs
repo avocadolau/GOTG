@@ -1,6 +1,14 @@
 ﻿namespace Wiwa
 {
     using ResourceId = System.UInt64;
+
+    public struct ComponentIterator
+    {
+        public ulong componentId;
+        public ulong componentIndex;
+        public ulong componentSize;
+    }
+
     #region Transform3D
     [Component]
     public struct Transform3D
@@ -32,12 +40,12 @@
     {
         public Vector3 positionOffset;
         public Vector3 scalingOffset;
-        public float mass;
-        public Vector3 gravity;
         public bool isTrigger;
         public bool isStatic;
+        public bool doContinuousCollision;
         public int selfTag;
         public int filterBits;
+
     }
     [Component]
     public struct ColliderCube

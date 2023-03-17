@@ -275,31 +275,31 @@ namespace Wiwa
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
 		//// Setting the shadow map buffer
-		// camera->frameBuffer->BindDepth(true);
+		 camera->shadowBuffer->Bind(true);
 
-		// Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
-		// glm::mat4 view;
-		// glm::mat4 projection;
-		// if (lightTrans)
-		//{
-		//	view = glm::lookAt(
-		//		lightTrans->localPosition,
-		//		lightTrans->localPosition + glm::radians(lightTrans->localRotation),
-		//		glm::vec3(0.0f, 1.0f, 0.0f));
-		//	projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+		 Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
+		 glm::mat4 view;
+		 glm::mat4 projection;
+		 if (lightTrans)
+		{
+			view = glm::lookAt(
+				lightTrans->localPosition,
+				lightTrans->localPosition + glm::radians(lightTrans->localRotation),
+				glm::vec3(0.0f, 1.0f, 0.0f));
+			projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
 
-		//	m_DepthShader->Bind();
-		//	m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
-		//	m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
+			m_DepthShader->Bind();
+			m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
+			m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
 
-		//	m_DepthShader->setUniform(m_DepthShaderUniforms.Model, lightTrans->localMatrix);
-		//}
+			m_DepthShader->setUniform(m_DepthShaderUniforms.Model, lightTrans->localMatrix);
+		}
 
-		// mesh->Render();
+		 mesh->Render();
 
-		// m_DepthShader->UnBind();
+		 m_DepthShader->UnBind();
 
-		// camera->frameBuffer->UnbindDepth();
+		 camera->shadowBuffer->Unbind();
 
 		// Set up color buffer
 
@@ -311,13 +311,14 @@ namespace Wiwa
 		matShader->Bind();
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
-		// if (lightTrans)
-		//{
-		//	glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
+		if (lightTrans)
+		{
+			glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
 
-		//	matShader->setUniform(matShader->getUniformLocation("u_Light"), lightMVP);
-		//}
-		// camera->frameBuffer->SetupDepth(GL_TEXTURE1);
+			matShader->setUniform(matShader->getUniformLocation("u_LightMVP"), lightMVP);
+		}
+		
+		camera->shadowBuffer->BindTexture();
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 

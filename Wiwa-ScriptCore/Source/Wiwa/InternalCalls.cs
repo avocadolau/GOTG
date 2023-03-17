@@ -15,6 +15,10 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static ref T GetComponent<T>(EntityId id, System.Type type);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static ComponentIterator GetComponentIterator(EntityId id, System.Type type);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static ref T GetComponentByIterator<T>(ComponentIterator iterator);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static ref T AddComponent<T>(EntityId id, System.Type type);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void ApplySystem(EntityId id, System.Type type);
@@ -92,19 +96,22 @@ namespace Wiwa
         internal extern static bool GetResizableIntr();
 
         #endregion
-        //#region Audio
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void PlayMusic(string str);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopMusic(string str);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void PlaySound(string str, EntityId entity);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopSound(string str, EntityId entity);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopAllEvents();
-        //#endregion
-
+        #region Audio
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayMusic(string str);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopMusic(string str);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlaySound(string str, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopSound(string str, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlaySoundEntity(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopSoundEntity(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopAllEvents();
+        #endregion
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
@@ -112,6 +119,12 @@ namespace Wiwa
         internal extern static bool AddBodyToLog(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool RemoveBodyFromLog(EntityId id);
+        #endregion
+        #region Scene
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadSceneByIndex(ulong index, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadSceneByName(string scene_name, int flags);
         #endregion
     }
 }

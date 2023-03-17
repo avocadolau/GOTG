@@ -46,6 +46,9 @@ void EditorLayer::OnAttach()
 	WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 	RegenSol();
 	s_Instance = this;
+
+	Wiwa::Time::Stop();
+
 	// Editor scene
 	m_EditorSceneId = Wiwa::SceneManager::CreateScene();
 	Wiwa::SceneManager::StopScene();
@@ -161,8 +164,6 @@ void EditorLayer::OnImGuiRender()
 	}
 	if (m_ShowDemo)
 		ImGui::ShowDemoWindow(&m_ShowDemo);
-
-	WI_INFO("{}, {}", Wiwa::Input::GetMouseX(), Wiwa::Input::GetMouseY());
 }
 
 void EditorLayer::OnEvent(Wiwa::Event &e)
@@ -589,10 +590,11 @@ void EditorLayer::MainMenuBar()
 					// Unload simulated scene but keep resources for the editor
 					Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
 
+					// Set editor scene again
 					Wiwa::SceneManager::SetScene(m_EditorSceneId);
-					Wiwa::SceneManager::StopScene();
 
-					Audio::StopAllEvents();
+					// Stop scene from being played
+					Wiwa::SceneManager::StopScene();
 				}
 			}
 

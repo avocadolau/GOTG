@@ -27,7 +27,7 @@ void GameLayer::OnAttach()
 	Wiwa::OnLoadEvent load_ev;
 	action.execute(load_ev);
 
-	Wiwa::SceneManager::LoadScene((uint32_t)0, Wiwa::SceneManager::LOAD_SEPARATE);
+	Wiwa::SceneManager::LoadSceneByIndex(0, Wiwa::SceneManager::LOAD_SEPARATE);
 
 	Wiwa::RenderManager::SetRenderOnMainWindow(true);
 }
@@ -39,7 +39,7 @@ void GameLayer::OnDetach()
 
 void GameLayer::OnUpdate()
 {
-
+	
 }
 
 void GameLayer::OnImGuiRender()
