@@ -42,6 +42,8 @@ namespace Wiwa {
 			LOAD_SEPARATE = 4,
 			// Loads the scene and appends it into the current scene (ignored if LOAD_SEPARATE is enabled)
 			LOAD_APPEND = 8,
+			// Load but don't awake/init
+			LOAD_NO_INIT = 16,
 			// Default settings = UNLOAD_CURRENT | UNLOAD_RESOURCES
 			LOAD_DEFAULT = UNLOAD_CURRENT | UNLOAD_RESOURCES | LOAD_SEPARATE
 		};
@@ -60,7 +62,7 @@ namespace Wiwa {
 
 		static void CleanUp();
 		
-		static void SetScene(SceneId sceneId);
+		static void SetScene(SceneId sceneId, bool init);
 		static void ChangeScene(SceneId sceneId);
 
 		static void StartChangeScene(SceneId sceneId);

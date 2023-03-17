@@ -95,6 +95,10 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PlaySoundEntity);
 		WI_ADD_INTERNAL_CALL(StopSoundEntity);
 
+		WI_ADD_INTERNAL_CALL(AddAudioSource);
+
+		WI_ADD_INTERNAL_CALL(IsPlaying);
+
 		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
 		// Physics

@@ -9,11 +9,14 @@
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/scene/Scene.h>
 
+#include <Wiwa/ecs/components/Mesh.h>
+
 namespace Wiwa {
 	
 	EntityManager::EntityManager()
 	{
 		m_ComponentIdCount = 0;
+		m_InitSystemsOnApply = true;
 	}
 
 	EntityManager::~EntityManager()
@@ -407,6 +410,34 @@ namespace Wiwa {
 		}
 	}
 
+	void EntityManager::SavePrefab(EntityId entity, const char* path)
+	{
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_OUT | FileSystem::OM_BINARY);
+
+		if (file.IsOpen()) {
+			_saveEntityImpl(file, entity);
+		}
+
+		file.Close();
+	}
+
+	EntityId EntityManager::LoadPrefab(const char* path)
+	{
+		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		if (file.IsOpen()) {
+			eid = _loadEntityImpl(file, eid, true);
+		}
+
+		file.Close();
+
+		return eid;
+	}
+
 	void EntityManager::DestroyEntity(EntityId entity)
 	{
 		m_EntitiesToDestroy.push_back(entity);
@@ -722,6 +753,23 @@ namespace Wiwa {
 		return false;
 	}
 
+	System* EntityManager::GetSystem(EntityId eid, SystemHash system_hash)
+	{
+		System* sys = NULL;
+
+		size_t size = m_EntitySystemHashes[eid].size();
+
+		for (size_t i = 0; i < size; i++) {
+			if (m_EntitySystemHashes[eid][i] == system_hash)
+			{
+				sys = m_EntitySystems[eid][i];
+				break;
+			}
+		}
+
+		return sys;
+	}
+
 	size_t EntityManager::getSystemIndex(EntityId entityId, SystemHash system_hash)
 	{
 		size_t index = INVALID_INDEX;
@@ -808,6 +856,156 @@ namespace Wiwa {
 		return true;
 	}
 
+	void EntityManager::_saveEntityImpl(File& file, EntityId eid)
+	{
+		const char* e_name = GetEntityName(eid);
+		size_t e_name_len = strlen(e_name) + 1;
+
+		// Save entity name
+		file.Write(&e_name_len, sizeof(size_t));
+		file.Write(e_name, e_name_len);
+
+		std::map<ComponentId, size_t>& components = GetEntityComponents(eid);
+		std::map<ComponentId, size_t>::iterator c_it;
+		size_t component_size = components.size();
+
+		// Save component count for this entity
+		file.Write(&component_size, sizeof(size_t));
+
+		// For each component in entity
+		for (c_it = components.begin(); c_it != components.end(); c_it++)
+		{
+			ComponentId c_id = c_it->first;
+			const Type* c_type = GetComponentType(c_id);
+			size_t c_size = c_type->size;
+			byte* c_data = GetComponent(eid, c_id, c_size);
+
+			// Save component hash, size and data
+			file.Write(&c_type->hash, sizeof(size_t));
+			file.Write(&c_size, sizeof(size_t));
+			file.Write(c_data, c_size);
+		}
+
+		// Save entity systems
+		const std::vector<SystemHash>& system_list = GetEntitySystemHashes(eid);
+		size_t system_count = system_list.size();
+
+		// Save system count
+		file.Write(&system_count, sizeof(size_t));
+
+		if (system_count > 0)
+		{
+			// Save system hashes
+			file.Write(system_list.data(), system_count * sizeof(SystemHash));
+		}
+
+		// Check for child entities
+		std::vector<EntityId>* children = GetEntityChildren(eid);
+		size_t children_size = children->size();
+
+		// Save children size (size >= 0)
+		file.Write(&children_size, sizeof(size_t));
+
+		// Recursively save each child entity
+		for (size_t i = 0; i < children_size; i++)
+		{
+			_saveEntityImpl(file, children->at(i));
+		}
+	}
+
+	EntityId EntityManager::_loadEntityImpl(File& file, EntityId parent, bool is_parent)
+	{
+		size_t e_name_len;
+		char* e_name_c;
+		std::string e_name;
+
+		// Read entity name
+		file.Read(&e_name_len, sizeof(size_t));
+		e_name_c = new char[e_name_len];
+		file.Read(e_name_c, e_name_len);
+		e_name = e_name_c;
+		delete[] e_name_c;
+
+		EntityId eid;
+
+		if (is_parent)
+		{
+			eid = CreateEntity(e_name.c_str());
+		}
+		else
+		{
+			eid = CreateEntity(e_name.c_str(), parent);
+		}
+
+		size_t component_size;
+
+		// Read component count
+		file.Read(&component_size, sizeof(size_t));
+
+		// For each component in entity
+		for (size_t i = 0; i < component_size; i++)
+		{
+			ComponentHash c_hash;
+			size_t c_size;
+			byte* data;
+
+			// Read component hash, size and data
+			file.Read(&c_hash, sizeof(size_t));
+			file.Read(&c_size, sizeof(size_t));
+			data = new byte[c_size];
+			file.Read(data, c_size);
+
+			byte* component = AddComponent(eid, c_hash, data);
+			delete[] data;
+
+			size_t mesh_hash = GetComponentType(GetComponentId<Mesh>())->hash;
+
+			if (c_hash == mesh_hash)
+			{
+				Mesh* mesh = (Mesh*)component;
+
+				size_t meshpath_size = strlen(mesh->mesh_path);
+				if (meshpath_size > 0)
+					mesh->meshId = Resources::Load<Model>(mesh->mesh_path);
+
+				size_t matpath_size = strlen(mesh->mat_path);
+				if (matpath_size > 0)
+					mesh->materialId = Resources::Load<Material>(mesh->mat_path);
+			}
+		}
+
+		size_t system_count;
+
+		// Read system count
+		file.Read(&system_count, sizeof(size_t));
+
+		if (system_count > 0)
+		{
+			SystemHash* system_hashes = new SystemHash[system_count];
+
+			// Read system hashes
+			file.Read(system_hashes, system_count * sizeof(SystemHash));
+
+			for (size_t i = 0; i < system_count; i++)
+			{
+				ApplySystem(eid, system_hashes[i]);
+			}
+		}
+
+		// Check for child entities
+		size_t children_size;
+
+		// Read children size (size >= 0)
+		file.Read(&children_size, sizeof(size_t));
+
+		for (size_t i = 0; i < children_size; i++)
+		{
+			_loadEntityImpl(file, eid, false);
+		}
+
+		return eid;
+	}
+
 	void EntityManager::ApplySystem(EntityId eid, SystemHash system_hash)
 	{
 		if (HasSystem(eid, system_hash)) return;
@@ -819,6 +1017,11 @@ namespace Wiwa {
 			system->SetEntity(eid);
 			system->SetScene(m_Scene);
 			system->OnSystemAdded();
+
+			if (m_InitSystemsOnApply) {
+				system->Awake();
+				system->Init();
+			}
 
 			m_EntitySystems[eid].push_back(system);
 			m_EntitySystemHashes[eid].push_back(system_hash);

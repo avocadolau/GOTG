@@ -722,6 +722,8 @@ namespace Wiwa
 		{
 			Scene *sc = m_Scenes[sceneid];
 
+			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+
 			_loadSceneImpl(sc, scene_file);
 
 			std::filesystem::path path = scene_path;
@@ -729,7 +731,7 @@ namespace Wiwa
 
 			if (flags & LOAD_SEPARATE)
 			{
-				SetScene(sceneid);
+				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
 			// Load Physics Manager json Data
@@ -783,13 +785,16 @@ namespace Wiwa
 		m_RemovedSceneIds.push_back(scene_id);
 	}
 
-	void SceneManager::SetScene(SceneId sceneId)
+	void SceneManager::SetScene(SceneId sceneId, bool init)
 	{
 		m_ActiveScene = sceneId;
 
 		Wiwa::RenderManager::SetLayerCamera(0, getScene(sceneId)->GetCameraManager().getActiveCamera());
-		m_Scenes[sceneId]->Awake();
-		m_Scenes[sceneId]->Init();
+
+		if (init) {
+			m_Scenes[sceneId]->Awake();
+			m_Scenes[sceneId]->Init();
+		}
 
 		SceneChangeEvent event(sceneId);
 		Action<Wiwa::Event &> act = {&Application::OnEvent, &Application::Get()};

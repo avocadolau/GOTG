@@ -1,20 +1,21 @@
 #pragma once
 #include "System.h"
 #include "../components/Transform3D.h"
-#include "../components/AudioSource.h"
 
 #include <Wiwa/utilities/Reflection.h>
 
 #include <Wiwa/ecs/EntityManager.h>
 
 namespace Wiwa {
-	class WI_API AudioSystem : public System {
+	class WI_API AgentAISystem : public System {
 	private:
-		EntityManager::ComponentIterator m_AudioSource;
+		EntityManager::ComponentIterator m_AgentAI;
 		EntityManager::ComponentIterator m_Transform;
+
+		glm::vec2 m_DirectionPoint;
 	public:
-		AudioSystem();
-		~AudioSystem();
+		AgentAISystem();
+		~AgentAISystem();
 
 		void OnAwake() override;
 
@@ -24,8 +25,9 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void OnEventFinish(const char* ev_name);
+		void GoToPosition(glm::vec3 targetPos);
+
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::AudioSystem);
+REGISTER_SYSTEM(Wiwa::AgentAISystem);

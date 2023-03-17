@@ -61,22 +61,31 @@ namespace Wiwa {
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
-		
-		if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
-			WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
+
+		if (asrc->isPlaying) {
+			if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
+				WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
+			}
+
+			Audio::Update();
+
+			// Wait to update audio engine thread so we can destroy the system
+			Sleep(8);
 		}
 
 		Audio::UnregisterGameObject(m_EntityId);
 	}
 
-	void AudioSystem::OnEventFinish()
+	void AudioSystem::OnEventFinish(const char* ev_name)
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
-		asrc->isPlaying = false;
+		if (strcmp(ev_name, asrc->eventName) == 0) {
+			asrc->isPlaying = false;
+		}
 
-		WI_CORE_INFO("Audio finished");
+		WI_CORE_INFO("Audio finished [{}]", ev_name);
 	}
 }
