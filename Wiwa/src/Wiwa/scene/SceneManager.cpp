@@ -723,6 +723,7 @@ namespace Wiwa
 			Scene *sc = m_Scenes[sceneid];
 
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
 			_loadSceneImpl(sc, scene_file);
 
@@ -801,18 +802,15 @@ namespace Wiwa
 		act(event);
 	}
 
-	void SceneManager::ChangeScene(SceneId sceneId)
+	void SceneManager::ChangeSceneByName(const char* name, int flags)
 	{
-		SceneChangeEvent event(sceneId);
-		Action<Wiwa::Event &> act = {&Application::OnEvent, &Application::Get()};
-		act(event);
-		m_Scenes[m_ActiveScene]->Unload();
-		m_ActiveScene = sceneId;
-		m_Scenes[m_ActiveScene]->Load();
+		size_t index = ProjectManager::getSceneIndexByName(name);
+
+		m_Scenes[m_ActiveScene]->ChangeScene(index, flags);
 	}
 
-	void SceneManager::StartChangeScene(SceneId sceneId)
-	{
-		m_Scenes[m_ActiveScene]->ChangeScene(sceneId);
+	void SceneManager::ChangeSceneByIndex(SceneId sceneId, int flags)
+	{		
+		m_Scenes[m_ActiveScene]->ChangeScene(sceneId, flags);
 	}
 }
