@@ -7,12 +7,15 @@
 
 namespace Wiwa
 {
-	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path) : GuiControl(scene, GuiControlType::SLIDER, id)
+	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, int callbackID) : GuiControl(scene, GuiControlType::SLIDER, id)
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
+		name = "Slider";
+		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
+		this->callbackID = callbackID;
+		callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 		id_quad_extra = r2d.CreateInstancedQuadTex(m_Scene, extraTexture->GetTextureId(), extraTexture->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::CENTER);
@@ -79,34 +82,34 @@ namespace Wiwa
 		{
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width /2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, {extraPosition.width,extraPosition.height},color);
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, { position.x,position.y }, {position.width,position.height},color);
 
 			
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, { extraPosition.width,extraPosition.height }, color);
 
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, color);
 
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, { extraPosition.width,extraPosition.height }, color);
 
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, color);
 
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, { extraPosition.width,extraPosition.height }, color);
 
 
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, color);
 
 
 		} break;
@@ -115,10 +118,10 @@ namespace Wiwa
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_extra, { extraPosition.x - (position.width / 2),extraPosition.y }, { extraPosition.width,extraPosition.height }, color);
 
 
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, color);
 
 		}break;
 		default:

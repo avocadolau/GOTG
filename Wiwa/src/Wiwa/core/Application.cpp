@@ -299,6 +299,33 @@ namespace Wiwa
 		return stype != NULL;
 	}
 
+	Callback* Application::getCallback(size_t hash) const
+	{
+		Callback* cb = NULL;
+
+		size_t s = m_Callbacks.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (m_Callbacks[i]->getHash() == hash) {
+				cb = m_Callbacks[i];
+				break;
+			}
+		}
+
+		return cb;
+	}
+
+	void Application::ClearCallbacks()
+	{
+		size_t s = m_Callbacks.size();
+
+		for (size_t i = 0; i < s; i++) {
+			delete m_Callbacks[i];
+		}
+		
+		m_Callbacks.clear();
+	}
+
 	void Application::RegisterSystemType(const Type *system)
 	{
 		const Type *type = GetSystemTypeH(system->hash);

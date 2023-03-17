@@ -3,7 +3,7 @@
 #include "Wiwa/Ui/UiControl.h"
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-
+#include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
 
@@ -14,10 +14,12 @@ namespace Wiwa
 	{
 	public:
 
-		GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text);
+		GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, int callbackID);
 		virtual ~GuiText();
 
 		bool Draw(Renderer2D* render);
+
+		Text* text;
 	};
 }
 
