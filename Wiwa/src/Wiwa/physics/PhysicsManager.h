@@ -20,6 +20,7 @@
 #include <vector>
 #include <bitset>
 #include <algorithm>
+#include <map>
 
 #define MAX_BITS 32
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
@@ -30,11 +31,14 @@ class Camera;
 namespace Wiwa {
 
 	struct Object {
-		Object(btCollisionObject& body_, const size_t id_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_), doContinuousCollision(doContinuousCollision_){};
+		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_), 
+			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_){};
 
 		btCollisionObject* collisionObject;
 		btVector3 velocity;
 		size_t id;
+		int selfTag;
+		const char* selfTagStr;
 		bool doContinuousCollision;
 	};
 
@@ -155,9 +159,10 @@ namespace Wiwa {
 		bool LogBodies();
 
 	public:
-		std::vector<std::string> filterStrings;
-		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;
+		std::map<std::string, int> filterMap;
 
+		/*std::vector<std::string> filterStrings;
+		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;*/
 		/*void bin(unsigned n)
 		{
 			if (n > 1)

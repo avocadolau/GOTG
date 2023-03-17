@@ -145,7 +145,7 @@ namespace WiwaApp
             if (debug) Console.WriteLine("testing it");
             previousWaveDestroy = false;
         }
-        void OnCollisionEnter(EntityId id1, EntityId id2)
+        void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
 
         }

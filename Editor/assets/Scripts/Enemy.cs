@@ -54,7 +54,7 @@ namespace WiwaApp
             }
         }
 
-        void OnCollisionEnter(EntityId id1, EntityId id2)
+        void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
             if (id1 == m_EntityId && PhysicsManager.GetEntityTagString(id2) == "COLLISION_BULLET")
             {

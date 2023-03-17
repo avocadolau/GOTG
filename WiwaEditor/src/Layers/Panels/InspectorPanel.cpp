@@ -169,19 +169,30 @@ void InspectorPanel::DrawCollisionTags()
 	if (ImGui::BeginPopupModal("Edit Tags", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		static int selected = -1;
-		for (int n = 0; n < py.filterStrings.size(); n++)
+		for (const auto& [key, value] : py.filterMap)
 		{
-			std::string tempStr = py.filterStrings[n].c_str();
-			tempStr += "_" + py.fliterBitsSets[n].to_string();
+			/*std::string tempStr = py.GetFilterTag(n);
+			int bits = 1 << n;
+			tempStr += "_" + std::to_string(bits);*/
+			std::string tagNameWitBits = key;
+			tagNameWitBits += "_" + std::to_string(value);
+			if (ImGui::Selectable(tagNameWitBits.c_str(), selected == value, ImGuiSelectableFlags_DontClosePopups))
+				selected = value;
+		}
+		/*for (int n = 0; n < py.filterMap.size(); n++)
+		{
+			std::string tempStr = py.GetFilterTag(n);
+			int bits = 1 << n;
+			tempStr += "_" + std::to_string(bits);
 			if (ImGui::Selectable(tempStr.c_str(), selected == n, ImGuiSelectableFlags_DontClosePopups))
 				selected = n;
-		}
+		}*/
 
 		static char strBuf[64] = ""; ImGui::InputText("Write Tag", strBuf, 64, ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CharsNoBlank);
 
 		if (ImGui::Button("Add", ImVec2(120, 0)))
 		{
-			if (!(std::find(py.filterStrings.begin(), py.filterStrings.end(), strBuf) != py.filterStrings.end()))
+			if (!(py.filterMap.find(strBuf) != py.filterMap.end()))
 			{
 				py.AddFilterTag(strBuf);
 			}
@@ -361,13 +372,13 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
 	ImGui::Checkbox("Do continuous?", &rigidBody->doContinuousCollision);
 
-	const char* comboPreviewValue = py.filterStrings[rigidBody->selfTag].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
+	const char* comboPreviewValue = py.GetFilterTag(rigidBody->selfTag);  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
 	{
-		for (int n = 0; n < py.filterStrings.size(); n++)
+		for (int n = 0; n < py.filterMap.size(); n++)
 		{
 			const bool is_selected = (rigidBody->selfTag == n);
-			if (ImGui::Selectable(py.filterStrings[n].c_str(), is_selected))
+			if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
 				rigidBody->selfTag = n;
 
 			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
@@ -379,10 +390,10 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	}
 
 	ImGui::Text("Collide with:");
-	for (int i = 0; i < py.filterStrings.size(); i++)
+	for (int i = 0; i < py.filterMap.size(); i++)
 	{
 		bool local = (rigidBody->filterBits >> i) & 1; //Checking a bit
-		ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
+		ImGui::Checkbox(py.GetFilterTag(i), &local);
 		if (local)
 			rigidBody->filterBits |= 1 << i;
 		else

@@ -313,8 +313,9 @@ namespace Wiwa {
 		m_BodiesToLog.clear();
 		delete m_World;
 
-		filterStrings.clear();
-		fliterBitsSets.clear();
+		filterMap.clear();
+		/*filterStrings.clear();
+		fliterBitsSets.clear();*/
 
 		m_HasBeenInit = false;
 		return true;
@@ -413,7 +414,7 @@ namespace Wiwa {
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
 
 		collision_object->setCollisionShape(collision_shape);
-		Object* myObjData = new Object(*collision_object, id, rigid_body.doContinuousCollision);
+		Object* myObjData = new Object(*collision_object, id, rigid_body.selfTag, GetFilterTag(rigid_body.selfTag), rigid_body.doContinuousCollision);
 		collision_object->setUserPointer((Object*)myObjData);
 		//collision_object->setCollisionFlags(rigid_body.)
 
@@ -471,7 +472,7 @@ namespace Wiwa {
 	bool PhysicsManager::OnSave()
 	{
 		JSONDocument physics;
-		int count = filterStrings.size();
+		int count = filterMap.size();
 
 		physics.AddMember("tags_count", count);
 		std::string tag = "tag_";
@@ -479,7 +480,7 @@ namespace Wiwa {
 		{
 			std::string newTag = tag;
 			newTag += std::to_string(i);
-			physics.AddMember(newTag.c_str(), filterStrings[i].c_str());
+			physics.AddMember(newTag.c_str(), GetFilterTag(i));
 		}
 		std::string path = "assets/Scenes/";
 		path += SceneManager::getActiveScene()->getName();
@@ -498,7 +499,7 @@ namespace Wiwa {
 		if (!physics.load_file(path.c_str()))
 			return false;
 
-		for (int i = 1; i < filterStrings.size(); i++)
+		for (int i = 1; i < filterMap.size(); i++)
 			RemoveFilterTag(i);
 
 		int count = physics["tags_count"].get<int>();
@@ -539,36 +540,56 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddFilterTag(const char* str)
 	{
-		if (filterStrings.size() == 32)
+		/*if (filterStrings.size() == 32)
 			return false;
 
 		filterStrings.emplace_back(str);
 		std::bitset<MAX_BITS> bset;
 		bset.set(filterStrings.size(), true);
-		fliterBitsSets.push_back(bset);
+		fliterBitsSets.push_back(bset);*/
+		int size = filterMap.size();
+		if (filterMap.size() == 32)
+			return false;
+		filterMap.emplace(str, size);
+		
 		return true;
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
-		filterStrings.erase(filterStrings.begin() + index);
-		fliterBitsSets.erase(fliterBitsSets.begin() + index);
+		/*filterStrings.erase(filterStrings.begin() + index);
+		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
+		for (const auto& [key, value] : filterMap)
+		{
+			if (value == index)
+				filterMap.erase(key);
+		}
 	}
 
 	const char* PhysicsManager::GetFilterTag(const int index)
 	{
-		return filterStrings[index].c_str();
+		//return filterStrings[index].c_str();
+		for (const auto& [key, value] : filterMap)
+		{
+			if (value == index)
+				return key.c_str();
+		}
+		return "NONE";
 	}
 
 	int PhysicsManager::GetFilterTag(const char* str)
 	{
-		int count = filterStrings.size();
+		/*int count = filterStrings.size();
 		std::string strcmp = str;
 		for (int i = 0; i < count; i++)
 		{
 			if (filterStrings[i] == strcmp)
 				return i;
 		}
-		return 0;
+		return 0;*/
+		if (!(filterMap.find(str) != filterMap.end()))
+			return -1;
+		
+		return filterMap[str];
 	}
 
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
@@ -597,9 +618,6 @@ namespace Wiwa {
 
 	int PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
-		std::string wall = "COLLISION_WALL";
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 		camera->frameBuffer->Bind(false);
@@ -622,8 +640,7 @@ namespace Wiwa {
 			int dist = ray_from_world.distance2(p);
 
 			Object* obj = (Object*)allResults.m_collisionObject[i].getUserPointer();
-			std::string str = GetFilterTag(em.GetComponent<Wiwa::CollisionBody>(obj->id)->selfTag);
-			if (str == wall)
+			if (strcmp(obj->selfTagStr, "WALL") == 0)
 				return dist;
 			else
 				return -1;
