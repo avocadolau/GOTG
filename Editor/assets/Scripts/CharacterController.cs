@@ -47,6 +47,13 @@ namespace Game
         bool X_activated = false;
         bool X2_activated = false;
 
+        float camSpeed = 0.1f;
+
+        float referenceX;
+        float referenceZ;
+
+        Vector3 lastPlayerPos;
+
         void Init()
         {
             ref CharacterController character = ref GetComponent<CharacterController>();
@@ -58,7 +65,10 @@ namespace Game
             campos.x = transform.Position.x + 0 + 0;
             campos.z = transform.Position.z -40 + 20;
 
-            
+            referenceZ = transform.Position.z;
+            referenceX = transform.Position.x;
+
+            lastPlayerPos = transform.Position;
 
             CameraManager.SetPosition(cam_id, campos);
             CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
@@ -90,10 +100,10 @@ namespace Game
 
             if(rayCastTimer > 250.0f)
             {
-                leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 40, transform.Position.y, transform.Position.z));
-                rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 40, transform.Position.y, transform.Position.z));
-                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 40));
-                lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 40));
+                leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 15, transform.Position.y, transform.Position.z));
+                rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 15, transform.Position.y, transform.Position.z));
+                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 15));
+                lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 15));
 
                 rayCastTimer = 0;
                 //Console.WriteLine("Left ray Wall distance" + leftRayWallDistance);
@@ -157,7 +167,6 @@ namespace Game
             Vector3 direction = new Vector3(0, 0, 0);
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
-
             if (Input.IsKeyDown(KeyCode.W))
             {
                 PlayAudioEvent("player_walk");
@@ -180,96 +189,136 @@ namespace Game
             }
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
-            
-            if (Input.IsKeyDown(KeyCode.W))
-            {
-                if (upperRayWallDistance != -1)
-                {
-                    campos.z += ((direction.z / 500) * (upperRayWallDistance)) / 800; // +
-                }
-                else if (upperRayWallDistance == -1)
-                {
-                    campos.z += ((direction.z / 500) * (1600)) / 800; // +
-                }
 
-                //Console.WriteLine("Zw direction: " + ((direction.z / 500) * (100)) / 600);
-            }
-            else if (Input.IsKeyDown(KeyCode.S))
-            {
-                //campos.z += (direction.z / 500) * Math.Sqrt(lowerRayWallDistance, 5); // -
+            //if (Input.IsKeyDown(KeyCode.W))
+            //{
+            //    if (upperRayWallDistance != -1)
+            //    {
+            //        campos.z += ((direction.z / 500) * (upperRayWallDistance)) / 800; // +
+            //    }
+            //    else if (upperRayWallDistance == -1)
+            //    {
+            //        campos.z += ((direction.z / 500) * (1600)) / 800; // +
+            //    }
+            //
+            //    //Console.WriteLine("Zw direction: " + ((direction.z / 500) * (100)) / 600);
+            //}
+            //else if (Input.IsKeyDown(KeyCode.S))
+            //{
+            //    //campos.z += (direction.z / 500) * Math.Sqrt(lowerRayWallDistance, 5); // -
+            //
+            //    if (lowerRayWallDistance != -1)
+            //    {
+            //        campos.z += ((direction.z / 500) * (lowerRayWallDistance)) / 800; // -
+            //    }
+            //    else if (lowerRayWallDistance == -1)
+            //    {
+            //        campos.z += ((direction.z / 500) * (1600)) / 800; // -
+            //    }
+            //    //Console.WriteLine("Zs direction: " + ((direction.z / 500) * (100)) / 600);
+            //}
+            //if (Input.IsKeyDown(KeyCode.A))
+            //{
+            //    //campos.x += (direction.x / 500) * Math.Sqrt(leftRayWallDistance); // +
+            //
+            //    if (leftRayWallDistance != -1)
+            //    {
+            //        campos.x += ((direction.x / 500) * (leftRayWallDistance)) / 800; // +
+            //    }
+            //    else if (leftRayWallDistance == -1)
+            //    {
+            //        campos.x += ((direction.x / 500) * (1600)) / 800; // +
+            //    }
+            //
+            //    //Console.WriteLine("Xa direction: " + ((direction.x / 500) * (100)) / 600);
+            //}
+            //else if (Input.IsKeyDown(KeyCode.D))
+            //{
+            //    //campos.x += (direction.x / 500) * Math.Sqrt(rightRayWallDistance, 5); // -
+            //
+            //    if (rightRayWallDistance != -1)
+            //    {
+            //        campos.x += ((direction.x / 500) * (rightRayWallDistance)) / 800; // -
+            //    }
+            //    else if (rightRayWallDistance == -1)
+            //    {
+            //        campos.x += ((direction.x / 500) * (1600)) / 800; // -
+            //    }
+            //
+            //    //Console.WriteLine("Xd direction: " + ((direction.x / 500) * (100)) / 600);
+            //}
 
-                if (lowerRayWallDistance != -1)
-                {
-                    campos.z += ((direction.z / 500) * (lowerRayWallDistance)) / 800; // -
-                }
-                else if (lowerRayWallDistance == -1)
-                {
-                    campos.z += ((direction.z / 500) * (1600)) / 800; // -
-                }
-                //Console.WriteLine("Zs direction: " + ((direction.z / 500) * (100)) / 600);
-            }
-            if (Input.IsKeyDown(KeyCode.A))
+            //if(transform.Position.z - campos.z > 40 || Z_activated == true)
+            //{
+            //    campos.z += 0.1f;
+            //    Z_activated = true;
+            //}
+            //else if (transform.Position.z - campos.z < 5 || Z2_activated == true)
+            //{
+            //    campos.z  -= 0.1f;
+            //    Z2_activated = true;
+            //}
+            //if (transform.Position.z - campos.z > 10 && transform.Position.z - campos.z < 35)
+            //{
+            //    Z_activated = false;
+            //    Z2_activated = false;
+            //}
+            //
+            //if (transform.Position.x - campos.x > 30 || X_activated == true)
+            //{
+            //    campos.x += 0.1f;
+            //    X_activated = true;
+            //}
+            //else if (transform.Position.x - campos.x < -30 || X2_activated == true)
+            //{
+            //    campos.x -= 0.1f;
+            //    X2_activated = true;
+            //}
+            //if(transform.Position.x - campos.x < 25 && transform.Position.x - campos.x > -25)
+            //{
+            //    X_activated = false;
+            //    X2_activated = false;
+            //}
+            lastPlayerPos.y = transform.Position.y;
+
+            if (lowerRayWallDistance == -1 && upperRayWallDistance == -1)
             {
-                //campos.x += (direction.x / 500) * Math.Sqrt(leftRayWallDistance); // +
-
-                if (leftRayWallDistance != -1)
-                {
-                    campos.x += ((direction.x / 500) * (leftRayWallDistance)) / 800; // +
-                }
-                else if (leftRayWallDistance == -1)
-                {
-                    campos.x += ((direction.x / 500) * (1600)) / 800; // +
-                }
-
-                //Console.WriteLine("Xa direction: " + ((direction.x / 500) * (100)) / 600);
-            }
-            else if (Input.IsKeyDown(KeyCode.D))
-            {
-                //campos.x += (direction.x / 500) * Math.Sqrt(rightRayWallDistance, 5); // -
-
-                if (rightRayWallDistance != -1)
-                {
-                    campos.x += ((direction.x / 500) * (rightRayWallDistance)) / 800; // -
-                }
-                else if (rightRayWallDistance == -1)
-                {
-                    campos.x += ((direction.x / 500) * (1600)) / 800; // -
-                }
-
-                //Console.WriteLine("Xd direction: " + ((direction.x / 500) * (100)) / 600);
+                lastPlayerPos.z = transform.Position.z;
             }
 
-            if(transform.Position.z - campos.z > 40 || Z_activated == true)
+            if (leftRayWallDistance == -1 && rightRayWallDistance == -1)
             {
-                campos.z += 0.1f;
-                Z_activated = true;
-            }
-            else if (transform.Position.z - campos.z < 5 || Z2_activated == true)
-            {
-                campos.z  -= 0.1f;
-                Z2_activated = true;
-            }
-            if (transform.Position.z - campos.z > 10 && transform.Position.z - campos.z < 35)
-            {
-                Z_activated = false;
-                Z2_activated = false;
+                lastPlayerPos.x = transform.Position.x;
             }
 
-            if (transform.Position.x - campos.x > 30 || X_activated == true)
-            {
-                campos.x += 0.1f;
-                X_activated = true;
-            }
-            else if (transform.Position.x - campos.x < -30 || X2_activated == true)
-            {
-                campos.x -= 0.1f;
-                X2_activated = true;
-            }
-            if(transform.Position.x - campos.x < 25 && transform.Position.x - campos.x > -25)
-            {
-                X_activated = false;
-                X2_activated = false;
-            }
+            float minCamVelocity = 0.0f;
+            float maxCamVelocity = 0.3f;  
+
+            float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 20), 0, 25);
+            float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 25);
+
+            float finalCamSpeed_X = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_X);
+            float finalCamSpeed_Z = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
+
+            campos.z += finalCamSpeed_Z;
+            campos.x += finalCamSpeed_X;
+            //if (transform.Position.z - campos.z > 20)
+            //{
+            //    campos.z += finalCamSpeed_Z; // +
+            //}
+            //else if (transform.Position.z - campos.z < 15)
+            //{
+            //    campos.z += finalCamSpeed_Z; // -
+            //}
+            //
+            //if (transform.Position.x - campos.x > 5)
+            //{
+            //    campos.x += finalCamSpeed_X; // +
+            //}
+            //else if (transform.Position.x - campos.x < -5)
+            //{
+            //    campos.x += finalCamSpeed_X; // -
+            //}
 
             /*
             if(transform.Position.z - campos.z > 40)
@@ -387,6 +436,16 @@ namespace Game
                 wallCollision = false;
                 //Console.WriteLine("wall UN-hit!!! ");
             }
+        }
+
+        float Interpolate(float value1, float value2, float weight)
+        {
+            return value1 * (1 - weight) + value2 * weight;
+        }
+
+        float NormalizedValue(float value, float min, float max)
+        {
+            return (value - min) / (max - min);
         }
     }
 }
