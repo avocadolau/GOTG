@@ -33,8 +33,18 @@ namespace Game
     class CharacterControllerSystem : Behaviour
     {
         Vector3 campos;
-        bool collision = false;
+        bool wallCollision = false;
         int lastDirection = -1;
+
+        float rayCastTimer = 0;
+        float upperRayWallDistance;
+        float lowerRayWallDistance;
+        float leftRayWallDistance;
+        float rightRayWallDistance;
+
+        float Z_accel;
+        float X_accel;
+
         void Init()
         {
             ref CharacterController character = ref GetComponent<CharacterController>();
@@ -45,6 +55,8 @@ namespace Game
             campos.y = transform.Position.y + 20 + 35;
             campos.x = transform.Position.x + 0 + 0;
             campos.z = transform.Position.z -40 + 20;
+
+            
 
             CameraManager.SetPosition(cam_id, campos);
             CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
@@ -71,6 +83,20 @@ namespace Game
 
             Fire(ref character);
             //Console.WriteLine("Finish Update character controller");
+
+            rayCastTimer += Time.DeltaTimeMS();
+
+            if(rayCastTimer > 250.0f)
+            {
+                leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 40, transform.Position.y, transform.Position.z));
+                rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 40, transform.Position.y, transform.Position.z));
+                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 40));
+                lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 40));
+
+                rayCastTimer = 0;
+                //Console.WriteLine("Left ray Wall distance" + leftRayWallDistance);
+            }
+            
         }
         private void Fire(ref CharacterController character)
         {
@@ -127,6 +153,8 @@ namespace Game
         private Vector3 GetInputFromKeyboard(Vector3 forward, Vector3 right, float translation)
         {
             Vector3 direction = new Vector3(0, 0, 0);
+            ref Transform3D transform = ref GetComponent<Transform3D>();
+
 
             if (Input.IsKeyDown(KeyCode.W))
             {
@@ -154,70 +182,81 @@ namespace Game
             }
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
-
-            if(collision == false)
+            //Console.WriteLine("leftRayWallDistance: " + leftRayWallDistance);
+            if (Input.IsKeyDown(KeyCode.W))
             {
-                if (Input.IsKeyDown(KeyCode.W))
+                if (upperRayWallDistance != -1)
                 {
-                    campos.z += direction.z / 300; // +
+                    campos.z += ((direction.z / 500) * (upperRayWallDistance)) / 800; // +
                 }
-                else if (Input.IsKeyDown(KeyCode.S))
+                else if (upperRayWallDistance == -1)
                 {
-                    campos.z += direction.z / 300; // -
+                    campos.z += ((direction.z / 500) * (1600)) / 800; // +
                 }
-                if (Input.IsKeyDown(KeyCode.A))
+
+                //Console.WriteLine("Zw direction: " + ((direction.z / 500) * (100)) / 600);
+            }
+            else if (Input.IsKeyDown(KeyCode.S))
+            {
+                //campos.z += (direction.z / 500) * Math.Sqrt(lowerRayWallDistance, 5); // -
+
+                if (lowerRayWallDistance != -1)
                 {
-                    campos.x += direction.x / 300; // +
+                    campos.z += ((direction.z / 500) * (lowerRayWallDistance)) / 800; // -
                 }
-                else if (Input.IsKeyDown(KeyCode.D))
+                else if (lowerRayWallDistance == -1)
                 {
-                    campos.x += direction.x / 300; // -
+                    campos.z += ((direction.z / 500) * (1600)) / 800; // -
                 }
+                //Console.WriteLine("Zs direction: " + ((direction.z / 500) * (100)) / 600);
+            }
+            if (Input.IsKeyDown(KeyCode.A))
+            {
+                //campos.x += (direction.x / 500) * Math.Sqrt(leftRayWallDistance); // +
+
+                if (leftRayWallDistance != -1)
+                {
+                    campos.x += ((direction.x / 500) * (leftRayWallDistance)) / 800; // +
+                }
+                else if (leftRayWallDistance == -1)
+                {
+                    campos.x += ((direction.x / 500) * (1600)) / 800; // +
+                }
+
+                //Console.WriteLine("Xa direction: " + ((direction.x / 500) * (100)) / 600);
+            }
+            else if (Input.IsKeyDown(KeyCode.D))
+            {
+                //campos.x += (direction.x / 500) * Math.Sqrt(rightRayWallDistance, 5); // -
+
+                if (rightRayWallDistance != -1)
+                {
+                    campos.x += ((direction.x / 500) * (rightRayWallDistance)) / 800; // -
+                }
+                else if (rightRayWallDistance == -1)
+                {
+                    campos.x += ((direction.x / 500) * (1600)) / 800; // -
+                }
+
+                //Console.WriteLine("Xd direction: " + ((direction.x / 500) * (100)) / 600);
             }
 
-            if(collision == true)
+            if(transform.Position.z - campos.z > 40)
             {
-                Console.WriteLine("Z direction: " + direction.z);
-                Console.WriteLine("X direction: " + direction.x);
-
-                //if (lastDirection == 2)
-                //{
-                //    direction.z--;
-                //}
-                //if (lastDirection == 1)
-                //{
-                //    direction.z++;
-                //}
-                //if (lastDirection == 4)
-                //{
-                //    direction.x--;
-                //}
-                //if (lastDirection == 3)
-                //{
-                //    direction.x++;
-                //}
-
-                if (lastDirection == 2)
-                {
-                    direction.z += 10;
-                }
-                if (lastDirection == 1)
-                {
-                    direction.z -= 10;
-                }
-                if (lastDirection == 4)
-                {
-                    direction.x += 10;
-                }
-                if (lastDirection == 3)
-                {
-                    direction.x -= 10;
-                }
+                campos.z += 0.1f;
             }
-
-            //campos.x = transform.Position.x + character.camXOffset + 0;
-            //campos.y = transform.Position.y + character.camYOffset + 35;
-            //campos.z = transform.Position.z + character.camZOffset + 20;
+            if (transform.Position.z - campos.z < 5)
+            {
+                campos.z  -= 0.1f;
+            }
+            if (transform.Position.x - campos.x > 30)
+            {
+                campos.x += 0.1f;
+            }
+            if (transform.Position.x - campos.x < -30)
+            {
+                campos.x -= 0.1f;
+            }
 
             CameraManager.SetPosition(cam_id, campos);
             CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
@@ -302,19 +341,19 @@ namespace Game
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            if (id1 == m_EntityId && PhysicsManager.GetEntityTagString(id2) == "COLLISION_WALL")
+            if (id1 == m_EntityId && str2 == "WALL")
             {
-                collision = true;
-                Console.WriteLine("wall hit!!! ");
+                wallCollision = true;
+                //Console.WriteLine("wall hit!!! ");
             }
         }
         
         void OnCollisionExit(EntityId id1, EntityId id2, string str1, string str2)
         {
-            if (id1 == m_EntityId && PhysicsManager.GetEntityTagString(id2) == "COLLISION_WALL")
+            if (id1 == m_EntityId && str2 == "WALL")
             {
-                collision = false;
-                Console.WriteLine("wall UN-hit!!! ");
+                wallCollision = false;
+                //Console.WriteLine("wall UN-hit!!! ");
             }
         }
     }
