@@ -59,13 +59,12 @@ namespace Wiwa
 			{
 				state = GuiControlState::FOCUSED;
 
-				if (Wiwa::Input::IsMouseButtonPressed(0) && refreshTime > 60)
+				if (Wiwa::Input::IsMouseButtonReleased(0))
 				{
 					state = GuiControlState::PRESSED;
 					checked = !checked;
 					void* params[] = { &checked };
 					callback->Execute(params);
-					refreshTime = 0;
 				}
 				else
 				{
@@ -75,7 +74,6 @@ namespace Wiwa
 		}
 
 		SwapTexture();
-		refreshTime++;
 
 		return false;
 	}

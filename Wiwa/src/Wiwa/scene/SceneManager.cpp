@@ -306,7 +306,7 @@ namespace Wiwa
 					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					gm.CreateGuiControl_Text(guiType, id, position, textureGui.c_str(),canvas.at(i)->id, callbackID);
+					gm.CreateGuiControl_Text(guiType, id, position, textureGui.c_str(),canvas.at(i)->id);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
 					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID);

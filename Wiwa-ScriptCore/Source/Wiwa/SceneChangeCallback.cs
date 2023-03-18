@@ -8,8 +8,8 @@ namespace Wiwa
     {
         static void OnExecute(float x)
         {
-            System.Console.WriteLine("PlayGame called");
-            Wiwa.InternalCalls.ChangeScene(0);
+            System.Console.WriteLine($"value of slider:{x}");
+            //Wiwa.InternalCalls.ChangeScene(0);
            
         }
     }
@@ -17,10 +17,10 @@ namespace Wiwa
     [Callback]
     class PlayGame
     {
-        static void OnExecute(int x, int y)
+        static void OnExecute(bool ret)
         {
-            System.Console.WriteLine("PlayGame called");
-            Wiwa.InternalCalls.Play();
+            System.Console.WriteLine($"value of checkbox:{ret}");
+           // Wiwa.InternalCalls.Play();
         }
     }
 
@@ -29,8 +29,8 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            System.Console.WriteLine("Quit called");
-            Wiwa.InternalCalls.Quit();
+            System.Console.WriteLine("button");
+            //Wiwa.InternalCalls.Quit();
         }
     }
 }

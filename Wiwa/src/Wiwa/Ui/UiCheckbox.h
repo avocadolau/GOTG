@@ -24,6 +24,5 @@ namespace Wiwa
 
 		bool checked = false;
 
-		int refreshTime = 0;
 	};
 }

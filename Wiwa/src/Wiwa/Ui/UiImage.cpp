@@ -47,7 +47,7 @@ namespace Wiwa
 			{
 				state = GuiControlState::FOCUSED;
 
-				if (Wiwa::Input::IsMouseButtonPressed(0))
+				if (Wiwa::Input::IsMouseButtonReleased(0))
 				{
 					state = GuiControlState::PRESSED;
 				}
