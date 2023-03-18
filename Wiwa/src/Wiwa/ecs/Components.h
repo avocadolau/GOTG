@@ -21,3 +21,8 @@
 #include "components/ColliderSphere.h"
 #include "components/ColliderCylinder.h"
 #include "components/RayCast.h"
+
+//Particle components
+#include "components/Billboard.h"
+#include "components/ParticleEmitter.h"
+
