@@ -481,7 +481,9 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				Wiwa::Callback* cb = app.getCallbackAt(n);
 				if (cb->getParamCount() == 1) {
-					if (cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
+					const Type* param = cb->getParamAt(0);
+
+					if (param->hash == (size_t)TypeHash::Bool) {
 						if (ImGui::Selectable(cb->getName().c_str(), is_selected))
 						{
 							current_item = n;

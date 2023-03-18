@@ -55,7 +55,8 @@ namespace Wiwa
 				{
 					state = GuiControlState::PRESSED;
 
-					callback->Execute();
+					if(callback)
+						callback->Execute();
 				}
 			}
 			else
