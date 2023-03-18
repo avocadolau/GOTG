@@ -35,7 +35,7 @@ namespace Wiwa {
 
 		Bone* FindBone(const std::string& name);
 
-		inline float GetTicksPerSecond() { return m_TicksPerSecond; }
+		inline int GetTicksPerSecond() { return m_TicksPerSecond; }
 
 		inline float GetDuration() { return m_Duration; }
 
