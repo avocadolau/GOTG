@@ -39,6 +39,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetMouseYDeltaIntr);
 		WI_ADD_INTERNAL_CALL(IsButtonPressedIntr);
 		WI_ADD_INTERNAL_CALL(GetAxisIntr);
+		WI_ADD_INTERNAL_CALL(GetRawAxisIntr);
 
 		// ECS
 		WI_ADD_INTERNAL_CALL(GetComponent);

@@ -49,7 +49,9 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool IsButtonPressedIntr(Gamepad gamepad, KeyCode button);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static float GetAxisIntr(Gamepad gamepad, GamepadAxis axis);
+        internal extern static float GetAxisIntr(Gamepad gamepad, GamepadAxis axis, float deadzone);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetRawAxisIntr(Gamepad gamepad, GamepadAxis axis, float deadzone);
         #endregion
         #region Time
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
