@@ -160,6 +160,8 @@ GuiType UIPanel::GetSelectedElementType(const char* current_item)
 	{
 		return GuiType::TEXT;
 	}
+
+	return GuiType::TEXT;
 }
 
 
