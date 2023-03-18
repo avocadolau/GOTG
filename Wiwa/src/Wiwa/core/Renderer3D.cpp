@@ -403,6 +403,7 @@ namespace Wiwa
 		glBindVertexArray(0);*/
 
 		material->UnBind();
+		glActiveTexture(GL_TEXTURE1);
 		camera->frameBuffer->Unbind();
 	}
 
