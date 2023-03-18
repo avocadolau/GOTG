@@ -196,7 +196,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			// L12b: TODO 5: Fill a list of all adjancent nodes
 			PathList adjacent;
-			int yes = (int)node->FindWalkableAdjacents(adjacent);
+			uint32_t yes = node->FindWalkableAdjacents(adjacent);
 
 
 			// L12b: TODO 6: Iterate adjancent nodes:
@@ -242,7 +242,7 @@ bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 	bool ret = false;
 
 	if ((pos.x >= 0) && (pos.x <= (int)m_mapData.width) &&
-		(pos.y >= 0) && (pos.y <= (int)m_mapData.width))
+		(pos.y >= 0) && (pos.y <= (int)m_mapData.height))
 	{
 		ret = true;
 	}
