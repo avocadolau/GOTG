@@ -30,6 +30,11 @@ namespace Wiwa
         internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId LoadPrefabIntr(string file);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SavePrefabIntr(EntityId id, string file);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -64,6 +69,22 @@ namespace Wiwa
         internal extern static void SetTimeScaleIntr(float scale);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static float GetTimeScaleIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PauseIntr();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PauseUnPauseIntr();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void UnPauseIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool IsPausedIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool IsPlayingIntr();
         #endregion
         #region Camera
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

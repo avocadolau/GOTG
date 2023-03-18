@@ -1,8 +1,5 @@
-﻿using System;
-
-namespace Wiwa
+﻿namespace Wiwa
 {
-    using System.Reflection;
     using EntityId = System.UInt64;
 
     public class Behaviour
@@ -127,6 +124,15 @@ namespace Wiwa
         public void AddAudioSource(string ev_name, bool playOnAwake, bool isDefaultListener)
         {
             InternalCalls.AddAudioSource(m_EntityId, ev_name, playOnAwake, isDefaultListener);
+        }
+
+        public EntityId LoadPrefab(string file)
+        {
+            return InternalCalls.LoadPrefabIntr(file);
+        }
+        public void SavePrefab(EntityId id, string file)
+        {
+            InternalCalls.SavePrefabIntr(id, file);
         }
     }
 }

@@ -50,6 +50,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CreateEntity);
 		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
+		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
+		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
@@ -57,6 +59,14 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SetFPSIntr);
 		WI_ADD_INTERNAL_CALL(SetTimeScaleIntr);
 		WI_ADD_INTERNAL_CALL(GetTimeScaleIntr);
+		WI_ADD_INTERNAL_CALL(PlayIntr);
+		WI_ADD_INTERNAL_CALL(StopIntr);
+		WI_ADD_INTERNAL_CALL(PauseIntr);
+		WI_ADD_INTERNAL_CALL(UnPauseIntr);
+		WI_ADD_INTERNAL_CALL(PauseUnPauseIntr);
+		WI_ADD_INTERNAL_CALL(IsPausedIntr);
+		WI_ADD_INTERNAL_CALL(IsPlayingIntr);
+
 
 		// Camera
 		WI_ADD_INTERNAL_CALL(GetActiveCamera);
