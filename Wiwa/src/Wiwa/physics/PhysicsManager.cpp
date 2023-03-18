@@ -60,7 +60,7 @@ namespace Wiwa {
 
 		AddFilterTag("COLLISION_EVERYTHING");
 
-		WI_INFO("Physics Manager Init");
+		//WI_INFO("Physics Manager Init");
 		
 		return true;
 	}
@@ -76,12 +76,25 @@ namespace Wiwa {
 		//Step simulation
 		float dt = 1.0f/60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
-		for (int i = 0; i < SUB_STEPS; i++)
+		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
+		m_World->performDiscreteCollisionDetection();
+		ResolveContacts();
+		static int o = 0;
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		{
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
+			o++;
+		}
+		
+		// Commented because it causes clipping :(
+		/*for (int i = 0; i < SUB_STEPS; i++)
 		{
 			UpdateObjects(dt / SUB_STEPS);
 			m_World->performDiscreteCollisionDetection();
 			ResolveContacts();
-		}
+		}*/
 		
 		return true;
 	}
@@ -103,8 +116,8 @@ namespace Wiwa {
 				//WI_INFO("c2 : {}", contactManifold->getContactPoint(0).m_contactMotion2);
 				btVector3 toSubstract = contactManifold->getContactPoint(0).m_normalWorldOnB * contactManifold->getContactPoint(0).getDistance();
 
-				ResolveContactA(obA, toSubstract, (obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
-				ResolveContactB(obB, toSubstract, (obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
+				ResolveContactA(obA, toSubstract, (obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
+				ResolveContactB(obB, toSubstract, (obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
 				//WI_INFO("d : {}", contactManifold->getContactPoint(0).getDistance());
 				size_t idA = obA->getUserIndex();
 				size_t idB = obB->getUserIndex();
@@ -163,22 +176,22 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger)
+	bool PhysicsManager::ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b)
 	{
 		if (is_static)
 			return false;
-		if (is_trigger)
+		if (is_trigger_a || is_trigger_b)
 			return false;
 
 		obj_a->getWorldTransform().setOrigin(obj_a->getWorldTransform().getOrigin() - vec);
 		return true;
 	}
 
-	bool PhysicsManager::ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger)
+	bool PhysicsManager::ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b)
 	{
 		if (is_static)
 			return false;
-		if (is_trigger)
+		if (is_trigger_a || is_trigger_b)
 			return false;
 
 		obj_a->getWorldTransform().setOrigin(obj_a->getWorldTransform().getOrigin() + vec);
@@ -212,7 +225,8 @@ namespace Wiwa {
 
 			// Get the position from the engine
 			glm::vec3 posEngine = transform3d->localPosition;
-			glm::quat rotEngine = glm::quat(transform3d->localMatrix);
+			//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
+			glm::quat rotEngine = glm::quat(glm::radians(transform3d->localRotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
 			// Get the offset
@@ -254,9 +268,11 @@ namespace Wiwa {
 			transform3d->localPosition = posEngine;
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			//bulletTransform.setRotation(rotationBullet);
+
 			glm::vec3 eulerAngles;
-			bulletTransform.getRotation().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
-			transform3d->localRotation = glm::degrees(eulerAngles);
+			bulletTransform.getRotation().normalized().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
+			//WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
+			//transform3d->localRotation = glm::degrees(eulerAngles);
 			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
 
 			(*item)->collisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
@@ -379,6 +395,7 @@ namespace Wiwa {
 		collisionObject->setUserIndex(id);
 
 		AddBodyInternal(id, collisionObject, colShape, rigid_body);
+		AddBodyToLog(FindByEntityId(id));
 		return true;
 	}
 
@@ -410,6 +427,13 @@ namespace Wiwa {
 	bool PhysicsManager::SetVelocity(Object* body, const glm::vec3 velocity)
 	{
 		body->velocity = btVector3(velocity.x, velocity.y, velocity.z);
+		return true;
+	}
+
+	bool PhysicsManager::SetRotation(Object* body, const glm::vec3 euler_angles)
+	{
+		glm::quat newRot = glm::quat(glm::radians(euler_angles));;
+		body->collisionObject->getWorldTransform().setRotation(btQuaternion(newRot.x, newRot.y, newRot.z, newRot.w));
 		return true;
 	}
 
@@ -497,18 +521,15 @@ namespace Wiwa {
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 		camera->frameBuffer->Bind(false);
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(glm::value_ptr(camera->getView()));
 
-		//m_Debug_draw->lineDisplayShader->Bind();
-		////m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Model, transform);
-		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-		//m_Debug_draw->lineDisplayShader->setUniform(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
 		m_World->debugDrawWorld();
-		//m_Debug_draw->lineDisplayShader->UnBind();
+		m_Debug_draw->lineDisplayShader->UnBind();
 		camera->frameBuffer->Unbind();
 	}
 
@@ -527,6 +548,30 @@ namespace Wiwa {
 	{
 		filterStrings.erase(filterStrings.begin() + index);
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);
+	}
+
+	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
+	{
+		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		camera->frameBuffer->Bind(false);
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
+		
+		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
+		btCollisionWorld::ClosestRayResultCallback closestHit = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
+		m_World->rayTest(ray_from_world, ray_to_world, closestHit);
+		if (closestHit.hasHit())
+		{
+			btVector3 p = ray_from_world.lerp(ray_to_world, closestHit.m_closestHitFraction);
+			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
+			m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
+		}
+
+		camera->frameBuffer->Unbind();
 	}
 
 	bool PhysicsManager::AddBodyToLog(Object* body_to_log)
@@ -561,79 +606,82 @@ namespace Wiwa {
 	}
 }
 
-//void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
-//{
-//	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-//
-//	// Create Vertex Array Object
-//	GLuint vao;
-//	glGenVertexArrays(1, &vao);
-//	glBindVertexArray(vao);
-//
-//	// Create a Vertex Buffer Object and copy the vertex data to it
-//	GLuint vbo;
-//	glGenBuffers(1, &vbo);
-//	GLfloat lineVertices[] = {
-//		from.x(), from.y(), from.z(),
-//		to.x(), to.y(), to.z()
-//	};
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
-//
-//	// Create an element array
-//	GLuint ebo;
-//	glGenBuffers(1, &ebo);
-//	GLuint elements[] = {
-//		0, 1,
-//	};
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
-//
-//	glEnableVertexAttribArray(0);
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(lineVertices), (void*)0);
-//	
-//	glBindVertexArray(vao);
-//	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
-//	glBindVertexArray(0);
-//
-//	glDeleteVertexArrays(1, &vao);
-//	glDeleteBuffers(1, &vbo);
-//	glDeleteBuffers(1, &ebo);
-//}
-
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
 	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-	//GLfloat lineVertices[] = {
-	//	from.x(), from.y(), from.z(),
-	//	to.x(), to.y(), to.z()
-	//};
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glVertexPointer
-	glUseProgram(0);
-	glColor3f(255, 0, 0);
-	glLineWidth(3.0f);
-	glBegin(GL_LINES);
-	glVertex3f(from.getX(), from.getY(), from.getZ());
-	glVertex3f(to.getX(), to.getY(), to.getZ());
-	glEnd();
-	glLineWidth(1.0f);
 
+	// Create Vertex Array Object
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	// Create a Vertex Buffer Object and copy the vertex data to it
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	GLfloat lineVertices[] = {
+		from.x(), from.y(), from.z(),
+		to.x(), to.y(), to.z()
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
+
+	// Create an element array
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	GLuint elements[] = {
+		0, 1,
+	};
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	
+	glBindVertexArray(vao);
+	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ebo);
 }
+
+//void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+//{
+//	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+//	//GLfloat lineVertices[] = {
+//	//	from.x(), from.y(), from.z(),
+//	//	to.x(), to.y(), to.z()
+//	//};
+//	//glEnableClientState(GL_VERTEX_ARRAY);
+//	//glVertexPointer
+//	/*glUseProgram(0);
+//	glColor3f(255, 0, 0);
+//	glLineWidth(3.0f);
+//	glBegin(GL_LINES);
+//	glVertex3f(from.getX(), from.getY(), from.getZ());
+//	glVertex3f(to.getX(), to.getY(), to.getZ());
+//	glEnd();
+//	glLineWidth(1.0f);*/
+//
+//}
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {
-	glUseProgram(0);
+	drawSphere(point_onB, 0.1, btVector4(0, 1, 1, 1));
+	drawLine(point_onB, point_onB + normal_onB, btVector4(0, 1, 1, 1));
+	/*glUseProgram(0);
 	glColor3f(0, 0, 255);
 	glPointSize(8.0f);
 	glBegin(GL_POINT);
 	glVertex3f(point_onB.getX(), point_onB.getY(), point_onB.getZ());
 	glEnd();
-	glPointSize(1.0f);
+	glPointSize(1.0f);*/
 	//point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
 	//point.color.Set(color.getX(), color.getY(), color.getZ());
 	//point.Render();
+
 }
 
 void DebugDrawer::reportErrorWarning(const char* warning_string)

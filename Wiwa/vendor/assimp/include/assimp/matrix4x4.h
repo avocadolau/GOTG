@@ -121,6 +121,29 @@ public:
     template <typename TOther>
     operator aiMatrix4x4t<TOther> () const;
 
+    const float* ToPtr() {
+
+        float* data = new float[16];
+        data[0] = a1;
+        data[1] = a2;
+        data[2] = a3;
+        data[3] = a4;
+        data[4] = b1;
+        data[5] = b2;
+        data[6] = b3;
+        data[7] = b4;
+        data[8] = c1;
+        data[9] = c2;
+        data[10] = c3;
+        data[11] = c4;
+        data[12] = d1;
+        data[13] = d2;
+        data[14] = d3;
+        data[15] = d4;
+
+        return data;
+    };
+
     // -------------------------------------------------------------------
     /** @brief Transpose the matrix */
     aiMatrix4x4t& Transpose();

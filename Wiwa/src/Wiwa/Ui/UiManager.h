@@ -39,13 +39,16 @@ namespace Wiwa
 		//Method for canvas
 		GuiCanvas* CreateGuiCanvas(unsigned int id,bool active);
 		//Method for sliders
-		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds,unsigned int canvas_id);
+		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds,unsigned int canvas_id, int callbackID);
 		//Method for buttons and checkboxes
-		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id);
+		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID);
 		//Method for strings
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id);
 
+		void SwapSelectedCanvas(GuiCanvas* canvasToSelect);
 		void DestroyGuiControl(GuiControl* control, GuiCanvas* canvas);
+		void DestroyCanvas(GuiCanvas* canvas);
+		void RemoveCanvas(GuiCanvas* canvasToDestroy);
 		void RemoveControl(GuiControl* control);
 
 		Text* InitFont(const char* path,char* word);
@@ -54,9 +57,10 @@ namespace Wiwa
 		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
 
 
+		void SetCallback(GuiCanvas* canvas, GuiControl* control, size_t hash);
 	public:
 		std::vector<GuiCanvas*> canvas;
-		
+		std::vector<GuiCanvas*> canvasToDestroy;
 		float accumulatedTime = 0.0f;
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;

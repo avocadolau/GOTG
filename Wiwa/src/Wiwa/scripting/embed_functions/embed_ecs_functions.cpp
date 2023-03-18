@@ -10,62 +10,105 @@
 #include <Wiwa/utilities/Log.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/core/Resources.h>
+#include <Wiwa/core/Application.h>
 
 #include <Wiwa/ecs/components/Mesh.h>
 
 #include "../MonoWiwaTranslations.h"
 
-byte* GetComponent(size_t id, MonoReflectionType* type)
+byte* GetComponent(size_t id, MonoReflectionType* type, void* scene)
 {
-	static std::unordered_map<size_t, Type*> s_ConvertedTypes;
-
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	// Take monotype
 	MonoType* compType = mono_reflection_type_get_type(type);
+
+	// Take type name
 	std::string typeName = mono_type_get_name(compType);
+
+	// Clear type's name
 	ClearName(typeName);
+
+	// Generate hash of type
 	size_t typeHash = FNV1A_HASH(typeName.c_str());
 
-	std::unordered_map<size_t, Type*>::iterator converted_type = s_ConvertedTypes.find(typeHash);
+	Wiwa::Application& app = Wiwa::Application::Get();
+	
+	const Type* t = app.GetComponentTypeH(typeHash);
 
-	Type* t = NULL;
+	// If reflected type is not a component, return NULL
+	if (!t) return nullptr;
 
-	if (converted_type == s_ConvertedTypes.end())
-	{
-		t = ConvertType(compType);
-
-		s_ConvertedTypes[typeHash] = t;
-	}
-	else
-	{
-		t = converted_type->second;
-	}
-
-	int alingment;
-
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
 	ComponentId compID = em.GetComponentId(t);
+
 	byte* comp = em.GetComponent(id, compID, t->size);
 
 	return comp;
 }
 
-size_t CreateEntity()
+Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoReflectionType* type, void* scene)
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+
+	Wiwa::EntityManager::ComponentIterator c_it = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+
+	// Take monotype
+	MonoType* compType = mono_reflection_type_get_type(type);
+
+	// Take type name
+	std::string typeName = mono_type_get_name(compType);
+
+	// Clear type's name
+	ClearName(typeName);
+
+	// Generate hash of type
+	size_t typeHash = FNV1A_HASH(typeName.c_str());
+
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	const Type* t = app.GetComponentTypeH(typeHash);
+
+	// If reflected type is not a component, return invalid iterator
+	if (!t) return c_it;
+
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+
+	c_it = em.GetComponentIterator(eid, typeHash);
+
+	return c_it;
+}
+
+byte* GetComponentByIterator(Wiwa::EntityManager::ComponentIterator iterator, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+
+	return em.GetComponentByIterator(iterator);
+}
+
+size_t CreateEntity(void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
 	return em.CreateEntity();
 }
 
-size_t CreateEntityNamed(MonoString* name_entity)
+size_t CreateEntityNamed(MonoString* name_entity, void* scene)
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 	char* name_p = mono_string_to_utf8(name_entity);
 	return em.CreateEntity(name_p);
 }
 
-void DestroyEntity(size_t eid)
+void DestroyEntity(size_t eid, void* scene)
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
 	em.DestroyEntity(eid);
 }
@@ -77,8 +120,10 @@ size_t LoadResourceModel(MonoString* str)
 	return Wiwa::Resources::Load<Wiwa::Model>(model);
 }
 
-void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat)
+void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat, void* scene)
 {
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+
 	char* model_p = mono_string_to_utf8(model);
 	char* mat_p = mono_string_to_utf8(mat);
 
@@ -91,13 +136,15 @@ void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat)
 	mesh.meshId = Wiwa::Resources::Load<Wiwa::Model>(mesh.mesh_path);
 	mesh.materialId = Wiwa::Resources::Load<Wiwa::Material>(mesh.mat_path);
 
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
 	em.AddComponent<Wiwa::Mesh>(eid, mesh);
 }
 
-byte* AddComponent(size_t id, MonoReflectionType* type)
+byte* AddComponent(size_t id, MonoReflectionType* type, void* scene)
 {
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+
 	static std::unordered_map<size_t, Type*> s_ConvertedTypes;
 
 	MonoType* compType = mono_reflection_type_get_type(type);
@@ -120,7 +167,7 @@ byte* AddComponent(size_t id, MonoReflectionType* type)
 		t = converted_type->second;
 	}
 
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
 	ComponentId compID = em.GetComponentId(t);
 
@@ -129,14 +176,16 @@ byte* AddComponent(size_t id, MonoReflectionType* type)
 	return comp;
 }
 
-void ApplySystem(size_t id, MonoReflectionType* type)
+void ApplySystem(size_t id, MonoReflectionType* type, void* scene)
 {
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+
 	MonoType* compType = mono_reflection_type_get_type(type);
 	std::string typeName = mono_type_get_name(compType);
 	ClearName(typeName);
 	size_t typeHash = FNV1A_HASH(typeName.c_str());
 
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
 	em.ApplySystem(id, typeHash);
 }

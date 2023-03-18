@@ -9,11 +9,11 @@ namespace Wiwa
 	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text) : GuiControl(scene, GuiControlType::TEXT, id)
 	{
 		this->position = bounds;
+		name = "Text";
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		text = new Text();
 		text = gm.InitFont("assets/Arial.ttf", (char*)string_text);
 		m_Scene = scene;
-		
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		

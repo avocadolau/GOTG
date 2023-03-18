@@ -30,6 +30,7 @@ IncludeDirs["assimp"] = "%{wks.location}/../../Wiwa/vendor/assimp/include"
 IncludeDirs["ImGuizmo"] = "%{wks.location}/../../Wiwa/vendor/imguizmo"
 IncludeDirs["GLI"] = "%{wks.location}/../../Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/../../Wiwa/vendor/Wwise/include"
+IncludeDirs["bullet"] = "%{wks.location}/../../Wiwa/vendor/bullet/include"
 
 project "WiwaGame"
 	kind "ConsoleApp"
@@ -54,12 +55,15 @@ project "WiwaGame"
 		"%{IncludeDirs.Wiwa}",
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.ImGuizmo}",
-		"%{IncludeDirs.filewatch}"
+		"%{IncludeDirs.filewatch}",
+		"%{IncludeDirs.Wwise}",
+		"%{IncludeDirs.bullet}"
 	}
 
 	links
 	{
-		"Wiwa"
+		"Wiwa",
+		"ImGui"
 	}
 
 	debugdir "%{wks.location}/build"

@@ -8,6 +8,7 @@
 #include <Wiwa/ecs/components/ColliderCylinder.h>
 #include <Wiwa/ecs/components/ColliderSphere.h>
 #include <Wiwa/ecs/components/ColliderCapsule.h>
+#include <Wiwa/ecs/components/RayCast.h>
 #include "Wiwa/ecs/components/Transform3D.h"
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
@@ -23,7 +24,7 @@
 #define MAX_BITS 32
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f)
-#define SUB_STEPS 6
+#define SUB_STEPS 3
 class DebugDrawer;
 class Camera;
 namespace Wiwa {
@@ -65,8 +66,8 @@ namespace Wiwa {
 		bool ResolveContacts();
 
 	private:
-		bool ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger);
-		bool ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger);
+		bool ResolveContactA(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b);
+		bool ResolveContactB(btCollisionObject* obj_a, const btVector3& vec, const bool is_static, const bool is_trigger_a, const bool is_trigger_b);
 	public:
 
 		bool UpdateObjects(const float dt);
@@ -94,6 +95,8 @@ namespace Wiwa {
 		// Manipulate bodies
 		bool SetVelocity(Object*body, const glm::vec3 velocity);
 
+		bool SetRotation(Object* body, const glm::vec3 euler_angles);
+
 		//void SetTrigger(MyObject* body, const bool isTrigger);
 
 		Object* FindByEntityId(size_t id);
@@ -106,11 +109,14 @@ namespace Wiwa {
 
 		bool getInit();
 
+		// Query world
 		void DebugDrawWorld();
 
 		bool AddFilterTag(const char* str);
 		
 		void RemoveFilterTag(const int index);
+
+		void RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
 	private:
 		bool m_Debug;

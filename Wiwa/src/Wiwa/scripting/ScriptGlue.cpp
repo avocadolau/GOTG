@@ -18,6 +18,7 @@
 #include "embed_functions/embed_physics_functions.h"
 #include "embed_functions/embed_screen_functions.h"
 #include "embed_functions/embed_ui_functions.h"
+#include "embed_functions/embed_scene_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -38,9 +39,12 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetMouseYDeltaIntr);
 		WI_ADD_INTERNAL_CALL(IsButtonPressedIntr);
 		WI_ADD_INTERNAL_CALL(GetAxisIntr);
+		WI_ADD_INTERNAL_CALL(GetRawAxisIntr);
 
 		// ECS
 		WI_ADD_INTERNAL_CALL(GetComponent);
+		WI_ADD_INTERNAL_CALL(GetComponentIterator);
+		WI_ADD_INTERNAL_CALL(GetComponentByIterator);
 		WI_ADD_INTERNAL_CALL(AddComponent);
 		WI_ADD_INTERNAL_CALL(ApplySystem);
 		WI_ADD_INTERNAL_CALL(CreateEntity);
@@ -51,6 +55,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
 		WI_ADD_INTERNAL_CALL(GetTimeIntr);
 		WI_ADD_INTERNAL_CALL(SetFPSIntr);
+		WI_ADD_INTERNAL_CALL(SetTimeScaleIntr);
+		WI_ADD_INTERNAL_CALL(GetTimeScaleIntr);
 
 		// Camera
 		WI_ADD_INTERNAL_CALL(GetActiveCamera);
@@ -62,6 +68,10 @@ namespace Wiwa
 		// Resources
 		WI_ADD_INTERNAL_CALL(LoadResourceModel);
 		WI_ADD_INTERNAL_CALL(AddMeshToEntity);
+
+		// Scene
+		WI_ADD_INTERNAL_CALL(LoadSceneByIndex);
+		WI_ADD_INTERNAL_CALL(LoadSceneByName);
 
 		//Screen
 
@@ -79,13 +89,20 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetHeightIntr);
 
 		// Audio
-		/*WI_ADD_INTERNAL_CALL(PlayMusic);
+		WI_ADD_INTERNAL_CALL(PlayMusic);
 		WI_ADD_INTERNAL_CALL(StopMusic);
 
 		WI_ADD_INTERNAL_CALL(PlaySound);
 		WI_ADD_INTERNAL_CALL(StopSound);
 
-		WI_ADD_INTERNAL_CALL(StopAllEvents);*/
+		WI_ADD_INTERNAL_CALL(PlaySoundEntity);
+		WI_ADD_INTERNAL_CALL(StopSoundEntity);
+
+		WI_ADD_INTERNAL_CALL(AddAudioSource);
+
+		WI_ADD_INTERNAL_CALL(IsPlaying);
+
+		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
@@ -93,7 +110,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 
 		// UI
-		WI_ADD_INTERNAL_CALL(Activate);
-		WI_ADD_INTERNAL_CALL(SwapTexture);
+		WI_ADD_INTERNAL_CALL(Play);
+		WI_ADD_INTERNAL_CALL(ChangeScene);
+		WI_ADD_INTERNAL_CALL(Quit);
 	}
 }

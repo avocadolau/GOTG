@@ -7,19 +7,27 @@
 
 namespace Wiwa
 {
-	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath) : GuiControl(scene, GuiControlType::BUTTON, id)
+	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
+		name = "Button";
 		m_Scene = scene;
-		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
-		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
-
+		if (path != "") {
+			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
+		}
 		//textId2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
 		//extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
+		this->callbackID = callbackID;
+		if(callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		
+		
+		
 		
 		state = GuiControlState::NORMAL;
 		canClick = true;
@@ -43,11 +51,12 @@ namespace Wiwa
 			{
 				state = GuiControlState::FOCUSED;
 
-				if (Wiwa::Input::IsMouseButtonPressed(0))
+				if (Wiwa::Input::IsMouseButtonReleased(0))
 				{
 					state = GuiControlState::PRESSED;
-				}
 
+					callback->Execute();
+				}
 			}
 			else
 			{

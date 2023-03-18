@@ -20,8 +20,10 @@ namespace Wiwa
 		 std::vector<GuiControl*> controls;
 		 std::vector<GuiControl*> controlsToDestroy;
 
-		 bool active;
 
+		 void SwapActive();
+		 bool active;
+		 bool selected;
 		 int id;
 	};
 }

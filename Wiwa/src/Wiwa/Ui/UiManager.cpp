@@ -46,20 +46,20 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID)
 	{
 		GuiControl* control = nullptr;
 	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, extraPath);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(m_Scene, id, bounds, path);
+				control = new GuiImage(m_Scene, id, bounds, path, callbackID);
 				break;
 			default:
 				break;
@@ -69,7 +69,7 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID)
 	{
 		GuiControl* control = nullptr;
 		
@@ -77,13 +77,13 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, slider_path);
+				control = new GuiButton(m_Scene, id, bounds, path, slider_path, callbackID);
 				break;
 			case GuiControlType::SLIDER:
-				control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path);
+				control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, slider_path);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, slider_path, callbackID);
 				break;
 			default:
 				break;
@@ -113,10 +113,18 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
-		
+		size_t Csize = canvasToDestroy.size();
+		for (size_t x = 0; x < Csize; x++)
+		{
+			RemoveCanvas(canvasToDestroy.at(x));
+		}
+		canvasToDestroy.clear();
+
 		std::vector<GuiCanvas*> canva = canvas;
 		for (int i = 0; i < canva.size(); i++)
 		{
+			
+			
 			size_t rsize = canvas.at(i)->controlsToDestroy.size();
 
 			for (size_t k = 0; k < rsize; k++) {
@@ -124,7 +132,6 @@ namespace Wiwa
 			}
 
 			canvas.at(i)->controlsToDestroy.clear();
-
 
 			if (canva.at(i)->active)
 			{
@@ -137,6 +144,8 @@ namespace Wiwa
 					}
 				}
 			}
+			
+			
 		}
 		return true;
 	}
@@ -158,6 +167,10 @@ namespace Wiwa
 		
 		return false;
 	}
+	void GuiManager::DestroyCanvas(GuiCanvas* canvas)
+	{
+		canvasToDestroy.push_back(canvas);
+	}
 	void GuiManager::DestroyGuiControl(GuiControl* control,GuiCanvas* canvas)
 	{
 		canvas->controlsToDestroy.push_back(control);
@@ -174,6 +187,28 @@ namespace Wiwa
 		return true;
 	}
 
+	void GuiManager::RemoveCanvas(GuiCanvas* canvasToDestroy)
+	{
+		for (int i = 0; i < canvasToDestroy->controls.size(); i++)
+		{
+			size_t ealive = canvasToDestroy->controls.size();
+			Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+			r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_normal);
+			if (canvasToDestroy->controls.at(i)->type == GuiControlType::SLIDER)
+			{
+				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_extra);
+			}
+			RemoveControl(canvasToDestroy->controls.at(i));
+		}
+		for (size_t j = 0; j < canvas.size(); j++)
+		{
+			if (canvas.at(j) == canvasToDestroy)
+			{
+				canvas.erase(canvas.begin() + j);
+				break;
+			}
+		}
+	}
 	void GuiManager::RemoveControl(GuiControl* control)
 	{
 		std::vector<GuiCanvas*> canva = canvas;
@@ -198,7 +233,6 @@ namespace Wiwa
 		}
 		
 	}
-
 	Text* GuiManager::InitFont(const char* path, char* _word)
 	{
 		
@@ -242,7 +276,6 @@ namespace Wiwa
 		/* calculate font scaling */
 		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
 
-		
 		char* word = _word;
 
 		int x = 0;
@@ -250,8 +283,8 @@ namespace Wiwa
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
 
-		ascent = roundf(ascent * scale);
-		descent = roundf(descent * scale);
+		ascent = round(ascent * scale);
+		descent = round(descent * scale);
 
 		int i;
 		for (i = 0; i < strlen(word); ++i)
@@ -292,5 +325,13 @@ namespace Wiwa
 		return text;
 	}
 
+	void GuiManager::SwapSelectedCanvas(GuiCanvas* canvasToSelect)
+	{
+		for (size_t i = 0; i < canvas.size(); i++)
+		{
+			canvas.at(i)->selected = false;
+		}
+		canvasToSelect->selected = true;
+	}
 	
 }

@@ -1,20 +1,26 @@
+using System;
+using System.Runtime.Hosting;
+
 namespace Wiwa
 {
     [Callback]
     class SceneChangeCallback
     {
-        static void OnExecute()
+        static void OnExecute(float x)
         {
-            System.Console.WriteLine("SceneChangeCallback called");
+            System.Console.WriteLine($"value of slider:{x}");
+            //Wiwa.InternalCalls.ChangeScene(0);
+           
         }
     }
 
     [Callback]
     class PlayGame
     {
-        static void OnExecute()
+        static void OnExecute(bool ret)
         {
-            System.Console.WriteLine("PlayGame called");
+            System.Console.WriteLine($"value of checkbox:{ret}");
+           // Wiwa.InternalCalls.Play();
         }
     }
 
@@ -23,7 +29,8 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            System.Console.WriteLine("Quit called");
+            System.Console.WriteLine("button");
+            //Wiwa.InternalCalls.Quit();
         }
     }
 }

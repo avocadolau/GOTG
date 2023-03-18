@@ -133,6 +133,7 @@ namespace Wiwa {
 	template<>
 	inline bool Resources::Import<Image>(const char* file)
 	{
+		if (std::filesystem::is_directory(file)) return false;
 		if (!_file_exists(file)) return false;
 
 		std::filesystem::path import_path = _import_path_impl(file, ".dds");

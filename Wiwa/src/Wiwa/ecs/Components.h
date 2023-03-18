@@ -15,8 +15,16 @@
 #include "components/PointLight.h"
 #include "components/SpotLight.h"
 
+// Animations
+#include "components/AnimatorComponent.h"
+
 // Physics components
 #include "components/Rigidbody.h"
 #include "components/ColliderCube.h"
 #include "components/ColliderSphere.h"
 #include "components/ColliderCylinder.h"
+#include "components/RayCast.h"
+
+// Particle components
+#include "components/Billboard.h"
+#include "components/ParticleEmitter.h"

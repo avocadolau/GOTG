@@ -32,17 +32,19 @@ namespace Wiwa {
 		if (editorCamera)
 		{
 			editorCamera->frameBuffer->Clear();
-			if (editorCamera->drawFrustrums)
+			editorCamera->shadowBuffer->Clear();
+			/*if (editorCamera->drawFrustrums)
 			{
 				Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
 				Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
-			}
+			}*/
 		}
 		size_t cameraCount = m_CamerasAlive.size();
 		for (size_t i = 0; i < cameraCount; i++)
 		{
 			CameraId cam_id = m_CamerasAlive[i];
 			m_Cameras[cam_id]->frameBuffer->Clear();
+			m_Cameras[cam_id]->shadowBuffer->Clear();
 		}
 	}
 	void CameraManager::Clear()

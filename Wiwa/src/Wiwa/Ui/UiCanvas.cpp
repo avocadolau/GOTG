@@ -10,10 +10,16 @@ namespace Wiwa
 	{
 		this->id = id;
 		this->active = active;
+		selected = false;
 	}
 
 	GuiCanvas::~GuiCanvas()
 	{
 
+	}
+
+	void GuiCanvas::SwapActive()
+	{
+		active = !active;
 	}
 }

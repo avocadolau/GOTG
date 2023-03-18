@@ -5,7 +5,7 @@
 namespace Wiwa {
 	AudioSystem::AudioSystem()
 	{
-
+		m_AudioSource = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	}
 
 	AudioSystem::~AudioSystem()
@@ -17,9 +17,12 @@ namespace Wiwa {
 	{
 		Audio::RegisterGameObject(m_EntityId);
 
-		AudioSource* asrc = GetComponent<AudioSource>();
+		m_AudioSource = GetComponentIterator<AudioSource>();
+		m_Transform = GetComponentIterator<Transform3D>();
 
-		if (!asrc) return;
+		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
+
+		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if(asrc->isDefaultListener){
 			Audio::AddDefaultListener(m_EntityId);
@@ -28,22 +31,25 @@ namespace Wiwa {
 
 	void AudioSystem::OnInit()
 	{
-		AudioSource* asrc = GetComponent<AudioSource>();
+		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
-		if (!asrc) return;
+		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if (asrc->playOnAwake)
 		{
-			if (!Audio::PostEvent(asrc->eventName, m_EntityId, { &Wiwa::AudioSystem::OnEventFinish, this })) {
+			if (!Audio::PostEvent(asrc->eventName, m_EntityId, { &AudioSystem::OnEventFinish, this })) {
 				WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
 			}
+
 			asrc->isPlaying = true;
 		}
 	}
 
 	void AudioSystem::OnUpdate()
 	{
-		Transform3D* t3d = GetComponent<Transform3D>();		
+		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
+
+		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_Transform);		
 
 		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Vector3F::FRONT, Vector3F::UP)) {
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());
@@ -52,23 +58,34 @@ namespace Wiwa {
 
 	void AudioSystem::OnDestroy()
 	{
-		AudioSource* asrc = GetComponent<AudioSource>();
+		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
-		if (!asrc) return;
-		
-		if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
-			WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
+		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
+
+		if (asrc->isPlaying) {
+			if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
+				WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
+			}
+
+			Audio::Update();
+
+			// Wait to update audio engine thread so we can destroy the system
+			Sleep(8);
 		}
 
 		Audio::UnregisterGameObject(m_EntityId);
 	}
 
-	void AudioSystem::OnEventFinish()
+	void AudioSystem::OnEventFinish(const char* ev_name)
 	{
-		AudioSource* asrc = GetComponent<AudioSource>();
+		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
-		if (!asrc) return;
+		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
-		asrc->isPlaying = false;
+		if (strcmp(ev_name, asrc->eventName) == 0) {
+			asrc->isPlaying = false;
+		}
+
+		WI_CORE_INFO("Audio finished [{}]", ev_name);
 	}
 }

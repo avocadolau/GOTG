@@ -1,25 +1,31 @@
 #pragma once
 #include "../MonoDefinitions.h"
+#include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/scene/Scene.h>
 
 typedef unsigned char byte;
 
-byte* GetComponent(size_t id, MonoReflectionType* type);
+byte* GetComponent(size_t id, MonoReflectionType* type, void* scene);
 
-byte* AddComponent(size_t id, MonoReflectionType* type);
+Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoReflectionType* type, void* scene);
 
-void ApplySystem(size_t id, MonoReflectionType* type);
+byte* GetComponentByIterator(Wiwa::EntityManager::ComponentIterator iterator, void* scene);
 
-size_t CreateEntity();
+byte* AddComponent(size_t id, MonoReflectionType* type, void* scene);
 
-size_t CreateEntityNamed(MonoString* name_entity);
+void ApplySystem(size_t id, MonoReflectionType* type, void* scene);
 
-void DestroyEntity(size_t eid);
+size_t CreateEntity(void* scene);
+
+size_t CreateEntityNamed(MonoString* name_entity, void* scene);
+
+void DestroyEntity(size_t eid, void* scene);
 
 // Help functions
 
 size_t LoadResourceModel(MonoString* str);
 
-void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat);
+void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat, void* scene);
 
 /*MonoArray* GetComponent(EntityId id, MonoReflectionType* type)
 	{

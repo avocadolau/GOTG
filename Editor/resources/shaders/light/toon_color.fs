@@ -6,7 +6,7 @@ out vec4 FragColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 LocalPos;
-
+in vec4 LightSpacePos;
 struct BaseLight
 {
     vec3 Color;
@@ -52,6 +52,7 @@ uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 uniform vec3 u_CameraPosition;
 
 uniform vec4 u_Color;
+uniform sampler2D u_ShadowMap;
 uniform int u_ToonLevels = 4;
 uniform float u_RimLightPower = 4.0;
 uniform float u_SpecularValue;
@@ -61,6 +62,22 @@ uniform vec4 u_MatSpecularColor;
 
 float ToonScaleFactor = 1.0f / u_ToonLevels;
 
+float CalcShadowFactor()
+{
+    vec3 projCoords = LightSpacePos.xyz / LightSpacePos.w;
+    vec2 UVCoords;
+    UVCoords.x = 0.5 * projCoords.x + 0.5;
+    UVCoords.y = 0.5 * projCoords.y + 0.5;
+    float z = 0.5 * projCoords.z + 0.5;
+    float depth = texture(u_ShadowMap, UVCoords).x;
+
+    float bias = 0.0025;
+
+    if(depth + bias < z)
+        return 0.5;
+    else
+        return 1.0;
+}
 
 float CalcRimLightFactor(vec3 pixelToCamera, vec3 normal)
 {
@@ -144,5 +161,5 @@ void main()
         totalLight += CalcSpotLight(u_SpotLights[i], normal);
     }
 
-    FragColor = u_Color;
+    FragColor = u_Color * totalLight;
 }

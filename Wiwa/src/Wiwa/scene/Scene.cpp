@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -63,11 +64,18 @@ namespace Wiwa
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
-			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeEntering)
-				m_CurrentState = SCENE_LOOP;
+			m_EntityManager.UpdateWhitelist();
+
 			UpdateEnter();
 			RenderEnter();
+
+			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
+			
+			if (m_TransitionTimer >= mMaxTimeEntering) {
+				m_TransitionTimer = 0;
+
+				m_CurrentState = SCENE_LOOP;
+			}
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
@@ -77,11 +85,18 @@ namespace Wiwa
 			RenderLoop();
 			break;
 		case Scene::SCENE_LEAVING:
-			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeLeaving)
-				SceneManager::ChangeScene(m_SceneToChange);
+			m_EntityManager.UpdateWhitelist();
+
 			UpdateLeave();
 			RenderLeave();
+
+			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
+			
+			if (m_TransitionTimer >= mMaxTimeLeaving) {
+				m_TransitionTimer = 0;
+
+				SceneManager::LoadSceneByIndex(m_SceneToChange, m_SceneChangeFlags);
+			}
 			break;
 		default:
 			break;
@@ -91,8 +106,6 @@ namespace Wiwa
 	void Scene::ModuleUpdate()
 	{
 		m_CameraManager->Update();
-
-		
 
 		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
 		r2d.UpdateInstanced(this);
@@ -127,16 +140,23 @@ namespace Wiwa
 
 	void Scene::Unload(bool unload_resources)
 	{
-		return;
+		Audio::StopAllEvents();
+		
+		// Sleep to wait till Audio thread stops all events
+		Sleep(10);
+
 		if (unload_resources)
 		{
+			// TODO: Fix unloading for the editor
+			return;
 			Wiwa::Resources::UnloadAllResources();
 		}
 	}
 
-	void Scene::ChangeScene(size_t scene)
+	void Scene::ChangeScene(size_t scene, int flags)
 	{
 		m_SceneToChange = scene;
+		m_SceneChangeFlags = flags;
 		m_CurrentState = SCENE_LEAVING;
 		m_TransitionTimer = 0;
 	}

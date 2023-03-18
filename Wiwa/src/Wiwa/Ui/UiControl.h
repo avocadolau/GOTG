@@ -2,7 +2,7 @@
 
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-
+#include <Wiwa/utilities/functions/Callback.h>
 #include <vector>
 #include <string>
 
@@ -137,7 +137,6 @@ namespace Wiwa
 
 		void SwapActive(Wiwa::Renderer2D& r2d)
 		{
-			
 			active = !active;
 			if (active)
 			{
@@ -188,6 +187,10 @@ namespace Wiwa
 			return true;
 		}
 
+		void SwapCallback(int callback_id)
+		{
+			//callback = Wiwa::Application::Get().getCallbackAt(callback_id);
+		}
 	public:
 
 		ResourceId textId1;
@@ -210,5 +213,10 @@ namespace Wiwa
 		uint32_t id_quad_normal;
 
 		uint32_t id_quad_extra;
+
+		int callbackID;
+
+		std::string name;
+		Callback* callback;
 	};
 }

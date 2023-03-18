@@ -13,7 +13,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path,const char* extraPath);
+		GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path,const char* extraPath, size_t callbackID);
 		virtual ~GuiCheckbox();
 
 		bool Update();
@@ -24,6 +24,5 @@ namespace Wiwa
 
 		bool checked = false;
 
-		int refreshTime = 0;
 	};
 }

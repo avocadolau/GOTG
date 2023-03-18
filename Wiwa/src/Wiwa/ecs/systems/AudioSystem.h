@@ -5,10 +5,13 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
+#include <Wiwa/ecs/EntityManager.h>
+
 namespace Wiwa {
 	class WI_API AudioSystem : public System {
 	private:
-
+		EntityManager::ComponentIterator m_AudioSource;
+		EntityManager::ComponentIterator m_Transform;
 	public:
 		AudioSystem();
 		~AudioSystem();
@@ -21,7 +24,7 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void OnEventFinish();
+		void OnEventFinish(const char* ev_name);
 	};
 }
 

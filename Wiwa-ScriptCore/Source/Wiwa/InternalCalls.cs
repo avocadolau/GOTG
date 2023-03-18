@@ -13,19 +13,23 @@ namespace Wiwa
         #endregion
         #region ECS
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static ref T GetComponent<T>(EntityId id, System.Type type);
+        internal extern static ref T GetComponent<T>(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static ref T AddComponent<T>(EntityId id, System.Type type);
+        internal extern static ComponentIterator GetComponentIterator(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void ApplySystem(EntityId id, System.Type type);
+        internal extern static ref T GetComponentByIterator<T>(ComponentIterator iterator, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static EntityId CreateEntity();
+        internal extern static ref T AddComponent<T>(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static EntityId CreateEntityNamed(string name_entity);
+        internal extern static void ApplySystem(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void DestroyEntity(EntityId eid);
+        internal extern static EntityId CreateEntity(System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void AddMeshToEntity(EntityId eid, string model, string mat);
+        internal extern static EntityId CreateEntityNamed(string name_entity, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -45,7 +49,9 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool IsButtonPressedIntr(Gamepad gamepad, KeyCode button);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static float GetAxisIntr(Gamepad gamepad, GamepadAxis axis);
+        internal extern static float GetAxisIntr(Gamepad gamepad, GamepadAxis axis, float deadzone);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetRawAxisIntr(Gamepad gamepad, GamepadAxis axis, float deadzone);
         #endregion
         #region Time
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -54,6 +60,10 @@ namespace Wiwa
         internal extern static float GetTimeIntr();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetFPSIntr(int fps);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetTimeScaleIntr(float scale);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetTimeScaleIntr();
         #endregion
         #region Camera
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -92,19 +102,26 @@ namespace Wiwa
         internal extern static bool GetResizableIntr();
 
         #endregion
-        //#region Audio
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void PlayMusic(string str);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopMusic(string str);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void PlaySound(string str, EntityId entity);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopSound(string str, EntityId entity);
-        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
-        //internal extern static void StopAllEvents();
-        //#endregion
-
+        #region Audio
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayMusic(string str);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopMusic(string str);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlaySound(string str, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopSound(string str, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlaySoundEntity(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopSoundEntity(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopAllEvents();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void AddAudioSource(EntityId entity, string ev_name, bool playOnAwake, bool isDefaultListener);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool IsPlaying(EntityId entity);
+        #endregion
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
@@ -112,6 +129,20 @@ namespace Wiwa
         internal extern static bool AddBodyToLog(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool RemoveBodyFromLog(EntityId id);
+        #endregion
+        #region Scene
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadSceneByIndex(ulong index, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadSceneByName(string scene_name, int flags);
+        #endregion
+        #region UI
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Play();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool ChangeScene(int scene_id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Quit();
         #endregion
     }
 }

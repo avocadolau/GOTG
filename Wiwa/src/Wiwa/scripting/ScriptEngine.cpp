@@ -172,13 +172,13 @@ namespace Wiwa {
 				continue;
 
 			bool isSystem = mono_class_is_subclass_of(monoClass, systemClass, false);
+			Type* type = nullptr;
 
 			MonoType* monoType = mono_class_get_type(monoClass);
 
-			Type* type = ConvertType(monoType);
-
 			if (isSystem)
 			{
+				type = ConvertType(monoType);
 				type->New = [assembly, nameSpace, name]() -> void* { return new SystemScriptClass(assembly, nameSpace, name); };
 				s_Data->Systems[type->hash] = type;
 
@@ -193,6 +193,7 @@ namespace Wiwa {
 			mono_bool isComponent = mono_custom_attrs_has_attr(attributes, componentClass);
 			if (isComponent == 1)
 			{
+				type = ConvertType(monoType);
 				s_Data->Components[type->hash] = type;
 				Class* c = (Class*)type;
 				Application::Get().RegisterComponentType(type);

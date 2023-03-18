@@ -10,12 +10,20 @@ namespace Wiwa
 	class WI_API System
 	{
 	private:
+		bool m_Awaken;
+		bool m_Inited;
 	protected:
 		EntityId m_EntityId;
 		Scene *m_Scene;
 
 		template <class T>
-		T *GetComponent();
+		T* GetComponent();
+
+		template<class T>
+		EntityManager::ComponentIterator GetComponentIterator();
+
+		template<class T>
+		T* GetComponentByIterator(const EntityManager::ComponentIterator& c_it);
 
 		virtual void OnAwake() {}
 
@@ -55,15 +63,12 @@ namespace Wiwa
 		virtual void OnSystemRemoved() {}
 
 		void Destroy();
-		virtual void OnCollisionEnter(Object *body1, Object *body2)
-		{
-		}
-		virtual void OnCollision(Object *body1, Object *body2)
-		{
-		}
-		virtual void OnCollisionExit(Object *body1, Object *body2)
-		{
-		}
+
+		virtual void OnCollisionEnter(Object *body1, Object *body2){}
+
+		virtual void OnCollision(Object *body1, Object *body2){}
+
+		virtual void OnCollisionExit(Object *body1, Object *body2){}
 
 		virtual bool OnComponentAdded(byte *data, const Type *type) { return true; }
 
@@ -71,11 +76,28 @@ namespace Wiwa
 	};
 
 	template <class T>
-	inline T *System::GetComponent()
+	inline T* System::GetComponent()
 	{
 		Wiwa::EntityManager &em = m_Scene->GetEntityManager();
 
 		T *component = em.GetComponent<T>(m_EntityId);
+
+		return component;
+	}
+
+	template<class T>
+	inline EntityManager::ComponentIterator System::GetComponentIterator()
+	{
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		return em.GetComponentIterator<T>(m_EntityId);
+	}
+
+	template<class T>
+	inline T* System::GetComponentByIterator(const EntityManager::ComponentIterator& c_it) {
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		T* component = (T*)em.GetComponentByIterator(c_it);
 
 		return component;
 	}

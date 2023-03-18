@@ -5,8 +5,10 @@
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/physics/PhysicsManager.h>
+#include <Wiwa/AI/AIPathFindingManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/particles/ParticleManager.h>
 
 #include <Wiwa/utilities/render/InstanceRenderer.h>
 
@@ -40,13 +42,15 @@ namespace Wiwa {
 
 		State getState() { return m_CurrentState; }
 
-		void ChangeScene(size_t scene);
+		void ChangeScene(size_t scene, int flags);
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
+		AIPathFindingManager& GetAIPathFindingManager() { return *m_AIPathFindingManager; }
 
 		LightManager& GetLightManager() { return *m_LightManager; }
+		ParticleManager& GetParticleManager() { return *m_ParticleManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
 		inline const char* getName() { return m_Name.c_str(); }
@@ -67,7 +71,9 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		PhysicsManager* m_PhysicsManager;
+		AIPathFindingManager* m_AIPathFindingManager;
 		LightManager* m_LightManager;
+		ParticleManager* m_ParticleManager;
 		GuiManager* m_GuiManager;
 
 	public:
@@ -77,6 +83,7 @@ namespace Wiwa {
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;
 		size_t m_SceneToChange = 0;
+		int m_SceneChangeFlags = 0;
 		std::string m_Name = "Default scene";
 	};
 }
