@@ -685,9 +685,6 @@ namespace Wiwa
 		{
 			Scene *sc = m_Scenes[sceneid];
 
-			// Load Physics Manager json Data
-			sc->GetPhysicsManager().OnLoad();
-
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
 
 			_loadSceneImpl(sc, scene_file);
@@ -699,6 +696,9 @@ namespace Wiwa
 			{
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
+
+			// Load Physics Manager json Data
+			sc->GetPhysicsManager().OnLoad();
 
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
