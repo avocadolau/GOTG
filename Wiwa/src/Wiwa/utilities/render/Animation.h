@@ -45,6 +45,7 @@ namespace Wiwa {
 		{
 			return m_BoneInfoMap;
 		}
+		glm::mat4 GetBoneTransform(int index) {return m_Bones[index]->GetLocalTransform(); };
 
 		void LoadAnimation(const aiAnimation* animation);
 		static Animation* LoadWiAnimation(const char* filepath);

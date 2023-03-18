@@ -107,7 +107,7 @@ namespace Wiwa {
 
 						texture_path = std::filesystem::relative(texture_path);
 
-						const char* default_shader = "resources/shaders/skinned/debug_bones";
+						const char* default_shader = "resources/shaders/skinned/skinned";
 
 						id = Resources::Load<Shader>(default_shader);
 						material.setShader(Resources::GetResourceById<Shader>(id), default_shader);
@@ -121,8 +121,8 @@ namespace Wiwa {
 					}
 					else
 					{
-						id = Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
-						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/debug_bones");
+						id = Resources::Load<Shader>("resources/shaders/skinned/skinned");
+						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/skinned/skinned");
 
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 					}
