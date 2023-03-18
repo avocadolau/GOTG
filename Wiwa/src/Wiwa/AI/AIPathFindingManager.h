@@ -131,9 +131,7 @@ namespace Wiwa {
 
 		private:
 
-		// total size of the map in map coords if i am not mistaken
-		static uint32_t m_width;
-		static uint32_t m_height;
+		
 			
 		// all map walkability values [0..255]
 		static unsigned char* m_map;
