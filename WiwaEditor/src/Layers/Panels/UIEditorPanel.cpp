@@ -152,6 +152,10 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 {
 	Wiwa::Vector2i vector = { pos[0],pos[1] };
 	Wiwa::Size2i size_ = { size[0],size[1] };
+	control->position.x = pos[0];
+	control->position.y = pos[1];
+	control->position.width = size[0];
+	control->position.height = size[1];
 	Wiwa::Application::Get().GetRenderer2D().UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector);
 	Wiwa::Application::Get().GetRenderer2D().UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, size_);
 	if (control->type != Wiwa::GuiControlType::TEXT)
