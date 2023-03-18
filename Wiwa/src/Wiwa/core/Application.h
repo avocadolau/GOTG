@@ -14,6 +14,7 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa/utilities/math/Vector4f.h>
 #include <Wiwa/utilities/time/Time.h>
+#include <Wiwa/utilities/functions/Callback.h>
 
 namespace Wiwa
 {
@@ -104,6 +105,12 @@ namespace Wiwa
 		const Type* GetSystemTypeH(size_t hash) const;
 		const Type* GetSystemType(size_t index) const;
 		bool HasSystemH(size_t hash) const;
+		// Reflect callbacks
+		size_t GetCallbacksCount() const { return m_Callbacks.size(); }
+		Callback* getCallback(size_t hash) const;
+		Callback* getCallbackAt(size_t index) const { return m_Callbacks[index]; };
+		void RegisterCallback(Callback* callback) { m_Callbacks.push_back(callback); }
+		void ClearCallbacks();
 
 		void RegisterSystemType(const Type* system);
 		void DeleteSystemType(const Type* system);
@@ -124,6 +131,7 @@ namespace Wiwa
 
 		std::vector<const Type*> m_ComponentTypes;
 		std::vector<const Type*> m_SystemTypes;
+		std::vector<Callback*> m_Callbacks;
 
 		Size2i m_TargetResolution;
 

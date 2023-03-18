@@ -24,9 +24,20 @@ void StopMusic(MonoString* ev_name)
 
 void PlaySound(MonoString* ev_name, size_t entity)
 {
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	Wiwa::AudioSource* asrc = em.GetComponent<Wiwa::AudioSource>(entity);
+
+	if (!asrc) return;
+
 	char* ev_p = mono_string_to_utf8(ev_name);
 
-	Audio::PostEvent(ev_p, entity);
+	sprintf_s(asrc->eventName, "%s", ev_p);
+	asrc->isPlaying = true;
+
+	Wiwa::AudioSystem* asys = em.GetSystem<Wiwa::AudioSystem>(entity);
+
+	Audio::PostEvent(ev_p, entity, { &Wiwa::AudioSystem::OnEventFinish, asys });
 }
 
 void StopSound(MonoString* ev_name, size_t entity)
@@ -42,9 +53,13 @@ void PlaySoundEntity(size_t entity)
 
 	Wiwa::AudioSource* asrc = em.GetComponent<Wiwa::AudioSource>(entity);
 
-	if (asrc) {
-		Audio::PostEvent(asrc->eventName, entity);
-	}
+	if (!asrc) return;
+
+	asrc->isPlaying = true;
+
+	Wiwa::AudioSystem* asys = em.GetSystem<Wiwa::AudioSystem>(entity);
+
+	Audio::PostEvent(asrc->eventName, entity, { &Wiwa::AudioSystem::OnEventFinish, asys });
 }
 
 void StopSoundEntity(size_t entity)
@@ -53,9 +68,33 @@ void StopSoundEntity(size_t entity)
 
 	Wiwa::AudioSource* asrc = em.GetComponent<Wiwa::AudioSource>(entity);
 
-	if (asrc) {
-		Audio::StopEvent(asrc->eventName, entity);
-	}
+	if (!asrc) return;
+
+	Audio::StopEvent(asrc->eventName, entity);
+}
+
+bool IsPlaying(size_t entity)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	Wiwa::AudioSource* asrc = em.GetComponent<Wiwa::AudioSource>(entity);
+
+	if (!asrc) return false;
+
+	return asrc->isPlaying;
+}
+
+void AddAudioSource(size_t entity, MonoString* event_name, bool playOnAwake, bool isDefaultListener)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	char* str = mono_string_to_utf8(event_name);
+
+	Wiwa::AudioSource* asrc = em.AddComponent<Wiwa::AudioSource>(entity);
+
+	sprintf_s(asrc->eventName, "%s", str);
+	asrc->playOnAwake = playOnAwake;
+	asrc->isDefaultListener = isDefaultListener;
 }
 
 void StopAllEvents()

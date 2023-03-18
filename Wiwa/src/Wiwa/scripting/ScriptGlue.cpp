@@ -17,6 +17,7 @@
 #include "embed_functions/embed_audio_functions.h"
 #include "embed_functions/embed_physics_functions.h"
 #include "embed_functions/embed_screen_functions.h"
+#include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
@@ -53,6 +54,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
 		WI_ADD_INTERNAL_CALL(GetTimeIntr);
 		WI_ADD_INTERNAL_CALL(SetFPSIntr);
+		WI_ADD_INTERNAL_CALL(SetTimeScaleIntr);
+		WI_ADD_INTERNAL_CALL(GetTimeScaleIntr);
 
 		// Camera
 		WI_ADD_INTERNAL_CALL(GetActiveCamera);
@@ -94,11 +97,20 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PlaySoundEntity);
 		WI_ADD_INTERNAL_CALL(StopSoundEntity);
 
+		WI_ADD_INTERNAL_CALL(AddAudioSource);
+
+		WI_ADD_INTERNAL_CALL(IsPlaying);
+
 		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(AddBodyToLog);
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
+
+		// UI
+		WI_ADD_INTERNAL_CALL(Play);
+		WI_ADD_INTERNAL_CALL(ChangeScene);
+		WI_ADD_INTERNAL_CALL(Quit);
 	}
 }

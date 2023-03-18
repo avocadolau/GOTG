@@ -13,23 +13,23 @@ namespace Wiwa
         #endregion
         #region ECS
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static ref T GetComponent<T>(EntityId id, System.Type type);
+        internal extern static ref T GetComponent<T>(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static ComponentIterator GetComponentIterator(EntityId id, System.Type type);
+        internal extern static ComponentIterator GetComponentIterator(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static ref T GetComponentByIterator<T>(ComponentIterator iterator);
+        internal extern static ref T GetComponentByIterator<T>(ComponentIterator iterator, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static ref T AddComponent<T>(EntityId id, System.Type type);
+        internal extern static ref T AddComponent<T>(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void ApplySystem(EntityId id, System.Type type);
+        internal extern static void ApplySystem(EntityId id, System.Type type, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static EntityId CreateEntity();
+        internal extern static EntityId CreateEntity(System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static EntityId CreateEntityNamed(string name_entity);
+        internal extern static EntityId CreateEntityNamed(string name_entity, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void DestroyEntity(EntityId eid);
+        internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void AddMeshToEntity(EntityId eid, string model, string mat);
+        internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -58,6 +58,10 @@ namespace Wiwa
         internal extern static float GetTimeIntr();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetFPSIntr(int fps);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetTimeScaleIntr(float scale);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetTimeScaleIntr();
         #endregion
         #region Camera
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -111,6 +115,10 @@ namespace Wiwa
         internal extern static void StopSoundEntity(EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void StopAllEvents();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void AddAudioSource(EntityId entity, string ev_name, bool playOnAwake, bool isDefaultListener);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool IsPlaying(EntityId entity);
         #endregion
         #region Physics
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -125,6 +133,14 @@ namespace Wiwa
         internal extern static void LoadSceneByIndex(ulong index, int flags);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void LoadSceneByName(string scene_name, int flags);
+        #endregion
+        #region UI
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Play();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool ChangeScene(int scene_id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Quit();
         #endregion
     }
 }

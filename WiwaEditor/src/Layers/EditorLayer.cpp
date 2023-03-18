@@ -84,6 +84,7 @@ void EditorLayer::OnAttach()
 	m_ShaderPanel = std::make_unique<ShaderPanel>(this);
 	m_EnvPanel = std::make_unique<EnvironmentPanel>(this);
 	m_UiPanel = std::make_unique<UIPanel>(this);
+	m_UiEditorPanel = std::make_unique<UIEditorPanel>(this);
 	m_AIMapBakingPanel = std::make_unique<AIMapBakingPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
@@ -112,6 +113,7 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_AnimatorPanel.get());
 	m_Panels.push_back(m_AnimationPanel.get());
 	m_Panels.push_back(m_UiPanel.get());
+	m_Panels.push_back(m_UiEditorPanel.get());
 	m_Panels.push_back(m_AudioPanel.get());
 	m_Panels.push_back(m_AIMapBakingPanel.get());
 
