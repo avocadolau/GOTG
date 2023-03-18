@@ -69,6 +69,15 @@ namespace Wiwa
 		m_BBDSUniforms.View = m_BBDisplayShader->getUniformLocation("u_View");
 		m_BBDSUniforms.Projection = m_BBDisplayShader->getUniformLocation("u_Proj");
 
+		//Particle Shader ==> Temporal hasta materiales
+		m_ParticleShaderId = Resources::Load<Shader>("resources/shaders/particle_display");
+		m_ParticleShader = Resources::GetResourceById<Shader>(m_ParticleShaderId);
+		m_ParticleShader->Compile("resources/shaders/particle_display");
+		m_ParticleShader->addUniform("u_Texture", Wiwa::UniformType::Sampler2D);
+		m_ParticleUniforms.Model = m_ParticleShader->getUniformLocation("u_Model");
+		m_ParticleUniforms.View = m_ParticleShader->getUniformLocation("u_View");
+		m_ParticleUniforms.Projection = m_ParticleShader->getUniformLocation("u_Proj");
+
 		m_DepthShaderId = Resources::Load<Shader>("resources/shaders/light/depth");
 		m_DepthShader = Resources::GetResourceById<Shader>(m_DepthShaderId);
 		m_DepthShader->Compile("resources/shaders/light/depth");
@@ -353,6 +362,38 @@ namespace Wiwa
 
 		camera->frameBuffer->Unbind();
 	}
+
+	void Renderer3D::RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* texture, const Size2i& srcSize)
+	{
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		camera->frameBuffer->Bind(clear);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, position);
+		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+		model = glm::scale(model, scale);
+
+		Shader* matShader = material->getShader();
+
+		matShader->Bind();
+		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+		SetUpLight(matShader, camera, directional, pointLights, spotLights);
+
+		material->Bind();
+
+		//make the drawing
+		glBindVertexArray(vao);
+		glDrawElements(GL_TRIANGLES, ebo_data.size(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+
+		material->UnBind();
+		camera->frameBuffer->Unbind();
+	}
+
 	void Renderer3D::RenderSkybox()
 	{
 		{
