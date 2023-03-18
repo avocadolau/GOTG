@@ -128,7 +128,8 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 	std::string metaPath = assetsPath.string();
 	metaPath += ".meta";
 	std::filesystem::remove(metaPath);
-	//Remove from library
+	//Remove from 
+
 	std::string extension;
 	std::filesystem::path libraryPath = Wiwa::Resources::_assetToLibPath(assetsPath.string());
 	if (ImageExtensionComp(assetsPath))
