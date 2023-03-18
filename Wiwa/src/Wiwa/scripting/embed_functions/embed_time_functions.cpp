@@ -16,3 +16,13 @@ void SetFPSIntr(int fps)
 {
     Wiwa::Time::SetTargetFPS(fps);
 }
+
+void SetTimeScaleIntr(float scale)
+{
+    Wiwa::Time::SetTimeScale(scale);
+}
+
+float GetTimeScaleIntr()
+{
+    return Wiwa::Time::GetTimeScale();
+}

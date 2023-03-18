@@ -6,7 +6,7 @@ namespace Wiwa
     [Callback]
     class SceneChangeCallback
     {
-        static void OnExecute()
+        static void OnExecute(float x)
         {
             System.Console.WriteLine("PlayGame called");
             Wiwa.InternalCalls.ChangeScene(0);

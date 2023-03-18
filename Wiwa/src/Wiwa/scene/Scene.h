@@ -41,7 +41,7 @@ namespace Wiwa {
 
 		State getState() { return m_CurrentState; }
 
-		void ChangeScene(size_t scene);
+		void ChangeScene(size_t scene, int flags);
 
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
@@ -80,6 +80,7 @@ namespace Wiwa {
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;
 		size_t m_SceneToChange = 0;
+		int m_SceneChangeFlags = 0;
 		std::string m_Name = "Default scene";
 	};
 }

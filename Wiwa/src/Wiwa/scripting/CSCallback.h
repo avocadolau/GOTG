@@ -14,6 +14,6 @@ namespace Wiwa {
 		CSCallback(MonoAssembly* assembly, const std::string& classNamespace, const std::string& className);
 		~CSCallback();
 
-		void Execute() override;
+		void Execute(void* param=NULL) override;
 	};
 }

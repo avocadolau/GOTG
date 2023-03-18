@@ -51,8 +51,6 @@ Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoRe
 {
 	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
 
-	WI_INFO(_scene->getName());
-
 	Wiwa::EntityManager::ComponentIterator c_it = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
 	// Take monotype

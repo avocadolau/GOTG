@@ -92,9 +92,18 @@ void ConfigurationPanel::Draw()
 			Wiwa::Application::Get().GetWindow().SetVSync(m_VSync);
 
 		int FPSCap = Wiwa::Time::GetTargetFPS();
+		static	bool capFPS = false;
+		ImGui::Checkbox("Cap FPS", &capFPS);
+		if (!capFPS)
+			ImGui::BeginDisabled();
 		ImGui::SliderInt("FPS", &FPSCap, 1, 250);
 		if (FPSCap > 1)
 			Wiwa::Time::SetTargetFPS(FPSCap);
+		if (!capFPS)
+			Wiwa::Time::SetTargetFPS(-1);
+
+		if(!capFPS)
+			ImGui::EndDisabled();
 	}
 	char title[25];
 	if (ImGui::CollapsingHeader("Info"))
