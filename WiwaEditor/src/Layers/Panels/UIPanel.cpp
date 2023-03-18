@@ -191,39 +191,36 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		ImGui::EndDragDropTarget();
 	}
 	
-	const char* items[] = { "Play","Change Scene","Quit"};
-	static const char* current_item = NULL;
-	ImGui::Text("Callback type:");
+	static size_t current_item = WI_INVALID_INDEX;
 
-	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	size_t cbcount = app.GetCallbacksCount();
+
+	if (cbcount > 0) {
+		current_item = 0;
+		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
 		{
-			bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
-			if (ImGui::Selectable(items[n], is_selected))
+			for (size_t n = 0; n < cbcount; n++)
 			{
-				current_item = items[n];
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
+				Wiwa::Callback* cb = app.getCallbackAt(n);
+				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				{
+					current_item = n;
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				}
 			}
-		}
-		ImGui::EndCombo();
-	}
-	if (current_item != NULL)
-	{
-		if (current_item == "Change Scene")
-		{
-			callbackID = 0;
-		}
-		else if (current_item == "Play")
-		{
-			callbackID = 1;
-		}
-		else if (current_item == "Quit")
-		{
-			callbackID = 2;
+			ImGui::EndCombo();
 		}
 	}
+
+	callbackID = current_item;
 	
 	if (ImGui::Button("Create button"))
 	{
@@ -278,39 +275,41 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 		ImGui::EndDragDropTarget();
 	}
-	const char* items[] = { "Play","Change Scene","Quit" };
-	static const char* current_item = NULL;
-	ImGui::Text("Callback type:");
 
-	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+	static size_t current_item = WI_INVALID_INDEX;
+
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	size_t cbcount = app.GetCallbacksCount();
+
+	if (cbcount > 0) {
+		current_item = 0;
+		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
 		{
-			bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
-			if (ImGui::Selectable(items[n], is_selected))
+			for (size_t n = 0; n < cbcount; n++)
 			{
-				current_item = items[n];
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
+				Wiwa::Callback* cb = app.getCallbackAt(n);
+				if (cb->getParamCount() == 1) {
+					if (cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+						if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+						{
+							current_item = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
+				}
 			}
-		}
-		ImGui::EndCombo();
-	}
-	if (current_item != NULL)
-	{
-		if (current_item == "Change Scene")
-		{
-			callbackID = 0;
-		}
-		else if (current_item == "Play")
-		{
-			callbackID = 1;
-		}
-		else if (current_item == "Quit")
-		{
-			callbackID = 2;
+			ImGui::EndCombo();
 		}
 	}
+
+	callbackID = current_item;
 
 	if (ImGui::Button("Create slider"))
 	{
@@ -354,39 +353,36 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		ImGui::EndDragDropTarget();
 	}
 
-	const char* items[] = { "Play","Change Scene","Quit" };
-	static const char* current_item = NULL;
-	ImGui::Text("Callback type:");
+	static size_t current_item = WI_INVALID_INDEX;
 
-	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	size_t cbcount = app.GetCallbacksCount();
+
+	if (cbcount > 0) {
+		current_item = 0;
+		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
 		{
-			bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
-			if (ImGui::Selectable(items[n], is_selected))
+			for (size_t n = 0; n < cbcount; n++)
 			{
-				current_item = items[n];
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
+				Wiwa::Callback* cb = app.getCallbackAt(n);
+				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				{
+					current_item = n;
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				}
 			}
-		}
-		ImGui::EndCombo();
-	}
-	if (current_item != NULL)
-	{
-		if (current_item == "Change Scene")
-		{
-			callbackID = 0;
-		}
-		else if (current_item == "Play")
-		{
-			callbackID = 1;
-		}
-		else if (current_item == "Quit")
-		{
-			callbackID = 2;
+			ImGui::EndCombo();
 		}
 	}
+
+	callbackID = current_item;
 
 	if (ImGui::Button("Create Image"))
 	{
@@ -462,39 +458,37 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 
 		ImGui::EndDragDropTarget();
 	}
-	const char* items[] = { "Play","Change Scene","Quit" };
-	static const char* current_item = NULL;
-	ImGui::Text("Callback type:");
 
-	if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+	static size_t current_item = WI_INVALID_INDEX;
+
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	size_t cbcount = app.GetCallbacksCount();
+
+	if (cbcount > 0) {
+		current_item = 0;
+		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
 		{
-			bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
-			if (ImGui::Selectable(items[n], is_selected))
+			for (size_t n = 0; n < cbcount; n++)
 			{
-				current_item = items[n];
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
+				Wiwa::Callback* cb = app.getCallbackAt(n);
+				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				{
+					current_item = n;
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				}
 			}
-		}
-		ImGui::EndCombo();
-	}
-	if (current_item != NULL)
-	{
-		if (current_item == "Change Scene")
-		{
-			callbackID = 0;
-		}
-		else if (current_item == "Play")
-		{
-			callbackID = 1;
-		}
-		else if (current_item == "Quit")
-		{
-			callbackID = 2;
+			ImGui::EndCombo();
 		}
 	}
+
+	callbackID = current_item;
 
 	if (ImGui::Button("Create checkbox"))
 	{
