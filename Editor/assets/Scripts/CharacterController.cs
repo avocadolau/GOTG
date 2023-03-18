@@ -34,7 +34,6 @@ namespace Game
     {
         Vector3 campos;
         bool wallCollision = false;
-        int lastDirection = -1;
 
         float rayCastTimer = 0;
         float upperRayWallDistance;
@@ -42,8 +41,11 @@ namespace Game
         float leftRayWallDistance;
         float rightRayWallDistance;
 
-        float Z_accel;
-        float X_accel;
+        bool Z_activated = false;
+        bool Z2_activated = false;
+
+        bool X_activated = false;
+        bool X2_activated = false;
 
         void Init()
         {
@@ -160,29 +162,25 @@ namespace Game
             {
                 PlayAudioEvent("player_walk");
                 direction += forward * translation;
-                lastDirection = 1;
             }
             else if (Input.IsKeyDown(KeyCode.S))
             {
                 PlayAudioEvent("player_walk");
                 direction -= forward * translation;
-                lastDirection = 2;
             }
             if (Input.IsKeyDown(KeyCode.A))
             {
                 PlayAudioEvent("player_walk");
                 direction += right * translation;
-                lastDirection = 3;
             }
             else if (Input.IsKeyDown(KeyCode.D))
             {
                 PlayAudioEvent("player_walk");
                 direction -= right * translation;
-                lastDirection = 4;
             }
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
-            //Console.WriteLine("leftRayWallDistance: " + leftRayWallDistance);
+            
             if (Input.IsKeyDown(KeyCode.W))
             {
                 if (upperRayWallDistance != -1)
@@ -241,6 +239,39 @@ namespace Game
                 //Console.WriteLine("Xd direction: " + ((direction.x / 500) * (100)) / 600);
             }
 
+            if(transform.Position.z - campos.z > 40 || Z_activated == true)
+            {
+                campos.z += 0.1f;
+                Z_activated = true;
+            }
+            else if (transform.Position.z - campos.z < 5 || Z2_activated == true)
+            {
+                campos.z  -= 0.1f;
+                Z2_activated = true;
+            }
+            if (transform.Position.z - campos.z > 10 && transform.Position.z - campos.z < 35)
+            {
+                Z_activated = false;
+                Z2_activated = false;
+            }
+
+            if (transform.Position.x - campos.x > 30 || X_activated == true)
+            {
+                campos.x += 0.1f;
+                X_activated = true;
+            }
+            else if (transform.Position.x - campos.x < -30 || X2_activated == true)
+            {
+                campos.x -= 0.1f;
+                X2_activated = true;
+            }
+            if(transform.Position.x - campos.x < 25 && transform.Position.x - campos.x > -25)
+            {
+                X_activated = false;
+                X2_activated = false;
+            }
+
+            /*
             if(transform.Position.z - campos.z > 40)
             {
                 campos.z += 0.1f;
@@ -257,6 +288,7 @@ namespace Game
             {
                 campos.x -= 0.1f;
             }
+            */
 
             CameraManager.SetPosition(cam_id, campos);
             CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
