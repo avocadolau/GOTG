@@ -63,7 +63,8 @@ namespace Wiwa
 				{
 					state = GuiControlState::PRESSED;
 					checked = !checked;
-					
+					void* params[] = { &checked };
+					callback->Execute(params);
 					refreshTime = 0;
 				}
 				else

@@ -24,11 +24,7 @@ namespace Wiwa
 
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
-		//id_quad_disabled = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_focused = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_pressed = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_selected = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 
 		
 		state = GuiControlState::NORMAL;
@@ -58,11 +54,13 @@ namespace Wiwa
 					{
 						state = GuiControlState::PRESSED;
 						extraPosition.x = mouseX;
+						value = ((extraPosition.x - position.x) / position.width);
+						void* params[] = { &value};
+						callback->Execute(params);
 					}
 					else
 					{
 						state = GuiControlState::NORMAL;
-						/*NotifyObserver();*/
 					}
 				}
 			}

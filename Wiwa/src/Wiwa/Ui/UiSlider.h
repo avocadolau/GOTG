@@ -19,6 +19,7 @@ namespace Wiwa
 
 		bool Update();
 		bool Draw(Renderer2D* render);
+		float value;
 
 
 		bool canClick = true;

@@ -209,11 +209,14 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
-				{
-					current_item = n;
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				if (cb->getParamCount() == 0) {
+				
+					if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+					}
 				}
 			}
 			ImGui::EndCombo();
@@ -413,7 +416,7 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		rect.y = position[1];
 		rect.height = size[0];
 		rect.width = size[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id,callbackID);
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id);
 	}
 	ImGui::PopID();
 }
@@ -477,11 +480,15 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
-				{
-					current_item = n;
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				if (cb->getParamCount() == 1) {
+					if (cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
+						if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+						{
+							current_item = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
 				}
 			}
 			ImGui::EndCombo();

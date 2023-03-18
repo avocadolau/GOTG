@@ -101,7 +101,7 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::TEXT:
-				control = new GuiText(m_Scene, id, bounds, string_text, callbackID);
+				control = new GuiText(m_Scene, id, bounds, string_text);
 				break;
 			default:
 				break;
