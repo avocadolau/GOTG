@@ -877,6 +877,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 
 				ImGui::EndDragDropTarget();
 			}
+
+			if (!emitter->texture)
+				ImGui::Text("[Drop a suitable texture here]");
+			else
+				ImGui::Text("[Drop a suitable texture to change the current texture]");
+
 		}
 
 		ImGui::TreePop();
