@@ -387,8 +387,20 @@ namespace Wiwa
 
 		//make the drawing
 		glBindVertexArray(vao);
+
+		//Solution to the material.cpp GL_TEXTURE1 on the void Material::Bind() function
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
+		//------------------------------
+
 		glDrawElements(GL_TRIANGLES, ebo_data.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+
+		/*glBindVertexArray(VAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);*/
 
 		material->UnBind();
 		camera->frameBuffer->Unbind();
