@@ -30,3 +30,7 @@
 //#include "components/game/enemy/Enemy.h"
 //#include "components/game/enemy/EnemySpawner.h"
 #include "components/game/enemy/Wave.h"
+//Particle components
+#include "components/Billboard.h"
+#include "components/ParticleEmitter.h"
+

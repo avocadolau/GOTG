@@ -677,6 +677,43 @@ namespace Wiwa {
 		return c_it;
 	}
 
+	inline byte* EntityManager::GetComponents(ComponentId id, size_t* size)
+	{
+		*size = m_ComponentsSize[id];
+		
+		return m_Components[id];
+	}
+
+	inline byte* EntityManager::GetComponentsByHash(ComponentHash hash, size_t* size)
+	{
+		ComponentId cid = GetComponentId(hash);
+
+		*size = m_ComponentsSize[cid];
+
+		return m_Components[cid];
+	}
+
+	bool EntityManager::IsComponentRemoved(ComponentId id, size_t index)
+	{
+		std::vector<size_t>& ids = m_ComponentsRemoved[id];
+		size_t s = ids.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (ids[i] == index) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool EntityManager::IsComponentRemovedByHash(ComponentHash hash, size_t index)
+	{
+		ComponentId cid = GetComponentId(hash);
+
+		return IsComponentRemoved(cid, index);
+	}
+
 	size_t EntityManager::GetComponentIndex(EntityId entityId, ComponentId componentId, size_t componentSize)
 	{
 		size_t index = -1;

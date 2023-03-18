@@ -15,6 +15,7 @@
 #include <Wiwa/ecs/components/PointLight.h>
 #include <Wiwa/ecs/components/SpotLight.h>
 #include <Wiwa/ecs/components/DirectionalLight.h>
+#include <Wiwa/ecs/components/ParticleEmitter.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -52,6 +53,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ColliderSphere) { DrawColliderSpehereComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleEmitterComponent(data); } else
 			
 		// Basic component interface
 		if (type->is_class) {
@@ -438,6 +440,464 @@ void InspectorPanel::DrawRayCastComponent(byte* data)
 	DrawVec3Control("Ray From", &rayCast->rayFromWorld, 0.0f, 100.0f);
 	DrawVec3Control("Ray To", &rayCast->rayToWorld, 0.0f, 100.0f);
 	ImGui::Checkbox("Enabled", &rayCast->doRayCasting);
+}
+
+void ParticleTab()
+{
+	ImGui::Dummy(ImVec2(38, 0));
+	ImGui::SameLine();
+}
+
+void InspectorPanel::DrawParticleEmitterComponent(byte* data)
+{
+
+	Wiwa::ParticleEmitter* emitter = (Wiwa::ParticleEmitter*)data;
+
+	ImGui::Separator();
+	ImGui::Text("Emitter Parameters");
+	ImGui::Separator();
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Checkbox("##repeat", &emitter->repeat);
+	ImGui::SameLine();
+	ImGui::Text("Loop Spawning");
+
+	//spawn rate
+	if (emitter->repeat)
+	{
+		ParticleTab();
+		ImGui::Checkbox("##particle_rate_isRanged", &emitter->particle_rate_isRanged);
+		ImGui::SameLine();
+
+
+
+
+		if (emitter->particle_rate_isRanged)
+		{
+			ImGui::Text("Spawn Rate Range");
+
+			ParticleTab();
+			ImGui::PushItemWidth(46.0f);
+
+			ParticleTab();
+
+			ImGui::DragFloat("##particle_rate_range0", &emitter->particle_rate_range[0], 0.01f, 0.0f, 0.0f, "%.2f");
+			ImGui::SameLine();
+
+
+			ImGui::DragFloat("##particle_rate_range1", &emitter->particle_rate_range[1], 0.01f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+			ImGui::Text("Spawn Rate");
+
+			ParticleTab();
+
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(100.0f);
+
+
+			ImGui::DragFloat("##particle_rate", &emitter->particle_rate, 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		ImGui::PopItemWidth();
+
+		if (emitter->particle_rate < 0)		emitter->particle_rate = 0.01f;
+		if (emitter->particle_rate_range[0] < 0)		emitter->particle_rate_range[0] = 0.01f;
+		if (emitter->particle_rate_range[1] < 0)		emitter->particle_rate_range[1] = 0.01f;
+	}
+
+
+	//spawn amount
+	{
+		ImGui::Checkbox("##particle_amount_isRanged", &emitter->particle_amount_isRanged);
+		ImGui::SameLine();
+
+
+		if (emitter->particle_amount_isRanged)
+		{
+			ImGui::Text("Spawn Amount Range");
+
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+
+
+			ImGui::PushItemWidth(46.0f);
+
+
+			ImGui::DragInt("##particle_amount_range0", &emitter->particle_amount_range[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::SameLine();
+
+
+			ImGui::DragInt("##particle_amount_range1", &emitter->particle_amount_range[1], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+			ImGui::Text("Spawn Amount");
+
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(100.0f);
+
+
+			ImGui::DragInt("##particle_amount", &emitter->particle_amount, 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		ImGui::PopItemWidth();
+
+		if (emitter->particle_amount < 0)		emitter->particle_amount = 0;
+		if (emitter->particle_amount_range[0] < 0)		emitter->particle_amount_range[0] = 0;
+		if (emitter->particle_amount_range[1] < 0)		emitter->particle_amount_range[1] = 0;
+	}
+
+
+
+	//particle attributes
+
+	ImGui::Separator();
+	ImGui::Text("Particle attributes");
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 4));
+
+	//particle follow emitter
+	{
+		ImGui::Dummy(ImVec2(0, 0));
+		ImGui::SameLine();
+
+		ImGui::Checkbox("##particle_followEmitter", &emitter->particle_followEmitter);
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(2.5, 0));
+		ImGui::SameLine();
+		ImGui::Text("Follow Emitter");
+	}
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Text("Range");
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+
+
+
+
+	//particle lifetime
+	{
+		ImGui::Dummy(ImVec2(0, 0));
+		ImGui::SameLine();
+
+
+		ImGui::Checkbox("##particle_lifetime_isRanged", &emitter->particle_lifetime_isRanged);
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(2, 0));
+		ImGui::SameLine();
+		ImGui::SameLine();
+		ImGui::Text("Particle life time");
+
+		if (emitter->particle_lifetime_isRanged)
+		{
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(46.0f);
+
+
+			ImGui::DragFloat("##particle_lifetime_range0", &emitter->particle_lifetime_range[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::SameLine();
+
+
+			ImGui::DragFloat("##particle_lifetime_range1", &emitter->particle_lifetime_range[1], 0.05f, 0.0f, 0.0f, "%.2f");
+
+		}
+		else
+		{
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(100.0f);
+			ImGui::DragFloat("##particle_lifetime", &emitter->particle_lifetime, 0.05f, 0.0f, 0.0f, "%.2f");
+
+		}
+		ImGui::PopItemWidth();
+
+		if (emitter->particle_lifetime < 0) emitter->particle_lifetime = 0;
+		if (emitter->particle_lifetime_range[0] < 0) emitter->particle_lifetime_range[0] = 0;
+		if (emitter->particle_lifetime_range[1] < 0) emitter->particle_lifetime_range[1] = 0;
+	}
+
+
+	if (ImGui::TreeNode("Position & Translation"))
+	{
+		//particle starting position
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_startingPosition_isRanged", &emitter->particle_startingPosition_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::Text("Particle Starting Position");
+
+			if (emitter->particle_startingPosition_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingPosition_range0", &(emitter->particle_startingPosition_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingPosition_range1", &(emitter->particle_startingPosition_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingPosition", &(emitter->particle_startingPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+
+
+		}
+
+		//particle initial velocity
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_velocity_isRanged", &emitter->particle_velocity_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();
+			ImGui::Text("Particle Velocity");
+			if (emitter->particle_velocity_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_velocity_range0", &(emitter->particle_velocity_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				/*	ImGui::SameLine();
+					ImGui::Text("Particle Velocity");*/
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_velocity_range1", &(emitter->particle_velocity_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_velocity", &(emitter->particle_velocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Velocity");*/
+			}
+		}
+
+		//particle constant acceleration
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_acceleration_isRanged", &emitter->particle_acceleration_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();
+			ImGui::Text("Particle Acceleration");
+			if (emitter->particle_acceleration_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_acceleration_range0", &(emitter->particle_acceleration_range[0])[0], 0.01f, 0.0f, 0.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Acceleration");*/
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_acceleration_range1", &(emitter->particle_acceleration_range[1])[0], 0.01f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_acceleration", &(emitter->particle_acceleration)[0], 0.01f, 0.0f, 0.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Acceleration");*/
+			}
+		}
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Rotation"))
+	{
+		//particle starting rotation
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_startingRotation_isRanged", &emitter->particle_startingRotation_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::Text("Particle Rotation");
+
+			if (emitter->particle_startingRotation_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingRotation_range0", &(emitter->particle_startingRotation_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingRotation_range1", &(emitter->particle_startingRotation_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingRotation", &(emitter->particle_startingRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+		}
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Size & Growth"))
+	{
+		//particle starting size
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_startingSize_isRanged", &emitter->particle_startingSize_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();
+			ImGui::Text("Particle Starting Size");
+			if (emitter->particle_startingSize_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingSize_range0", &(emitter->particle_startingSize_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Direction");*/
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingSize_range1", &(emitter->particle_startingSize_range[1])[0], 0.05f, 1.0f, 1.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_startingSize", &emitter->particle_startingSize[0], 0.05f, 0.0f, 10.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Direction");*/
+			}
+		}
+
+		//particle size constant growth rate
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_growthVelocity_isRanged", &emitter->particle_growthVelocity_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();
+			ImGui::Text("Particle Growth Rate");
+			if (emitter->particle_growthVelocity_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_growthVelocity_range0", &(emitter->particle_growthVelocity_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Direction");*/
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_growthVelocity_range1", &(emitter->particle_growthVelocity_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_growthVelocity", &emitter->particle_growthVelocity[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				/*ImGui::SameLine();
+				ImGui::Text("Particle Direction");*/
+			}
+		}
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Texture"))
+	{
+		//particle starting size
+		{
+			/*ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_texture", &emitter->particle_startingSize_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();*/
+
+			ImGui::Text("Particle Texture");
+
+			uint32_t image_id = 0;
+
+			if (emitter->texture)
+				image_id = emitter->texture->GetTextureId();
+
+			ImGui::Image(ImTextureID(image_id), { 128,128 });
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+
+
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::wstring ws(path);
+					std::string pathS(ws.begin(), ws.end());
+					std::filesystem::path p = pathS.c_str();
+					if (p.extension() == ".png" || p.extension() == ".jpg")
+					{
+						WI_CORE_INFO("test");
+
+						bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(pathS.c_str());
+
+						emitter->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
+
+						if (emitter->textId1 == WI_INVALID_INDEX)
+						{
+							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
+
+						}
+						else
+						{
+							emitter->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(emitter->textId1);
+
+							/*std::string test = "texture id: " + std::to_string(emitter->texture->GetTextureId());
+
+							WI_CORE_INFO(test);*/
+
+
+
+
+						}
+
+						/*WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+						p.replace_extension();
+						std::string src = Wiwa::FileSystem::RemoveFolderFromPath("assets", p.string());
+						mesh->meshId = Wiwa::Resources::Load<Wiwa::Model>(src.c_str());
+						mesh->modelIndex = 0;
+						mesh->drawChildren = true;
+
+						Wiwa::Model* m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);*/
+					}
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+
+			if (!emitter->texture)
+				ImGui::Text("[Drop a suitable texture here]");
+			else
+				ImGui::Text("[Drop a suitable texture to change the current texture]");
+
+		}
+
+		ImGui::TreePop();
+	}
 }
 
 InspectorPanel::InspectorPanel(EditorLayer* instance)

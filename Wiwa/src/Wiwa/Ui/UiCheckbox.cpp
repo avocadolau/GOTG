@@ -7,16 +7,18 @@
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath) : GuiControl(scene, GuiControlType::CHECKBOX, id)
+	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, int callbackID) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
-
+		name = "Checkbox";
+		m_Scene = scene;
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
 
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
-
+		this->callbackID = callbackID;
+		callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		//We create only once the texture
@@ -79,32 +81,56 @@ namespace Wiwa
 
 		case GuiControlState::DISABLED:
 		{
-			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
-			
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = this->position.x;
+			newPosition.y = this->position.y;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+		
 
 		case GuiControlState::NORMAL:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = this->position.x;
+			newPosition.y = this->position.y;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = this->position.x;
+			newPosition.y = this->position.y;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		case GuiControlState::PRESSED:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		} break;
+			Vector2i newPosition;
+			newPosition.x = this->position.x;
+			newPosition.y = this->position.y;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 
 		/******/
 
 		case GuiControlState::SELECTED:
 		{
-			r2d_1.UpdateInstancedQuadTex(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		}break;
+			Vector2i newPosition;
+			newPosition.x = this->position.x;
+			newPosition.y = this->position.y;
+			Size2i newSize;
+			newSize.w = this->position.width;
+			newSize.h = this->position.height;
+			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
 		default:
 			break;
 		}

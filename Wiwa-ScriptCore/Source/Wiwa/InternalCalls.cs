@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using System;
 
 namespace Wiwa
 {
@@ -61,6 +60,10 @@ namespace Wiwa
         internal extern static float GetTimeIntr();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetFPSIntr(int fps);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetTimeScaleIntr(float scale);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetTimeScaleIntr();
         #endregion
         #region Camera
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -138,6 +141,14 @@ namespace Wiwa
         internal extern static void LoadSceneByIndex(ulong index, int flags);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void LoadSceneByName(string scene_name, int flags);
+        #endregion
+        #region UI
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Play();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool ChangeScene(int scene_id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Quit();
         #endregion
     }
 }
