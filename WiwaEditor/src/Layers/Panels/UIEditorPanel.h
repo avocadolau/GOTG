@@ -4,6 +4,8 @@
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/scene/SceneManager.h>
 #include "../../Utils/EditorUtils.h"
+#include <Wiwa/Events/ApplicationEvent.h>
+
 
 class UIEditorPanel : public Panel
 {
@@ -24,6 +26,11 @@ public:
 	void SetInitialValues(Wiwa::GuiControl* control);
 
 	void UpdateElements(Wiwa::GuiControl* control);
+
+
+	void OnEvent(Wiwa::Event& e) override;
+	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
+
 	int elementSelected;
 
 	//Variables to change

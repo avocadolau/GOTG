@@ -61,19 +61,6 @@ void UIPanel::Draw()
 	ImGui::End();
 }
 
-void UIPanel::OnEvent(Wiwa::Event& e)
-{
-	Wiwa::EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<SceneChangeEvent>({ &UIPanel::OnSceneChange, this });
-
-}
-
-bool UIPanel::OnSceneChange(SceneChangeEvent& e)
-{
-	//UI_element_selected = -1;
-	return true;
-}
-
 void UIPanel::DrawGuiElementSelection()
 {
 	const char* items[] = {"Button", "Slider", "CheckBox", "Image","Text"};
@@ -590,4 +577,27 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	}
 
 	ImGui::PopID();
+}
+
+void UIPanel::OnEvent(Wiwa::Event& e)
+{
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<SceneChangeEvent>({ &UIPanel::OnSceneChange, this });
+
+}
+
+bool UIPanel::OnSceneChange(SceneChangeEvent& e)
+{
+	canvasSelected = -1;
+	elementSelected = -1;
+	position[0] = 0; position[1] = 0;
+	size[0] = 0; size[1] = 0;
+	originPos[0] = 0; originPos[1] = 0;
+	originSize[0] = 0; originSize[1] = 0;
+	sliderOriginPos[0] = 0; sliderOriginPos[1] = 0;
+	sliderOriginSize[0] = 0; sliderOriginSize[1] = 0;
+	callbackID = WI_INVALID_INDEX;
+	pathForAsset = "";
+	pathForExtraAsset = "";
+	return true;
 }

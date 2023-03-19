@@ -123,7 +123,6 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		}
 		if (control->type != Wiwa::GuiControlType::TEXT)
 		{
-			static size_t current_item = callbackID;
 
 			Wiwa::Application& app = Wiwa::Application::Get();
 
@@ -138,7 +137,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 				{
 					for (size_t n = 0; n < cbcount; n++)
 					{
-						bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
+						bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
 						current_cb = app.getCallbackAt(n);
 						switch (control->type)
 						{
@@ -146,7 +145,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 							if (current_cb->getParamCount() == 0) {
 								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 								{
-									current_item = n;
+									callbackID = n;
 									if (is_selected)
 										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 								}
@@ -156,7 +155,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
 								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 								{
-									current_item = n;
+									callbackID = n;
 									if (is_selected)
 										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 								}
@@ -167,7 +166,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 								if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
 									if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 									{
-										current_item = n;
+										callbackID = n;
 										if (is_selected)
 											ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 									}
@@ -178,7 +177,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 							if (current_cb->getParamCount() == 0) {
 								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 								{
-									current_item = n;
+									callbackID = n;
 									if (is_selected)
 										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 								}
@@ -192,7 +191,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 				}
 			}
 
-			callbackID = current_item;
+			 
 			AssetContainer(pathForAsset.c_str());
 			if (ImGui::BeginDragDropTarget())
 			{
@@ -265,4 +264,25 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 			r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetTextureId());
 		}
 	}
+}
+
+void UIEditorPanel::OnEvent(Wiwa::Event& e)
+{
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({ &UIEditorPanel::OnSceneChange, this });
+
+}
+bool UIEditorPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
+{
+	elementSelected = -1;
+	pos[0] = 0; pos[1] = 0;
+	size[0] = 0; size[1] = 0;
+	originPos[0] = 0; originPos[1] = 0;
+	originSize[0] = 0; originSize[1] = 0;
+	extraOriginPos[0] = 0; extraOriginPos[1] = 0;
+	extraOriginSize[0] = 0; extraOriginSize[1] = 0;
+	callbackID = WI_INVALID_INDEX;
+	pathForAsset = "";
+	pathForExtraAsset = "";
+	return true;
 }
