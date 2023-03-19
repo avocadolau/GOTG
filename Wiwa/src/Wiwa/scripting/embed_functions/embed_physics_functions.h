@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Wiwa/ecs/components/Transform3D.h"
-#include "Wiwa/ecs/components/Rigidbody.h"
+#include "Wiwa/ecs/components/CollisionBody.h"
 #include "Wiwa/ecs/components/ColliderCube.h"
 #include "Wiwa/ecs/components/ColliderSphere.h"
 #include "Wiwa/ecs/components/ColliderCylinder.h"
