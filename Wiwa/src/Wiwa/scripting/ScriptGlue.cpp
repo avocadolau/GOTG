@@ -20,6 +20,7 @@
 #include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
 #include "embed_functions/embed_application_functions.h"
+#include "embed_functions/embed_artificialintelligence_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -127,5 +128,9 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(Play);
 		WI_ADD_INTERNAL_CALL(ChangeScene);
 		WI_ADD_INTERNAL_CALL(Quit);
+
+		// AI
+		
+		WI_ADD_INTERNAL_CALL(SendAIToPosition);
 	}
 }

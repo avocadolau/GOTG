@@ -169,5 +169,10 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Quit();
         #endregion
+        #region AgentAI
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SendAIToPosition(EntityId entity_id, Vector3 target_pos);
+        #endregion
+
     }
 }

@@ -86,4 +86,12 @@
         public float val2;
     }
     #endregion
+    #region AgentAI
+    [Component]
+    public struct AgentAI
+    {
+        public float speed;
+        public Vector3 target;
+    }
+    #endregion
 }
