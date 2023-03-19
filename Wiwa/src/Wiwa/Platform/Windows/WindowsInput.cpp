@@ -27,6 +27,12 @@ namespace Wiwa
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
+	bool WindowsInput::IsMouseButtonReleasedImpl(int button)
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetMouseButton(window, button);
+		return state == GLFW_RELEASE;
+	}
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
 		return {MouseX, MouseY};
@@ -81,17 +87,32 @@ namespace Wiwa
 
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
-	float WindowsInput::GetAxisImpl(int gamepadIndx, int axis)
+	float WindowsInput::GetAxisImpl(int gamepadIndx, int axis, float deadzone)
 	{
 		GLFWgamepadstate state;
 		if (glfwGetGamepadState(gamepadIndx, &state))
 		{
 			float input = state.axes[axis];
 			input = round(input * 10) / 10;
-			if (input >= -1 && input <= -0.6)
+			if (input >= -1 && input <= -deadzone)
 				return -1;
-			else if (input >= 0.6 && input <= 1)
+			else if (input >= deadzone && input <= 1)
 				return 1;
+		}
+		return 0.f;
+	}
+	float WindowsInput::GetRawAxisImpl(int gamepadIndx, int axis, float deadzone)
+	{
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(gamepadIndx, &state))
+		{
+			float input = state.axes[axis];
+			input = round(input * 10) / 10;
+			
+			float absInput = abs(input);
+
+			if (absInput >= deadzone)
+				return input;
 		}
 		return 0.f;
 	}

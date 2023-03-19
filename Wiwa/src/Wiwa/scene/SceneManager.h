@@ -63,9 +63,9 @@ namespace Wiwa {
 		static void CleanUp();
 		
 		static void SetScene(SceneId sceneId, bool init);
-		static void ChangeScene(SceneId sceneId);
 
-		static void StartChangeScene(SceneId sceneId);
+		static void ChangeSceneByIndex(SceneId sceneId, int flags = LOAD_DEFAULT);
+		static void ChangeSceneByName(const char* name, int flags = LOAD_DEFAULT);
 
 		static SceneId getActiveSceneId() { return m_ActiveScene; }
 		static Scene* getActiveScene() { return m_Scenes[m_ActiveScene]; }

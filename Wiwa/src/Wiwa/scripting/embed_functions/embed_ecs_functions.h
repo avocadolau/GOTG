@@ -1,30 +1,34 @@
 #pragma once
 #include "../MonoDefinitions.h"
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/scene/Scene.h>
 
 typedef unsigned char byte;
 
-byte* GetComponent(size_t id, MonoReflectionType* type);
+byte* GetComponent(size_t id, MonoReflectionType* type, void* scene);
 
-Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoReflectionType* type);
+Wiwa::EntityManager::ComponentIterator GetComponentIterator(EntityId eid, MonoReflectionType* type, void* scene);
 
-byte* GetComponentByIterator(Wiwa::EntityManager::ComponentIterator iterator);
+byte* GetComponentByIterator(Wiwa::EntityManager::ComponentIterator iterator, void* scene);
 
-byte* AddComponent(size_t id, MonoReflectionType* type);
+byte* AddComponent(size_t id, MonoReflectionType* type, void* scene);
 
-void ApplySystem(size_t id, MonoReflectionType* type);
+void ApplySystem(size_t id, MonoReflectionType* type, void* scene);
 
-size_t CreateEntity();
+size_t CreateEntity(void* scene);
 
-size_t CreateEntityNamed(MonoString* name_entity);
+size_t CreateEntityNamed(MonoString* name_entity, void* scene);
 
-void DestroyEntity(size_t eid);
+void DestroyEntity(size_t eid, void* scene);
+
+size_t LoadPrefabIntr(const char* file);
+void SavePrefabIntr(size_t id, const char* file);
 
 // Help functions
 
 size_t LoadResourceModel(MonoString* str);
 
-void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat);
+void AddMeshToEntity(size_t eid, MonoString* model, MonoString* mat, void* scene);
 
 /*MonoArray* GetComponent(EntityId id, MonoReflectionType* type)
 	{

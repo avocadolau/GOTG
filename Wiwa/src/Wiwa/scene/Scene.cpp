@@ -57,14 +57,6 @@ namespace Wiwa
 	void Scene::Init()
 	{
 		m_EntityManager.SystemsInit();
-
-		// WAY TO CREATE THE POSITION
-		// Rect2i test;
-		// test.x = 500;
-		// test.y = 100;
-		// test.width = 200;
-		// test.height = 100;
-		// m_GuiManager->CreateGuiControl(GuiControlType::BUTTON, 0, test, "assets/test.png", nullptr, {0,0,0,0});
 	}
 
 	void Scene::Update()
@@ -72,25 +64,39 @@ namespace Wiwa
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
-			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeEntering)
-				m_CurrentState = SCENE_LOOP;
+			m_EntityManager.UpdateWhitelist();
+
 			UpdateEnter();
 			RenderEnter();
+
+			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
+			
+			if (m_TransitionTimer >= mMaxTimeEntering) {
+				m_TransitionTimer = 0;
+
+				m_CurrentState = SCENE_LOOP;
+			}
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
-			m_GuiManager->Update();
+			
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
 			break;
 		case Scene::SCENE_LEAVING:
-			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
-			if (m_TransitionTimer >= mMaxTimeLeaving)
-				SceneManager::ChangeScene(m_SceneToChange);
+			m_EntityManager.UpdateWhitelist();
+
 			UpdateLeave();
 			RenderLeave();
+
+			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
+			
+			if (m_TransitionTimer >= mMaxTimeLeaving) {
+				m_TransitionTimer = 0;
+
+				SceneManager::LoadSceneByIndex(m_SceneToChange, m_SceneChangeFlags);
+			}
 			break;
 		default:
 			break;
@@ -101,10 +107,11 @@ namespace Wiwa
 	{
 		m_CameraManager->Update();
 
-		m_GuiManager->Draw();
-
 		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
 		r2d.UpdateInstanced(this);
+
+		m_GuiManager->Draw();
+		m_GuiManager->Update();
 
 		m_EntityManager.Update();
 
@@ -146,9 +153,10 @@ namespace Wiwa
 		}
 	}
 
-	void Scene::ChangeScene(size_t scene)
+	void Scene::ChangeScene(size_t scene, int flags)
 	{
 		m_SceneToChange = scene;
+		m_SceneChangeFlags = flags;
 		m_CurrentState = SCENE_LEAVING;
 		m_TransitionTimer = 0;
 	}

@@ -556,37 +556,49 @@ static bool DrawNode(ImDrawList* drawList,
     const size_t InputsCount = nodeTemplate.mInputCount;
     const size_t OutputsCount = nodeTemplate.mOutputCount;
 
-    /*
+    
     for (int i = 0; i < 2; i++)
     {
         const size_t slotCount[2] = {InputsCount, OutputsCount};
         
         for (size_t slotIndex = 0; slotIndex < slotCount[i]; slotIndex++)
         {
-            const char* con = i ? nodeTemplate.mOutputNames[slotIndex] : nodeTemplate.mInputNames[slotIndex];//node.mOutputs[slot_idx] : node->mInputs[slot_idx];
-            if (!delegate->IsIOPinned(nodeIndex, slot_idx, i == 1))
-            {
-               
-            }
-            continue;
+           const char* con;
+           if (nodeTemplate.mInputNames != NULL)
+           {
+              con = i ? nodeTemplate.mOutputNames[slotIndex] : nodeTemplate.mInputNames[slotIndex];//node.mOutputs[slot_idx] : node->mInputs[slot_idx];
+           }
+           else
+           {
+              con = "test";
+           }
+            //if (!delegate->IsIOPinned(nodeIndex, slot_idx, i == 1))
+            //{
+            //   
+            //}
+            //continue;
 
             ImVec2 p = offset + (i ? GetOutputSlotPos(delegate, node, slotIndex, factor) : GetInputSlotPos(delegate, node, slotIndex, factor));
             const float arc = 28.f * (float(i) * 0.3f + 1.0f) * (i ? 1.f : -1.f);
             const float ofs = 0.f;
 
             ImVec2 pts[3] = {p + ImVec2(arc + ofs, 0.f), p + ImVec2(0.f + ofs, -arc), p + ImVec2(0.f + ofs, arc)};
-            drawList->AddTriangleFilled(pts[0], pts[1], pts[2], i ? 0xFFAA5030 : 0xFF30AA50);
-            drawList->AddTriangle(pts[0], pts[1], pts[2], 0xFF000000, 2.f);
+            //drawList->AddTriangleFilled(pts[0], pts[1], pts[2], i ? 0xFFAA5030 : 0xFF30AA50);
+            //drawList->AddTriangle(pts[0], pts[1], pts[2], 0xFF000000, 2.f);
         }
     }
-    */
+
+   
 
     ImGui::SetCursorScreenPos(nodeRectangleMin);
     float maxHeight = ImMin(viewPort.Max.y, nodeRectangleMin.y + nodeSize.y) - nodeRectangleMin.y;
     float maxWidth = ImMin(viewPort.Max.x, nodeRectangleMin.x + nodeSize.x) - nodeRectangleMin.x;
     ImGui::InvisibleButton("node", ImVec2(maxWidth, maxHeight));
+
+
     // must be called right after creating the control we want to be able to move
     bool nodeMovingActive = ImGui::IsItemActive();
+
 
     // Save the size of what we have emitted and whether any of the widgets are being used
     bool nodeWidgetsActive = (!old_any_active && ImGui::IsAnyItemActive());
@@ -681,7 +693,52 @@ static bool DrawNode(ImDrawList* drawList,
     {
         delegate.CustomDraw(drawList, customDrawRect, nodeIndex);
     }
-/*
+
+    ImVec2 cursorPos = nodeRectangleMin;
+    cursorPos.x += 5;
+    cursorPos.y += 60;
+    ImGui::SetCursorScreenPos(cursorPos);
+
+    if (ImGui::Button("+I", ImVec2(20, 20)))
+    {
+       delegate.ChangeInputCount(0, 1);
+    }
+    
+    cursorPos.x += 25;
+    ImGui::SetCursorScreenPos(cursorPos);
+    
+    if (ImGui::Button("-I", ImVec2(20, 20)))
+    {
+       delegate.ChangeInputCount(0, -1);
+    }
+
+
+    cursorPos.x += 30;
+
+    ImGui::SetCursorScreenPos(cursorPos);
+    
+    if (ImGui::Button("+O", ImVec2(20, 20)))
+    {
+       delegate.ChangeOutputCount(0, 1);
+    }
+    
+    cursorPos.x += 25;
+    ImGui::SetCursorScreenPos(cursorPos);
+    
+    if (ImGui::Button("-O", ImVec2(20, 20)))
+    {
+       delegate.ChangeOutputCount(0, -1);
+    }
+
+    //ImVec2 cursorPos = ImGui::GetCursorPos();
+    //ImGui::SetCursorPos(ImVec2(nodeRectangleMin));
+    //if (ImGui::Button("+", ImVec2(300, 100)))
+    //{
+    //   //delegate.mTemplates[0].mInputCount++;
+    //   //WI_INFO("{}", delegate.test);
+    //}
+    //ImGui::SetCursorPos(cursorPos);
+/* 
     const ImTextureID bmpInfo = (ImTextureID)(uint64_t)delegate->GetBitmapInfo(nodeIndex).idx;
     if (bmpInfo)
     {
@@ -927,10 +984,10 @@ void Show(Delegate& delegate, const Options& options, ViewState& viewState, bool
                 SlotIndex inputSlot = -1;
                 SlotIndex outputSlot = -1;
 
-                bool overInput = (!inMinimap) && HandleConnections(drawList, nodeIndex, offset, viewState.mFactor, delegate, options, false, inputSlot, outputSlot, inMinimap);
+                  bool overInput = (!inMinimap) && HandleConnections(drawList, nodeIndex, offset, viewState.mFactor, delegate, options, false, inputSlot, outputSlot, inMinimap);
 
                 // shadow
-                /*
+                
                 ImVec2 shadowOffset = ImVec2(30, 30);
                 ImVec2 shadowPivot = (nodeRect.Min + nodeRect.Max) /2.f;
                 ImVec2 shadowPointMiddle = shadowPivot + shadowOffset;
@@ -950,7 +1007,7 @@ void Show(Delegate& delegate, const Options& options, ViewState& viewState, bool
 
                 // bottom right
                 drawList->AddRectFilledMultiColor(shadowPointMiddle, nodeRect.Max + shadowOffset, IM_COL32(0, 0, 0, 255), IM_COL32(0 ,0, 0, 0), IM_COL32(0,0,0,0), IM_COL32(0, 0, 0, 0));
-                */
+                
                 if (DrawNode(drawList, nodeIndex, offset, viewState.mFactor, delegate, overInput, options, inMinimap, regionRect))
                 {
                     hoveredNode = nodeIndex;

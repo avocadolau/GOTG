@@ -211,9 +211,18 @@ namespace Wiwa
 		ComponentIterator GetComponentIterator(EntityId eid);
 
 		inline byte** GetComponentsPtr(ComponentId id) { return &m_Components[id]; }
-		inline byte* GetComponents(ComponentId id) { return m_Components[id]; }
+
+		inline byte* GetComponents(ComponentId id, size_t* size);
+		inline byte* GetComponentsByHash(ComponentHash hash, size_t* size);
+
 		template <class T>
 		T* GetComponents(size_t *size);
+
+		template<class T>
+		bool IsComponentRemoved(size_t index);
+
+		bool IsComponentRemoved(ComponentId id, size_t index);
+		bool IsComponentRemovedByHash(ComponentHash hash, size_t index);
 
 		inline std::vector<byte *> *GetComponentsList() { return &m_Components; }
 
@@ -251,6 +260,11 @@ namespace Wiwa
 		// System functions
 		bool HasSystem(EntityId eid, SystemHash sid);
 
+		template<class T>
+		T* GetSystem(EntityId eid);
+
+		System* GetSystem(EntityId eid, SystemHash system_hash);
+
 		// Register systems
 		template <class T>
 		void ApplySystem(EntityId eid);
@@ -268,6 +282,14 @@ namespace Wiwa
 		const Type *ctype = GetType<T>();
 
 		return GetComponentId(ctype);
+	}
+
+	template<class T>
+	inline T* EntityManager::GetSystem(EntityId eid)
+	{
+		const Type* stype = GetType<T>();
+
+		return (T*)GetSystem(eid, stype->hash);
 	}
 
 	template <class T>
@@ -306,6 +328,14 @@ namespace Wiwa
 		}
 
 		return (T *)(void *)components;
+	}
+
+	template<class T>
+	inline bool EntityManager::IsComponentRemoved(size_t index)
+	{
+		ComponentId cid = GetComponentId<T>();
+
+		return IsComponentRemoved(cid, index);
 	}
 
 	template <class T>

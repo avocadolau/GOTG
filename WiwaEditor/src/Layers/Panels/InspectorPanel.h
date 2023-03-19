@@ -23,11 +23,13 @@ private:
 	void DrawPointLightComponent(byte* data);
 	void DrawDirectionalLightComponent(byte* data);
 	void DrawSpotLightComponent(byte* data);
+	void DrawAnimatorComponent(byte* data);
 	void DrawRigidBodyComponent(byte* data);
 	void DrawColliderCubeComponent(byte* data);
 	void DrawColliderSpehereComponent(byte* data);
 	void DrawColliderCylinderComponent(byte* data);
 	void DrawRayCastComponent(byte* data);
+	void DrawParticleEmitterComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();
@@ -46,6 +48,7 @@ public:
 		id = m_CurrentID;
 		return m_EntitySet;
 	}
+
 private:
 	
 	int m_CurrentID = 0;
