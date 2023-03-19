@@ -8,7 +8,7 @@
 namespace Wiwa {
 	PhysicsSystem::PhysicsSystem()
 	{
-
+		obj = nullptr;
 	}
 
 	PhysicsSystem::~PhysicsSystem()
@@ -59,24 +59,19 @@ namespace Wiwa {
 		{
 			if (cube)
 			{
-				std::string name = "City_building_004";
-				WI_INFO("NEW BODY OF ENTITY--> {} AND ID {}", e_name, m_EntityId);
-				//if (mesh) cube->halfExtents = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId)->boundingBox.HalfSize();
-				physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
-				if (name == e_name)
-					physicsManager.AddBodyToLog(physicsManager.FindByEntityId(m_EntityId));
+				obj = physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
 			}
 			else if (sphere)
 			{
-				physicsManager.AddBodySphere(m_EntityId, *sphere, *transform, *rb);
+				obj = physicsManager.AddBodySphere(m_EntityId, *sphere, *transform, *rb);
 			}
 			else if (cylinder)
 			{
-				physicsManager.AddBodyCylinder(m_EntityId, *cylinder, *transform, *rb);
+				obj = physicsManager.AddBodyCylinder(m_EntityId, *cylinder, *transform, *rb);
 			}
 			else if (capsule)
 			{
-				physicsManager.AddBodyCapsule(m_EntityId, *capsule, *transform, *rb);
+				obj = physicsManager.AddBodyCapsule(m_EntityId, *capsule, *transform, *rb);
 			}
 		}
 	}
@@ -106,13 +101,18 @@ namespace Wiwa {
 		//WI_INFO("Collision leave of --> {}", e_name);
 	}
 
+	Object* PhysicsSystem::getBody()
+	{
+		return obj;
+	}
+
 	void PhysicsSystem::DeleteBody()
 	{
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		Object* body = physicsManager.FindByEntityId(m_EntityId);
+		if (obj != nullptr)
+			physicsManager.DeleteBody(obj);
 
-		if (body != nullptr)
-			physicsManager.DeleteBody(body);
+		obj = nullptr;
 	}
 }
