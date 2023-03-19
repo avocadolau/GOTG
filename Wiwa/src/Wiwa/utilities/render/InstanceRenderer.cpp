@@ -205,6 +205,11 @@ namespace Wiwa {
 		m_InstanceVertex[id].textureClip = clip;
 	}
 
+	void InstanceRenderer::UpdateInstanceColor(uint32_t id, const Color4f& color)
+	{
+		m_InstanceVertex[id].color = color;
+	}
+
 	int InstanceRenderer::AddTexture(uint32_t texture)
 	{
 		size_t texSize = m_Textures.size();

@@ -199,6 +199,12 @@ namespace Wiwa
 		instanceRenderer.UpdateInstanceTexture(id, tex_id);
 	}
 
+	void Renderer2D::UpdateInstancedQuadTexColor(Scene* scene, uint32_t id, const Color4f& color)
+	{
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
+		instanceRenderer.UpdateInstanceColor(id, color);
+	}
+
 	void Renderer2D::UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color)
 	{
 		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
