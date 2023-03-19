@@ -51,7 +51,7 @@ namespace Wiwa {
 		m_Debug = true;
 		m_HasBeenInit = true;
 
-		m_World = new btCollisionWorld(m_Dispatcher, m_Broad_phase, m_Collision_conf);
+		m_World = new btCollisionWorld(m_Dispatcher,m_Broad_phase,m_Collision_conf);
 		m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
@@ -61,7 +61,7 @@ namespace Wiwa {
 		AddFilterTag("COLLISION_EVERYTHING");
 
 		//WI_INFO("Physics Manager Init");
-
+		
 		return true;
 	}
 
@@ -74,21 +74,20 @@ namespace Wiwa {
 		}
 
 		//Step simulation
-		float dt = 1.0f / 60.0f;
+		float dt = 1.0f/60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
 		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
-
-		//static int o = 0;
-		//Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		//for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
-		//{
-		//	Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-		//	//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
-		//	o++;
-		//}
-
+		static int o = 0;
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
+		{
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
+			o++;
+		}
+		
 		// Commented because it causes clipping :(
 		/*for (int i = 0; i < SUB_STEPS; i++)
 		{
@@ -96,7 +95,7 @@ namespace Wiwa {
 			m_World->performDiscreteCollisionDetection();
 			ResolveContacts();
 		}*/
-
+		
 		return true;
 	}
 
@@ -136,9 +135,6 @@ namespace Wiwa {
 			std::vector<System*>& vecB = entityManager.GetEntitySystems(cData.entityB);
 			Object* objA = FindByEntityId(cData.entityA);
 			Object* objB = FindByEntityId(cData.entityB);
-
-			if (objA == nullptr || objB == nullptr)
-				continue;
 
 			switch (cData.collisionType) {
 			case CT_ENTER:
@@ -224,8 +220,8 @@ namespace Wiwa {
 
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
-			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
+			Transform3D*transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			Rigidbody*rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
 			// Get the position from the engine
 			glm::vec3 posEngine = transform3d->localPosition;
@@ -256,7 +252,7 @@ namespace Wiwa {
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
+			Rigidbody* rigidBody = entityManager.GetComponent<Wiwa::Rigidbody>((*item)->id);
 
 			btTransform bulletTransform((*item)->collisionObject->getWorldTransform());
 
@@ -308,7 +304,7 @@ namespace Wiwa {
 			m_World->removeCollisionObject((*item)->collisionObject);
 			//delete (ObjectData*)(*item)->getUserPointer();
 			delete (*item)->collisionObject;
-			delete* item;
+			delete*item;
 			*item = nullptr;
 		}
 
@@ -316,9 +312,8 @@ namespace Wiwa {
 		m_BodiesToLog.clear();
 		delete m_World;
 
-		filterMap.clear();
-		/*filterStrings.clear();
-		fliterBitsSets.clear();*/
+		filterStrings.clear();
+		fliterBitsSets.clear();
 
 		m_HasBeenInit = false;
 		return true;
@@ -338,7 +333,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
 		btCollisionShape* colShape = new btSphereShape(sphere.radius);
 		m_Shapes.push_back(colShape);
@@ -352,7 +347,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
 		glm::vec3 skew;
 		glm::vec4 perspective;
@@ -373,7 +368,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
 		btCollisionShape* colShape = new btCylinderShape(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
 		m_Shapes.push_back(colShape);
@@ -388,7 +383,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body)
 	{
 		btCollisionShape* colShape = new btCapsuleShape(capsule.radius, capsule.radius);
 		m_Shapes.push_back(colShape);
@@ -404,7 +399,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body)
+	bool PhysicsManager::AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::Rigidbody& rigid_body)
 	{
 		if (rigid_body.isTrigger)
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -417,8 +412,8 @@ namespace Wiwa {
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() & ~btCollisionObject::CF_STATIC_OBJECT);
 
 		collision_object->setCollisionShape(collision_shape);
-		Object* myObjData = new Object(*collision_object, id, rigid_body.selfTag, GetFilterTag(rigid_body.selfTag), rigid_body.doContinuousCollision);
-		collision_object->setUserPointer((Object*)myObjData);
+		Object* myObjData = new Object(*collision_object, id, rigid_body.doContinuousCollision);
+
 		//collision_object->setCollisionFlags(rigid_body.)
 
 		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
@@ -475,7 +470,7 @@ namespace Wiwa {
 	bool PhysicsManager::OnSave()
 	{
 		JSONDocument physics;
-		int count = filterMap.size();
+		int count = filterStrings.size();
 
 		physics.AddMember("tags_count", count);
 		std::string tag = "tag_";
@@ -483,7 +478,7 @@ namespace Wiwa {
 		{
 			std::string newTag = tag;
 			newTag += std::to_string(i);
-			physics.AddMember(newTag.c_str(), GetFilterTag(i));
+			physics.AddMember(newTag.c_str(), filterStrings[i].c_str());
 		}
 		std::string path = "assets/Scenes/";
 		path += SceneManager::getActiveScene()->getName();
@@ -492,17 +487,17 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::OnLoad(const char* name)
+	bool PhysicsManager::OnLoad()
 	{
 		std::string path = "assets/Scenes/";
-		path += name;
+		path += SceneManager::getActiveScene()->getName();
 		path += "_physics.json";
 
 		JSONDocument physics;
 		if (!physics.load_file(path.c_str()))
 			return false;
 
-		for (int i = 1; i < filterMap.size(); i++)
+		for (int i = 1; i < filterStrings.size(); i++)
 			RemoveFilterTag(i);
 
 		int count = physics["tags_count"].get<int>();
@@ -524,152 +519,59 @@ namespace Wiwa {
 	void PhysicsManager::DebugDrawWorld()
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-		if (camera->drawBoundingBoxes)
-		{
-			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-			camera->frameBuffer->Bind(false);
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		camera->frameBuffer->Bind(false);
 
-			m_Debug_draw->lineDisplayShader->Bind();
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
-			m_World->debugDrawWorld();
-			m_Debug_draw->lineDisplayShader->UnBind();
-			camera->frameBuffer->Unbind();
-		}
+		m_World->debugDrawWorld();
+		m_Debug_draw->lineDisplayShader->UnBind();
+		camera->frameBuffer->Unbind();
 	}
 
 	bool PhysicsManager::AddFilterTag(const char* str)
 	{
-		/*if (filterStrings.size() == 32)
+		if (filterStrings.size() == 32)
 			return false;
 
 		filterStrings.emplace_back(str);
 		std::bitset<MAX_BITS> bset;
 		bset.set(filterStrings.size(), true);
-		fliterBitsSets.push_back(bset);*/
-		int size = filterMap.size();
-		if (filterMap.size() == 32)
-			return false;
-		filterMap.emplace(str, size);
-
+		fliterBitsSets.push_back(bset);
 		return true;
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
-		/*filterStrings.erase(filterStrings.begin() + index);
-		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
-		for (const auto& [key, value] : filterMap)
-		{
-			if (value == index)
-				filterMap.erase(key);
-		}
-	}
-
-	const char* PhysicsManager::GetFilterTag(const int index)
-	{
-		//return filterStrings[index].c_str();
-		for (const auto& [key, value] : filterMap)
-		{
-			if (value == index)
-				return key.c_str();
-		}
-		return "NONE";
-	}
-
-	int PhysicsManager::GetFilterTag(const char* str)
-	{
-		/*int count = filterStrings.size();
-		std::string strcmp = str;
-		for (int i = 0; i < count; i++)
-		{
-			if (filterStrings[i] == strcmp)
-				return i;
-		}
-		return 0;*/
-		if (!(filterMap.find(str) != filterMap.end()))
-			return -1;
-
-		return filterMap[str];
+		filterStrings.erase(filterStrings.begin() + index);
+		fliterBitsSets.erase(fliterBitsSets.begin() + index);
 	}
 
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-
-		if (camera->drawBoundingBoxes)
-		{
-			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-			camera->frameBuffer->Bind(false);
-			m_Debug_draw->lineDisplayShader->Bind();
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
-
-			((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
-		}
-
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		camera->frameBuffer->Bind(false);
+		m_Debug_draw->lineDisplayShader->Bind();
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
+		
+		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
 		btCollisionWorld::ClosestRayResultCallback closestHit = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
 		m_World->rayTest(ray_from_world, ray_to_world, closestHit);
 		if (closestHit.hasHit())
 		{
 			btVector3 p = ray_from_world.lerp(ray_to_world, closestHit.m_closestHitFraction);
-			if (camera->drawBoundingBoxes)
-			{
-				m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
-				m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
-			}
+			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
+			m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
 		}
 
-		if (camera->drawBoundingBoxes)
-			camera->frameBuffer->Unbind();
-	}
-
-	int PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
-	{
-		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-
-		if (camera->drawBoundingBoxes)
-		{
-			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-			camera->frameBuffer->Bind(false);
-			m_Debug_draw->lineDisplayShader->Bind();
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
-			((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
-		}
-
-		btCollisionWorld::AllHitsRayResultCallback allResults = btCollisionWorld::AllHitsRayResultCallback(ray_from_world, ray_to_world);
-		m_World->rayTest(ray_from_world, ray_to_world, allResults);
-
-		for (int i = 0; i < allResults.m_hitFractions.size(); i++)
-		{
-			btVector3 p = ray_from_world.lerp(ray_to_world, allResults.m_hitFractions[i]);
-
-			if (camera->drawBoundingBoxes)
-			{
-				m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
-				m_World->getDebugDrawer()->drawLine(p, p + allResults.m_hitNormalWorld[i], btVector4(0, 0, 1, 1));
-			}
-
-			int dist = ray_from_world.distance2(p);
-
-			Object* obj = (Object*)allResults.m_collisionObject[i].getUserPointer();
-			if (strcmp(obj->selfTagStr, "WALL") == 0)
-				return dist;
-			else
-				return -1;
-		}
-
-		if (camera->drawBoundingBoxes)
-			camera->frameBuffer->Unbind();
-
-		return -1;
+		camera->frameBuffer->Unbind();
 	}
 
 	bool PhysicsManager::AddBodyToLog(Object* body_to_log)
@@ -697,7 +599,7 @@ namespace Wiwa {
 		{
 			btVector3 pos = (*item)->collisionObject->getWorldTransform().getOrigin();
 			/*const char* e_name = entityManager.GetEntityName(id); */
-			WI_INFO("Id {} is at {} {} {}", (*item)->id, pos.x(), pos.y(), pos.z());
+			WI_INFO("Id {} is at {} {} {}", (*item)->id, pos.x(), pos.y(), pos.z()); 
 			num++;
 		}
 		return true;
@@ -735,7 +637,7 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-
+	
 	glBindVertexArray(vao);
 	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

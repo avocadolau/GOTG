@@ -43,7 +43,7 @@ namespace Wiwa {
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 
-		CollisionBody* rb = GetComponent<CollisionBody>();
+		Rigidbody* rb = GetComponent<Rigidbody>();
 		Transform3D* transform = GetComponent<Transform3D>();
 
 		ColliderCube* cube = GetComponent<ColliderCube>();

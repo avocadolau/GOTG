@@ -71,9 +71,9 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		{
 			DrawAnimatorComponent(data);
 		}
-		else if (type->hash == (size_t)TypeHash::CollisionBody)
+		else if (type->hash == (size_t)TypeHash::Rigidbody)
 		{
-			DrawCollisionBodyComponent(data);
+			DrawRigidBodyComponent(data);
 		}
 		else if (type->hash == (size_t)TypeHash::ColliderCube)
 		{
@@ -216,31 +216,20 @@ void InspectorPanel::DrawCollisionTags()
 	if (ImGui::BeginPopupModal("Edit Tags", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		static int selected = -1;
-		for (const auto& [key, value] : py.filterMap)
+		for (int n = 0; n < py.filterStrings.size(); n++)
 		{
-			/*std::string tempStr = py.GetFilterTag(n);
-			int bits = 1 << n;
-			tempStr += "_" + std::to_string(bits);*/
-			std::string tagNameWitBits = key;
-			tagNameWitBits += "_" + std::to_string(value);
-			if (ImGui::Selectable(tagNameWitBits.c_str(), selected == value, ImGuiSelectableFlags_DontClosePopups))
-				selected = value;
-		}
-		/*for (int n = 0; n < py.filterMap.size(); n++)
-		{
-			std::string tempStr = py.GetFilterTag(n);
-			int bits = 1 << n;
-			tempStr += "_" + std::to_string(bits);
+			std::string tempStr = py.filterStrings[n].c_str();
+			tempStr += "_" + py.fliterBitsSets[n].to_string();
 			if (ImGui::Selectable(tempStr.c_str(), selected == n, ImGuiSelectableFlags_DontClosePopups))
 				selected = n;
-		}*/
+		}
 
 		static char strBuf[64] = "";
 		ImGui::InputText("Write Tag", strBuf, 64, ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CharsNoBlank);
 
 		if (ImGui::Button("Add", ImVec2(120, 0)))
 		{
-			if (!(py.filterMap.find(strBuf) != py.filterMap.end()))
+			if (!(std::find(py.filterStrings.begin(), py.filterStrings.end(), strBuf) != py.filterStrings.end()))
 			{
 				py.AddFilterTag(strBuf);
 			}
@@ -422,9 +411,9 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	AssetContainer(animator->filePath);
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 		{
-			const wchar_t* path = (const wchar_t*)payload->Data;
+			const wchar_t *path = (const wchar_t *)payload->Data;
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
@@ -436,77 +425,57 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 			}
 		}
 
-		Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
-
-		AssetContainer(animator->filePath);
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				std::wstring ws(path);
-				std::string pathS(ws.begin(), ws.end());
-				std::filesystem::path p = pathS.c_str();
-				if (p.extension() == ".wianimator")
-				{
-					WI_INFO("Trying to load payload at path {0}", pathS.c_str());
-					strcpy(animator->filePath, pathS.c_str());
-					animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
-				}
-			}
-
-			ImGui::EndDragDropTarget();
-		}
-		if (animator->animator == nullptr)
-			return;
-		// get animaitons
-		const char* animationItems[10];
-		for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
-		{
-			animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
-		}
-
-		const char* current_item = NULL;
-		if (animator->animator->GetCurrentAnimation() != nullptr)
-			current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
-
-		if (ImGui::BeginCombo("animaiton", current_item))
-		{
-			for (int n = 0; n < animator->animator->m_Animations.size(); n++)
-			{
-				bool is_selected = (current_item == animationItems[n]);
-				if (ImGui::Selectable(animationItems[n], is_selected))
-				{
-					current_item = animationItems[n];
-					ImGui::SetItemDefaultFocus();
-					animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
-				}
-			}
-			ImGui::EndCombo();
-		}
-
-		ImGui::Checkbox("Play", &animator->Play);
+		ImGui::EndDragDropTarget();
 	}
+	if (animator->animator == nullptr)
+		return;
+	// get animaitons
+	const char *animationItems[10];
+	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+	{
+		animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+	}
+
+	const char *current_item = NULL;
+	if (animator->animator->GetCurrentAnimation() != nullptr)
+		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
+
+	if (ImGui::BeginCombo("animaiton", current_item))
+	{
+		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+		{
+			bool is_selected = (current_item == animationItems[n]);
+			if (ImGui::Selectable(animationItems[n], is_selected))
+			{
+				current_item = animationItems[n];
+				ImGui::SetItemDefaultFocus();
+				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::Checkbox("Play", &animator->Play);
 }
 
-void InspectorPanel::DrawCollisionBodyComponent(byte* data)
+void InspectorPanel::DrawRigidBodyComponent(byte *data)
 {
-	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-	Wiwa::CollisionBody* collisionBody = (Wiwa::CollisionBody*)data;
-	DrawVec3Control("Position offset", &collisionBody->positionOffset, 0.0f, 100.0f);
-	DrawVec3Control("Scaling offset", &collisionBody->scalingOffset, 0.0f, 100.0f);
-	ImGui::Checkbox("Is static?", &collisionBody->isStatic);
-	ImGui::Checkbox("Is trigger?", &collisionBody->isTrigger);
-	ImGui::Checkbox("Do continuous?", &collisionBody->doContinuousCollision);
+	Wiwa::PhysicsManager &py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+	Wiwa::Rigidbody *rigidBody = (Wiwa::Rigidbody *)data;
+	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
+	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
+	ImGui::Checkbox("Is static?", &rigidBody->isStatic);
+	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
+	ImGui::Checkbox("Do continuous?", &rigidBody->doContinuousCollision);
 
-	const char* comboPreviewValue = py.GetFilterTag(collisionBody->selfTag);  // Pass in the preview value visible before opening the combo (it could be anything)
+	const char *comboPreviewValue = py.filterStrings[rigidBody->selfTag].c_str(); // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
 	{
-		for (int n = 0; n < py.filterMap.size(); n++)
+		for (int n = 0; n < py.filterStrings.size(); n++)
 		{
-			const bool is_selected = (collisionBody->selfTag == n);
-			if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
-				collisionBody->selfTag = n;
+			const bool is_selected = (rigidBody->selfTag == n);
+			if (ImGui::Selectable(py.filterStrings[n].c_str(), is_selected))
+				rigidBody->selfTag = n;
 
 			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 			if (is_selected)
@@ -517,25 +486,25 @@ void InspectorPanel::DrawCollisionBodyComponent(byte* data)
 	}
 
 	ImGui::Text("Collide with:");
-	for (int i = 0; i < py.filterMap.size(); i++)
+	for (int i = 0; i < py.filterStrings.size(); i++)
 	{
-		bool local = (collisionBody->filterBits >> i) & 1; //Checking a bit
-		ImGui::Checkbox(py.GetFilterTag(i), &local);
+		bool local = (rigidBody->filterBits >> i) & 1; // Checking a bit
+		ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
 		if (local)
-			collisionBody->filterBits |= 1 << i;
+			rigidBody->filterBits |= 1 << i;
 		else
-			collisionBody->filterBits &= ~(1 << i);
+			rigidBody->filterBits &= ~(1 << i);
 	}
 
 	// ImGui::Text("Do not collide with:");
 	// for (int i = 0; i < py.filterStrings.size(); i++)
 	//{
-	//	bool local = (collisionBody->filterBits >> i) & 1U; //Checking a bit
+	//	bool local = (rigidBody->filterBits >> i) & 1U; //Checking a bit
 	//	ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
 	//	if (local)
-	//		collisionBody->filterBits |= 1UL << i;
+	//		rigidBody->filterBits |= 1UL << i;
 	//	else
-	//		collisionBody->filterBits &= ~(1UL << i);
+	//		rigidBody->filterBits &= ~(1UL << i);
 	// }
 }
 

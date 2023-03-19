@@ -34,9 +34,9 @@
         public Vector4 local_mat_r4;
     }
     #endregion
-    #region CollisionBody
+    #region RigidBody
     [Component]
-    public struct CollisionBody
+    public struct Rigidbody
     {
         public Vector3 positionOffset;
         public Vector3 scalingOffset;

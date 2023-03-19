@@ -1,7 +1,7 @@
 #pragma once
 #include "System.h"
 #include "../components/Transform3D.h"
-#include "../components/CollisionBody.h"
+#include "../components/Rigidbody.h"
 
 #include <Wiwa/utilities/Reflection.h>
 

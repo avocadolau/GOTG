@@ -3,7 +3,7 @@
 #include <wipch.h>
 #include <Wiwa/core/Core.h>
 
-#include <Wiwa/ecs/components/CollisionBody.h>
+#include <Wiwa/ecs/components/RigidBody.h>
 #include <Wiwa/ecs/components/ColliderCube.h>
 #include <Wiwa/ecs/components/ColliderCylinder.h>
 #include <Wiwa/ecs/components/ColliderSphere.h>
@@ -20,7 +20,6 @@
 #include <vector>
 #include <bitset>
 #include <algorithm>
-#include <map>
 
 #define MAX_BITS 32
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
@@ -31,14 +30,11 @@ class Camera;
 namespace Wiwa {
 
 	struct Object {
-		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_),
-			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_) {};
+		Object(btCollisionObject& body_, const size_t id_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_), doContinuousCollision(doContinuousCollision_){};
 
 		btCollisionObject* collisionObject;
 		btVector3 velocity;
 		size_t id;
-		int selfTag;
-		const char* selfTagStr;
 		bool doContinuousCollision;
 	};
 
@@ -85,19 +81,19 @@ namespace Wiwa {
 		bool DeleteBody(Object* body);
 
 		// Add bodies
-		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
-		bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
-		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 
-		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::Rigidbody& rigid_body);
 	private:
-		bool AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body);
+		bool AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::Rigidbody& rigid_body);
 	public:
 
 		// Manipulate bodies
-		bool SetVelocity(Object* body, const glm::vec3 velocity);
+		bool SetVelocity(Object*body, const glm::vec3 velocity);
 
 		bool SetRotation(Object* body, const glm::vec3 euler_angles);
 
@@ -109,7 +105,7 @@ namespace Wiwa {
 
 		bool OnSave();
 
-		bool OnLoad(const char* name);
+		bool OnLoad();
 
 		bool getInit();
 
@@ -117,16 +113,10 @@ namespace Wiwa {
 		void DebugDrawWorld();
 
 		bool AddFilterTag(const char* str);
-
+		
 		void RemoveFilterTag(const int index);
 
-		const char* GetFilterTag(const int index);
-
-		int GetFilterTag(const char* str);
-
 		void RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world);
-
-		int RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
 	private:
 		bool m_Debug;
@@ -159,10 +149,9 @@ namespace Wiwa {
 		bool LogBodies();
 
 	public:
-		std::map<std::string, int> filterMap;
+		std::vector<std::string> filterStrings;
+		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;
 
-		/*std::vector<std::string> filterStrings;
-		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;*/
 		/*void bin(unsigned n)
 		{
 			if (n > 1)

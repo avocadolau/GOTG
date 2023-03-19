@@ -10,7 +10,7 @@
 
 
 namespace Wiwa {
-	struct WI_API CollisionBody {
+	struct WI_API Rigidbody {
 		glm::vec3 positionOffset;
 		glm::vec3 scalingOffset;
 		bool isTrigger;
@@ -21,7 +21,7 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::CollisionBody)
+REFLECTION_BEGIN(Wiwa::Rigidbody)
 	REFLECT_MEMBER(positionOffset)
 	REFLECT_MEMBER(scalingOffset)
 	REFLECT_MEMBER(isTrigger)

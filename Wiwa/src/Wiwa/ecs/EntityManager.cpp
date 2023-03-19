@@ -832,9 +832,9 @@ namespace Wiwa {
 		std::vector<System*>& systems = m_EntitySystems[entityId];
 		size_t s_size = systems.size();
 
-		if (type->hash == (size_t)TypeHash::CollisionBody)
+		if (type->hash == (size_t)TypeHash::Rigidbody)
 		{
-			Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
+			Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
 			rigidBody->positionOffset = { 0,0,0 };
 			rigidBody->scalingOffset = { 1,1,1 };
 			rigidBody->isTrigger = false;
