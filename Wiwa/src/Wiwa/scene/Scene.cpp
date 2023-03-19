@@ -79,7 +79,7 @@ namespace Wiwa
 			break;
 		case Scene::SCENE_LOOP:
 			m_EntityManager.SystemsUpdate();
-			
+			m_GuiManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -111,7 +111,6 @@ namespace Wiwa
 		r2d.UpdateInstanced(this);
 
 		m_GuiManager->Draw();
-		m_GuiManager->Update();
 
 		m_EntityManager.Update();
 
