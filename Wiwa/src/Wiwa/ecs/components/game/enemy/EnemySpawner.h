@@ -1,5 +1,5 @@
 //#pragma once
-//
+//#pragma warning(disable : 4302)
 //#include <Wiwa/core/Core.h>
 //#include <Wiwa/utilities/Reflection.h>
 //

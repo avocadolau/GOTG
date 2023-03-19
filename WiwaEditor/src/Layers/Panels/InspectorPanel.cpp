@@ -17,6 +17,7 @@
 #include <Wiwa/ecs/components/DirectionalLight.h>
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/ParticleEmitter.h>
+#include <Wiwa/ecs/components/CollisionBody.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -490,7 +491,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 void InspectorPanel::DrawRigidBodyComponent(byte *data)
 {
 	Wiwa::PhysicsManager &py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-	Wiwa::Rigidbody *rigidBody = (Wiwa::Rigidbody *)data;
+	Wiwa::CollisionBody *rigidBody = (Wiwa::CollisionBody*)data;
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
 	ImGui::Checkbox("Is static?", &rigidBody->isStatic);

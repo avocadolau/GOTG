@@ -19,7 +19,7 @@
 #include "components/AnimatorComponent.h"
 
 // Physics components
-#include "components/Rigidbody.h"
+#include "components/CollisionBody.h"
 #include "components/ColliderCube.h"
 #include "components/ColliderSphere.h"
 #include "components/ColliderCylinder.h"
