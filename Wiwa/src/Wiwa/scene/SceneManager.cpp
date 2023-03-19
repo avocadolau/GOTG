@@ -720,14 +720,20 @@ namespace Wiwa
 		File scene_file = FileSystem::Open(scene_path, FileSystem::OM_IN | FileSystem::OM_BINARY);
 		if (scene_file.IsOpen())
 		{
-			Scene *sc = m_Scenes[sceneid];
+			Scene* sc = m_Scenes[sceneid];
+			std::filesystem::path path = scene_path;
+
+			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+
+			// Load Physics Manager json Data
+			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
 			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
 			_loadSceneImpl(sc, scene_file);
 
-			std::filesystem::path path = scene_path;
 			sc->ChangeName(path.filename().stem().string().c_str());
 
 			if (flags & LOAD_SEPARATE)
@@ -735,8 +741,6 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			// Load Physics Manager json Data
-			sc->GetPhysicsManager().OnLoad();
 			Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1, 1, 0); // this is temporal
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
