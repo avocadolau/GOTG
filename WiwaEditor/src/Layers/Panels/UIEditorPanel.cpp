@@ -150,24 +150,26 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 
 void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 {
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
 	Wiwa::Vector2i vector = { pos[0],pos[1] };
 	Wiwa::Size2i size_ = { size[0],size[1] };
 	control->position.x = pos[0];
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
-	Wiwa::Application::Get().GetRenderer2D().UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector);
-	Wiwa::Application::Get().GetRenderer2D().UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, size_);
+	r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector, Wiwa::Renderer2D::Pivot::UPLEFT);
+	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, size_);
 	if (control->type != Wiwa::GuiControlType::TEXT)
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
 		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
-		Wiwa::Application::Get().GetRenderer2D().UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
 		if (control->type == Wiwa::GuiControlType::SLIDER)
 		{
 			control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForExtraAsset.c_str());
 			control->extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId2);
-			Wiwa::Application::Get().GetRenderer2D().UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetTextureId());
+			r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetTextureId());
 		}
 	}
 }
