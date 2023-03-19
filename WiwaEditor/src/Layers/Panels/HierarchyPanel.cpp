@@ -164,6 +164,7 @@ void HierarchyPanel::CreateNode(const EntityId& eid, const char* entName, ImGuiT
 	std::vector<EntityId>* childs = entityManager.GetEntityChildren(eid);
 	std::string name = ICON_FK_CUBE " ";
 	name += entName;
+
 	if (!childs->empty())
 	{
 		
@@ -172,7 +173,6 @@ void HierarchyPanel::CreateNode(const EntityId& eid, const char* entName, ImGuiT
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
 		}
-		
 		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
 		if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
 		{
@@ -213,6 +213,11 @@ void HierarchyPanel::CreateNode(const EntityId& eid, const char* entName, ImGuiT
 			act(event);
 			m_CurrentID = eid;
 		}
+	}
+	if (ImGui::BeginDragDropSource())
+	{
+		ImGui::SetDragDropPayload("HIERARCHY_ENTITY", &eid, sizeof(eid));
+		ImGui::EndDragDropSource();
 	}
 
 }

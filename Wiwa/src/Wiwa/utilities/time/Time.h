@@ -32,6 +32,8 @@ namespace Wiwa
 
 		static void Play();
 		static void PauseUnPause();
+		static void Pause();
+		static void UnPause();
 		static void Step();
 		static void Update();
 		static void PostUpdate();

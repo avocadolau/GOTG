@@ -17,7 +17,7 @@ namespace Wiwa
     [Callback]
     class PlayGame
     {
-        static void OnExecute()
+        static void OnExecute(int x, int y)
         {
             System.Console.WriteLine("PlayGame called");
             Wiwa.InternalCalls.Play();

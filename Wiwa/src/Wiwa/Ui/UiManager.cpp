@@ -276,7 +276,6 @@ namespace Wiwa
 		/* calculate font scaling */
 		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
 
-		
 		char* word = _word;
 
 		int x = 0;
@@ -284,8 +283,8 @@ namespace Wiwa
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
 
-		ascent = roundf(ascent * scale);
-		descent = roundf(descent * scale);
+		ascent = round(ascent * scale);
+		descent = round(descent * scale);
 
 		int i;
 		for (i = 0; i < strlen(word); ++i)

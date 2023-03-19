@@ -10,6 +10,7 @@ in vec4 LightSpacePos;
 
 
 
+
 struct BaseLight
 {
     vec3 Color;

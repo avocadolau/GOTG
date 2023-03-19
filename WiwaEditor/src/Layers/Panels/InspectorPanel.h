@@ -23,6 +23,7 @@ private:
 	void DrawPointLightComponent(byte* data);
 	void DrawDirectionalLightComponent(byte* data);
 	void DrawSpotLightComponent(byte* data);
+	void DrawAnimatorComponent(byte* data);
 	void DrawRigidBodyComponent(byte* data);
 	void DrawColliderCubeComponent(byte* data);
 	void DrawColliderSpehereComponent(byte* data);
@@ -47,6 +48,7 @@ public:
 		id = m_CurrentID;
 		return m_EntitySet;
 	}
+
 private:
 	
 	int m_CurrentID = 0;

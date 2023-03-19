@@ -15,4 +15,6 @@ float GetMouseYDeltaIntr();
 
 bool IsButtonPressedIntr(Wiwa::GamepadNum gamepad, Wiwa::KeyCode button);
 
-float GetAxisIntr(Wiwa::GamepadNum gamepad, Wiwa::GamepadAxis axis);
+float GetAxisIntr(Wiwa::GamepadNum gamepad, Wiwa::GamepadAxis axis, float deadzone);
+
+float GetRawAxisIntr(Wiwa::GamepadNum gamepad, Wiwa::GamepadAxis axis, float deadzone);

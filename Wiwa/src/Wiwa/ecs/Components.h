@@ -15,6 +15,9 @@
 #include "components/PointLight.h"
 #include "components/SpotLight.h"
 
+// Animations
+#include "components/AnimatorComponent.h"
+
 // Physics components
 #include "components/Rigidbody.h"
 #include "components/ColliderCube.h"
@@ -31,6 +34,6 @@
 //#include "components/game/enemy/EnemySpawner.h"
 #include "components/game/enemy/Wave.h"
 //Particle components
+// Particle components
 #include "components/Billboard.h"
 #include "components/ParticleEmitter.h"
-

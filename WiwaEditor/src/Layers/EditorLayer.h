@@ -27,10 +27,15 @@
 #include "Panels/ShaderPanel.h"
 #include "Panels/AudioPanel.h"
 #include "Panels/EnvoirmentPanel.h"
+
+#include "Panels/AnimatorPanel.h"
+#include "Panels/AnimationPanel.h"
+
 #include "Panels/UIPanel.h"
 #include "Panels/UIEditorPanel.h"
 #include "Panels/AIMapBakingPanel.h"
 #include "Panels/GameLogPanel.h"
+
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -123,10 +128,13 @@ private:
 	std::unique_ptr<Panel> m_ShaderPanel;
 	std::unique_ptr<Panel> m_AudioPanel;
 	std::unique_ptr<Panel> m_EnvPanel;
+	std::unique_ptr<Panel>  m_AnimatorPanel;
+	std::unique_ptr<Panel> m_AnimationPanel;
 	std::unique_ptr<Panel> m_UiPanel;
 	std::unique_ptr<Panel> m_UiEditorPanel;
 	std::unique_ptr<Panel> m_AIMapBakingPanel;
 	std::unique_ptr<Panel> m_GameLogPanel;
+
 
 	std::vector<Panel *> m_Panels;
 	std::vector<Panel *> m_Settings;

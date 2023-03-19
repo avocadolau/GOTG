@@ -6,7 +6,7 @@
 #include <Wiwa/core/Renderer2D.h>
 namespace Wiwa
 {
-	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, int callbackID) : GuiControl(scene, GuiControlType::TEXT, id)
+	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, size_t callbackID) : GuiControl(scene, GuiControlType::TEXT, id)
 	{
 		this->position = bounds;
 		name = "Text";

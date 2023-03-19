@@ -121,6 +121,18 @@ void DestroyEntity(size_t eid, void* scene)
 	em.DestroyEntity(eid);
 }
 
+size_t LoadPrefabIntr(const char* file)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	return em.LoadPrefab(file);
+}
+
+void SavePrefabIntr(size_t id, const char* file)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	em.SavePrefab(id, file);
+}
+
 size_t LoadResourceModel(MonoString* str)
 {
 	char* model = mono_string_to_utf8(str);

@@ -15,15 +15,16 @@
 #include <Wiwa/ecs/components/PointLight.h>
 #include <Wiwa/ecs/components/SpotLight.h>
 #include <Wiwa/ecs/components/DirectionalLight.h>
+#include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/ParticleEmitter.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
 	bool ret = true;
 
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
-	const Type* type = em.GetComponentType(componentId);
+	const Type *type = em.GetComponentType(componentId);
 
 	std::string name = type->name;
 
@@ -39,7 +40,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 			}
 		}
 
-		byte* data = em.GetComponent(m_CurrentID, componentId, type->size);
+		byte *data = em.GetComponent(m_CurrentID, componentId, type->size);
 
 		// Custom component interface
 		if (type->hash == (size_t)TypeHash::Mesh) {	DrawMeshComponent(data); } else
@@ -54,7 +55,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleEmitterComponent(data); } else
-			
+		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -64,17 +65,78 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 				DrawField(data, cl->fields[i]);
 			}
 		}
+		else if (type->hash == (size_t)TypeHash::Transform3D)
+		{
+			DrawTransform3dComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::AudioSource)
+		{
+			DrawAudioSourceComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::PointLight)
+		{
+			DrawPointLightComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::DirectionalLight)
+		{
+			DrawDirectionalLightComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::SpotLight)
+		{
+			DrawSpotLightComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::AnimatorComponent)
+		{
+			DrawAnimatorComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::Rigidbody)
+		{
+			DrawRigidBodyComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCube)
+		{
+			DrawColliderCubeComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderSphere)
+		{
+			DrawColliderSpehereComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::ColliderCylinder)
+		{
+			DrawColliderCylinderComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::RayCast)
+		{
+			DrawRayCastComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::ParticleEmitter)
+		{
+			DrawParticleEmitterComponent(data);
+		}
+		else
+
+			// Basic component interface
+			if (type->is_class)
+			{
+				const Class *cl = (const Class *)type;
+
+				for (size_t i = 0; i < cl->fields.size(); i++)
+				{
+					DrawField(data, cl->fields[i]);
+				}
+			}
 		ImGui::TreePop();
 	}
-	
+
 	return ret;
 }
 
-void InspectorPanel::DrawField(unsigned char* data, const Field& field)
+void InspectorPanel::DrawField(unsigned char *data, const Field &field)
 {
 	// Draw class field
-	if (field.type->is_class) {
-		const Class* cl = (const Class*)field.type;
+	if (field.type->is_class)
+	{
+		const Class *cl = (const Class *)field.type;
 
 		std::string name = field.name;
 
@@ -90,13 +152,14 @@ void InspectorPanel::DrawField(unsigned char* data, const Field& field)
 	}
 
 	// Draw enum field
-	if (field.type->is_enum) {
-		const Enum* en = (const Enum*)field.type;
+	if (field.type->is_enum)
+	{
+		const Enum *en = (const Enum *)field.type;
 
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
 
-		//TODO: DRAW LIST OF ENUMS TO CHOOSE FROM
+		// TODO: DRAW LIST OF ENUMS TO CHOOSE FROM
 
 		ImGui::PopID();
 		return;
@@ -113,7 +176,7 @@ void InspectorPanel::DrawField(unsigned char* data, const Field& field)
 	{
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
-		ImGui::InputFloat("", (float*)(data + field.offset));
+		ImGui::InputFloat("", (float *)(data + field.offset));
 		ImGui::PopID();
 	}
 	else if (field.type->hash == (size_t)TypeHash::Vector2f)
@@ -125,21 +188,21 @@ void InspectorPanel::DrawField(unsigned char* data, const Field& field)
 	else if (field.type->hash == (size_t)TypeHash::Vector3f)
 	{
 		ImGui::PushID(field.name.c_str());
-		DrawVec3Control(field.name.c_str(), data, field,0.0f);
+		DrawVec3Control(field.name.c_str(), data, field, 0.0f);
 		ImGui::PopID();
 	}
 	else if (field.type->hash == (size_t)TypeHash::UInt64)
 	{
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
-		ImGui::InputInt("", (int*)(data + field.offset));
+		ImGui::InputInt("", (int *)(data + field.offset));
 		ImGui::PopID();
 	}
 	else if (field.type->hash == (size_t)TypeHash::Int32)
 	{
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
-		ImGui::InputInt("", (int*)(data + field.offset));
+		ImGui::InputInt("", (int *)(data + field.offset));
 		ImGui::PopID();
 	}
 	else if (field.type->hash == (size_t)TypeHash::Rect2i)
@@ -152,14 +215,14 @@ void InspectorPanel::DrawField(unsigned char* data, const Field& field)
 	{
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
-		ImGui::InputInt("", (int*)(data + field.offset));
+		ImGui::InputInt("", (int *)(data + field.offset));
 		ImGui::PopID();
 	}
 }
 
 void InspectorPanel::DrawCollisionTags()
 {
-	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+	Wiwa::PhysicsManager &py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 
 	if (ImGui::Button("Edit Tags"))
 		ImGui::OpenPopup("Edit Tags");
@@ -190,7 +253,8 @@ void InspectorPanel::DrawCollisionTags()
 				selected = n;
 		}*/
 
-		static char strBuf[64] = ""; ImGui::InputText("Write Tag", strBuf, 64, ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CharsNoBlank);
+		static char strBuf[64] = "";
+		ImGui::InputText("Write Tag", strBuf, 64, ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CharsNoBlank);
 
 		if (ImGui::Button("Add", ImVec2(120, 0)))
 		{
@@ -208,17 +272,20 @@ void InspectorPanel::DrawCollisionTags()
 				py.RemoveFilterTag(selected);
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		ImGui::EndPopup();
 	}
 
 	// Using the generic BeginCombo() API, you have full control over how to display the combo contents.
-		// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
-		// stored in the object itself, etc.)
-	//const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };
-	//static int itemCurrentIdx = 0; // Here we store our selection data as an index.
-	//const char* comboPreviewValue = py.filterStrings[itemCurrentIdx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
-	//if (ImGui::BeginCombo("Collision Tags", comboPreviewValue))
+	// (your selection data could be an index, a pointer to the object, an id for the object, a flag intrusively
+	// stored in the object itself, etc.)
+	// const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };
+	// static int itemCurrentIdx = 0; // Here we store our selection data as an index.
+	// const char* comboPreviewValue = py.filterStrings[itemCurrentIdx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
+	// if (ImGui::BeginCombo("Collision Tags", comboPreviewValue))
 	//{
 	//	for (int n = 0; n < py.filterStrings.size(); n++)
 	//	{
@@ -231,29 +298,32 @@ void InspectorPanel::DrawCollisionTags()
 	//			ImGui::SetItemDefaultFocus();
 	//	}
 
-	//	
+	//
 
 	//	ImGui::EndCombo();
 	//}
 }
 
-void InspectorPanel::DrawMeshComponent(byte* data)
+void InspectorPanel::DrawMeshComponent(byte *data)
 {
-	Wiwa::Mesh* mesh = (Wiwa::Mesh*)data;
+	Wiwa::Mesh *mesh = (Wiwa::Mesh *)data;
 
 	// Draw meshId field
 	ImGui::Text("Model");
 	ImGui::PushID("meshId");
 
-
-	Wiwa::Model* mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
+	Wiwa::Model *mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 	mod = mod->getModelAt(mesh->modelIndex);
+
+	// DEBUG
+	// ImGui::SliderFloat("Animation time: ", &mod->GetParent()->animationTime, 0, mod->GetParent()->GetAnimations()[0]->duration);
+
 	AssetContainer(std::filesystem::path(mod->getModelPath()).stem().string().c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 		{
-			const wchar_t* path = (const wchar_t*)payload->Data;
+			const wchar_t *path = (const wchar_t *)payload->Data;
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
@@ -266,7 +336,7 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 				mesh->modelIndex = 0;
 				mesh->drawChildren = true;
 
-				Wiwa::Model* m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
+				Wiwa::Model *m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 			}
 		}
 
@@ -276,22 +346,22 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 	ImGui::SameLine();
 	ImGui::Text(mod->getModelPath());
 	ImGui::Text("Bounding box");
-	ImGui::InputFloat3("Max", (float*)glm::value_ptr(mod->boundingBox.getMax()));
-	ImGui::InputFloat3("Min", (float*)glm::value_ptr(mod->boundingBox.getMin()));
+	ImGui::InputFloat3("Max", (float *)glm::value_ptr(mod->boundingBox.getMax()));
+	ImGui::InputFloat3("Min", (float *)glm::value_ptr(mod->boundingBox.getMin()));
 	static bool showNormals = false;
 	if (ImGui::Checkbox("Show normals", &showNormals))
 		mod->showNormals = showNormals;
 	ImGui::PopID();
 
-	//Draw materialId field
+	// Draw materialId field
 	ImGui::Text("Material");
-	Wiwa::Material* mat = Wiwa::Resources::GetResourceById<Wiwa::Material>(mesh->materialId);
+	Wiwa::Material *mat = Wiwa::Resources::GetResourceById<Wiwa::Material>(mesh->materialId);
 	AssetContainer(std::filesystem::path(mat->getMaterialPath()).stem().string().c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 		{
-			const wchar_t* path = (const wchar_t*)payload->Data;
+			const wchar_t *path = (const wchar_t *)payload->Data;
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
@@ -311,26 +381,26 @@ void InspectorPanel::DrawMeshComponent(byte* data)
 	ImGui::PopID();
 }
 
-void InspectorPanel::DrawTransform3dComponent(byte* data)
+void InspectorPanel::DrawTransform3dComponent(byte *data)
 {
-	Wiwa::Transform3D* transform = (Wiwa::Transform3D*)data;
+	Wiwa::Transform3D *transform = (Wiwa::Transform3D *)data;
 	DrawVec3Control("Position", &transform->localPosition, 0.0f, 100.0f);
 	DrawVec3Control("Rotation", &transform->localRotation, 0.0f, 100.0f);
 	DrawVec3Control("Scale", &transform->localScale, 1.0f, 100.0f);
 }
 
-void InspectorPanel::DrawAudioSourceComponent(byte* data)
+void InspectorPanel::DrawAudioSourceComponent(byte *data)
 {
-	Wiwa::AudioSource* asrc = (Wiwa::AudioSource*)data;
+	Wiwa::AudioSource *asrc = (Wiwa::AudioSource *)data;
 
 	ImGui::Checkbox("Is default listener", &asrc->isDefaultListener);
 	ImGui::InputText("Event", asrc->eventName, sizeof(asrc->eventName));
 	ImGui::Checkbox("Play on awake", &asrc->playOnAwake);
 }
 
-void InspectorPanel::DrawPointLightComponent(byte* data)
+void InspectorPanel::DrawPointLightComponent(byte *data)
 {
-	Wiwa::PointLight* lsrc = (Wiwa::PointLight*)data;
+	Wiwa::PointLight *lsrc = (Wiwa::PointLight *)data;
 
 	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
 	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.05f, 0.5f, "%.2f");
@@ -338,21 +408,20 @@ void InspectorPanel::DrawPointLightComponent(byte* data)
 	ImGui::SliderFloat("Constant", &lsrc->Constant, 0.001f, 1.0f);
 	ImGui::SliderFloat("Linear", &lsrc->Linear, 0.001f, 1.0f);
 	ImGui::SliderFloat("Exponential", &lsrc->Exp, 0.001f, 1.0f);
-
 }
 
-void InspectorPanel::DrawDirectionalLightComponent(byte* data)
+void InspectorPanel::DrawDirectionalLightComponent(byte *data)
 {
-	Wiwa::DirectionalLight* lsrc = (Wiwa::DirectionalLight*)data;
+	Wiwa::DirectionalLight *lsrc = (Wiwa::DirectionalLight *)data;
 
 	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
 	ImGui::InputFloat("Ambient intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
 	ImGui::InputFloat("Diffuse intensity", &lsrc->DiffuseIntensity, 0.5f, 1.0f, "%.2f");
 }
-//TODO: Implement when ready
-void InspectorPanel::DrawSpotLightComponent(byte* data)
+// TODO: Implement when ready
+void InspectorPanel::DrawSpotLightComponent(byte *data)
 {
-	Wiwa::SpotLight* lsrc = (Wiwa::SpotLight*)data;
+	Wiwa::SpotLight *lsrc = (Wiwa::SpotLight *)data;
 
 	ImGui::ColorEdit3("Color", glm::value_ptr(lsrc->Color));
 	ImGui::InputFloat("Ambient Intensity", &lsrc->AmbientIntensity, 0.5f, 1.0f, "%.2f");
@@ -364,10 +433,64 @@ void InspectorPanel::DrawSpotLightComponent(byte* data)
 	ImGui::InputFloat("Cutoff", &lsrc->Cutoff);
 }
 
-void InspectorPanel::DrawRigidBodyComponent(byte* data)
+void InspectorPanel::DrawAnimatorComponent(byte *data)
 {
-	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-	Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
+	Wiwa::AnimatorComponent *animator = (Wiwa::AnimatorComponent *)data;
+
+	AssetContainer(animator->filePath);
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t *path = (const wchar_t *)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".wianimator")
+			{
+				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+				strcpy(animator->filePath, pathS.c_str());
+				animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+	if (animator->animator == nullptr)
+		return;
+	// get animaitons
+	const char *animationItems[10];
+	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+	{
+		animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+	}
+
+	const char *current_item = NULL;
+	if (animator->animator->GetCurrentAnimation() != nullptr)
+		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
+
+	if (ImGui::BeginCombo("animaiton", current_item))
+	{
+		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+		{
+			bool is_selected = (current_item == animationItems[n]);
+			if (ImGui::Selectable(animationItems[n], is_selected))
+			{
+				current_item = animationItems[n];
+				ImGui::SetItemDefaultFocus();
+				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::Checkbox("Play", &animator->Play);
+}
+
+void InspectorPanel::DrawRigidBodyComponent(byte *data)
+{
+	Wiwa::PhysicsManager &py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+	Wiwa::Rigidbody *rigidBody = (Wiwa::Rigidbody *)data;
 	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
 	ImGui::Checkbox("Is static?", &rigidBody->isStatic);
@@ -402,8 +525,8 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 			rigidBody->filterBits &= ~(1 << i);
 	}
 
-	//ImGui::Text("Do not collide with:");
-	//for (int i = 0; i < py.filterStrings.size(); i++)
+	// ImGui::Text("Do not collide with:");
+	// for (int i = 0; i < py.filterStrings.size(); i++)
 	//{
 	//	bool local = (rigidBody->filterBits >> i) & 1U; //Checking a bit
 	//	ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
@@ -411,32 +534,31 @@ void InspectorPanel::DrawRigidBodyComponent(byte* data)
 	//		rigidBody->filterBits |= 1UL << i;
 	//	else
 	//		rigidBody->filterBits &= ~(1UL << i);
-	//}
-
+	// }
 }
 
-void InspectorPanel::DrawColliderCubeComponent(byte* data)
+void InspectorPanel::DrawColliderCubeComponent(byte *data)
 {
-	Wiwa::ColliderCube* colliderCube = (Wiwa::ColliderCube*)data;
+	Wiwa::ColliderCube *colliderCube = (Wiwa::ColliderCube *)data;
 	DrawVec3Control("HalfExtents", &colliderCube->halfExtents, 0.0f, 100.0f);
 }
 
-void InspectorPanel::DrawColliderSpehereComponent(byte* data)
+void InspectorPanel::DrawColliderSpehereComponent(byte *data)
 {
-	Wiwa::ColliderSphere* colliderSphere = (Wiwa::ColliderSphere*)data;
+	Wiwa::ColliderSphere *colliderSphere = (Wiwa::ColliderSphere *)data;
 	ImGui::InputFloat("Radius", &colliderSphere->radius);
 }
 
-void InspectorPanel::DrawColliderCylinderComponent(byte* data)
+void InspectorPanel::DrawColliderCylinderComponent(byte *data)
 {
-	Wiwa::ColliderCylinder* colliderCylinder = (Wiwa::ColliderCylinder*)data;
+	Wiwa::ColliderCylinder *colliderCylinder = (Wiwa::ColliderCylinder *)data;
 	ImGui::InputFloat("Radius", &colliderCylinder->radius);
 	ImGui::InputFloat("Height", &colliderCylinder->height);
 }
 
-void InspectorPanel::DrawRayCastComponent(byte* data)
+void InspectorPanel::DrawRayCastComponent(byte *data)
 {
-	Wiwa::RayCast* rayCast = (Wiwa::RayCast*)data;
+	Wiwa::RayCast *rayCast = (Wiwa::RayCast *)data;
 	DrawVec3Control("Ray From", &rayCast->rayFromWorld, 0.0f, 100.0f);
 	DrawVec3Control("Ray To", &rayCast->rayToWorld, 0.0f, 100.0f);
 	ImGui::Checkbox("Enabled", &rayCast->doRayCasting);
@@ -448,10 +570,10 @@ void ParticleTab()
 	ImGui::SameLine();
 }
 
-void InspectorPanel::DrawParticleEmitterComponent(byte* data)
+void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 {
 
-	Wiwa::ParticleEmitter* emitter = (Wiwa::ParticleEmitter*)data;
+	Wiwa::ParticleEmitter *emitter = (Wiwa::ParticleEmitter *)data;
 
 	ImGui::Separator();
 	ImGui::Text("Emitter Parameters");
@@ -463,15 +585,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 	ImGui::SameLine();
 	ImGui::Text("Loop Spawning");
 
-	//spawn rate
+	// spawn rate
 	if (emitter->repeat)
 	{
 		ParticleTab();
 		ImGui::Checkbox("##particle_rate_isRanged", &emitter->particle_rate_isRanged);
 		ImGui::SameLine();
-
-
-
 
 		if (emitter->particle_rate_isRanged)
 		{
@@ -485,7 +604,6 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::DragFloat("##particle_rate_range0", &emitter->particle_rate_range[0], 0.01f, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
 
-
 			ImGui::DragFloat("##particle_rate_range1", &emitter->particle_rate_range[1], 0.01f, 0.0f, 0.0f, "%.2f");
 		}
 		else
@@ -498,22 +616,22 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::SameLine();
 			ImGui::PushItemWidth(100.0f);
 
-
 			ImGui::DragFloat("##particle_rate", &emitter->particle_rate, 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		ImGui::PopItemWidth();
 
-		if (emitter->particle_rate < 0)		emitter->particle_rate = 0.01f;
-		if (emitter->particle_rate_range[0] < 0)		emitter->particle_rate_range[0] = 0.01f;
-		if (emitter->particle_rate_range[1] < 0)		emitter->particle_rate_range[1] = 0.01f;
+		if (emitter->particle_rate < 0)
+			emitter->particle_rate = 0.01f;
+		if (emitter->particle_rate_range[0] < 0)
+			emitter->particle_rate_range[0] = 0.01f;
+		if (emitter->particle_rate_range[1] < 0)
+			emitter->particle_rate_range[1] = 0.01f;
 	}
 
-
-	//spawn amount
+	// spawn amount
 	{
 		ImGui::Checkbox("##particle_amount_isRanged", &emitter->particle_amount_isRanged);
 		ImGui::SameLine();
-
 
 		if (emitter->particle_amount_isRanged)
 		{
@@ -522,14 +640,11 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::Dummy(ImVec2(38, 0));
 			ImGui::SameLine();
 
-
 			ImGui::PushItemWidth(46.0f);
-
 
 			ImGui::DragInt("##particle_amount_range0", &emitter->particle_amount_range[0], 0.05f, 0.0f, 0.0f, "%.2f");
 
 			ImGui::SameLine();
-
 
 			ImGui::DragInt("##particle_amount_range1", &emitter->particle_amount_range[1], 0.05f, 0.0f, 0.0f, "%.2f");
 		}
@@ -541,26 +656,26 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::SameLine();
 			ImGui::PushItemWidth(100.0f);
 
-
 			ImGui::DragInt("##particle_amount", &emitter->particle_amount, 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		ImGui::PopItemWidth();
 
-		if (emitter->particle_amount < 0)		emitter->particle_amount = 0;
-		if (emitter->particle_amount_range[0] < 0)		emitter->particle_amount_range[0] = 0;
-		if (emitter->particle_amount_range[1] < 0)		emitter->particle_amount_range[1] = 0;
+		if (emitter->particle_amount < 0)
+			emitter->particle_amount = 0;
+		if (emitter->particle_amount_range[0] < 0)
+			emitter->particle_amount_range[0] = 0;
+		if (emitter->particle_amount_range[1] < 0)
+			emitter->particle_amount_range[1] = 0;
 	}
 
-
-
-	//particle attributes
+	// particle attributes
 
 	ImGui::Separator();
 	ImGui::Text("Particle attributes");
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 4));
 
-	//particle follow emitter
+	// particle follow emitter
 	{
 		ImGui::Dummy(ImVec2(0, 0));
 		ImGui::SameLine();
@@ -578,15 +693,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
-
-
-
-
-	//particle lifetime
+	// particle lifetime
 	{
 		ImGui::Dummy(ImVec2(0, 0));
 		ImGui::SameLine();
-
 
 		ImGui::Checkbox("##particle_lifetime_isRanged", &emitter->particle_lifetime_isRanged);
 		ImGui::SameLine();
@@ -601,13 +711,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::SameLine();
 			ImGui::PushItemWidth(46.0f);
 
-
 			ImGui::DragFloat("##particle_lifetime_range0", &emitter->particle_lifetime_range[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
 
-
 			ImGui::DragFloat("##particle_lifetime_range1", &emitter->particle_lifetime_range[1], 0.05f, 0.0f, 0.0f, "%.2f");
-
 		}
 		else
 		{
@@ -615,19 +722,20 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::SameLine();
 			ImGui::PushItemWidth(100.0f);
 			ImGui::DragFloat("##particle_lifetime", &emitter->particle_lifetime, 0.05f, 0.0f, 0.0f, "%.2f");
-
 		}
 		ImGui::PopItemWidth();
 
-		if (emitter->particle_lifetime < 0) emitter->particle_lifetime = 0;
-		if (emitter->particle_lifetime_range[0] < 0) emitter->particle_lifetime_range[0] = 0;
-		if (emitter->particle_lifetime_range[1] < 0) emitter->particle_lifetime_range[1] = 0;
+		if (emitter->particle_lifetime < 0)
+			emitter->particle_lifetime = 0;
+		if (emitter->particle_lifetime_range[0] < 0)
+			emitter->particle_lifetime_range[0] = 0;
+		if (emitter->particle_lifetime_range[1] < 0)
+			emitter->particle_lifetime_range[1] = 0;
 	}
-
 
 	if (ImGui::TreeNode("Position & Translation"))
 	{
-		//particle starting position
+		// particle starting position
 		{
 			ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -652,11 +760,9 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 				ImGui::SameLine();
 				ImGui::DragFloat3("##particle_startingPosition", &(emitter->particle_startingPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			}
-
-
 		}
 
-		//particle initial velocity
+		// particle initial velocity
 		{
 			ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -687,7 +793,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			}
 		}
 
-		//particle constant acceleration
+		// particle constant acceleration
 		{
 			ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -723,7 +829,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 
 	if (ImGui::TreeNode("Rotation"))
 	{
-		//particle starting rotation
+		// particle starting rotation
 		{
 			ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -754,7 +860,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 
 	if (ImGui::TreeNode("Size & Growth"))
 	{
-		//particle starting size
+		// particle starting size
 		{
 			ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -785,7 +891,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			}
 		}
 
-		//particle size constant growth rate
+		// particle size constant growth rate
 		{
 			ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -820,7 +926,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 
 	if (ImGui::TreeNode("Texture"))
 	{
-		//particle starting size
+		// particle starting size
 		{
 			/*ImGui::Dummy(ImVec2(0, 0));
 			ImGui::SameLine();
@@ -837,15 +943,14 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			if (emitter->texture)
 				image_id = emitter->texture->GetTextureId();
 
-			ImGui::Image(ImTextureID(image_id), { 128,128 });
+			ImGui::Image(ImTextureID(image_id), {128, 128});
 
 			if (ImGui::BeginDragDropTarget())
 			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 				{
 
-
-					const wchar_t* path = (const wchar_t*)payload->Data;
+					const wchar_t *path = (const wchar_t *)payload->Data;
 					std::wstring ws(path);
 					std::string pathS(ws.begin(), ws.end());
 					std::filesystem::path p = pathS.c_str();
@@ -860,7 +965,6 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 						if (emitter->textId1 == WI_INVALID_INDEX)
 						{
 							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
-
 						}
 						else
 						{
@@ -869,10 +973,6 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 							/*std::string test = "texture id: " + std::to_string(emitter->texture->GetTextureId());
 
 							WI_CORE_INFO(test);*/
-
-
-
-
 						}
 
 						/*WI_INFO("Trying to load payload at path {0}", pathS.c_str());
@@ -893,14 +993,13 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 				ImGui::Text("[Drop a suitable texture here]");
 			else
 				ImGui::Text("[Drop a suitable texture to change the current texture]");
-
 		}
 
 		ImGui::TreePop();
 	}
 }
 
-InspectorPanel::InspectorPanel(EditorLayer* instance)
+InspectorPanel::InspectorPanel(EditorLayer *instance)
 	: Panel("Inspector", ICON_FK_INFO_CIRCLE, instance)
 {
 }
@@ -911,15 +1010,15 @@ InspectorPanel::~InspectorPanel()
 
 void InspectorPanel::Draw()
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager &em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	ImGui::Begin(iconName.c_str(), &active);
 	if (m_EntitySet && m_CurrentID >= 0)
 	{
-		const char* entName = em.GetEntityName(m_CurrentID);
+		const char *entName = em.GetEntityName(m_CurrentID);
 		std::string edit = entName;
-		
-		ImGui::InputText("Name", (char*)edit.c_str(), 64);
+
+		ImGui::InputText("Name", (char *)edit.c_str(), 64);
 		ImGui::SameLine();
 		ImGui::Text("(%i)", m_CurrentID);
 
@@ -932,8 +1031,8 @@ void InspectorPanel::Draw()
 		}
 		if (strcmp(edit.c_str(), entName) != 0)
 			em.SetEntityName(m_CurrentID, edit.c_str());
-		
-		if(ImGui::CollapsingHeader("Components"))
+
+		if (ImGui::CollapsingHeader("Components"))
 			DrawComponents(em);
 
 		if (ImGui::CollapsingHeader("Systems"))
@@ -946,9 +1045,9 @@ void InspectorPanel::Draw()
 	ImGui::End();
 }
 
-void InspectorPanel::DrawComponents(Wiwa::EntityManager& em)
+void InspectorPanel::DrawComponents(Wiwa::EntityManager &em)
 {
-	std::map<ComponentId, size_t>& map = em.GetEntityComponents(m_CurrentID);
+	std::map<ComponentId, size_t> &map = em.GetEntityComponents(m_CurrentID);
 	bool removed = false;
 	size_t idToRemove;
 
@@ -961,10 +1060,11 @@ void InspectorPanel::DrawComponents(Wiwa::EntityManager& em)
 		}
 	}
 
-	if (removed) {
+	if (removed)
+	{
 		em.RemoveComponentById(m_CurrentID, idToRemove);
 	}
-	
+
 	ImGui::Separator();
 
 	if (ButtonCenteredOnLine("Add component"))
@@ -978,9 +1078,10 @@ void InspectorPanel::DrawComponents(Wiwa::EntityManager& em)
 		ImGui::Text("Search:");
 		filter.Draw("##searchbar", 340.f);
 		ImGui::BeginChild("listbox child", ImVec2(300, 200));
-		for (size_t i = 0; i < c_count; i++) {
-			const Type* type = Wiwa::Application::Get().GetComponentType(i);
-			const char* paintkit = type->name.c_str();
+		for (size_t i = 0; i < c_count; i++)
+		{
+			const Type *type = Wiwa::Application::Get().GetComponentType(i);
+			const char *paintkit = type->name.c_str();
 			if (filter.PassFilter(paintkit))
 			{
 				std::string label = paintkit;
@@ -998,14 +1099,14 @@ void InspectorPanel::DrawComponents(Wiwa::EntityManager& em)
 	}
 }
 
-void InspectorPanel::DrawSystems(Wiwa::EntityManager& em)
+void InspectorPanel::DrawSystems(Wiwa::EntityManager &em)
 {
-	std::vector<SystemHash>& systems = em.GetEntitySystemHashes(m_CurrentID);
+	std::vector<SystemHash> &systems = em.GetEntitySystemHashes(m_CurrentID);
 
 	for (size_t i = 0; i < systems.size(); i++)
 	{
 		ImGui::PushID(i);
-		const Type* system = Wiwa::Application::Get().GetSystemTypeH(systems[i]);
+		const Type *system = Wiwa::Application::Get().GetSystemTypeH(systems[i]);
 		ImGui::Text(system->name.c_str());
 		ImGui::SameLine();
 		if (ImGui::Button("Delete"))
@@ -1026,9 +1127,10 @@ void InspectorPanel::DrawSystems(Wiwa::EntityManager& em)
 		ImGui::Text("Search:");
 		filter.Draw("##searchbar", 340.f);
 		ImGui::BeginChild("listbox child", ImVec2(300, 200));
-		for (size_t i = 0; i < c_count; i++) {
-			const Type* type = Wiwa::Application::Get().GetSystemType(i);
-			const char* paintkit = type->name.c_str();
+		for (size_t i = 0; i < c_count; i++)
+		{
+			const Type *type = Wiwa::Application::Get().GetSystemType(i);
+			const char *paintkit = type->name.c_str();
 			if (filter.PassFilter(paintkit))
 			{
 				std::string label = paintkit;
@@ -1050,21 +1152,21 @@ void InspectorPanel::Update()
 {
 }
 
-void InspectorPanel::OnEvent(Wiwa::Event&e)
+void InspectorPanel::OnEvent(Wiwa::Event &e)
 {
 	Wiwa::EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<EntityChangeEvent>({ &InspectorPanel::OnEntityChangeEvent, this });
-	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({ &InspectorPanel::OnSceneChangeEvent, this });
+	dispatcher.Dispatch<EntityChangeEvent>({&InspectorPanel::OnEntityChangeEvent, this});
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({&InspectorPanel::OnSceneChangeEvent, this});
 }
 
-bool InspectorPanel::OnEntityChangeEvent(EntityChangeEvent& e)
+bool InspectorPanel::OnEntityChangeEvent(EntityChangeEvent &e)
 {
 	m_CurrentID = e.GetResourceId();
 	m_EntitySet = true;
 	return false;
 }
 
-bool InspectorPanel::OnSceneChangeEvent(Wiwa::SceneChangeEvent& e)
+bool InspectorPanel::OnSceneChangeEvent(Wiwa::SceneChangeEvent &e)
 {
 	m_CurrentID = -1;
 	m_EntitySet = false;
