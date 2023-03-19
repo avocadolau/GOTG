@@ -36,6 +36,7 @@
 /Editor/Library
 *.meta
 imgui.ini
+/Editor/config/panels.json
 # VA config
 
 /JSON/
