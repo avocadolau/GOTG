@@ -150,5 +150,9 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Quit();
         #endregion
+        #region Game
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetRoomStateTriggerNext(bool value);
+        #endregion
     }
 }

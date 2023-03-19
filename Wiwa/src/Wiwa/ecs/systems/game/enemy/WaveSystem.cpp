@@ -123,7 +123,7 @@ namespace Wiwa
 		collBodyPtr->isTrigger = true;
 		collBodyPtr->isStatic = false;
 		collBodyPtr->doContinuousCollision = false;
-		collBodyPtr->selfTag = 4;
+		collBodyPtr->selfTag = m_Scene->GetPhysicsManager().GetFilterTag("ENEMY");
 		collBodyPtr->filterBits = 1 << 0;
 
 		Character stats;

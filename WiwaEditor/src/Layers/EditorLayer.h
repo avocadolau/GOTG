@@ -30,6 +30,7 @@
 #include "Panels/UIPanel.h"
 #include "Panels/UIEditorPanel.h"
 #include "Panels/AIMapBakingPanel.h"
+#include "Panels/GameLogPanel.h"
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -125,6 +126,7 @@ private:
 	std::unique_ptr<Panel> m_UiPanel;
 	std::unique_ptr<Panel> m_UiEditorPanel;
 	std::unique_ptr<Panel> m_AIMapBakingPanel;
+	std::unique_ptr<Panel> m_GameLogPanel;
 
 	std::vector<Panel *> m_Panels;
 	std::vector<Panel *> m_Settings;

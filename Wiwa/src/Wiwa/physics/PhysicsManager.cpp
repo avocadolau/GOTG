@@ -489,10 +489,10 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::OnLoad()
+	bool PhysicsManager::OnLoad(const char* name)
 	{
 		std::string path = "assets/Scenes/";
-		path += SceneManager::getActiveScene()->getName();
+		path += name;
 		path += "_physics.json";
 
 		JSONDocument physics;
@@ -595,47 +595,64 @@ namespace Wiwa {
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		camera->frameBuffer->Bind(false);
-		m_Debug_draw->lineDisplayShader->Bind();
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
+
+		if (camera->drawBoundingBoxes)
+		{
+			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+			camera->frameBuffer->Bind(false);
+			m_Debug_draw->lineDisplayShader->Bind();
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
+
+			((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
+		}
 		
-		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
 		btCollisionWorld::ClosestRayResultCallback closestHit = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
 		m_World->rayTest(ray_from_world, ray_to_world, closestHit);
 		if (closestHit.hasHit())
 		{
 			btVector3 p = ray_from_world.lerp(ray_to_world, closestHit.m_closestHitFraction);
-			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
-			m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
+			if (camera->drawBoundingBoxes)
+			{
+				m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
+				m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
+			}
 		}
 		
-		camera->frameBuffer->Unbind();
+		if (camera->drawBoundingBoxes) 
+			camera->frameBuffer->Unbind();
 	}
 
 	int PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		camera->frameBuffer->Bind(false);
-		m_Debug_draw->lineDisplayShader->Bind();
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-		m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-		m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
 
-		((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
+		if (camera->drawBoundingBoxes)
+		{
+			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+			camera->frameBuffer->Bind(false);
+			m_Debug_draw->lineDisplayShader->Bind();
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(0.0, 0.0f, 1.0f, 1.0f));
+			((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
+		}
+
 		btCollisionWorld::AllHitsRayResultCallback allResults = btCollisionWorld::AllHitsRayResultCallback(ray_from_world, ray_to_world);
 		m_World->rayTest(ray_from_world, ray_to_world, allResults);
 
 		for (int i = 0; i < allResults.m_hitFractions.size(); i++)
 		{
 			btVector3 p = ray_from_world.lerp(ray_to_world, allResults.m_hitFractions[i]);
-			m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
-			m_World->getDebugDrawer()->drawLine(p, p + allResults.m_hitNormalWorld[i], btVector4(0, 0, 1, 1));
+
+			if (camera->drawBoundingBoxes)
+			{
+				m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
+				m_World->getDebugDrawer()->drawLine(p, p + allResults.m_hitNormalWorld[i], btVector4(0, 0, 1, 1));
+			}
 
 			int dist = ray_from_world.distance2(p);
 
@@ -646,7 +663,8 @@ namespace Wiwa {
 				return -1;
 		}
 
-		camera->frameBuffer->Unbind();
+		if (camera->drawBoundingBoxes) 
+			camera->frameBuffer->Unbind();
 
 		return -1;
 	}

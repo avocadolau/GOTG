@@ -109,7 +109,7 @@ namespace Wiwa {
 
 		bool OnSave();
 
-		bool OnLoad();
+		bool OnLoad(const char* name);
 
 		bool getInit();
 

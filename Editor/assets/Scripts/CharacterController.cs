@@ -422,19 +422,39 @@ namespace Game
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            if (id1 == m_EntityId && str2 == "WALL")
+            Console.WriteLine(id1 + str1);
+            Console.WriteLine(id2 + str2);
+            if (id1 == m_EntityId)
             {
-                wallCollision = true;
+                if (str2 == "WALL")
+                {
+                    wallCollision = true;
+                }
+                else if (str2 == "END_TRIGGER")
+                {
+                    GameState.SetRoomStateTriggerNext(true);
+                    Console.WriteLine("Trigger true ");
+                }
                 //Console.WriteLine("wall hit!!! ");
             }
         }
         
         void OnCollisionExit(EntityId id1, EntityId id2, string str1, string str2)
         {
-            if (id1 == m_EntityId && str2 == "WALL")
+            Console.WriteLine(id1 + str1);
+            Console.WriteLine(id2 + str2);
+            if (id1 == m_EntityId)
             {
-                wallCollision = false;
-                //Console.WriteLine("wall UN-hit!!! ");
+                if (str2 == "WALL")
+                {
+                    wallCollision = false;
+                }
+                else if (str2 == "END_TRIGGER")
+                {
+                    GameState.SetRoomStateTriggerNext(false);
+                    Console.WriteLine("Trigger false ");
+                }
+                //Console.WriteLine("wall hit!!! ");
             }
         }
 

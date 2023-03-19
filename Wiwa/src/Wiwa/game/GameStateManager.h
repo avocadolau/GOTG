@@ -18,28 +18,35 @@
 typedef size_t SceneId;
 
 namespace Wiwa {
+	struct EnemySpawner
+	{
+		int maxEnemiesPerWave;
+		int maxWaveCount;
+		int currentWaveCount;
+		float timeBetweenWaves;
+		bool hasFinished;
+	};
 
 	enum class RoomType
 	{
-		NONE = -1,
+		NONE = 0,
 		ROOM_HUB = 1,
 		ROOM_COMBAT = 2,
 		ROOM_REWARD = 3
 	};
 	static const char* s_RoomTypeStr[] =
-	{ "ROOM_HUB", "ROOM_COMBAT", "ROOM_REWARD"};
+	{ "NONE", "ROOM_HUB", "ROOM_COMBAT", "ROOM_REWARD"};
 
 	enum class RoomState
 	{
-		NONE = -1,
-		STATE_STARTING = 1,
-		STATE_MIDDLE = 2,
-		STATE_FINISHED = 3,
-		STATE_AWAITING_NEXT = 4,
-		STATE_TRANSITIONING = 5
+		NONE = 0,
+		STATE_STARTED = 1,
+		STATE_FINISHED = 2,
+		STATE_AWAITING_NEXT = 3,
+		STATE_TRANSITIONING = 4
 	};
 	static const char* s_RoomStateStr[] =
-	{ "STATE_STARTING", "STATE_MIDDLE", "STATE_FINISHED", "STATE_AWAITING_NEXT" };
+	{ "NONE", "STATE_STARTED", "STATE_FINISHED", "STATE_AWAITING_NEXT", "STATE_TRANSITIONING"};
 
 	struct GameEvent
 	{
@@ -56,8 +63,8 @@ namespace Wiwa {
 		static RoomType s_RoomType;
 		static RoomState s_RoomState;
 
-		static bool s_HasFinshedLevel;
-		static bool s_CanPassNextLevel;
+		static bool s_HasFinshedRoom;
+		static bool s_CanPassNextRoom;
 		static bool s_PlayerTriggerNext;
 
 		static std::vector<GameEvent> s_PreStartEvents;
@@ -65,8 +72,10 @@ namespace Wiwa {
 		static std::vector<GameEvent> s_PostFinishedEvents;
 
 		static void ChangeRoomState(RoomState room_state);
-	public:
 
+	public:
+		static int s_TotalSpawners;
+		static int s_SpawnersFinished;
 		// Save & Load Overall Player Progression
 		static void SaveProgression();
 		static void LoadProgression();
@@ -82,5 +91,11 @@ namespace Wiwa {
 		static void EndCurrentRoom();
 
 		static void LogRoomState();
+		static const char* GetRoomState();
+		static const char* GetRoomType();
+
+		static void setFinishRoom(bool value);
+		static void setCanPassNextRoom(bool value);
+		static void setPlayerTriggerNextRoom(bool value);
 	};
 }

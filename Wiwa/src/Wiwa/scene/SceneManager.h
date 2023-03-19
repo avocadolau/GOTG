@@ -54,9 +54,15 @@ namespace Wiwa {
 
 		static void ModuleUpdate();
 
-		static void PlayScene() { m_PlayScene = true; }
+		static void PlayScene() { 
+			GameStateManager::StartNewRoom();
+			m_PlayScene = true; 
+		}
 
-		static void StopScene() { m_PlayScene = false; }
+		static void StopScene() { 
+			GameStateManager::EndCurrentRoom();
+			m_PlayScene = false; 
+		}
 
 		static bool IsPlaying() { return m_PlayScene; }
 
