@@ -11,8 +11,11 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		this->texture = texture;
+		texturePosition = boundsOriginTex;
 		name = "Image";
 		m_Scene = scene;
+		active = true;
+
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
@@ -23,7 +26,7 @@ namespace Wiwa
 		}
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 
 		state = GuiControlState::NORMAL;
 		canClick = true;

@@ -10,8 +10,10 @@ namespace Wiwa
 	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
+		texturePosition = boundsOriginTex;
 		name = "Checkbox";
 		m_Scene = scene;
+		active = true;
 
 		if (path != "") {
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
@@ -28,12 +30,7 @@ namespace Wiwa
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		//We create only once the texture
-		//id_quad_disabled = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_focused = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_pressed = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_selected = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 
 		canClick = true;
 	}

@@ -27,8 +27,13 @@ public:
 	int elementSelected;
 
 	//Variables to change
-	float pos[2];
-	float size[2];
+	int pos[2];
+	int size[2];
+	int originPos[2];
+	int originSize[2];
+	int extraOriginPos[2];
+	int extraOriginSize[2];
+	size_t callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 

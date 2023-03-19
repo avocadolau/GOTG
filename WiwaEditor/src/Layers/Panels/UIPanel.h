@@ -48,10 +48,12 @@ public:
 
 	int canvasSelected = -1;
 	int elementSelected = -1;
-	int position[2] = { 0.0f,0.0f };
-	int size[2] = { 0.0f,0.0f };
-	int originPos[2] = { 0.0f,0.0f };
-	int originSize[2] = { 0.0f,0.0f };
+	int position[2] = { 0,0 };
+	int size[2] = { 0,0 };
+	int originPos[2] = { 0,0 };
+	int originSize[2] = { 0,0 };
+	int sliderOriginPos[2] = { 0,0 };
+	int sliderOriginSize[2] = { 0,0 };
 	int callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;

@@ -15,7 +15,27 @@ namespace Wiwa
     }
 
     [Callback]
+    class TestSlider
+    {
+        static void OnExecute(bool ret)
+        {
+            System.Console.WriteLine($"value of checkbox:{ret}");
+            // Wiwa.InternalCalls.Play();
+        }
+    }
+
+    [Callback]
     class PlayGame
+    {
+        static void OnExecute(bool ret)
+        {
+            System.Console.WriteLine($"value of checkbox:{ret}");
+           // Wiwa.InternalCalls.Play();
+        }
+    }
+
+    [Callback]
+    class Test
     {
         static void OnExecute(bool ret)
         {
@@ -29,8 +49,17 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            System.Console.WriteLine("button");
+            System.Console.WriteLine("quit button");
             //Wiwa.InternalCalls.Quit();
+        }
+    }
+    [Callback]
+    class TestButton
+    {
+        static void OnExecute()
+        {
+            System.Console.WriteLine("testButton");
+            // Wiwa.InternalCalls.Play();
         }
     }
 }

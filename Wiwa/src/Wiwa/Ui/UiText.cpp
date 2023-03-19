@@ -10,6 +10,8 @@ namespace Wiwa
 	{
 		this->position = bounds;
 		name = "Text";
+		active = true;
+
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		text = new Text();
 		text = gm.InitFont("assets/Arial.ttf", (char*)string_text);

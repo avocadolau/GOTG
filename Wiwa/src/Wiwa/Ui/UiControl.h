@@ -204,7 +204,9 @@ namespace Wiwa
 
 		char text[32];           // Control text (if required)
 		Rect2i position;        // Position and size
+		Rect2i texturePosition;        
 		Rect2i extraPosition;	// Position and size for the bar
+		Rect2i extraTexturePosition;        
 		Color4f color = Color::WHITE;        // Tint color
 
 		Image* texture;
@@ -214,7 +216,7 @@ namespace Wiwa
 
 		uint32_t id_quad_extra;
 
-		int callbackID;
+		size_t callbackID;
 
 		std::string name;
 		Callback* callback;

@@ -240,9 +240,14 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect);
 	}
 
 	ImGui::PopID();
@@ -254,6 +259,8 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
 	ImGui::InputInt2("Origin position", originPos);
 	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Slider origin position", sliderOriginPos);
+	ImGui::InputInt2("Slider origin size", sliderOriginSize);
 	ImGui::InputInt2("Position", position);
 	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
@@ -342,14 +349,26 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
+		rect.width = size[0];
+		rect.height = size[1];
 		Wiwa::Rect2i rect2;
 		rect2.x = rect.x - (rect.width / 2);
 		rect2.y = rect.y;
 		rect2.width = (rect.width / 100);
 		rect2.height = rect.height;
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID);
+
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+
+		Wiwa::Rect2i sliderOriginRect;
+		sliderOriginRect.x = originPos[0];
+		sliderOriginRect.y = originPos[1];
+		sliderOriginRect.width = originSize[0];
+		sliderOriginRect.height = originSize[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID,originRect,sliderOriginRect);
 	}
 
 	ImGui::PopID();
@@ -430,9 +449,14 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect);
 	}
 
 	ImGui::PopID();
@@ -452,8 +476,8 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
+		rect.width = size[0];
+		rect.height = size[1];
 		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id);
 	}
 	ImGui::PopID();
@@ -555,9 +579,14 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID,originRect);
 	}
 
 	ImGui::PopID();
