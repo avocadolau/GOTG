@@ -43,18 +43,20 @@ void AIMapBakingPanel::Draw()
 		
 		EntityId eid = EntityId();
 
-		for(int i = 0; i < entityList->size(); i++)
-		{
-			eid = entityList->at(i);
-			if (entityManager.GetEntityName(eid) == "Floor")
-			{
-				// entityManager.GetComponent<Wiwa::tra>();
-				// Get the transform component and call the generation map funtion
-			}
-			else {
-				continue;
-			}
-		}
+		//for(int i = 0; i < entityList->size(); i++)
+		//{
+		//	eid = entityList->at(i);
+		//	if (entityManager.GetEntityName(eid) == "Floor")
+		//	{
+		//		// entityManager.GetComponent<Wiwa::tra>();
+		//		// Get the transform component and call the generation map funtion
+		//	}
+		//	else {
+		//		continue;
+		//	}
+		//}
+
+		Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1.0f, 1.0f, 0.0f);
 	}
 
 	

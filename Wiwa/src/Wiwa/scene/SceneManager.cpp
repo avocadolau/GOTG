@@ -737,7 +737,7 @@ namespace Wiwa
 
 			// Load Physics Manager json Data
 			sc->GetPhysicsManager().OnLoad();
-
+			Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1, 1, 0); // this is temporal
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else
