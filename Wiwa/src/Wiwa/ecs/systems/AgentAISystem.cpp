@@ -27,8 +27,9 @@ void Wiwa::AgentAISystem::OnInit()
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
+	
 	//
-	GoToPosition({49,0,49});
+	//GoToPosition({49,0,49});
 	//
 	m_DirectionPoint = Wiwa::AIPathFindingManager::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
 
@@ -42,15 +43,20 @@ void Wiwa::AgentAISystem::OnUpdate()
 		agent->hasArrived = true; 
 	}*/
 
-	float dirX = m_DirectionPoint.x - transform->position.x;
-	dirX /= abs(dirX);
+	if (m_IsMoving)
+	{
+		float dirX = m_DirectionPoint.x - transform->position.x;
+		dirX /= abs(dirX);
 
-	float dirY = m_DirectionPoint.y - transform->position.z;
-	dirY /= abs(dirY);
+		float dirY = m_DirectionPoint.y - transform->position.z;
+		dirY /= abs(dirY);
 
-	// Move to direction
-	transform->localPosition.x += agent->speed * dirX;
-	transform->localPosition.z += agent->speed * dirY;
+		// Move to direction
+		transform->localPosition.x += agent->speed * dirX;
+		transform->localPosition.z += agent->speed * dirY;
+	}
+
+	
 
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
@@ -90,6 +96,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 	glEnd();
 
 	camera->frameBuffer->Unbind();
+
+	m_IsMoving = false;
 }
 
 void Wiwa::AgentAISystem::OnDestroy()
@@ -120,5 +128,6 @@ void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
 
 	m_DirectionPoint = nextPos;
 
+	m_IsMoving = true;
 	
 }
