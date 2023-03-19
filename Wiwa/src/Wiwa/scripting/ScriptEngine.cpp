@@ -110,6 +110,11 @@ namespace Wiwa {
 		return mono_array_new(s_Data->AppDomain, type, (uintptr_t)size);
 	}
 
+	MonoString* ScriptEngine::CreateString(const char* str)
+	{
+		return mono_string_new(s_Data->AppDomain, str);
+	}
+
 	void ScriptEngine::ReloadAssembly()
 	{
 		mono_domain_set(mono_get_root_domain(), false);

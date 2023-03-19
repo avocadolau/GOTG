@@ -27,7 +27,9 @@ namespace Wiwa {
 
 		static void LoadAssembly(const std::filesystem::path& filepath);
 		static void LoadAppAssembly(const std::filesystem::path& filepath);
+
 		static MonoArray* CreateArray(MonoClass* type, uint32_t size);
+		static MonoString* CreateString(const char* str);
 
 		static void ReloadAssembly();
 
