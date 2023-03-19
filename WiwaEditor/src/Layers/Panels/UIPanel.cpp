@@ -171,8 +171,10 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateButton");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -250,8 +252,10 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateSlider");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -355,8 +359,10 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateImage");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -437,8 +443,8 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateText");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("position", position);
-	ImGui::InputFloat2("size", size);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	ImGui::InputText("String", (char*)pathForAsset.c_str(),64);
 
 	if (ImGui::Button("Create Text"))
@@ -457,8 +463,10 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	ImGui::PushID("CreateCheckbox");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{

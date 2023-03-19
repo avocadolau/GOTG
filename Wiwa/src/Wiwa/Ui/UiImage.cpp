@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID) : GuiControl(scene, GuiControlType::IMAGE, id)
+	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex) : GuiControl(scene, GuiControlType::IMAGE, id)
 	{
 		this->position = bounds;
 		this->texture = texture;

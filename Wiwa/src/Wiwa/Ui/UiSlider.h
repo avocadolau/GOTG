@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path,const char* slider_path, size_t callbackID);
+		GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path,const char* slider_path, size_t callbackID, Rect2i boundsOriginTex);
 		virtual ~GuiSlider();
 
 		bool Update();
