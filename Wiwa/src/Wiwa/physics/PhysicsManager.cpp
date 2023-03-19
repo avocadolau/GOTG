@@ -338,7 +338,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	Object* PhysicsManager::AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		btCollisionShape* colShape = new btSphereShape(sphere.radius);
 		m_Shapes.push_back(colShape);
@@ -348,11 +348,11 @@ namespace Wiwa {
 		btCollisionObject* collisionObject = new btCollisionObject();
 		collisionObject->setUserIndex(id); // id
 
-		AddBodyInternal(id, collisionObject, colShape, rigid_body);
-		return true;
+		Object* obj = AddBodyInternal(id, collisionObject, colShape, rigid_body);
+		return obj;
 	}
 
-	bool PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	Object* PhysicsManager::AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		glm::vec3 skew;
 		glm::vec4 perspective;
@@ -369,11 +369,11 @@ namespace Wiwa {
 		btCollisionObject* collisionObject = new btCollisionObject();
 		collisionObject->setUserIndex(id);
 
-		AddBodyInternal(id, collisionObject, colShape, rigid_body);
-		return true;
+		Object* obj = AddBodyInternal(id, collisionObject, colShape, rigid_body);
+		return obj;
 	}
 
-	bool PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	Object* PhysicsManager::AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		btCollisionShape* colShape = new btCylinderShape(btVector3(cylinder.height * 0.5f, cylinder.radius, 0.0f));
 		m_Shapes.push_back(colShape);
@@ -384,11 +384,11 @@ namespace Wiwa {
 		btCollisionObject* collisionObject = new btCollisionObject();
 		collisionObject->setUserIndex(id);
 
-		AddBodyInternal(id, collisionObject, colShape, rigid_body);
-		return true;
+		Object* obj = AddBodyInternal(id, collisionObject, colShape, rigid_body);
+		return obj;
 	}
 
-	bool PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
+	Object* PhysicsManager::AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body)
 	{
 		btCollisionShape* colShape = new btCapsuleShape(capsule.radius, capsule.radius);
 		m_Shapes.push_back(colShape);
@@ -399,12 +399,12 @@ namespace Wiwa {
 		btCollisionObject* collisionObject = new btCollisionObject();
 		collisionObject->setUserIndex(id);
 
-		AddBodyInternal(id, collisionObject, colShape, rigid_body);
+		Object* obj = AddBodyInternal(id, collisionObject, colShape, rigid_body);
 		AddBodyToLog(FindByEntityId(id));
-		return true;
+		return obj;
 	}
 
-	bool PhysicsManager::AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body)
+	Object* PhysicsManager::AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body)
 	{
 		if (rigid_body.isTrigger)
 			collision_object->setCollisionFlags(collision_object->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -426,7 +426,7 @@ namespace Wiwa {
 		bits |= (1 << rigid_body.selfTag);
 		m_World->addCollisionObject(collision_object, bits, rigid_body.filterBits);
 		m_CollObjects.push_back(myObjData);
-		return true;
+		return myObjData;
 	}
 
 	bool PhysicsManager::SetVelocity(Object* body, const glm::vec3 velocity)

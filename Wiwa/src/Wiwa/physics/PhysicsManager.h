@@ -85,15 +85,15 @@ namespace Wiwa {
 		bool DeleteBody(Object* body);
 
 		// Add bodies
-		bool AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		Object* AddBodySphere(size_t id, const Wiwa::ColliderSphere& sphere, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
 
-		bool AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		Object* AddBodyCube(size_t id, const Wiwa::ColliderCube& cube, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
 
-		bool AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		Object* AddBodyCylinder(size_t id, const Wiwa::ColliderCylinder& cylinder, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
 
-		bool AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
+		Object* AddBodyCapsule(size_t id, const Wiwa::ColliderCapsule& capsule, Wiwa::Transform3D& transform, Wiwa::CollisionBody& rigid_body);
 	private:
-		bool AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body);
+		Object* AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body);
 	public:
 
 		// Manipulate bodies
