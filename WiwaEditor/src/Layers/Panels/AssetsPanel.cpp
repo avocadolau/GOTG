@@ -29,6 +29,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	ResourceId scrptId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/script_icon.png");
 	ResourceId shaderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/shader_icon.png");
 	ResourceId prefabId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/prefab_icon.png");
+	ResourceId sceneId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/scene_icon.png");
 	
 
 	m_FolderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(folderId)->GetTextureId();
@@ -38,6 +39,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	m_ModelIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(modId)->GetTextureId();
 	m_ShaderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(shaderId)->GetTextureId();
 	m_PrefabIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(prefabId)->GetTextureId();
+	m_SceneIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(sceneId)->GetTextureId();
 
 	if (!std::filesystem::exists(s_AssetsPath))
 	{
@@ -267,7 +269,8 @@ void AssetsPanel::Draw()
 			int id = 0;
 			for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentPath))
 			{
-				if (directoryEntry.path().extension() == ".meta")
+				if (directoryEntry.path().extension() == ".meta"
+				|| directoryEntry.path().extension() == ".json")
 					continue;
 				ImGui::TableNextColumn();
 				ImGui::PushID(id++);
@@ -289,13 +292,13 @@ void AssetsPanel::Draw()
 				else if (directoryEntry.path().extension() == ".cs")
 					texID = m_ScriptIcon;
 				else if (directoryEntry.path().extension() == ".vs"
-					||   directoryEntry.path().extension() == ".fs"
-					||   directoryEntry.path().extension() == ".gs")
+					|| directoryEntry.path().extension() == ".fs"
+					|| directoryEntry.path().extension() == ".gs")
 					texID = m_ShaderIcon;
 				else if (directoryEntry.path().extension() == ".wiprefab")
 					texID = m_PrefabIcon;
-
-				
+				else if (directoryEntry.path().extension() == ".wiscene")
+					texID = m_SceneIcon;
 
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::ImageButton(texID, { thumbnailSize, thumbnailSize }))

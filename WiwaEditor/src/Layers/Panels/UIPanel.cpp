@@ -34,7 +34,7 @@ void UIPanel::Draw()
 		}
 		for (size_t i = 0; i < Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.size(); i++)
 		{
- 			ImGui::PushID(i);
+ 			ImGui::PushID((int)i);
 			ImGui::Text("Canvas %i", i);
 			ImGui::SameLine();
 			if(ImGui::Button("Select canvas"))

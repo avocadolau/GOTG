@@ -3,7 +3,7 @@
 #include <wipch.h>
 #include <Wiwa/core/Core.h>
 
-#include <Wiwa/ecs/components/RigidBody.h>
+#include <Wiwa/ecs/components/CollisionBody.h>
 #include <Wiwa/ecs/components/ColliderCube.h>
 #include <Wiwa/ecs/components/ColliderCylinder.h>
 #include <Wiwa/ecs/components/ColliderSphere.h>

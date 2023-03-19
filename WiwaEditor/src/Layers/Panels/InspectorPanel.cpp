@@ -17,6 +17,7 @@
 #include <Wiwa/ecs/components/DirectionalLight.h>
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/ParticleEmitter.h>
+#include <Wiwa/ecs/components/CollisionBody.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {

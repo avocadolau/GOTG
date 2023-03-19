@@ -1,4 +1,8 @@
 #pragma once
+#pragma warning(disable : 4302)
+#pragma warning(disable : 4401)
+#pragma warning(disable : 4311)
+#pragma warning(disable : 26495)
 #include <typeinfo>
 #include <vector>
 #include <string>

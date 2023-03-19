@@ -53,7 +53,7 @@ namespace Wiwa
 				SceneData sd;
 
 				for (size_t i = 0; i < size; i++) {
-					JSONValue scene = scene_list[i];
+					JSONValue scene = scene_list[(uint32_t)i];
 					
 					sd.scene_name = scene["name"].as_string();
 					sd.scene_path = scene["path"].as_string();
