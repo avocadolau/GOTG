@@ -19,6 +19,7 @@
 #include "embed_functions/embed_screen_functions.h"
 #include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
+#include "embed_functions/embed_application_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -26,6 +27,9 @@ namespace Wiwa
 {
 	void ScriptGlue::RegisterFunctions()
 	{
+		// Application
+		WI_ADD_INTERNAL_CALL(QuitIntr);
+
 		// Logging
 		WI_ADD_INTERNAL_CALL(NativeLog);
 		WI_ADD_INTERNAL_CALL(NativeLogVector);

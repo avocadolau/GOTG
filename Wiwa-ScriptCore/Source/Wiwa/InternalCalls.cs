@@ -5,6 +5,10 @@ namespace Wiwa
     using EntityId = System.UInt64;
     internal class InternalCalls
     {
+        #region Application
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void QuitIntr();
+        #endregion
         #region Log
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void NativeLog(string log, int param);
