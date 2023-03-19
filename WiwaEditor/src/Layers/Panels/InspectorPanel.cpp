@@ -49,7 +49,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
 		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
-		if (type->hash == (size_t)TypeHash::CollisionBody) { DrawRigidBodyComponent(data); } else
+		if (type->hash == (size_t)TypeHash::CollisionBody) { DrawCollisionBodyComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCube) { DrawColliderCubeComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderSphere) { DrawColliderSpehereComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
@@ -91,7 +91,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		}
 		else if (type->hash == (size_t)TypeHash::Rigidbody)
 		{
-			DrawRigidBodyComponent(data);
+			DrawCollisionBodyComponent(data);
 		}
 		else if (type->hash == (size_t)TypeHash::ColliderCube)
 		{
@@ -487,24 +487,24 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	ImGui::Checkbox("Play", &animator->Play);
 }
 
-void InspectorPanel::DrawRigidBodyComponent(byte *data)
+void InspectorPanel::DrawCollisionBodyComponent(byte *data)
 {
 	Wiwa::PhysicsManager &py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-	Wiwa::Rigidbody *rigidBody = (Wiwa::Rigidbody *)data;
-	DrawVec3Control("Position offset", &rigidBody->positionOffset, 0.0f, 100.0f);
-	DrawVec3Control("Scaling offset", &rigidBody->scalingOffset, 0.0f, 100.0f);
-	ImGui::Checkbox("Is static?", &rigidBody->isStatic);
-	ImGui::Checkbox("Is trigger?", &rigidBody->isTrigger);
-	ImGui::Checkbox("Do continuous?", &rigidBody->doContinuousCollision);
+	Wiwa::CollisionBody *collisionBody = (Wiwa::CollisionBody*)data;
+	DrawVec3Control("Position offset", &collisionBody->positionOffset, 0.0f, 100.0f);
+	DrawVec3Control("Scaling offset", &collisionBody->scalingOffset, 0.0f, 100.0f);
+	ImGui::Checkbox("Is static?", &collisionBody->isStatic);
+	ImGui::Checkbox("Is trigger?", &collisionBody->isTrigger);
+	ImGui::Checkbox("Do continuous?", &collisionBody->doContinuousCollision);
 
-	const char* comboPreviewValue = py.GetFilterTag(rigidBody->selfTag);  // Pass in the preview value visible before opening the combo (it could be anything)
+	const char* comboPreviewValue = py.GetFilterTag(collisionBody->selfTag);  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
 	{
 		for (int n = 0; n < py.filterMap.size(); n++)
 		{
-			const bool is_selected = (rigidBody->selfTag == n);
+			const bool is_selected = (collisionBody->selfTag == n);
 			if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
-				rigidBody->selfTag = n;
+				collisionBody->selfTag = n;
 
 			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 			if (is_selected)
@@ -517,23 +517,23 @@ void InspectorPanel::DrawRigidBodyComponent(byte *data)
 	ImGui::Text("Collide with:");
 	for (int i = 0; i < py.filterMap.size(); i++)
 	{
-		bool local = (rigidBody->filterBits >> i) & 1; //Checking a bit
+		bool local = (collisionBody->filterBits >> i) & 1; //Checking a bit
 		ImGui::Checkbox(py.GetFilterTag(i), &local);
 		if (local)
-			rigidBody->filterBits |= 1 << i;
+			collisionBody->filterBits |= 1 << i;
 		else
-			rigidBody->filterBits &= ~(1 << i);
+			collisionBody->filterBits &= ~(1 << i);
 	}
 
 	// ImGui::Text("Do not collide with:");
 	// for (int i = 0; i < py.filterStrings.size(); i++)
 	//{
-	//	bool local = (rigidBody->filterBits >> i) & 1U; //Checking a bit
+	//	bool local = (collisionBody->filterBits >> i) & 1U; //Checking a bit
 	//	ImGui::Checkbox(py.filterStrings[i].c_str(), &local);
 	//	if (local)
-	//		rigidBody->filterBits |= 1UL << i;
+	//		collisionBody->filterBits |= 1UL << i;
 	//	else
-	//		rigidBody->filterBits &= ~(1UL << i);
+	//		collisionBody->filterBits &= ~(1UL << i);
 	// }
 }
 
