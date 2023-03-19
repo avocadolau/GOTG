@@ -137,6 +137,9 @@ namespace Wiwa {
 			Object* objA = FindByEntityId(cData.entityA);
 			Object* objB = FindByEntityId(cData.entityB);
 
+			if (objA == nullptr || objB == nullptr)
+				continue;
+
 			switch (cData.collisionType) {
 			case CT_ENTER:
 				for (size_t k = 0; k < vecA.size(); k++) {

@@ -93,7 +93,7 @@ namespace Game
             //UpdateCamera(ref character, ref transform);
             UpdateInput(ref character, ref transform);
 
-            //Fire(ref character);
+            Fire(ref character);
             //Console.WriteLine("Finish Update character controller");
 
             rayCastTimer += Time.DeltaTimeMS();
