@@ -13,6 +13,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_Transform;
 
 		glm::vec2 m_DirectionPoint;
+		bool m_IsMoving = false;
 	public:
 		AgentAISystem();
 		~AgentAISystem();
