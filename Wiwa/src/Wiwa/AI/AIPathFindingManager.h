@@ -97,9 +97,6 @@ namespace Wiwa {
 		// Called before quitting
 		static bool CleanUp();
 
-		// Sets up the walkability map
-		static void SetMap(uint32_t width, uint32_t height, unsigned char* data); // set map for each agent as well?
-
 		// Main function to request a path from A to B
 		static int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
 
@@ -134,9 +131,7 @@ namespace Wiwa {
 
 		private:
 
-		// total size of the map in world coords if i am not mistaken
-		static uint32_t m_width;
-		static uint32_t m_height;
+		
 			
 		// all map walkability values [0..255]
 		static unsigned char* m_map;
