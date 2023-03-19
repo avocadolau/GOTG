@@ -3,6 +3,7 @@
 #include "Animator.h"
 #include <Wiwa/utilities/json/JSONDocument.h>
 #include <Wiwa/utilities/json/JSONValue.h>
+#include <stack>
 namespace Wiwa {
 	Animator::Animator()
 	{
@@ -35,6 +36,8 @@ namespace Wiwa {
 			float TimeInTicks = dt * TicksPerSecond;
 			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
 			m_CurrentTime = AnimationTimeTicks;
+
+			//CalculateBoneFinalTransform();
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 		}
 		// Update the time for the current animation
@@ -164,17 +167,37 @@ namespace Wiwa {
 		int counter = 0;
 		for (it = t.begin(); it != t.end(); it++)
 		{
-			m_FinalBoneMatrices[counter] = it->second.finalTransformation;
+			m_FinalBoneMatrices[counter] = it->second.globalTransformation;
 			counter++;
 		}
 		// Set the animation state to blending
 		m_AnimationState = AnimationState::Blending;
 	}
-
-	void Animator::CalculateBoneTransform(const NodeData* node, glm::mat4 parentTransform)
+	
+	void Animator::CalculateBoneFinalTransform()
 	{
-		std::string nodeName = node->name;
-		glm::mat4 nodeTransform = node->transformation;
+		auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
+		for (auto& bone : m_CurrentAnimation->GetBones())
+		{
+			if (boneInfoMap.find(bone->m_Name) != boneInfoMap.end())
+			{
+				//interpolate local bone matrix
+				bone->Update(m_CurrentTime);
+
+				int index = boneInfoMap[bone->m_Name].id;
+
+				glm::mat4 globalTransform = boneInfoMap[bone->m_Name].globalTransformation;
+				glm::mat4 localTransform = bone->m_LocalTransform;
+				glm::mat4 offsetMatrix = boneInfoMap[bone->m_Name].offsetMatrix;
+				m_FinalBoneMatrices[index] = globalTransform * localTransform * offsetMatrix;				
+			}
+		}
+	}
+	
+	void Animator::CalculateBoneTransform(const NodeData* rootNode, const  glm::mat4 parentTransform)
+	{
+		std::string nodeName = rootNode->name;
+		glm::mat4 nodeTransform = rootNode->transformation;
 
 		Bone* Bone = m_CurrentAnimation->FindBone(nodeName);
 
@@ -186,6 +209,9 @@ namespace Wiwa {
 
 		glm::mat4 globalTransformation = parentTransform * nodeTransform;
 
+		WI_INFO("{}\n", nodeName.c_str());
+		m_CurrentAnimation->PrintGlmMatrix(globalTransformation);
+
 		auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
 		if (boneInfoMap.find(nodeName) != boneInfoMap.end())
 		{
@@ -193,8 +219,8 @@ namespace Wiwa {
 			m_FinalBoneMatrices[index] = globalTransformation * boneInfoMap[nodeName].offsetMatrix;
 		}
 
-		for (int i = 0; i < node->childrenCount; i++)
-			CalculateBoneTransform(&node->children[i], globalTransformation);
+		for (int i = 0; i < rootNode->childrenCount; i++)
+			CalculateBoneTransform(&rootNode->children[i], globalTransformation);
 	}
 }
 

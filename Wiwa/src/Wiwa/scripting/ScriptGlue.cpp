@@ -19,6 +19,7 @@
 #include "embed_functions/embed_screen_functions.h"
 #include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
+#include "embed_functions/embed_animator_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -112,5 +113,11 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(Play);
 		WI_ADD_INTERNAL_CALL(ChangeScene);
 		WI_ADD_INTERNAL_CALL(Quit);
+
+		//animator
+		WI_ADD_INTERNAL_CALL(PlayAnimationName);
+		WI_ADD_INTERNAL_CALL(PlayAnimation);
+		WI_ADD_INTERNAL_CALL(PauseAnimation);
+		WI_ADD_INTERNAL_CALL(RestartAnimation);
 	}
 }
