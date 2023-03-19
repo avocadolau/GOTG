@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f4ca67468407e9a6cba7392bb29a044aaf60f1a89123a0eeae679e5d30a583c0
-size 443
+{"sol_version":"vs2022","build_conf":"Release","custom_layouts":[],"Configuration":false,"Console":true,"Scene":true,"Hierarchy":true,"Assets":true,"Inspector":true,"Mesh view":false,"Material Editor":true,"Systems":false,"Game":true,"Cameras":true,"Resources":false,"Import":false,"Shaders":true,"Environment":false,"Animator":false,"Animation Editor":false,"UI":false,"UI editor":false,"Audio":true," AI Map Baking":false,"Game Log":false}

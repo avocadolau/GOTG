@@ -460,13 +460,5 @@ namespace Wiwa
             // Returns true in the presence of NaN values.
             return !(lhs == rhs);
         }
-
-
-        [System.Obsolete("Use Vector3.forward instead.")]
-        public static Vector3 fwd { get { return new Vector3(0F, 0F, 1F); } }
-        [System.Obsolete("Use Vector3.Angle instead. AngleBetween uses radians instead of degrees and was deprecated for this reason")]
-        public static float AngleBetween(Vector3 from, Vector3 to) { return (float)Math.Acos(Mathf.Clamp(Vector3.Dot(from.normalized, to.normalized), -1F, 1F)); }
-        [System.Obsolete("Use Vector3.ProjectOnPlane instead.")]
-        public static Vector3 Exclude(Vector3 excludeThis, Vector3 fromThat) { return ProjectOnPlane(fromThat, excludeThis); }
     }
 }
