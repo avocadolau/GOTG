@@ -198,9 +198,9 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	size_t cbcount = app.GetCallbacksCount();
 
 	if (cbcount > 0) {
-		current_item = 0;
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
-
+		Wiwa::Callback* current_cb;
+		if (current_item == WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(0);
+		if (current_item != WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(current_item);
 		ImGui::Text("Callback type:");
 
 		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
@@ -208,10 +208,9 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (cb->getParamCount() == 0) {
-				
-					if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				current_cb = app.getCallbackAt(n);
+				if (current_cb->getParamCount() == 0) {
+					if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 					{
 						current_item = n;
 						if (is_selected)
@@ -286,8 +285,9 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	size_t cbcount = app.GetCallbacksCount();
 
 	if (cbcount > 0) {
-		current_item = 0;
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		Wiwa::Callback* current_cb;
+		if (current_item == WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(0);
+		if (current_item != WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
@@ -296,10 +296,10 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (cb->getParamCount() == 1) {
-					if (cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-						if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				current_cb = app.getCallbackAt(n);
+				if (current_cb->getParamCount() == 1) {
+					if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+						if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 						{
 							current_item = n;
 							if (is_selected)
@@ -363,8 +363,9 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	size_t cbcount = app.GetCallbacksCount();
 
 	if (cbcount > 0) {
-		current_item = 0;
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		Wiwa::Callback* current_cb;
+		if (current_item == WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(0);
+		if (current_item != WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
@@ -373,13 +374,15 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				current_cb = app.getCallbackAt(n);
+				
+				if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 				{
 					current_item = n;
 					if (is_selected)
 						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 				}
+				
 			}
 			ImGui::EndCombo();
 		}
@@ -469,8 +472,9 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	size_t cbcount = app.GetCallbacksCount();
 
 	if (cbcount > 0) {
-		current_item = 0;
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		Wiwa::Callback* current_cb;
+		if (current_item == WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(0);
+		if (current_item != WI_INVALID_INDEX) current_cb = Wiwa::Application::Get().getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
@@ -479,12 +483,12 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (cb->getParamCount() == 1) {
-					const Type* param = cb->getParamAt(0);
+				current_cb = app.getCallbackAt(n);
+				if (current_cb->getParamCount() == 1) {
+					const Type* param = current_cb->getParamAt(0);
 
 					if (param->hash == (size_t)TypeHash::Bool) {
-						if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+						if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 						{
 							current_item = n;
 							if (is_selected)
