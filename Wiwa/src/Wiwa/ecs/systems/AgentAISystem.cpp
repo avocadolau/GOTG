@@ -5,6 +5,8 @@
 #include <Wiwa/AI/AIPathFindingManager.h>
 //#include "Wiwa/ecs/components/Transform3D.h"
 
+#include "glew.h"
+
 Wiwa::AgentAISystem::AgentAISystem()
 {
 }
@@ -49,6 +51,45 @@ void Wiwa::AgentAISystem::OnUpdate()
 	// Move to direction
 	transform->localPosition.x += agent->speed * dirX;
 	transform->localPosition.z += agent->speed * dirY;
+
+	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+
+	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+	camera->frameBuffer->Bind(false);
+
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(glm::value_ptr(camera->getView()));
+
+
+	glBegin(GL_LINES);
+	glColor3f(1, 1, 1);
+	glLineWidth(10.0f);
+
+	Wiwa::AIPathFindingManager::MapData mapdata = Wiwa::AIPathFindingManager::GetMapData();
+
+	float d = mapdata.height * mapdata.width * 2;
+
+	for (float i = -d; i <= d; i += 1.0f)
+	{
+		glVertex3f(i, 0.0f, -d);
+		glVertex3f(i, 0.0f, d);
+		glVertex3f(-d, 0.0f, i);
+		glVertex3f(d, 0.0f, i);
+	}
+
+
+	glVertex3f(transform->localPosition.x, 0, transform->localPosition.z);
+
+	glm::vec2 dest = Wiwa::AIPathFindingManager::WorldToMap(49, 49);
+
+	glVertex3f(dest.x, 0, dest.y);
+
+	glEnd();
+
+	camera->frameBuffer->Unbind();
 }
 
 void Wiwa::AgentAISystem::OnDestroy()
@@ -66,9 +107,9 @@ void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
 	
 
 	glm::ivec2 target = {targetPos.x, targetPos.z};
-	Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint,target);
+	//Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint,target);
 
-	glm::ivec2 nextPos;
+	glm::ivec2 nextPos = target;
 
 	const std::vector<glm::ivec2>* lastPath = Wiwa::AIPathFindingManager::GetLastPath();
 	

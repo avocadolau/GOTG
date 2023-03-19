@@ -197,7 +197,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			
 
 			// L12b: TODO 4: If we just added the destination, we are done!
-			if (node->pos == destination)
+			if (node && node->pos == destination)
 			{
 				m_lastPath.clear();
 
@@ -205,10 +205,11 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				// Use the Pathnode::parent and Flip() the path when you are finish
 				const PathNode* pathNode = node;
 
+				WI_INFO("pathnode = {}", pathNode->pos.x);
 				while (pathNode)
 				{
-					m_lastPath.push_back(pathNode->pos);
-					pathNode = pathNode->parent;
+					//m_lastPath.push_back(pathNode->pos);
+					//pathNode = pathNode->parent;
 				}
 
 				std::reverse(m_lastPath.begin(), m_lastPath.end());
