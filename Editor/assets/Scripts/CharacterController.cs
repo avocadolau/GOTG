@@ -11,6 +11,7 @@ namespace Game
     public struct CharacterController
     {
         public float velocity;
+        public float rotationSpeed;
         public float camYOffset;
         public float camXOffset;
         public float camZOffset;
@@ -141,83 +142,33 @@ namespace Game
         private void UpdateInput(ref CharacterController character, ref Transform3D transform)
         {
             //Console.WriteLine("Update Input");
-            Vector3 forward = Wiwa.Math.CalculateForward(ref transform);
-            Vector3 right = Wiwa.Math.CalculateRight(ref transform);
+            Vector3 forward = Mathf.CalculateForward(ref transform);
+            Vector3 right = Mathf.CalculateRight(ref transform);
             //ref Rigidbody rigidbody = ref GetComponent<Rigidbody>();
-            float translation = character.velocity * Time.DeltaTime();
+            float translation = character.velocity * Time.DeltaTimeMS();
 
             Vector3 direction = new Vector3(0, 0, 0);
-            direction += GetInputFromKeyboard(forward, right, translation);
+            direction += GetInputFromKeyboard(forward, right);
             direction += GetGamepadInputDirection(GamepadAxis.LeftX, GamepadAxis.LeftY);
 
             //transform.LocalPosition += direction;
             PhysicsManager.SetLinearVelocity(m_EntityId, direction * translation);
 
-            if (direction.x != 0f || direction.z != 0f)
+            if (direction != Vector3Values.zero)
             {
+                float angle = CalculateRotation(direction, forward);
 
-                float newRotation = CalculateRotation(direction, forward);
-                if (newRotation != 0f)
-                {
-                    Console.WriteLine("New rotation:" + newRotation);
-                    Console.WriteLine("Direction: " + direction.x + " X " + direction.y + " Y");
-                    transform.LocalRotation.y += newRotation;
-                }
-                if (transform.LocalRotation.y > 360f)
+                transform.LocalRotation.y += angle;
+                Console.WriteLine(angle);
+                if (transform.LocalRotation.y > 360)
                     transform.LocalRotation.y = 0f;
             }
         }
-        public Vector3 RotateTowards(Vector3 direction, Vector3 newDirection, float rotationSpeed)
-        {
-            // Calculate the angle between the two vectors
-            float angle = CalculateRotation(direction, newDirection);
 
-            // Calculate the rotation axis
-            Vector3 rotationAxis = Cross(direction, newDirection);
-
-            // Create a rotation quaternion
-            Quaternion rotation = AngleAxis(angle * rotationSpeed * Time.DeltaTime(), rotationAxis);
-
-            // Rotate the direction vector towards the new direction vector
-            direction = rotation * direction;
-
-            return direction;
-        }
-        public Vector3 Cross(Vector3 a, Vector3 b)
-        {
-            Vector3 cross = new Vector3();
-
-            cross.x = a.y * b.z - a.z * b.y;
-            cross.y = a.z * b.x - a.x * b.z;
-            cross.z = a.x * b.y - a.y * b.x;
-
-            return cross;
-        }
-        public Quaternion AngleAxis(float angle, Vector3 axis)
-        {
-            // Convert the angle to radians
-            float radians = angle * ((float)(180 / System.Math.PI));
-
-            // Calculate the sin and cos of half the angle
-            float halfSin = (float)System.Math.Sin(radians / 2f);
-            float halfCos = (float)System.Math.Cos(radians / 2f);
-
-            // Normalize the axis vector
-            axis.Normalize();
-
-            // Calculate the quaternion components
-            float x = axis.x * halfSin;
-            float y = axis.y * halfSin;
-            float z = axis.z * halfSin;
-            float w = halfCos;
-
-            // Create and return the quaternion
-            return new Quaternion(x, y, z, w);
-        }
         float CalculateRotation(Vector3 first, Vector3 second)
         {
-            float angle = Wiwa.Math.ACos(Wiwa.Math.Dot(first.Normalized(), second.Normalized())) * 180f / (float)System.Math.PI;
-            if (!float.IsNaN(angle))
+            float angle = Mathf.Acos(Vector3.Dot(first.normalized, second.normalized)) * Mathf.Rad2Deg;
+            if (!float.IsNaN(angle) && !float.IsInfinity(angle))
                 return angle;
             return 0f;
         }
@@ -230,7 +181,7 @@ namespace Game
 
             return direction;
         }
-        private Vector3 GetInputFromKeyboard(Vector3 forward, Vector3 right, float translation)
+        private Vector3 GetInputFromKeyboard(Vector3 forward, Vector3 right)
         {
             Vector3 direction = new Vector3(0, 0, 0);
             ref Transform3D transform = ref GetComponent<Transform3D>();
@@ -238,22 +189,22 @@ namespace Game
             if (Input.IsKeyDown(KeyCode.W))
             {
                 PlayAudioEvent("player_walk");
-                direction += forward * translation;
+                direction += forward;
             }
             else if (Input.IsKeyDown(KeyCode.S))
             {
                 PlayAudioEvent("player_walk");
-                direction -= forward * translation;
+                direction -= forward;
             }
             if (Input.IsKeyDown(KeyCode.A))
             {
                 PlayAudioEvent("player_walk");
-                direction += right * translation;
+                direction += right;
             }
             else if (Input.IsKeyDown(KeyCode.D))
             {
                 PlayAudioEvent("player_walk");
-                direction -= right * translation;
+                direction -= right;
             }
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
