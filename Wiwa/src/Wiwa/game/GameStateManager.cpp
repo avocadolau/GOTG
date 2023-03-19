@@ -18,6 +18,7 @@ namespace Wiwa
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
+
 	}
 
 	void GameStateManager::SaveProgression()
@@ -86,6 +87,8 @@ namespace Wiwa
 
 	void GameStateManager::StartNewRoom()
 	{
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		em.RegisterComponent<EnemySpawner>();
 		s_HasFinshedRoom = false;
 		s_CanPassNextRoom = false;
 		s_PlayerTriggerNext = false;
