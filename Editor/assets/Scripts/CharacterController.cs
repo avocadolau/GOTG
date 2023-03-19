@@ -148,17 +148,102 @@ namespace Game
 
             Vector3 direction = new Vector3(0, 0, 0);
             direction += GetInputFromKeyboard(forward, right, translation);
-            direction += GetInputGamepad(forward, right, translation);
+            direction += GetGamepadInputDirection(GamepadAxis.LeftX, GamepadAxis.LeftY);
 
             //transform.LocalPosition += direction;
             PhysicsManager.SetLinearVelocity(m_EntityId, direction);
+            
+            
+            
+            Vector3 rotDirection = new Vector3(0, 0, 0);
+            rotDirection = GetGamepadInputDirection(GamepadAxis.RightX, GamepadAxis.RightY);
+            double angle = CalculateRotation(forward, rotDirection);
+           
+            Console.WriteLine("ANGLE=== :   " + angle);
+            //Console.WriteLine("Direction.x :   " + direction.x + "\nDirection.z :   " + direction.z);
+            Console.WriteLine("Direction.x :   " + rotDirection.x + "\nDirection.z :   " + rotDirection.z);
+            Console.WriteLine("forward.x :   " + forward.x + "\nforward.z :   " + forward.z);
+            Console.WriteLine(" right.x :   " + right.x + "\n right.z :   " + right.z);
+            //Console.WriteLine("TEST ROTATIONS:   " + test);
+            float rotSpeed = 0.1f;
+            transform.LocalRotation.y += CalculateRotation(forward, rotDirection);
+
+
+
+
+
         }
-        private Vector3 GetInputGamepad(Vector3 forward, Vector3 right, float translation)
+        public Vector3 RotateTowards(Vector3 direction, Vector3 newDirection, float rotationSpeed)
+        {
+            // Calculate the angle between the two vectors
+            float angle = CalculateRotation(direction, newDirection);
+
+            // Calculate the rotation axis
+            Vector3 rotationAxis = Cross(direction, newDirection);
+
+            // Create a rotation quaternion
+            Quaternion rotation = AngleAxis(angle * rotationSpeed * Time.DeltaTime(), rotationAxis);
+
+            // Rotate the direction vector towards the new direction vector
+            direction = rotation * direction;
+
+            return direction;
+        }
+        public Vector3 Cross(Vector3 a, Vector3 b)
+        {
+            Vector3 cross = new Vector3();
+
+            cross.x = a.y * b.z - a.z * b.y;
+            cross.y = a.z * b.x - a.x * b.z;
+            cross.z = a.x * b.y - a.y * b.x;
+
+            return cross;
+        }
+        public Quaternion AngleAxis(float angle, Vector3 axis)
+        {
+            // Convert the angle to radians
+            float radians = angle * ((float)(180 / System.Math.PI));
+
+            // Calculate the sin and cos of half the angle
+            float halfSin = (float)System.Math.Sin(radians / 2f);
+            float halfCos = (float)System.Math.Cos(radians / 2f);
+
+            // Normalize the axis vector
+            axis.Normalize();
+
+            // Calculate the quaternion components
+            float x = axis.x * halfSin;
+            float y = axis.y * halfSin;
+            float z = axis.z * halfSin;
+            float w = halfCos;
+
+            // Create and return the quaternion
+            return new Quaternion(x, y, z, w);
+        }
+        float CalculateRotation(Vector3 first, Vector3 second)
+        {
+            double result = 0;
+
+            double numerator = 0;
+            double denominator = 0;
+
+
+
+            numerator = first.x * second.x + first.z * second.z;
+            denominator = System.Math.Sqrt((first.x * first.x) + (first.z * first.z)) * (System.Math.Sqrt((second.x * second.x) + (second.z * second.z)));
+
+            result = (System.Math.Acos((numerator) / (denominator)) * 180 / System.Math.PI);
+            //result = System.Math.Acos(0) * 180 / System.Math.PI;
+            if (double.IsNaN(result)) return 0;
+            else return ((float)result);
+            
+        }
+        private Vector3 GetGamepadInputDirection(GamepadAxis axis, GamepadAxis axis02)
         {
             Vector3 direction = new Vector3(0, 0, 0);
 
-            direction += right * translation * -Input.GetAxis(Gamepad.GamePad1, GamepadAxis.LeftX);
-            direction += forward * translation * -Input.GetAxis(Gamepad.GamePad1, GamepadAxis.LeftY);
+            direction.x = -Input.GetAxis(Gamepad.GamePad1, axis);
+            direction.z = -Input.GetAxis(Gamepad.GamePad1, axis02);
 
             return direction;
         }
