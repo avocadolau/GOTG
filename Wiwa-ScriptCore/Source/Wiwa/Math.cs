@@ -42,6 +42,10 @@ namespace Wiwa
         {
             return System.Math.Atan2(x, y);
         }
+        public static float ACos(float value)
+        {
+            return (float)System.Math.Acos((double)value);
+        }
         public static Vector3 Normalize(Vector3 A)
         {
             double distance = System.Math.Sqrt(A.x * A.x + A.y * A.y + A.z * A.z);
@@ -55,6 +59,10 @@ namespace Wiwa
             z = v1.x * v2.y - v2.x * v1.y;
 
             return new Vector3(x, y, z);
+        }
+        public static float Dot(Vector3 v1, Vector3 v2)
+        {
+            return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
         }
         #endregion
 
@@ -258,7 +266,7 @@ namespace Wiwa
         {
             return new Vector3(a.x * k, a.y * k, a.z * k);
         }
-        public static Vector3 operator-(Vector3 v)
+        public static Vector3 operator -(Vector3 v)
         {
             return new Vector3(-v.x, -v.y, -v.z);
         }
@@ -295,5 +303,5 @@ namespace Wiwa
         }
     }
 
-    
+
 }

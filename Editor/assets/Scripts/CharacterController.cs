@@ -63,7 +63,7 @@ namespace Game
 
             campos.y = transform.Position.y + 20 + 35;
             campos.x = transform.Position.x + 0 + 0;
-            campos.z = transform.Position.z -40 + 20;
+            campos.z = transform.Position.z - 40 + 20;
 
             referenceZ = transform.Position.z;
             referenceX = transform.Position.x;
@@ -93,12 +93,12 @@ namespace Game
             //UpdateCamera(ref character, ref transform);
             UpdateInput(ref character, ref transform);
 
-            Fire(ref character);
+            //Fire(ref character);
             //Console.WriteLine("Finish Update character controller");
 
             rayCastTimer += Time.DeltaTimeMS();
 
-            if(rayCastTimer > 250.0f)
+            if (rayCastTimer > 250.0f)
             {
                 leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 15, transform.Position.y, transform.Position.z));
                 rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 15, transform.Position.y, transform.Position.z));
@@ -108,7 +108,7 @@ namespace Game
                 rayCastTimer = 0;
                 //Console.WriteLine("Left ray Wall distance" + leftRayWallDistance);
             }
-            
+
         }
         private void Fire(ref CharacterController character)
         {
@@ -144,34 +144,28 @@ namespace Game
             Vector3 forward = Wiwa.Math.CalculateForward(ref transform);
             Vector3 right = Wiwa.Math.CalculateRight(ref transform);
             //ref Rigidbody rigidbody = ref GetComponent<Rigidbody>();
-            float translation = character.velocity;
+            float translation = character.velocity * Time.DeltaTime();
 
             Vector3 direction = new Vector3(0, 0, 0);
             direction += GetInputFromKeyboard(forward, right, translation);
             direction += GetGamepadInputDirection(GamepadAxis.LeftX, GamepadAxis.LeftY);
 
             //transform.LocalPosition += direction;
-            PhysicsManager.SetLinearVelocity(m_EntityId, direction);
-            
-            
-            
-            Vector3 rotDirection = new Vector3(0, 0, 0);
-            rotDirection = GetGamepadInputDirection(GamepadAxis.RightX, GamepadAxis.RightY);
-            double angle = CalculateRotation(forward, rotDirection);
-           
-            Console.WriteLine("ANGLE=== :   " + angle);
-            //Console.WriteLine("Direction.x :   " + direction.x + "\nDirection.z :   " + direction.z);
-            Console.WriteLine("Direction.x :   " + rotDirection.x + "\nDirection.z :   " + rotDirection.z);
-            Console.WriteLine("forward.x :   " + forward.x + "\nforward.z :   " + forward.z);
-            Console.WriteLine(" right.x :   " + right.x + "\n right.z :   " + right.z);
-            //Console.WriteLine("TEST ROTATIONS:   " + test);
-            float rotSpeed = 0.1f;
-            transform.LocalRotation.y += CalculateRotation(forward, rotDirection);
+            PhysicsManager.SetLinearVelocity(m_EntityId, direction * translation);
 
+            if (direction.x != 0f || direction.z != 0f)
+            {
 
-
-
-
+                float newRotation = CalculateRotation(direction, forward);
+                if (newRotation != 0f)
+                {
+                    Console.WriteLine("New rotation:" + newRotation);
+                    Console.WriteLine("Direction: " + direction.x + " X " + direction.y + " Y");
+                    transform.LocalRotation.y += newRotation;
+                }
+                if (transform.LocalRotation.y > 360f)
+                    transform.LocalRotation.y = 0f;
+            }
         }
         public Vector3 RotateTowards(Vector3 direction, Vector3 newDirection, float rotationSpeed)
         {
@@ -222,28 +216,17 @@ namespace Game
         }
         float CalculateRotation(Vector3 first, Vector3 second)
         {
-            double result = 0;
-
-            double numerator = 0;
-            double denominator = 0;
-
-
-
-            numerator = first.x * second.x + first.z * second.z;
-            denominator = System.Math.Sqrt((first.x * first.x) + (first.z * first.z)) * (System.Math.Sqrt((second.x * second.x) + (second.z * second.z)));
-
-            result = (System.Math.Acos((numerator) / (denominator)) * 180 / System.Math.PI);
-            //result = System.Math.Acos(0) * 180 / System.Math.PI;
-            if (double.IsNaN(result)) return 0;
-            else return ((float)result);
-            
+            float angle = Wiwa.Math.ACos(Wiwa.Math.Dot(first.Normalized(), second.Normalized())) * 180f / (float)System.Math.PI;
+            if (!float.IsNaN(angle))
+                return angle;
+            return 0f;
         }
         private Vector3 GetGamepadInputDirection(GamepadAxis axis, GamepadAxis axis02)
         {
             Vector3 direction = new Vector3(0, 0, 0);
 
-            direction.x = -Input.GetAxis(Gamepad.GamePad1, axis);
-            direction.z = -Input.GetAxis(Gamepad.GamePad1, axis02);
+            direction.x = -Input.GetRawAxis(Gamepad.GamePad1, axis, 0f);
+            direction.z = -Input.GetRawAxis(Gamepad.GamePad1, axis02, 0f);
 
             return direction;
         }
@@ -377,7 +360,7 @@ namespace Game
             }
 
             float minCamVelocity = 0.0f;
-            float maxCamVelocity = 0.3f;  
+            float maxCamVelocity = 0.3f;
 
             float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 20), 0, 25);
             float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 25);
@@ -523,7 +506,7 @@ namespace Game
                 //Console.WriteLine("wall hit!!! ");
             }
         }
-        
+
         void OnCollisionExit(EntityId id1, EntityId id2, string str1, string str2)
         {
             Console.WriteLine(id1 + str1);
