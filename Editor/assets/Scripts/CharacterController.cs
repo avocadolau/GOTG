@@ -154,15 +154,40 @@ namespace Game
             //transform.LocalPosition += direction;
             PhysicsManager.SetLinearVelocity(m_EntityId, direction * translation);
 
-            if (direction != Vector3Values.zero)
+            Vector3 rotDirection = new Vector3(0, 0, 0);
+            rotDirection += GetGamepadInputDirection(GamepadAxis.RightX, GamepadAxis.RightY);
+            if (rotDirection == Vector3Values.zero)
             {
-                float angle = CalculateRotation(direction, forward);
+                if (direction != Vector3Values.zero)
+                {
+                    float angle = CalculateRotation(direction, forward);
+
+                    transform.LocalRotation.y += angle;
+                    Console.WriteLine(angle);
+                    if (transform.LocalRotation.y > 360)
+                        transform.LocalRotation.y = 0f;
+                }
+            }
+            else
+            {
+                float angle = CalculateRotation(rotDirection, forward);
 
                 transform.LocalRotation.y += angle;
                 Console.WriteLine(angle);
                 if (transform.LocalRotation.y > 360)
                     transform.LocalRotation.y = 0f;
+
             }
+            //if (direction != Vector3Values.zero)
+            //{
+            //    float angle = CalculateRotation(direction, forward);
+
+            //    transform.LocalRotation.y += angle;
+            //    Console.WriteLine(angle);
+            //    if (transform.LocalRotation.y > 360)
+            //        transform.LocalRotation.y = 0f;
+            //}
+
         }
 
         float CalculateRotation(Vector3 first, Vector3 second)
