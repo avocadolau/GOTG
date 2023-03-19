@@ -51,7 +51,7 @@ namespace Wiwa {
 		m_Debug = true;
 		m_HasBeenInit = true;
 
-		m_World = new btCollisionWorld(m_Dispatcher,m_Broad_phase,m_Collision_conf);
+		m_World = new btCollisionWorld(m_Dispatcher, m_Broad_phase, m_Collision_conf);
 		m_World->getPairCache()->setOverlapFilterCallback(m_filterCallback);
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
@@ -61,7 +61,7 @@ namespace Wiwa {
 		AddFilterTag("COLLISION_EVERYTHING");
 
 		//WI_INFO("Physics Manager Init");
-		
+
 		return true;
 	}
 
@@ -74,12 +74,12 @@ namespace Wiwa {
 		}
 
 		//Step simulation
-		float dt = 1.0f/60.0f;
+		float dt = 1.0f / 60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
 		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
-	
+
 		//static int o = 0;
 		//Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		//for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
@@ -88,7 +88,7 @@ namespace Wiwa {
 		//	//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
 		//	o++;
 		//}
-		
+
 		// Commented because it causes clipping :(
 		/*for (int i = 0; i < SUB_STEPS; i++)
 		{
@@ -96,7 +96,7 @@ namespace Wiwa {
 			m_World->performDiscreteCollisionDetection();
 			ResolveContacts();
 		}*/
-		
+
 		return true;
 	}
 
@@ -224,8 +224,8 @@ namespace Wiwa {
 
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
-			Transform3D*transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			CollisionBody*rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			// Get the position from the engine
 			glm::vec3 posEngine = transform3d->localPosition;
@@ -308,7 +308,7 @@ namespace Wiwa {
 			m_World->removeCollisionObject((*item)->collisionObject);
 			//delete (ObjectData*)(*item)->getUserPointer();
 			delete (*item)->collisionObject;
-			delete*item;
+			delete* item;
 			*item = nullptr;
 		}
 
@@ -554,7 +554,7 @@ namespace Wiwa {
 		if (filterMap.size() == 32)
 			return false;
 		filterMap.emplace(str, size);
-		
+
 		return true;
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
@@ -591,7 +591,7 @@ namespace Wiwa {
 		return 0;*/
 		if (!(filterMap.find(str) != filterMap.end()))
 			return -1;
-		
+
 		return filterMap[str];
 	}
 
@@ -611,7 +611,7 @@ namespace Wiwa {
 
 			((DebugDrawer*)m_World->getDebugDrawer())->drawLine(ray_from_world, ray_to_world, btVector4(0, 0, 1, 1));
 		}
-		
+
 		btCollisionWorld::ClosestRayResultCallback closestHit = btCollisionWorld::ClosestRayResultCallback(ray_from_world, ray_to_world);
 		m_World->rayTest(ray_from_world, ray_to_world, closestHit);
 		if (closestHit.hasHit())
@@ -623,8 +623,8 @@ namespace Wiwa {
 				m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
 			}
 		}
-		
-		if (camera->drawBoundingBoxes) 
+
+		if (camera->drawBoundingBoxes)
 			camera->frameBuffer->Unbind();
 	}
 
@@ -666,7 +666,7 @@ namespace Wiwa {
 				return -1;
 		}
 
-		if (camera->drawBoundingBoxes) 
+		if (camera->drawBoundingBoxes)
 			camera->frameBuffer->Unbind();
 
 		return -1;
@@ -697,7 +697,7 @@ namespace Wiwa {
 		{
 			btVector3 pos = (*item)->collisionObject->getWorldTransform().getOrigin();
 			/*const char* e_name = entityManager.GetEntityName(id); */
-			WI_INFO("Id {} is at {} {} {}", (*item)->id, pos.x(), pos.y(), pos.z()); 
+			WI_INFO("Id {} is at {} {} {}", (*item)->id, pos.x(), pos.y(), pos.z());
 			num++;
 		}
 		return true;
@@ -735,7 +735,7 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-	
+
 	glBindVertexArray(vao);
 	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

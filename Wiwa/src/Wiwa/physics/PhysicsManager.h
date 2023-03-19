@@ -31,8 +31,8 @@ class Camera;
 namespace Wiwa {
 
 	struct Object {
-		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_), 
-			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_){};
+		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_),
+			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_) {};
 
 		btCollisionObject* collisionObject;
 		btVector3 velocity;
@@ -97,7 +97,7 @@ namespace Wiwa {
 	public:
 
 		// Manipulate bodies
-		bool SetVelocity(Object*body, const glm::vec3 velocity);
+		bool SetVelocity(Object* body, const glm::vec3 velocity);
 
 		bool SetRotation(Object* body, const glm::vec3 euler_angles);
 
@@ -117,7 +117,7 @@ namespace Wiwa {
 		void DebugDrawWorld();
 
 		bool AddFilterTag(const char* str);
-		
+
 		void RemoveFilterTag(const int index);
 
 		const char* GetFilterTag(const int index);

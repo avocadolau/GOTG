@@ -721,8 +721,14 @@ namespace Wiwa
 		File scene_file = FileSystem::Open(scene_path, FileSystem::OM_IN | FileSystem::OM_BINARY);
 		if (scene_file.IsOpen())
 		{
-			Scene *sc = m_Scenes[sceneid];
+			Scene* sc = m_Scenes[sceneid];
 			std::filesystem::path path = scene_path;
+
+			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+
+			// Load Physics Manager json Data
+			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
 			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();

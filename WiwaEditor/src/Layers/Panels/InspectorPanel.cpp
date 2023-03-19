@@ -90,7 +90,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		{
 			DrawAnimatorComponent(data);
 		}
-		else if (type->hash == (size_t)TypeHash::Rigidbody)
+		else if (type->hash == (size_t)TypeHash::CollisionBody)
 		{
 			DrawCollisionBodyComponent(data);
 		}
@@ -441,9 +441,9 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	AssetContainer(animator->filePath);
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 		{
-			const wchar_t *path = (const wchar_t *)payload->Data;
+			const wchar_t* path = (const wchar_t*)payload->Data;
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
@@ -455,43 +455,63 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 			}
 		}
 
-		ImGui::EndDragDropTarget();
-	}
-	if (animator->animator == nullptr)
-		return;
-	// get animaitons
-	const char *animationItems[10];
-	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
-	{
-		animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
-	}
+		Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
 
-	const char *current_item = NULL;
-	if (animator->animator->GetCurrentAnimation() != nullptr)
-		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
-
-	if (ImGui::BeginCombo("animaiton", current_item))
-	{
-		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+		AssetContainer(animator->filePath);
+		if (ImGui::BeginDragDropTarget())
 		{
-			bool is_selected = (current_item == animationItems[n]);
-			if (ImGui::Selectable(animationItems[n], is_selected))
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
-				current_item = animationItems[n];
-				ImGui::SetItemDefaultFocus();
-				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				std::wstring ws(path);
+				std::string pathS(ws.begin(), ws.end());
+				std::filesystem::path p = pathS.c_str();
+				if (p.extension() == ".wianimator")
+				{
+					WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+					strcpy(animator->filePath, pathS.c_str());
+					animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
+				}
 			}
-		}
-		ImGui::EndCombo();
-	}
 
-	ImGui::Checkbox("Play", &animator->Play);
+			ImGui::EndDragDropTarget();
+		}
+		if (animator->animator == nullptr)
+			return;
+		// get animaitons
+		const char* animationItems[10];
+		for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+		{
+			animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+		}
+
+		const char* current_item = NULL;
+		if (animator->animator->GetCurrentAnimation() != nullptr)
+			current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
+
+		if (ImGui::BeginCombo("animaiton", current_item))
+		{
+			for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+			{
+				bool is_selected = (current_item == animationItems[n]);
+				if (ImGui::Selectable(animationItems[n], is_selected))
+				{
+					current_item = animationItems[n];
+					ImGui::SetItemDefaultFocus();
+					animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+				}
+			}
+			ImGui::EndCombo();
+		}
+
+		ImGui::Checkbox("Play", &animator->Play);
+	}
 }
 
-void InspectorPanel::DrawCollisionBodyComponent(byte *data)
+void InspectorPanel::DrawCollisionBodyComponent(byte* data)
 {
-	Wiwa::PhysicsManager &py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
-	Wiwa::CollisionBody *collisionBody = (Wiwa::CollisionBody*)data;
+	Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+	Wiwa::CollisionBody* collisionBody = (Wiwa::CollisionBody*)data;
 	DrawVec3Control("Position offset", &collisionBody->positionOffset, 0.0f, 100.0f);
 	DrawVec3Control("Scaling offset", &collisionBody->scalingOffset, 0.0f, 100.0f);
 	ImGui::Checkbox("Is static?", &collisionBody->isStatic);

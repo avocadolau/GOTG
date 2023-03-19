@@ -251,7 +251,6 @@ enum class TypeHash : size_t {
 	SpotLight = FNV1A_HASH("SpotLight"),
 	CollisionBody = FNV1A_HASH("CollisionBody"),
 	AnimatorComponent = FNV1A_HASH("AnimatorComponent"),
-	Rigidbody = FNV1A_HASH("Rigidbody"),
 	ColliderCube = FNV1A_HASH("ColliderCube"),
 	ColliderCylinder = FNV1A_HASH("ColliderCylinder"),
 	ColliderSphere = FNV1A_HASH("ColliderSphere"),
