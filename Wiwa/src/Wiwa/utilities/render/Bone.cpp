@@ -236,6 +236,8 @@ namespace Wiwa {
         file.Write(&name_len, sizeof(size_t));
         file.Write(node->m_Name.c_str(), name_len);
 
+        file.Write(&node->m_GlobalTransform, sizeof(glm::mat4));
+
         file.Write(&node->m_NumPositionKeys, sizeof(unsigned int));
         file.Write(&node->m_NumRotationKeys, sizeof(unsigned int));
         file.Write(&node->m_NumScalingKeys, sizeof(unsigned int));
@@ -263,6 +265,8 @@ namespace Wiwa {
         node->m_Name.resize(name_len);
         file.Read(&node->m_Name[0], name_len);
 
+        file.Read(&node->m_GlobalTransform, sizeof(glm::mat4));
+
         file.Read(&node->m_NumPositionKeys, sizeof(unsigned int));
         file.Read(&node->m_NumRotationKeys, sizeof(unsigned int));
         file.Read(&node->m_NumScalingKeys, sizeof(unsigned int));
@@ -282,6 +286,7 @@ namespace Wiwa {
         file.Read(&scaling_key_size, sizeof(size_t));
         node->m_Scales.resize(scaling_key_size);
         file.Read(&node->m_Scales[0], scaling_key_size * sizeof(VectorKey));
+
         return node;
     }
 

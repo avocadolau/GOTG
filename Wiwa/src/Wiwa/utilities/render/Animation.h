@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <glm/glm.hpp>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/filesystem/FileSystem.h>
@@ -18,6 +19,7 @@ namespace Wiwa {
 	struct NodeData
 	{
 		glm::mat4 transformation;
+		glm::mat4 globalTransformation;
 		std::string name;
 		int childrenCount;
 		std::vector<NodeData> children;
@@ -39,12 +41,15 @@ namespace Wiwa {
 
 		inline float GetDuration() { return m_Duration; }
 
+		inline std::vector<Bone*> GetBones() { return m_Bones; }
+
 		inline const NodeData& GetRootNode() { return m_RootNode; }
 
 		inline const std::map<std::string, BoneInfo>& GetBoneIDMap()
 		{
 			return m_BoneInfoMap;
 		}
+
 		glm::mat4 GetBoneTransform(int index) {return m_Bones[index]->GetLocalTransform(); };
 
 		void LoadAnimation(const aiAnimation* animation);
@@ -59,15 +64,21 @@ namespace Wiwa {
 		int m_TicksPerSecond = 0;
 		int m_NumChannels = 0;
 		std::string m_Name;
+		void PrintGlmMatrix(const glm::mat4& mat);
 	private:
 		void ReadMissingBones(const aiAnimation* animation, Model& model);
 
-		void ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root);
+		void ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root,glm::mat4& parentTransform);
+
+		glm::mat4 CalculateGlobalTransform(const ModelHierarchy* bone, glm::mat4 parentTransform);
 
 		std::vector<Bone*> m_Bones;
 		NodeData m_RootNode;
 		std::map<std::string, BoneInfo> m_BoneInfoMap;
+		std::map<std::string, std::vector<glm::mat4>> m_CalculatedBoneMatrices;
 		unsigned int m_BoneCount;
+
+
 	};
 }
 
