@@ -131,10 +131,6 @@ namespace Wiwa
 
 		// UI
 
-		WI_ADD_INTERNAL_CALL(Play);
-		WI_ADD_INTERNAL_CALL(ChangeScene);
-		WI_ADD_INTERNAL_CALL(Quit);
-
 
 		// AI
 		
