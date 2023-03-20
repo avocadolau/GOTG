@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fd08383322ec1bf2fb348c8e2df0490343b0f9a1f880964496427ff92dfa0534
-size 60
+{"shader":"library/resources/shaders/light/toon_textured","uniforms":{"u_Texture":"","u_ToonLevels":0,"u_RimLightPower":1.0,"u_SpecularValue":1.0,"u_MatAmbientColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatDiffuseColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatSpecularColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}}}
