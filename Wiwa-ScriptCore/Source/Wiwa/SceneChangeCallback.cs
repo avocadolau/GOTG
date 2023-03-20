@@ -8,7 +8,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(2, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(3, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
     [Callback]
