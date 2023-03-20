@@ -549,16 +549,28 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 4));
 
-	//particle follow emitter
+	//particle follow emitter position
 	{
 		ImGui::Dummy(ImVec2(0, 0));
 		ImGui::SameLine();
 
-		ImGui::Checkbox("##particle_followEmitter", &emitter->particle_followEmitter);
+		ImGui::Checkbox("##particle_followEmitterPosition", &emitter->particle_followEmitterPosition);
 		ImGui::SameLine();
 		ImGui::Dummy(ImVec2(2.5, 0));
 		ImGui::SameLine();
-		ImGui::Text("Follow Emitter");
+		ImGui::Text("Follow Emitter Position");
+	}
+
+	//particle follow emitter rotation
+	{
+		ImGui::Dummy(ImVec2(0, 0));
+		ImGui::SameLine();
+
+		ImGui::Checkbox("##particle_followEmitterRotation", &emitter->particle_followEmitterRotation);
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(2.5, 0));
+		ImGui::SameLine();
+		ImGui::Text("Follow Emitter Rotation");
 	}
 
 	ImGui::Dummy(ImVec2(0, 4));

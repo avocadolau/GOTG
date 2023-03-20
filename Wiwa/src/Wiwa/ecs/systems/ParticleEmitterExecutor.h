@@ -6,17 +6,20 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
+#define MAX_PARTICLES 1000
 class Camera;
 namespace Wiwa {
 
 	struct ParticleBillboard
 	{
-		Material *m_material;
-		glm::vec3 vertices[4];
-		glm::vec2 tex_coords[4];
-		int vertex_indices[6];
+		Material	*m_material;
+		glm::vec3	vertices[4];
+		glm::vec2	tex_coords[4];
+		int			vertex_indices[6];
 		Transform3D transform;
 
+		float		initial_lifetime = 0;
+		float		lifetime_percentage = 0;
 		float		lifetime = 0;
 		glm::vec4	color;
 
@@ -33,8 +36,8 @@ namespace Wiwa {
 		glm::vec3	growthVelocity;
 		glm::vec3	growthAcceleration;
 
-
-		bool		followEmitter;
+		bool		followEmitterRotation;
+		bool		followEmitterPosition;
 		bool		followParticle;
 
 		ParticleBillboard();
@@ -97,7 +100,7 @@ namespace Wiwa {
 
 		ParticleBillboard* setRotation(const glm::vec3 rot);
 
-		std::array<ParticleBillboard, 1500> particleArray;
+		std::array<ParticleBillboard, MAX_PARTICLES> particleArray;
 
 		class Material* m_Material;
 

@@ -24,6 +24,7 @@ namespace Wiwa {
 		bool	particle_amount_isRanged;
 		int		particle_amount_range[2];
 
+		float	particle_initial_lifetime;
 		float	particle_lifetime;
 		bool	particle_lifetime_isRanged;
 		float	particle_lifetime_range[2];
@@ -66,8 +67,8 @@ namespace Wiwa {
 		bool		particle_growthAcceleration_isRanged;
 		glm::vec3	particle_growthAcceleration_range[2];
 
-
-		bool		particle_followEmitter = false;
+		bool		particle_followEmitterRotation = false;
+		bool		particle_followEmitterPosition = false;
 		bool		particle_followParticle = false;;
 
 		ResourceId textId1 = -4;
@@ -117,7 +118,7 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitter)
 	REFLECT_MEMBER(particle_growthAcceleration)
 	REFLECT_MEMBER(particle_growthAcceleration_isRanged)
 	REFLECT_MEMBER(particle_growthAcceleration_range)
-	REFLECT_MEMBER(particle_followEmitter)
+	REFLECT_MEMBER(particle_followEmitterPosition)
 	REFLECT_MEMBER(particle_followParticle)
 
 REFLECTION_END;

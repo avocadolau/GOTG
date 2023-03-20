@@ -33,7 +33,6 @@ namespace Wiwa {
 	{
 		WI_CORE_INFO("Init");
 
-		AddParticles();
 	}
 
 	void ParticleEmitterExecutor::OnUpdate()
@@ -86,121 +85,253 @@ namespace Wiwa {
 		ParticleEmitter* emitter = GetComponent<ParticleEmitter>();
 		Transform3D* t3D = GetComponent<Transform3D>();
 
+		std::string info_ = "active particles: " + std::to_string(currentParticleIndex);
+		WI_CORE_INFO(info_.c_str());
+
+
+		/*Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		camera->frameBuffer->Bind(false);
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(glm::value_ptr(camera->getView()));
+
+		glBegin(GL_LINES);
+		glColor3f(1, 1, 1);
+
+		float length = 0.2f;
+		float spacing = 0.1f;
+
+		float start = 0;
+		float z_con = 0;
+		int max_elements_line_ref = 50;
+		int max_elements_line = max_elements_line_ref;
+
+		float offset = -7;
+
+		for (size_t j = 0; j < MAX_PARTICLES; j++)
+		{
+			ParticleBillboard& p = particleArray[j];
+			 
+			glColor3f(1, 0, 0);
+
+
+			if (p.lifetime > 0)
+				glColor3f(0, 1 * p.lifetime_percentage, 0);
+
+			if (j > max_elements_line)
+			{
+				z_con += spacing * 5;
+				max_elements_line += max_elements_line_ref;
+				start = 0;
+			}
+
+			glVertex3f(start + offset, 0.0f, z_con);
+			glVertex3f(start + length + offset, 0.0f, z_con);
+
+			start += length + spacing;
+
+			
+		}
+
+		glEnd();
+
+		camera->frameBuffer->Unbind();*/
 
 
 		for (size_t j = 0; j < currentParticleIndex; j++)
 		{
-			ParticleBillboard& p = particleArray[j];
-
-			//particle death
-			if (p.lifetime < 0)
+			if (currentParticleIndex < MAX_PARTICLES)
 			{
-				//shift all elements after j to the left
-				for (size_t k = j; k < currentParticleIndex - 1; k++)
+				ParticleBillboard& p = particleArray[j];
+
+				//particle death
+				if (p.lifetime < 0)
 				{
-					particleArray[k] = particleArray[k + 1];
+					p.lifetime = 0;
+					p.lifetime_percentage = 0;
+					p.initial_lifetime = 0;
+					p.color = glm::vec4(1, 1, 1, 1);
+
+					//position
+					p.transform.position = glm::vec3(0, 0, 0);
+					p.transform.localPosition = glm::vec3(0, 0, 0);
+
+					p.startingPosition = glm::vec3(0, 0, 0);
+					p.velocity = glm::vec3(0, 0, 0);
+					p.acceleration = glm::vec3(0, 0, 0);
+
+					//rotation
+					p.transform.rotation = glm::vec3(0, 0, 0);
+					p.transform.localRotation = glm::vec3(0, 0, 0);
+
+					p.startingRotation = glm::vec3(0, 0, 0);
+
+					//scale
+					p.transform.scale = glm::vec3(1, 1, 1);
+					p.transform.localScale = glm::vec3(1, 1, 1);
+
+					p.start_size = glm::vec3(1.0f, 1.0f, 1.0f);
+					p.growthVelocity = glm::vec3(0, 0, 0);
+					p.growthAcceleration = glm::vec3(0, 0, 0);
+
+					p.followEmitterRotation = false;
+					p.followEmitterPosition = false;
+					p.followParticle = false;
+
+					//shift all elements after j to the left
+					for (size_t k = j; k < currentParticleIndex - 1; k++)
+					{
+						particleArray[k] = particleArray[k + 1];
+					}
+
+					currentParticleIndex--; //decrease currentParticleIndex since one particle has been removed
+					j--; //decrement j to account for the shift
+					continue;
 				}
 
-				currentParticleIndex--; //decrease currentParticleIndex since one particle has been removed
-				j--; //decrement j to account for the shift
-				continue;
-			}
 
-			//particles look at the camera:
-			//ScreenAlign(p);
 
-			p.lifetime -= dt;
-			
-			//update particles mesh points
-			
-			//position
-			p.velocity += p.acceleration * dt;
-			glm::vec3 resultantPosition = p.velocity * dt;
 
-			p.transform.position += resultantPosition;
+				//particles look at the camera:
+				//ScreenAlign(p);
 
-			if (p.startingRotation.x != 0.0f || p.startingRotation.y != 0.0f || p.startingRotation.z != 0.0f)
-			{
-				p.transform.rotation = p.startingRotation;
-			}
+				p.lifetime -= dt;
+				p.lifetime_percentage = p.lifetime / p.initial_lifetime;
 
-			//size
-			p.transform.localScale += p.growthVelocity * dt;
+				//update particles mesh points
 
-			for (size_t i = 0; i < 4; i++)
-			{
-				//update particle variables
+				//position
+				p.velocity += p.acceleration * dt;
+				glm::vec3 resultantPosition = p.velocity * dt;
 
-				p.vertices[i] = (ref_vertices[i] + p.startingPosition + p.transform.position);
+				p.transform.position += resultantPosition;
 
-				if (p.followEmitter)
+				if (p.startingRotation.x != 0.0f || p.startingRotation.y != 0.0f || p.startingRotation.z != 0.0f)
 				{
-					p.vertices[i] = (ref_vertices[i] + t3D->position + p.startingPosition + p.transform.position);//+ entity position
-				}
-				//emitterComp->position
-			}
-
-			//draw particles
-			{
-				GLuint VAO, VBO, EBO;
-
-				//set mesh
-				glGenVertexArrays(1, &VAO);
-				glGenBuffers(1, &VBO);
-				glGenBuffers(1, &EBO);
-
-				glBindVertexArray(VAO);
-				glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-				glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * sizeof(p.vertices), &p.vertices, GL_DYNAMIC_DRAW);
-
-
-
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(p.vertex_indices) * sizeof(int), &p.vertex_indices, GL_DYNAMIC_DRAW);
-
-				glEnableVertexAttribArray(0);
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-				glEnableVertexAttribArray(2);
-				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)sizeof(glm::vec3[4]));
-
-				glBindVertexArray(0);
-
-
-				size_t cameraCount = man.getCameraSize();
-				std::vector<CameraId>& cameras = man.getCameras();
-
-
-				std::vector<int> indices;
-				for (size_t i = 0; i < 6; i++)
-				{
-					indices.push_back(p.vertex_indices[i]);
+					p.transform.rotation = p.startingRotation;
 				}
 
-				//show in game cameras
-				for (size_t i = 0; i < cameraCount; i++)
-				{
-					CameraId cam_id = cameras[i];
-					Camera* camera = man.getCamera(cam_id);
+				//size
+				p.transform.localScale += p.growthVelocity * dt;
 
+
+				//set data to vertices
+				for (size_t i = 0; i < 4; i++)
+				{
+					//update particle variables
+
+
+
+					glm::vec3 rotatedPosition = p.startingPosition;
+
+					if (p.followEmitterRotation)
+					{
+						float degtorad = PI / 180;
+
+						/*rotatedPosition = glm::vec3(
+							p.startingPosition.x * cosf(t3D->localRotation.y * degtorad) - p.startingPosition.z * sinf(t3D->localRotation.y * degtorad),
+							0,
+							p.startingPosition.z * sinf(t3D->localRotation.y * degtorad) + p.startingPosition.z * cosf(t3D->localRotation.y * degtorad));
+						*/	
+
+						rotatedPosition = glm::vec3(
+							p.startingPosition.x * cosf(t3D->localRotation.y * degtorad) + p.startingPosition.z * cosf(t3D->localRotation.y * degtorad),
+							0,
+							p.startingPosition.z * cosf(t3D->localRotation.y * degtorad) + p.startingPosition.x * cosf(t3D->localRotation.y * degtorad));
+
+					}
+
+					glm::vec3 resultantPosition = p.vertices[i] = (ref_vertices[i] + rotatedPosition + p.transform.position);
+
+					if (p.followEmitterPosition)
+					{
+						resultantPosition = (ref_vertices[i] + t3D->position + rotatedPosition + p.transform.position);
+					}
+
+					/*if (p.followEmitterRotation)
+					{
+						glm::vec3 test = resultantPosition;
+
+						resultantPosition = glm::vec3(resultantPosition.x * cosf(t3D->rotation.y), 0, test.z);
+
+						std::string rstPos = "x: " + std::to_string(resultantPosition.x) + " y: " + std::to_string(resultantPosition.z);
+						WI_CORE_INFO(rstPos.c_str());
+					}*/
+
+					//emitterComp->position
+
+
+					p.vertices[i] = resultantPosition;
+				}
+
+				//draw particles
+				{
+					GLuint VAO, VBO, EBO;
+
+					//set mesh
+					glGenVertexArrays(1, &VAO);
+					glGenBuffers(1, &VBO);
+					glGenBuffers(1, &EBO);
+
+					glBindVertexArray(VAO);
+					glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+					glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * sizeof(p.vertices), &p.vertices, GL_DYNAMIC_DRAW);
+
+
+
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(p.vertex_indices) * sizeof(int), &p.vertex_indices, GL_DYNAMIC_DRAW);
+
+					glEnableVertexAttribArray(0);
+					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+					glEnableVertexAttribArray(2);
+					glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)sizeof(glm::vec3[4]));
+
+					glBindVertexArray(0);
+
+
+					size_t cameraCount = man.getCameraSize();
+					std::vector<CameraId>& cameras = man.getCameras();
+
+
+					std::vector<int> indices;
+					for (size_t i = 0; i < 6; i++)
+					{
+						indices.push_back(p.vertex_indices[i]);
+					}
+
+					//show in game cameras
+					for (size_t i = 0; i < cameraCount; i++)
+					{
+						CameraId cam_id = cameras[i];
+						Camera* camera = man.getCamera(cam_id);
+
+						if (emitter->texture)
+							r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
+								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, emitter->texture, emitter->texture->GetSize());
+					}
+
+					//show in editor window
 					if (emitter->texture)
 						r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
-							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, emitter->texture, emitter->texture->GetSize());
+							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, emitter->texture, emitter->texture->GetSize());
+
+
+					glDeleteVertexArrays(1, &VAO);
+					glDeleteBuffers(1, &VBO);
+					glDeleteBuffers(1, &EBO);
 				}
-
-				//show in editor window
-				if (emitter->texture)
-					r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
-						lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, emitter->texture, emitter->texture->GetSize());
-
-			
-				glDeleteVertexArrays(1, &VAO);
-				glDeleteBuffers(1, &VBO);
-				glDeleteBuffers(1, &EBO);
 			}
 		}
-	}
+	
+		
+}
 
 	void ParticleEmitterExecutor::OnSystemAdded() // Called when system added to the editor
 	{
@@ -353,7 +484,8 @@ namespace Wiwa {
 				}
 			}
 
-			p.followEmitter = emitter->particle_followEmitter;
+			p.followEmitterPosition = emitter->particle_followEmitterPosition;
+			p.followEmitterRotation = emitter->particle_followEmitterRotation;
 			p.followParticle = emitter->particle_followParticle;
 
 
@@ -413,8 +545,9 @@ namespace Wiwa {
 		
 
 		//set variables
-		
-		lifetime = 1;
+		initial_lifetime = 0;
+		lifetime_percentage = 0;
+		lifetime = 0;
 		color = glm::vec4(1, 1, 1, 1);
 		
 		//position
@@ -441,7 +574,9 @@ namespace Wiwa {
 		growthVelocity = glm::vec3(0, 0, 0);
 		growthAcceleration = glm::vec3(0, 0, 0);
 
-		followEmitter = false;
+
+		followEmitterRotation = false;
+		followEmitterPosition = false;
 		followParticle = false;
 	}
 }
