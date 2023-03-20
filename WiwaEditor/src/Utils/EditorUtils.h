@@ -6,8 +6,6 @@
 #include <glm/glm.hpp>
 #include <filesystem>
 #include <Wiwa/utilities/math/Vector3f.h>
-
-
 struct Field;
 
 inline void TextCentered(const char* text) {
@@ -58,3 +56,22 @@ bool ShaderExtensionComp(const std::filesystem::path file);
 bool MaterialExtensionComp(const std::filesystem::path file);
 
 void CreateScriptFile(const char* filePath, const char* name);
+
+inline void VectorEdit(std::vector<int>& vector)
+{
+	for (size_t i = 0; i < vector.size(); i++)
+	{
+		ImGui::PushID(i);
+		ImGui::InputInt("", &vector[i]);
+		ImGui::PopID();
+	}
+	if (ImGui::Button("+"))
+	{
+		vector.push_back(0);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("-"))
+	{
+		vector.erase(vector.begin() + vector.size() - 1);
+	}
+}

@@ -19,12 +19,15 @@ namespace Wiwa
 		static SceneId s_LastCombatRoom;
 		static SceneId s_LastRewardRoom;
 		static SceneId s_LastShopRoom;
-		static std::vector<SceneId> s_CombatRooms;
-		static std::vector<SceneId> s_RewardRooms;
-		static std::vector<SceneId> s_ShopRooms;
+		static std::vector<int> s_CombatRooms;
+		static std::vector<int> s_RewardRooms;
+		static std::vector<int> s_ShopRooms;
 
 		static void StartRun();
 		static void NextRoom();
 		static void EndRun();
+
+		static void SerializeData();
+		static void DeserializeData();
 	};
 }
