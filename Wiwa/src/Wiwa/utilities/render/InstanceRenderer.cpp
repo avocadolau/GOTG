@@ -184,12 +184,14 @@ namespace Wiwa {
 
 	void InstanceRenderer::UpdateInstancePosition(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot)
 	{
-		Size2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex->scale.h };
+		Size2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex[id].scale.h};
+		
 		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(position, s, pivot);
 	}
 
-	void InstanceRenderer::UpdateInstanceSize(uint32_t id, const Size2i& size)
+	void InstanceRenderer::UpdateInstanceSize(uint32_t id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot)
 	{
+		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(pos, size, pivot);
 		m_InstanceVertex[id].scale = { static_cast<float>(size.x), static_cast<float>(size.y) };
 	}
 
