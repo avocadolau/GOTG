@@ -153,6 +153,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetLinearVelocity(EntityId id, Vector3 velocity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static Vector3 GetLinearVelocity(EntityId id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool AddBodyToLog(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool RemoveBodyFromLog(EntityId id);
@@ -180,6 +182,12 @@ namespace Wiwa
         #region Game
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetRoomStateTriggerNext(bool value);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void InitHub();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StartRun();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void EndRun();
         #endregion
 
         #region AgentAI

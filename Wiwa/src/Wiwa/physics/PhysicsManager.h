@@ -159,7 +159,8 @@ namespace Wiwa {
 		bool LogBodies();
 
 	public:
-		std::map<std::string, int> filterMap;
+		std::map<std::string, int> filterMapStringKey;
+		std::map<int, std::string> filterMapIntKey;
 
 		/*std::vector<std::string> filterStrings;
 		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;*/

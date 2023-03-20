@@ -31,6 +31,7 @@ void GameLayer::OnAttach()
 
 	Wiwa::RenderManager::SetRenderOnMainWindow(true);
 	Wiwa::Time::Update();
+	Wiwa::Time::SetTargetFPS(60);
 }
 
 void GameLayer::OnDetach()

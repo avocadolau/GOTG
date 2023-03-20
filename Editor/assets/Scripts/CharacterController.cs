@@ -10,7 +10,7 @@ namespace Game
     [Component]
     public struct CharacterController
     {
-        public float velocity;
+        public float maxVelocity;
         public float rotationSpeed;
         public float camYOffset;
         public float camXOffset;
@@ -53,6 +53,7 @@ namespace Game
         float referenceX;
         float referenceZ;
 
+        
         Vector3 lastPlayerPos;
         //enum PlayerState
         //{
@@ -171,14 +172,33 @@ namespace Game
             Vector3 forward = Mathf.CalculateForward(ref transform);
             Vector3 right = Mathf.CalculateRight(ref transform);
             //ref Rigidbody rigidbody = ref GetComponent<Rigidbody>();
-            float translation = character.velocity * Time.DeltaTimeMS();
+            Vector3 finalVelocity = new Vector3(0, 0, 0);
+            //float translation = character.maxVelocity * Time.DeltaTimeMS();
 
             Vector3 direction = new Vector3(0, 0, 0);
             direction += GetInputFromKeyboard(forward, right);
             direction += GetGamepadInputDirection(GamepadAxis.LeftX, GamepadAxis.LeftY);
 
             //transform.LocalPosition += direction;
-            PhysicsManager.SetLinearVelocity(m_EntityId, direction * translation);
+            //finalVelocity = direction * translation;
+            finalVelocity.x = Interpolate(0, character.maxVelocity, direction.x);
+            finalVelocity.z = Interpolate(0, character.maxVelocity, direction.z);
+            PhysicsManager.SetLinearVelocity(m_EntityId, finalVelocity);
+
+
+            if (finalVelocity != Vector3Values.zero)
+            {
+                if (Mathf.Abs(finalVelocity.x)> character.maxVelocity*0.3 || Mathf.Abs(finalVelocity.z) > character.maxVelocity * 0.3)
+                {
+                    Animator.PlayAnimationName("run", m_EntityId);
+                    
+                }
+                else Animator.PlayAnimationName("walk", m_EntityId);
+            }
+            else Animator.PlayAnimationName("idle", m_EntityId);
+
+            Console.WriteLine("Vx: " + PhysicsManager.GetLinearVelocity(m_EntityId).x + "Vz: " + PhysicsManager.GetLinearVelocity(m_EntityId).z);
+
 
             Vector3 rotDirection = new Vector3(0, 0, 0);
             rotDirection += GetGamepadInputDirection(GamepadAxis.RightX, GamepadAxis.RightY);
@@ -187,21 +207,29 @@ namespace Game
                 if (direction != Vector3Values.zero)
                 {
                     float angle = CalculateRotation(direction, forward);
+                    Console.WriteLine("NEWANGLES: " + angle);
+                    Console.WriteLine("ACTUAL ROTATION: " + transform.LocalRotation.y);
 
-                    transform.LocalRotation.y += angle;
-                    Console.WriteLine(angle);
-                    if (transform.LocalRotation.y > 360)
-                        transform.LocalRotation.y = 0f;
+                    if (angle > 25)
+                    {
+                        transform.LocalRotation.y += angle;
+                        if (transform.LocalRotation.y > 360) transform.LocalRotation.y -= 360;
+                    }
                 }
+
             }
             else
             {
                 float angle = CalculateRotation(rotDirection, forward);
+                Console.WriteLine("NEWANGLES: " + angle);
+                Console.WriteLine("ACTUAL ROTATION: " + transform.LocalRotation.y);
 
-                transform.LocalRotation.y += angle;
-                Console.WriteLine(angle);
-                if (transform.LocalRotation.y > 360)
-                    transform.LocalRotation.y = 0f;
+                if (angle > 25)
+                {
+                    transform.LocalRotation.y += angle;
+                    if (transform.LocalRotation.y > 360) transform.LocalRotation.y -= 360;
+                }
+
 
             }
             //if (direction != Vector3Values.zero)

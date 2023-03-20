@@ -7,7 +7,10 @@
         {
             InternalCalls.SetLinearVelocity(id, velocity);
         }
-
+        public static Vector3 GetLinearVelocity(EntityId id)
+        {
+            return InternalCalls.GetLinearVelocity(id);
+        }
         public static bool AddBodyToLog(EntityId id)
         {
             return InternalCalls.AddBodyToLog(id);
