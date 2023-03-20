@@ -88,8 +88,8 @@ namespace Wiwa {
 		std::string info_ = "active particles: " + std::to_string(currentParticleIndex);
 		WI_CORE_INFO(info_.c_str());
 
-
-		/*Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		//----------------------------------------------------------------------------------
+		/*Camera *camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 		camera->frameBuffer->Bind(false);
@@ -115,12 +115,12 @@ namespace Wiwa {
 		for (size_t j = 0; j < MAX_PARTICLES; j++)
 		{
 			ParticleBillboard& p = particleArray[j];
-			 
-			glColor3f(1, 0, 0);
 
+			if (particleArray[j].isActive)
+				glColor3f(1, 0, 0);
 
-			if (p.lifetime > 0)
-				glColor3f(0, 1 * p.lifetime_percentage, 0);
+			if (!particleArray[j].isActive)
+				glColor3f(0, 1, 0);
 
 			if (j > max_elements_line)
 			{
@@ -134,13 +134,14 @@ namespace Wiwa {
 
 			start += length + spacing;
 
-			
+
 		}
 
 		glEnd();
 
 		camera->frameBuffer->Unbind();*/
 
+		//----------------------------------------------------------------------------------
 
 		for (size_t j = 0; j < currentParticleIndex; j++)
 		{
@@ -181,6 +182,8 @@ namespace Wiwa {
 					p.followEmitterRotation = false;
 					p.followEmitterPosition = false;
 					p.followParticle = false;
+
+					particleArray[j].isActive = false;
 
 					//shift all elements after j to the left
 					for (size_t k = j; k < currentParticleIndex - 1; k++)
@@ -330,6 +333,7 @@ namespace Wiwa {
 			}
 		}
 	
+	
 		
 }
 
@@ -357,13 +361,22 @@ namespace Wiwa {
 
 		for (size_t i = 0; i < amountToAdd; i++)
 		{
+			size_t j;
 
-			if (currentParticleIndex >= particleArray.size()) {
+			for (j = 0; j < particleArray.size(); j++)
+			{
+				if (!particleArray[j].isActive)
+				{
+					break;
+				}
+			}
+
+			if (j >= particleArray.size()) {
 				// If we reach the end of the array, break out of the loop
 				break;
 			}
 
-			ParticleBillboard& p = particleArray[currentParticleIndex];
+			ParticleBillboard& p = particleArray[j];
 
 			//set particle lifetime
 			if (emitter->particle_lifetime_isRanged)
@@ -511,6 +524,9 @@ namespace Wiwa {
 			p.m_material = m_Material;
 
 			particleArray[currentParticleIndex] = p;
+
+			particleArray[currentParticleIndex].isActive = true;
+
 			currentParticleIndex++;
 		}
 

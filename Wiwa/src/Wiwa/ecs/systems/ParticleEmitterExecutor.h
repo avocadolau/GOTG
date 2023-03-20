@@ -40,6 +40,8 @@ namespace Wiwa {
 		bool		followEmitterPosition;
 		bool		followParticle;
 
+		bool        isActive = false;
+
 		ParticleBillboard();
 
 	};
