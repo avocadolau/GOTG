@@ -74,6 +74,11 @@
         {
             return InternalCalls.GetEntityName(eid, m_Scene);
         }
+        public EntityId GetEntityByName(string name)
+        {
+            return InternalCalls.GetEntityByName(name, m_Scene);
+        }
+
         public void AddMesh(EntityId eid, string model, string material)
         {
             InternalCalls.AddMeshToEntity(eid, model, material, m_Scene);

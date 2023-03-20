@@ -33,6 +33,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static string GetEntityName(EntityId id, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetEntityByName(string name, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
