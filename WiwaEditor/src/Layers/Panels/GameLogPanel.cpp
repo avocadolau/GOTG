@@ -1,5 +1,7 @@
 #include "GameLogPanel.h"
 #include <Wiwa/game/GameStateManager.h>
+#include <Wiwa/game/RoomManager.h>
+#include "../../Utils/EditorUtils.h"
 
 GameLogPanel::GameLogPanel(EditorLayer* instance)
 	: Panel("Game Log", ICON_FK_GAMEPAD, instance)
@@ -17,6 +19,7 @@ void GameLogPanel::Draw()
 
 	DrawStateInfo();
 	DrawRoomSpawnersInfo();
+	DrawRoomVariables();
 	ImGui::End();
 }
 
@@ -43,4 +46,32 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::s_SpawnersFinished);
 }
+
+void GameLogPanel::DrawRoomVariables()
+{
+	ImGui::Separator();
+	ImGui::Text("Rooms to boss", Wiwa::RoomManager::s_RoomsToBoss);
+	ImGui::Text("Rooms to shop", Wiwa::RoomManager::s_RoomsToShop);
+	ImGui::Separator();
+	ImGui::PushID(0);
+	ImGui::Text("Battle rooms");
+	VectorEdit(Wiwa::RoomManager::s_CombatRooms);
+	ImGui::PopID();
+	ImGui::Separator();
+	ImGui::PushID(1);
+	ImGui::Text("Reward rooms");
+	VectorEdit(Wiwa::RoomManager::s_RewardRooms);
+	ImGui::Separator();
+	ImGui::PopID();
+	ImGui::PushID(2);
+	ImGui::Text("Shop rooms");
+	VectorEdit(Wiwa::RoomManager::s_ShopRooms);
+	ImGui::PopID();
+	if (ImGui::Button("Save"))
+	{
+		Wiwa::RoomManager::SerializeData();
+	}
+}
+
+
 
