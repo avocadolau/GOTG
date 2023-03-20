@@ -148,9 +148,77 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="2081067388" Type="User" Language="SFX">
+		<SoundBank Id="2081067388" Type="User" Language="SFX" Hash="{A42D06FA-EAB0-AE36-A835-A11F31ACF144}">
 			<ShortName>Player_soundbank</ShortName>
 			<Path>Player_soundbank.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2715313045" Type="User" Language="SFX" Hash="{13D8245F-9716-7BB3-1F30-E82344AA8F38}">
+			<ShortName>pause_sound</ShortName>
+			<Path>pause_sound.bnk</Path>
+			<Media>
+				<File Id="845486800" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Menu\pause_sound.wav</ShortName>
+					<CachePath>SFX/Menu/pause_sound_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2715313045" Name="pause_sound">
+					<MediaRefs>
+						<MediaRef Id="845486800"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3112424181" Type="User" Language="SFX" Hash="{62DFD956-C5E0-F302-B78C-B1FBD773813D}">
+			<ShortName>character_selection</ShortName>
+			<Path>character_selection.bnk</Path>
+			<Media>
+				<File Id="829528992" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Menu\character_selection.wav</ShortName>
+					<CachePath>SFX/Menu/character_selection_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="3112424181" Name="character_selection">
+					<MediaRefs>
+						<MediaRef Id="829528992"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3261905107" Type="User" Language="SFX" Hash="{19FDAB18-8CFB-C125-E1BE-AAF1C832CE9D}">
+			<ShortName>menu_intro</ShortName>
+			<Path>menu_intro.bnk</Path>
+			<Media>
+				<File Id="339486545" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Menu\menu_song.wav</ShortName>
+					<CachePath>SFX/Menu/menu_song_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2709296900" Name="menu_song">
+					<MediaRefs>
+						<MediaRef Id="339486545"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3785327939" Type="User" Language="SFX" Hash="{AF3EE890-E539-0ECE-2081-577BEB38B6D5}">
+			<ShortName>logo_intro</ShortName>
+			<Path>logo_intro.bnk</Path>
+			<Media>
+				<File Id="950593736" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Menu\logo_intro.wav</ShortName>
+					<CachePath>SFX/Menu/logo_intro_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="3785327939" Name="logo_intro">
+					<MediaRefs>
+						<MediaRef Id="950593736"/>
+					</MediaRefs>
+				</Event>
+			</Events>
 		</SoundBank>
 		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{46F5656C-331B-27B1-6EC4-5A03519E9E05}">
 			<ShortName>player_shoot</ShortName>
@@ -170,5 +238,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{83C8C2AE-A02C-CF47-E588-2216FE13FA3C}</FileHash>
+	<FileHash>{D9802DD0-89D8-CA82-B502-4829FFB4B919}</FileHash>
 </SoundBanksInfo>
