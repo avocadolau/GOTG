@@ -38,8 +38,6 @@ namespace Wiwa {
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
         std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
 
-        void ResetTime() { m_CurrentTime = 0; }
-
         std::vector<Animation*> m_Animations;
         std::string m_Name;
         unsigned int m_NumAnimations;
