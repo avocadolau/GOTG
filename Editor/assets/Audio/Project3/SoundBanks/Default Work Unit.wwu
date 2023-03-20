@@ -15,6 +15,34 @@
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
+				<SoundBank Name="character_selection" ID="{C1CD90D7-8C02-4410-ABEC-3AE818653A77}">
+					<ObjectInclusionList>
+						<ObjectRef Name="character_selection" ID="{02DA4D1A-F03D-40D2-97F6-AA890A789216}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="logo_intro" ID="{1AB09DD4-6B1B-4C3B-966F-1C6C68F3EB40}">
+					<ObjectInclusionList>
+						<ObjectRef Name="logo_intro" ID="{E3D47F86-37B9-435C-ABE0-9996A7C18E4B}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="menu_intro" ID="{38824FAA-9140-4DAF-B909-E7F92287DABE}">
+					<ObjectInclusionList>
+						<ObjectRef Name="menu_song" ID="{49FAEAA0-81A2-4DC8-A6F5-928DD67CED8C}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="pause_sound" ID="{58E87580-5255-4F8C-B9AA-A540BFC9AB22}">
+					<ObjectInclusionList>
+						<ObjectRef Name="pause_sound" ID="{B9C6E3D0-3987-46F5-89D7-8C7B4E184648}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

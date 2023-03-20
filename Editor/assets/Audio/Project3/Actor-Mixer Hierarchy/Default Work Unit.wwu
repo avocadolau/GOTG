@@ -185,6 +185,57 @@
 								<ActiveSource Name="pause_sound" ID="{F3C92E00-5520-492B-8715-DC418DD3FC73}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
+						<Sound Name="logo_intro" ID="{543B43CA-CA49-43AB-B466-8E9AC1007B01}" ShortID="27155323">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="logo_intro" ID="{CB56795D-5322-4B76-897B-0C5536D44F99}">
+									<Language>SFX</Language>
+									<AudioFile>Menu\logo_intro.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="950593736"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="logo_intro" ID="{CB56795D-5322-4B76-897B-0C5536D44F99}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="menu_song" ID="{E320DD80-C102-43E8-9291-F5BEEC354B68}" ShortID="63133323">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-19</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="menu_song" ID="{80D3D52A-B38B-45F2-BB21-308ECDC8A5A6}">
+									<Language>SFX</Language>
+									<AudioFile>Menu\menu_song.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="339486545"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="menu_song" ID="{80D3D52A-B38B-45F2-BB21-308ECDC8A5A6}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="Weapons" ID="{C95A99BC-1EF7-4BC9-A20A-5D66AB9AF0CA}" ShortID="802284686">
