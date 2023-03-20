@@ -60,12 +60,6 @@ namespace Wiwa
 
 		m_TargetResolution = {1920, 1080};
 
-		// JSONDocument project("config/project.json");
-		// m_ProjectName = project["name"].get<const char*>();
-		// m_ProjectVersion = project["version"].get<const char*>();
-		// m_ProjectCompany = project["company"].get<const char*>();
-		// m_ProjectTarget = (ProjectTarget)project["target"].get<int>();
-		// project.save_file("config/project.json");
 		std::string name = "Wiwa Engine: ";
 		name += ProjectManager::GetProjectName();
 		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name.c_str())));

@@ -1176,8 +1176,8 @@ void InspectorPanel::Update()
 void InspectorPanel::OnEvent(Wiwa::Event &e)
 {
 	Wiwa::EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<EntityChangeEvent>({&InspectorPanel::OnEntityChangeEvent, this});
-	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({&InspectorPanel::OnSceneChangeEvent, this});
+	dispatcher.Dispatch<EntityChangeEvent>( {&InspectorPanel::OnEntityChangeEvent, this});
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>( {&InspectorPanel::OnSceneChangeEvent, this});
 }
 
 bool InspectorPanel::OnEntityChangeEvent(EntityChangeEvent &e)
