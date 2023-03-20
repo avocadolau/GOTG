@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0452306d0ff8378aa4526394fabd371f84daac3082043757867c39226a1f36f7
-size 365
+{"shader":"library/resources/shaders/light/toon_textured","uniforms":{"u_Texture":"assets/models/props/columns/tex_columnconer1_difuse.png","u_ToonLevels":4,"u_RimLightPower":1.0,"u_SpecularValue":1.0,"u_MatAmbientColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatDiffuseColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatSpecularColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}}}

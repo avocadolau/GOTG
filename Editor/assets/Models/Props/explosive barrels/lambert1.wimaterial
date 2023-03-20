@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0b8cd12bad92105e11407b4236bed2701392b4f6a15d1b17ae1c6367d728e9ff
-size 383
+{"shader":"library/resources/shaders/light/toon_textured","uniforms":{"u_Texture":"assets/models/props/explosive barrels/tex_explosivebarrelskree_difuse.png","u_ToonLevels":4,"u_RimLightPower":1.0,"u_SpecularValue":1.0,"u_MatAmbientColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatDiffuseColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatSpecularColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}}}

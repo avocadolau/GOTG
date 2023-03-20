@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1a93b059c523ebab39fc0c5029ad96aa8ca095e827058783262122c17413f181
-size 370
+{"shader":"library/resources/shaders/light/toon_textured","uniforms":{"u_Texture":"assets/models/environment/textures/wall_vent_top_basemap.png","u_ToonLevels":4,"u_RimLightPower":1.0,"u_SpecularValue":1.0,"u_MatAmbientColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatDiffuseColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatSpecularColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}}}
