@@ -46,15 +46,19 @@ namespace Wiwa
 		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned");
 		Shader *skinnedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedShaderId);
 		skinnedShader->Compile("resources/shaders/skinned/skinned");
-		// skinnedShader->addUniform("u_Texture", UniformType::Sampler2D);
-		// skinnedShader->addUniform("u_ToonLevels", UniformType::Float);
-		// skinnedShader->addUniform("u_RimLightPower", UniformType::Float);
-		// skinnedShader->addUniform("u_SpecularValue", UniformType::Float);
-		// skinnedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
-		// skinnedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
-		// skinnedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned", skinnedShader);
-
+		// Init skinned textured
+		ResourceId skinnedTexturedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured");
+		Shader* skinnedTexturedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedShaderId);
+		skinnedTexturedShader->Compile("resources/shaders/skinned/skinned_textured");
+		skinnedTexturedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedTexturedShader->addUniform("u_ToonLevels", UniformType::Int);
+		skinnedTexturedShader->addUniform("u_RimLightPower", UniformType::Float);
+		skinnedTexturedShader->addUniform("u_SpecularValue", UniformType::Float);
+		skinnedTexturedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		skinnedTexturedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		skinnedTexturedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured", skinnedTexturedShader);
 		// Init bone debug
 		ResourceId debugBonesShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
 		Shader *debugBoneShader = Wiwa::Resources::GetResourceById<Shader>(debugBonesShaderId);
