@@ -100,26 +100,10 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
-		size_t Csize = canvasToDestroy.size();
-		for (size_t x = 0; x < Csize; x++)
-		{
-			RemoveCanvas(canvasToDestroy.at(x));
-		}
-		canvasToDestroy.clear();
-
 		std::vector<GuiCanvas*> canva = canvas;
 		for (int i = 0; i < canva.size(); i++)
 		{
 			
-			
-			size_t rsize = canvas.at(i)->controlsToDestroy.size();
-
-			for (size_t k = 0; k < rsize; k++) {
-				RemoveControl(canvas.at(i)->controlsToDestroy[k]);
-			}
-
-			canvas.at(i)->controlsToDestroy.clear();
-
 			if (canva.at(i)->active)
 			{
 				std::vector<GuiControl*> control = canva.at(i)->controls;
@@ -139,8 +123,26 @@ namespace Wiwa
 
 	bool GuiManager::Draw()
 	{
+		size_t Csize = canvasToDestroy.size();
+		for (size_t x = 0; x < Csize; x++)
+		{
+			RemoveCanvas(canvasToDestroy.at(x));
+		}
+		canvasToDestroy.clear();
 
 		std::vector<GuiCanvas*> canva = canvas;
+		for (int i = 0; i < canva.size(); i++)
+		{
+
+
+			size_t rsize = canvas.at(i)->controlsToDestroy.size();
+
+			for (size_t k = 0; k < rsize; k++) {
+				RemoveControl(canvas.at(i)->controlsToDestroy[k]);
+			}
+
+			canvas.at(i)->controlsToDestroy.clear();
+		}
 		for (int i = 0; i < canva.size(); i++)
 		{
 			std::vector<GuiControl*> control = canva.at(i)->controls;
