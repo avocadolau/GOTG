@@ -33,12 +33,10 @@ namespace Wiwa {
 
         static void SaveWiAnimator(Animator* animator, const char* path);
         static Animator* LoadWiAnimator(const char* path);
-
+        void ResetTime() { m_CurrentTime = 0; }
         void SetCurrentAnimation(Animation* anim) { m_CurrentAnimation = anim; }
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
         std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
-
-        void ResetTime() { m_CurrentTime = 0; }
 
         std::vector<Animation*> m_Animations;
         std::string m_Name;

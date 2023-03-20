@@ -11,7 +11,7 @@ void PlayAnimationName(MonoString* name, size_t entity)
 	Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(entity);
 
 	const char* ev_p = mono_string_to_utf8(name);
-	
+
 	animator->PlayAnimation(ev_p);
 }
 

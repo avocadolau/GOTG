@@ -182,14 +182,10 @@ namespace Wiwa
         internal extern static void SetRoomStateTriggerNext(bool value);
         #endregion
 
-
         #region AgentAI
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SendAIToPosition(EntityId entity_id, Vector3 target_pos);
         #endregion
-
-
-
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PlayAnimationName(string name, EntityId entity);
@@ -200,6 +196,5 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void RestartAnimation(EntityId entity);
         #endregion
-
     }
 }
