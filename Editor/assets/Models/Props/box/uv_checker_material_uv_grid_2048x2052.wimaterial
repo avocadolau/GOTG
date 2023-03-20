@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3283d03cd01c849a70ffff7b983c45373732358cecee41c61e94e597b04eb720
-size 310
+{"shader":"resources/shaders/skinned/skinned","uniforms":{}}
