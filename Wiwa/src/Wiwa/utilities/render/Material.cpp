@@ -653,7 +653,7 @@ namespace Wiwa {
 
 	void Material::Bind()
 	{
-		int texureId = GL_TEXTURE1;
+		int texureId = GL_TEXTURE0;
 		for (size_t i = 0; i < m_Uniforms.size(); i++)
 		{
 			m_Uniforms[i].sendToShader(m_Shader->getID(), texureId);

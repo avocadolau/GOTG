@@ -14,7 +14,7 @@ namespace Wiwa
 
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		text = new Text();
-		text = gm.InitFont("assets/Arial.ttf", (char*)string_text);
+		text = gm.InitFont("assets/Fonts/arial.ttf", (char*)string_text);
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
