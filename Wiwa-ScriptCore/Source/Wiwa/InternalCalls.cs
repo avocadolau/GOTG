@@ -198,6 +198,9 @@ namespace Wiwa
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SendAIToPositionById(EntityId entity_id, EntityId target_id);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float DistanceAgentTargetById(EntityId entity_id, EntityId target_id);
         #endregion
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

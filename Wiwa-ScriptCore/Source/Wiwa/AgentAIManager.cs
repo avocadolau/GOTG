@@ -12,6 +12,11 @@
         {
             InternalCalls.SendAIToPositionById(entity_id, target_id);
         }
+
+        public static float DistanceAgentTargetById(EntityId entity_id, EntityId target_id)
+        {
+            return InternalCalls.DistanceAgentTargetById(entity_id, target_id);
+        }
     }
 }
 

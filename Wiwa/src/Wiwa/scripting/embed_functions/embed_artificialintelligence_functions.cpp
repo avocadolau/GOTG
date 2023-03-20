@@ -26,3 +26,10 @@ void SendAIToPositionById(size_t entity_id, size_t target_id)
 		agentPtr->GoToPosition(em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition);
 	}
 }
+
+float DistanceAgentTargetById(size_t entity_id, size_t target_id)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	return glm::distance(em.GetSystem<Wiwa::Transform3D>(entity_id)->localPosition, em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition);
+}

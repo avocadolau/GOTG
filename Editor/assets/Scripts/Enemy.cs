@@ -18,7 +18,11 @@ namespace WiwaApp
         ComponentIterator characterStatsIt;
         ComponentIterator colliderIt;
         ComponentIterator agentIt;
+        EntityId playerId; 
+
         bool debug = false;
+
+        float attackRate = 0;
         void Awake()
         {
             //if (debug) Console.WriteLine("-- Starting Awake -- Enemy");
@@ -39,7 +43,7 @@ namespace WiwaApp
             characterStatsIt = GetComponentIterator<Character>();
             colliderIt = GetComponentIterator<CollisionBody>();
             agentIt = GetComponentIterator<AgentAI>();
-
+            playerId = GetEntityByName("Player");
 
             //ref CollisionBody collBody = ref GetComponentByIterator<CollisionBody>(colliderIt);
             //collBody.selfTag = 4;
@@ -61,9 +65,18 @@ namespace WiwaApp
             if (agentIt.componentIndex != Constants.WI_INVALID_INDEX)
             {
                 ref Wiwa.AgentAI agent = ref GetComponentByIterator<Wiwa.AgentAI>(agentIt);
-                //Wiwa.AgentAIManager.SendAIToPosition(m_EntityId, );
-                
+                Wiwa.AgentAIManager.SendAIToPositionById(m_EntityId, playerId);                
             }
+
+            if((Wiwa.AgentAIManager.DistanceAgentTargetById(m_EntityId, playerId) < 5) && (attackRate >= 1000.0f) )
+            {
+                // apply damage
+                // Play Attack animation
+
+                attackRate = 0.0f;
+            }
+
+            attackRate += Time.DeltaTimeMS();
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
