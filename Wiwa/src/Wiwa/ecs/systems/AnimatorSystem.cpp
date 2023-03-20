@@ -11,7 +11,6 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnAwake()
 	{
-		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 	}
 	void AnimatorSystem::OnInit()
 	{
@@ -26,14 +25,45 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnDestroy()
 	{
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		delete anim->animator;
 	}
 	void AnimatorSystem::OnEventFinish()
 	{
+
 	}
 	void AnimatorSystem::OnSystemAdded()
 	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator = Animator::LoadWiAnimator(anim->filePath);
 	}
 	void AnimatorSystem::OnSystemRemoved()
 	{
+	}
+	void AnimatorSystem::Pause()
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->Play = false;
+	}
+	void AnimatorSystem::Play()
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->Play = true;
+	}
+	void AnimatorSystem::PlayAnimation(std::string name)
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->PlayAnimationName(name);
+		anim->Play = true;
+	}
+	void AnimatorSystem::Restart()
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->ResetTime();
 	}
 }
