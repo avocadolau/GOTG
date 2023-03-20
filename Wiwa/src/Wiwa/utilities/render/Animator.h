@@ -25,7 +25,9 @@ namespace Wiwa {
 
         void InitBoneTranforms();
 
-        void CalculateBoneTransform(const NodeData* node, glm::mat4 parentTransform);
+        void CalculateBoneTransform(const NodeData* node,const glm::mat4 parentTransform);
+
+        void CalculateBoneFinalTransform();
 
         void BlendToAnimation(Animation* targetAnim, float blendDuration, float weight);
 
@@ -34,11 +36,9 @@ namespace Wiwa {
 
         void SetCurrentAnimation(Animation* anim) { m_CurrentAnimation = anim; }
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
-        std::vector<glm::mat4> GetFinalBoneMatrices()
-        {
-            return m_FinalBoneMatrices;
-        }
+        std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
 
+        void ResetTime() { m_CurrentTime = 0; }
 
         std::vector<Animation*> m_Animations;
         std::string m_Name;
@@ -51,7 +51,7 @@ namespace Wiwa {
         float m_CurrentTime;
         float m_DeltaTime = 0;
         float m_AnimationTime;
-
+        std::string m_RootNodeName;
         //blending
         Animation* m_TargetAnimation ;
         float m_BlendDuration;
