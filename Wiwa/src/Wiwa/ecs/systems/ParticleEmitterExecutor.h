@@ -96,6 +96,7 @@ namespace Wiwa {
 		void UpdateParticles();
 
 		float timer = 0;
+		float animationTimer = 0;
 		float dt;
 
 		int currentParticleIndex = 0;
@@ -106,6 +107,9 @@ namespace Wiwa {
 
 		class Material* m_Material;
 
+		int gameTime = 0;
+		float textureAnimationPoints = 0.25f;
+
 		glm::vec3 ref_vertices[4] = 
 		{
 		glm::vec3(-1, 1, 0),	//0		0	  2   		1	  3
@@ -113,15 +117,6 @@ namespace Wiwa {
 		glm::vec3(1, 1, 0),		//2				  		
 		glm::vec3(1, -1, 0)		//3		1	  3	  		0	  2
 		
-		};
-
-		glm::vec2 ref_tex_coords[4] = 
-		{
-			glm::vec2(0, 0),	//0		0	  2  		1	  3
-			glm::vec2(0, 1),	//1			     		
-			glm::vec2(1, 0),	//2			     		
-			glm::vec2(1, 1)		//3		1	  3  		0	  2
-							
 		};
 
 		int ref_vertex_indices[6] =

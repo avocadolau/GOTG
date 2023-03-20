@@ -66,6 +66,22 @@ namespace Wiwa {
 
 			}
 
+			if (textureAnimationPoints <= 1)
+			{
+				if (animationTimer >= 6)
+				{
+					textureAnimationPoints = textureAnimationPoints + 0.25f;
+					animationTimer = 0;
+				}
+				else
+				{
+					animationTimer += dt;
+				}
+			}
+			
+
+
+			
 			UpdateParticles();
 		}
 	}
@@ -249,6 +265,16 @@ namespace Wiwa {
 					}
 
 					glm::vec3 resultantPosition = p.vertices[i] = (ref_vertices[i] + rotatedPosition + p.transform.position);
+
+					glm::vec2 ref_tex_coords[4] =
+					{
+						glm::vec2(0, 0),	//0		0	  2  		1	  3
+						glm::vec2(0, textureAnimationPoints),	//1			     		
+						glm::vec2(textureAnimationPoints, 0),	//2			     		
+						glm::vec2(textureAnimationPoints, textureAnimationPoints)		//3		1	  3  		0	  2				
+					};
+
+					p.tex_coords[i] = ref_tex_coords[i];
 
 					if (p.followEmitterPosition)
 					{
@@ -506,7 +532,7 @@ namespace Wiwa {
 			for (size_t i = 0; i < 4; i++)
 			{
 				p.vertices[i] = ref_vertices[i];
-				p.tex_coords[i] = ref_tex_coords[i];
+				//p.tex_coords[i] = ref_tex_coords[i];
 			}
 			for (size_t i = 0; i < 6; i++)
 			{
