@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "GameStateManager.h"
 #include "Wiwa/scene/SceneManager.h"
+#include <Wiwa/game/RoomManager.h>
 
 namespace Wiwa
 {
@@ -85,17 +86,27 @@ namespace Wiwa
 		s_CanPassNextRoom = s_HasFinshedRoom;
 	}
 
+	void GameStateManager::StartRun()
+	{
+		StartNewRoom();
+	}
+
+	void GameStateManager::EndRun()
+	{
+		Wiwa::RoomManager::EndRun();
+	}
+
+	void GameStateManager::InitHub()
+	{
+		Wiwa::RoomManager::InitHub();
+	}
+
 	void GameStateManager::StartNewRoom()
 	{
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		em.RegisterComponent<EnemySpawner>();
-		s_HasFinshedRoom = false;
-		s_CanPassNextRoom = false;
-		s_PlayerTriggerNext = false;
-		s_TotalSpawners = 0;
-		s_SpawnersFinished = 0;
-		ChangeRoomState(RoomState::STATE_STARTED);
+		ResetBooleans();
 		LoadProgression();
+		Wiwa::RoomManager::NextRoom();
+		ChangeRoomState(RoomState::STATE_STARTED);
 	}
 
 	void GameStateManager::EndCurrentRoom()
@@ -118,6 +129,14 @@ namespace Wiwa
 		return s_RoomTypeStr[(int)s_RoomType];
 	}
 
+	void GameStateManager::ResetCombatRoomData()
+	{
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		em.RegisterComponent<EnemySpawner>();
+		s_TotalSpawners = 0;
+		s_SpawnersFinished = 0;
+	}
+
 	void GameStateManager::setFinishRoom(bool value)
 	{
 		s_HasFinshedRoom = value;
@@ -131,6 +150,13 @@ namespace Wiwa
 	void GameStateManager::setPlayerTriggerNextRoom(bool value)
 	{
 		s_PlayerTriggerNext = value;
+	}
+
+	void GameStateManager::ResetBooleans()
+	{
+		s_HasFinshedRoom = false;
+		s_CanPassNextRoom = false;
+		s_PlayerTriggerNext = false;
 	}
 }
 

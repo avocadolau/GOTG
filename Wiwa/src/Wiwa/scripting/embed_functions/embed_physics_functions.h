@@ -8,6 +8,8 @@
 
 void SetLinearVelocity(size_t id, glm::vec3 velocity);
 
+glm::vec3 GetLinearVelocity(size_t id);
+
 bool AddBodyToLog(size_t id);
 
 bool RemoveBodyFromLog(size_t id);

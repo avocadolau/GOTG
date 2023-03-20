@@ -213,6 +213,9 @@ namespace Wiwa
 
 	void Renderer2D::UpdateInstanced(Scene *scene)
 	{
+		glEnable(GL_BLEND);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
 		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
 
 		FrameBuffer &framebuffer = *m_ActiveCamera.frameBuffer;
@@ -226,5 +229,7 @@ namespace Wiwa
 		framebuffer.Unbind();
 
 		m_RenderCallsInstancedCount++;
+
+		glDisable(GL_BLEND);
 	}
 }

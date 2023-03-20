@@ -62,4 +62,3 @@ Editor/resources/scripts/Wiwa-AppAssembly.dll
 Editor/game/build
 Editor/game/.vs
 Editor/game/Wiwa.lib
-Editor/game/ImGui.lib
