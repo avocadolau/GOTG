@@ -268,28 +268,28 @@ namespace Game
             ref Transform3D transform = ref GetComponent<Transform3D>();
             if (Input.IsKeyDown(KeyCode.W))
             {
-                PlayAudioEvent("player_walk");
+                //PlayAudioEvent("player_walk");
                 //     OnChangeState(PlayerState.WAlK);
                 Animator.PlayAnimationName("run", m_EntityId);
                 direction += forward;
             }
             else if (Input.IsKeyDown(KeyCode.S))
             {
-                PlayAudioEvent("player_walk");
+               // PlayAudioEvent("player_walk");
                 //     OnChangeState(PlayerState.WAlK);
                 Animator.PlayAnimationName("run", m_EntityId);
                 direction -= forward;
             }
             if (Input.IsKeyDown(KeyCode.A))
             {
-                PlayAudioEvent("player_walk");
+                //PlayAudioEvent("player_walk");
                 //  OnChangeState(PlayerState.WAlK);
                 Animator.PlayAnimationName("run", m_EntityId);
                 direction += right;
             }
             else if (Input.IsKeyDown(KeyCode.D))
             {
-                PlayAudioEvent("player_walk");
+                //PlayAudioEvent("player_walk");
                 // OnChangeState(PlayerState.WAlK);
                 Animator.PlayAnimationName("run", m_EntityId);
                 direction -= right;
