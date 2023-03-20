@@ -29,7 +29,7 @@ namespace Game
                 || Input.IsKeyDown(KeyCode.Space)
                 || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA))
             {
-                SceneManager.LoadScene(1);
+                SceneManager.ChangeScene(1);
             }
         }
     }
