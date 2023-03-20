@@ -58,7 +58,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	
 
-	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+	/*Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 	camera->frameBuffer->Bind(false);
@@ -95,7 +95,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	glEnd();
 
-	camera->frameBuffer->Unbind();
+	camera->frameBuffer->Unbind();*/
 
 	m_IsMoving = false;
 }

@@ -54,7 +54,15 @@ namespace Game
         float referenceZ;
 
         Vector3 lastPlayerPos;
-
+        //enum PlayerState
+        //{
+        //    RUN,
+        //    RUN_SHOT,
+        //    WAlK,
+        //    WALK_SHOT,
+        //    IDLE
+        //}
+        //PlayerState state;
         void Init()
         {
             ref CharacterController character = ref GetComponent<CharacterController>();
@@ -84,7 +92,22 @@ namespace Game
             rb.filterBits |= 1 << character.collisionTag1;
             rb.filterBits |= 1 << character.collisionTag2;
         }
-
+        //void OnChangeState(PlayerState newState)
+        //{
+        //    state = newState;
+        //    //Once input read, change player state
+        //    switch (state)
+        //    {
+        //        case PlayerState.RUN:
+        //            Animator.PlayAnimationName("run", m_EntityId);
+        //            break;
+        //        case PlayerState.IDLE:
+        //            Animator.PlayAnimationName("idle", m_EntityId);
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
         void Update()
         {
             //Console.WriteLine("Starting Update character controller");
@@ -93,6 +116,9 @@ namespace Game
 
             //UpdateCamera(ref character, ref transform);
             UpdateInput(ref character, ref transform);
+
+
+
 
             Fire(ref character);
             //Console.WriteLine("Finish Update character controller");
@@ -210,119 +236,42 @@ namespace Game
         {
             Vector3 direction = new Vector3(0, 0, 0);
             ref Transform3D transform = ref GetComponent<Transform3D>();
-
             if (Input.IsKeyDown(KeyCode.W))
             {
                 PlayAudioEvent("player_walk");
+                //     OnChangeState(PlayerState.WAlK);
+                Animator.PlayAnimationName("run", m_EntityId);
                 direction += forward;
             }
             else if (Input.IsKeyDown(KeyCode.S))
             {
                 PlayAudioEvent("player_walk");
+                //     OnChangeState(PlayerState.WAlK);
+                Animator.PlayAnimationName("run", m_EntityId);
                 direction -= forward;
             }
             if (Input.IsKeyDown(KeyCode.A))
             {
                 PlayAudioEvent("player_walk");
+                //  OnChangeState(PlayerState.WAlK);
+                Animator.PlayAnimationName("run", m_EntityId);
                 direction += right;
             }
             else if (Input.IsKeyDown(KeyCode.D))
             {
                 PlayAudioEvent("player_walk");
+                // OnChangeState(PlayerState.WAlK);
+                Animator.PlayAnimationName("run", m_EntityId);
                 direction -= right;
+            }
+            else
+            {
+                //  OnChangeState(PlayerState.IDLE);
+                Animator.PlayAnimationName("idle", m_EntityId);
             }
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
-            //if (Input.IsKeyDown(KeyCode.W))
-            //{
-            //    if (upperRayWallDistance != -1)
-            //    {
-            //        campos.z += ((direction.z / 500) * (upperRayWallDistance)) / 800; // +
-            //    }
-            //    else if (upperRayWallDistance == -1)
-            //    {
-            //        campos.z += ((direction.z / 500) * (1600)) / 800; // +
-            //    }
-            //
-            //    //Console.WriteLine("Zw direction: " + ((direction.z / 500) * (100)) / 600);
-            //}
-            //else if (Input.IsKeyDown(KeyCode.S))
-            //{
-            //    //campos.z += (direction.z / 500) * Math.Sqrt(lowerRayWallDistance, 5); // -
-            //
-            //    if (lowerRayWallDistance != -1)
-            //    {
-            //        campos.z += ((direction.z / 500) * (lowerRayWallDistance)) / 800; // -
-            //    }
-            //    else if (lowerRayWallDistance == -1)
-            //    {
-            //        campos.z += ((direction.z / 500) * (1600)) / 800; // -
-            //    }
-            //    //Console.WriteLine("Zs direction: " + ((direction.z / 500) * (100)) / 600);
-            //}
-            //if (Input.IsKeyDown(KeyCode.A))
-            //{
-            //    //campos.x += (direction.x / 500) * Math.Sqrt(leftRayWallDistance); // +
-            //
-            //    if (leftRayWallDistance != -1)
-            //    {
-            //        campos.x += ((direction.x / 500) * (leftRayWallDistance)) / 800; // +
-            //    }
-            //    else if (leftRayWallDistance == -1)
-            //    {
-            //        campos.x += ((direction.x / 500) * (1600)) / 800; // +
-            //    }
-            //
-            //    //Console.WriteLine("Xa direction: " + ((direction.x / 500) * (100)) / 600);
-            //}
-            //else if (Input.IsKeyDown(KeyCode.D))
-            //{
-            //    //campos.x += (direction.x / 500) * Math.Sqrt(rightRayWallDistance, 5); // -
-            //
-            //    if (rightRayWallDistance != -1)
-            //    {
-            //        campos.x += ((direction.x / 500) * (rightRayWallDistance)) / 800; // -
-            //    }
-            //    else if (rightRayWallDistance == -1)
-            //    {
-            //        campos.x += ((direction.x / 500) * (1600)) / 800; // -
-            //    }
-            //
-            //    //Console.WriteLine("Xd direction: " + ((direction.x / 500) * (100)) / 600);
-            //}
-
-            //if(transform.Position.z - campos.z > 40 || Z_activated == true)
-            //{
-            //    campos.z += 0.1f;
-            //    Z_activated = true;
-            //}
-            //else if (transform.Position.z - campos.z < 5 || Z2_activated == true)
-            //{
-            //    campos.z  -= 0.1f;
-            //    Z2_activated = true;
-            //}
-            //if (transform.Position.z - campos.z > 10 && transform.Position.z - campos.z < 35)
-            //{
-            //    Z_activated = false;
-            //    Z2_activated = false;
-            //}
-            //
-            //if (transform.Position.x - campos.x > 30 || X_activated == true)
-            //{
-            //    campos.x += 0.1f;
-            //    X_activated = true;
-            //}
-            //else if (transform.Position.x - campos.x < -30 || X2_activated == true)
-            //{
-            //    campos.x -= 0.1f;
-            //    X2_activated = true;
-            //}
-            //if(transform.Position.x - campos.x < 25 && transform.Position.x - campos.x > -25)
-            //{
-            //    X_activated = false;
-            //    X2_activated = false;
-            //}
             lastPlayerPos.y = transform.Position.y;
 
             if (lowerRayWallDistance == -1 && upperRayWallDistance == -1)
@@ -337,51 +286,16 @@ namespace Game
 
             float minCamVelocity = 0.0f;
             float maxCamVelocity = 0.3f;
-
+            
             float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 20), 0, 25);
             float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 25);
 
-            float finalCamSpeed_X = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_X);
-            float finalCamSpeed_Z = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
+            float finalCamSpeed_X = Mathf.Lerp(minCamVelocity, maxCamVelocity, normalicedDistance_X);
+            float finalCamSpeed_Z = Mathf.Lerp(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
 
             campos.z += finalCamSpeed_Z;
             campos.x += finalCamSpeed_X;
-            //if (transform.Position.z - campos.z > 20)
-            //{
-            //    campos.z += finalCamSpeed_Z; // +
-            //}
-            //else if (transform.Position.z - campos.z < 15)
-            //{
-            //    campos.z += finalCamSpeed_Z; // -
-            //}
-            //
-            //if (transform.Position.x - campos.x > 5)
-            //{
-            //    campos.x += finalCamSpeed_X; // +
-            //}
-            //else if (transform.Position.x - campos.x < -5)
-            //{
-            //    campos.x += finalCamSpeed_X; // -
-            //}
-
-            /*
-            if(transform.Position.z - campos.z > 40)
-            {
-                campos.z += 0.1f;
-            }
-            if (transform.Position.z - campos.z < 5)
-            {
-                campos.z  -= 0.1f;
-            }
-            if (transform.Position.x - campos.x > 30)
-            {
-                campos.x += 0.1f;
-            }
-            if (transform.Position.x - campos.x < -30)
-            {
-                campos.x -= 0.1f;
-            }
-            */
+           
 
             CameraManager.SetPosition(cam_id, campos);
             CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));

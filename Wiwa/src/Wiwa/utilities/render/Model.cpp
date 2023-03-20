@@ -234,13 +234,10 @@ namespace Wiwa {
 				f.Read(&item.first[0], name_size);
 				f.Read(&item.second.id, sizeof(unsigned int));
 				f.Read(&item.second.offsetMatrix, sizeof(glm::mat4));
-				f.Read(&item.second.finalTransformation, sizeof(glm::mat4));
+				f.Read(&item.second.globalTransformation, sizeof(glm::mat4));
 
 				m_BoneInfoMap.insert(item);
 			}
-
-			//animator = Animator::LoadWiAnimator(f);
-			//animator->PlayAnimationIndex(0);
 
 			// Material size
 			size_t mat_size;
@@ -410,7 +407,7 @@ namespace Wiwa {
 		if (m_BoneInfoMap.find(nodeName) != m_BoneInfoMap.end())
 		{
 			unsigned int boneIndex = m_BoneInfoMap[nodeName].id;
-			boneInfo[boneIndex].finalTransformation = globalTransformation;
+			boneInfo[boneIndex].globalTransformation = globalTransformation;
 		}
 		for (unsigned int i = 0; i < pNode->mNumChildren; i++)
 		{
@@ -953,10 +950,8 @@ namespace Wiwa {
 				f.Write(it->first.c_str(), name_size);
 				f.Write(&it->second.id, sizeof(unsigned int));
 				f.Write(&it->second.offsetMatrix, sizeof(glm::mat4));
-				f.Write(&it->second.finalTransformation, sizeof(glm::mat4));
+				f.Write(&it->second.globalTransformation, sizeof(glm::mat4));
 			}
-			
-			//model->animator->SaveWiAnimator(model->animator, file);
 
 			// Material size
 			size_t mat_size = model->materials.size();

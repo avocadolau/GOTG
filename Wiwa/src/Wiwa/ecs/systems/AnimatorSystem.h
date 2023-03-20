@@ -26,6 +26,14 @@ namespace Wiwa {
 		void OnSystemAdded() override;
 
 		void OnSystemRemoved()override;
+
+		void Pause();
+
+		void Play();
+
+		void PlayAnimation(std::string name);
+
+		void Restart();
 	};
 }
 

@@ -9,6 +9,15 @@
 struct aiNodeAnim;
 
 namespace Wiwa {
+    struct TransformKey 
+    {
+        double time;
+        glm::mat4 value;
+        TransformKey() {
+            time = 0; value = glm::mat4(1.f);
+        }
+    };
+
     struct VectorKey
     {
         //time of this key when the transformation should happen
@@ -42,7 +51,8 @@ namespace Wiwa {
     class WI_API Bone
     {
     public:
-
+       
+        std::vector<TransformKey>m_CalculatedTransforms;
         std::vector<VectorKey> m_Positions;
         std::vector<QuatKey> m_Rotations;
         std::vector<VectorKey> m_Scales;
@@ -51,6 +61,7 @@ namespace Wiwa {
         int m_NumScalingKeys;
 
         glm::mat4 m_LocalTransform;
+        glm::mat4 m_GlobalTransform;
         std::string m_Name;
         int m_ID;
 

@@ -69,7 +69,7 @@ namespace Wiwa
 		void SetInstanceEnabled(Scene *scene, uint32_t instance, bool enabled);
 
 		void UpdateInstancedQuadTexPosition(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
-		void UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Size2i& size);
+		void UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
 		void UpdateInstancedQuadTexClip(Scene* scene, uint32_t id, const Size2i& srcSize, const Rect2i& clip);
 		void UpdateInstancedQuadTexTexture(Scene* scene, uint32_t id, uint32_t tex_id);
 		void UpdateInstancedQuadTexColor(Scene* scene, uint32_t id, const Color4f& color);
