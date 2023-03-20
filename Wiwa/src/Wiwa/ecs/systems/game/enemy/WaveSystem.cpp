@@ -145,6 +145,10 @@ namespace Wiwa
 		agentPtr->speed = stats.speed;
 		agentPtr->target = { 0,0,0 };
 
+		// Mesh component
+
+
+
 		// Create a enemy component and enemy system
 		Enemy enemy;
 		enemy.enemyType = 0;
