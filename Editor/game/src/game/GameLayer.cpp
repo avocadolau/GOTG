@@ -32,6 +32,8 @@ void GameLayer::OnAttach()
 	Wiwa::RenderManager::SetRenderOnMainWindow(true);
 	Wiwa::Time::Update();
 	Wiwa::Time::SetTargetFPS(60);
+	Wiwa::Application::Get().GetWindow().SetFullScreen(true);
+	
 }
 
 void GameLayer::OnDetach()
