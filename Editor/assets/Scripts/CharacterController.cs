@@ -396,7 +396,8 @@ namespace Game
             bc.TimeToDestroy = character.bulletLifeTime;
             bc.Damage = 20;
             //bc.direction = direction;
-
+            AddAudioSource(entity, "player_shoot", true, false);
+            ApplySystem<AudioSystem>(entity);
             // Activate controller
             ApplySystem<BulletController>(entity);
             ApplySystem<MeshRenderer>(entity);
@@ -405,8 +406,6 @@ namespace Game
             //Console.WriteLine("entity: " + entity + " direction " + direction.x + " " + direction.y + " " + direction.z);
             PhysicsManager.AddBodyToLog(entity);
 
-            AddAudioSource("player_shoot", true, false);
-            ApplySystem<AudioSystem>(entity);
             // Activate controller
             ApplySystem<MeshRenderer>(entity);
 
