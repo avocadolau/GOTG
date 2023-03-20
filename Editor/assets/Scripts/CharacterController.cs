@@ -153,14 +153,18 @@ namespace Game
                 if (System.Math.Abs(shootX) > 0.5f || System.Math.Abs(shootY) > 0.5f)
                 {
                     // Shoot sound
-                    PlayAudioEvent("player_shoot");
+                    Console.WriteLine("TEST");
+                    
+                    //PlayMusic("player_shoot");
+                    //PlayAudioEvent("player_shoot");
                     Vector3 bulletDir = new Vector3(shootX, 0, shootY);
                     SpawnBullet(ref character, new Vector3(0, 0, 0), bulletDir, 0);
                 }
                 else if (Input.IsKeyDown(KeyCode.Space))
                 {
                     // Shoot sound
-                    PlayAudioEvent("player_shoot");
+                    
+                    //PlayAudioEvent("player_shoot");
                     Vector3 bulletDir = new Vector3(0, 0, 1);
                     SpawnBullet(ref character, new Vector3(0, 0, 0), bulletDir, 0);
                 }
@@ -401,6 +405,8 @@ namespace Game
             //Console.WriteLine("entity: " + entity + " direction " + direction.x + " " + direction.y + " " + direction.z);
             PhysicsManager.AddBodyToLog(entity);
 
+            AddAudioSource("player_shoot", true, false);
+            ApplySystem<AudioSystem>(entity);
             // Activate controller
             ApplySystem<MeshRenderer>(entity);
 

@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	4004702906	player_shoot			\Default Work Unit\player_shoot	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	253953353	starlord_shot	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapons\starlord_shot_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Weapons\starlord_shot		271284
+
