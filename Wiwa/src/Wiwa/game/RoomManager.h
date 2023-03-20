@@ -2,7 +2,7 @@
 
 #include <Wiwa/core/Core.h>
 #include <vector>
-#include <Wiwa/game/GameStateManager.h>
+
 
 typedef size_t SceneId;
 
@@ -13,10 +13,12 @@ namespace Wiwa
 	{
 	public:
 		static SceneId s_CurrentRoomIndx;
-		static RoomType s_CurrentRoom;
 		static SceneId s_RoomsToShop;
 		static SceneId s_RoomsToBoss;
 		static SceneId s_IntroductionRoom;
+		static SceneId s_LastCombatRoom;
+		static SceneId s_LastRewardRoom;
+		static SceneId s_LastShopRoom;
 		static std::vector<SceneId> s_CombatRooms;
 		static std::vector<SceneId> s_RewardRooms;
 		static std::vector<SceneId> s_ShopRooms;

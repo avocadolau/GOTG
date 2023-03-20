@@ -91,6 +91,9 @@ namespace Wiwa {
 		static void StartNewRoom();
 		static void EndCurrentRoom();
 
+		inline static void SetRoomType(RoomType type) { s_RoomType = type; }
+		inline static RoomType GetType() { return s_RoomType; }
+
 		static void LogRoomState();
 		static const char* GetRoomState();
 		static const char* GetRoomType();
