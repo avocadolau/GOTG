@@ -62,19 +62,23 @@ namespace WiwaApp
                // if (debug) Console.WriteLine("-- enemy deleted -- Enemy");
             }
 
-            if (agentIt.componentIndex != Constants.WI_INVALID_INDEX)
+            if(playerId != Constants.WI_INVALID_INDEX)
             {
-                ref Wiwa.AgentAI agent = ref GetComponentByIterator<Wiwa.AgentAI>(agentIt);
-                Wiwa.AgentAIManager.SendAIToPositionById(m_EntityId, playerId);                
-            }
+                if (agentIt.componentIndex != Constants.WI_INVALID_INDEX)
+                {
+                    ref Wiwa.AgentAI agent = ref GetComponentByIterator<Wiwa.AgentAI>(agentIt);
+                    Wiwa.AgentAIManager.SendAIToPositionById(m_EntityId, playerId);
+                }
 
-            if((Wiwa.AgentAIManager.DistanceAgentTargetById(m_EntityId, playerId) < 5) && (attackRate >= 1000.0f) )
-            {
-                // apply damage
-                // Play Attack animation
+                if ((Wiwa.AgentAIManager.DistanceAgentTargetById(m_EntityId, playerId) < 5) && (attackRate >= 1000.0f))
+                {
+                    // apply damage
+                    // Play Attack animation
 
-                attackRate = 0.0f;
+                    attackRate = 0.0f;
+                }
             }
+            
 
             attackRate += Time.DeltaTimeMS();
         }

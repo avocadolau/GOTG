@@ -71,9 +71,9 @@ namespace Game
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
-            campos.y = transform.Position.y + 20 + 35;
-            campos.x = transform.Position.x + 0 + 0;
-            campos.z = transform.Position.z - 40 + 20;
+            campos.y = transform.Position.y + 20;
+            campos.x = transform.Position.x;
+            campos.z = transform.Position.z;
 
             referenceZ = transform.Position.z;
             referenceX = transform.Position.x;
