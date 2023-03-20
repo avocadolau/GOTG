@@ -33,6 +33,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static string GetEntityName(EntityId id, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetEntityByName(string name, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
@@ -193,6 +195,9 @@ namespace Wiwa
         #region AgentAI
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SendAIToPosition(EntityId entity_id, Vector3 target_pos);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SendAIToPositionById(EntityId entity_id, EntityId target_id);
         #endregion
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

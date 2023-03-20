@@ -59,6 +59,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
 		WI_ADD_INTERNAL_CALL(GetEntityName);
+		WI_ADD_INTERNAL_CALL(GetEntityByName);
 		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
 		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
 
@@ -140,6 +141,7 @@ namespace Wiwa
 		
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
+		WI_ADD_INTERNAL_CALL(SendAIToPositionById);
 
 		//animator
 		WI_ADD_INTERNAL_CALL(PlayAnimationName);
