@@ -4,6 +4,8 @@
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/scene/SceneManager.h>
 #include "../../Utils/EditorUtils.h"
+#include <Wiwa/Events/ApplicationEvent.h>
+
 
 class UIEditorPanel : public Panel
 {
@@ -24,11 +26,21 @@ public:
 	void SetInitialValues(Wiwa::GuiControl* control);
 
 	void UpdateElements(Wiwa::GuiControl* control);
+
+
+	void OnEvent(Wiwa::Event& e) override;
+	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
+
 	int elementSelected;
 
 	//Variables to change
-	float pos[2];
-	float size[2];
+	int pos[2];
+	int size[2];
+	int originPos[2];
+	int originSize[2];
+	int extraOriginPos[2];
+	int extraOriginSize[2];
+	size_t callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 

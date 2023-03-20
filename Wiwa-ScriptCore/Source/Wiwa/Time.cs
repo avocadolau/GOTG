@@ -31,7 +31,7 @@
         }
         public static void Play()
         {
-            InternalCalls.Play();
+            InternalCalls.PlayIntr();
         }
         public static void Stop()
         {

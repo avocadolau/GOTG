@@ -160,14 +160,13 @@ namespace Wiwa
         internal extern static void LoadSceneByIndex(ulong index, int flags);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void LoadSceneByName(string scene_name, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeSceneByIndex(ulong index, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeSceneByName(string scene_name, int flags);
         #endregion
         #region UI
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Play();
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool ChangeScene(int scene_id);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool Quit();
+        
         #endregion
         #region AgentAI
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

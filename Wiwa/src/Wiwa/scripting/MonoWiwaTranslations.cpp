@@ -95,6 +95,9 @@ Type* ConvertType(MonoType* monotype)
 	{
 		name = "__int64";
 	}
+	else if (name == "Boolean") {
+		name = "bool";
+	}
 
 	type->name = name;
 	type->size = mono_type_size(monotype, &alignment);
