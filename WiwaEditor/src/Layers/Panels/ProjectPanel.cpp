@@ -75,8 +75,9 @@ void ProjectPanel::Draw()
 	for (int i = 0; i < scene_count; i++)
 	{
 		Wiwa::ProjectManager::SceneData &sdata = scene_list[i];
-
-		ImGui::Selectable(sdata.scene_name.c_str());
+		std::string sceneName = std::to_string(i) + " ";
+		sceneName += sdata.scene_name.c_str();
+		ImGui::Selectable(sceneName.c_str());
 
 		if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
 		{

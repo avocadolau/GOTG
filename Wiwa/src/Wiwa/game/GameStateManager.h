@@ -31,10 +31,12 @@ namespace Wiwa {
 		NONE = 0,
 		ROOM_HUB = 1,
 		ROOM_COMBAT = 2,
-		ROOM_REWARD = 3
+		ROOM_REWARD = 3,
+		ROOM_BOSS = 4,
+		ROOM_SHOP = 5
 	};
 	static const char* s_RoomTypeStr[] =
-	{ "NONE", "ROOM_HUB", "ROOM_COMBAT", "ROOM_REWARD"};
+	{ "NONE", "ROOM_HUB", "ROOM_COMBAT", "ROOM_REWARD", "ROOM_BOSS", "ROOM_SHOP"};
 
 	enum class RoomState
 	{
