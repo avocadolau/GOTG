@@ -128,6 +128,7 @@ namespace Wiwa
 
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
+		WI_ADD_INTERNAL_CALL(GetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(AddBodyToLog);
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 		WI_ADD_INTERNAL_CALL(GetEntityTagString);
