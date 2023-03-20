@@ -320,8 +320,8 @@ namespace Game
             float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 20), 0, 25);
             float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 25);
 
-            float finalCamSpeed_X = Mathf.Lerp(minCamVelocity, maxCamVelocity, normalicedDistance_X);
-            float finalCamSpeed_Z = Mathf.Lerp(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
+            float finalCamSpeed_X = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_X);
+            float finalCamSpeed_Z = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
 
             campos.z += finalCamSpeed_Z;
             campos.x += finalCamSpeed_X;
