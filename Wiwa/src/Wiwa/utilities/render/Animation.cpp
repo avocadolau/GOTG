@@ -1,7 +1,7 @@
 #include "wipch.h"
 #include "Animation.h"
 #include <assimp/anim.h>
-
+#include <glm/gtx/quaternion.hpp>
 namespace Wiwa {
 	Animation::Animation()
 	{
@@ -16,8 +16,14 @@ namespace Wiwa {
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
 		m_BoneInfoMap = model->GetBoneInfoMap();
-		ReadHeirarchyData(m_RootNode, model->getModelHierarchy());
+
 		ReadMissingBones(animation, *model);
+		WI_INFO("=============================================================");
+		WI_INFO("animation: {}\n ",animation->mName.C_Str());
+		
+		ReadHeirarchyData(m_RootNode, model->getModelHierarchy(), glm::mat4(1.f));
+
+
 	}
 
 	Animation::Animation(const aiAnimation* animation)
@@ -55,12 +61,13 @@ namespace Wiwa {
 		}
 		return nullptr;
 	}
+
 	void Animation::ReadMissingBones(const aiAnimation* animation, Model& model)
 	{
 		int size = animation->mNumChannels;
 
-		auto& boneInfoMap = model.GetBoneInfoMap();//getting m_BoneInfoMap from Model class
-		int& boneCount = model.GetBoneCount(); //getting the m_BoneCounter from Model class
+		auto& boneInfoMap = model.GetBoneInfoMap();	//getting m_BoneInfoMap from Model class
+		int& boneCount = model.GetBoneCount();		//getting the m_BoneCounter from Model class
 
 		//reading channels(bones engaged in an animation and their keyframes)
 		for (int i = 0; i < size; i++)
@@ -79,22 +86,51 @@ namespace Wiwa {
 		m_BoneInfoMap = boneInfoMap;
 	}
 
-	void Animation::ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root)
+	void Animation::ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root, glm::mat4& parentTransform)
 	{
-		assert(root);
+		assert(root);		
 
+		glm::mat4 nodeTransform = root->Transformation;
+		glm::mat4 globalTransform = parentTransform * nodeTransform;
+
+		if (m_BoneInfoMap.find(root->name) != m_BoneInfoMap.end()) {
+			m_BoneInfoMap[root->name].globalTransformation = globalTransform;
+		}
+		WI_INFO("{}\n", root->name.c_str());
+		PrintGlmMatrix(globalTransform);
 		dest.name = root->name.data();
 		dest.transformation = root->Transformation;
 		dest.childrenCount = root->children.size();
 
-		for (int i = 0; i < root->children.size(); i++)
-		{
+		for (unsigned int i = 0; i < root->children.size(); i++) {
 			NodeData newData;
-			ReadHeirarchyData(newData, root->children[i]);
+			ReadHeirarchyData(newData,root->children[i], globalTransform);
 			dest.children.push_back(newData);
 		}
 	}
+	glm::mat4  Animation::CalculateGlobalTransform(const ModelHierarchy* bone, glm::mat4 parentTransform)
+	{
+		glm::mat4 nodeTransform = bone->Transformation;
+		glm::mat4 globalTransform = parentTransform * nodeTransform;
 
+		if (m_BoneInfoMap.find(bone->name) != m_BoneInfoMap.end()) {
+			m_BoneInfoMap[bone->name].globalTransformation = globalTransform;
+		}
+
+		for (auto child : bone->children) {
+			CalculateGlobalTransform(child, globalTransform);
+		}
+
+		return globalTransform;
+	}
+	void Animation::PrintGlmMatrix(const glm::mat4& mat)
+	{
+		WI_INFO("{0}_{1}_{2}_{3}", mat[0][0], mat[0][1], mat[0][2], mat[0][3]);
+		WI_INFO("{0}_{1}_{2}_{3}", mat[1][0], mat[1][1], mat[1][2], mat[1][3]);
+		WI_INFO("{0}_{1}_{2}_{3}", mat[2][0], mat[2][1], mat[2][2], mat[2][3]);
+		WI_INFO("{0}_{1}_{2}_{3}", mat[3][0], mat[3][1], mat[3][2], mat[3][3]);
+		WI_INFO("\n");
+	}
 	void Animation::LoadAnimation(const aiAnimation* animation)
 	{
 		m_Duration = animation->mDuration;
@@ -127,6 +163,7 @@ namespace Wiwa {
 
 		//save NodeAnim structure
 		animation->SaveNodeData(file, &animation->m_RootNode);
+
 		//save bone info map
 		size_t bone_index_size = animation->m_BoneInfoMap.size();
 		file.Write(&bone_index_size, sizeof(size_t));
@@ -138,12 +175,11 @@ namespace Wiwa {
 			file.Write(it->first.c_str(), name_size);
 			file.Write(&it->second.id, sizeof(unsigned int));
 			file.Write(&it->second.offsetMatrix, sizeof(glm::mat4));
-			file.Write(&it->second.finalTransformation, sizeof(glm::mat4));
+			file.Write(&it->second.globalTransformation, sizeof(glm::mat4));
 		}
 
 		size_t channels_size = animation->m_Bones.size();
 		file.Write(&channels_size, sizeof(size_t));
-
 
 		for (unsigned int i = 0; i < channels_size; i++)
 		{
@@ -224,20 +260,18 @@ namespace Wiwa {
 			file.Read(&item.first[0], name_size);
 			file.Read(&item.second.id, sizeof(unsigned int));
 			file.Read(&item.second.offsetMatrix, sizeof(glm::mat4));
-			file.Read(&item.second.finalTransformation, sizeof(glm::mat4));
+			file.Read(&item.second.globalTransformation, sizeof(glm::mat4));
 
 			anim->m_BoneInfoMap.insert(item);
 		}
-
 
 		size_t channels_size;
 		file.Read(&channels_size, sizeof(size_t));
 
 		for (unsigned int i = 0; i < channels_size; i++)
 		{
-			anim->m_Bones.push_back(Bone::LoadWiAnimNode(file));
-		}
-
+			anim->m_Bones.push_back(Bone::LoadWiAnimNode(file));	
+		}		
 		return anim;
 	}
 }

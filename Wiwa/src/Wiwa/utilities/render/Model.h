@@ -82,17 +82,18 @@ namespace Wiwa {
 	};
 	struct BoneInfo {
 		glm::mat4 offsetMatrix;
-		glm::mat4 finalTransformation;
+		glm::mat4 globalTransformation;
+
 		unsigned int id;
 		BoneInfo()
 		{
 			offsetMatrix = glm::mat4();
-			finalTransformation = glm::mat4();
+			globalTransformation = glm::mat4();
 		}
 		BoneInfo(glm::mat4& offset)
 		{
 			offsetMatrix = offset;
-			finalTransformation = glm::mat4();
+			globalTransformation = glm::mat4();
 		}
 	};
 

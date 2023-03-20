@@ -168,5 +168,16 @@ namespace Wiwa
         #region UI
         
         #endregion
+
+        #region Animations
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayAnimationName(string name, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayAnimation(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PauseAnimation(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void RestartAnimation(EntityId entity);
+        #endregion
     }
 }
