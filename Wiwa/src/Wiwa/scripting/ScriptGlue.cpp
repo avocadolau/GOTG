@@ -134,6 +134,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetEntityTagBits);
 		WI_ADD_INTERNAL_CALL(RayCastDistanceWalls);
 
+		//UI
+		WI_ADD_INTERNAL_CALL(ActivateCanvas);
 		// Game
 		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);
 		// AI
