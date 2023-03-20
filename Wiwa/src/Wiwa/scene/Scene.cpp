@@ -13,8 +13,8 @@ namespace Wiwa
 {
 	Scene::Scene() : m_InstanceRenderer(40500)
 	{
-		mMaxTimeEntering = 300;
-		mMaxTimeLeaving = 300;
+		mMaxTimeEntering = 450;
+		mMaxTimeLeaving = 450;
 
 		// Initialize instance renderer with shader
 		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
