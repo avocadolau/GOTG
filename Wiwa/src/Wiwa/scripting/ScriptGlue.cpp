@@ -137,14 +137,21 @@ namespace Wiwa
 
 		//UI
 		WI_ADD_INTERNAL_CALL(ActivateCanvas);
-		// Game
-		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);
+		
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
+
 		//animator
 		WI_ADD_INTERNAL_CALL(PlayAnimationName);
 		WI_ADD_INTERNAL_CALL(PlayAnimation);
 		WI_ADD_INTERNAL_CALL(PauseAnimation);
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
+
+		// Game
+		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);
+		WI_ADD_INTERNAL_CALL(InitHub);
+		WI_ADD_INTERNAL_CALL(StartRun);
+		WI_ADD_INTERNAL_CALL(EndRun);
+
 	}
 }

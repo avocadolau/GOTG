@@ -741,12 +741,6 @@ namespace Wiwa
 			// Load Physics Manager json Data
 			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
-			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-
-			// Load Physics Manager json Data
-			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
-
 			_loadSceneImpl(sc, scene_file);
 
 			sc->ChangeName(path.filename().stem().string().c_str());

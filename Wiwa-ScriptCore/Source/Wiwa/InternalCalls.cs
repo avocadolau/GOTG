@@ -182,6 +182,12 @@ namespace Wiwa
         #region Game
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetRoomStateTriggerNext(bool value);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void InitHub();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StartRun();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void EndRun();
         #endregion
 
         #region AgentAI

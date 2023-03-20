@@ -20,10 +20,9 @@ namespace Wiwa
 	SceneId RoomManager::s_LastRewardRoom;
 	SceneId RoomManager::s_LastShopRoom;
 
-	void RoomManager::StartRun()
+	void RoomManager::InitHub()
 	{
 		GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-		
 	}
 
 	void RoomManager::NextRoom()
@@ -95,10 +94,13 @@ namespace Wiwa
 		default:
 			break;
 		}
+
+		SceneManager::getActiveScene()->GetPhysicsManager().OnLoad("game_tags");
 	}
 
 	void RoomManager::EndRun()
 	{
+		GameStateManager::SetRoomType(RoomType::NONE);
 	}
 
 	void RoomManager::SerializeData()

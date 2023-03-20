@@ -316,7 +316,8 @@ namespace Wiwa {
 		m_BodiesToLog.clear();
 		delete m_World;
 
-		filterMap.clear();
+		filterMapStringKey.clear();
+		filterMapIntKey.clear();
 		/*filterStrings.clear();
 		fliterBitsSets.clear();*/
 
@@ -475,7 +476,7 @@ namespace Wiwa {
 	bool PhysicsManager::OnSave()
 	{
 		JSONDocument physics;
-		int count = filterMap.size();
+		int count = filterMapStringKey.size();
 
 		physics.AddMember("tags_count", count);
 		std::string tag = "tag_";
@@ -502,7 +503,7 @@ namespace Wiwa {
 		if (!physics.load_file(path.c_str()))
 			return false;
 
-		for (int i = 1; i < filterMap.size(); i++)
+		for (int i = 1; i < filterMapStringKey.size(); i++)
 			RemoveFilterTag(i);
 
 		int count = physics["tags_count"].get<int>();
@@ -550,33 +551,38 @@ namespace Wiwa {
 		std::bitset<MAX_BITS> bset;
 		bset.set(filterStrings.size(), true);
 		fliterBitsSets.push_back(bset);*/
-		int size = filterMap.size();
-		if (filterMap.size() == 32)
+		int size = filterMapStringKey.size();
+		if (filterMapStringKey.size() == 32)
 			return false;
-		filterMap.emplace(str, size);
-
+		filterMapStringKey.emplace(str, size);
+		filterMapIntKey.emplace(size, str);
 		return true;
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
 		/*filterStrings.erase(filterStrings.begin() + index);
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
-		for (const auto& [key, value] : filterMap)
+		for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)
-				filterMap.erase(key);
+			{
+				filterMapStringKey.erase(key);
+				filterMapIntKey.erase(value);
+			}
 		}
 	}
 
-	const char* PhysicsManager::GetFilterTag(const int index)
+	const char* PhysicsManager::GetFilterTag(int index)
 	{
+
+		return filterMapIntKey[index].c_str();
 		//return filterStrings[index].c_str();
-		for (const auto& [key, value] : filterMap)
+		/*for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)
 				return key.c_str();
 		}
-		return "NONE";
+		return "NONE";*/
 	}
 
 	int PhysicsManager::GetFilterTag(const char* str)
@@ -589,10 +595,10 @@ namespace Wiwa {
 				return i;
 		}
 		return 0;*/
-		if (!(filterMap.find(str) != filterMap.end()))
+		if (!(filterMapStringKey.find(str) != filterMapStringKey.end()))
 			return -1;
 
-		return filterMap[str];
+		return filterMapStringKey[str];
 	}
 
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
