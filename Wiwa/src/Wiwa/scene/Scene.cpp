@@ -178,9 +178,9 @@ namespace Wiwa
 		m_CurrentState = SCENE_LEAVING;
 		m_TransitionTimer = 0;
 
-		SceneChangeEvent event(scene);
-		Action<Event&> action = { &Application::OnEvent, this };
-		action(event);
+		//SceneChangeEvent event(scene);
+		//Action<Event&> action = { &Application::OnEvent, this };
+		//action(event);
 	}
 
 	void Scene::UpdateEnter()

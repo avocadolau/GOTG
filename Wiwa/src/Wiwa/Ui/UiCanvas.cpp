@@ -21,5 +21,9 @@ namespace Wiwa
 	void GuiCanvas::SwapActive()
 	{
 		active = !active;
+		for (size_t i = 0; i < controls.size(); i++)
+		{
+			this->controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
+		}
 	}
 }

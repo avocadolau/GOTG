@@ -89,6 +89,7 @@
         public float val2;
     }
     #endregion
+
     #region Game
     [Component]
     public struct Wave
@@ -138,5 +139,14 @@
     //    public int bulletTag;
     //    public int collisionTag1;
     //}
+    #endregion
+    #region AgentAI
+    [Component]
+    public struct AgentAI
+    {
+        public float speed;
+        public Vector3 target;
+    }
+
     #endregion
 }

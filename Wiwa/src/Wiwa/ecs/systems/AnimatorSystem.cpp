@@ -14,8 +14,7 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnInit()
 	{
-		//Preload Known Matrices
-		//Animator->LoadMatrices
+
 	}
 	void AnimatorSystem::OnUpdate()
 	{
@@ -40,6 +39,20 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnSystemRemoved()
 	{
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		if (anim->animator != nullptr)
+			delete anim->animator;
+	}
+	void AnimatorSystem::PlayAnimation(std::string name)
+	{
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->PlayAnimationName(name);
+		anim->Play = true;
+	}
+	void AnimatorSystem::Restart()
+	{
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->ResetTime();
 	}
 	void AnimatorSystem::Pause()
 	{

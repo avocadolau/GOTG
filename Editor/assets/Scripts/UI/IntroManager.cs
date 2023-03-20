@@ -25,10 +25,9 @@ namespace Game
         {
             IntroData data = GetComponentByIterator<IntroData>(introData);
             time += Time.DeltaTime();
-
             if (time >= data.timeToWait
                 || Input.IsKeyDown(KeyCode.Space)
-                || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.A))
+                || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA))
             {
                 SceneManager.LoadScene(1);
             }

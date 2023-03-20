@@ -30,6 +30,7 @@ void GameLayer::OnAttach()
 	Wiwa::SceneManager::LoadSceneByIndex(0, Wiwa::SceneManager::LOAD_SEPARATE);
 
 	Wiwa::RenderManager::SetRenderOnMainWindow(true);
+	Wiwa::Time::Update();
 }
 
 void GameLayer::OnDetach()

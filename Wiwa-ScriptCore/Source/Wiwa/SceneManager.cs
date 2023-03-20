@@ -15,14 +15,23 @@ namespace Wiwa
     }
     public class SceneManager
     {
-        public static void LoadScene(ulong index, int flags=(int)LoadFlags.LOAD_DEFAULT)
+        public static void LoadScene(ulong index, int flags = (int)LoadFlags.LOAD_DEFAULT)
         {
             InternalCalls.LoadSceneByIndex(index, flags);
         }
 
-        public static void LoadScene(string name, int flags=(int)LoadFlags.LOAD_DEFAULT)
+        public static void LoadScene(string name, int flags = (int)LoadFlags.LOAD_DEFAULT)
         {
             InternalCalls.LoadSceneByName(name, flags);
+        }
+
+        public static void ChangeScene(ulong index, int flags = (int)LoadFlags.LOAD_DEFAULT)
+        {
+            InternalCalls.ChangeSceneByIndex(index, flags);
+        }
+        public static void ChangeScene(string name, int flags = (int)LoadFlags.LOAD_DEFAULT)
+        {
+            InternalCalls.ChangeSceneByName(name, flags);
         }
     }
 }

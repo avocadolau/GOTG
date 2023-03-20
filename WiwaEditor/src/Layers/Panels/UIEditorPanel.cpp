@@ -239,17 +239,17 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 {
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
 	Wiwa::Vector2i vector = { pos[0],pos[1] };
 	Wiwa::Size2i size_ = { size[0],size[1] };
-	//Wiwa::Vector2i vector = { pos[0],pos[1] };
-	//Wiwa::Size2i size_ = { size[0],size[1] };
+	Wiwa::Rect2i originTexRect = { originPos[0],originPos[1],originSize[0],originSize[1] };
+	Wiwa::Rect2i extraOriginTexRect = { extraOriginPos[0],extraOriginPos[1],extraOriginSize[0],extraOriginSize[1] };
 	control->position.x = pos[0];
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
 	control->callbackID = callbackID;
 	control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+	r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
 	r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector, Wiwa::Renderer2D::Pivot::UPLEFT);
 	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, size_);
 	if (control->type != Wiwa::GuiControlType::TEXT)

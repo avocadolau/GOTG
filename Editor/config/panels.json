@@ -1,1 +1,27 @@
-{"sol_version":"vs2022","build_conf":"Release","custom_layouts":[],"Configuration":false,"Console":true,"Scene":true,"Hierarchy":true,"Assets":true,"Inspector":true,"Mesh view":false,"Material Editor":true,"Systems":false,"Game":true,"Cameras":true,"Resources":false,"Import":false,"Shaders":true,"Environment":false,"Animator":false,"Animation Editor":false,"UI":false,"UI editor":false,"Audio":true," AI Map Baking":false,"Game Log":false}
+{
+    "sol_version": "vs2022",
+    "build_conf": "Release",
+    "custom_layouts": [],
+    "Configuration": false,
+    "Console": true,
+    "Scene": true,
+    "Hierarchy": true,
+    "Assets": true,
+    "Inspector": true,
+    "Mesh view": false,
+    "Material Editor": true,
+    "Systems": false,
+    "Game": true,
+    "Cameras": true,
+    "Resources": false,
+    "Import": false,
+    "Shaders": true,
+    "Environment": false,
+    "Animator": false,
+    "Animation Editor": false,
+    "UI": false,
+    "UI editor": false,
+    "Audio": true,
+    " AI Map Baking": false,
+    "Game Log": true
+}

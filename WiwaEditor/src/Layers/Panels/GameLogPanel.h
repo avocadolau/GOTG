@@ -13,4 +13,6 @@ public:
 	void DrawStateInfo();
 
 	void DrawRoomSpawnersInfo();
+
+	void DrawRoomVariables();
 };
