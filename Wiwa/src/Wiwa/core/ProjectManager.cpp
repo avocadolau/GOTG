@@ -98,7 +98,6 @@ namespace Wiwa
 	void ProjectManager::SaveProjectAs(const char* file)
 	{
 		std::string path = file;
-		path += ".wiproject";
 		Wiwa::JSONDocument doc(path.c_str());
 		m_CurrentProject = path;
 		doc.AddMember("name", m_Name.c_str());

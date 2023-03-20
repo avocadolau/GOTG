@@ -18,26 +18,26 @@ ProjectPanel::~ProjectPanel()
 void ProjectPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active, ImGuiWindowFlags_NoDocking);
-	const char *buff = Wiwa::Application::Get().GetProjectName();
+	const char* buff = Wiwa::ProjectManager::GetProjectName();
 	std::string edit = buff;
 
 	ImGui::InputText("Project Name", (char *)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::Application::Get().SetProjectName(edit.c_str());
+		Wiwa::ProjectManager::SetProjectName(edit.c_str());
 
-	buff = Wiwa::Application::Get().GetProjectVersion();
+	buff = Wiwa::ProjectManager::GetProjectVersion();
 	edit = buff;
 
 	ImGui::InputText("Project Version", (char *)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::Application::Get().SetProjectVersion(edit.c_str());
+		Wiwa::ProjectManager::SetProjectVersion(edit.c_str());
 
-	buff = Wiwa::Application::Get().GetProjectCompany();
+	buff = Wiwa::ProjectManager::GetProjectCompany();
 	edit = buff;
 
 	ImGui::InputText("Company Name", (char *)edit.c_str(), 64);
 	if (strcmp(edit.c_str(), buff) != 0)
-		Wiwa::Application::Get().SetProjectCompany(edit.c_str());
+		Wiwa::ProjectManager::SetProjectCompany(edit.c_str());
 
 	ImGui::Separator();
 
