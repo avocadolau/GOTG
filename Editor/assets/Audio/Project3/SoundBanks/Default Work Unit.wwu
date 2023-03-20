@@ -4,8 +4,12 @@
 		<WorkUnit Name="Default Work Unit" ID="{B0B09002-1B2B-4E9D-9DAF-53D25465CF1F}" PersistMode="Standalone">
 			<ChildrenList>
 				<SoundBank Name="Player_soundbank" ID="{BE04BD1B-1F56-4949-A1B1-1FF993F29D5D}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="player_shoot" ID="{852D44FD-58B9-4B4E-98F0-0A725EDEED84}">
 					<ObjectInclusionList>
-						<ObjectRef Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="Project" SchemaVersion="110" WwiseVersion="v2022.1.1" WwiseBuild="8100">
+<WwiseDocument Type="Project" SchemaVersion="110" WwiseVersion="v2022.1.2" WwiseBuild="8150">
 	<ProjectInfo>
 		<Project Name="Project3" ID="{911C9302-4A7F-45BA-B734-E76FC60A11C4}">
 			<Platforms>
@@ -11906,6 +11906,9 @@
 				</PhysicalFolder>
 				<PhysicalFolder Path="SoundBanks">
 					<WorkUnit Name="SoundBanks" ID="{C98E673F-A24C-48A8-960F-10565FFE70A0}" PersistMode="Standalone"/>
+				</PhysicalFolder>
+				<PhysicalFolder Path="SoundBanks\player">
+					<WorkUnit Name="player" ID="{9EAC8D03-5C58-40A5-86F4-621FC77CDC7D}" PersistMode="Standalone"/>
 				</PhysicalFolder>
 				<PhysicalFolder Path="Soundcaster Sessions">
 					<WorkUnit Name="Soundcaster Sessions" ID="{4C96B38B-3DB4-40C7-91C9-665510E38993}" PersistMode="Standalone"/>

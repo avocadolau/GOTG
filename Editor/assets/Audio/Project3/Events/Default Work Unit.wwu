@@ -8,7 +8,7 @@
 						<Action Name="" ID="{A1EB4EDE-9453-4B5F-A546-30F43C603E09}" ShortID="805077965">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Sci_Fi_Shot_Element" ID="{AC073A32-40C4-4F5B-AB8A-C52A985CA6F7}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+									<ObjectRef Name="starlord_shot" ID="{3DE54C51-419B-46DA-8A10-DCB685E336A6}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
