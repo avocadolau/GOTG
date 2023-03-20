@@ -88,6 +88,10 @@ namespace Wiwa {
 		static void UpdateRoomState();
 		static void QuerySpawners();
 
+		// Run and rooms
+		static void StartRun();
+		static void EndRun();
+		static void InitHub();
 		static void StartNewRoom();
 		static void EndCurrentRoom();
 
@@ -98,8 +102,13 @@ namespace Wiwa {
 		static const char* GetRoomState();
 		static const char* GetRoomType();
 
+		// Reset combat data
+		static void ResetCombatRoomData();
 		static void setFinishRoom(bool value);
 		static void setCanPassNextRoom(bool value);
 		static void setPlayerTriggerNextRoom(bool value);
+
+		// Reset general data
+		static void ResetBooleans();
 	};
 }

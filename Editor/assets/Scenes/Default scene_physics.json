@@ -1,1 +1,10 @@
-{"tags_count":1,"tag_0":"COLLISION_EVERYTHING"}
+{
+	"tags_count": 7,
+	"tag_0": "COLLISION_EVERYTHING",
+	"tag_1": "START_RUN_TRIGGER",
+	"tag_2": "END_ROOM_TRIGGER",
+	"tag_3": "PLAYER",
+	"tag_4": "BULLET",
+	"tag_5": "ENEMY",
+	"tag_6": "WALL"
+}
