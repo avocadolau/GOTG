@@ -61,6 +61,7 @@ void UIEditorPanel::DrawCanvasItems()
 		ImGui::SameLine();
 		ImGui::Text("%i", canvas->controls.at(i)->id);
 		ImGui::SameLine();
+		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))
 		{
 			elementSelected = i;
@@ -77,6 +78,7 @@ void UIEditorPanel::DrawCanvasItems()
 			gm.DestroyGuiControl(canvas->controls.at(i), canvas);
 			elementSelected = -1;
 		}
+		ImGui::PopID();
 	}
 	if(elementSelected > -1)OpenEditGuiControl(canvas->controls.at(elementSelected));
 	
