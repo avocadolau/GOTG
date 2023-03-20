@@ -21,6 +21,8 @@ size_t CreateEntityNamed(MonoString* name_entity, void* scene);
 
 MonoString* GetEntityName(size_t id, void* scene);
 
+size_t GetEntityByName(MonoString* name_entity, void* scene);
+
 void DestroyEntity(size_t eid, void* scene);
 
 size_t LoadPrefabIntr(const char* file);

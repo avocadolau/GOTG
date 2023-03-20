@@ -113,6 +113,23 @@ MonoString* GetEntityName(size_t id, void* scene)
 	return 	Wiwa::ScriptEngine::CreateString(_scene->GetEntityManager().GetEntityName(id));
 }
 
+size_t GetEntityByName(MonoString* name_entity, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	const char* name = mono_string_to_utf8(name_entity);
+
+	std::vector<EntityId>* ent = em.GetEntitiesAlive();
+	size_t count = em.GetEntityCount();
+	for (int i = 0; i < count; i++)
+	{
+		size_t id = ent->at(i);
+		if (strcmp(name,em.GetEntityName(id)))
+			return id;
+	}
+	return -1;
+}
+
 void DestroyEntity(size_t eid, void* scene)
 {
 	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;

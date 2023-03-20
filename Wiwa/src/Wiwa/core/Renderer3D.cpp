@@ -45,6 +45,7 @@ namespace Wiwa
 		// Init skinned
 		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned");
 		Shader *skinnedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedShaderId);
+
 		skinnedShader->Compile("resources/shaders/skinned/skinned");
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned", skinnedShader);
 		// Init skinned textured
