@@ -8,6 +8,10 @@
             InternalCalls.SendAIToPosition(entity_id, target_pos);
         }
 
+        public static void SendAIToPositionById(EntityId entity_id, EntityId target_id)
+        {
+            InternalCalls.SendAIToPositionById(entity_id, target_id);
+        }
     }
 }
 

@@ -140,6 +140,7 @@ namespace Wiwa
 		
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
+		WI_ADD_INTERNAL_CALL(SendAIToPositionById);
 
 		//animator
 		WI_ADD_INTERNAL_CALL(PlayAnimationName);

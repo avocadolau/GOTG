@@ -17,6 +17,7 @@ namespace WiwaApp
         ComponentIterator enemyIt;
         ComponentIterator characterStatsIt;
         ComponentIterator colliderIt;
+        ComponentIterator agentIt;
         bool debug = false;
         void Awake()
         {
@@ -27,6 +28,8 @@ namespace WiwaApp
             characterStatsIt.componentIndex = Constants.WI_INVALID_INDEX;
             colliderIt.componentId = Constants.WI_INVALID_INDEX;
             colliderIt.componentIndex = Constants.WI_INVALID_INDEX;
+            agentIt.componentId = Constants.WI_INVALID_INDEX;
+            agentIt.componentIndex = Constants.WI_INVALID_INDEX;
         }
 
         void Init()
@@ -35,6 +38,8 @@ namespace WiwaApp
             enemyIt = GetComponentIterator<Enemy>();
             characterStatsIt = GetComponentIterator<Character>();
             colliderIt = GetComponentIterator<CollisionBody>();
+            agentIt = GetComponentIterator<AgentAI>();
+
 
             //ref CollisionBody collBody = ref GetComponentByIterator<CollisionBody>(colliderIt);
             //collBody.selfTag = 4;
@@ -51,6 +56,13 @@ namespace WiwaApp
                 ref Enemy enemy = ref GetComponentByIterator<Enemy>(enemyIt);
                 enemy.hasFinished = true;
                // if (debug) Console.WriteLine("-- enemy deleted -- Enemy");
+            }
+
+            if (agentIt.componentIndex != Constants.WI_INVALID_INDEX)
+            {
+                ref Wiwa.AgentAI agent = ref GetComponentByIterator<Wiwa.AgentAI>(agentIt);
+                //Wiwa.AgentAIManager.SendAIToPosition(m_EntityId, );
+                
             }
         }
 
