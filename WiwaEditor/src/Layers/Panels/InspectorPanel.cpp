@@ -235,7 +235,7 @@ void InspectorPanel::DrawCollisionTags()
 	if (ImGui::BeginPopupModal("Edit Tags", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		static int selected = -1;
-		for (const auto& [key, value] : py.filterMap)
+		for (const auto& [key, value] : py.filterMapStringKey)
 		{
 			/*std::string tempStr = py.GetFilterTag(n);
 			int bits = 1 << n;
@@ -245,7 +245,7 @@ void InspectorPanel::DrawCollisionTags()
 			if (ImGui::Selectable(tagNameWitBits.c_str(), selected == value, ImGuiSelectableFlags_DontClosePopups))
 				selected = value;
 		}
-		/*for (int n = 0; n < py.filterMap.size(); n++)
+		/*for (int n = 0; n < py.filterMapStringKey.size(); n++)
 		{
 			std::string tempStr = py.GetFilterTag(n);
 			int bits = 1 << n;
@@ -259,7 +259,7 @@ void InspectorPanel::DrawCollisionTags()
 
 		if (ImGui::Button("Add", ImVec2(120, 0)))
 		{
-			if (!(py.filterMap.find(strBuf) != py.filterMap.end()))
+			if (!(py.filterMapStringKey.find(strBuf) != py.filterMapStringKey.end()))
 			{
 				py.AddFilterTag(strBuf);
 			}
@@ -502,30 +502,61 @@ void InspectorPanel::DrawCollisionBodyComponent(byte* data)
 	const char* comboPreviewValue = py.GetFilterTag(collisionBody->selfTag);  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
 	{
-		for (int n = 0; n < py.filterMap.size(); n++)
+		for (const auto& [key, value] : py.filterMapStringKey)
 		{
-			const bool is_selected = (collisionBody->selfTag == n);
-			if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
-				collisionBody->selfTag = n;
+			const bool is_selected = (collisionBody->selfTag == value);
+			std::string tagNameWitBits = key;
+			tagNameWitBits += "_" + std::to_string(value);
+			if (ImGui::Selectable(tagNameWitBits.c_str(), is_selected))
+				collisionBody->selfTag = value;
 
 			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 			if (is_selected)
 				ImGui::SetItemDefaultFocus();
 		}
 
+		//for (int n = 0; n < py.filterMapStringKey.size(); n++)
+		//{
+		//	const bool is_selected = (collisionBody->selfTag == n);
+		//	if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
+		//		collisionBody->selfTag = n;
+
+		//	// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+		//	if (is_selected)
+		//		ImGui::SetItemDefaultFocus();
+		//}
+
 		ImGui::EndCombo();
 	}
 
 	ImGui::Text("Collide with:");
-	for (int i = 0; i < py.filterMap.size(); i++)
+	for (const auto& [key, value] : py.filterMapStringKey)
 	{
-		bool local = (collisionBody->filterBits >> i) & 1; //Checking a bit
-		ImGui::Checkbox(py.GetFilterTag(i), &local);
+		bool local = (collisionBody->filterBits >> value) & 1; //Checking a bit
+		ImGui::Checkbox(key.c_str(), &local);
 		if (local)
-			collisionBody->filterBits |= 1 << i;
+			collisionBody->filterBits |= 1 << value;
 		else
-			collisionBody->filterBits &= ~(1 << i);
+			collisionBody->filterBits &= ~(1 << value);
+		///*std::string tempStr = py.GetFilterTag(n);
+		//int bits = 1 << n;
+		//tempStr += "_" + std::to_string(bits);*/
+		//std::string tagNameWitBits = key;
+		//tagNameWitBits += "_" + std::to_string(value);
+		//if (ImGui::Selectable(tagNameWitBits.c_str(), selected == value, ImGuiSelectableFlags_DontClosePopups))
+		//	selected = value;
 	}
+
+	//ImGui::Text("Collide with:");
+	//for (int i = 0; i < py.filterMapStringKey.size(); i++)
+	//{
+	//	bool local = (collisionBody->filterBits >> i) & 1; //Checking a bit
+	//	ImGui::Checkbox(py.GetFilterTag(i), &local);
+	//	if (local)
+	//		collisionBody->filterBits |= 1 << i;
+	//	else
+	//		collisionBody->filterBits &= ~(1 << i);
+	//}
 
 	// ImGui::Text("Do not collide with:");
 	// for (int i = 0; i < py.filterStrings.size(); i++)

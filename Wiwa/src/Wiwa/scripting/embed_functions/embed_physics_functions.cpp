@@ -14,6 +14,15 @@ void SetLinearVelocity(size_t id, glm::vec3 velocity)
     physicsManager.SetVelocity(obj, velocity);
 }
 
+glm::vec3 GetLinearVelocity(size_t id)
+{
+    Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+    Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
+    Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(id)->getBody();
+    return glm::vec3(obj->velocity.x(), obj->velocity.y(), obj->velocity.z());
+}
+
 bool AddBodyToLog(size_t id)
 {
     Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();

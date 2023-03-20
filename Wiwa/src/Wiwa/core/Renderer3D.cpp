@@ -485,12 +485,14 @@ namespace Wiwa
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
 				camera->frameBuffer->Bind(false);
 				glDepthFunc(GL_LEQUAL);
-				Shader *shader = m_DefaultSkybox.m_Material->getShader();
+				Shader* shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
-				shader->setUniform(shader->getViewLoc(), camera->getView());
+				glm::mat4 view = glm::mat4(glm::mat3(camera->getView()));
+				shader->setUniform(shader->getViewLoc(), view);
 				m_DefaultSkybox.Render();
 				shader->UnBind();
 				glDepthFunc(GL_LESS);

@@ -23,7 +23,7 @@ namespace Wiwa
 		static std::vector<int> s_RewardRooms;
 		static std::vector<int> s_ShopRooms;
 
-		static void StartRun();
+		static void InitHub();
 		static void NextRoom();
 		static void EndRun();
 

@@ -20,6 +20,7 @@ namespace Wiwa {
 		m_AwakeMethod = scriptClass.GetMethod("Awake", 0);
 		m_InitMethod = scriptClass.GetMethod("Init", 0);
 		m_UpdateMethod = scriptClass.GetMethod("Update", 0);
+		m_DestroyMethod = scriptClass.GetMethod("Destroy", 0);
 		
 		m_OnCollisionEnterMethod = scriptClass.GetMethod("OnCollisionEnter", 4);
 		m_OnCollisionMethod = scriptClass.GetMethod("OnCollision", 4);
@@ -48,6 +49,13 @@ namespace Wiwa {
 		if (!m_UpdateMethod) return;
 
 		scriptClass.InvokeMethod(m_SystemObject, m_UpdateMethod, NULL);
+	}
+
+	void SystemScriptClass::OnDestroy()
+	{
+		if (!m_DestroyMethod) return;
+
+		scriptClass.InvokeMethod(m_SystemObject, m_DestroyMethod, NULL);
 	}
 
 	void SystemScriptClass::OnCollisionEnter(Object* obj1, Object* obj2)
