@@ -28,6 +28,8 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	ResourceId modId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/model_icon.png");
 	ResourceId scrptId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/script_icon.png");
 	ResourceId shaderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/shader_icon.png");
+	ResourceId prefabId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/prefab_icon.png");
+	ResourceId sceneId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/scene_icon.png");
 	
 
 	m_FolderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(folderId)->GetTextureId();
@@ -36,6 +38,8 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	m_ScriptIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(scrptId)->GetTextureId();
 	m_ModelIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(modId)->GetTextureId();
 	m_ShaderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(shaderId)->GetTextureId();
+	m_PrefabIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(prefabId)->GetTextureId();
+	m_SceneIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(sceneId)->GetTextureId();
 
 	if (!std::filesystem::exists(s_AssetsPath))
 	{
@@ -146,6 +150,8 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 
 		Wiwa::ProjectManager::RemoveScene(name.string().c_str());
 	}
+	else if (assetsPath.extension() == ".wiprefab")
+		extension = ".wiprefab";
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -216,6 +222,12 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		std::filesystem::create_directories(rp);
 		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
+	else if (path.extension() == ".wiprefab") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
 }
 
 void AssetsPanel::Draw()
@@ -257,7 +269,8 @@ void AssetsPanel::Draw()
 			int id = 0;
 			for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentPath))
 			{
-				if (directoryEntry.path().extension() == ".meta")
+				if (directoryEntry.path().extension() == ".meta"
+				|| directoryEntry.path().extension() == ".json")
 					continue;
 				ImGui::TableNextColumn();
 				ImGui::PushID(id++);
@@ -272,17 +285,20 @@ void AssetsPanel::Draw()
 					ResourceId pngID = Wiwa::Resources::LoadNative<Wiwa::Image>(path.string().c_str());
 					texID = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(pngID)->GetTextureId();
 				}
-				if (ModelExtensionComp(directoryEntry.path()))
+				else if (ModelExtensionComp(directoryEntry.path()))
 					texID = m_ModelIcon;
-				if (MaterialExtensionComp(directoryEntry.path()))
+				else if (MaterialExtensionComp(directoryEntry.path()))
 					texID = m_MaterialIcon;
-				if (directoryEntry.path().extension() == ".cs")
+				else if (directoryEntry.path().extension() == ".cs")
 					texID = m_ScriptIcon;
-				if (directoryEntry.path().extension() == ".vs" 
+				else if (directoryEntry.path().extension() == ".vs"
 					|| directoryEntry.path().extension() == ".fs"
 					|| directoryEntry.path().extension() == ".gs")
 					texID = m_ShaderIcon;
-				
+				else if (directoryEntry.path().extension() == ".wiprefab")
+					texID = m_PrefabIcon;
+				else if (directoryEntry.path().extension() == ".wiscene")
+					texID = m_SceneIcon;
 
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::ImageButton(texID, { thumbnailSize, thumbnailSize }))
@@ -344,6 +360,21 @@ void AssetsPanel::Draw()
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_ENTITY"))
+				{
+					Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+					const EntityId* id = (EntityId*)payload->Data;
+					WI_INFO("Created prefab of Entity {0} at {1}", em.GetEntityName(*id), m_CurrentPath.string().c_str());
+					std::filesystem::path file = m_CurrentPath.string();
+					file /= em.GetEntityName(*id);
+					file += ".wiprefab";
+					em.SavePrefab(*id, file.string().c_str());
+				}
+				ImGui::EndDragDropTarget();
+			}
 		}
 		ImGui::EndTable();
 	}

@@ -677,6 +677,43 @@ namespace Wiwa {
 		return c_it;
 	}
 
+	inline byte* EntityManager::GetComponents(ComponentId id, size_t* size)
+	{
+		*size = m_ComponentsSize[id];
+		
+		return m_Components[id];
+	}
+
+	inline byte* EntityManager::GetComponentsByHash(ComponentHash hash, size_t* size)
+	{
+		ComponentId cid = GetComponentId(hash);
+
+		*size = m_ComponentsSize[cid];
+
+		return m_Components[cid];
+	}
+
+	bool EntityManager::IsComponentRemoved(ComponentId id, size_t index)
+	{
+		std::vector<size_t>& ids = m_ComponentsRemoved[id];
+		size_t s = ids.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (ids[i] == index) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	bool EntityManager::IsComponentRemovedByHash(ComponentHash hash, size_t index)
+	{
+		ComponentId cid = GetComponentId(hash);
+
+		return IsComponentRemoved(cid, index);
+	}
+
 	size_t EntityManager::GetComponentIndex(EntityId entityId, ComponentId componentId, size_t componentSize)
 	{
 		size_t index = -1;
@@ -795,9 +832,9 @@ namespace Wiwa {
 		std::vector<System*>& systems = m_EntitySystems[entityId];
 		size_t s_size = systems.size();
 
-		if (type->hash == (size_t)TypeHash::Rigidbody)
+		if (type->hash == (size_t)TypeHash::CollisionBody)
 		{
-			Wiwa::Rigidbody* rigidBody = (Wiwa::Rigidbody*)data;
+			Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
 			rigidBody->positionOffset = { 0,0,0 };
 			rigidBody->scalingOffset = { 1,1,1 };
 			rigidBody->isTrigger = false;

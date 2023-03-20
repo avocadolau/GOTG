@@ -211,9 +211,18 @@ namespace Wiwa
 		ComponentIterator GetComponentIterator(EntityId eid);
 
 		inline byte** GetComponentsPtr(ComponentId id) { return &m_Components[id]; }
-		inline byte* GetComponents(ComponentId id) { return m_Components[id]; }
+
+		inline byte* GetComponents(ComponentId id, size_t* size);
+		inline byte* GetComponentsByHash(ComponentHash hash, size_t* size);
+
 		template <class T>
 		T* GetComponents(size_t *size);
+
+		template<class T>
+		bool IsComponentRemoved(size_t index);
+
+		bool IsComponentRemoved(ComponentId id, size_t index);
+		bool IsComponentRemovedByHash(ComponentHash hash, size_t index);
 
 		inline std::vector<byte *> *GetComponentsList() { return &m_Components; }
 
@@ -319,6 +328,14 @@ namespace Wiwa
 		}
 
 		return (T *)(void *)components;
+	}
+
+	template<class T>
+	inline bool EntityManager::IsComponentRemoved(size_t index)
+	{
+		ComponentId cid = GetComponentId<T>();
+
+		return IsComponentRemoved(cid, index);
 	}
 
 	template <class T>

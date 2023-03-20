@@ -39,11 +39,11 @@ namespace Wiwa
 		//Method for canvas
 		GuiCanvas* CreateGuiCanvas(unsigned int id,bool active);
 		//Method for sliders
-		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds,unsigned int canvas_id, int callbackID);
+		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds,unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex);
 		//Method for buttons and checkboxes
-		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID);
+		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex);
 		//Method for strings
-		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, int callbackID);
+		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id);
 
 		void SwapSelectedCanvas(GuiCanvas* canvasToSelect);
 		void DestroyGuiControl(GuiControl* control, GuiCanvas* canvas);

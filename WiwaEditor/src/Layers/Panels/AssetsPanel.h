@@ -39,6 +39,8 @@ private:
 	ImTextureID m_ModelIcon;
 	ImTextureID m_ScriptIcon;
 	ImTextureID m_ShaderIcon;
+	ImTextureID m_PrefabIcon;
+	ImTextureID m_SceneIcon;
 
 	 
 	std::filesystem::path m_CurrentPath;

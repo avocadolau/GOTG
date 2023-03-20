@@ -5,6 +5,10 @@ namespace Wiwa
     using EntityId = System.UInt64;
     internal class InternalCalls
     {
+        #region Application
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void QuitIntr();
+        #endregion
         #region Log
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void NativeLog(string log, int param);
@@ -30,6 +34,11 @@ namespace Wiwa
         internal extern static void DestroyEntity(EntityId eid, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId LoadPrefabIntr(string file);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SavePrefabIntr(EntityId id, string file);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -49,7 +58,9 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool IsButtonPressedIntr(Gamepad gamepad, KeyCode button);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static float GetAxisIntr(Gamepad gamepad, GamepadAxis axis);
+        internal extern static float GetAxisIntr(Gamepad gamepad, GamepadAxis axis, float deadzone);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetRawAxisIntr(Gamepad gamepad, GamepadAxis axis, float deadzone);
         #endregion
         #region Time
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -62,6 +73,22 @@ namespace Wiwa
         internal extern static void SetTimeScaleIntr(float scale);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static float GetTimeScaleIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PlayIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PauseIntr();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PauseUnPauseIntr();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void UnPauseIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool IsPausedIntr();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool IsPlayingIntr();
         #endregion
         #region Camera
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -133,14 +160,13 @@ namespace Wiwa
         internal extern static void LoadSceneByIndex(ulong index, int flags);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void LoadSceneByName(string scene_name, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeSceneByIndex(ulong index, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeSceneByName(string scene_name, int flags);
         #endregion
         #region UI
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Play();
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool ChangeScene(int scene_id);
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static bool Quit();
+        
         #endregion
 
         #region Animations

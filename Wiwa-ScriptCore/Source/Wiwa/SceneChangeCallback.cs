@@ -4,23 +4,19 @@ using System.Runtime.Hosting;
 namespace Wiwa
 {
     [Callback]
-    class SceneChangeCallback
-    {
-        static void OnExecute(float x)
-        {
-            System.Console.WriteLine("PlayGame called");
-            Wiwa.InternalCalls.ChangeScene(0);
-           
-        }
-    }
-
-    [Callback]
     class PlayGame
     {
         static void OnExecute()
         {
-            System.Console.WriteLine("PlayGame called");
-            Wiwa.InternalCalls.Play();
+            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
+        }
+    }
+    [Callback]
+    class GoMainMenu
+    {
+        static void OnExecute()
+        {
+            InternalCalls.ChangeSceneByIndex(0, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
 
@@ -29,8 +25,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            System.Console.WriteLine("Quit called");
-            Wiwa.InternalCalls.Quit();
+            //Wiwa.InternalCalls.Quit();
         }
     }
 }

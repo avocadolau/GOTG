@@ -10,6 +10,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+
 #Fortran module files
 *.mod
 *.smod
@@ -20,7 +21,6 @@
 *.a
 
 # Executables
-
 *.out
 *.app
 *.sln
@@ -32,11 +32,12 @@
 
 # User content
 /Editor/WiwaEditor.exe
-/Editor/Assets
 /Editor/Wiwa.dll
 /Editor/Library
+/Editor/Assets/
+*.meta
 imgui.ini
-
+/Editor/config/panels.json
 # VA config
 
 /JSON/
@@ -50,15 +51,16 @@ Intermediates/
 *.lock
 *.com%002Ffwlink%002F%003Flinkid%003D835884
 Editor/.vs/AppAssembly/v17/.suo
-Editor/.vs/AppAssembly/v17/.suo
+Editor/.vs/AppAssembly/v16/.suo
 *.pdb
 *.ngfx-proj
 
 # Dlls
 Editor/resources/scripts/Wiwa-ScriptCore.dll
-
-Editor/.vs/AppAssembly/v16/.suo
+Editor/resources/scripts/Wiwa-AppAssembly.dll
 
 # Game build
 Editor/game/build
 Editor/game/.vs
+Editor/game/Wiwa.lib
+Editor/game/ImGui.lib

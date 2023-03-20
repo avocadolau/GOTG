@@ -184,7 +184,7 @@ namespace Wiwa {
 
 	void InstanceRenderer::UpdateInstancePosition(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot)
 	{
-		Vector2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex->scale.h };
+		Size2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex->scale.h };
 		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(position, s, pivot);
 	}
 
@@ -203,6 +203,11 @@ namespace Wiwa {
 	void InstanceRenderer::UpdateInstanceClip(uint32_t id, const TextureClip& clip)
 	{
 		m_InstanceVertex[id].textureClip = clip;
+	}
+
+	void InstanceRenderer::UpdateInstanceColor(uint32_t id, const Color4f& color)
+	{
+		m_InstanceVertex[id].color = color;
 	}
 
 	int InstanceRenderer::AddTexture(uint32_t texture)

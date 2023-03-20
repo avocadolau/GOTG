@@ -212,6 +212,7 @@ inline const Wiwa::Array<const Type*, count>* GetTypes() {
 // Enum of basic type hashes
 enum class TypeHash : size_t {
 	// Basic hashes
+	Bool = FNV1A_HASH("bool"),
 	Int32 = FNV1A_HASH("int"),
 	UInt32 = FNV1A_HASH("unsigned int"),
 	Int64 = FNV1A_HASH("__int64"),
@@ -246,7 +247,7 @@ enum class TypeHash : size_t {
 	DirectionalLight = FNV1A_HASH("DirectionalLight"),
 	SpotLight = FNV1A_HASH("SpotLight"),
 	AnimatorComponent = FNV1A_HASH("AnimatorComponent"),
-	Rigidbody = FNV1A_HASH("Rigidbody"),
+	CollisionBody = FNV1A_HASH("CollisionBody"),
 	ColliderCube = FNV1A_HASH("ColliderCube"),
 	ColliderCylinder = FNV1A_HASH("ColliderCylinder"),
 	ColliderSphere = FNV1A_HASH("ColliderSphere"),

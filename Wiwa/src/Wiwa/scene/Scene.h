@@ -58,13 +58,13 @@ namespace Wiwa {
 	protected:
 		virtual void ProcessInput() {}
 
-		virtual void UpdateEnter() {}
+		void UpdateEnter();
 		virtual void UpdateLoop() {}
-		virtual void UpdateLeave() {}
+		void UpdateLeave();
 
-		virtual void RenderEnter() {}
+		void RenderEnter();
 		virtual void RenderLoop() {}
-		virtual void RenderLeave() {}
+		void RenderLeave();
 
 		size_t mMaxTimeEntering, mMaxTimeLeaving = 0;
 
@@ -79,6 +79,8 @@ namespace Wiwa {
 	public:
 	private:
 		InstanceRenderer m_InstanceRenderer;
+
+		uint32_t m_TransitionInstance;
 
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;
