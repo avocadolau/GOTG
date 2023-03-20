@@ -19,14 +19,23 @@ namespace Wiwa
 	SceneId RoomManager::s_LastCombatRoom;
 	SceneId RoomManager::s_LastRewardRoom;
 	SceneId RoomManager::s_LastShopRoom;
+	int RoomManager::s_CurrentRoomsCount = 3;
 
 	void RoomManager::InitHub()
 	{
 		GameStateManager::SetRoomType(RoomType::ROOM_HUB);
+		GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 	}
 
-	void RoomManager::NextRoom()
+	int RoomManager::NextRoom()
 	{
+		if (s_CurrentRoomsCount <= 0)
+		{
+			GameStateManager::SetRoomType(RoomType::ROOM_HUB);
+			SceneManager::ChangeSceneByIndex(2);
+			return 1;
+		}
+
 		RoomType type = GameStateManager::GetType();
 		switch (type)
 		{
@@ -35,6 +44,7 @@ namespace Wiwa
 		case Wiwa::RoomType::ROOM_HUB:
 		{
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
+			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
@@ -42,6 +52,7 @@ namespace Wiwa
 		case Wiwa::RoomType::ROOM_COMBAT:
 		{
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
+			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			int nextRoom = s_LastRewardRoom;
 			while (nextRoom == s_LastRewardRoom)
 			{
@@ -54,6 +65,7 @@ namespace Wiwa
 		case Wiwa::RoomType::ROOM_REWARD:
 		{
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
+			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			int nextRoom = s_LastCombatRoom;
 			while (nextRoom == s_LastCombatRoom)
 			{
@@ -65,9 +77,11 @@ namespace Wiwa
 
 			s_RoomsToBoss--;
 			s_RoomsToShop--;
+			
 			if (s_RoomsToShop == 0)
 			{
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
+				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 				nextRoom = s_LastShopRoom;
 				while (nextRoom == s_LastShopRoom)
 				{
@@ -89,13 +103,22 @@ namespace Wiwa
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
 				SceneManager::LoadScene("RunBoss");
 			}
+			else
+			{
+				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
+				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
+				int nextRoom = RAND(0, s_CombatRooms.size() - 1);
+				SceneId id = s_CombatRooms[nextRoom];
+				SceneManager::ChangeSceneByIndex(id);
+			}
 			
 		}break;
 		default:
 			break;
 		}
-
-		SceneManager::getActiveScene()->GetPhysicsManager().OnLoad("game_tags");
+		s_CurrentRoomsCount--;
+		return 1;
+		//SceneManager::getActiveScene()->GetPhysicsManager().OnLoad("game_tags");
 	}
 
 	void RoomManager::EndRun()

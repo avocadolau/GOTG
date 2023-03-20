@@ -40,7 +40,9 @@ namespace Wiwa
 
 	void GameStateManager::UpdateRoomState()
 	{
-		QuerySpawners();
+
+		if (s_RoomType == RoomType::ROOM_COMBAT)
+			UpdateCombatRoom();
 
 		if (s_HasFinshedRoom)
 		{
@@ -52,14 +54,15 @@ namespace Wiwa
 
 		if (s_PlayerTriggerNext && s_RoomState == RoomState::STATE_AWAITING_NEXT)
 		{
-			/*EndCurrentRoom();
-			StartNewRoom();*/
+			EndCurrentRoom();
+			StartNewRoom();
 		}
 	}
 
-	void GameStateManager::QuerySpawners()
+	void GameStateManager::UpdateCombatRoom()
 	{
 		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		em.RegisterComponent<EnemySpawner>();
 		size_t size = 0;
 		ComponentHash cmpHash = FNV1A_HASH("EnemySpawner");
 		Wiwa::EnemySpawner* enemySpawnerList = (Wiwa::EnemySpawner*)em.GetComponentsByHash(cmpHash, &size);
@@ -103,14 +106,24 @@ namespace Wiwa
 
 	void GameStateManager::StartNewRoom()
 	{
-		ResetBooleans();
+		s_PlayerTriggerNext = false;
 		LoadProgression();
 		Wiwa::RoomManager::NextRoom();
-		ChangeRoomState(RoomState::STATE_STARTED);
+
+		if (s_RoomType == RoomType::ROOM_REWARD || s_RoomType == RoomType::ROOM_SHOP || s_RoomType == RoomType::ROOM_HUB)
+		{
+			s_HasFinshedRoom = true;
+			s_CanPassNextRoom = true;
+		}
 	}
 
 	void GameStateManager::EndCurrentRoom()
 	{
+		if (s_RoomType == RoomType::ROOM_COMBAT)
+		{
+			ResetCombatRoomData();
+			ResetBooleans();
+		}
 		ChangeRoomState(RoomState::STATE_TRANSITIONING);
 		SaveProgression();
 	}

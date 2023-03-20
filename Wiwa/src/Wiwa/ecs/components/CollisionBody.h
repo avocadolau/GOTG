@@ -26,5 +26,7 @@ REFLECTION_BEGIN(Wiwa::CollisionBody)
 	REFLECT_MEMBER(scalingOffset)
 	REFLECT_MEMBER(isTrigger)
 	REFLECT_MEMBER(isStatic)
+	REFLECT_MEMBER(doContinuousCollision)
+	REFLECT_MEMBER(selfTag)
 	REFLECT_MEMBER(filterBits)
 REFLECTION_END;
