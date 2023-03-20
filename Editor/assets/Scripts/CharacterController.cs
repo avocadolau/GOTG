@@ -53,7 +53,7 @@ namespace Game
         float referenceX;
         float referenceZ;
 
-        
+
         Vector3 lastPlayerPos;
         //enum PlayerState
         //{
@@ -73,7 +73,7 @@ namespace Game
 
             campos.y = transform.Position.y + 20;
             campos.x = transform.Position.x;
-            campos.z = transform.Position.z;
+            campos.z = transform.Position.z - 5;
 
             referenceZ = transform.Position.z;
             referenceX = transform.Position.x;
@@ -128,10 +128,10 @@ namespace Game
 
             if (rayCastTimer > 250.0f)
             {
-                leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 15, transform.Position.y, transform.Position.z));
-                rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 15, transform.Position.y, transform.Position.z));
-                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 15));
-                lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 15));
+                leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 7, transform.Position.y, transform.Position.z));
+                rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 7, transform.Position.y, transform.Position.z));
+                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7));
+                lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 7));
 
                 rayCastTimer = 0;
                 //Console.WriteLine("Left ray Wall distance" + leftRayWallDistance);
@@ -153,8 +153,8 @@ namespace Game
                 if (System.Math.Abs(shootX) > 0.5f || System.Math.Abs(shootY) > 0.5f)
                 {
                     // Shoot sound
-                    Console.WriteLine("TEST");
-                    
+
+
                     //PlayMusic("player_shoot");
                     //PlayAudioEvent("player_shoot");
                     Vector3 bulletDir = new Vector3(shootX, 0, shootY);
@@ -163,7 +163,7 @@ namespace Game
                 else if (Input.IsKeyDown(KeyCode.Space))
                 {
                     // Shoot sound
-                    
+
                     //PlayAudioEvent("player_shoot");
                     Vector3 bulletDir = new Vector3(0, 0, 1);
                     SpawnBullet(ref character, new Vector3(0, 0, 0), bulletDir, 0);
@@ -192,16 +192,16 @@ namespace Game
 
             if (finalVelocity != Vector3Values.zero)
             {
-                if (Mathf.Abs(finalVelocity.x)> character.maxVelocity*0.3 || Mathf.Abs(finalVelocity.z) > character.maxVelocity * 0.3)
+                if (Mathf.Abs(finalVelocity.x) > character.maxVelocity * 0.3 || Mathf.Abs(finalVelocity.z) > character.maxVelocity * 0.3)
                 {
                     Animator.PlayAnimationName("run", m_EntityId);
-                    
+
                 }
                 else Animator.PlayAnimationName("walk", m_EntityId);
             }
             else Animator.PlayAnimationName("idle", m_EntityId);
 
-            Console.WriteLine("Vx: " + PhysicsManager.GetLinearVelocity(m_EntityId).x + "Vz: " + PhysicsManager.GetLinearVelocity(m_EntityId).z);
+
 
 
             Vector3 rotDirection = new Vector3(0, 0, 0);
@@ -211,8 +211,7 @@ namespace Game
                 if (direction != Vector3Values.zero)
                 {
                     float angle = CalculateRotation(direction, forward);
-                    Console.WriteLine("NEWANGLES: " + angle);
-                    Console.WriteLine("ACTUAL ROTATION: " + transform.LocalRotation.y);
+
 
                     if (angle > 25)
                     {
@@ -225,8 +224,7 @@ namespace Game
             else
             {
                 float angle = CalculateRotation(rotDirection, forward);
-                Console.WriteLine("NEWANGLES: " + angle);
-                Console.WriteLine("ACTUAL ROTATION: " + transform.LocalRotation.y);
+
 
                 if (angle > 25)
                 {
@@ -318,7 +316,7 @@ namespace Game
 
             float minCamVelocity = 0.0f;
             float maxCamVelocity = 0.3f;
-            
+
             float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 20), 0, 25);
             float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 25);
 
@@ -327,7 +325,7 @@ namespace Game
 
             campos.z += finalCamSpeed_Z;
             campos.x += finalCamSpeed_X;
-           
+
 
             CameraManager.SetPosition(cam_id, campos);
             CameraManager.SetCameraRotation(cam_id, new Vector3(90, -70, 0));
