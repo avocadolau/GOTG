@@ -87,7 +87,14 @@ namespace Wiwa {
 			return glm::vec3(yaw, pitch, roll);
 		}
 
+		void EmitBatch();
+		void Play();
+		void Stop();
 	private:
+
+		ParticleEmitter* emitter;
+
+		EntityManager::ComponentIterator m_emitterComponent;
 
 		void DeleteParticleSystem();
 

@@ -446,6 +446,13 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 	ImGui::Text("Emitter Parameters");
 	ImGui::Separator();
 
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Checkbox("##isPlaying", &emitter->isPlaying);
+	ImGui::SameLine();
+	ImGui::Text("Playing");
+
 	ImGui::Dummy(ImVec2(0, 4));
 
 	ImGui::Checkbox("##repeat", &emitter->repeat);
@@ -857,6 +864,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 						bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(pathS.c_str());
 
 						emitter->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
+						emitter->texturePath = pathS;
 
 						if (emitter->textId1 == WI_INVALID_INDEX)
 						{
@@ -866,7 +874,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 						else
 						{
 							emitter->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(emitter->textId1);
-
+							
 							/*std::string test = "texture id: " + std::to_string(emitter->texture->GetTextureId());
 
 							WI_CORE_INFO(test);*/

@@ -19,6 +19,7 @@
 #include "embed_functions/embed_screen_functions.h"
 #include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
+#include "embed_functions/embed_particles_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -110,5 +111,9 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(Play);
 		WI_ADD_INTERNAL_CALL(ChangeScene);
 		WI_ADD_INTERNAL_CALL(Quit);
+
+		//Particles
+		WI_ADD_INTERNAL_CALL(EmitterEmitBatch);
+
 	}
 }

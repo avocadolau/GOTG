@@ -13,7 +13,7 @@ namespace Wiwa {
 
 		Material m_material;
 
-		//Emiter parameters
+		//Emitter parameters
 		float	particle_rate;
 		bool	particle_rate_isRanged;
 		float	particle_rate_range[2];
@@ -28,6 +28,8 @@ namespace Wiwa {
 		float	particle_lifetime;
 		bool	particle_lifetime_isRanged;
 		float	particle_lifetime_range[2];
+
+		bool isPlaying = true;
 
 		//std::list<ColorTime> particle_color;
 
@@ -73,7 +75,7 @@ namespace Wiwa {
 
 		ResourceId textId1 = -4;
 		Image* texture = nullptr;
-
+		std::string texturePath;
 	};
 }
 

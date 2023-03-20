@@ -38,12 +38,16 @@ namespace Wiwa {
 	void ParticleEmitterExecutor::OnUpdate()
 	{
 
-		ParticleEmitter* emitter = GetComponent<ParticleEmitter>();
+		emitter = GetComponent<ParticleEmitter>();
 
-		dt = Time::GetRealDeltaTime() / 1000;
+		
 
 		if (emitter)
 		{
+
+			dt = Time::GetRealDeltaTime() / 1000;
+
+
 			if (timer <= 0)
 			{
 				if (emitter->repeat)
@@ -62,7 +66,11 @@ namespace Wiwa {
 			}
 			else
 			{
-				timer -= dt;
+				if (emitter->isPlaying)
+				{
+					timer -= dt;
+
+				}
 
 			}
 
@@ -365,6 +373,15 @@ namespace Wiwa {
 
 	void ParticleEmitterExecutor::OnSystemAdded() // Called when system added to the editor
 	{
+		m_emitterComponent = GetComponentIterator<ParticleEmitter>();
+		Wiwa::ParticleEmitter* emitter = GetComponentByIterator<Wiwa::ParticleEmitter>(m_emitterComponent);
+
+		if (emitter &&!emitter->texturePath.empty())
+		{
+			emitter->textId1 = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+
+			emitter->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(emitter->textId1);
+		}
 
 	}
 
@@ -574,6 +591,36 @@ namespace Wiwa {
 	void ParticleEmitterExecutor::OnSystemRemoved() // Called when system removed to the editor
 	{
 
+	}
+
+	void ParticleEmitterExecutor::EmitBatch()
+	{
+		AddParticles();
+	}
+
+	void ParticleEmitterExecutor::Play()
+	{
+		if (emitter)
+		{
+			emitter->isPlaying = true;
+
+			if (emitter->particle_rate_isRanged)
+			{
+				timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
+			}
+			else
+			{
+				timer = emitter->particle_rate;
+			}
+		}
+	}
+
+	void ParticleEmitterExecutor::Stop()
+	{
+		if (emitter)
+		{
+			emitter->isPlaying = false;
+		}
 	}
 
 	void ParticleEmitterExecutor::DeleteParticleSystem()

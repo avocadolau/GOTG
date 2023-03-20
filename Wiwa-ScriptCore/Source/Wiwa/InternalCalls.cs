@@ -139,5 +139,10 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Quit();
         #endregion
+        #region Particles
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void EmitterEmitBatch(EntityId entity);
+
+        #endregion
     }
 }
