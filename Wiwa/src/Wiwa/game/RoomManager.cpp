@@ -11,8 +11,8 @@ namespace Wiwa
 	std::vector<SceneId> RoomManager::s_ShopRooms;
 
 	SceneId RoomManager::s_CurrentRoomIndx;
-	SceneId RoomManager::s_RoomsToShop;
-	SceneId RoomManager::s_RoomsToBoss;
+	SceneId RoomManager::s_RoomsToShop = 10;
+	SceneId RoomManager::s_RoomsToBoss = 20;
 	SceneId RoomManager::s_IntroductionRoom;
 	SceneId RoomManager::s_LastCombatRoom;
 	SceneId RoomManager::s_LastRewardRoom;
@@ -61,12 +61,34 @@ namespace Wiwa
 			s_LastCombatRoom = nextRoom;
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
+
+			s_RoomsToBoss--;
+			s_RoomsToShop--;
+			if (s_RoomsToShop == 0)
+			{
+				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
+				nextRoom = s_LastShopRoom;
+				while (nextRoom == s_LastShopRoom)
+				{
+					nextRoom = RAND(0, s_ShopRooms.size() - 1);
+				}
+				id = s_ShopRooms[id];
+				SceneManager::ChangeSceneByIndex(id);
+				s_RoomsToShop = 10;
+			}
 		}break;
 		case Wiwa::RoomType::ROOM_BOSS:
-			break;
+		{
+			SceneManager::ChangeSceneByName("RunEnd");
+		}break;
 		case Wiwa::RoomType::ROOM_SHOP: 
 		{
-
+			if (s_RoomsToBoss == 0)
+			{
+				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
+				SceneManager::LoadScene("RunBoss");
+			}
+			
 		}break;
 		default:
 			break;
