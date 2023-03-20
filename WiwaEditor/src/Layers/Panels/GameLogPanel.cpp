@@ -50,8 +50,9 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 void GameLogPanel::DrawRoomVariables()
 {
 	ImGui::Separator();
-	ImGui::Text("Rooms to boss", Wiwa::RoomManager::s_RoomsToBoss);
-	ImGui::Text("Rooms to shop", Wiwa::RoomManager::s_RoomsToShop);
+	ImGui::Text("Rooms to boss %d", Wiwa::RoomManager::s_RoomsToBoss);
+	ImGui::Text("Rooms to shop %d", Wiwa::RoomManager::s_RoomsToShop);
+	ImGui::Text("Rooms to end and return tu hub %d", Wiwa::RoomManager::s_CurrentRoomsCount);
 	ImGui::Separator();
 	ImGui::PushID(0);
 	ImGui::Text("Battle rooms");

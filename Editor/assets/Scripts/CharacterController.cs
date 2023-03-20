@@ -416,11 +416,6 @@ namespace Game
                 {
                     wallCollision = true;
                 }
-                else if (str2 == "END_TRIGGER")
-                {
-                    GameState.SetRoomStateTriggerNext(true);
-                    Console.WriteLine("Trigger true ");
-                }
                 //Console.WriteLine("wall hit!!! ");
             }
         }
@@ -434,11 +429,6 @@ namespace Game
                 if (str2 == "WALL")
                 {
                     wallCollision = false;
-                }
-                else if (str2 == "END_TRIGGER")
-                {
-                    GameState.SetRoomStateTriggerNext(false);
-                    Console.WriteLine("Trigger false ");
                 }
                 //Console.WriteLine("wall hit!!! ");
             }

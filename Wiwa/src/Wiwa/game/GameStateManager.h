@@ -86,7 +86,7 @@ namespace Wiwa {
 		static void LoadPlayer(Character& character);
 
 		static void UpdateRoomState();
-		static void QuerySpawners();
+		static void UpdateCombatRoom();
 
 		// Run and rooms
 		static void StartRun();
@@ -96,6 +96,7 @@ namespace Wiwa {
 		static void EndCurrentRoom();
 
 		inline static void SetRoomType(RoomType type) { s_RoomType = type; }
+		inline static void SetRoomState(RoomState type) { s_RoomState = type; }
 		inline static RoomType GetType() { return s_RoomType; }
 
 		static void LogRoomState();

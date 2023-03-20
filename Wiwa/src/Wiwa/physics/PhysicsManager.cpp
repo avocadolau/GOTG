@@ -574,7 +574,6 @@ namespace Wiwa {
 
 	const char* PhysicsManager::GetFilterTag(int index)
 	{
-
 		return filterMapIntKey[index].c_str();
 		//return filterStrings[index].c_str();
 		/*for (const auto& [key, value] : filterMapStringKey)
