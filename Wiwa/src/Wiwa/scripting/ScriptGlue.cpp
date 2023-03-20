@@ -127,8 +127,6 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 
 		// UI
-		WI_ADD_INTERNAL_CALL(Play);
-		WI_ADD_INTERNAL_CALL(ChangeScene);
-		WI_ADD_INTERNAL_CALL(Quit);
+		
 	}
 }
