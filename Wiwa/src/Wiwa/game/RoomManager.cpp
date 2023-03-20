@@ -14,6 +14,9 @@ namespace Wiwa
 	SceneId RoomManager::s_RoomsToShop;
 	SceneId RoomManager::s_RoomsToBoss;
 	SceneId RoomManager::s_IntroductionRoom;
+	SceneId RoomManager::s_LastCombatRoom;
+	SceneId RoomManager::s_LastRewardRoom;
+	SceneId RoomManager::s_LastShopRoom;
 
 	void RoomManager::StartRun()
 	{

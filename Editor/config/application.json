@@ -2,5 +2,5 @@
     "vsync": false,
     "fullscreen": false,
     "resizable": true,
-    "project_file": "Editor\\config\\project.wiproject"
+    "project_file": "config\\project.wiproject"
 }
