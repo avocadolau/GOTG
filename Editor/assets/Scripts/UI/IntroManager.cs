@@ -29,6 +29,7 @@ namespace Game
                 || Input.IsKeyDown(KeyCode.Space)
                 || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA))
             {
+                Audio.StopAllEvents();
                 SceneManager.ChangeScene(1);
             }
         }

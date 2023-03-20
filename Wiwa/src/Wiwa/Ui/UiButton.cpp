@@ -4,6 +4,7 @@
 #include <Wiwa/utilities/Log.h>
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -61,6 +62,7 @@ namespace Wiwa
 				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
 					clicked = false;
+					Audio::PostEvent("character_selection");
 					if(callback)
 						callback->Execute();
 				}
