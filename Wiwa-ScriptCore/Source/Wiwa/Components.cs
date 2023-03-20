@@ -139,7 +139,7 @@
     //    public int bulletTag;
     //    public int collisionTag1;
     //}
-
+    #endregion
     #region AgentAI
     [Component]
     public struct AgentAI
