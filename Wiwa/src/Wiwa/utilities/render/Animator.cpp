@@ -209,8 +209,8 @@ namespace Wiwa {
 
 		glm::mat4 globalTransformation = parentTransform * nodeTransform;
 
-		WI_INFO("{}\n", nodeName.c_str());
-		m_CurrentAnimation->PrintGlmMatrix(globalTransformation);
+		//WI_INFO("{}\n", nodeName.c_str());
+		//m_CurrentAnimation->PrintGlmMatrix(globalTransformation);
 
 		auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
 		if (boneInfoMap.find(nodeName) != boneInfoMap.end())

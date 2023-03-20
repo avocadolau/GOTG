@@ -8,6 +8,21 @@ namespace Wiwa
         {
             InternalCalls.PlayAnimationName(name, entity);
         }
+
+        public static void PlayAnimation(EntityId entity)
+        {
+            InternalCalls.PlayAnimation(entity);
+        }
+
+        public static void PauseAnimation(EntityId entity)
+        {
+            InternalCalls.PlayAnimation(entity);
+        }
+
+        public static void RestartAnimation(EntityId entity)
+        {
+            InternalCalls.PlayAnimation(entity);
+        }
     }
 
 }
