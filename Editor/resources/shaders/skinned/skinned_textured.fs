@@ -166,5 +166,5 @@ void main()
         totalLight += CalcSpotLight(u_SpotLights[i], normal);
     }
 
-    FragColor = texture2D(u_Texture, TexCoord.xy) *totalLight;
+    FragColor = texture2D(u_Texture, TexCoord.xy) * totalLight;
 }

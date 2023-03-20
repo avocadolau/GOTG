@@ -14,8 +14,6 @@ out vec3 LocalPos;
 out vec2 TexCoord;
 out vec4 LightSpacePos;
 
-const int MAX_BONES = 200;
-
 uniform mat4 u_Model;
 uniform mat4 u_Proj;
 uniform mat4 u_View;
