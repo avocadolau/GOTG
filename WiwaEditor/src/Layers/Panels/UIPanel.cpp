@@ -61,19 +61,6 @@ void UIPanel::Draw()
 	ImGui::End();
 }
 
-void UIPanel::OnEvent(Wiwa::Event& e)
-{
-	Wiwa::EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<SceneChangeEvent>({ &UIPanel::OnSceneChange, this });
-
-}
-
-bool UIPanel::OnSceneChange(SceneChangeEvent& e)
-{
-	//UI_element_selected = -1;
-	return true;
-}
-
 void UIPanel::DrawGuiElementSelection()
 {
 	const char* items[] = {"Button", "Slider", "CheckBox", "Image","Text"};
@@ -171,8 +158,10 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateButton");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -197,8 +186,17 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	size_t cbcount = app.GetCallbacksCount();
 
+	if (current_item == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			Wiwa::Callback* cb = app.getCallbackAt(i);
+
+			if (cb->getParamCount() == 0) {
+				current_item = i;
+			}
+		}
+	}
+
 	if (cbcount > 0) {
-		current_item = 0;
 		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
@@ -208,12 +206,14 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
-				{
-					current_item = n;
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				current_cb = app.getCallbackAt(n);
+				if (current_cb->getParamCount() == 0) {
+					if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+					}
 				}
 			}
 			ImGui::EndCombo();
@@ -227,9 +227,14 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect);
 	}
 
 	ImGui::PopID();
@@ -239,8 +244,12 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateSlider");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Slider origin position", sliderOriginPos);
+	ImGui::InputInt2("Slider origin size", sliderOriginSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -282,8 +291,19 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	size_t cbcount = app.GetCallbacksCount();
 
+	if (current_item == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			Wiwa::Callback* cb = app.getCallbackAt(i);
+
+			if (cb->getParamCount() == 1) {
+				if (cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+					current_item = i;
+				}
+			}
+		}
+	}
+
 	if (cbcount > 0) {
-		current_item = 0;
 		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
@@ -293,10 +313,10 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (cb->getParamCount() == 1) {
-					if (cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-						if (ImGui::Selectable(cb->getName().c_str(), is_selected))
+				current_cb = app.getCallbackAt(n);
+				if (current_cb->getParamCount() == 1) {
+					if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+						if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 						{
 							current_item = n;
 							if (is_selected)
@@ -316,14 +336,26 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
+		rect.width = size[0];
+		rect.height = size[1];
 		Wiwa::Rect2i rect2;
 		rect2.x = rect.x - (rect.width / 2);
 		rect2.y = rect.y;
 		rect2.width = (rect.width / 100);
 		rect2.height = rect.height;
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID);
+
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+
+		Wiwa::Rect2i sliderOriginRect;
+		sliderOriginRect.x = originPos[0];
+		sliderOriginRect.y = originPos[1];
+		sliderOriginRect.width = originSize[0];
+		sliderOriginRect.height = originSize[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID,originRect,sliderOriginRect);
 	}
 
 	ImGui::PopID();
@@ -333,8 +365,10 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateImage");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -359,8 +393,17 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	size_t cbcount = app.GetCallbacksCount();
 
+	if (current_item == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			Wiwa::Callback* cb = app.getCallbackAt(i);
+
+			if (cb->getParamCount() == 0) {
+				current_item = i;
+			}
+		}
+	}
+
 	if (cbcount > 0) {
-		current_item = 0;
 		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
@@ -370,13 +413,17 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
-				{
-					current_item = n;
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				current_cb = app.getCallbackAt(n);
+				
+				if (current_cb->getParamCount() == 0) {
+					if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+					}
 				}
+				
 			}
 			ImGui::EndCombo();
 		}
@@ -389,9 +436,14 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect);
 	}
 
 	ImGui::PopID();
@@ -402,8 +454,8 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateText");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("position", position);
-	ImGui::InputFloat2("size", size);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	ImGui::InputText("String", (char*)pathForAsset.c_str(),64);
 
 	if (ImGui::Button("Create Text"))
@@ -411,9 +463,9 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id,callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id);
 	}
 	ImGui::PopID();
 }
@@ -422,8 +474,10 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	ImGui::PushID("CreateCheckbox");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::InputFloat2("Position", position);
-	ImGui::InputFloat2("Size", size);
+	ImGui::InputInt2("Origin position", originPos);
+	ImGui::InputInt2("Origin size", originSize);
+	ImGui::InputInt2("Position", position);
+	ImGui::InputInt2("Size", size);
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -465,8 +519,19 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 
 	size_t cbcount = app.GetCallbacksCount();
 
+	if (current_item == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			Wiwa::Callback* cb = app.getCallbackAt(i);
+
+			if (cb->getParamCount() == 1) {
+				if (cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
+					current_item = i;
+				}
+			}
+		}
+	}
+
 	if (cbcount > 0) {
-		current_item = 0;
 		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
@@ -476,12 +541,18 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				Wiwa::Callback* cb = app.getCallbackAt(n);
-				if (ImGui::Selectable(cb->getName().c_str(), is_selected))
-				{
-					current_item = n;
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+				current_cb = app.getCallbackAt(n);
+				if (current_cb->getParamCount() == 1) {
+					const Type* param = current_cb->getParamAt(0);
+
+					if (param->hash == (size_t)TypeHash::Bool) {
+						if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						{
+							current_item = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
 				}
 			}
 			ImGui::EndCombo();
@@ -495,10 +566,38 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
 		rect.y = position[1];
-		rect.height = size[0];
-		rect.width = size[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID);
+		rect.width = size[0];
+		rect.height = size[1];
+		Wiwa::Rect2i originRect;
+		originRect.x = originPos[0];
+		originRect.y = originPos[1];
+		originRect.width = originSize[0];
+		originRect.height = originSize[1];
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID,originRect);
 	}
 
 	ImGui::PopID();
+}
+
+void UIPanel::OnEvent(Wiwa::Event& e)
+{
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<SceneChangeEvent>({ &UIPanel::OnSceneChange, this });
+
+}
+
+bool UIPanel::OnSceneChange(SceneChangeEvent& e)
+{
+	canvasSelected = -1;
+	elementSelected = -1;
+	position[0] = 0; position[1] = 0;
+	size[0] = 0; size[1] = 0;
+	originPos[0] = 0; originPos[1] = 0;
+	originSize[0] = 0; originSize[1] = 0;
+	sliderOriginPos[0] = 0; sliderOriginPos[1] = 0;
+	sliderOriginSize[0] = 0; sliderOriginSize[1] = 0;
+	callbackID = WI_INVALID_INDEX;
+	pathForAsset = "";
+	pathForExtraAsset = "";
+	return true;
 }

@@ -89,6 +89,9 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(LoadSceneByIndex);
 		WI_ADD_INTERNAL_CALL(LoadSceneByName);
 
+		WI_ADD_INTERNAL_CALL(ChangeSceneByIndex);
+		WI_ADD_INTERNAL_CALL(ChangeSceneByName);
+
 		//Screen
 
 		WI_ADD_INTERNAL_CALL(SetFullscreenIntr);

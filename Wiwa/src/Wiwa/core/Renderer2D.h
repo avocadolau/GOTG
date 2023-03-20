@@ -72,6 +72,7 @@ namespace Wiwa
 		void UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Size2i& size);
 		void UpdateInstancedQuadTexClip(Scene* scene, uint32_t id, const Size2i& srcSize, const Rect2i& clip);
 		void UpdateInstancedQuadTexTexture(Scene* scene, uint32_t id, uint32_t tex_id);
+		void UpdateInstancedQuadTexColor(Scene* scene, uint32_t id, const Color4f& color);
 
 		void UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color);
 

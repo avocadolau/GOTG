@@ -216,6 +216,7 @@ inline const Wiwa::Array<const Type*, count>* GetTypes() {
 // Enum of basic type hashes
 enum class TypeHash : size_t {
 	// Basic hashes
+	Bool = FNV1A_HASH("bool"),
 	Int32 = FNV1A_HASH("int"),
 	UInt32 = FNV1A_HASH("unsigned int"),
 	Int64 = FNV1A_HASH("__int64"),
