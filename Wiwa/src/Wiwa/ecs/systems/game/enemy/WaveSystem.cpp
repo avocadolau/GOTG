@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "WaveSystem.h"
 #include "../../PhysicsSystem.h"
+#include "../../AgentAISystem.h"
 
 #include <random>
 namespace Wiwa
@@ -127,13 +128,22 @@ namespace Wiwa
 		collBodyPtr->filterBits = 1 << 0;
 
 		Character stats;
-		stats.healthPoints = 60;
-		stats.damage = 0;
-		stats.range = 0;
-		stats.rof = 0;
+		stats.healthPoints = 30;
+		stats.damage = 10;
+		stats.range = 3;//shord distance
+		stats.rof = 1;
 		stats.shieldRegeneration = 0;
-		stats.speed = 0;
+		stats.speed = 1.5f;
 		entityManager.AddComponent<Character>(newEnemyId, stats);
+
+		// AgentAI component
+
+		AgentAI agent;
+		agent.speed = stats.speed;
+		agent.target = { 0,0,0 };
+		AgentAI* agentPtr = entityManager.AddComponent<AgentAI>(newEnemyId, agent);
+		agentPtr->speed = stats.speed;
+		agentPtr->target = { 0,0,0 };
 
 		// Create a enemy component and enemy system
 		Enemy enemy;
@@ -148,6 +158,7 @@ namespace Wiwa
 
 		entityManager.ApplySystem(newEnemyId, sysHash);
 		entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
+		entityManager.ApplySystem<Wiwa::AgentAISystem>(newEnemyId);
 
 	}
 
