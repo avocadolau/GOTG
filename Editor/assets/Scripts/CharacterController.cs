@@ -126,21 +126,17 @@ namespace Game
 
             rayCastTimer += Time.DeltaTimeMS();
 
-            leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 7, transform.Position.y, transform.Position.z));
-            rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 7, transform.Position.y, transform.Position.z));
-            upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7));
-            lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 7));
-      
             if (rayCastTimer > 250.0f)
             {
-                //leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 7, transform.Position.y, transform.Position.z));
-                //rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 7, transform.Position.y, transform.Position.z));
-                //upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7));
-                //lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 7));
-                Console.WriteLine("LEFT RAY: " + leftRayWallDistance);
-                Console.WriteLine("RIGHT RAY: " + rightRayWallDistance);
-                Console.WriteLine("UPPER RAY: " + upperRayWallDistance);
-                Console.WriteLine("LOWER RAY: " + lowerRayWallDistance);
+                leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 7, transform.Position.y, transform.Position.z));
+                rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 7, transform.Position.y, transform.Position.z));
+                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7));
+                lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 7));
+        
+                //Console.WriteLine("LEFT RAY: " + leftRayWallDistance);
+                //Console.WriteLine("RIGHT RAY: " + rightRayWallDistance);
+                //Console.WriteLine("UPPER RAY: " + upperRayWallDistance);
+                //Console.WriteLine("LOWER RAY: " + lowerRayWallDistance);
                 rayCastTimer = 0;
                 //Console.WriteLine("Left ray Wall distance" + leftRayWallDistance);
             }

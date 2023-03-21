@@ -174,6 +174,7 @@ namespace Wiwa
 
 	void Scene::ChangeScene(size_t scene, int flags)
 	{
+		WI_INFO("ChangeScene() with scene: {}", scene);
 		m_SceneToChange = scene;
 		m_SceneChangeFlags = flags;
 		m_CurrentState = SCENE_LEAVING;

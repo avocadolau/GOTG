@@ -823,7 +823,8 @@ namespace Wiwa
 	}
 
 	void SceneManager::ChangeSceneByIndex(SceneId sceneId, int flags)
-	{		
+	{	
+		WI_INFO("ChangeSceneByIndex() with sceneId: {}", sceneId);
 		m_Scenes[m_ActiveScene]->ChangeScene(sceneId, flags);
 	}
 }

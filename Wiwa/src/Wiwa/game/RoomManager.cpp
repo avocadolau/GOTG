@@ -30,6 +30,7 @@ namespace Wiwa
 
 	int RoomManager::NextRoom()
 	{
+		WI_INFO("ROOM STATE: NextRoom()");
 		if (s_CurrentRoomsCount <= 0)
 		{
 			GameStateManager::SetRoomType(RoomType::ROOM_HUB);
@@ -44,14 +45,17 @@ namespace Wiwa
 			break;
 		case Wiwa::RoomType::ROOM_HUB:
 		{
+			WI_INFO("ROOM STATE: NEXT ROOM COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
+
 		}break;
 		case Wiwa::RoomType::ROOM_COMBAT:
 		{
+			WI_INFO("ROOM STATE: NEXT ROOM ROOM_REWARD");
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			int nextRoom = s_LastRewardRoom;
@@ -65,6 +69,7 @@ namespace Wiwa
 		}break;
 		case Wiwa::RoomType::ROOM_REWARD:
 		{
+			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			int nextRoom = s_LastCombatRoom;
@@ -81,6 +86,7 @@ namespace Wiwa
 			
 			if (s_RoomsToShop == 0)
 			{
+				WI_INFO("ROOM STATE: NEXT ROOM ROOM_SHOP");
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 				nextRoom = s_LastShopRoom;
@@ -95,17 +101,20 @@ namespace Wiwa
 		}break;
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
+			WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 			SceneManager::ChangeSceneByName("RunEnd");
 		}break;
 		case Wiwa::RoomType::ROOM_SHOP: 
 		{
 			if (s_RoomsToBoss == 0)
 			{
+				WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
 				SceneManager::LoadScene("RunBoss");
 			}
 			else
 			{
+				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 				int nextRoom = RAND(0, s_CombatRooms.size() - 1);

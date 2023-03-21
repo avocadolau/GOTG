@@ -77,6 +77,7 @@ namespace Wiwa {
 	public:
 		static int s_TotalSpawners;
 		static int s_SpawnersFinished;
+		static bool debug;
 		// Save & Load Overall Player Progression
 		static void SaveProgression();
 		static void LoadProgression();

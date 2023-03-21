@@ -15,6 +15,7 @@ namespace Wiwa
 	std::vector<GameEvent> GameStateManager::s_PostFinishedEvents;
 	int GameStateManager::s_TotalSpawners = 0;
 	int GameStateManager::s_SpawnersFinished = 0;
+	bool GameStateManager::debug = true;
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -40,7 +41,6 @@ namespace Wiwa
 
 	void GameStateManager::UpdateRoomState()
 	{
-
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 			UpdateCombatRoom();
 
@@ -94,21 +94,25 @@ namespace Wiwa
 
 	void GameStateManager::StartRun()
 	{
+		if (debug) WI_INFO("GAME STATE: StartRun()");
 		StartNewRoom();
 	}
 
 	void GameStateManager::EndRun()
 	{
+		if (debug) WI_INFO("GAME STATE: EndRun()");
 		Wiwa::RoomManager::EndRun();
 	}
 
 	void GameStateManager::InitHub()
 	{
+		if (debug) WI_INFO("GAME STATE: InitHub()");
 		Wiwa::RoomManager::InitHub();
 	}
 
 	void GameStateManager::StartNewRoom()
 	{
+		if (debug) WI_INFO("GAME STATE: StartNewRoom()");
 		s_PlayerTriggerNext = false;
 		LoadProgression();
 		Wiwa::RoomManager::NextRoom();
@@ -122,6 +126,7 @@ namespace Wiwa
 
 	void GameStateManager::EndCurrentRoom()
 	{
+		if (debug) WI_INFO("GAME STATE: EndCurrentRoom()");
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 		{
 			ResetCombatRoomData();
@@ -147,6 +152,7 @@ namespace Wiwa
 
 	void GameStateManager::ResetCombatRoomData()
 	{
+		if (debug) WI_INFO("GAME STATE: ResetCombatRoomData()");
 		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		em.RegisterComponent<EnemySpawner>();
 		s_TotalSpawners = 0;
@@ -170,6 +176,7 @@ namespace Wiwa
 
 	void GameStateManager::ResetBooleans()
 	{
+		if (debug) WI_INFO("GAME STATE: ResetBooleans()");
 		s_HasFinshedRoom = false;
 		s_CanPassNextRoom = false;
 		s_PlayerTriggerNext = false;
