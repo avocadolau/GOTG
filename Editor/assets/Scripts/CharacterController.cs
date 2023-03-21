@@ -68,6 +68,8 @@ namespace Game
         {
             ref CharacterController character = ref GetComponent<CharacterController>();
             ref Transform3D transform = ref GetComponent<Transform3D>();
+            //EntityId id = Findchild("firepos");
+            //ref Transform3D firepos = ref GetComponent<Transform3D>(id);
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
@@ -198,6 +200,7 @@ namespace Game
             {
                 if (Mathf.Abs(finalVelocity.x) > character.maxVelocity * 0.3 || Mathf.Abs(finalVelocity.z) > character.maxVelocity * 0.3)
                 {
+                    
                     Animator.PlayAnimationName("run", m_EntityId);
 
                 }

@@ -20,10 +20,10 @@ namespace Wiwa {
         void UpdateAnimation(float dt);
 
         void PlayAnimation(Animation* pAnimation);
-        void PlayAnimationName(std::string name);
-        void PlayAnimationIndex(unsigned int index);
 
-        void InitBoneTranforms();
+        void PlayAnimationName(std::string name);
+
+        void PlayAnimationIndex(unsigned int index);
 
         void CalculateBoneTransform(const NodeData* node,const glm::mat4 parentTransform);
 
@@ -32,10 +32,15 @@ namespace Wiwa {
         void BlendToAnimation(Animation* targetAnim, float blendDuration, float weight);
 
         static void SaveWiAnimator(Animator* animator, const char* path);
+
         static Animator* LoadWiAnimator(const char* path);
+
         void ResetTime() { m_CurrentTime = 0; }
+
         void SetCurrentAnimation(Animation* anim) { m_CurrentAnimation = anim; }
+
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
+
         std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
 
         std::vector<Animation*> m_Animations;

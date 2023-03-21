@@ -17,13 +17,8 @@ namespace Wiwa {
 		m_Name = animation->mName.C_Str();
 		m_BoneInfoMap = model->GetBoneInfoMap();
 
-		ReadMissingBones(animation, *model);
-		WI_INFO("=============================================================");
-		WI_INFO("animation: {}\n ",animation->mName.C_Str());
-		
+		ReadMissingBones(animation, *model);		
 		ReadHeirarchyData(m_RootNode, model->getModelHierarchy(), glm::mat4(1.f));
-
-
 	}
 
 	Animation::Animation(const aiAnimation* animation)
@@ -96,8 +91,7 @@ namespace Wiwa {
 		if (m_BoneInfoMap.find(root->name) != m_BoneInfoMap.end()) {
 			m_BoneInfoMap[root->name].globalTransformation = globalTransform;
 		}
-		WI_INFO("{}\n", root->name.c_str());
-		PrintGlmMatrix(globalTransform);
+
 		dest.name = root->name.data();
 		dest.transformation = root->Transformation;
 		dest.childrenCount = root->children.size();
