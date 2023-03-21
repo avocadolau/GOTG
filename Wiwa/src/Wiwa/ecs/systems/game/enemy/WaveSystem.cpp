@@ -94,6 +94,7 @@ namespace Wiwa
 		std::uniform_int_distribution<> dis(-5, 5);
 		enemyTransform.localPosition.x += dis(gen);
 		enemyTransform.localPosition.z += dis(gen);
+		enemyTransform.localPosition.y = 0;
 		entityManager.AddComponent<Transform3D>(newEnemyId, enemyTransform);
 
 		// Create collision body
@@ -125,7 +126,8 @@ namespace Wiwa
 		collBodyPtr->isStatic = false;
 		collBodyPtr->doContinuousCollision = false;
 		collBodyPtr->selfTag = m_Scene->GetPhysicsManager().GetFilterTag("ENEMY");
-		collBodyPtr->filterBits = 1 << 0;
+		collBodyPtr->filterBits |= 1 << m_Scene->GetPhysicsManager().GetFilterTag("WALL");
+		collBodyPtr->filterBits |= 1 << m_Scene->GetPhysicsManager().GetFilterTag("PLAYER");
 
 		Character stats;
 		stats.healthPoints = 30;
@@ -133,7 +135,7 @@ namespace Wiwa
 		stats.range = 3;//shord distance
 		stats.rof = 1;
 		stats.shieldRegeneration = 0;
-		stats.speed = 0.05f;
+		stats.speed = 10.0f;
 		entityManager.AddComponent<Character>(newEnemyId, stats);
 
 		// AgentAI component
