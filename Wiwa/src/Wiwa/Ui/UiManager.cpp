@@ -329,10 +329,8 @@ namespace Wiwa
 
 		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
 
-		EntityId eid = WI_INVALID_INDEX;
-
 		if (file.IsOpen()) {
-			eid = _loadGUIImpl(file);
+			_loadGUIImpl(file);
 		}
 
 		file.Close();

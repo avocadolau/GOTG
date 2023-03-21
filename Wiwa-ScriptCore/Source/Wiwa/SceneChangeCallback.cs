@@ -28,4 +28,22 @@ namespace Wiwa
             //Wiwa.InternalCalls.Quit();
         }
     }
+
+    [Callback]
+    class SetFullscreen
+    {
+        static void OnExecute(bool ret)
+        {
+            InternalCalls.SetFullscreenIntr(ret);
+        }
+    }
+
+    [Callback]
+    class SetVsync
+    {
+        static void OnExecute(bool ret)
+        {
+            InternalCalls.SetVsyncIntr(ret);
+        }
+    }
 }
