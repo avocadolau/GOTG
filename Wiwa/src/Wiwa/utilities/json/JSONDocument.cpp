@@ -67,6 +67,11 @@ namespace Wiwa {
 		return m_Document.HasMember(mem);
 	}
 
+	bool JSONDocument::IsObject()
+	{
+		return m_Document.IsObject();
+	}
+
 	bool JSONDocument::load_file(const char* path)
 	{
 		FILE* fp = fopen(path, "rb");

@@ -3,7 +3,6 @@
 
 #include <Wiwa/core/Core.h>
 
-#include "../vendor/rapidjson/rapidjson.h"
 #include "../vendor/rapidjson/stringbuffer.h"
 
 #include "JSONValue.h"
@@ -28,6 +27,7 @@ namespace Wiwa {
 		JSONValue AddMemberObject(const char* mem);
 		JSONValue AddMemberArray(const char* mem);
 		bool HasMember(const char* mem);
+		bool IsObject();
 
 		bool load_file(const char* path);
 		bool save_file(const char* path);

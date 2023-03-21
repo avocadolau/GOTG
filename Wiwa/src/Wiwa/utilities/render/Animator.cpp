@@ -3,6 +3,7 @@
 #include "Animator.h"
 #include <Wiwa/utilities/json/JSONDocument.h>
 #include <Wiwa/utilities/json/JSONValue.h>
+#include <glm/gtx/matrix_interpolation.hpp >
 #include <stack>
 namespace Wiwa {
 	Animator::Animator()
@@ -37,50 +38,50 @@ namespace Wiwa {
 			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
 			m_CurrentTime = AnimationTimeTicks;
 
-			//CalculateBoneFinalTransform();
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+	
+
+			//blendig
+			// Update the time for the current animation
+			//m_AnimationTime += dt;
+			//if (m_AnimationTime > m_CurrentAnimation->GetDuration()) {
+			//	m_AnimationTime = fmod(m_AnimationTime, m_CurrentAnimation->GetDuration());
+			//}
+
+			//// Update the blend time if blending
+			//if (m_AnimationState == AnimationState::Blending) {
+			//	m_BlendTime += dt;
+			//	if (m_BlendTime >= m_BlendDuration) {
+			//		// If the blend is complete, switch to the target animation
+			//		m_CurrentAnimation = m_TargetAnimation;
+			//		m_AnimationTime = 0.0f;
+			//		m_BlendTime = 0.0f;
+			//		m_AnimationState = AnimationState::Playing;
+			//	}
+			//	else {
+			//		// Otherwise, blend between the source and target animations
+			//		float blendFactor = m_BlendTime / m_BlendDuration;
+			//		for (unsigned int i = 0; i < m_FinalBoneMatrices.size(); i++) {
+			//			glm::mat4 sourceTransform = m_CurrentAnimation->GetBoneTransform(i);
+			//			glm::mat4 targetTransform = m_TargetAnimation->GetBoneTransform(i);
+			//			m_FinalBoneMatrices[i] = glm::interpolate(sourceTransform, targetTransform, blendFactor) * m_BlendWeight + sourceTransform * (1.0f - m_BlendWeight);
+			//		}
+			//	}
+			//}
+			//else {
+			//	// If not blending, update the bone transforms for the current animation
+			//	for (unsigned int i = 0; i < m_FinalBoneMatrices.size(); i++) {
+			//		m_FinalBoneMatrices[i] = m_CurrentAnimation->GetBoneTransform(i);
+			//	}
+			//}
 		}
-		// Update the time for the current animation
-	//	m_AnimationTime += dt;
-	//	if (m_AnimationTime > m_CurrentAnimation->GetDuration()) {
-	//		m_AnimationTime = fmod(m_AnimationTime, m_CurrentAnimation->GetDuration());
-	//	}
-
-	//	// Update the blend time if blending
-	//	if (m_AnimationState == AnimationState::Blending) {
-	//		m_BlendTime += dt;
-	//		if (m_BlendTime >= m_BlendDuration) {
-	//			// If the blend is complete, switch to the target animation
-	//			m_CurrentAnimation = m_TargetAnimation;
-	//			m_AnimationTime = 0.0f;
-	//			m_BlendTime = 0.0f;
-	//			m_AnimationState = AnimationState::Playing;
-	//		}
-	//		else {
-	//			// Otherwise, blend between the source and target animations
-	//			float blendFactor = m_BlendTime / m_BlendDuration;
-	//			for (unsigned int i = 0; i < m_FinalBoneMatrices.size(); i++) {
-	//				glm::mat4 sourceTransform = m_CurrentAnimation->GetBoneTransform(i);
-	//				glm::mat4 targetTransform = m_TargetAnimation->GetBoneTransform(i);
-	///*			    m_FinalBoneMatrices[i] = glm::mix(sourceTransform, targetTransform, blendFactor) * m_BlendWeight
-	//					+ sourceTransform * (1.0f - m_BlendWeight);*/
-	//			}
-	//		}
-	//	}
-	//	else {
-	//		// If not blending, update the bone transforms for the current animation
-	//		for (unsigned int i = 0; i < m_FinalBoneMatrices.size(); i++) {
-	//			m_FinalBoneMatrices[i] = m_CurrentAnimation->GetBoneTransform(i);
-	//		}
-
-
-	//	}
 	}
 
 	void Animator::PlayAnimation(Animation* pAnimation)
 	{
 		m_CurrentAnimation = pAnimation;	
 		m_CurrentTime = 0;
+		m_AnimationTime = pAnimation->GetDuration();
 	}
 
 	Animator::~Animator()
@@ -135,10 +136,14 @@ namespace Wiwa {
 	{
 		for (auto& animation : m_Animations)
 		{
-			if (animation->m_Name == name)
+			if (animation->m_Name.data() == name.data())
 			{
+
+				//BlendToAnimation(animation, 0.5f, 1);
+				//m_TargetAnimation = animation;
+				//m_AnimationState = AnimationState::Blending;
 				m_CurrentAnimation = animation;
-				m_CurrentTime = 0;
+				//m_CurrentTime = 0;
 				return;
 			}
 		}
@@ -152,6 +157,13 @@ namespace Wiwa {
 
 	void Animator::BlendToAnimation(Animation* targetAnim, float blendDuration, float weight)
 	{
+
+
+		if (m_CurrentAnimation == nullptr)
+		{
+			m_CurrentAnimation = targetAnim;
+			return;
+		}
 		// Store the current animation as the source animation
 		Animation& sourceAnim = *m_CurrentAnimation;
 
@@ -208,9 +220,6 @@ namespace Wiwa {
 		}
 
 		glm::mat4 globalTransformation = parentTransform * nodeTransform;
-
-		//WI_INFO("{}\n", nodeName.c_str());
-		//m_CurrentAnimation->PrintGlmMatrix(globalTransformation);
 
 		auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
 		if (boneInfoMap.find(nodeName) != boneInfoMap.end())
