@@ -317,7 +317,7 @@ namespace Game
             float minCamVelocity = 0.0f;
             float maxCamVelocity = 0.3f;
 
-            float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 20), 0, 25);
+            float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 5), 0, 25);
             float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 25);
 
             float finalCamSpeed_X = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_X);
