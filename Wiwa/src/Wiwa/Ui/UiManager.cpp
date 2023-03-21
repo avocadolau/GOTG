@@ -323,5 +323,185 @@ namespace Wiwa
 		}
 		canvasToSelect->selected = true;
 	}
+
+	void GuiManager::LoadWiUI(const char* path)
+	{
+		if (!Wiwa::FileSystem::Exists(path)) return;
+
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		if (file.IsOpen()) {
+			eid = _loadGUIImpl(file);
+		}
+
+		file.Close();
+
+	}
+	bool GuiManager::_loadGUIImpl(Wiwa::File& File)
+	{
+		std::vector<GuiCanvas*>& canvas = ReturnCanvas();
+		size_t canvas_count;
+		File.Read(&canvas_count, sizeof(size_t));
+		for (size_t i = 0; i < canvas_count; i++)
+		{
+			int id_canvas;
+			bool active_canvas;
+
+			File.Read(&id_canvas, sizeof(int));
+			File.Read(&active_canvas, 1);
+
+			CreateGuiCanvas(id_canvas, active_canvas);
+
+			std::vector<GuiControl*>& controls = canvas.at(i)->controls;
+			size_t controls_count;
+			File.Read(&controls_count, sizeof(size_t));
+			//controls.resize(controls_count);
+			for (size_t j = 0; j < controls_count; j++)
+			{
+
+				int id;
+				bool active;
+				GuiControlType guiType;
+				GuiControlState state;
+				Rect2i position;
+				std::string textureGui;
+				std::string extraTextureGui;
+
+				size_t textureGui_len;
+				char* textureGui_c;
+				size_t extraTextureGui_len;
+				char* extraTextureGui_c;
+
+				Rect2i extraPosition;
+
+				Rect2i texturePosition;
+				Rect2i extraTexturePosition;
+
+				int callbackID;// = 1;
+
+				File.Read(&id, sizeof(int));
+				File.Read(&active, 1);
+				File.Read(&guiType, sizeof(GuiControlType));
+				File.Read(&state, sizeof(GuiControlState));
+				File.Read(&position, sizeof(Rect2i));
+				File.Read(&callbackID, sizeof(int));
+				File.Read(&extraPosition, sizeof(Rect2i));
+				File.Read(&textureGui_len, sizeof(size_t));
+				textureGui_c = new char[textureGui_len];
+				File.Read(textureGui_c, textureGui_len);
+				textureGui = textureGui_c;
+				delete[] textureGui_c;
+
+				File.Read(&extraTextureGui_len, sizeof(size_t));
+				extraTextureGui_c = new char[extraTextureGui_len];
+				File.Read(extraTextureGui_c, extraTextureGui_len);
+				extraTextureGui = extraTextureGui_c;
+				delete[] extraTextureGui_c;
+
+				File.Read(&texturePosition, sizeof(Rect2i));
+				File.Read(&extraTexturePosition, sizeof(Rect2i));
+
+
+
+				switch (guiType)
+				{
+				case Wiwa::GuiControlType::BUTTON:
+					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
+					break;
+				case Wiwa::GuiControlType::TEXT:
+					CreateGuiControl_Text(guiType, id, position, textureGui.c_str(), canvas.at(i)->id);
+					break;
+				case Wiwa::GuiControlType::CHECKBOX:
+					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
+					break;
+				case Wiwa::GuiControlType::SLIDER:
+					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition);
+					break;
+				case Wiwa::GuiControlType::IMAGE:
+					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	void GuiManager::SaveWiUI(const char* path)
+	{
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_OUT | FileSystem::OM_BINARY);
+
+		if (file.IsOpen()) {
+			_saveGUIImpl(file);
+		}
+
+		file.Close();
+	}
+	bool GuiManager::_saveGUIImpl(Wiwa::File& File)
+	{
+		std::vector<GuiCanvas*>& canvas = ReturnCanvas();
+		size_t canvas_count = canvas.size();
+
+		// Save GuiControl count
+		File.Write(&canvas_count, sizeof(size_t));
+
+		for (size_t i = 0; i < canvas_count; i++)
+		{
+			GuiCanvas* canva = canvas.at(i);
+
+			int id_canvas = canva->id;
+			bool active_canvas = canva->active;
+
+			File.Write(&id_canvas, sizeof(int));
+			File.Write(&active_canvas, 1);
+
+			size_t controls_count = canvas.at(i)->controls.size();
+			File.Write(&controls_count, sizeof(size_t));
+			for (size_t j = 0; j < controls_count; j++)
+			{
+				GuiControl* control = canvas.at(i)->controls.at(j);
+
+				int id = control->id;
+				bool active = control->GetActive();
+				GuiControlType guiType = control->GetType();
+				GuiControlState guiState = control->GetState();
+				Rect2i position = control->GetPosition();
+				int callbackID = control->callbackID;
+				Rect2i texturePosition = control->texturePosition;
+				Rect2i extraTexturePosition = control->extraTexturePosition;
+
+				const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+				const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
+
+				size_t textureGui_len = strlen(textureGui) + 1;
+				size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
+
+				File.Write(&id, sizeof(int));
+				File.Write(&active, 1);
+				File.Write(&guiType, sizeof(GuiControlType));
+				File.Write(&guiState, sizeof(GuiControlState));
+				File.Write(&position, sizeof(Rect2i));
+
+				File.Write(&callbackID, sizeof(int));
+				Rect2i extraPosition = control->GetExtraPosition();
+				File.Write(&extraPosition, sizeof(Rect2i));
+
+				// Save texture
+				File.Write(&textureGui_len, sizeof(size_t));
+				File.Write(textureGui, textureGui_len);
+				// Save extraTexture
+				File.Write(&extraTextureGui_len, sizeof(size_t));
+				File.Write(extraTextureGui, extraTextureGui_len);
+
+				File.Write(&texturePosition, sizeof(Rect2i));
+				File.Write(&extraTexturePosition, sizeof(Rect2i));
+
+
+
+			}
+		}
+	}
 	
 }
