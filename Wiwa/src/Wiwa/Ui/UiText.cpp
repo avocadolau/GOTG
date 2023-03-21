@@ -11,13 +11,13 @@ namespace Wiwa
 		this->position = bounds;
 		name = "Text";
 		active = true;
-
+		text = string_text;
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		text = new Text();
-		text = gm.InitFont("assets/Fonts/BADABB_.TTF", (char*)string_text);
+		text_res = new Text();
+		text_res = gm.InitFont("assets/Fonts/arial.ttf", (char*)string_text);
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text_res->GetTextureId(), text_res->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		
 		
 	}

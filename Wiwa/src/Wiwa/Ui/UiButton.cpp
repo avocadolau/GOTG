@@ -15,6 +15,7 @@ namespace Wiwa
 		name = "Button";
 		m_Scene = scene;
 		active = true;
+		text = "";
 		if (path != "") {
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);

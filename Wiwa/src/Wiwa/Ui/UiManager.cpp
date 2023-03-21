@@ -378,6 +378,8 @@ namespace Wiwa
 
 				int callbackID;// = 1;
 
+				const char* text;
+
 				File.Read(&id, sizeof(int));
 				File.Read(&active, 1);
 				File.Read(&guiType, sizeof(GuiControlType));
@@ -400,7 +402,7 @@ namespace Wiwa
 				File.Read(&texturePosition, sizeof(Rect2i));
 				File.Read(&extraTexturePosition, sizeof(Rect2i));
 
-
+				File.Read(&text, sizeof(const char*));
 
 				switch (guiType)
 				{
@@ -408,7 +410,7 @@ namespace Wiwa
 					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					CreateGuiControl_Text(guiType, id, position, textureGui.c_str(), canvas.at(i)->id);
+					CreateGuiControl_Text(guiType, id, position, text, canvas.at(i)->id);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
 					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
@@ -475,6 +477,8 @@ namespace Wiwa
 				size_t textureGui_len = strlen(textureGui) + 1;
 				size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
 
+				const char* text = control->text;
+
 				File.Write(&id, sizeof(int));
 				File.Write(&active, 1);
 				File.Write(&guiType, sizeof(GuiControlType));
@@ -495,6 +499,7 @@ namespace Wiwa
 				File.Write(&texturePosition, sizeof(Rect2i));
 				File.Write(&extraTexturePosition, sizeof(Rect2i));
 
+				File.Write(&text, sizeof(const char*));
 
 
 			}

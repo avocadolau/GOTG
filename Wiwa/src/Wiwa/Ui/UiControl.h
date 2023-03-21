@@ -178,12 +178,10 @@ namespace Wiwa
 		bool SwapToNewTexture(const char* path, Wiwa::Renderer2D& r2d)
 		{
 			
-			r2d.RemoveInstance(m_Scene, id_quad_normal);
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 
-			
-			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, texture->GetTextureId()); 
 			return true;
 		}
 
@@ -202,7 +200,7 @@ namespace Wiwa
 		GuiControlState state;
 		GuiEvent event;
 
-		char text[32];           // Control text (if required)
+		const char* text;           // Control text (if required)
 		Rect2i position;        // Position and size
 		Rect2i texturePosition;        
 		Rect2i extraPosition;	// Position and size for the bar
@@ -211,7 +209,7 @@ namespace Wiwa
 
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
-		
+
 		uint32_t id_quad_normal;
 
 		uint32_t id_quad_extra;

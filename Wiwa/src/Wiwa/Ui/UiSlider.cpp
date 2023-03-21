@@ -16,7 +16,7 @@ namespace Wiwa
 		name = "Slider";
 		m_Scene = scene;
 		active = true;
-
+		text = "";
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)

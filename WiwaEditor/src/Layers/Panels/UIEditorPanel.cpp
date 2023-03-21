@@ -249,11 +249,14 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
-	control->callbackID = callbackID;
-	control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
-	r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+	if (callbackID != WI_INVALID_INDEX)
+	{
+		control->callbackID = callbackID;
+		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+	}
+	if(control->type != Wiwa::GuiControlType::TEXT)r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
 	r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector, Wiwa::Renderer2D::Pivot::UPLEFT);
-	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, {pos[0], pos[1]}, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
+	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
 	if (control->type != Wiwa::GuiControlType::TEXT)
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
