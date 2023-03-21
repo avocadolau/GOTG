@@ -92,9 +92,6 @@ namespace Wiwa
 		return m_Value->HasMember(mem);
 	}
 
-	bool JSONValue::IsObject() {
-		return m_Value->IsObject();
-	}
 
 	JSONValue JSONValue::operator[](const char *key)
 	{
