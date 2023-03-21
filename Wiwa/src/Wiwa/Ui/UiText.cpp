@@ -39,7 +39,7 @@ namespace Wiwa
 		Size2i newSize;
 		newSize.w = this->position.width;
 		newSize.h = this->position.height;
-		render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 	
 
 		return false;
