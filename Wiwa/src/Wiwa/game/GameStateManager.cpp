@@ -44,12 +44,9 @@ namespace Wiwa
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 			UpdateCombatRoom();
 
-		if (s_HasFinshedRoom)
+		if (s_HasFinshedRoom && s_CanPassNextRoom && s_PlayerTriggerNext)
 		{
-			if (s_CanPassNextRoom && s_PlayerTriggerNext)
-				ChangeRoomState(RoomState::STATE_AWAITING_NEXT);
-			else
-				ChangeRoomState(RoomState::STATE_FINISHED);
+			ChangeRoomState(RoomState::STATE_AWAITING_NEXT);		
 		}
 
 		if (s_PlayerTriggerNext && s_RoomState == RoomState::STATE_AWAITING_NEXT)
@@ -85,8 +82,14 @@ namespace Wiwa
 				}
 			}
 		}
+
 		s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
 		s_CanPassNextRoom = s_HasFinshedRoom;
+
+		if (s_HasFinshedRoom)
+			ChangeRoomState(RoomState::STATE_FINISHED);
+		else
+			ChangeRoomState(RoomState::STATE_STARTED);
 	}
 
 	void GameStateManager::StartRun()

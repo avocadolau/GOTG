@@ -25,6 +25,7 @@ namespace Wiwa
 	{
 		GameStateManager::SetRoomType(RoomType::ROOM_HUB);
 		GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
+		s_CurrentRoomsCount = 3;
 	}
 
 	int RoomManager::NextRoom()
@@ -32,7 +33,7 @@ namespace Wiwa
 		if (s_CurrentRoomsCount <= 0)
 		{
 			GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-			SceneManager::ChangeSceneByIndex(2);
+			SceneManager::ChangeSceneByIndex(3); // Hardcoded hub index (intro scene)
 			return 1;
 		}
 
