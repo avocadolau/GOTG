@@ -103,7 +103,7 @@ namespace Wiwa
 		std::vector<GuiCanvas*> canva = canvas;
 		for (int i = 0; i < canva.size(); i++)
 		{
-
+			
 			if (canva.at(i)->active)
 			{
 				std::vector<GuiControl*> control = canva.at(i)->controls;
@@ -115,15 +115,14 @@ namespace Wiwa
 					}
 				}
 			}
-
-
+			
+			
 		}
 		return true;
 	}
 
 	bool GuiManager::Draw()
 	{
-
 		size_t Csize = canvasToDestroy.size();
 		for (size_t x = 0; x < Csize; x++)
 		{
@@ -154,7 +153,7 @@ namespace Wiwa
 			}
 			return true;
 		}
-
+		
 		return false;
 	}
 	void GuiManager::DestroyCanvas(GuiCanvas* canvas)
@@ -323,7 +322,7 @@ namespace Wiwa
 		}
 		canvasToSelect->selected = true;
 	}
-
+	
 	void GuiManager::LoadWiUI(const char* path)
 	{
 		if (!Wiwa::FileSystem::Exists(path)) return;
@@ -503,5 +502,4 @@ namespace Wiwa
 			}
 		}
 	}
-	
 }

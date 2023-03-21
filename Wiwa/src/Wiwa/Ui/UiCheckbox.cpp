@@ -30,7 +30,7 @@ namespace Wiwa
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 
 		canClick = true;
 	}
@@ -90,8 +90,8 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
-		
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+
 
 		case GuiControlState::NORMAL:
 		{
@@ -101,7 +101,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
@@ -112,7 +112,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 		case GuiControlState::PRESSED:
 		{
 			Vector2i newPosition;
@@ -121,7 +121,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		/******/
 
@@ -133,7 +133,7 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);		} break;
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 		default:
 			break;
 		}

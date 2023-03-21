@@ -19,20 +19,30 @@ UIPanel::~UIPanel()
 
 void UIPanel::Draw()
 {
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 
 	ImGui::Begin(iconName.c_str(), &active);
 	
 	ImGui::Text("UI creator panel");
 	ImGui::NewLine();
+	ImGui::InputText("String", (char*)nameSavingWiGUI.c_str(), 64);
+	ImGui::SameLine();
+	if (ImGui::Button("Save GUI"))
+	{
+		std::filesystem::path file = "assets/saved_wiGUI";
+		file /= nameSavingWiGUI.c_str();
+		file += ".wiGUI";
+		gm.SaveWiUI(file.string().c_str());
+	}
 	if (ImGui::CollapsingHeader("Canvas creation"))
 	{
 		if (ImGui::Button("Create Canvas"))
 		{
-			Wiwa::SceneManager::getActiveScene()->GetGuiManager().CreateGuiCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.size(), true);
+			gm.CreateGuiCanvas(gm.canvas.size(), true);
 			//m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, 0, { 200,200,100,100 }, "assets/hola.png", nullptr, 0,1);
 
 		}
-		for (size_t i = 0; i < Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.size(); i++)
+		for (size_t i = 0; i < gm.canvas.size(); i++)
 		{
  			ImGui::PushID((int)i);
 			ImGui::Text("Canvas %i", i);
@@ -40,17 +50,17 @@ void UIPanel::Draw()
 			if(ImGui::Button("Select canvas"))
 			{
 				canvasSelected = i;
-				Wiwa::SceneManager::getActiveScene()->GetGuiManager().SwapSelectedCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i));
+				gm.SwapSelectedCanvas(gm.canvas.at(i));
 			}
 			ImGui::SameLine();
 			if(ImGui::Button("Swap active"))
 			{
-				Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i)->SwapActive();
+				gm.canvas.at(i)->SwapActive();
 			}
 			ImGui::SameLine();
 			if(ImGui::Button("Delete"))
 			{
-				Wiwa::SceneManager::getActiveScene()->GetGuiManager().DestroyCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i));
+				gm.DestroyCanvas(gm.canvas.at(i));
 				canvasSelected = -1;
 			}
 			ImGui::PopID();
