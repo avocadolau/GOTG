@@ -45,6 +45,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	if (m_IsMoving)
 	{
+		
+
 		float dirX = m_DirectionPoint.x - transform->position.x;
 		dirX /= abs(dirX);
 
