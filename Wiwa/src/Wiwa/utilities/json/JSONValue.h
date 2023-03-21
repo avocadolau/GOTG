@@ -2,6 +2,7 @@
 
 #include <Wiwa/core/Core.h>
 #include "../vendor/rapidjson/document.h"
+#include "../vendor/rapidjson/rapidjson.h"
 
 namespace Wiwa
 {
@@ -61,6 +62,8 @@ namespace Wiwa
 		JSONValue PushBackObject();
 
 		bool HasMember(const char *mem);
+
+		bool IsObject();
 
 		JSONValue operator[](const char *key);
 		JSONValue operator[](uint32_t index);
