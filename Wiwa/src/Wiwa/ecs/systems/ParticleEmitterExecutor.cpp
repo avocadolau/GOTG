@@ -295,10 +295,10 @@ namespace Wiwa {
 
 					glm::vec2 ref_tex_coords[4] =
 					{
-						glm::vec2(0, 0),	//0		0	  2  		1	  3
-						glm::vec2(0, frame.y),	//1			     		
-						glm::vec2(frame.x , 0),	//2			     		
-						glm::vec2(frame.y , frame.w)		//3		1	  3  		0	  2				
+						glm::vec2(frame.x, frame.y),                    //0    0    2    1    3
+						glm::vec2(frame.x, frame.y + frame.w),           //1
+						glm::vec2(frame.x + frame.z, frame.y),           //2
+						glm::vec2(frame.x + frame.z, frame.y + frame.w)  //3    1    3    0    2
 					};
 
 					p.tex_coords[i] = ref_tex_coords[i];
