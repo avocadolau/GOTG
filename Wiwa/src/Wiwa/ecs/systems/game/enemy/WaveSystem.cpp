@@ -133,7 +133,7 @@ namespace Wiwa
 		stats.range = 3;//shord distance
 		stats.rof = 1;
 		stats.shieldRegeneration = 0;
-		stats.speed = 1.5f;
+		stats.speed = 0.05f;
 		entityManager.AddComponent<Character>(newEnemyId, stats);
 
 		// AgentAI component
