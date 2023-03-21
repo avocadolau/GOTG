@@ -565,8 +565,18 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Dummy(ImVec2(2.5, 0));
 		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Position");
+		ImGui::Text("Always Follow Emitter Position");
+
+		ImGui::Dummy(ImVec2(0, 0));
+		ImGui::SameLine();
+
+		ImGui::Checkbox("##particle_followEmitterPositionSpawn", &emitter->particle_followEmitterPositionSpawn);
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(2.5, 0));
+		ImGui::SameLine();
+		ImGui::Text("Follow Emitter Position On Spawn");
 	}
+
 
 	//particle follow emitter rotation
 	{
@@ -577,7 +587,16 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Dummy(ImVec2(2.5, 0));
 		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Rotation");
+		ImGui::Text("Always Follow Emitter Rotation");
+
+		ImGui::Dummy(ImVec2(0, 0));
+		ImGui::SameLine();
+
+		ImGui::Checkbox("##particle_followEmitterRotationSpawn", &emitter->particle_followEmitterRotationSpawn);
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(2.5, 0));
+		ImGui::SameLine();
+		ImGui::Text("Follow Emitter Rotation On Spawn");
 	}
 
 	ImGui::Dummy(ImVec2(0, 4));
