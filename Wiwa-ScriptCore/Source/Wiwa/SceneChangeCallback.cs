@@ -25,7 +25,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            //Wiwa.InternalCalls.Quit();
+            Wiwa.Application.Quit();
         }
     }
 
