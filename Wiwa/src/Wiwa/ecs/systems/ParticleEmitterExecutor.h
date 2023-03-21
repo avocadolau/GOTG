@@ -39,9 +39,7 @@ namespace Wiwa {
 		glm::vec3	growthAcceleration;
 
 		bool		followEmitterRotation;
-		bool		followEmitterRotationSpawn;
 		bool		followEmitterPosition;
-		bool		followEmitterPositionSpawn;
 		bool		followParticle;
 
 		bool        isActive = false;
