@@ -112,6 +112,7 @@ namespace Wiwa {
 		std::string info_ = "active particles: " + std::to_string(currentParticleIndex);
 		WI_CORE_INFO(info_.c_str());
 
+
 		//----------------------------------------------------------------------------------
 		/*Camera *camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
@@ -220,9 +221,6 @@ namespace Wiwa {
 					continue;
 				}
 
-
-
-
 				//particles look at the camera:
 				//ScreenAlign(p);
 
@@ -245,13 +243,10 @@ namespace Wiwa {
 				//size
 				p.transform.localScale += p.growthVelocity * dt;
 
-
 				//set data to vertices
 				for (size_t i = 0; i < 4; i++)
 				{
 					//update particle variables
-
-
 
 					glm::vec3 rotatedPosition = p.startingPosition;
 
@@ -274,15 +269,40 @@ namespace Wiwa {
 
 					glm::vec3 resultantPosition = p.vertices[i] = (ref_vertices[i] + rotatedPosition + p.transform.position);
 
+					//---------------------------------------
+					
+					// Update the animation
+					p.animation->Update();
+
+					// Get the current frame of the animation
+					glm::vec4& frame = p.animation->GetCurrentFrame();
+
+					// Update the texture coordinates based on the current frame
+					/*p.texCoords[0] = frame.x;
+					p.texCoords[1] = frame.y;
+					p.texCoords[2] = frame.x + frame.z;
+					p.texCoords[3] = frame.y + frame.w;*/
+
+					//---------------------------------------
+					
+					//glm::vec2 ref_tex_coords[4] =
+					//{
+					//	glm::vec2(0, 0),	//0		0	  2  		1	  3
+					//	glm::vec2(0, 1),	//1			     		
+					//	glm::vec2(1, 0),	//2			     		
+					//	glm::vec2(1, 1)		//3		1	  3  		0	  2				
+					//};
+
 					glm::vec2 ref_tex_coords[4] =
 					{
 						glm::vec2(0, 0),	//0		0	  2  		1	  3
-						glm::vec2(0, textureAnimationPoints),	//1			     		
-						glm::vec2(textureAnimationPoints, 0),	//2			     		
-						glm::vec2(textureAnimationPoints, textureAnimationPoints)		//3		1	  3  		0	  2				
+						glm::vec2(0, frame.y),	//1			     		
+						glm::vec2(frame.x , 0),	//2			     		
+						glm::vec2(frame.y , frame.w)		//3		1	  3  		0	  2				
 					};
 
 					p.tex_coords[i] = ref_tex_coords[i];
+
 
 					if (p.followEmitterPosition)
 					{
@@ -565,6 +585,19 @@ namespace Wiwa {
 			m_Material->SetUniformData("u_Texture", sdata);
 
 			p.m_material = m_Material;
+
+			p.animation = new AnimationParticles();
+
+			if (p.animation != nullptr)
+			{
+				p.animation->speed = 1.0f;
+				p.animation->loop = true;
+				p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+				p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+				p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+			}
+
+			/*delete p.animation;*/
 
 			particleArray[currentParticleIndex] = p;
 
