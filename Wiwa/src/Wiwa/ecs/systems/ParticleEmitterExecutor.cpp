@@ -74,7 +74,7 @@ namespace Wiwa {
 
 			}
 
-			if (textureAnimationPoints <= 1)
+			/*if (textureAnimationPoints <= 1)
 			{
 				if (animationTimer >= 6)
 				{
@@ -85,7 +85,7 @@ namespace Wiwa {
 				{
 					animationTimer += dt;
 				}
-			}
+			}*/
 			
 
 
@@ -233,11 +233,11 @@ namespace Wiwa {
 				p.velocity += p.acceleration * dt;
 				glm::vec3 resultantPosition = p.velocity * dt;
 
-				p.transform.position += resultantPosition;
+				p.transform.localPosition += resultantPosition;
 
 				if (p.startingRotation.x != 0.0f || p.startingRotation.y != 0.0f || p.startingRotation.z != 0.0f)
 				{
-					p.transform.rotation = p.startingRotation;
+					p.transform.localRotation = p.startingRotation;
 				}
 
 				//size
@@ -250,24 +250,29 @@ namespace Wiwa {
 
 					glm::vec3 rotatedPosition = p.startingPosition;
 
+
 					if (p.followEmitterRotation)
 					{
-						float degtorad = PI / 180;
-
-						/*rotatedPosition = glm::vec3(
-							p.startingPosition.x * cosf(t3D->localRotation.y * degtorad) - p.startingPosition.z * sinf(t3D->localRotation.y * degtorad),
-							0,
-							p.startingPosition.z * sinf(t3D->localRotation.y * degtorad) + p.startingPosition.z * cosf(t3D->localRotation.y * degtorad));
-						*/	
-
-						rotatedPosition = glm::vec3(
-							p.startingPosition.x * cosf(t3D->localRotation.y * degtorad) + p.startingPosition.z * cosf(t3D->localRotation.y * degtorad),
-							0,
-							p.startingPosition.z * cosf(t3D->localRotation.y * degtorad) + p.startingPosition.x * cosf(t3D->localRotation.y * degtorad));
-
+						p.transform.rotation = t3D->rotation;
 					}
 
-					glm::vec3 resultantPosition = p.vertices[i] = (ref_vertices[i] + rotatedPosition + p.transform.position);
+					glm::vec3 scaledVertex = ref_vertices[i] * p.transform.localScale;
+
+
+					//fix rotation
+					glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
+					glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
+					glm::vec3 resultantVertex = glm::vec3(rotatedVertex);
+					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
+
+
+
+
+					if (p.followEmitterPosition)
+					{
+						resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex;
+					}
+
 
 					//---------------------------------------
 					
@@ -315,14 +320,8 @@ namespace Wiwa {
 
 						resultantPosition = glm::vec3(resultantPosition.x * cosf(t3D->rotation.y), 0, test.z);
 
-						std::string rstPos = "x: " + std::to_string(resultantPosition.x) + " y: " + std::to_string(resultantPosition.z);
-						WI_CORE_INFO(rstPos.c_str());
-					}*/
 
-					//emitterComp->position
-
-
-					p.vertices[i] = resultantPosition;
+					p.vertices[i] = resultantPosition;*/
 				}
 
 				//draw particles
@@ -370,13 +369,13 @@ namespace Wiwa {
 						Camera* camera = man.getCamera(cam_id);
 
 						if (emitter->texture)
-							r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
+							r3d.RenderQuad(VAO, indices, p.transform.localPosition, p.transform.rotation, glm::vec3(1, 1, 1),
 								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, emitter->texture, emitter->texture->GetSize());
 					}
 
 					//show in editor window
 					if (emitter->texture)
-						r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
+						r3d.RenderQuad(VAO, indices, p.transform.localPosition, p.transform.rotation, glm::vec3(1, 1, 1),
 							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, emitter->texture, emitter->texture->GetSize());
 
 
@@ -386,10 +385,7 @@ namespace Wiwa {
 				}
 			}
 		}
-	
-	
-		
-}
+	}
 
 	void ParticleEmitterExecutor::OnSystemAdded() // Called when system added to the editor
 	{
@@ -401,6 +397,9 @@ namespace Wiwa {
 			emitter->textId1 = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
 
 			emitter->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(emitter->textId1);
+
+			emitter->particle_lifetime = 1;
+
 		}
 
 	}
@@ -561,22 +560,37 @@ namespace Wiwa {
 			}
 
 			p.followEmitterPosition = emitter->particle_followEmitterPosition;
+			p.followEmitterPositionSpawn = emitter->particle_followEmitterPositionSpawn;
 			p.followEmitterRotation = emitter->particle_followEmitterRotation;
+			p.followEmitterRotationSpawn = emitter->particle_followEmitterRotationSpawn;
 			p.followParticle = emitter->particle_followParticle;
 
-
+			Transform3D* t3D = GetComponent<Transform3D>();
+;
 			//set geometry
 			for (size_t i = 0; i < 4; i++)
 			{
 				p.vertices[i] = ref_vertices[i];
-				//p.tex_coords[i] = ref_tex_coords[i];
+				
 			}
 			for (size_t i = 0; i < 6; i++)
 			{
 				p.vertex_indices[i] = ref_vertex_indices[i];
 			}
 
+			
+
 			p.transform.scale = glm::vec3(1, 1, 1);
+
+			if (p.followEmitterRotationSpawn)
+			{
+				p.transform.localRotation += t3D->localRotation;
+			}
+
+			if (p.followEmitterPositionSpawn)
+			{
+				p.transform.localPosition += t3D->localPosition;
+			}
 
 			Uniform::SamplerData sdata;
 			sdata.tex_id = emitter->texture->GetTextureId();
@@ -698,7 +712,9 @@ namespace Wiwa {
 
 
 		followEmitterRotation = false;
+		followEmitterRotationSpawn = false;
 		followEmitterPosition = false;
+		followEmitterPositionSpawn = false;
 		followParticle = false;
 	}
 }

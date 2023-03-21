@@ -70,12 +70,14 @@ namespace Wiwa {
 		glm::vec3	particle_growthAcceleration_range[2];
 
 		bool		particle_followEmitterRotation = false;
+		bool		particle_followEmitterRotationSpawn = false;
 		bool		particle_followEmitterPosition = false;
+		bool		particle_followEmitterPositionSpawn = false;
 		bool		particle_followParticle = false;;
 
 		ResourceId textId1 = -4;
 		Image* texture = nullptr;
-		std::string texturePath;
+		std::string texturePath = "";
 	};
 }
 
