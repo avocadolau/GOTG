@@ -27,6 +27,7 @@ void UIPanel::Draw()
 	ImGui::NewLine();
 	ImGui::InputText("String", (char*)nameSavingWiGUI.c_str(), 64);
 	ImGui::SameLine();
+	ImGui::PushID("saveGUI");
 	if (ImGui::Button("Save GUI"))
 	{
 		std::filesystem::path file = "assets/saved_wiGUI";
@@ -34,6 +35,7 @@ void UIPanel::Draw()
 		file += ".wiGUI";
 		gm.SaveWiUI(file.string().c_str());
 	}
+	ImGui::PopID();
 	if (ImGui::CollapsingHeader("Canvas creation"))
 	{
 		if (ImGui::Button("Create Canvas"))
@@ -609,5 +611,6 @@ bool UIPanel::OnSceneChange(SceneChangeEvent& e)
 	callbackID = WI_INVALID_INDEX;
 	pathForAsset = "";
 	pathForExtraAsset = "";
+	nameSavingWiGUI = "";
 	return true;
 }
