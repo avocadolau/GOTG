@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Wiwa
+﻿namespace Wiwa
 {
-    public partial struct Plane : IFormattable
+    public partial struct Plane
     {
         // sizeof(Plane) is not const in C# and so cannot be used in fixed arrays, so we define it here
         internal const int size = 16;
