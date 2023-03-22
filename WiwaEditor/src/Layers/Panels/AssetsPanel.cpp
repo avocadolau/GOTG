@@ -30,7 +30,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	ResourceId shaderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/shader_icon.png");
 	ResourceId prefabId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/prefab_icon.png");
 	ResourceId sceneId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/scene_icon.png");
-	
+	ResourceId guiId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/wigui_icon.png");
 
 	m_FolderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(folderId)->GetTextureId();
 	m_FileIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(fileId)->GetTextureId();
@@ -40,6 +40,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	m_ShaderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(shaderId)->GetTextureId();
 	m_PrefabIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(prefabId)->GetTextureId();
 	m_SceneIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(sceneId)->GetTextureId();
+	m_GuiIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(guiId)->GetTextureId();
 
 	if (!std::filesystem::exists(s_AssetsPath))
 	{
@@ -152,6 +153,8 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 	}
 	else if (assetsPath.extension() == ".wiprefab")
 		extension = ".wiprefab";
+	else if (assetsPath.extension() == ".wiGUI")
+		extension = ".wiGUI";
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -299,7 +302,9 @@ void AssetsPanel::Draw()
 					texID = m_PrefabIcon;
 				else if (directoryEntry.path().extension() == ".wiscene")
 					texID = m_SceneIcon;
-
+				else if (directoryEntry.path().extension() == ".wiGUI")
+					texID = m_GuiIcon;
+				
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::ImageButton(texID, { thumbnailSize, thumbnailSize }))
 				{
