@@ -24,5 +24,7 @@ namespace Wiwa
 
 		bool checked = false;
 
+		bool clicked = false;
+
 	};
 }

@@ -25,7 +25,7 @@ void UIPanel::Draw()
 	
 	ImGui::Text("UI creator panel");
 	ImGui::NewLine();
-	ImGui::InputText("String", (char*)nameSavingWiGUI.c_str(), 64);
+	ImGui::InputText("name for GUI", (char*)nameSavingWiGUI.c_str(), 64);
 	ImGui::SameLine();
 	ImGui::PushID("saveGUI");
 	if (ImGui::Button("Save GUI"))

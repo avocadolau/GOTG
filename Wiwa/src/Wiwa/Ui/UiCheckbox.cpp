@@ -55,8 +55,13 @@ namespace Wiwa
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
 				state = GuiControlState::FOCUSED;
+				if (Wiwa::Input::IsMouseButtonPressed(0))
+				{
+					state = GuiControlState::PRESSED;
+					clicked = true;
+				}
 
-				if (Wiwa::Input::IsMouseButtonReleased(0))
+				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
 					state = GuiControlState::PRESSED;
 					checked = !checked;
@@ -153,7 +158,7 @@ namespace Wiwa
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		}
 		r2d.RemoveInstance(m_Scene, id_quad_normal);
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 
 		return true;
 	}
