@@ -4,6 +4,7 @@
 
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/scene/SceneManager.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 //#include <Wiwa/audio/Audio.h>
 //#include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 //#include <Wiwa/utilities/filesystem/FileSystem.h>
@@ -56,7 +57,7 @@ void AIMapBakingPanel::Draw()
 		//	}
 		//}
 
-		Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1.0f, 1.0f, 0.0f);
+		Wiwa::AIMapGeneration::CreateWalkabilityMap(50, 50, 1.0f, 1.0f, 0.0f);
 	}
 
 	

@@ -2,7 +2,7 @@
 
 #include "AgentAISystem.h"
 #include "Wiwa/ecs/components/AgentAI.h"
-#include <Wiwa/AI/AIPathFindingManager.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 //#include "Wiwa/ecs/components/Transform3D.h"
 
 #include "glew.h"
@@ -31,9 +31,10 @@ void Wiwa::AgentAISystem::OnUpdate()
 	//
 	//GoToPosition({49,0,49});
 	//
-	m_DirectionPoint = Wiwa::AIPathFindingManager::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
 
-	Wiwa::AIPathFindingManager::MapData& localMapData = Wiwa::AIPathFindingManager::GetMapData();
+	m_DirectionPoint = Wiwa::AIMapGeneration::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
+
+	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
 	m_DirectionPoint = { m_DirectionPoint.x + (localMapData.tileWidth*0.5f), m_DirectionPoint.y + (localMapData.tileHeight * 0.5f) };
 
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
@@ -111,7 +112,7 @@ void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
 
 	// transform->position;
 	
-	m_DirectionPoint = Wiwa::AIPathFindingManager::WorldToMap(transform->position.x, transform->position.z);
+	m_DirectionPoint = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
 	
 
 	glm::ivec2 target = {targetPos.x, targetPos.z};

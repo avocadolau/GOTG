@@ -7,6 +7,7 @@
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/utilities/render/LightManager.h>
 #include <Wiwa/core/ProjectManager.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 
 namespace Wiwa
 {
@@ -752,7 +753,8 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1, 1, 0); // this is temporal
+			Wiwa::AIMapGeneration::CreateWalkabilityMap(50, 50, 1, 1, 0); // this is temporal
+
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else
