@@ -2,7 +2,7 @@
 using System.Linq;
 using Wiwa;
 
-namespace WiwaApp
+namespace Game
 {
     using EntityId = System.UInt64;
     [Component]
