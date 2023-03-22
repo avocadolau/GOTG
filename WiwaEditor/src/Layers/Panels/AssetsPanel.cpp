@@ -30,7 +30,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	ResourceId shaderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/shader_icon.png");
 	ResourceId prefabId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/prefab_icon.png");
 	ResourceId sceneId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/scene_icon.png");
-	ResourceId guiId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/wigui_icon.png");
+	ResourceId guiId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/canvas_icon.png");
 
 	m_FolderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(folderId)->GetTextureId();
 	m_FileIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(fileId)->GetTextureId();
