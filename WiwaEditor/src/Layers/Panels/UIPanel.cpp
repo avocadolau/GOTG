@@ -355,7 +355,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		rect.width = size[0];
 		rect.height = size[1];
 		Wiwa::Rect2i rect2;
-		rect2.x = rect.x - (rect.width / 2);
+		rect2.x = rect.x;
 		rect2.y = rect.y;
 		rect2.width = (rect.width / 100);
 		rect2.height = rect.height;

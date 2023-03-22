@@ -46,4 +46,24 @@ namespace Wiwa
             InternalCalls.SetVsyncIntr(ret);
         }
     }
+
+    [Callback]
+    class SetVolumeMusic
+    {
+        static void OnExecute(float level)
+        {
+            //InternalCalls.SetFullscreenIntr(ret);
+            Console.WriteLine($"slider actual level is :{level}");
+        }
+    }
+
+    [Callback]
+    class SetVolumeFX
+    {
+        static void OnExecute(float level)
+        {
+            //InternalCalls.SetVsyncIntr(ret);
+            Console.WriteLine($"slider actual level is :{level}");
+        }
+    }
 }
