@@ -11,8 +11,8 @@ namespace Wiwa {
 	}
 	Animation::Animation(const aiAnimation* animation, Model* model)
 	{
-		m_Duration = animation->mDuration;
-		m_TicksPerSecond = animation->mTicksPerSecond;
+		m_Duration = (float)animation->mDuration;
+		m_TicksPerSecond = (int)animation->mTicksPerSecond;
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
 		m_BoneInfoMap = model->GetBoneInfoMap();
@@ -28,8 +28,8 @@ namespace Wiwa {
 
 	Animation::Animation(const aiAnimation* animation)
 	{
-		m_Duration = animation->mDuration;
-		m_TicksPerSecond = animation->mTicksPerSecond;
+		m_Duration = (float)animation->mDuration;
+		m_TicksPerSecond = (int)animation->mTicksPerSecond;
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
 	}
@@ -133,10 +133,10 @@ namespace Wiwa {
 	}
 	void Animation::LoadAnimation(const aiAnimation* animation)
 	{
-		m_Duration = animation->mDuration;
-		m_TicksPerSecond = animation->mTicksPerSecond;
-		m_TicksPerSecond = animation->mTicksPerSecond;
+		m_Duration = (float)animation->mDuration;
+		m_TicksPerSecond = (int)animation->mTicksPerSecond;
 		m_NumChannels = animation->mNumChannels;
+		m_Name = animation->mName.C_Str();
 
 		for (unsigned int i = 0; i < animation->mNumChannels; i++)
 		{

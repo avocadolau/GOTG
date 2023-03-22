@@ -1,4 +1,6 @@
 #pragma once
+#pragma warning(disable : 4311)
+#pragma warning(disable : 4302)
 #include <Wiwa/core/Core.h>
 #include <Wiwa/utilities/Reflection.h>
 
@@ -13,6 +15,6 @@ namespace Wiwa {
 }
 
 REFLECTION_BEGIN(Wiwa::AgentAI)
-REFLECT_MEMBER(speed)
-REFLECT_MEMBER(target)
+	REFLECT_MEMBER(speed)
+	REFLECT_MEMBER(target)
 REFLECTION_END;

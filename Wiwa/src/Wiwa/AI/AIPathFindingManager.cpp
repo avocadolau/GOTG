@@ -26,7 +26,7 @@ Wiwa::AIPathFindingManager::MapData Wiwa::AIPathFindingManager::m_mapData = MapD
 Wiwa::AIPathFindingManager::PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
 {}
 
-Wiwa::AIPathFindingManager::PathNode::PathNode(int g, int h, const const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
+Wiwa::AIPathFindingManager::PathNode::PathNode(int g, int h, const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
 {}
 
 Wiwa::AIPathFindingManager::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
@@ -79,7 +79,7 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
-	return listToFill.pathList.size();
+	return (uint32_t)listToFill.pathList.size();
 }
 
 
@@ -97,7 +97,7 @@ int Wiwa::AIPathFindingManager::PathNode::CalculateF(const glm::ivec2& destinati
 	int fx = pos.x - destination.x;
 	int fy = pos.y - destination.y;
 
-	h = sqrtf((fx * fx) + (fy * fy));
+	h = (int)sqrt((fx * fx) + (fy * fy));
 
 	
 	return g + h;
@@ -162,8 +162,8 @@ bool Wiwa::AIPathFindingManager::CleanUp()
 
 int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::ivec2& destination)
 {
-	int ret = -1;
-	int iterations = 0;
+	size_t ret = -1;
+	size_t iterations = 0;
 
 	// they are not defined, IsWalkable returns NULL
 	bool ori = IsWalkable(origin);
@@ -255,7 +255,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		}
 	}
 
-	return ret;
+	return (int)ret;
 }
 
 const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath()

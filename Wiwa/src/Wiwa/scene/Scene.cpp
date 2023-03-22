@@ -197,10 +197,10 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		float perc = m_TransitionTimer / (float)mMaxTimeEntering;
-		int w = 256 * (1.0f - perc);
+		int w = (int)(256.f * (1.0f - perc));
 
 		Wiwa::Size2i size = {
-			1920 * (1.0f - perc),
+			(int)(1920 * (1.0f - perc)),
 			1080
 		};
 
@@ -213,10 +213,10 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		float perc = m_TransitionTimer / (float)mMaxTimeLeaving;
-		int w = 256 * perc;
+		int w = (int)(256.f * perc);
 
 		Wiwa::Size2i size = {
-			1920 * perc,
+			(int)(1920 * perc),
 			1080
 		};
 

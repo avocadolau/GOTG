@@ -464,7 +464,7 @@ namespace Wiwa
 		glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
 		//------------------------------
 
-		glDrawElements(GL_TRIANGLES, ebo_data.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, (GLsizei)0);
 		glBindVertexArray(0);
 
 		/*glBindVertexArray(VAO);

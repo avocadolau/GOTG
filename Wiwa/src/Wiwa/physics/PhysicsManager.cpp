@@ -475,15 +475,15 @@ namespace Wiwa {
 	bool PhysicsManager::OnSave()
 	{
 		JSONDocument physics;
-		int count = filterMap.size();
+		size_t count = filterMap.size();
 
 		physics.AddMember("tags_count", count);
 		std::string tag = "tag_";
-		for (int i = 0; i < count; i++)
+		for (size_t i = 0; i < count; i++)
 		{
 			std::string newTag = tag;
 			newTag += std::to_string(i);
-			physics.AddMember(newTag.c_str(), GetFilterTag(i));
+			physics.AddMember(newTag.c_str(), GetFilterTag((int)i));
 		}
 		std::string path = "assets/Scenes/";
 		path += SceneManager::getActiveScene()->getName();
@@ -550,7 +550,7 @@ namespace Wiwa {
 		std::bitset<MAX_BITS> bset;
 		bset.set(filterStrings.size(), true);
 		fliterBitsSets.push_back(bset);*/
-		int size = filterMap.size();
+		size_t size = filterMap.size();
 		if (filterMap.size() == 32)
 			return false;
 		filterMap.emplace(str, size);
@@ -619,8 +619,8 @@ namespace Wiwa {
 			btVector3 p = ray_from_world.lerp(ray_to_world, closestHit.m_closestHitFraction);
 			if (camera->drawBoundingBoxes)
 			{
-				m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
-				m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0, 0, 1, 1));
+				m_World->getDebugDrawer()->drawSphere(p, (btScalar)0.1f, btVector4(0.f, 0.f, 1.f, 1.f));
+				m_World->getDebugDrawer()->drawLine(p, p + closestHit.m_hitNormalWorld, btVector4(0.f, 0.f, 1.f, 1.f));
 			}
 		}
 
@@ -628,7 +628,7 @@ namespace Wiwa {
 			camera->frameBuffer->Unbind();
 	}
 
-	int PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
+	float PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
 		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
@@ -653,23 +653,23 @@ namespace Wiwa {
 
 			if (camera->drawBoundingBoxes)
 			{
-				m_World->getDebugDrawer()->drawSphere(p, 0.1, btVector4(0, 0, 1, 1));
-				m_World->getDebugDrawer()->drawLine(p, p + allResults.m_hitNormalWorld[i], btVector4(0, 0, 1, 1));
+				m_World->getDebugDrawer()->drawSphere(p, 0.1f, btVector4(0.f, 0.f, 1.f, 1.f));
+				m_World->getDebugDrawer()->drawLine(p, p + allResults.m_hitNormalWorld[i], btVector4(0.f, 0.f, 1.f, 1.f));
 			}
 
-			int dist = ray_from_world.distance2(p);
+			float dist = ray_from_world.distance2(p);
 
 			Object* obj = (Object*)allResults.m_collisionObject[i].getUserPointer();
 			if (strcmp(obj->selfTagStr, "WALL") == 0)
 				return dist;
 			else
-				return -1;
+				return -1.f;
 		}
 
 		if (camera->drawBoundingBoxes)
 			camera->frameBuffer->Unbind();
 
-		return -1;
+		return -1.f;
 	}
 
 	bool PhysicsManager::AddBodyToLog(Object* body_to_log)
@@ -767,8 +767,8 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {
-	drawSphere(point_onB, 0.1, btVector4(0, 1, 1, 1));
-	drawLine(point_onB, point_onB + normal_onB, btVector4(0, 1, 1, 1));
+	drawSphere(point_onB, 0.1f, btVector4(0.f, 1.f, 1.f, 1.f));
+	drawLine(point_onB, point_onB + normal_onB, btVector4(0.f, 1.f, 1.f, 1.f));
 	/*glUseProgram(0);
 	glColor3f(0, 0, 255);
 	glPointSize(8.0f);

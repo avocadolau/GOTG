@@ -261,7 +261,7 @@ namespace Wiwa
 		byte* bitmap = (byte*)calloc(b_w * b_h, sizeof(unsigned char));
 
 		/* calculate font scaling */
-		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
+		float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
 
 		char* word = _word;
 
@@ -270,8 +270,8 @@ namespace Wiwa
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
 
-		ascent = round(ascent * scale);
-		descent = round(descent * scale);
+		ascent = (int)round(ascent * scale);
+		descent = (int)round(descent * scale);
 
 		int i;
 		for (i = 0; i < strlen(word); ++i)
@@ -290,16 +290,16 @@ namespace Wiwa
 			int y = ascent + c_y1;
 
 			/* render character (stride and offset is important here) */
-			int byteOffset = x + roundf(lsb * scale) + (y * b_w);
+			int byteOffset =(int)(x + roundf(lsb * scale) + (y * b_w));
 			stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);
 
 			/* advance x */
-			x += roundf(ax * scale);
+			x += (int)roundf(ax * scale);
 
 			/* add kerning */
 			int kern;
 			kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
-			x += roundf(kern * scale);
+			x += (int)roundf(kern * scale);
 		}
 	
 		
