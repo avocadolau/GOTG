@@ -9,6 +9,23 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
+		<SoundBank Id="412874053" Type="User" Language="SFX" Hash="{1B5FA598-9C39-2A9A-BC28-F13755FD30CF}">
+			<ShortName>on_hover</ShortName>
+			<Path>on_hover.bnk</Path>
+			<Media>
+				<File Id="54831371" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Click.wav</ShortName>
+					<CachePath>SFX/Click_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="412874053" Name="on_hover">
+					<MediaRefs>
+						<MediaRef Id="54831371"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
 		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{66834572-B8EA-99A4-7528-A01A4873C5C2}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
@@ -259,5 +276,5 @@
 			<Path>New_SoundBank.bnk</Path>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{9B0930BB-0896-3F78-7C1A-63EA8EC9333B}</FileHash>
+	<FileHash>{09A89829-001A-89CA-EEC8-D96146840FEA}</FileHash>
 </SoundBanksInfo>
