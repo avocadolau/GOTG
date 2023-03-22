@@ -31,6 +31,10 @@ void UIPanel::Draw()
 	if (ImGui::Button("Save GUI"))
 	{
 		std::filesystem::path file = "assets/saved_wiGUI";
+		if (!std::filesystem::exists(file))
+		{
+			std::filesystem::create_directory(file);
+		}
 		file /= nameSavingWiGUI.c_str();
 		file += ".wiGUI";
 		gm.SaveWiUI(file.string().c_str());
