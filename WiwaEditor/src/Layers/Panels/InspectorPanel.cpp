@@ -455,6 +455,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
+	ImGui::Checkbox("##isAnimated", &emitter->isAnimated);
+	ImGui::SameLine();
+	ImGui::Text("Animated");
+
+	ImGui::Dummy(ImVec2(0, 4));
+
 	ImGui::Checkbox("##repeat", &emitter->repeat);
 	ImGui::SameLine();
 	ImGui::Text("Loop Spawning");

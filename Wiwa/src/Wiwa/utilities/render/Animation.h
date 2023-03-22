@@ -68,7 +68,6 @@ namespace Wiwa {
             }
         }
 
-
         glm::vec4& GetCurrentFrame()
         {
             int actualFrame = static_cast<int>(currentFrame);

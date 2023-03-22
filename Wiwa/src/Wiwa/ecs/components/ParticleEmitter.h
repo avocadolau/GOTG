@@ -31,6 +31,8 @@ namespace Wiwa {
 
 		bool isPlaying = true;
 
+		bool isAnimated;
+
 		//std::list<ColorTime> particle_color;
 
 		int nextPos = 100;
@@ -90,6 +92,8 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitter)
 	REFLECT_MEMBER(particle_lifetime)
 	REFLECT_MEMBER(particle_lifetime_isRanged)
 	REFLECT_MEMBER(particle_lifetime_range)
+	REFLECT_MEMBER(isPlaying)
+	REFLECT_MEMBER(isAnimated)
 	REFLECT_MEMBER(repeat)
 	REFLECT_MEMBER(nextPos)
 	REFLECT_MEMBER(nextColor)
