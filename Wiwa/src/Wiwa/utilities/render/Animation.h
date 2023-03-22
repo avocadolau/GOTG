@@ -21,7 +21,7 @@ namespace Wiwa {
 		glm::mat4 transformation;
 		glm::mat4 globalTransformation;
 		std::string name;
-		int childrenCount;
+		size_t childrenCount;
 		std::vector<NodeData> children;
 	};
 

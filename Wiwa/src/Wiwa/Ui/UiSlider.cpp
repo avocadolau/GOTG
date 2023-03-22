@@ -57,8 +57,8 @@ namespace Wiwa
 					if (Wiwa::Input::IsMouseButtonReleased(0))
 					{
 						state = GuiControlState::PRESSED;
-						extraPosition.x = mouseX;
-						value = ((extraPosition.x - position.x) / position.width);
+						extraPosition.x = (int)mouseX;
+						value = (float)((extraPosition.x - position.x) / position.width);
 						void* params[] = { &value};
 						callback->Execute(params);
 					}

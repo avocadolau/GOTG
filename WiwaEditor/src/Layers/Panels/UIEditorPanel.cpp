@@ -43,7 +43,7 @@ void UIEditorPanel::GetSelectedCanvas()
 	{
 		if (gm.canvas.at(i)->selected)
 		{
-			canvasSelectedID = i;
+			canvasSelectedID = (int)i;
 		}
 	}
 
@@ -64,7 +64,7 @@ void UIEditorPanel::DrawCanvasItems()
 		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))
 		{
-			elementSelected = i;
+			elementSelected = (int)i;
 			SetInitialValues(canvas->controls.at(i));
 		}
 		ImGui::SameLine();

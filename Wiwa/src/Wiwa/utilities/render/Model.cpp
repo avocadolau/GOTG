@@ -38,7 +38,7 @@ namespace Wiwa {
 		}
 
 		sbyte* file_data = NULL;
-		uint32_t file_buf_size = FileSystem::ReadAll(file, &file_data);
+		size_t file_buf_size = FileSystem::ReadAll(file, &file_data);
 
 		WI_INFO("Loaded with bytes: {}", file_buf_size);
 
@@ -114,7 +114,7 @@ namespace Wiwa {
 						bool imported = Resources::Import<Image>(texture_path.string().c_str());
 
 						if (imported) {
-							uint32_t imgId = Resources::Load<Image>(texture_path.string().c_str());
+							ResourceId imgId = Resources::Load<Image>(texture_path.string().c_str());
 							Image* img = Resources::GetResourceById<Image>(imgId);
 							material.SetUniformData("u_Texture", glm::ivec2(img->GetTextureId(), imgId));
 						}
@@ -295,7 +295,7 @@ namespace Wiwa {
 
 	int Model::GetBoneId(const aiBone* pBone)
 	{
-		int boneid = 0;
+		size_t boneid = 0;
 		std::string bone_name(pBone->mName.C_Str());
 		if (m_BoneInfoMap.find(bone_name) == m_BoneInfoMap.end())
 		{
@@ -479,15 +479,6 @@ namespace Wiwa {
 
 	void Model::CreatePyramid()
 	{
-		vbo_data = {
-			0.00f,1.00f,-1.00f,0.67f,0.67f,0.33f,0.25f,0.51f,0.00f,0.00f,1.00f,0.67,0.67,0.33,0.25,0.75,1.00,-0.00,-1.00,0.67,0.67,0.33,0.49,0.75,1.00,-0.00,-1.00,0.67,-0.67,0.33,0.49,0.75,0.00,0.00,1.00,0.67,-0.67,0.33,0.25,0.75,-0.00,-1.00,-1.00,0.67,-0.67,0.33,0.25,0.99,0.00,1.00,-1.00,0.00,0.00,-1.00,0.75,0.51,1.00,-0.00,-1.00,0.00,0.00,-1.00,0.99,0.75,-0.00,-1.00,-1.00,0.00,0.00,-1.00,0.75,0.99,-1.00,0.00,-1.00,0.00,0.00,-1.00,0.51,0.75,-0.00,-1.00,-1.00,-0.67,-0.67,0.33,0.25,0.99,0.00,0.00,1.00,-0.67,-0.67,0.33,0.25,0.75,-1.00,0.00,-1.00,-0.67,-0.67,0.33,0.01,0.75,-1.00,0.00,-1.00,-0.67,0.67,0.33,0.01,0.75,0.00,0.00,1.00,-0.67,0.67,0.33,0.25,0.75,0.00,1.00,-1.00,-0.67,0.67,0.33,0.25,0.51
-		};
-
-		ebo_data = {
-			0,1,2,3,4,5,6,7,8,6,8,9,10,11,12,13,14,15
-		};
-		is_root = false;
-		generateBuffers();
 	}
 
 	void Model::CreateSphere()
@@ -853,7 +844,7 @@ namespace Wiwa {
 
 	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)
 	{
-		for (int i = 0; i < mesh->mNumBones; i++)
+		for (size_t i = 0; i < mesh->mNumBones; i++)
 		{
 			LoadSingleBone(meshIndex, mesh->mBones[i]);
 		}

@@ -17,7 +17,7 @@ namespace Wiwa {
 		WI_INFO("Callback [{}]", className.c_str());
 
 		for (size_t i = 0; i < pcount; i++) {
-			m_Params.push_back(m_ScriptClass.GetMethodParamType(signature, i));
+			m_Params.push_back(m_ScriptClass.GetMethodParamType(signature, (int)i));
 
 			WI_INFO("Param {} of type {}", i + 1, m_Params[i]->name.c_str());
 		}

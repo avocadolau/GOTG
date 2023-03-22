@@ -64,6 +64,7 @@ namespace Wiwa {
 	{
 	public:
 		// Enum that indicates all the resources that can be loaded by the engine
+#pragma warning(disable : )
 		enum ResourceType {
 			WRT_IMAGE,
 			WRT_AUDIOCLIP, //TODO

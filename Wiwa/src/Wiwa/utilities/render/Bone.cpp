@@ -60,7 +60,7 @@ namespace Wiwa {
         m_NumScalingKeys = aiAnimNode->mNumScalingKeys;
 
 
-        for (unsigned int i = 0; i < m_NumPositionKeys; i++)
+        for (uint32_t i = 0; i < m_NumPositionKeys; i++)
         {
             VectorKey posKey;
 
@@ -70,7 +70,7 @@ namespace Wiwa {
             posKey.value.z = aiAnimNode->mPositionKeys[i].mValue.z;
             m_Positions.push_back(posKey);
         }
-        for (unsigned int i = 0; i < m_NumRotationKeys; i++)
+        for (uint32_t i = 0; i < m_NumRotationKeys; i++)
         {
             QuatKey quatKey;
 
@@ -81,7 +81,7 @@ namespace Wiwa {
             quatKey.value.w = aiAnimNode->mRotationKeys[i].mValue.w;
             m_Rotations.push_back(quatKey);
         }
-        for (unsigned int i = 0; i < m_NumScalingKeys; i++)
+        for (uint32_t i = 0; i < m_NumScalingKeys; i++)
         {
             VectorKey scaleKey;
 
@@ -104,7 +104,7 @@ namespace Wiwa {
 
     int Bone::GetPositionIndex(float animationTime)
     {
-        for (int index = 0; index < m_NumPositionKeys - 1; ++index)
+        for (size_t index = 0; index < m_NumPositionKeys - 1; ++index)
         {
             if (animationTime < m_Positions[index + 1].time)
                 return index;
@@ -114,7 +114,7 @@ namespace Wiwa {
 
     int Bone::GetRotationIndex(float animationTime)
     {
-        for (int index = 0; index < m_NumRotationKeys - 1; ++index)
+        for (size_t index = 0; index < m_NumRotationKeys - 1; ++index)
         {
             if (animationTime < m_Rotations[index + 1].time)
                 return index;
@@ -124,7 +124,7 @@ namespace Wiwa {
 
     int Bone::GetScaleIndex(float animationTime)
     {
-        for (int index = 0; index < m_NumScalingKeys - 1; ++index)
+        for (size_t index = 0; index < m_NumScalingKeys - 1; ++index)
         {
             if (animationTime < m_Scales[index + 1].time)
                 return index;
@@ -148,8 +148,8 @@ namespace Wiwa {
 
         int p0Index = GetPositionIndex(animationTime);
         int p1Index = p0Index + 1;
-        float scaleFactor = GetScaleFactor(m_Positions[p0Index].time,
-            m_Positions[p1Index].time, animationTime);
+        float scaleFactor = GetScaleFactor((float)m_Positions[p0Index].time,
+            (float)m_Positions[p1Index].time, animationTime);
         glm::vec3 finalPosition = glm::mix(m_Positions[p0Index].value, m_Positions[p1Index].value, scaleFactor);
         return glm::translate(glm::mat4(1.0f), finalPosition);
     }
@@ -164,8 +164,8 @@ namespace Wiwa {
 
         int p0Index = GetRotationIndex(animationTime);
         int p1Index = p0Index + 1;
-        float scaleFactor = GetScaleFactor(m_Rotations[p0Index].time,
-            m_Rotations[p1Index].time, animationTime);
+        float scaleFactor = GetScaleFactor((float)m_Rotations[p0Index].time,
+            (float)m_Rotations[p1Index].time, animationTime);
         glm::quat finalRotation = glm::slerp(m_Rotations[p0Index].value, m_Rotations[p1Index].value, scaleFactor);
         finalRotation = glm::normalize(finalRotation);
         return glm::toMat4(finalRotation);
@@ -195,7 +195,7 @@ namespace Wiwa {
         m_NumScalingKeys = aiAnimNode->mNumScalingKeys;
 
 
-        for (unsigned int i = 0; i < m_NumPositionKeys; i++)
+        for (uint32_t i = 0; i < m_NumPositionKeys; i++)
         {
             VectorKey posKey;
 
@@ -205,7 +205,7 @@ namespace Wiwa {
             posKey.value.z = aiAnimNode->mPositionKeys[i].mValue.z;
             m_Positions.push_back(posKey);
         }
-        for (unsigned int i = 0; i < m_NumRotationKeys; i++)
+        for (uint32_t i = 0; i < m_NumRotationKeys; i++)
         {
             QuatKey quatKey;
 
@@ -216,7 +216,7 @@ namespace Wiwa {
             quatKey.value.w = aiAnimNode->mRotationKeys[i].mValue.w;
             m_Rotations.push_back(quatKey);
         }
-        for (unsigned int i = 0; i < m_NumScalingKeys; i++)
+        for (uint32_t i = 0; i < m_NumScalingKeys; i++)
         {
             VectorKey scaleKey;
 

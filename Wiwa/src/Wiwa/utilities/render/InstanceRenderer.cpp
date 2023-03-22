@@ -146,8 +146,8 @@ namespace Wiwa {
 
 	uint32_t InstanceRenderer::AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot)
 	{
-		uint32_t remove_size = m_RemovedInstances.size();
-		uint32_t instance_id = WI_INVALID_INDEX;
+		size_t remove_size = m_RemovedInstances.size();
+		size_t instance_id = WI_INVALID_INDEX;
 
 		if (remove_size > 0) {
 			instance_id = m_RemovedInstances[remove_size - 1];

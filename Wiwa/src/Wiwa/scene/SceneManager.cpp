@@ -769,7 +769,7 @@ namespace Wiwa
 		return sceneid;
 	}
 
-	void SceneManager::LoadSceneByIndex(uint32_t scene_index, int flags)
+	void SceneManager::LoadSceneByIndex(size_t scene_index, int flags)
 	{
 		ProjectManager::SceneData &sd = ProjectManager::getSceneDataAt(scene_index);
 		

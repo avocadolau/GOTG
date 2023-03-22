@@ -552,7 +552,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
                 SetRectEmpty(&border_thickness);
                 if (GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME)
                 {
-                    AdjustWindowRectEx(&border_thickness, GetWindowLongPtr(hWnd, GWL_STYLE) & ~WS_CAPTION, FALSE, NULL);
+                    AdjustWindowRectEx(&border_thickness, (DWORD)GetWindowLongPtr(hWnd, GWL_STYLE) & ~WS_CAPTION, FALSE, (DWORD)NULL);
                     border_thickness.left *= -1;
                     border_thickness.top *= -1;
                 }
@@ -562,7 +562,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
                 }
 
                 MARGINS margins = { 0 };
-                DwmExtendFrameIntoClientArea(hWnd, &margins);
+                int ret = DwmExtendFrameIntoClientArea(hWnd, &margins);
                 SetWindowPos(hWnd, NULL, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 
                 break;
