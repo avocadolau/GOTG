@@ -44,7 +44,7 @@ namespace Wiwa {
 
 		bool        isActive = false;
 
-		class AnimationParticles* animation;
+		class AnimationParticles* animation = nullptr;
 
 		ParticleBillboard();
 

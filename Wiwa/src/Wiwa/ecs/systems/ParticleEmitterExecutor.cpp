@@ -233,11 +233,11 @@ namespace Wiwa {
 				p.velocity += p.acceleration * dt;
 				glm::vec3 resultantPosition = p.velocity * dt;
 
-				p.transform.position += resultantPosition;
+				p.transform.localPosition += resultantPosition;
 
 				if (p.startingRotation.x != 0.0f || p.startingRotation.y != 0.0f || p.startingRotation.z != 0.0f)
 				{
-					p.transform.rotation = p.startingRotation;
+					p.transform.localRotation = p.startingRotation;
 				}
 
 				//size
@@ -250,27 +250,33 @@ namespace Wiwa {
 
 					glm::vec3 rotatedPosition = p.startingPosition;
 
+
 					if (p.followEmitterRotation)
 					{
-						float degtorad = PI / 180;
-
-						/*rotatedPosition = glm::vec3(
-							p.startingPosition.x * cosf(t3D->localRotation.y * degtorad) - p.startingPosition.z * sinf(t3D->localRotation.y * degtorad),
-							0,
-							p.startingPosition.z * sinf(t3D->localRotation.y * degtorad) + p.startingPosition.z * cosf(t3D->localRotation.y * degtorad));
-						*/	
-
-						rotatedPosition = glm::vec3(
-							p.startingPosition.x * cosf(t3D->localRotation.y * degtorad) + p.startingPosition.z * cosf(t3D->localRotation.y * degtorad),
-							0,
-							p.startingPosition.z * cosf(t3D->localRotation.y * degtorad) + p.startingPosition.x * cosf(t3D->localRotation.y * degtorad));
-
+						p.transform.rotation = t3D->rotation;
 					}
 
-					glm::vec3 resultantPosition = p.vertices[i] = (ref_vertices[i] + rotatedPosition + p.transform.position);
+					glm::vec3 scaledVertex = ref_vertices[i] * p.transform.localScale;
+
+
+					//fix rotation
+					glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
+					glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
+					glm::vec3 resultantVertex = glm::vec3(rotatedVertex);
+					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
+
+
+
+
+					if (p.followEmitterPosition)
+					{
+						resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex;
+					}
+
+					p.vertices[i] = resultantPosition;
 
 					//---------------------------------------
-					
+
 					// Update the animation
 					p.animation->Update();
 
@@ -284,7 +290,7 @@ namespace Wiwa {
 					p.texCoords[3] = frame.y + frame.w;*/
 
 					//---------------------------------------
-					
+
 					//glm::vec2 ref_tex_coords[4] =
 					//{
 					//	glm::vec2(0, 0),	//0		0	  2  		1	  3
@@ -295,19 +301,13 @@ namespace Wiwa {
 
 					glm::vec2 ref_tex_coords[4] =
 					{
-						glm::vec2(0, 0),	//0		0	  2  		1	  3
-						glm::vec2(0, frame.y),	//1			     		
-						glm::vec2(frame.x , 0),	//2			     		
-						glm::vec2(frame.y , frame.w)		//3		1	  3  		0	  2				
+						glm::vec2(frame.x, frame.y),                     //0    0    2    1    3
+						glm::vec2(frame.x, frame.y + frame.w),           //1
+						glm::vec2(frame.x + frame.z, frame.y),           //2
+						glm::vec2(frame.x + frame.z, frame.y + frame.w)  //3    1    3    0    2	
 					};
 
 					p.tex_coords[i] = ref_tex_coords[i];
-
-
-					if (p.followEmitterPosition)
-					{
-						resultantPosition = (ref_vertices[i] + t3D->position + rotatedPosition + p.transform.position);
-					}
 
 					/*if (p.followEmitterRotation)
 					{
@@ -315,15 +315,10 @@ namespace Wiwa {
 
 						resultantPosition = glm::vec3(resultantPosition.x * cosf(t3D->rotation.y), 0, test.z);
 
-						std::string rstPos = "x: " + std::to_string(resultantPosition.x) + " y: " + std::to_string(resultantPosition.z);
-						WI_CORE_INFO(rstPos.c_str());
-					}*/
 
-					//emitterComp->position
-
-
-					p.vertices[i] = resultantPosition;
+					p.vertices[i] = resultantPosition;*/
 				}
+
 
 				//draw particles
 				{
