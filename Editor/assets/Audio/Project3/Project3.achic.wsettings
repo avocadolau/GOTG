@@ -3,6 +3,7 @@
 	<UserProjectSettingsInfo>
 		<UserProjectSettings Name="" ID="{A4E5C4C5-98DF-42CE-8275-1D09BB776203}">
 			<PropertyList>
+				<Property Name="AudioFilesImporter\Path" Type="string" Value="C:\Users\achic\Desktop\"/>
 				<Property Name="Event Action List\{02DA4D1A-F03D-40D2-97F6-AA890A789216}\x64_Expand States" Type="string" Value=""/>
 				<Property Name="Event Action List\{49FAEAA0-81A2-4DC8-A6F5-928DD67CED8C}\x64_Expand States" Type="string" Value=""/>
 				<Property Name="Event Action List\{755EF7D6-C6EC-468C-B859-BE3961A3B866}\x64_Expand States" Type="string" Value=""/>

@@ -186,7 +186,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3261905107" Type="User" Language="SFX" Hash="{19FDAB18-8CFB-C125-E1BE-AAF1C832CE9D}">
+		<SoundBank Id="3261905107" Type="User" Language="SFX" Hash="{3E7A5F42-DDD1-015C-82A8-C9CEF9F107EC}">
 			<ShortName>menu_intro</ShortName>
 			<Path>menu_intro.bnk</Path>
 			<Media>
@@ -199,6 +199,23 @@
 				<Event Id="2709296900" Name="menu_song">
 					<MediaRefs>
 						<MediaRef Id="339486545"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3332217831" Type="User" Language="SFX" Hash="{FAB93733-8D28-ED68-D065-76E0E93BA462}">
+			<ShortName>background_song</ShortName>
+			<Path>background_song.bnk</Path>
+			<Media>
+				<File Id="969701212" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Background Example.wav</ShortName>
+					<CachePath>SFX/Background Example_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="3332217831" Name="background_song">
+					<MediaRefs>
+						<MediaRef Id="969701212"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -237,6 +254,10 @@
 				</Event>
 			</Events>
 		</SoundBank>
+		<SoundBank Id="4072029455" Type="User" Language="SFX" Hash="{237193B2-875F-A205-6513-737A70F188DC}">
+			<ShortName>New_SoundBank</ShortName>
+			<Path>New_SoundBank.bnk</Path>
+		</SoundBank>
 	</SoundBanks>
-	<FileHash>{D9802DD0-89D8-CA82-B502-4829FFB4B919}</FileHash>
+	<FileHash>{9B0930BB-0896-3F78-7C1A-63EA8EC9333B}</FileHash>
 </SoundBanksInfo>

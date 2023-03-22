@@ -236,6 +236,28 @@
 								<ActiveSource Name="menu_song" ID="{80D3D52A-B38B-45F2-BB21-308ECDC8A5A6}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
+						<Sound Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" ShortID="293078174">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Background Example" ID="{2FB30ECC-A038-49EE-AE6E-39A8AF4687E4}">
+									<Language>SFX</Language>
+									<AudioFile>Background Example.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="969701212"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Background Example" ID="{2FB30ECC-A038-49EE-AE6E-39A8AF4687E4}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="Weapons" ID="{C95A99BC-1EF7-4BC9-A20A-5D66AB9AF0CA}" ShortID="802284686">
