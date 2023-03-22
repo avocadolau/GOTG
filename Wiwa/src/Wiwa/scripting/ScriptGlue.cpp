@@ -93,6 +93,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(ChangeSceneByIndex);
 		WI_ADD_INTERNAL_CALL(ChangeSceneByName);
 
+		WI_ADD_INTERNAL_CALL(PauseScene);
 		//Screen
 
 		WI_ADD_INTERNAL_CALL(SetFullscreenIntr);
@@ -130,10 +131,9 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 
 		// UI
-
+		WI_ADD_INTERNAL_CALL(ActivateGuiCanvas);
 
 		// AI
-		
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
 
 

@@ -92,7 +92,7 @@ namespace Wiwa
 			}
 			break;
 		case Scene::SCENE_LOOP:
-			m_EntityManager.SystemsUpdate();
+			if(!pausedGame)m_EntityManager.SystemsUpdate();
 			m_GuiManager->Update();
 			ProcessInput();
 			UpdateLoop();

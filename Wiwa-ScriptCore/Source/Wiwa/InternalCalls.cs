@@ -164,9 +164,11 @@ namespace Wiwa
         internal extern static void ChangeSceneByIndex(ulong index, int flags);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void ChangeSceneByName(string scene_name, int flags);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void PauseScene();
         #endregion
         #region UI
-        
+
         #endregion
 
         #region AgentAI

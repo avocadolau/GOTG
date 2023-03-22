@@ -832,4 +832,9 @@ namespace Wiwa
 	{		
 		m_Scenes[m_ActiveScene]->ChangeScene(sceneId, flags);
 	}
+
+	void SceneManager::PauseCurrentScene()
+	{
+		m_Scenes[m_ActiveScene]->SwapPauseActive();
+	}
 }
