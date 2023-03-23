@@ -5,6 +5,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/AI/AIMapGeneration.h>
+#include "../../Utils/EditorUtils.h"
 //#include <Wiwa/audio/Audio.h>
 //#include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 //#include <Wiwa/utilities/filesystem/FileSystem.h>
@@ -15,7 +16,7 @@
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
 	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
 {
-	m_drawGrid = false;
+	m_drawGrid = true;
 }
 
 AIMapBakingPanel::~AIMapBakingPanel()
@@ -27,15 +28,28 @@ void AIMapBakingPanel::Draw()
 	ImGui::Begin(iconName.c_str(), &active);
 
 	
-	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map into the entity named");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0, 255, 200, 1), "Floor");
-
-	ImGui::TextColored(ImVec4(255, 0, 0, 1), " It does not take in account AABBs collisions yet");
+	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map with theese parameters:");
 	
-
-	//ImGui::SameLine();
 	
+	glm::ivec2 mapSizeInTiles = { 0,0 };
+	mapSizeInTiles.x = Wiwa::AIMapGeneration::GetMapData().width;
+	mapSizeInTiles.y = Wiwa::AIMapGeneration::GetMapData().height;
+	
+	const std::string posLabel = "Position in Tiles:";
+	DrawInt2Control(posLabel, &mapSizeInTiles, 1.0f, 300.0f);
+
+	Wiwa::AIMapGeneration::GetMapData().width = mapSizeInTiles.x;
+	Wiwa::AIMapGeneration::GetMapData().height = mapSizeInTiles.y;
+
+	glm::vec2 sizeOfTiles = { 0.0f, 0.0f };
+	sizeOfTiles.x = Wiwa::AIMapGeneration::GetMapData().tileWidth;
+	sizeOfTiles.y = Wiwa::AIMapGeneration::GetMapData().tileHeight;
+
+	const std::string sizeLabel = "Size of the Tiles:";
+	DrawVec2Control(posLabel, &sizeOfTiles, 1.0f, 300.0f);
+
+	Wiwa::AIMapGeneration::GetMapData().tileWidth  = sizeOfTiles.x;
+	Wiwa::AIMapGeneration::GetMapData().tileHeight = sizeOfTiles.y;
 
 	if (ImGui::Button("Bake Map")) {
 		
