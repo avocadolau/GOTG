@@ -93,5 +93,5 @@ void ChangeCollisionTags(size_t id, int filter_group, int filter_mask)
     cb->selfTag = bits;
     obj->selfTag = cb->selfTag;
     obj->selfTagStr = physicsManager.GetFilterTag(cb->selfTag);
-    physicsManager.ChangeCollisionTags(obj, filter_group, filter_mask);
+    physicsManager.ChangeCollisionTags(obj, bits, filter_mask);
 }

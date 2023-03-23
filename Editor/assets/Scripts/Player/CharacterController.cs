@@ -3,6 +3,7 @@ using Wiwa;
 
 namespace Game
 {
+    using EntityId = System.UInt32;
     [Component]
     public struct CharacterController
     {
@@ -11,8 +12,8 @@ namespace Game
         public float RotationSpeed;
 
         public float DashCoolDown;
-        public float DashMaxSpeed;
-        public float DashIncrement;
+        public float DashDistance;
+        public float DashSpeed;
 
         public float WalkTreshold;
     }
@@ -25,8 +26,14 @@ namespace Game
         private float dashTimer = 0f;
         private float dashCurrentVel = 0f;
         private bool isDashing = false;
+
+        private Vector3 lastPos = Vector3Values.zero;
+
+        private int normalTags = 0;
+        private int dashTags = 0;
         void Awake()
         {
+            InitTags();
             //Setting components
             characterControllerIt = GetComponentIterator<CharacterController>();
             transformIt = GetComponentIterator<Transform3D>();
@@ -34,18 +41,28 @@ namespace Game
 
             dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
         }
-
+        void InitTags()
+        {
+            dashTags |= 1 << PhysicsManager.GetTagBitsByString("WALL");
+            normalTags |= 1 << PhysicsManager.GetTagBitsByString("WALL");
+            normalTags |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
+            normalTags |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
+            normalTags |= 1 << PhysicsManager.GetTagBitsByString("END_ROOM_TRIGGER");
+            normalTags |= 1 << PhysicsManager.GetTagBitsByString("START_RUN_TRIGGER");
+        }
         void Update()
         {
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref CharacterController controller = ref GetComponentByIterator<CharacterController>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
+            Vector3 velocity = Vector3Values.zero;
 
             Vector3 input = GetMovementInput(ref controller);
-            Vector3 velocity = input * controller.Velocity * Time.DeltaTimeMS();
+            bool isDashing = Dash(ref velocity, input, controller, transform, ref rb);
 
+            if (!isDashing)
+                velocity = input * controller.Velocity * Time.DeltaTimeMS();
 
-            bool isDashing = Dash(ref velocity, input, controller, transform);
 
             PhysicsManager.SetLinearVelocity(m_EntityId, velocity);
 
@@ -139,7 +156,7 @@ namespace Game
             }
             Animator.PlayAnimationName("run", m_EntityId);
         }
-        bool Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform)
+        bool Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform, ref CollisionBody cb)
         {
             dashTimer += Time.DeltaTime();
 
@@ -147,30 +164,43 @@ namespace Game
             (Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA)))
             {
                 isDashing = true;
+                lastPos = transform.LocalPosition;
                 return true;
             }
 
             if (isDashing)
             {
+                Vector3 targetPoint = Mathf.PointAlongDirection(lastPos, input, controller.DashDistance);
                 if (input == Vector3Values.zero)
                 {
                     input = Mathf.CalculateForward(ref transform);
                 }
 
-                dashCurrentVel += controller.DashIncrement;
-                velocity = input * dashCurrentVel * Time.DeltaTimeMS();
+                dashCurrentVel += controller.DashSpeed;
+                velocity = input * dashCurrentVel;
 
-                if (dashCurrentVel >= controller.DashMaxSpeed)
+                float distance = Vector3.Distance(transform.LocalPosition, targetPoint);
+                PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, dashTags);
+                if (distance <= 2f)
                 {
                     dashTimer = 0f;
                     dashCurrentVel = 0f;
                     isDashing = false;
+                    PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, normalTags);
                 }
                 return true;
 
             }
 
             return false;
+        }
+
+        void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
+        {
+            if (id1 == m_EntityId)
+                return;
+            if (str2 == "WALL")
+                isDashing = false;
         }
     }
 }
