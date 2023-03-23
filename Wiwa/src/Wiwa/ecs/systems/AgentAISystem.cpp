@@ -114,12 +114,11 @@ void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
 	// transform->position;
 	
 	m_DirectionPoint = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
+	glm::ivec2 targetInMap = Wiwa::AIMapGeneration::WorldToMap(targetPos.x, targetPos.z);
 	
+	Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint, targetInMap);
 
-	glm::ivec2 target = {targetPos.x, targetPos.z};
-	Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint,target);
-
-	glm::ivec2 nextPos = target;
+	glm::ivec2 nextPos = targetInMap;
 
 	const std::vector<glm::ivec2>* lastPath = Wiwa::AIPathFindingManager::GetLastPath();
 	

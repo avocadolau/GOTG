@@ -37,8 +37,8 @@ namespace Wiwa {
 
 		struct PathNode
 		{
-			int g;
-			int h;
+			int g; // Distance from current node and parent
+			int h; // Distance between current node and destination
 			glm::ivec2 pos;
 			const PathNode* parent; // needed to reconstruct the path in the end
 
@@ -70,7 +70,8 @@ namespace Wiwa {
 			PathNode* GetNodeLowestScore();
 
 			// The list itself, note they are not pointers!
-			std::vector<PathNode> pathList;
+			//std::vector<PathNode> pathList;
+			std::list<PathNode> pathList;
 		};
 
 	private:

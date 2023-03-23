@@ -32,6 +32,7 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 
 	m_map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
 	memset(m_map, 1, width * height);
+	AIPathFindingManager::SetMap(width, height, m_map);
 
 	for (int z = 0; z < m_mapData.height; z++)
 	{
@@ -40,7 +41,7 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 			// if collision then invalid walking code
 
 			// if not collision then default walking code
-			m_map[z + x] = DEFAULT_WALK_CODE;
+			m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
 		}
 	}
 
