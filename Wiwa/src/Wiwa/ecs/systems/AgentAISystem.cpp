@@ -28,16 +28,6 @@ void Wiwa::AgentAISystem::OnInit()
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
-	
-	//
-	
-	//
-
-	m_DirectionPoint = Wiwa::AIMapGeneration::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
-
-	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
-	m_DirectionPoint = { m_DirectionPoint.x + (localMapData.tileWidth*0.5f), m_DirectionPoint.y + (localMapData.tileHeight * 0.5f) };
-
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 
@@ -45,9 +35,14 @@ void Wiwa::AgentAISystem::OnUpdate()
 		agent->hasArrived = true; 
 	}*/
 
-	if (lastPath.empty() == false)
+	if (lastPath.empty() == false && m_IsMoving == false)
 	{
 		GoToNextPosition();
+	}
+
+	if (HasArrivedNextPosition(glm::ivec2(transform->localPosition.x, transform->localPosition.z), m_DirectionPoint))
+	{
+		m_IsMoving = false;
 	}
 
 	if (m_IsMoving)
@@ -62,8 +57,6 @@ void Wiwa::AgentAISystem::OnUpdate()
 		transform->localPosition.x += agent->speed * dirX * Time::GetDeltaTimeSeconds();
 		transform->localPosition.z += agent->speed * dirY * Time::GetDeltaTimeSeconds();
 	}
-
-	
 	
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
@@ -103,26 +96,21 @@ void Wiwa::AgentAISystem::OnUpdate()
 	glEnd();
 
 	camera->frameBuffer->Unbind();
-	
-
-	m_IsMoving = false;
 }
 
 void Wiwa::AgentAISystem::OnDestroy()
 {
 }
 
-void Wiwa::AgentAISystem::CreatePath(glm::vec3 targetPos)
+void Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 {
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
-
-	// transform->position;
 	
-	m_DirectionPoint = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
+	glm::ivec2 currentPositionMap = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
 	glm::ivec2 targetInMap = Wiwa::AIMapGeneration::WorldToMap(targetPos.x, targetPos.z);
 	
-	Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint, targetInMap);
+	Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
 
 	lastPath = *Wiwa::AIPathFindingManager::GetLastPath();
 	
@@ -130,10 +118,17 @@ void Wiwa::AgentAISystem::CreatePath(glm::vec3 targetPos)
 
 void Wiwa::AgentAISystem::GoToNextPosition()
 {
-	nextPos = lastPath.front();
+	nextPos = lastPath.back();
 	lastPath.pop_back();
 
-	m_DirectionPoint = nextPos;
+	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
+	m_DirectionPoint = { nextPos.x + (localMapData.tileWidth * 0.5f), nextPos.y + (localMapData.tileHeight * 0.5f) };
 
 	m_IsMoving = true;
+}
+
+
+bool Wiwa::AgentAISystem::HasArrivedNextPosition(const glm::ivec2& next_position, const glm::ivec2& current_position)
+{
+	return (next_position == current_position);
 }

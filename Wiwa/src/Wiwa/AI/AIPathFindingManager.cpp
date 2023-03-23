@@ -1,5 +1,6 @@
 #include <wipch.h>
 #include "AIPathFindingManager.h"
+#include "AIMapGeneration.h"
 //#include "Wiwa/ecs/systems/System.h"
 //#include "Wiwa/ecs/EntityManager.h"
 //#include "Wiwa/scene/SceneManager.h"
@@ -212,6 +213,8 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			PathNode* lowest = open.GetNodeLowestScore();
 			closed.pathList.push_back(*lowest);
 			PathNode* node = &closed.pathList.back();
+			auto vec = Wiwa::AIMapGeneration::MapToWorld(node->pos.x, node->pos.y);
+			node->pos = vec;
 
 			//WI_INFO("X = {}", node->pos.x);
 			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
@@ -232,7 +235,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 					pathNode = pathNode->parent;
 				}
 				
-				std::reverse(m_lastPath.begin(), m_lastPath.end());
+				//std::reverse(m_lastPath.begin(), m_lastPath.end());
 				ret = m_lastPath.size();
 
 				break;
@@ -248,12 +251,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			{
 				if (closed.Find(item.pos) != nullptr)
 					continue;
-				//// ignore nodes in the closed list
-				//for (std::list<PathNode>::iterator iterator = closed.pathList.begin(); iterator != closed.pathList.end(); iterator++)
-				//{
-				//	
-				//}
-				//
+
 				// If it is NOT found, calculate its F and add it to the open list
 				PathNode* adjacentInOpen = open.Find(item.pos);
 				if (adjacentInOpen == nullptr)
