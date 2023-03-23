@@ -118,7 +118,7 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::Find
 		/*if (pathList.(i).pos == point)
 			return &pathList.at(i);*/
 	}
-	return &pathList.front();
+	return nullptr;
 
 	/*for (int i = 0; i < pathList.size(); i++)
 	{
@@ -246,13 +246,14 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			// If it is a better path, Update the parent
 			for (auto& item : adjacent.pathList)
 			{
-				// ignore nodes in the closed list
-				for (std::list<PathNode>::iterator item = closed.pathList.begin(); item != closed.pathList.end(); item++)
-				{
-					if (closed.Find(item->pos) != nullptr)
-						continue;
-				}
-				
+				if (closed.Find(item.pos) != nullptr)
+					continue;
+				//// ignore nodes in the closed list
+				//for (std::list<PathNode>::iterator iterator = closed.pathList.begin(); iterator != closed.pathList.end(); iterator++)
+				//{
+				//	
+				//}
+				//
 				// If it is NOT found, calculate its F and add it to the open list
 				PathNode* adjacentInOpen = open.Find(item.pos);
 				if (adjacentInOpen == nullptr)

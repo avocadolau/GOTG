@@ -11,6 +11,6 @@ void SendAIToPosition(size_t entity_id,glm::vec3 target_pos)
 
 	if (agentPtr)
 	{
-		agentPtr->GoToPosition(target_pos);
+		agentPtr->CreatePath(target_pos);
 	}
 }

@@ -23,13 +23,14 @@ void Wiwa::AgentAISystem::OnAwake()
 
 void Wiwa::AgentAISystem::OnInit()
 {
+	CreatePath({ 20,0,20 });
 }
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
 	
 	//
-	GoToPosition({20,0,20});
+	
 	//
 
 	m_DirectionPoint = Wiwa::AIMapGeneration::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
@@ -44,6 +45,11 @@ void Wiwa::AgentAISystem::OnUpdate()
 		agent->hasArrived = true; 
 	}*/
 
+	if (lastPath.empty() == false)
+	{
+		GoToNextPosition();
+	}
+
 	if (m_IsMoving)
 	{
 		float dirX = m_DirectionPoint.x - transform->position.x;
@@ -53,8 +59,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 		dirY /= abs(dirY);
 
 		// Move to direction
-		transform->localPosition.x += agent->speed * dirX;
-		transform->localPosition.z += agent->speed * dirY;
+		transform->localPosition.x += agent->speed * dirX * Time::GetDeltaTimeSeconds();
+		transform->localPosition.z += agent->speed * dirY * Time::GetDeltaTimeSeconds();
 	}
 
 	
@@ -106,7 +112,7 @@ void Wiwa::AgentAISystem::OnDestroy()
 {
 }
 
-void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
+void Wiwa::AgentAISystem::CreatePath(glm::vec3 targetPos)
 {
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
@@ -118,17 +124,16 @@ void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
 	
 	Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint, targetInMap);
 
-	glm::ivec2 nextPos = targetInMap;
-
-	const std::vector<glm::ivec2>* lastPath = Wiwa::AIPathFindingManager::GetLastPath();
+	lastPath = *Wiwa::AIPathFindingManager::GetLastPath();
 	
-	if (lastPath->size() > 1)
-	{
-		nextPos = { lastPath->at(1).x, lastPath->at(1).y };
-	}
+}
+
+void Wiwa::AgentAISystem::GoToNextPosition()
+{
+	nextPos = lastPath.front();
+	lastPath.pop_back();
 
 	m_DirectionPoint = nextPos;
 
 	m_IsMoving = true;
-	
 }
