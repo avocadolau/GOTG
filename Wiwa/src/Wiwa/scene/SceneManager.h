@@ -78,6 +78,8 @@ namespace Wiwa {
 
 		static void SaveScene(SceneId scene_id, const char* scene_path);
 
+		static void PauseCurrentScene();
+
 		// Load a scene file to memory
 		static SceneId LoadScene(const char* scene_path, int flags=LOAD_DEFAULT);
 

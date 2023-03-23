@@ -57,7 +57,14 @@ namespace Wiwa
 		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
 
 
-		void SetCallback(GuiCanvas* canvas, GuiControl* control, size_t hash);
+
+		bool _saveGUIImpl(File& file);
+		bool _loadGUIImpl(File& file);
+
+		void SaveWiUI(const char* path);
+
+		void LoadWiUI(const char* path);
+
 	public:
 		std::vector<GuiCanvas*> canvas;
 		std::vector<GuiCanvas*> canvasToDestroy;

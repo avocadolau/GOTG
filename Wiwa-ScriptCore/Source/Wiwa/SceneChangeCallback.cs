@@ -25,7 +25,55 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            //Wiwa.InternalCalls.Quit();
+            Wiwa.Application.Quit();
+        }
+    }
+
+
+    [Callback]
+    class Resume_PauseGame
+    {
+        static void OnExecute()
+        {
+            InternalCalls.PauseScene();
+        }
+    }
+
+    [Callback]
+    class SetFullscreen
+    {
+        static void OnExecute(bool ret)
+        {
+            InternalCalls.SetFullscreenIntr(ret);
+        }
+    }
+
+    [Callback]
+    class SetVsync
+    {
+        static void OnExecute(bool ret)
+        {
+            InternalCalls.SetVsyncIntr(ret);
+        }
+    }
+
+    [Callback]
+    class SetVolumeMusic
+    {
+        static void OnExecute(float level)
+        {
+            //InternalCalls.SetFullscreenIntr(ret);
+            Console.WriteLine($"slider actual level is :{level}");
+        }
+    }
+
+    [Callback]
+    class SetVolumeFX
+    {
+        static void OnExecute(float level)
+        {
+            //InternalCalls.SetVsyncIntr(ret);
+            Console.WriteLine($"slider actual level is :{level}");
         }
     }
 }
