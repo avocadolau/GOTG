@@ -165,9 +165,13 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static int GetEntityTagBits(EntityId id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static int GetTagBitsByString(string tag);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static int RayCastDistanceWalls(Vector3 from, Vector3 to);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetTrigger(EntityId id, bool value);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeCollisionTags(EntityId id);
         #endregion
         #region Scene
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

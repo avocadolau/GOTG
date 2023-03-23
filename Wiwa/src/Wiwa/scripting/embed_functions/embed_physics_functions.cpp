@@ -4,6 +4,7 @@
 #include "Wiwa/physics/PhysicsManager.h"
 #include <Wiwa/scripting/ScriptEngine.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <mono/metadata/object.h>
 
 void SetLinearVelocity(size_t id, glm::vec3 velocity)
 {
@@ -55,6 +56,13 @@ int GetEntityTagBits(size_t id)
     return selfTag;
 }
 
+int GetTagBitsByString(MonoString* str)
+{
+    char* name_p = mono_string_to_utf8(str);
+    Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+    return physicsManager.GetFilterTag(name_p);
+}
+
 int RayCastDistanceWalls(glm::vec3 from, glm::vec3 to)
 {
     Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
@@ -68,4 +76,18 @@ void SetTrigger(size_t id, bool value)
 
     Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(id)->getBody();
     physicsManager.SetTrigger(obj, value);
+}
+
+void ChangeCollisionTags(size_t id)
+{
+    Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+    Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
+    Wiwa::CollisionBody* cb = em.GetComponent<Wiwa::CollisionBody>(id);
+    Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(id)->getBody();
+    int bits = 0;
+    bits |= 1 << cb->selfTag;
+    physicsManager.ChangeCollisionTags(obj, bits, cb->filterBits);
+
+    obj->selfTagStr = physicsManager.GetFilterTag(cb->selfTag);
 }

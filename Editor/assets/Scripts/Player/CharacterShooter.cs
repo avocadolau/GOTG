@@ -1,7 +1,5 @@
-using Wiwa;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Wiwa;
 namespace Game
 {
     [Component]
@@ -36,7 +34,7 @@ namespace Game
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref CharacterShooterComponent characterShoot = ref GetComponent<CharacterShooterComponent>();
             ref CharacterController characterCtrl = ref GetComponent<CharacterController>();
-            
+
             Fire(ref characterShoot, transform.LocalRotation);
         }
         private void Fire(ref CharacterShooterComponent character, Vector3 bullDirection)
@@ -82,7 +80,7 @@ namespace Game
             ref Transform3D newEntityTransform = ref GetComponent<Transform3D>(entity);
             ref BulletComponent bc = ref AddComponent<BulletComponent>(entity);
             AddMesh(entity, "Models/bullet", "assets/Models/03_mat_addelements.wimaterial");
-            
+
             ref CollisionBody rb = ref AddComponent<CollisionBody>(entity);
             rb.scalingOffset.x = 1;
             rb.scalingOffset.y = 1;
@@ -132,6 +130,7 @@ namespace Game
             ApplySystem<MeshRenderer>(entity);
 
         }
+
         void InitCollisionFlags(ref CollisionBody rb, ref CharacterShooterComponent character)
         {
             //int bitsSelf = 0;

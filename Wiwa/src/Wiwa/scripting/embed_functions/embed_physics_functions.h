@@ -18,6 +18,10 @@ MonoString* GetEntityTagString(size_t id);
 
 int GetEntityTagBits(size_t id);
 
+int GetTagBitsByString(MonoString* str);
+
 int RayCastDistanceWalls(glm::vec3 from, glm::vec3 to);
 
 void SetTrigger(size_t id, bool value);
+
+void ChangeCollisionTags(size_t id);

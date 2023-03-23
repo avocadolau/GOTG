@@ -29,6 +29,11 @@
             return InternalCalls.GetEntityTagBits(id);
         }
 
+        public static int GetTagBitsByString(string tag)
+        {
+            return InternalCalls.GetTagBitsByString(tag);
+        }
+
         public static int RayCastDistanceWalls(Vector3 from, Vector3 to)
         {
             return InternalCalls.RayCastDistanceWalls(from, to);
@@ -37,6 +42,11 @@
         public static void SetTrigger(EntityId id, bool value)
         {
             InternalCalls.SetTrigger(id, value);
+        }
+
+        public static void ChangeCollisionTags(EntityId id)
+        {
+            InternalCalls.ChangeCollisionTags(id);
         }
     }
 }
