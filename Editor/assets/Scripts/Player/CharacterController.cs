@@ -42,6 +42,15 @@ namespace Game
         {
             Vector3 input = Vector3Values.zero;
 
+            //     z
+            //     |
+            //     |
+            //-----|----- -x
+            //     |
+            //     |
+
+
+
             if (Input.IsKeyDown(KeyCode.A))
                 input.x += 1;
             if (Input.IsKeyDown(KeyCode.D))
