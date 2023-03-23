@@ -6,7 +6,7 @@ namespace WiwaApp
 {
     using EntityId = System.UInt64;
     [Component]
-    public struct EnemySpawner
+    public struct WavesSpawner
     {
         public int maxEnemiesPerWave;
         public int maxWaveCount;
@@ -14,14 +14,14 @@ namespace WiwaApp
         public float timeBetweenWaves;
         public bool hasFinished;
     }
-    class EnemySpawnerSystem : Behaviour
+    class WavesSpawnerSystem : Behaviour
     {
         ComponentIterator enemySpawnerIt;
         ComponentIterator currentWaveIt;
         EntityId currentWaveEntityId;
         float timer = 0.0f;
         bool previousWaveDestroy = false;
-        bool debug = false;
+        bool debug = true;
         void Awake()
         {
             if (debug) Console.WriteLine("-- Starting Awake -- Enemy spawner");
@@ -37,8 +37,8 @@ namespace WiwaApp
         void Init()
         {
             if (debug) Console.WriteLine("-- Starting Init -- Enemy spawner");
-            enemySpawnerIt = GetComponentIterator<EnemySpawner>();
-            EnemySpawner enemySpawner = GetComponentByIterator<EnemySpawner>(enemySpawnerIt);
+            enemySpawnerIt = GetComponentIterator<WavesSpawner>();
+            WavesSpawner enemySpawner = GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
             timer = enemySpawner.timeBetweenWaves;
             SpawnWave();
         }
@@ -46,44 +46,48 @@ namespace WiwaApp
         void Update()
         {
             if (debug) Console.WriteLine("-- Starting Update -- Enemy spawner");
-            ref EnemySpawner enemySpawner = ref GetComponentByIterator<EnemySpawner>(enemySpawnerIt);
-            if (debug)
+            if (enemySpawnerIt.componentId != Constants.WI_INVALID_INDEX)
             {
-                Console.WriteLine("waveID");
-                Console.WriteLine(currentWaveIt.componentId);
-                Console.WriteLine(currentWaveIt.componentIndex);
-                Console.WriteLine(currentWaveIt.componentSize);
-            }
-
-            if (currentWaveIt.componentId != Constants.WI_INVALID_INDEX)
-            {
-                if (debug) Console.WriteLine("Getting wave");
-                ref Wave currentWave = ref GetComponent<Wave>(currentWaveEntityId);
-                if (debug) Console.WriteLine("Checking wave");
-        
-                if (debug) Console.WriteLine("No Wave");
-                if (!previousWaveDestroy)
-                    previousWaveDestroy = CheckFinishWave(currentWave);
-
-                // Finish the spawner
-                if (enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount && previousWaveDestroy)
+                ref WavesSpawner enemySpawner = ref GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
+                if (debug)
                 {
-                    enemySpawner.hasFinished = true;
+                    Console.WriteLine("waveID");
+                    Console.WriteLine(currentWaveIt.componentId);
+                    Console.WriteLine(currentWaveIt.componentIndex);
+                    Console.WriteLine(currentWaveIt.componentSize);
                 }
-                
-            }
 
-            // Timer before deploying next wave
-            if (previousWaveDestroy && enemySpawner.hasFinished == false)
-            {
-                timer -= Time.DeltaTime();
-                if (debug) Console.WriteLine("Timer -> " + timer);
-                if (timer < 0)
+                if (currentWaveIt.componentId != Constants.WI_INVALID_INDEX)
                 {
-                    SpawnWave();
-                    timer = enemySpawner.timeBetweenWaves;
+                    if (debug) Console.WriteLine("Getting wave");
+                    ref Wave currentWave = ref GetComponent<Wave>(currentWaveEntityId);
+                    if (debug) Console.WriteLine("Checking wave");
+
+                    if (debug) Console.WriteLine("No Wave");
+                    if (!previousWaveDestroy)
+                        previousWaveDestroy = CheckFinishWave(currentWave);
+
+                    // Finish the spawner
+                    if (enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount && previousWaveDestroy)
+                    {
+                        enemySpawner.hasFinished = true;
+                    }
+
+                }
+
+                // Timer before deploying next wave
+                if (previousWaveDestroy && enemySpawner.hasFinished == false)
+                {
+                    timer -= Time.DeltaTime();
+                    if (debug) Console.WriteLine("Timer -> " + timer);
+                    if (timer < 0)
+                    {
+                        SpawnWave();
+                        timer = enemySpawner.timeBetweenWaves;
+                    }
                 }
             }
+           
             if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
         }
 
@@ -106,7 +110,7 @@ namespace WiwaApp
         private void SpawnWave()
         {
             if (debug) Console.WriteLine("New wave and getting spawner comp");
-            ref EnemySpawner enemySpawner = ref GetComponentByIterator<EnemySpawner>(enemySpawnerIt);
+            ref WavesSpawner enemySpawner = ref GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
 
             enemySpawner.currentWaveCount += 1;
 

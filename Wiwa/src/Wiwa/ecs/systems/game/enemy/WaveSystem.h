@@ -10,6 +10,7 @@ namespace Wiwa {
 		std::vector<EntityManager::ComponentIterator> m_EnemiesCmp;
 		std::vector<EntityId> m_EnemiesId;
 		bool init = false;
+		SystemHash physicsSystemHash;
 	public:
 		WaveSystem();
 		~WaveSystem();

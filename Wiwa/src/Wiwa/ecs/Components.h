@@ -27,12 +27,8 @@
 
 // Game components
 #include "components/game/Character.h"
-#include "components/game/player/Player.h"
-//#include "components/game/player/PlayerSpawner.h"
-//#include "components/game/enemy/Enemy.h"
-//#include "components/game/enemy/EnemySpawner.h"
 #include "components/game/enemy/Wave.h"
-//Particle components
+
 // Particle components
 #include "components/Billboard.h"
 #include "components/ParticleEmitter.h"

@@ -6,10 +6,6 @@
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
 #include <Wiwa/ecs/components/game/Character.h>
-#include <Wiwa/ecs/components/game/player/Player.h>
-#include <Wiwa/ecs/components/game/player/PlayerSpawner.h>
-#include <Wiwa/ecs/components/game/enemy/Enemy.h>
-#include <Wiwa/ecs/components/game/enemy/EnemySpawner.h>
 #include <Wiwa/ecs/components/game/enemy/Wave.h>
 
 #include <vector>
