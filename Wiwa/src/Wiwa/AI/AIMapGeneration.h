@@ -35,8 +35,8 @@ namespace Wiwa {
 			float startingPosition;
 			int width;
 			int	height;
-			float tileWidth;
-			float tileHeight;
+			float tileWidth; // Cannot be less than 1!
+			float tileHeight;// Cannot be less than 1!
 		};
 
 

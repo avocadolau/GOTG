@@ -78,18 +78,23 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	float d = mapdata.height * mapdata.width * 2;
 
-	for (float i = -d; i <= d; i += 1.0f)
+	for (float i = -d; i <= d; i += mapdata.tileHeight)
 	{
 		glVertex3f(i, 0.0f, -d);
 		glVertex3f(i, 0.0f, d);
-		glVertex3f(-d, 0.0f, i);
-		glVertex3f(d, 0.0f, i);
+		//glVertex3f(-d, 0.0f, i);
+		//glVertex3f(d, 0.0f, i);		
 	}
 
+	for (float j = -d; j <= d; j += mapdata.tileWidth)
+	{
+		glVertex3f(-d, 0.0f, j);
+		glVertex3f(d, 0.0f, j);
+	}
 
 	glVertex3f(transform->localPosition.x, 0, transform->localPosition.z);
 
-	glm::vec2 dest = Wiwa::AIMapGeneration::WorldToMap(49, 49);
+	glm::vec2 dest = Wiwa::AIMapGeneration::WorldToMap(20, 20);
 
 	glVertex3f(dest.x, 0, dest.y);
 

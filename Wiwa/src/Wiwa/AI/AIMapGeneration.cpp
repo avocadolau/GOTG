@@ -30,6 +30,11 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	m_mapData.tileHeight = tileHeight;
 	m_mapData.tileWidth = tileWidth;
 
+	if (tileHeight < 1.f) tileHeight = 1.f;
+
+	if (tileWidth < 1.f) tileWidth = 1.f;	
+
+
 	m_map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
 	memset(m_map, 1, width * height);
 	AIPathFindingManager::SetMap(width, height, m_map);
@@ -64,8 +69,8 @@ glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(float x, float y)
 {
 	glm::ivec2 ret;
 
-	ret.x = (int)x / m_mapData.tileWidth;
-	ret.y = (int)y / m_mapData.tileHeight;
+	ret.x = x / m_mapData.tileWidth;
+	ret.y = y / m_mapData.tileHeight;
 
 	return ret;
 }
