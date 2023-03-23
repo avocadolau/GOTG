@@ -453,6 +453,14 @@ namespace Wiwa {
 			body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	}
 
+	void PhysicsManager::ChangeCollisionTags(Object* body, int filterGroup, int filterBits)
+	{
+		m_World->removeCollisionObject(body->collisionObject);
+
+		m_World->addCollisionObject(body->collisionObject, filterGroup, filterBits);
+		m_World->updateSingleAabb(body->collisionObject);
+	}
+
 	Object* PhysicsManager::FindByEntityId(size_t id)
 	{
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)

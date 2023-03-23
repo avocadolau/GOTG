@@ -103,6 +103,8 @@ namespace Wiwa {
 
 		void SetTrigger(Object* body, bool isTrigger);
 
+		void ChangeCollisionTags(Object* body, int filterGroup, int filterBits);
+
 		Object* FindByEntityId(size_t id);
 
 		void UpdateCollisionType(size_t first, size_t second);
