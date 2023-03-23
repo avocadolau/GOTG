@@ -52,7 +52,10 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 				EntityId actualId = entities->at(i);
 
 				
-				if (em.GetComponent<Wiwa::CollisionBody>(actualId)->isStatic)
+				if (em.GetComponent<Wiwa::CollisionBody>(actualId) != nullptr &&
+					em.GetComponent<Wiwa::Transform3D>(actualId) != nullptr &&
+					em.GetComponent<Wiwa::CollisionBody>(actualId)->isStatic == true
+					)
 				{
 					em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
 				}
