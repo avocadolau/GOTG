@@ -3,6 +3,7 @@
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/utilities/functions/Callback.h>
+#include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
 
@@ -185,9 +186,13 @@ namespace Wiwa
 			return true;
 		}
 
-		void SwapCallback(int callback_id)
+		void SwapText(const char* word, Wiwa::Renderer2D& r2d)
 		{
-			//callback = Wiwa::Application::Get().getCallbackAt(callback_id);
+			/*text = word;
+			Text* newText = new Text();
+			newText = Text::InitFont("assets/Fonts/arial.ttf", (char*)word);
+			
+			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());*/
 		}
 	public:
 

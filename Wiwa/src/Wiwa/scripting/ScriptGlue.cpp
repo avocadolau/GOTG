@@ -132,7 +132,8 @@ namespace Wiwa
 
 		// UI
 		WI_ADD_INTERNAL_CALL(ActivateGuiCanvas);
-
+		WI_ADD_INTERNAL_CALL(SwapToNewTexture);
+		WI_ADD_INTERNAL_CALL(SwapText);
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
 

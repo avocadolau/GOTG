@@ -170,6 +170,10 @@ namespace Wiwa
         #region UI
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void ActivateGuiCanvas(int id);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SwapToNewTexture(string path,int id_canvas,int id_control);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SwapText(string word, int id_canvas, int id_control);
         #endregion
 
         #region AgentAI

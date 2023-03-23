@@ -29,6 +29,16 @@ namespace Wiwa
         }
     }
 
+
+    [Callback]
+    class Resume_PauseGame
+    {
+        static void OnExecute()
+        {
+            InternalCalls.PauseScene();
+        }
+    }
+
     [Callback]
     class SetFullscreen
     {
