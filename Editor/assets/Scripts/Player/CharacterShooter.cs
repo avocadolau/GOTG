@@ -12,6 +12,9 @@ namespace Game
         public float bulletScale;
         public float bulletLifeTime;
         public float bulletSpeed;
+        public int bulletTag;
+        public int collisionTag1;
+        public int collisionTag2;
     }
     public class CharacterShooter : Behaviour
     {
@@ -79,7 +82,7 @@ namespace Game
             ref Transform3D newEntityTransform = ref GetComponent<Transform3D>(entity);
             ref BulletComponent bc = ref AddComponent<BulletComponent>(entity);
             AddMesh(entity, "Models/bullet", "assets/Models/03_mat_addelements.wimaterial");
-
+            
             ref CollisionBody rb = ref AddComponent<CollisionBody>(entity);
             rb.scalingOffset.x = 1;
             rb.scalingOffset.y = 1;
@@ -132,11 +135,11 @@ namespace Game
         void InitCollisionFlags(ref CollisionBody rb, ref CharacterShooterComponent character)
         {
             //int bitsSelf = 0;
-            ////bitsSelf |= 1 << character.bulletTag;
-            //rb.selfTag = character.bulletTag;
+            //bitsSelf |= 1 << character.bulletTag;
+            rb.selfTag = character.bulletTag;
 
-            //rb.filterBits |= 1 << character.collisionTag1;
-            //rb.filterBits |= 1 << character.collisionTag2;
+            rb.filterBits |= 1 << character.collisionTag1;
+            rb.filterBits |= 1 << character.collisionTag2;
         }
     }
 }
