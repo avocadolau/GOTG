@@ -11,7 +11,6 @@
 
 // Game systems
 #include "systems/game/CharacterSystem.h"
-#include "systems/game/player/PlayerSpawnerSystem.h"
 #include "systems/AgentAISystem.h"
 //#include "systems/game/enemy/EnemySystem.h"
 //#include "systems/game/enemy/EnemySpawnerSystem.h"

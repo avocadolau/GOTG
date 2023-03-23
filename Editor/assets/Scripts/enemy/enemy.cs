@@ -6,7 +6,7 @@ namespace Game
 {
     using EntityId = System.UInt64;
     [Component]
-    public struct enemy
+    public struct Enemy
     {
         public int enemyType;
         public bool hasFinished;
@@ -39,7 +39,7 @@ namespace Game
         public virtual void Init()
         {
             if (debug) Console.WriteLine("-- Starting Init -- Enemy");
-            enemyIt = GetComponentIterator<enemy>();
+            enemyIt = GetComponentIterator<Enemy>();
             characterStatsIt = GetComponentIterator<Character>();
             colliderIt = GetComponentIterator<CollisionBody>();
             agentIt = GetComponentIterator<AgentAI>();
@@ -51,7 +51,7 @@ namespace Game
         {
             if (Input.IsKeyDown(KeyCode.M))
             {
-                ref enemy self = ref GetComponentByIterator<enemy>(enemyIt);
+                ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
                 self.hasFinished = true;
             }
 
@@ -89,7 +89,7 @@ namespace Game
             if (characterStatsIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref Character statsSelf = ref GetComponentByIterator<Character>(characterStatsIt);
-                ref enemy self = ref GetComponentByIterator<enemy>(enemyIt);
+                ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
 
                 statsSelf.healthPoints = statsSelf.healthPoints - damage;
                 if (statsSelf.healthPoints <= 0)
