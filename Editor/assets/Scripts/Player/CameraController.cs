@@ -41,7 +41,7 @@ namespace Game
 
             campos.y = transform.Position.y + 25;
             campos.x = transform.Position.x;
-            campos.z = transform.Position.z + 10;
+            campos.z = transform.Position.z - 10;
 
             referenceZ = transform.Position.z;
             referenceX = transform.Position.x;
