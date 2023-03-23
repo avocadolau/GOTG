@@ -37,6 +37,14 @@ namespace Wiwa
 	{
 		m_IsPaused = !m_IsPaused;
 	}
+	void Time::Pause()
+	{
+		m_IsPaused = true;
+	}
+	void Time::UnPause()
+	{
+		m_IsPaused = false;
+	}
 	void Time::Update()
 	{
 		OPTICK_EVENT("Time Update");
@@ -69,8 +77,7 @@ namespace Wiwa
 		m_IsPlaying = false;
 		m_TimeScale = 0;
 	}
-
-	void Time::SetTimeScale(const int value)
+	void Time::SetTimeScale(float value)
 	{
 		m_TimeScale = value;
 		CLAMP(m_TimeScale, -2, 5);

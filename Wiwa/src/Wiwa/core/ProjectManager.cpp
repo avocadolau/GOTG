@@ -52,7 +52,7 @@ namespace Wiwa
 				size_t size = scene_list.Size();
 				SceneData sd;
 
-				for (size_t i = 0; i < size; i++) {
+				for (uint32_t i = 0; i < size; i++) {
 					JSONValue scene = scene_list[i];
 					
 					sd.scene_name = scene["name"].as_string();

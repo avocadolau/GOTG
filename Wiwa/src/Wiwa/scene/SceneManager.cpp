@@ -276,6 +276,9 @@ namespace Wiwa
 
 				Rect2i extraPosition;
 
+				Rect2i texturePosition;
+				Rect2i extraTexturePosition;
+
 				int callbackID;// = 1;
 
 				scene_file.Read(&id, sizeof(int));
@@ -297,25 +300,27 @@ namespace Wiwa
 				extraTextureGui = extraTextureGui_c;
 				delete[] extraTextureGui_c;
 
-				
+				scene_file.Read(&texturePosition, sizeof(Rect2i));
+				scene_file.Read(&extraTexturePosition, sizeof(Rect2i));
+
 
 
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID);
+					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					gm.CreateGuiControl_Text(guiType, id, position, textureGui.c_str(),canvas.at(i)->id, callbackID);
+					gm.CreateGuiControl_Text(guiType, id, position, textureGui.c_str(),canvas.at(i)->id);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID);
+					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
-					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID);
+					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID);
+					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition);
 					break;
 				default:
 					break;
@@ -523,6 +528,8 @@ namespace Wiwa
 					GuiControlState guiState = control->GetState();
 					Rect2i position = control->GetPosition();
 					int callbackID = control->callbackID;
+					Rect2i texturePosition = control->texturePosition;
+					Rect2i extraTexturePosition = control->extraTexturePosition;
 					
 					const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
 					const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
@@ -546,6 +553,10 @@ namespace Wiwa
 					// Save extraTexture
 					scene_file.Write(&extraTextureGui_len, sizeof(size_t));
 					scene_file.Write(extraTextureGui, extraTextureGui_len);
+
+					scene_file.Write(&texturePosition, sizeof(Rect2i));
+					scene_file.Write(&extraTexturePosition, sizeof(Rect2i));
+
 
 					
 				}
@@ -720,14 +731,20 @@ namespace Wiwa
 		File scene_file = FileSystem::Open(scene_path, FileSystem::OM_IN | FileSystem::OM_BINARY);
 		if (scene_file.IsOpen())
 		{
-			Scene *sc = m_Scenes[sceneid];
+			Scene* sc = m_Scenes[sceneid];
+			std::filesystem::path path = scene_path;
+
+			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+
+			// Load Physics Manager json Data
+			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
 			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
 			_loadSceneImpl(sc, scene_file);
 
-			std::filesystem::path path = scene_path;
 			sc->ChangeName(path.filename().stem().string().c_str());
 
 			if (flags & LOAD_SEPARATE)
@@ -735,9 +752,7 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			// Load Physics Manager json Data
-			sc->GetPhysicsManager().OnLoad();
-
+			Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1, 1, 0); // this is temporal
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else
@@ -750,7 +765,7 @@ namespace Wiwa
 		return sceneid;
 	}
 
-	void SceneManager::LoadSceneByIndex(uint32_t scene_index, int flags)
+	void SceneManager::LoadSceneByIndex(size_t scene_index, int flags)
 	{
 		ProjectManager::SceneData &sd = ProjectManager::getSceneDataAt(scene_index);
 		

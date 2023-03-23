@@ -12,9 +12,16 @@ namespace Wiwa {
 
 		MonoMethodSignature* signature = m_ScriptClass.GetMethodSignature(m_Execute);
 
-		m_HasParam = m_ScriptClass.GetMethodParamCount(signature) > 0;
-		m_ParamType = m_ScriptClass.GetMethodParamType(signature, 0);
+		uint32_t pcount = m_ScriptClass.GetMethodParamCount(signature);
 
+		WI_INFO("Callback [{}]", className.c_str());
+
+		for (size_t i = 0; i < pcount; i++) {
+			m_Params.push_back(m_ScriptClass.GetMethodParamType(signature, (int)i));
+
+			WI_INFO("Param {} of type {}", i + 1, m_Params[i]->name.c_str());
+		}
+		
 		m_Name = className;
 		m_Hash = FNV1A_HASH(m_Name.c_str());
 	}
@@ -24,8 +31,8 @@ namespace Wiwa {
 
 	}
 
-	void CSCallback::Execute(void* param)
+	void CSCallback::Execute(void** params)
 	{
-		mono_runtime_invoke(m_Execute, NULL, &param, NULL);
+		mono_runtime_invoke(m_Execute, NULL, params, NULL);
 	}
 }

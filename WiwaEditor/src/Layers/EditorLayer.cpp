@@ -18,6 +18,7 @@
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/components/Sprite.h>
 #include <Wiwa/scripting/ScriptEngine.h>
 
@@ -56,6 +57,7 @@ void EditorLayer::OnAttach()
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 	m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
 	m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+	
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
 
@@ -85,6 +87,9 @@ void EditorLayer::OnAttach()
 	m_UiEditorPanel = std::make_unique<UIEditorPanel>(this);
 	m_AIMapBakingPanel = std::make_unique<AIMapBakingPanel>(this);
 
+	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
+	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
+
 	m_AudioPanel = std::make_unique<AudioPanel>(this);
 
 	m_ProjectPanel = std::make_unique<ProjectPanel>(this);
@@ -105,14 +110,16 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_ImportPanel.get());
 	m_Panels.push_back(m_ShaderPanel.get());
 	m_Panels.push_back(m_EnvPanel.get());
+	m_Panels.push_back(m_AnimatorPanel.get());
+	m_Panels.push_back(m_AnimationPanel.get());
 	m_Panels.push_back(m_UiPanel.get());
 	m_Panels.push_back(m_UiEditorPanel.get());
 	m_Panels.push_back(m_AudioPanel.get());
 	m_Panels.push_back(m_AIMapBakingPanel.get());
 
+	
 	m_Settings.push_back(m_ProjectPanel.get());
 	m_Settings.push_back(m_About.get());
-
 	m_EventCallback = {&Wiwa::Application::OnEvent, &Wiwa::Application::Get()};
 
 	LoadCallback();

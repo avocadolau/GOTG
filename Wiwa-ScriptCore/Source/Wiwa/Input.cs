@@ -30,9 +30,13 @@
         {
             return InternalCalls.IsButtonPressedIntr(gamepad, button);
         }
-        public static float GetAxis(Gamepad gamepad, GamepadAxis axis)
+        public static float GetAxis(Gamepad gamepad, GamepadAxis axis, float deadzone = 0.6f)
         {
-            return InternalCalls.GetAxisIntr(gamepad, axis);
+            return InternalCalls.GetAxisIntr(gamepad, axis, deadzone);
+        }
+        public static float GetRawAxis(Gamepad gamepad, GamepadAxis axis, float deadzone)
+        {
+            return InternalCalls.GetRawAxisIntr(gamepad, axis, deadzone);
         }
     }
 }

@@ -142,9 +142,14 @@ void ScenePanel::Draw()
             {
                 CreateEntityWithModelHierarchy(pathS.c_str());
             }
-            if (p.extension() == ".wiscene")
+            else if (p.extension() == ".wiscene")
             {
                 EditorLayer::Get().LoadScene(pathS);
+            }
+            else if (p.extension() == ".wiprefab")
+            {
+                Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+                em.LoadPrefab(pathS.c_str());
             }
         }
 

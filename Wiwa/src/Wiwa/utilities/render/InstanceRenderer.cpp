@@ -146,8 +146,8 @@ namespace Wiwa {
 
 	uint32_t InstanceRenderer::AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot)
 	{
-		uint32_t remove_size = m_RemovedInstances.size();
-		uint32_t instance_id = WI_INVALID_INDEX;
+		size_t remove_size = m_RemovedInstances.size();
+		size_t instance_id = WI_INVALID_INDEX;
 
 		if (remove_size > 0) {
 			instance_id = m_RemovedInstances[remove_size - 1];
@@ -184,12 +184,14 @@ namespace Wiwa {
 
 	void InstanceRenderer::UpdateInstancePosition(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot)
 	{
-		Vector2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex->scale.h };
+		Size2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex[id].scale.h};
+		
 		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(position, s, pivot);
 	}
 
-	void InstanceRenderer::UpdateInstanceSize(uint32_t id, const Size2i& size)
+	void InstanceRenderer::UpdateInstanceSize(uint32_t id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot)
 	{
+		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(pos, size, pivot);
 		m_InstanceVertex[id].scale = { static_cast<float>(size.x), static_cast<float>(size.y) };
 	}
 
@@ -203,6 +205,11 @@ namespace Wiwa {
 	void InstanceRenderer::UpdateInstanceClip(uint32_t id, const TextureClip& clip)
 	{
 		m_InstanceVertex[id].textureClip = clip;
+	}
+
+	void InstanceRenderer::UpdateInstanceColor(uint32_t id, const Color4f& color)
+	{
+		m_InstanceVertex[id].color = color;
 	}
 
 	int InstanceRenderer::AddTexture(uint32_t texture)

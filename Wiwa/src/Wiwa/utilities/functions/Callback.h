@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
@@ -9,19 +10,18 @@ namespace Wiwa {
 		std::string m_Name;
 		size_t m_Hash;
 
-		bool m_HasParam;
-		const Type* m_ParamType;
+		std::vector<const Type*> m_Params;
 	public:
 		std::string getName() { return m_Name; }
 		size_t getHash() { return m_Hash; }
-
-		bool HasParam() { return m_HasParam; }
-		size_t ParamHash() { if (m_ParamType) return m_ParamType->hash; return WI_INVALID_INDEX; }
+		
+		size_t getParamCount() { return m_Params.size(); }
+		const Type* getParamAt(size_t index) { return m_Params[index]; }
 
 		Callback();
 		
 		virtual ~Callback() = default;
 
-		virtual void Execute(void* param=NULL){}
+		virtual void Execute(void** params=NULL){}
 	};
 }

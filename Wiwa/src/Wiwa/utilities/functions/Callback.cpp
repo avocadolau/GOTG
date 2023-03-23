@@ -6,8 +6,5 @@ namespace Wiwa {
 	{
 		m_Name = "None";
 		m_Hash = WI_INVALID_INDEX;
-
-		m_HasParam = false;
-		m_ParamType = NULL;
 	}
 }

@@ -32,6 +32,8 @@ namespace Wiwa
 
 		static void Play();
 		static void PauseUnPause();
+		static void Pause();
+		static void UnPause();
 		static void Step();
 		static void Update();
 		static void PostUpdate();
@@ -41,7 +43,7 @@ namespace Wiwa
 		static inline uint32_t GetGameFrameCount() { return m_GameFrameCount; }
 		static inline float GetTime() { return m_Time.count(); }
 		static inline float GetTimeScale() { return m_TimeScale; }
-		static void SetTimeScale(const int value);
+		static void SetTimeScale(float value);
 		static inline float GetDeltaTime() { return m_DeltaTime.count() * 1000.0f; }
 		static inline float GetDeltaTimeSeconds() { return m_DeltaTime.count(); }
 		static inline float GetRealTimeSinceStartup() { return m_RealTimeSinceStartup.count(); }

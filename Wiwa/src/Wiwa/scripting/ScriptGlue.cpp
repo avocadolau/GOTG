@@ -19,7 +19,11 @@
 #include "embed_functions/embed_screen_functions.h"
 #include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
+#include "embed_functions/embed_animator_functions.h"
+#include "embed_functions/embed_application_functions.h"
+#include "embed_functions/embed_artificialintelligence_functions.h"
 #include "embed_functions/embed_particles_functions.h"
+
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -27,6 +31,9 @@ namespace Wiwa
 {
 	void ScriptGlue::RegisterFunctions()
 	{
+		// Application
+		WI_ADD_INTERNAL_CALL(QuitIntr);
+
 		// Logging
 		WI_ADD_INTERNAL_CALL(NativeLog);
 		WI_ADD_INTERNAL_CALL(NativeLogVector);
@@ -40,6 +47,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetMouseYDeltaIntr);
 		WI_ADD_INTERNAL_CALL(IsButtonPressedIntr);
 		WI_ADD_INTERNAL_CALL(GetAxisIntr);
+		WI_ADD_INTERNAL_CALL(GetRawAxisIntr);
 
 		// ECS
 		WI_ADD_INTERNAL_CALL(GetComponent);
@@ -50,11 +58,23 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CreateEntity);
 		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
+		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
+		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
 		WI_ADD_INTERNAL_CALL(GetTimeIntr);
 		WI_ADD_INTERNAL_CALL(SetFPSIntr);
+		WI_ADD_INTERNAL_CALL(SetTimeScaleIntr);
+		WI_ADD_INTERNAL_CALL(GetTimeScaleIntr);
+		WI_ADD_INTERNAL_CALL(PlayIntr);
+		WI_ADD_INTERNAL_CALL(StopIntr);
+		WI_ADD_INTERNAL_CALL(PauseIntr);
+		WI_ADD_INTERNAL_CALL(UnPauseIntr);
+		WI_ADD_INTERNAL_CALL(PauseUnPauseIntr);
+		WI_ADD_INTERNAL_CALL(IsPausedIntr);
+		WI_ADD_INTERNAL_CALL(IsPlayingIntr);
+
 
 		// Camera
 		WI_ADD_INTERNAL_CALL(GetActiveCamera);
@@ -70,6 +90,9 @@ namespace Wiwa
 		// Scene
 		WI_ADD_INTERNAL_CALL(LoadSceneByIndex);
 		WI_ADD_INTERNAL_CALL(LoadSceneByName);
+
+		WI_ADD_INTERNAL_CALL(ChangeSceneByIndex);
+		WI_ADD_INTERNAL_CALL(ChangeSceneByName);
 
 		//Screen
 
@@ -108,6 +131,19 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 
 		// UI
+
+
+		// AI
+		
+		WI_ADD_INTERNAL_CALL(SendAIToPosition);
+
+
+		//animator
+		WI_ADD_INTERNAL_CALL(PlayAnimationName);
+		WI_ADD_INTERNAL_CALL(PlayAnimation);
+		WI_ADD_INTERNAL_CALL(PauseAnimation);
+		WI_ADD_INTERNAL_CALL(RestartAnimation);
+
 		WI_ADD_INTERNAL_CALL(Play);
 		WI_ADD_INTERNAL_CALL(ChangeScene);
 		WI_ADD_INTERNAL_CALL(Quit);

@@ -7,27 +7,28 @@
 
 namespace Wiwa
 {
-	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, int callbackID) : GuiControl(scene, GuiControlType::SLIDER, id)
+	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, size_t callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex) : GuiControl(scene, GuiControlType::SLIDER, id)
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
+		texturePosition = boundsOriginTex;
+		extraTexturePosition = sliderOriginTex;
 		name = "Slider";
 		m_Scene = scene;
+		active = true;
+
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;
-		callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+		if (callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
-		id_quad_extra = r2d.CreateInstancedQuadTex(m_Scene, extraTexture->GetTextureId(), extraTexture->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_extra = r2d.CreateInstancedQuadTex(m_Scene, extraTexture->GetTextureId(), extraTexture->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, extraTexturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 
 
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
-		//id_quad_disabled = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_focused = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_pressed = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
-		//id_quad_selected = r2d.CreateInstancedQuadTex(texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 
 		
 		state = GuiControlState::NORMAL;
@@ -53,15 +54,17 @@ namespace Wiwa
 					(mouseY > position.y && mouseY < position.y + position.height))
 				{
 					state = GuiControlState::FOCUSED;
-					if (Wiwa::Input::IsMouseButtonPressed(0))
+					if (Wiwa::Input::IsMouseButtonReleased(0))
 					{
 						state = GuiControlState::PRESSED;
-						extraPosition.x = mouseX;
+						extraPosition.x = (int)mouseX;
+						value = (float)((extraPosition.x - position.x) / position.width);
+						void* params[] = { &value};
+						callback->Execute(params);
 					}
 					else
 					{
 						state = GuiControlState::NORMAL;
-						/*NotifyObserver();*/
 					}
 				}
 			}

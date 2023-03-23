@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Image.h>
 #include <Wiwa/utilities/render/Model.h>
+#include <Wiwa/utilities/render/Animation.h>
 #include <Wiwa/utilities/render/Material.h>
 #include <Wiwa/utilities/json/JSONDocument.h>
 #include <Wiwa/utilities/json/JSONValue.h>
@@ -63,12 +64,14 @@ namespace Wiwa {
 	{
 	public:
 		// Enum that indicates all the resources that can be loaded by the engine
+#pragma warning(disable : )
 		enum ResourceType {
 			WRT_IMAGE,
 			WRT_AUDIOCLIP, //TODO
 			WRT_SHADER,
 			WRT_MODEL,
 			WRT_MATERIAL,
+			WRT_ANIMATION,
 			WRT_LAST
 		};
 		enum MetaResult
@@ -110,6 +113,7 @@ namespace Wiwa {
 		// Implementations
 		static void _import_image_impl(const char* origin, const char* destination);
 		static void _import_model_impl(const char* origin, const char* destination, ModelSettings* settings);
+		static void _import_animation_impl(const char* origin, const char* destination);
 		static bool _check_import_impl(const char* file, const char* extension);
 		
 	public:

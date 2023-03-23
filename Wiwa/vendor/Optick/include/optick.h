@@ -145,7 +145,7 @@ typedef void (VKAPI_PTR *PFN_vkFreeCommandBuffers_)(VkDevice device, VkCommandPo
 #if OPTICK_VKAPI_PTR_DEFINED
 #undef VKAPI_PTR
 #endif
-
+#pragma warning(disable : 26812)
 // D3D12 Forward Declarations
 struct ID3D12CommandList;
 struct ID3D12Device;

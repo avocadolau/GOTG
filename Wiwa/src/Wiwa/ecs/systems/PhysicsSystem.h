@@ -1,7 +1,7 @@
 #pragma once
 #include "System.h"
 #include "../components/Transform3D.h"
-#include "../components/Rigidbody.h"
+#include "../components/CollisionBody.h"
 
 #include <Wiwa/utilities/Reflection.h>
 
@@ -29,8 +29,9 @@ namespace Wiwa {
 		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 
+		Object* getBody();
 	private:
-
+		Object* obj = nullptr;
 		void DeleteBody();
 	};
 }

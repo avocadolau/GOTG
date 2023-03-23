@@ -46,20 +46,20 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex)
 	{
 		GuiControl* control = nullptr;
 	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(m_Scene, id, bounds, path, callbackID);
+				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex);
 				break;
 			default:
 				break;
@@ -69,31 +69,18 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex)
 	{
 		GuiControl* control = nullptr;
-		
-		
-			switch (type)
-			{
-			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, slider_path, callbackID);
-				break;
-			case GuiControlType::SLIDER:
-				control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID);
-				break;
-			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, slider_path, callbackID);
-				break;
-			default:
-				break;
-			}
-			if (control != nullptr) canvas.at(canvas_id)->controls.push_back(control);
+
+		control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex,sliderOriginTex);
+
+		canvas.at(canvas_id)->controls.push_back(control);
 		
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, int callbackID)
+	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id)
 	{
 		GuiControl* control = nullptr;
 		
@@ -101,7 +88,7 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::TEXT:
-				control = new GuiText(m_Scene, id, bounds, string_text, callbackID);
+				control = new GuiText(m_Scene, id, bounds, string_text);
 				break;
 			default:
 				break;
@@ -274,9 +261,8 @@ namespace Wiwa
 		byte* bitmap = (byte*)calloc(b_w * b_h, sizeof(unsigned char));
 
 		/* calculate font scaling */
-		float scale = stbtt_ScaleForPixelHeight(&info, l_h);
+		float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
 
-		
 		char* word = _word;
 
 		int x = 0;
@@ -284,8 +270,8 @@ namespace Wiwa
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
 
-		ascent = roundf(ascent * scale);
-		descent = roundf(descent * scale);
+		ascent = (int)round(ascent * scale);
+		descent = (int)round(descent * scale);
 
 		int i;
 		for (i = 0; i < strlen(word); ++i)
@@ -304,16 +290,16 @@ namespace Wiwa
 			int y = ascent + c_y1;
 
 			/* render character (stride and offset is important here) */
-			int byteOffset = x + roundf(lsb * scale) + (y * b_w);
+			int byteOffset =(int)(x + roundf(lsb * scale) + (y * b_w));
 			stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);
 
 			/* advance x */
-			x += roundf(ax * scale);
+			x += (int)roundf(ax * scale);
 
 			/* add kerning */
 			int kern;
 			kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
-			x += roundf(kern * scale);
+			x += (int)roundf(kern * scale);
 		}
 	
 		

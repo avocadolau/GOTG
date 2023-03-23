@@ -3,6 +3,9 @@
 #include "System.h"
 #include "../components/Transform3D.h"
 #include "../components/Mesh.h"
+#include "../components/AudioSource.h"
+#include "../components/AnimatorComponent.h"
+
 
 #include <Wiwa/utilities/Reflection.h>
 

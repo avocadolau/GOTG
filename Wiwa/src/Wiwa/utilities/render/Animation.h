@@ -1,81 +1,84 @@
 #pragma once
-
 #include <Wiwa/core/Core.h>
-#include <glm/glm.hpp>
-#include <chrono>
+
+#include <string>
 #include <vector>
 #include <map>
-#include <stdint.h>
-#include <Wiwa/core/Resources.h>
+#include <set>
+#include <glm/glm.hpp>
+#include <Wiwa/utilities/math/Math.h>
+#include <Wiwa/utilities/filesystem/FileSystem.h>
+#include <Wiwa/utilities/render/Bone.h>
+#include <Wiwa/utilities/render/Model.h>
 
-#include <stdint.h>
-
-#define MAX_FRAMES 60
+struct aiAnimation;
+struct BoneInfo;
+class ModelHierarchy;
 
 namespace Wiwa {
+	struct NodeData
+	{
+		glm::mat4 transformation;
+		glm::mat4 globalTransformation;
+		std::string name;
+		size_t childrenCount;
+		std::vector<NodeData> children;
+	};
 
-    class WI_API AnimationParticles
-    {
-    public:
-        float speed = 1.0f;
-        std::vector<glm::vec4> frames;
-        bool loop = true;
-        // Allows the animation to keep going back and forth
-        bool pingpong = false;
-        bool mustFlip = false;
+	class WI_API Animation
+	{
+	public:
+		Animation();
+		Animation(const aiAnimation* animation, Model* model);
+		Animation(const aiAnimation* animation);
+		Animation(const char* filePath, Model* model);
+		Animation(const char* filePath);
+		~Animation();
 
-    private:
-        float currentFrame = 0.0f;
-        int totalFrames = 0;
-        int loopCount = 0;
-        int pingpongDirection = 1;
-        std::chrono::time_point<std::chrono::high_resolution_clock> lastUpdate;
+		Bone* FindBone(const std::string& name);
 
-    public:
+		inline int GetTicksPerSecond() { return m_TicksPerSecond; }
 
-        void PushBack(const glm::vec4& rect)
-        {
-            frames.push_back(rect);
-            totalFrames++;
-        }
+		inline float GetDuration() { return m_Duration; }
 
-        void Reset()
-        {
-            currentFrame = 0;
-            loopCount = 0;
-            lastUpdate = std::chrono::high_resolution_clock::now();
-        }
+		inline std::vector<Bone*> GetBones() { return m_Bones; }
 
-        bool HasFinished()
-        {
-            return !loop && !pingpong && loopCount > 0;
-        }
+		inline const NodeData& GetRootNode() { return m_RootNode; }
 
-        void Update()
-        {
-            std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
-            float elapsedSeconds = std::chrono::duration<float>(now - lastUpdate).count();
-            lastUpdate = now;
+		inline const std::map<std::string, BoneInfo>& GetBoneIDMap()
+		{
+			return m_BoneInfoMap;
+		}
 
-            currentFrame += speed * elapsedSeconds;
-            if (currentFrame >= totalFrames)
-            {
-                currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;
-                ++loopCount;
+		glm::mat4 GetBoneTransform(int index) {return m_Bones[index]->GetLocalTransform(); };
 
-                if (pingpong)
-                    pingpongDirection = -pingpongDirection;
-            }
-        }
+		void LoadAnimation(const aiAnimation* animation);
+		static Animation* LoadWiAnimation(const char* filepath);
+		static void SaveWiAnimation(Animation* animation, const char* path);
+		void SaveNodeData(File& file, NodeData* node);
+		NodeData* LoadNodeData(File& file);
+		static Animation* GetAnimationFromFile(const char* filepath);
 
-        glm::vec4& GetCurrentFrame()
-        {
-            int actualFrame = static_cast<int>(currentFrame);
-            if (pingpongDirection == -1)
-                actualFrame = totalFrames - static_cast<int>(currentFrame) - 1;
+		std::string m_SavePath;
+		float m_Duration = 0;
+		int m_TicksPerSecond = 0;
+		int m_NumChannels = 0;
+		std::string m_Name;
+		void PrintGlmMatrix(const glm::mat4& mat);
+	private:
+		void ReadMissingBones(const aiAnimation* animation, Model& model);
 
-            return frames[actualFrame];
-        }
-    };
+		void ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root,glm::mat4& parentTransform);
 
+		glm::mat4 CalculateGlobalTransform(const ModelHierarchy* bone, glm::mat4 parentTransform);
+
+		std::vector<Bone*> m_Bones;
+		NodeData m_RootNode;
+		std::map<std::string, BoneInfo> m_BoneInfoMap;
+		std::map<std::string, std::vector<glm::mat4>> m_CalculatedBoneMatrices;
+		unsigned int m_BoneCount;
+
+
+	};
 }
+

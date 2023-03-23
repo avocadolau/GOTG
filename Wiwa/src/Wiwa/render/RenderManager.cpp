@@ -14,6 +14,7 @@ namespace Wiwa {
 	glm::mat4 RenderManager::m_OrthoProj;
 	glm::mat4 RenderManager::m_View;
 	glm::mat4 RenderManager::m_Model;
+	uint32_t RenderManager::m_BoneLocation[MAX_BONES];
 	uint32_t RenderManager::m_OrthoLoc;
 	uint32_t RenderManager::m_ViewLoc;
 	uint32_t RenderManager::m_ModelLoc;
@@ -65,6 +66,13 @@ namespace Wiwa {
 		m_OrthoLoc = m_Shader.getUniformLocation("u_Proj");
 		m_ViewLoc = m_Shader.getUniformLocation("u_View");
 		m_ModelLoc = m_Shader.getUniformLocation("u_Model");
+
+		for (unsigned int i = 0; i < MAX_BONES; i++) {
+			char Name[128];
+			memset(Name, 0, sizeof(Name));
+			snprintf(Name, sizeof(Name), "u_Bones[%d]", i);
+			m_BoneLocation[i] = m_Shader.getUniformLocation(Name);
+		}
 
 		// Init orthographic projection
 		m_OrthoProj = glm::ortho(0.0f, (float)width, (float)height, 0.0f, 0.1f, 100.0f);

@@ -34,9 +34,9 @@
         public Vector4 local_mat_r4;
     }
     #endregion
-    #region RigidBody
+    #region CollisionBody
     [Component]
-    public struct Rigidbody
+    public struct CollisionBody
     {
         public Vector3 positionOffset;
         public Vector3 scalingOffset;
@@ -84,6 +84,14 @@
     {
         public int val1;
         public float val2;
+    }
+    #endregion
+    #region AgentAI
+    [Component]
+    public struct AgentAI
+    {
+        public float speed;
+        public Vector3 target;
     }
     #endregion
 }

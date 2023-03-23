@@ -6,7 +6,7 @@
 //#include "Wiwa/utilities/render/CameraManager.h"
 //#include <glew.h>
 
-//#include <Wiwa/utilities/Log.h>
+#include <Wiwa/utilities/Log.h>
 //#include "Wiwa/utilities/time/Time.h"
 
 //#include <glm/gtc/quaternion.hpp>
@@ -17,8 +17,6 @@
 //#include <Wiwa/utilities/json/JSONDocument.h>
 
 
-uint32_t Wiwa::AIPathFindingManager::m_width = 0;
-uint32_t Wiwa::AIPathFindingManager::m_height = 0;
 unsigned char* Wiwa::AIPathFindingManager::m_map = nullptr;
 std::vector<glm::ivec2> Wiwa::AIPathFindingManager::m_lastPath = {};
 Wiwa::AIPathFindingManager::MapData Wiwa::AIPathFindingManager::m_mapData = MapData();
@@ -28,7 +26,7 @@ Wiwa::AIPathFindingManager::MapData Wiwa::AIPathFindingManager::m_mapData = MapD
 Wiwa::AIPathFindingManager::PathNode::PathNode() : g(-1), h(-1), pos(-1, -1), parent(NULL)
 {}
 
-Wiwa::AIPathFindingManager::PathNode::PathNode(int g, int h, const const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
+Wiwa::AIPathFindingManager::PathNode::PathNode(int g, int h, const glm::ivec2& pos, const PathNode* parent) : g(g), h(h), pos(pos), parent(parent)
 {}
 
 Wiwa::AIPathFindingManager::PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), parent(node.parent)
@@ -42,35 +40,46 @@ bool Wiwa::AIPathFindingManager::PathNode::operator==(const PathNode& other) con
 uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPathFindingManager::PathList& listToFill) const
 {
 	glm::ivec2 cell;
-	uint32_t before = listToFill.pathList.size();
-
+	
 	// north
 	cell = pos;
 	cell.y = pos.y + 1;
-	// AIPathFindingManager* test;
-	// test sexo->IsWalkable(cell)
+
+	
+	
+	//WI_INFO(" IsWalkable N {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.push_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
 	// south
 	cell = pos;
 	cell.y = pos.y - 1;
+
+	//WI_INFO(" IsWalkable S {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
 	// east
 	cell = pos;
 	cell.x = pos.x + 1;
+
+	//WI_INFO(" IsWalkable E {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
 	// west
 	cell = pos;
 	cell.x = pos.x - 1;
+
+	//WI_INFO(" IsWalkable W {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.push_back(PathNode(-1, -1, cell, this));
 
-	return listToFill.pathList.size();
+	return (uint32_t)listToFill.pathList.size();
 }
 
 
@@ -88,7 +97,7 @@ int Wiwa::AIPathFindingManager::PathNode::CalculateF(const glm::ivec2& destinati
 	int fx = pos.x - destination.x;
 	int fy = pos.y - destination.y;
 
-	h = sqrtf((fx * fx) + (fy * fy));
+	h = (int)sqrt((fx * fx) + (fy * fy));
 
 	
 	return g + h;
@@ -109,20 +118,31 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::Find
 
 Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetNodeLowestScore()
 {
-	PathNode ret = PathNode();
+	//PathNode ret = PathNode();
 	int min = 65535;
 
-	for (int i = pathList.size(); i > 0; i--)
+	//for (int i = pathList.size()-1; i > 0; --i)
+	//{
+	//	if (pathList.at(i).Score() < min)
+	//	{
+	//		min = pathList.at(i).Score();
+	//		ret = pathList.at(i);
+	//	}			
+	//}
+
+	std::vector<PathNode>::iterator ret = pathList.end();
+	
+	for (std::vector<PathNode>::iterator it = pathList.begin(); it != pathList.end(); ++it)
 	{
-		if (pathList.at(i).Score() < min)
+		if (it->Score() < min)
 		{
-			min = pathList.at(i).Score();
-			ret = pathList.at(i);
+			min = it->Score();
+			ret = it;
 		}
-			
 	}
 
-	return &ret;
+	return &(*ret);
+	//return ret;
 
 }
 
@@ -140,46 +160,44 @@ bool Wiwa::AIPathFindingManager::CleanUp()
 	return false;
 }
 
-void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, unsigned char* data)
-{
-	m_width = width;
-	m_height = height;
-
-	
-	m_map = new unsigned char[width * height];
-	memcpy(m_map, data, width * height);
-}
-
 int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::ivec2& destination)
 {
-	int ret = -1;
-	int iterations = 0;
+	size_t ret = -1;
+	size_t iterations = 0;
+
+	// they are not defined, IsWalkable returns NULL
+	bool ori = IsWalkable(origin);
+	bool desti = IsWalkable(destination);
 
 	// L12b: TODO 1: if origin or destination are not walkable, return -1
-	if (IsWalkable(origin) && IsWalkable(destination))
+	if (ori && desti)
 	{
 		// L12b: TODO 2: Create two lists: open, close
 		PathList open;
 		PathList closed;
 
 		// Add the origin tile to open
-		open.pathList.push_back(PathNode(0, 0, origin, nullptr));
+		open.pathList.push_back(PathNode(0, 0, origin, nullptr));	
 
+		iterations = open.pathList.size();
+		
 		// Iterate while we have tile in the open list
 		while (open.pathList.size() > 0)
 		{
 			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
 			PathNode* lowest = open.GetNodeLowestScore();
 			closed.pathList.push_back(*lowest);
-			PathNode* node = lowest;
+			PathNode* node = &closed.pathList.back();
 
-			// Using std::remove() algorithm to move the value to be deleted to the end of the vector
+			WI_INFO("X = {}", node->pos.x);
 			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
+			// Using std::remove() algorithm to move the value to be deleted to the end of the vector
+			//open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
 
 			
 
 			// L12b: TODO 4: If we just added the destination, we are done!
-			if (node->pos == destination)
+			if (node && node->pos == destination)
 			{
 				m_lastPath.clear();
 
@@ -187,21 +205,24 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				// Use the Pathnode::parent and Flip() the path when you are finish
 				const PathNode* pathNode = node;
 
+				WI_INFO("pathnode = {}", pathNode->pos.x);
 				while (pathNode)
 				{
-					m_lastPath.push_back(pathNode->pos);
-					pathNode = pathNode->parent;
+					//m_lastPath.push_back(pathNode->pos);
+					//pathNode = pathNode->parent;
 				}
 
 				std::reverse(m_lastPath.begin(), m_lastPath.end());
 				ret = m_lastPath.size();
 				//LOG("Created path of %d steps in %d iterations", ret, iterations);
+				WI_INFO(" Path of {} steps and {} iterations", ret,iterations);
 				break;
 			}
 
 			// L12b: TODO 5: Fill a list of all adjancent nodes
 			PathList adjacent;
-			node->FindWalkableAdjacents(adjacent);
+			uint32_t yes = node->FindWalkableAdjacents(adjacent);
+
 
 			// L12b: TODO 6: Iterate adjancent nodes:
 			// If it is a better path, Update the parent
@@ -228,12 +249,13 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				}
 
 			}
+			WI_INFO(" Path of {} steps and {} iterations", ret, iterations);
 
-			++iterations;
+			iterations--;
 		}
 	}
 
-	return ret;
+	return (int)ret;
 }
 
 const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath()
@@ -243,20 +265,40 @@ const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath()
 
 bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 {
-	return (pos.x >= 0 && pos.x <= (int)m_width &&
-		pos.y >= 0 && pos.y <= (int)m_height);
+	bool ret = false;
+
+	if ((pos.x >= 0) && (pos.x <= (int)m_mapData.width) &&
+		(pos.y >= 0) && (pos.y <= (int)m_mapData.height))
+	{
+		ret = true;
+	}
+
+	return ret;
 }
 
 bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 {
 	unsigned char t = GetTileAt(pos);
-	return t != INVALID_WALK_CODE && t > 0;
+
+	if (t != INVALID_WALK_CODE && t > 0) {
+		//WI_INFO(" IsWalkable True");
+		return true;
+	}
+	else {
+		//WI_INFO(" IsWalkable False");
+		return false;
+	}
 }
 
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_map[(pos.y * m_width) + pos.x]; // returns the id of the tile
+	{
+		//WI_INFO(" m_map at {} is equal to {}", pos.y + pos.x, m_map[pos.y + pos.x]);
+		return m_map[pos.y + pos.x]; // returns the walk code of the tile
+	}	
+
+	//WI_INFO(" Invalid Code", pos.y + pos.x, m_map[pos.y + pos.x]);
 
 	return INVALID_WALK_CODE;
 }
@@ -264,8 +306,6 @@ unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 bool Wiwa::AIPathFindingManager::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos)
 {
 	bool ret = false;
-
-	bool isWalkable = true;
 
 	m_mapData.startingPosition = startPos;
 	m_mapData.width = width;
