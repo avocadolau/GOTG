@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	412874053	on_hover			\Default Work Unit\on_hover	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	54831371	Click	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Click_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Menu\Click		154256
-

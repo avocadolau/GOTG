@@ -336,8 +336,9 @@ bool Audio::Init()
 
     // Initialize music engine
     AkMusicSettings musicInit;
+   
     AK::MusicEngine::GetDefaultInitSettings(musicInit);
-
+   
     if (AK::MusicEngine::Init(&musicInit) != AK_Success)
     {
         printf("Could not initialize the Music Engine.");
@@ -368,6 +369,8 @@ bool Audio::Init()
         setLastError(gres);
     }
 
+
+    
     AkSoundPosition position;
     position.SetPosition(0.0f, 300.0f, 0.0f);
     position.SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
@@ -386,7 +389,7 @@ bool Audio::Update()
     OPTICK_EVENT("Audio Update");
 
     AK::SoundEngine::RenderAudio();
-
+    
     return true;
 }
 
