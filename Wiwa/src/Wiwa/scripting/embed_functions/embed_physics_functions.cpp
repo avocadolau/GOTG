@@ -85,13 +85,9 @@ void ChangeCollisionTags(size_t id, int filter_group, int filter_mask)
 
     Wiwa::CollisionBody* cb = em.GetComponent<Wiwa::CollisionBody>(id);
     Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(id)->getBody();
-
     int bits = 0;
-    bits |= (1 << filter_group);
+    bits |= 1 << cb->selfTag;
+    physicsManager.ChangeCollisionTags(obj, bits, cb->filterBits);
 
-    cb->filterBits = filter_mask;
-    cb->selfTag = bits;
-    obj->selfTag = cb->selfTag;
     obj->selfTagStr = physicsManager.GetFilterTag(cb->selfTag);
-    physicsManager.ChangeCollisionTags(obj, filter_group, filter_mask);
 }
