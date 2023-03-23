@@ -35,8 +35,8 @@ namespace Wiwa {
 			float startingPosition;
 			int width;
 			int	height;
-			int	tileWidth;
-			int	tileHeight;
+			float tileWidth;
+			float tileHeight;
 		};
 
 
@@ -56,8 +56,8 @@ namespace Wiwa {
 		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos);
 
 		// Space translations for the pathfinding
-		static glm::ivec2 MapToWorld(int x, int y);
-		static glm::ivec2 WorldToMap(int x, int y);
+		static glm::vec2 MapToWorld(int x, int y);
+		static glm::ivec2 WorldToMap(float x, float y);
 
 
 		static MapData& GetMapData()

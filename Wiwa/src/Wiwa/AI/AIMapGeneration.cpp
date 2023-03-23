@@ -27,8 +27,8 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	m_mapData.startingPosition = startPos;
 	m_mapData.width = width;
 	m_mapData.height = height;
-	m_mapData.tileHeight = (int)tileHeight;
-	m_mapData.tileWidth = (int)tileWidth;
+	m_mapData.tileHeight = tileHeight;
+	m_mapData.tileWidth = tileWidth;
 
 	m_map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
 	memset(m_map, 1, width * height);
@@ -50,22 +50,22 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	return ret;
 }
 
-glm::ivec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)
+glm::vec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)
 {
-	glm::ivec2 ret;
+	glm::vec2 ret;
 
-	ret.x = x * m_mapData.tileWidth;
-	ret.y = y * m_mapData.tileHeight;
+	ret.x = (float)x * m_mapData.tileWidth;
+	ret.y = (float)y * m_mapData.tileHeight;
 
 	return ret;
 }
 
-glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(int x, int y)
+glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(float x, float y)
 {
 	glm::ivec2 ret;
 
-	ret.x = x / m_mapData.tileWidth;
-	ret.y = y / m_mapData.tileHeight;
+	ret.x = (int)x / m_mapData.tileWidth;
+	ret.y = (int)y / m_mapData.tileHeight;
 
 	return ret;
 }
