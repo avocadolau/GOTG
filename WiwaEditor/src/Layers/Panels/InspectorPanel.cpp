@@ -847,9 +847,20 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 			ImGui::Text("Particle Texture");
 
 			uint32_t image_id = 0;
+			Wiwa::Image* texture = nullptr;
+			Wiwa::ResourceId textureResource = -4;
 
-			if (emitter->texture)
-				image_id = emitter->texture->GetTextureId();
+			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath.c_str());
+
+			if (importedCorrectly)
+			{
+				textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
+			}
+
+
+			if (texture != nullptr)
+				image_id = texture->GetTextureId();
 
 			ImGui::Image(ImTextureID(image_id), { 128,128 });
 
@@ -865,46 +876,27 @@ void InspectorPanel::DrawParticleEmitterComponent(byte* data)
 					std::filesystem::path p = pathS.c_str();
 					if (p.extension() == ".png" || p.extension() == ".jpg")
 					{
-						WI_CORE_INFO("test");
-
 						bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(pathS.c_str());
 
-						emitter->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
-						emitter->texturePath = pathS;
+						emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
 
-						if (emitter->textId1 == WI_INVALID_INDEX)
+						if (emitter->textureId != WI_INVALID_INDEX)
 						{
-							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
-
+							emitter->texturePath = pathS;
 						}
 						else
 						{
-							emitter->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(emitter->textId1);
-							
-							/*std::string test = "texture id: " + std::to_string(emitter->texture->GetTextureId());
-
-							WI_CORE_INFO(test);*/
-
-
-
+							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
+							emitter->texturePath = "";
 
 						}
-
-						/*WI_INFO("Trying to load payload at path {0}", pathS.c_str());
-						p.replace_extension();
-						std::string src = Wiwa::FileSystem::RemoveFolderFromPath("assets", p.string());
-						mesh->meshId = Wiwa::Resources::Load<Wiwa::Model>(src.c_str());
-						mesh->modelIndex = 0;
-						mesh->drawChildren = true;
-
-						Wiwa::Model* m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);*/
 					}
 				}
 
 				ImGui::EndDragDropTarget();
 			}
 
-			if (!emitter->texture)
+			if (texture)
 				ImGui::Text("[Drop a suitable texture here]");
 			else
 				ImGui::Text("[Drop a suitable texture to change the current texture]");

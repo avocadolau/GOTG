@@ -18,7 +18,7 @@ namespace Wiwa {
 		bool	particle_rate_isRanged;
 		float	particle_rate_range[2];
 
-		bool	repeat = true;
+		bool	repeat;
 
 		int		particle_amount;
 		bool	particle_amount_isRanged;
@@ -29,14 +29,14 @@ namespace Wiwa {
 		bool	particle_lifetime_isRanged;
 		float	particle_lifetime_range[2];
 
-		bool isPlaying = true;
+		bool isPlaying;
 
 		bool isAnimated;
 
 		//std::list<ColorTime> particle_color;
 
-		int nextPos = 100;
-		glm::vec4 nextColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		int nextPos;
+		glm::vec4 nextColor;
 
 		//position
 		glm::vec3	particle_startingPosition;
@@ -59,9 +59,9 @@ namespace Wiwa {
 
 		
 		//scale
-		glm::vec3	particle_startingSize = glm::vec3(1,1,1);
+		glm::vec3	particle_startingSize;
 		bool		particle_startingSize_isRanged;
-		glm::vec3	particle_startingSize_range[2] = {glm::vec3(1,1,1) , glm::vec3(1,1,1)};
+		glm::vec3	particle_startingSize_range[2];
 
 		glm::vec3	particle_growthVelocity;
 		bool		particle_growthVelocity_isRanged;
@@ -71,12 +71,12 @@ namespace Wiwa {
 		bool		particle_growthAcceleration_isRanged;
 		glm::vec3	particle_growthAcceleration_range[2];
 
-		bool		particle_followEmitterRotation = false;
-		bool		particle_followEmitterPosition = false;
-		bool		particle_followParticle = false;;
+		bool		particle_followEmitterRotation;
+		bool		particle_followEmitterPosition;
+		bool		particle_followParticle;
 
-		ResourceId textId1 = -4;
-		Image* texture = nullptr;
+		ResourceId textureId;
+
 		std::string texturePath;
 	};
 }

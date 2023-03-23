@@ -367,21 +367,34 @@ namespace Wiwa {
 						indices.push_back(p.vertex_indices[i]);
 					}
 
+					//get texture from resourceId
+					Image* texture = nullptr;
+
+					Wiwa::ResourceId textureResource = -4;
+
+					bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath.c_str());
+
+					if (importedCorrectly)
+					{
+						textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+						texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
+					}
+
 					//show in game cameras
 					for (size_t i = 0; i < cameraCount; i++)
 					{
 						CameraId cam_id = cameras[i];
 						Camera* camera = man.getCamera(cam_id);
 
-						if (emitter->texture)
+						if (texture)
 							r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
-								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, emitter->texture, emitter->texture->GetSize());
+								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, texture, texture->GetSize());
 					}
 
 					//show in editor window
-					if (emitter->texture)
+					if (texture)
 						r3d.RenderQuad(VAO, indices, p.transform.position, p.transform.rotation, p.transform.localScale,
-							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, emitter->texture, emitter->texture->GetSize());
+							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, texture, texture->GetSize());
 
 
 					glDeleteVertexArrays(1, &VAO);
@@ -397,14 +410,13 @@ namespace Wiwa {
 
 	void ParticleEmitterExecutor::OnSystemAdded() // Called when system added to the editor
 	{
+		
 		m_emitterComponent = GetComponentIterator<ParticleEmitter>();
 		Wiwa::ParticleEmitter* emitter = GetComponentByIterator<Wiwa::ParticleEmitter>(m_emitterComponent);
 
 		if (emitter &&!emitter->texturePath.empty())
 		{
-			emitter->textId1 = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
-
-			emitter->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(emitter->textId1);
+			emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
 		}
 
 	}
@@ -583,7 +595,24 @@ namespace Wiwa {
 			p.transform.scale = glm::vec3(1, 1, 1);
 
 			Uniform::SamplerData sdata;
-			sdata.tex_id = emitter->texture->GetTextureId();
+
+
+
+			//get texture from resourceId
+			Image* texture = nullptr;
+
+			Wiwa::ResourceId textureResource = -4;
+
+			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath.c_str());
+
+			if (importedCorrectly)
+			{
+				textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
+			}
+
+
+			sdata.tex_id = texture->GetTextureId();
 
 			//Problema de Memory Leak
 			m_Material->SetUniformData("u_Texture", sdata);
