@@ -29,7 +29,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 {
 	
 	//
-	//GoToPosition({49,0,49});
+	GoToPosition({20,0,20});
 	//
 
 	m_DirectionPoint = Wiwa::AIMapGeneration::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
@@ -58,7 +58,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 	}
 
 	
-	/*
+	
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
@@ -96,7 +96,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	glEnd();
 
-	camera->frameBuffer->Unbind();*/
+	camera->frameBuffer->Unbind();
 	
 
 	m_IsMoving = false;
