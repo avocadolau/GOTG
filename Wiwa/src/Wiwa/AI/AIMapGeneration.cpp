@@ -2,8 +2,8 @@
 #include "AIMapGeneration.h"
 #include "AIPathFindingManager.h"
 //#include "Wiwa/ecs/systems/System.h"
-//#include "Wiwa/ecs/EntityManager.h"
-//#include "Wiwa/scene/SceneManager.h"
+#include "Wiwa/ecs/EntityManager.h"
+#include "Wiwa/scene/SceneManager.h"
 //#include "Wiwa/utilities/render/CameraManager.h"
 //#include <glew.h>
 
@@ -39,12 +39,27 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	memset(m_map, 1, width * height);
 	AIPathFindingManager::SetMap(width, height, m_map);
 
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	std::vector<EntityId>* entities = em.GetEntitiesAlive();
+	int entityCount = em.GetEntityCount();
+	
 	for (int z = 0; z < m_mapData.height; z++)
 	{
 		for (int x = 0; x < m_mapData.width; x++)
 		{
-			// if collision then invalid walking code
+			for (int i = 0; i < entityCount; i++)
+			{
+				EntityId actualId = entities->at(i);
 
+				
+				if (em.GetComponent<Wiwa::CollisionBody>(actualId)->isStatic)
+				{
+					em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
+				}
+			}
+
+			// if collision then invalid walking code
+			
 			// if not collision then default walking code
 			m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
 		}
