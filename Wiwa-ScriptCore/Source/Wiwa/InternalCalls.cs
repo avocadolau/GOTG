@@ -168,7 +168,8 @@ namespace Wiwa
         internal extern static void PauseScene();
         #endregion
         #region UI
-
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ActivateGuiCanvas(int id);
         #endregion
 
         #region AgentAI
