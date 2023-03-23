@@ -39,9 +39,9 @@ namespace Game
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
-            campos.y = transform.Position.y + 20;
+            campos.y = transform.Position.y + 25;
             campos.x = transform.Position.x;
-            campos.z = transform.Position.z;
+            campos.z = transform.Position.z + 10;
 
             referenceZ = transform.Position.z;
             referenceX = transform.Position.x;
@@ -91,8 +91,8 @@ namespace Game
             float minCamVelocity = 0.0f;
             float maxCamVelocity = 0.3f;
 
-            float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z), 0, 15);
-            float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 15);
+            float normalicedDistance_Z = NormalizedValue(lastPlayerPos.z - (campos.z + 10), 0, 20);
+            float normalicedDistance_X = NormalizedValue(lastPlayerPos.x - campos.x, 0, 20);
 
             float finalCamSpeed_X = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_X);
             float finalCamSpeed_Z = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
