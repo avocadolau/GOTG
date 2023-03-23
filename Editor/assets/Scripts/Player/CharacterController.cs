@@ -1,3 +1,4 @@
+using System;
 using Wiwa;
 
 
@@ -55,14 +56,15 @@ namespace Game
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref CharacterController controller = ref GetComponentByIterator<CharacterController>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
+
             Vector3 velocity = Vector3Values.zero;
 
             Vector3 input = GetMovementInput(ref controller);
-            bool isDashing = Dash(ref velocity, input, controller, transform, ref rb);
 
             if (!isDashing)
-                velocity = input * controller.Velocity * Time.DeltaTimeMS();
+                velocity = input * controller.Velocity;
 
+            Dash(ref velocity, input, controller, transform, ref rb);
 
             PhysicsManager.SetLinearVelocity(m_EntityId, velocity);
 
@@ -156,7 +158,7 @@ namespace Game
             }
             Animator.PlayAnimationName("run", m_EntityId);
         }
-        bool Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform, ref CollisionBody cb)
+        void Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform, ref CollisionBody cb)
         {
             dashTimer += Time.DeltaTime();
 
@@ -165,22 +167,24 @@ namespace Game
             {
                 isDashing = true;
                 lastPos = transform.LocalPosition;
-                return true;
             }
 
             if (isDashing)
             {
-                Vector3 targetPoint = Mathf.PointAlongDirection(lastPos, input, controller.DashDistance);
                 if (input == Vector3Values.zero)
                 {
                     input = Mathf.CalculateForward(ref transform);
                 }
 
+                Vector3 targetPoint = Mathf.PointAlongDirection(lastPos, input, controller.DashDistance);
                 dashCurrentVel += controller.DashSpeed;
                 velocity = input * dashCurrentVel;
 
-                float distance = Vector3.Distance(transform.LocalPosition, targetPoint);
+                float distance = Vector3.Distance(targetPoint, transform.LocalPosition);
                 PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, dashTags);
+                Console.WriteLine($"Target: {targetPoint.x} X {targetPoint.y} Y {targetPoint.z}");
+                Console.WriteLine($"Distance {distance}");
+
                 if (distance <= 2f)
                 {
                     dashTimer = 0f;
@@ -188,11 +192,8 @@ namespace Game
                     isDashing = false;
                     PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, normalTags);
                 }
-                return true;
 
             }
-
-            return false;
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
