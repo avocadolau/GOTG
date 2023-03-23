@@ -14,35 +14,42 @@ namespace Game
         public float bulletSpeed;
     }
     public class CharacterShooter : Behaviour
-	{
-		//Called the first frame
-		
-		void Awake()
-		{
+    {
+        //Called the first frame
+        private ComponentIterator transformIt;
 
-		}
-		//Called after Awake()
-		void Init()
-		{
-		}
-		//Called every frame
-		void Update()
-		{
-		}
-		private void Fire(ref CharacterShooterComponent character, Vector3 bullDirection)
+        void Awake()
+        {
+
+        }
+        //Called after Awake()
+        void Init()
+        {
+            transformIt = GetComponentIterator<Transform3D>();
+        }
+        //Called every frame
+        void Update()
+        {
+            ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
+            ref CharacterShooterComponent characterShoot = ref GetComponent<CharacterShooterComponent>();
+            ref CharacterController characterCtrl = ref GetComponent<CharacterController>();
+            
+            Fire(ref characterShoot, transform.LocalRotation);
+        }
+        private void Fire(ref CharacterShooterComponent character, Vector3 bullDirection)
         {
             Console.WriteLine("Fire");
-            float shootX = -Input.GetAxis(Gamepad.GamePad1, GamepadAxis.RightX);
-            float shootY = -Input.GetAxis(Gamepad.GamePad1, GamepadAxis.RightY);
+            float shootX = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, 0);
+            float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
 
             character.fireTimer += Time.DeltaTime();
 
-
+            Vector3 bullDir = new Vector3(shootX, 0, shootY);
             if (character.fireTimer >= character.fireInterval)
             {
                 character.fireTimer = 0.0f;
 
-                if (System.Math.Abs(bullDirection.x) > 0.5f || System.Math.Abs(bullDirection.z) > 0.5f)
+                if (System.Math.Abs(shootX) > 0.5f || System.Math.Abs(shootY) > 0.5f)
                 {
                     // Shoot sound
 
@@ -50,7 +57,7 @@ namespace Game
                     //PlayMusic("player_shoot");
                     //PlayAudioEvent("player_shoot");
                     //Vector3 bulletDir = new Vector3(shootX, 0, shootY);
-                    SpawnBullet(ref character, new Vector3(0, 0, 0), bullDirection, 0);
+                    SpawnBullet(ref character, new Vector3(0, 0, 0), bullDir, bullDirection.y);
                 }
                 else if (Input.IsKeyDown(KeyCode.Space))
                 {
@@ -58,11 +65,11 @@ namespace Game
 
                     //PlayAudioEvent("player_shoot");
                     //Vector3 bulletDir = new Vector3(0, 0, 1);
-                    SpawnBullet(ref character, new Vector3(0, 0, 0), bullDirection, 0);
+                    SpawnBullet(ref character, new Vector3(0, 0, 0), bullDir, 0);
                 }
             }
         }
-		void SpawnBullet(ref CharacterShooterComponent character, Vector3 bullet_offset, Vector3 direction, float rot)
+        void SpawnBullet(ref CharacterShooterComponent character, Vector3 bullet_offset, Vector3 direction, float rot)
         {
             ref Transform3D parent = ref GetComponent<Transform3D>(m_EntityId);
 
@@ -108,8 +115,8 @@ namespace Game
             bc.TimeToDestroy = character.bulletLifeTime;
             bc.Damage = 20;
             //bc.direction = direction;
-            AddAudioSource(entity, "player_shoot", true, false);
-            ApplySystem<AudioSystem>(entity);
+            //AddAudioSource(entity, "player_shoot", true, false);    ///Please add another sound
+            //ApplySystem<AudioSystem>(entity);
             // Activate controller
             ApplySystem<BulletController>(entity);
             ApplySystem<MeshRenderer>(entity);
@@ -122,7 +129,7 @@ namespace Game
             ApplySystem<MeshRenderer>(entity);
 
         }
-		void InitCollisionFlags(ref CollisionBody rb, ref CharacterShooterComponent character)
+        void InitCollisionFlags(ref CollisionBody rb, ref CharacterShooterComponent character)
         {
             //int bitsSelf = 0;
             ////bitsSelf |= 1 << character.bulletTag;
@@ -131,5 +138,5 @@ namespace Game
             //rb.filterBits |= 1 << character.collisionTag1;
             //rb.filterBits |= 1 << character.collisionTag2;
         }
-	}
+    }
 }
