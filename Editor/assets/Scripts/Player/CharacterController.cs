@@ -181,7 +181,7 @@ namespace Game
                 velocity = input * dashCurrentVel;
 
                 float distance = Vector3.Distance(targetPoint, transform.LocalPosition);
-                PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, dashTags);
+                PhysicsManager.ChangeCollisionTags(m_EntityId);
                 Console.WriteLine($"Target: {targetPoint.x} X {targetPoint.y} Y {targetPoint.z}");
                 Console.WriteLine($"Distance {distance}");
 
@@ -190,7 +190,7 @@ namespace Game
                     dashTimer = 0f;
                     dashCurrentVel = 0f;
                     isDashing = false;
-                    PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, normalTags);
+                    PhysicsManager.ChangeCollisionTags(m_EntityId);
                 }
 
             }

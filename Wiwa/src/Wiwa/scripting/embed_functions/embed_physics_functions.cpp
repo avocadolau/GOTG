@@ -78,7 +78,7 @@ void SetTrigger(size_t id, bool value)
     physicsManager.SetTrigger(obj, value);
 }
 
-void ChangeCollisionTags(size_t id, int filter_group, int filter_mask)
+void ChangeCollisionTags(size_t id)
 {
     Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
     Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
