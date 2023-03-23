@@ -459,6 +459,7 @@ namespace Wiwa {
 
 		m_World->addCollisionObject(body->collisionObject, filterGroup, filterBits);
 		m_World->updateSingleAabb(body->collisionObject);
+		m_World->refreshBroadphaseProxy(body->collisionObject);
 	}
 
 	Object* PhysicsManager::FindByEntityId(size_t id)
