@@ -101,7 +101,7 @@ namespace Wiwa {
 
 		bool SetRotation(Object* body, const glm::vec3 euler_angles);
 
-		//void SetTrigger(MyObject* body, const bool isTrigger);
+		void SetTrigger(Object* body, bool isTrigger);
 
 		Object* FindByEntityId(size_t id);
 

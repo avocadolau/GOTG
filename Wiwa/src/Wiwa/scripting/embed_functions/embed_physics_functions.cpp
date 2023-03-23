@@ -60,3 +60,12 @@ int RayCastDistanceWalls(glm::vec3 from, glm::vec3 to)
     Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
     return physicsManager.RayTestWalls(btVector3(from.x, from.y, from.z), btVector3(to.x, to.y, to.z));
 }
+
+void SetTrigger(size_t id, bool value)
+{
+    Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+    Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
+    Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(id)->getBody();
+    physicsManager.SetTrigger(obj, value);
+}

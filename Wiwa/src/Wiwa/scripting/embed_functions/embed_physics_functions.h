@@ -19,3 +19,5 @@ MonoString* GetEntityTagString(size_t id);
 int GetEntityTagBits(size_t id);
 
 int RayCastDistanceWalls(glm::vec3 from, glm::vec3 to);
+
+void SetTrigger(size_t id, bool value);

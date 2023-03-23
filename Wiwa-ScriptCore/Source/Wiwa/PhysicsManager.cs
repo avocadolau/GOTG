@@ -33,6 +33,11 @@
         {
             return InternalCalls.RayCastDistanceWalls(from, to);
         }
+
+        public static void SetTrigger(EntityId id, bool value)
+        {
+            InternalCalls.SetTrigger(id, value);
+        }
     }
 }
 
