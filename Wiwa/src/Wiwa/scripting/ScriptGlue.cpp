@@ -132,6 +132,9 @@ namespace Wiwa
 
 		// UI
 
+		/*WI_ADD_INTERNAL_CALL(Play);
+		WI_ADD_INTERNAL_CALL(ChangeScene);
+		WI_ADD_INTERNAL_CALL(Quit);*/
 
 		// AI
 		
@@ -143,10 +146,6 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PlayAnimation);
 		WI_ADD_INTERNAL_CALL(PauseAnimation);
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
-
-		WI_ADD_INTERNAL_CALL(Play);
-		WI_ADD_INTERNAL_CALL(ChangeScene);
-		WI_ADD_INTERNAL_CALL(Quit);
 
 		//Particles
 		WI_ADD_INTERNAL_CALL(EmitterEmitBatch);

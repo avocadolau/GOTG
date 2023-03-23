@@ -5,7 +5,7 @@
 #include <map>
 
 #include <Wiwa/utilities/Reflection.h>
-#include <Wiwa/utilities/render/Animation.h>
+#include <Wiwa/utilities/render/TextureAnimation.h>
 
 #define MAX_PARTICLES 1000
 class Camera;
