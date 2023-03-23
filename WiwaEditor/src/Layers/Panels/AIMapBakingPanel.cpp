@@ -10,12 +10,12 @@
 //#include <Wiwa/utilities/filesystem/FileSystem.h>
 //#include <Wiwa/core/Resources.h>
 
-#include "glew.h"
+//#include "glew.h"
 
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
 	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
 {
-	m_
+	m_drawGrid = false;
 }
 
 AIMapBakingPanel::~AIMapBakingPanel()
