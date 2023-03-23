@@ -134,7 +134,10 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
 		WI_ADD_INTERNAL_CALL(GetEntityTagString);
 		WI_ADD_INTERNAL_CALL(GetEntityTagBits);
+		WI_ADD_INTERNAL_CALL(GetTagBitsByString);
 		WI_ADD_INTERNAL_CALL(RayCastDistanceWalls);
+		WI_ADD_INTERNAL_CALL(SetTrigger);
+		WI_ADD_INTERNAL_CALL(ChangeCollisionTags);
 
 		//UI
 		WI_ADD_INTERNAL_CALL(ActivateCanvas);

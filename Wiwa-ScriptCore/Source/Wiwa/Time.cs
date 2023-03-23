@@ -7,11 +7,11 @@
         //Time returned in seconds
         public static float DeltaTime()
         {
-            return InternalCalls.GetDeltaTimeIntr() / 1000;
+            return InternalCalls.GetDeltaTimeIntr();
         }
         public static float DeltaTimeMS()
         {
-            return InternalCalls.GetDeltaTimeIntr();
+            return InternalCalls.GetDeltaTimeIntr() * 1000;
         }
         public static float GetTime()
         {
