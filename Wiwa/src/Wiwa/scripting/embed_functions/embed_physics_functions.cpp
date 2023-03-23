@@ -78,17 +78,16 @@ void SetTrigger(size_t id, bool value)
     physicsManager.SetTrigger(obj, value);
 }
 
-void ChangeCollisionTags(size_t id, int filter_group, int filter_mask)
+void ChangeCollisionTags(size_t id)
 {
     Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
     Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
 
     Wiwa::CollisionBody* cb = em.GetComponent<Wiwa::CollisionBody>(id);
     Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(id)->getBody();
+    int bits = 0;
+    bits |= 1 << cb->selfTag;
+    physicsManager.ChangeCollisionTags(obj, bits, cb->filterBits);
 
-    cb->filterBits = filter_mask;
-    cb->selfTag = filter_group;
-    obj->selfTag = cb->selfTag;
     obj->selfTagStr = physicsManager.GetFilterTag(cb->selfTag);
-    physicsManager.ChangeCollisionTags(obj, filter_group, filter_mask);
 }

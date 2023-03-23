@@ -171,7 +171,7 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetTrigger(EntityId id, bool value);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void ChangeCollisionTags(EntityId id, int filter_group, int filter_mask);
+        internal extern static void ChangeCollisionTags(EntityId id);
         #endregion
         #region Scene
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

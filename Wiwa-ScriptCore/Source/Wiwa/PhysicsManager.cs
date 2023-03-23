@@ -44,9 +44,9 @@
             InternalCalls.SetTrigger(id, value);
         }
 
-        public static void ChangeCollisionTags(EntityId id, int filter_group, int filter_mask)
+        public static void ChangeCollisionTags(EntityId id)
         {
-            InternalCalls.ChangeCollisionTags(id, filter_group, filter_mask);
+            InternalCalls.ChangeCollisionTags(id);
         }
     }
 }

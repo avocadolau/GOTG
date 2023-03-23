@@ -456,9 +456,10 @@ namespace Wiwa {
 	void PhysicsManager::ChangeCollisionTags(Object* body, int filterGroup, int filterBits)
 	{
 		m_World->removeCollisionObject(body->collisionObject);
-
 		m_World->addCollisionObject(body->collisionObject, filterGroup, filterBits);
-		m_World->updateSingleAabb(body->collisionObject);
+		//m_World->updateSingleAabb(body->collisionObject);
+		//m_World->refreshBroadphaseProxy(body->collisionObject);
+		//m_World->updateSingleAabb(body->collisionObject);
 	}
 
 	Object* PhysicsManager::FindByEntityId(size_t id)
