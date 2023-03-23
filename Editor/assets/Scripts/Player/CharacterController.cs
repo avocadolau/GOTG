@@ -45,11 +45,11 @@ namespace Game
         void InitTags()
         {
             dashTags |= 1 << PhysicsManager.GetTagBitsByString("WALL");
-            normalTags |= 1 << PhysicsManager.GetTagBitsByString("WALL");
-            normalTags |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
-            normalTags |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
-            normalTags |= 1 << PhysicsManager.GetTagBitsByString("END_ROOM_TRIGGER");
-            normalTags |= 1 << PhysicsManager.GetTagBitsByString("START_RUN_TRIGGER");
+            normalTags = PhysicsManager.GetTagBitsByString("WALL");
+            normalTags = PhysicsManager.GetTagBitsByString("COLUMN");
+            normalTags = PhysicsManager.GetTagBitsByString("ENEMY");
+            normalTags = PhysicsManager.GetTagBitsByString("END_ROOM_TRIGGER");
+            normalTags = PhysicsManager.GetTagBitsByString("START_RUN_TRIGGER");
         }
         void Update()
         {
@@ -181,19 +181,30 @@ namespace Game
                 velocity = input * dashCurrentVel;
 
                 float distance = Vector3.Distance(targetPoint, transform.LocalPosition);
+
+                cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("ENEMY"));
+                cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("COLUMN"));
                 PhysicsManager.ChangeCollisionTags(m_EntityId);
                 Console.WriteLine($"Target: {targetPoint.x} X {targetPoint.y} Y {targetPoint.z}");
                 Console.WriteLine($"Distance {distance}");
 
                 if (distance <= 2f)
                 {
-                    dashTimer = 0f;
-                    dashCurrentVel = 0f;
-                    isDashing = false;
-                    PhysicsManager.ChangeCollisionTags(m_EntityId);
+                    ResetDash();
                 }
 
             }
+        }
+        void ResetDash()
+        {
+            ref CollisionBody cb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
+            dashTimer = 0f;
+            dashCurrentVel = 0f;
+            isDashing = false;
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
+            PhysicsManager.ChangeCollisionTags(m_EntityId);
+
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
@@ -201,7 +212,8 @@ namespace Game
             if (id1 == m_EntityId)
                 return;
             if (str2 == "WALL")
-                isDashing = false;
+                ResetDash();
         }
+
     }
 }
