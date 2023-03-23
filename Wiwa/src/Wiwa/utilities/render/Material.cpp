@@ -41,7 +41,8 @@ namespace Wiwa {
 	void Material::Load(const char* path)
 	{
 		JSONDocument matFile(path);
-
+		if (!matFile.IsObject())
+			return;
 		if (matFile.HasMember("shader"))
 			m_ShaderPath = matFile["shader"].as_string();
 
