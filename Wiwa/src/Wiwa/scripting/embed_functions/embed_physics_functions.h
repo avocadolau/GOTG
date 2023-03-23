@@ -24,4 +24,4 @@ int RayCastDistanceWalls(glm::vec3 from, glm::vec3 to);
 
 void SetTrigger(size_t id, bool value);
 
-void ChangeCollisionTags(size_t id, int filter_group, int filter_mask);
+void ChangeCollisionTags(size_t id);

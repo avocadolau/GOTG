@@ -184,7 +184,7 @@ namespace Game
 
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("ENEMY"));
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("COLUMN"));
-                PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, cb.filterBits);
+                PhysicsManager.ChangeCollisionTags(m_EntityId);
                 Console.WriteLine($"Target: {targetPoint.x} X {targetPoint.y} Y {targetPoint.z}");
                 Console.WriteLine($"Distance {distance}");
 
@@ -203,7 +203,7 @@ namespace Game
             isDashing = false;
             cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
             cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
-            PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, cb.filterBits);
+            PhysicsManager.ChangeCollisionTags(m_EntityId);
 
         }
 

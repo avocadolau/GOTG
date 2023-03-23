@@ -20,14 +20,14 @@ namespace Game
             {
                 //Poner
                 cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
-                PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, cb.filterBits);
+                PhysicsManager.ChangeCollisionTags(m_EntityId);
             }
 
             if (Input.IsKeyDown(KeyCode.O))
             {
                 //Quitar
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("ENEMY"));
-                PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, cb.filterBits);
+                PhysicsManager.ChangeCollisionTags(m_EntityId);
             }
 
         }
