@@ -9,4 +9,7 @@ public:
 	virtual ~AIMapBakingPanel();
 
 	void Draw() override;
+
+private:
+	bool m_drawGrid;
 };

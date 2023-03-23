@@ -58,8 +58,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 	}
 
 	
-
-	/*Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+	/*
+	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 	camera->frameBuffer->Bind(false);
@@ -75,7 +75,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 	glColor3f(1, 1, 1);
 	glLineWidth(10.0f);
 
-	Wiwa::AIPathFindingManager::MapData mapdata = Wiwa::AIPathFindingManager::GetMapData();
+	Wiwa::AIMapGeneration::MapData mapdata = Wiwa::AIMapGeneration::GetMapData();
 
 	float d = mapdata.height * mapdata.width * 2;
 
@@ -90,13 +90,14 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	glVertex3f(transform->localPosition.x, 0, transform->localPosition.z);
 
-	glm::vec2 dest = Wiwa::AIPathFindingManager::WorldToMap(49, 49);
+	glm::vec2 dest = Wiwa::AIMapGeneration::WorldToMap(49, 49);
 
 	glVertex3f(dest.x, 0, dest.y);
 
 	glEnd();
 
 	camera->frameBuffer->Unbind();*/
+	
 
 	m_IsMoving = false;
 }
@@ -116,7 +117,7 @@ void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
 	
 
 	glm::ivec2 target = {targetPos.x, targetPos.z};
-	//Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint,target);
+	Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint,target);
 
 	glm::ivec2 nextPos = target;
 

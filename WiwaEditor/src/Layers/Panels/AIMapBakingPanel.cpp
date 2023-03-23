@@ -10,9 +10,12 @@
 //#include <Wiwa/utilities/filesystem/FileSystem.h>
 //#include <Wiwa/core/Resources.h>
 
+#include "glew.h"
+
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
 	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
 {
+	m_
 }
 
 AIMapBakingPanel::~AIMapBakingPanel()
@@ -24,7 +27,7 @@ void AIMapBakingPanel::Draw()
 	ImGui::Begin(iconName.c_str(), &active);
 
 	
-	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the A* Map into the entity named");
+	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map into the entity named");
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0, 255, 200, 1), "Floor");
 
@@ -60,6 +63,11 @@ void AIMapBakingPanel::Draw()
 		Wiwa::AIMapGeneration::CreateWalkabilityMap(50, 50, 1.0f, 1.0f, 0.0f);
 	}
 
+	ImGui::Checkbox("Draw Map Grid", &m_drawGrid);
+
+	if (m_drawGrid)
+	{
+	}
 	
 	ImGui::End();
 }
