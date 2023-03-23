@@ -1,11 +1,8 @@
-﻿using System;
-using Wiwa;
-using WiwaApp;
+﻿using Wiwa;
 
 
 namespace Game
 {
-    using EntityId = System.UInt64;
     class TagChangeTest : Behaviour
     {
         public float Timer;
@@ -21,17 +18,19 @@ namespace Game
 
             if (Input.IsKeyDown(KeyCode.U))
             {
+                //Poner
                 cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
                 PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, cb.filterBits);
             }
 
             if (Input.IsKeyDown(KeyCode.O))
             {
+                //Quitar
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("ENEMY"));
                 PhysicsManager.ChangeCollisionTags(m_EntityId, cb.selfTag, cb.filterBits);
             }
 
         }
-    
+
     }
 }
