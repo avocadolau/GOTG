@@ -4,7 +4,7 @@ using Wiwa;
 
 namespace Game
 {
-    using EntityId = System.UInt32;
+    using EntityId = System.UInt64;
     [Component]
     public struct CharacterController
     {
@@ -23,6 +23,7 @@ namespace Game
         private ComponentIterator characterControllerIt;
         private ComponentIterator transformIt;
         private ComponentIterator rigidBodyIt;
+        private ComponentIterator shooterIt;
 
         private float dashTimer = 0f;
         private float dashCurrentVel = 0f;
@@ -30,35 +31,30 @@ namespace Game
 
         private Vector3 lastPos = Vector3Values.zero;
 
-        private int normalTags = 0;
-        private int dashTags = 0;
+        private bool isShooting = false;
+        private float shootTimer = 0f;
+
+
         void Awake()
         {
-            InitTags();
+
             //Setting components
             characterControllerIt = GetComponentIterator<CharacterController>();
             transformIt = GetComponentIterator<Transform3D>();
             rigidBodyIt = GetComponentIterator<CollisionBody>();
+            shooterIt = GetComponentIterator<CharacterShooter>();
 
             dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
         }
-        void InitTags()
-        {
-            dashTags |= 1 << PhysicsManager.GetTagBitsByString("WALL");
-            normalTags = PhysicsManager.GetTagBitsByString("WALL");
-            normalTags = PhysicsManager.GetTagBitsByString("COLUMN");
-            normalTags = PhysicsManager.GetTagBitsByString("ENEMY");
-            normalTags = PhysicsManager.GetTagBitsByString("END_ROOM_TRIGGER");
-            normalTags = PhysicsManager.GetTagBitsByString("START_RUN_TRIGGER");
-        }
+
         void Update()
         {
+            //Components
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref CharacterController controller = ref GetComponentByIterator<CharacterController>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
 
             Vector3 velocity = Vector3Values.zero;
-
             Vector3 input = GetMovementInput(ref controller);
 
             if (!isDashing)
@@ -75,8 +71,12 @@ namespace Game
 
 
             Vector3 shootInput = GetShootingInput(ref controller);
+            shootTimer += Time.DeltaTime();
             if (shootInput != Vector3Values.zero)
+            {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
+                Fire();
+            }
         }
 
         Vector3 GetMovementInput(ref CharacterController controller)
@@ -137,8 +137,13 @@ namespace Game
         }
         void SetPlayerRotation(ref Vector3 currentRotation, Vector3 input, float rotationSpeed)
         {
-            float angle = Mathf.Atan2(input.x, input.z) * Mathf.Rad2Deg;
+            float angle = AngleFromVec2(new Vector2(input.x, input.z));
+
+
             currentRotation.y = Mathf.LerpAngle(currentRotation.y, angle, rotationSpeed);
+
+            if (currentRotation.y >= 360f)
+                currentRotation.y = 0f;
         }
         void UpdateAnimation(Vector3 input, CharacterController controller)
         {
@@ -185,8 +190,7 @@ namespace Game
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("ENEMY"));
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("COLUMN"));
                 PhysicsManager.ChangeCollisionTags(m_EntityId);
-                Console.WriteLine($"Target: {targetPoint.x} X {targetPoint.y} Y {targetPoint.z}");
-                Console.WriteLine($"Distance {distance}");
+
 
                 if (distance <= 2f)
                 {
@@ -207,13 +211,84 @@ namespace Game
 
         }
 
+
+        void Fire()
+        {
+            ref CharacterShooter shooter = ref GetComponentByIterator<CharacterShooter>(shooterIt);
+            isShooting = true;
+            if (shootTimer >= shooter.FireInterval)
+            {
+                shootTimer = 0f;
+
+                Vector3 spawnPoint;
+                //Decide wich hand is going next
+                if (shooter.ShootRight)
+                    spawnPoint = shooter.RightSpawnPos;
+                else
+                    spawnPoint = shooter.LeftSpawnPos;
+
+                spawnPoint += GetComponentByIterator<Transform3D>(transformIt).LocalPosition;
+
+                shooter.ShootRight = !shooter.ShootRight;
+                SpawnBullet(spawnPoint, shooter);
+            }
+
+        }
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            if (id1 == m_EntityId)
+            if (id1 != m_EntityId)
                 return;
             if (str2 == "WALL")
                 ResetDash();
         }
 
+
+        //TODO: Put on Mathf.cs
+        public float AngleFromVec2(Vector2 vector)
+        {
+            return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
+        }
+        void SpawnBullet(Vector3 position, CharacterShooter shooter)
+        {
+            float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
+
+            Console.WriteLine($"Angle {angle}");
+
+            Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
+
+            Console.WriteLine($"Direction {direction.x} {direction.z}");
+            EntityId bullet = CreateEntity();
+
+            ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
+            ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
+            ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
+            ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
+
+            AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
+
+
+            bulletTransform.LocalPosition = position;
+            bulletTransform.LocalScale = new Vector3(1f, 1f, 1f);
+
+            cs.radius = 1;
+
+            cb.scalingOffset = new Vector3(1f, 1f, 1f);
+            cb.isTrigger = true;
+            cb.isStatic = false;
+            cb.doContinuousCollision = false;
+            cb.selfTag = 3;
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("WALL");
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
+
+            bulletComp.Velocity = shooter.BulletSpeed;
+            bulletComp.LifeTime = shooter.BulletLifeTime;
+            bulletComp.Damage = shooter.BulletDamage;
+            bulletComp.Direction = direction;
+
+            ApplySystem<MeshRenderer>(bullet);
+            ApplySystem<PhysicsSystem>(bullet);
+            ApplySystem<BulletController>(bullet);
+        }
     }
 }
