@@ -75,7 +75,7 @@ namespace Wiwa
 
 		Image* texture;
 
-		size_t idGuiSelected = -1;
+		int idGuiSelected = -1;
 
 	};
 }

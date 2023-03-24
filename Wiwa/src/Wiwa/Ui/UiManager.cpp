@@ -428,6 +428,8 @@ namespace Wiwa
 				}
 			}
 		}
+
+		return true;
 	}
 
 	void GuiManager::SaveWiUI(const char* path)
@@ -506,6 +508,7 @@ namespace Wiwa
 
 			}
 		}
+		return true;
 	}
 	void GuiManager::InputController()
 	{
@@ -526,7 +529,7 @@ namespace Wiwa
 				{
 					idGuiSelected--;
 				}
-				if (idGuiSelected > -1 && idGuiSelected <= canvas.at(i)->controls.size())
+				if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controls.size())
 				{
 					canvas.at(i)->SelectElement(idGuiSelected);
 				}
