@@ -223,5 +223,11 @@ namespace Wiwa
 
 		std::string name;
 		Callback* callback;
+
+		//THINGS FOR ANIMATIONS
+		List<Rect2i> positionsForAnimations;
+		bool animated; 
+		size_t framesAnimation;
+		float animSpeed;
 	};
 }

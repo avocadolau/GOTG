@@ -26,4 +26,13 @@ namespace Wiwa
 			this->controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
 		}
 	}
+
+	void GuiCanvas::SelectElement(size_t id)
+	{
+		for (size_t i = 0; i < controls.size(); i++)
+		{
+			controls.at(i)->state = Wiwa::GuiControlState::NORMAL;
+		}
+		controls.at(id)->state = Wiwa::GuiControlState::FOCUSED;
+	}
 }

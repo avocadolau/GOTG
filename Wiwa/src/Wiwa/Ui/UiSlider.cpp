@@ -23,13 +23,12 @@ namespace Wiwa
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
-		id_quad_extra = r2d.CreateInstancedQuadTex(m_Scene, extraTexture->GetTextureId(), extraTexture->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, extraTexturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 
 
 		textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 		texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-
+		id_quad_extra = r2d.CreateInstancedQuadTex(m_Scene, extraTexture->GetTextureId(), extraTexture->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, extraTexturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 		
 		state = GuiControlState::NORMAL;
 		//canClick = true;
@@ -53,6 +52,7 @@ namespace Wiwa
 				if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
 					(mouseY > position.y && mouseY < position.y + position.height))
 				{
+					state = GuiControlState::FOCUSED;
 					if (Wiwa::Input::IsMouseButtonPressed(0))
 					{
 						state = GuiControlState::PRESSED;
@@ -90,30 +90,34 @@ namespace Wiwa
 		{
 			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
 			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, {extraPosition.width,extraPosition.height}, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
 
 			
 		} break;
 
 		case GuiControlState::NORMAL:
 		{
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
 
 		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
 		{
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
 
 		} break;
 		case GuiControlState::PRESSED:
 		{
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
 
 
 		} break;
@@ -122,8 +126,9 @@ namespace Wiwa
 
 		case GuiControlState::SELECTED:
 		{
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
 
 		}break;
 		default:

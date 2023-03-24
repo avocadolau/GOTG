@@ -23,5 +23,7 @@ namespace Wiwa
 		bool canClick = true;
 
 		bool clicked = false;
+
+		float timeForAnim;
 	};
 }

@@ -31,6 +31,7 @@ namespace Wiwa
 	bool GuiManager::Init(Scene* scene)
 	{
 		m_Scene = scene;
+		idGuiSelected = -1;
 		//InitFont("assets/arial.ttf");
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
@@ -100,6 +101,7 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
+		InputController();
 		std::vector<GuiCanvas*> canva = canvas;
 		for (int i = 0; i < canva.size(); i++)
 		{
@@ -502,6 +504,36 @@ namespace Wiwa
 				File.Write(&text, sizeof(const char*));
 
 
+			}
+		}
+	}
+	void GuiManager::InputController()
+	{
+		bool ret = Wiwa::Input::IsButtonPressed(0,13);
+		bool ret2 = Wiwa::Input::IsButtonPressed(0, 11);
+
+		WI_INFO(idGuiSelected);
+
+		for (size_t i = 0; i < canvas.size(); i++)
+		{
+			if (canvas.at(i)->active)
+			{
+				if (ret2)
+				{
+					idGuiSelected++;
+				}
+				else if (ret)
+				{
+					idGuiSelected--;
+				}
+				if (idGuiSelected > -1 && idGuiSelected <= canvas.at(i)->controls.size())
+				{
+					canvas.at(i)->SelectElement(idGuiSelected);
+				}
+				else if (idGuiSelected > canvas.at(i)->controls.size())
+				{
+					idGuiSelected = 0;
+				}
 			}
 		}
 	}

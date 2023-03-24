@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
+#include <Wiwa/core/Input.h>
 
 
 
@@ -56,7 +57,7 @@ namespace Wiwa
 		
 		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
 
-
+		void InputController();
 
 		bool _saveGUIImpl(File& file);
 		bool _loadGUIImpl(File& file);
@@ -73,6 +74,8 @@ namespace Wiwa
 		bool doLogic = false;
 
 		Image* texture;
+
+		size_t idGuiSelected = -1;
 
 	};
 }

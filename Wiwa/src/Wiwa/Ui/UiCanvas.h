@@ -22,6 +22,8 @@ namespace Wiwa
 
 
 		 void SwapActive();
+
+		 void SelectElement(size_t id);
 		 bool active;
 		 bool selected;
 		 int id;
