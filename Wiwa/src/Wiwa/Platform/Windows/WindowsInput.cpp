@@ -121,11 +121,25 @@ namespace Wiwa
 		GLFWgamepadstate state;
 		if(glfwGetGamepadState(gamepadIndx, &state))
 		{
-			if (state.buttons[keycode])
+			if (state.buttons[keycode] == GLFW_PRESS)
 			{
 				return true;
 			}
 		}
 		return false;
+	
+	}
+	bool WindowsInput::IsButtonReleasedImpl(int gamepadIndx, int keycode)
+	{
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(gamepadIndx, &state))
+		{
+			if (state.buttons[keycode] == GLFW_RELEASE)
+			{
+				return true;
+			}
+		}
+		return false;
+
 	}
 }
