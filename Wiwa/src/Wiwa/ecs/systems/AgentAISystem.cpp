@@ -47,11 +47,26 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	if (m_IsMoving)
 	{
-		float dirX = m_DirectionPoint.x - transform->position.x;
-		dirX /= abs(dirX);
+		float dirX = 0.0f;
 
-		float dirY = m_DirectionPoint.y - transform->position.z;
-		dirY /= abs(dirY);
+		if (m_DirectionPoint.x != transform->position.x)
+		{
+			dirX = m_DirectionPoint.x - transform->position.x;
+			dirX /= abs(dirX);
+		}
+		
+
+		
+		WI_CORE_INFO(" DirX = {}, Directionpoint.x = {}, transform->position.x = {}", dirX, m_DirectionPoint.x , transform->position.x);
+		
+		
+		float dirY = 0.0f;
+
+		if (m_DirectionPoint.y != transform->position.z)
+		{
+			dirY = m_DirectionPoint.y - transform->position.z;
+			dirY /= abs(dirY);
+		}
 
 		// Move to direction
 		transform->localPosition.x += agent->speed * dirX * Time::GetDeltaTimeSeconds();
@@ -94,9 +109,9 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	glVertex3f(transform->localPosition.x, 0, transform->localPosition.z);
 
-	glm::vec2 dest = Wiwa::AIMapGeneration::WorldToMap(20, 20);
+	//glm::vec2 dest = Wiwa::AIMapGeneration::WorldToMap(20, 20);
 
-	glVertex3f(dest.x, 0, dest.y);
+	//glVertex3f(dest.x, 0, dest.y);
 
 	glEnd();
 

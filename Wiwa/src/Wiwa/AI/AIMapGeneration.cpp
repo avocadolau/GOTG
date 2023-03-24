@@ -79,7 +79,7 @@ glm::vec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)
 
 	ret.x = (float)x * m_mapData.tileWidth;
 	ret.y = (float)y * m_mapData.tileHeight;
-
+	//WI_CORE_INFO("Map to World: x = {}, y = {}, ret.x = {}, ret.y = {}", x, y, ret.x, ret.y);
 	return ret;
 }
 
@@ -89,6 +89,6 @@ glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(float x, float y)
 
 	ret.x = x / m_mapData.tileWidth;
 	ret.y = y / m_mapData.tileHeight;
-
+	//WI_CORE_INFO("World to Map: x = {}, y = {}, ret.x = {}, ret.y = {}", x,y,ret.x, ret.y);
 	return ret;
 }
