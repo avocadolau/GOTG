@@ -451,7 +451,8 @@ namespace Wiwa {
 		Material* mat = new Material((Shader*)0);
 
 		JSONDocument matFile(path);
-
+		if (!matFile.IsObject())
+			return nullptr;
 		if (matFile.HasMember("shader")) {
 			std::string shader_path = matFile["shader"].get<const char*>();
 
