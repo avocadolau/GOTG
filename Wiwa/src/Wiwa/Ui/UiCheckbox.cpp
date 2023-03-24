@@ -56,9 +56,6 @@ namespace Wiwa
 			{
 				state = GuiControlState::FOCUSED;
 			}
-			{
-				state = GuiControlState::NORMAL;
-			}
 
 			if (state == GuiControlState::FOCUSED)
 			{

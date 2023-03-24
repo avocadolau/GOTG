@@ -154,12 +154,14 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 							}
 							break;
 						case Wiwa::GuiControlType::CHECKBOX:
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							if (current_cb->getParamCount() == 1) {
+								if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
+									if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+									{
+										callbackID = n;
+										if (is_selected)
+											ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+									}
 								}
 							}
 							break;
