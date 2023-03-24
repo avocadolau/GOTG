@@ -517,6 +517,8 @@ void EditorLayer::MainMenuBar()
 		{
 			if (ImGui::MenuItem("Reload assembly", "ALT + R"))
 				Wiwa::ScriptEngine::ReloadAssembly();
+			if (ImGui::MenuItem("Open Solution"))
+				system("call tools/opensln.bat AppAssembly.sln");
 
 			ImGui::EndMenu();
 		}
