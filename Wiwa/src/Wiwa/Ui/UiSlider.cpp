@@ -53,6 +53,9 @@ namespace Wiwa
 					(mouseY > position.y && mouseY < position.y + position.height))
 				{
 					state = GuiControlState::FOCUSED;
+				}
+				if (state == GuiControlState::FOCUSED)
+				{
 					if (Wiwa::Input::IsMouseButtonPressed(0))
 					{
 						state = GuiControlState::PRESSED;
@@ -63,13 +66,39 @@ namespace Wiwa
 					if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 					{
 						clicked = false;
-						value = (((float)extraPosition.width/ (float)position.width) * 100);
-						void* params[] = { &value};
+						value = (((float)extraPosition.width / (float)position.width) * 100);
+						void* params[] = { &value };
 						callback->Execute(params);
 					}
-					else
+
+					//RIGHT
+					if (Wiwa::Input::IsButtonPressed(0, 12))
 					{
-						state = GuiControlState::NORMAL;
+						extraPosition.width += 1;
+						if (extraPosition.width >= position.width)
+						{
+							extraPosition.width = position.width;
+						}
+
+					}
+					//LEFT
+					if (Wiwa::Input::IsButtonPressed(0, 14))
+					{
+						extraPosition.width -= 1;
+						if (extraPosition.width <= 0)
+						{
+							extraPosition.width = 0;
+						}
+
+					}
+					//DETECT IF "A" BUTTON CLICKED
+					if (Wiwa::Input::IsButtonPressed(0, 0))
+					{
+						clicked = false;
+						value = (((float)extraPosition.width / (float)position.width) * 100);
+						void* params[] = { &value };
+						callback->Execute(params);
+
 					}
 				}
 			}

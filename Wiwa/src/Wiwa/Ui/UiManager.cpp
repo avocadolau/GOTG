@@ -127,6 +127,7 @@ namespace Wiwa
 
 	bool GuiManager::Draw()
 	{
+
 		size_t Csize = canvasToDestroy.size();
 		for (size_t x = 0; x < Csize; x++)
 		{
@@ -524,33 +525,33 @@ namespace Wiwa
 	}
 	void GuiManager::InputController()
 	{
-		
-		bool ret = Wiwa::Input::IsButtonPressed(0, 13);
-		bool ret2 = Wiwa::Input::IsButtonPressed(0, 11);
-
-		
 		for (size_t i = 0; i < canvas.size(); i++)
 		{
-			if (canvas.at(i)->active)
+			if (Wiwa::Input::IsButtonPressed(0, 13))
 			{
-				
-				WI_INFO("id_selected {}",idGuiSelected);
-				if (ret2)
-				{
-					idGuiSelected++;
-				}
-				else if (ret)
-				{
-					idGuiSelected--;
-				}
-				if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controlsForSelection.size())
-				{
-					canvas.at(i)->SelectElement(idGuiSelected);
-				}
-				else if (idGuiSelected >= canvas.at(i)->controlsForSelection.size())
+				idGuiSelected++;
+
+				if (idGuiSelected >= canvas.at(i)->controlsForSelection.size())
 				{
 					idGuiSelected = 0;
 				}
+				break;
+					
+			}
+			if (Wiwa::Input::IsButtonPressed(0, 11))
+			{
+				idGuiSelected--;
+				if (idGuiSelected <= -1)
+				{
+					idGuiSelected = canvas.at(i)->controlsForSelection.size() - 1;
+				}
+				break;
+					
+			}
+			if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controlsForSelection.size())
+			{
+				canvas.at(i)->SelectElement(idGuiSelected);
+					
 			}
 		}
 	}
