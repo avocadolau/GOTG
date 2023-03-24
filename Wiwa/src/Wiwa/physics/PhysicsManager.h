@@ -141,7 +141,7 @@ namespace Wiwa {
 		btOverlapFilterCallback* m_filterCallback;
 
 		//  btDefaultVehicleRaycaster* v_Vehicle_raycaster;
-		DebugDrawer* m_Debug_draw;
+		
 
 		std::list<btCollisionShape*> m_Shapes;
 		std::list<Object*> m_CollObjects;
@@ -157,6 +157,8 @@ namespace Wiwa {
 		bool AddBodyToLog(Object* body_to_log);
 		bool RemoveBodyFromLog(Object* body_to_log);
 		bool LogBodies();
+
+		DebugDrawer* m_Debug_draw;
 
 	public:
 		std::map<std::string, int> filterMap;

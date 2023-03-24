@@ -10,6 +10,7 @@
 #include <Wiwa/utilities/Log.h>
 //#include "Wiwa/utilities/time/Time.h"
 
+#include <random>
 //#include <glm/gtc/quaternion.hpp>
 //#include <glm/gtx/matrix_decompose.hpp>
 //#include <glm/gtc/type_ptr.hpp>
@@ -47,7 +48,7 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	{
 		for (int x = 0; x < m_mapData.width; x++)
 		{
-			for (int i = 0; i < entityCount; i++)
+			/*for (int i = 0; i < entityCount; i++)
 			{
 				EntityId actualId = entities->at(i);
 
@@ -66,10 +67,31 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 						m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
 					}
 				}
-			}
+			}*/
 
 			// if collision then invalid walking code
+			// Create a random device object
+			std::random_device rd;
 			
+			// Initialize a random number generator with the random device
+			std::mt19937 gen(rd());
+			
+			// Define the range of random numbers you want to generate (1 to 256, inclusive)
+			std::uniform_int_distribution<> distr(1, 10);
+			
+			if (distr(gen) == 1)
+			{
+				m_map[x * m_mapData.width + z] = INVALID_WALK_CODE;
+			}
+			else
+			{
+				m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
+			}
+
+			//m_map[x * m_mapData.width + z] = INVALID_WALK_CODE;
+			
+			//WI_CORE_INFO(" At {} the walkabilty value is: {}",x * m_mapData.width + z, m_map[x * m_mapData.width + z]);
+
 			// if not collision then default walking code
 			//m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
 		}

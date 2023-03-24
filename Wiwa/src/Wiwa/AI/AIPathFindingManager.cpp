@@ -151,6 +151,9 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetN
 			ret = &(*item);
 		}
 	}
+
+	int actualCost = m_map[ ret->pos.x * m_width + ret->pos.y ];
+
 	return ret;
 	
 	/*auto lowest = std::min_element(pathList.begin(), pathList.end(), [](const PathNode& a, const PathNode& b) {
@@ -162,7 +165,6 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetN
 		ret = &(*lowest);
 	}	*/
 
-	return ret;
 
 }
 
@@ -213,8 +215,8 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			PathNode* lowest = open.GetNodeLowestScore();
 			closed.pathList.push_back(*lowest);
 			PathNode* node = &closed.pathList.back();
-			auto vec = Wiwa::AIMapGeneration::MapToWorld(node->pos.x, node->pos.y);
-			node->pos = vec;
+			//auto vec = Wiwa::AIMapGeneration::MapToWorld(node->pos.x, node->pos.y);
+			//node->pos = vec;
 
 			//WI_INFO("X = {}", node->pos.x);
 			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
@@ -223,6 +225,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			
 			// L12b: TODO 4: If we just added the destination, we are done!
+			//glm::ivec2 nodeMapCoords = Wiwa::AIMapGeneration::WorldToMap(node->pos.x, node->pos.y);
 			if (node && node->pos == destination)
 			{
 				m_lastPath.clear();				
@@ -237,7 +240,10 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				
 				//std::reverse(m_lastPath.begin(), m_lastPath.end());
 				ret = m_lastPath.size();
-
+				//for (int i = 0; i < m_lastPath.size(); i++)
+				//{
+				//	WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}",i, m_lastPath.at(i).x, m_lastPath.at(i).y, m_map[(m_lastPath.at(i).x * m_width) + m_lastPath.at(i).y]);
+				//}
 				break;
 			}
 
@@ -252,20 +258,29 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				if (closed.Find(item.pos) != nullptr)
 					continue;
 
+				
+
 				// If it is NOT found, calculate its F and add it to the open list
 				PathNode* adjacentInOpen = open.Find(item.pos);
 				if (adjacentInOpen == nullptr)
 				{
-					item.CalculateF(destination);
-					open.pathList.emplace_back(item);
+					///if (IsWalkable(item.pos))
+					//{
+						item.CalculateF(destination);
+						open.pathList.emplace_back(item);
+					//}
 				}
 				else
 				{
 					// If it is already in the open list, check if it is a better path (compare G)
 					if (adjacentInOpen->g > item.g + 1)
 					{
-						adjacentInOpen->parent = item.parent;
-						adjacentInOpen->CalculateF(destination);
+						//if (IsWalkable(item.pos))
+						//{
+							adjacentInOpen->parent = item.parent;
+							adjacentInOpen->CalculateF(destination);
+							
+						//}						
 					}
 				}
 			}
@@ -296,7 +311,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				}
 
 			}*/
-			WI_INFO(" Path of {} steps and {} iterations", ret, iterations);
+			//WI_INFO(" Path of {} steps and {} iterations", ret, iterations);
 
 			++iterations;
 		}

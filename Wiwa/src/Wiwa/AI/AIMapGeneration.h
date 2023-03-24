@@ -65,6 +65,11 @@ namespace Wiwa {
 			return m_mapData;
 		}
 
+		static unsigned char* GetMap()
+		{
+			return m_map;
+		}
+
 	private:
 
 		// data of the map
