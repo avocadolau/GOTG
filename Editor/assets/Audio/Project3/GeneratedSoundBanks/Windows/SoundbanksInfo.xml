@@ -151,9 +151,57 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="2081067388" Type="User" Language="SFX" Hash="{A42D06FA-EAB0-AE36-A835-A11F31ACF144}">
-			<ShortName>Player_soundbank</ShortName>
-			<Path>Player_soundbank.bnk</Path>
+		<SoundBank Id="2308042502" Type="User" Language="SFX" Hash="{5D3DF168-606F-4624-2DD3-84F9DBA333E8}">
+			<ShortName>player_walking</ShortName>
+			<Path>player_walking.bnk</Path>
+			<Media>
+				<File Id="418562462" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal02.wav</ShortName>
+					<CachePath>SFX/FootstepMetal02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="524945233" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal04.wav</ShortName>
+					<CachePath>SFX/FootstepMetal04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="537205970" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal01.wav</ShortName>
+					<CachePath>SFX/FootstepMetal01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="557765093" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal08.wav</ShortName>
+					<CachePath>SFX/FootstepMetal08_10C4C929.wem</CachePath>
+				</File>
+				<File Id="604386515" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal03.wav</ShortName>
+					<CachePath>SFX/FootstepMetal03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="645811211" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal05.wav</ShortName>
+					<CachePath>SFX/FootstepMetal05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="883523052" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal07.wav</ShortName>
+					<CachePath>SFX/FootstepMetal07_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1046599716" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>FootstepMetal06.wav</ShortName>
+					<CachePath>SFX/FootstepMetal06_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2147561130" Name="player_walk">
+					<MediaRefs>
+						<MediaRef Id="418562462"/>
+						<MediaRef Id="524945233"/>
+						<MediaRef Id="537205970"/>
+						<MediaRef Id="557765093"/>
+						<MediaRef Id="604386515"/>
+						<MediaRef Id="645811211"/>
+						<MediaRef Id="883523052"/>
+						<MediaRef Id="1046599716"/>
+					</MediaRefs>
+				</Event>
+			</Events>
 		</SoundBank>
 		<SoundBank Id="2715313045" Type="User" Language="SFX" Hash="{13D8245F-9716-7BB3-1F30-E82344AA8F38}">
 			<ShortName>pause_sound</ShortName>
@@ -206,7 +254,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3332217831" Type="User" Language="SFX" Hash="{D3068A8C-C04E-631B-6AC0-126CF4079EEB}">
+		<SoundBank Id="3332217831" Type="User" Language="SFX" Hash="{7434420E-AD7D-FE22-9759-341AD1754BF4}">
 			<ShortName>background_song</ShortName>
 			<Path>background_song.bnk</Path>
 			<Media>
@@ -257,10 +305,6 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="4072029455" Type="User" Language="SFX" Hash="{237193B2-875F-A205-6513-737A70F188DC}">
-			<ShortName>New_SoundBank</ShortName>
-			<Path>New_SoundBank.bnk</Path>
-		</SoundBank>
 	</SoundBanks>
-	<FileHash>{9EFFDB1E-DA4B-5F3E-AB17-E3EC62FADBB5}</FileHash>
+	<FileHash>{BEF353CF-F680-A15B-0683-4E1CFA918297}</FileHash>
 </SoundBanksInfo>
