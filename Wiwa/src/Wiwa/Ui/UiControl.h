@@ -3,6 +3,7 @@
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/utilities/functions/Callback.h>
+#include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
 
@@ -178,18 +179,20 @@ namespace Wiwa
 		bool SwapToNewTexture(const char* path, Wiwa::Renderer2D& r2d)
 		{
 			
-			r2d.RemoveInstance(m_Scene, id_quad_normal);
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 
-			
-			id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, texture->GetTextureId()); 
 			return true;
 		}
 
-		void SwapCallback(int callback_id)
+		void SwapText(const char* word, Wiwa::Renderer2D& r2d)
 		{
-			//callback = Wiwa::Application::Get().getCallbackAt(callback_id);
+			/*text = word;
+			Text* newText = new Text();
+			newText = Text::InitFont("assets/Fonts/arial.ttf", (char*)word);
+			
+			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());*/
 		}
 	public:
 
@@ -202,7 +205,7 @@ namespace Wiwa
 		GuiControlState state;
 		GuiEvent event;
 
-		char text[32];           // Control text (if required)
+		const char* text;           // Control text (if required)
 		Rect2i position;        // Position and size
 		Rect2i texturePosition;        
 		Rect2i extraPosition;	// Position and size for the bar
@@ -211,7 +214,7 @@ namespace Wiwa
 
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
-		
+
 		uint32_t id_quad_normal;
 
 		uint32_t id_quad_extra;

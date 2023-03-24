@@ -41,7 +41,7 @@ private:
 	ImTextureID m_ShaderIcon;
 	ImTextureID m_PrefabIcon;
 	ImTextureID m_SceneIcon;
-
+	ImTextureID m_GuiIcon;
 	 
 	std::filesystem::path m_CurrentPath;
 	std::filesystem::directory_entry m_SelectedEntry;

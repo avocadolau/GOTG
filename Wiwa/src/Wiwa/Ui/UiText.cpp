@@ -11,13 +11,13 @@ namespace Wiwa
 		this->position = bounds;
 		name = "Text";
 		active = true;
-
+		text = string_text;
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		text = new Text();
-		text = gm.InitFont("assets/Arial.ttf", (char*)string_text);
+		text_res = new Text();
+		text_res = gm.InitFont("assets/Fonts/arial.ttf", (char*)string_text);
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text_res->GetTextureId(), text_res->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		
 		
 	}
@@ -39,7 +39,7 @@ namespace Wiwa
 		Size2i newSize;
 		newSize.w = this->position.width;
 		newSize.h = this->position.height;
-		render->UpdateInstancedQuad(m_Scene, id_quad_normal, newPosition, newSize, color);
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 	
 
 		return false;

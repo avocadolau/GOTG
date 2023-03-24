@@ -282,6 +282,8 @@ namespace Wiwa
 
 				int callbackID;// = 1;
 
+				const char* text;
+
 				scene_file.Read(&id, sizeof(int));
 				scene_file.Read(&active, 1);
 				scene_file.Read(&guiType, sizeof(GuiControlType));
@@ -304,7 +306,7 @@ namespace Wiwa
 				scene_file.Read(&texturePosition, sizeof(Rect2i));
 				scene_file.Read(&extraTexturePosition, sizeof(Rect2i));
 
-
+				scene_file.Read(&text, sizeof(const char*));
 
 				switch (guiType)
 				{
@@ -312,7 +314,7 @@ namespace Wiwa
 					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					gm.CreateGuiControl_Text(guiType, id, position, textureGui.c_str(),canvas.at(i)->id);
+					gm.CreateGuiControl_Text(guiType, id, position, text,canvas.at(i)->id);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
 					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
@@ -538,6 +540,8 @@ namespace Wiwa
 					size_t textureGui_len = strlen(textureGui) + 1;
 					size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
 
+					const char* text = control->text;
+
 					scene_file.Write(&id, sizeof(int));
 					scene_file.Write(&active, 1);
 					scene_file.Write(&guiType, sizeof(GuiControlType));
@@ -558,7 +562,7 @@ namespace Wiwa
 					scene_file.Write(&texturePosition, sizeof(Rect2i));
 					scene_file.Write(&extraTexturePosition, sizeof(Rect2i));
 
-
+					scene_file.Write(&text, sizeof(const char*));
 					
 				}
 			}
@@ -826,5 +830,10 @@ namespace Wiwa
 	void SceneManager::ChangeSceneByIndex(SceneId sceneId, int flags)
 	{		
 		m_Scenes[m_ActiveScene]->ChangeScene(sceneId, flags);
+	}
+
+	void SceneManager::PauseCurrentScene()
+	{
+		m_Scenes[m_ActiveScene]->SwapPauseActive();
 	}
 }

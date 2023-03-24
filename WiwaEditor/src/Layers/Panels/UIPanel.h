@@ -56,4 +56,5 @@ public:
 	int callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
+	std::string nameSavingWiGUI;
 };
