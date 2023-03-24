@@ -213,6 +213,12 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		{
 			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
 			PathNode* lowest = open.GetNodeLowestScore();
+
+			if (!IsWalkable(lowest->pos))
+			{
+				continue;
+			}
+
 			closed.pathList.push_back(*lowest);
 			PathNode* node = &closed.pathList.back();
 			//auto vec = Wiwa::AIMapGeneration::MapToWorld(node->pos.x, node->pos.y);
@@ -258,13 +264,14 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				if (closed.Find(item.pos) != nullptr)
 					continue;
 
-				
+				//if (!IsWalkable(item.pos))
+				//	continue;
 
 				// If it is NOT found, calculate its F and add it to the open list
 				PathNode* adjacentInOpen = open.Find(item.pos);
 				if (adjacentInOpen == nullptr)
 				{
-					///if (IsWalkable(item.pos))
+					//if (IsWalkable(item.pos))
 					//{
 						item.CalculateF(destination);
 						open.pathList.emplace_back(item);

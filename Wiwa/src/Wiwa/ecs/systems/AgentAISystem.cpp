@@ -129,22 +129,24 @@ void Wiwa::AgentAISystem::OnUpdate()
 			//
 
 			if (map[j * mapdata.width + i] == 255)
-			{
-			
-				glColor3f(1, 0, 0);
+			{			
+				glColor3f( (j + i)*0.01f, 0, 0);
 			}
 			else
 			{
-				glColor3f(0, 0, 1);
+				glColor3f(0, 0,  (j + i) * 0.01f);
 			}
 			//glColor3f(1, 0, 0);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Set the polygon mode to wireframe
+			glPolygonMode(GL_FRONT_AND_BACK, GL_3D); // Set the polygon mode to wireframe
 			glBegin(GL_QUADS); // Begin drawing the quad   
-			glVertex3f(vec.x,0, vec.y - mapdata.tileHeight ); // Bottom-left vertex   
-			glVertex3f(vec.x,0, vec.y); // Top-left vertex   
-			glVertex3f(vec.x + mapdata.tileWidth,0, vec.y); // Top-right vertex   
-			glVertex3f(vec.x + mapdata.tileWidth,0, vec.y - mapdata.tileHeight); // Bottom-right vertex
-			
+			//glVertex3f(vec.x,0, vec.y - mapdata.tileHeight ); // Bottom-left vertex   
+			//glVertex3f(vec.x,0, vec.y); // Top-left vertex   
+			//glVertex3f(vec.x + mapdata.tileWidth,0, vec.y); // Top-right vertex   
+			//glVertex3f(vec.x + mapdata.tileWidth,0, vec.y - mapdata.tileHeight); // Bottom-right vertex
+			glVertex3f(vec.x, 0.0f, vec.y+1.0f); // Bottom-left vertex
+			glVertex3f(vec.x +1.0f, 0.0f, vec.y+1.0f); // Bottom-right vertex
+			glVertex3f(vec.x+1.0f, 0.0f, vec.y); // Top-right vertex
+			glVertex3f(vec.x, 0.0f, vec.y); // Top-left vertex
 			
 			//
 			glEnd();
@@ -188,8 +190,8 @@ void Wiwa::AgentAISystem::GoToNextPosition()
 	lastPath.pop_back();
 
 	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
-	//m_DirectionPoint = { nextPos.x + (localMapData.tileWidth * 0.5f), nextPos.y + (localMapData.tileHeight * 0.5f) };
-	m_DirectionPoint = { nextPos.x , nextPos.y };
+	m_DirectionPoint = { nextPos.x + (localMapData.tileWidth * 0.5f), nextPos.y + (localMapData.tileHeight * 0.5f) };
+	//m_DirectionPoint = { nextPos.x , nextPos.y };
 
 	m_IsMoving = true;
 }
