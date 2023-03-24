@@ -136,14 +136,14 @@ namespace Wiwa {
 	{
 		for (auto& animation : m_Animations)
 		{
-			if (animation->m_Name.data() == name.data())
+			if (animation->m_Name == name)
 			{
 
 				//BlendToAnimation(animation, 0.5f, 1);
-				//m_TargetAnimation = animation;
-				//m_AnimationState = AnimationState::Blending;
+				m_TargetAnimation = animation;
+				m_AnimationState = AnimationState::Blending;
 				m_CurrentAnimation = animation;
-				//m_CurrentTime = 0;
+				m_CurrentTime = 0;
 				return;
 			}
 		}
