@@ -26,61 +26,31 @@ AIMapBakingPanel::~AIMapBakingPanel()
 void AIMapBakingPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
-
 	
 	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map with theese parameters:");
-	
-	
-	glm::ivec2 mapSizeInTiles = { 0,0 };
-	mapSizeInTiles.x = Wiwa::AIMapGeneration::GetMapData().width;
-	mapSizeInTiles.y = Wiwa::AIMapGeneration::GetMapData().height;
 	
 	const std::string posLabel = "Position in Tiles:";
 	DrawInt2Control(posLabel, &mapSizeInTiles, 1.0f, 300.0f);
 
-	Wiwa::AIMapGeneration::GetMapData().width = mapSizeInTiles.x;
-	Wiwa::AIMapGeneration::GetMapData().height = mapSizeInTiles.y;
-
-	glm::vec2 sizeOfTiles = { 0.0f, 0.0f };
-	sizeOfTiles.x = Wiwa::AIMapGeneration::GetMapData().tileWidth;
-	sizeOfTiles.y = Wiwa::AIMapGeneration::GetMapData().tileHeight;
-
 	const std::string sizeLabel = "Size of the Tiles:";
-	DrawVec2Control(posLabel, &sizeOfTiles, 1.0f, 300.0f);
+	DrawVec2Control(sizeLabel, &sizeOfTiles, 1.0f, 300.0f);
 
-	Wiwa::AIMapGeneration::GetMapData().tileWidth  = sizeOfTiles.x;
-	Wiwa::AIMapGeneration::GetMapData().tileHeight = sizeOfTiles.y;
+	ImGui::Spacing();
+	if (ImGui::Button("Create new Map"))
+	{
+		Wiwa::AIMapGeneration::CreateWalkabilityMap(mapSizeInTiles.x, mapSizeInTiles.y, sizeOfTiles.x, sizeOfTiles.y, 0.0f);
+	}
 
-	if (ImGui::Button("Bake Map")) {
-		
-		//
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		
-		//std::unique_ptr<std::vector<SystemHash>> entityList  = std::make_unique<std::vector<SystemHash>>(entityManager);
-		std::vector<EntityId>* entityList = entityManager.GetEntitiesAlive();
-		
-		EntityId eid = EntityId();
-
-		//for(int i = 0; i < entityList->size(); i++)
-		//{
-		//	eid = entityList->at(i);
-		//	if (entityManager.GetEntityName(eid) == "Floor")
-		//	{
-		//		// entityManager.GetComponent<Wiwa::tra>();
-		//		// Get the transform component and call the generation map funtion
-		//	}
-		//	else {
-		//		continue;
-		//	}
-		//}
-
-		Wiwa::AIMapGeneration::CreateWalkabilityMap(50, 50, 1.0f, 1.0f, 0.0f);
+	if (ImGui::Button("Bake Map"))
+	{
+		Wiwa::AIMapGeneration::BakeMap();
 	}
 
 	ImGui::Checkbox("Draw Map Grid", &m_drawGrid);
 
 	if (m_drawGrid)
 	{
+		Wiwa::AIMapGeneration::DebugDrawMap();
 	}
 	
 	ImGui::End();

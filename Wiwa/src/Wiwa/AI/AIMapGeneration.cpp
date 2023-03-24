@@ -15,7 +15,7 @@
 //#include <glm/gtx/matrix_decompose.hpp>
 //#include <glm/gtc/type_ptr.hpp>
 //#include <vector>
-
+#include "glew.h"
 //#include <Wiwa/utilities/json/JSONDocument.h>
 
 Wiwa::AIMapGeneration::MapData Wiwa::AIMapGeneration::m_mapData = MapData();
@@ -43,63 +43,153 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	std::vector<EntityId>* entities = em.GetEntitiesAlive();
 	int entityCount = em.GetEntityCount();
-	
-	for (int z = 0; z < m_mapData.height; z++)
-	{
-		for (int x = 0; x < m_mapData.width; x++)
-		{
-			/*for (int i = 0; i < entityCount; i++)
-			{
-				EntityId actualId = entities->at(i);
-
-				
-				if (em.GetComponent<Wiwa::CollisionBody>(actualId) != nullptr &&
-					em.GetComponent<Wiwa::Transform3D>(actualId) != nullptr &&
-					em.GetComponent<Wiwa::CollisionBody>(actualId)->isStatic == true
-					)
-				{
-					if (Wiwa::AIMapGeneration::WorldToMap(em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition.x, em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition.z) == glm::ivec2{x* m_mapData.width,z})
-					{
-						m_map[x * m_mapData.width + z] = INVALID_WALK_CODE;
-					}
-					else
-					{
-						m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
-					}
-				}
-			}*/
-
-			// if collision then invalid walking code
-			// Create a random device object
-			std::random_device rd;
-			
-			// Initialize a random number generator with the random device
-			std::mt19937 gen(rd());
-			
-			// Define the range of random numbers you want to generate (1 to 256, inclusive)
-			std::uniform_int_distribution<> distr(1, 10);
-			
-			if (distr(gen) == 1)
-			{
-				m_map[x * m_mapData.width + z] = INVALID_WALK_CODE;
-			}
-			else
-			{
-				m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
-			}
-
-			//m_map[x * m_mapData.width + z] = INVALID_WALK_CODE;
-			
-			//WI_CORE_INFO(" At {} the walkabilty value is: {}",x * m_mapData.width + z, m_map[x * m_mapData.width + z]);
-
-			// if not collision then default walking code
-			//m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
-		}
-	}
 
 	ret = true;
 
 	return ret;
+}
+
+void Wiwa::AIMapGeneration::BakeMap()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	std::vector<EntityId>* entityList = em.GetEntitiesAlive();
+	int size = entityList->size();
+	for (int i = 0; i < size; i++)
+	{
+		EntityId actualId = entityList->at(i);
+		if (em.HasComponent<Wiwa::CollisionBody>(actualId))
+		{
+			Wiwa::CollisionBody* cb = em.GetComponent<Wiwa::CollisionBody>(actualId);
+			
+			if (!cb->isStatic)
+				continue;
+
+			if (cb)
+			{
+				if (em.HasComponent<Wiwa::ColliderCube>(actualId))
+				{
+					ColliderCube* cube = em.GetComponent<ColliderCube>(actualId);
+					glm::vec3& pos = em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
+
+					glm::vec2 topLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z + cube->halfExtents.z);
+					glm::vec2 bottomLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z - cube->halfExtents.z);
+					glm::vec2 bottomRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z - cube->halfExtents.z);
+					glm::vec2 topRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z + cube->halfExtents.z);
+
+					glm::ivec2 topLeftMap = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
+					glm::ivec2 bottomLeftMap = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
+					glm::ivec2 bottomRightMap = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
+					glm::ivec2 topRightMap = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
+
+					for (int i = bottomLeftMap.y; i < topLeftMap.y; i++)
+					{
+						for (int j = topLeftMap.x; j < topRightMap.x; j++)
+						{
+							glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
+							SetPositionUnWalkable(vec);
+						}
+					}
+
+				}
+				else if (em.HasComponent<Wiwa::ColliderSphere>(actualId))
+				{
+					ColliderSphere* sphere = em.GetComponent<ColliderSphere>(actualId);
+				}
+				else if (em.HasComponent<Wiwa::ColliderCylinder>(actualId))
+				{
+					ColliderCylinder* cylinder = em.GetComponent<ColliderCylinder>(actualId);
+				}
+				else if (em.HasComponent<Wiwa::ColliderCapsule>(actualId))
+				{
+					ColliderCapsule* capsule = em.GetComponent<ColliderCapsule>(actualId);
+				}
+			}
+		}
+		else
+			continue;
+	}
+}
+
+void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::vec2 world_pos)
+{
+	glm::ivec2 vec = Wiwa::AIMapGeneration::WorldToMap(world_pos.x, world_pos.y);
+	m_map[vec.x * m_mapData.width + vec.y] = INVALID_WALK_CODE;
+}
+
+void Wiwa::AIMapGeneration::DebugDrawMap()
+{
+	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+
+	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+	camera->frameBuffer->Bind(false);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(glm::value_ptr(camera->getView()));
+
+	unsigned char* map = Wiwa::AIMapGeneration::GetMap();
+	for (int i = 0; i < m_mapData.height; i++)
+	{
+		for (int j = 0; j < m_mapData.width; j++)
+		{
+			glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
+			if (map[j * m_mapData.width + i] == 255)
+			{
+				glColor4f(1, 0, 0, 0.1f);
+			}
+			else
+			{
+				glColor4f(0, 0, 1, 0.1f);
+			}
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode to wireframe
+			glBegin(GL_QUADS); // Begin drawing the quad   
+			glVertex3f(vec.x, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-left vertex
+			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-right vertex
+			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y); // Top-right vertex
+			glVertex3f(vec.x, 0.0f, vec.y); // Top-left vertex
+			glEnd();
+
+			glColor3f(0.5, 0.5, .5);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Set the polygon mode to wireframe
+			glBegin(GL_QUADS); // Begin drawing the quad   
+			glVertex3f(vec.x, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-left vertex
+			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-right vertex
+			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y); // Top-right vertex
+			glVertex3f(vec.x, 0.0f, vec.y); // Top-left vertex
+			glEnd();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
+		}
+	}
+
+	//unsigned char* map = Wiwa::AIMapGeneration::GetMap();
+	//for (int i = 0; i < mapdata.height; i++)
+	//{
+	//	for (int j = 0; j < mapdata.width; j++)
+	//	{
+	//		glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
+
+	//		if (map[j * mapdata.width + i] == 255)
+	//		{
+	//			glColor3f(1, 0, 0);
+	//		}
+	//		else
+	//		{
+	//			glColor3f(0, 0, 1);
+	//		}
+	//		//glColor3f(1, 0, 0);
+	//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Set the polygon mode to wireframe
+	//		glBegin(GL_QUADS); // Begin drawing the quad   
+	//		glVertex3f(vec.x, 0, vec.y - mapdata.tileHeight); // Bottom-left vertex   
+	//		glVertex3f(vec.x, 0, vec.y); // Top-left vertex   
+	//		glVertex3f(vec.x + mapdata.tileWidth, 0, vec.y); // Top-right vertex   
+	//		glVertex3f(vec.x + mapdata.tileWidth, 0, vec.y - mapdata.tileHeight); // Bottom-right vertex
+	//		glEnd();
+	//		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
+	//	}
+	//}
+	glEnd();
+	camera->frameBuffer->Unbind();
 }
 
 glm::vec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)

@@ -198,7 +198,6 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	size_t ret = -1;
 	size_t iterations = 0;
 
-
 	if (IsWalkable(origin) && IsWalkable(destination))
 	{
 		PathList open;
@@ -221,8 +220,6 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			closed.pathList.push_back(*lowest);
 			PathNode* node = &closed.pathList.back();
-			//auto vec = Wiwa::AIMapGeneration::MapToWorld(node->pos.x, node->pos.y);
-			//node->pos = vec;
 
 			//WI_INFO("X = {}", node->pos.x);
 			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
@@ -231,7 +228,6 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			
 			// L12b: TODO 4: If we just added the destination, we are done!
-			//glm::ivec2 nodeMapCoords = Wiwa::AIMapGeneration::WorldToMap(node->pos.x, node->pos.y);
 			if (node && node->pos == destination)
 			{
 				m_lastPath.clear();				
@@ -240,7 +236,8 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 				while (pathNode)
 				{
-					m_lastPath.push_back(pathNode->pos);
+					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
+					m_lastPath.push_back(vec);
 					pathNode = pathNode->parent;
 				}
 				
@@ -271,55 +268,19 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				PathNode* adjacentInOpen = open.Find(item.pos);
 				if (adjacentInOpen == nullptr)
 				{
-					//if (IsWalkable(item.pos))
-					//{
-						item.CalculateF(destination);
-						open.pathList.emplace_back(item);
-					//}
+					item.CalculateF(destination);
+					open.pathList.emplace_back(item);
 				}
 				else
 				{
 					// If it is already in the open list, check if it is a better path (compare G)
 					if (adjacentInOpen->g > item.g + 1)
 					{
-						//if (IsWalkable(item.pos))
-						//{
-							adjacentInOpen->parent = item.parent;
-							adjacentInOpen->CalculateF(destination);
-							
-						//}						
+						adjacentInOpen->parent = item.parent;
+						adjacentInOpen->CalculateF(destination);				
 					}
 				}
 			}
-			/*for (auto& adjNode : adjacent.pathList)
-			{
-				auto closedIt = std::find_if(closed.pathList.begin(), closed.pathList.end(), [&](const PathNode& node) {
-					return node.pos == adjNode.pos;
-					});
-
-				if (closedIt != closed.pathList.end())
-					continue;
-
-				auto openIt = std::find_if(open.pathList.begin(), open.pathList.end(), [&](const PathNode& node) {
-					return node.pos == adjNode.pos;
-					});
-
-				if (openIt == open.pathList.end())
-				{
-					open.pathList.push_back(adjNode);
-				}
-				else
-				{
-					if (openIt->g > adjNode.g + 1)
-					{
-						openIt->parent = adjNode.parent;
-						openIt->CalculateF(destination);
-					}
-				}
-
-			}*/
-			//WI_INFO(" Path of {} steps and {} iterations", ret, iterations);
-
 			++iterations;
 		}
 	}

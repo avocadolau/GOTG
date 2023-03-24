@@ -4,16 +4,6 @@
 #include <Wiwa/core/Core.h>
 
 #include <Wiwa/ecs/components/AgentAI.h>
-//#include <Wiwa/ecs/components/ColliderCube.h>
-//#include <Wiwa/ecs/components/ColliderCylinder.h>
-//#include <Wiwa/ecs/components/ColliderSphere.h>
-//#include <Wiwa/ecs/components/ColliderCapsule.h>
-//#include <Wiwa/ecs/components/RayCast.h>
-//#include "Wiwa/ecs/components/Transform3D.h"
-//#include <Wiwa/utilities/render/shaders/Shader.h>
-//#include <Wiwa/utilities/render/Uniforms.h>
-//#include <Wiwa/core/Resources.h>
-
 //#include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
