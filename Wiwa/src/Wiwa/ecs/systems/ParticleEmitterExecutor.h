@@ -6,9 +6,6 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
-class Camera;
-class AnimationParticles;
-
 namespace Wiwa {
 
 
@@ -33,11 +30,9 @@ namespace Wiwa {
 
 		void OnSystemRemoved() override;
 
-		void ScreenAlign(std::shared_ptr<ParticleBillboard> particle);
-
-		void EmitBatch();
-		void Play();
-		void Stop();
+		void EmitBatch(EntityId eid);
+		void Play(EntityId eid);
+		void Stop(EntityId eid);
 	private:
 
 		EntityManager::ComponentIterator m_emitterComponent;

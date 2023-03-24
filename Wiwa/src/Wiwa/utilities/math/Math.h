@@ -275,6 +275,9 @@ namespace Wiwa {
 		inline int RandomRange(int value01, int value02)
 		{
 
+			if (value01 == 0 && value02 == 0)
+				return 0;
+
 			if (value01 > value02) {
 
 				int i = value01;
@@ -282,6 +285,8 @@ namespace Wiwa {
 				value02 = i;
 
 			}
+
+			int subs = value02 - value01;
 
 			int ret = value01 + (rand()) / (RAND_MAX / (value02 - value01));
 

@@ -9,5 +9,5 @@ void EmitterEmitBatch(size_t entity)
 
     Wiwa::ParticleEmitterExecutor* emitterSys = em.GetSystem<Wiwa::ParticleEmitterExecutor>(entity);
 
-    emitterSys->EmitBatch();
+    emitterSys->EmitBatch(entity);
 }

@@ -20,6 +20,8 @@ namespace Wiwa {
 	struct ParticleBillboard
 	{
 		Material* m_material;
+
+		ParticleEmitter* emitterOwner;
 		glm::vec3	vertices[4];
 		glm::vec2	tex_coords[4];
 		int			vertex_indices[6];
@@ -72,21 +74,25 @@ namespace Wiwa {
 		void OnDestroy();
 
 		void ScreenAlign(std::shared_ptr<ParticleBillboard> particle);
+		void AddEmitter(ParticleEmitter* emitter);
+		void RemoveEmitter(ParticleEmitter* emitter);
+		bool ContainsEmitter(ParticleEmitter* emitter);
 
-		void EmitBatch();
-		void Play();
-		void Stop();
+		void EmitBatch(EntityId eid);
+		void Play(EntityId eid);
+		void Stop(EntityId eid);
 
 	private:
 
+		std::vector<std::shared_ptr<ParticleEmitter>> emitterList;
+		
+		Transform3D* t3D = nullptr;
 
-		ParticleEmitter* emitter;
-
-		EntityManager::ComponentIterator m_emitterComponent;
+		//EntityManager& m_entityManager;
 
 		void DeleteParticleSystem();
 
-		void AddParticles();
+		void AddParticles(ParticleEmitter* emitter);
 
 		void UpdateParticles();
 

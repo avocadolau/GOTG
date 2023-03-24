@@ -11,8 +11,6 @@ namespace Wiwa {
 
 	struct WI_API ParticleEmitter {
 
-		Material m_material;
-
 		//Emitter parameters
 		float	particle_rate;
 		bool	particle_rate_isRanged;
@@ -76,6 +74,7 @@ namespace Wiwa {
 		bool		particle_followParticle;
 
 		ResourceId textureId;
+		EntityId entityOwnerId;
 
 		std::string texturePath;
 	};

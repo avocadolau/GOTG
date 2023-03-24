@@ -26,6 +26,7 @@ namespace Wiwa
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
 		m_PhysicsManager = new PhysicsManager();
+		m_ParticleManager = new ParticleManager();
 
 		uint32_t imgid = Resources::LoadNative<Wiwa::Image>("resources/images/transitions/transision.png");
 		Wiwa::Image* img = Resources::GetResourceById<Wiwa::Image>(imgid);
@@ -48,6 +49,8 @@ namespace Wiwa
 
 		// Clear entity manager
 		m_EntityManager.Clear();
+
+		delete m_ParticleManager;
 
 		// Clear physics world
 		m_PhysicsManager->CleanWorld();
@@ -138,6 +141,8 @@ namespace Wiwa
 		{
 			m_PhysicsManager->StepSimulation();
 			m_PhysicsManager->UpdatePhysicsToEngine();
+			m_ParticleManager->Update();
+
 			// m_PhysicsManager->LogBodies();
 		}
 		// m_PhysicsManager->LogBodies();
@@ -146,6 +151,7 @@ namespace Wiwa
 		{
 			m_EntityManager.UpdateWhitelist();
 		}
+
 	}
 
 	void Scene::Load()
