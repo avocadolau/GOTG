@@ -111,6 +111,7 @@ namespace Wiwa
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
 
 		switch (state)
 		{
@@ -122,6 +123,7 @@ namespace Wiwa
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
 
 			
 		} break;
@@ -130,6 +132,8 @@ namespace Wiwa
 		{
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			color = { 1.0f,1.0f,1.0f,1.0f };
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
 
 
 		} break;
@@ -139,6 +143,8 @@ namespace Wiwa
 		{
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			color = { 0.6f, 0.6f, 0.6f, 1.0f };
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
 
 
 		} break;
@@ -147,6 +153,8 @@ namespace Wiwa
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 
+			color = { 0.1f, 0.1f, 0.1f, 1.0f };
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
 
 
 		} break;
@@ -157,6 +165,8 @@ namespace Wiwa
 		{
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			color = { 0.6f, 0.6f, 0.6f, 1.0f };
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
 
 
 		}break;

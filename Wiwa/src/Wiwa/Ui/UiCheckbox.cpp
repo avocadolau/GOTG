@@ -90,6 +90,7 @@ namespace Wiwa
 	bool GuiCheckbox::Draw(Renderer2D* render)
 	{
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
 
 		switch (state)
 		{
@@ -102,7 +103,9 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 
 
 		case GuiControlState::NORMAL:
@@ -113,7 +116,11 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 1.0f,1.0f,1.0f,1.0f };
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
@@ -124,7 +131,11 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 0.6f, 0.6f, 0.6f, 1.0f };
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 		case GuiControlState::PRESSED:
 		{
 			Vector2i newPosition;
@@ -133,7 +144,11 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 0.1f, 0.1f, 0.1f, 1.0f };
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 
 		/******/
 
@@ -145,7 +160,11 @@ namespace Wiwa
 			Size2i newSize;
 			newSize.w = this->position.width;
 			newSize.h = this->position.height;
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 0.6f, 0.6f, 0.6f, 1.0f };
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 		default:
 			break;
 		}

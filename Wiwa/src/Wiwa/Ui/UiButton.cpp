@@ -80,15 +80,13 @@ namespace Wiwa
 				//DETECT CONTROLLER CLICKS
 			}
 		}
-		SwapTexture();
 
 		return false;
 	}
 
 	bool GuiButton::Draw(Renderer2D* render)
 	{
-		// Draw the right button depending on state
-		//Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
 		switch (state)
 		{
 
@@ -98,15 +96,20 @@ namespace Wiwa
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
 
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 
 		case GuiControlState::NORMAL:
 		{
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 1.0f,1.0f,1.0f,1.0f };
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
 		case GuiControlState::FOCUSED:
@@ -115,15 +118,19 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 0.6f, 0.6f, 0.6f, 1.0f };
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 		case GuiControlState::PRESSED:
 		{
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 0.1f, 0.1f, 0.1f, 1.0f };
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 
 		/******/
 
@@ -132,41 +139,14 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
+			color = { 0.6f, 0.6f, 0.6f, 1.0f };
+			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		} break;
 		default:
 			break;
 		}
 
 		return false;
-	}
-
-	bool GuiButton::SwapTexture()
-	{
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
-		switch (state)
-		{
-		case Wiwa::GuiControlState::DISABLED:
-			break;
-		case Wiwa::GuiControlState::NORMAL:
-			color = { 1.0f,1.0f,1.0f,1.0f };
-			break;
-		case Wiwa::GuiControlState::FOCUSED:
-			color = { 0.6f, 0.6f, 0.6f, 1.0f };
-			break;
-		case Wiwa::GuiControlState::PRESSED:
-			color = { 0.1f, 0.1f, 0.1f, 1.0f };
-			break;
-		case Wiwa::GuiControlState::SELECTED:
-			color = { 0.6f, 0.6f, 0.6f, 1.0f };
-			break;
-		default:
-			break;
-		}
-
-		r2d.UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-
-		return true;
 	}
 }
