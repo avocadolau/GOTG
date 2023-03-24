@@ -11,8 +11,8 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_AgentAI;
 		EntityManager::ComponentIterator m_Transform;
-		std::vector<glm::ivec2> lastPath;
-		glm::ivec2 nextPos;
+		std::vector<glm::vec2> lastPath;
+		glm::vec2 nextPos;
 
 		glm::vec2 m_DirectionPoint;
 		bool m_IsMoving = false;

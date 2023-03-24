@@ -108,6 +108,8 @@ void Wiwa::AIMapGeneration::BakeMap()
 		else
 			continue;
 	}
+	AIPathFindingManager::SetMap(m_mapData.width, m_mapData.height, m_map);
+
 }
 
 void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::vec2 world_pos)
@@ -161,33 +163,6 @@ void Wiwa::AIMapGeneration::DebugDrawMap()
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
 		}
 	}
-
-	//unsigned char* map = Wiwa::AIMapGeneration::GetMap();
-	//for (int i = 0; i < mapdata.height; i++)
-	//{
-	//	for (int j = 0; j < mapdata.width; j++)
-	//	{
-	//		glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
-
-	//		if (map[j * mapdata.width + i] == 255)
-	//		{
-	//			glColor3f(1, 0, 0);
-	//		}
-	//		else
-	//		{
-	//			glColor3f(0, 0, 1);
-	//		}
-	//		//glColor3f(1, 0, 0);
-	//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Set the polygon mode to wireframe
-	//		glBegin(GL_QUADS); // Begin drawing the quad   
-	//		glVertex3f(vec.x, 0, vec.y - mapdata.tileHeight); // Bottom-left vertex   
-	//		glVertex3f(vec.x, 0, vec.y); // Top-left vertex   
-	//		glVertex3f(vec.x + mapdata.tileWidth, 0, vec.y); // Top-right vertex   
-	//		glVertex3f(vec.x + mapdata.tileWidth, 0, vec.y - mapdata.tileHeight); // Bottom-right vertex
-	//		glEnd();
-	//		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
-	//	}
-	//}
 	glEnd();
 	camera->frameBuffer->Unbind();
 }

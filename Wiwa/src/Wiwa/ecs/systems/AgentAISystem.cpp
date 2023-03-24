@@ -110,18 +110,6 @@ void Wiwa::AgentAISystem::OnUpdate()
 		glEnd();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
 	}
-
-	//if (!lastPath.empty())
-	//{
-	//	for (int i = 0; i < lastPath.size() - 1; i++)
-	//	{
-	//		glBegin(GL_LINE); // Begin drawing the quad   
-	//		glVertex3f(lastPath[i].x, 0, lastPath[i].y);
-	//		glVertex3f(lastPath[i + 1].x, 0, lastPath[i + 1].y);
-	//		glEnd();
-	//	}
-
-	//}
 	
 	camera->frameBuffer->Unbind();
 }
@@ -149,7 +137,6 @@ void Wiwa::AgentAISystem::GoToNextPosition()
 
 	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
 	m_DirectionPoint = { nextPos.x + (localMapData.tileWidth * 0.5f), nextPos.y + (localMapData.tileHeight * 0.5f) };
-	//m_DirectionPoint = { nextPos.x , nextPos.y };
 
 	m_IsMoving = true;
 }

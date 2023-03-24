@@ -21,7 +21,7 @@
 uint32_t Wiwa::AIPathFindingManager::m_width = 0;
 uint32_t Wiwa::AIPathFindingManager::m_height = 0;
 unsigned char* Wiwa::AIPathFindingManager::m_map = nullptr;
-std::vector<glm::ivec2> Wiwa::AIPathFindingManager::m_lastPath = {};
+std::vector<glm::vec2> Wiwa::AIPathFindingManager::m_lastPath = {};
 
 // PathNode Defintitions
 
@@ -151,9 +151,6 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetN
 			ret = &(*item);
 		}
 	}
-
-	int actualCost = m_map[ ret->pos.x * m_width + ret->pos.y ];
-
 	return ret;
 	
 	/*auto lowest = std::min_element(pathList.begin(), pathList.end(), [](const PathNode& a, const PathNode& b) {
@@ -212,12 +209,6 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		{
 			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
 			PathNode* lowest = open.GetNodeLowestScore();
-
-			if (!IsWalkable(lowest->pos))
-			{
-				continue;
-			}
-
 			closed.pathList.push_back(*lowest);
 			PathNode* node = &closed.pathList.back();
 
@@ -234,19 +225,19 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 				const PathNode* pathNode = node;
 
+				int i = 0;
 				while (pathNode)
 				{
+					WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.x, m_map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
+
 					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
 					m_lastPath.push_back(vec);
 					pathNode = pathNode->parent;
+					i++;
 				}
 				
 				//std::reverse(m_lastPath.begin(), m_lastPath.end());
 				ret = m_lastPath.size();
-				//for (int i = 0; i < m_lastPath.size(); i++)
-				//{
-				//	WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}",i, m_lastPath.at(i).x, m_lastPath.at(i).y, m_map[(m_lastPath.at(i).x * m_width) + m_lastPath.at(i).y]);
-				//}
 				break;
 			}
 
@@ -260,9 +251,6 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			{
 				if (closed.Find(item.pos) != nullptr)
 					continue;
-
-				//if (!IsWalkable(item.pos))
-				//	continue;
 
 				// If it is NOT found, calculate its F and add it to the open list
 				PathNode* adjacentInOpen = open.Find(item.pos);
@@ -288,7 +276,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	return ret;
 }
 
-const std::vector<glm::ivec2>* Wiwa::AIPathFindingManager::GetLastPath()
+const std::vector<glm::vec2>* Wiwa::AIPathFindingManager::GetLastPath()
 {
 	return &m_lastPath;
 }
