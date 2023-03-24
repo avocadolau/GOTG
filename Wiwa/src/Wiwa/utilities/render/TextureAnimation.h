@@ -16,6 +16,10 @@ namespace Wiwa {
 
     class WI_API AnimationParticles
     {
+    private:
+        // Private constructor to prevent instantiation
+        AnimationParticles() {}
+
     public:
         float speed = 1.0f;
         std::vector<glm::vec4> frames;
@@ -32,6 +36,12 @@ namespace Wiwa {
         std::chrono::time_point<std::chrono::high_resolution_clock> lastUpdate;
 
     public:
+
+        // Static method to access the singleton instance
+        static AnimationParticles& getInstance() {
+            static AnimationParticles instance;
+            return instance;
+        }
 
         void PushBack(const glm::vec4& rect)
         {

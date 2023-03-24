@@ -641,7 +641,9 @@ namespace Wiwa {
 
 			p.m_material = m_Material;
 
-			p.animation = new AnimationParticles();
+			AnimationParticles& particleAnimation = AnimationParticles::getInstance();
+
+			p.animation = &particleAnimation;
 
 			if (p.animation != nullptr)
 			{
