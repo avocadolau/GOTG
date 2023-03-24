@@ -40,6 +40,26 @@ namespace Wiwa
     }
 
     [Callback]
+    class ActivateOptionsCanvas
+    {
+        static void OnExecute()
+        {
+            InternalCalls.ActivateGuiCanvas(1);
+            InternalCalls.ActivateGuiCanvas(2);
+        }
+    }
+
+    [Callback]
+    class DeActivateOptionsCanvas
+    {
+        static void OnExecute()
+        {
+            InternalCalls.ActivateGuiCanvas(2);
+            InternalCalls.ActivateGuiCanvas(1);
+        }
+    }
+
+    [Callback]
     class SetFullscreen
     {
         static void OnExecute(bool ret)
