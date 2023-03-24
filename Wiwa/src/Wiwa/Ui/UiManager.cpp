@@ -529,24 +529,30 @@ namespace Wiwa
 		{
 			if (Wiwa::Input::IsButtonPressed(0, 13))
 			{
+				DpadUp = true;
+			}
+			if (Wiwa::Input::IsButtonPressed(0, 11))
+			{
+				DpadDown = true;
+			}
+			if (Wiwa::Input::IsButtonReleased(0, 13) && DpadUp)
+			{
+				DpadUp = false;
 				idGuiSelected++;
 
 				if (idGuiSelected >= canvas.at(i)->controlsForSelection.size())
 				{
 					idGuiSelected = 0;
-				}
-				break;
-					
+				}					
 			}
-			if (Wiwa::Input::IsButtonPressed(0, 11))
+			if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
 			{
+				DpadDown = false;
 				idGuiSelected--;
 				if (idGuiSelected <= -1)
 				{
 					idGuiSelected = canvas.at(i)->controlsForSelection.size() - 1;
-				}
-				break;
-					
+				}					
 			}
 			if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controlsForSelection.size())
 			{

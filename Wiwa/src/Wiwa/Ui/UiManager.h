@@ -77,5 +77,8 @@ namespace Wiwa
 
 		int idGuiSelected = -1;
 
+		bool DpadUp = false;
+		bool DpadDown = false;
+
 	};
 }
