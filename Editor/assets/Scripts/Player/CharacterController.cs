@@ -34,6 +34,9 @@ namespace Game
         private bool isShooting = false;
         private float shootTimer = 0f;
 
+        private float footstepTimer = 0f;
+        private float walkStepTimer = 0f;
+        private float runStepTimer = 0f;
 
         void Awake()
         {
@@ -45,6 +48,8 @@ namespace Game
             shooterIt = GetComponentIterator<CharacterShooter>();
 
             dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
+
+            // need to get or hardcode step and run timers.
         }
 
         void Update()
@@ -64,8 +69,17 @@ namespace Game
 
             PhysicsManager.SetLinearVelocity(m_EntityId, velocity);
 
+            footstepTimer += Time.DeltaTime();
+
             if (input != Vector3Values.zero)
+            {
                 SetPlayerRotation(ref transform.LocalRotation, input, controller.RotationSpeed);
+                PlayFootStep();
+            }
+            else
+            {
+                footstepTimer = 0; 
+            }
 
             UpdateAnimation(input, controller);
 
@@ -234,6 +248,19 @@ namespace Game
             }
 
         }
+
+        void PlayFootStep()
+        {
+            EntityId entId = GetEntityByName("Player");
+           
+            if (footstepTimer >= 0.5f)
+            {
+                footstepTimer = 0;
+                Console.WriteLine($"{entId}");
+                Audio.PlaySound("player_walking", entId);
+            }
+        }
+
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
             if (id1 != m_EntityId)
