@@ -12,6 +12,7 @@ namespace Wiwa
 		name = "Text";
 		active = true;
 		text = string_text;
+		audioEventForButton = "none";
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		text_res = new Text();
 		text_res = gm.InitFont("assets/Fonts/arial.ttf", (char*)string_text);

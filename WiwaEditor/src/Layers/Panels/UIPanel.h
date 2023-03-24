@@ -57,4 +57,5 @@ public:
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 	std::string nameSavingWiGUI;
+	std::string audioEventForButton;
 };

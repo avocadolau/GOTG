@@ -4,10 +4,11 @@
 
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
-	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, size_t callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex) : GuiControl(scene, GuiControlType::SLIDER, id)
+	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, size_t callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName) : GuiControl(scene, GuiControlType::SLIDER, id)
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
@@ -17,6 +18,7 @@ namespace Wiwa
 		m_Scene = scene;
 		active = true;
 		text = "";
+		audioEventForButton = audioEventName;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)
@@ -101,6 +103,13 @@ namespace Wiwa
 						clicked = false;
 						value = (((float)extraPosition.width / (float)position.width) * 100);
 						void* params[] = { &value };
+						if (audioEventForButton != nullptr)
+						{
+							if (Audio::FindEvent(audioEventForButton) != Audio::INVALID_ID)
+							{
+								Audio::PostEvent(audioEventForButton);
+							}
+						}
 						if(callback)
 							callback->Execute(params);
 					}

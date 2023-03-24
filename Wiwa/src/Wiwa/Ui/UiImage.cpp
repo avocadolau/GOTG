@@ -16,6 +16,7 @@ namespace Wiwa
 		m_Scene = scene;
 		active = true;
 		text = "";
+		audioEventForButton = "none";
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);

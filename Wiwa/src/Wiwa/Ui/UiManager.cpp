@@ -47,17 +47,17 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName)
 	{
 		GuiControl* control = nullptr;
 	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex, audioEventName);
 				break;
 			case GuiControlType::IMAGE:
 				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex);
@@ -71,11 +71,11 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName)
 	{
 		GuiControl* control = nullptr;
 
-		control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex,sliderOriginTex);
+		control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex,sliderOriginTex, audioEventName);
 
 		canvas.at(canvas_id)->controls.push_back(control);
 		canvas.at(canvas_id)->controlsForSelection.push_back(control);
@@ -394,7 +394,7 @@ namespace Wiwa
 				int callbackID;// = 1;
 
 				const char* text;
-
+				const char* audioEvent;
 				File.Read(&id, sizeof(int));
 				File.Read(&active, 1);
 				File.Read(&guiType, sizeof(GuiControlType));
@@ -418,23 +418,23 @@ namespace Wiwa
 				File.Read(&extraTexturePosition, sizeof(Rect2i));
 
 				File.Read(&text, sizeof(const char*));
-
+				File.Read(&audioEvent, sizeof(const char*));
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
+					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent);
 					break;
 				case Wiwa::GuiControlType::TEXT:
 					CreateGuiControl_Text(guiType, id, position, text, canvas.at(i)->id);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
+					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
-					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition);
+					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition);
+					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent);
 					break;
 				default:
 					break;
@@ -495,7 +495,7 @@ namespace Wiwa
 				size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
 
 				const char* text = control->text;
-
+				const char* audioEvent = control->audioEventForButton;
 				File.Write(&id, sizeof(int));
 				File.Write(&active, 1);
 				File.Write(&guiType, sizeof(GuiControlType));
@@ -517,7 +517,7 @@ namespace Wiwa
 				File.Write(&extraTexturePosition, sizeof(Rect2i));
 
 				File.Write(&text, sizeof(const char*));
-
+				File.Write(&audioEvent, sizeof(const char*));
 
 			}
 		}

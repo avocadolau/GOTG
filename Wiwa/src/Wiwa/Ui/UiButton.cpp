@@ -8,7 +8,7 @@
 
 namespace Wiwa
 {
-	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex) : GuiControl(scene, GuiControlType::BUTTON, id)
+	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
@@ -16,6 +16,8 @@ namespace Wiwa
 		m_Scene = scene;
 		active = true;
 		text = "";
+		audioEventForButton = audioEventName;
+		
 		if (path != "") {
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
@@ -78,7 +80,13 @@ namespace Wiwa
 				if (clicked && Wiwa::Input::IsButtonReleased(0,0))
 				{
 					clicked = false;
-					Audio::PostEvent("character_selection");
+					if (audioEventForButton != nullptr)
+					{
+						if (Audio::FindEvent(audioEventForButton) != Audio::INVALID_ID)
+						{
+							Audio::PostEvent(audioEventForButton);
+						}
+					}
 					if (callback)
 						callback->Execute();
 				}

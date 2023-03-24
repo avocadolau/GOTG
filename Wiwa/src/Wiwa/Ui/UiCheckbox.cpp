@@ -1,13 +1,13 @@
 #include <wipch.h>
 #include <Wiwa/core/Input.h>
 #include "UiCheckbox.h"
-
+#include <Wiwa/audio/Audio.h>
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex) : GuiControl(scene, GuiControlType::CHECKBOX, id)
+	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
@@ -15,6 +15,9 @@ namespace Wiwa
 		m_Scene = scene;
 		active = true;
 		text = "";
+		
+		audioEventForButton = audioEventName;
+		
 		if (path != "") {
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
@@ -80,6 +83,13 @@ namespace Wiwa
 				{
 					clicked = false;
 					checked = !checked;
+					if (audioEventForButton != nullptr)
+					{
+						if (Audio::FindEvent(audioEventForButton) != Audio::INVALID_ID)
+						{
+							Audio::PostEvent(audioEventForButton);
+						}
+					}
 					void* params[] = { &checked };
 					if (callback)
 						callback->Execute(params);

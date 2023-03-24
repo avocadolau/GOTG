@@ -237,7 +237,7 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	}
 
 	callbackID = current_item;
-	
+	ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
 	if (ImGui::Button("Create button"))
 	{
 		Wiwa::Rect2i rect;
@@ -250,7 +250,7 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		originRect.y = originPos[1];
 		originRect.width = originSize[0];
 		originRect.height = originSize[1];
-		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect);
+		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect,audioEventForButton.c_str());
 	}
 
 	ImGui::PopID();
@@ -344,7 +344,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			ImGui::EndCombo();
 		}
 	}
-
+	ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
 	callbackID = current_item;
 
 	if (ImGui::Button("Create slider"))
@@ -371,7 +371,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		sliderOriginRect.y = originPos[1];
 		sliderOriginRect.width = originSize[0];
 		sliderOriginRect.height = originSize[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID,originRect,sliderOriginRect);
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID,originRect,sliderOriginRect, audioEventForButton.c_str());
 	}
 
 	ImGui::PopID();
@@ -459,7 +459,7 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		originRect.y = originPos[1];
 		originRect.width = originSize[0];
 		originRect.height = originSize[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect);
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::IMAGE, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect, audioEventForButton.c_str());
 	}
 
 	ImGui::PopID();
@@ -577,6 +577,7 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	}
 
 	callbackID = (int)current_item;
+	ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
 
 	if (ImGui::Button("Create checkbox"))
 	{
@@ -590,7 +591,7 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 		originRect.y = originPos[1];
 		originRect.width = originSize[0];
 		originRect.height = originSize[1];
-		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID, originRect);
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID, originRect, audioEventForButton.c_str());
 	}
 
 	ImGui::PopID();
@@ -617,5 +618,6 @@ bool UIPanel::OnSceneChange(SceneChangeEvent& e)
 	pathForAsset = "";
 	pathForExtraAsset = "";
 	nameSavingWiGUI = "";
+	audioEventForButton = "";
 	return true;
 }
