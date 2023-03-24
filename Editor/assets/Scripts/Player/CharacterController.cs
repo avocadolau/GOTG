@@ -39,7 +39,7 @@ namespace Game
         private float runStepTimer = 0f;
 
         private bool isWalking = false;
-    
+
         void Awake()
         {
 
@@ -62,10 +62,13 @@ namespace Game
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
 
             Vector3 velocity = Vector3Values.zero;
-            Vector3 input = GetMovementInput(ref controller);
+            Vector3 input = Vector3Values.zero;
 
             if (!isDashing)
+            {
+                input = GetMovementInput(ref controller);
                 velocity = input * controller.Velocity;
+            }
 
             Dash(ref velocity, input, controller, transform, ref rb);
 
@@ -80,7 +83,7 @@ namespace Game
             }
             else
             {
-                footstepTimer = 0; 
+                footstepTimer = 0;
             }
 
             UpdateAnimation(input, controller);
@@ -175,7 +178,7 @@ namespace Game
             if (mag <= controller.WalkTreshold)
             {
                 isWalking = true;
-                
+
                 Animator.PlayAnimationName("walk", m_EntityId);
                 return;
             }
@@ -266,7 +269,7 @@ namespace Game
                 footstepTimer = 0;
                 Audio.PlaySound("player_walk", m_EntityId);
             }
-            
+
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
