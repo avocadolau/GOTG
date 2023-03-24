@@ -66,6 +66,7 @@ namespace Wiwa
 				break;
 			}
 			if (control != nullptr) canvas.at(canvas_id)->controls.push_back(control);
+			if (control->type != GuiControlType::IMAGE) canvas.at(canvas_id)->controlsForSelection.push_back(control);
 	
 		return control;
 	}
@@ -77,7 +78,8 @@ namespace Wiwa
 		control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex,sliderOriginTex);
 
 		canvas.at(canvas_id)->controls.push_back(control);
-		
+		canvas.at(canvas_id)->controlsForSelection.push_back(control);
+
 		return control;
 	}
 
@@ -218,6 +220,16 @@ namespace Wiwa
 				if (canvas.at(i)->controls.at(j) == control)
 				{
 					canvas.at(i)->controls.erase(canvas.at(i)->controls.begin() + j);
+					break;
+				}
+			}
+
+			size_t selectableAlive = canvas.at(i)->controlsForSelection.size();
+			for (size_t k = 0; k < selectableAlive; k++)
+			{
+				if (canvas.at(i)->controlsForSelection.at(k) == control)
+				{
+					canvas.at(i)->controlsForSelection.erase(canvas.at(i)->controlsForSelection.begin() + k);
 					break;
 				}
 			}
@@ -512,15 +524,17 @@ namespace Wiwa
 	}
 	void GuiManager::InputController()
 	{
-		bool ret = Wiwa::Input::IsButtonPressed(0,13);
+		
+		bool ret = Wiwa::Input::IsButtonPressed(0, 13);
 		bool ret2 = Wiwa::Input::IsButtonPressed(0, 11);
 
-		WI_INFO(idGuiSelected);
-
+		
 		for (size_t i = 0; i < canvas.size(); i++)
 		{
 			if (canvas.at(i)->active)
 			{
+				
+				WI_INFO("id_selected {}",idGuiSelected);
 				if (ret2)
 				{
 					idGuiSelected++;
@@ -529,11 +543,11 @@ namespace Wiwa
 				{
 					idGuiSelected--;
 				}
-				if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controls.size())
+				if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controlsForSelection.size())
 				{
 					canvas.at(i)->SelectElement(idGuiSelected);
 				}
-				else if (idGuiSelected > canvas.at(i)->controls.size())
+				else if (idGuiSelected >= canvas.at(i)->controlsForSelection.size())
 				{
 					idGuiSelected = 0;
 				}

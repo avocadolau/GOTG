@@ -55,6 +55,13 @@ namespace Wiwa
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
 				state = GuiControlState::FOCUSED;
+			}
+			{
+				state = GuiControlState::NORMAL;
+			}
+
+			if (state == GuiControlState::FOCUSED)
+			{
 				if (Wiwa::Input::IsMouseButtonPressed(0))
 				{
 					state = GuiControlState::PRESSED;
@@ -63,14 +70,17 @@ namespace Wiwa
 
 				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
-					state = GuiControlState::PRESSED;
 					checked = !checked;
 					void* params[] = { &checked };
 					callback->Execute(params);
 				}
-				else
+
+				if (Wiwa::Input::IsButtonPressed(0, 0)) 
 				{
-					state = GuiControlState::NORMAL;
+					checked = !checked;
+					void* params[] = { &checked };
+					callback->Execute(params);
+
 				}
 			}
 		}

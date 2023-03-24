@@ -54,25 +54,31 @@ namespace Wiwa
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
 				state = GuiControlState::FOCUSED;
+			
+			}
+			if (state == GuiControlState::FOCUSED)
+			{
 				if (Wiwa::Input::IsMouseButtonPressed(0))
 				{
 					state = GuiControlState::PRESSED;
 					clicked = true;
 				}
-				
 				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
 					clicked = false;
 					Audio::PostEvent("character_selection");
-					if(callback)
+					if (callback)
 						callback->Execute();
 				}
-			}
-			else
-			{
-				state = GuiControlState::NORMAL;
-			}
+				if(Wiwa::Input::IsButtonPressed(0, 0))
+				{
+					Audio::PostEvent("character_selection");
+					if (callback)
+						callback->Execute();
 
+				} 
+				//DETECT CONTROLLER CLICKS
+			}
 		}
 		SwapTexture();
 

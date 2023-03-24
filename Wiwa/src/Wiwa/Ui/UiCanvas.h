@@ -18,6 +18,7 @@ namespace Wiwa
 		 ~GuiCanvas();
 
 		 std::vector<GuiControl*> controls;
+		 std::vector<GuiControl*> controlsForSelection;
 		 std::vector<GuiControl*> controlsToDestroy;
 
 
