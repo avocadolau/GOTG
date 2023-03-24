@@ -1,0 +1,13 @@
+Event	ID	Name			Wwise Object Path	Notes
+	2147561130	player_walk			\Default Work Unit\player_walk	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	418562462	FootstepMetal02	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal02_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal02		32170
+	524945233	FootstepMetal04	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal04_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal04		34540
+	537205970	FootstepMetal01	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal01_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal01		34932
+	557765093	FootstepMetal08	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal08_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal08		33908
+	604386515	FootstepMetal03	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal03_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal03		33434
+	645811211	FootstepMetal05	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal05_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal05		33118
+	883523052	FootstepMetal07	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal07_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal07		35488
+	1046599716	FootstepMetal06	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\FootstepMetal06_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Footsteps\default_footsteps_random\FootstepMetal06		36594
+

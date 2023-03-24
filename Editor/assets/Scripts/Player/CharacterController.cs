@@ -34,7 +34,12 @@ namespace Game
         private bool isShooting = false;
         private float shootTimer = 0f;
 
+        private float footstepTimer = 0f;
+        private float walkStepTimer = 0f;
+        private float runStepTimer = 0f;
 
+        private bool isWalking = false;
+    
         void Awake()
         {
 
@@ -45,6 +50,8 @@ namespace Game
             shooterIt = GetComponentIterator<CharacterShooter>();
 
             dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
+
+            // need to get or hardcode step and run timers.
         }
 
         void Update()
@@ -64,8 +71,17 @@ namespace Game
 
             PhysicsManager.SetLinearVelocity(m_EntityId, velocity);
 
+            footstepTimer += Time.DeltaTime();
+
             if (input != Vector3Values.zero)
+            {
                 SetPlayerRotation(ref transform.LocalRotation, input, controller.RotationSpeed);
+                PlayFootStep();
+            }
+            else
+            {
+                footstepTimer = 0; 
+            }
 
             UpdateAnimation(input, controller);
 
@@ -158,9 +174,12 @@ namespace Game
 
             if (mag <= controller.WalkTreshold)
             {
+                isWalking = true;
+                
                 Animator.PlayAnimationName("walk", m_EntityId);
                 return;
             }
+            isWalking = false;
             Animator.PlayAnimationName("run", m_EntityId);
         }
         void Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform, ref CollisionBody cb)
@@ -234,6 +253,22 @@ namespace Game
             }
 
         }
+
+        void PlayFootStep()
+        {
+            if (isWalking && footstepTimer >= walkStepTimer)
+            {
+                footstepTimer = 0;
+                Audio.PlaySound("player_walk", m_EntityId);
+            }
+            else if (footstepTimer >= runStepTimer)
+            {
+                footstepTimer = 0;
+                Audio.PlaySound("player_walk", m_EntityId);
+            }
+            
+        }
+
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
             if (id1 != m_EntityId)

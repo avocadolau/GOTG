@@ -99,6 +99,17 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}">
+					<ChildrenList>
+						<Action Name="" ID="{6ED117A5-62B7-4D7D-82D9-4C759F7555CF}" ShortID="922518561">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
