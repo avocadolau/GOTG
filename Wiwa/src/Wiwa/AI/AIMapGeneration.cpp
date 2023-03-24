@@ -57,14 +57,21 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 					em.GetComponent<Wiwa::CollisionBody>(actualId)->isStatic == true
 					)
 				{
-					em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
+					if (Wiwa::AIMapGeneration::WorldToMap(em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition.x, em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition.z) == glm::ivec2{x* m_mapData.width,z})
+					{
+						m_map[x * m_mapData.width + z] = INVALID_WALK_CODE;
+					}
+					else
+					{
+						m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
+					}
 				}
 			}
 
 			// if collision then invalid walking code
 			
 			// if not collision then default walking code
-			m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
+			//m_map[x * m_mapData.width + z] = DEFAULT_WALK_CODE;
 		}
 	}
 

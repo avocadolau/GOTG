@@ -55,11 +55,6 @@ void Wiwa::AgentAISystem::OnUpdate()
 			dirX /= abs(dirX);
 		}
 		
-
-		
-		WI_CORE_INFO(" DirX = {}, Directionpoint.x = {}, transform->position.x = {}", dirX, m_DirectionPoint.x , transform->position.x);
-		
-		
 		float dirY = 0.0f;
 
 		if (m_DirectionPoint.y != transform->position.z)
