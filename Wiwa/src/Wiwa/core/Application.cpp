@@ -384,6 +384,9 @@ namespace Wiwa
 	{
 		JSONDocument config("config/application.json");
 
+		if (!config.IsObject())
+			return false;
+
 		if (config.HasMember("vsync"))
 			m_Window->SetVSync(config["vsync"].as_bool());
 
