@@ -1,0 +1,1 @@
+{"shader":"resources/shaders/light/toon_color","uniforms":{"u_Color":{"r":0.800000011920929,"g":0.800000011920929,"b":0.800000011920929,"a":1.0},"u_ToonLevels":0,"u_RimLightPower":1.0,"u_SpecularValue":1.0,"u_MatAmbientColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatDiffuseColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_MatSpecularColor":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}}}
