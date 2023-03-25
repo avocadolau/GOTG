@@ -100,6 +100,7 @@ namespace Game
             if (shootInput != Vector3Values.zero && !isDashing)
             {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
+                lastDir = shootInput;
 
             }
             if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper))
@@ -115,6 +116,7 @@ namespace Game
                 else
                 {
                     Fire(shootInput);
+                    
                 }
             } 
             
