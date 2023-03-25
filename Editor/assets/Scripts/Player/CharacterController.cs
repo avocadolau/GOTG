@@ -35,8 +35,8 @@ namespace Game
         private float shootTimer = 0f;
 
         private float footstepTimer = 0f;
-        private float walkStepTimer = 0f;
-        private float runStepTimer = 0f;
+        private float walkStepTimer = 0.6f;
+        private float runStepTimer = 0.30f;
 
         private bool isWalking = false;
 
@@ -259,13 +259,17 @@ namespace Game
 
         void PlayFootStep()
         {
-            if (isWalking && footstepTimer >= walkStepTimer)
+            if (isWalking)
             {
-                footstepTimer = 0;
-                Audio.PlaySound("player_walk", m_EntityId);
+                if (footstepTimer >= walkStepTimer)
+                {
+                    footstepTimer = 0;
+                    Audio.PlaySound("player_walk", m_EntityId);
+                }
             }
             else if (footstepTimer >= runStepTimer)
             {
+                Console.Write($"{isWalking}"); ;
                 footstepTimer = 0;
                 Audio.PlaySound("player_walk", m_EntityId);
             }
@@ -301,7 +305,8 @@ namespace Game
             ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
             ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
             ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
-
+            
+           
             AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
 
 
@@ -327,6 +332,9 @@ namespace Game
             ApplySystem<MeshRenderer>(bullet);
             ApplySystem<PhysicsSystem>(bullet);
             ApplySystem<BulletController>(bullet);
+            ApplySystem<AudioSystem>(bullet);
+
+            Audio.PlaySound("player_shoot", m_EntityId);
         }
     }
 }
