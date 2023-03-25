@@ -19,38 +19,54 @@ UIPanel::~UIPanel()
 
 void UIPanel::Draw()
 {
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 
 	ImGui::Begin(iconName.c_str(), &active);
 	
 	ImGui::Text("UI creator panel");
 	ImGui::NewLine();
+	ImGui::InputText("name for GUI", (char*)nameSavingWiGUI.c_str(), 64);
+	ImGui::SameLine();
+	ImGui::PushID("saveGUI");
+	if (ImGui::Button("Save GUI"))
+	{
+		std::filesystem::path file = "assets/saved_wiGUI";
+		if (!std::filesystem::exists(file))
+		{
+			std::filesystem::create_directory(file);
+		}
+		file /= nameSavingWiGUI.c_str();
+		file += ".wiGUI";
+		gm.SaveWiUI(file.string().c_str());
+	}
+	ImGui::PopID();
 	if (ImGui::CollapsingHeader("Canvas creation"))
 	{
 		if (ImGui::Button("Create Canvas"))
 		{
-			Wiwa::SceneManager::getActiveScene()->GetGuiManager().CreateGuiCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.size(), true);
+			gm.CreateGuiCanvas(gm.canvas.size(), true);
 			//m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, 0, { 200,200,100,100 }, "assets/hola.png", nullptr, 0,1);
 
 		}
-		for (size_t i = 0; i < Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.size(); i++)
+		for (size_t i = 0; i < gm.canvas.size(); i++)
 		{
- 			ImGui::PushID(i);
+ 			ImGui::PushID((int)i);
 			ImGui::Text("Canvas %i", i);
 			ImGui::SameLine();
 			if(ImGui::Button("Select canvas"))
 			{
 				canvasSelected = i;
-				Wiwa::SceneManager::getActiveScene()->GetGuiManager().SwapSelectedCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i));
+				gm.SwapSelectedCanvas(gm.canvas.at(i));
 			}
 			ImGui::SameLine();
 			if(ImGui::Button("Swap active"))
 			{
-				Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i)->SwapActive();
+				gm.canvas.at(i)->SwapActive();
 			}
 			ImGui::SameLine();
 			if(ImGui::Button("Delete"))
 			{
-				Wiwa::SceneManager::getActiveScene()->GetGuiManager().DestroyCanvas(Wiwa::SceneManager::getActiveScene()->GetGuiManager().canvas.at(i));
+				gm.DestroyCanvas(gm.canvas.at(i));
 				canvasSelected = -1;
 			}
 			ImGui::PopID();
@@ -339,7 +355,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		rect.width = size[0];
 		rect.height = size[1];
 		Wiwa::Rect2i rect2;
-		rect2.x = rect.x - (rect.width / 2);
+		rect2.x = rect.x;
 		rect2.y = rect.y;
 		rect2.width = (rect.width / 100);
 		rect2.height = rect.height;
@@ -600,5 +616,6 @@ bool UIPanel::OnSceneChange(SceneChangeEvent& e)
 	callbackID = WI_INVALID_INDEX;
 	pathForAsset = "";
 	pathForExtraAsset = "";
+	nameSavingWiGUI = "";
 	return true;
 }

@@ -24,5 +24,10 @@ namespace Wiwa
         {
             InternalCalls.LoadSceneByName(name, flags);
         }
+
+        public static void PauseScene()
+        {
+            InternalCalls.PauseScene();
+        }
     }
 }

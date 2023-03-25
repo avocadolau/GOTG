@@ -151,6 +151,11 @@ void ScenePanel::Draw()
                 Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
                 em.LoadPrefab(pathS.c_str());
             }
+            else if (p.extension() == ".wiGUI")
+            {
+                Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+                gm.LoadWiUI(pathS.c_str());
+            }
         }
 
         ImGui::EndDragDropTarget();

@@ -4,6 +4,7 @@
 #include <Wiwa/utilities/Log.h>
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -14,6 +15,7 @@ namespace Wiwa
 		name = "Button";
 		m_Scene = scene;
 		active = true;
+		text = "";
 		if (path != "") {
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
@@ -61,6 +63,7 @@ namespace Wiwa
 				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
 					clicked = false;
+					Audio::PostEvent("character_selection");
 					if(callback)
 						callback->Execute();
 				}
