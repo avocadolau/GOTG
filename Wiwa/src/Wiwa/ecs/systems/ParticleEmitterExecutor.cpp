@@ -28,9 +28,9 @@ namespace Wiwa {
 		{
 			m_emitter = GetComponentByIterator<Wiwa::ParticleEmitter>(m_emitterComponent);
 
-			if (m_emitter && !m_emitter->texturePath.empty())
+			if (m_emitter && !m_emitter->texturePath)
 			{
-				m_emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(m_emitter->texturePath.c_str());
+				m_emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(m_emitter->texturePath);
 			}
 		}
 		
@@ -54,9 +54,9 @@ namespace Wiwa {
 				pman.AddEmitter(emitter);
 
 				emitter->entityOwnerId = m_EntityId;
-				if (!emitter->texturePath.empty())
+				if (!emitter->texturePath)
 				{
-					emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+					emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath);
 				}
 			}
 		}
@@ -97,9 +97,12 @@ namespace Wiwa {
 				pman.AddEmitter(emitter);
 
 				emitter->entityOwnerId = m_EntityId;
-				if (!emitter->texturePath.empty())
+
+				std::string test = emitter->texturePath;
+
+				if (!emitter->texturePath)
 				{
-					emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+					emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath);
 				}
 			}
 

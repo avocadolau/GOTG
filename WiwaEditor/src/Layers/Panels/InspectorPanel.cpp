@@ -968,12 +968,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			uint32_t image_id = 0;
 			Wiwa::Image* texture = nullptr;
 			Wiwa::ResourceId textureResource = -4;
-
-			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath.c_str());
+			
+			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath);
 
 			if (importedCorrectly)
 			{
-				textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+				textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath);
 				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
 			}
 
@@ -1000,12 +1000,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 						if (emitter->textureId != WI_INVALID_INDEX)
 						{
-							emitter->texturePath = pathS;
+							std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
 						}
 						else
 						{
 							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
-							emitter->texturePath = "";
+							std::strncpy(emitter->texturePath, "", 1);
 
 						}
 					}

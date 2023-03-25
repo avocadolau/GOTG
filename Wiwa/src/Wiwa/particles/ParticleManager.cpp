@@ -47,27 +47,29 @@ namespace Wiwa {
 
 			for (std::shared_ptr<ParticleEmitter> emitter : emitterList)
 			{
-				if (timer <= 0)
+				if (emitter->timer <= 0)
 				{
 					if (emitter->repeat)
 					{
 						if (emitter->particle_rate_isRanged)
 						{
-							timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
+							emitter->timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
 						}
 						else
 						{
-							timer = emitter->particle_rate;
+							emitter->timer = emitter->particle_rate;
+
+							AddParticles(emitter.get());
 						}
 					}
 
-					AddParticles(emitter.get());
+					
 				}
 				else
 				{
 					if (emitter->isPlaying)
 					{
-						timer -= dt;
+						emitter->timer -= dt;
 
 					}
 
@@ -357,11 +359,11 @@ namespace Wiwa {
 
 					Wiwa::ResourceId textureResource = -4;
 
-					bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(p.emitterOwner->texturePath.c_str());
+					bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(p.emitterOwner->texturePath);
 
 					if (importedCorrectly)
 					{
-						textureResource = Wiwa::Resources::Load<Wiwa::Image>(p.emitterOwner->texturePath.c_str());
+						textureResource = Wiwa::Resources::Load<Wiwa::Image>(p.emitterOwner->texturePath);
 						texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
 					}
 
@@ -628,11 +630,11 @@ namespace Wiwa {
 
 			Wiwa::ResourceId textureResource = -4;
 
-			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath.c_str());
+			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath);
 
 			if (importedCorrectly)
 			{
-				textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath.c_str());
+				textureResource = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath);
 				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
 			}
 

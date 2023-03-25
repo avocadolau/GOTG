@@ -28,6 +28,7 @@ namespace Wiwa {
 		float	particle_lifetime_range[2];
 
 		bool isPlaying;
+		float timer;
 
 		bool isAnimated;
 
@@ -76,7 +77,7 @@ namespace Wiwa {
 		ResourceId textureId;
 		EntityId entityOwnerId;
 
-		std::string texturePath;
+		char texturePath[128];
 	};
 }
 
