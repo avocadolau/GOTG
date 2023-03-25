@@ -73,7 +73,7 @@ namespace Game
             }
 
             Dash(ref velocity, input, controller, transform, ref rb);
-
+            //ChangePosition
             PhysicsManager.SetLinearVelocity(m_EntityId, velocity);
 
             footstepTimer += Time.DeltaTime();
@@ -91,18 +91,18 @@ namespace Game
 
             UpdateAnimation(input, controller);
 
-
+            
             Vector3 shootInput = GetShootingInput(ref controller);
             shootTimer += Time.DeltaTime();
-
-
-
+            
+            //rotates the character if aiming
             if (shootInput != Vector3Values.zero && !isDashing)
             {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
                 lastDir = shootInput;
 
             }
+            //FIRES the weapon, if the player is not aiming shoots the bullet is shot to the direction the character is looking
             if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper))
             {
                 if (shootInput == Vector3Values.zero)
