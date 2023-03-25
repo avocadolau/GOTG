@@ -76,7 +76,7 @@ namespace Game
 
             footstepTimer += Time.DeltaTime();
 
-            if (input != Vector3Values.zero)
+            if (input != Vector3Values.zero && !isDashing)
             {
                 SetPlayerRotation(ref transform.LocalRotation, input, controller.RotationSpeed);
                 PlayFootStep();
@@ -87,11 +87,11 @@ namespace Game
             }
 
             UpdateAnimation(input, controller);
-
+            
 
             Vector3 shootInput = GetShootingInput(ref controller);
             shootTimer += Time.DeltaTime();
-            if (shootInput != Vector3Values.zero)
+            if (shootInput != Vector3Values.zero && !isDashing)
             {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
                 Fire(shootInput);
@@ -297,7 +297,8 @@ namespace Game
             // float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
 
             Console.WriteLine($"Angle {angle}");
-
+            
+            
             //Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
             //Vector3 bulletDir = new Vector3(shootX, 0, shootY);
 

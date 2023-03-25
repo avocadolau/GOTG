@@ -21,8 +21,10 @@ namespace Game
             bulletCompIt = GetComponentIterator<BulletComponent>();
 
             ref BulletComponent bulletc = ref GetComponentByIterator<BulletComponent>(bulletCompIt);
-
-            PhysicsManager.SetLinearVelocity(m_EntityId, bulletc.Direction * bulletc.Velocity);
+            
+            //Mathf.Clamp
+            PhysicsManager.SetLinearVelocity(m_EntityId, bulletc.Direction.normalized * bulletc.Velocity);
+            
         }
 
         void Update()
