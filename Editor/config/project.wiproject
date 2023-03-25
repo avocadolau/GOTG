@@ -1,1 +1,2 @@
-{"name":"Wiwa game","version":"0.1","company":"My company","target":0,"scene_list":[{"name":"test","path":"library/scenes/test.wiscene"},{"name":"MainMenu","path":"library/scenes/mainmenu.wiscene"},{"name":"testAudioSlider","path":"library/scenes/testaudioslider.wiscene"},{"name":"newScene","path":"library/scenes/newscene.wiscene"}]}
+{"name":"Wiwa game","version":"0.1","company":"My company","target":0,"scene_list":[]}
+

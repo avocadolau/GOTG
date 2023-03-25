@@ -476,7 +476,6 @@ namespace Wiwa
 				}
 			}
 		}
-
 		return true;
 	}
 
@@ -602,5 +601,6 @@ namespace Wiwa
 					
 			}
 		}
+		return true;
 	}
 }

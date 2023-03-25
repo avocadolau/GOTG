@@ -116,7 +116,8 @@ namespace Wiwa {
 				//WI_INFO("normal : {} {} {}", contactManifold->getContactPoint(0).m_normalWorldOnB.x(), contactManifold->getContactPoint(0).m_normalWorldOnB.y(), contactManifold->getContactPoint(0).m_normalWorldOnB.z());
 				//WI_INFO("c2 : {}", contactManifold->getContactPoint(0).m_contactMotion2);
 				btVector3 toSubstract = contactManifold->getContactPoint(0).m_normalWorldOnB * contactManifold->getContactPoint(0).getDistance();
-
+				
+				WI_INFO("impulse : {}", contactManifold->getContactPoint(0).m_appliedImpulse);
 				ResolveContactA(obA, toSubstract, (obA->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
 				ResolveContactB(obB, toSubstract, (obB->getCollisionFlags() & btCollisionObject::CF_STATIC_OBJECT), (obB->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE), (obA->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE));
 				//WI_INFO("d : {}", contactManifold->getContactPoint(0).getDistance());

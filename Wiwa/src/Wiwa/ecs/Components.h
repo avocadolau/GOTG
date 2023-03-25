@@ -28,3 +28,7 @@
 // Particle components
 #include "components/Billboard.h"
 #include "components/ParticleEmitter.h"
+
+// Ai components
+#include "components/AgentAI.h"
+#include "components/MapAI.h"
