@@ -80,7 +80,7 @@ namespace Wiwa {
 		static int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
 
 		// To request all tiles involved in the last generated path
-		static const std::vector<glm::vec2>* GetLastPath();
+		static const std::vector<glm::vec2> GetLastPath();
 
 		// Utility: return true if pos is inside the map boundaries
 		static bool CheckBoundaries(const glm::ivec2& pos);

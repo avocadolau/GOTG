@@ -127,7 +127,7 @@ void Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 	
 	Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
 
-	lastPath = *Wiwa::AIPathFindingManager::GetLastPath();
+	lastPath = Wiwa::AIPathFindingManager::GetLastPath();
 }
 
 void Wiwa::AgentAISystem::GoToNextPosition()

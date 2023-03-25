@@ -44,7 +44,7 @@ namespace Wiwa {
 		// Generate the grid of the map, stores it inside map data and set the navigation values to walkable or non walkable
 		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos);
 		static void BakeMap();
-		static void SetPositionUnWalkable(glm::vec2 world_pos);
+		static void SetPositionUnWalkable(glm::ivec2 world_pos);
 		static void DebugDrawMap();
 		// Space translations for the pathfinding
 		static glm::vec2 MapToWorld(int x, int y);

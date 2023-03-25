@@ -46,10 +46,13 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	// north
 	cell = pos;
 	cell.y = pos.y + 1;
-
 	
-	
-	//WI_INFO(" IsWalkable N {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+	bool inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
+	WI_INFO(" Is in boundaries N {}", inbound);
+	bool walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
+	WI_INFO(" IsWalkable N {}", walkable);
+	if (inbound && walkable == false)
+		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
@@ -58,7 +61,12 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	cell = pos;
 	cell.y = pos.y - 1;
 
-	//WI_INFO(" IsWalkable S {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+	inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
+	WI_INFO(" Is in boundaries S {}", inbound);
+	walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
+	WI_INFO(" IsWalkable S {}", walkable);
+	if (inbound && walkable == false)
+		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
@@ -67,7 +75,12 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	cell = pos;
 	cell.x = pos.x + 1;
 
-	//WI_INFO(" IsWalkable E {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+	inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
+	WI_INFO(" Is in boundaries E {}", inbound);
+	walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
+	WI_INFO(" IsWalkable E {}", walkable);
+	if (inbound && walkable == false)
+		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
@@ -76,7 +89,12 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	cell = pos;
 	cell.x = pos.x - 1;
 
-	//WI_INFO(" IsWalkable W {}", Wiwa::AIPathFindingManager::IsWalkable(cell));
+	inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
+	WI_INFO(" Is in boundaries W {}", inbound);
+	walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
+	WI_INFO(" IsWalkable W {}", walkable);
+	if (inbound && walkable == false)
+		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
@@ -228,7 +246,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				int i = 0;
 				while (pathNode)
 				{
-					WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.x, m_map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
+					WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
 
 					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
 					m_lastPath.push_back(vec);
@@ -276,9 +294,9 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	return ret;
 }
 
-const std::vector<glm::vec2>* Wiwa::AIPathFindingManager::GetLastPath()
+const std::vector<glm::vec2> Wiwa::AIPathFindingManager::GetLastPath()
 {
-	return &m_lastPath;
+	return m_lastPath;
 }
 
 bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
@@ -290,13 +308,13 @@ bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 {
 	unsigned char t = GetTileAt(pos);
-	return t != INVALID_WALK_CODE && t > 0;
+	return (t != INVALID_WALK_CODE && t > 0);
 }
 
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_map[(pos.x * m_width) + pos.y];
+		return m_map[(pos.y * m_width) + pos.x];
 
 	return INVALID_WALK_CODE;
 }

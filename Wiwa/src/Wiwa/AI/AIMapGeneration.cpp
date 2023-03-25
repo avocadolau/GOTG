@@ -85,8 +85,7 @@ void Wiwa::AIMapGeneration::BakeMap()
 					{
 						for (int j = topLeftMap.x; j < topRightMap.x; j++)
 						{
-							glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
-							SetPositionUnWalkable(vec);
+							SetPositionUnWalkable(glm::ivec2(j, i));
 						}
 					}
 
@@ -112,10 +111,10 @@ void Wiwa::AIMapGeneration::BakeMap()
 
 }
 
-void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::vec2 world_pos)
+void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
 {
-	glm::ivec2 vec = Wiwa::AIMapGeneration::WorldToMap(world_pos.x, world_pos.y);
-	m_map[vec.x * m_mapData.width + vec.y] = INVALID_WALK_CODE;
+	//m_map[vec.x * m_mapData.width + vec.y] = INVALID_WALK_CODE;
+	m_map[(vec.y * m_mapData.width) + vec.x] = INVALID_WALK_CODE;
 }
 
 void Wiwa::AIMapGeneration::DebugDrawMap()
