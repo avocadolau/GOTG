@@ -25,8 +25,8 @@ size_t GetEntityByName(MonoString* name_entity, void* scene);
 
 void DestroyEntity(size_t eid, void* scene);
 
-size_t LoadPrefabIntr(const char* file);
-void SavePrefabIntr(size_t id, const char* file);
+size_t LoadPrefabIntr(MonoString* file);
+void SavePrefabIntr(size_t id, MonoString* file);
 
 // Help functions
 

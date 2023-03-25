@@ -43,5 +43,6 @@ public:
 	size_t callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
+	std::string audioEventForButton;
 
 };

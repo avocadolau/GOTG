@@ -21,7 +21,19 @@ namespace Wiwa {
 		float timeBetweenWaves;
 		bool hasFinished;
 	};
+	struct DefaultCharacterSettings
+	{
+		int MaxHealth;
+		int Health;
+		int MaxShield;
+		int Shield;
 
+		float Speed;
+		float DashDistance;
+		float DashSpeed;
+		float DashCoolDown;
+		float WalkTreshold;
+	};
 	enum class RoomType
 	{
 		NONE = 0,
@@ -70,6 +82,8 @@ namespace Wiwa {
 
 		static void ChangeRoomState(RoomState room_state);
 
+		
+
 	public:
 		static int s_TotalSpawners;
 		static int s_SpawnersFinished;
@@ -77,10 +91,6 @@ namespace Wiwa {
 		// Save & Load Overall Player Progression
 		static void SaveProgression();
 		static void LoadProgression();
-
-		// Save & Load Player data into player entity
-		static void SavePlayer(const Character& character);
-		static void LoadPlayer(Character& character);
 
 		static void UpdateRoomState();
 		static void UpdateCombatRoom();
@@ -108,5 +118,29 @@ namespace Wiwa {
 
 		// Reset general data
 		static void ResetBooleans();
+
+		static int NextRoom();
+
+
+		static void SerializeData();
+		static void DeserializeData();
+
+
+	public:
+		static DefaultCharacterSettings s_CharacterSettings[2];
+		static int s_CurrentCharacter;
+		static float s_GamepadDeadzone;
+
+		static SceneId s_CurrentRoomIndx;
+		static SceneId s_RoomsToShop;
+		static SceneId s_RoomsToBoss;
+		static SceneId s_IntroductionRoom;
+		static SceneId s_LastCombatRoom;
+		static SceneId s_LastRewardRoom;
+		static SceneId s_LastShopRoom;
+		static std::vector<int> s_CombatRooms;
+		static std::vector<int> s_RewardRooms;
+		static std::vector<int> s_ShopRooms;
+		static int s_CurrentRoomsCount;
 	};
 }

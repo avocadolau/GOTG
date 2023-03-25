@@ -43,7 +43,7 @@ void UIEditorPanel::GetSelectedCanvas()
 	{
 		if (gm.canvas.at(i)->selected)
 		{
-			canvasSelectedID = i;
+			canvasSelectedID = (int)i;
 		}
 	}
 
@@ -64,7 +64,7 @@ void UIEditorPanel::DrawCanvasItems()
 		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))
 		{
-			elementSelected = i;
+			elementSelected = (int)i;
 			SetInitialValues(canvas->controls.at(i));
 		}
 		ImGui::SameLine();
@@ -96,7 +96,8 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 	originSize[0] = control->texturePosition.width;
 	originSize[1] = control->texturePosition.height;
 	callbackID = control->callbackID;
-	if (control->type == Wiwa::GuiControlType::SLIDER)
+	audioEventForButton = control->audioEventForButton;
+	if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
 	{
 		extraOriginPos[0] = control->extraTexturePosition.x;
 		extraOriginPos[1] = control->extraTexturePosition.y;
@@ -118,54 +119,34 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		ImGui::InputInt2("size", size);
 		ImGui::InputInt2("origin position", originPos);
 		ImGui::InputInt2("origin size", originSize);
-		if (control->type == Wiwa::GuiControlType::SLIDER)
+		if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
 		{
 			ImGui::InputInt2("origin position slider", extraOriginPos);
 			ImGui::InputInt2("origin size slider", extraOriginSize);
 		}
-		if (control->type != Wiwa::GuiControlType::TEXT)
+		if (control->type != Wiwa::GuiControlType::TEXT || control->type != Wiwa::GuiControlType::BAR)
 		{
 
 			Wiwa::Application& app = Wiwa::Application::Get();
+			if (callbackID != WI_INVALID_INDEX)
+			{
+				size_t cbcount = app.GetCallbacksCount();
 
-			size_t cbcount = app.GetCallbacksCount();
+				if (cbcount > 0) {
+					Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
 
-			if (cbcount > 0) {
-				Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
+					ImGui::Text("Callback type:");
 
-				ImGui::Text("Callback type:");
-
-				if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
-				{
-					for (size_t n = 0; n < cbcount; n++)
+					if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
 					{
-						bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
-						current_cb = app.getCallbackAt(n);
-						switch (control->type)
+						for (size_t n = 0; n < cbcount; n++)
 						{
-						case Wiwa::GuiControlType::BUTTON:
-							if (current_cb->getParamCount() == 0) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-								}
-							}
-							break;
-						case Wiwa::GuiControlType::CHECKBOX:
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-								}
-							}
-							break;
-						case Wiwa::GuiControlType::SLIDER:
-							if (current_cb->getParamCount() == 1) {
-								if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+							bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
+							current_cb = app.getCallbackAt(n);
+							switch (control->type)
+							{
+							case Wiwa::GuiControlType::BUTTON:
+								if (current_cb->getParamCount() == 0) {
 									if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
 									{
 										callbackID = n;
@@ -173,25 +154,50 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 											ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 									}
 								}
-							}
-							break;
-						case Wiwa::GuiControlType::IMAGE:
-							if (current_cb->getParamCount() == 0) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+								break;
+							case Wiwa::GuiControlType::CHECKBOX:
+								if (current_cb->getParamCount() == 1) {
+									if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
+										if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+										{
+											callbackID = n;
+											if (is_selected)
+												ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+										}
+									}
 								}
+								break;
+							case Wiwa::GuiControlType::SLIDER:
+								if (current_cb->getParamCount() == 1) {
+									if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+										if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+										{
+											callbackID = n;
+											if (is_selected)
+												ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+										}
+									}
+								}
+								break;
+							case Wiwa::GuiControlType::IMAGE:
+								if (current_cb->getParamCount() == 0) {
+									if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+									{
+										callbackID = n;
+										if (is_selected)
+											ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+									}
+								}
+								break;
+							default:
+								break;
 							}
-							break;
-						default:
-							break;
 						}
+						ImGui::EndCombo();
 					}
-					ImGui::EndCombo();
 				}
 			}
+
 
 			 
 			AssetContainer(pathForAsset.c_str());
@@ -231,8 +237,12 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 					ImGui::EndDragDropTarget();
 				}
 			}
+			
+			ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
+			
 		}
 		
+
 		UpdateElements(control);
 		
 	}
@@ -249,17 +259,21 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
-	control->callbackID = callbackID;
-	control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
-	r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+	//control->audioEventForButton = audioEventForButton.c_str();
+	if (callbackID != WI_INVALID_INDEX)
+	{
+		control->callbackID = callbackID;
+		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+	}
+	if(control->type != Wiwa::GuiControlType::TEXT)r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
 	r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector, Wiwa::Renderer2D::Pivot::UPLEFT);
-	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, {pos[0], pos[1]}, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
+	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
 	if (control->type != Wiwa::GuiControlType::TEXT)
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
 		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
-		if (control->type == Wiwa::GuiControlType::SLIDER)
+		if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
 		{
 			control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForExtraAsset.c_str());
 			control->extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId2);
@@ -286,5 +300,6 @@ bool UIEditorPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
 	callbackID = WI_INVALID_INDEX;
 	pathForAsset = "";
 	pathForExtraAsset = "";
+	audioEventForButton = "";
 	return true;
 }
