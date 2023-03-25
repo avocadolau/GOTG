@@ -539,7 +539,7 @@ uint32_t Audio::FindEvent(const char* event_name)
 
     for (size_t i = 0; i < event_size; i++) {
         if (m_LoadedEvents[i].name == event_name) {
-            index = i;
+            index = (uint32_t)i;
             break;
         }
     }
@@ -555,7 +555,7 @@ uint32_t Audio::FindBank(const char* bank_name)
 
     for (size_t i = 0; i < bank_size; i++) {
         if (m_LoadedBanks[i].name == bank_name) {
-            index = i;
+            index = (uint32_t)i;
             break;
         }
     }

@@ -1,29 +1,29 @@
 #pragma once
 
 #include "Wiwa/Ui/UiControl.h"
+
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
 
 #include <vector>
 #include <string>
 
-
 namespace Wiwa
 {
-	class WI_API GuiImage : public Wiwa::GuiControl
+	class WI_API GuiBar : public Wiwa::GuiControl
 	{
 	public:
 
-		GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex);
-		virtual ~GuiImage();
+		GuiBar(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path,Rect2i boundsOriginTex, Rect2i sliderOriginTex);
+		virtual ~GuiBar();
 
-		bool Update();
 		bool Draw(Renderer2D* render);
+		float value;
+
 
 		bool canClick = true;
 
 		bool clicked = false;
 
-		float timeForAnim;
 	};
 }

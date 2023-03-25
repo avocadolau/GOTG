@@ -146,7 +146,7 @@ namespace Wiwa {
 	FileMapping FileSystem::CreateMemoryMappedFile(const char* name, size_t size)
 	{
 		FileMapping fmap;
-		fmap.mapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, size, name);
+		fmap.mapFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, (DWORD)size, name);
 		fmap.is_open = true;
 
 		if (!fmap.mapFile) {

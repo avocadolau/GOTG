@@ -1,6 +1,5 @@
 #include "GameLogPanel.h"
 #include <Wiwa/game/GameStateManager.h>
-#include <Wiwa/game/RoomManager.h>
 #include "../../Utils/EditorUtils.h"
 
 GameLogPanel::GameLogPanel(EditorLayer* instance)
@@ -50,27 +49,61 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 void GameLogPanel::DrawRoomVariables()
 {
 	ImGui::Separator();
-	ImGui::Text("Rooms to boss %d", Wiwa::RoomManager::s_RoomsToBoss);
-	ImGui::Text("Rooms to shop %d", Wiwa::RoomManager::s_RoomsToShop);
-	ImGui::Text("Rooms to end and return tu hub %d", Wiwa::RoomManager::s_CurrentRoomsCount);
+	ImGui::Text("Rooms to boss %d", Wiwa::GameStateManager::s_RoomsToBoss);
+	ImGui::Text("Rooms to shop %d", Wiwa::GameStateManager::s_RoomsToShop);
+	ImGui::Text("Rooms to end and return tu hub %d", Wiwa::GameStateManager::s_CurrentRoomsCount);
 	ImGui::Separator();
 	ImGui::PushID(0);
 	ImGui::Text("Battle rooms");
-	VectorEdit(Wiwa::RoomManager::s_CombatRooms);
+	VectorEdit(Wiwa::GameStateManager::s_CombatRooms);
 	ImGui::PopID();
 	ImGui::Separator();
 	ImGui::PushID(1);
 	ImGui::Text("Reward rooms");
-	VectorEdit(Wiwa::RoomManager::s_RewardRooms);
+	VectorEdit(Wiwa::GameStateManager::s_RewardRooms);
 	ImGui::Separator();
 	ImGui::PopID();
 	ImGui::PushID(2);
 	ImGui::Text("Shop rooms");
-	VectorEdit(Wiwa::RoomManager::s_ShopRooms);
+	VectorEdit(Wiwa::GameStateManager::s_ShopRooms);
 	ImGui::PopID();
+	ImGui::Separator();
+
+	const char* startCharacter = Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
+	ImGui::Text("Current character %s", startCharacter);
+	ImGui::InputInt("Start character", &Wiwa::GameStateManager::s_CurrentCharacter);
+	CLAMP(Wiwa::GameStateManager::s_CurrentCharacter, 0, 1);
+	if(ImGui::CollapsingHeader("Star Lord default values"))
+	{
+		ImGui::InputInt("Max health", &Wiwa::GameStateManager::s_CharacterSettings[0].MaxHealth);
+		ImGui::Text("Current health %i", Wiwa::GameStateManager::s_CharacterSettings[0].Health);
+		ImGui::InputInt("Max Shield", &Wiwa::GameStateManager::s_CharacterSettings[0].MaxShield);
+		ImGui::Text("Current Shield %i", Wiwa::GameStateManager::s_CharacterSettings[0].Shield);
+		ImGui::InputFloat("Speed", &Wiwa::GameStateManager::s_CharacterSettings[0].Speed);
+		ImGui::InputFloat("Dash distance", &Wiwa::GameStateManager::s_CharacterSettings[0].DashDistance);
+		ImGui::InputFloat("Dash speed", &Wiwa::GameStateManager::s_CharacterSettings[0].DashSpeed);
+		ImGui::InputFloat("Dash cooldown", &Wiwa::GameStateManager::s_CharacterSettings[0].DashCoolDown);
+		ImGui::InputFloat("Walk threshold", &Wiwa::GameStateManager::s_CharacterSettings[0].WalkTreshold);
+	}
+
+	if (ImGui::CollapsingHeader("Rocket default values"))
+	{
+		ImGui::InputInt("Max health", &Wiwa::GameStateManager::s_CharacterSettings[1].MaxHealth);
+		ImGui::Text("Current health %i", Wiwa::GameStateManager::s_CharacterSettings[1].Health);
+		ImGui::InputInt("Max Shield", &Wiwa::GameStateManager::s_CharacterSettings[1].MaxShield);
+		ImGui::Text("Current Shield %i", Wiwa::GameStateManager::s_CharacterSettings[1].Shield);
+		ImGui::InputFloat("Speed", &Wiwa::GameStateManager::s_CharacterSettings[1].Speed);
+		ImGui::InputFloat("Dash distance", &Wiwa::GameStateManager::s_CharacterSettings[1].DashDistance);
+		ImGui::InputFloat("Dash speed", &Wiwa::GameStateManager::s_CharacterSettings[1].DashSpeed);
+		ImGui::InputFloat("Dash cooldown", &Wiwa::GameStateManager::s_CharacterSettings[1].DashCoolDown);
+		ImGui::InputFloat("Walk threshold", &Wiwa::GameStateManager::s_CharacterSettings[1].WalkTreshold);
+	}
+
+	ImGui::InputFloat("Gamepad deadzone", &Wiwa::GameStateManager::s_GamepadDeadzone);
+
 	if (ImGui::Button("Save"))
 	{
-		Wiwa::RoomManager::SerializeData();
+		Wiwa::GameStateManager::SerializeData();
 	}
 }
 

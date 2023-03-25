@@ -14,13 +14,11 @@ namespace Wiwa
 	{
 	public:
 
-		GuiButton(Scene* scene, unsigned int id, Rect2i bounds, const char* path, const char* extraPath,size_t callbackID, Rect2i boundsOriginTex);
+		GuiButton(Scene* scene, unsigned int id, Rect2i bounds, const char* path, const char* extraPath,size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName);
 		virtual ~GuiButton();
 
 		bool Update();
 		bool Draw(Renderer2D* render);
-
-		bool SwapTexture();
 
 		bool canClick = true;
 

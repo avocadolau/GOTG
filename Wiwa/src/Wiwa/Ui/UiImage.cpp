@@ -15,7 +15,8 @@ namespace Wiwa
 		name = "Image";
 		m_Scene = scene;
 		active = true;
-
+		text = "none";
+		audioEventForButton = "none";
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
@@ -30,6 +31,14 @@ namespace Wiwa
 
 		state = GuiControlState::NORMAL;
 		canClick = true;
+
+		/*animated = true;
+		timeForAnim = 0;
+		framesAnimation = 0;
+		animSpeed = 60.0f;
+		positionsForAnimations.push_back({ 30,30,100,100 });
+		positionsForAnimations.push_back({ 200,200,100,100 });
+		positionsForAnimations.push_back({ 500,500,100,100 });*/
 	}
 
 	GuiImage::~GuiImage()
@@ -49,8 +58,13 @@ namespace Wiwa
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
 				state = GuiControlState::FOCUSED;
+				if (Wiwa::Input::IsMouseButtonPressed(0))
+				{
+					state = GuiControlState::PRESSED;
+					clicked = true;
+				}
 
-				if (Wiwa::Input::IsMouseButtonReleased(0))
+				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
 					state = GuiControlState::PRESSED;
 				}
@@ -61,6 +75,7 @@ namespace Wiwa
 				state = GuiControlState::NORMAL;
 			}
 
+			
 		}
 
 		return false;
@@ -70,6 +85,25 @@ namespace Wiwa
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+
+		/*if (animated)
+		{
+			timeForAnim += 1.0f;
+			if (timeForAnim >= animSpeed)
+			{
+				if (framesAnimation < positionsForAnimations.size())
+				{
+					framesAnimation++;
+				}
+				else
+				{
+					framesAnimation = 0;
+				}
+
+				timeForAnim = 0.0f;
+			}
+
+		}*/
 
 		switch (state)
 		{
@@ -121,6 +155,10 @@ namespace Wiwa
 			break;
 		}
 
+		/*if (animated)
+		{
+			render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(framesAnimation));
+		}*/
 		return false;
 	}
 }

@@ -114,6 +114,10 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		{
 			DrawParticleEmitterComponent(data);
 		}
+		else if (type->hash == (size_t)TypeHash::AgentAI)
+		{
+			DrawAiAgentComponent(data);
+		}
 		else
 
 			// Basic component interface
@@ -1063,6 +1067,13 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 		ImGui::TreePop();
 	}
+}
+
+void InspectorPanel::DrawAiAgentComponent(byte* data)
+{
+	Wiwa::AgentAI* agent = (Wiwa::AgentAI*)data;
+	DrawVec3Control("Target", &agent->target, 0.0f, 100.0f);
+	ImGui::InputFloat("Speed", &agent->speed);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)
