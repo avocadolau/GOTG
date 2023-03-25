@@ -69,6 +69,47 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Set_Bus_Volume_Master_Audio_Bus" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}">
+					<ChildrenList>
+						<Action Name="" ID="{B1289A08-05F6-408E-9F80-CA8173CB4C3D}" ShortID="205418363">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="11"/>
+								<Property Name="Scope" Type="int16" Value="1"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Set_Bus_Volume_Master_Audio_Bus_01" ID="{03903AD0-6338-4E2F-9E48-AF41550E07C7}">
+					<ChildrenList>
+						<Action Name="" ID="{2CA7BE9A-BEFF-43BC-BF12-74A6572FF198}" ShortID="1000534739">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="11"/>
+								<Property Name="Scope" Type="int16" Value="1"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}">
+					<ChildrenList>
+						<Action Name="" ID="{6ED117A5-62B7-4D7D-82D9-4C759F7555CF}" ShortID="922518561">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

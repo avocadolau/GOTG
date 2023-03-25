@@ -110,6 +110,7 @@ namespace Wiwa {
 			btPersistentManifold* contactManifold = m_World->getDispatcher()->getManifoldByIndexInternal(i);
 			btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
 			btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
+
 			int numContacts = contactManifold->getNumContacts();
 			if (numContacts > 0)
 			{
@@ -420,6 +421,7 @@ namespace Wiwa {
 		collision_object->setCollisionShape(collision_shape);
 		Object* myObjData = new Object(*collision_object, id, rigid_body.selfTag, GetFilterTag(rigid_body.selfTag), rigid_body.doContinuousCollision);
 		collision_object->setUserPointer((Object*)myObjData);
+		collision_object->setUserIndex2(1);
 		//collision_object->setCollisionFlags(rigid_body.)
 
 		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
@@ -441,6 +443,23 @@ namespace Wiwa {
 		glm::quat newRot = glm::quat(glm::radians(euler_angles));;
 		body->collisionObject->getWorldTransform().setRotation(btQuaternion(newRot.x, newRot.y, newRot.z, newRot.w));
 		return true;
+	}
+
+	void PhysicsManager::SetTrigger(Object* body, bool isTrigger)
+	{
+		if (isTrigger)
+			body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		else
+			body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	}
+
+	void PhysicsManager::ChangeCollisionTags(Object* body, int filterGroup, int filterBits)
+	{
+		m_World->removeCollisionObject(body->collisionObject);
+		m_World->addCollisionObject(body->collisionObject, filterGroup, filterBits);
+		//m_World->updateSingleAabb(body->collisionObject);
+		//m_World->refreshBroadphaseProxy(body->collisionObject);
+		//m_World->updateSingleAabb(body->collisionObject);
 	}
 
 	Object* PhysicsManager::FindByEntityId(size_t id)

@@ -592,5 +592,9 @@ namespace Wiwa
             return rad * 180.0f / PI;
         }
         #endregion
+        public static Vector3 PointAlongDirection(Vector3 origin, Vector3 direction, float distance)
+        {
+            return origin + direction.normalized * distance;
+        }
     }
 }

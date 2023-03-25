@@ -3,11 +3,6 @@
 	<SoundBanks>
 		<WorkUnit Name="Default Work Unit" ID="{B0B09002-1B2B-4E9D-9DAF-53D25465CF1F}" PersistMode="Standalone">
 			<ChildrenList>
-				<SoundBank Name="Player_soundbank" ID="{BE04BD1B-1F56-4949-A1B1-1FF993F29D5D}">
-					<ObjectInclusionList/>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
 				<SoundBank Name="player_shoot" ID="{852D44FD-58B9-4B4E-98F0-0A725EDEED84}">
 					<ObjectInclusionList>
 						<ObjectRef Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
@@ -39,6 +34,21 @@
 				<SoundBank Name="pause_sound" ID="{58E87580-5255-4F8C-B9AA-A540BFC9AB22}">
 					<ObjectInclusionList>
 						<ObjectRef Name="pause_sound" ID="{B9C6E3D0-3987-46F5-89D7-8C7B4E184648}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="background_song" ID="{125180E6-B5FA-4A10-8C9F-6B882A37F14D}">
+					<ObjectInclusionList>
+						<ObjectRef Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="player_walking" ID="{6018BF2B-026E-4FE7-BBEE-5788AD0142A5}">
+					<ObjectInclusionList>
+						<ObjectRef Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
