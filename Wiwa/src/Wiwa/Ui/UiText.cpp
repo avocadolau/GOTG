@@ -13,6 +13,8 @@ namespace Wiwa
 		active = true;
 		text = string_text;
 		audioEventForButton = "none";
+		callbackID = WI_INVALID_INDEX;
+
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		text_res = new Text();
 		text_res = gm.InitFont("assets/Fonts/arial.ttf", (char*)string_text);

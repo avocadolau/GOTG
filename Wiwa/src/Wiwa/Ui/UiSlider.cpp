@@ -122,6 +122,8 @@ namespace Wiwa
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
 		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
+		extraPosition.x = position.x;
+		extraPosition.y = position.y;
 
 		switch (state)
 		{

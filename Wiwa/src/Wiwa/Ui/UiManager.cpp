@@ -7,6 +7,7 @@
 #include "UiSlider.h"
 #include "UiText.h"
 #include "UiImage.h"
+#include "UiBar.h"
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/scene/Scene.h>
@@ -74,11 +75,22 @@ namespace Wiwa
 	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName)
 	{
 		GuiControl* control = nullptr;
+		switch (type)
+		{
+		case Wiwa::GuiControlType::SLIDER:
+			control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex, sliderOriginTex, audioEventName);
+			canvas.at(canvas_id)->controls.push_back(control);
+			canvas.at(canvas_id)->controlsForSelection.push_back(control);
+			break;
+		case Wiwa::GuiControlType::BAR:
+			control = new GuiBar(m_Scene, id, bounds, sliderBounds, path, slider_path, boundsOriginTex, sliderOriginTex);
+			canvas.at(canvas_id)->controls.push_back(control);
+			break;
+		default:
+			break;
+		}
 
-		control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex,sliderOriginTex, audioEventName);
-
-		canvas.at(canvas_id)->controls.push_back(control);
-		canvas.at(canvas_id)->controlsForSelection.push_back(control);
+		
 
 		return control;
 	}
@@ -189,6 +201,10 @@ namespace Wiwa
 			Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 			r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_normal);
 			if (canvasToDestroy->controls.at(i)->type == GuiControlType::SLIDER)
+			{
+				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_extra);
+			}
+			if (canvasToDestroy->controls.at(i)->type == GuiControlType::BAR)
 			{
 				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_extra);
 			}
@@ -447,6 +463,9 @@ namespace Wiwa
 					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
 					break;
 				case Wiwa::GuiControlType::SLIDER:
+					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str());
+					break;
+				case Wiwa::GuiControlType::BAR:
 					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str());
 					break;
 				case Wiwa::GuiControlType::IMAGE:

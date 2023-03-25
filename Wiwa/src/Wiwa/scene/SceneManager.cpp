@@ -340,6 +340,9 @@ namespace Wiwa
 				case Wiwa::GuiControlType::SLIDER:
 					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition, audioEvent.c_str());
 					break;
+				case Wiwa::GuiControlType::BAR:
+					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str());
+					break;
 				case Wiwa::GuiControlType::IMAGE:
 					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
 					break;
