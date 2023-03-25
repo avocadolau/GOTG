@@ -66,6 +66,7 @@ public:
 
 	void SubmitToMainThread(const std::function<void()> func);
 
+	void StopScene();
 	static void RegenSol();
 
 	std::string getOpenedScenePath() { return m_OpenedScenePath; };

@@ -254,7 +254,6 @@ namespace Game
                 shooter.ShootRight = !shooter.ShootRight;
                 SpawnBullet(spawnPoint, shooter);
             }
-
         }
 
         void PlayFootStep()
