@@ -40,6 +40,8 @@ namespace Game
 
         private bool isWalking = false;
 
+        Vector3 lastDir = Vector3Values.zero;
+
         void Awake()
         {
 
@@ -78,6 +80,7 @@ namespace Game
 
             if (input != Vector3Values.zero && !isDashing)
             {
+                lastDir = input;
                 SetPlayerRotation(ref transform.LocalRotation, input, controller.RotationSpeed);
                 PlayFootStep();
             }
@@ -87,15 +90,35 @@ namespace Game
             }
 
             UpdateAnimation(input, controller);
-            
+
 
             Vector3 shootInput = GetShootingInput(ref controller);
             shootTimer += Time.DeltaTime();
+
+
+
             if (shootInput != Vector3Values.zero && !isDashing)
             {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
-                Fire(shootInput);
+
             }
+            if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper))
+            {
+                if (shootInput == Vector3Values.zero)
+                {
+                    if(lastDir != Vector3Values.zero)
+                    {
+                        Fire(lastDir);
+                    }
+                    else Fire(new Vector3(0,0,1));
+                }
+                else
+                {
+                    Fire(shootInput);
+                }
+            } 
+            
+            
         }
 
         Vector3 GetMovementInput(ref CharacterController controller)
@@ -295,10 +318,11 @@ namespace Game
 
             // float shootX = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, 0);
             // float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
+            
 
             Console.WriteLine($"Angle {angle}");
-            
-            
+
+            position = RotatePointAroundPivot(position, GetComponentByIterator<Transform3D>(transformIt).LocalPosition, new Vector3(0, angle, 0));
             //Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
             //Vector3 bulletDir = new Vector3(shootX, 0, shootY);
 
@@ -342,5 +366,10 @@ namespace Game
 
             Audio.PlaySound("player_shoot", m_EntityId);
         }
+        Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+        {
+            return Quaternion.Euler(angles) * (point - pivot) + pivot;
+        }
     }
+
 }
