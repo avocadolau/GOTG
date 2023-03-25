@@ -47,33 +47,65 @@ namespace Wiwa {
 
 			for (std::shared_ptr<ParticleEmitter> emitter : emitterList)
 			{
-				if (emitter->timer <= 0)
-				{
-					if (emitter->repeat)
-					{
-						if (emitter->particle_rate_isRanged)
-						{
-							emitter->timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
-						}
-						else
-						{
-							emitter->timer = emitter->particle_rate;
 
-							AddParticles(emitter.get());
+				if (emitter->isPlaying)
+				{
+					if (emitter->timer < 0)
+					{
+
+						AddParticles(emitter.get());
+
+						if (emitter->repeat)
+						{
+							if (emitter->particle_rate_isRanged)
+							{
+								emitter->timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
+							}
+							else
+							{
+								emitter->timer = emitter->particle_rate;
+
+							}
 						}
+						
+
+
 					}
 
+
+					emitter->timer -= dt;
 					
 				}
-				else
-				{
-					if (emitter->isPlaying)
-					{
-						emitter->timer -= dt;
 
-					}
 
-				}
+
+				//if (emitter->timer <= 0)
+				//{
+				//	if (emitter->repeat)
+				//	{
+				//		if (emitter->particle_rate_isRanged)
+				//		{
+				//			emitter->timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
+				//		}
+				//		else
+				//		{
+				//			emitter->timer = emitter->particle_rate;
+
+				//		}
+
+				//	}
+
+				//	
+				//}
+				//else
+				//{
+				//	if (emitter->isPlaying)
+				//	{
+				//		emitter->timer -= dt;
+
+				//	}
+
+				//}
 			}
 			
 
@@ -100,8 +132,8 @@ namespace Wiwa {
 		//std::string info_ = "active particles: " + std::to_string(currentParticleIndex);
 		//WI_CORE_INFO(info_.c_str());
 
-		std::string info_ = "emitter count: " + std::to_string(emitterList.size());
-		WI_CORE_INFO(info_.c_str());
+		/*std::string info_ = "emitter count: " + std::to_string(emitterList.size());
+		WI_CORE_INFO(info_.c_str());*/
 
 
 		//----------------------------------------------------------------------------------
@@ -259,10 +291,10 @@ namespace Wiwa {
 					glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
 					glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
 					glm::vec3 resultantVertex = glm::vec3(rotatedVertex);
+
+
+
 					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
-
-
-
 
 					if (p.followEmitterPosition)
 					{
@@ -621,7 +653,6 @@ namespace Wiwa {
 
 			p.transform.scale = glm::vec3(1, 1, 1);
 
-			Uniform::SamplerData sdata;
 
 
 
@@ -638,25 +669,28 @@ namespace Wiwa {
 				texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
 			}
 
-
-			sdata.tex_id = texture->GetTextureId();
-
-			//Problema de Memory Leak
-			m_Material->SetUniformData("u_Texture", sdata);
-
-			p.m_material = m_Material;
-
-			AnimationParticles& particleAnimation = AnimationParticles::getInstance();
-
-			p.animation = &particleAnimation;
-
-			if (p.animation != nullptr)
+			if (texture)
 			{
-				p.animation->speed = 1.0f;
-				p.animation->loop = true;
-				p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-				p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-				p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+				Uniform::SamplerData sdata;
+				sdata.tex_id = texture->GetTextureId();
+
+				//Problema de Memory Leak
+				m_Material->SetUniformData("u_Texture", sdata);
+
+				p.m_material = m_Material;
+
+				AnimationParticles& particleAnimation = AnimationParticles::getInstance();
+
+				p.animation = &particleAnimation;
+
+				if (p.animation != nullptr)
+				{
+					p.animation->speed = 1.0f;
+					p.animation->loop = true;
+					p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+					p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+					p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+				}
 			}
 
 			/*delete p.animation;*/
@@ -679,23 +713,17 @@ namespace Wiwa {
 		AddParticles(emitter);
 	}
 
-	void ParticleManager::Play(EntityId eid)
+	void ParticleManager::Play(EntityId eid, float delaySec)
 	{
 		EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		ParticleEmitter* emitter = eman.GetComponent<ParticleEmitter>(eid);
 
-		if (emitter)
+		if (emitter && !emitter->isPlaying)
 		{
 			emitter->isPlaying = true;
-
-			if (emitter->particle_rate_isRanged)
-			{
-				timer = Wiwa::Math::RandomRange(emitter->particle_rate_range[0], emitter->particle_rate_range[1]);
-			}
-			else
-			{
-				timer = emitter->particle_rate;
-			}
+			WI_CORE_INFO("time = {}", delaySec);
+			emitter->timer = delaySec;
+			
 		}
 	}
 
@@ -704,9 +732,10 @@ namespace Wiwa {
 		EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		ParticleEmitter* emitter = eman.GetComponent<ParticleEmitter>(eid);
 
-		if (emitter)
+		if (emitter && emitter->isPlaying)
 		{
 			emitter->isPlaying = false;
+
 		}
 	}
 

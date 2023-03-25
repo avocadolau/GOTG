@@ -79,7 +79,7 @@ namespace Wiwa {
 		bool ContainsEmitter(ParticleEmitter* emitter);
 
 		void EmitBatch(EntityId eid);
-		void Play(EntityId eid);
+		void Play(EntityId eid, float delaySec);
 		void Stop(EntityId eid);
 
 	private:
@@ -96,8 +96,8 @@ namespace Wiwa {
 
 		void UpdateParticles();
 
-		float timer = 0;
-		float animationTimer = 0;
+
+		
 		float dt;
 
 		int currentParticleIndex = 0;

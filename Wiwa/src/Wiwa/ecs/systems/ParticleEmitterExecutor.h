@@ -31,7 +31,7 @@ namespace Wiwa {
 		void OnSystemRemoved() override;
 
 		void EmitBatch(EntityId eid);
-		void Play(EntityId eid);
+		void Play(EntityId eid,float delaySec);
 		void Stop(EntityId eid);
 	private:
 

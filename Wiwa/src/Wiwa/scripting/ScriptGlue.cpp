@@ -148,7 +148,9 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
 
 		//Particles
-		WI_ADD_INTERNAL_CALL(EmitterEmitBatch);
+		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayBatch);
+		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayLoop);
+		WI_ADD_INTERNAL_CALL(ParticleEmitterStopLoop);
 
 	}
 }

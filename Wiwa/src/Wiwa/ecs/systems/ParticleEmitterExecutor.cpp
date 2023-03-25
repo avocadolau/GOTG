@@ -57,6 +57,7 @@ namespace Wiwa {
 				if (!emitter->texturePath)
 				{
 					emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(emitter->texturePath);
+					emitter->timer = 0;
 				}
 			}
 		}
@@ -122,16 +123,16 @@ namespace Wiwa {
 		pman.EmitBatch(eid);
 	}
 
-	void ParticleEmitterExecutor::Play(EntityId eid)
+	void ParticleEmitterExecutor::Play(EntityId eid, float delaySec)
 	{
 		ParticleManager& pman = m_Scene->GetParticleManager();
-		pman.Play(eid);
+		pman.Play(eid, delaySec);
 	}
 
 	void ParticleEmitterExecutor::Stop(EntityId eid)
 	{
 		ParticleManager& pman = m_Scene->GetParticleManager();
-		pman.EmitBatch(eid);
+		pman.Stop(eid);
 	}
 	
 }

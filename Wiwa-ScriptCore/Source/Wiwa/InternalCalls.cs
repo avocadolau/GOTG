@@ -188,7 +188,13 @@ namespace Wiwa
         #endregion
         #region Particles
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void EmitterEmitBatch(EntityId entity);
+        internal extern static void ParticleEmitterPlayBatch(EntityId entity);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ParticleEmitterPlayLoop(EntityId entity, float delaySec);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ParticleEmitterStopLoop(EntityId entity); 
 
         #endregion
     }
