@@ -14,5 +14,9 @@
         {
             InternalCalls.SwapText(word, id_canvas, id_control);
         }
+        public static void SetValeForUIbar(float value, int id_canvas, int id_control)
+        {
+            InternalCalls.SetValueForUIbar(value, id_canvas, id_control);
+        }
     }
 }

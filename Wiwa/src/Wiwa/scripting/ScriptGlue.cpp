@@ -135,6 +135,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SwapToNewTexture);
 		WI_ADD_INTERNAL_CALL(SwapText);
 
+		WI_ADD_INTERNAL_CALL(SetValueForUIbar);
+
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
 		WI_ADD_INTERNAL_CALL(SendAIToPositionById);

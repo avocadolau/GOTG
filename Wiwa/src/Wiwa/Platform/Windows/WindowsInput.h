@@ -21,5 +21,7 @@ namespace Wiwa
 		virtual float GetAxisImpl(int gamepadIndx, int axis, float deadzone) override;
 		virtual float GetRawAxisImpl(int gamepadIndx, int axis, float deadzone) override;
 		virtual bool IsButtonPressedImpl(int gamepadIndx, int keycode) override;
+		virtual bool IsButtonReleasedImpl(int gamepadIndx, int keycode) override;
+
 	};
 }

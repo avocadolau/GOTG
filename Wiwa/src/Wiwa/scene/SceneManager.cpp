@@ -282,7 +282,12 @@ namespace Wiwa
 
 				int callbackID;// = 1;
 
-				const char* text;
+				std::string text;
+				size_t textGuiLen;
+				char* textGui_c;
+				std::string audioEvent;
+				size_t audioEventGuiLen;
+				char* audioEventGui_c;
 
 				scene_file.Read(&id, sizeof(int));
 				scene_file.Read(&active, 1);
@@ -290,7 +295,21 @@ namespace Wiwa
 				scene_file.Read(&state, sizeof(GuiControlState));
 				scene_file.Read(&position, sizeof(Rect2i));
 				scene_file.Read(&callbackID, sizeof(int));
+
+
 				scene_file.Read(&extraPosition, sizeof(Rect2i));
+
+				scene_file.Read(&textGuiLen, sizeof(size_t));
+				textGui_c = new char[textGuiLen];
+				scene_file.Read(textGui_c, textGuiLen);
+				text = textGui_c;
+				delete[] textGui_c;
+				scene_file.Read(&audioEventGuiLen, sizeof(size_t));
+				audioEventGui_c = new char[audioEventGuiLen];
+				scene_file.Read(audioEventGui_c, audioEventGuiLen);
+				audioEvent = audioEventGui_c;
+				delete[] audioEventGui_c;
+
 				scene_file.Read(&textureGui_len, sizeof(size_t));
 				textureGui_c = new char[textureGui_len];
 				scene_file.Read(textureGui_c, textureGui_len);
@@ -306,24 +325,27 @@ namespace Wiwa
 				scene_file.Read(&texturePosition, sizeof(Rect2i));
 				scene_file.Read(&extraTexturePosition, sizeof(Rect2i));
 
-				scene_file.Read(&text, sizeof(const char*));
+				
 
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition);
+					 gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition,audioEvent.c_str());
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					gm.CreateGuiControl_Text(guiType, id, position, text,canvas.at(i)->id);
+					gm.CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition);
+					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
 					break;
 				case Wiwa::GuiControlType::SLIDER:
-					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition);
+					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition, audioEvent.c_str());
+					break;
+				case Wiwa::GuiControlType::BAR:
+					gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str());
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition);
+					gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
 					break;
 				default:
 					break;
@@ -540,7 +562,11 @@ namespace Wiwa
 					size_t textureGui_len = strlen(textureGui) + 1;
 					size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
 
-					const char* text = control->text;
+					const char* text = control->text.c_str();
+					const char* audioEvent = control->audioEventForButton.c_str();
+
+					size_t textGuiLen = strlen(text) + 1;
+					size_t audioEventGuiLen = strlen(audioEvent) + 1;
 
 					scene_file.Write(&id, sizeof(int));
 					scene_file.Write(&active, 1);
@@ -552,6 +578,12 @@ namespace Wiwa
 					Rect2i extraPosition = control->GetExtraPosition();
 					scene_file.Write(&extraPosition, sizeof(Rect2i));
 
+					scene_file.Write(&textGuiLen, sizeof(size_t));
+					scene_file.Write(text, textGuiLen);
+
+					scene_file.Write(&audioEventGuiLen, sizeof(size_t));
+					scene_file.Write(audioEvent, audioEventGuiLen);
+
 					// Save texture
 					scene_file.Write(&textureGui_len, sizeof(size_t));
 					scene_file.Write(textureGui, textureGui_len);
@@ -561,9 +593,6 @@ namespace Wiwa
 
 					scene_file.Write(&texturePosition, sizeof(Rect2i));
 					scene_file.Write(&extraTexturePosition, sizeof(Rect2i));
-
-					scene_file.Write(&text, sizeof(const char*));
-					
 				}
 			}
 			// Iterate through all controls
