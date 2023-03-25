@@ -173,3 +173,20 @@ bool Wiwa::AgentAISystem::isNear(glm::vec2 point1, glm::vec2 point2, float thres
 {
 	return glm::distance2(point1, point2) < threshold * threshold;
 }
+
+void Wiwa::AgentAISystem::StopMooving()
+{
+	lastPath.clear();
+}
+
+bool Wiwa::AgentAISystem::HasPath()
+{
+	if(lastPath.empty())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}	
+}

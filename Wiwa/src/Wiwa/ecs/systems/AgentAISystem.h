@@ -36,6 +36,10 @@ namespace Wiwa {
 		bool HasArrivedNextPosition(const glm::vec2& next_position, const glm::vec2& current_position);
 
 		bool isNear(glm::vec2 point1, glm::vec2 point2, float threshold);
+
+		void StopMooving();
+
+		bool HasPath();
 	};
 }
 
