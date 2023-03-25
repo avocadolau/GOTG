@@ -273,6 +273,11 @@
 							</ReferenceList>
 							<ChildrenList>
 								<AudioFileSource Name="starlord_shot" ID="{EF16398D-4A23-41BF-8E35-51C5F08D9EDD}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.39639375"/>
+										<Property Name="TrimEnd" Type="Real64" Value="1.06160625"/>
+									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Weapons\starlord_shot.wav</AudioFile>
 									<MediaIDList>
