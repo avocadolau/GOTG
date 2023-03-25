@@ -17,9 +17,13 @@ namespace Wiwa {
 
         ~Animator();
 
+        void Update(float dt);
+
         void UpdateAnimation(float dt);
 
         void UpdateBlendingAnimation(float dt);
+
+        void Blend(std::string name, float blendTime);
 
         void PlayAnimation(Animation* pAnimation);
 
@@ -53,9 +57,13 @@ namespace Wiwa {
 
         void SetTargetAnimation(Animation* anim) { m_TargetAnimation = anim; }
 
+        void SetAnimationSatate(AnimationState state) { m_AnimationState = state; }
+
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
 
         Animation* GetTargetAnimation() { return m_TargetAnimation; }
+
+        Animation* GetAnimation(std::string name);
 
         std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
 

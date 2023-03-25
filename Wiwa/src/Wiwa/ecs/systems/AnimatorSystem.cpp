@@ -21,6 +21,9 @@ namespace Wiwa {
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 		
 		if (!anim->Play) return;
+
+		
+
 		if (!anim->Blend)
 		{
 				anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
@@ -70,6 +73,18 @@ namespace Wiwa {
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 		anim->animator->PlayAnimationName(name);
 		anim->Play = true;
+	}
+	void AnimatorSystem::Blend(std::string targetAnim, float blendDuration)
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->Blend(targetAnim, blendDuration);
+	}
+	void AnimatorSystem::SetAnimationSate(Wiwa::AnimationState state)
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->SetAnimationSatate(state);
 	}
 	void AnimatorSystem::Restart()
 	{

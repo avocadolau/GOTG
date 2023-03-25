@@ -5,6 +5,7 @@
 #include <Wiwa/utilities/json/JSONValue.h>
 #include <glm/gtx/matrix_interpolation.hpp >
 #include <stack>
+#include <cmath>
 namespace Wiwa {
 	Animator::Animator()
 	{
@@ -28,6 +29,24 @@ namespace Wiwa {
 			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
 	}
 
+	void Animator::Update(float dt)
+	{
+		switch (m_AnimationState)
+		{
+		case AnimationState::Blending:
+			UpdateBlendingAnimation(dt);
+			break;
+		case AnimationState::Paused:
+			break;
+		case AnimationState::Playing:
+			Update(dt);
+			break;
+		default:
+			break;
+		}
+
+	}
+
 	void Animator::UpdateAnimation(float dt)
 	{
 		m_DeltaTime = dt;
@@ -44,11 +63,23 @@ namespace Wiwa {
 
 	void Animator::UpdateBlendingAnimation(float dt)
 	{
-		m_DeltaTime = dt;
-		if (m_CurrentAnimation && m_TargetAnimation)
+		if (m_BlendTime <= 0)
 		{
-			BlendTwoAnimations(m_CurrentAnimation, m_TargetAnimation, m_BlendWeight, dt);
+			m_AnimationState = AnimationState::Playing; 
+			return;
 		}
+		m_BlendTime -= dt;
+		m_BlendWeight = 0 + m_BlendTime * (1 - 0);		
+		BlendTwoAnimations(m_CurrentAnimation, m_TargetAnimation, m_BlendWeight, dt);
+
+	}
+
+	void Animator::Blend(std::string name, float blendTime)
+	{
+		m_TargetAnimation = GetAnimation(name);
+		m_BlendDuration = blendTime;
+		m_BlendTime = blendTime;
+		m_AnimationState = AnimationState::Blending;
 	}
 
 	void Animator::PlayAnimation(Animation* pAnimation)
@@ -240,23 +271,13 @@ namespace Wiwa {
 		for (int i = 0; i < rootNode->childrenCount; i++)
 			CalculateBoneTransform(&rootNode->children[i], globalTransformation);
 	}
-	void Animator::CalculateBoneTransform(Animation* animation, float time, const NodeData* node, const glm::mat4 parentTransform)
+	Animation* Animator::GetAnimation(std::string name)
 	{
-		//std::string nodeName = node->name;
-		//glm::mat4 nodeTransform = node->transformation;
-
-		//Bone* Bone = animation->FindBone(nodeName);
-
-		//if (Bone)
-		//{
-		//	Bone->Update(time);
-		//	nodeTransform = Bone->GetLocalTransform();
-		//}
-
-		//glm::mat4 globalTransformation = parentTransform * nodeTransform;
-
-		//for (int i = 0; i < node->childrenCount; i++)
-		//	CalculateBoneTransform(&node->children[i], globalTransformation);
+		for (auto& animation : m_Animations)
+		{
+			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
+				return animation;
+		}
 	}
 }
 

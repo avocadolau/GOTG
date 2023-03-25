@@ -486,7 +486,10 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 		ImGui::EndCombo();
 	}
 
-	ImGui::Checkbox("Play", &animator->Play);
+	if (ImGui::Checkbox("Play", &animator->Play))
+	{
+
+	}
 
 	ImGui::Checkbox("Blend", &animator->Blend);
 

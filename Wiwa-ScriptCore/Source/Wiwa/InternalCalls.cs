@@ -210,6 +210,8 @@ namespace Wiwa
         #endregion
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Blend(string targetAnimation, float blendDuration, EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PlayAnimationName(string name, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PlayAnimation(EntityId entity);
