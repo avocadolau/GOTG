@@ -94,14 +94,14 @@ namespace Wiwa {
 		private:
 
 		// size of the map
-		static uint32_t m_width;
-		static uint32_t m_height;
+		static uint32_t m_Width;
+		static uint32_t m_Height;
 			
 		// all map walkability values [0..255]
 		static unsigned char* m_Map;
 
 		// we store the created path here
-		static std::vector<glm::vec2> m_lastPath;
+		static std::vector<glm::vec2> m_LastPath;
 	};
 }
 

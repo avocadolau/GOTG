@@ -37,7 +37,7 @@ namespace Wiwa {
 
 		bool isNear(glm::vec2 point1, glm::vec2 point2, float threshold);
 
-		void StopMooving();
+		void StopMoving();
 
 		bool HasPath();
 	};

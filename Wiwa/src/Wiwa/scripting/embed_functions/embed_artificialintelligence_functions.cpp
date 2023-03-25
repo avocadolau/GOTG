@@ -47,7 +47,7 @@ void StopMooving(size_t entity_id)
 
 	Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(entity_id);
 
-	agentPtr->StopMooving();
+	agentPtr->StopMoving();
 }
 
 bool HasPath(size_t entity_id)

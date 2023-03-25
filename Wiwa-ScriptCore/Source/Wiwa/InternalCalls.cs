@@ -191,7 +191,7 @@ namespace Wiwa
         internal extern static float DistanceAgentTargetById(EntityId entity_id, EntityId target_id);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void StopMooving(EntityId entity_id);
+        internal extern static void StopMoving(EntityId entity_id);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool HasPath(EntityId entity_id);
