@@ -470,7 +470,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	const char* current_item = NULL;
 	if (animator->animator->GetCurrentAnimation() != nullptr)
 		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
-
+	ImGui::Text("Current animation");
 	if (ImGui::BeginCombo("animaiton", current_item))
 	{
 		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
@@ -487,6 +487,39 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	}
 
 	ImGui::Checkbox("Play", &animator->Play);
+
+	ImGui::Checkbox("Blend", &animator->Blend);
+
+	if(animator->Blend)
+		if (ImGui::TreeNodeEx("Blending"))
+		{
+			const char* animationItems[10];
+			for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+			{
+				animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+			}
+
+			const char* current_item = NULL;
+			if (animator->animator->GetTargetAnimation() != nullptr)
+				current_item = animator->animator->GetTargetAnimation()->m_Name.c_str();
+			ImGui::Text("Blend to animation");
+			if (ImGui::BeginCombo("blend anim", current_item))
+			{
+				for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+				{
+					bool is_selected = (current_item == animationItems[n]);
+					if (ImGui::Selectable(animationItems[n], is_selected))
+					{
+						current_item = animationItems[n];
+						ImGui::SetItemDefaultFocus();
+						animator->animator->SetTargetAnimation(animator->animator->m_Animations[n]);
+					}
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::SliderFloat("Weight", &animator->weight, 0, 1);
+			ImGui::TreePop();
+		}
 }
 
 void InspectorPanel::DrawCollisionBodyComponent(byte* data)

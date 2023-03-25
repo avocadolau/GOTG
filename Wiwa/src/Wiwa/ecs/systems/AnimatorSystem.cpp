@@ -19,8 +19,16 @@ namespace Wiwa {
 	void AnimatorSystem::OnUpdate()
 	{
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
-		if(anim->Play)
-			anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
+		
+		if (!anim->Play) return;
+		if (!anim->Blend)
+		{
+				anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
+		}
+		else {
+			anim->animator->m_BlendWeight = anim->weight;
+			anim->animator->UpdateBlendingAnimation(Time::GetRealTimeSinceStartup());
+		}		
 	}
 	void AnimatorSystem::OnDestroy()
 	{
