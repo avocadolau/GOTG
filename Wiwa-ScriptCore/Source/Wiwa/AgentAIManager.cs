@@ -24,9 +24,9 @@
             return InternalCalls.DistanceAgentTargetById(entity_id, target_id);
         }
         
-        public static void StopMooving(EntityId entity_id)
+        public static void StopMoving(EntityId entity_id)
         {
-            InternalCalls.StopMooving(entity_id);
+            InternalCalls.StopMoving(entity_id);
         }
         
         public static bool HasPath(EntityId entity_id)

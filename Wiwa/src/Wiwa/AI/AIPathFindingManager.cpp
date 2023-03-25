@@ -18,10 +18,10 @@
 
 //#include <Wiwa/utilities/json/JSONDocument.h>
 
-uint32_t Wiwa::AIPathFindingManager::m_width = 0;
-uint32_t Wiwa::AIPathFindingManager::m_height = 0;
+uint32_t Wiwa::AIPathFindingManager::m_Width = 0;
+uint32_t Wiwa::AIPathFindingManager::m_Height = 0;
 unsigned char* Wiwa::AIPathFindingManager::m_Map = nullptr;
-std::vector<glm::vec2> Wiwa::AIPathFindingManager::m_lastPath = {};
+std::vector<glm::vec2> Wiwa::AIPathFindingManager::m_LastPath = {};
 
 // PathNode Defintitions
 
@@ -171,8 +171,8 @@ bool Wiwa::AIPathFindingManager::CleanUp()
 
 void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, unsigned char* data)
 {
-	m_width = width;
-	m_height = height;
+	m_Width = width;
+	m_Height = height;
 
 	delete[] m_Map;				
 	m_Map = NULL;
@@ -211,23 +211,23 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 			// L12b: TODO 4: If we just added the destination, we are done!
 			if (node && node->pos == destination)
 			{
-				m_lastPath.clear();				
+				m_LastPath.clear();				
 
 				const PathNode* pathNode = node;
 
 				int i = 0;
 				while (pathNode)
 				{
-					//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_Map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
+					//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_Map[(pathNode->pos.x * m_Width) + pathNode->pos.y]);
 
 					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
-					m_lastPath.push_back(vec);
+					m_LastPath.push_back(vec);
 					pathNode = pathNode->parent;
 					i++;
 				}
 				
-				//std::reverse(m_lastPath.begin(), m_lastPath.end());
-				ret = m_lastPath.size();
+				//std::reverse(m_LastPath.begin(), m_LastPath.end());
+				ret = m_LastPath.size();
 				break;
 			}
 
@@ -268,13 +268,13 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 const std::vector<glm::vec2> Wiwa::AIPathFindingManager::GetLastPath()
 {
-	return m_lastPath;
+	return m_LastPath;
 }
 
 bool Wiwa::AIPathFindingManager::CheckBoundaries(const glm::ivec2& pos)
 {
-	return (pos.x >= 0 && pos.x <= (int)m_width &&
-		pos.y >= 0 && pos.y <= (int)m_height);
+	return (pos.x >= 0 && pos.x <= (int)m_Width &&
+		pos.y >= 0 && pos.y <= (int)m_Height);
 }
 
 bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
@@ -286,7 +286,7 @@ bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_Map[(pos.y * m_width) + pos.x];
+		return m_Map[(pos.y * m_Width) + pos.x];
 
 	return INVALID_WALK_CODE;
 }

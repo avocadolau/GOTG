@@ -16,7 +16,7 @@
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
 	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
 {
-	m_drawGrid = true;
+	m_DrawGrid = true;
 }
 
 AIMapBakingPanel::~AIMapBakingPanel()
@@ -30,15 +30,15 @@ void AIMapBakingPanel::Draw()
 	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map with theese parameters:");
 	
 	const std::string posLabel = "Position in Tiles:";
-	DrawInt2Control(posLabel, &mapSizeInTiles, 1.0f, 0.0f);
+	DrawInt2Control(posLabel, &m_MapSizeInTiles, 1.0f, 0.0f);
 
 	const std::string sizeLabel = "Size of the Tiles:";
-	DrawVec2Control(sizeLabel, &sizeOfTiles, 1.0f, 0.0f);
+	DrawVec2Control(sizeLabel, &m_SizeOfTiles, 1.0f, 0.0f);
 
 	ImGui::Spacing();
 	if (ImGui::Button("Create new Map"))
 	{
-		Wiwa::AIMapGeneration::CreateWalkabilityMap(mapSizeInTiles.x, mapSizeInTiles.y, sizeOfTiles.x, sizeOfTiles.y, glm::vec3(0.0f));
+		Wiwa::AIMapGeneration::CreateWalkabilityMap(m_MapSizeInTiles.x, m_MapSizeInTiles.y, m_SizeOfTiles.x, m_SizeOfTiles.y, glm::vec3(0.0f));
 		RefreshData();
 	}
 
@@ -64,9 +64,9 @@ void AIMapBakingPanel::Draw()
 		RefreshData();
 	}
 
-	ImGui::Checkbox("Draw Map Grid", &m_drawGrid);
+	ImGui::Checkbox("Draw Map Grid", &m_DrawGrid);
 
-	if (m_drawGrid)
+	if (m_DrawGrid)
 	{
 		Wiwa::AIMapGeneration::DebugDrawMap();
 	}
@@ -77,6 +77,6 @@ void AIMapBakingPanel::Draw()
 void AIMapBakingPanel::RefreshData()
 {
 	Wiwa::AIMapGeneration::MapData& data = Wiwa::AIMapGeneration::GetMapData();
-	mapSizeInTiles = { data.width, data.height };
-	sizeOfTiles = { data.tileWidth, data.tileHeight };
+	m_MapSizeInTiles = { data.width, data.height };
+	m_SizeOfTiles = { data.tileWidth, data.tileHeight };
 }

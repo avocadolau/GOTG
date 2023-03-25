@@ -12,8 +12,8 @@ public:
 
 	void RefreshData();
 private:
-	bool m_drawGrid;
-	glm::ivec2 mapSizeInTiles = { 10, 10 };
-	glm::vec2 sizeOfTiles = { 2.0f, 2.0f };
+	bool m_DrawGrid;
+	glm::ivec2 m_MapSizeInTiles = { 10, 10 };
+	glm::vec2 m_SizeOfTiles = { 2.0f, 2.0f };
 
 };
