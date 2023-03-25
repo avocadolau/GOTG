@@ -47,10 +47,12 @@ namespace Wiwa
 		delete m_LightManager;
 		delete m_GuiManager;
 
+		/*delete m_ParticleManager;*/
+
 		// Clear entity manager
 		m_EntityManager.Clear();
 
-		delete m_ParticleManager;
+		/*delete m_ParticleManager;*/
 
 		// Clear physics world
 		m_PhysicsManager->CleanWorld();

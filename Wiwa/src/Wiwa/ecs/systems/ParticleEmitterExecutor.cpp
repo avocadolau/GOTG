@@ -69,7 +69,7 @@ namespace Wiwa {
 
 	void ParticleEmitterExecutor::OnDestroy()
 	{
-		ParticleManager& pman = m_Scene->GetParticleManager();
+		/*ParticleManager& pman = m_Scene->GetParticleManager();
 
 		m_emitterComponent = GetComponentIterator<ParticleEmitter>();
 		Wiwa::ParticleEmitter* emitter = GetComponentByIterator<Wiwa::ParticleEmitter>(m_emitterComponent);
@@ -77,7 +77,7 @@ namespace Wiwa {
 		if (emitter)
 		{
 			pman.RemoveEmitter(emitter);
-		}
+		}*/
 	}
 
 	

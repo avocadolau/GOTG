@@ -418,11 +418,14 @@ namespace Wiwa {
 	{
 		if (emitterList.size() > 0)
 		{
-			for (int i = emitterList.size() - 1; i >= 0; i--)
+			if (emitter->entityOwnerId)
 			{
-				if (emitterList[i]->entityOwnerId == emitter->entityOwnerId)
+				for (int i = emitterList.size() - 1; i >= 0; i--)
 				{
-					emitterList.erase(emitterList.begin() + i);
+					if (emitterList[i]->entityOwnerId == emitter->entityOwnerId)
+					{
+						emitterList.erase(emitterList.begin() + i);
+					}
 				}
 			}
 		}

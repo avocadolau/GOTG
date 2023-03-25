@@ -8,8 +8,8 @@
 
 #include <vector>
 #include <string>
-#define MAX_PARTICLES 1000
 
+#define MAX_PARTICLES 1000
 
 class Camera;
 class AnimationParticles;
@@ -125,8 +125,3 @@ namespace Wiwa {
 	};
 
 }
-
-
-		
-
-
