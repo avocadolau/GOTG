@@ -622,10 +622,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 			ParticleTab();
 
-			ImGui::DragFloat("##particle_rate_range0", &emitter->particle_rate_range[0], 0.01f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##particle_rate_range0", &emitter->particle_rate_range_0, 0.01f, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
 
-			ImGui::DragFloat("##particle_rate_range1", &emitter->particle_rate_range[1], 0.01f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##particle_rate_range1", &emitter->particle_rate_range_1, 0.01f, 0.0f, 0.0f, "%.2f");
 		}
 		else
 		{
@@ -643,10 +643,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 		if (emitter->particle_rate < 0)
 			emitter->particle_rate = 0.01f;
-		if (emitter->particle_rate_range[0] < 0)
-			emitter->particle_rate_range[0] = 0.01f;
-		if (emitter->particle_rate_range[1] < 0)
-			emitter->particle_rate_range[1] = 0.01f;
+		if (emitter->particle_rate_range_0 < 0)
+			emitter->particle_rate_range_0 = 0.01f;
+		if (emitter->particle_rate_range_1 < 0)
+			emitter->particle_rate_range_1 = 0.01f;
 	}
 
 	// spawn amount
@@ -663,11 +663,11 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 			ImGui::PushItemWidth(46.0f);
 
-			ImGui::DragInt("##particle_amount_range0", &emitter->particle_amount_range[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragInt("##particle_amount_range0", &emitter->particle_amount_range_0, 0.05f, 0.0f, 0.0f, "%.2f");
 
 			ImGui::SameLine();
 
-			ImGui::DragInt("##particle_amount_range1", &emitter->particle_amount_range[1], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragInt("##particle_amount_range1", &emitter->particle_amount_range_1, 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		else
 		{
@@ -683,10 +683,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 		if (emitter->particle_amount < 0)
 			emitter->particle_amount = 0;
-		if (emitter->particle_amount_range[0] < 0)
-			emitter->particle_amount_range[0] = 0;
-		if (emitter->particle_amount_range[1] < 0)
-			emitter->particle_amount_range[1] = 0;
+		if (emitter->particle_amount_range_0 < 0)
+			emitter->particle_amount_range_0 = 0;
+		if (emitter->particle_amount_range_1 < 0)
+			emitter->particle_amount_range_1 = 0;
 	}
 
 	// particle attributes
@@ -764,10 +764,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			ImGui::SameLine();
 			ImGui::PushItemWidth(46.0f);
 
-			ImGui::DragFloat("##particle_lifetime_range0", &emitter->particle_lifetime_range[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##particle_lifetime_range0", &emitter->particle_lifetime_range_0, 0.05f, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
 
-			ImGui::DragFloat("##particle_lifetime_range1", &emitter->particle_lifetime_range[1], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##particle_lifetime_range1", &emitter->particle_lifetime_range_1, 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		else
 		{
@@ -780,10 +780,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 		if (emitter->particle_lifetime < 0)
 			emitter->particle_lifetime = 0;
-		if (emitter->particle_lifetime_range[0] < 0)
-			emitter->particle_lifetime_range[0] = 0;
-		if (emitter->particle_lifetime_range[1] < 0)
-			emitter->particle_lifetime_range[1] = 0;
+		if (emitter->particle_amount_range_0 < 0)
+			emitter->particle_amount_range_0 = 0;
+		if (emitter->particle_lifetime_range_1 < 0)
+			emitter->particle_lifetime_range_1 = 0;
 	}
 
 	if (ImGui::TreeNode("Position & Translation"))
@@ -802,10 +802,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			{
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_startingPosition_range0", &(emitter->particle_startingPosition_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_startingPosition_range0", &(emitter->particle_startingPosition_range_0)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_startingPosition_range1", &(emitter->particle_startingPosition_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_startingPosition_range1", &(emitter->particle_startingPosition_range_1)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			}
 			else
 			{
@@ -829,12 +829,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			{
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_velocity_range0", &(emitter->particle_velocity_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_velocity_range0", &(emitter->particle_velocity_range_0)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 				/*	ImGui::SameLine();
 					ImGui::Text("Particle Velocity");*/
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_velocity_range1", &(emitter->particle_velocity_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_velocity_range1", &(emitter->particle_velocity_range_1)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			}
 			else
 			{
@@ -860,12 +860,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			{
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_acceleration_range0", &(emitter->particle_acceleration_range[0])[0], 0.01f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_acceleration_range0", &(emitter->particle_acceleration_range_0)[0], 0.01f, 0.0f, 0.0f, "%.2f");
 				/*ImGui::SameLine();
 				ImGui::Text("Particle Acceleration");*/
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_acceleration_range1", &(emitter->particle_acceleration_range[1])[0], 0.01f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_acceleration_range1", &(emitter->particle_acceleration_range_1)[0], 0.01f, 0.0f, 0.0f, "%.2f");
 			}
 			else
 			{
@@ -896,10 +896,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			{
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_startingRotation_range0", &(emitter->particle_startingRotation_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_startingRotation_range0", &(emitter->particle_startingRotation_range_0)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_startingRotation_range1", &(emitter->particle_startingRotation_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_startingRotation_range1", &(emitter->particle_startingRotation_range_1)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			}
 			else
 			{
@@ -927,12 +927,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			{
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_startingSize_range0", &(emitter->particle_startingSize_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_startingSize_range0", &(emitter->particle_startingSize_range_0)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 				/*ImGui::SameLine();
 				ImGui::Text("Particle Direction");*/
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_startingSize_range1", &(emitter->particle_startingSize_range[1])[0], 0.05f, 1.0f, 1.0f, "%.2f");
+				ImGui::DragFloat3("##particle_startingSize_range1", &(emitter->particle_startingSize_range_1)[0], 0.05f, 1.0f, 1.0f, "%.2f");
 			}
 			else
 			{
@@ -958,12 +958,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			{
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_growthVelocity_range0", &(emitter->particle_growthVelocity_range[0])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_growthVelocity_range0", &(emitter->particle_growthVelocity_range_0)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 				/*ImGui::SameLine();
 				ImGui::Text("Particle Direction");*/
 				ImGui::Dummy(ImVec2(38, 0));
 				ImGui::SameLine();
-				ImGui::DragFloat3("##particle_growthVelocity_range1", &(emitter->particle_growthVelocity_range[1])[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##particle_growthVelocity_range1", &(emitter->particle_growthVelocity_range_1)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			}
 			else
 			{

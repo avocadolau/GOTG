@@ -49,8 +49,9 @@ namespace Wiwa {
 			Wiwa::ParticleEmitter* emitter = GetComponentByIterator<Wiwa::ParticleEmitter>(m_emitterComponent);
 
 
-			if (emitter && !pman.ContainsEmitter(emitter))
+			if (emitter)
 			{
+				if (!pman.ContainsEmitter(emitter))
 				pman.AddEmitter(emitter);
 
 				emitter->entityOwnerId = m_EntityId;
@@ -95,7 +96,8 @@ namespace Wiwa {
 
 			if (emitter)
 			{
-				pman.AddEmitter(emitter);
+				if (!pman.ContainsEmitter(emitter))
+					pman.AddEmitter(emitter);
 
 				emitter->entityOwnerId = m_EntityId;
 
