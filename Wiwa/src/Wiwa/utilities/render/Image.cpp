@@ -82,7 +82,7 @@ namespace Wiwa {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, &Format.Swizzles[0]);
 
-        glCompressedTexImage2D(GL_TEXTURE_2D, 0, Format.Internal, w, h, 0, texture.size(), texture.data());
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, Format.Internal, w, h, 0, (GLsizei)texture.size(), texture.data());
         glGenerateMipmap(GL_TEXTURE_2D);
 
         m_ImageSize.x = w;

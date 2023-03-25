@@ -77,7 +77,7 @@ namespace Wiwa
 		m_IsPlaying = false;
 		m_TimeScale = 0;
 	}
-	void Time::SetTimeScale(const int value)
+	void Time::SetTimeScale(float value)
 	{
 		m_TimeScale = value;
 		CLAMP(m_TimeScale, -2, 5);

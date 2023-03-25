@@ -11,9 +11,12 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_AgentAI;
 		EntityManager::ComponentIterator m_Transform;
+		std::vector<glm::vec2> lastPath;
+		glm::vec2 nextPos;
 
 		glm::vec2 m_DirectionPoint;
 		bool m_IsMoving = false;
+
 	public:
 		AgentAISystem();
 		~AgentAISystem();
@@ -26,8 +29,17 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void GoToPosition(glm::vec3 targetPos);
+		void CreatePath(const glm::vec3& targetPos);
 
+		void GoToNextPosition();
+
+		bool HasArrivedNextPosition(const glm::vec2& next_position, const glm::vec2& current_position);
+
+		bool isNear(glm::vec2 point1, glm::vec2 point2, float threshold);
+
+		void StopMoving();
+
+		bool HasPath();
 	};
 }
 

@@ -33,5 +33,9 @@ namespace Wiwa
         {
             InternalCalls.ChangeSceneByName(name, flags);
         }
+        public static void PauseScene()
+        {
+            InternalCalls.PauseScene();
+        }
     }
 }
