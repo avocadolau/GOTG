@@ -1,6 +1,5 @@
 #pragma once
 #include <Wiwa/game/GameStateManager.h>
-#include <Wiwa/game/RoomManager.h>
 
 void SetRoomStateTriggerNext(bool value);
 

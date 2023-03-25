@@ -1,1 +1,1 @@
-{"combat":[4,5],"reward":[6,7],"shop":[8]}
+{"combat":[4,5],"reward":[6,7],"shop":[8],"starlord":{"max_health":0,"health":0,"max_shield":0,"shield":0,"speed":0.0,"dash_speed":0.0,"dash_distance":0.0,"dash_cooldown":0.0,"walk_treshold":0.0},"rocket":{"max_health":0,"health":0,"max_shield":0,"shield":0,"speed":0.0,"dash_speed":0.0,"dash_distance":0.0,"dash_cooldown":0.0,"walk_treshold":0.0},"gamepad_deadzone":0.0,"current_character":0}
