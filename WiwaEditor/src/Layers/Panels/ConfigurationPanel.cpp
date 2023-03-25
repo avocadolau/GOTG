@@ -177,7 +177,7 @@ void ConfigurationPanel::Draw()
 		ImGui::Text("Gamepad 1");
 		ImGui::Text("Left X: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, 0.f));
 		ImGui::Text("Left Y: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftY, 0.f));
-		ImGui::Text("Left X: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightX, 0.f));
+		ImGui::Text("Right X: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightX, 0.f));
 		ImGui::Text("Right Y: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightY, 0.f));
 		ImGui::Text("Left trigger: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftTrigger, 0.f));
 		ImGui::Text("Right trigger: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger, 0.f));
@@ -185,7 +185,7 @@ void ConfigurationPanel::Draw()
 		ImGui::Text("Gamepad 2");
 		ImGui::Text("Left X: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::LeftX, 0.f));
 		ImGui::Text("Left Y: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::LeftY, 0.f));
-		ImGui::Text("Left X: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::RightX, 0.f));
+		ImGui::Text("Right X: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::RightX, 0.f));
 		ImGui::Text("Right Y: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::RightY, 0.f));
 		ImGui::Text("Left trigger: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::LeftTrigger, 0.f));
 		ImGui::Text("Right trigger: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::RightTrigger, 0.f));
