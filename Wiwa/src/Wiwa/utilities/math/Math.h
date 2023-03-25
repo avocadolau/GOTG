@@ -272,5 +272,21 @@ namespace Wiwa {
 			return ret;
 
 		}
+		inline int RandomRange(int value01, int value02)
+		{
+
+			if (value01 > value02) {
+
+				int i = value01;
+				value01 = value02;
+				value02 = i;
+
+			}
+
+			int ret = value01 + (rand()) / (RAND_MAX / (value02 - value01));
+
+			return ret;
+
+		}
 	}
 }

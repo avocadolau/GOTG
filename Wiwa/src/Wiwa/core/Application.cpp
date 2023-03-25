@@ -36,7 +36,6 @@
 #include <Wiwa/render/RenderManager.h>
 
 #include <Wiwa/core/ProjectManager.h>
-#include <Wiwa/game/RoomManager.h>
 
 USE_REFLECTION;
 
@@ -98,7 +97,7 @@ namespace Wiwa
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
-		Wiwa::RoomManager::DeserializeData();
+		Wiwa::GameStateManager::DeserializeData();
 	}
 
 	void Application::SetHwInfo()

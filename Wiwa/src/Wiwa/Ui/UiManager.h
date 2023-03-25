@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
+#include <Wiwa/core/Input.h>
 
 
 
@@ -38,10 +39,10 @@ namespace Wiwa
 
 		//Method for canvas
 		GuiCanvas* CreateGuiCanvas(unsigned int id,bool active);
-		//Method for sliders
-		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds,unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex);
+		//Method for sliders / UI_BARS
+		GuiControl* CreateGuiControl(GuiControlType type,unsigned int id,Rect2i bounds,const char* path, const char* slider_path, Rect2i sliderBounds,unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName);
 		//Method for buttons and checkboxes
-		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex);
+		GuiControl* CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex,const char* audioEventName);
 		//Method for strings
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id);
 
@@ -56,8 +57,15 @@ namespace Wiwa
 		
 		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
 
+		void InputController();
 
-		void SetCallback(GuiCanvas* canvas, GuiControl* control, size_t hash);
+		bool _saveGUIImpl(File& file);
+		bool _loadGUIImpl(File& file);
+
+		void SaveWiUI(const char* path);
+
+		void LoadWiUI(const char* path);
+
 	public:
 		std::vector<GuiCanvas*> canvas;
 		std::vector<GuiCanvas*> canvasToDestroy;
@@ -66,6 +74,11 @@ namespace Wiwa
 		bool doLogic = false;
 
 		Image* texture;
+
+		int idGuiSelected = -1;
+
+		bool DpadUp = false;
+		bool DpadDown = false;
 
 	};
 }

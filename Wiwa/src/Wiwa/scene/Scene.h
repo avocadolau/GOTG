@@ -44,6 +44,8 @@ namespace Wiwa {
 
 		void ChangeScene(size_t scene, int flags);
 
+		void SwapPauseActive() { pausedGame = !pausedGame; }
+
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
@@ -87,5 +89,6 @@ namespace Wiwa {
 		size_t m_SceneToChange = 0;
 		int m_SceneChangeFlags = 0;
 		std::string m_Name = "Default scene";
+		bool pausedGame = false;
 	};
 }

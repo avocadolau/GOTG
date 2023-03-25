@@ -96,7 +96,7 @@ namespace Wiwa {
 		{
 			JSONValue animations = doc["animations"];
 
-			for (size_t i = 0; i < animations.Size(); i++)
+			for (uint32_t i = 0; i < animations.Size(); i++)
 			{
 				std::string path = animations[i].as_string();
 				if(!FileSystem::Exists(path.c_str()))continue;

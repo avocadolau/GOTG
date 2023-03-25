@@ -2,9 +2,11 @@
 
 #include "AgentAISystem.h"
 #include "Wiwa/ecs/components/AgentAI.h"
-#include <Wiwa/AI/AIPathFindingManager.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 //#include "Wiwa/ecs/components/Transform3D.h"
-
+#include <Wiwa/physics/PhysicsManager.h>
+#include <glm/gtx/norm.hpp>
+#include <glm/gtx/vector_angle.hpp> // for glm::angle()
 #include "glew.h"
 
 Wiwa::AgentAISystem::AgentAISystem()
@@ -19,117 +21,172 @@ void Wiwa::AgentAISystem::OnAwake()
 {
 	m_AgentAI = GetComponentIterator<Wiwa::AgentAI>();
 	m_Transform = GetComponentIterator<Wiwa::Transform3D>();
+	
 }
 
 void Wiwa::AgentAISystem::OnInit()
 {
+	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
+	if (agent)
+	{
+		agent->hasArrived = false;
+		agent->hasPath = false;
+	}
 }
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
-	
-	//
-	//GoToPosition({49,0,49});
-	//
-	m_DirectionPoint = Wiwa::AIPathFindingManager::MapToWorld(m_DirectionPoint.x, m_DirectionPoint.y);
-
-	Wiwa::AIPathFindingManager::MapData& localMapData = Wiwa::AIPathFindingManager::GetMapData();
-	m_DirectionPoint = { m_DirectionPoint.x + (localMapData.tileWidth*0.5f), m_DirectionPoint.y + (localMapData.tileHeight * 0.5f) };
-
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 
-	/*if (transform->position.x < m_DirectionPoint.x && transform->position.z < m_DirectionPoint.y) {
-		agent->hasArrived = true; 
-	}*/
+	if (agent->hasPath == false)
+	{
+		CreatePath(agent->target);
+		agent->hasPath = true;
+		agent->hasArrived = false;
+	}
+
+	if (lastPath.empty() == false && m_IsMoving == false)
+	{
+		GoToNextPosition();
+
+		if (lastPath.empty())
+		{
+			agent->hasPath = false;
+			agent->hasArrived = true;
+		}
+	}
+
+	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
+	float threshold = localMapData.tileWidth/2.0f; // example threshold distance
+	if (isNear(glm::vec2(transform->localPosition.x, transform->localPosition.z), m_DirectionPoint, threshold))
+	{
+		m_IsMoving = false;
+	}
 
 	if (m_IsMoving)
 	{
-		
+		glm::vec2 position = glm::vec2(transform->position.x, transform->position.z);
+		// Calculate the distance between the current position and the target position
+		float distance = glm::distance(position, m_DirectionPoint);
 
-		float dirX = m_DirectionPoint.x - transform->position.x;
-		dirX /= abs(dirX);
+		// Calculate the time required to move the full distance at the given move speed
+		float timeToMove = distance / agent->speed;
 
-		float dirY = m_DirectionPoint.y - transform->position.z;
-		dirY /= abs(dirY);
+		// Calculate the interpolation factor based on the elapsed time and the time required to move
+		float t = glm::clamp(Time::GetDeltaTimeSeconds() / timeToMove, 0.0f, 1.0f);
+
+		// Interpolate the character's position between the current position and the target position using the interpolation factor
+		glm::vec2 interpolatedPosition = glm::mix(position, m_DirectionPoint, t);
+
+		// Calculate the forward vector from the current position to the target position
+		glm::vec2 forward = glm::normalize(m_DirectionPoint - position);
+
+		// Calculate the angle between the current forward vector and the target forward vector
+		float angle = glm::angle(forward, { 1.0f, 0.0f });
+		if (forward.y < 0.0f) {
+			angle = -angle;
+		}
+
+		// Interpolate the character's rotation to the target rotation using the interpolation factor
+		float targetRotation = angle;
+		if (targetRotation < 0.0f) {
+			targetRotation += 2.0f * glm::pi<float>();
+		}
+		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, t);
+
+		// Update the character's position and rotation to the interpolated position and rotation
+		transform->localPosition.x = interpolatedPosition.x;
+		transform->localPosition.z = interpolatedPosition.y;
+
+		transform->localRotation.y = interpolatedRotation;
 
 		// Move to direction
-		transform->localPosition.x += agent->speed * dirX;
-		transform->localPosition.z += agent->speed * dirY;
+		/*transform->localPosition.x += agent->speed * direction.x * Time::GetDeltaTimeSeconds();
+		transform->localPosition.z += agent->speed * direction.y * Time::GetDeltaTimeSeconds();*/
 	}
 
-	
-
-	/*Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 	camera->frameBuffer->Bind(false);
-
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(camera->getProjection()));
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera->getView()));
+	
+	Wiwa::AIMapGeneration::MapData& data = Wiwa::AIMapGeneration::GetMapData();
 
-
-	glBegin(GL_LINES);
-	glColor3f(1, 1, 1);
-	glLineWidth(10.0f);
-
-	Wiwa::AIPathFindingManager::MapData mapdata = Wiwa::AIPathFindingManager::GetMapData();
-
-	float d = mapdata.height * mapdata.width * 2;
-
-	for (float i = -d; i <= d; i += 1.0f)
+	for (int i = 0; i < lastPath.size(); i++)
 	{
-		glVertex3f(i, 0.0f, -d);
-		glVertex3f(i, 0.0f, d);
-		glVertex3f(-d, 0.0f, i);
-		glVertex3f(d, 0.0f, i);
+		glm::vec2 vec = lastPath.at(i);
+		glColor3f(0, 1, 0);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_3D); // Set the polygon mode to wireframe
+		glBegin(GL_QUADS); // Begin drawing the quad
+		glVertex3f(vec.x, 0.5f, vec.y + data.tileHeight); // Bottom-left vertex
+		glVertex3f(vec.x + data.tileWidth, 0.5f, vec.y + data.tileHeight); // Bottom-right vertex
+		glVertex3f(vec.x + data.tileWidth, 0.5f, vec.y); // Top-right vertex
+		glVertex3f(vec.x, 0.5f, vec.y); // Top-left vertex
+		
+		glEnd();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
 	}
-
-
-	glVertex3f(transform->localPosition.x, 0, transform->localPosition.z);
-
-	glm::vec2 dest = Wiwa::AIPathFindingManager::WorldToMap(49, 49);
-
-	glVertex3f(dest.x, 0, dest.y);
-
-	glEnd();
-
-	camera->frameBuffer->Unbind();*/
-
-	m_IsMoving = false;
+	
+	camera->frameBuffer->Unbind();
 }
 
 void Wiwa::AgentAISystem::OnDestroy()
 {
 }
 
-void Wiwa::AgentAISystem::GoToPosition(glm::vec3 targetPos)
+void Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 {
-	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
-
-	// transform->position;
 	
-	m_DirectionPoint = Wiwa::AIPathFindingManager::WorldToMap(transform->position.x, transform->position.z);
+	glm::ivec2 currentPositionMap = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
+	glm::ivec2 targetInMap = Wiwa::AIMapGeneration::WorldToMap(targetPos.x, targetPos.z);
 	
+	Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
 
-	glm::ivec2 target = {targetPos.x, targetPos.z};
-	//Wiwa::AIPathFindingManager::CreatePath(m_DirectionPoint,target);
+	lastPath = Wiwa::AIPathFindingManager::GetLastPath();
+}
 
-	glm::ivec2 nextPos = target;
+void Wiwa::AgentAISystem::GoToNextPosition()
+{
+	nextPos = lastPath.back();
+	lastPath.pop_back();
 
-	const std::vector<glm::ivec2>* lastPath = Wiwa::AIPathFindingManager::GetLastPath();
-	
-	if (lastPath->size() > 1)
-	{
-		nextPos = { lastPath->at(1).x, lastPath->at(1).y };
-	}
-
-	m_DirectionPoint = nextPos;
+	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
+	m_DirectionPoint = { nextPos.x + (localMapData.tileWidth * 0.5f), nextPos.y + (localMapData.tileHeight * 0.5f) };
 
 	m_IsMoving = true;
-	
+}
+
+
+bool Wiwa::AgentAISystem::HasArrivedNextPosition(const glm::vec2& next_position, const glm::vec2& current_position)
+{
+	return (next_position == current_position);
+}
+
+bool Wiwa::AgentAISystem::isNear(glm::vec2 point1, glm::vec2 point2, float threshold)
+{
+	return glm::distance2(point1, point2) < threshold * threshold;
+}
+
+void Wiwa::AgentAISystem::StopMoving()
+{
+	lastPath.clear();
+}
+
+bool Wiwa::AgentAISystem::HasPath()
+{
+	if(lastPath.empty())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}	
 }

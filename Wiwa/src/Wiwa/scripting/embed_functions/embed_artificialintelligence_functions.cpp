@@ -11,7 +11,7 @@ void SendAIToPosition(size_t entity_id,glm::vec3 target_pos)
 
 	if (agentPtr)
 	{
-		agentPtr->GoToPosition(target_pos);
+		agentPtr->CreatePath(target_pos);
 	}
 }
 
@@ -21,13 +21,17 @@ void SendAIToPositionById(size_t entity_id, size_t target_id)
 
 	Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(entity_id);
 
-	//WI_INFO(" Position of the player: X {}",em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition.x);
-	//WI_INFO(" Position of the player: Y {}", em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition.y);
-	//WI_INFO(" Position of the player: Z {}", em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition.z);
 	if (agentPtr)
 	{
-		agentPtr->GoToPosition(em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition);		
+		agentPtr->CreatePath(em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition);
 	}
+}
+
+float DistanceAgentTarget(size_t entity_id, glm::vec3 target_pos)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	return glm::distance(em.GetComponent<Wiwa::Transform3D>(entity_id)->localPosition, target_pos);
 }
 
 float DistanceAgentTargetById(size_t entity_id, size_t target_id)
@@ -35,4 +39,22 @@ float DistanceAgentTargetById(size_t entity_id, size_t target_id)
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	return glm::distance(em.GetComponent<Wiwa::Transform3D>(entity_id)->localPosition, em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition);
+}
+
+void StopMoving(size_t entity_id)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(entity_id);
+
+	agentPtr->StopMoving();
+}
+
+bool HasPath(size_t entity_id)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(entity_id);
+
+	return agentPtr->HasPath();	
 }

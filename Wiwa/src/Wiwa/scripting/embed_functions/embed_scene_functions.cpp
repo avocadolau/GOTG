@@ -27,3 +27,9 @@ void ChangeSceneByName(MonoString* scene_name, int flags)
 
 	Wiwa::SceneManager::ChangeSceneByName(scene, flags);
 }
+
+
+void PauseScene()
+{
+	Wiwa::SceneManager::PauseCurrentScene();
+}

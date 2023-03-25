@@ -128,7 +128,7 @@ namespace Wiwa {
 
 		void RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
-		int RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world);
+		float RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
 	private:
 		bool m_Debug;
@@ -143,7 +143,7 @@ namespace Wiwa {
 		btOverlapFilterCallback* m_filterCallback;
 
 		//  btDefaultVehicleRaycaster* v_Vehicle_raycaster;
-		DebugDrawer* m_Debug_draw;
+		
 
 		std::list<btCollisionShape*> m_Shapes;
 		std::list<Object*> m_CollObjects;
@@ -159,6 +159,8 @@ namespace Wiwa {
 		bool AddBodyToLog(Object* body_to_log);
 		bool RemoveBodyFromLog(Object* body_to_log);
 		bool LogBodies();
+
+		DebugDrawer* m_Debug_draw;
 
 	public:
 		std::map<std::string, int> filterMapStringKey;
