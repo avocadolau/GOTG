@@ -25,6 +25,8 @@ namespace Wiwa {
 
         void PlayAnimationIndex(unsigned int index);
 
+        void BlendAnimations(Animation* from, Animation* to, float weight);
+
         void CalculateBoneTransform(const NodeData* node,const glm::mat4 parentTransform);
 
         void CalculateBoneFinalTransform();
