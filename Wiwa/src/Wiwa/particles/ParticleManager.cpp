@@ -293,8 +293,14 @@ namespace Wiwa {
 
 					if (p.emitterOwner->activateBillboard == true)
 					{
+
+						Wiwa::CameraManager& cm = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
+						CameraId cameraId;
+						cameraId = cm.getActiveCameraId();
+						Wiwa::Camera* cam = cm.getCamera(cameraId);
+
 						//fix rotation
-						glm::mat4 rotationMatrix = man.editorCamera->getView();
+						glm::mat4 rotationMatrix = cam->getView();
 						glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
 
 
@@ -433,9 +439,14 @@ namespace Wiwa {
 								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, texture, texture->GetSize());
 					}
 
+					Wiwa::CameraManager& cm = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
+					CameraId cameraId;
+					cameraId = cm.getActiveCameraId();
+					Wiwa::Camera* cam = cm.getCamera(cameraId);
+
 					//show in editor window
 					if (texture)
-						r3d.RenderQuad(VAO, indices, p.transform.position  - (man.editorCamera->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
+						r3d.RenderQuad(VAO, indices, p.transform.position  - (cam->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
 							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, texture, texture->GetSize());
 
 
