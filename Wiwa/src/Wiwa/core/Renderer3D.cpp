@@ -456,6 +456,8 @@ namespace Wiwa
 
 		material->Bind();
 
+		glDisable(GL_CULL_FACE);
+
 		// make the drawing
 		glBindVertexArray(vao);
 
@@ -476,6 +478,7 @@ namespace Wiwa
 		material->UnBind();
 		glActiveTexture(GL_TEXTURE1);
 		camera->frameBuffer->Unbind();
+		glEnable(GL_CULL_FACE);
 
 
 

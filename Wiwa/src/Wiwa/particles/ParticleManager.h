@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-#define MAX_PARTICLES 1000
+#define MAX_PARTICLES 4000
 
 class Camera;
 class AnimationParticles;
