@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Wiwa;
 namespace Game
 {
@@ -31,17 +32,37 @@ namespace Game
             meleeAttackIt = GetComponentIterator<MeleeAttack>();
             transformIt = GetComponentIterator<Transform3D>();
             colliderIt = GetComponentIterator<CollisionBody>();
-            TriggerAttack();
+            if (meleeAttackIt.componentId != Constants.WI_INVALID_INDEX)
+            {
+                ref MeleeAttack attack = ref GetComponent<MeleeAttack>();
+                TriggerAttack(ref attack);
+            }
         }
 
         void Update()
         {
+            if (meleeAttackIt.componentId != Constants.WI_INVALID_INDEX) 
+            {
+                ref MeleeAttack attack = ref GetComponent<MeleeAttack>();
+                timer += Time.DeltaTime();
 
+                if (attack.hasFinished)
+                {
+                    DestroyEntity();
+                }
+
+                if (timer >= attack.duration)
+                {
+                    attack.hasFinished= true;
+                }
+            }
         }
 
-        void TriggerAttack()
+        void TriggerAttack(ref MeleeAttack attack)
         {
+            attack.hasFinished = false;
 
+            // Sounds & particles here
         }
     }
 }
