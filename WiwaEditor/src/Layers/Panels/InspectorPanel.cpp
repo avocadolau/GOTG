@@ -596,6 +596,12 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
+	ImGui::Checkbox("##activateBillboard", &emitter->activateBillboard);
+	ImGui::SameLine();
+	ImGui::Text("Billboard");
+
+	ImGui::Dummy(ImVec2(0, 4));
+
 	ImGui::Checkbox("##repeat", &emitter->repeat);
 	ImGui::SameLine();
 	ImGui::Text("Loop Spawning");
@@ -689,6 +695,26 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 	ImGui::Text("Particle attributes");
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 4));
+
+	/*ImGui::Checkbox("##particle_followOnSpawn", &emitter->followOnSpawn);
+	ImGui::SameLine();
+	ImGui::Dummy(ImVec2(2.5, 0));
+	ImGui::Text("Follow On Spawn");
+
+	ImGui::Dummy(ImVec2(0, 4));*/
+
+
+	//particle follow on spawn
+	{
+		ImGui::Dummy(ImVec2(0, 0));
+		ImGui::SameLine();
+
+		ImGui::Checkbox("##particle_followOnSpawn", &emitter->followOnSpawn);
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(2.5, 0));
+		ImGui::SameLine();
+		ImGui::Text("Follow On Spawn");
+	}
 
 	//particle follow emitter position
 	{

@@ -49,6 +49,8 @@ namespace Wiwa {
 		bool		followEmitterPosition;
 		bool		followParticle;
 
+		bool        followSpawn;
+
 		bool        isActive = false;
 
 		class AnimationParticles* animation = nullptr;
