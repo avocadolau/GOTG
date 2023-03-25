@@ -5,7 +5,8 @@
 #include <Wiwa/AI/AIMapGeneration.h>
 //#include "Wiwa/ecs/components/Transform3D.h"
 #include <Wiwa/physics/PhysicsManager.h>
-
+#include <glm/gtx/norm.hpp>
+#include <glm/gtx/vector_angle.hpp> // for glm::angle()
 #include "glew.h"
 
 Wiwa::AgentAISystem::AgentAISystem()
@@ -56,32 +57,53 @@ void Wiwa::AgentAISystem::OnUpdate()
 		}
 	}
 
-	if (HasArrivedNextPosition(glm::ivec2(transform->localPosition.x, transform->localPosition.z), m_DirectionPoint))
+	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
+	float threshold = localMapData.tileWidth/2.0f; // example threshold distance
+	if (isNear(glm::vec2(transform->localPosition.x, transform->localPosition.z), m_DirectionPoint, threshold))
 	{
 		m_IsMoving = false;
 	}
 
 	if (m_IsMoving)
 	{
-		float dirX = 0.0f;
+		glm::vec2 position = glm::vec2(transform->position.x, transform->position.z);
+		// Calculate the distance between the current position and the target position
+		float distance = glm::distance(position, m_DirectionPoint);
 
-		if (m_DirectionPoint.x != transform->position.x)
-		{
-			dirX = m_DirectionPoint.x - transform->position.x;
-			dirX /= abs(dirX);
-		}
-		
-		float dirY = 0.0f;
+		// Calculate the time required to move the full distance at the given move speed
+		float timeToMove = distance / agent->speed;
 
-		if (m_DirectionPoint.y != transform->position.z)
-		{
-			dirY = m_DirectionPoint.y - transform->position.z;
-			dirY /= abs(dirY);
+		// Calculate the interpolation factor based on the elapsed time and the time required to move
+		float t = glm::clamp(Time::GetDeltaTimeSeconds() / timeToMove, 0.0f, 1.0f);
+
+		// Interpolate the character's position between the current position and the target position using the interpolation factor
+		glm::vec2 interpolatedPosition = glm::mix(position, m_DirectionPoint, t);
+
+		// Calculate the forward vector from the current position to the target position
+		glm::vec2 forward = glm::normalize(m_DirectionPoint - position);
+
+		// Calculate the angle between the current forward vector and the target forward vector
+		float angle = glm::angle(forward, { 1.0f, 0.0f });
+		if (forward.y < 0.0f) {
+			angle = -angle;
 		}
+
+		// Interpolate the character's rotation to the target rotation using the interpolation factor
+		float targetRotation = angle;
+		if (targetRotation < 0.0f) {
+			targetRotation += 2.0f * glm::pi<float>();
+		}
+		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, t);
+
+		// Update the character's position and rotation to the interpolated position and rotation
+		transform->localPosition.x = interpolatedPosition.x;
+		transform->localPosition.z = interpolatedPosition.y;
+
+		transform->localRotation.y = interpolatedRotation;
 
 		// Move to direction
-		transform->localPosition.x += agent->speed * dirX * Time::GetDeltaTimeSeconds();
-		transform->localPosition.z += agent->speed * dirY * Time::GetDeltaTimeSeconds();
+		/*transform->localPosition.x += agent->speed * direction.x * Time::GetDeltaTimeSeconds();
+		transform->localPosition.z += agent->speed * direction.y * Time::GetDeltaTimeSeconds();*/
 	}
 
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
@@ -142,7 +164,12 @@ void Wiwa::AgentAISystem::GoToNextPosition()
 }
 
 
-bool Wiwa::AgentAISystem::HasArrivedNextPosition(const glm::ivec2& next_position, const glm::ivec2& current_position)
+bool Wiwa::AgentAISystem::HasArrivedNextPosition(const glm::vec2& next_position, const glm::vec2& current_position)
 {
 	return (next_position == current_position);
+}
+
+bool Wiwa::AgentAISystem::isNear(glm::vec2 point1, glm::vec2 point2, float threshold)
+{
+	return glm::distance2(point1, point2) < threshold * threshold;
 }

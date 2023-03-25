@@ -16,6 +16,7 @@ namespace Wiwa {
 
 		glm::vec2 m_DirectionPoint;
 		bool m_IsMoving = false;
+
 	public:
 		AgentAISystem();
 		~AgentAISystem();
@@ -32,7 +33,9 @@ namespace Wiwa {
 
 		void GoToNextPosition();
 
-		bool HasArrivedNextPosition(const glm::ivec2& next_position, const glm::ivec2& current_position);
+		bool HasArrivedNextPosition(const glm::vec2& next_position, const glm::vec2& current_position);
+
+		bool isNear(glm::vec2 point1, glm::vec2 point2, float threshold);
 	};
 }
 

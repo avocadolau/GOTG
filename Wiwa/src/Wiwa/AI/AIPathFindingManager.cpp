@@ -47,26 +47,12 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	cell = pos;
 	cell.y = pos.y + 1;
 	
-	bool inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
-	WI_INFO(" Is in boundaries N {}", inbound);
-	bool walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
-	WI_INFO(" IsWalkable N {}", walkable);
-	if (inbound && walkable == false)
-		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
 	// south
 	cell = pos;
 	cell.y = pos.y - 1;
-
-	inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
-	WI_INFO(" Is in boundaries S {}", inbound);
-	walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
-	WI_INFO(" IsWalkable S {}", walkable);
-	if (inbound && walkable == false)
-		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
@@ -75,26 +61,12 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	cell = pos;
 	cell.x = pos.x + 1;
 
-	inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
-	WI_INFO(" Is in boundaries E {}", inbound);
-	walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
-	WI_INFO(" IsWalkable E {}", walkable);
-	if (inbound && walkable == false)
-		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
 
 	// west
 	cell = pos;
 	cell.x = pos.x - 1;
-
-	inbound = Wiwa::AIPathFindingManager::CheckBoundaries(cell);
-	WI_INFO(" Is in boundaries W {}", inbound);
-	walkable = Wiwa::AIPathFindingManager::IsWalkable(cell);
-	WI_INFO(" IsWalkable W {}", walkable);
-	if (inbound && walkable == false)
-		WI_INFO("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
@@ -246,7 +218,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				int i = 0;
 				while (pathNode)
 				{
-					WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
+					//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
 
 					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
 					m_lastPath.push_back(vec);

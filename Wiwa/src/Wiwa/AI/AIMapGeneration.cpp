@@ -81,9 +81,9 @@ void Wiwa::AIMapGeneration::BakeMap()
 					glm::ivec2 bottomRightMap = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
 					glm::ivec2 topRightMap = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
 
-					for (int i = bottomLeftMap.y; i < topLeftMap.y; i++)
+					for (int i = bottomLeftMap.y; i <= topLeftMap.y; i++)
 					{
-						for (int j = topLeftMap.x; j < topRightMap.x; j++)
+						for (int j = topLeftMap.x; j <= topRightMap.x; j++)
 						{
 							SetPositionUnWalkable(glm::ivec2(j, i));
 						}
