@@ -15,7 +15,7 @@ namespace Wiwa
 		name = "Button";
 		m_Scene = scene;
 		active = true;
-		text = "";
+		text = "none";
 		audioEventForButton = audioEventName;
 		
 		if (path != "") {
@@ -80,12 +80,9 @@ namespace Wiwa
 				if (clicked && Wiwa::Input::IsButtonReleased(0,0))
 				{
 					clicked = false;
-					if (audioEventForButton != nullptr)
+					if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 					{
-						if (Audio::FindEvent(audioEventForButton) != Audio::INVALID_ID)
-						{
-							Audio::PostEvent(audioEventForButton);
-						}
+						Audio::PostEvent(audioEventForButton.c_str());
 					}
 					if (callback)
 						callback->Execute();

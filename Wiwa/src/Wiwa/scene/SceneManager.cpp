@@ -294,7 +294,21 @@ namespace Wiwa
 				scene_file.Read(&state, sizeof(GuiControlState));
 				scene_file.Read(&position, sizeof(Rect2i));
 				scene_file.Read(&callbackID, sizeof(int));
+
+
 				scene_file.Read(&extraPosition, sizeof(Rect2i));
+
+				scene_file.Read(&textGuiLen, sizeof(size_t));
+				textGui_c = new char[textGuiLen];
+				scene_file.Read(textGui_c, textGuiLen);
+				text = textGui_c;
+				delete[] textGui_c;
+				scene_file.Read(&audioEventGuiLen, sizeof(size_t));
+				audioEventGui_c = new char[audioEventGuiLen];
+				scene_file.Read(audioEventGui_c, audioEventGuiLen);
+				audioEvent = audioEventGui_c;
+				delete[] audioEventGui_c;
+
 				scene_file.Read(&textureGui_len, sizeof(size_t));
 				textureGui_c = new char[textureGui_len];
 				scene_file.Read(textureGui_c, textureGui_len);
@@ -310,16 +324,7 @@ namespace Wiwa
 				scene_file.Read(&texturePosition, sizeof(Rect2i));
 				scene_file.Read(&extraTexturePosition, sizeof(Rect2i));
 
-				scene_file.Read(&textGuiLen, sizeof(size_t));
-				textGui_c = new char[textGuiLen];
-				scene_file.Read(textGui_c, textGuiLen);
-				text = textGui_c;
-				delete[] textGui_c;
-				scene_file.Read(&audioEventGuiLen, sizeof(size_t));
-				audioEventGui_c = new char[audioEventGuiLen];
-				scene_file.Read(audioEventGui_c, audioEventGuiLen);
-				audioEvent = audioEventGuiLen;
-				delete[] audioEventGui_c;
+				
 
 				switch (guiType)
 				{
@@ -553,8 +558,8 @@ namespace Wiwa
 					size_t textureGui_len = strlen(textureGui) + 1;
 					size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
 
-					const char* text = control->text;
-					const char* audioEvent = control->audioEventForButton;
+					const char* text = control->text.c_str();
+					const char* audioEvent = control->audioEventForButton.c_str();
 
 					size_t textGuiLen = strlen(text) + 1;
 					size_t audioEventGuiLen = strlen(audioEvent) + 1;
@@ -569,6 +574,12 @@ namespace Wiwa
 					Rect2i extraPosition = control->GetExtraPosition();
 					scene_file.Write(&extraPosition, sizeof(Rect2i));
 
+					scene_file.Write(&textGuiLen, sizeof(size_t));
+					scene_file.Write(text, textGuiLen);
+
+					scene_file.Write(&audioEventGuiLen, sizeof(size_t));
+					scene_file.Write(audioEvent, audioEventGuiLen);
+
 					// Save texture
 					scene_file.Write(&textureGui_len, sizeof(size_t));
 					scene_file.Write(textureGui, textureGui_len);
@@ -578,12 +589,6 @@ namespace Wiwa
 
 					scene_file.Write(&texturePosition, sizeof(Rect2i));
 					scene_file.Write(&extraTexturePosition, sizeof(Rect2i));
-
-					scene_file.Write(&textGuiLen, sizeof(size_t));
-					scene_file.Write(&text, textGuiLen);
-					scene_file.Write(&audioEventGuiLen, sizeof(size_t));
-					scene_file.Write(&audioEvent, audioEventGuiLen);
-					
 				}
 			}
 			// Iterate through all controls

@@ -205,8 +205,8 @@ namespace Wiwa
 		GuiControlState state;
 		GuiEvent event;
 
-		const char* text;           // Control text (if required)
-		const char* audioEventForButton;           // Control text (if required)
+		std::string text;           // Control text (if required)
+		std::string audioEventForButton;           // Control text (if required)
 		Rect2i position;        // Position and size
 		Rect2i texturePosition;        
 		Rect2i extraPosition;	// Position and size for the bar

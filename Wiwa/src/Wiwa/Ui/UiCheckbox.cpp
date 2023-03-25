@@ -14,8 +14,7 @@ namespace Wiwa
 		name = "Checkbox";
 		m_Scene = scene;
 		active = true;
-		text = "";
-		
+		text = "none";
 		audioEventForButton = audioEventName;
 		
 		if (path != "") {
@@ -83,12 +82,9 @@ namespace Wiwa
 				{
 					clicked = false;
 					checked = !checked;
-					if (audioEventForButton != nullptr)
+					if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 					{
-						if (Audio::FindEvent(audioEventForButton) != Audio::INVALID_ID)
-						{
-							Audio::PostEvent(audioEventForButton);
-						}
+						Audio::PostEvent(audioEventForButton.c_str());
 					}
 					void* params[] = { &checked };
 					if (callback)

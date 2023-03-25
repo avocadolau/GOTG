@@ -17,7 +17,7 @@ namespace Wiwa
 		name = "Slider";
 		m_Scene = scene;
 		active = true;
-		text = "";
+		text = "none";
 		audioEventForButton = audioEventName;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;
@@ -103,12 +103,9 @@ namespace Wiwa
 						clicked = false;
 						value = (((float)extraPosition.width / (float)position.width) * 100);
 						void* params[] = { &value };
-						if (audioEventForButton != nullptr)
+						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 						{
-							if (Audio::FindEvent(audioEventForButton) != Audio::INVALID_ID)
-							{
-								Audio::PostEvent(audioEventForButton);
-							}
+							Audio::PostEvent(audioEventForButton.c_str());
 						}
 						if(callback)
 							callback->Execute(params);

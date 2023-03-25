@@ -15,7 +15,7 @@ namespace Wiwa
 		name = "Image";
 		m_Scene = scene;
 		active = true;
-		text = "";
+		text = "none";
 		audioEventForButton = "none";
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)

@@ -96,10 +96,7 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 	originSize[0] = control->texturePosition.width;
 	originSize[1] = control->texturePosition.height;
 	callbackID = control->callbackID;
-	if (control->type != Wiwa::GuiControlType::IMAGE || control->type != Wiwa::GuiControlType::TEXT)
-	{
-		audioEventForButton = control->audioEventForButton;
-	}
+	audioEventForButton = control->audioEventForButton;
 	if (control->type == Wiwa::GuiControlType::SLIDER)
 	{
 		extraOriginPos[0] = control->extraTexturePosition.x;
@@ -237,10 +234,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 					ImGui::EndDragDropTarget();
 				}
 			}
-			if(control->type != Wiwa::GuiControlType::IMAGE)
-			{
-					ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
-			}
+			
+			ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
+			
 		}
 		
 
@@ -260,10 +256,7 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
-	if (control->type != Wiwa::GuiControlType::TEXT || control->type != Wiwa::GuiControlType::IMAGE)
-	{
-		control->audioEventForButton = audioEventForButton.c_str();
-	}
+	//control->audioEventForButton = audioEventForButton.c_str();
 	if (callbackID != WI_INVALID_INDEX)
 	{
 		control->callbackID = callbackID;
