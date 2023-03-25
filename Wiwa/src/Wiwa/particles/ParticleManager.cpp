@@ -483,8 +483,7 @@ namespace Wiwa {
 
 	void ParticleManager::AddEmitter(ParticleEmitter* emitter)
 	{
-		std::shared_ptr<ParticleEmitter> sm_emitter(emitter);
-
+		std::shared_ptr<ParticleEmitter> sm_emitter = std::make_shared<ParticleEmitter>(*emitter);
 		emitterList.push_back(sm_emitter);
 	}
 
@@ -504,12 +503,29 @@ namespace Wiwa {
 			}
 		}
 
+		/*if (emitterList.size() > 0)
+		{
+			if (emitter->entityOwnerId)
+			{
+				emitterList.erase(std::remove_if(emitterList.begin(), emitterList.end(),
+					[&](std::shared_ptr<ParticleEmitter> const& item)
+					{
+						return item->entityOwnerId == emitter->entityOwnerId;
+					}), emitterList.end());
+			}
+		}*/
+
 		//emitterList.erase(
 		//	std::remove_if(emitterList.begin(), emitterList.end(),[&]()));
 	}
 
 	bool ParticleManager::ContainsEmitter(ParticleEmitter* emitter)
 	{
+		if (emitter == nullptr)
+		{
+			return false;
+		}
+		
 		for (std::shared_ptr<ParticleEmitter> item : emitterList)
 		{
 			if (item->entityOwnerId == emitter->entityOwnerId)
