@@ -20,7 +20,7 @@
 
 uint32_t Wiwa::AIPathFindingManager::m_width = 0;
 uint32_t Wiwa::AIPathFindingManager::m_height = 0;
-unsigned char* Wiwa::AIPathFindingManager::m_map = nullptr;
+unsigned char* Wiwa::AIPathFindingManager::m_Map = nullptr;
 std::vector<glm::vec2> Wiwa::AIPathFindingManager::m_lastPath = {};
 
 // PathNode Defintitions
@@ -164,8 +164,8 @@ Wiwa::AIPathFindingManager::AIPathFindingManager()
 
 bool Wiwa::AIPathFindingManager::CleanUp()
 {	
-	delete[] m_map;
-	m_map = nullptr;
+	delete[] m_Map;
+	m_Map = nullptr;
 	return false;
 }
 
@@ -174,10 +174,10 @@ void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, unsigne
 	m_width = width;
 	m_height = height;
 
-	delete[] m_map;				
-	m_map = NULL;
-	m_map = new unsigned char[width * height];
-	memcpy(m_map, data, width * height);
+	delete[] m_Map;				
+	m_Map = NULL;
+	m_Map = new unsigned char[width * height];
+	memcpy(m_Map, data, width * height);
 }
 
 int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::ivec2& destination)
@@ -218,7 +218,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 				int i = 0;
 				while (pathNode)
 				{
-					//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
+					//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_Map[(pathNode->pos.x * m_width) + pathNode->pos.y]);
 
 					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
 					m_lastPath.push_back(vec);
@@ -286,7 +286,7 @@ bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_map[(pos.y * m_width) + pos.x];
+		return m_Map[(pos.y * m_width) + pos.x];
 
 	return INVALID_WALK_CODE;
 }

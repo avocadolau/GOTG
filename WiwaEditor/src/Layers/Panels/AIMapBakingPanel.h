@@ -10,6 +10,7 @@ public:
 
 	void Draw() override;
 
+	void RefreshData();
 private:
 	bool m_drawGrid;
 	glm::ivec2 mapSizeInTiles = { 10, 10 };

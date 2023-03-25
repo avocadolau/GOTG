@@ -98,7 +98,7 @@ namespace Wiwa {
 		static uint32_t m_height;
 			
 		// all map walkability values [0..255]
-		static unsigned char* m_map;
+		static unsigned char* m_Map;
 
 		// we store the created path here
 		static std::vector<glm::vec2> m_lastPath;

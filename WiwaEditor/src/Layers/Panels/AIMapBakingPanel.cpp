@@ -30,20 +30,38 @@ void AIMapBakingPanel::Draw()
 	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map with theese parameters:");
 	
 	const std::string posLabel = "Position in Tiles:";
-	DrawInt2Control(posLabel, &mapSizeInTiles, 1.0f, 300.0f);
+	DrawInt2Control(posLabel, &mapSizeInTiles, 1.0f, 0.0f);
 
 	const std::string sizeLabel = "Size of the Tiles:";
-	DrawVec2Control(sizeLabel, &sizeOfTiles, 1.0f, 300.0f);
+	DrawVec2Control(sizeLabel, &sizeOfTiles, 1.0f, 0.0f);
 
 	ImGui::Spacing();
 	if (ImGui::Button("Create new Map"))
 	{
-		Wiwa::AIMapGeneration::CreateWalkabilityMap(mapSizeInTiles.x, mapSizeInTiles.y, sizeOfTiles.x, sizeOfTiles.y, 0.0f);
+		Wiwa::AIMapGeneration::CreateWalkabilityMap(mapSizeInTiles.x, mapSizeInTiles.y, sizeOfTiles.x, sizeOfTiles.y, glm::vec3(0.0f));
+		RefreshData();
 	}
 
 	if (ImGui::Button("Bake Map"))
 	{
 		Wiwa::AIMapGeneration::BakeMap();
+	}
+
+	if (ImGui::Button("Save current Map"))
+	{
+		Wiwa::AIMapGeneration::OnSave();
+	}
+
+	if (ImGui::Button("Load last saved Map"))
+	{
+		Wiwa::AIMapGeneration::OnLoad();
+		RefreshData();
+	}
+
+	if (ImGui::Button("Clear Map"))
+	{
+		Wiwa::AIMapGeneration::ClearMap();
+		RefreshData();
 	}
 
 	ImGui::Checkbox("Draw Map Grid", &m_drawGrid);
@@ -54,4 +72,11 @@ void AIMapBakingPanel::Draw()
 	}
 	
 	ImGui::End();
+}
+
+void AIMapBakingPanel::RefreshData()
+{
+	Wiwa::AIMapGeneration::MapData& data = Wiwa::AIMapGeneration::GetMapData();
+	mapSizeInTiles = { data.width, data.height };
+	sizeOfTiles = { data.tileWidth, data.tileHeight };
 }

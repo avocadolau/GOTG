@@ -18,32 +18,28 @@
 #include "glew.h"
 //#include <Wiwa/utilities/json/JSONDocument.h>
 
-Wiwa::AIMapGeneration::MapData Wiwa::AIMapGeneration::m_mapData = MapData();
-unsigned char* Wiwa::AIMapGeneration::m_map = nullptr;
+Wiwa::AIMapGeneration::MapData Wiwa::AIMapGeneration::m_MapData = MapData();
+unsigned char* Wiwa::AIMapGeneration::m_Map = nullptr;
 
-bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos)
+bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec3 startPos)
 {
 	bool ret = false;
 
-	m_mapData.startingPosition = startPos;
-	m_mapData.width = width;
-	m_mapData.height = height;
-	m_mapData.tileHeight = tileHeight;
-	m_mapData.tileWidth = tileWidth;
+	m_MapData.startingPosition = startPos;
+	m_MapData.width = width;
+	m_MapData.height = height;
+	m_MapData.tileHeight = tileHeight;
+	m_MapData.tileWidth = tileWidth;
 
 	if (tileHeight < 1.f) tileHeight = 1.f;
 
 	if (tileWidth < 1.f) tileWidth = 1.f;	
 
-
-	m_map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
-	memset(m_map, 1, width * height);
-	AIPathFindingManager::SetMap(width, height, m_map);
-
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	std::vector<EntityId>* entities = em.GetEntitiesAlive();
-	int entityCount = em.GetEntityCount();
-
+	delete[] m_Map;
+	m_Map = nullptr;
+	m_Map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
+	memset(m_Map, 1, width * height);
+	AIPathFindingManager::SetMap(width, height, m_Map);
 	ret = true;
 
 	return ret;
@@ -107,14 +103,13 @@ void Wiwa::AIMapGeneration::BakeMap()
 		else
 			continue;
 	}
-	AIPathFindingManager::SetMap(m_mapData.width, m_mapData.height, m_map);
-
+	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
 }
 
 void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
 {
-	//m_map[vec.x * m_mapData.width + vec.y] = INVALID_WALK_CODE;
-	m_map[(vec.y * m_mapData.width) + vec.x] = INVALID_WALK_CODE;
+	//m_Map[vec.x * m_MapData.width + vec.y] = INVALID_WALK_CODE;
+	m_Map[(vec.y * m_MapData.width) + vec.x] = INVALID_WALK_CODE;
 }
 
 void Wiwa::AIMapGeneration::DebugDrawMap()
@@ -130,12 +125,12 @@ void Wiwa::AIMapGeneration::DebugDrawMap()
 	glLoadMatrixf(glm::value_ptr(camera->getView()));
 
 	unsigned char* map = Wiwa::AIMapGeneration::GetMap();
-	for (int i = 0; i < m_mapData.height; i++)
+	for (int i = 0; i < m_MapData.height; i++)
 	{
-		for (int j = 0; j < m_mapData.width; j++)
+		for (int j = 0; j < m_MapData.width; j++)
 		{
 			glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
-			if (map[j * m_mapData.width + i] == 255)
+			if (map[j * m_MapData.width + i] == 255)
 			{
 				glColor4f(1, 0, 0, 0.1f);
 			}
@@ -145,18 +140,18 @@ void Wiwa::AIMapGeneration::DebugDrawMap()
 			}
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode to wireframe
 			glBegin(GL_QUADS); // Begin drawing the quad   
-			glVertex3f(vec.x, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-left vertex
-			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-right vertex
-			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y); // Top-right vertex
+			glVertex3f(vec.x, 0.0f, vec.y + m_MapData.tileHeight); // Bottom-left vertex
+			glVertex3f(vec.x + m_MapData.tileWidth, 0.0f, vec.y + m_MapData.tileHeight); // Bottom-right vertex
+			glVertex3f(vec.x + m_MapData.tileWidth, 0.0f, vec.y); // Top-right vertex
 			glVertex3f(vec.x, 0.0f, vec.y); // Top-left vertex
 			glEnd();
 
 			glColor3f(0.5, 0.5, .5);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Set the polygon mode to wireframe
 			glBegin(GL_QUADS); // Begin drawing the quad   
-			glVertex3f(vec.x, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-left vertex
-			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y + m_mapData.tileHeight); // Bottom-right vertex
-			glVertex3f(vec.x + m_mapData.tileWidth, 0.0f, vec.y); // Top-right vertex
+			glVertex3f(vec.x, 0.0f, vec.y + m_MapData.tileHeight); // Bottom-left vertex
+			glVertex3f(vec.x + m_MapData.tileWidth, 0.0f, vec.y + m_MapData.tileHeight); // Bottom-right vertex
+			glVertex3f(vec.x + m_MapData.tileWidth, 0.0f, vec.y); // Top-right vertex
 			glVertex3f(vec.x, 0.0f, vec.y); // Top-left vertex
 			glEnd();
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
@@ -170,8 +165,8 @@ glm::vec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)
 {
 	glm::vec2 ret;
 
-	ret.x = (float)x * m_mapData.tileWidth;
-	ret.y = (float)y * m_mapData.tileHeight;
+	ret.x = (float)x * m_MapData.tileWidth;
+	ret.y = (float)y * m_MapData.tileHeight;
 	//WI_CORE_INFO("Map to World: x = {}, y = {}, ret.x = {}, ret.y = {}", x, y, ret.x, ret.y);
 	return ret;
 }
@@ -180,8 +175,122 @@ glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(float x, float y)
 {
 	glm::ivec2 ret;
 
-	ret.x = x / m_mapData.tileWidth;
-	ret.y = y / m_mapData.tileHeight;
+	ret.x = x / m_MapData.tileWidth;
+	ret.y = y / m_MapData.tileHeight;
 	//WI_CORE_INFO("World to Map: x = {}, y = {}, ret.x = {}, ret.y = {}", x,y,ret.x, ret.y);
 	return ret;
+}
+
+bool Wiwa::AIMapGeneration::OnSave()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	// Check if entity already exists
+	std::string name = "tiles_map_data";
+	std::vector<EntityId>* ent = em.GetEntitiesAlive();
+	size_t count = em.GetEntityCount();
+	bool hasMapData = false;
+	for (int i = 0; i < count; i++)
+	{
+		size_t id = ent->at(i);
+		std::string entName(em.GetEntityName(id));
+		if (name == entName)
+		{
+			SaveMapData(id);
+			hasMapData = true;
+			return true;
+		}
+	}
+
+	if (!hasMapData)
+	{
+		CreateNewEntityAndSaveData();
+		return true;
+	}
+	return false;
+}
+
+bool Wiwa::AIMapGeneration::OnLoad()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	// Check if entity already exists
+	const char* name = "tiles_map_data";
+	std::vector<EntityId>* ent = em.GetEntitiesAlive();
+	size_t count = em.GetEntityCount();
+	bool hasMapData = false;
+	for (int i = 0; i < count; i++)
+	{
+		size_t id = ent->at(i);
+		std::string entName(em.GetEntityName(id));
+		if (name != entName)
+			continue;
+
+		if (em.HasComponent<Wiwa::MapAI>(id))
+		{
+			LoadMapData(id);
+			hasMapData = true;
+		}
+		return true;
+	}
+	return false;
+}
+
+bool Wiwa::AIMapGeneration::ClearMap()
+{
+	CreateWalkabilityMap(m_MapData.width, m_MapData.height, m_MapData.tileWidth, m_MapData.tileHeight, m_MapData.startingPosition);
+	return true;
+}
+
+void Wiwa::AIMapGeneration::LoadMapData(size_t id)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::MapAI* data = em.GetComponent<Wiwa::MapAI>(id);
+	m_MapData.startingPosition = data->startingPosition;
+	m_MapData.width = data->width;
+	m_MapData.height = data->height;
+	m_MapData.tileWidth = data->tileWidth;
+	m_MapData.tileHeight = data->tileHeight;
+
+	CreateWalkabilityMap(m_MapData.width, m_MapData.height, m_MapData.tileWidth, m_MapData.tileHeight, m_MapData.startingPosition);
+
+	//strcpy(reinterpret_cast<char*>(m_Map), reinterpret_cast<const char*>(data->map)); // OK
+	memcpy(m_Map, &data->map, m_MapData.width * m_MapData.height);
+	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
+}
+
+void Wiwa::AIMapGeneration::SaveMapData(size_t id)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::MapAI* data = em.GetComponent<Wiwa::MapAI>(id);
+	data->startingPosition = m_MapData.startingPosition;
+	data->width = m_MapData.width;
+	data->height = m_MapData.height;
+	data->tileWidth = m_MapData.tileWidth;
+	data->tileHeight = m_MapData.tileHeight;
+	//strcpy(reinterpret_cast<char*>(data->map), reinterpret_cast<const char*>(m_Map)); // OK
+	memset(data->map, 1, MAP_TILES_MAX_SIZE);
+	memcpy(data->map, m_Map, m_MapData.width * m_MapData.height);
+	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
+
+}
+
+void Wiwa::AIMapGeneration::CreateNewEntityAndSaveData()
+{
+	const char* name = "tiles_map_data";
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	size_t newId = em.CreateEntity(name);
+	MapAI newMap;
+	newMap.startingPosition = m_MapData.startingPosition;
+	newMap.width = m_MapData.width;
+	newMap.height = m_MapData.height;
+	newMap.tileWidth = m_MapData.tileWidth;
+	newMap.tileHeight = m_MapData.tileHeight;
+	memset(newMap.map, 1, MAP_TILES_MAX_SIZE);
+	memcpy(newMap.map, m_Map, m_MapData.width * m_MapData.height);
+	//strcpy(reinterpret_cast<char*>(newMap.map), reinterpret_cast<const char*>(m_Map)); // OK
+	em.AddComponent<Wiwa::MapAI>(newId, newMap);
+	em.AddComponent<Wiwa::Transform3D>(newId);
+	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
+
 }

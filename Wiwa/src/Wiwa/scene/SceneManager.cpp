@@ -701,7 +701,7 @@ namespace Wiwa
 
 			// Save Physics Manager json Data
 			sc->GetPhysicsManager().OnSave();
-
+			AIMapGeneration::OnSave();
 			WI_CORE_INFO("Saved scene in file \"{0}\" successfully!", scene_path);
 		}
 		else
@@ -754,7 +754,8 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			//Wiwa::AIMapGeneration::CreateWalkabilityMap(50, 50, 3.0f, 3.0f, 0.f); // this is temporal
+			AIMapGeneration::ClearMap();
+			AIMapGeneration::OnLoad();
 
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
