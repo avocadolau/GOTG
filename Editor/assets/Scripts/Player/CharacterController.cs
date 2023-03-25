@@ -94,7 +94,7 @@ namespace Game
             if (shootInput != Vector3Values.zero)
             {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
-                Fire();
+                Fire(shootInput);
             }
         }
 
@@ -234,7 +234,7 @@ namespace Game
         }
 
 
-        void Fire()
+        void Fire(Vector3 shootInput)
         {
             ref CharacterShooter shooter = ref GetComponentByIterator<CharacterShooter>(shooterIt);
             isShooting = true;
@@ -252,7 +252,7 @@ namespace Game
                 spawnPoint += GetComponentByIterator<Transform3D>(transformIt).LocalPosition;
 
                 shooter.ShootRight = !shooter.ShootRight;
-                SpawnBullet(spawnPoint, shooter);
+                SpawnBullet(spawnPoint, shooter, shootInput);
             }
         }
 
@@ -289,15 +289,19 @@ namespace Game
         {
             return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         }
-        void SpawnBullet(Vector3 position, CharacterShooter shooter)
+        void SpawnBullet(Vector3 position, CharacterShooter shooter, Vector3 bullDir)
         {
             float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
 
+            // float shootX = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, 0);
+            // float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
+
             Console.WriteLine($"Angle {angle}");
 
-            Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
+            //Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
+            //Vector3 bulletDir = new Vector3(shootX, 0, shootY);
 
-            Console.WriteLine($"Direction {direction.x} {direction.z}");
+            //Console.WriteLine($"Direction {direction.x} {direction.z}");
             EntityId bullet = CreateEntity();
 
             ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
@@ -308,7 +312,7 @@ namespace Game
 
             AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
 
-
+            //bulletTransform.LocalRotation.y = bulletDir.x * 90 + bulletDir.z * 90;
             bulletTransform.LocalPosition = position;
             bulletTransform.LocalScale = new Vector3(1f, 1f, 1f);
 
@@ -326,7 +330,9 @@ namespace Game
             bulletComp.Velocity = shooter.BulletSpeed;
             bulletComp.LifeTime = shooter.BulletLifeTime;
             bulletComp.Damage = shooter.BulletDamage;
-            bulletComp.Direction = direction;
+            bulletComp.Direction = bullDir;
+
+            bulletTransform.LocalRotation.y = 90.0f + angle;
 
             ApplySystem<MeshRenderer>(bullet);
             ApplySystem<PhysicsSystem>(bullet);
