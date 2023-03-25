@@ -601,6 +601,5 @@ namespace Wiwa
 					
 			}
 		}
-		return true;
 	}
 }
