@@ -426,6 +426,7 @@ namespace Wiwa
 				}
 			}
 		}
+		return true;
 	}
 
 	void GuiManager::SaveWiUI(const char* path)
@@ -504,5 +505,6 @@ namespace Wiwa
 
 			}
 		}
+		return true;
 	}
 }

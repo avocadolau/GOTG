@@ -4,14 +4,19 @@
 
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/scene/SceneManager.h>
+#include <Wiwa/AI/AIMapGeneration.h>
+#include "../../Utils/EditorUtils.h"
 //#include <Wiwa/audio/Audio.h>
 //#include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 //#include <Wiwa/utilities/filesystem/FileSystem.h>
 //#include <Wiwa/core/Resources.h>
 
+//#include "glew.h"
+
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
 	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
 {
+	m_drawGrid = true;
 }
 
 AIMapBakingPanel::~AIMapBakingPanel()
@@ -21,44 +26,57 @@ AIMapBakingPanel::~AIMapBakingPanel()
 void AIMapBakingPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
-
 	
-	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the A* Map into the entity named");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0, 255, 200, 1), "Floor");
-
-	ImGui::TextColored(ImVec4(255, 0, 0, 1), " It does not take in account AABBs collisions yet");
+	ImGui::TextColored(ImVec4(255, 252, 127, 1), " This button bakes the Map with theese parameters:");
 	
+	const std::string posLabel = "Position in Tiles:";
+	DrawInt2Control(posLabel, &mapSizeInTiles, 1.0f, 0.0f);
 
-	//ImGui::SameLine();
-	
+	const std::string sizeLabel = "Size of the Tiles:";
+	DrawVec2Control(sizeLabel, &sizeOfTiles, 1.0f, 0.0f);
 
-	if (ImGui::Button("Bake Map")) {
-		
-		//
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		
-		//std::unique_ptr<std::vector<SystemHash>> entityList  = std::make_unique<std::vector<SystemHash>>(entityManager);
-		std::vector<EntityId>* entityList = entityManager.GetEntitiesAlive();
-		
-		EntityId eid = EntityId();
-
-		//for(int i = 0; i < entityList->size(); i++)
-		//{
-		//	eid = entityList->at(i);
-		//	if (entityManager.GetEntityName(eid) == "Floor")
-		//	{
-		//		// entityManager.GetComponent<Wiwa::tra>();
-		//		// Get the transform component and call the generation map funtion
-		//	}
-		//	else {
-		//		continue;
-		//	}
-		//}
-
-		Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1.0f, 1.0f, 0.0f);
+	ImGui::Spacing();
+	if (ImGui::Button("Create new Map"))
+	{
+		Wiwa::AIMapGeneration::CreateWalkabilityMap(mapSizeInTiles.x, mapSizeInTiles.y, sizeOfTiles.x, sizeOfTiles.y, glm::vec3(0.0f));
+		RefreshData();
 	}
 
+	if (ImGui::Button("Bake Map"))
+	{
+		Wiwa::AIMapGeneration::BakeMap();
+	}
+
+	if (ImGui::Button("Save current Map"))
+	{
+		Wiwa::AIMapGeneration::OnSave();
+	}
+
+	if (ImGui::Button("Load last saved Map"))
+	{
+		Wiwa::AIMapGeneration::OnLoad();
+		RefreshData();
+	}
+
+	if (ImGui::Button("Clear Map"))
+	{
+		Wiwa::AIMapGeneration::ClearMap();
+		RefreshData();
+	}
+
+	ImGui::Checkbox("Draw Map Grid", &m_drawGrid);
+
+	if (m_drawGrid)
+	{
+		Wiwa::AIMapGeneration::DebugDrawMap();
+	}
 	
 	ImGui::End();
+}
+
+void AIMapBakingPanel::RefreshData()
+{
+	Wiwa::AIMapGeneration::MapData& data = Wiwa::AIMapGeneration::GetMapData();
+	mapSizeInTiles = { data.width, data.height };
+	sizeOfTiles = { data.tileWidth, data.tileHeight };
 }

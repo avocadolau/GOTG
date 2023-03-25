@@ -7,6 +7,7 @@
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/utilities/render/LightManager.h>
 #include <Wiwa/core/ProjectManager.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 
 namespace Wiwa
 {
@@ -700,7 +701,7 @@ namespace Wiwa
 
 			// Save Physics Manager json Data
 			sc->GetPhysicsManager().OnSave();
-
+			AIMapGeneration::OnSave();
 			WI_CORE_INFO("Saved scene in file \"{0}\" successfully!", scene_path);
 		}
 		else
@@ -744,9 +745,6 @@ namespace Wiwa
 			// Load Physics Manager json Data
 			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
-			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-
 			_loadSceneImpl(sc, scene_file);
 
 			sc->ChangeName(path.filename().stem().string().c_str());
@@ -756,7 +754,9 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			Wiwa::AIPathFindingManager::CreateWalkabilityMap(50, 50, 1, 1, 0); // this is temporal
+			AIMapGeneration::ClearMap();
+			AIMapGeneration::OnLoad();
+
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else

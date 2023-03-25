@@ -4,16 +4,6 @@
 #include <Wiwa/core/Core.h>
 
 #include <Wiwa/ecs/components/AgentAI.h>
-//#include <Wiwa/ecs/components/ColliderCube.h>
-//#include <Wiwa/ecs/components/ColliderCylinder.h>
-//#include <Wiwa/ecs/components/ColliderSphere.h>
-//#include <Wiwa/ecs/components/ColliderCapsule.h>
-//#include <Wiwa/ecs/components/RayCast.h>
-//#include "Wiwa/ecs/components/Transform3D.h"
-//#include <Wiwa/utilities/render/shaders/Shader.h>
-//#include <Wiwa/utilities/render/Uniforms.h>
-//#include <Wiwa/core/Resources.h>
-
 //#include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
@@ -33,27 +23,12 @@ namespace Wiwa {
 
 	public:
 
-		// Data from the map
-		struct MapData
-		{
-			float startingPosition;
-			int width;
-			int	height;
-			int	tileWidth;
-			int	tileHeight;
-		};
-
-
-		// ---------------------------------------------------------------------
-		// Pathnode: Helper struct to represent a node in the path creation
-		// ---------------------------------------------------------------------
-
 		struct PathList;
 
 		struct PathNode
 		{
-			int g;
-			int h;
+			int g; // Distance from current node and parent
+			int h; // Distance between current node and destination
 			glm::ivec2 pos;
 			const PathNode* parent; // needed to reconstruct the path in the end
 
@@ -85,7 +60,8 @@ namespace Wiwa {
 			PathNode* GetNodeLowestScore();
 
 			// The list itself, note they are not pointers!
-			std::vector<PathNode> pathList;
+			//std::vector<PathNode> pathList;
+			std::list<PathNode> pathList;
 		};
 
 	private:
@@ -97,11 +73,14 @@ namespace Wiwa {
 		// Called before quitting
 		static bool CleanUp();
 
+		// Sets up the walkability map
+		static void SetMap(uint32_t width, uint32_t height, unsigned char* data);
+
 		// Main function to request a path from A to B
 		static int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
 
 		// To request all tiles involved in the last generated path
-		static const std::vector<glm::ivec2>* GetLastPath();
+		static const std::vector<glm::vec2> GetLastPath();
 
 		// Utility: return true if pos is inside the map boundaries
 		static bool CheckBoundaries(const glm::ivec2& pos);
@@ -112,36 +91,17 @@ namespace Wiwa {
 		// Utility: return the walkability value of a tile
 		static unsigned char GetTileAt(const glm::ivec2& pos);
 
-		/*
-		// Map Related functions
-		*/
-
-		// Generate the grid of the map, stores it inside map data and set the navigation values to walkable or non walkable
-		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, float startPos);
-
-		// Space translations for the pathfinding
-		static glm::ivec2 MapToWorld(int x, int y);
-		static glm::ivec2 WorldToMap(int x, int y);
-
-
-		static MapData& GetMapData()
-		{
-			return m_mapData;
-		}
-
 		private:
 
-		
+		// size of the map
+		static uint32_t m_width;
+		static uint32_t m_height;
 			
 		// all map walkability values [0..255]
-		static unsigned char* m_map;
+		static unsigned char* m_Map;
 
 		// we store the created path here
-		static std::vector<glm::ivec2> m_lastPath;
-
-		// data of the map
-		static MapData m_mapData;
-		
+		static std::vector<glm::vec2> m_lastPath;
 	};
 }
 

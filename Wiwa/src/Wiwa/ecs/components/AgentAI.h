@@ -10,11 +10,14 @@ namespace Wiwa {
 	struct WI_API AgentAI {
 		float speed;
 		glm::vec3 target;
-		//bool hasArrived;
+		bool hasArrived;
+		bool hasPath;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::AgentAI)
 	REFLECT_MEMBER(speed)
 	REFLECT_MEMBER(target)
+	REFLECT_MEMBER(hasArrived)
+	REFLECT_MEMBER(hasPath)
 REFLECTION_END;
