@@ -258,6 +258,8 @@ namespace Wiwa {
 
 		inline float RandomRange(float value01, float value02) 
 		{
+			if ((value01 - value02) == 0)
+				return 0;
 
 			if (value01 > value02) {
 
@@ -275,7 +277,7 @@ namespace Wiwa {
 		inline int RandomRange(int value01, int value02)
 		{
 
-			if (value01 == 0 && value02 == 0)
+			if ((value01 - value02) == 0)
 				return 0;
 
 			if (value01 > value02) {

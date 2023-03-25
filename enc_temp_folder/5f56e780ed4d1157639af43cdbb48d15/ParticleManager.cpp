@@ -43,7 +43,7 @@ namespace Wiwa {
 		if (emitterList.size() > 0)
 		{
 			dt = Time::GetRealDeltaTime() / 1000;
-			
+
 
 			for (std::shared_ptr<ParticleEmitter> emitter : emitterList)
 			{
@@ -67,14 +67,14 @@ namespace Wiwa {
 
 							}
 						}
-						
+
 
 
 					}
 
 
 					emitter->timer -= dt;
-					
+
 				}
 
 
@@ -107,9 +107,9 @@ namespace Wiwa {
 
 				//}
 			}
-			
 
-			
+
+
 		}
 
 		UpdateParticles();
@@ -193,7 +193,7 @@ namespace Wiwa {
 
 		for (size_t j = 0; j < currentParticleIndex; j++)
 		{
-			
+
 
 			if (currentParticleIndex < MAX_PARTICLES)
 			{
@@ -235,6 +235,8 @@ namespace Wiwa {
 					p.followEmitterRotation = false;
 					p.followEmitterPosition = false;
 					p.followParticle = false;
+
+					p.followSpawn = false;
 
 					particleArray[j].isActive = false;
 
@@ -286,7 +288,43 @@ namespace Wiwa {
 
 					glm::vec3 scaledVertex = ref_vertices[i] * p.transform.localScale;
 
-					
+
+					glm::vec3 resultantVertex = glm::vec3(0, 0, 0);
+
+					if (p.emitterOwner->activateBillboard == true)
+					{
+						//fix rotation
+						glm::mat4 rotationMatrix = man.editorCamera->getView();
+						glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
+
+
+						glm::vec4 rotatedVertex = billboardMatrix * glm::vec4(scaledVertex, 1.0f);
+						resultantVertex = glm::vec3(rotatedVertex);
+					}
+					else
+					{
+						//fix rotation
+						glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
+						glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
+						resultantVertex = glm::vec3(rotatedVertex);
+					}
+
+					if (p.followSpawn)
+					{
+						p.startingPosition = t3D->localPosition;
+					}
+
+					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
+
+					p.followSpawn = false;
+
+
+					if (p.followEmitterPosition)
+					{
+						resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex;
+					}
+
+					p.vertices[i] = resultantPosition;
 
 					//---------------------------------------
 
@@ -384,105 +422,21 @@ namespace Wiwa {
 						texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textureResource);
 					}
 
-					CameraId cameraId;
-					cameraId = man.getActiveCameraId();
-					Wiwa::Camera* cam = man.getCamera(cameraId);
-
-
-
-					for (size_t i = 0; i < 4; i++)
+					//show in game cameras
+					for (size_t i = 0; i < cameraCount; i++)
 					{
-						//// Billboarding
-						bool billboarding = true;
-						glm::vec3 resultantVertex = { 0,0,0 };
-						glm::vec3 scaledVertex = ref_vertices[i] * p.transform.localScale;
+						CameraId cam_id = cameras[i];
+						Camera* camera = man.getCamera(cam_id);
 
-						if (billboarding)
-						{
-							//fix rotation
-							glm::mat4 rotationMatrix = cam->getView();
-							glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
-
-
-							glm::vec4 rotatedVertex = billboardMatrix * glm::vec4(scaledVertex, 1.0f);
-							resultantVertex = glm::vec3(rotatedVertex);
-						}
-						else
-						{
-							//fix rotation
-							glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
-							glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
-							resultantVertex = glm::vec3(rotatedVertex);
-						}
-
-						glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
-
-						if (p.followEmitterPosition)
-						{
-							resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex;
-						}
-
-						p.vertices[i] = resultantPosition;
+						if (texture)
+							r3d.RenderQuad(VAO, indices, p.transform.position - (camera->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
+								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, texture, texture->GetSize());
 					}
 
 					//show in editor window
 					if (texture)
-						r3d.RenderQuad(VAO, indices, p.transform.position - cam->getPosition(), p.transform.rotation, p.transform.localScale,
-							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, cam, true, texture, texture->GetSize());
-
-					////show in game cameras
-					//for (size_t i = 0; i < cameraCount; i++)
-					//{
-					//	CameraId cam_id = cameras[i];
-					//	Camera* camera = man.getCamera(cam_id);
-
-					//	for (size_t i = 0; i < 4; i++)
-					//	{
-					//		//// Billboarding
-					//		bool billboarding = true;
-					//		glm::vec3 resultantVertex = { 0,0,0 };
-					//		glm::vec3 scaledVertex = ref_vertices[i] * p.transform.localScale;
-
-					//		if (billboarding)
-					//		{
-
-					//			//glm::mat4 rotationMatrix = glm::lookAt(man.editorCamera->getPosition(), man.editorCamera->getPosition() + man.editorCamera->getFront(), man.editorCamera->getUp());
-					//			//glm::mat4 model = glm::translate(glm::mat4(1.0f), (p.startingPosition + p.transform.localPosition)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-					//			//glm::mat4 modelView = man.editorCamera->getView() * glm::inverse(model);
-
-					//			//fix rotation
-					//			glm::mat4 rotationMatrix = camera->getView();
-					//			glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
-
-
-					//			glm::vec4 rotatedVertex = billboardMatrix * glm::vec4(scaledVertex, 1.0f);
-					//			resultantVertex = glm::vec3(rotatedVertex);
-					//		}
-					//		else
-					//		{
-					//			//fix rotation
-					//			glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
-					//			glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
-					//			resultantVertex = glm::vec3(rotatedVertex);
-					//		}
-
-					//		glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
-
-					//		if (p.followEmitterPosition)
-					//		{
-					//			resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex;
-					//		}
-
-					//		p.vertices[i] = resultantPosition;
-					//	}
-
-
-					//	if (texture)
-					//		r3d.RenderQuad(VAO, indices, p.transform.position - camera->getPosition(), p.transform.rotation, p.transform.localScale,
-					//			lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, texture, texture->GetSize());
-					//}
-
-
+						r3d.RenderQuad(VAO, indices, p.transform.position  - (man.editorCamera->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
+							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, texture, texture->GetSize());
 
 
 					glDeleteVertexArrays(1, &VAO);
@@ -597,18 +551,21 @@ namespace Wiwa {
 
 			//position
 			{
-				//set starting position
-				if (emitter->particle_startingPosition_isRanged)
+				if (p.followSpawn == false)
 				{
-					float x = Wiwa::Math::RandomRange(emitter->particle_startingPosition_range[0].x, emitter->particle_startingPosition_range[1].x);
-					float y = Wiwa::Math::RandomRange(emitter->particle_startingPosition_range[0].y, emitter->particle_startingPosition_range[1].y);
-					float z = Wiwa::Math::RandomRange(emitter->particle_startingPosition_range[0].z, emitter->particle_startingPosition_range[1].z);
+					//set starting position
+					if (emitter->particle_startingPosition_isRanged)
+					{
+						float x = Wiwa::Math::RandomRange(emitter->particle_startingPosition_range[0].x, emitter->particle_startingPosition_range[1].x);
+						float y = Wiwa::Math::RandomRange(emitter->particle_startingPosition_range[0].y, emitter->particle_startingPosition_range[1].y);
+						float z = Wiwa::Math::RandomRange(emitter->particle_startingPosition_range[0].z, emitter->particle_startingPosition_range[1].z);
 
-					p.startingPosition = glm::vec3(x, y, z);
-				}
-				else
-				{
-					p.startingPosition = emitter->particle_startingPosition;
+						p.startingPosition = glm::vec3(x, y, z);
+					}
+					else
+					{
+						p.startingPosition = emitter->particle_startingPosition;
+					}
 				}
 
 				//set initial velocity
@@ -708,6 +665,8 @@ namespace Wiwa {
 			p.followEmitterRotation = emitter->particle_followEmitterRotation;
 			p.followParticle = emitter->particle_followParticle;
 
+			p.followSpawn = emitter->followOnSpawn;
+
 
 			//set geometry
 			for (size_t i = 0; i < 4; i++)
@@ -721,9 +680,6 @@ namespace Wiwa {
 			}
 
 			p.transform.scale = glm::vec3(1, 1, 1);
-
-
-
 
 			//get texture from resourceId
 			Image* texture = nullptr;
@@ -754,11 +710,23 @@ namespace Wiwa {
 
 				if (p.animation != nullptr)
 				{
-					p.animation->speed = 1.0f;
-					p.animation->loop = true;
+					//p.animation->speed = 1.0f;
+					//p.animation->loop = true;
+					//p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+					//p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+
+					p.animation->speed = 2.0f;
+					p.animation->loop = false;
+
 					p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
 					p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
 					p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+					p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+
+					p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+					p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
+
 				}
 			}
 
@@ -790,9 +758,9 @@ namespace Wiwa {
 		if (emitter && !emitter->isPlaying)
 		{
 			emitter->isPlaying = true;
-			//WI_CORE_INFO("time = {}", delaySec);
+			WI_CORE_INFO("time = {}", delaySec);
 			emitter->timer = delaySec;
-			
+
 		}
 	}
 
@@ -853,10 +821,10 @@ namespace Wiwa {
 		followEmitterRotation = false;
 		followEmitterPosition = false;
 		followParticle = false;
+		followSpawn = false;
 	}
 	//bool ParticleManager::CreateCustomParticle()
 	//{
 	//	return true;
 	//}
 }
-
