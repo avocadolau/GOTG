@@ -189,7 +189,7 @@ namespace Game
         {
             dashTimer += Time.DeltaTime();
 
-            if (dashTimer >= controller.DashCoolDown &&
+            if (!isDashing && dashTimer >= controller.DashCoolDown &&
             (Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA)))
             {
                 isDashing = true;
@@ -304,8 +304,8 @@ namespace Game
             ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
             ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
             ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
-            
-           
+
+
             AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
 
 
