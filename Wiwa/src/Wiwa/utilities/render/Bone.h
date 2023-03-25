@@ -56,9 +56,9 @@ namespace Wiwa {
         std::vector<VectorKey> m_Positions;
         std::vector<QuatKey> m_Rotations;
         std::vector<VectorKey> m_Scales;
-        int m_NumPositionKeys;
-        int m_NumRotationKeys;
-        int m_NumScalingKeys;
+        uint32_t m_NumPositionKeys;
+        uint32_t m_NumRotationKeys;
+        uint32_t m_NumScalingKeys;
 
         glm::mat4 m_LocalTransform;
         glm::mat4 m_GlobalTransform;

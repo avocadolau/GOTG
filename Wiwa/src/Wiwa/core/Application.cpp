@@ -36,7 +36,6 @@
 #include <Wiwa/render/RenderManager.h>
 
 #include <Wiwa/core/ProjectManager.h>
-#include <Wiwa/game/RoomManager.h>
 
 USE_REFLECTION;
 
@@ -98,7 +97,7 @@ namespace Wiwa
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
-		Wiwa::RoomManager::DeserializeData();
+		Wiwa::GameStateManager::DeserializeData();
 	}
 
 	void Application::SetHwInfo()
@@ -383,6 +382,9 @@ namespace Wiwa
 	bool Application::OnLoad(OnLoadEvent &e)
 	{
 		JSONDocument config("config/application.json");
+
+		if (!config.IsObject())
+			return false;
 
 		if (config.HasMember("vsync"))
 			m_Window->SetVSync(config["vsync"].as_bool());

@@ -47,7 +47,9 @@ void DrawVec3Control(const char* label, unsigned char* data, const Field field, 
 void DrawVec3Control(const std::string& label,float* values, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawVec3Control(const std::string& label, glm::vec3* values, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawVec2Control(const char* label, unsigned char* data, const Field field, float resetValue = 0.0f, float columnWidth = 100.0f);
+void DrawVec2Control(const std::string& label, glm::vec2* values, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawInt2Control(const char* label, unsigned char* data, const Field field, int resetValue = 0.0f, float columnWidth = 100.0f);
+void DrawInt2Control(const std::string& label, glm::ivec2* values, float resetValue = 0.0f, float columnWidth = 100.0f);
 void DrawRect2Control(const char* label, unsigned char* data, const Field field, int resetValue = 0.0f, float columnWidth = 100.0f);
 
 bool ImageExtensionComp(const std::filesystem::path file);

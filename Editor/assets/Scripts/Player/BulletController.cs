@@ -8,33 +8,43 @@ namespace Game
     public struct BulletComponent
     {
         public float Velocity;
-        public float TimeToDestroy;
-        public float Timer;
+        public float LifeTime;
         public int Damage;
-
-        public Vector3 direction;
+        public Vector3 Direction;
     }
     class BulletController : Behaviour
     {
+        private float timer = 0f;
+        private ComponentIterator bulletCompIt;
+        void Init()
+        {
+            bulletCompIt = GetComponentIterator<BulletComponent>();
+
+            ref BulletComponent bulletc = ref GetComponentByIterator<BulletComponent>(bulletCompIt);
+            
+            //Mathf.Clamp
+            PhysicsManager.SetLinearVelocity(m_EntityId, bulletc.Direction.normalized * bulletc.Velocity);
+            
+        }
+
         void Update()
         {
-            ref BulletComponent bulletc = ref GetComponent<BulletComponent>();
-            bulletc.Timer += Time.DeltaTime();
+            ref BulletComponent bulletc = ref GetComponentByIterator<BulletComponent>(bulletCompIt);
 
-            //ref Transform3D transform = ref GetComponent<Transform3D>();
+            timer += Time.DeltaTime();
 
-            //transform.LocalPosition += bulletc.direction * bulletc.Velocity * Time.DeltaTime();
-
-            if (bulletc.Timer >= bulletc.TimeToDestroy)
+            if (timer >= bulletc.LifeTime)
             {
                 DestroyEntity();
             }
-
-           
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
+            if (id1 != m_EntityId)
+                return;
+
+            Console.WriteLine(str2);
             DestroyEntity();
         }
     }

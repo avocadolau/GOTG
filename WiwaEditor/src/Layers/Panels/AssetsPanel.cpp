@@ -30,7 +30,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	ResourceId shaderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/shader_icon.png");
 	ResourceId prefabId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/prefab_icon.png");
 	ResourceId sceneId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/scene_icon.png");
-	
+	ResourceId guiId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/canvas_icon.png");
 
 	m_FolderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(folderId)->GetTextureId();
 	m_FileIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(fileId)->GetTextureId();
@@ -40,6 +40,7 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	m_ShaderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(shaderId)->GetTextureId();
 	m_PrefabIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(prefabId)->GetTextureId();
 	m_SceneIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(sceneId)->GetTextureId();
+	m_GuiIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(guiId)->GetTextureId();
 
 	if (!std::filesystem::exists(s_AssetsPath))
 	{
@@ -91,39 +92,49 @@ AssetsPanel::~AssetsPanel()
 
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
 {	
-	std::filesystem::path assetsPath = "assets";
-	assetsPath /= path;
+	using namespace std::chrono_literals;
+	std::this_thread::sleep_for(500ms);
+	Wiwa::Application::Get().SubmitToMainThread([path, change_type]()
+	{
+		std::filesystem::path assetsPath = "assets";
+		assetsPath /= path;
 
-	if (assetsPath.extension() == ".meta")
-		return;
-	
-	if (assetsPath.extension() == ".cs")
-	{
-		EditorLayer::Get().RegenSol();
-	}
-	switch (change_type)
-	{
-	case filewatch::Event::added:
-	{
-		CheckImport(assetsPath);
-	}break;
-	case filewatch::Event::removed:
-	{
+		if (assetsPath.extension() == ".meta")
+			return;
+
+		if (assetsPath.extension() == ".cs")
+		{
+			if (Wiwa::Time::IsPlaying())
+			{
+				WI_WARN("Scene paused due to script reload!");
+				EditorLayer::Get().StopScene();
+			}
+			EditorLayer::Get().RegenSol();
+		}
+		switch (change_type)
+		{
+		case filewatch::Event::added:
+		{
+			CheckImport(assetsPath);
+		}break;
+		case filewatch::Event::removed:
+		{
 		DeleteFileAssets(assetsPath);
-	}break;
-	case filewatch::Event::modified:
-	{
-		CheckImport(assetsPath);
-	}break;
-	case filewatch::Event::renamed_old:
-	{
-		DeleteFileAssets(assetsPath);
-	}break;
-	case filewatch::Event::renamed_new:
-	{
-		CheckImport(assetsPath);
-	}break;
-	};
+		}break;
+		case filewatch::Event::modified:
+		{
+			CheckImport(assetsPath);
+		}break;
+		case filewatch::Event::renamed_old:
+		{
+			DeleteFileAssets(assetsPath);
+		}break;
+		case filewatch::Event::renamed_new:
+		{
+			CheckImport(assetsPath);
+		}break;
+		};
+	});
 }
 
 void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
@@ -152,6 +163,8 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 	}
 	else if (assetsPath.extension() == ".wiprefab")
 		extension = ".wiprefab";
+	else if (assetsPath.extension() == ".wiGUI")
+		extension = ".wiGUI";
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -299,7 +312,9 @@ void AssetsPanel::Draw()
 					texID = m_PrefabIcon;
 				else if (directoryEntry.path().extension() == ".wiscene")
 					texID = m_SceneIcon;
-
+				else if (directoryEntry.path().extension() == ".wiGUI")
+					texID = m_GuiIcon;
+				
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::ImageButton(texID, { thumbnailSize, thumbnailSize }))
 				{
@@ -329,10 +344,17 @@ void AssetsPanel::Draw()
 					if (directoryEntry.is_directory())
 						m_CurrentPath /= path.filename();
 					else
-						Wiwa::Application::Get().OpenDir(path.string().c_str());
+					{
+						if (path.extension() == ".cs")
+							system("call tools/opensln.bat AppAssembly.sln");
+						else
+							Wiwa::Application::Get().OpenDir(path.string().c_str());
+					}
 				}
 				if (ImGui::BeginPopupContextWindow("Assets context window"))
 				{
+					if(ImGui::IsItemHovered())
+						m_SelectedEntry = directoryEntry;
 					if (ImGui::MenuItem("Find in explorer"))
 					{
 						Wiwa::Application::Get().OpenDir(m_CurrentPath.string().c_str());

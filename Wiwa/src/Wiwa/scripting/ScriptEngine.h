@@ -56,7 +56,7 @@ namespace Wiwa {
 			std::unordered_map<size_t, Type*> Systems;
 		};
 		static ScriptEngineData* s_Data;
-
+		static bool isAssemblyLoaded;
 	private:
 		static void InitMono();
 		static void ShutDownMono();

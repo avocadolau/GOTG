@@ -19,7 +19,7 @@ namespace Wiwa
 
 		bool Draw(Renderer2D* render);
 
-		Text* text;
+		Text* text_res;
 	};
 }
 

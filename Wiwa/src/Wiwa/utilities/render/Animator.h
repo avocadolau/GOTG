@@ -19,13 +19,25 @@ namespace Wiwa {
 
         void UpdateAnimation(float dt);
 
+        void UpdateBlendingAnimation(float dt);
+
         void PlayAnimation(Animation* pAnimation);
 
         void PlayAnimationName(std::string name);
 
         void PlayAnimationIndex(unsigned int index);
 
+        void BlendTwoAnimations(Animation* baseAnim, Animation* layerAnim, float blendFactor, float deltaTime);
+
+        void CalculateBlendedBoneTransform(Animation* animationBase, const NodeData* node,
+            Animation* animationLayer, const NodeData* nodeLayered,
+            const float currentTimeBase, const float currentTimeLayered,
+            const glm::mat4& parentTransform,
+            const float blendFactor);
+
         void CalculateBoneTransform(const NodeData* node,const glm::mat4 parentTransform);
+
+        void CalculateBoneTransform(Animation* animation, float time,const NodeData* node,const glm::mat4 parentTransform);
 
         void CalculateBoneFinalTransform();
 
@@ -39,7 +51,11 @@ namespace Wiwa {
 
         void SetCurrentAnimation(Animation* anim) { m_CurrentAnimation = anim; }
 
+        void SetTargetAnimation(Animation* anim) { m_TargetAnimation = anim; }
+
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
+
+        Animation* GetTargetAnimation() { return m_TargetAnimation; }
 
         std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
 
@@ -47,18 +63,19 @@ namespace Wiwa {
         std::string m_Name;
         unsigned int m_NumAnimations;
         AnimationState m_AnimationState = AnimationState::Paused;
+
+        float m_BlendWeight;
     private:
         std::vector<glm::mat4> m_FinalBoneMatrices;
         //Animator
-        Animation* m_CurrentAnimation;
+        Animation* m_CurrentAnimation = nullptr;
         float m_CurrentTime;
         float m_DeltaTime = 0;
         float m_AnimationTime;
         std::string m_RootNodeName;
         //blending
-        Animation* m_TargetAnimation ;
+        Animation* m_TargetAnimation = nullptr;
         float m_BlendDuration;
         float m_BlendTime = 0.0f;
-        float m_BlendWeight;
     };
 }

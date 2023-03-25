@@ -4,7 +4,7 @@ using Wiwa;
 
 namespace Game
 {
-    using EntityId = System.UInt32;
+    using EntityId = System.UInt64;
     [Component]
     public struct CharacterController
     {
@@ -23,6 +23,7 @@ namespace Game
         private ComponentIterator characterControllerIt;
         private ComponentIterator transformIt;
         private ComponentIterator rigidBodyIt;
+        private ComponentIterator shooterIt;
 
         private float dashTimer = 0f;
         private float dashCurrentVel = 0f;
@@ -30,53 +31,96 @@ namespace Game
 
         private Vector3 lastPos = Vector3Values.zero;
 
-        private int normalTags = 0;
-        private int dashTags = 0;
+        private bool isShooting = false;
+        private float shootTimer = 0f;
+
+        private float footstepTimer = 0f;
+        private float walkStepTimer = 0.6f;
+        private float runStepTimer = 0.30f;
+
+        private bool isWalking = false;
+
+        Vector3 lastDir = Vector3Values.zero;
+
         void Awake()
         {
-            InitTags();
+
             //Setting components
             characterControllerIt = GetComponentIterator<CharacterController>();
             transformIt = GetComponentIterator<Transform3D>();
             rigidBodyIt = GetComponentIterator<CollisionBody>();
+            shooterIt = GetComponentIterator<CharacterShooter>();
 
             dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
+
+            // need to get or hardcode step and run timers.
         }
-        void InitTags()
-        {
-            dashTags |= 1 << PhysicsManager.GetTagBitsByString("WALL");
-            normalTags = PhysicsManager.GetTagBitsByString("WALL");
-            normalTags = PhysicsManager.GetTagBitsByString("COLUMN");
-            normalTags = PhysicsManager.GetTagBitsByString("ENEMY");
-            normalTags = PhysicsManager.GetTagBitsByString("END_ROOM_TRIGGER");
-            normalTags = PhysicsManager.GetTagBitsByString("START_RUN_TRIGGER");
-        }
+
         void Update()
         {
+            //Components
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref CharacterController controller = ref GetComponentByIterator<CharacterController>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
 
             Vector3 velocity = Vector3Values.zero;
-
-            Vector3 input = GetMovementInput(ref controller);
+            Vector3 input = Vector3Values.zero;
 
             if (!isDashing)
+            {
+                input = GetMovementInput(ref controller);
                 velocity = input * controller.Velocity;
+            }
 
             Dash(ref velocity, input, controller, transform, ref rb);
-
+            //ChangePosition
             PhysicsManager.SetLinearVelocity(m_EntityId, velocity);
 
-            if (input != Vector3Values.zero)
+            footstepTimer += Time.DeltaTime();
+
+            if (input != Vector3Values.zero && !isDashing)
+            {
+                lastDir = input;
                 SetPlayerRotation(ref transform.LocalRotation, input, controller.RotationSpeed);
+                PlayFootStep();
+            }
+            else
+            {
+                footstepTimer = 0;
+            }
 
             UpdateAnimation(input, controller);
 
-
+            
             Vector3 shootInput = GetShootingInput(ref controller);
-            if (shootInput != Vector3Values.zero)
+            shootTimer += Time.DeltaTime();
+            
+            //rotates the character if aiming
+            if (shootInput != Vector3Values.zero && !isDashing)
+            {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
+                lastDir = shootInput;
+
+            }
+            //FIRES the weapon, if the player is not aiming shoots the bullet is shot to the direction the character is looking
+            if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper))
+            {
+                if (shootInput == Vector3Values.zero)
+                {
+                    if(lastDir != Vector3Values.zero)
+                    {
+                        Fire(lastDir);
+                    }
+                    else Fire(new Vector3(0,0,1));
+                }
+                else
+                {
+                    Fire(shootInput);
+                    
+                }
+            } 
+            
+            
         }
 
         Vector3 GetMovementInput(ref CharacterController controller)
@@ -137,8 +181,13 @@ namespace Game
         }
         void SetPlayerRotation(ref Vector3 currentRotation, Vector3 input, float rotationSpeed)
         {
-            float angle = Mathf.Atan2(input.x, input.z) * Mathf.Rad2Deg;
+            float angle = AngleFromVec2(new Vector2(input.x, input.z));
+
+
             currentRotation.y = Mathf.LerpAngle(currentRotation.y, angle, rotationSpeed);
+
+            if (currentRotation.y >= 360f)
+                currentRotation.y = 0f;
         }
         void UpdateAnimation(Vector3 input, CharacterController controller)
         {
@@ -153,16 +202,19 @@ namespace Game
 
             if (mag <= controller.WalkTreshold)
             {
+                isWalking = true;
+
                 Animator.PlayAnimationName("walk", m_EntityId);
                 return;
             }
+            isWalking = false;
             Animator.PlayAnimationName("run", m_EntityId);
         }
         void Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform, ref CollisionBody cb)
         {
             dashTimer += Time.DeltaTime();
 
-            if (dashTimer >= controller.DashCoolDown &&
+            if (!isDashing && dashTimer >= controller.DashCoolDown &&
             (Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA)))
             {
                 isDashing = true;
@@ -185,8 +237,7 @@ namespace Game
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("ENEMY"));
                 cb.filterBits &= ~(1 << PhysicsManager.GetTagBitsByString("COLUMN"));
                 PhysicsManager.ChangeCollisionTags(m_EntityId);
-                Console.WriteLine($"Target: {targetPoint.x} X {targetPoint.y} Y {targetPoint.z}");
-                Console.WriteLine($"Distance {distance}");
+
 
                 if (distance <= 2f)
                 {
@@ -207,13 +258,120 @@ namespace Game
 
         }
 
+
+        void Fire(Vector3 shootInput)
+        {
+            ref CharacterShooter shooter = ref GetComponentByIterator<CharacterShooter>(shooterIt);
+            isShooting = true;
+            if (shootTimer >= shooter.FireInterval)
+            {
+                shootTimer = 0f;
+
+                Vector3 spawnPoint;
+                //Decide wich hand is going next
+                if (shooter.ShootRight)
+                    spawnPoint = shooter.RightSpawnPos;
+                else
+                    spawnPoint = shooter.LeftSpawnPos;
+
+                spawnPoint += GetComponentByIterator<Transform3D>(transformIt).LocalPosition;
+
+                shooter.ShootRight = !shooter.ShootRight;
+                SpawnBullet(spawnPoint, shooter, shootInput);
+            }
+        }
+
+        void PlayFootStep()
+        {
+            if (isWalking)
+            {
+                if (footstepTimer >= walkStepTimer)
+                {
+                    footstepTimer = 0;
+                    Audio.PlaySound("player_walk", m_EntityId);
+                }
+            }
+            else if (footstepTimer >= runStepTimer)
+            {
+                Console.Write($"{isWalking}"); ;
+                footstepTimer = 0;
+                Audio.PlaySound("player_walk", m_EntityId);
+            }
+
+        }
+
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            if (id1 == m_EntityId)
+            if (id1 != m_EntityId)
                 return;
             if (str2 == "WALL")
                 ResetDash();
         }
 
+
+        //TODO: Put on Mathf.cs
+        public float AngleFromVec2(Vector2 vector)
+        {
+            return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
+        }
+        void SpawnBullet(Vector3 position, CharacterShooter shooter, Vector3 bullDir)
+        {
+            float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
+
+            // float shootX = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, 0);
+            // float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
+            
+
+            Console.WriteLine($"Angle {angle}");
+
+            position = RotatePointAroundPivot(position, GetComponentByIterator<Transform3D>(transformIt).LocalPosition, new Vector3(0, angle, 0));
+            //Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
+            //Vector3 bulletDir = new Vector3(shootX, 0, shootY);
+
+            //Console.WriteLine($"Direction {direction.x} {direction.z}");
+            EntityId bullet = CreateEntity();
+
+            ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
+            ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
+            ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
+            ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
+
+
+            AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
+
+            //bulletTransform.LocalRotation.y = bulletDir.x * 90 + bulletDir.z * 90;
+            bulletTransform.LocalPosition = position;
+            bulletTransform.LocalScale = new Vector3(1f, 1f, 1f);
+
+            cs.radius = 1;
+
+            cb.scalingOffset = new Vector3(1f, 1f, 1f);
+            cb.isTrigger = true;
+            cb.isStatic = false;
+            cb.doContinuousCollision = false;
+            cb.selfTag = 3;
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("WALL");
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
+
+            bulletComp.Velocity = shooter.BulletSpeed;
+            bulletComp.LifeTime = shooter.BulletLifeTime;
+            bulletComp.Damage = shooter.BulletDamage;
+            bulletComp.Direction = bullDir;
+
+            bulletTransform.LocalRotation.y = 90.0f + angle;
+
+            ApplySystem<MeshRenderer>(bullet);
+            ApplySystem<PhysicsSystem>(bullet);
+            ApplySystem<BulletController>(bullet);
+            ApplySystem<AudioSystem>(bullet);
+
+            Audio.PlaySound("player_shoot", m_EntityId);
+        }
+        Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+        {
+            return Quaternion.Euler(angles) * (point - pivot) + pivot;
+        }
     }
+
 }

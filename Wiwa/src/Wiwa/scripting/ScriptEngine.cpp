@@ -22,6 +22,7 @@
 
 namespace Wiwa {
 	ScriptEngine::ScriptEngineData* ScriptEngine::s_Data = nullptr;
+	bool ScriptEngine::isAssemblyLoaded = false;
 
 	void ScriptEngine::Init()
 	{
@@ -54,6 +55,12 @@ namespace Wiwa {
 		s_Data->CoreAssemblyFilePath = filepath;
 		s_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath.string().c_str());
 		s_Data->SystemAssembly = Utils::LoadMonoAssembly("mono/lib/mono/4.5/mscorlib.dll");
+		if (!s_Data->CoreAssembly)
+		{
+			WI_CORE_CRITICAL("The Core Assembly can't be loaded, please recompile engine!");
+			return;
+		}
+
 		LoadAssemblyTypes(s_Data->CoreAssembly);
 	}
 	//Function not called in the main thread
@@ -65,11 +72,12 @@ namespace Wiwa {
 			std::this_thread::sleep_for(500ms);
 			//Add reload to main thread queue
 			Application::Get().SubmitToMainThread([]()
-				{
-					ScriptEngine::s_Data->AssemblyReloadPending = true;
-			ScriptEngine::s_Data->AppAssemblyFileWatcher.reset();
-			ScriptEngine::ReloadAssembly();
-				});
+			{
+				ScriptEngine::s_Data->AssemblyReloadPending = true;
+				ScriptEngine::s_Data->AppAssemblyFileWatcher.reset();
+				ScriptEngine::ReloadAssembly();
+				
+			});
 		}
 	}
 
@@ -77,10 +85,18 @@ namespace Wiwa {
 	{
 		s_Data->AppAssembly = Utils::LoadMonoAssembly(filepath.string().c_str());
 		s_Data->AppAssemblyFilePath = filepath;
+
+		if (!s_Data->AppAssembly)
+		{
+			WI_CORE_CRITICAL("The App Assembly can't be loaded, please recompile the AppAssembly.sln!");
+			return;
+			isAssemblyLoaded = false;
+		}
 		LoadAssemblyTypes(s_Data->AppAssembly);
 
 		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>(filepath.string(), OnAppAssemblyFSEvent);
 		s_Data->AssemblyReloadPending = false;
+		isAssemblyLoaded = true;
 	}
 
 	void ScriptEngine::InitMono()
@@ -129,6 +145,8 @@ namespace Wiwa {
 		Utils::PrintReflectionTypes(s_Data->Components);
 		WI_CORE_WARN("Systems");
 		Utils::PrintReflectionTypes(s_Data->Systems);
+
+		isAssemblyLoaded = true;
 	}
 
 	std::unordered_map<size_t, Type*>& ScriptEngine::getSystems()
