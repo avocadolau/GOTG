@@ -74,7 +74,8 @@ namespace Wiwa {
 		static bool CleanUp();
 
 		// Sets up the walkability map
-		static void SetMap(uint32_t width, uint32_t height, unsigned char* data);
+		//static void SetMap(uint32_t width, uint32_t height, unsigned char* data);
+		static void SetMap(uint32_t width, uint32_t height, const std::vector< unsigned char>& data);
 
 		// Main function to request a path from A to B
 		static int CreatePath(const glm::ivec2& origin, const glm::ivec2& destination);
@@ -98,8 +99,8 @@ namespace Wiwa {
 		static uint32_t m_Height;
 			
 		// all map walkability values [0..255]
-		static unsigned char* m_Map;
-
+		//static unsigned char* m_Map;
+		static std::vector <unsigned char> m_MapPathFinding;
 		// we store the created path here
 		static std::vector<glm::vec2> m_LastPath;
 	};
