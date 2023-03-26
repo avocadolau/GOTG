@@ -670,14 +670,70 @@ namespace Wiwa {
 					p.animation->speed = 1.0f;
 					p.animation->loop = false;
 
-					p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-					p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-					p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-					p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+					switch (p.emitterOwner->number_animations)
+					{
 
-					p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
-					p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
+					case 1:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
 
+					case 2:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 3:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 4:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 5:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 6:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
+					}
+					break;
+
+					default:
+						break;
+					}
+
+					//p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+					//p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
 				}
 			}
 
