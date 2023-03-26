@@ -15,6 +15,7 @@ extern "C" {
 	typedef struct _MonoArray MonoArray;
 	typedef struct _MonoDomain MonoDomain;
 	typedef struct _MonoAssembly MonoAssembly;
+	typedef struct _MonoString MonoString;
 }
 
 
@@ -29,12 +30,13 @@ namespace Wiwa {
 		static void LoadAppAssembly(const std::filesystem::path& filepath);
 
 		static MonoArray* CreateArray(MonoClass* type, uint32_t size);
+		static MonoString* CreateString(const char* str);
 
 		static void ReloadAssembly();
 
 		static std::unordered_map<size_t, Type*>& getSystems();
 		static std::unordered_map<size_t, Type*>& getComponents();
-	
+
 		struct ScriptEngineData
 		{
 			MonoDomain* RootDomain = nullptr;
@@ -54,7 +56,7 @@ namespace Wiwa {
 			std::unordered_map<size_t, Type*> Systems;
 		};
 		static ScriptEngineData* s_Data;
-
+		static bool isAssemblyLoaded;
 	private:
 		static void InitMono();
 		static void ShutDownMono();
@@ -70,5 +72,5 @@ namespace Wiwa {
 	};
 
 
-	
+
 }

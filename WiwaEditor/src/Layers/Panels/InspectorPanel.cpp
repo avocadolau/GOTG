@@ -17,6 +17,7 @@
 #include <Wiwa/ecs/components/DirectionalLight.h>
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/ParticleEmitter.h>
+#include <Wiwa/ecs/components/CollisionBody.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -43,9 +44,27 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		byte *data = em.GetComponent(m_CurrentID, componentId, type->size);
 
 		// Custom component interface
-		if (type->hash == (size_t)TypeHash::Mesh)
-		{
-			DrawMeshComponent(data);
+		if (type->hash == (size_t)TypeHash::Mesh) {	DrawMeshComponent(data); } else
+		if (type->hash == (size_t)TypeHash::Transform3D) { DrawTransform3dComponent(data); } else
+		if (type->hash == (size_t)TypeHash::AudioSource) { DrawAudioSourceComponent(data); } else
+		if (type->hash == (size_t)TypeHash::PointLight) { DrawPointLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::DirectionalLight) { DrawDirectionalLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::SpotLight) { DrawSpotLightComponent(data); } else
+		if (type->hash == (size_t)TypeHash::CollisionBody) { DrawCollisionBodyComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ColliderCube) { DrawColliderCubeComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ColliderSphere) { DrawColliderSpehereComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
+		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleEmitterComponent(data); } else
+		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
+		// Basic component interface
+		if (type->is_class) {
+			const Class* cl = (const Class*)type;
+
+			for (size_t i = 0; i < cl->fields.size(); i++)
+			{
+				DrawField(data, cl->fields[i]);
+			}
 		}
 		else if (type->hash == (size_t)TypeHash::Transform3D)
 		{
@@ -220,7 +239,7 @@ void InspectorPanel::DrawCollisionTags()
 	if (ImGui::BeginPopupModal("Edit Tags", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		static int selected = -1;
-		for (const auto& [key, value] : py.filterMap)
+		for (const auto& [key, value] : py.filterMapStringKey)
 		{
 			/*std::string tempStr = py.GetFilterTag(n);
 			int bits = 1 << n;
@@ -230,7 +249,7 @@ void InspectorPanel::DrawCollisionTags()
 			if (ImGui::Selectable(tagNameWitBits.c_str(), selected == value, ImGuiSelectableFlags_DontClosePopups))
 				selected = value;
 		}
-		/*for (int n = 0; n < py.filterMap.size(); n++)
+		/*for (int n = 0; n < py.filterMapStringKey.size(); n++)
 		{
 			std::string tempStr = py.GetFilterTag(n);
 			int bits = 1 << n;
@@ -244,7 +263,7 @@ void InspectorPanel::DrawCollisionTags()
 
 		if (ImGui::Button("Add", ImVec2(120, 0)))
 		{
-			if (!(py.filterMap.find(strBuf) != py.filterMap.end()))
+			if (!(py.filterMapStringKey.find(strBuf) != py.filterMapStringKey.end()))
 			{
 				py.AddFilterTag(strBuf);
 			}
@@ -440,57 +459,74 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 			}
 		}
 
-		Wiwa::AnimatorComponent* animator = (Wiwa::AnimatorComponent*)data;
-
-		AssetContainer(animator->filePath);
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				std::wstring ws(path);
-				std::string pathS(ws.begin(), ws.end());
-				std::filesystem::path p = pathS.c_str();
-				if (p.extension() == ".wianimator")
-				{
-					WI_INFO("Trying to load payload at path {0}", pathS.c_str());
-					strcpy(animator->filePath, pathS.c_str());
-					animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
-				}
-			}
-
-			ImGui::EndDragDropTarget();
-		}
-		if (animator->animator == nullptr)
-			return;
-		// get animaitons
-		const char* animationItems[10];
-		for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
-		{
-			animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
-		}
-
-		const char* current_item = NULL;
-		if (animator->animator->GetCurrentAnimation() != nullptr)
-			current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
-
-		if (ImGui::BeginCombo("animaiton", current_item))
-		{
-			for (int n = 0; n < animator->animator->m_Animations.size(); n++)
-			{
-				bool is_selected = (current_item == animationItems[n]);
-				if (ImGui::Selectable(animationItems[n], is_selected))
-				{
-					current_item = animationItems[n];
-					ImGui::SetItemDefaultFocus();
-					animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
-				}
-			}
-			ImGui::EndCombo();
-		}
-
-		ImGui::Checkbox("Play", &animator->Play);
+		ImGui::EndDragDropTarget();
 	}
+	if (animator->animator == nullptr)
+		return;
+
+	// get animaitons
+	const char* animationItems[10];
+	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+	{
+		animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+	}
+
+	const char* current_item = NULL;
+	if (animator->animator->GetCurrentAnimation() != nullptr)
+		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
+	ImGui::Text("Current animation");
+	if (ImGui::BeginCombo("animaiton", current_item))
+	{
+		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+		{
+			bool is_selected = (current_item == animationItems[n]);
+			if (ImGui::Selectable(animationItems[n], is_selected))
+			{
+				current_item = animationItems[n];
+				ImGui::SetItemDefaultFocus();
+				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::Checkbox("Play", &animator->Play))
+	{
+
+	}
+
+	ImGui::Checkbox("Blend", &animator->Blend);
+
+	if(animator->Blend)
+		if (ImGui::TreeNodeEx("Blending"))
+		{
+			const char* animationItems[10];
+			for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+			{
+				animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+			}
+
+			const char* current_item = NULL;
+			if (animator->animator->GetTargetAnimation() != nullptr)
+				current_item = animator->animator->GetTargetAnimation()->m_Name.c_str();
+			ImGui::Text("Blend to animation");
+			if (ImGui::BeginCombo("blend anim", current_item))
+			{
+				for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+				{
+					bool is_selected = (current_item == animationItems[n]);
+					if (ImGui::Selectable(animationItems[n], is_selected))
+					{
+						current_item = animationItems[n];
+						ImGui::SetItemDefaultFocus();
+						animator->animator->SetTargetAnimation(animator->animator->m_Animations[n]);
+					}
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::SliderFloat("Weight", &animator->weight, 0, 1);
+			ImGui::TreePop();
+		}
 }
 
 void InspectorPanel::DrawCollisionBodyComponent(byte* data)
@@ -506,30 +542,61 @@ void InspectorPanel::DrawCollisionBodyComponent(byte* data)
 	const char* comboPreviewValue = py.GetFilterTag(collisionBody->selfTag);  // Pass in the preview value visible before opening the combo (it could be anything)
 	if (ImGui::BeginCombo("Self Tag", comboPreviewValue))
 	{
-		for (int n = 0; n < py.filterMap.size(); n++)
+		for (const auto& [key, value] : py.filterMapStringKey)
 		{
-			const bool is_selected = (collisionBody->selfTag == n);
-			if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
-				collisionBody->selfTag = n;
+			const bool is_selected = (collisionBody->selfTag == value);
+			std::string tagNameWitBits = key;
+			tagNameWitBits += "_" + std::to_string(value);
+			if (ImGui::Selectable(tagNameWitBits.c_str(), is_selected))
+				collisionBody->selfTag = value;
 
 			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 			if (is_selected)
 				ImGui::SetItemDefaultFocus();
 		}
 
+		//for (int n = 0; n < py.filterMapStringKey.size(); n++)
+		//{
+		//	const bool is_selected = (collisionBody->selfTag == n);
+		//	if (ImGui::Selectable(py.GetFilterTag(n), is_selected))
+		//		collisionBody->selfTag = n;
+
+		//	// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+		//	if (is_selected)
+		//		ImGui::SetItemDefaultFocus();
+		//}
+
 		ImGui::EndCombo();
 	}
 
 	ImGui::Text("Collide with:");
-	for (int i = 0; i < py.filterMap.size(); i++)
+	for (const auto& [key, value] : py.filterMapStringKey)
 	{
-		bool local = (collisionBody->filterBits >> i) & 1; //Checking a bit
-		ImGui::Checkbox(py.GetFilterTag(i), &local);
+		bool local = (collisionBody->filterBits >> value) & 1; //Checking a bit
+		ImGui::Checkbox(key.c_str(), &local);
 		if (local)
-			collisionBody->filterBits |= 1 << i;
+			collisionBody->filterBits |= 1 << value;
 		else
-			collisionBody->filterBits &= ~(1 << i);
+			collisionBody->filterBits &= ~(1 << value);
+		///*std::string tempStr = py.GetFilterTag(n);
+		//int bits = 1 << n;
+		//tempStr += "_" + std::to_string(bits);*/
+		//std::string tagNameWitBits = key;
+		//tagNameWitBits += "_" + std::to_string(value);
+		//if (ImGui::Selectable(tagNameWitBits.c_str(), selected == value, ImGuiSelectableFlags_DontClosePopups))
+		//	selected = value;
 	}
+
+	//ImGui::Text("Collide with:");
+	//for (int i = 0; i < py.filterMapStringKey.size(); i++)
+	//{
+	//	bool local = (collisionBody->filterBits >> i) & 1; //Checking a bit
+	//	ImGui::Checkbox(py.GetFilterTag(i), &local);
+	//	if (local)
+	//		collisionBody->filterBits |= 1 << i;
+	//	else
+	//		collisionBody->filterBits &= ~(1 << i);
+	//}
 
 	// ImGui::Text("Do not collide with:");
 	// for (int i = 0; i < py.filterStrings.size(); i++)
@@ -1217,8 +1284,8 @@ void InspectorPanel::Update()
 void InspectorPanel::OnEvent(Wiwa::Event &e)
 {
 	Wiwa::EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<EntityChangeEvent>({&InspectorPanel::OnEntityChangeEvent, this});
-	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({&InspectorPanel::OnSceneChangeEvent, this});
+	dispatcher.Dispatch<EntityChangeEvent>( {&InspectorPanel::OnEntityChangeEvent, this});
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>( {&InspectorPanel::OnSceneChangeEvent, this});
 }
 
 bool InspectorPanel::OnEntityChangeEvent(EntityChangeEvent &e)

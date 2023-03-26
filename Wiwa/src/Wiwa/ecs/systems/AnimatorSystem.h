@@ -33,6 +33,10 @@ namespace Wiwa {
 
 		void PlayAnimation(std::string name);
 
+		void Blend(std::string targetAnim, float blendTime);
+
+		void SetAnimationSate(Wiwa::AnimationState state);
+
 		void Restart();
 	};
 }

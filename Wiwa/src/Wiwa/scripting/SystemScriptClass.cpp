@@ -20,10 +20,11 @@ namespace Wiwa {
 		m_AwakeMethod = scriptClass.GetMethod("Awake", 0);
 		m_InitMethod = scriptClass.GetMethod("Init", 0);
 		m_UpdateMethod = scriptClass.GetMethod("Update", 0);
+		m_DestroyMethod = scriptClass.GetMethod("Destroy", 0);
 		
-		m_OnCollisionEnterMethod = scriptClass.GetMethod("OnCollisionEnter", 2);
-		m_OnCollisionMethod = scriptClass.GetMethod("OnCollision", 2);
-		m_OnCollisionExitMethod = scriptClass.GetMethod("OnCollisionExit", 2);
+		m_OnCollisionEnterMethod = scriptClass.GetMethod("OnCollisionEnter", 4);
+		m_OnCollisionMethod = scriptClass.GetMethod("OnCollision", 4);
+		m_OnCollisionExitMethod = scriptClass.GetMethod("OnCollisionExit", 4);
 
 		m_EntityIdField = scriptClass.GetField("m_EntityId");
 		m_SceneField = scriptClass.GetField("m_Scene");
@@ -50,13 +51,22 @@ namespace Wiwa {
 		scriptClass.InvokeMethod(m_SystemObject, m_UpdateMethod, NULL);
 	}
 
+	void SystemScriptClass::OnDestroy()
+	{
+		if (!m_DestroyMethod) return;
+
+		scriptClass.InvokeMethod(m_SystemObject, m_DestroyMethod, NULL);
+	}
+
 	void SystemScriptClass::OnCollisionEnter(Object* obj1, Object* obj2)
 	{
 		if (!m_OnCollisionEnterMethod) return;
 
 		void* params[] = {
 			&obj1->id,
-			&obj2->id
+			&obj2->id,
+			Wiwa::ScriptEngine::CreateString(obj1->selfTagStr),
+			Wiwa::ScriptEngine::CreateString(obj2->selfTagStr)
 		};
 
 		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
@@ -68,10 +78,12 @@ namespace Wiwa {
 
 		void* params[] = {
 			&obj1->id,
-			&obj2->id
+			&obj2->id,
+			Wiwa::ScriptEngine::CreateString(obj1->selfTagStr),
+			Wiwa::ScriptEngine::CreateString(obj2->selfTagStr)
 		};
 
-		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionMethod, params);
 	}
 
 	void SystemScriptClass::OnCollisionExit(Object* obj1, Object* obj2)
@@ -80,10 +92,12 @@ namespace Wiwa {
 
 		void* params[] = {
 			&obj1->id,
-			&obj2->id
+			&obj2->id,
+			Wiwa::ScriptEngine::CreateString(obj1->selfTagStr),
+			Wiwa::ScriptEngine::CreateString(obj2->selfTagStr)
 		};
 
-		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionEnterMethod, params);
+		scriptClass.InvokeMethod(m_SystemObject, m_OnCollisionExitMethod, params);
 	}
 
 	void SystemScriptClass::OnEntitySet()

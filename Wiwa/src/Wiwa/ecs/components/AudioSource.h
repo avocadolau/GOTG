@@ -8,7 +8,7 @@
 namespace Wiwa {
 	struct WI_API AudioSource {
 		bool isDefaultListener;
-		char eventName[32];
+		char eventName[32]; 
 		bool playOnAwake;
 		bool isPlaying;
 	};

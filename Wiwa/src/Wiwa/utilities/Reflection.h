@@ -1,4 +1,8 @@
 #pragma once
+#pragma warning(disable : 4302)
+#pragma warning(disable : 4401)
+#pragma warning(disable : 4311)
+#pragma warning(disable : 26495)
 #include <typeinfo>
 #include <vector>
 #include <string>
@@ -246,13 +250,21 @@ enum class TypeHash : size_t {
 	PointLight = FNV1A_HASH("PointLight"),
 	DirectionalLight = FNV1A_HASH("DirectionalLight"),
 	SpotLight = FNV1A_HASH("SpotLight"),
-	AnimatorComponent = FNV1A_HASH("AnimatorComponent"),
 	CollisionBody = FNV1A_HASH("CollisionBody"),
+	AnimatorComponent = FNV1A_HASH("AnimatorComponent"),
 	ColliderCube = FNV1A_HASH("ColliderCube"),
 	ColliderCylinder = FNV1A_HASH("ColliderCylinder"),
 	ColliderSphere = FNV1A_HASH("ColliderSphere"),
 	ColliderCapsule = FNV1A_HASH("ColliderCapsule"),
 	RayCast = FNV1A_HASH("RayCast"),
 	AgentAI = FNV1A_HASH("AgentAI"),
+
+	// Game Controller
+	Character = FNV1A_HASH("Character"),
+	Player = FNV1A_HASH("Player"),
+	PlayerSpawner = FNV1A_HASH("PlayerSpawner"),
+	//Enemy = FNV1A_HASH("Enemy"),
+	EnemySpawner = FNV1A_HASH("EnemySpawner"),
+	Wave = FNV1A_HASH("Wave"),
 	ParticleEmitter = FNV1A_HASH("ParticleEmitter")
 };

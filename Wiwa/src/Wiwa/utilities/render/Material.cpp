@@ -41,7 +41,8 @@ namespace Wiwa {
 	void Material::Load(const char* path)
 	{
 		JSONDocument matFile(path);
-
+		if (!matFile.IsObject())
+			return;
 		if (matFile.HasMember("shader"))
 			m_ShaderPath = matFile["shader"].as_string();
 
@@ -450,7 +451,8 @@ namespace Wiwa {
 		Material* mat = new Material((Shader*)0);
 
 		JSONDocument matFile(path);
-
+		if (!matFile.IsObject())
+			return nullptr;
 		if (matFile.HasMember("shader")) {
 			std::string shader_path = matFile["shader"].get<const char*>();
 
@@ -653,7 +655,7 @@ namespace Wiwa {
 
 	void Material::Bind()
 	{
-		int texureId = GL_TEXTURE1;
+		int texureId = GL_TEXTURE0;
 		for (size_t i = 0; i < m_Uniforms.size(); i++)
 		{
 			m_Uniforms[i].sendToShader(m_Shader->getID(), texureId);

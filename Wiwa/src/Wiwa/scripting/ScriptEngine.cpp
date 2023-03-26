@@ -22,7 +22,8 @@
 
 namespace Wiwa {
 	ScriptEngine::ScriptEngineData* ScriptEngine::s_Data = nullptr;
-	
+	bool ScriptEngine::isAssemblyLoaded = false;
+
 	void ScriptEngine::Init()
 	{
 		s_Data = new ScriptEngineData();
@@ -31,13 +32,13 @@ namespace Wiwa {
 
 		LoadAssembly("resources/scripts/Wiwa-ScriptCore.dll");
 		LoadAppAssembly("resources/scripts/Wiwa-AppAssembly.dll");
-		
+
 		//Debug
 		WI_CORE_WARN("Components");
 		Utils::PrintReflectionTypes(s_Data->Components);
 		WI_CORE_WARN("Systems");
 		Utils::PrintReflectionTypes(s_Data->Systems);
-		
+
 		ScriptGlue::RegisterFunctions();
 	}
 	void ScriptEngine::ShutDown()
@@ -54,6 +55,12 @@ namespace Wiwa {
 		s_Data->CoreAssemblyFilePath = filepath;
 		s_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath.string().c_str());
 		s_Data->SystemAssembly = Utils::LoadMonoAssembly("mono/lib/mono/4.5/mscorlib.dll");
+		if (!s_Data->CoreAssembly)
+		{
+			WI_CORE_CRITICAL("The Core Assembly can't be loaded, please recompile engine!");
+			return;
+		}
+
 		LoadAssemblyTypes(s_Data->CoreAssembly);
 	}
 	//Function not called in the main thread
@@ -69,6 +76,7 @@ namespace Wiwa {
 				ScriptEngine::s_Data->AssemblyReloadPending = true;
 				ScriptEngine::s_Data->AppAssemblyFileWatcher.reset();
 				ScriptEngine::ReloadAssembly();
+				
 			});
 		}
 	}
@@ -77,18 +85,26 @@ namespace Wiwa {
 	{
 		s_Data->AppAssembly = Utils::LoadMonoAssembly(filepath.string().c_str());
 		s_Data->AppAssemblyFilePath = filepath;
+
+		if (!s_Data->AppAssembly)
+		{
+			WI_CORE_CRITICAL("The App Assembly can't be loaded, please recompile the AppAssembly.sln!");
+			return;
+			isAssemblyLoaded = false;
+		}
 		LoadAssemblyTypes(s_Data->AppAssembly);
 
-		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>(filepath.string(),OnAppAssemblyFSEvent);
+		s_Data->AppAssemblyFileWatcher = std::make_unique<filewatch::FileWatch<std::string>>(filepath.string(), OnAppAssemblyFSEvent);
 		s_Data->AssemblyReloadPending = false;
+		isAssemblyLoaded = true;
 	}
-	
+
 	void ScriptEngine::InitMono()
 	{
 		mono_set_assemblies_path("mono/lib");
 
 		MonoDomain* rootDomain = mono_jit_init("WiwaJITRuntime");
-		
+
 		WI_CORE_ASSERT(rootDomain, "Mono root domain not initialized!");
 
 		// Store the root domain pointer
@@ -110,6 +126,11 @@ namespace Wiwa {
 		return mono_array_new(s_Data->AppDomain, type, (uintptr_t)size);
 	}
 
+	MonoString* ScriptEngine::CreateString(const char* str)
+	{
+		return mono_string_new(s_Data->AppDomain, str);
+	}
+
 	void ScriptEngine::ReloadAssembly()
 	{
 		mono_domain_set(mono_get_root_domain(), false);
@@ -124,6 +145,8 @@ namespace Wiwa {
 		Utils::PrintReflectionTypes(s_Data->Components);
 		WI_CORE_WARN("Systems");
 		Utils::PrintReflectionTypes(s_Data->Systems);
+
+		isAssemblyLoaded = true;
 	}
 
 	std::unordered_map<size_t, Type*>& ScriptEngine::getSystems()
@@ -166,19 +189,19 @@ namespace Wiwa {
 
 			if (monoClass == systemClass || monoClass == componentClass)
 				continue;
-			
+
 			mono_bool isEnum = mono_class_is_enum(monoClass);
 			if (isEnum == 1)
 				continue;
 
 			bool isSystem = mono_class_is_subclass_of(monoClass, systemClass, false);
-			Type* type = nullptr;
 
 			MonoType* monoType = mono_class_get_type(monoClass);
 
+			Type* type = ConvertType(monoType);
+
 			if (isSystem)
 			{
-				type = ConvertType(monoType);
 				type->New = [assembly, nameSpace, name]() -> void* { return new SystemScriptClass(assembly, nameSpace, name); };
 				s_Data->Systems[type->hash] = type;
 
@@ -193,7 +216,6 @@ namespace Wiwa {
 			mono_bool isComponent = mono_custom_attrs_has_attr(attributes, componentClass);
 			if (isComponent == 1)
 			{
-				type = ConvertType(monoType);
 				s_Data->Components[type->hash] = type;
 				Class* c = (Class*)type;
 				Application::Get().RegisterComponentType(type);

@@ -11,6 +11,9 @@ namespace Wiwa {
 	{
 		char filePath[128];
 		bool Play;
+		bool Blend;
+		float weight;
+
 		Animator* animator;
 	};
 }

@@ -16,7 +16,10 @@
         {
             return InternalCalls.GetComponentIterator(m_EntityId, typeof(T), m_Scene);
         }
-
+        public ComponentIterator GetComponentIterator<T>(EntityId id) where T : unmanaged
+        {
+            return InternalCalls.GetComponentIterator(id, typeof(T), m_Scene);
+        }
         public ref T GetComponentByIterator<T>(ComponentIterator iterator) where T : unmanaged
         {
             return ref InternalCalls.GetComponentByIterator<T>(iterator, m_Scene);
@@ -66,6 +69,14 @@
             EntityId id = InternalCalls.CreateEntityNamed(name_entity, m_Scene);
             AddComponent<Transform3D>(id);
             return id;
+        }
+        public string GetEntityName(EntityId eid)
+        {
+            return InternalCalls.GetEntityName(eid, m_Scene);
+        }
+        public EntityId GetEntityByName(string name)
+        {
+            return InternalCalls.GetEntityByName(name, m_Scene);
         }
 
         public void AddMesh(EntityId eid, string model, string material)

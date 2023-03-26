@@ -48,13 +48,18 @@ namespace Wiwa
 	{
 		if (state != GuiControlState::DISABLED)
 		{
-			// L14: TODO 3_D: Update the state of the GUiButton according to the mouse position
+			
 			float mouseX, mouseY;
 			mouseX = Wiwa::Input::GetMouseX();
 			mouseY = Wiwa::Input::GetMouseY();
 			if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
+				if (state == GuiControlState::NORMAL)
+				{
+					Audio::PostEvent("on_hover");
+				}
+
 				state = GuiControlState::FOCUSED;
 			
 			}

@@ -832,19 +832,19 @@ namespace Wiwa {
 		std::vector<System*>& systems = m_EntitySystems[entityId];
 		size_t s_size = systems.size();
 
-		if (type->hash == (size_t)TypeHash::CollisionBody)
-		{
-			Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
-			rigidBody->positionOffset = { 0,0,0 };
-			rigidBody->scalingOffset = { 1,1,1 };
-			rigidBody->isTrigger = false;
-			rigidBody->isStatic = false;
-			rigidBody->doContinuousCollision = false;
-			rigidBody->selfTag = 0;
-			rigidBody->filterBits |= 1 << 0;
-			//rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCube)
+		//if (type->hash == (size_t)TypeHash::CollisionBody)
+		//{
+		//	Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
+		//	rigidBody->positionOffset = { 0,0,0 };
+		//	rigidBody->scalingOffset = { 1,1,1 };
+		//	rigidBody->isTrigger = false;
+		//	rigidBody->isStatic = false;
+		//	rigidBody->doContinuousCollision = false;
+		//	rigidBody->selfTag = 0;
+		//	rigidBody->filterBits |= 1 << 0;
+		//	//rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
+		//}
+		/*if (type->hash == (size_t)TypeHash::ColliderCube)
 		{ 
 			Wiwa::ColliderCube* colliderCube = (Wiwa::ColliderCube*)data;
 			colliderCube->halfExtents= { 2,2,2 };
@@ -859,20 +859,20 @@ namespace Wiwa {
 			Wiwa::ColliderCylinder* colliderCube = (Wiwa::ColliderCylinder*)data;
 			colliderCube->height = 1;
 			colliderCube->radius = 1;
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCapsule)
+		}*/
+		/*else if (type->hash == (size_t)TypeHash::ColliderCapsule)
 		{
 			Wiwa::ColliderCapsule* colliderCapsule = (Wiwa::ColliderCapsule*)data;
 			colliderCapsule->height = 1;
 			colliderCapsule->radius = 1;
-		}
-		else if (type->hash == (size_t)TypeHash::RayCast)
+		}*/
+		/*else if (type->hash == (size_t)TypeHash::RayCast)
 		{
 			Wiwa::RayCast* rayCast = (Wiwa::RayCast*)data;
 			rayCast->rayFromWorld = { 0,0,0 };
 			rayCast->rayToWorld = { 0,0,0 };
 			rayCast->doRayCasting = false;
-		}
+		}*/
 
 		for (size_t i = 0; i < s_size; i++) {
 			systems[i]->OnComponentAdded(data, type);

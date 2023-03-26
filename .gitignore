@@ -34,7 +34,6 @@
 /Editor/WiwaEditor.exe
 /Editor/Wiwa.dll
 /Editor/Library
-/Editor/Assets/
 *.meta
 imgui.ini
 /Editor/config/panels.json
@@ -63,4 +62,3 @@ Editor/resources/scripts/Wiwa-AppAssembly.dll
 Editor/game/build
 Editor/game/.vs
 Editor/game/Wiwa.lib
-Editor/game/ImGui.lib

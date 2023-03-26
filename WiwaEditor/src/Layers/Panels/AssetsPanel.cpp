@@ -92,39 +92,49 @@ AssetsPanel::~AssetsPanel()
 
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
 {	
-	std::filesystem::path assetsPath = "assets";
-	assetsPath /= path;
+	using namespace std::chrono_literals;
+	std::this_thread::sleep_for(500ms);
+	Wiwa::Application::Get().SubmitToMainThread([path, change_type]()
+	{
+		std::filesystem::path assetsPath = "assets";
+		assetsPath /= path;
 
-	if (assetsPath.extension() == ".meta")
-		return;
-	
-	if (assetsPath.extension() == ".cs")
-	{
-		EditorLayer::Get().RegenSol();
-	}
-	switch (change_type)
-	{
-	case filewatch::Event::added:
-	{
-		CheckImport(assetsPath);
-	}break;
-	case filewatch::Event::removed:
-	{
+		if (assetsPath.extension() == ".meta")
+			return;
+
+		if (assetsPath.extension() == ".cs")
+		{
+			if (Wiwa::Time::IsPlaying())
+			{
+				WI_WARN("Scene paused due to script reload!");
+				EditorLayer::Get().StopScene();
+			}
+			EditorLayer::Get().RegenSol();
+		}
+		switch (change_type)
+		{
+		case filewatch::Event::added:
+		{
+			CheckImport(assetsPath);
+		}break;
+		case filewatch::Event::removed:
+		{
 		DeleteFileAssets(assetsPath);
-	}break;
-	case filewatch::Event::modified:
-	{
-		CheckImport(assetsPath);
-	}break;
-	case filewatch::Event::renamed_old:
-	{
-		DeleteFileAssets(assetsPath);
-	}break;
-	case filewatch::Event::renamed_new:
-	{
-		CheckImport(assetsPath);
-	}break;
-	};
+		}break;
+		case filewatch::Event::modified:
+		{
+			CheckImport(assetsPath);
+		}break;
+		case filewatch::Event::renamed_old:
+		{
+			DeleteFileAssets(assetsPath);
+		}break;
+		case filewatch::Event::renamed_new:
+		{
+			CheckImport(assetsPath);
+		}break;
+		};
+	});
 }
 
 void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
@@ -334,10 +344,17 @@ void AssetsPanel::Draw()
 					if (directoryEntry.is_directory())
 						m_CurrentPath /= path.filename();
 					else
-						Wiwa::Application::Get().OpenDir(path.string().c_str());
+					{
+						if (path.extension() == ".cs")
+							system("call tools/opensln.bat AppAssembly.sln");
+						else
+							Wiwa::Application::Get().OpenDir(path.string().c_str());
+					}
 				}
 				if (ImGui::BeginPopupContextWindow("Assets context window"))
 				{
+					if(ImGui::IsItemHovered())
+						m_SelectedEntry = directoryEntry;
 					if (ImGui::MenuItem("Find in explorer"))
 					{
 						Wiwa::Application::Get().OpenDir(m_CurrentPath.string().c_str());

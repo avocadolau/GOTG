@@ -4,13 +4,15 @@
     {
 
     }
+    public class AudioSystem
+    {
 
+    }
     public class PhysicsSystem
     {
 
     }
-
-    public class AudioSystem
+    public class WaveSystem
     {
 
     }

@@ -14,7 +14,6 @@
 
 #include <Wiwa/core/Resources.h>
 
-#include "../Utils/ProjectManager.h"
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
@@ -33,6 +32,8 @@ EditorLayer *EditorLayer::s_Instance = nullptr;
 std::string EditorLayer::s_SolVersion = "vs2022";
 std::string EditorLayer::s_BuildConf = "Release";
 std::thread *EditorLayer::s_RegenThread;
+
+
 EditorLayer::EditorLayer()
 	: Layer("Editor Layer")
 {
@@ -86,6 +87,7 @@ void EditorLayer::OnAttach()
 	m_UiPanel = std::make_unique<UIPanel>(this);
 	m_UiEditorPanel = std::make_unique<UIEditorPanel>(this);
 	m_AIMapBakingPanel = std::make_unique<AIMapBakingPanel>(this);
+	m_GameLogPanel = std::make_unique<GameLogPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
 	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
@@ -116,6 +118,7 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_UiEditorPanel.get());
 	m_Panels.push_back(m_AudioPanel.get());
 	m_Panels.push_back(m_AIMapBakingPanel.get());
+	m_Panels.push_back(m_GameLogPanel.get());
 
 	
 	m_Settings.push_back(m_ProjectPanel.get());
@@ -180,10 +183,10 @@ void EditorLayer::OnImGuiRender()
 void EditorLayer::OnEvent(Wiwa::Event &e)
 {
 	Wiwa::EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<Wiwa::KeyPressedEvent>({&EditorLayer::OnKeyPressed, this});
-	dispatcher.Dispatch<Wiwa::OnLoadEvent>({&EditorLayer::EditorLayer::OnLoad, this});
-	dispatcher.Dispatch<Wiwa::OnSaveEvent>({&EditorLayer::EditorLayer::OnSave, this});
-	dispatcher.Dispatch<Wiwa::WindowCloseEvent>({&EditorLayer::EditorLayer::OnWindowClose, this});
+	dispatcher.Dispatch<Wiwa::KeyPressedEvent>({ &EditorLayer::OnKeyPressed, this});
+	dispatcher.Dispatch<Wiwa::OnLoadEvent>({ &EditorLayer::OnLoad, this});
+	dispatcher.Dispatch<Wiwa::OnSaveEvent>({ &EditorLayer::OnSave, this});
+	dispatcher.Dispatch<Wiwa::WindowCloseEvent>({ &EditorLayer::OnWindowClose, this});
 
 	for (auto it = m_Panels.end(); it != m_Panels.begin();)
 	{
@@ -323,7 +326,7 @@ void EditorLayer::MainMenuBar()
 			}
 			if (ImGui::MenuItem("Save", "Ctrl+S"))
 			{
-				Utils::ProjectManager::SaveProject();
+				Wiwa::ProjectManager::SaveProject();
 			}
 			if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
 			{
@@ -516,6 +519,8 @@ void EditorLayer::MainMenuBar()
 		{
 			if (ImGui::MenuItem("Reload assembly", "ALT + R"))
 				Wiwa::ScriptEngine::ReloadAssembly();
+			if (ImGui::MenuItem("Open Solution"))
+				system("call tools/opensln.bat AppAssembly.sln");
 
 			ImGui::EndMenu();
 		}
@@ -571,37 +576,36 @@ void EditorLayer::MainMenuBar()
 			{
 				if (!is_playing)
 				{
-					SaveScene();
-
-					if (m_OpenedScenePath != "")
+					if (Wiwa::ScriptEngine::isAssemblyLoaded)
 					{
-						Wiwa::Time::Play();
-						Wiwa::Time::Update();
+						SaveScene();
 
-						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
-						Wiwa::Scene *sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
-						sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+						if (m_OpenedScenePath != "")
+						{
+							Wiwa::Time::Play();
+							Wiwa::Time::Update();
 
-						// For debug purposes
-						std::string ex = sc->getName();
-						ex += "_execution";
-						sc->ChangeName(ex.c_str());
+							m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
+							Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+							sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
 
-						Wiwa::SceneManager::PlayScene();
+							// For debug purposes
+							std::string ex = sc->getName();
+							ex += "_execution";
+							sc->ChangeName(ex.c_str());
+
+							Wiwa::SceneManager::PlayScene();
+						}
+					}
+					else
+					{
+						WI_ERROR("Fix the errors on the scripts before playing!");
+
 					}
 				}
 				else
 				{
-					Wiwa::Time::Stop();
-
-					// Unload simulated scene but keep resources for the editor
-					Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
-
-					// Set editor scene again
-					Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
-
-					// Stop scene from being played
-					Wiwa::SceneManager::StopScene();
+					StopScene();
 				}
 			}
 
@@ -673,6 +677,20 @@ void EditorLayer::MainMenuBar()
 	}
 }
 
+void EditorLayer::StopScene()
+{
+	Wiwa::Time::Stop();
+
+	// Unload simulated scene but keep resources for the editor
+	Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);
+
+	// Set editor scene again
+	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
+
+	// Stop scene from being played
+	Wiwa::SceneManager::StopScene();
+}
+
 void EditorLayer::OpenCloseAssetsFolder()
 {
 	m_Assets->active = !m_Assets->active;
@@ -683,7 +701,7 @@ void EditorLayer::SaveProjectAs()
 	std::string filePath = Wiwa::FileDialogs::SaveFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Utils::ProjectManager::SaveProjectAs(filePath.c_str());
+		Wiwa::ProjectManager::SaveProjectAs(filePath.c_str());
 		WI_INFO("Succesfully saved project at path {0}", filePath.c_str());
 	}
 }
@@ -693,7 +711,7 @@ void EditorLayer::OpenProject()
 	std::string filePath = Wiwa::FileDialogs::OpenFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Utils::ProjectManager::OpenProject(filePath.c_str());
+		Wiwa::ProjectManager::OpenProject(filePath.c_str());
 		WI_INFO("Succesfully opened project at path {0}", filePath.c_str());
 	}
 }
@@ -703,7 +721,7 @@ void EditorLayer::NewProject()
 	std::string filePath = Wiwa::FileDialogs::SaveFile("Wiwa Project (*.wiproject)\0*.wiproject\0");
 	if (!filePath.empty())
 	{
-		Utils::ProjectManager::CreateProject(filePath.c_str());
+		Wiwa::ProjectManager::CreateProject(filePath.c_str());
 		WI_INFO("Succesfully created project at path {0}", filePath.c_str());
 	}
 }
@@ -908,7 +926,7 @@ bool EditorLayer::OnKeyPressed(Wiwa::KeyPressedEvent &e)
 			if (shift)
 				SaveProjectAs();
 			else
-				Utils::ProjectManager::SaveProject();
+				Wiwa::ProjectManager::SaveProject();
 		}
 
 		break;

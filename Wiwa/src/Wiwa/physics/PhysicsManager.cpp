@@ -110,6 +110,7 @@ namespace Wiwa {
 			btPersistentManifold* contactManifold = m_World->getDispatcher()->getManifoldByIndexInternal(i);
 			btCollisionObject* obA = (btCollisionObject*)(contactManifold->getBody0());
 			btCollisionObject* obB = (btCollisionObject*)(contactManifold->getBody1());
+
 			int numContacts = contactManifold->getNumContacts();
 			if (numContacts > 0)
 			{
@@ -317,7 +318,8 @@ namespace Wiwa {
 		m_BodiesToLog.clear();
 		delete m_World;
 
-		filterMap.clear();
+		filterMapStringKey.clear();
+		filterMapIntKey.clear();
 		/*filterStrings.clear();
 		fliterBitsSets.clear();*/
 
@@ -420,6 +422,7 @@ namespace Wiwa {
 		collision_object->setCollisionShape(collision_shape);
 		Object* myObjData = new Object(*collision_object, id, rigid_body.selfTag, GetFilterTag(rigid_body.selfTag), rigid_body.doContinuousCollision);
 		collision_object->setUserPointer((Object*)myObjData);
+		collision_object->setUserIndex2(1);
 		//collision_object->setCollisionFlags(rigid_body.)
 
 		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
@@ -441,6 +444,23 @@ namespace Wiwa {
 		glm::quat newRot = glm::quat(glm::radians(euler_angles));;
 		body->collisionObject->getWorldTransform().setRotation(btQuaternion(newRot.x, newRot.y, newRot.z, newRot.w));
 		return true;
+	}
+
+	void PhysicsManager::SetTrigger(Object* body, bool isTrigger)
+	{
+		if (isTrigger)
+			body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		else
+			body->collisionObject->setCollisionFlags(body->collisionObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	}
+
+	void PhysicsManager::ChangeCollisionTags(Object* body, int filterGroup, int filterBits)
+	{
+		m_World->removeCollisionObject(body->collisionObject);
+		m_World->addCollisionObject(body->collisionObject, filterGroup, filterBits);
+		//m_World->updateSingleAabb(body->collisionObject);
+		//m_World->refreshBroadphaseProxy(body->collisionObject);
+		//m_World->updateSingleAabb(body->collisionObject);
 	}
 
 	Object* PhysicsManager::FindByEntityId(size_t id)
@@ -476,7 +496,7 @@ namespace Wiwa {
 	bool PhysicsManager::OnSave()
 	{
 		JSONDocument physics;
-		size_t count = filterMap.size();
+		int count = filterMapStringKey.size();
 
 		physics.AddMember("tags_count", count);
 		std::string tag = "tag_";
@@ -503,7 +523,7 @@ namespace Wiwa {
 		if (!physics.load_file(path.c_str()))
 			return false;
 
-		for (int i = 1; i < filterMap.size(); i++)
+		for (int i = 1; i < filterMapStringKey.size(); i++)
 			RemoveFilterTag(i);
 
 		int count = physics["tags_count"].get<int>();
@@ -551,33 +571,37 @@ namespace Wiwa {
 		std::bitset<MAX_BITS> bset;
 		bset.set(filterStrings.size(), true);
 		fliterBitsSets.push_back(bset);*/
-		size_t size = filterMap.size();
-		if (filterMap.size() == 32)
+		int size = filterMapStringKey.size();
+		if (filterMapStringKey.size() == 32)
 			return false;
-		filterMap.emplace(str, size);
-
+		filterMapStringKey.emplace(str, size);
+		filterMapIntKey.emplace(size, str);
 		return true;
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
 		/*filterStrings.erase(filterStrings.begin() + index);
 		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
-		for (const auto& [key, value] : filterMap)
+		for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)
-				filterMap.erase(key);
+			{
+				filterMapStringKey.erase(key);
+				filterMapIntKey.erase(value);
+			}
 		}
 	}
 
-	const char* PhysicsManager::GetFilterTag(const int index)
+	const char* PhysicsManager::GetFilterTag(int index)
 	{
+		return filterMapIntKey[index].c_str();
 		//return filterStrings[index].c_str();
-		for (const auto& [key, value] : filterMap)
+		/*for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)
 				return key.c_str();
 		}
-		return "NONE";
+		return "NONE";*/
 	}
 
 	int PhysicsManager::GetFilterTag(const char* str)
@@ -590,10 +614,10 @@ namespace Wiwa {
 				return i;
 		}
 		return 0;*/
-		if (!(filterMap.find(str) != filterMap.end()))
+		if (!(filterMapStringKey.find(str) != filterMapStringKey.end()))
 			return -1;
 
-		return filterMap[str];
+		return filterMapStringKey[str];
 	}
 
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
