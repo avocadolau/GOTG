@@ -1,5 +1,6 @@
 #include "wipch.h"
 #include "Animation.h"
+#include <Wiwa/core/Resources.h>
 #include <assimp/anim.h>
 #include <glm/gtx/quaternion.hpp>
 namespace Wiwa {
@@ -143,13 +144,17 @@ namespace Wiwa {
 		std::filesystem::path filepath = path;
 		filepath.replace_filename(animation->m_Name.c_str());
 		filepath.replace_extension("wianim");
-		animation->m_SavePath = filepath.string();
-		
+		animation->m_SavePath =  Wiwa::Resources::_assetToLibPath(filepath.string());
+
 		File file = FileSystem::OpenOB(filepath.string().c_str());
 
 		size_t name_len = animation->m_Name.size();
 		file.Write(&name_len, sizeof(size_t));
 		file.Write(animation->m_Name.c_str(), name_len);
+
+		size_t savep_len = animation->m_SavePath.size();
+		file.Write(&savep_len, sizeof(size_t));
+		file.Write(animation->m_SavePath.c_str(), savep_len);
 
 		file.Write(&animation->m_Duration, sizeof(double));
 		file.Write(&animation->m_TicksPerSecond, sizeof(double));
@@ -228,11 +233,16 @@ namespace Wiwa {
 
 		File file = Wiwa::FileSystem::OpenIB(filepath);
 		Animation* anim = new Animation();
-
+		//load name
 		size_t name_len;
 		file.Read(&name_len, sizeof(size_t));
 		anim->m_Name.resize(name_len);
 		file.Read(&anim->m_Name[0], name_len);
+		//load save path
+		size_t savep_len;
+		file.Read(&savep_len, sizeof(size_t));
+		anim->m_Name.resize(savep_len);
+		file.Read(&anim->m_SavePath[0], savep_len);
 
 		file.Read(&anim->m_Duration, sizeof(double));
 		file.Read(&anim->m_TicksPerSecond, sizeof(double));

@@ -57,6 +57,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleEmitterComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
+		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;

@@ -17,11 +17,13 @@
 //#include <vector>
 #include "glew.h"
 //#include <Wiwa/utilities/json/JSONDocument.h>
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
 
 Wiwa::AIMapGeneration::MapData Wiwa::AIMapGeneration::m_MapData = MapData();
-unsigned char* Wiwa::AIMapGeneration::m_Map = nullptr;
+//unsigned char* Wiwa::AIMapGeneration::m_Map = nullptr;
+std::vector<unsigned char> Wiwa::AIMapGeneration::m_Map = std::vector<unsigned char>(MAP_TILES_MAX_SIZE);
 
-bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec3 startPos)
+bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec2 startPos)
 {
 	bool ret = false;
 
@@ -35,18 +37,34 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 
 	if (tileWidth < 1.f) tileWidth = 1.f;	
 
-	delete[] m_Map;
-	m_Map = nullptr;
-	m_Map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
-	memset(m_Map, 1, width * height);
+	m_Map.clear();
+	m_Map.resize(width * height, DEFAULT_WALK_CODE);
+	/*if (m_Map != nullptr)
+	{
+		delete[] m_Map;
+		m_Map = nullptr;
+	}*/
+	//
+	//m_Map = new unsigned char[width * height]; // string that store tiles, this can vary as we want
+	//memset(m_Map, 1, width * height);
 	AIPathFindingManager::SetMap(width, height, m_Map);
 	ret = true;
 
 	return ret;
 }
 
-void Wiwa::AIMapGeneration::BakeMap()
+glm::vec2 scaleRectVertex(glm::vec2 rectPos, glm::vec2 halfExtents, glm::vec2 scaling, glm::vec2 localPos) {
+	glm::vec2 scaledPos = glm::vec2(rectPos.x + localPos.x * halfExtents.x * scaling.x,
+		rectPos.y + localPos.y * halfExtents.y * scaling.y);
+	return scaledPos;
+}
+
+
+bool Wiwa::AIMapGeneration::BakeMap()
 {
+	if (m_Map.empty())
+		return false;
+
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	std::vector<EntityId>* entityList = em.GetEntitiesAlive();
 	int size = entityList->size();
@@ -66,11 +84,30 @@ void Wiwa::AIMapGeneration::BakeMap()
 				{
 					ColliderCube* cube = em.GetComponent<ColliderCube>(actualId);
 					glm::vec3& pos = em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
+					btTransform& t = em.GetSystem<Wiwa::PhysicsSystem>(actualId)->getBody()->collisionObject->getWorldTransform();
 
-					glm::vec2 topLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z + cube->halfExtents.z);
+					glm::mat4 mat(1.0f);
+					t.getOpenGLMatrix(glm::value_ptr(mat));
+
+					glm::vec2 rectPos = { pos.x,pos.z };
+					glm::vec2 halfExtents = { cube->halfExtents.x, cube->halfExtents.z };
+					glm::vec2 scaling = { cb->scalingOffset.x, cb->scalingOffset.z };
+
+					glm::vec2 topLeft = rectPos - halfExtents;
+					glm::vec2 bottomLeft = rectPos + glm::vec2(-halfExtents.x, halfExtents.y);
+					glm::vec2 bottomRight = rectPos + halfExtents;
+					glm::vec2 topRight = rectPos + glm::vec2(halfExtents.x, -halfExtents.y);
+
+					topLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, 1));
+					bottomLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, -1));
+					bottomRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, -1));
+					topRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, 1));
+
+					/*glm::vec2 topLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z + cube->halfExtents.z);
 					glm::vec2 bottomLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z - cube->halfExtents.z);
 					glm::vec2 bottomRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z - cube->halfExtents.z);
-					glm::vec2 topRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z + cube->halfExtents.z);
+					glm::vec2 topRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z + cube->halfExtents.z);*/
+
 
 					glm::ivec2 topLeftMap = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
 					glm::ivec2 bottomLeftMap = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
@@ -104,16 +141,21 @@ void Wiwa::AIMapGeneration::BakeMap()
 			continue;
 	}
 	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
+	return true;
 }
 
 void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
 {
 	//m_Map[vec.x * m_MapData.width + vec.y] = INVALID_WALK_CODE;
-	m_Map[(vec.y * m_MapData.width) + vec.x] = INVALID_WALK_CODE;
+	if (AIPathFindingManager::CheckBoundaries(vec) && (vec.y * m_MapData.width + vec.x) < m_Map.size())
+		m_Map[(vec.y * m_MapData.width) + vec.x] = INVALID_WALK_CODE;
 }
 
-void Wiwa::AIMapGeneration::DebugDrawMap()
+bool Wiwa::AIMapGeneration::DebugDrawMap()
 {
+	if (m_Map.empty())
+		return false;
+
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
@@ -124,13 +166,12 @@ void Wiwa::AIMapGeneration::DebugDrawMap()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera->getView()));
 
-	unsigned char* map = Wiwa::AIMapGeneration::GetMap();
 	for (int i = 0; i < m_MapData.height; i++)
 	{
 		for (int j = 0; j < m_MapData.width; j++)
 		{
 			glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
-			if (map[j * m_MapData.width + i] == 255)
+			if (m_Map[j * m_MapData.width + i] == 255)
 			{
 				glColor4f(1, 0, 0, 0.1f);
 			}
@@ -159,14 +200,16 @@ void Wiwa::AIMapGeneration::DebugDrawMap()
 	}
 	glEnd();
 	camera->frameBuffer->Unbind();
+
+	return true;
 }
 
 glm::vec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)
 {
 	glm::vec2 ret;
 
-	ret.x = (float)x * m_MapData.tileWidth;
-	ret.y = (float)y * m_MapData.tileHeight;
+	ret.x = (float)(x + m_MapData.startingPosition.x) * m_MapData.tileWidth;
+	ret.y = (float)(y + m_MapData.startingPosition.y) * m_MapData.tileHeight;
 	//WI_CORE_INFO("Map to World: x = {}, y = {}, ret.x = {}, ret.y = {}", x, y, ret.x, ret.y);
 	return ret;
 }
@@ -175,8 +218,8 @@ glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(float x, float y)
 {
 	glm::ivec2 ret;
 
-	ret.x = x / m_MapData.tileWidth;
-	ret.y = y / m_MapData.tileHeight;
+	ret.x = (x / m_MapData.tileWidth) - m_MapData.startingPosition.x;
+	ret.y = (y / m_MapData.tileHeight) - m_MapData.startingPosition.y;
 	//WI_CORE_INFO("World to Map: x = {}, y = {}, ret.x = {}, ret.y = {}", x,y,ret.x, ret.y);
 	return ret;
 }
@@ -238,7 +281,13 @@ bool Wiwa::AIMapGeneration::OnLoad()
 
 bool Wiwa::AIMapGeneration::ClearMap()
 {
-	CreateWalkabilityMap(m_MapData.width, m_MapData.height, m_MapData.tileWidth, m_MapData.tileHeight, m_MapData.startingPosition);
+	//CreateWalkabilityMap(m_MapData.width, m_MapData.height, m_MapData.tileWidth, m_MapData.tileHeight, m_MapData.startingPosition);
+	/*if (m_Map != nullptr)
+	{
+		delete[] m_Map;
+		m_Map = nullptr;
+	}*/
+	m_Map.clear();
 	return true;
 }
 
@@ -255,7 +304,9 @@ void Wiwa::AIMapGeneration::LoadMapData(size_t id)
 	CreateWalkabilityMap(m_MapData.width, m_MapData.height, m_MapData.tileWidth, m_MapData.tileHeight, m_MapData.startingPosition);
 
 	//strcpy(reinterpret_cast<char*>(m_Map), reinterpret_cast<const char*>(data->map)); // OK
-	memcpy(m_Map, &data->map, m_MapData.width * m_MapData.height);
+	//memcpy(m_Map, &data->map, m_MapData.width * m_MapData.height * sizeof(unsigned char));
+	//m_Map.assign(data->map, data->map + sizeof(data->map));
+	std::copy(data->map, data->map + data->width * data->height, m_Map.begin());
 	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
 }
 
@@ -269,8 +320,9 @@ void Wiwa::AIMapGeneration::SaveMapData(size_t id)
 	data->tileWidth = m_MapData.tileWidth;
 	data->tileHeight = m_MapData.tileHeight;
 	//strcpy(reinterpret_cast<char*>(data->map), reinterpret_cast<const char*>(m_Map)); // OK
+	//memcpy(data->map, m_Map, m_MapData.width * m_MapData.height * sizeof(unsigned char));
 	memset(data->map, 1, MAP_TILES_MAX_SIZE);
-	memcpy(data->map, m_Map, m_MapData.width * m_MapData.height);
+	std::copy(m_Map.begin(), m_Map.end(), data->map);
 	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
 
 }
@@ -286,9 +338,11 @@ void Wiwa::AIMapGeneration::CreateNewEntityAndSaveData()
 	newMap.height = m_MapData.height;
 	newMap.tileWidth = m_MapData.tileWidth;
 	newMap.tileHeight = m_MapData.tileHeight;
-	memset(newMap.map, 1, MAP_TILES_MAX_SIZE);
-	memcpy(newMap.map, m_Map, m_MapData.width * m_MapData.height);
+	//memset(newMap.map, 1, MAP_TILES_MAX_SIZE);
+	//memcpy(newMap.map, m_Map, m_MapData.width * m_MapData.height * sizeof(unsigned char));
 	//strcpy(reinterpret_cast<char*>(newMap.map), reinterpret_cast<const char*>(m_Map)); // OK
+	memset(newMap.map, 1, MAP_TILES_MAX_SIZE);
+	std::copy(m_Map.begin(), m_Map.end(), newMap.map);
 	em.AddComponent<Wiwa::MapAI>(newId, newMap);
 	em.AddComponent<Wiwa::Transform3D>(newId);
 	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);

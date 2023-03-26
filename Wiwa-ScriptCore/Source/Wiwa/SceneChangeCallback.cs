@@ -82,7 +82,7 @@ namespace Wiwa
         static void OnExecute(float level)
         {
             //InternalCalls.SetFullscreenIntr(ret);
-            Console.WriteLine($"slider actual level is :{level}");
+            //Console.WriteLine($"slider actual level is :{level}");
             InternalCalls.ChangeMasterVolume(((int)level));
         }
     }
@@ -93,7 +93,7 @@ namespace Wiwa
         static void OnExecute(float level)
         {
             //InternalCalls.SetVsyncIntr(ret);
-            Console.WriteLine($"slider actual level is :{level}");
+            //Console.WriteLine($"slider actual level is :{level}");
         }
     }
 }

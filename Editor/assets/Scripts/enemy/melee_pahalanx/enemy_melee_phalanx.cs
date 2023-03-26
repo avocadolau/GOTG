@@ -23,7 +23,7 @@ namespace Game
             base.Init();
             currentState = idleState;
             EnemyMeleePhalanx self = this;
-            currentState.EnterState(ref self);
+            currentState.EnterState(ref self, m_EntityId);
             timer = 0.0f;
         }
 
@@ -31,16 +31,16 @@ namespace Game
         {
             base.Update();
             EnemyMeleePhalanx self = this;
-            currentState.UpdateState(ref self);
+            currentState.UpdateState(ref self, m_EntityId);
             timer += Time.DeltaTime();
         }
 
         public void SwitchState(MeleePhalanxBaseState state)
         {
             EnemyMeleePhalanx self = this;
-            currentState.ExitState(ref self);
+            currentState.ExitState(ref self, m_EntityId);
             currentState = state;
-            currentState.EnterState(ref self);
+            currentState.EnterState(ref self, m_EntityId);
         }
 
         public override void ReceiveDamage(int damage)

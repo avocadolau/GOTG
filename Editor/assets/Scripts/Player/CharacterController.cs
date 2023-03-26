@@ -89,7 +89,7 @@ namespace Game
 
             }
             //FIRES the weapon, if the player is not aiming shoots the bullet is shot to the direction the character is looking
-            if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper))
+            if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper) || Input.IsKeyDown(KeyCode.Space))
             {
                 if (shootInput == Vector3Values.zero)
                 {
@@ -319,7 +319,7 @@ namespace Game
             AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
 
             //bulletTransform.LocalRotation.y = bulletDir.x * 90 + bulletDir.z * 90;
-            bulletTransform.LocalPosition = position;
+            bulletTransform.LocalPosition = new Vector3(position.x, 2, position.z);
             bulletTransform.LocalScale = new Vector3(1f, 1f, 1f);
 
             cs.radius = 1;
