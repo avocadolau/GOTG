@@ -492,12 +492,15 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 
 	if (ImGui::Checkbox("Play", &animator->Play))
 	{
-
+		if (animator->Play)
+			animator->animator->PlayAnimation();
+		else
+			animator->animator->PauseAnimation();
 	}
 
 	ImGui::Checkbox("Blend", &animator->Blend);
-
-	if(animator->Blend)
+	if (animator->Blend)
+	{
 		if (ImGui::TreeNodeEx("Blending"))
 		{
 			const char* animationItems[10];
@@ -524,9 +527,23 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				}
 				ImGui::EndCombo();
 			}
-			ImGui::SliderFloat("Weight", &animator->weight, 0, 1);
+			if(ImGui::SliderFloat("Weight", &animator->weight, 0, 1))
+			{
+
+			}
+			if(ImGui::SliderFloat("Blend Duration", &animator->blendDuration, 0, 5))
+			{
+
+			}
+
+			if (animator->animator->GetTargetAnimation())
+			{
+				animator->animator->SetAnimationSatate(Wiwa::AnimationState::Blending);
+			}
+
 			ImGui::TreePop();
 		}
+	}
 }
 
 void InspectorPanel::DrawCollisionBodyComponent(byte* data)

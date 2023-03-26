@@ -39,7 +39,7 @@ namespace Wiwa {
 		case AnimationState::Paused:
 			break;
 		case AnimationState::Playing:
-			Update(dt);
+			UpdateAnimation(dt); 
 			break;
 		default:
 			break;
@@ -144,15 +144,20 @@ namespace Wiwa {
 			if (strcmp(animation->m_Name.c_str(),name.c_str()) == 0)
 			{
 				m_CurrentAnimation = animation;
+				m_AnimationState = AnimationState::Playing;
 				return;
 			}
 		}
 	}
 
-	void Animator::PlayAnimationIndex(unsigned int index)
+	void Animator::PlayAnimation()
 	{
-		if (index > m_Animations.size()) return;
-		m_CurrentAnimation = m_Animations[index];
+		m_AnimationState = AnimationState::Playing;
+	}
+
+	void Animator::PauseAnimation()
+	{
+		m_AnimationState = AnimationState::Paused;
 	}
 
 	void Animator::BlendTwoAnimations(Animation* baseAnim, Animation* layerAnim, float blendFactor, float deltaTime)
