@@ -8,7 +8,7 @@
 
 namespace Wiwa
 {
-	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, size_t callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName) : GuiControl(scene, GuiControlType::SLIDER, id)
+	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, size_t callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName, bool active) : GuiControl(scene, GuiControlType::SLIDER, id)
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
@@ -16,7 +16,7 @@ namespace Wiwa
 		extraTexturePosition = sliderOriginTex;
 		name = "Slider";
 		m_Scene = scene;
-		active = true;
+		this->active = active;
 		text = "none";
 		audioEventForButton = audioEventName;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
@@ -32,6 +32,12 @@ namespace Wiwa
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 		id_quad_extra = r2d.CreateInstancedQuadTex(m_Scene, extraTexture->GetTextureId(), extraTexture->GetSize(), { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, extraTexturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
 		
+		if (!active)
+		{
+			r2d.DisableInstance(m_Scene, id_quad_normal);
+			r2d.DisableInstance(m_Scene, id_quad_extra);
+
+		}
 		state = GuiControlState::NORMAL;
 		//canClick = true;
 	}

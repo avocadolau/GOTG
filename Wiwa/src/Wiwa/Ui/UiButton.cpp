@@ -8,13 +8,13 @@
 
 namespace Wiwa
 {
-	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName) : GuiControl(scene, GuiControlType::BUTTON, id)
+	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
 		name = "Button";
 		m_Scene = scene;
-		active = true;
+		this->active = active;
 		text = "none";
 		audioEventForButton = audioEventName;
 		
@@ -31,9 +31,11 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-		
-		
-		
+		if (!active)
+		{
+			r2d.DisableInstance(m_Scene, id_quad_normal);
+
+		}
 		
 		state = GuiControlState::NORMAL;
 		canClick = true;

@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text);
+		GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, bool active);
 		virtual ~GuiText();
 
 		bool Draw(Renderer2D* render);

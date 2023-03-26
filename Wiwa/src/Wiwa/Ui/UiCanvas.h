@@ -17,6 +17,8 @@ namespace Wiwa
 		GuiCanvas(Scene* scene, unsigned int id,bool active);
 		 ~GuiCanvas();
 
+		 bool Update();
+
 		 std::vector<GuiControl*> controls;
 		 std::vector<GuiControl*> controlsForSelection;
 		 std::vector<GuiControl*> controlsToDestroy;
@@ -24,9 +26,16 @@ namespace Wiwa
 
 		 void SwapActive();
 
+		 void InputController();
+
 		 void SelectElement(size_t id);
 		 bool active;
 		 bool selected;
 		 int id;
+
+		 int idGuiSelected = -1;
+
+		 bool DpadUp = false;
+		 bool DpadDown = false;
 	};
 }
