@@ -349,10 +349,10 @@ namespace Game
             ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
             ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
 
-            AddMesh(bullet, "Models/Cube", "assets/Models/03_mat_addelements.wimaterial");
+            AddMesh(bullet, "Player/Bullet/PlaneBullet", "Player/Bullet/defaultmaterial.wimaterial");
 
             bulletTransform.LocalPosition = transform.worldMatrix.GetPosition();
-            bulletTransform.LocalRotation = transform.Rotation;
+            bulletTransform.LocalRotation = new Vector3(-90f, 0f, playerTransform.LocalRotation.y + 90f);
             bulletTransform.LocalScale = transform.Scale;
 
             cs.radius = 1;
