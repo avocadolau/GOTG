@@ -181,6 +181,8 @@ namespace Wiwa
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
 		s_CurrentRoomsCount = 3;
+		s_RoomsToBoss = 20;
+		s_RoomsToShop = 10;
 	}
 
 	void GameStateManager::InitPlayerData()
