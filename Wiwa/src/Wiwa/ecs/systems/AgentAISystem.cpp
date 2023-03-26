@@ -41,9 +41,11 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	if (agent->hasPath == false)
 	{
-		CreatePath(agent->target);
-		agent->hasPath = true;
-		agent->hasArrived = false;
+		if (CreatePath(agent->target))
+		{
+			agent->hasPath = true;
+			agent->hasArrived = false;
+		}
 	}
 
 	if (lastPath.empty() == false && m_IsMoving == false)
@@ -140,16 +142,21 @@ void Wiwa::AgentAISystem::OnDestroy()
 {
 }
 
-void Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
+bool Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 {
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 	
 	glm::ivec2 currentPositionMap = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
 	glm::ivec2 targetInMap = Wiwa::AIMapGeneration::WorldToMap(targetPos.x, targetPos.z);
 	
-	Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
+	int check = Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
 
-	lastPath = Wiwa::AIPathFindingManager::GetLastPath();
+	if (check != -1)
+	{
+		lastPath = Wiwa::AIPathFindingManager::GetLastPath();
+		return true;
+	}
+	return false;
 }
 
 void Wiwa::AgentAISystem::GoToNextPosition()

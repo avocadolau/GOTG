@@ -24,9 +24,10 @@ namespace Wiwa {
 	struct DefaultCharacterSettings
 	{
 		int MaxHealth;
-		int Health;
 		int MaxShield;
-		int Shield;
+
+		int Damage;
+		float RateOfFire;
 
 		float Speed;
 		float DashDistance;
@@ -34,6 +35,7 @@ namespace Wiwa {
 		float DashCoolDown;
 		float WalkTreshold;
 	};
+	
 	enum class RoomType
 	{
 		NONE = 0,
@@ -99,7 +101,10 @@ namespace Wiwa {
 		static void StartRun();
 		static void EndRun();
 		static void InitHub();
+		static void InitPlayerData();
+		static void Die();
 		static void StartNewRoom();
+		static void SetPlayerId(EntityId id, Scene* scene);
 		static void EndCurrentRoom();
 
 		inline static void SetRoomType(RoomType type) { s_RoomType = type; }
@@ -122,12 +127,14 @@ namespace Wiwa {
 		static int NextRoom();
 
 
+
 		static void SerializeData();
 		static void DeserializeData();
 
 
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
+		static EntityManager::ComponentIterator s_CharacterStats;
 		static int s_CurrentCharacter;
 		static float s_GamepadDeadzone;
 
@@ -142,5 +149,9 @@ namespace Wiwa {
 		static std::vector<int> s_RewardRooms;
 		static std::vector<int> s_ShopRooms;
 		static int s_CurrentRoomsCount;
+
+		static EntityId s_PlayerId;
+
+		static Scene* s_CurrentScene;
 	};
 }

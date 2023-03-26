@@ -313,6 +313,114 @@
 						</Sound>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Enemies" ID="{D01A9EC4-BA6E-44D5-A21D-1CD7C9A3C53F}" ShortID="418251565">
+					<ChildrenList>
+						<Folder Name="Melee" ID="{FBFB9659-7375-41D6-9904-3C561FA8B769}" ShortID="329502847">
+							<ChildrenList>
+								<Sound Name="197656-SovinaSlime26" ID="{3F21E66F-A025-404A-9F40-2F43C21E9F1F}" ShortID="744817653">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="197656-SovinaSlime26" ID="{02FCE46B-ACAF-4A57-A8CC-430CB98E4BAD}">
+											<Language>SFX</Language>
+											<AudioFile>Enemies\Melee\197656-SovinaSlime26.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="144484845"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="197656-SovinaSlime26" ID="{02FCE46B-ACAF-4A57-A8CC-430CB98E4BAD}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="Ranged" ID="{D0739288-7745-4855-9AD7-FFA4135C2D17}" ShortID="229437438">
+							<ChildrenList>
+								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{895036FF-7D1C-48E4-8780-84D166F6D7AA}" ShortID="769076689">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{AFFEFF63-975F-4E50-AEF4-3982296493F3}">
+											<Language>SFX</Language>
+											<AudioFile>Enemies\Ranged\184478-Time_Glitch_-aquatic_density-4.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="160020738"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{AFFEFF63-975F-4E50-AEF4-3982296493F3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="Sentinel" ID="{53D31A74-6008-42DA-8F6F-2E96A1861384}" ShortID="368582402">
+							<ChildrenList>
+								<Sound Name="sentinel_moving" ID="{75151CCA-BFC6-46B5-8D07-4116EFF02CC4}" ShortID="505612201">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sentinel_moving" ID="{8650AA08-1771-4D8E-851B-4A30755FE1BE}">
+											<Language>SFX</Language>
+											<AudioFile>Enemies\Sentinel\sentinel_moving.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1073341136"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sentinel_moving" ID="{8650AA08-1771-4D8E-851B-4A30755FE1BE}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="Subjugator" ID="{89EB54CC-2F33-4485-A50C-B0EEEF77B1F5}" ShortID="742869065">
+							<ChildrenList>
+								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{5A8C6B82-81D5-4960-B80F-F34286884C3A}" ShortID="572117610">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{7AD26ED3-49C8-4E50-9EFF-E31424BBCED9}">
+											<Language>SFX</Language>
+											<AudioFile>Enemies\Subjugator\184478-Time_Glitch_-aquatic_density-4.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="830773921"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{7AD26ED3-49C8-4E50-9EFF-E31424BBCED9}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</Folder>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

@@ -19,15 +19,21 @@ namespace Wiwa {
 	void AnimatorSystem::OnUpdate()
 	{
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
-		
-		if (!anim->Play) return;
+
+
+		//anim->animator->Update(Time::GetRealTimeSinceStartup());
+
+
+
+		if (!anim->Play) return;	
+
 		if (!anim->Blend)
 		{
 				anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
 		}
-		else {
+		else if(anim->animator->GetCurrentAnimation()&& anim->animator->GetTargetAnimation()){
 			anim->animator->m_BlendWeight = anim->weight;
-			anim->animator->UpdateBlendingAnimation(Time::GetRealTimeSinceStartup());
+			anim->animator->BlendTwoAnimations(anim->animator->GetCurrentAnimation(),anim->animator->GetTargetAnimation(),anim->weight, Time::GetRealTimeSinceStartup());
 		}		
 	}
 	void AnimatorSystem::OnDestroy()
@@ -56,20 +62,31 @@ namespace Wiwa {
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
-		anim->Play = false;
+		anim->animator->PauseAnimation();
 	}
 	void AnimatorSystem::Play()
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
-		anim->Play = true;
+		anim->animator->PlayAnimation();
 	}
 	void AnimatorSystem::PlayAnimation(std::string name)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 		anim->animator->PlayAnimationName(name);
-		anim->Play = true;
+	}
+	void AnimatorSystem::Blend(std::string targetAnim, float blendDuration)
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->Blend(targetAnim, blendDuration);
+	}
+	void AnimatorSystem::SetAnimationSate(Wiwa::AnimationState state)
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		anim->animator->SetAnimationSatate(state);
 	}
 	void AnimatorSystem::Restart()
 	{

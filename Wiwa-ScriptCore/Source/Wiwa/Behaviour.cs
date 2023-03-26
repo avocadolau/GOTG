@@ -5,7 +5,7 @@
     public class Behaviour
     {
         protected EntityId m_EntityId;
-        private System.Int64 m_Scene = 0;
+        protected System.Int64 m_Scene = 0;
 
         public ref T GetComponent<T>(EntityId entity) where T : unmanaged
         {

@@ -13,6 +13,7 @@ namespace Wiwa {
 		bool Play;
 		bool Blend;
 		float weight;
+		float blendDuration;
 
 		Animator* animator;
 	};

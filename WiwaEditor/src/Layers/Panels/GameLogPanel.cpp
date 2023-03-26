@@ -1,7 +1,8 @@
 #include "GameLogPanel.h"
 #include <Wiwa/game/GameStateManager.h>
 #include "../../Utils/EditorUtils.h"
-
+#include <Wiwa/scene/Scene.h>
+#include <Wiwa/utilities/time/Time.h>
 GameLogPanel::GameLogPanel(EditorLayer* instance)
 	: Panel("Game Log", ICON_FK_GAMEPAD, instance)
 {
@@ -69,34 +70,69 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::PopID();
 	ImGui::Separator();
 
-	const char* startCharacter = Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
+	ImGui::Text("Current player id %i", Wiwa::GameStateManager::s_PlayerId);
+
+	const char* startCharacter
+		= Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
 	ImGui::Text("Current character %s", startCharacter);
 	ImGui::InputInt("Start character", &Wiwa::GameStateManager::s_CurrentCharacter);
 	CLAMP(Wiwa::GameStateManager::s_CurrentCharacter, 0, 1);
+
+	if (ImGui::CollapsingHeader("Current player stats"))
+	{
+		if (Wiwa::GameStateManager::s_CurrentScene && Wiwa::Time::IsPlaying())
+		{
+			Wiwa::Character* character =
+				(Wiwa::Character*)Wiwa::GameStateManager::s_CurrentScene->GetEntityManager().GetComponentByIterator(Wiwa::GameStateManager::s_CharacterStats);
+			if (character)
+			{
+				ImGui::Text("Max Health %i", character->MaxHealth);
+				ImGui::Text("Health %i", character->Health);
+				ImGui::Text("Max Shield %i", character->MaxShield);
+				ImGui::Text("Shield %i", character->Shield);
+				ImGui::Text("Damage %i", character->Damage);
+				ImGui::Text("Rate of fire %f", character->RateOfFire);
+				ImGui::Text("Speed %f", character->Speed);
+				ImGui::Text("Dash distance %f", character->DashDistance);
+				ImGui::Text("Dash speed %f", character->DashSpeed);
+				ImGui::Text("Dash cooldown %f", character->DashCooldown);
+				ImGui::Text("Walk threshold %f", character->WalkTreshold);
+			}
+		}
+		else
+		{
+			ImGui::Text("Not playing");
+		}
+	}
+
 	if(ImGui::CollapsingHeader("Star Lord default values"))
 	{
+		ImGui::PushID(0);
 		ImGui::InputInt("Max health", &Wiwa::GameStateManager::s_CharacterSettings[0].MaxHealth);
-		ImGui::Text("Current health %i", Wiwa::GameStateManager::s_CharacterSettings[0].Health);
 		ImGui::InputInt("Max Shield", &Wiwa::GameStateManager::s_CharacterSettings[0].MaxShield);
-		ImGui::Text("Current Shield %i", Wiwa::GameStateManager::s_CharacterSettings[0].Shield);
+		ImGui::InputInt("Damage", &Wiwa::GameStateManager::s_CharacterSettings[0].Damage);
+		ImGui::InputFloat("Rate of fire", &Wiwa::GameStateManager::s_CharacterSettings[0].RateOfFire);
 		ImGui::InputFloat("Speed", &Wiwa::GameStateManager::s_CharacterSettings[0].Speed);
 		ImGui::InputFloat("Dash distance", &Wiwa::GameStateManager::s_CharacterSettings[0].DashDistance);
 		ImGui::InputFloat("Dash speed", &Wiwa::GameStateManager::s_CharacterSettings[0].DashSpeed);
 		ImGui::InputFloat("Dash cooldown", &Wiwa::GameStateManager::s_CharacterSettings[0].DashCoolDown);
 		ImGui::InputFloat("Walk threshold", &Wiwa::GameStateManager::s_CharacterSettings[0].WalkTreshold);
+		ImGui::PopID();
 	}
 
 	if (ImGui::CollapsingHeader("Rocket default values"))
 	{
+		ImGui::PushID(1);
 		ImGui::InputInt("Max health", &Wiwa::GameStateManager::s_CharacterSettings[1].MaxHealth);
-		ImGui::Text("Current health %i", Wiwa::GameStateManager::s_CharacterSettings[1].Health);
 		ImGui::InputInt("Max Shield", &Wiwa::GameStateManager::s_CharacterSettings[1].MaxShield);
-		ImGui::Text("Current Shield %i", Wiwa::GameStateManager::s_CharacterSettings[1].Shield);
+		ImGui::InputInt("Damage", &Wiwa::GameStateManager::s_CharacterSettings[1].Damage);
+		ImGui::InputFloat("Rate of fire", &Wiwa::GameStateManager::s_CharacterSettings[1].RateOfFire);
 		ImGui::InputFloat("Speed", &Wiwa::GameStateManager::s_CharacterSettings[1].Speed);
 		ImGui::InputFloat("Dash distance", &Wiwa::GameStateManager::s_CharacterSettings[1].DashDistance);
 		ImGui::InputFloat("Dash speed", &Wiwa::GameStateManager::s_CharacterSettings[1].DashSpeed);
 		ImGui::InputFloat("Dash cooldown", &Wiwa::GameStateManager::s_CharacterSettings[1].DashCoolDown);
 		ImGui::InputFloat("Walk threshold", &Wiwa::GameStateManager::s_CharacterSettings[1].WalkTreshold);
+		ImGui::PopID();
 	}
 
 	ImGui::InputFloat("Gamepad deadzone", &Wiwa::GameStateManager::s_GamepadDeadzone);

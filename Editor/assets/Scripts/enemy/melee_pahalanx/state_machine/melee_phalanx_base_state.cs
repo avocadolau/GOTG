@@ -4,11 +4,13 @@ using Wiwa;
 
 namespace Game
 { 
-  public abstract class MeleePhalanxBaseState
+    using EntityId = System.UInt64;
+public abstract class MeleePhalanxBaseState
     {
-        public abstract void EnterState(ref EnemyMeleePhalanx enemy);
-        public abstract void UpdateState(ref EnemyMeleePhalanx enemy);
-        public abstract void ExitState(ref EnemyMeleePhalanx enemy);
-        public abstract void OnCollisionEnter(ref EnemyMeleePhalanx enemy);
+
+        public abstract void EnterState(ref EnemyMeleePhalanx enemy, EntityId entityId);
+        public abstract void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId);
+        public abstract void ExitState(ref EnemyMeleePhalanx enemy, EntityId entityId);
+        public abstract void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId entityId);
     }
 }

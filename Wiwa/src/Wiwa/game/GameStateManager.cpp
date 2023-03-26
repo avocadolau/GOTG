@@ -28,7 +28,10 @@ namespace Wiwa
 	int GameStateManager::s_CurrentRoomsCount;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
 	int GameStateManager::s_CurrentCharacter = 0;
-	float GameStateManager::s_GamepadDeadzone;
+	float GameStateManager::s_GamepadDeadzone = 0.f;
+	EntityId GameStateManager::s_PlayerId = 0;
+	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
+	Scene* GameStateManager::s_CurrentScene = nullptr;
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -37,17 +40,74 @@ namespace Wiwa
 
 	void GameStateManager::SaveProgression()
 	{
+		
+		if(debug)
+			WI_CORE_INFO("Saving player progression");
+
+		JSONDocument doc;
+		EntityManager& em = s_CurrentScene->GetEntityManager();
+		Character* character = em.GetComponent<Character>(s_PlayerId);
+		if (character)
+		{
+			doc.AddMember("max_health", character->MaxHealth);
+			doc.AddMember("health", character->Health);
+			doc.AddMember("max_shield", character->MaxShield);
+			doc.AddMember("shield", character->Shield);
+			doc.AddMember("damage", character->Damage);
+			doc.AddMember("rof", character->RateOfFire);
+			doc.AddMember("speed", character->Speed);
+			doc.AddMember("dash_distance", character->DashDistance);
+			doc.AddMember("dash_speed", character->DashSpeed);
+			doc.AddMember("dash_cooldown", character->DashCooldown);
+			doc.AddMember("walk_threshold", character->WalkTreshold);
+		}
+		doc.save_file("config/player_data.json");
+
+		if(debug)
+			WI_CORE_INFO("Player progression saved");
 	}
 
 	void GameStateManager::LoadProgression()
 	{
+		if (debug)
+			WI_CORE_INFO("Loading player progression");
+		EntityManager& em = s_CurrentScene->GetEntityManager();
+		Character* character = em.GetComponent<Character>(s_PlayerId);
+		JSONDocument doc("config/player_data.json");
+		if (doc.IsObject())
+		{
+			if (doc.HasMember("max_health"))
+				character->MaxHealth = doc["max_health"].as_int();
+			if (doc.HasMember("health"))
+				character->Health = doc["health"].as_int();
+			if (doc.HasMember("max_shield"))
+				character->MaxShield = doc["max_shield"].as_int();
+			if (doc.HasMember("shield"))
+				character->Shield = doc["shield"].as_int();
+			if (doc.HasMember("damage"))
+				character->Damage = doc["damage"].as_int();
+			if (doc.HasMember("rof"))
+				character->RateOfFire = doc["rof"].as_float();
+			if (doc.HasMember("speed"))
+				character->Speed = doc["speed"].as_float();
+			if (doc.HasMember("dash_distance"))
+				character->DashDistance = doc["dash_distance"].as_float();
+			if (doc.HasMember("dash_speed"))
+				character->DashSpeed = doc["dash_speed"].as_float();
+			if (doc.HasMember("dash_cooldown"))
+				character->DashCooldown = doc["dash_cooldown"].as_float();
+			if (doc.HasMember("walk_threshold"))
+				character->WalkTreshold = doc["walk_threshold"].as_float();
+		}
+		if (debug)
+			WI_CORE_INFO("Player progression loaded");
 	}
 
 
 	void GameStateManager::UpdateRoomState()
 	{
-		if (s_RoomType == RoomType::ROOM_COMBAT)
-			UpdateCombatRoom();
+		//if (s_RoomType == RoomType::ROOM_COMBAT)
+			//UpdateCombatRoom();
 
 		if (s_HasFinshedRoom && s_CanPassNextRoom && s_PlayerTriggerNext)
 		{
@@ -63,7 +123,7 @@ namespace Wiwa
 
 	void GameStateManager::UpdateCombatRoom()
 	{
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& em = s_CurrentScene->GetEntityManager();
 		em.RegisterComponent<EnemySpawner>();
 		size_t size = 0;
 		ComponentHash cmpHash = FNV1A_HASH("EnemySpawner");
@@ -71,23 +131,26 @@ namespace Wiwa
 
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
-		for (int i = 0; i < size; i++)
+		if (enemySpawnerList)
 		{
-			if (em.IsComponentRemovedByHash(cmpHash, i)) {
-				//WI_INFO("Removed at: [{}]", i);
-			}
-			else
+			for (int i = 0; i < size; i++)
 			{
-				s_TotalSpawners += 1;
-				Wiwa::EnemySpawner* c = &enemySpawnerList[i];
-				if (c)
+				if (em.IsComponentRemovedByHash(cmpHash, i)) {
+					//WI_INFO("Removed at: [{}]", i);
+				}
+				else
 				{
-					if (c->hasFinished)
-						s_SpawnersFinished += 1;
+					s_TotalSpawners += 1;
+
+					Wiwa::EnemySpawner* c = &enemySpawnerList[i];
+					if (c)
+					{
+						if (c->hasFinished)
+							s_SpawnersFinished += 1;
+					}
 				}
 			}
 		}
-
 		s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
 		s_CanPassNextRoom = s_HasFinshedRoom;
 
@@ -100,6 +163,7 @@ namespace Wiwa
 	void GameStateManager::StartRun()
 	{
 		if (debug) WI_INFO("GAME STATE: StartRun()");
+		SaveProgression();
 		StartNewRoom();
 	}
 
@@ -111,17 +175,78 @@ namespace Wiwa
 
 	void GameStateManager::InitHub()
 	{
-		if (debug) WI_INFO("GAME STATE: InitHub()");
+		if (debug)
+			WI_INFO("GAME STATE: InitHub()");
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
+		InitPlayerData();
 		s_CurrentRoomsCount = 3;
+		s_RoomsToBoss = 20;
+		s_RoomsToShop = 10;
+	}
+
+	void GameStateManager::InitPlayerData()
+	{
+		if (debug)
+			WI_CORE_INFO("Init progression");
+	
+		EntityManager& em = s_CurrentScene->GetEntityManager();
+		EntityManager::ComponentIterator it = em.GetComponentIterator<Character>(s_PlayerId);
+		Character* character = (Character*)em.GetComponentByIterator(it);
+		JSONDocument doc("config/room_data.json");
+		if (!character)
+		{
+			WI_ERROR("Character was nullptr");
+			return; 
+		}
+		if (doc.IsObject())
+		{
+			if (doc.HasMember("starlord") && doc.HasMember("rocket"))
+			{
+				JSONValue characterDoc = doc["starlord"];
+				if (s_CurrentCharacter == 1)
+					characterDoc = doc["rocket"];
+				if (characterDoc.HasMember("max_health"))
+					character->MaxHealth = characterDoc["max_health"].as_int();
+				character->Health = character->MaxHealth;
+				if (characterDoc.HasMember("max_shield"))
+					character->MaxShield = characterDoc["max_shield"].as_int();
+				character->Shield = character->MaxShield;
+				if (characterDoc.HasMember("shield"))
+					character->Shield = characterDoc["shield"].as_int();
+				if (characterDoc.HasMember("damage"))
+					character->Damage = characterDoc["damage"].as_int();
+				if (characterDoc.HasMember("rof"))
+					character->RateOfFire = characterDoc["rof"].as_float();
+				if (characterDoc.HasMember("speed"))
+					character->Speed = characterDoc["speed"].as_float();
+				if (characterDoc.HasMember("dash_distance"))
+					character->DashDistance = characterDoc["dash_distance"].as_float();
+				if (characterDoc.HasMember("dash_speed"))
+					character->DashSpeed = characterDoc["dash_speed"].as_float();
+				if (characterDoc.HasMember("dash_cooldown"))
+					character->DashCooldown = characterDoc["dash_cooldown"].as_float();
+				if (characterDoc.HasMember("walk_threshold"))
+					character->WalkTreshold = characterDoc["walk_threshold"].as_float();
+			}
+		}
+		if (debug)
+			WI_CORE_INFO("Player init loaded");
+	}
+
+	void GameStateManager::Die()
+	{
+		if (debug)
+			WI_CORE_INFO("Player dead");
+
+		//TODO: @Alejandro Pop the deadth menu
 	}
 
 	void GameStateManager::StartNewRoom()
 	{
-		if (debug) WI_INFO("GAME STATE: StartNewRoom()");
+		if (debug)
+			WI_INFO("GAME STATE: StartNewRoom()");
 		s_PlayerTriggerNext = false;
-		LoadProgression();
 		NextRoom();
 
 		if (s_RoomType == RoomType::ROOM_REWARD || s_RoomType == RoomType::ROOM_SHOP || s_RoomType == RoomType::ROOM_HUB)
@@ -129,6 +254,14 @@ namespace Wiwa
 			s_HasFinshedRoom = true;
 			s_CanPassNextRoom = true;
 		}
+	}
+
+	void GameStateManager::SetPlayerId(EntityId id, Scene* scene)
+	{
+		s_PlayerId = id;
+		s_CurrentScene = scene;
+		s_CharacterStats = scene->GetEntityManager().GetComponentIterator<Character>(id);
+		WI_CORE_INFO("Player id set to {}", id);
 	}
 
 	void GameStateManager::EndCurrentRoom()
@@ -294,6 +427,7 @@ namespace Wiwa
 	}
 
 
+
 	void GameStateManager::SerializeData()
 	{
 		JSONDocument doc;
@@ -318,26 +452,26 @@ namespace Wiwa
 
 		JSONValue starlord = doc.AddMemberObject("starlord");
 		starlord.AddMember("max_health", s_CharacterSettings[0].MaxHealth);
-		starlord.AddMember("health", s_CharacterSettings[0].Health);
 		starlord.AddMember("max_shield", s_CharacterSettings[0].MaxShield);
-		starlord.AddMember("shield", s_CharacterSettings[0].Shield);
+		starlord.AddMember("damage", s_CharacterSettings[0].Damage);
+		starlord.AddMember("rof", s_CharacterSettings[0].RateOfFire);
 		starlord.AddMember("speed", s_CharacterSettings[0].Speed);
 		starlord.AddMember("dash_speed", s_CharacterSettings[0].DashSpeed);
 		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
 		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
-		starlord.AddMember("walk_treshold", s_CharacterSettings[0].WalkTreshold);
+		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
 
 
 		JSONValue rocket = doc.AddMemberObject("rocket");
 		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
-		rocket.AddMember("health", s_CharacterSettings[1].Shield);
 		rocket.AddMember("max_shield", s_CharacterSettings[1].MaxShield);
-		rocket.AddMember("shield", s_CharacterSettings[1].Shield);
+		rocket.AddMember("damage", s_CharacterSettings[1].Damage);
+		rocket.AddMember("rof", s_CharacterSettings[1].RateOfFire);
 		rocket.AddMember("speed", s_CharacterSettings[1].Speed);
 		rocket.AddMember("dash_speed", s_CharacterSettings[1].DashSpeed);
 		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
 		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
-		rocket.AddMember("walk_treshold", s_CharacterSettings[1].WalkTreshold);
+		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
 
 		doc.AddMember("gamepad_deadzone", s_GamepadDeadzone);
 		doc.AddMember("current_character", s_CurrentCharacter);
@@ -392,28 +526,28 @@ namespace Wiwa
 		{
 			JSONValue starlord = doc["starlord"];
 			s_CharacterSettings[0].MaxHealth = starlord["max_health"].as_int();
-			s_CharacterSettings[0].Health = starlord["health"].as_int();
 			s_CharacterSettings[0].MaxShield = starlord["max_shield"].as_int();
-			s_CharacterSettings[0].Shield = starlord["shield"].as_int();
+			s_CharacterSettings[0].Damage = starlord["damage"].as_int();
+			s_CharacterSettings[0].RateOfFire = starlord["rof"].as_float();
 			s_CharacterSettings[0].Speed = starlord["speed"].as_float();
 			s_CharacterSettings[0].DashSpeed = starlord["dash_speed"].as_float();
 			s_CharacterSettings[0].DashDistance = starlord["dash_distance"].as_float();
 			s_CharacterSettings[0].DashCoolDown = starlord["dash_cooldown"].as_float();
-			s_CharacterSettings[0].WalkTreshold = starlord["walk_treshold"].as_float();
+			s_CharacterSettings[0].WalkTreshold = starlord["walk_threshold"].as_float();
 		}
 
 		if (doc.HasMember("rocket"))
 		{
 			JSONValue rocket = doc["rocket"];
 			s_CharacterSettings[1].MaxHealth = rocket["max_health"].as_int();
-			s_CharacterSettings[1].Health = rocket["health"].as_int();
 			s_CharacterSettings[1].MaxShield = rocket["max_shield"].as_int();
-			s_CharacterSettings[1].Shield = rocket["shield"].as_int();
+			s_CharacterSettings[1].Damage = rocket["damage"].as_int();
+			s_CharacterSettings[1].RateOfFire = rocket["rof"].as_float();
 			s_CharacterSettings[1].Speed = rocket["speed"].as_float();
 			s_CharacterSettings[1].DashSpeed = rocket["dash_speed"].as_float();
 			s_CharacterSettings[1].DashDistance = rocket["dash_distance"].as_float();
 			s_CharacterSettings[1].DashCoolDown = rocket["dash_cooldown"].as_float();
-			s_CharacterSettings[1].WalkTreshold = rocket["walk_treshold"].as_float();
+			s_CharacterSettings[1].WalkTreshold = rocket["walk_threshold"].as_float();
 		}
 		if (doc.HasMember("gamepad_deadzone"))
 			s_GamepadDeadzone = doc["gamepad_deadzone"].as_float();

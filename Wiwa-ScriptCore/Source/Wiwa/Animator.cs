@@ -3,6 +3,11 @@
     using EntityId = System.UInt64;
     public class Animator
     {
+        public static void Blend(string targetAnimation, float blendDuration, EntityId entity)
+        {
+            InternalCalls.Blend(targetAnimation, blendDuration, entity);
+        }
+
         public static void PlayAnimationName(string name, EntityId entity)
         {
             InternalCalls.PlayAnimationName(name, entity);

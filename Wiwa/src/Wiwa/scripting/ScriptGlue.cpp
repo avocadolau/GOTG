@@ -128,6 +128,8 @@ namespace Wiwa
 
 		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
+		WI_ADD_INTERNAL_CALL(ChangeMasterVolume);
+
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(GetLinearVelocity);
@@ -167,6 +169,10 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(InitHub);
 		WI_ADD_INTERNAL_CALL(StartRun);
 		WI_ADD_INTERNAL_CALL(EndRun);
-
+		WI_ADD_INTERNAL_CALL(SetPlayer);
+		WI_ADD_INTERNAL_CALL(GetControllerDeadzone);
+		WI_ADD_INTERNAL_CALL(LoadPlayerProgression);
+		WI_ADD_INTERNAL_CALL(SavePlayerProgression);
+		WI_ADD_INTERNAL_CALL(Die);
 	}
 }

@@ -8,3 +8,13 @@ void InitHub();
 void StartRun();
 
 void EndRun();
+
+void SetPlayer(size_t id, void* scene);
+
+void SavePlayerProgression();
+
+void LoadPlayerProgression();
+
+float GetControllerDeadzone();
+
+void Die();

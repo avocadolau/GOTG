@@ -20,8 +20,9 @@
 
 uint32_t Wiwa::AIPathFindingManager::m_Width = 0;
 uint32_t Wiwa::AIPathFindingManager::m_Height = 0;
-unsigned char* Wiwa::AIPathFindingManager::m_Map = nullptr;
+//unsigned char* Wiwa::AIPathFindingManager::m_Map = nullptr;
 std::vector<glm::vec2> Wiwa::AIPathFindingManager::m_LastPath = {};
+std::vector<unsigned char> Wiwa::AIPathFindingManager::m_MapPathFinding = std::vector<unsigned char>(MAP_TILES_MAX_SIZE);
 
 // PathNode Defintitions
 
@@ -164,20 +165,36 @@ Wiwa::AIPathFindingManager::AIPathFindingManager()
 
 bool Wiwa::AIPathFindingManager::CleanUp()
 {	
-	delete[] m_Map;
-	m_Map = nullptr;
+	m_MapPathFinding.clear();
+	/*delete[] m_Map;
+	m_Map = nullptr;*/
 	return false;
 }
 
-void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, unsigned char* data)
+//void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, unsigned char* data)
+//{
+//	m_Width = width;
+//	m_Height = height;
+//
+//	if (m_Map != nullptr)
+//	{
+//		delete[] m_Map;
+//		m_Map = nullptr;
+//	}
+//
+//	m_Map = new unsigned char[width * height];
+//	memcpy(m_Map, data, width * height * sizeof(unsigned char));
+//}
+
+void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, const std::vector<unsigned char>& data)
 {
 	m_Width = width;
 	m_Height = height;
 
-	delete[] m_Map;				
-	m_Map = NULL;
-	m_Map = new unsigned char[width * height];
-	memcpy(m_Map, data, width * height);
+	m_MapPathFinding.clear();
+	m_MapPathFinding.resize(width * height, DEFAULT_WALK_CODE);
+	std::copy(data.begin(), data.end(), m_MapPathFinding.begin());
+	//memcpy(m_Map, data, width * height * sizeof(unsigned char));
 }
 
 int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::ivec2& destination)
@@ -286,7 +303,7 @@ bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
 	if (CheckBoundaries(pos))
-		return m_Map[(pos.y * m_Width) + pos.x];
+		return m_MapPathFinding[(pos.y * m_Width) + pos.x];
 
 	return INVALID_WALK_CODE;
 }

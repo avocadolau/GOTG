@@ -11,14 +11,16 @@ namespace Game
         public int enemyType;
         public bool hasFinished;
     }
-   
+
     public class EnemySystem : Behaviour
     {
         public ComponentIterator enemyIt;
         public ComponentIterator characterStatsIt;
         public ComponentIterator colliderIt;
         public ComponentIterator agentIt;
+        public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
+
         public EntityId playerId; 
         bool debug = true;
         public virtual void Awake()
@@ -34,6 +36,8 @@ namespace Game
             agentIt.componentIndex = Constants.WI_INVALID_INDEX;
             playerTransformIt.componentId = Constants.WI_INVALID_INDEX;
             playerTransformIt.componentIndex = Constants.WI_INVALID_INDEX;
+            transformIt.componentId = Constants.WI_INVALID_INDEX;
+            transformIt.componentIndex = Constants.WI_INVALID_INDEX;
         }
 
         public virtual void Init()
@@ -45,6 +49,7 @@ namespace Game
             agentIt = GetComponentIterator<AgentAI>();
             playerId = GetEntityByName("Player");
             playerTransformIt = GetComponentIterator<Transform3D>(playerId);
+            transformIt = GetComponentIterator<Transform3D>();
         }
 
         public virtual void Update()
@@ -80,7 +85,8 @@ namespace Game
         {
             if (id1 == m_EntityId && str2 == "BULLET")
             {
-                ReceiveDamage(20);
+                ref BulletComponent bullet = ref GetComponent<BulletComponent>(id2);
+                ReceiveDamage(bullet.Damage);
             }
         }
 
@@ -91,8 +97,8 @@ namespace Game
                 ref Character statsSelf = ref GetComponentByIterator<Character>(characterStatsIt);
                 ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
 
-                statsSelf.healthPoints = statsSelf.healthPoints - damage;
-                if (statsSelf.healthPoints <= 0)
+                statsSelf.Health = statsSelf.Health - damage;
+                if (statsSelf.Health <= 0)
                 {
                     self.hasFinished = true;
                 }

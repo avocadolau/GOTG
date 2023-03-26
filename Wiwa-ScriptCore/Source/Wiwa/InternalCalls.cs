@@ -149,6 +149,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddAudioSource(EntityId entity, string ev_name, bool playOnAwake, bool isDefaultListener);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeMasterVolume(int volume);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool IsPlaying(EntityId entity);
         #endregion
         #region Physics
@@ -189,7 +191,7 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void ActivateGuiCanvas(int id);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void SwapToNewTexture(string path,int id_canvas,int id_control);
+        internal extern static void SwapToNewTexture(string path, int id_canvas, int id_control);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SwapText(string word, int id_canvas, int id_control);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -200,11 +202,24 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetRoomStateTriggerNext(bool value);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void InitHub();
+        internal extern static void InitHub(System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void StartRun();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void EndRun();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SavePlayerProgression();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadPlayerProgression();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetPlayer(EntityId id, System.Int64 scene);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float GetControllerDeadzone();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Die();
         #endregion
 
         #region AgentAI
@@ -230,6 +245,8 @@ namespace Wiwa
         #endregion
 
         #region Animations
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Blend(string targetAnimation, float blendDuration, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PlayAnimationName(string name, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
