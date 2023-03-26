@@ -31,11 +31,7 @@ namespace Game
 
                 if (transformIt.componentId != 18446744073709551615) //change per constant
                 {
-                    
-
-
                     ParticleEmitterManger.ParticleEmitterPlayBatch(m_EntityId);
-
                 }
 
                 timer = 5;
