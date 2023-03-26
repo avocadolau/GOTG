@@ -27,6 +27,8 @@ namespace Game
 
         private bool isWalking = false;
 
+        private float dieTimer = 5f;
+
         Vector3 lastDir = Vector3Values.zero;
 
         void Awake()
@@ -106,6 +108,7 @@ namespace Game
 
                 }
             }
+            //Debug remove once tested
             if (Input.IsKeyDown(KeyCode.F1))
             {
                 controller.Health = 0;
@@ -113,7 +116,11 @@ namespace Game
 
             if (controller.Health <= 0)
             {
-                GameState.Die();
+                dieTimer -= Time.DeltaTime();
+                if (dieTimer <= 0)
+                {
+                    GameState.Die();
+                }
             }
 
         }
