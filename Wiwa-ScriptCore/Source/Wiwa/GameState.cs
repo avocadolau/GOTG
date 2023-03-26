@@ -23,9 +23,9 @@
             InternalCalls.EndRun();
         }
 
-        public static void SetPlayer(EntityId id)
+        public static void SetPlayer(EntityId id, System.Int64 scene)
         {
-            InternalCalls.SetPlayer(id);
+            InternalCalls.SetPlayer(id, scene);
         }
         public static float GetControllerDeadzone()
         {

@@ -30,21 +30,22 @@ namespace Wiwa
 	int GameStateManager::s_CurrentCharacter = 0;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
 	EntityId GameStateManager::s_PlayerId = 0;
-	CharacterStats GameStateManager::s_CharacterStats;
+	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
+	Scene* GameStateManager::s_CurrentScene = nullptr;
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
 	}
 
-	void GameStateManager::SaveProgression(void* scene)
+	void GameStateManager::SaveProgression()
 	{
-		Scene* _scene = (Scene*)scene;
+		
 		if(debug)
 			WI_CORE_INFO("Saving player progression");
 
 		JSONDocument doc;
-		EntityManager& em = _scene->GetEntityManager();
+		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
 		if (character)
 		{
@@ -66,12 +67,11 @@ namespace Wiwa
 			WI_CORE_INFO("Player progression saved");
 	}
 
-	void GameStateManager::LoadProgression(void* scene)
+	void GameStateManager::LoadProgression()
 	{
-		Scene* _scene = (Scene*)scene;
 		if (debug)
 			WI_CORE_INFO("Loading player progression");
-		EntityManager& em = _scene->GetEntityManager();
+		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
 		JSONDocument doc("config/player_data.json");
 		if (doc.IsObject())
@@ -123,7 +123,7 @@ namespace Wiwa
 
 	void GameStateManager::UpdateCombatRoom()
 	{
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& em = s_CurrentScene->GetEntityManager();
 		em.RegisterComponent<EnemySpawner>();
 		size_t size = 0;
 		ComponentHash cmpHash = FNV1A_HASH("EnemySpawner");
@@ -131,23 +131,26 @@ namespace Wiwa
 
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
-		for (int i = 0; i < size; i++)
+		if (enemySpawnerList)
 		{
-			if (em.IsComponentRemovedByHash(cmpHash, i)) {
-				//WI_INFO("Removed at: [{}]", i);
-			}
-			else
+			for (int i = 0; i < size; i++)
 			{
-				s_TotalSpawners += 1;
-				Wiwa::EnemySpawner* c = &enemySpawnerList[i];
-				if (c)
+				if (em.IsComponentRemovedByHash(cmpHash, i)) {
+					//WI_INFO("Removed at: [{}]", i);
+				}
+				else
 				{
-					if (c->hasFinished)
-						s_SpawnersFinished += 1;
+					s_TotalSpawners += 1;
+
+					Wiwa::EnemySpawner* c = &enemySpawnerList[i];
+					if (c)
+					{
+						if (c->hasFinished)
+							s_SpawnersFinished += 1;
+					}
 				}
 			}
 		}
-
 		s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
 		s_CanPassNextRoom = s_HasFinshedRoom;
 
@@ -169,22 +172,22 @@ namespace Wiwa
 		SetRoomType(RoomType::NONE);
 	}
 
-	void GameStateManager::InitHub(void* scene)
+	void GameStateManager::InitHub()
 	{
 		if (debug)
 			WI_INFO("GAME STATE: InitHub()");
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
-		InitPlayerData(scene);
+		InitPlayerData();
 		s_CurrentRoomsCount = 3;
 	}
 
-	void GameStateManager::InitPlayerData(void* scene)
+	void GameStateManager::InitPlayerData()
 	{
 		if (debug)
 			WI_CORE_INFO("Init progression");
-		Scene* _scene = (Scene*)scene;
-		EntityManager& em = _scene->GetEntityManager();
+	
+		EntityManager& em = s_CurrentScene->GetEntityManager();
 		EntityManager::ComponentIterator it = em.GetComponentIterator<Character>(s_PlayerId);
 		Character* character = (Character*)em.GetComponentByIterator(it);
 		JSONDocument doc("config/room_data.json");
@@ -240,7 +243,7 @@ namespace Wiwa
 			WI_INFO("GAME STATE: StartNewRoom()");
 		s_PlayerTriggerNext = false;
 
-		//LoadProgression();
+		LoadProgression();
 		NextRoom();
 
 		if (s_RoomType == RoomType::ROOM_REWARD || s_RoomType == RoomType::ROOM_SHOP || s_RoomType == RoomType::ROOM_HUB)
@@ -250,9 +253,11 @@ namespace Wiwa
 		}
 	}
 
-	void GameStateManager::SetPlayerId(EntityId id)
+	void GameStateManager::SetPlayerId(EntityId id, Scene* scene)
 	{
 		s_PlayerId = id;
+		s_CurrentScene = scene;
+		s_CharacterStats = scene->GetEntityManager().GetComponentIterator<Character>(id);
 		WI_CORE_INFO("Player id set to {}", id);
 	}
 
@@ -265,7 +270,7 @@ namespace Wiwa
 			ResetBooleans();
 		}
 		ChangeRoomState(RoomState::STATE_TRANSITIONING);
-		//SaveProgression();
+		SaveProgression();
 	}
 
 	void GameStateManager::LogRoomState()
