@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Wiwa;
 
 namespace Game
@@ -11,7 +10,7 @@ namespace Game
         public int enemyType;
         public bool hasFinished;
     }
-   
+
     public class EnemySystem : Behaviour
     {
         public ComponentIterator enemyIt;
@@ -19,7 +18,7 @@ namespace Game
         public ComponentIterator colliderIt;
         public ComponentIterator agentIt;
         public ComponentIterator playerTransformIt;
-        public EntityId playerId; 
+        public EntityId playerId;
         bool debug = true;
         public virtual void Awake()
         {
@@ -91,8 +90,8 @@ namespace Game
                 ref Character statsSelf = ref GetComponentByIterator<Character>(characterStatsIt);
                 ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
 
-                statsSelf.healthPoints = statsSelf.healthPoints - damage;
-                if (statsSelf.healthPoints <= 0)
+                statsSelf.Health = statsSelf.Health - damage;
+                if (statsSelf.Health <= 0)
                 {
                     self.hasFinished = true;
                 }

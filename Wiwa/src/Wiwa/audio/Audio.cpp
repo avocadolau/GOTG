@@ -434,7 +434,7 @@ bool Audio::LoadProject(const char* init_bnk)
 
 bool Audio::ReloadProject()
 {
-    if (!UnloadAllBanks()) return false;
+    if (!   UnloadAllBanks()) return false;
 
     AKRESULT res = AK::SoundEngine::LoadBank(m_InitBankPath.c_str(), m_InitBank);
 
@@ -760,3 +760,10 @@ bool Audio::UnloadAllBanks()
 
     return true;
 }
+
+void Audio::ChangeMasterVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("MasterVolume", value);
+}
+
+
