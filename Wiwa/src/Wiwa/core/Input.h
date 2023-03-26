@@ -7,7 +7,16 @@ namespace Wiwa
 	class WI_API Input
 	{
 	public:
-		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }	
+		enum KeyState {
+			KS_NONE,
+			KS_PRESS,
+			KS_REPEAT,
+			KS_RELEASE
+		};
+
+		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
+		inline static bool IsKeyRepeat(int keycode) { return s_Instance->IsKeyRepeatImpl(keycode); }
+		inline static bool IsKeyReleased(int keycode) { return s_Instance->IsKeyReleasedImpl(keycode); }
 		inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
 		inline static bool IsMouseButtonReleased(int button) { return s_Instance->IsMouseButtonReleasedImpl(button); }
 		inline static std::pair<float, float> GetMousePosition() { return s_Instance->GetMousePositionImpl(); }
@@ -22,7 +31,9 @@ namespace Wiwa
 		inline static bool IsButtonPressed(int gamepadIndx,int keycode) { return s_Instance->IsButtonPressedImpl(gamepadIndx, keycode); }
 		inline static bool IsButtonReleased(int gamepadIndx, int keycode) { return s_Instance->IsButtonReleasedImpl(gamepadIndx, keycode); }
 
+		inline static void Init() { return s_Instance->InitImpl(); }
 		inline static void Update() { return s_Instance->UpdateImpl(); }
+
 		inline static void OverrideMouseInputs(float mx, float my, float px, float py, float dx, float dy) 
 		{
 			MouseX = mx;
@@ -34,6 +45,8 @@ namespace Wiwa
 		}
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) = 0;
+		virtual bool IsKeyRepeatImpl(int keycode) = 0;
+		virtual bool IsKeyReleasedImpl(int keycode) = 0;
 		virtual bool IsMouseButtonPressedImpl(int button) = 0;
 		virtual bool IsMouseButtonReleasedImpl(int button) = 0;
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
@@ -41,6 +54,7 @@ namespace Wiwa
 		virtual float GetMouseYImpl() = 0;
 		virtual float GetMouseXDeltaImpl() = 0;
 		virtual float GetMouseYDeltaImpl() = 0;
+		virtual void InitImpl() = 0;
 		virtual void UpdateImpl() = 0;
 		virtual void LockCursorImpl() = 0;
 		virtual void UnlockCursorImpl() = 0;
@@ -59,5 +73,11 @@ namespace Wiwa
 
 		static float prevMouseX;
 		static float prevMouseY;
+
+		static KeyState* m_KeyStates;
+		static size_t m_MaxKeys;
+
+		static KeyState* m_ButtonStates;
+		static size_t m_MaxButtons;
 	};
 }

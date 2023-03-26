@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Wiwa/core/Input.h>
+#include <Wiwa/Events/KeyEvent.h>
 
 namespace Wiwa
 {
@@ -8,6 +9,8 @@ namespace Wiwa
 	{
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) override;
+		virtual bool IsKeyRepeatImpl(int keycode) override;
+		virtual bool IsKeyReleasedImpl(int keycode) override;
 		virtual bool IsMouseButtonPressedImpl(int button) override;
 		virtual bool IsMouseButtonReleasedImpl(int button) override;
 		virtual std::pair<float, float> GetMousePositionImpl() override;
@@ -15,6 +18,8 @@ namespace Wiwa
 		virtual float GetMouseYImpl() override;
 		virtual float GetMouseXDeltaImpl() override;
 		virtual float GetMouseYDeltaImpl() override;
+
+		virtual void InitImpl() override;
 		virtual void UpdateImpl() override;
 		virtual void LockCursorImpl() override;
 		virtual void UnlockCursorImpl() override;
@@ -23,5 +28,6 @@ namespace Wiwa
 		virtual bool IsButtonPressedImpl(int gamepadIndx, int keycode) override;
 		virtual bool IsButtonReleasedImpl(int gamepadIndx, int keycode) override;
 
+		void OnWindowEvent(Event& ev);
 	};
 }

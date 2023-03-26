@@ -181,6 +181,8 @@ namespace Wiwa
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
 		s_CurrentRoomsCount = 3;
+		s_RoomsToBoss = 20;
+		s_RoomsToShop = 10;
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -204,18 +206,12 @@ namespace Wiwa
 				JSONValue characterDoc = doc["starlord"];
 				if (s_CurrentCharacter == 1)
 					characterDoc = doc["rocket"];
-
-				
 				if (characterDoc.HasMember("max_health"))
 					character->MaxHealth = characterDoc["max_health"].as_int();
-				
 				character->Health = character->MaxHealth;
-				
 				if (characterDoc.HasMember("max_shield"))
 					character->MaxShield = characterDoc["max_shield"].as_int();
-
 				character->Shield = character->MaxShield;
-
 				if (characterDoc.HasMember("shield"))
 					character->Shield = characterDoc["shield"].as_int();
 				if (characterDoc.HasMember("damage"))
