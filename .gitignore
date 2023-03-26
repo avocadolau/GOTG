@@ -37,6 +37,7 @@
 *.meta
 imgui.ini
 /Editor/config/panels.json
+!/Editor/config/player_data.json
 # VA config
 
 /JSON/

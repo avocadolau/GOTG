@@ -257,7 +257,10 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		originRect.y = originPos[1];
 		originRect.width = originSize[0];
 		originRect.height = originSize[1];
-		if(canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID,originRect,audioEventForButton.c_str());
+		if (canvas_id > -1)
+		{
+			m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID, originRect, audioEventForButton.c_str());
+		}
 	}
 
 	ImGui::PopID();

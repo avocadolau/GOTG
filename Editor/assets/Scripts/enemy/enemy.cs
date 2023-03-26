@@ -11,7 +11,7 @@ namespace Game
         public int enemyType;
         public bool hasFinished;
     }
-   
+
     public class EnemySystem : Behaviour
     {
         public ComponentIterator enemyIt;

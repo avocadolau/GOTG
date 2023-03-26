@@ -1,12 +1,10 @@
-using System;
 using Wiwa;
-using WiwaApp;
 
 
 namespace Game
 {
     using EntityId = System.UInt64;
-    
+
     class CameraControllerSystem : Behaviour
     {
         Vector3 campos;
@@ -34,7 +32,7 @@ namespace Game
 
         void Init()
         {
-            ref CharacterController character = ref GetComponent<CharacterController>();
+            ref Character character = ref GetComponent<Character>();
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
@@ -55,7 +53,7 @@ namespace Game
         void Update()
         {
             //Console.WriteLine("Starting Update character controller");
-            ref CharacterController character = ref GetComponent<CharacterController>();
+            ref Character character = ref GetComponent<Character>();
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
             rayCastTimer += Time.DeltaTimeMS();
@@ -66,7 +64,7 @@ namespace Game
                 rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 7, transform.Position.y, transform.Position.z));
                 upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7));
                 lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 7));
-        
+
                 //Console.WriteLine("LEFT RAY: " + leftRayWallDistance);
                 //Console.WriteLine("RIGHT RAY: " + rightRayWallDistance);
                 //Console.WriteLine("UPPER RAY: " + upperRayWallDistance);

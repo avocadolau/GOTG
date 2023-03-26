@@ -116,7 +116,7 @@ namespace Wiwa {
 						if (imported) {
 							ResourceId imgId = Resources::Load<Image>(texture_path.string().c_str());
 							Image* img = Resources::GetResourceById<Image>(imgId);
-							material.SetUniformData("u_Texture", glm::ivec2(img->GetTextureId(), imgId));
+							material.SetUniformData("u_Texture", Uniform::SamplerData(img->GetTextureId(), imgId, texture_path.string()));
 						}
 					}
 					else

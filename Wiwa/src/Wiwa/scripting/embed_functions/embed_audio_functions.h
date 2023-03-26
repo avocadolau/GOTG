@@ -16,3 +16,5 @@ bool IsPlaying(size_t entity);
 void AddAudioSource(size_t entity, MonoString* event_name, bool playOnAwake, bool isDefaultListener);
 
 void StopAllEvents();
+
+void ChangeMasterVolume(int volume);
