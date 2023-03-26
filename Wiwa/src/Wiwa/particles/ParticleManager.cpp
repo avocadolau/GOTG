@@ -18,6 +18,7 @@ namespace Wiwa {
 		shader->Compile("resources/shaders/particle_display");
 		m_Material = new Material(shader);
 
+		currentFrameParticles = 0;
 	}
 
 
@@ -38,8 +39,7 @@ namespace Wiwa {
 
 	void ParticleManager::Update()
 	{
-
-
+		/*currentFrameParticles++;*/ //check
 		if (emitterList.size() > 0)
 		{
 			dt = Time::GetRealDeltaTime() / 1000;
@@ -77,39 +77,7 @@ namespace Wiwa {
 
 				}
 
-
-
-				//if (emitter->timer <= 0)
-				//{
-				//	if (emitter->repeat)
-				//	{
-				//		if (emitter->particle_rate_isRanged)
-				//		{
-				//			emitter->timer = Wiwa::Math::RandomRange(emitter->particle_rate_range_0, emitter->particle_rate_range_1);
-				//		}
-				//		else
-				//		{
-				//			emitter->timer = emitter->particle_rate;
-
-				//		}
-
-				//	}
-
-				//	
-				//}
-				//else
-				//{
-				//	if (emitter->isPlaying)
-				//	{
-				//		emitter->timer -= dt;
-
-				//	}
-
-				//}
 			}
-
-
-
 		}
 
 		UpdateParticles();
@@ -128,75 +96,13 @@ namespace Wiwa {
 		EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
 
-
-		//std::string info_ = "active particles: " + std::to_string(currentParticleIndex);
-		//WI_CORE_INFO(info_.c_str());
-
-		/*std::string info_ = "emitter count: " + std::to_string(emitterList.size());
-		WI_CORE_INFO(info_.c_str());*/
-
-
-		//----------------------------------------------------------------------------------
-		/*Camera *camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-		camera->frameBuffer->Bind(false);
-
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(glm::value_ptr(camera->getView()));
-
-		glBegin(GL_LINES);
-		glColor3f(1, 1, 1);
-
-		float length = 0.2f;
-		float spacing = 0.1f;
-
-		float start = 0;
-		float z_con = 0;
-		int max_elements_line_ref = 50;
-		int max_elements_line = max_elements_line_ref;
-
-		float offset = -7;
-
-		for (size_t j = 0; j < MAX_PARTICLES; j++)
-		{
-			ParticleBillboard& p = particleArray[j];
-
-			if (particleArray[j].isActive)
-				glColor3f(1, 0, 0);
-
-			if (!particleArray[j].isActive)
-				glColor3f(0, 1, 0);
-
-			if (j > max_elements_line)
-			{
-				z_con += spacing * 5;
-				max_elements_line += max_elements_line_ref;
-				start = 0;
-			}
-
-			glVertex3f(start + offset, 0.0f, z_con);
-			glVertex3f(start + length + offset, 0.0f, z_con);
-
-			start += length + spacing;
-
-
-		}
-
-		glEnd();
-
-		camera->frameBuffer->Unbind();*/
-
-		//----------------------------------------------------------------------------------
-
 		for (size_t j = 0; j < currentParticleIndex; j++)
 		{
 
 
 			if (currentParticleIndex < MAX_PARTICLES)
 			{
+
 				ParticleBillboard& p = particleArray[j];
 
 				//Transform3D* t3D = m_entityManager.GetComponent<Transform3D>(p.emitterOwner->entityOwnerId);
@@ -243,6 +149,8 @@ namespace Wiwa {
 					p.followParticle = false;
 
 					p.followSpawn = false;
+
+					currentFrameParticles = 0;
 
 					particleArray[j].isActive = false;
 
@@ -326,7 +234,7 @@ namespace Wiwa {
 						p.startingPosition = t3D->localPosition;
 					}
 
-					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
+					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex + p.offset;
 
 					p.followSpawn = false;
 
@@ -342,8 +250,13 @@ namespace Wiwa {
 
 					if (p.m_material)
 					{
+						// calculate elapsed time since particle's start time
+						double elapsedTime = Wiwa::Time::GetTime() - p.startTime;
+
+						/*int animationFrame = currentFrameParticles - p.animationCreationTime;*/
+
 						// Update the animation
-						p.animation->Update();
+						p.animation->Update(elapsedTime);
 
 						// Get the current frame of the animation
 						glm::vec4& frame = p.animation->GetCurrentFrame();
@@ -463,9 +376,6 @@ namespace Wiwa {
 				}
 			}
 		}
-
-
-
 	}
 
 	void ParticleManager::ScreenAlign(std::shared_ptr<ParticleBillboard> particle)
@@ -702,6 +612,7 @@ namespace Wiwa {
 			p.followParticle = emitter->particle_followParticle;
 
 			p.followSpawn = emitter->followOnSpawn;
+			p.offset = emitter->particle_Offset;
 
 
 			//set geometry
@@ -744,6 +655,10 @@ namespace Wiwa {
 
 				p.animation = &particleAnimation;
 
+				p.animationCreationTime = currentFrameParticles;
+
+				p.animation->creationTimes.push_back(p.animationCreationTime);
+
 				if (p.animation != nullptr)
 				{
 					//p.animation->speed = 1.0f;
@@ -752,21 +667,79 @@ namespace Wiwa {
 					//p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
 					//p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
 
-					p.animation->speed = 2.0f;
+					p.animation->speed = 1.0f;
 					p.animation->loop = false;
 
-					p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-					p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-					p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-					p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+					switch (p.emitterOwner->number_animations)
+					{
 
-					p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
-					p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
+					case 1:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
 
+					case 2:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 3:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 4:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 5:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+					}
+					break;
+
+					case 6:
+					{
+						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+						p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
+					}
+					break;
+
+					default:
+						break;
+					}
+
+					//p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
+					//p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
+					//p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
 				}
 			}
 
 			/*delete p.animation;*/
+
+			p.startTime = Wiwa::Time::GetTime();
 
 			particleArray[currentParticleIndex] = p;
 
@@ -774,6 +747,8 @@ namespace Wiwa {
 
 			currentParticleIndex++;
 		}
+
+		currentFrameParticles++;
 
 	}
 
@@ -833,6 +808,7 @@ namespace Wiwa {
 		transform.position = glm::vec3(0, 0, 0);
 		transform.localPosition = glm::vec3(0, 0, 0);
 
+		offset = glm::vec3(0, 0, 0);
 		startingPosition = glm::vec3(0, 0, 0);
 		velocity = glm::vec3(0, 0, 0);
 		acceleration = glm::vec3(0, 0, 0);

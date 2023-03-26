@@ -683,6 +683,22 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 	ImGui::SameLine();
 	ImGui::Text("Animated");
 
+	// number of animations
+	if (emitter->isAnimated)
+	{
+		ParticleTab();
+
+		ImGui::Text("Number of Animations");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
+
+		ImGui::DragInt("##particle_aniamtions_number", &emitter->number_animations, 0.05f, 0.0f, 0.0f, "%.2f");
+
+		ImGui::PopItemWidth();
+	}
+
 	ImGui::Dummy(ImVec2(0, 4));
 
 	ImGui::Checkbox("##activateBillboard", &emitter->activateBillboard);
@@ -877,6 +893,24 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 	if (ImGui::TreeNode("Position & Translation"))
 	{
+		// particle offset
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_offset_isRanged", &emitter->particle_Offset_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::Text("Particle Offset");
+
+			if (emitter->particle_Offset_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_Offset", &(emitter->particle_Offset)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+		}
+
 		// particle starting position
 		{
 			ImGui::Dummy(ImVec2(0, 0));
