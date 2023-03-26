@@ -340,48 +340,49 @@ namespace Wiwa {
 
 					//---------------------------------------
 
-					// Update the animation
-					p.animation->Update();
-
-					// Get the current frame of the animation
-					glm::vec4& frame = p.animation->GetCurrentFrame();
-
-					// Update the texture coordinates based on the current frame
-					/*p.texCoords[0] = frame.x;
-					p.texCoords[1] = frame.y;
-					p.texCoords[2] = frame.x + frame.z;
-					p.texCoords[3] = frame.y + frame.w;*/
-
-					//---------------------------------------
-
-					if (p.emitterOwner->isAnimated == false)
+					if (p.m_material)
 					{
-						glm::vec2 ref_tex_coords[4] =
+						// Update the animation
+						p.animation->Update();
+
+						// Get the current frame of the animation
+						glm::vec4& frame = p.animation->GetCurrentFrame();
+
+						// Update the texture coordinates based on the current frame
+						/*p.texCoords[0] = frame.x;
+						p.texCoords[1] = frame.y;
+						p.texCoords[2] = frame.x + frame.z;
+						p.texCoords[3] = frame.y + frame.w;*/
+
+						//---------------------------------------
+
+						if (p.emitterOwner->isAnimated == false)
 						{
-							glm::vec2(0, 0),	//0		0	  2  		1	  3
-							glm::vec2(0, 1),	//1			     		
-							glm::vec2(1, 0),	//2			     		
-							glm::vec2(1, 1)		//3		1	  3  		0	  2				
-						};
+							glm::vec2 ref_tex_coords[4] =
+							{
+								glm::vec2(0, 0),	//0		0	  2  		1	  3
+								glm::vec2(0, 1),	//1			     		
+								glm::vec2(1, 0),	//2			     		
+								glm::vec2(1, 1)		//3		1	  3  		0	  2				
+							};
 
-						p.tex_coords[i] = ref_tex_coords[i];
-					}
+							p.tex_coords[i] = ref_tex_coords[i];
+						}
 
-					if (p.emitterOwner->isAnimated == true)
-					{
-						glm::vec2 ref_tex_coords[4] =
+						if (p.emitterOwner->isAnimated == true)
 						{
-							glm::vec2(frame.x, frame.y),                     //0    0    2    1    3
-							glm::vec2(frame.x, frame.y + frame.w),           //1
-							glm::vec2(frame.x + frame.z, frame.y),           //2
-							glm::vec2(frame.x + frame.z, frame.y + frame.w)  //3    1    3    0    2	
-						};
+							glm::vec2 ref_tex_coords[4] =
+							{
+								glm::vec2(frame.x, frame.y),                     //0    0    2    1    3
+								glm::vec2(frame.x, frame.y + frame.w),           //1
+								glm::vec2(frame.x + frame.z, frame.y),           //2
+								glm::vec2(frame.x + frame.z, frame.y + frame.w)  //3    1    3    0    2	
+							};
 
-						p.tex_coords[i] = ref_tex_coords[i];
+							p.tex_coords[i] = ref_tex_coords[i];
+						}
 					}
-
 				}
-
 
 				//draw particles
 				{
