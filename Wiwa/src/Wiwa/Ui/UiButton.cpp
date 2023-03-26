@@ -57,7 +57,7 @@ namespace Wiwa
 			{
 				if (state == GuiControlState::NORMAL)
 				{
-					Audio::PostEvent("on_hover");
+					//Audio::PostEvent("on_hover");
 				}
 
 				state = GuiControlState::FOCUSED;

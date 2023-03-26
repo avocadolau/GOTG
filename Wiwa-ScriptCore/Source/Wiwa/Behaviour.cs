@@ -11,7 +11,6 @@
         {
             return ref InternalCalls.GetComponent<T>(entity, typeof(T), m_Scene);
         }
-
         public ComponentIterator GetComponentIterator<T>() where T : unmanaged
         {
             return InternalCalls.GetComponentIterator(m_EntityId, typeof(T), m_Scene);
@@ -77,6 +76,11 @@
         public EntityId GetEntityByName(string name)
         {
             return InternalCalls.GetEntityByName(name, m_Scene);
+        }
+
+        public EntityId GetChildByName(string name)
+        {
+            return InternalCalls.GetChildByName(m_EntityId, name, m_Scene);
         }
 
         public void AddMesh(EntityId eid, string model, string material)

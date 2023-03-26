@@ -32,9 +32,6 @@ private:
 	
 	bool m_ShowFPS = true;
 
-	bool m_RightBtnHold;
-	bool m_LeftBtnHold;
-
 	Wiwa::Vector4f m_MeshColor = {};
 
 	int m_GizmoType = -1;

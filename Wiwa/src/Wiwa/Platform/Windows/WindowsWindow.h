@@ -7,7 +7,9 @@
 namespace Wiwa {
 	class WindowsWindow : public Window
 	{
-	public:
+	private:
+		GLFWwindow* m_Window;
+
 		struct WindowData
 		{
 			std::string Title = "";
@@ -18,8 +20,6 @@ namespace Wiwa {
 
 			EventCallbackFn EventCallback;
 		};
-	private:
-		GLFWwindow* m_Window;
 
 		WindowData m_Data;
 		WindowData m_OldData;
@@ -30,7 +30,6 @@ namespace Wiwa {
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
 
-		void PollEvents() override;
 		void OnUpdate() override;
 
 		inline WindowData& GetWindowData() { return m_Data; }

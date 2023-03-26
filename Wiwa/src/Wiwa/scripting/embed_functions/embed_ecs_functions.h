@@ -21,7 +21,9 @@ size_t CreateEntityNamed(MonoString* name_entity, void* scene);
 
 MonoString* GetEntityName(size_t id, void* scene);
 
-size_t GetEntityByName(MonoString* name_entity, void* scene);
+EntityId GetEntityByName(MonoString* name_entity, void* scene);
+
+EntityId GetChildByName(EntityId parent, MonoString* name, void* scene);
 
 void DestroyEntity(size_t eid, void* scene);
 
