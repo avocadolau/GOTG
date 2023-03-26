@@ -27,15 +27,24 @@ namespace Wiwa
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
-		return m_KeyStates[keycode] == KeyState::KS_PRESS;
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetKey(window, keycode);
+		return state == GLFW_PRESS;
+		//return m_KeyStates[keycode] == KeyState::KS_PRESS;
 	}
 	bool WindowsInput::IsKeyRepeatImpl(int keycode)
 	{
-		return m_KeyStates[keycode] == KeyState::KS_REPEAT;
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetKey(window, keycode);
+		return state == GLFW_PRESS;
+		//return m_KeyStates[keycode] == KeyState::KS_PRESS || m_KeyStates[keycode] == KeyState::KS_REPEAT;
 	}
 	bool WindowsInput::IsKeyReleasedImpl(int keycode)
 	{
-		return m_KeyStates[keycode] == KeyState::KS_RELEASE;
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetKey(window, keycode);
+		return state == GLFW_RELEASE;
+		//return m_KeyStates[keycode] == KeyState::KS_RELEASE;
 	}
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
