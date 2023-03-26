@@ -1,12 +1,10 @@
-using System;
-using System.Linq;
 using Wiwa;
 
 namespace WiwaApp
 {
     class InitHub : Behaviour
     {
-        void Awake()
+        void Init()
         {
             GameState.InitHub();
         }

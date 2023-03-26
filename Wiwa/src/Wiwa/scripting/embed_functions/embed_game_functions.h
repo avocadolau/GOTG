@@ -14,3 +14,5 @@ void SetPlayer(size_t id);
 void SaveProgression();
 
 void LoadProgression();
+
+float GetControllerDeadzone();

@@ -6,16 +6,19 @@ namespace Game
 {
     using EntityId = UInt64;
     [Component]
-    public struct CharacterController
+    public struct Character
     {
-        public float Velocity;
-        public float GamepadDeadZone;
-        public float RotationSpeed;
+        public int MaxHealth;
+        public int Health;
+        public int MaxShield;
+        public int Shield;
+        public int Damage;
 
-        public float DashCoolDown;
+        public float RateOfFire;
+        public float Speed;
         public float DashDistance;
         public float DashSpeed;
-
+        public float DashCooldown;
         public float WalkTreshold;
     }
     class CharacterControllerSystem : Behaviour
@@ -46,21 +49,22 @@ namespace Game
         {
             GameState.SetPlayer(m_EntityId);
             //Setting components
-            characterControllerIt = GetComponentIterator<CharacterController>();
+            characterControllerIt = GetComponentIterator<Character>();
             transformIt = GetComponentIterator<Transform3D>();
             rigidBodyIt = GetComponentIterator<CollisionBody>();
             shooterIt = GetComponentIterator<StarlordShooter>();
+            dashTimer = GetComponentByIterator<Character>(characterControllerIt).DashCooldown;
 
-            dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
+            // need to get or hardcode step and run timers. walkthreshold
 
-            // need to get or hardcode step and run timers.
+
         }
 
         void Update()
         {
             //Components
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
-            ref CharacterController controller = ref GetComponentByIterator<CharacterController>(characterControllerIt);
+            ref Character controller = ref GetComponentByIterator<Character>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
 
             Vector3 velocity = Vector3Values.zero;
@@ -69,7 +73,7 @@ namespace Game
             if (!isDashing)
             {
                 input = GetMovementInput(ref controller);
-                velocity = input * controller.Velocity;
+                velocity = input * controller.Speed;
             }
 
             Dash(ref velocity, input, controller, transform, ref rb);
@@ -81,7 +85,7 @@ namespace Game
             if (input != Vector3Values.zero && !isDashing)
             {
                 lastDir = input;
-                SetPlayerRotation(ref transform.LocalRotation, input, controller.RotationSpeed);
+                SetPlayerRotation(ref transform.LocalRotation, input, 1f);
                 PlayFootStep();
             }
             else
@@ -98,7 +102,7 @@ namespace Game
             //rotates the character if aiming
             if (shootInput != Vector3Values.zero && !isDashing)
             {
-                SetPlayerRotation(ref transform.LocalRotation, shootInput, controller.RotationSpeed);
+                SetPlayerRotation(ref transform.LocalRotation, shootInput, 1f);
                 lastDir = shootInput;
 
             }
@@ -119,11 +123,9 @@ namespace Game
 
                 }
             }
-
-
         }
 
-        Vector3 GetMovementInput(ref CharacterController controller)
+        Vector3 GetMovementInput(ref Character controller)
         {
             Vector3 input = Vector3Values.zero;
 
@@ -146,12 +148,12 @@ namespace Game
                 input.z -= 1;
 
             //This axis need to be inverted
-            input.x -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.LeftX, controller.GamepadDeadZone);
-            input.z -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.LeftY, controller.GamepadDeadZone);
+            input.x -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.LeftX, GameState.GetControllerDeadzone());
+            input.z -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.LeftY, GameState.GetControllerDeadzone());
 
             return input;
         }
-        Vector3 GetShootingInput(ref CharacterController controller)
+        Vector3 GetShootingInput(ref Character controller)
         {
             Vector3 input = Vector3Values.zero;
 
@@ -174,8 +176,8 @@ namespace Game
                 input.z -= 1;
 
             //This axis need to be inverted
-            input.x -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, controller.GamepadDeadZone);
-            input.z -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, controller.GamepadDeadZone);
+            input.x -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, GameState.GetControllerDeadzone());
+            input.z -= Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, GameState.GetControllerDeadzone());
 
             return input;
         }
@@ -189,7 +191,7 @@ namespace Game
             if (currentRotation.y >= 360f)
                 currentRotation.y = 0f;
         }
-        void UpdateAnimation(Vector3 input, CharacterController controller)
+        void UpdateAnimation(Vector3 input, Character controller)
         {
             if (input == Vector3Values.zero)
             {
@@ -210,11 +212,11 @@ namespace Game
             isWalking = false;
             Animator.PlayAnimationName("run", m_EntityId);
         }
-        void Dash(ref Vector3 velocity, Vector3 input, CharacterController controller, Transform3D transform, ref CollisionBody cb)
+        void Dash(ref Vector3 velocity, Vector3 input, Character controller, Transform3D transform, ref CollisionBody cb)
         {
             dashTimer += Time.DeltaTime();
 
-            if (!isDashing && dashTimer >= controller.DashCoolDown &&
+            if (!isDashing && dashTimer >= controller.DashCooldown &&
             (Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA)))
             {
                 isDashing = true;
@@ -261,9 +263,10 @@ namespace Game
 
         void Fire(Vector3 shootInput)
         {
+            ref Character character = ref GetComponentByIterator<Character>(characterControllerIt);
             ref StarlordShooter shooter = ref GetComponentByIterator<StarlordShooter>(shooterIt);
             isShooting = true;
-            if (shootTimer >= shooter.FireInterval)
+            if (shootTimer >= character.RateOfFire)
             {
                 shootTimer = 0f;
 
@@ -277,7 +280,7 @@ namespace Game
                 spawnPoint += GetComponentByIterator<Transform3D>(transformIt).LocalPosition;
 
                 shooter.ShootRight = !shooter.ShootRight;
-                SpawnBullet(spawnPoint, shooter, shootInput);
+                SpawnBullet(spawnPoint, shooter, character, shootInput);
             }
         }
 
@@ -314,7 +317,7 @@ namespace Game
         {
             return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         }
-        void SpawnBullet(Vector3 position, StarlordShooter shooter, Vector3 bullDir)
+        void SpawnBullet(Vector3 position, StarlordShooter shooter, Character character, Vector3 bullDir)
         {
             float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
 
@@ -356,7 +359,7 @@ namespace Game
 
             bulletComp.Velocity = shooter.BulletSpeed;
             bulletComp.LifeTime = shooter.BulletLifeTime;
-            bulletComp.Damage = shooter.BulletDamage;
+            bulletComp.Damage = character.Damage;
             bulletComp.Direction = bullDir;
 
             bulletTransform.LocalRotation.y = 90.0f + angle;

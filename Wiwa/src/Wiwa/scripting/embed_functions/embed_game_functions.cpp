@@ -35,3 +35,8 @@ void LoadProgression()
 {
 	Wiwa::GameStateManager::LoadProgression();
 }
+
+float GetControllerDeadzone()
+{
+	return Wiwa::GameStateManager::s_GamepadDeadzone;
+}

@@ -27,5 +27,9 @@
         {
             InternalCalls.SetPlayer(id);
         }
+        public static float GetControllerDeadzone()
+        {
+            return InternalCalls.GetControllerDeadzone();
+        }
     }
 }
