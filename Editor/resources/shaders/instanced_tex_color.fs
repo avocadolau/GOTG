@@ -1,6 +1,6 @@
 #version 330 core
 
-uniform sampler2D u_Textures[32];
+uniform sampler2D u_Textures[64];
 
 in vec4 f_Color;
 in vec2 f_TexCoord;

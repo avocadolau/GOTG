@@ -238,7 +238,11 @@ namespace Wiwa
 	{
 		if (debug)
 			WI_CORE_INFO("Player dead");
-
+		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+		gm.canvas.at(0)->SwapActive(); //Swap active of normal HUD canvas
+		gm.canvas.at(3)->SwapActive(); //Activate death UI
+		SceneManager::PauseCurrentScene();
+		
 		//TODO: @Alejandro Pop the deadth menu
 	}
 
