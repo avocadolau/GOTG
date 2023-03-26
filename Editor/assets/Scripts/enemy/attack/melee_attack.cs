@@ -3,6 +3,8 @@ using System.Collections;
 using Wiwa;
 namespace Game
 {
+    using EntityId = System.UInt64;
+
     [Component]
     public struct MeleeAttack
     {
@@ -56,6 +58,10 @@ namespace Game
                     attack.hasFinished= true;
                 }
             }
+        }
+        void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
+        {
+
         }
 
         void TriggerAttack(ref MeleeAttack attack)

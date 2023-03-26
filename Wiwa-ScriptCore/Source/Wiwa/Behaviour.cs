@@ -152,11 +152,17 @@
 
         public EntityId LoadPrefab(string file)
         {
-            return InternalCalls.LoadPrefabIntr(file);
+            return InternalCalls.LoadPrefabIntr(file, m_Scene);
         }
+
+        public EntityId LoadPrefabAsChild(string file, EntityId parent)
+        {
+            return InternalCalls.LoadPrefabAsChildIntr(file, parent, m_Scene);
+        }
+
         public void SavePrefab(EntityId id, string file)
         {
-            InternalCalls.SavePrefabIntr(id, file);
+            InternalCalls.SavePrefabIntr(id, file, m_Scene);
         }
     }
 }
