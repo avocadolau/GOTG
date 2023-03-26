@@ -20,3 +20,18 @@ void EndRun()
 {
 	Wiwa::GameStateManager::EndRun();
 }
+
+void SetPlayer(size_t id)
+{
+	Wiwa::GameStateManager::SetPlayerId(id);
+}
+
+void SaveProgression()
+{
+	Wiwa::GameStateManager::SaveProgression();
+}
+
+void LoadProgression()
+{
+	Wiwa::GameStateManager::LoadProgression();
+}

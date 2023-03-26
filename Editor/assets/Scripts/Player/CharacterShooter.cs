@@ -2,7 +2,7 @@ using Wiwa;
 namespace Game
 {
     [Component]
-    public struct CharacterShooter
+    public struct StarlordShooter
     {
         public float FireInterval;
         public float BulletLifeTime;

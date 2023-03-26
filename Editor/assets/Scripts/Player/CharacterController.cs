@@ -4,7 +4,7 @@ using Wiwa;
 
 namespace Game
 {
-    using EntityId = System.UInt64;
+    using EntityId = UInt64;
     [Component]
     public struct CharacterController
     {
@@ -44,12 +44,12 @@ namespace Game
 
         void Awake()
         {
-
+            GameState.SetPlayer(m_EntityId);
             //Setting components
             characterControllerIt = GetComponentIterator<CharacterController>();
             transformIt = GetComponentIterator<Transform3D>();
             rigidBodyIt = GetComponentIterator<CollisionBody>();
-            shooterIt = GetComponentIterator<CharacterShooter>();
+            shooterIt = GetComponentIterator<StarlordShooter>();
 
             dashTimer = GetComponentByIterator<CharacterController>(characterControllerIt).DashCoolDown;
 
@@ -91,10 +91,10 @@ namespace Game
 
             UpdateAnimation(input, controller);
 
-            
+
             Vector3 shootInput = GetShootingInput(ref controller);
             shootTimer += Time.DeltaTime();
-            
+
             //rotates the character if aiming
             if (shootInput != Vector3Values.zero && !isDashing)
             {
@@ -107,20 +107,20 @@ namespace Game
             {
                 if (shootInput == Vector3Values.zero)
                 {
-                    if(lastDir != Vector3Values.zero)
+                    if (lastDir != Vector3Values.zero)
                     {
                         Fire(lastDir);
                     }
-                    else Fire(new Vector3(0,0,1));
+                    else Fire(new Vector3(0, 0, 1));
                 }
                 else
                 {
                     Fire(shootInput);
-                    
+
                 }
-            } 
-            
-            
+            }
+
+
         }
 
         Vector3 GetMovementInput(ref CharacterController controller)
@@ -261,7 +261,7 @@ namespace Game
 
         void Fire(Vector3 shootInput)
         {
-            ref CharacterShooter shooter = ref GetComponentByIterator<CharacterShooter>(shooterIt);
+            ref StarlordShooter shooter = ref GetComponentByIterator<StarlordShooter>(shooterIt);
             isShooting = true;
             if (shootTimer >= shooter.FireInterval)
             {
@@ -314,13 +314,13 @@ namespace Game
         {
             return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         }
-        void SpawnBullet(Vector3 position, CharacterShooter shooter, Vector3 bullDir)
+        void SpawnBullet(Vector3 position, StarlordShooter shooter, Vector3 bullDir)
         {
             float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
 
             // float shootX = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, 0);
             // float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
-            
+
 
             Console.WriteLine($"Angle {angle}");
 
