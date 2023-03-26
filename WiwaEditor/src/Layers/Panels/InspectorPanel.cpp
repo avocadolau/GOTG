@@ -454,6 +454,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 			if (p.extension() == ".wianimator")
 			{
 				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+				pathS =	Wiwa::Resources::_assetToLibPath(pathS);
 				strcpy(animator->filePath, pathS.c_str());
 				animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
 			}
