@@ -23,7 +23,7 @@ namespace Wiwa {
 
 		//anim->animator->Update(Time::GetRealTimeSinceStartup());
 
-
+		anim->animator->m_AnimationTime = anim->animationTime;
 
 		if (!anim->Play) return;	
 

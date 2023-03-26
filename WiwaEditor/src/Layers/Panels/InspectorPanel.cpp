@@ -488,11 +488,14 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				current_item = animationItems[n];
 				ImGui::SetItemDefaultFocus();
 				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+				animator->animator->PlayAnimation();
+				animator->animator->Loop(animator->Loop);
 			}
 		}
 		ImGui::EndCombo();
 	}
-
+	if (!animator->animator->GetCurrentAnimation())
+		return;
 	if (ImGui::Checkbox("Play", &animator->Play))
 	{
 		if (animator->Play)
@@ -500,6 +503,14 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 		else
 			animator->animator->PauseAnimation();
 	}
+
+	if (ImGui::Checkbox("Loop", &animator->Loop))
+	{
+		animator->animator->Loop(animator->Loop);
+	}
+	ImGui::Text(std::to_string(animator->animator->GetCurrentAnimation()->GetDuration()).c_str());
+	float maxTime =animator->animator->GetCurrentAnimation()->GetDuration()/24;
+	ImGui::SliderFloat("Aniamtion time", &animator->animationTime, 0, maxTime);
 
 	ImGui::Checkbox("Blend", &animator->Blend);
 	if (animator->Blend)

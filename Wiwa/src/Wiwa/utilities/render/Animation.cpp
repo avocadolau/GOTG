@@ -9,6 +9,8 @@ namespace Wiwa {
 		m_Duration = 0;
 		m_TicksPerSecond = 0;
 		m_Name = "new animation";
+		m_Loop = false;
+		m_HasFinished = false;
 	}
 	Animation::Animation(const aiAnimation* animation, Model* model)
 	{
@@ -17,7 +19,8 @@ namespace Wiwa {
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
 		m_BoneInfoMap = model->GetBoneInfoMap();
-
+		m_Loop = false;
+		m_HasFinished = false;
 		ReadMissingBones(animation, *model);		
 		ReadHeirarchyData(m_RootNode, model->getModelHierarchy(), glm::mat4(1.f));
 	}
@@ -28,6 +31,8 @@ namespace Wiwa {
 		m_TicksPerSecond = (int)animation->mTicksPerSecond;
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
+		m_Loop = false;
+		m_HasFinished = false;
 	}
 
 	Animation::Animation(const char* filePath, Model* model)
@@ -35,6 +40,8 @@ namespace Wiwa {
 		m_Duration = 0;
 		m_TicksPerSecond = 0;
 		m_Name = "new animation";
+		m_Loop = false;
+		m_HasFinished = false;
 	}
 
 	Animation::Animation(const char* filePath)
@@ -159,6 +166,7 @@ namespace Wiwa {
 		file.Write(&animation->m_Duration, sizeof(double));
 		file.Write(&animation->m_TicksPerSecond, sizeof(double));
 		file.Write(&animation->m_NumChannels, sizeof(unsigned int));
+		file.Write(&animation->m_Loop, sizeof(bool));
 
 		//save NodeAnim structure
 		animation->SaveNodeData(file, &animation->m_RootNode);
@@ -247,6 +255,7 @@ namespace Wiwa {
 		file.Read(&anim->m_Duration, sizeof(double));
 		file.Read(&anim->m_TicksPerSecond, sizeof(double));
 		file.Read(&anim->m_NumChannels, sizeof(unsigned int));
+		file.Read(&anim->m_Loop, sizeof(bool));
 
 
 		//Load NodeAnim structure
