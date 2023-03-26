@@ -25,8 +25,7 @@
 #include "components/ColliderCylinder.h"
 #include "components/RayCast.h"
 
-// Particle components
-#include "components/Billboard.h"
+//Particle components
 #include "components/ParticleEmitter.h"
 
 // Ai components

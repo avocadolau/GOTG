@@ -456,6 +456,8 @@ namespace Wiwa
 
 		material->Bind();
 
+		glDisable(GL_CULL_FACE);
+
 		// make the drawing
 		glBindVertexArray(vao);
 
@@ -476,6 +478,42 @@ namespace Wiwa
 		material->UnBind();
 		glActiveTexture(GL_TEXTURE1);
 		camera->frameBuffer->Unbind();
+		glEnable(GL_CULL_FACE);
+
+
+
+		/*
+		GLboolean depth;
+		GLboolean blend;
+
+		glGetBooleanv(GL_DEPTH_TEST, &depth);
+		glGetBooleanv(GL_BLEND, &blend);
+
+		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		//Solution to the material.cpp GL_TEXTURE1 on the void Material::Bind() function
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
+		//------------------------------
+
+		glDrawElements(GL_TRIANGLES, ebo_data.size(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+
+		
+		//reset data
+		material->UnBind();
+		glActiveTexture(GL_TEXTURE1);
+		camera->frameBuffer->Unbind();
+
+		if (depth == GL_TRUE)
+			glEnable(GL_DEPTH_TEST);
+
+		if (blend == GL_TRUE)
+			glEnable(GL_BLEND);
+		
+		*/
 	}
 
 	void Renderer3D::RenderSkybox()
