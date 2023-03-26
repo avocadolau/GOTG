@@ -202,82 +202,84 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 	size_t ret = -1;
 	size_t iterations = 0;
 
-	if (IsWalkable(origin) && IsWalkable(destination))
+	if (!IsWalkable(origin))
+		return ret;
+
+	if (!IsWalkable(destination))
+		return ret;
+
+	PathList open;
+	PathList closed;
+
+	// Add the origin tile to open
+	open.pathList.push_back(PathNode(0, 0, origin, nullptr));
+
+	// Iterate while we have tile in the open list
+	while (!open.pathList.empty())
 	{
-		PathList open;
-		PathList closed;
+		// L12b: TODO 3: Move the lowest score cell from open list to the closed list
+		PathNode* lowest = open.GetNodeLowestScore();
+		closed.pathList.push_back(*lowest);
+		PathNode* node = &closed.pathList.back();
 
-		// Add the origin tile to open
-		open.pathList.push_back(PathNode(0, 0, origin, nullptr));	
+		//WI_INFO("X = {}", node->pos.x);
+		open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
+		// Using std::remove() algorithm to move the value to be deleted to the end of the vector
+		//open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
 
-		
-		// Iterate while we have tile in the open list
-		while (!open.pathList.empty())
+
+		// L12b: TODO 4: If we just added the destination, we are done!
+		if (node && node->pos == destination)
 		{
-			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
-			PathNode* lowest = open.GetNodeLowestScore();
-			closed.pathList.push_back(*lowest);
-			PathNode* node = &closed.pathList.back();
+			m_LastPath.clear();
 
-			//WI_INFO("X = {}", node->pos.x);
-			open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
-			// Using std::remove() algorithm to move the value to be deleted to the end of the vector
-			//open.pathList.erase(std::remove(open.pathList.begin(), open.pathList.end(), *lowest), open.pathList.end());
+			const PathNode* pathNode = node;
 
-			
-			// L12b: TODO 4: If we just added the destination, we are done!
-			if (node && node->pos == destination)
+			int i = 0;
+			while (pathNode)
 			{
-				m_LastPath.clear();				
+				//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_Map[(pathNode->pos.x * m_Width) + pathNode->pos.y]);
 
-				const PathNode* pathNode = node;
-
-				int i = 0;
-				while (pathNode)
-				{
-					//WI_CORE_INFO(" Last Path value at pos {}: x = {}, y = {}, Walkability Value: {}", i, pathNode->pos.x, pathNode->pos.y, m_Map[(pathNode->pos.x * m_Width) + pathNode->pos.y]);
-
-					glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
-					m_LastPath.push_back(vec);
-					pathNode = pathNode->parent;
-					i++;
-				}
-				
-				//std::reverse(m_LastPath.begin(), m_LastPath.end());
-				ret = m_LastPath.size();
-				break;
+				glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(pathNode->pos.x, pathNode->pos.y);
+				m_LastPath.push_back(vec);
+				pathNode = pathNode->parent;
+				i++;
 			}
 
-			// L12b: TODO 5: Fill a list of all adjancent nodes
-			PathList adjacent;
-			node->FindWalkableAdjacents(adjacent);
-
-			// L12b: TODO 6: Iterate adjancent nodes:
-			// If it is a better path, Update the parent
-			for (auto& item : adjacent.pathList)
-			{
-				if (closed.Find(item.pos) != nullptr)
-					continue;
-
-				// If it is NOT found, calculate its F and add it to the open list
-				PathNode* adjacentInOpen = open.Find(item.pos);
-				if (adjacentInOpen == nullptr)
-				{
-					item.CalculateF(destination);
-					open.pathList.emplace_back(item);
-				}
-				else
-				{
-					// If it is already in the open list, check if it is a better path (compare G)
-					if (adjacentInOpen->g > item.g + 1)
-					{
-						adjacentInOpen->parent = item.parent;
-						adjacentInOpen->CalculateF(destination);				
-					}
-				}
-			}
-			++iterations;
+			//std::reverse(m_LastPath.begin(), m_LastPath.end());
+			ret = m_LastPath.size();
+			break;
 		}
+
+		// L12b: TODO 5: Fill a list of all adjancent nodes
+		PathList adjacent;
+		node->FindWalkableAdjacents(adjacent);
+
+		// L12b: TODO 6: Iterate adjancent nodes:
+		// If it is a better path, Update the parent
+		for (auto& item : adjacent.pathList)
+		{
+			if (closed.Find(item.pos) != nullptr)
+				continue;
+
+			// If it is NOT found, calculate its F and add it to the open list
+			PathNode* adjacentInOpen = open.Find(item.pos);
+			if (adjacentInOpen == nullptr)
+			{
+				item.CalculateF(destination);
+				open.pathList.emplace_back(item);
+			}
+			else
+			{
+				// If it is already in the open list, check if it is a better path (compare G)
+				if (adjacentInOpen->g > item.g + 1)
+				{
+					adjacentInOpen->parent = item.parent;
+					adjacentInOpen->CalculateF(destination);
+				}
+			}
+		}
+		++iterations;
 	}
 
 	return ret;
