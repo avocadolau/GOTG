@@ -9,7 +9,29 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{06A916D2-9CAE-44F3-0F4C-967E78967209}">
+		<SoundBank Id="412874053" Type="User" Language="SFX" Hash="{1319D680-CDBD-BDF3-15EE-35A9F4F72232}">
+			<ShortName>on_hover</ShortName>
+			<Path>on_hover.bnk</Path>
+			<Media>
+				<File Id="845486800" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Menu\pause_sound.wav</ShortName>
+					<CachePath>SFX/Menu/pause_sound_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="412874053" Name="on_hover">
+					<MediaRefs>
+						<MediaRef Id="845486800"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2715313045" Name="pause_sound">
+					<MediaRefs>
+						<MediaRef Id="845486800"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{AA81883C-5DE9-CFD2-6A13-62B3E3FEB945}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -19,6 +41,7 @@
 				</AudioDevices>
 			</Plugins>
 			<Busses>
+				<Bus Id="493417818" Name="Music Audio Bus"/>
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
 			</Busses>
 			<GameParameters>
@@ -237,13 +260,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3261905107" Type="User" Language="SFX" Hash="{3E7A5F42-DDD1-015C-82A8-C9CEF9F107EC}">
+		<SoundBank Id="3261905107" Type="User" Language="SFX" Hash="{9E7C2355-CC90-5BF3-7ADA-AF0677E3DF16}">
 			<ShortName>menu_intro</ShortName>
 			<Path>menu_intro.bnk</Path>
 			<Media>
 				<File Id="339486545" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Menu\menu_song.wav</ShortName>
-					<CachePath>SFX/Menu/menu_song_10C4C929.wem</CachePath>
+					<CachePath>SFX/Menu/menu_song_914A974D.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -271,7 +294,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3501630426" Type="User" Language="SFX" Hash="{440A8DF2-69EE-E7B2-0490-DA2145D3C8F6}">
+		<SoundBank Id="3501630426" Type="User" Language="SFX" Hash="{56D8F007-62AD-8F4E-5526-6153E25E9989}">
 			<ShortName>Set_Bus_Master_Volume</ShortName>
 			<Path>Set_Bus_Master_Volume.bnk</Path>
 			<Events>
@@ -295,7 +318,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{F2217F72-F73B-B422-78FC-91B52AF0C261}">
+		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{5AD481A7-D90E-C37E-E0C2-973216F6F5D8}">
 			<ShortName>player_shoot</ShortName>
 			<Path>player_shoot.bnk</Path>
 			<Media>
@@ -313,5 +336,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{BA911FA0-0529-AA9E-5E10-7142CD5DACA5}</FileHash>
+	<FileHash>{73758E59-108C-1822-4BC6-FF66FB91BB6E}</FileHash>
 </SoundBanksInfo>
