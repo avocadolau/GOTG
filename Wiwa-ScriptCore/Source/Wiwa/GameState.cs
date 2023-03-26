@@ -44,5 +44,9 @@
         {
             InternalCalls.Die();
         }
+        public static EntityId GetPlayerId()
+        {
+            return InternalCalls.GetPlayerId();
+        }
     }
 }

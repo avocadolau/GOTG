@@ -60,7 +60,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 	}
 
 	Wiwa::AIMapGeneration::MapData& localMapData = Wiwa::AIMapGeneration::GetMapData();
-	float threshold = localMapData.tileWidth/2.0f; // example threshold distance
+	float threshold = localMapData.tileWidth; // example threshold distance
 	if (isNear(glm::vec2(transform->localPosition.x, transform->localPosition.z), m_DirectionPoint, threshold))
 	{
 		m_IsMoving = false;

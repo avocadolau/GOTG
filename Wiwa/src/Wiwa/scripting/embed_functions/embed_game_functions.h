@@ -18,3 +18,5 @@ void LoadPlayerProgression();
 float GetControllerDeadzone();
 
 void Die();
+
+size_t GetPlayerId();

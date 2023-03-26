@@ -222,6 +222,8 @@ namespace Wiwa
         internal extern static float GetControllerDeadzone();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Die();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetPlayerId();
         #endregion
 
         #region AgentAI

@@ -47,7 +47,8 @@ namespace Game
             characterStatsIt = GetComponentIterator<Character>();
             colliderIt = GetComponentIterator<CollisionBody>();
             agentIt = GetComponentIterator<AgentAI>();
-            playerId = GetEntityByName("Player");
+            playerId = GameState.GetPlayerId();
+            if (debug) Console.WriteLine("-- Starting Init -- player id is: " + playerId);
             playerTransformIt = GetComponentIterator<Transform3D>(playerId);
             transformIt = GetComponentIterator<Transform3D>();
         }

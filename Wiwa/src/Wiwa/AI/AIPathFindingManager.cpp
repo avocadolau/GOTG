@@ -20,6 +20,7 @@
 
 uint32_t Wiwa::AIPathFindingManager::m_Width = 0;
 uint32_t Wiwa::AIPathFindingManager::m_Height = 0;
+int Wiwa::AIPathFindingManager::m_MapSize = 0;
 //unsigned char* Wiwa::AIPathFindingManager::m_Map = nullptr;
 std::vector<glm::vec2> Wiwa::AIPathFindingManager::m_LastPath = {};
 std::vector<unsigned char> Wiwa::AIPathFindingManager::m_MapPathFinding = std::vector<unsigned char>(MAP_TILES_MAX_SIZE);
@@ -193,6 +194,7 @@ void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, const s
 
 	m_MapPathFinding.clear();
 	m_MapPathFinding.resize(width * height, DEFAULT_WALK_CODE);
+	m_MapSize = width * height;
 	std::copy(data.begin(), data.end(), m_MapPathFinding.begin());
 	//memcpy(m_Map, data, width * height * sizeof(unsigned char));
 }
@@ -304,7 +306,7 @@ bool Wiwa::AIPathFindingManager::IsWalkable(const glm::ivec2& pos)
 
 unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 {
-	if (CheckBoundaries(pos))
+	if (CheckBoundaries(pos) && (pos.y * m_Width + pos.x) < m_MapSize - 1)
 		return m_MapPathFinding[(pos.y * m_Width) + pos.x];
 
 	return INVALID_WALK_CODE;
