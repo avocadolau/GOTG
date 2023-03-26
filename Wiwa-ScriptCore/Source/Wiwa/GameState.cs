@@ -1,5 +1,6 @@
 ﻿namespace Wiwa
 {
+    using EntityId = System.UInt64;
     public class GameState
     {
         public static void SetRoomStateTriggerNext(bool value)
@@ -20,6 +21,11 @@
         public static void EndRun()
         {
             InternalCalls.EndRun();
+        }
+
+        public static void SetPlayer(EntityId id)
+        {
+            InternalCalls.SetPlayer(id);
         }
     }
 }

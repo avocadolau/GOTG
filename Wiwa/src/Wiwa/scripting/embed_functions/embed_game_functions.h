@@ -8,3 +8,9 @@ void InitHub();
 void StartRun();
 
 void EndRun();
+
+void SetPlayer(size_t id);
+
+void SaveProgression();
+
+void LoadProgression();

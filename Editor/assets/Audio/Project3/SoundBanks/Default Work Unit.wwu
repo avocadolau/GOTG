@@ -53,6 +53,13 @@
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
+				<SoundBank Name="Set_Bus_Master_Volume" ID="{F228E7C7-B1A8-4636-812F-C520697C1253}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Set_Bus_Master_Volume" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

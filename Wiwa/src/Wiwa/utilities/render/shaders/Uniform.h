@@ -32,6 +32,15 @@ namespace Wiwa {
 			uint32_t tex_id;
 			size_t resource_id;
 			std::string tex_path;
+
+			SamplerData() = default;
+
+			SamplerData(uint32_t id, size_t resId, std::string textPath)
+			{
+				tex_id = id;
+				resource_id = resId;
+				tex_path = textPath;
+			}
 		};
 
 		Uniform()
@@ -54,11 +63,9 @@ namespace Wiwa {
 
 			//If it's already a value we need to free the data
 			if (m_Data)
-				free(m_Data);
+				delete m_Data;
 
 			//Reserving memory and copy the value
-			/*m_Data = malloc(sizeof(T));
-			memcpy(m_Data, &value, sizeof(T));*/
 			m_Data = new T(value);
 		}
 
