@@ -55,22 +55,23 @@ namespace Wiwa {
 
 			//update animation time
 			float TicksPerSecond = (float)(m_CurrentAnimation->m_TicksPerSecond != 0 ? m_CurrentAnimation->m_TicksPerSecond : 25.0f);
-			float TimeInTicks = m_AnimationTime * TicksPerSecond;
+			float TimeInTicks = dt * TicksPerSecond;
+			//float TimeInTicks = m_AnimationTime * TicksPerSecond;
 			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
 			m_CurrentTime = AnimationTimeTicks;
 
 			if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
 			{
-				m_CurrentAnimation->m_HasFinished = true;
-				m_AnimationTime = 0;
-				if (m_CurrentAnimation->m_Loop)
-				{
-					m_CurrentAnimation->m_HasFinished = false;
-					m_AnimationTime = m_CurrentAnimation->m_Duration;
-					m_AnimationState = AnimationState::Playing;
-				}
-				else
-					return;
+				//m_CurrentAnimation->m_HasFinished = true;
+				//m_AnimationTime = 0;
+				//if (m_CurrentAnimation->m_Loop)
+				//{
+				//	m_CurrentAnimation->m_HasFinished = false;
+				//	m_AnimationTime = m_CurrentAnimation->m_Duration;
+				//	m_AnimationState = AnimationState::Playing;
+				//}
+				//else
+				//	return;
 			}
 
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
