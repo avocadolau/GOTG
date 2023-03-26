@@ -11,6 +11,8 @@ namespace Game
         private ComponentIterator transformIt;
         private ComponentIterator rigidBodyIt;
         private ComponentIterator shooterIt;
+        private ComponentIterator leftPosIt;
+        private ComponentIterator rightPosIt;
 
         private float dashTimer = 0f;
         private float dashCurrentVel = 0f;
@@ -26,6 +28,7 @@ namespace Game
         private float runStepTimer = 0.30f;
 
         private bool isWalking = false;
+        private bool isAiming = false;
 
         private float dieTimer = 5f;
 
@@ -42,11 +45,15 @@ namespace Game
             shooterIt = GetComponentIterator<StarlordShooter>();
             dashTimer = GetComponentByIterator<Character>(characterControllerIt).DashCooldown;
 
+
+
+
             // need to get or hardcode step and run timers. walkthreshol
         }
 
         void Update()
         {
+
             //Components
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref Character controller = ref GetComponentByIterator<Character>(characterControllerIt);
@@ -83,13 +90,19 @@ namespace Game
 
             Vector3 shootInput = GetShootingInput(ref controller);
             shootTimer += Time.DeltaTime();
-
+            isAiming = false;
             //rotates the character if aiming
             if (shootInput != Vector3Values.zero && !isDashing)
             {
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, 1f);
                 lastDir = shootInput;
+                isAiming = true;
 
+                Animator.PlayAnimationName("aiming", m_EntityId);
+                //if (isWalking)
+                //{
+                //    Animator.Blend("aiming", 1f, m_EntityId);
+                //}
             }
             //FIRES the weapon, if the player is not aiming shoots the bullet is shot to the direction the character is looking
             if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper) || Input.IsKeyDown(KeyCode.Space))
@@ -210,14 +223,14 @@ namespace Game
                 return;
             }
             isWalking = false;
-            Animator.PlayAnimationName("run", m_EntityId);
+            Animator.PlayAnimationName("running", m_EntityId);
         }
         void Dash(ref Vector3 velocity, Vector3 input, Character controller, Transform3D transform, ref CollisionBody cb)
         {
             dashTimer += Time.DeltaTime();
 
             if (!isDashing && dashTimer >= controller.DashCooldown &&
-            (Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadA)))
+            (Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadLeftBumper)))
             {
                 isDashing = true;
                 lastPos = transform.LocalPosition;
@@ -263,24 +276,35 @@ namespace Game
 
         void Fire(Vector3 shootInput)
         {
+            EntityId leftPos = GetChildByName("LeftPos");
+            EntityId rigthPos = GetChildByName("RightPos");
+            leftPosIt = GetComponentIterator<Transform3D>(leftPos);
+            rightPosIt = GetComponentIterator<Transform3D>(rigthPos);
             ref Character character = ref GetComponentByIterator<Character>(characterControllerIt);
             ref StarlordShooter shooter = ref GetComponentByIterator<StarlordShooter>(shooterIt);
+            ref Transform3D left = ref GetComponentByIterator<Transform3D>(leftPosIt);
+            ref Transform3D right = ref GetComponentByIterator<Transform3D>(rightPosIt);
             isShooting = true;
             if (shootTimer >= character.RateOfFire)
             {
                 shootTimer = 0f;
 
-                Vector3 spawnPoint;
+                Transform3D spawnPoint;
                 //Decide wich hand is going next
                 if (shooter.ShootRight)
-                    spawnPoint = shooter.RightSpawnPos;
+                {
+                    spawnPoint = right;
+                    Animator.PlayAnimationName("shoot_right", m_EntityId);
+                }
                 else
-                    spawnPoint = shooter.LeftSpawnPos;
+                {
+                    spawnPoint = left;
+                    Animator.PlayAnimationName("shoot_left", m_EntityId);
+                }
 
-                spawnPoint += GetComponentByIterator<Transform3D>(transformIt).LocalPosition;
 
                 shooter.ShootRight = !shooter.ShootRight;
-                SpawnBullet(spawnPoint, shooter, character, shootInput);
+                SpawnBullet(spawnPoint, shooter, character, Mathf.CalculateForward(ref spawnPoint));
             }
         }
 
@@ -316,31 +340,22 @@ namespace Game
         {
             return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         }
-        void SpawnBullet(Vector3 position, StarlordShooter shooter, Character character, Vector3 bullDir)
+        void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
         {
-            float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
-
-
-            Console.WriteLine($"Angle {angle}");
-
-            position = RotatePointAroundPivot(position, GetComponentByIterator<Transform3D>(transformIt).LocalPosition, new Vector3(0, angle, 0));
-
-            EntityId bullet = CreateEntity();
-
+            EntityId bullet = CreateEntityNamed("Bullet");
+            ref Transform3D playerTransform = ref GetComponent<Transform3D>();
             ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
             ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
             ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
             ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
 
+            AddMesh(bullet, "Models/Cube", "assets/Models/03_mat_addelements.wimaterial");
 
-            AddMesh(bullet, "Models/Bullet", "assets/Models/03_mat_addelements.wimaterial");
-
-            //bulletTransform.LocalRotation.y = bulletDir.x * 90 + bulletDir.z * 90;
-            bulletTransform.LocalPosition = new Vector3(position.x, 2, position.z);
-            bulletTransform.LocalScale = new Vector3(1f, 1f, 1f);
+            bulletTransform.LocalPosition = transform.worldMatrix.GetPosition();
+            bulletTransform.LocalRotation = transform.Rotation;
+            bulletTransform.LocalScale = transform.Scale;
 
             cs.radius = 1;
-
             cb.scalingOffset = new Vector3(1f, 1f, 1f);
             cb.isTrigger = true;
             cb.isStatic = false;
@@ -354,8 +369,6 @@ namespace Game
             bulletComp.LifeTime = shooter.BulletLifeTime;
             bulletComp.Damage = character.Damage;
             bulletComp.Direction = bullDir;
-
-            bulletTransform.LocalRotation.y = 90.0f + angle;
 
             ApplySystem<MeshRenderer>(bullet);
             ApplySystem<PhysicsSystem>(bullet);

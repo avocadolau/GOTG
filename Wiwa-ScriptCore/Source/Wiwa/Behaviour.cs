@@ -82,6 +82,15 @@
         {
             return InternalCalls.GetChildByName(m_EntityId, name, m_Scene);
         }
+        public EntityId CreateChildByName(string name)
+        {
+            return InternalCalls.CreateChildByName(m_EntityId, name, m_Scene);
+        }
+
+        public EntityId CreateChildByName(EntityId id, string name)
+        {
+            return InternalCalls.CreateChildByName(id, name, m_Scene);
+        }
 
         public void AddMesh(EntityId eid, string model, string material)
         {

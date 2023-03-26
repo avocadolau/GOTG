@@ -63,6 +63,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetChildByName);
 		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
 		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
+		WI_ADD_INTERNAL_CALL(CreateChildByName);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);

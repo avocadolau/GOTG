@@ -45,6 +45,8 @@ namespace Wiwa
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SavePrefabIntr(EntityId id, string file);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId CreateChildByName(EntityId parent, string name, System.Int64 scene);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

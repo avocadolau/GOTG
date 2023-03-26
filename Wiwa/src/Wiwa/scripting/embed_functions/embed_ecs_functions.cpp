@@ -131,6 +131,15 @@ EntityId GetChildByName(EntityId parent, MonoString* name, void* scene)
 	return em.GetChildByName(parent, cname);
 }
 
+EntityId CreateChildByName(EntityId parent, MonoString* name, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	const char* cname = mono_string_to_utf8(name);
+
+	return em.CreateEntity(cname, parent);
+}
+
 void DestroyEntity(size_t eid, void* scene)
 {
 	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
