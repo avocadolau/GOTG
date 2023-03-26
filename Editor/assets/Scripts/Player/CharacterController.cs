@@ -31,7 +31,7 @@ namespace Game
 
         void Awake()
         {
-            GameState.SetPlayer(m_EntityId);
+            GameState.SetPlayer(m_EntityId, m_Scene);
             //Setting components
             characterControllerIt = GetComponentIterator<Character>();
             transformIt = GetComponentIterator<Transform3D>();
@@ -39,9 +39,7 @@ namespace Game
             shooterIt = GetComponentIterator<StarlordShooter>();
             dashTimer = GetComponentByIterator<Character>(characterControllerIt).DashCooldown;
 
-            // need to get or hardcode step and run timers. walkthreshold
-
-
+            // need to get or hardcode step and run timers. walkthreshol
         }
 
         void Update()
@@ -305,17 +303,11 @@ namespace Game
         {
             float angle = GetComponentByIterator<Transform3D>(transformIt).LocalRotation.y;
 
-            // float shootX = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightX, 0);
-            // float shootY = -Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.RightY, 0);
-
 
             Console.WriteLine($"Angle {angle}");
 
             position = RotatePointAroundPivot(position, GetComponentByIterator<Transform3D>(transformIt).LocalPosition, new Vector3(0, angle, 0));
-            //Vector3 direction = new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
-            //Vector3 bulletDir = new Vector3(shootX, 0, shootY);
 
-            //Console.WriteLine($"Direction {direction.x} {direction.z}");
             EntityId bullet = CreateEntity();
 
             ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);

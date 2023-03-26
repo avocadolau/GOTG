@@ -35,22 +35,7 @@ namespace Wiwa {
 		float DashCoolDown;
 		float WalkTreshold;
 	};
-	struct CharacterStats
-	{
-		int MaxHealth;
-		int Health;
-		int MaxShield;
-		int Shield;
-
-		int Damage;
-		float RateOfFire;
-
-		float Speed;
-		float DashDistance;
-		float DashSpeed;
-		float DashCoolDown;
-		float WalkTreshold;
-	};
+	
 	enum class RoomType
 	{
 		NONE = 0,
@@ -106,8 +91,8 @@ namespace Wiwa {
 		static int s_SpawnersFinished;
 		static bool debug;
 		// Save & Load Overall Player Progression
-		static void SaveProgression(void* scene);
-		static void LoadProgression(void* scene);
+		static void SaveProgression();
+		static void LoadProgression();
 
 		static void UpdateRoomState();
 		static void UpdateCombatRoom();
@@ -115,10 +100,10 @@ namespace Wiwa {
 		// Run and rooms
 		static void StartRun();
 		static void EndRun();
-		static void InitHub(void* scene);
-		static void InitPlayerData(void* scene);
+		static void InitHub();
+		static void InitPlayerData();
 		static void StartNewRoom();
-		static void SetPlayerId(EntityId id);
+		static void SetPlayerId(EntityId id, Scene* scene);
 		static void EndCurrentRoom();
 
 		inline static void SetRoomType(RoomType type) { s_RoomType = type; }
@@ -148,7 +133,7 @@ namespace Wiwa {
 
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
-		static CharacterStats s_CharacterStats;
+		static EntityManager::ComponentIterator s_CharacterStats;
 		static int s_CurrentCharacter;
 		static float s_GamepadDeadzone;
 
@@ -165,5 +150,7 @@ namespace Wiwa {
 		static int s_CurrentRoomsCount;
 
 		static EntityId s_PlayerId;
+
+		static Scene* s_CurrentScene;
 	};
 }

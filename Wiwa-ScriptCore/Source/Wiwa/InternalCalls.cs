@@ -208,7 +208,7 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void EndRun();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void SetPlayer(EntityId id);
+        internal extern static void SetPlayer(EntityId id, System.Int64 scene);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static float GetControllerDeadzone();

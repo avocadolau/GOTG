@@ -3,13 +3,13 @@
 
 void SetRoomStateTriggerNext(bool value);
 
-void InitHub(void* scene);
+void InitHub();
 
 void StartRun();
 
 void EndRun();
 
-void SetPlayer(size_t id);
+void SetPlayer(size_t id, void* scene);
 
 void SaveProgression();
 
