@@ -97,8 +97,8 @@ namespace Game
                 ref Character statsSelf = ref GetComponentByIterator<Character>(characterStatsIt);
                 ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
 
-                statsSelf.healthPoints = statsSelf.healthPoints - damage;
-                if (statsSelf.healthPoints <= 0)
+                statsSelf.Health = statsSelf.Health - damage;
+                if (statsSelf.Health <= 0)
                 {
                     self.hasFinished = true;
                 }
