@@ -55,6 +55,10 @@ namespace Wiwa {
 
 		class AnimationParticles* animation = nullptr;
 
+		double startTime;
+
+		int animationCreationTime;
+
 		ParticleBillboard();
 
 	};
@@ -98,7 +102,7 @@ namespace Wiwa {
 
 		void UpdateParticles();
 
-
+		int currentFrameParticles;
 		
 		float dt;
 
