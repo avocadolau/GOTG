@@ -8,8 +8,7 @@
 #include <Wiwa/ecs/components/MapAI.h>
 //#include <vector>
 //#include <bitset>
-//#include <algorithm>
-
+#include <algorithm>
 
 namespace Wiwa {
 
@@ -42,9 +41,9 @@ namespace Wiwa {
 
 		// Generate the grid of the map, stores it inside map data and set the navigation values to walkable or non walkable
 		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec3 startPos);
-		static void BakeMap();
+		static bool BakeMap();
 		static void SetPositionUnWalkable(glm::ivec2 world_pos);
-		static void DebugDrawMap();
+		static bool DebugDrawMap();
 		// Space translations for the pathfinding
 		static glm::vec2 MapToWorld(int x, int y);
 		static glm::ivec2 WorldToMap(float x, float y);
@@ -58,7 +57,12 @@ namespace Wiwa {
 			return m_MapData;
 		}
 
-		static unsigned char* GetMap()
+		/*static unsigned char* GetMap()
+		{
+			return m_Map;
+		}*/
+
+		static std::vector<unsigned char>& GetMap()
 		{
 			return m_Map;
 		}
@@ -68,7 +72,7 @@ namespace Wiwa {
 		// data of the map
 		static MapData m_MapData;
 
-		static unsigned char* m_Map;
-
+		//static unsigned char* m_Map;
+		static std::vector <unsigned char> m_Map;
 	};
 }
