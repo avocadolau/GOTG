@@ -704,6 +704,6 @@ bool UIPanel::OnSceneChange(SceneChangeEvent& e)
 	pathForAsset = "";
 	pathForExtraAsset = "";
 	nameSavingWiGUI = "";
-	audioEventForButton = "";
+	//audioEventForButton = "";
 	return true;
 }
