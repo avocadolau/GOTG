@@ -44,6 +44,10 @@ namespace Wiwa {
 		int nextPos;
 		glm::vec4 nextColor;
 
+		//offset
+		glm::vec3	particle_Offset;
+		bool		particle_Offset_isRanged;
+
 		//position
 		glm::vec3	particle_startingPosition;
 		bool		particle_startingPosition_isRanged;
@@ -116,6 +120,8 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitter)
 	REFLECT_MEMBER(repeat)
 	REFLECT_MEMBER(nextPos)
 	REFLECT_MEMBER(nextColor)
+	REFLECT_MEMBER(particle_Offset)
+	REFLECT_MEMBER(particle_Offset_isRanged)
 	REFLECT_MEMBER(particle_startingPosition)
 	REFLECT_MEMBER(particle_startingPosition_isRanged)
 	REFLECT_MEMBER(particle_startingPosition_range_0)

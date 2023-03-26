@@ -234,7 +234,7 @@ namespace Wiwa {
 						p.startingPosition = t3D->localPosition;
 					}
 
-					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex;
+					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex + p.offset;
 
 					p.followSpawn = false;
 
@@ -612,6 +612,7 @@ namespace Wiwa {
 			p.followParticle = emitter->particle_followParticle;
 
 			p.followSpawn = emitter->followOnSpawn;
+			p.offset = emitter->particle_Offset;
 
 
 			//set geometry
@@ -751,6 +752,7 @@ namespace Wiwa {
 		transform.position = glm::vec3(0, 0, 0);
 		transform.localPosition = glm::vec3(0, 0, 0);
 
+		offset = glm::vec3(0, 0, 0);
 		startingPosition = glm::vec3(0, 0, 0);
 		velocity = glm::vec3(0, 0, 0);
 		acceleration = glm::vec3(0, 0, 0);

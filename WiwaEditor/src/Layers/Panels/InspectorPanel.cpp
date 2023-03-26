@@ -792,6 +792,24 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 	if (ImGui::TreeNode("Position & Translation"))
 	{
+		// particle offset
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_offset_isRanged", &emitter->particle_Offset_isRanged);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::Text("Particle Offset");
+
+			if (emitter->particle_Offset_isRanged)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::DragFloat3("##particle_Offset", &(emitter->particle_Offset)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+		}
+
 		// particle starting position
 		{
 			ImGui::Dummy(ImVec2(0, 0));

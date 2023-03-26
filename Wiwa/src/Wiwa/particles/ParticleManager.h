@@ -33,6 +33,7 @@ namespace Wiwa {
 		glm::vec4	color;
 
 		//position
+		glm::vec3	offset;
 		glm::vec3	startingPosition;
 		glm::vec3	velocity;
 		glm::vec3	acceleration;
