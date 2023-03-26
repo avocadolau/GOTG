@@ -41,6 +41,7 @@ namespace Wiwa
 	{
 		if(debug)
 			WI_CORE_INFO("Saving player progression");
+
 		JSONDocument doc;
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
@@ -59,6 +60,7 @@ namespace Wiwa
 			doc.AddMember("walk_threshold", character->WalkTreshold);
 		}
 		doc.save_file("config/player_data.json");
+
 		if(debug)
 			WI_CORE_INFO("Player progression saved");
 	}
@@ -173,9 +175,54 @@ namespace Wiwa
 		s_CurrentRoomsCount = 3;
 	}
 
+	void GameStateManager::InitPlayerData()
+	{
+		if (debug)
+			WI_CORE_INFO("Loading player progression");
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		Character* character = em.GetComponent<Character>(s_PlayerId);
+		JSONDocument doc("config/room_data.json");
+		if (doc.IsObject())
+		{
+			if (doc.HasMember("starlord"))
+			{
+				/*JSONValue characterDoc = doc;
+				if (s_CurrentCharacter == 0)
+					characterDoc*/
+
+				
+				if (doc.HasMember("max_health"))
+						character->MaxHealth = doc["max_health"].as_int();
+				if (doc.HasMember("health"))
+					character->Health = doc["health"].as_int();
+				if (doc.HasMember("max_shield"))
+					character->MaxShield = doc["max_shield"].as_int();
+				if (doc.HasMember("shield"))
+					character->Shield = doc["shield"].as_int();
+				if (doc.HasMember("damage"))
+					character->Damage = doc["damage"].as_int();
+				if (doc.HasMember("rof"))
+					character->RateOfFire = doc["rof"].as_float();
+				if (doc.HasMember("speed"))
+					character->Speed = doc["speed"].as_float();
+				if (doc.HasMember("dash_distance"))
+					character->DashDistance = doc["dash_distance"].as_float();
+				if (doc.HasMember("dash_speed"))
+					character->DashSpeed = doc["dash_speed"].as_float();
+				if (doc.HasMember("dash_cooldown"))
+					character->DashCooldown = doc["dash_cooldown"].as_float();
+				if (doc.HasMember("walk_threshold"))
+					character->WalkTreshold = doc["walk_threshold"].as_float();
+			}
+		}
+		if (debug)
+			WI_CORE_INFO("Player progression loaded");
+	}
+
 	void GameStateManager::StartNewRoom()
 	{
-		if (debug) WI_INFO("GAME STATE: StartNewRoom()");
+		if (debug)
+			WI_INFO("GAME STATE: StartNewRoom()");
 		s_PlayerTriggerNext = false;
 
 		LoadProgression();

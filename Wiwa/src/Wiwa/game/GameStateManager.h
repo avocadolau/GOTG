@@ -116,6 +116,7 @@ namespace Wiwa {
 		static void StartRun();
 		static void EndRun();
 		static void InitHub();
+		static void InitPlayerData();
 		static void StartNewRoom();
 		static void SetPlayerId(EntityId id);
 		static void EndCurrentRoom();
