@@ -2,6 +2,7 @@
 #include <Wiwa/game/GameStateManager.h>
 #include "../../Utils/EditorUtils.h"
 #include <Wiwa/scene/Scene.h>
+#include <Wiwa/utilities/time/Time.h>
 GameLogPanel::GameLogPanel(EditorLayer* instance)
 	: Panel("Game Log", ICON_FK_GAMEPAD, instance)
 {
@@ -79,7 +80,7 @@ void GameLogPanel::DrawRoomVariables()
 
 	if (ImGui::CollapsingHeader("Current player stats"))
 	{
-		if (Wiwa::GameStateManager::s_CurrentScene)
+		if (Wiwa::GameStateManager::s_CurrentScene && Wiwa::Time::IsPlaying())
 		{
 			Wiwa::Character* character =
 				(Wiwa::Character*)Wiwa::GameStateManager::s_CurrentScene->GetEntityManager().GetComponentByIterator(Wiwa::GameStateManager::s_CharacterStats);

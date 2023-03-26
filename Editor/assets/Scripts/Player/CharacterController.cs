@@ -296,7 +296,6 @@ namespace Game
             }
             else if (footstepTimer >= runStepTimer)
             {
-                Console.Write($"{isWalking}"); ;
                 footstepTimer = 0;
                 Audio.PlaySound("player_walk", m_EntityId);
             }
