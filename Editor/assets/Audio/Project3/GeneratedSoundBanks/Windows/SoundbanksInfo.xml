@@ -318,13 +318,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{5AD481A7-D90E-C37E-E0C2-973216F6F5D8}">
+		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{B966FA01-377F-D274-A821-C50CE838BD33}">
 			<ShortName>player_shoot</ShortName>
 			<Path>player_shoot.bnk</Path>
 			<Media>
 				<File Id="253953353" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapons\starlord_shot.wav</ShortName>
-					<CachePath>SFX/Weapons/starlord_shot_DF806254.wem</CachePath>
+					<CachePath>SFX/Weapons/starlord_shot_3C816656.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -336,5 +336,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{73758E59-108C-1822-4BC6-FF66FB91BB6E}</FileHash>
+	<FileHash>{2368407B-445B-AC52-C455-336FBA1440A7}</FileHash>
 </SoundBanksInfo>

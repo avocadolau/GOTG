@@ -270,7 +270,7 @@
 							<PropertyList>
 								<Property Name="Volume" Type="Real64">
 									<ValueList>
-										<Value>-13</Value>
+										<Value>-24</Value>
 									</ValueList>
 								</Property>
 							</PropertyList>
@@ -287,7 +287,7 @@
 									<PropertyList>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
 										<Property Name="TrimBegin" Type="Real64" Value="0.39639375"/>
-										<Property Name="TrimEnd" Type="Real64" Value="1.06160625"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.713268623310811"/>
 									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Weapons\starlord_shot.wav</AudioFile>

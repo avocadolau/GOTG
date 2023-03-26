@@ -23,34 +23,31 @@ namespace Game
 
             if (timer > 250)
             {
-                ChasePlayer(enemy, entityId);
+                enemy.ChasePlayer(enemy, entityId);
                 timer = 0;
             }
 
-            if (enemy.timer > 4)
-            {
-                enemy.SwitchState(enemy.attackingState);
-            }
-
-        }
-
-        private void ChasePlayer(EnemyMeleePhalanx enemy, ulong entityId)
-        {
-            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (enemy.playerTransformIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref Transform3D playerTr = ref enemy.GetComponentByIterator<Transform3D>(enemy.playerTransformIt);
                 if (enemy.agentIt.componentIndex != Constants.WI_INVALID_INDEX)
                 {
                     ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
-                    AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
+                    if (AgentAIManager.DistanceAgentTarget(entityId, playerTr.LocalPosition) < 4)
+                    {
+                        enemy.SwitchState(enemy.attackingState);
+
+                    }
                 }
             }
+
         }
+
+     
         public override void ExitState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
         }
-        public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId entityId)
+        public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId id1, EntityId id2, string str1, string str2)
         {
 
         }

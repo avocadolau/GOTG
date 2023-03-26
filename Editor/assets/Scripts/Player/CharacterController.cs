@@ -24,8 +24,8 @@ namespace Game
         private float shootTimer = 0f;
 
         private float footstepTimer = 0f;
-        private float walkStepTimer = 0.6f;
-        private float runStepTimer = 0.30f;
+        private float walkStepTimer = 0.62f;
+        private float runStepTimer = 0.458f;
 
         private bool isWalking = false;
         private bool isAiming = false;
@@ -310,20 +310,26 @@ namespace Game
 
         void PlayFootStep()
         {
-            if (isWalking)
-            {
-                if (footstepTimer >= walkStepTimer)
-                {
-                    footstepTimer = 0;
-                    Audio.PlaySound("player_walk", m_EntityId);
-                }
-            }
-            else if (footstepTimer >= runStepTimer)
+            // IF WALKING animation returns, activate this
+            //Console.WriteLine(footstepTimer);
+            //if (isWalking)
+            //{
+            //    if (footstepTimer >= walkStepTimer)
+            //    {
+            //        footstepTimer = 0;
+            //        Audio.PlaySound("player_walk", m_EntityId);
+            //    }
+            //}
+            //else if (footstepTimer >= runStepTimer)
+            //{
+            //    footstepTimer = 0;
+            //    Audio.PlaySound("player_walk", m_EntityId);
+            //}
+            if (footstepTimer >= runStepTimer)
             {
                 footstepTimer = 0;
                 Audio.PlaySound("player_walk", m_EntityId);
             }
-
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)

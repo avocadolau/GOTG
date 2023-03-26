@@ -74,9 +74,11 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 		// Calculate the time required to move the full distance at the given move speed
 		float timeToMove = distance / agent->speed;
+		float timeToRotate = distance / agent->angularSpeed;
 
 		// Calculate the interpolation factor based on the elapsed time and the time required to move
 		float t = glm::clamp(Time::GetDeltaTimeSeconds() / timeToMove, 0.0f, 1.0f);
+		float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
 
 		// Interpolate the character's position between the current position and the target position using the interpolation factor
 		glm::vec2 interpolatedPosition = glm::mix(position, m_DirectionPoint, t);
@@ -87,7 +89,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 		// Calculate the angle between the current forward vector and the target forward vector
 		float angle = glm::angle(forward, { 0.0f, 1.0f });
 		if (forward.y < 0.0f) {
-			angle = -angle;
+			angle =  (-angle);
 		}
 
 		// Interpolate the character's rotation to the target rotation using the interpolation factor
@@ -95,7 +97,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 		/*if (targetRotation < 0.0f) {
 			targetRotation += 2.0f * glm::pi<float>();
 		}*/
-		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, t);
+		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, tRot);
 		
 		// Update the character's position and rotation to the interpolated position and rotation
 		transform->localPosition.x = interpolatedPosition.x;
@@ -103,8 +105,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 		
 		
-		WI_INFO(" Viva Messi {}", angle);
-		WI_INFO(" Viva Messi {}", targetRotation);
+		//WI_INFO(" Viva Messi {}", angle);
+		//WI_INFO(" Viva Messi {}", targetRotation);
 		
 		transform->localRotation.y = interpolatedRotation;
 

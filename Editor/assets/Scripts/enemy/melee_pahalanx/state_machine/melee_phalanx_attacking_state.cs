@@ -39,15 +39,18 @@ namespace Game
 
     public class MeleePhalanxAttackingState : MeleePhalanxBaseState
     {
+        float timer;
         AttackContainer firstAttack = new AttackContainer(false);
         //AttackContainer secondAttack = new AttackContainer(false);
         public override void EnterState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
-            GenerateAttack(ref enemy, ref firstAttack);
+            GenerateAttack(ref enemy, ref entityId, ref firstAttack);
             enemy.timer = 0;
             Animator.PlayAnimationName("atack", entityId);
+            enemy.ChasePlayer(enemy, entityId);
         }
+
         public override void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Animator.PauseAnimation(entityId);
@@ -74,23 +77,21 @@ namespace Game
         {
 
         }
-        public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId entityId)
+        public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId id1, EntityId id2, string str1, string str2)
         {
 
         }
 
-        void GenerateAttack(ref EnemyMeleePhalanx enemy, ref AttackContainer attackContainer)
+        void GenerateAttack(ref EnemyMeleePhalanx enemy, ref EntityId entityId, ref AttackContainer attackContainer)
         {
             Console.WriteLine("1");
-            attackContainer.id = enemy.LoadPrefab("assets\\enemy\\prefabs\\melee_attack.wiprefab");
+            attackContainer.id = enemy.LoadPrefabAsChild("assets\\enemy\\prefabs\\melee_attack.wiprefab", entityId);
             Console.WriteLine("2");
             attackContainer.iterator = enemy.GetComponentIterator<MeleeAttack>(attackContainer.id);
             attackContainer.hasInit = true;
             ref Transform3D transformEnemy = ref enemy.GetComponentByIterator<Transform3D>(enemy.transformIt);
             ref Transform3D transformAttack = ref enemy.GetComponent<Transform3D>(attackContainer.id);
-            transformAttack.LocalPosition.x = transformEnemy.LocalPosition.x;
-            transformAttack.LocalPosition.y = transformEnemy.LocalPosition.y + 2;
-            transformAttack.LocalPosition.z = transformEnemy.LocalPosition.z + 2;
+            transformAttack.LocalPosition = new Vector3(0,2,2);
             Console.WriteLine("3");
         }
     }

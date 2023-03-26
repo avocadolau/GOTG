@@ -149,6 +149,7 @@ namespace Wiwa
 
 		// Load prefab from file
 		EntityId LoadPrefab(const char* path);
+		EntityId LoadPrefab(const char* path, EntityId parent);
 
 		bool IsActive(EntityId entity) { return m_EntityActive[entity]; }
 

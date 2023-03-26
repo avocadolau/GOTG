@@ -151,6 +151,7 @@
     {
         public float speed;
         public Vector3 target;
+        public float angularSpeed;
     }
 
     #endregion
