@@ -85,24 +85,30 @@ void Wiwa::AgentAISystem::OnUpdate()
 		glm::vec2 forward = glm::normalize(m_DirectionPoint - position);
 
 		// Calculate the angle between the current forward vector and the target forward vector
-		float angle = glm::angle(forward, { 1.0f, 0.0f });
+		float angle = glm::angle(forward, { 0.0f, 1.0f });
 		if (forward.y < 0.0f) {
 			angle = -angle;
 		}
 
 		// Interpolate the character's rotation to the target rotation using the interpolation factor
-		float targetRotation = angle;
-		if (targetRotation < 0.0f) {
+		float targetRotation = angle * 180 / glm::pi<float>();
+		/*if (targetRotation < 0.0f) {
 			targetRotation += 2.0f * glm::pi<float>();
-		}
+		}*/
 		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, t);
-
+		
 		// Update the character's position and rotation to the interpolated position and rotation
 		transform->localPosition.x = interpolatedPosition.x;
 		transform->localPosition.z = interpolatedPosition.y;
 
+		
+		
+		WI_INFO(" Viva Messi {}", angle);
+		WI_INFO(" Viva Messi {}", targetRotation);
+		
 		transform->localRotation.y = interpolatedRotation;
 
+		
 		// Move to direction
 		/*transform->localPosition.x += agent->speed * direction.x * Time::GetDeltaTimeSeconds();
 		transform->localPosition.z += agent->speed * direction.y * Time::GetDeltaTimeSeconds();*/
