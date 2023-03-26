@@ -18,6 +18,7 @@
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/ParticleEmitter.h>
 #include <Wiwa/ecs/components/CollisionBody.h>
+#include <Wiwa/ecs/systems/AgentAISystem.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -1096,6 +1097,21 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 	Wiwa::AgentAI* agent = (Wiwa::AgentAI*)data;
 	DrawVec3Control("Target", &agent->target, 0.0f, 100.0f);
 	ImGui::InputFloat("Speed", &agent->speed);
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::AgentAISystem* agentSys = em.GetSystem<Wiwa::AgentAISystem>(m_CurrentID);
+
+	if (agent)
+	{
+		if (ImGui::Button("Create path to") && Wiwa::SceneManager::IsPlaying())
+		{
+			agentSys->CreatePath(agent->target);
+		}
+
+		//if (ImGui::Button("Go to next position"))
+		//{
+		//	agentSys->GoToNextPosition();
+		//}
+	}
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)

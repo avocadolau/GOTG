@@ -12,6 +12,15 @@ namespace Game
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             Animator.PlayAnimationName("run", entityId);
             enemy.timer = 0;
+            if (enemy.playerTransformIt.componentId != Constants.WI_INVALID_INDEX)
+            {
+                ref Transform3D playerTr = ref enemy.GetComponentByIterator<Transform3D>(enemy.playerTransformIt);
+                if (enemy.agentIt.componentIndex != Constants.WI_INVALID_INDEX)
+                {
+                    ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
+                    AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
+                }
+            }
         }
         public override void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
