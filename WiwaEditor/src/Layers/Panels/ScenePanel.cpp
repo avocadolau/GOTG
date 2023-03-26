@@ -57,6 +57,7 @@ ScenePanel::ScenePanel(EditorLayer* instance)
     pitch = 0.0f;
 
     m_RightBtnHold = false;
+    m_LeftBtnHold = false;
 }
 
 ScenePanel::~ScenePanel()
