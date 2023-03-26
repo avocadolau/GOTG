@@ -127,12 +127,15 @@ namespace Wiwa {
 		if (doc.HasMember("animations"))
 		{
 			JSONValue animations = doc["animations"];
-
-			for (uint32_t i = 0; i < animations.Size(); i++)
+			if (animations.IsArray())
 			{
-				std::string path = animations[i].as_string();
-				if(!FileSystem::Exists(path.c_str()))continue;
-				animator->m_Animations.push_back( Animation::LoadWiAnimation(path.c_str()));	
+				for (uint32_t i = 0; i < animations.Size(); i++)
+				{
+					std::string path = animations[i].as_string();
+					if (!FileSystem::Exists(path.c_str()))
+						continue;
+					animator->m_Animations.push_back(Animation::LoadWiAnimation(path.c_str()));
+				}
 			}
 		}
 		return animator;
