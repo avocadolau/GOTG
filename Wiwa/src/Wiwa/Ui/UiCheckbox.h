@@ -13,7 +13,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path,const char* extraPath, size_t callbackID, Rect2i boundsOriginTex);
+		GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path,const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName);
 		virtual ~GuiCheckbox();
 
 		bool Update();

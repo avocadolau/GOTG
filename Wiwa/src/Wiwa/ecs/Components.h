@@ -27,3 +27,7 @@
 
 //Particle components
 #include "components/ParticleEmitter.h"
+
+// Ai components
+#include "components/AgentAI.h"
+#include "components/MapAI.h"

@@ -174,14 +174,31 @@ namespace Wiwa
         internal extern static void SwapToNewTexture(string path,int id_canvas,int id_control);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SwapText(string word, int id_canvas, int id_control);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetValueForUIbar(float value, int id_canvas, int id_control);
         #endregion
 
         #region AgentAI
+
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SendAIToPosition(EntityId entity_id, Vector3 target_pos);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SendAIToPositionById(EntityId entity_id, EntityId target_id);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float DistanceAgentTarget(EntityId entity_id, Vector3 target_pos);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static float DistanceAgentTargetById(EntityId entity_id, EntityId target_id);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void StopMoving(EntityId entity_id);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool HasPath(EntityId entity_id);
+
         #endregion
-
-
 
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

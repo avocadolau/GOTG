@@ -30,3 +30,9 @@ void SwapText(MonoString* word, int id_canvas, int id_gui)
 	char* newWord = mono_string_to_utf8(word);
 	gm.canvas.at(id_canvas)->controls.at(id_gui)->SwapText(newWord, r2d);
 }
+
+void SetValueForUIbar(float value, int id_canvas, int id_gui)
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	gm.canvas.at(id_canvas)->controls.at(id_gui)->SetValueForUIbar(value);
+}

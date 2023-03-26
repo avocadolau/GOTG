@@ -19,7 +19,8 @@ namespace Wiwa
 		CHECKBOX,
 		SLIDER,
 		INPUTBOX,
-		IMAGE
+		IMAGE,
+		BAR,
 	};
 
 	enum class GuiControlState
@@ -149,6 +150,10 @@ namespace Wiwa
 				{
 					r2d.EnableInstance(m_Scene, id_quad_extra);
 				}
+				if (type == GuiControlType::BAR)
+				{
+					r2d.EnableInstance(m_Scene, id_quad_extra);
+				}
 				
 			}
 			else
@@ -159,23 +164,12 @@ namespace Wiwa
 				{
 					r2d.DisableInstance(m_Scene, id_quad_extra);
 				}
+				if (type == GuiControlType::BAR)
+				{
+					r2d.DisableInstance(m_Scene, id_quad_extra);
+				}
 			}
 		}
-
-		void GetEventFunction()
-		{
-			//meter aqui el codigo en especifico para cada event
-			switch (event)
-			{
-			case Wiwa::GuiEvent::PLAY:
-				break;
-			case Wiwa::GuiEvent::TEST:
-				break;
-			default:
-				break;
-			}
-		}
-
 		bool SwapToNewTexture(const char* path, Wiwa::Renderer2D& r2d)
 		{
 			
@@ -194,6 +188,15 @@ namespace Wiwa
 			
 			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());*/
 		}
+
+		void SetValueForUIbar(float value)
+		{
+			if (type == GuiControlType::BAR)
+			{
+				extraPosition.width = ((value * (float)position.width) / 100);
+			}
+		}
+		
 	public:
 
 		ResourceId textId1;
@@ -205,7 +208,8 @@ namespace Wiwa
 		GuiControlState state;
 		GuiEvent event;
 
-		const char* text;           // Control text (if required)
+		std::string text;           // Control text (if required)
+		std::string audioEventForButton;           // Control text (if required)
 		Rect2i position;        // Position and size
 		Rect2i texturePosition;        
 		Rect2i extraPosition;	// Position and size for the bar
@@ -223,5 +227,11 @@ namespace Wiwa
 
 		std::string name;
 		Callback* callback;
+
+		//THINGS FOR ANIMATIONS
+		List<Rect2i> positionsForAnimations;
+		bool animated; 
+		size_t framesAnimation;
+		float animSpeed;
 	};
 }
