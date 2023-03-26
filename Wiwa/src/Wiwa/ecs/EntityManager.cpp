@@ -714,6 +714,40 @@ namespace Wiwa {
 		return IsComponentRemoved(cid, index);
 	}
 
+	EntityId EntityManager::GetEntityByName(const char* name)
+	{
+		size_t ecount = m_EntityNames.size();
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		for (size_t i = 0; i < ecount; i++) {
+			if (m_EntityNames[i] == name) {
+				eid = i;
+				break;
+			}
+		}
+
+		return eid;
+	}
+
+	EntityId EntityManager::GetChildByName(EntityId parent, const char* name)
+	{
+		EntityId eid = WI_INVALID_INDEX;
+
+		size_t ecount = m_EntityChildren[parent].size();
+
+		for (size_t i = 0; i < ecount; i++) {
+			EntityId id = m_EntityChildren[parent][i];
+
+			if (m_EntityNames[id] == name) {
+				eid = id;
+				break;
+			}
+		}
+
+		return eid;
+	}
+
 	size_t EntityManager::GetComponentIndex(EntityId entityId, ComponentId componentId, size_t componentSize)
 	{
 		size_t index = -1;

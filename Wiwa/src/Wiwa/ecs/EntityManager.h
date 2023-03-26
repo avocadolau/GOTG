@@ -166,6 +166,10 @@ namespace Wiwa
 		inline EntityId GetEntityParent(EntityId eid) { return m_EntityParent[eid]; }
 		inline std::vector<EntityId> *GetEntityChildren(EntityId eid) { return &m_EntityChildren[eid]; }
 
+		EntityId GetEntityByName(const char* name);
+
+		EntityId GetChildByName(EntityId parent, const char* name);
+
 		inline std::map<ComponentId, size_t> &GetEntityComponents(EntityId id) { return m_EntityComponents[id]; }
 
 		inline std::vector<SystemHash> &GetEntitySystemHashes(EntityId id) { return m_EntitySystemHashes[id]; }

@@ -29,6 +29,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static EntityId CreateEntity(System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetChildByName(EntityId parent, string name, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static EntityId CreateEntityNamed(string name_entity, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static string GetEntityName(EntityId id, System.Int64 scene);
