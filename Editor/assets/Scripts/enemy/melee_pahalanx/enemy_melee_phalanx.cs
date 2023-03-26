@@ -35,6 +35,13 @@ namespace Game
             timer += Time.DeltaTime();
         }
 
+        public override void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
+        {
+            base.OnCollisionEnter(id1, id2, str1, str2);
+            EnemyMeleePhalanx self = this;
+            currentState.OnCollisionEnter(ref self, id1, id2, str1, str2);
+        }
+
         public void SwitchState(MeleePhalanxBaseState state)
         {
             EnemyMeleePhalanx self = this;

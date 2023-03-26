@@ -28,8 +28,9 @@ EntityId CreateChildByName(EntityId parent, MonoString* name, void* scene);
 
 void DestroyEntity(size_t eid, void* scene);
 
-size_t LoadPrefabIntr(MonoString* file);
-void SavePrefabIntr(size_t id, MonoString* file);
+size_t LoadPrefabIntr(MonoString* file, void* scene);
+size_t LoadPrefabAsChildIntr(MonoString* file, size_t id, void* scene);
+void SavePrefabIntr(size_t id, MonoString* file, void* scene);
 
 // Help functions
 
