@@ -31,5 +31,18 @@
         {
             return InternalCalls.GetControllerDeadzone();
         }
+
+        public static void SavePlayerProgression()
+        {
+            InternalCalls.SavePlayerProgression();
+        }
+        public static void LoadPlayerProgression()
+        {
+            InternalCalls.LoadPlayerProgression();
+        }
+        public static void Die()
+        {
+            InternalCalls.Die();
+        }
     }
 }

@@ -91,8 +91,9 @@ namespace Wiwa {
 
 	Animator::~Animator()
 	{
+		m_CurrentAnimation = nullptr;
+		m_TargetAnimation = nullptr;
 		m_Animations.clear();
-		delete m_CurrentAnimation;
 	}
 
 	void Animator::SaveWiAnimator(Animator* animator, const char* path)

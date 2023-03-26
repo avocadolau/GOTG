@@ -102,6 +102,7 @@ namespace Wiwa {
 		static void EndRun();
 		static void InitHub();
 		static void InitPlayerData();
+		static void Die();
 		static void StartNewRoom();
 		static void SetPlayerId(EntityId id, Scene* scene);
 		static void EndCurrentRoom();

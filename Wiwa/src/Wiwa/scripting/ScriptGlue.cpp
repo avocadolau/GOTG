@@ -171,5 +171,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(EndRun);
 		WI_ADD_INTERNAL_CALL(SetPlayer);
 		WI_ADD_INTERNAL_CALL(GetControllerDeadzone);
+		WI_ADD_INTERNAL_CALL(LoadPlayerProgression);
+		WI_ADD_INTERNAL_CALL(SavePlayerProgression);
+		WI_ADD_INTERNAL_CALL(Die);
 	}
 }

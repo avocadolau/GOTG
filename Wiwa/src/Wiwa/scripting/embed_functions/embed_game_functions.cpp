@@ -27,17 +27,22 @@ void SetPlayer(size_t id, void* scene)
 	Wiwa::GameStateManager::SetPlayerId(id, _scene);
 }
 
-void SaveProgression()
+void SavePlayerProgression()
 {
-	//Wiwa::GameStateManager::SaveProgression();
+	Wiwa::GameStateManager::SaveProgression();
 }
 
-void LoadProgression()
+void LoadPlayerProgression()
 {
-	//Wiwa::GameStateManager::LoadProgression();
+	Wiwa::GameStateManager::LoadProgression();
 }
 
 float GetControllerDeadzone()
 {
 	return Wiwa::GameStateManager::s_GamepadDeadzone;
+}
+
+void Die()
+{
+	Wiwa::GameStateManager::Die();
 }

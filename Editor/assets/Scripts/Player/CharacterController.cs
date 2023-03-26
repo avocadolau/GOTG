@@ -32,6 +32,7 @@ namespace Game
         void Awake()
         {
             GameState.SetPlayer(m_EntityId, m_Scene);
+            GameState.LoadPlayerProgression();
             //Setting components
             characterControllerIt = GetComponentIterator<Character>();
             transformIt = GetComponentIterator<Transform3D>();
@@ -105,6 +106,16 @@ namespace Game
 
                 }
             }
+            if (Input.IsKeyDown(KeyCode.F1))
+            {
+                controller.Health = 0;
+            }
+
+            if (controller.Health <= 0)
+            {
+                GameState.Die();
+            }
+
         }
 
         Vector3 GetMovementInput(ref Character controller)

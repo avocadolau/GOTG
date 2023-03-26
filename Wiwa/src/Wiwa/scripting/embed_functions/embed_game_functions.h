@@ -11,8 +11,10 @@ void EndRun();
 
 void SetPlayer(size_t id, void* scene);
 
-void SaveProgression();
+void SavePlayerProgression();
 
-void LoadProgression();
+void LoadPlayerProgression();
 
 float GetControllerDeadzone();
+
+void Die();

@@ -106,8 +106,8 @@ namespace Wiwa
 
 	void GameStateManager::UpdateRoomState()
 	{
-		if (s_RoomType == RoomType::ROOM_COMBAT)
-			UpdateCombatRoom();
+		//if (s_RoomType == RoomType::ROOM_COMBAT)
+			//UpdateCombatRoom();
 
 		if (s_HasFinshedRoom && s_CanPassNextRoom && s_PlayerTriggerNext)
 		{
@@ -163,6 +163,7 @@ namespace Wiwa
 	void GameStateManager::StartRun()
 	{
 		if (debug) WI_INFO("GAME STATE: StartRun()");
+		SaveProgression();
 		StartNewRoom();
 	}
 
@@ -237,13 +238,19 @@ namespace Wiwa
 			WI_CORE_INFO("Player init loaded");
 	}
 
+	void GameStateManager::Die()
+	{
+		if (debug)
+			WI_CORE_INFO("Player dead");
+
+		//TODO: @Alejandro Pop the deadth menu
+	}
+
 	void GameStateManager::StartNewRoom()
 	{
 		if (debug)
 			WI_INFO("GAME STATE: StartNewRoom()");
 		s_PlayerTriggerNext = false;
-
-		LoadProgression();
 		NextRoom();
 
 		if (s_RoomType == RoomType::ROOM_REWARD || s_RoomType == RoomType::ROOM_SHOP || s_RoomType == RoomType::ROOM_HUB)

@@ -207,11 +207,19 @@ namespace Wiwa
         internal extern static void StartRun();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void EndRun();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SavePlayerProgression();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadPlayerProgression();
+
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetPlayer(EntityId id, System.Int64 scene);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static float GetControllerDeadzone();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Die();
         #endregion
 
         #region AgentAI
