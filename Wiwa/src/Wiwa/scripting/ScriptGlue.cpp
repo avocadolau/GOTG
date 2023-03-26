@@ -128,6 +128,8 @@ namespace Wiwa
 
 		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
+		WI_ADD_INTERNAL_CALL(ChangeMasterVolume);
+
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(GetLinearVelocity);
