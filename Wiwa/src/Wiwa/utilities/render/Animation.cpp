@@ -241,7 +241,7 @@ namespace Wiwa {
 		//load save path
 		size_t savep_len;
 		file.Read(&savep_len, sizeof(size_t));
-		anim->m_Name.resize(savep_len);
+		anim->m_SavePath.resize(savep_len);
 		file.Read(&anim->m_SavePath[0], savep_len);
 
 		file.Read(&anim->m_Duration, sizeof(double));
