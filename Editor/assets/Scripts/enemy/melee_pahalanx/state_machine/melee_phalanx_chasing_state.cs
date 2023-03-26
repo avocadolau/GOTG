@@ -10,14 +10,18 @@ namespace Game
         public override void EnterState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
-
+            Animator.PlayAnimationName("run", entityId);
             enemy.timer = 0;
         }
         public override void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-            enemy.SwitchState(enemy.attackingState);
+            if (enemy.timer > 4)
+            {
+                enemy.SwitchState(enemy.attackingState);
+            }
+            
         }
         public override void ExitState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {

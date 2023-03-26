@@ -40,28 +40,35 @@ namespace Game
     public class MeleePhalanxAttackingState : MeleePhalanxBaseState
     {
         AttackContainer firstAttack = new AttackContainer(false);
-        AttackContainer secondAttack = new AttackContainer(false);
+        //AttackContainer secondAttack = new AttackContainer(false);
         public override void EnterState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             GenerateAttack(ref enemy, ref firstAttack);
             enemy.timer = 0;
+            Animator.PlayAnimationName("atack", entityId);
         }
         public override void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
+            Animator.PauseAnimation(entityId);
             //Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-            if (firstAttack.HasFinished(enemy) && secondAttack.hasInit == false)
+            if (firstAttack.HasFinished(enemy)) // && secondAttack.hasInit == false)
             {
                 Console.WriteLine("First attack has finished");
-                GenerateAttack(ref enemy, ref secondAttack);
+                //GenerateAttack(ref enemy, ref secondAttack);
+            }
+            if (enemy.timer > 2)
+            {
+                enemy.SwitchState(enemy.chasingState);
             }
 
-            if (secondAttack.HasFinished(enemy))
-            {
-                Console.WriteLine("Second attack has finished");
-                //enemy.SwitchState(enemy.idleState);
-            }
+            //if (secondAttack.HasFinished(enemy))
+            //{
+            //    Animator.PauseAnimation(entityId);
+            //    Console.WriteLine("Second attack has finished");
+            //    enemy.SwitchState(enemy.idleState);
+            //}
         }
         public override void ExitState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
