@@ -225,6 +225,10 @@
 							</ReferenceList>
 							<ChildrenList>
 								<AudioFileSource Name="menu_song" ID="{80D3D52A-B38B-45F2-BB21-308ECDC8A5A6}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="1.8075751590959"/>
+									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Menu\menu_song.wav</AudioFile>
 									<MediaIDList>
@@ -263,6 +267,13 @@
 				<Folder Name="Weapons" ID="{C95A99BC-1EF7-4BC9-A20A-5D66AB9AF0CA}" ShortID="802284686">
 					<ChildrenList>
 						<Sound Name="starlord_shot" ID="{3DE54C51-419B-46DA-8A10-DCB685E336A6}" ShortID="993640783">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-24</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -276,7 +287,7 @@
 									<PropertyList>
 										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
 										<Property Name="TrimBegin" Type="Real64" Value="0.39639375"/>
-										<Property Name="TrimEnd" Type="Real64" Value="1.06160625"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.713268623310811"/>
 									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Weapons\starlord_shot.wav</AudioFile>
@@ -313,11 +324,11 @@
 						</Sound>
 					</ChildrenList>
 				</Folder>
-				<Folder Name="Enemies" ID="{D01A9EC4-BA6E-44D5-A21D-1CD7C9A3C53F}" ShortID="418251565">
+				<Folder Name="Enemies" ID="{ED4367A5-69E1-4DCC-926B-B54A39B95D31}" ShortID="181944280">
 					<ChildrenList>
-						<Folder Name="Melee" ID="{FBFB9659-7375-41D6-9904-3C561FA8B769}" ShortID="329502847">
+						<Folder Name="Melee" ID="{FFB02A62-A43E-4AA2-B098-2CF4C3C6C3BC}" ShortID="5625439">
 							<ChildrenList>
-								<Sound Name="197656-SovinaSlime26" ID="{3F21E66F-A025-404A-9F40-2F43C21E9F1F}" ShortID="744817653">
+								<Sound Name="197656-SovinaSlime26" ID="{BACDAEE4-B6E5-4462-9CE8-AD90EA3F6943}" ShortID="440424758">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -327,7 +338,7 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="197656-SovinaSlime26" ID="{02FCE46B-ACAF-4A57-A8CC-430CB98E4BAD}">
+										<AudioFileSource Name="197656-SovinaSlime26" ID="{F58FF357-DB11-4EBF-AFE7-EC572EC3D3C0}">
 											<Language>SFX</Language>
 											<AudioFile>Enemies\Melee\197656-SovinaSlime26.wav</AudioFile>
 											<MediaIDList>
@@ -336,14 +347,14 @@
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="197656-SovinaSlime26" ID="{02FCE46B-ACAF-4A57-A8CC-430CB98E4BAD}" Platform="Linked"/>
+										<ActiveSource Name="197656-SovinaSlime26" ID="{F58FF357-DB11-4EBF-AFE7-EC572EC3D3C0}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Ranged" ID="{D0739288-7745-4855-9AD7-FFA4135C2D17}" ShortID="229437438">
+						<Folder Name="Ranged" ID="{6E26C0F6-FDE5-49FD-9F28-949494E807DC}" ShortID="783274755">
 							<ChildrenList>
-								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{895036FF-7D1C-48E4-8780-84D166F6D7AA}" ShortID="769076689">
+								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{3B815756-5C95-4243-92F0-82C9E1FF563B}" ShortID="936135286">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -353,7 +364,7 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{AFFEFF63-975F-4E50-AEF4-3982296493F3}">
+										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{98DBCC2D-1ED5-499C-B28C-BEEC16F8C6A4}">
 											<Language>SFX</Language>
 											<AudioFile>Enemies\Ranged\184478-Time_Glitch_-aquatic_density-4.wav</AudioFile>
 											<MediaIDList>
@@ -362,14 +373,14 @@
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{AFFEFF63-975F-4E50-AEF4-3982296493F3}" Platform="Linked"/>
+										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{98DBCC2D-1ED5-499C-B28C-BEEC16F8C6A4}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Sentinel" ID="{53D31A74-6008-42DA-8F6F-2E96A1861384}" ShortID="368582402">
+						<Folder Name="Sentinel" ID="{F1C55FCE-F954-4650-8878-4FBA0C480628}" ShortID="917367290">
 							<ChildrenList>
-								<Sound Name="sentinel_moving" ID="{75151CCA-BFC6-46B5-8D07-4116EFF02CC4}" ShortID="505612201">
+								<Sound Name="sentinel_moving" ID="{BDD18B92-4B35-4D61-B22B-CDE58E106CFC}" ShortID="952419831">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -379,7 +390,7 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sentinel_moving" ID="{8650AA08-1771-4D8E-851B-4A30755FE1BE}">
+										<AudioFileSource Name="sentinel_moving" ID="{B27905E3-A2B0-43E9-B843-17761A709741}">
 											<Language>SFX</Language>
 											<AudioFile>Enemies\Sentinel\sentinel_moving.wav</AudioFile>
 											<MediaIDList>
@@ -388,14 +399,14 @@
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sentinel_moving" ID="{8650AA08-1771-4D8E-851B-4A30755FE1BE}" Platform="Linked"/>
+										<ActiveSource Name="sentinel_moving" ID="{B27905E3-A2B0-43E9-B843-17761A709741}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Subjugator" ID="{89EB54CC-2F33-4485-A50C-B0EEEF77B1F5}" ShortID="742869065">
+						<Folder Name="Subjugator" ID="{AB2E4D75-7275-4179-B6C8-E21A3CE8E4B4}" ShortID="431440389">
 							<ChildrenList>
-								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{5A8C6B82-81D5-4960-B80F-F34286884C3A}" ShortID="572117610">
+								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{5AC88DA5-DC1D-42B5-A558-883657A907DC}" ShortID="992356666">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -405,7 +416,7 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{7AD26ED3-49C8-4E50-9EFF-E31424BBCED9}">
+										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{762E2BF8-C820-48BA-A935-1AE603254B92}">
 											<Language>SFX</Language>
 											<AudioFile>Enemies\Subjugator\184478-Time_Glitch_-aquatic_density-4.wav</AudioFile>
 											<MediaIDList>
@@ -414,7 +425,7 @@
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{7AD26ED3-49C8-4E50-9EFF-E31424BBCED9}" Platform="Linked"/>
+										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{762E2BF8-C820-48BA-A935-1AE603254B92}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>

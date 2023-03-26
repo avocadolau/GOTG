@@ -16,8 +16,6 @@ namespace Game
         {
             Animator.PlayAnimationName("idle", entityId);
 
-            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
-
             if (enemy.timer > 4)
             {
                 enemy.SwitchState(enemy.chasingState);
@@ -27,7 +25,7 @@ namespace Game
         public override void ExitState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
         }
-        public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId entityId)
+        public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId id1, EntityId id2, string str1, string str2)
         {
 
         }

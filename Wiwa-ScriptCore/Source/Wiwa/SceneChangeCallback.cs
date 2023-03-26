@@ -35,6 +35,8 @@ namespace Wiwa
         static void OnExecute()
         {
             InternalCalls.PauseScene();
+            InternalCalls.ActivateGuiCanvas(1);
+            InternalCalls.ActivateGuiCanvas(0);
         }
     }
 

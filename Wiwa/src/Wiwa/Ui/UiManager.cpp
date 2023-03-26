@@ -32,7 +32,7 @@ namespace Wiwa
 	bool GuiManager::Init(Scene* scene)
 	{
 		m_Scene = scene;
-		idGuiSelected = -1;
+		
 		//InitFont("assets/arial.ttf");
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
@@ -48,20 +48,20 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active)
 	{
 		GuiControl* control = nullptr;
 	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName,active);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex, audioEventName);
+				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex, audioEventName, active);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex);
+				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active);
 				break;
 			default:
 				break;
@@ -72,18 +72,18 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName)
+	GuiControl* GuiManager::CreateGuiControl(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* slider_path, Rect2i sliderBounds, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName, bool active)
 	{
 		GuiControl* control = nullptr;
 		switch (type)
 		{
 		case Wiwa::GuiControlType::SLIDER:
-			control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex, sliderOriginTex, audioEventName);
+			control = new GuiSlider(m_Scene, id, bounds, sliderBounds, path, slider_path, callbackID, boundsOriginTex, sliderOriginTex, audioEventName, active);
 			canvas.at(canvas_id)->controls.push_back(control);
 			canvas.at(canvas_id)->controlsForSelection.push_back(control);
 			break;
 		case Wiwa::GuiControlType::BAR:
-			control = new GuiBar(m_Scene, id, bounds, sliderBounds, path, slider_path, boundsOriginTex, sliderOriginTex);
+			control = new GuiBar(m_Scene, id, bounds, sliderBounds, path, slider_path, boundsOriginTex, sliderOriginTex, active);
 			canvas.at(canvas_id)->controls.push_back(control);
 			break;
 		default:
@@ -95,7 +95,7 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id)
+	GuiControl* GuiManager::CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, bool active)
 	{
 		GuiControl* control = nullptr;
 		
@@ -103,7 +103,7 @@ namespace Wiwa
 			switch (type)
 			{
 			case GuiControlType::TEXT:
-				control = new GuiText(m_Scene, id, bounds, string_text);
+				control = new GuiText(m_Scene, id, bounds, string_text, active);
 				break;
 			default:
 				break;
@@ -115,13 +115,13 @@ namespace Wiwa
 
 	bool GuiManager::Update()
 	{
-		InputController();
+		
 		std::vector<GuiCanvas*> canva = canvas;
 		for (int i = 0; i < canva.size(); i++)
 		{
-			
 			if (canva.at(i)->active)
 			{
+				canva.at(i)->Update();
 				std::vector<GuiControl*> control = canva.at(i)->controls;
 				for (int j = 0; j < control.size(); j++)
 				{
@@ -161,13 +161,19 @@ namespace Wiwa
 
 		for (int i = 0; i < canva.size(); i++)
 		{
-			std::vector<GuiControl*> control = canva.at(i)->controls;
-
-			for (int j = 0; j < control.size(); j++)
+			if (canva.at(i)->active)
 			{
-				control.at(j)->Draw(&Wiwa::Application::Get().GetRenderer2D());
+				std::vector<GuiControl*> control = canva.at(i)->controls;
+
+				for (int j = 0; j < control.size(); j++)
+				{
+					if (control.at(j)->active)
+					{
+						control.at(j)->Draw(&Wiwa::Application::Get().GetRenderer2D());
+					}
+				}
+
 			}
-			return true;
 		}
 		
 		return false;
@@ -387,6 +393,7 @@ namespace Wiwa
 			//controls.resize(controls_count);
 			for (size_t j = 0; j < controls_count; j++)
 			{
+				GuiControl* control = nullptr;
 				int id;
 				bool active;
 				GuiControlType guiType;
@@ -453,22 +460,22 @@ namespace Wiwa
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(),active);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id);
+					control = CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
-					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str());
+					control = CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active);
 					break;
 				case Wiwa::GuiControlType::BAR:
-					CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str());
+					control = CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str());
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active);
 					break;
 				default:
 					break;
@@ -563,42 +570,5 @@ namespace Wiwa
 		}
 		return true;
 	}
-	void GuiManager::InputController()
-	{
-		for (size_t i = 0; i < canvas.size(); i++)
-		{
-			if (Wiwa::Input::IsButtonPressed(0, 13))
-			{
-				DpadUp = true;
-			}
-			if (Wiwa::Input::IsButtonPressed(0, 11))
-			{
-				DpadDown = true;
-			}
-			if (Wiwa::Input::IsButtonReleased(0, 13) && DpadUp)
-			{
-				DpadUp = false;
-				idGuiSelected++;
-
-				if (idGuiSelected >= canvas.at(i)->controlsForSelection.size())
-				{
-					idGuiSelected = 0;
-				}					
-			}
-			if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
-			{
-				DpadDown = false;
-				idGuiSelected--;
-				if (idGuiSelected <= -1)
-				{
-					idGuiSelected = canvas.at(i)->controlsForSelection.size() - 1;
-				}					
-			}
-			if (idGuiSelected > -1 && idGuiSelected < canvas.at(i)->controlsForSelection.size())
-			{
-				canvas.at(i)->SelectElement(idGuiSelected);
-					
-			}
-		}
-	}
+	
 }

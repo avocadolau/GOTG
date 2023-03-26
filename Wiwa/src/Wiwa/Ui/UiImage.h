@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex);
+		GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active);
 		virtual ~GuiImage();
 
 		bool Update();

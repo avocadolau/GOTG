@@ -63,6 +63,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(GetChildByName);
 		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
 		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
+		WI_ADD_INTERNAL_CALL(LoadPrefabAsChildIntr);
+		WI_ADD_INTERNAL_CALL(CreateChildByName);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
@@ -175,5 +177,6 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(LoadPlayerProgression);
 		WI_ADD_INTERNAL_CALL(SavePlayerProgression);
 		WI_ADD_INTERNAL_CALL(Die);
+		WI_ADD_INTERNAL_CALL(GetPlayerId);
 	}
 }

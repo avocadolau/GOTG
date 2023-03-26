@@ -1108,6 +1108,7 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 	Wiwa::AgentAI* agent = (Wiwa::AgentAI*)data;
 	DrawVec3Control("Target", &agent->target, 0.0f, 100.0f);
 	ImGui::InputFloat("Speed", &agent->speed);
+	ImGui::InputFloat("Angular Speed", &agent->angularSpeed);
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	Wiwa::AgentAISystem* agentSys = em.GetSystem<Wiwa::AgentAISystem>(m_CurrentID);
 

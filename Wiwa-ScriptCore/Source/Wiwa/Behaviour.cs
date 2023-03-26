@@ -82,6 +82,15 @@
         {
             return InternalCalls.GetChildByName(m_EntityId, name, m_Scene);
         }
+        public EntityId CreateChildByName(string name)
+        {
+            return InternalCalls.CreateChildByName(m_EntityId, name, m_Scene);
+        }
+
+        public EntityId CreateChildByName(EntityId id, string name)
+        {
+            return InternalCalls.CreateChildByName(id, name, m_Scene);
+        }
 
         public void AddMesh(EntityId eid, string model, string material)
         {
@@ -143,11 +152,17 @@
 
         public EntityId LoadPrefab(string file)
         {
-            return InternalCalls.LoadPrefabIntr(file);
+            return InternalCalls.LoadPrefabIntr(file, m_Scene);
         }
+
+        public EntityId LoadPrefabAsChild(string file, EntityId parent)
+        {
+            return InternalCalls.LoadPrefabAsChildIntr(file, parent, m_Scene);
+        }
+
         public void SavePrefab(EntityId id, string file)
         {
-            InternalCalls.SavePrefabIntr(id, file);
+            InternalCalls.SavePrefabIntr(id, file, m_Scene);
         }
     }
 }

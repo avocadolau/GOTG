@@ -46,3 +46,8 @@ void Die()
 {
 	Wiwa::GameStateManager::Die();
 }
+
+size_t GetPlayerId()
+{
+	return Wiwa::GameStateManager::s_PlayerId;
+}

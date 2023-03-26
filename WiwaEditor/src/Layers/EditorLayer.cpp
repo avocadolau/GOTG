@@ -807,9 +807,10 @@ void EditorLayer::DockSpace()
 void EditorLayer::LoadPanelConfig()
 {
 	Wiwa::JSONDocument config("config/panels.json");
-
+	if (!config.IsObject())
+		return;
 	if (config.HasMember("sol_version"))
-		s_SolVersion = config["sol_version"].get<const char *>();
+		s_SolVersion = config["sol_version"].as_string();
 	if (config.HasMember("build_conf"))
 		s_BuildConf = config["build_conf"].as_string();
 

@@ -41,10 +41,13 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static EntityId LoadPrefabIntr(string file);
-
+        internal extern static EntityId LoadPrefabIntr(string file, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void SavePrefabIntr(EntityId id, string file);
+        internal extern static void SavePrefabIntr(EntityId id, string file, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId LoadPrefabAsChildIntr(string file, EntityId id, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId CreateChildByName(EntityId parent, string name, System.Int64 scene);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -222,6 +225,8 @@ namespace Wiwa
         internal extern static float GetControllerDeadzone();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Die();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetPlayerId();
         #endregion
 
         #region AgentAI

@@ -438,6 +438,23 @@ namespace Wiwa {
 		return eid;
 	}
 
+	EntityId EntityManager::LoadPrefab(const char* path, EntityId parent)
+	{
+		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		if (file.IsOpen()) {
+			eid = _loadEntityImpl(file, parent, true);
+		}
+
+		file.Close();
+
+		return eid;
+	}
+
 	void EntityManager::DestroyEntity(EntityId entity)
 	{
 		m_EntitiesToDestroy.push_back(entity);
