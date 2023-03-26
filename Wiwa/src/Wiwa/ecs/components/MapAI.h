@@ -9,7 +9,7 @@
 
 namespace Wiwa {
 	struct WI_API MapAI {
-		glm::vec3 startingPosition;
+		glm::vec2 startingPosition;
 		int width;
 		int	height;
 		float tileWidth; // Cannot be less than 1!

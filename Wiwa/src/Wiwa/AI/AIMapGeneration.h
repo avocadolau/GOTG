@@ -5,6 +5,8 @@
 
 //#include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <Wiwa/ecs/components/MapAI.h>
 //#include <vector>
 //#include <bitset>
@@ -20,7 +22,7 @@ namespace Wiwa {
 		// Data from the map
 		struct MapData
 		{
-			glm::vec3 startingPosition;
+			glm::vec2 startingPosition;
 			int width;
 			int	height;
 			float tileWidth; // Cannot be less than 1!
@@ -40,7 +42,7 @@ namespace Wiwa {
 		*/
 
 		// Generate the grid of the map, stores it inside map data and set the navigation values to walkable or non walkable
-		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec3 startPos);
+		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec2 startPos);
 		static bool BakeMap();
 		static void SetPositionUnWalkable(glm::ivec2 world_pos);
 		static bool DebugDrawMap();

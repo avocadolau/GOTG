@@ -29,7 +29,7 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void CreatePath(const glm::vec3& targetPos);
+		bool CreatePath(const glm::vec3& targetPos);
 
 		void GoToNextPosition();
 

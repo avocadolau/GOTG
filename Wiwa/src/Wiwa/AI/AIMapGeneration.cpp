@@ -17,12 +17,13 @@
 //#include <vector>
 #include "glew.h"
 //#include <Wiwa/utilities/json/JSONDocument.h>
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
 
 Wiwa::AIMapGeneration::MapData Wiwa::AIMapGeneration::m_MapData = MapData();
 //unsigned char* Wiwa::AIMapGeneration::m_Map = nullptr;
 std::vector<unsigned char> Wiwa::AIMapGeneration::m_Map = std::vector<unsigned char>(MAP_TILES_MAX_SIZE);
 
-bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec3 startPos)
+bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec2 startPos)
 {
 	bool ret = false;
 
@@ -52,6 +53,13 @@ bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float ti
 	return ret;
 }
 
+glm::vec2 scaleRectVertex(glm::vec2 rectPos, glm::vec2 halfExtents, glm::vec2 scaling, glm::vec2 localPos) {
+	glm::vec2 scaledPos = glm::vec2(rectPos.x + localPos.x * halfExtents.x * scaling.x,
+		rectPos.y + localPos.y * halfExtents.y * scaling.y);
+	return scaledPos;
+}
+
+
 bool Wiwa::AIMapGeneration::BakeMap()
 {
 	if (m_Map.empty())
@@ -76,11 +84,30 @@ bool Wiwa::AIMapGeneration::BakeMap()
 				{
 					ColliderCube* cube = em.GetComponent<ColliderCube>(actualId);
 					glm::vec3& pos = em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
+					btTransform& t = em.GetSystem<Wiwa::PhysicsSystem>(actualId)->getBody()->collisionObject->getWorldTransform();
 
-					glm::vec2 topLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z + cube->halfExtents.z);
+					glm::mat4 mat(1.0f);
+					t.getOpenGLMatrix(glm::value_ptr(mat));
+
+					glm::vec2 rectPos = { pos.x,pos.z };
+					glm::vec2 halfExtents = { cube->halfExtents.x, cube->halfExtents.z };
+					glm::vec2 scaling = { cb->scalingOffset.x, cb->scalingOffset.z };
+
+					glm::vec2 topLeft = rectPos - halfExtents;
+					glm::vec2 bottomLeft = rectPos + glm::vec2(-halfExtents.x, halfExtents.y);
+					glm::vec2 bottomRight = rectPos + halfExtents;
+					glm::vec2 topRight = rectPos + glm::vec2(halfExtents.x, -halfExtents.y);
+
+					topLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, 1));
+					bottomLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, -1));
+					bottomRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, -1));
+					topRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, 1));
+
+					/*glm::vec2 topLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z + cube->halfExtents.z);
 					glm::vec2 bottomLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z - cube->halfExtents.z);
 					glm::vec2 bottomRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z - cube->halfExtents.z);
-					glm::vec2 topRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z + cube->halfExtents.z);
+					glm::vec2 topRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z + cube->halfExtents.z);*/
+
 
 					glm::ivec2 topLeftMap = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
 					glm::ivec2 bottomLeftMap = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
@@ -120,7 +147,7 @@ bool Wiwa::AIMapGeneration::BakeMap()
 void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
 {
 	//m_Map[vec.x * m_MapData.width + vec.y] = INVALID_WALK_CODE;
-	if (AIPathFindingManager::CheckBoundaries(vec))
+	if (AIPathFindingManager::CheckBoundaries(vec) && (vec.y * m_MapData.width + vec.x) < m_Map.size())
 		m_Map[(vec.y * m_MapData.width) + vec.x] = INVALID_WALK_CODE;
 }
 
@@ -181,8 +208,8 @@ glm::vec2 Wiwa::AIMapGeneration::MapToWorld(int x, int y)
 {
 	glm::vec2 ret;
 
-	ret.x = (float)x * m_MapData.tileWidth;
-	ret.y = (float)y * m_MapData.tileHeight;
+	ret.x = (float)(x + m_MapData.startingPosition.x) * m_MapData.tileWidth;
+	ret.y = (float)(y + m_MapData.startingPosition.y) * m_MapData.tileHeight;
 	//WI_CORE_INFO("Map to World: x = {}, y = {}, ret.x = {}, ret.y = {}", x, y, ret.x, ret.y);
 	return ret;
 }
@@ -191,8 +218,8 @@ glm::ivec2 Wiwa::AIMapGeneration::WorldToMap(float x, float y)
 {
 	glm::ivec2 ret;
 
-	ret.x = x / m_MapData.tileWidth;
-	ret.y = y / m_MapData.tileHeight;
+	ret.x = (x / m_MapData.tileWidth) - m_MapData.startingPosition.x;
+	ret.y = (y / m_MapData.tileHeight) - m_MapData.startingPosition.y;
 	//WI_CORE_INFO("World to Map: x = {}, y = {}, ret.x = {}, ret.y = {}", x,y,ret.x, ret.y);
 	return ret;
 }
