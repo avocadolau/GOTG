@@ -271,6 +271,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
+		<SoundBank Id="3501630426" Type="User" Language="SFX" Hash="{440A8DF2-69EE-E7B2-0490-DA2145D3C8F6}">
+			<ShortName>Set_Bus_Master_Volume</ShortName>
+			<Path>Set_Bus_Master_Volume.bnk</Path>
+			<Events>
+				<Event Id="3501630426" Name="Set_Bus_Master_Volume"/>
+			</Events>
+		</SoundBank>
 		<SoundBank Id="3785327939" Type="User" Language="SFX" Hash="{AF3EE890-E539-0ECE-2081-577BEB38B6D5}">
 			<ShortName>logo_intro</ShortName>
 			<Path>logo_intro.bnk</Path>
@@ -288,13 +295,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{1D9CE364-F562-4925-88C8-F0AB548FD17E}">
+		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{F2217F72-F73B-B422-78FC-91B52AF0C261}">
 			<ShortName>player_shoot</ShortName>
 			<Path>player_shoot.bnk</Path>
 			<Media>
 				<File Id="253953353" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapons\starlord_shot.wav</ShortName>
-					<CachePath>SFX/Weapons/starlord_shot_406173BA.wem</CachePath>
+					<CachePath>SFX/Weapons/starlord_shot_DF806254.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -306,5 +313,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{ADA118D8-E2D4-DDDB-0F41-28729F1C0748}</FileHash>
+	<FileHash>{BA911FA0-0529-AA9E-5E10-7142CD5DACA5}</FileHash>
 </SoundBanksInfo>

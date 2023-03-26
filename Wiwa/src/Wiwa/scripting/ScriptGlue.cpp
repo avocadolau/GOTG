@@ -128,6 +128,8 @@ namespace Wiwa
 
 		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
+		WI_ADD_INTERNAL_CALL(ChangeMasterVolume);
+
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(GetLinearVelocity);
@@ -152,7 +154,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SendAIToPositionById);
 		WI_ADD_INTERNAL_CALL(DistanceAgentTarget);
 		WI_ADD_INTERNAL_CALL(DistanceAgentTargetById);
-		WI_ADD_INTERNAL_CALL(StopMoving);
+		WI_ADD_INTERNAL_CALL(StopMooving);
 		WI_ADD_INTERNAL_CALL(HasPath);
 
 

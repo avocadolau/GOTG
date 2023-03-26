@@ -84,6 +84,7 @@ namespace Wiwa
         {
             //InternalCalls.SetFullscreenIntr(ret);
             Console.WriteLine($"slider actual level is :{level}");
+            InternalCalls.ChangeMasterVolume(((int)level));
         }
     }
 

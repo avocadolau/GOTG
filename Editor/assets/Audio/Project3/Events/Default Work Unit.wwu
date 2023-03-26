@@ -69,7 +69,7 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="Set_Bus_Volume_Master_Audio_Bus" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}">
+				<Event Name="Set_Bus_Master_Volume" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}">
 					<ChildrenList>
 						<Action Name="" ID="{B1289A08-05F6-408E-9F80-CA8173CB4C3D}" ShortID="205418363">
 							<PropertyList>

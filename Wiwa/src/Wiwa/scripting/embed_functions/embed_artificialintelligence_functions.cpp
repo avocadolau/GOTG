@@ -41,7 +41,7 @@ float DistanceAgentTargetById(size_t entity_id, size_t target_id)
 	return glm::distance(em.GetComponent<Wiwa::Transform3D>(entity_id)->localPosition, em.GetComponent<Wiwa::Transform3D>(target_id)->localPosition);
 }
 
-void StopMoving(size_t entity_id)
+void StopMooving(size_t entity_id)
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 

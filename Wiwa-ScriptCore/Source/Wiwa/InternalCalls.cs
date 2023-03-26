@@ -149,6 +149,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddAudioSource(EntityId entity, string ev_name, bool playOnAwake, bool isDefaultListener);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void ChangeMasterVolume(int volume);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool IsPlaying(EntityId entity);
         #endregion
         #region Physics
