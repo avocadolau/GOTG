@@ -55,9 +55,6 @@ ScenePanel::ScenePanel(EditorLayer* instance)
 
     yaw = -90.0f;
     pitch = 0.0f;
-
-    m_RightBtnHold = false;
-    m_LeftBtnHold = false;
 }
 
 ScenePanel::~ScenePanel()
@@ -302,15 +299,7 @@ void ScenePanel::Draw()
             m_Camera->setFOV(fov);
         }
 
-        if (Wiwa::Input::IsMouseButtonPressed(0)) {
-            m_LeftBtnHold = true;
-        }
-
-        if (Wiwa::Input::IsMouseButtonReleased(0)) {
-            m_LeftBtnHold = false;
-        }
-
-        if (m_LeftBtnHold && !ImGuizmo::IsUsing())
+        if (Wiwa::Input::IsMouseButtonPressed(0) && !ImGuizmo::IsUsing())
         {
             glm::vec3 out_dir;
             glm::vec3 out_origin;
@@ -402,16 +391,8 @@ void ScenePanel::Draw()
             act(event);
         }
 
-        if (Wiwa::Input::IsMouseButtonPressed(1)) {
-            m_RightBtnHold = true;
-        }
-
-        if (Wiwa::Input::IsMouseButtonReleased(1)) {
-            m_RightBtnHold = false;
-        }
-
         // Check if right click was pressed
-        if (m_RightBtnHold) {
+        if (Wiwa::Input::IsMouseButtonPressed(1)) {
             // Check if relative motion is not 0
             if (rel2f != Wiwa::Vector2f::Zero()) {
                 float xoffset = -rel2f.x * sensitivity;

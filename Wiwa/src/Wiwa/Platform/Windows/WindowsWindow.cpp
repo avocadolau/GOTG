@@ -182,12 +182,9 @@ namespace Wiwa {
 	{
 		glfwDestroyWindow(m_Window);
 	}
-	void WindowsWindow::PollEvents()
-	{
-		glfwPollEvents();
-	}
 	void WindowsWindow::OnUpdate()
 	{
+		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
 	}
 	void WindowsWindow::SetVSync(bool enabled)

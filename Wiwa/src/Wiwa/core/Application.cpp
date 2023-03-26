@@ -93,9 +93,6 @@ namespace Wiwa
 		{
 			WI_CORE_ERROR("Audio engine error: [{}]", Audio::GetLastError());
 		}
-
-		Input::Init();
-
 		ScriptEngine::Init();
 
 		WI_CORE_WARN("=======Systems initialized=======");
@@ -168,7 +165,6 @@ namespace Wiwa
 
 			// Update inputs
 			Input::Update();
-			m_Window->PollEvents();
 
 			// Update renderers
 			m_Renderer2D->Update();
