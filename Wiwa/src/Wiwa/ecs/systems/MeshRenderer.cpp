@@ -47,22 +47,37 @@ namespace Wiwa {
 
 		EntityId parent = eman.GetEntityParent(m_EntityId);
 		Transform3D* parent_t3d = eman.GetComponent<Transform3D>(parent);
-
-		for (size_t i = 0; i < cameraCount; i++)
+		if (animator == nullptr)
 		{
-			CameraId cam_id = cameras[i];
-			Camera* camera = man.getCamera(cam_id);
+			for (size_t i = 0; i < cameraCount; i++)
+			{
+				CameraId cam_id = cameras[i];
+				Camera* camera = man.getCamera(cam_id);
 
-			if (camera->cull && !camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax()))
-				return;
+				if (camera->cull && !camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax()))
+					return;
 
-			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+			}
+			//add animator render on both
+			if(man.editorCamera)
+				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
+		
 		}
-		//add animator render on both
-		if(man.editorCamera)
-			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
+		else if (animator->animator != nullptr)
+		{
+			for (size_t i = 0; i < cameraCount; i++)
+			{
+				CameraId cam_id = cameras[i];
+				Camera* camera = man.getCamera(cam_id);
 
-		if(animator != nullptr && animator->animator != nullptr)
-			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(),animator->animator->GetFinalBoneMatrices(), false, man.editorCamera);
+				if (camera->cull && !camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax()))
+					return;
+
+				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), animator->animator->GetFinalBoneMatrices(), false, camera);
+			}
+			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), animator->animator->GetFinalBoneMatrices(), false, man.editorCamera);
+		}
+		
 	}
 }

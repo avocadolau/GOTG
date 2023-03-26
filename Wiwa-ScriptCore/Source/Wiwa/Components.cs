@@ -1,6 +1,5 @@
 ﻿namespace Wiwa
 {
-    using ResourceId = System.UInt64;
     public struct Constants
     {
         public const ulong WI_INVALID_INDEX = 18446744073709551615;
@@ -101,12 +100,18 @@
     [Component]
     public struct Character
     {
-        public int healthPoints;
-        public int damage;
-        public float speed;
-        public int shieldRegeneration;
-        public int range;
-        public int rof;
+        public int MaxHealth;
+        public int Health;
+        public int MaxShield;
+        public int Shield;
+        public int Damage;
+
+        public float RateOfFire;
+        public float Speed;
+        public float DashDistance;
+        public float DashSpeed;
+        public float DashCooldown;
+        public float WalkTreshold;
     }
     //[Component]
     //public struct EnemySpawner

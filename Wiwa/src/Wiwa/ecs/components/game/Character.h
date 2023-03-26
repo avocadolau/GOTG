@@ -6,20 +6,30 @@
 
 namespace Wiwa {
 	struct WI_API Character {
-		int healthPoints;
-		int damage;
-		float speed;
-		int shieldRegeneration;
-		int range;
-		int rof;
+		int MaxHealth;
+		int Health;
+		int MaxShield;
+		int Shield;
+		int Damage;
+		
+		float RateOfFire;
+		float Speed;
+		float DashDistance;
+		float DashSpeed;
+		float DashCooldown;
+		float WalkTreshold;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::Character)
-REFLECT_MEMBER(healthPoints)
-REFLECT_MEMBER(damage)
-REFLECT_MEMBER(speed)
-REFLECT_MEMBER(shieldRegeneration)
-REFLECT_MEMBER(range)
-REFLECT_MEMBER(rof)
+	REFLECT_MEMBER(MaxHealth)
+	REFLECT_MEMBER(Health)
+	REFLECT_MEMBER(MaxShield)
+	REFLECT_MEMBER(Shield)
+	REFLECT_MEMBER(Damage)
+	REFLECT_MEMBER(RateOfFire)
+	REFLECT_MEMBER(DashDistance)
+	REFLECT_MEMBER(DashSpeed)
+	REFLECT_MEMBER(DashCooldown)
+	REFLECT_MEMBER(WalkTreshold)
 REFLECTION_END;

@@ -101,3 +101,8 @@ void StopAllEvents()
 {
 	Audio::StopAllEvents();
 }
+
+void ChangeMasterVolume(int volume)
+{
+	Audio::ChangeMasterVolume(volume);
+}
