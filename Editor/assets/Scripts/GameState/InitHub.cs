@@ -6,7 +6,7 @@ namespace WiwaApp
     {
         void Init()
         {
-            GameState.InitHub();
+            GameState.InitHub(m_Scene);
         }
     }
 }

@@ -106,8 +106,8 @@ namespace Wiwa {
 		static int s_SpawnersFinished;
 		static bool debug;
 		// Save & Load Overall Player Progression
-		static void SaveProgression();
-		static void LoadProgression();
+		static void SaveProgression(void* scene);
+		static void LoadProgression(void* scene);
 
 		static void UpdateRoomState();
 		static void UpdateCombatRoom();
@@ -115,8 +115,8 @@ namespace Wiwa {
 		// Run and rooms
 		static void StartRun();
 		static void EndRun();
-		static void InitHub();
-		static void InitPlayerData();
+		static void InitHub(void* scene);
+		static void InitPlayerData(void* scene);
 		static void StartNewRoom();
 		static void SetPlayerId(EntityId id);
 		static void EndCurrentRoom();

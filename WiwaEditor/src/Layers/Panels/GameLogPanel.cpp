@@ -71,7 +71,8 @@ void GameLogPanel::DrawRoomVariables()
 
 	ImGui::Text("Current player id %i", Wiwa::GameStateManager::s_PlayerId);
 
-	const char* startCharacter = Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
+	const char* startCharacter
+		= Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
 	ImGui::Text("Current character %s", startCharacter);
 	ImGui::InputInt("Start character", &Wiwa::GameStateManager::s_CurrentCharacter);
 	CLAMP(Wiwa::GameStateManager::s_CurrentCharacter, 0, 1);

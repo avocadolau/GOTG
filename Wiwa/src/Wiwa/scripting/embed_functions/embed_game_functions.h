@@ -3,7 +3,7 @@
 
 void SetRoomStateTriggerNext(bool value);
 
-void InitHub();
+void InitHub(void* scene);
 
 void StartRun();
 

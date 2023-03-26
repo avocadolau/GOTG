@@ -6,9 +6,9 @@ void SetRoomStateTriggerNext(bool value)
 	Wiwa::GameStateManager::setPlayerTriggerNextRoom(value);
 }
 
-void InitHub()
+void InitHub(void* scene)
 {
-	Wiwa::GameStateManager::InitHub();
+	Wiwa::GameStateManager::InitHub(scene);
 }
 
 void StartRun()
@@ -28,12 +28,12 @@ void SetPlayer(size_t id)
 
 void SaveProgression()
 {
-	Wiwa::GameStateManager::SaveProgression();
+	//Wiwa::GameStateManager::SaveProgression();
 }
 
 void LoadProgression()
 {
-	Wiwa::GameStateManager::LoadProgression();
+	//Wiwa::GameStateManager::LoadProgression();
 }
 
 float GetControllerDeadzone()

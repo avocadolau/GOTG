@@ -8,9 +8,9 @@
             InternalCalls.SetRoomStateTriggerNext(value);
         }
 
-        public static void InitHub()
+        public static void InitHub(System.Int64 scene)
         {
-            InternalCalls.InitHub();
+            InternalCalls.InitHub(scene);
         }
 
         public static void StartRun()

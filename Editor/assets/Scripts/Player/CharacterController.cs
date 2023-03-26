@@ -5,22 +5,6 @@ using Wiwa;
 namespace Game
 {
     using EntityId = UInt64;
-    [Component]
-    public struct Character
-    {
-        public int MaxHealth;
-        public int Health;
-        public int MaxShield;
-        public int Shield;
-        public int Damage;
-
-        public float RateOfFire;
-        public float Speed;
-        public float DashDistance;
-        public float DashSpeed;
-        public float DashCooldown;
-        public float WalkTreshold;
-    }
     class CharacterControllerSystem : Behaviour
     {
         private ComponentIterator characterControllerIt;

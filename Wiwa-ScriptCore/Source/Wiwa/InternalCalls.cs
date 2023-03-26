@@ -200,7 +200,7 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetRoomStateTriggerNext(bool value);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void InitHub();
+        internal extern static void InitHub(System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void StartRun();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
