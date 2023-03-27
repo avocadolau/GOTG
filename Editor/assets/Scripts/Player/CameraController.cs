@@ -54,7 +54,7 @@ namespace Game
             extraPosOffsetX = 0;
             extraPosOffsetZ = 0;
 
-            campos.y = transform.Position.y + 25;
+            campos.y = transform.Position.y + 40;
             campos.x = transform.Position.x;
             campos.z = transform.Position.z - 10;
 
