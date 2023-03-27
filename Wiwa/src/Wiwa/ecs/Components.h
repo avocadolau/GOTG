@@ -25,12 +25,12 @@
 #include "components/ColliderCylinder.h"
 #include "components/RayCast.h"
 
+
 // Game components
 #include "components/game/Character.h"
 #include "components/game/enemy/Wave.h"
 
 // Particle components
-#include "components/Billboard.h"
 #include "components/ParticleEmitter.h"
 
 // Ai components
