@@ -196,12 +196,12 @@ namespace Wiwa {
 
 	void Animator::PlayAnimationName(std::string name)
 	{
-		//if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
-		//{
-		//	m_AnimationTime = m_CurrentAnimation->m_Duration;
-		//	m_AnimationState = AnimationState::Playing;
-		//	return;
-		//}
+		if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
+		{
+			m_AnimationTime = m_CurrentAnimation->m_Duration;
+			m_AnimationState = AnimationState::Playing;
+			return;
+		}
 
 		for (auto& animation : m_Animations)
 		{
