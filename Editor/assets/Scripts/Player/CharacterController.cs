@@ -52,6 +52,12 @@ namespace Game
         {
 
             //Components
+            if (transformIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
+            if (characterControllerIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
+            if (rigidBodyIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref Character controller = ref GetComponentByIterator<Character>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
@@ -274,6 +280,16 @@ namespace Game
             EntityId rigthPos = GetChildByName("RightPos");
             leftPosIt = GetComponentIterator<Transform3D>(leftPos);
             rightPosIt = GetComponentIterator<Transform3D>(rigthPos);
+
+            if (leftPosIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
+            if (leftPosIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
+            if (characterControllerIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
+            if (shooterIt.componentIndex != Constants.WI_INVALID_INDEX)
+                return;
+
             ref Character character = ref GetComponentByIterator<Character>(characterControllerIt);
             ref StarlordShooter shooter = ref GetComponentByIterator<StarlordShooter>(shooterIt);
             ref Transform3D left = ref GetComponentByIterator<Transform3D>(leftPosIt);
