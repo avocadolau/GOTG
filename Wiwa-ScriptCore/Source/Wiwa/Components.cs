@@ -155,4 +155,11 @@
     }
 
     #endregion
+    #region ParticleEmitter
+    [Component]
+    public struct ParticleEmitter
+    {
+        public bool isPlaying;
+    }
+    #endregion
 }
