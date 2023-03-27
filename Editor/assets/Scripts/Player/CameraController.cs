@@ -8,6 +8,7 @@ namespace Game
 
     class CameraControllerSystem : Behaviour
     {
+        // Camera required variables delcaration
         Vector3 campos;
         bool wallCollision = false;
 
@@ -30,6 +31,8 @@ namespace Game
 
         float extraPosOffsetX;
         float extraPosOffsetZ;
+        float extraPosOffsetDistanceX;
+        float extraPosOffsetDistanceZ;
 
         float offsetDivision;
 
@@ -40,9 +43,13 @@ namespace Game
             ref Character character = ref GetComponent<Character>();
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
+            // Some camera required variables initialitation
+
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
-            offsetDivision = 65; // Divides the speed for the camera movement offset transition - the lower the value the faster the transition is
+            offsetDivision = 65; // <-- This variable divides the speed for the camera movement offset transition - the lower the value the faster the transition is
+            extraPosOffsetDistanceX = 4; // <-- This variable determines how far the camera will go when offsetting on the X axis
+            extraPosOffsetDistanceZ = 5; // <-- This variable determines how far the camera will go when offsetting on the Z axis
 
             extraPosOffsetX = 0;
             extraPosOffsetZ = 0;
@@ -66,6 +73,7 @@ namespace Game
             ref Character character = ref GetComponent<Character>();
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
+            // Raycast checks
             rayCastTimer += Time.DeltaTimeMS();
 
             if (rayCastTimer > 250.0f)
@@ -85,47 +93,48 @@ namespace Game
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
+            // Make the camera move an especified offset when walking on specified direction (with keyboard)
+
             //extraPosOffsetX = 0;
             //extraPosOffsetZ = 0;
 
             if (Input.IsKeyDown(KeyCode.A))
             {
-                if(extraPosOffsetX <= 4) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
+                if(extraPosOffsetX <= (extraPosOffsetDistanceX)) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
             }
             if (Input.IsKeyDown(KeyCode.D))
             {
-                if(extraPosOffsetX >= -4) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
+                if(extraPosOffsetX >= -(extraPosOffsetDistanceX)) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
             }
             if (Input.IsKeyDown(KeyCode.W))
             {
-                if (extraPosOffsetZ <= 5)
-                {
-                    extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
-                    Console.WriteLine("extraPosOffsetZ: " + extraPosOffsetZ);
-                }
+                if (extraPosOffsetZ <= (extraPosOffsetDistanceZ)) extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
             }
             if (Input.IsKeyDown(KeyCode.S))
             {
-                if (extraPosOffsetZ >= -5) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
+                if (extraPosOffsetZ >= -(extraPosOffsetDistanceZ)) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
             }
+
+            // Make the camera move an especified offset when walking on specified direction (with gamepad)
 
             if (Input.IsKeyDown(KeyCode.Left))
             {
-                if (extraPosOffsetX <= 4) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
+                if (extraPosOffsetX <= (extraPosOffsetDistanceX)) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
             }
             if (Input.IsKeyDown(KeyCode.Right))
             {
-                if (extraPosOffsetX >= -4) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
+                if (extraPosOffsetX >= -(extraPosOffsetDistanceX)) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
             }
             if (Input.IsKeyDown(KeyCode.Up))
             {
-                if (extraPosOffsetZ <= 5) extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
+                if (extraPosOffsetZ <= (extraPosOffsetDistanceZ)) extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
             }
             if (Input.IsKeyDown(KeyCode.Down))
             {
-                if (extraPosOffsetZ >= -5) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
+                if (extraPosOffsetZ >= -(extraPosOffsetDistanceZ)) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
             }
 
+            // If raycast detect a wall do not update the position where camera have to move next
 
             lastPlayerPos.y = transform.Position.y;
 
@@ -139,6 +148,8 @@ namespace Game
                 lastPlayerPos.x = transform.Position.x + extraPosOffsetX;
             }
 
+            // Distance between central point and player point interpolation
+
             float minCamVelocity = 0.0f;
             float maxCamVelocity = 0.3f;
 
@@ -147,6 +158,8 @@ namespace Game
 
             float finalCamSpeed_X = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_X);
             float finalCamSpeed_Z = Interpolate(minCamVelocity, maxCamVelocity, normalicedDistance_Z);
+
+            // Move camera with changing speed depending on interpolation calculated previowsly
 
             campos.z += finalCamSpeed_Z;
             campos.x += finalCamSpeed_X;
