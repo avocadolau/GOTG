@@ -29,6 +29,8 @@ namespace Game
 
         private bool isWalking = false;
         private bool isAiming = false;
+        private float animDur = 0.25f;
+        private float animTimer = 0f;
 
         private float dieTimer = 5f;
 
@@ -44,11 +46,6 @@ namespace Game
             rigidBodyIt = GetComponentIterator<CollisionBody>();
             shooterIt = GetComponentIterator<StarlordShooter>();
             dashTimer = GetComponentByIterator<Character>(characterControllerIt).DashCooldown;
-
-
-
-
-            // need to get or hardcode step and run timers. walkthreshol
         }
 
         void Update()
@@ -97,12 +94,10 @@ namespace Game
                 SetPlayerRotation(ref transform.LocalRotation, shootInput, 1f);
                 lastDir = shootInput;
                 isAiming = true;
-
-                Animator.PlayAnimationName("aiming", m_EntityId);
-                //if (isWalking)
-                //{
-                //    Animator.Blend("aiming", 1f, m_EntityId);
-                //}
+                if (animTimer > animDur)
+                {
+                    Animator.PlayAnimationName("aiming", m_EntityId);
+                }
             }
             //FIRES the weapon, if the player is not aiming shoots the bullet is shot to the direction the character is looking
             if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper) || Input.IsKeyDown(KeyCode.Space))
@@ -206,24 +201,23 @@ namespace Game
         }
         void UpdateAnimation(Vector3 input, Character controller)
         {
-            if (input == Vector3Values.zero)
+            animTimer += Time.DeltaTime();
+            if (isShooting)
+            {
+                animTimer = 0f;
+                isShooting = false;
+            }
+            isWalking = false;
+            if (input == Vector3Values.zero && animTimer > animDur && !isAiming)
             {
                 Animator.PlayAnimationName("idle", m_EntityId);
                 return;
             }
-
-            float mag = input.magnitude;
-            Mathf.Clamp01(mag);
-
-            if (mag <= controller.WalkTreshold)
+            else if (input != Vector3Values.zero)
             {
                 isWalking = true;
-
-                Animator.PlayAnimationName("walk", m_EntityId);
-                return;
+                Animator.PlayAnimationName("running", m_EntityId);
             }
-            isWalking = false;
-            Animator.PlayAnimationName("running", m_EntityId);
         }
         void Dash(ref Vector3 velocity, Vector3 input, Character controller, Transform3D transform, ref CollisionBody cb)
         {
@@ -301,7 +295,10 @@ namespace Game
                     spawnPoint = left;
                     Animator.PlayAnimationName("shoot_left", m_EntityId);
                 }
-
+                if (isWalking)
+                {
+                    Animator.Blend("running", 1f, m_EntityId);
+                }
 
                 shooter.ShootRight = !shooter.ShootRight;
                 SpawnBullet(spawnPoint, shooter, character, Mathf.CalculateForward(ref spawnPoint));
@@ -382,10 +379,6 @@ namespace Game
             ApplySystem<AudioSystem>(bullet);
 
             Audio.PlaySound("player_shoot", m_EntityId);
-        }
-        Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
-        {
-            return Quaternion.Euler(angles) * (point - pivot) + pivot;
         }
     }
 

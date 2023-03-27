@@ -166,6 +166,8 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PlayAnimation);
 		WI_ADD_INTERNAL_CALL(PauseAnimation);
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
+		WI_ADD_INTERNAL_CALL(Blend);
+
 
 		// Game
 		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);

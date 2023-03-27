@@ -12,7 +12,7 @@ void Blend(MonoString* targetAnim, float blendTime, size_t entity)
 
 	const char* ev_p = mono_string_to_utf8(targetAnim);
 
-	animator->PlayAnimation(ev_p);
+	animator->Blend(ev_p, blendTime);
 }
 
 void PlayAnimationName(MonoString* name, size_t entity)
