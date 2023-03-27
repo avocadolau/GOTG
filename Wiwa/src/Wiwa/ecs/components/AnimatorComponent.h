@@ -11,8 +11,10 @@ namespace Wiwa {
 	{
 		char filePath[128];
 		bool Play;
+		bool Loop;
 		bool Blend;
 		float weight;
+		float animationTime;
 		float blendDuration;
 
 		Animator* animator;
