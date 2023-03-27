@@ -249,6 +249,8 @@ namespace Wiwa {
 
 		Model* getModelAt(size_t index) { return models[index]; }
 
+		size_t getModelCount() { return models.size(); }
+
 		std::string getMaterialAt(size_t index) { return materials[index]; }
 
 		size_t getMaterialCount() { return materials.size(); }
