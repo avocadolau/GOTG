@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Wiwa;
 
@@ -28,8 +29,8 @@ namespace Game
                 if (iterator.componentId != Constants.WI_INVALID_INDEX)
                 {
                     ref MeleeAttack attack = ref behaviour.GetComponent<MeleeAttack>(id);
-                    if (attack.hasFinished) { hasFinished= true; }
-                    return attack.hasFinished;
+                    //if (attack.hasFinished) { hasFinished= true; }
+                    //return attack.hasFinished;
                 }
                 return false;
             }
@@ -41,9 +42,14 @@ namespace Game
     {
         float timer;
         AttackContainer firstAttack = new AttackContainer(false);
+        private ComponentIterator playerStatsIt;
+        
+
         //AttackContainer secondAttack = new AttackContainer(false);
         public override void EnterState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
+            playerStatsIt.componentId = Constants.WI_INVALID_INDEX;
+            playerStatsIt.componentIndex = Constants.WI_INVALID_INDEX;
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             GenerateAttack(ref enemy, ref entityId, ref firstAttack);
             enemy.timer = 0;
@@ -58,7 +64,7 @@ namespace Game
             //Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (firstAttack.HasFinished(enemy)) // && secondAttack.hasInit == false)
             {
-                Console.WriteLine("First attack has finished");
+                //Console.WriteLine("First attack has finished");
                 //GenerateAttack(ref enemy, ref secondAttack);
             }
             if (enemy.timer > 2)
@@ -85,15 +91,21 @@ namespace Game
 
         void GenerateAttack(ref EnemyMeleePhalanx enemy, ref EntityId entityId, ref AttackContainer attackContainer)
         {
-            Console.WriteLine("1");
-            attackContainer.id = enemy.LoadPrefabAsChild("assets\\enemy\\prefabs\\melee_attack.wiprefab", entityId);
-            Console.WriteLine("2");
-            attackContainer.iterator = enemy.GetComponentIterator<MeleeAttack>(attackContainer.id);
-            attackContainer.hasInit = true;
+            
+            ref Transform3D playerTr = ref enemy.GetComponentByIterator<Transform3D>(enemy.playerTransformIt);
             ref Transform3D transformEnemy = ref enemy.GetComponentByIterator<Transform3D>(enemy.transformIt);
-            ref Transform3D transformAttack = ref enemy.GetComponent<Transform3D>(attackContainer.id);
-            transformAttack.LocalPosition = new Vector3(0,2,2);
-            Console.WriteLine("3");
+            ref Character stats = ref enemy.GetComponentByIterator<Character>(enemy.playerStatsIt);
+            Vector3 vector;
+            vector.x = playerTr.Position.x - transformEnemy.Position.x;
+            vector.y = 0;
+            vector.z = playerTr.Position.z - transformEnemy.Position.z;
+            float distance = Mathf.Sqrt(vector.x * vector.x + vector.z * vector.z);
+            //Console.WriteLine(" Distance " + distance);
+            if (distance <= 3.0f)
+            {
+                stats.Health -= 10;
+            }
+            
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Game
     {
         public int enemyType;
         public bool hasFinished;
-        public float rotationSpeed;
         public Vector3 currentRotation;
     }
 
@@ -21,6 +20,7 @@ namespace Game
         public ComponentIterator agentIt;
         public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
+        public ComponentIterator playerStatsIt;
 
         public EntityId playerId;
         bool debug = true;
@@ -39,6 +39,9 @@ namespace Game
             playerTransformIt.componentIndex = Constants.WI_INVALID_INDEX;
             transformIt.componentId = Constants.WI_INVALID_INDEX;
             transformIt.componentIndex = Constants.WI_INVALID_INDEX;
+            playerStatsIt.componentId = Constants.WI_INVALID_INDEX;
+            playerStatsIt.componentIndex = Constants.WI_INVALID_INDEX;
+
         }
 
         public virtual void Init()
@@ -52,9 +55,10 @@ namespace Game
             if (debug) Console.WriteLine("-- Starting Init -- player id is: " + playerId);
             playerTransformIt = GetComponentIterator<Transform3D>(playerId);
             transformIt = GetComponentIterator<Transform3D>();
+            playerStatsIt = GetComponentIterator<Character>(playerId);
 
             ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
-            self.rotationSpeed = 10;
+            //self.rotationSpeed = 10;
         }
 
         public virtual void Update()
@@ -96,7 +100,7 @@ namespace Game
         }
         public void ChasePlayer(EnemySystem enemy, ulong entityId)
         {
-            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            //Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (enemy.playerTransformIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref Transform3D playerTr = ref enemy.GetComponentByIterator<Transform3D>(enemy.playerTransformIt);
@@ -104,7 +108,7 @@ namespace Game
                 {
                     ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
                     AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
-                    RotateTo(playerTr.Position,  enemy, entityId);                   
+                    //RotateTo(playerTr.Position,  enemy, entityId);                   
                 }
             }
         }
@@ -124,20 +128,20 @@ namespace Game
             }
         }
 
-        public void RotateTo(Vector3 target, EnemySystem enemy, ulong entityId)
-        {
-            float angle = Mathf.Atan2(target.x, target.z) * Mathf.Rad2Deg;
+        //public void RotateTo(Vector3 target, EnemySystem enemy, ulong entityId)
+        //{
+        //    float angle = Mathf.Atan2(target.x, target.z) * Mathf.Rad2Deg;
 
-            ref Enemy self = ref enemy.GetComponentByIterator<Enemy>(enemyIt);
+        //    ref Enemy self = ref enemy.GetComponentByIterator<Enemy>(enemyIt);
        
-            self.currentRotation.y = Mathf.LerpAngle(self.currentRotation.y, angle, self.rotationSpeed);
+        //    self.currentRotation.y = Mathf.LerpAngle(self.currentRotation.y, angle, self.rotationSpeed);
 
-            if (self.currentRotation.y >= 360f)
-                self.currentRotation.y = 0f;
+        //    if (self.currentRotation.y >= 360f)
+        //        self.currentRotation.y = 0f;
 
-            ref Transform3D transform = ref enemy.GetComponent<Transform3D>();
+        //    ref Transform3D transform = ref enemy.GetComponent<Transform3D>();
 
-            transform.LocalRotation = new Vector3(0, self.currentRotation.y,0);
-        }
+        //    transform.LocalRotation = new Vector3(0, self.currentRotation.y,0);
+        //}
     }
 }
