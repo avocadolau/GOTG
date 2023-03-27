@@ -86,8 +86,6 @@ namespace Wiwa {
 
 		static void ChangeRoomState(RoomState room_state);
 
-		
-
 	public:
 		static int s_TotalSpawners;
 		static int s_SpawnersFinished;

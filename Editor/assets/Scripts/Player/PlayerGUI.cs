@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using Wiwa;
 
 namespace Game
@@ -22,24 +21,28 @@ namespace Game
         }
         void Update()
         {
-            if(playerStatsIt.componentId != Constants.WI_INVALID_INDEX)
+            if (playerStatsIt.componentId != Constants.WI_INVALID_INDEX)
             {
-                ref Character stats =  ref GetComponentByIterator<Character>(playerStatsIt);
+                ref Character stats = ref GetComponentByIterator<Character>(playerStatsIt);
 
                 GUI.SetValeForUIbar(stats.Health, 0, 0);
 
 
 
-                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadY) && !gamePaused)
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadGuide) && !gamePaused)
                 {
-                    
+
                     SceneManager.PauseScene();
                     GUI.ActivateGuiCanvas(0);
                     GUI.ActivateGuiCanvas(1);
                 }
             }
+            else
+            {
 
-           
+                Console.WriteLine("Null");
+            }
+
         }
     }
 }
