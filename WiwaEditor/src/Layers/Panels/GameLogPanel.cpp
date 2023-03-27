@@ -53,6 +53,9 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::Text("Rooms to boss %d", Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::Text("Rooms to shop %d", Wiwa::GameStateManager::s_RoomsToShop);
 	ImGui::Text("Rooms to end and return tu hub %d", Wiwa::GameStateManager::s_CurrentRoomsCount);
+	ImGui::InputInt("HUB room index", (int*)&Wiwa::GameStateManager::s_IntroductionRoom);
+	ImGui::InputInt("Rooms to boss", (int*)&Wiwa::GameStateManager::s_RoomsToBoss);
+	ImGui::InputInt("Rooms to shop", (int*)&Wiwa::GameStateManager::s_RoomsToShop);
 	ImGui::Separator();
 	ImGui::PushID(0);
 	ImGui::Text("Battle rooms");
@@ -82,21 +85,24 @@ void GameLogPanel::DrawRoomVariables()
 	{
 		if (Wiwa::GameStateManager::s_CurrentScene && Wiwa::Time::IsPlaying())
 		{
-			Wiwa::Character* character =
-				(Wiwa::Character*)Wiwa::GameStateManager::s_CurrentScene->GetEntityManager().GetComponentByIterator(Wiwa::GameStateManager::s_CharacterStats);
-			if (character)
+			if (Wiwa::GameStateManager::s_CharacterStats.c_id != WI_INVALID_INDEX)
 			{
-				ImGui::Text("Max Health %i", character->MaxHealth);
-				ImGui::Text("Health %i", character->Health);
-				ImGui::Text("Max Shield %i", character->MaxShield);
-				ImGui::Text("Shield %i", character->Shield);
-				ImGui::Text("Damage %i", character->Damage);
-				ImGui::Text("Rate of fire %f", character->RateOfFire);
-				ImGui::Text("Speed %f", character->Speed);
-				ImGui::Text("Dash distance %f", character->DashDistance);
-				ImGui::Text("Dash speed %f", character->DashSpeed);
-				ImGui::Text("Dash cooldown %f", character->DashCooldown);
-				ImGui::Text("Walk threshold %f", character->WalkTreshold);
+				Wiwa::Character* character =
+					(Wiwa::Character*)Wiwa::GameStateManager::s_CurrentScene->GetEntityManager().GetComponentByIterator(Wiwa::GameStateManager::s_CharacterStats);
+				if (character)
+				{
+					ImGui::Text("Max Health %i", character->MaxHealth);
+					ImGui::Text("Health %i", character->Health);
+					ImGui::Text("Max Shield %i", character->MaxShield);
+					ImGui::Text("Shield %i", character->Shield);
+					ImGui::Text("Damage %i", character->Damage);
+					ImGui::Text("Rate of fire %f", character->RateOfFire);
+					ImGui::Text("Speed %f", character->Speed);
+					ImGui::Text("Dash distance %f", character->DashDistance);
+					ImGui::Text("Dash speed %f", character->DashSpeed);
+					ImGui::Text("Dash cooldown %f", character->DashCooldown);
+					ImGui::Text("Walk threshold %f", character->WalkTreshold);
+				}
 			}
 		}
 		else

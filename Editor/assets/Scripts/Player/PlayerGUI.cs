@@ -8,6 +8,7 @@ namespace Game
     {
         private ComponentIterator playerStatsIt;
         bool gamePaused = false;
+        private bool loadPending = true;
         void Awake()
         {
             playerStatsIt.componentId = Constants.WI_INVALID_INDEX;
@@ -16,11 +17,17 @@ namespace Game
 
         void Init()
         {
-            EntityId playerID = GameState.GetPlayerId();
-            playerStatsIt = GetComponentIterator<Character>(playerID);
+
         }
         void Update()
         {
+            if (loadPending)
+            {
+                EntityId playerID = GameState.GetPlayerId();
+                playerStatsIt = GetComponentIterator<Character>(playerID);
+
+                loadPending = false;
+            }
             if (playerStatsIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref Character stats = ref GetComponentByIterator<Character>(playerStatsIt);

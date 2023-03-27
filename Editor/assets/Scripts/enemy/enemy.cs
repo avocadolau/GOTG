@@ -68,7 +68,8 @@ namespace Game
                 ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
                 self.hasFinished = true;
             }
-
+            ref Transform3D t3d = ref GetComponentByIterator<Transform3D>(transformIt);
+            t3d.LocalPosition.y = 0f;
             //if(playerId != Constants.WI_INVALID_INDEX)
             //{
             //    if (agentIt.componentIndex != Constants.WI_INVALID_INDEX)
@@ -133,7 +134,7 @@ namespace Game
         //    float angle = Mathf.Atan2(target.x, target.z) * Mathf.Rad2Deg;
 
         //    ref Enemy self = ref enemy.GetComponentByIterator<Enemy>(enemyIt);
-       
+
         //    self.currentRotation.y = Mathf.LerpAngle(self.currentRotation.y, angle, self.rotationSpeed);
 
         //    if (self.currentRotation.y >= 360f)

@@ -332,10 +332,10 @@ namespace Wiwa
 	int GameStateManager::NextRoom()
 	{
 		WI_INFO("ROOM STATE: NextRoom()");
-		if (s_CurrentRoomsCount <= 0)
+		if (s_CurrentRoomsCount > s_RoomsToShop)
 		{
 			GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-			SceneManager::ChangeSceneByIndex(3); // Hardcoded hub index (intro scene)
+			SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
 			return 1;
 		}
 
@@ -416,7 +416,7 @@ namespace Wiwa
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
-				SceneManager::LoadScene("RunBoss");
+				//SceneManager::LoadScene("RunBoss");
 			}
 			else
 			{
@@ -443,6 +443,7 @@ namespace Wiwa
 	void GameStateManager::SerializeData()
 	{
 		JSONDocument doc;
+		doc.AddMember("intro", s_IntroductionRoom);
 		JSONValue combatRooms = doc.AddMemberArray("combat");
 		for (size_t i = 0; i < s_CombatRooms.size(); i++)
 		{
@@ -495,6 +496,10 @@ namespace Wiwa
 	{
 		JSONDocument doc;
 		doc.load_file("config/room_data.json");
+		if (doc.HasMember("intro")) {
+			s_IntroductionRoom = doc["intro"].as_int();
+		}
+
 		if (doc.HasMember("combat")) {
 
 			JSONValue scene_list = doc["combat"];

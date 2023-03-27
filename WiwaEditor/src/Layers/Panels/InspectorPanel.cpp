@@ -1226,27 +1226,30 @@ void InspectorPanel::Draw()
 	if (m_EntitySet && m_CurrentID >= 0)
 	{
 		const char *entName = em.GetEntityName(m_CurrentID);
-		std::string edit = entName;
-
-		ImGui::InputText("Name", (char *)edit.c_str(), 64);
-		ImGui::SameLine();
-		ImGui::Text("(%i)", m_CurrentID);
-
-		DrawCollisionTags();
-
-		if (ImGui::Button("Delete##entity"))
+		if (entName)
 		{
-			m_EntitySet = false;
-			em.DestroyEntity(m_CurrentID);
+			std::string edit = entName;
+
+			ImGui::InputText("Name", (char*)edit.c_str(), 64);
+			ImGui::SameLine();
+			ImGui::Text("(%i)", m_CurrentID);
+
+			DrawCollisionTags();
+
+			if (ImGui::Button("Delete##entity"))
+			{
+				m_EntitySet = false;
+				em.DestroyEntity(m_CurrentID);
+			}
+			if (strcmp(edit.c_str(), entName) != 0)
+				em.SetEntityName(m_CurrentID, edit.c_str());
+
+			if (ImGui::CollapsingHeader("Components"))
+				DrawComponents(em);
+
+			if (ImGui::CollapsingHeader("Systems"))
+				DrawSystems(em);
 		}
-		if (strcmp(edit.c_str(), entName) != 0)
-			em.SetEntityName(m_CurrentID, edit.c_str());
-
-		if (ImGui::CollapsingHeader("Components"))
-			DrawComponents(em);
-
-		if (ImGui::CollapsingHeader("Systems"))
-			DrawSystems(em);
 	}
 	else
 	{
