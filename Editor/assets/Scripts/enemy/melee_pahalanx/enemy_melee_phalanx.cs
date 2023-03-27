@@ -16,8 +16,6 @@ namespace Game
         public override void Awake()
         {
             base.Awake();
-            Animator.PlayAnimationName("spawn", m_EntityId);
-
         }
 
         public override void Init()
@@ -27,6 +25,7 @@ namespace Game
             EnemyMeleePhalanx self = this;
             currentState.EnterState(ref self, m_EntityId);
             timer = 0.0f;
+            Animator.PlayAnimationName("spawn", m_EntityId);
         }
 
         public override void Update()
@@ -35,6 +34,7 @@ namespace Game
             EnemyMeleePhalanx self = this;
             currentState.UpdateState(ref self, m_EntityId);
             timer += Time.DeltaTime();
+            
         }
 
         public override void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)

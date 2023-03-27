@@ -6,7 +6,8 @@
 #include <glm/gtx/matrix_interpolation.hpp >
 #include <stack>
 #include <cmath>
-namespace Wiwa {
+namespace Wiwa
+{
 	Animator::Animator()
 	{
 		m_Name = "New Animator";
@@ -18,7 +19,8 @@ namespace Wiwa {
 		for (int i = 0; i < 100; i++)
 			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
 	}
-	Animator::Animator(Animation* animation) {
+	Animator::Animator(Animation *animation)
+	{
 		m_Name = "New Animator";
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = animation;
@@ -39,12 +41,11 @@ namespace Wiwa {
 		case AnimationState::Paused:
 			break;
 		case AnimationState::Playing:
-			UpdateAnimation(dt); 
+			UpdateAnimation(dt);
 			break;
 		default:
 			break;
 		}
-
 	}
 
 	void Animator::UpdateAnimation(float dt)
@@ -53,29 +54,28 @@ namespace Wiwa {
 		if (m_CurrentAnimation)
 		{
 
-			//update animation time
+			// update animation time
 			float TicksPerSecond = (float)(m_CurrentAnimation->m_TicksPerSecond != 0 ? m_CurrentAnimation->m_TicksPerSecond : 25.0f);
 			float TimeInTicks = dt * TicksPerSecond;
-			//float TimeInTicks = m_AnimationTime * TicksPerSecond;
+			// float TimeInTicks = m_AnimationTime * TicksPerSecond;
 			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
 			m_CurrentTime = AnimationTimeTicks;
 
 			if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
 			{
-				//m_CurrentAnimation->m_HasFinished = true;
-				//m_AnimationTime = 0;
-				//if (m_CurrentAnimation->m_Loop)
+				// m_CurrentAnimation->m_HasFinished = true;
+				// m_AnimationTime = 0;
+				// if (m_CurrentAnimation->m_Loop)
 				//{
 				//	m_CurrentAnimation->m_HasFinished = false;
 				//	m_AnimationTime = m_CurrentAnimation->m_Duration;
 				//	m_AnimationState = AnimationState::Playing;
-				//}
-				//else
+				// }
+				// else
 				//	return;
 			}
 
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
-
 		}
 	}
 
@@ -83,13 +83,12 @@ namespace Wiwa {
 	{
 		if (m_BlendTime <= 0)
 		{
-			m_AnimationState = AnimationState::Playing; 
+			m_AnimationState = AnimationState::Playing;
 			return;
 		}
 		m_BlendTime -= dt;
-		m_BlendWeight = 0 + m_BlendTime * (1 - 0);		
+		m_BlendWeight = 0 + m_BlendTime * (1 - 0);
 		BlendTwoAnimations(m_CurrentAnimation, m_TargetAnimation, m_BlendWeight, dt);
-
 	}
 
 	void Animator::Blend(std::string name, float blendTime)
@@ -100,9 +99,9 @@ namespace Wiwa {
 		m_AnimationState = AnimationState::Blending;
 	}
 
-	void Animator::PlayAnimation(Animation* pAnimation)
+	void Animator::PlayAnimation(Animation *pAnimation)
 	{
-		m_CurrentAnimation = pAnimation;	
+		m_CurrentAnimation = pAnimation;
 		m_CurrentTime = 0;
 		m_AnimationTime = pAnimation->GetDuration();
 	}
@@ -117,7 +116,7 @@ namespace Wiwa {
 			return;
 		}
 
-		for (auto& animation : m_Animations)
+		for (auto &animation : m_Animations)
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 			{
@@ -129,7 +128,8 @@ namespace Wiwa {
 					m_TargetAnimation->m_Loop = loop;
 					m_AnimationState = AnimationState::Blending;
 				}
-				else {
+				else
+				{
 					m_CurrentAnimation = animation;
 					m_AnimationTime = animation->m_Duration;
 					m_CurrentAnimation->m_Loop = loop;
@@ -149,7 +149,7 @@ namespace Wiwa {
 		m_Animations.clear();
 	}
 
-	void Animator::SaveWiAnimator(Animator* animator, const char* path)
+	void Animator::SaveWiAnimator(Animator *animator, const char *path)
 	{
 		std::filesystem::path filePath = path;
 		std::string name = filePath.filename().string();
@@ -161,8 +161,8 @@ namespace Wiwa {
 		doc.AddMember("file", path);
 		doc.AddMember("folderAsset", false);
 		JSONValue animations = doc.AddMemberArray("animations");
-		
-		for (auto& anim : animator->m_Animations)
+
+		for (auto &anim : animator->m_Animations)
 		{
 			animations.PushBack(anim->m_SavePath.c_str());
 		}
@@ -170,12 +170,12 @@ namespace Wiwa {
 		doc.save_file(filePath.string().c_str());
 	}
 
-	Animator* Animator::LoadWiAnimator(const char* path)
+	Animator *Animator::LoadWiAnimator(const char *path)
 	{
 		std::filesystem::path filePath = path;
 		if (!std::filesystem::exists(filePath))
 			return nullptr;
-		Animator* animator = new Animator();
+		Animator *animator = new Animator();
 		JSONDocument doc(filePath.string().c_str());
 		if (doc.HasMember("animations"))
 		{
@@ -206,13 +206,13 @@ namespace Wiwa {
 			}
 		}
 
-		for (auto& animation : m_Animations)
+		for (auto &animation : m_Animations)
 		{
-			if (strcmp(animation->m_Name.c_str(),name.c_str()) == 0)
+			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 			{
 				m_CurrentAnimation = animation;
 				m_AnimationTime = animation->m_Duration;
-				m_AnimationState = AnimationState::Playing;				
+				m_AnimationState = AnimationState::Playing;
 				return;
 			}
 		}
@@ -232,7 +232,7 @@ namespace Wiwa {
 		m_AnimationState = AnimationState::Paused;
 	}
 
-	void Animator::BlendTwoAnimations(Animation* baseAnim, Animation* layerAnim, float blendFactor, float deltaTime)
+	void Animator::BlendTwoAnimations(Animation *baseAnim, Animation *layerAnim, float blendFactor, float deltaTime)
 	{
 		// Speed multipliers to correctly transition from one animation to another
 		float a = 1.0f;
@@ -257,15 +257,14 @@ namespace Wiwa {
 		currentTimeLayered = AnimationTimeTicks;
 
 		CalculateBlendedBoneTransform(baseAnim, &baseAnim->GetRootNode(), layerAnim, &layerAnim->GetRootNode(), currentTimeBase, currentTimeLayered, glm::mat4(1.0f), blendFactor);
-
 	}
 
-	void Animator::CalculateBlendedBoneTransform(Animation* animationBase, const NodeData* node, Animation* animationLayer, const NodeData* nodeLayered, const float currentTimeBase, const float currentTimeLayered, const glm::mat4& parentTransform, const float blendFactor)
+	void Animator::CalculateBlendedBoneTransform(Animation *animationBase, const NodeData *node, Animation *animationLayer, const NodeData *nodeLayered, const float currentTimeBase, const float currentTimeLayered, const glm::mat4 &parentTransform, const float blendFactor)
 	{
-		const std::string& nodeName = node->name;
+		const std::string &nodeName = node->name;
 
 		glm::mat4 nodeTransform = node->transformation;
-		Bone* pBone = animationBase->FindBone(nodeName);
+		Bone *pBone = animationBase->FindBone(nodeName);
 		if (pBone)
 		{
 			pBone->Update(currentTimeBase);
@@ -289,28 +288,27 @@ namespace Wiwa {
 
 		glm::mat4 globalTransformation = parentTransform * blendedMat;
 
-		const auto& boneInfoMap = animationBase->GetBoneIDMap();
+		const auto &boneInfoMap = animationBase->GetBoneIDMap();
 		if (boneInfoMap.find(nodeName) != boneInfoMap.end())
 		{
 			const int index = boneInfoMap.at(nodeName).id;
-			const glm::mat4& offset = boneInfoMap.at(nodeName).offsetMatrix;
+			const glm::mat4 &offset = boneInfoMap.at(nodeName).offsetMatrix;
 
 			m_FinalBoneMatrices[index] = globalTransformation * offset;
 		}
 
 		for (size_t i = 0; i < node->children.size(); ++i)
 			CalculateBlendedBoneTransform(animationBase, &node->children[i], animationLayer, &nodeLayered->children[i], currentTimeBase, currentTimeLayered, globalTransformation, blendFactor);
-
 	}
 
 	void Animator::CalculateBoneFinalTransform()
 	{
 		auto boneInfoMap = m_CurrentAnimation->GetBoneIDMap();
-		for (auto& bone : m_CurrentAnimation->GetBones())
+		for (auto &bone : m_CurrentAnimation->GetBones())
 		{
 			if (boneInfoMap.find(bone->m_Name) != boneInfoMap.end())
 			{
-				//interpolate local bone matrix
+				// interpolate local bone matrix
 				bone->Update(m_CurrentTime);
 
 				int index = boneInfoMap[bone->m_Name].id;
@@ -318,17 +316,17 @@ namespace Wiwa {
 				glm::mat4 globalTransform = boneInfoMap[bone->m_Name].globalTransformation;
 				glm::mat4 localTransform = bone->m_LocalTransform;
 				glm::mat4 offsetMatrix = boneInfoMap[bone->m_Name].offsetMatrix;
-				m_FinalBoneMatrices[index] = globalTransform * localTransform * offsetMatrix;				
+				m_FinalBoneMatrices[index] = globalTransform * localTransform * offsetMatrix;
 			}
 		}
 	}
-	
-	void Animator::CalculateBoneTransform(const NodeData* rootNode, const  glm::mat4 parentTransform)
+
+	void Animator::CalculateBoneTransform(const NodeData *rootNode, const glm::mat4 parentTransform)
 	{
 		std::string nodeName = rootNode->name;
 		glm::mat4 nodeTransform = rootNode->transformation;
 
-		Bone* Bone = m_CurrentAnimation->FindBone(nodeName);
+		Bone *Bone = m_CurrentAnimation->FindBone(nodeName);
 
 		if (Bone)
 		{
@@ -348,14 +346,12 @@ namespace Wiwa {
 		for (int i = 0; i < rootNode->childrenCount; i++)
 			CalculateBoneTransform(&rootNode->children[i], globalTransformation);
 	}
-	Animation* Animator::GetAnimation(std::string name)
+	Animation *Animator::GetAnimation(std::string name)
 	{
-		for (auto& animation : m_Animations)
+		for (auto &animation : m_Animations)
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 				return animation;
 		}
 	}
 }
-
-
