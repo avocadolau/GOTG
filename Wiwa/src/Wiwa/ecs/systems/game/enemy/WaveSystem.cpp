@@ -87,6 +87,7 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		EntityId newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 		entityManager.RemoveSystem(newEnemyId, physicsSystemHash);
+		entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
 
 		// Set readable name
 		Wave* wave = GetComponentByIterator<Wave>(m_Wave);
@@ -100,8 +101,8 @@ namespace Wiwa
 		std::random_device rd;  //Will be used to obtain a seed for the random number engine
 		std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 		std::uniform_int_distribution<> dis(-10, 10);
-		enemyTransform->localPosition.x = spawnTransform->position.x + dis(gen);
-		enemyTransform->localPosition.z = spawnTransform->position.z + dis(gen);
+		enemyTransform->localPosition.x = spawnTransform->localPosition.x + dis(gen);
+		enemyTransform->localPosition.z = spawnTransform->localPosition.z + dis(gen);
 		enemyTransform->localPosition.y = 0;
 
 		// Set the correspondent tag
@@ -175,9 +176,8 @@ namespace Wiwa
 		//SystemHash sysHash = FNV1A_HASH("EnemySystem");
 
 		//entityManager.ApplySystem(newEnemyId, sysHash);
-		entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
 		//entityManager.ApplySystem<Wiwa::AgentAISystem>(newEnemyId);
-
+	
 	}
 
 	void WaveSystem::DestroyEnemy(int index)

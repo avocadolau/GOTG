@@ -123,6 +123,9 @@ namespace WiwaApp
             ref Transform3D parent = ref GetComponent<Transform3D>(m_EntityId);
             ref Transform3D waveTransform = ref GetComponent<Transform3D>(currentWaveEntityId); ;
             waveTransform.LocalPosition = parent.worldMatrix.GetPosition();
+            if (debug) Console.WriteLine("spawner world matrix position is: " + parent.worldMatrix.GetPosition().x + " " + parent.worldMatrix.GetPosition().y + " " + parent.worldMatrix.GetPosition().z);
+            if (debug) Console.WriteLine("spawner position is: " + parent.LocalPosition.x + " " + +parent.LocalPosition.y + " " + parent.LocalPosition.z);
+            if (debug) Console.WriteLine("wave position is: " + waveTransform.LocalPosition.x + " " + +waveTransform.LocalPosition.y + " " + waveTransform.LocalPosition.z);
 
             if (debug) Console.WriteLine("Adding wave comp");
             // Create a wave component and wave system
