@@ -18,8 +18,13 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnUpdate()
 	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 
+		if (anim == nullptr) return;
 
 		//anim->animator->Update(Time::GetRealTimeSinceStartup());
 
@@ -29,7 +34,7 @@ namespace Wiwa {
 
 		if (!anim->Blend)
 		{
-				anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
+			anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
 		}
 		else if(anim->animator->GetCurrentAnimation()&& anim->animator->GetTargetAnimation()){
 			anim->animator->m_BlendWeight = anim->weight;
@@ -57,7 +62,14 @@ namespace Wiwa {
 	}
 	void AnimatorSystem::OnSystemRemoved()
 	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		if (anim->animator != nullptr)
 			delete anim->animator;
 	}
@@ -65,37 +77,73 @@ namespace Wiwa {
 	void AnimatorSystem::Pause()
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		anim->animator->PauseAnimation();
 	}
 	void AnimatorSystem::Play()
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		anim->animator->PlayAnimation();
 	}
 	void AnimatorSystem::PlayAnimation(std::string name)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		anim->animator->PlayAnimationName(name);
 	}
 	void AnimatorSystem::Blend(std::string targetAnim, float blendDuration)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		anim->animator->Blend(targetAnim, blendDuration);
 	}
 	void AnimatorSystem::SetAnimationSate(Wiwa::AnimationState state)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		anim->animator->SetAnimationSatate(state);
 	}
 	void AnimatorSystem::Restart()
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
+		if (!anim) return;
+		
 		anim->animator->ResetTime();
 	}
 }
