@@ -244,7 +244,7 @@ namespace Wiwa {
 
 				for (size_t j = 0; j < system_size; j++) {
 					System* s = m_EntitySystems[i][j];
-
+					if (!s) continue;
 					s->Update();
 				}
 			}
