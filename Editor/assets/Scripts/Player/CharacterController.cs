@@ -57,6 +57,10 @@ namespace Game
             ref Character controller = ref GetComponentByIterator<Character>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
 
+            //Debug remove once tested
+            if (CheckDeath(ref controller))
+                return;
+
             Vector3 velocity = Vector3Values.zero;
             Vector3 input = Vector3Values.zero;
 
@@ -117,7 +121,11 @@ namespace Game
 
                 }
             }
-            //Debug remove once tested
+
+        }
+
+        private bool CheckDeath(ref Character controller)
+        {
             if (Input.IsKeyDown(KeyCode.F1))
             {
                 controller.Health = 0;
@@ -126,12 +134,13 @@ namespace Game
             if (controller.Health <= 0)
             {
                 dieTimer -= Time.DeltaTime();
+                Animator.PlayAnimationName("death", m_EntityId);
                 if (dieTimer <= 0)
-                {
                     GameState.Die();
-                }
-            }
 
+                return true;
+            }
+            return false;
         }
 
         Vector3 GetMovementInput(ref Character controller)
