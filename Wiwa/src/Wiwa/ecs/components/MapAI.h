@@ -5,7 +5,7 @@
 #include <Wiwa/utilities/Reflection.h>
 
 #include <glm/glm.hpp>
-#define MAP_TILES_MAX_SIZE 5000
+#define MAP_TILES_MAX_SIZE 20000
 
 namespace Wiwa {
 	struct WI_API MapAI {

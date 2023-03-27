@@ -507,7 +507,8 @@ namespace Wiwa {
 			physics.AddMember(newTag.c_str(), GetFilterTag((int)i));
 		}
 		std::string path = "assets/Scenes/";
-		path += SceneManager::getActiveScene()->getName();
+		//path += SceneManager::getActiveScene()->getName();
+		path += "game_tags";
 		path += "_physics.json";
 		physics.save_file(path.c_str());
 		return true;
@@ -516,7 +517,7 @@ namespace Wiwa {
 	bool PhysicsManager::OnLoad(const char* name)
 	{
 		std::string path = "assets/Scenes/";
-		path += name;
+		path += "game_tags";
 		path += "_physics.json";
 
 		JSONDocument physics;
