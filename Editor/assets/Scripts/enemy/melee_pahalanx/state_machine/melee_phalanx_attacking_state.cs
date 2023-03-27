@@ -92,7 +92,10 @@ namespace Game
             attackContainer.hasInit = true;
             ref Transform3D transformEnemy = ref enemy.GetComponentByIterator<Transform3D>(enemy.transformIt);
             ref Transform3D transformAttack = ref enemy.GetComponent<Transform3D>(attackContainer.id);
-            transformAttack.LocalPosition = new Vector3(0,2,2);
+            //transformAttack.LocalPosition.x = 0;
+            //transformAttack.LocalPosition.y = 2;
+            //transformAttack.LocalPosition.z = 2;
+            //transformAttack.LocalPosition = transformEnemy.LocalPosition + Vector3 
             Console.WriteLine("3");
         }
     }
