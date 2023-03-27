@@ -31,6 +31,7 @@
 EditorLayer *EditorLayer::s_Instance = nullptr;
 std::string EditorLayer::s_SolVersion = "vs2022";
 std::string EditorLayer::s_BuildConf = "Release";
+bool EditorLayer::s_BuildAutomatic = false;
 std::thread *EditorLayer::s_RegenThread;
 
 
@@ -215,6 +216,8 @@ static std::mutex mutex;
 
 void EditorLayer::RegenSolutionThread()
 {
+	if (!s_BuildAutomatic)
+		return;
 	std::string call = "call tools\\generatesol.bat ";
 	call += s_SolVersion;
 	call += " AppAssembly.sln ";
@@ -285,6 +288,8 @@ void EditorLayer::BuildProject()
 
 void EditorLayer::RegenSol()
 {
+	if (!s_BuildAutomatic)
+		return;
 	if (threadExec)
 	{
 		mutex.lock();
@@ -521,6 +526,10 @@ void EditorLayer::MainMenuBar()
 				Wiwa::ScriptEngine::ReloadAssembly();
 			if (ImGui::MenuItem("Open Solution"))
 				system("call tools/opensln.bat AppAssembly.sln");
+			ImGui::Checkbox("Build automatic", &s_BuildAutomatic);
+			ImGui::SameLine();
+
+			HelpMarker("Enables/Disables the automatic assembly compilation");
 
 			ImGui::EndMenu();
 		}
@@ -813,6 +822,8 @@ void EditorLayer::LoadPanelConfig()
 		s_SolVersion = config["sol_version"].as_string();
 	if (config.HasMember("build_conf"))
 		s_BuildConf = config["build_conf"].as_string();
+	if (config.HasMember("build_auto"))
+		s_BuildAutomatic = config["build_auto"].as_bool();
 
 	if (config.HasMember("custom_layouts"))
 	{
@@ -851,6 +862,7 @@ void EditorLayer::SavePanelConfig()
 
 	config.AddMember("sol_version", s_SolVersion.c_str());
 	config.AddMember("build_conf", s_BuildConf.c_str());
+	config.AddMember("build_auto", s_BuildAutomatic);
 
 	Wiwa::JSONValue clayouts = config.AddMemberArray("custom_layouts");
 
