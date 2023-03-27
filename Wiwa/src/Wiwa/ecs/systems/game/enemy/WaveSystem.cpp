@@ -95,16 +95,16 @@ namespace Wiwa
 		entityManager.SetEntityName(m_EntityId, enemyName.c_str());
 
 		// Set intial positions
-		Transform3D *spawnTransform = entityManager.GetComponent<Transform3D>(m_EntityId);
-		Transform3D *enemyTransform = entityManager.GetComponent<Transform3D>(newEnemyId);
+		Transform3D* spawnTransform = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(m_EntityId));
+		Transform3D* enemyTransform = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newEnemyId));
 
 		if (!enemyTransform || !spawnTransform)
 			return;
 
-		enemyTransform->localPosition.x = spawnTransform->position.x + RAND(-10, 10);
-		enemyTransform->localPosition.z = spawnTransform->position.z + RAND(-10, 10);
+		enemyTransform->localPosition.x = spawnTransform->localPosition.x + RAND(-10, 10);
+		enemyTransform->localPosition.z = spawnTransform->localPosition.z + RAND(-10, 10);
 		enemyTransform->localPosition.y = 0;
-
+	
 		WI_CORE_INFO("Spawned enemy at {}x {}y {}z", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
 		WI_CORE_INFO("Spawn transform at {}x {}y {}z", spawnTransform->localPosition.x, spawnTransform->localPosition.y, spawnTransform->localPosition.z);
 		// Set the correspondent tag

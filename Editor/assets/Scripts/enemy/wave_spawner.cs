@@ -22,7 +22,7 @@ namespace WiwaApp
         EntityId currentWaveEntityId;
         float timer = 0.0f;
         bool previousWaveDestroy = false;
-        bool debug = true;
+        bool debug = false;
         void Awake()
         {
             if (debug) Console.WriteLine("-- Starting Awake -- Enemy spawner");
@@ -152,7 +152,10 @@ namespace WiwaApp
         }
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Console.WriteLine(GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Console.WriteLine("OnCollision wave spawner");
+            Console.WriteLine(id1 + str1);
+            Console.WriteLine(id2 + str2);
             if (id1 == m_EntityId)
             {
                 if (enemySpawnerIt.componentId != Constants.WI_INVALID_INDEX)

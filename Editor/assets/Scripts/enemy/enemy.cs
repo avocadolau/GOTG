@@ -21,9 +21,10 @@ namespace Game
         public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
         public ComponentIterator playerStatsIt;
+        
 
         public EntityId playerId;
-        bool debug = true;
+        bool debug = false;
         public virtual void Awake()
         {
             if (debug) Console.WriteLine("-- Starting Awake -- Enemy");
@@ -58,7 +59,13 @@ namespace Game
             playerStatsIt = GetComponentIterator<Character>(playerId);
 
             ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
-            //self.rotationSpeed = 10;
+            ref Transform3D tr = ref GetComponentByIterator<Transform3D>(transformIt);
+
+            if (debug) Console.WriteLine("enemy world matrix position is: " + tr.worldMatrix.GetPosition().x + " " + tr.worldMatrix.GetPosition().y + " " + tr.worldMatrix.GetPosition().z);
+            if (debug) Console.WriteLine("enemy position is: " + tr.LocalPosition.x + " " + tr.LocalPosition.y + " " + tr.LocalPosition.z);
+            self.currentRotation.x = 0;
+            self.currentRotation.y = 0;
+            self.currentRotation.z = 0;
         }
 
         public virtual void Update()
@@ -69,6 +76,10 @@ namespace Game
                 self.hasFinished = true;
             }
             ref Transform3D t3d = ref GetComponentByIterator<Transform3D>(transformIt);
+
+            
+            if (debug) Console.WriteLine("enemy world matrix position is: " + t3d.worldMatrix.GetPosition().x + " " + t3d.worldMatrix.GetPosition().y + " " + t3d.worldMatrix.GetPosition().z);
+            if (debug) Console.WriteLine("enemy position is: " + t3d.LocalPosition.x + " " + t3d.LocalPosition.y + " " + t3d.LocalPosition.z);
             t3d.LocalPosition.y = 0f;
             //if(playerId != Constants.WI_INVALID_INDEX)
             //{
@@ -142,7 +153,7 @@ namespace Game
 
         //    ref Transform3D transform = ref enemy.GetComponent<Transform3D>();
 
-        //    transform.LocalRotation = new Vector3(0, self.currentRotation.y,0);
+        //    transform.LocalRotation.y = self.currentRotation.y
         //}
     }
 }

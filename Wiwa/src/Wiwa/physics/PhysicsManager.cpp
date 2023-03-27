@@ -398,6 +398,7 @@ namespace Wiwa {
 
 		btTransform startTransform;
 		startTransform.setFromOpenGLMatrix(glm::value_ptr(transform.worldMatrix));
+		startTransform.setOrigin(btVector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z));
 
 		btCollisionObject* collisionObject = new btCollisionObject();
 		collisionObject->setUserIndex(id);
