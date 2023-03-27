@@ -16,6 +16,8 @@ namespace Game
         public override void Awake()
         {
             base.Awake();
+            Animator.PlayAnimationName("spawn", m_EntityId);
+
         }
 
         public override void Init()

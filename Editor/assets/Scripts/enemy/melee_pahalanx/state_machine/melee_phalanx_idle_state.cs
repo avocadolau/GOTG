@@ -16,7 +16,7 @@ namespace Game
         {
             Animator.PlayAnimationName("idle", entityId);
 
-            if (enemy.timer > 4)
+            if (enemy.timer > 2)
             {
                 enemy.SwitchState(enemy.chasingState);
             }

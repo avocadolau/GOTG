@@ -347,7 +347,7 @@ bool Wiwa::AIMapGeneration::OnSave()
 		}
 	}
 
-	if (!hasMapData && (m_Map[0] != '\0'))
+	if (!m_Map.empty() && !hasMapData && (m_Map[0] != '\0'))
 	{
 		CreateNewEntityAndSaveData();
 		return true;

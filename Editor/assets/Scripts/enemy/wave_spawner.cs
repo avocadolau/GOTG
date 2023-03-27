@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game;
+using System;
 using System.Linq;
 using Wiwa;
 
@@ -13,6 +14,8 @@ namespace WiwaApp
         public int currentWaveCount;
         public float timeBetweenWaves;
         public bool hasFinished;
+        public bool hasTriggered;
+        public int spawnOffset;
     }
     class WavesSpawnerSystem : Behaviour
     {
@@ -29,7 +32,6 @@ namespace WiwaApp
             enemySpawnerIt.componentIndex = Constants.WI_INVALID_INDEX;
             currentWaveIt.componentId = Constants.WI_INVALID_INDEX;
             currentWaveIt.componentIndex = Constants.WI_INVALID_INDEX;
-
             currentWaveEntityId = 0;
             previousWaveDestroy = false;
         }
@@ -40,7 +42,7 @@ namespace WiwaApp
             enemySpawnerIt = GetComponentIterator<WavesSpawner>();
             WavesSpawner enemySpawner = GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
             timer = enemySpawner.timeBetweenWaves;
-            SpawnWave();
+            enemySpawner.hasTriggered = false;
         }
 
         void Update()
@@ -49,13 +51,13 @@ namespace WiwaApp
             if (enemySpawnerIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref WavesSpawner enemySpawner = ref GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
-                if (debug)
-                {
-                    Console.WriteLine("waveID");
-                    Console.WriteLine(currentWaveIt.componentId);
-                    Console.WriteLine(currentWaveIt.componentIndex);
-                    Console.WriteLine(currentWaveIt.componentSize);
-                }
+                //if (debug)
+                //{
+                //    Console.WriteLine("waveID");
+                //    Console.WriteLine(currentWaveIt.componentId);
+                //    Console.WriteLine(currentWaveIt.componentIndex);
+                //    Console.WriteLine(currentWaveIt.componentSize);
+                //}
 
                 if (currentWaveIt.componentId != Constants.WI_INVALID_INDEX)
                 {
@@ -76,7 +78,7 @@ namespace WiwaApp
                 }
 
                 // Timer before deploying next wave
-                if (previousWaveDestroy && enemySpawner.hasFinished == false)
+                if (previousWaveDestroy && enemySpawner.hasFinished == false && enemySpawner.hasTriggered)
                 {
                     timer -= Time.DeltaTime();
                     if (debug) Console.WriteLine("Timer -> " + timer);
@@ -87,8 +89,8 @@ namespace WiwaApp
                     }
                 }
             }
-           
-            if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
+
+            //if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
         }
 
 
@@ -122,9 +124,7 @@ namespace WiwaApp
             if (debug) Console.WriteLine("Getting transforms comp");
             ref Transform3D parent = ref GetComponent<Transform3D>(m_EntityId);
             ref Transform3D waveTransform = ref GetComponent<Transform3D>(currentWaveEntityId); ;
-            waveTransform.LocalPosition.x = parent.LocalPosition.x;
-            waveTransform.LocalPosition.y = parent.LocalPosition.y;
-            waveTransform.LocalPosition.z = parent.LocalPosition.z;
+            waveTransform.LocalPosition = parent.worldMatrix.GetPosition();
 
             if (debug) Console.WriteLine("Adding wave comp");
             // Create a wave component and wave system
@@ -151,7 +151,21 @@ namespace WiwaApp
         }
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
+            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            if (id1 == m_EntityId && str2 == "PLAYER")
+            {
+                if (enemySpawnerIt.componentId != Constants.WI_INVALID_INDEX)
+                {
+                    ref WavesSpawner enemySpawner = ref GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
+                    if (!enemySpawner.hasTriggered)
+                    {
+                        SpawnWave();
+                        enemySpawner.hasTriggered = true;
+                    }
 
+                }
+            }
+            
         }
     }
 }
