@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Wiwa;
 
 namespace Game
@@ -21,7 +20,7 @@ namespace Game
         public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
 
-        public EntityId playerId; 
+        public EntityId playerId;
         bool debug = true;
         public virtual void Awake()
         {
@@ -100,6 +99,8 @@ namespace Game
                 {
                     ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
                     AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
+                    ref Transform3D transform = ref GetComponent<Transform3D>();
+                    transform.LocalRotation = Quaternion.LookRotation(Mathf.CalculateForward(ref playerTr)).eulerAngles;
                 }
             }
         }

@@ -74,6 +74,8 @@ namespace Wiwa
 		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
 		JSONDocument doc("config/player_data.json");
+		if (!character)
+			return;
 		if (doc.IsObject())
 		{
 			if (doc.HasMember("max_health"))
