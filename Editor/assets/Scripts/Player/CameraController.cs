@@ -1,3 +1,4 @@
+using System;
 using Wiwa;
 
 
@@ -27,6 +28,10 @@ namespace Game
         float referenceX;
         float referenceZ;
 
+        float extraPosOffsetX;
+        float extraPosOffsetZ;
+
+        float offsetDivision;
 
         Vector3 lastPlayerPos;
 
@@ -36,6 +41,11 @@ namespace Game
             ref Transform3D transform = ref GetComponent<Transform3D>();
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
+
+            offsetDivision = 65; // Divides the speed for the camera movement offset transition - the lower the value the faster the transition is
+
+            extraPosOffsetX = 0;
+            extraPosOffsetZ = 0;
 
             campos.y = transform.Position.y + 25;
             campos.x = transform.Position.x;
@@ -62,7 +72,8 @@ namespace Game
             {
                 leftRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x + 7, transform.Position.y, transform.Position.z));
                 rightRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x - 7, transform.Position.y, transform.Position.z));
-                upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7));
+                //upperRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z + 7)); //Not actually needed
+                upperRayWallDistance = -1;
                 lowerRayWallDistance = PhysicsManager.RayCastDistanceWalls(transform.Position, new Vector3(transform.Position.x, transform.Position.y, transform.Position.z - 7));
 
                 //Console.WriteLine("LEFT RAY: " + leftRayWallDistance);
@@ -74,16 +85,58 @@ namespace Game
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
 
+            //extraPosOffsetX = 0;
+            //extraPosOffsetZ = 0;
+
+            if (Input.IsKeyDown(KeyCode.A))
+            {
+                if(extraPosOffsetX <= 4) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
+            }
+            if (Input.IsKeyDown(KeyCode.D))
+            {
+                if(extraPosOffsetX >= -4) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
+            }
+            if (Input.IsKeyDown(KeyCode.W))
+            {
+                if (extraPosOffsetZ <= 5)
+                {
+                    extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
+                    Console.WriteLine("extraPosOffsetZ: " + extraPosOffsetZ);
+                }
+            }
+            if (Input.IsKeyDown(KeyCode.S))
+            {
+                if (extraPosOffsetZ >= -5) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
+            }
+
+            if (Input.IsKeyDown(KeyCode.Left))
+            {
+                if (extraPosOffsetX <= 4) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
+            }
+            if (Input.IsKeyDown(KeyCode.Right))
+            {
+                if (extraPosOffsetX >= -4) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
+            }
+            if (Input.IsKeyDown(KeyCode.Up))
+            {
+                if (extraPosOffsetZ <= 5) extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
+            }
+            if (Input.IsKeyDown(KeyCode.Down))
+            {
+                if (extraPosOffsetZ >= -5) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
+            }
+
+
             lastPlayerPos.y = transform.Position.y;
 
             if (lowerRayWallDistance == -1 && upperRayWallDistance == -1)
             {
-                lastPlayerPos.z = transform.Position.z;
+                lastPlayerPos.z = transform.Position.z + extraPosOffsetZ;
             }
 
             if (leftRayWallDistance == -1 && rightRayWallDistance == -1)
             {
-                lastPlayerPos.x = transform.Position.x;
+                lastPlayerPos.x = transform.Position.x + extraPosOffsetX;
             }
 
             float minCamVelocity = 0.0f;

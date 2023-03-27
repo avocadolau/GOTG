@@ -18,6 +18,7 @@
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/ParticleEmitter.h>
 #include <Wiwa/ecs/components/CollisionBody.h>
+#include <Wiwa/ecs/systems/AgentAISystem.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -57,6 +58,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleEmitterComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
+		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -486,11 +488,14 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				current_item = animationItems[n];
 				ImGui::SetItemDefaultFocus();
 				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+				animator->animator->PlayAnimation();
+				animator->animator->Loop(animator->Loop);
 			}
 		}
 		ImGui::EndCombo();
 	}
-
+	if (!animator->animator->GetCurrentAnimation())
+		return;
 	if (ImGui::Checkbox("Play", &animator->Play))
 	{
 		if (animator->Play)
@@ -498,6 +503,14 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 		else
 			animator->animator->PauseAnimation();
 	}
+
+	if (ImGui::Checkbox("Loop", &animator->Loop))
+	{
+		animator->animator->Loop(animator->Loop);
+	}
+	ImGui::Text(std::to_string(animator->animator->GetCurrentAnimation()->GetDuration()).c_str());
+	float maxTime =animator->animator->GetCurrentAnimation()->GetDuration()/24;
+	ImGui::SliderFloat("Aniamtion time", &animator->animationTime, 0, maxTime);
 
 	ImGui::Checkbox("Blend", &animator->Blend);
 	if (animator->Blend)
@@ -1178,6 +1191,22 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 	Wiwa::AgentAI* agent = (Wiwa::AgentAI*)data;
 	DrawVec3Control("Target", &agent->target, 0.0f, 100.0f);
 	ImGui::InputFloat("Speed", &agent->speed);
+	ImGui::InputFloat("Angular Speed", &agent->angularSpeed);
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::AgentAISystem* agentSys = em.GetSystem<Wiwa::AgentAISystem>(m_CurrentID);
+
+	if (agent)
+	{
+		if (ImGui::Button("Create path to") && Wiwa::SceneManager::IsPlaying())
+		{
+			agentSys->CreatePath(agent->target);
+		}
+
+		//if (ImGui::Button("Go to next position"))
+		//{
+		//	agentSys->GoToNextPosition();
+		//}
+	}
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)

@@ -73,12 +73,13 @@
 					<ChildrenList>
 						<Action Name="" ID="{B1289A08-05F6-408E-9F80-CA8173CB4C3D}" ShortID="205418363">
 							<PropertyList>
-								<Property Name="ActionType" Type="int16" Value="11"/>
+								<Property Name="ActionType" Type="int16" Value="38"/>
+								<Property Name="GameParameterValue" Type="Real64" Value="76"/>
 								<Property Name="Scope" Type="int16" Value="1"/>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+									<ObjectRef Name="MasterVolume" ID="{37155977-97CE-402C-89A9-1AE619F18259}" WorkUnitID="{02E271C5-C17C-4AA5-B1B0-C26312712607}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
@@ -105,6 +106,17 @@
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="on_hover" ID="{C0413F64-E9E0-4B28-A0C5-A859611A1B64}">
+					<ChildrenList>
+						<Action Name="" ID="{C22D4225-B20D-4433-96F0-EA2873B2EC5A}" ShortID="919270292">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="pause_sound" ID="{3ECED16A-1D1E-4FF2-A6C6-E13A06E3A5AA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>

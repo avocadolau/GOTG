@@ -24,7 +24,6 @@
 #include "embed_functions/embed_application_functions.h"
 #include "embed_functions/embed_animator_functions.h"
 #include "embed_functions/embed_artificialintelligence_functions.h"
-#include "embed_functions/embed_particles_functions.h"
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -61,8 +60,11 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
 		WI_ADD_INTERNAL_CALL(GetEntityName);
 		WI_ADD_INTERNAL_CALL(GetEntityByName);
+		WI_ADD_INTERNAL_CALL(GetChildByName);
 		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
 		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
+		WI_ADD_INTERNAL_CALL(LoadPrefabAsChildIntr);
+		WI_ADD_INTERNAL_CALL(CreateChildByName);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
@@ -165,19 +167,16 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PauseAnimation);
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
 
-		//Particles
-		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayBatch);
-		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayLoop);
-		WI_ADD_INTERNAL_CALL(ParticleEmitterStopLoop);
-
 		// Game
 		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);
 		WI_ADD_INTERNAL_CALL(InitHub);
 		WI_ADD_INTERNAL_CALL(StartRun);
 		WI_ADD_INTERNAL_CALL(EndRun);
-
 		WI_ADD_INTERNAL_CALL(SetPlayer);
 		WI_ADD_INTERNAL_CALL(GetControllerDeadzone);
-
+		WI_ADD_INTERNAL_CALL(LoadPlayerProgression);
+		WI_ADD_INTERNAL_CALL(SavePlayerProgression);
+		WI_ADD_INTERNAL_CALL(Die);
+		WI_ADD_INTERNAL_CALL(GetPlayerId);
 	}
 }

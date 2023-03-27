@@ -149,6 +149,7 @@ namespace Wiwa
 
 		// Load prefab from file
 		EntityId LoadPrefab(const char* path);
+		EntityId LoadPrefab(const char* path, EntityId parent);
 
 		bool IsActive(EntityId entity) { return m_EntityActive[entity]; }
 
@@ -165,6 +166,10 @@ namespace Wiwa
 		inline size_t GetEntityCount() { return m_EntitiesAlive.size(); }
 		inline EntityId GetEntityParent(EntityId eid) { return m_EntityParent[eid]; }
 		inline std::vector<EntityId> *GetEntityChildren(EntityId eid) { return &m_EntityChildren[eid]; }
+
+		EntityId GetEntityByName(const char* name);
+
+		EntityId GetChildByName(EntityId parent, const char* name);
 
 		inline std::map<ComponentId, size_t> &GetEntityComponents(EntityId id) { return m_EntityComponents[id]; }
 

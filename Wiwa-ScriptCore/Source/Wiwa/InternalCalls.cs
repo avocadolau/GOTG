@@ -29,6 +29,8 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static EntityId CreateEntity(System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetChildByName(EntityId parent, string name, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static EntityId CreateEntityNamed(string name_entity, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static string GetEntityName(EntityId id, System.Int64 scene);
@@ -39,10 +41,13 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void AddMeshToEntity(EntityId eid, string model, string mat, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static EntityId LoadPrefabIntr(string file);
-
+        internal extern static EntityId LoadPrefabIntr(string file, System.Int64 scene);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void SavePrefabIntr(EntityId id, string file);
+        internal extern static void SavePrefabIntr(EntityId id, string file, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId LoadPrefabAsChildIntr(string file, EntityId id, System.Int64 scene);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId CreateChildByName(EntityId parent, string name, System.Int64 scene);
         #endregion
         #region Input
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -207,11 +212,21 @@ namespace Wiwa
         internal extern static void StartRun();
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void EndRun();
+
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void SetPlayer(EntityId id);
+        internal extern static void SavePlayerProgression();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void LoadPlayerProgression();
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetPlayer(EntityId id, System.Int64 scene);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static float GetControllerDeadzone();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Die();
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static EntityId GetPlayerId();
         #endregion
 
         #region AgentAI

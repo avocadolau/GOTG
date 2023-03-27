@@ -11,7 +11,6 @@
         {
             return ref InternalCalls.GetComponent<T>(entity, typeof(T), m_Scene);
         }
-
         public ComponentIterator GetComponentIterator<T>() where T : unmanaged
         {
             return InternalCalls.GetComponentIterator(m_EntityId, typeof(T), m_Scene);
@@ -79,6 +78,20 @@
             return InternalCalls.GetEntityByName(name, m_Scene);
         }
 
+        public EntityId GetChildByName(string name)
+        {
+            return InternalCalls.GetChildByName(m_EntityId, name, m_Scene);
+        }
+        public EntityId CreateChildByName(string name)
+        {
+            return InternalCalls.CreateChildByName(m_EntityId, name, m_Scene);
+        }
+
+        public EntityId CreateChildByName(EntityId id, string name)
+        {
+            return InternalCalls.CreateChildByName(id, name, m_Scene);
+        }
+
         public void AddMesh(EntityId eid, string model, string material)
         {
             InternalCalls.AddMeshToEntity(eid, model, material, m_Scene);
@@ -139,11 +152,17 @@
 
         public EntityId LoadPrefab(string file)
         {
-            return InternalCalls.LoadPrefabIntr(file);
+            return InternalCalls.LoadPrefabIntr(file, m_Scene);
         }
+
+        public EntityId LoadPrefabAsChild(string file, EntityId parent)
+        {
+            return InternalCalls.LoadPrefabAsChildIntr(file, parent, m_Scene);
+        }
+
         public void SavePrefab(EntityId id, string file)
         {
-            InternalCalls.SavePrefabIntr(id, file);
+            InternalCalls.SavePrefabIntr(id, file, m_Scene);
         }
     }
 }

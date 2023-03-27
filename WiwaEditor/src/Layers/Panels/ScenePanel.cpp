@@ -225,7 +225,7 @@ void ScenePanel::Draw()
                 ImGuizmo::RecomposeMatrixFromComponents(translation, rotation, scale, tmpMatrix);
                 ImGuizmo::MODE mode = isParent ? ImGuizmo::WORLD : ImGuizmo::LOCAL;
                 //Snaping
-                bool snap = Wiwa::Input::IsKeyPressed(Wiwa::Key::LeftControl);
+                bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
                 float snapValue = 0.5f; //Snap to 0.5m for translation/scale
 
                 if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
@@ -390,6 +390,7 @@ void ScenePanel::Draw()
             Action<Wiwa::Event&> act = { &EditorLayer::OnEvent, instance };
             act(event);
         }
+
         // Check if right click was pressed
         if (Wiwa::Input::IsMouseButtonPressed(1)) {
             // Check if relative motion is not 0
@@ -403,7 +404,7 @@ void ScenePanel::Draw()
                 if (pitch > 89.0f) pitch = 89.0f;
                 if (pitch < -89.0f) pitch = -89.0f;
 
-                if (Wiwa::Input::IsKeyPressed(Wiwa::Key::LeftAlt) && m_EntSelected != -1)
+                if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftAlt) && m_EntSelected != -1)
                 {
                     float radius = 7.0f;
                     glm::vec3 direction = {};
@@ -425,7 +426,7 @@ void ScenePanel::Draw()
                 }
             }
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::LeftShift))
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftShift))
                 camFastSpeed = camSpeed * 2;
             else
                 camFastSpeed = camSpeed;
@@ -433,27 +434,27 @@ void ScenePanel::Draw()
             // Camera movement
             glm::vec3 campos = m_Camera->getPosition();
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::W)) {
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::W)) {
                 campos += m_Camera->getFront() * camFastSpeed;
             }
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::S)) {
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::S)) {
                 campos -= m_Camera->getFront() * camFastSpeed;
             }
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::A)) {
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::A)) {
                 campos -= glm::normalize(glm::cross(m_Camera->getFront(), m_Camera->getUp())) * camFastSpeed;
             }
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::D)) {
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::D)) {
                 campos += glm::normalize(glm::cross(m_Camera->getFront(), m_Camera->getUp())) * camFastSpeed;
             }
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Q)) {
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::Q)) {
                 campos += m_Camera->getUp() * camFastSpeed;
             }
 
-            if (Wiwa::Input::IsKeyPressed(Wiwa::Key::E)) {
+            if (Wiwa::Input::IsKeyRepeat(Wiwa::Key::E)) {
                 campos -= m_Camera->getUp() * camFastSpeed;
             }
             m_Camera->setPosition({ campos.x, campos.y, campos.z });

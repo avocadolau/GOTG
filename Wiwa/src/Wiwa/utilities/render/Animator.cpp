@@ -52,12 +52,30 @@ namespace Wiwa {
 		m_DeltaTime = dt;
 		if (m_CurrentAnimation)
 		{
+
+			//update animation time
 			float TicksPerSecond = (float)(m_CurrentAnimation->m_TicksPerSecond != 0 ? m_CurrentAnimation->m_TicksPerSecond : 25.0f);
 			float TimeInTicks = dt * TicksPerSecond;
+			//float TimeInTicks = m_AnimationTime * TicksPerSecond;
 			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
 			m_CurrentTime = AnimationTimeTicks;
 
+			if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
+			{
+				//m_CurrentAnimation->m_HasFinished = true;
+				//m_AnimationTime = 0;
+				//if (m_CurrentAnimation->m_Loop)
+				//{
+				//	m_CurrentAnimation->m_HasFinished = false;
+				//	m_AnimationTime = m_CurrentAnimation->m_Duration;
+				//	m_AnimationState = AnimationState::Playing;
+				//}
+				//else
+				//	return;
+			}
+
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+
 		}
 	}
 
@@ -89,10 +107,46 @@ namespace Wiwa {
 		m_AnimationTime = pAnimation->GetDuration();
 	}
 
+	void Animator::PlayAnimation(std::string name, bool loop, bool transition, float transitionTime)
+	{
+		if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
+		{
+			m_AnimationTime = m_CurrentAnimation->m_Duration;
+			m_AnimationState = AnimationState::Playing;
+			m_CurrentAnimation->m_Loop = loop;
+			return;
+		}
+
+		for (auto& animation : m_Animations)
+		{
+			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
+			{
+				if (transition)
+				{
+					m_TargetAnimation = animation;
+					m_AnimationTime = animation->m_Duration;
+					m_BlendDuration = transitionTime;
+					m_TargetAnimation->m_Loop = loop;
+					m_AnimationState = AnimationState::Blending;
+				}
+				else {
+					m_CurrentAnimation = animation;
+					m_AnimationTime = animation->m_Duration;
+					m_CurrentAnimation->m_Loop = loop;
+					m_AnimationState = AnimationState::Playing;
+					return;
+				}
+
+				return;
+			}
+		}
+	}
+
 	Animator::~Animator()
 	{
+		m_CurrentAnimation = nullptr;
+		m_TargetAnimation = nullptr;
 		m_Animations.clear();
-		delete m_CurrentAnimation;
 	}
 
 	void Animator::SaveWiAnimator(Animator* animator, const char* path)
@@ -126,12 +180,15 @@ namespace Wiwa {
 		if (doc.HasMember("animations"))
 		{
 			JSONValue animations = doc["animations"];
-
-			for (uint32_t i = 0; i < animations.Size(); i++)
+			if (animations.IsArray())
 			{
-				std::string path = animations[i].as_string();
-				if(!FileSystem::Exists(path.c_str()))continue;
-				animator->m_Animations.push_back( Animation::LoadWiAnimation(path.c_str()));	
+				for (uint32_t i = 0; i < animations.Size(); i++)
+				{
+					std::string path = animations[i].as_string();
+					if (!FileSystem::Exists(path.c_str()))
+						continue;
+					animator->m_Animations.push_back(Animation::LoadWiAnimation(path.c_str()));
+				}
 			}
 		}
 		return animator;
@@ -139,12 +196,20 @@ namespace Wiwa {
 
 	void Animator::PlayAnimationName(std::string name)
 	{
+		if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
+		{
+			m_AnimationTime = m_CurrentAnimation->m_Duration;
+			m_AnimationState = AnimationState::Playing;
+			return;
+		}
+
 		for (auto& animation : m_Animations)
 		{
 			if (strcmp(animation->m_Name.c_str(),name.c_str()) == 0)
 			{
 				m_CurrentAnimation = animation;
-				m_AnimationState = AnimationState::Playing;
+				m_AnimationTime = animation->m_Duration;
+				m_AnimationState = AnimationState::Playing;				
 				return;
 			}
 		}
@@ -153,6 +218,10 @@ namespace Wiwa {
 	void Animator::PlayAnimation()
 	{
 		m_AnimationState = AnimationState::Playing;
+		if (m_CurrentAnimation != nullptr)
+		{
+			m_AnimationTime = m_CurrentAnimation->m_Duration;
+		}
 	}
 
 	void Animator::PauseAnimation()

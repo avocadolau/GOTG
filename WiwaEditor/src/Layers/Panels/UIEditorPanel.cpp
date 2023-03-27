@@ -259,7 +259,7 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
-	//control->audioEventForButton = audioEventForButton.c_str();
+	control->audioEventForButton = audioEventForButton.c_str();
 	if (callbackID != WI_INVALID_INDEX)
 	{
 		control->callbackID = callbackID;

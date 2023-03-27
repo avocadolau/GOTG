@@ -15,11 +15,25 @@ namespace Wiwa
 	float Input::MouseY = 0;
 	float Input::prevMouseX = 0;
 	float Input::prevMouseY = 0;
+
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keycode);
-		return state == GLFW_PRESS || state == GLFW_REPEAT;
+
+		return state == GLFW_PRESS;
+	}
+	bool WindowsInput::IsKeyRepeatImpl(int keycode)
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetKey(window, keycode);
+		return state == GLFW_PRESS;
+	}
+	bool WindowsInput::IsKeyReleasedImpl(int keycode)
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto state = glfwGetKey(window, keycode);
+		return state == GLFW_RELEASE;
 	}
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{

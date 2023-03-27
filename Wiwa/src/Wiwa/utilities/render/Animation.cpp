@@ -1,5 +1,6 @@
 #include "wipch.h"
 #include "Animation.h"
+#include <Wiwa/core/Resources.h>
 #include <assimp/anim.h>
 #include <glm/gtx/quaternion.hpp>
 namespace Wiwa {
@@ -8,6 +9,8 @@ namespace Wiwa {
 		m_Duration = 0;
 		m_TicksPerSecond = 0;
 		m_Name = "new animation";
+		m_Loop = false;
+		m_HasFinished = false;
 	}
 	Animation::Animation(const aiAnimation* animation, Model* model)
 	{
@@ -16,7 +19,8 @@ namespace Wiwa {
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
 		m_BoneInfoMap = model->GetBoneInfoMap();
-
+		m_Loop = false;
+		m_HasFinished = false;
 		ReadMissingBones(animation, *model);		
 		ReadHeirarchyData(m_RootNode, model->getModelHierarchy(), glm::mat4(1.f));
 	}
@@ -27,6 +31,8 @@ namespace Wiwa {
 		m_TicksPerSecond = (int)animation->mTicksPerSecond;
 		m_NumChannels = animation->mNumChannels;
 		m_Name = animation->mName.C_Str();
+		m_Loop = false;
+		m_HasFinished = false;
 	}
 
 	Animation::Animation(const char* filePath, Model* model)
@@ -34,6 +40,8 @@ namespace Wiwa {
 		m_Duration = 0;
 		m_TicksPerSecond = 0;
 		m_Name = "new animation";
+		m_Loop = false;
+		m_HasFinished = false;
 	}
 
 	Animation::Animation(const char* filePath)
@@ -143,17 +151,22 @@ namespace Wiwa {
 		std::filesystem::path filepath = path;
 		filepath.replace_filename(animation->m_Name.c_str());
 		filepath.replace_extension("wianim");
-		animation->m_SavePath = filepath.string();
-		
+		animation->m_SavePath =  Wiwa::Resources::_assetToLibPath(filepath.string());
+
 		File file = FileSystem::OpenOB(filepath.string().c_str());
 
 		size_t name_len = animation->m_Name.size();
 		file.Write(&name_len, sizeof(size_t));
 		file.Write(animation->m_Name.c_str(), name_len);
 
+		size_t savep_len = animation->m_SavePath.size();
+		file.Write(&savep_len, sizeof(size_t));
+		file.Write(animation->m_SavePath.c_str(), savep_len);
+
 		file.Write(&animation->m_Duration, sizeof(double));
 		file.Write(&animation->m_TicksPerSecond, sizeof(double));
 		file.Write(&animation->m_NumChannels, sizeof(unsigned int));
+		file.Write(&animation->m_Loop, sizeof(bool));
 
 		//save NodeAnim structure
 		animation->SaveNodeData(file, &animation->m_RootNode);
@@ -228,15 +241,21 @@ namespace Wiwa {
 
 		File file = Wiwa::FileSystem::OpenIB(filepath);
 		Animation* anim = new Animation();
-
+		//load name
 		size_t name_len;
 		file.Read(&name_len, sizeof(size_t));
 		anim->m_Name.resize(name_len);
 		file.Read(&anim->m_Name[0], name_len);
+		//load save path
+		size_t savep_len;
+		file.Read(&savep_len, sizeof(size_t));
+		anim->m_SavePath.resize(savep_len);
+		file.Read(&anim->m_SavePath[0], savep_len);
 
 		file.Read(&anim->m_Duration, sizeof(double));
 		file.Read(&anim->m_TicksPerSecond, sizeof(double));
 		file.Read(&anim->m_NumChannels, sizeof(unsigned int));
+		file.Read(&anim->m_Loop, sizeof(bool));
 
 
 		//Load NodeAnim structure

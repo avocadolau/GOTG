@@ -23,17 +23,17 @@
         public Vector3 LocalRotation;
         public Vector3 LocalScale;
 
-        //public Matrix4x4 worldMatrix;
-        //public Matrix4x4 localMatrix;
-        public Vector4 world_mat_r1;
-        public Vector4 world_mat_r2;
-        public Vector4 world_mat_r3;
-        public Vector4 world_mat_r4;
+        public Matrix4x4 worldMatrix;
+        public Matrix4x4 localMatrix;
+        //public Vector4 world_mat_r1;
+        //public Vector4 world_mat_r2;
+        //public Vector4 world_mat_r3;
+        //public Vector4 world_mat_r4;
 
-        public Vector4 local_mat_r1;
-        public Vector4 local_mat_r2;
-        public Vector4 local_mat_r3;
-        public Vector4 local_mat_r4;
+        //public Vector4 local_mat_r1;
+        //public Vector4 local_mat_r2;
+        //public Vector4 local_mat_r3;
+        //public Vector4 local_mat_r4;
     }
     #endregion
     #region CollisionBody
@@ -151,6 +151,7 @@
     {
         public float speed;
         public Vector3 target;
+        public float angularSpeed;
     }
 
     #endregion

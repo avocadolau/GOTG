@@ -6,9 +6,9 @@ void SetRoomStateTriggerNext(bool value)
 	Wiwa::GameStateManager::setPlayerTriggerNextRoom(value);
 }
 
-void InitHub(void* scene)
+void InitHub()
 {
-	Wiwa::GameStateManager::InitHub(scene);
+	Wiwa::GameStateManager::InitHub();
 }
 
 void StartRun()
@@ -21,22 +21,33 @@ void EndRun()
 	Wiwa::GameStateManager::EndRun();
 }
 
-void SetPlayer(size_t id)
+void SetPlayer(size_t id, void* scene)
 {
-	Wiwa::GameStateManager::SetPlayerId(id);
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::GameStateManager::SetPlayerId(id, _scene);
 }
 
-void SaveProgression()
+void SavePlayerProgression()
 {
-	//Wiwa::GameStateManager::SaveProgression();
+	Wiwa::GameStateManager::SaveProgression();
 }
 
-void LoadProgression()
+void LoadPlayerProgression()
 {
-	//Wiwa::GameStateManager::LoadProgression();
+	Wiwa::GameStateManager::LoadProgression();
 }
 
 float GetControllerDeadzone()
 {
 	return Wiwa::GameStateManager::s_GamepadDeadzone;
+}
+
+void Die()
+{
+	Wiwa::GameStateManager::Die();
+}
+
+size_t GetPlayerId()
+{
+	return Wiwa::GameStateManager::s_PlayerId;
 }

@@ -6,7 +6,7 @@
 #include <Wiwa/core/Renderer2D.h>
 namespace Wiwa
 {
-	GuiBar::GuiBar(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, Rect2i boundsOriginTex, Rect2i sliderOriginTex) : GuiControl(scene, GuiControlType::BAR, id)
+	GuiBar::GuiBar(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, Rect2i boundsOriginTex, Rect2i sliderOriginTex, bool active) : GuiControl(scene, GuiControlType::BAR, id)
 	{
 		this->position = bounds;
 		this->extraPosition = sliderBounds;
@@ -14,7 +14,7 @@ namespace Wiwa
 		extraTexturePosition = sliderOriginTex;
 		name = "UI_bar";
 		m_Scene = scene;
-		active = true;
+		this->active = active;
 		text = "none";
 		callbackID = WI_INVALID_INDEX;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
@@ -28,6 +28,12 @@ namespace Wiwa
 
 		state = GuiControlState::NORMAL;
 
+		if (!active)
+		{
+			r2d.DisableInstance(m_Scene, id_quad_normal);
+			r2d.DisableInstance(m_Scene, id_quad_extra);
+
+		}
 	}
 
 	GuiBar::~GuiBar()
@@ -40,7 +46,6 @@ namespace Wiwa
 	{
 		extraPosition.x = position.x;
 		extraPosition.y = position.y;
-
 		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		return false;

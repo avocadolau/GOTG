@@ -7,14 +7,14 @@
 
 namespace Wiwa
 {
-	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex) : GuiControl(scene, GuiControlType::IMAGE, id)
+	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active) : GuiControl(scene, GuiControlType::IMAGE, id)
 	{
 		this->position = bounds;
 		this->texture = texture;
 		texturePosition = boundsOriginTex;
 		name = "Image";
 		m_Scene = scene;
-		active = true;
+		this->active = active;
 		text = "none";
 		audioEventForButton = "none";
 		this->callbackID = callbackID;
@@ -32,6 +32,11 @@ namespace Wiwa
 		state = GuiControlState::NORMAL;
 		canClick = true;
 
+		if (!active)
+		{
+			r2d.DisableInstance(m_Scene, id_quad_normal);
+
+		}
 		/*animated = true;
 		timeForAnim = 0;
 		framesAnimation = 0;

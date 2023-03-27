@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Wiwa;
 
 namespace Game
@@ -17,8 +18,10 @@ namespace Game
         public ComponentIterator characterStatsIt;
         public ComponentIterator colliderIt;
         public ComponentIterator agentIt;
+        public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
-        public EntityId playerId;
+
+        public EntityId playerId; 
         bool debug = true;
         public virtual void Awake()
         {
@@ -33,6 +36,8 @@ namespace Game
             agentIt.componentIndex = Constants.WI_INVALID_INDEX;
             playerTransformIt.componentId = Constants.WI_INVALID_INDEX;
             playerTransformIt.componentIndex = Constants.WI_INVALID_INDEX;
+            transformIt.componentId = Constants.WI_INVALID_INDEX;
+            transformIt.componentIndex = Constants.WI_INVALID_INDEX;
         }
 
         public virtual void Init()
@@ -42,8 +47,10 @@ namespace Game
             characterStatsIt = GetComponentIterator<Character>();
             colliderIt = GetComponentIterator<CollisionBody>();
             agentIt = GetComponentIterator<AgentAI>();
-            playerId = GetEntityByName("Player");
+            playerId = GameState.GetPlayerId();
+            if (debug) Console.WriteLine("-- Starting Init -- player id is: " + playerId);
             playerTransformIt = GetComponentIterator<Transform3D>(playerId);
+            transformIt = GetComponentIterator<Transform3D>();
         }
 
         public virtual void Update()
@@ -75,11 +82,25 @@ namespace Game
             //attackRate += Time.DeltaTimeMS();
         }
 
-        void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
+        public virtual void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
             if (id1 == m_EntityId && str2 == "BULLET")
             {
-                ReceiveDamage(20);
+                ref BulletComponent bullet = ref GetComponent<BulletComponent>(id2);
+                ReceiveDamage(bullet.Damage);
+            }
+        }
+        public void ChasePlayer(EnemySystem enemy, ulong entityId)
+        {
+            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            if (enemy.playerTransformIt.componentId != Constants.WI_INVALID_INDEX)
+            {
+                ref Transform3D playerTr = ref enemy.GetComponentByIterator<Transform3D>(enemy.playerTransformIt);
+                if (enemy.agentIt.componentIndex != Constants.WI_INVALID_INDEX)
+                {
+                    ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
+                    AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
+                }
             }
         }
 

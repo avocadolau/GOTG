@@ -18,6 +18,13 @@ namespace Wiwa
 
 	}
 
+	bool GuiCanvas::Update()
+	{
+		InputController();
+
+		return true;
+	}
+
 	void GuiCanvas::SwapActive()
 	{
 		active = !active;
@@ -41,5 +48,44 @@ namespace Wiwa
 			}
 		}
 		
+	}
+
+	void GuiCanvas::InputController()
+	{
+
+		if (Wiwa::Input::IsButtonPressed(0, 13))
+		{
+			DpadUp = true;
+		}
+		if (Wiwa::Input::IsButtonPressed(0, 11))
+		{
+			DpadDown = true;
+		}
+		if (Wiwa::Input::IsButtonReleased(0, 13) && DpadUp)
+		{
+			DpadUp = false;
+			idGuiSelected++;
+
+			if (idGuiSelected >= controlsForSelection.size())
+			{
+				idGuiSelected = 0;
+			}
+		}
+		if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
+		{
+			DpadDown = false;
+			idGuiSelected--;
+			if (idGuiSelected <= -1)
+			{
+				idGuiSelected = controlsForSelection.size() - 1;
+			}
+		}
+		if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
+		{
+			SelectElement(idGuiSelected);
+
+		}
+
+
 	}
 }

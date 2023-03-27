@@ -23,13 +23,30 @@
             InternalCalls.EndRun();
         }
 
-        public static void SetPlayer(EntityId id)
+        public static void SetPlayer(EntityId id, System.Int64 scene)
         {
-            InternalCalls.SetPlayer(id);
+            InternalCalls.SetPlayer(id, scene);
         }
         public static float GetControllerDeadzone()
         {
             return InternalCalls.GetControllerDeadzone();
+        }
+
+        public static void SavePlayerProgression()
+        {
+            InternalCalls.SavePlayerProgression();
+        }
+        public static void LoadPlayerProgression()
+        {
+            InternalCalls.LoadPlayerProgression();
+        }
+        public static void Die()
+        {
+            InternalCalls.Die();
+        }
+        public static EntityId GetPlayerId()
+        {
+            return InternalCalls.GetPlayerId();
         }
     }
 }

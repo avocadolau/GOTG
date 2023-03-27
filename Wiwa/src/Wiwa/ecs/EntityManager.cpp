@@ -438,6 +438,23 @@ namespace Wiwa {
 		return eid;
 	}
 
+	EntityId EntityManager::LoadPrefab(const char* path, EntityId parent)
+	{
+		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		if (file.IsOpen()) {
+			eid = _loadEntityImpl(file, parent, true);
+		}
+
+		file.Close();
+
+		return eid;
+	}
+
 	void EntityManager::DestroyEntity(EntityId entity)
 	{
 		m_EntitiesToDestroy.push_back(entity);
@@ -712,6 +729,40 @@ namespace Wiwa {
 		ComponentId cid = GetComponentId(hash);
 
 		return IsComponentRemoved(cid, index);
+	}
+
+	EntityId EntityManager::GetEntityByName(const char* name)
+	{
+		size_t ecount = m_EntityNames.size();
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		for (size_t i = 0; i < ecount; i++) {
+			if (m_EntityNames[i] == name) {
+				eid = i;
+				break;
+			}
+		}
+
+		return eid;
+	}
+
+	EntityId EntityManager::GetChildByName(EntityId parent, const char* name)
+	{
+		EntityId eid = WI_INVALID_INDEX;
+
+		size_t ecount = m_EntityChildren[parent].size();
+
+		for (size_t i = 0; i < ecount; i++) {
+			EntityId id = m_EntityChildren[parent][i];
+
+			if (m_EntityNames[id] == name) {
+				eid = id;
+				break;
+			}
+		}
+
+		return eid;
 	}
 
 	size_t EntityManager::GetComponentIndex(EntityId entityId, ComponentId componentId, size_t componentSize)

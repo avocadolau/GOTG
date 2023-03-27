@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiBar(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path,Rect2i boundsOriginTex, Rect2i sliderOriginTex);
+		GuiBar(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path,Rect2i boundsOriginTex, Rect2i sliderOriginTex,bool active);
 		virtual ~GuiBar();
 
 		bool Draw(Renderer2D* render);
