@@ -356,7 +356,7 @@ namespace Wiwa
 			matShader->setUniform(matShader->getUniformLocation("u_LightMVP"), lightMVP);
 		}*/
 
-		camera->shadowBuffer->BindTexture();
+		//camera->shadowBuffer->BindTexture();
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 

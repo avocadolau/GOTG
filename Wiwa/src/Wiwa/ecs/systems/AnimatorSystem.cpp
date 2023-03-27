@@ -48,7 +48,11 @@ namespace Wiwa {
 	void AnimatorSystem::OnSystemAdded()
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+		
 		anim->animator = Animator::LoadWiAnimator(anim->filePath);
 	}
 	void AnimatorSystem::OnSystemRemoved()
