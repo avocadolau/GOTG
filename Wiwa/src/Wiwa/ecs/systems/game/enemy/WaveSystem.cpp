@@ -87,7 +87,6 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		EntityId newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 		entityManager.RemoveSystem(newEnemyId, physicsSystemHash);
-		entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
 
 		// Set readable name
 		Wave* wave = GetComponentByIterator<Wave>(m_Wave);
@@ -177,7 +176,8 @@ namespace Wiwa
 
 		//entityManager.ApplySystem(newEnemyId, sysHash);
 		//entityManager.ApplySystem<Wiwa::AgentAISystem>(newEnemyId);
-	
+		entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
+
 	}
 
 	void WaveSystem::DestroyEnemy(int index)
