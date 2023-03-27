@@ -117,19 +117,22 @@ namespace Game
 
             // Make the camera move an especified offset when walking on specified direction (with gamepad)
 
-            if (Input.IsKeyDown(KeyCode.Left))
+            float gamepadInputX = Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.LeftX, GameState.GetControllerDeadzone());
+            float gamepadInputZ = Input.GetRawAxis(Gamepad.GamePad1, GamepadAxis.LeftY, GameState.GetControllerDeadzone());
+
+            if (gamepadInputX < -0.3f)
             {
                 if (extraPosOffsetX <= (extraPosOffsetDistanceX)) extraPosOffsetX += (Time.DeltaTimeMS() / offsetDivision);
             }
-            if (Input.IsKeyDown(KeyCode.Right))
+            if (gamepadInputX > 0.3f)
             {
                 if (extraPosOffsetX >= -(extraPosOffsetDistanceX)) extraPosOffsetX -= (Time.DeltaTimeMS() / offsetDivision);
             }
-            if (Input.IsKeyDown(KeyCode.Up))
+            if (gamepadInputZ < -0.3f)
             {
                 if (extraPosOffsetZ <= (extraPosOffsetDistanceZ)) extraPosOffsetZ += (Time.DeltaTimeMS() / offsetDivision);
             }
-            if (Input.IsKeyDown(KeyCode.Down))
+            if (gamepadInputZ > 0.3f)
             {
                 if (extraPosOffsetZ >= -(extraPosOffsetDistanceZ)) extraPosOffsetZ -= (Time.DeltaTimeMS() / offsetDivision);
             }
