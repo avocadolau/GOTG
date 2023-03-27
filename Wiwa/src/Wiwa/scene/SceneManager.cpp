@@ -132,23 +132,32 @@ namespace Wiwa
 			data = new byte[c_size];
 			scene_file.Read(data, c_size);
 
-			byte *component = em.AddComponent(eid, c_hash, data);
-			delete[] data;
-
 			size_t mesh_hash = em.GetComponentType(em.GetComponentId<Mesh>())->hash;
 
 			if (c_hash == mesh_hash)
 			{
-				Mesh *mesh = (Mesh *)component;
+				Mesh* mesh = (Mesh*)data;
 
 				size_t meshpath_size = strlen(mesh->mesh_path);
-				if (meshpath_size > 0)
+				if (meshpath_size > 0) {
 					mesh->meshId = Resources::Load<Model>(mesh->mesh_path);
 
-				size_t matpath_size = strlen(mesh->mat_path);
-				if (matpath_size > 0)
-					mesh->materialId = Resources::Load<Material>(mesh->mat_path);
+					Model* model = Resources::GetResourceById<Model>(mesh->meshId);
+
+					size_t msize = model->getModelCount();
+
+					if (mesh->modelIndex < msize) {
+						size_t matpath_size = strlen(mesh->mat_path);
+						if (matpath_size > 0) {
+							mesh->materialId = Resources::Load<Material>(mesh->mat_path);
+
+							em.AddComponent(eid, c_hash, data);
+						}
+					}
+				}
 			}
+
+			delete[] data;
 		}
 
 		size_t system_count;
