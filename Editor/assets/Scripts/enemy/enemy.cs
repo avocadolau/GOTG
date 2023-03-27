@@ -120,7 +120,7 @@ namespace Game
                 {
                     ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
                     AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
-                    //RotateTo(playerTr.Position,  enemy, entityId);                   
+                    RotateTo(playerTr.Position,  enemy, entityId);                   
                 }
             }
         }
@@ -140,20 +140,20 @@ namespace Game
             }
         }
 
-        //public void RotateTo(Vector3 target, EnemySystem enemy, ulong entityId)
-        //{
-        //    float angle = Mathf.Atan2(target.x, target.z) * Mathf.Rad2Deg;
+        public void RotateTo(Vector3 target, EnemySystem enemy, ulong entityId)
+        {
+            float angle = Mathf.Atan2(target.x, target.z) * Mathf.Rad2Deg;
 
-        //    ref Enemy self = ref enemy.GetComponentByIterator<Enemy>(enemyIt);
+            ref Enemy self = ref enemy.GetComponentByIterator<Enemy>(enemyIt);
 
-        //    self.currentRotation.y = Mathf.LerpAngle(self.currentRotation.y, angle, self.rotationSpeed);
+            self.currentRotation.y = Mathf.LerpAngle(self.currentRotation.y, angle, 10);
 
-        //    if (self.currentRotation.y >= 360f)
-        //        self.currentRotation.y = 0f;
+            if (self.currentRotation.y >= 360f)
+                self.currentRotation.y = 0f;
 
-        //    ref Transform3D transform = ref enemy.GetComponent<Transform3D>();
+            ref Transform3D transform = ref enemy.GetComponent<Transform3D>();
 
-        //    transform.LocalRotation.y = self.currentRotation.y
-        //}
+            transform.LocalRotation.y = self.currentRotation.y;
+        }
     }
 }
