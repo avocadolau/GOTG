@@ -21,6 +21,7 @@ namespace Game
         public ComponentIterator agentIt;
         public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
+        public ComponentIterator playerStatsIt;
 
         public EntityId playerId;
         bool debug = true;
@@ -39,6 +40,9 @@ namespace Game
             playerTransformIt.componentIndex = Constants.WI_INVALID_INDEX;
             transformIt.componentId = Constants.WI_INVALID_INDEX;
             transformIt.componentIndex = Constants.WI_INVALID_INDEX;
+            playerStatsIt.componentId = Constants.WI_INVALID_INDEX;
+            playerStatsIt.componentIndex = Constants.WI_INVALID_INDEX;
+
         }
 
         public virtual void Init()
@@ -52,6 +56,7 @@ namespace Game
             if (debug) Console.WriteLine("-- Starting Init -- player id is: " + playerId);
             playerTransformIt = GetComponentIterator<Transform3D>(playerId);
             transformIt = GetComponentIterator<Transform3D>();
+            playerStatsIt = GetComponentIterator<Character>(playerId);
 
             ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
             self.rotationSpeed = 10;
@@ -96,7 +101,7 @@ namespace Game
         }
         public void ChasePlayer(EnemySystem enemy, ulong entityId)
         {
-            Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            //Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             if (enemy.playerTransformIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref Transform3D playerTr = ref enemy.GetComponentByIterator<Transform3D>(enemy.playerTransformIt);

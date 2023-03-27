@@ -80,24 +80,25 @@ namespace Game
 
         void TriggerAttack(ref MeleeAttack attack)
         {
-            attack.hasFinished = false;
-
-
-            if (playerStatsIt.componentId != Constants.WI_INVALID_INDEX)
-            {
-                ref Character stats = ref GetComponentByIterator<Character>(playerStatsIt);
-                ref Transform3D transform = ref GetComponentByIterator<Transform3D>(playerTransformIt);
-                ref Transform3D transform_attack = ref GetComponentByIterator<Transform3D>(transformIt);
-                Vector3 vector;
-                vector.x = transform.Position.x - transform_attack.Position.x;
-                vector.y = 0;
-                vector.z = transform.Position.z - transform_attack.Position.z;
-                float distance = Mathf.Sqrt(vector.x * vector.x + vector.z * vector.z);
-                if(distance <= 3.0f)
-                {
-                    stats.Health -= attack.damage;
-                }
-            }
+            //attack.hasFinished = false;
+            //
+            //
+            //if (playerStatsIt.componentId != Constants.WI_INVALID_INDEX)
+            //{
+            //    ref Character stats = ref GetComponentByIterator<Character>(playerStatsIt);
+            //    ref Transform3D transform = ref GetComponentByIterator<Transform3D>(playerTransformIt);
+            //    //ref Transform3D transformEnemy = ref self.GetComponentByIterator<Transform3D>(self.transformIt);
+            //    Vector3 vector;
+            //    vector.x = transform.Position.x - transformEnemy.Position.x;
+            //    vector.y = 0;
+            //    vector.z = transform.Position.z - transformEnemy.Position.z;
+            //    float distance = Mathf.Sqrt(vector.x * vector.x + vector.z * vector.z);
+            //    Console.WriteLine(" Distance " + distance);
+            //    if(distance <= 3.0f)
+            //    {
+            //        stats.Health -= attack.damage;
+            //    }
+            //}
 
             // Sounds & particles here
         }
