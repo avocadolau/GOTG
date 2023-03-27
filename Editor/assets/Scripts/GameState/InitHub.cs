@@ -4,9 +4,14 @@ namespace WiwaApp
 {
     class InitHub : Behaviour
     {
-        void Init()
+        private bool pendingToLoad = true;
+        void Update()
         {
-            GameState.InitHub(m_Scene);
+            if (pendingToLoad)
+            {
+                GameState.InitHub(m_Scene);
+                pendingToLoad = false;
+            }
         }
     }
 }

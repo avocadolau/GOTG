@@ -1,6 +1,4 @@
-﻿using Game;
-using System;
-using System.Linq;
+﻿using System;
 using Wiwa;
 
 namespace WiwaApp
@@ -47,7 +45,8 @@ namespace WiwaApp
 
         void Update()
         {
-            if (debug) Console.WriteLine("-- Starting Update -- Enemy spawner");
+            if (debug)
+                Console.WriteLine("-- Starting Update -- Enemy spawner");
             if (enemySpawnerIt.componentId != Constants.WI_INVALID_INDEX)
             {
                 ref WavesSpawner enemySpawner = ref GetComponentByIterator<WavesSpawner>(enemySpawnerIt);
@@ -65,7 +64,6 @@ namespace WiwaApp
                     ref Wave currentWave = ref GetComponent<Wave>(currentWaveEntityId);
                     if (debug) Console.WriteLine("Checking wave");
 
-                    if (debug) Console.WriteLine("No Wave");
                     if (!previousWaveDestroy)
                         previousWaveDestroy = CheckFinishWave(currentWave);
 
@@ -90,7 +88,7 @@ namespace WiwaApp
                 }
             }
 
-            //if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
+            if (debug) Console.WriteLine("-- Finish Update -- Enemy spawner");
         }
 
 
@@ -152,7 +150,7 @@ namespace WiwaApp
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
-            if (id1 == m_EntityId && str2 == "PLAYER")
+            if (id1 == m_EntityId)
             {
                 if (enemySpawnerIt.componentId != Constants.WI_INVALID_INDEX)
                 {
@@ -165,7 +163,7 @@ namespace WiwaApp
 
                 }
             }
-            
+
         }
     }
 }

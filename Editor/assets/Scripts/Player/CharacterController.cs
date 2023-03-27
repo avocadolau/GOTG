@@ -34,13 +34,11 @@ namespace Game
         private float animTimer = 0f;
 
         private float dieTimer = 5f;
-
+        private bool pendingToLoad = true;
         Vector3 lastDir = Vector3Values.zero;
 
         void Awake()
         {
-            GameState.SetPlayer(m_EntityId, m_Scene);
-            GameState.LoadPlayerProgression();
             //Setting components
             characterControllerIt = GetComponentIterator<Character>();
             transformIt = GetComponentIterator<Transform3D>();
@@ -48,12 +46,18 @@ namespace Game
             shooterIt = GetComponentIterator<StarlordShooter>();
             dashTimer = GetComponentByIterator<Character>(characterControllerIt).DashCooldown;
         }
-
+        void Init()
+        {
+        }
         void Update()
         {
-
+            if (pendingToLoad)
+            {
+                GameState.SetPlayer(m_EntityId, m_Scene);
+                GameState.LoadPlayerProgression();
+                pendingToLoad = false;
+            }
             //Components
-
             ref Transform3D transform = ref GetComponentByIterator<Transform3D>(transformIt);
             ref Character controller = ref GetComponentByIterator<Character>(characterControllerIt);
             ref CollisionBody rb = ref GetComponentByIterator<CollisionBody>(rigidBodyIt);
