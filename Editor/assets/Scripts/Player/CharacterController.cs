@@ -26,6 +26,7 @@ namespace Game
         private float footstepTimer = 0f;
         private float walkStepTimer = 0.62f;
         private float runStepTimer = 0.458f;
+        float stepParticleTimer = 0.0f;
 
         private bool isWalking = false;
         private bool isAiming = false;
@@ -122,6 +123,19 @@ namespace Game
                 }
             }
 
+            if (isWalking)
+            {
+                stepParticleTimer -= Time.DeltaTime();
+
+                if (stepParticleTimer < 0)
+                {
+                    ParticleEmitterManger.ParticleEmitterPlayBatch(m_EntityId);
+
+                    stepParticleTimer = 0.4f; //better if random between 2 values
+
+
+                }
+            }
         }
 
         private bool CheckDeath(ref Character controller)
