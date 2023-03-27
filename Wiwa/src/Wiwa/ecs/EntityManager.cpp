@@ -174,6 +174,8 @@ namespace Wiwa {
 
 			Transform3D* t3d = GetComponent<Transform3D>(p_ent);
 
+			if (!t3d) return;
+
 			t3d->position = t3d->localPosition;
 			t3d->rotation = t3d->localRotation;
 			t3d->scale = t3d->localScale;
