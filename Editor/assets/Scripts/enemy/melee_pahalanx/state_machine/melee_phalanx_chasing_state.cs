@@ -36,7 +36,6 @@ namespace Game
                     if (AgentAIManager.DistanceAgentTarget(entityId, playerTr.LocalPosition) < 4)
                     {
                         enemy.SwitchState(enemy.attackingState);
-
                     }
                 }
             }
@@ -49,7 +48,6 @@ namespace Game
         }
         public override void OnCollisionEnter(ref EnemyMeleePhalanx enemy, EntityId id1, EntityId id2, string str1, string str2)
         {
-
         }
     }
 }
