@@ -100,8 +100,8 @@ namespace Wiwa
 		std::random_device rd;  //Will be used to obtain a seed for the random number engine
 		std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 		std::uniform_int_distribution<> dis(-10, 10);
-		enemyTransform->localPosition.x = spawnTransform->localRotation.x + dis(gen);
-		enemyTransform->localPosition.z = spawnTransform->localRotation.z + dis(gen);
+		enemyTransform->localPosition.x = spawnTransform->position.x + dis(gen);
+		enemyTransform->localPosition.z = spawnTransform->position.z + dis(gen);
 		enemyTransform->localPosition.y = 0;
 
 		// Set the correspondent tag

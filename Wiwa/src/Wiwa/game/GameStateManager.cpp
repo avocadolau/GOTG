@@ -74,6 +74,8 @@ namespace Wiwa
 		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
 		JSONDocument doc("config/player_data.json");
+		if (!character)
+			return;
 		if (doc.IsObject())
 		{
 			if (doc.HasMember("max_health"))
@@ -106,8 +108,8 @@ namespace Wiwa
 
 	void GameStateManager::UpdateRoomState()
 	{
-		//if (s_RoomType == RoomType::ROOM_COMBAT)
-			//UpdateCombatRoom();
+		if (s_RoomType == RoomType::ROOM_COMBAT)
+			UpdateCombatRoom();
 
 		if (s_HasFinshedRoom && s_CanPassNextRoom && s_PlayerTriggerNext)
 		{
@@ -123,11 +125,11 @@ namespace Wiwa
 
 	void GameStateManager::UpdateCombatRoom()
 	{
-		Wiwa::EntityManager& em = s_CurrentScene->GetEntityManager();
-		em.RegisterComponent<EnemySpawner>();
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		em.RegisterComponent<WavesSpawner>();
 		size_t size = 0;
-		ComponentHash cmpHash = FNV1A_HASH("EnemySpawner");
-		Wiwa::EnemySpawner* enemySpawnerList = (Wiwa::EnemySpawner*)em.GetComponentsByHash(cmpHash, &size);
+		ComponentHash cmpHash = FNV1A_HASH("WavesSpawner");
+		Wiwa::WavesSpawner* enemySpawnerList = (Wiwa::WavesSpawner*)em.GetComponentsByHash(cmpHash, &size);
 
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
@@ -142,7 +144,7 @@ namespace Wiwa
 				{
 					s_TotalSpawners += 1;
 
-					Wiwa::EnemySpawner* c = &enemySpawnerList[i];
+					Wiwa::WavesSpawner* c = &enemySpawnerList[i];
 					if (c)
 					{
 						if (c->hasFinished)
@@ -150,9 +152,10 @@ namespace Wiwa
 					}
 				}
 			}
+			s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
+			s_CanPassNextRoom = s_HasFinshedRoom;
 		}
-		s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
-		s_CanPassNextRoom = s_HasFinshedRoom;
+	
 
 		if (s_HasFinshedRoom)
 			ChangeRoomState(RoomState::STATE_FINISHED);
@@ -298,7 +301,7 @@ namespace Wiwa
 	{
 		if (debug) WI_INFO("GAME STATE: ResetCombatRoomData()");
 		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		em.RegisterComponent<EnemySpawner>();
+		em.RegisterComponent<WavesSpawner>();
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
 	}
@@ -349,32 +352,35 @@ namespace Wiwa
 			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
-
-		}break;
+			break;
+		}
 		case Wiwa::RoomType::ROOM_COMBAT:
 		{
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_REWARD");
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			int nextRoom = s_LastRewardRoom;
-			while (nextRoom == s_LastRewardRoom)
+			/*while (nextRoom == s_LastRewardRoom)
 			{
-				nextRoom = RAND(0, s_RewardRooms.size() - 1);
-			}
+			}*/
+			nextRoom = RAND(0, s_RewardRooms.size() - 1);
+
 			s_LastRewardRoom = nextRoom;
 			SceneId id = s_RewardRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
-		}break;
+			break;
+		}
 		case Wiwa::RoomType::ROOM_REWARD:
 		{
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			int nextRoom = s_LastCombatRoom;
-			while (nextRoom == s_LastCombatRoom)
+			/*while (nextRoom == s_LastCombatRoom)
 			{
-				nextRoom = RAND(0, s_CombatRooms.size() - 1);
-			}
+				
+			}*/
+			nextRoom = RAND(0, s_CombatRooms.size() - 1);
 			s_LastCombatRoom = nextRoom;
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
@@ -396,12 +402,14 @@ namespace Wiwa
 				SceneManager::ChangeSceneByIndex(id);
 				s_RoomsToShop = 10;
 			}
-		}break;
+			break;
+		}
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 			SceneManager::ChangeSceneByName("RunEnd");
-		}break;
+			break;
+		}
 		case Wiwa::RoomType::ROOM_SHOP:
 		{
 			if (s_RoomsToBoss == 0)
@@ -419,8 +427,8 @@ namespace Wiwa
 				SceneId id = s_CombatRooms[nextRoom];
 				SceneManager::ChangeSceneByIndex(id);
 			}
-
-		}break;
+			break;
+		}
 		default:
 			break;
 		}

@@ -164,6 +164,7 @@ private:
 public:
 	static std::string s_SolVersion;
 	static std::string s_BuildConf;
+	static bool s_BuildAutomatic;
 private:
 	static EditorLayer* s_Instance;
 	static std::thread* s_RegenThread;

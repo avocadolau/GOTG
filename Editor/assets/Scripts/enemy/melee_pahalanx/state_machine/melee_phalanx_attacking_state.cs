@@ -49,13 +49,13 @@ namespace Game
             enemy.timer = 0;
             Animator.PlayAnimationName("atack", entityId);
             enemy.ChasePlayer(enemy, entityId);
+
         }
 
         public override void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Animator.PauseAnimation(entityId);
             //Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
-
             if (firstAttack.HasFinished(enemy)) // && secondAttack.hasInit == false)
             {
                 Console.WriteLine("First attack has finished");
@@ -65,6 +65,7 @@ namespace Game
             {
                 enemy.SwitchState(enemy.chasingState);
             }
+
 
             //if (secondAttack.HasFinished(enemy))
             //{

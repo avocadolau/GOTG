@@ -13,13 +13,15 @@
 typedef size_t SceneId;
 
 namespace Wiwa {
-	struct EnemySpawner
+	struct WavesSpawner
 	{
 		int maxEnemiesPerWave;
 		int maxWaveCount;
 		int currentWaveCount;
 		float timeBetweenWaves;
 		bool hasFinished;
+		bool hasTriggered;
+		int spawnOffset;
 	};
 	struct DefaultCharacterSettings
 	{

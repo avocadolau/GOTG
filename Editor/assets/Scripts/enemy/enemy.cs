@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Wiwa;
 
 namespace Game
@@ -10,6 +9,8 @@ namespace Game
     {
         public int enemyType;
         public bool hasFinished;
+        public float rotationSpeed;
+        public Vector3 currentRotation;
     }
 
     public class EnemySystem : Behaviour
@@ -21,7 +22,7 @@ namespace Game
         public ComponentIterator transformIt;
         public ComponentIterator playerTransformIt;
 
-        public EntityId playerId; 
+        public EntityId playerId;
         bool debug = true;
         public virtual void Awake()
         {
@@ -51,6 +52,9 @@ namespace Game
             if (debug) Console.WriteLine("-- Starting Init -- player id is: " + playerId);
             playerTransformIt = GetComponentIterator<Transform3D>(playerId);
             transformIt = GetComponentIterator<Transform3D>();
+
+            ref Enemy self = ref GetComponentByIterator<Enemy>(enemyIt);
+            self.rotationSpeed = 10;
         }
 
         public virtual void Update()
@@ -100,6 +104,7 @@ namespace Game
                 {
                     ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
                     AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
+                    RotateTo(playerTr.Position,  enemy, entityId);                   
                 }
             }
         }
@@ -117,6 +122,22 @@ namespace Game
                     self.hasFinished = true;
                 }
             }
+        }
+
+        public void RotateTo(Vector3 target, EnemySystem enemy, ulong entityId)
+        {
+            float angle = Mathf.Atan2(target.x, target.z) * Mathf.Rad2Deg;
+
+            ref Enemy self = ref enemy.GetComponentByIterator<Enemy>(enemyIt);
+       
+            self.currentRotation.y = Mathf.LerpAngle(self.currentRotation.y, angle, self.rotationSpeed);
+
+            if (self.currentRotation.y >= 360f)
+                self.currentRotation.y = 0f;
+
+            ref Transform3D transform = ref enemy.GetComponent<Transform3D>();
+
+            transform.LocalRotation = new Vector3(0, self.currentRotation.y,0);
         }
     }
 }

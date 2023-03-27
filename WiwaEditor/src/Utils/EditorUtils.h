@@ -8,6 +8,19 @@
 #include <Wiwa/utilities/math/Vector3f.h>
 struct Field;
 
+inline static void HelpMarker(const char* desc)
+{
+	ImGui::TextDisabled("(?)");
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort))
+	{
+		ImGui::BeginTooltip();
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(desc);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
+}
+
 inline void TextCentered(const char* text) {
 	ImVec2 windowSize = ImGui::GetWindowSize();
 	ImVec2 textSize = ImGui::CalcTextSize(text);
