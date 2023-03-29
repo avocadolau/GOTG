@@ -188,13 +188,13 @@ namespace Wiwa
 	}
 	bool GuiManager::CleanUp()
 	{
-		//std::vector<GuiControl*> control = controls;
+		for (size_t i = 0; i < canvas.size(); i++)
+		{
+			canvas.at(i)->controls.clear();
+			canvas.at(i)->controlsForSelection.clear();
+		}
 
-		//for (int i = 0; i < control.size(); i++)
-		//{
-		//	//control.erase(i);
-		//}
-
+		canvas.clear();
 		return true;
 	}
 
