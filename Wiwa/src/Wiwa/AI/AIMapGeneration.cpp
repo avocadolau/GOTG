@@ -149,81 +149,7 @@ bool Wiwa::AIMapGeneration::BakeMap()
 				if (em.HasComponent<Wiwa::ColliderCube>(actualId))
 				{
 					ColliderCube* cube = em.GetComponent<ColliderCube>(actualId);
-					glm::vec3& pos = em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
-					glm::vec3& rot = em.GetComponent<Wiwa::Transform3D>(actualId)->localRotation;
-					btTransform& t = em.GetSystem<Wiwa::PhysicsSystem>(actualId)->getBody()->collisionObject->getWorldTransform();
-
-					glm::mat4 mat(1.0f);
-					t.getOpenGLMatrix(glm::value_ptr(mat));
-
-					glm::vec2 rectPos = { pos.x,pos.z };
-					glm::vec2 halfExtents = { cube->halfExtents.x, cube->halfExtents.z };
-					glm::vec2 scaling = { cb->scalingOffset.x, cb->scalingOffset.z };
-
-					/*glm::vec2 topLeft = rectPos - halfExtents;
-					glm::vec2 bottomLeft = rectPos + glm::vec2(-halfExtents.x, halfExtents.y);
-					glm::vec2 bottomRight = rectPos + halfExtents;
-					glm::vec2 topRight = rectPos + glm::vec2(halfExtents.x, -halfExtents.y);
-
-					topLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, 1));
-					bottomLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, -1));
-					bottomRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, -1));
-					topRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, 1));*/
-
-					/*glm::vec2 topLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z + cube->halfExtents.z);
-					glm::vec2 bottomLeft = glm::vec2(pos.x - cube->halfExtents.x, pos.z - cube->halfExtents.z);
-					glm::vec2 bottomRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z - cube->halfExtents.z);
-					glm::vec2 topRight = glm::vec2(pos.x + cube->halfExtents.x, pos.z + cube->halfExtents.z);*/
-
-
-					//glm::ivec2 topLeftMap = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
-					//glm::ivec2 bottomLeftMap = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
-					//glm::ivec2 bottomRightMap = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
-					//glm::ivec2 topRightMap = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
-
-					// Calculate the corners of the rotated rectangle in world space
-					glm::vec2 topLeft = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(-1, 1));
-					glm::vec2 bottomLeft = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(-1, -1));
-					glm::vec2 bottomRight = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(1, -1));
-					glm::vec2 topRight = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(1, 1));
-
-					// Convert the corners to tile coordinates
-					glm::ivec2 topLeftTile = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
-					glm::ivec2 bottomLeftTile = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
-					glm::ivec2 bottomRightTile = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
-					glm::ivec2 topRightTile = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
-
-					// Determine the minimum and maximum x and y tile indices
-					int minX = std::min({ topLeftTile.x, bottomLeftTile.x, bottomRightTile.x, topRightTile.x });
-					int minY = std::min({ topLeftTile.y, bottomLeftTile.y, bottomRightTile.y, topRightTile.y });
-					int maxX = std::max({ topLeftTile.x, bottomLeftTile.x, bottomRightTile.x, topRightTile.x });
-					int maxY = std::max({ topLeftTile.y, bottomLeftTile.y, bottomRightTile.y, topRightTile.y });
-
-					// Loop over all tiles within the bounding box
-					for (int y = minY; y <= maxY; y++) {
-						for (int x = minX; x <= maxX; x++) {
-							// Calculate the center of the current tile in world space
-							glm::vec2 tileCenter = Wiwa::AIMapGeneration::MapToWorld(x, y) + glm::vec2(m_MapData.tileWidth / 2, m_MapData.tileHeight / 2);
-							SetPositionUnWalkable(glm::ivec2(x, y));
-
-							//// Check if the tile is contained within the rotated rectangle
-							//if (pointInRotatedRect(tileCenter, rectPos, halfExtents, scaling, glm::radians(rot.y))) {
-							//	// Do something with the tile
-							//	// ...
-							//}
-						}
-					}
-
-
-
-					/*for (int i = bottomLeftMap.y; i <= topLeftMap.y; i++)
-					{
-						for (int j = topLeftMap.x; j <= topRightMap.x; j++)
-						{
-							SetPositionUnWalkable(glm::ivec2(j, i));
-						}
-					}*/
-
+					BakeCube(*cb, *cube, actualId, em);
 				}
 				else if (em.HasComponent<Wiwa::ColliderSphere>(actualId))
 				{
@@ -244,6 +170,92 @@ bool Wiwa::AIMapGeneration::BakeMap()
 	}
 	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
 	return true;
+}
+
+bool Wiwa::AIMapGeneration::BakeCube(const CollisionBody& body, const ColliderCube& cube, EntityId actualId, EntityManager& em)
+{
+	glm::vec3& pos = em.GetComponent<Wiwa::Transform3D>(actualId)->localPosition;
+	glm::vec3& rot = em.GetComponent<Wiwa::Transform3D>(actualId)->localRotation;
+	btTransform& t = em.GetSystem<Wiwa::PhysicsSystem>(actualId)->getBody()->collisionObject->getWorldTransform();
+
+	glm::mat4 mat(1.0f);
+	t.getOpenGLMatrix(glm::value_ptr(mat));
+
+	glm::vec2 rectPos = { pos.x,pos.z };
+	glm::vec2 halfExtents = { cube.halfExtents.x, cube.halfExtents.z };
+	glm::vec2 scaling = { body.scalingOffset.x, body.scalingOffset.z };
+
+	glm::vec2 topLeft = rectPos - halfExtents;
+	glm::vec2 bottomLeft = rectPos + glm::vec2(-halfExtents.x, halfExtents.y);
+	glm::vec2 bottomRight = rectPos + halfExtents;
+	glm::vec2 topRight = rectPos + glm::vec2(halfExtents.x, -halfExtents.y);
+
+	/*topLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, 1));
+	bottomLeft = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(-1, -1));
+	bottomRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, -1));
+	topRight = scaleRectVertex(rectPos, halfExtents, scaling, glm::vec2(1, 1));*/
+
+	// Calculate the corners of the rotated rectangle in world space
+	topLeft = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(-1, 1));
+	bottomLeft = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(-1, -1));
+	bottomRight = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(1, -1));
+	topRight = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(1, 1));
+
+	//glm::vec2 topLeft = glm::vec2(pos.x - cube.halfExtents.x, pos.z + cube.halfExtents.z);
+	//glm::vec2 bottomLeft = glm::vec2(pos.x - cube.halfExtents.x, pos.z - cube.halfExtents.z);
+	//glm::vec2 bottomRight = glm::vec2(pos.x + cube.halfExtents.x, pos.z - cube.halfExtents.z);
+	//glm::vec2 topRight = glm::vec2(pos.x + cube.halfExtents.x, pos.z + cube.halfExtents.z);
+
+	glm::ivec2 topLeftMap = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
+	glm::ivec2 bottomLeftMap = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
+	glm::ivec2 bottomRightMap = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
+	glm::ivec2 topRightMap = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
+
+	for (int i = bottomLeftMap.y; i <= topLeftMap.y; i++)
+	{
+		for (int j = topLeftMap.x; j <= topRightMap.x; j++)
+		{
+			SetPositionUnWalkable(glm::ivec2(i, j));
+		}
+	}
+	//// Calculate the corners of the rotated rectangle in world space
+	//glm::vec2 topLeft = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(-1, 1));
+	//glm::vec2 bottomLeft = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(-1, -1));
+	//glm::vec2 bottomRight = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(1, -1));
+	//glm::vec2 topRight = rotateRectVertex(rectPos, halfExtents, scaling, glm::radians(rot.y), glm::vec2(1, 1));
+
+	//// Convert the corners to tile coordinates
+	//glm::ivec2 topLeftTile = Wiwa::AIMapGeneration::WorldToMap(topLeft.x, topLeft.y);
+	//glm::ivec2 bottomLeftTile = Wiwa::AIMapGeneration::WorldToMap(bottomLeft.x, bottomLeft.y);
+	//glm::ivec2 bottomRightTile = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
+	//glm::ivec2 topRightTile = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
+
+	//// Determine the minimum and maximum x and y tile indices
+	//int minX = std::min({ topLeftTile.x, bottomLeftTile.x, bottomRightTile.x, topRightTile.x });
+	//int minY = std::min({ topLeftTile.y, bottomLeftTile.y, bottomRightTile.y, topRightTile.y });
+	//int maxX = std::max({ topLeftTile.x, bottomLeftTile.x, bottomRightTile.x, topRightTile.x });
+	//int maxY = std::max({ topLeftTile.y, bottomLeftTile.y, bottomRightTile.y, topRightTile.y });
+
+	//// Loop over all tiles within the bounding box
+	//for (int y = minY; y <= maxY; y++) {
+	//	for (int x = minX; x <= maxX; x++) {
+	//		// Calculate the center of the current tile in world space
+	//		glm::vec2 tileCenter = Wiwa::AIMapGeneration::MapToWorld(x, y) + glm::vec2(m_MapData.tileWidth / 2, m_MapData.tileHeight / 2);
+	//		SetPositionUnWalkable(glm::ivec2(x, y));
+
+	//		//// Check if the tile is contained within the rotated rectangle
+	//		//if (pointInRotatedRect(tileCenter, rectPos, halfExtents, scaling, glm::radians(rot.y))) {
+	//		//	// Do something with the tile
+	//		//	// ...
+	//		//}
+	//	}
+	//}
+
+	return false;
+}
+
+void Wiwa::AIMapGeneration::DrawRect(const glm::vec2 top_left, const glm::vec2 bottom_left, const glm::vec2 bottom_right, const glm::vec2 top_right)
+{
 }
 
 void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
@@ -268,12 +280,12 @@ bool Wiwa::AIMapGeneration::DebugDrawMap()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera->getView()));
 
-	for (int i = 0; i < m_MapData.height; i++)
+	for (int i = 0; i < m_MapData.height - 1; i++)
 	{
-		for (int j = 0; j < m_MapData.width; j++)
+		for (int j = 0; j < m_MapData.width - 1; j++)
 		{
 			glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
-			if (m_Map[j * m_MapData.width + i] == 255)
+			if (m_Map[i * m_MapData.width + j] == 255)
 			{
 				glColor4f(1, 0, 0, 0.1f);
 			}
