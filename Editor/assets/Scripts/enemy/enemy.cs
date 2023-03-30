@@ -120,7 +120,7 @@ namespace Game
                 {
                     ref AgentAI agent = ref enemy.GetComponentByIterator<AgentAI>(enemy.agentIt);
                     AgentAIManager.SendAIToPosition(entityId, playerTr.LocalPosition);
-                    RotateTo(playerTr.Position,  enemy, entityId);                   
+                    //RotateTo(playerTr.Position,  enemy, entityId);                   
                 }
             }
         }
