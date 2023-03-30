@@ -60,6 +60,25 @@ namespace Wiwa
 		skinnedTexturedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		skinnedTexturedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured", skinnedTexturedShader);
+		// Init skinned textured outlined
+		//ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
+		//Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
+		//skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
+		//skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		//skinnedTexturedOutlinedShader->addUniform("u_ToonLevels", UniformType::Int);
+		//skinnedTexturedOutlinedShader->addUniform("u_RimLightPower", UniformType::Float);
+		//skinnedTexturedOutlinedShader->addUniform("u_SpecularValue", UniformType::Float);
+		//skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		//skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		//skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		//skinnedTexturedOutlinedShader->addUniform("u_NearFar", UniformType::fVec2);
+		//Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
+		// Init skinned depth
+		ResourceId skinnedDepthShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_depth");
+		Shader* skinnedDepthShader = Wiwa::Resources::GetResourceById<Shader>(skinnedDepthShaderId);
+		skinnedDepthShader->Compile("resources/shaders/skinned/skinned_depth");
+		skinnedDepthShader->addUniform("u_Texture", UniformType::Sampler2D);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_depth", skinnedDepthShader);
 		// Init bone debug
 		ResourceId debugBonesShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
 		Shader *debugBoneShader = Wiwa::Resources::GetResourceById<Shader>(debugBonesShaderId);
@@ -392,6 +411,9 @@ namespace Wiwa
 	}
 	void Renderer3D::RenderMesh(Model *mesh, const glm::mat4 &transform, Material *material, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, const std::vector<glm::mat4> &finalBoneMatrices, bool clear, Camera *camera, bool cull)
 	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+
 		if (!camera)
 		{
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
