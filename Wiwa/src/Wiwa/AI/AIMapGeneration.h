@@ -11,6 +11,9 @@
 //#include <vector>
 //#include <bitset>
 #include <algorithm>
+#include <Wiwa/ecs/components/CollisionBody.h>
+#include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/ecs/components/ColliderCube.h>
 
 namespace Wiwa {
 
@@ -44,8 +47,11 @@ namespace Wiwa {
 		// Generate the grid of the map, stores it inside map data and set the navigation values to walkable or non walkable
 		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec2 startPos);
 		static bool BakeMap();
+		static bool BakeCube(const CollisionBody& body, const ColliderCube& cube, EntityId actualId, EntityManager& em);
+		static void DrawRect(const glm::vec2 top_left, const glm::vec2 bottom_left, const glm::vec2 bottom_right, const glm::vec2 top_right);
 		static void SetPositionUnWalkable(glm::ivec2 world_pos);
 		static bool DebugDrawMap();
+
 		// Space translations for the pathfinding
 		static glm::vec2 MapToWorld(int x, int y);
 		static glm::ivec2 WorldToMap(float x, float y);
