@@ -45,6 +45,8 @@ public:
 	void DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 
+	void VectorEdit(std::vector<Wiwa::Rect2i> list);
+
 	GuiType type;
 
 	int canvasSelected = -1;
@@ -60,4 +62,8 @@ public:
 	std::string pathForExtraAsset;
 	std::string nameSavingWiGUI;
 	std::string audioEventForButton;
+
+	bool animated = false;
+	float animSpeed = 0;
+	std::vector<Wiwa::Rect2i> animationRects;
 };

@@ -61,7 +61,7 @@ namespace Wiwa
 				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex, audioEventName, active);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active);
+				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active, false, 0, {});
 				break;
 			default:
 				break;
@@ -113,6 +113,18 @@ namespace Wiwa
 		return control;
 	}
 
+	GuiControl* GuiManager::CreateTestImageAnim(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, float framesAnim, std::vector<Rect2i> animRects)
+	{
+		GuiControl* control = nullptr;
+
+
+		control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active, animated, framesAnim, animRects);
+
+		
+		canvas.at(canvas_id)->controls.push_back(control);
+
+		return control;
+	}
 	bool GuiManager::Update()
 	{
 		

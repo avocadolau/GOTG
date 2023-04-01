@@ -196,6 +196,11 @@ namespace Wiwa
 				extraPosition.width = (int)((value * (float)position.width) / 100);
 			}
 		}
+
+		void HandleAnim()
+		{
+			
+		}
 		
 	public:
 
@@ -229,9 +234,10 @@ namespace Wiwa
 		Callback* callback;
 
 		//THINGS FOR ANIMATIONS
-		List<Rect2i> positionsForAnimations;
-		bool animated; 
+		std::vector<Rect2i> positionsForAnimations;
+		bool animatedControl; 
 		size_t framesAnimation;
 		float animSpeed;
+
 	};
 }

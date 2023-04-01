@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active) : GuiControl(scene, GuiControlType::IMAGE, id)
+	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active, bool animated, float animFrames, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::IMAGE, id)
 	{
 		this->position = bounds;
 		this->texture = texture;
@@ -37,13 +37,10 @@ namespace Wiwa
 			r2d.DisableInstance(m_Scene, id_quad_normal);
 
 		}
-		/*animated = true;
-		timeForAnim = 0;
 		framesAnimation = 0;
-		animSpeed = 60.0f;
-		positionsForAnimations.push_back({ 30,30,100,100 });
-		positionsForAnimations.push_back({ 200,200,100,100 });
-		positionsForAnimations.push_back({ 500,500,100,100 });*/
+		animatedControl = animated;
+		animSpeed = animFrames;
+		positionsForAnimations = animationRects;
 	}
 
 	GuiImage::~GuiImage()
@@ -90,26 +87,7 @@ namespace Wiwa
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-
-		/*if (animated)
-		{
-			timeForAnim += 1.0f;
-			if (timeForAnim >= animSpeed)
-			{
-				if (framesAnimation < positionsForAnimations.size())
-				{
-					framesAnimation++;
-				}
-				else
-				{
-					framesAnimation = 0;
-				}
-
-				timeForAnim = 0.0f;
-			}
-
-		}*/
-
+		
 		switch (state)
 		{
 
@@ -160,10 +138,25 @@ namespace Wiwa
 			break;
 		}
 
-		/*if (animated)
+		if (animatedControl)
 		{
-			render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(framesAnimation));
-		}*/
+			timeForAnim += 1.0f;
+			if (timeForAnim >= animSpeed)
+			{
+				if (framesAnimation < positionsForAnimations.size() - 1)
+				{
+					framesAnimation++;
+				}
+				else
+				{
+					framesAnimation = 0;
+				}
+				timeForAnim = 0.0f;
+				render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(framesAnimation));
+
+			}
+		}
+
 		return false;
 	}
 }

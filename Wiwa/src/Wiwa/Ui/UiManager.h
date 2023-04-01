@@ -46,6 +46,9 @@ namespace Wiwa
 		//Method for strings
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, bool active);
 
+		//Method for buttons and checkboxes
+		GuiControl* CreateTestImageAnim(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active,bool animated,float framesAnim, std::vector<Rect2i> animRects);
+
 		void SwapSelectedCanvas(GuiCanvas* canvasToSelect);
 		void DestroyGuiControl(GuiControl* control, GuiCanvas* canvas);
 		void DestroyCanvas(GuiCanvas* canvas);
