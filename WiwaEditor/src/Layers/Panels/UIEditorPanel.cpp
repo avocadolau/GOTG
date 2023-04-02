@@ -242,8 +242,10 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			
 		}
 		
-
-		UpdateElements(control);
+		if (ImGui::Button("Update"))
+		{
+			UpdateElements(control);
+		}
 		
 	}
 }
@@ -266,7 +268,6 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 	}
 	if(control->type != Wiwa::GuiControlType::TEXT)r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
-	r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector, Wiwa::Renderer2D::Pivot::UPLEFT);
 	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
 	if (control->type != Wiwa::GuiControlType::TEXT)
 	{

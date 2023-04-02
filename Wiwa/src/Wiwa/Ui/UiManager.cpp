@@ -48,20 +48,20 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, float framesAnim, std::vector<Rect2i> animRects)
 	{
 		GuiControl* control = nullptr;
 	
 			switch (type)
 			{
 			case GuiControlType::BUTTON:
-				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName,active);
+				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName,active,animated,framesAnim,animRects);
 				break;
 			case GuiControlType::CHECKBOX:
 				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex, audioEventName, active);
 				break;
 			case GuiControlType::IMAGE:
-				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active, false, 0, {});
+				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active, animated, framesAnim, animRects);
 				break;
 			default:
 				break;
@@ -113,18 +113,7 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateTestImageAnim(GuiControlType type, unsigned int id, Rect2i bounds, const char* path, const char* extraPath, unsigned int canvas_id, int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, float framesAnim, std::vector<Rect2i> animRects)
-	{
-		GuiControl* control = nullptr;
-
-
-		control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active, animated, framesAnim, animRects);
-
-		
-		canvas.at(canvas_id)->controls.push_back(control);
-
-		return control;
-	}
+	
 	bool GuiManager::Update()
 	{
 		
@@ -433,13 +422,27 @@ namespace Wiwa
 				size_t audioEventGuiLen;
 				char* audioEventGui_c;
 
+				bool animated;
+				float animSpeed;
+				size_t animRectsSize;
+				std::vector<Rect2i> animRects;
+
 				File.Read(&id, sizeof(int));
 				File.Read(&active, 1);
 				File.Read(&guiType, sizeof(GuiControlType));
 				File.Read(&state, sizeof(GuiControlState));
 				File.Read(&position, sizeof(Rect2i));
 				File.Read(&callbackID, sizeof(int));
-
+				File.Read(&animated, 1);
+				File.Read(&animSpeed, sizeof(float));
+				File.Read(&animRectsSize, sizeof(size_t));
+				
+				for (size_t counterForRects = 0; counterForRects < animRectsSize; counterForRects++)
+				{
+					Rect2i helperRect;
+					File.Read(&helperRect, sizeof(Rect2i));
+					animRects.push_back(helperRect);
+				}
 
 				File.Read(&extraPosition, sizeof(Rect2i));
 
@@ -472,13 +475,13 @@ namespace Wiwa
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(),active);
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(),active,animated,animSpeed,animRects);
 					break;
 				case Wiwa::GuiControlType::TEXT:
 					control = CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active);
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
 					control = CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active);
@@ -487,7 +490,7 @@ namespace Wiwa
 					control = CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active);
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
 					break;
 				default:
 					break;
@@ -552,6 +555,11 @@ namespace Wiwa
 				size_t textGuiLen = strlen(text) + 1;
 				size_t audioEventGuiLen = strlen(audioEvent) + 1;
 
+				bool animated = control->animatedControl;
+				float animSpeed = control->animSpeed;
+				size_t animRectsSize = control->positionsForAnimations.size();
+				std::vector<Rect2i> animRects = control->positionsForAnimations;
+
 				File.Write(&id, sizeof(int));
 				File.Write(&active, 1);
 				File.Write(&guiType, sizeof(GuiControlType));
@@ -559,6 +567,16 @@ namespace Wiwa
 				File.Write(&position, sizeof(Rect2i));
 
 				File.Write(&callbackID, sizeof(int));
+
+				File.Write(&animated, 1);
+				File.Write(&animSpeed, sizeof(float));
+				File.Write(&animRectsSize, sizeof(size_t));
+
+				for (size_t counterForRects = 0; counterForRects < animRectsSize; counterForRects++)
+				{
+					File.Write(&animRects.at(counterForRects), sizeof(Rect2i));
+				}
+
 				Rect2i extraPosition = control->GetExtraPosition();
 				File.Write(&extraPosition, sizeof(Rect2i));
 
