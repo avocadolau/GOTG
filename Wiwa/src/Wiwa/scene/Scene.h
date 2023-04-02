@@ -15,6 +15,7 @@
 namespace Wiwa {
 	class LightManager;
 	class GuiManager;
+	class DialogManager;
 
 
 	class WI_API Scene {
@@ -54,6 +55,7 @@ namespace Wiwa {
 		LightManager& GetLightManager() { return *m_LightManager; }
 		ParticleManager& GetParticleManager() { return *m_ParticleManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
+		DialogManager& GetDialogManager() { return *m_DialogManager; }
 		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
@@ -77,6 +79,7 @@ namespace Wiwa {
 		LightManager* m_LightManager;
 		ParticleManager* m_ParticleManager;
 		GuiManager* m_GuiManager;
+		DialogManager* m_DialogManager;
 
 	public:
 	private:

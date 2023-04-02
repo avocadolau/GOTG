@@ -33,6 +33,7 @@
 
 #include "Panels/UIPanel.h"
 #include "Panels/UIEditorPanel.h"
+#include "Panels/DialogPanel.h"
 #include "Panels/AIMapBakingPanel.h"
 #include "Panels/GameLogPanel.h"
 
@@ -132,6 +133,7 @@ private:
 	std::unique_ptr<Panel>  m_AnimatorPanel;
 	std::unique_ptr<Panel> m_AnimationPanel;
 	std::unique_ptr<Panel> m_UiPanel;
+	std::unique_ptr<Panel> m_DialogPanel;
 	std::unique_ptr<Panel> m_UiEditorPanel;
 	std::unique_ptr<Panel> m_AIMapBakingPanel;
 	std::unique_ptr<Panel> m_GameLogPanel;
