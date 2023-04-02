@@ -60,19 +60,14 @@ namespace Wiwa
 		skinnedTexturedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		skinnedTexturedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured", skinnedTexturedShader);
-		// Init skinned textured outlined
-		//ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
-		//Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
-		//skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
-		//skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
-		//skinnedTexturedOutlinedShader->addUniform("u_ToonLevels", UniformType::Int);
-		//skinnedTexturedOutlinedShader->addUniform("u_RimLightPower", UniformType::Float);
-		//skinnedTexturedOutlinedShader->addUniform("u_SpecularValue", UniformType::Float);
-		//skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
-		//skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
-		//skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
-		//skinnedTexturedOutlinedShader->addUniform("u_NearFar", UniformType::fVec2);
-		//Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
+		//init skinned Outline
+		ResourceId skinnedOutlineShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_outline");
+		Shader* skinnedOutlineShader = Wiwa::Resources::GetResourceById<Shader>(skinnedOutlineShaderId);
+		skinnedOutlineShader->Compile("resources/shaders/skinned/skinned_outline");
+		skinnedOutlineShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedOutlineShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		skinnedOutlineShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_outline", skinnedOutlineShader);
 		// Init skinned depth
 		ResourceId skinnedDepthShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_depth");
 		Shader* skinnedDepthShader = Wiwa::Resources::GetResourceById<Shader>(skinnedDepthShaderId);
@@ -130,6 +125,8 @@ namespace Wiwa
 		m_DepthShaderUniforms.Model = m_DepthShader->getUniformLocation("u_Model");
 		m_DepthShaderUniforms.View = m_DepthShader->getUniformLocation("u_View");
 		m_DepthShaderUniforms.Projection = m_DepthShader->getUniformLocation("u_Proj");
+
+
 
 		std::vector<const char *> faces = {
 			"resources/images/skybox/right.jpg",
@@ -411,8 +408,7 @@ namespace Wiwa
 	}
 	void Renderer3D::RenderMesh(Model *mesh, const glm::mat4 &transform, Material *material, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, const std::vector<glm::mat4> &finalBoneMatrices, bool clear, Camera *camera, bool cull)
 	{
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
+
 
 		if (!camera)
 		{
@@ -420,6 +416,11 @@ namespace Wiwa
 		}
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		//prepare buffers
+
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 
 		camera->frameBuffer->Bind(clear);
 
@@ -431,11 +432,8 @@ namespace Wiwa
 		matShader->SetBoneTransform(finalBoneMatrices);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
-
 		material->Bind();
-
 		mesh->Render();
-
 		material->UnBind();
 
 		if (mesh->showNormals)
