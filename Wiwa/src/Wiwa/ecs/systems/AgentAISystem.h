@@ -15,7 +15,9 @@ namespace Wiwa {
 		glm::vec2 nextPos;
 
 		glm::vec2 m_DirectionPoint;
+		glm::vec2 m_RotDirectionPoint = glm::vec2{0,0};
 		bool m_IsMoving = false;
+		bool m_IsRotating = false;
 
 	public:
 		AgentAISystem();
@@ -40,6 +42,10 @@ namespace Wiwa {
 		void StopMoving();
 
 		bool HasPath();
+
+		void AllowRotation() { m_IsRotating = true; }
+
+		void DisableRotation() { m_IsRotating = false; }
 	};
 }
 

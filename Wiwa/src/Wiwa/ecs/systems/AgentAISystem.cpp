@@ -66,11 +66,12 @@ void Wiwa::AgentAISystem::OnUpdate()
 		m_IsMoving = false;
 	}
 
+	glm::vec2 position = glm::vec2(transform->position.x, transform->position.z);
+	
+	float distance = glm::distance(position, m_DirectionPoint);
+
 	if (m_IsMoving)
-	{
-		glm::vec2 position = glm::vec2(transform->position.x, transform->position.z);
-		// Calculate the distance between the current position and the target position
-		float distance = glm::distance(position, m_DirectionPoint);
+	{	
 
 		// Calculate the time required to move the full distance at the given move speed
 		float timeToMove = distance / agent->speed;
@@ -96,16 +97,27 @@ void Wiwa::AgentAISystem::OnUpdate()
 		// Move to direction
 		/*transform->localPosition.x += agent->speed * direction.x * Time::GetDeltaTimeSeconds();
 		transform->localPosition.z += agent->speed * direction.y * Time::GetDeltaTimeSeconds();*/
-		
-		
+
+		m_IsRotating = true; // temporal
+		m_RotDirectionPoint = m_DirectionPoint; // temporal
+	}
+
+	
+	
+
+	if (m_IsRotating)
+	{
 		// Rotation Things:
-		
+
 		float timeToRotate = distance / agent->angularSpeed;
-		
+
 		float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
 		//
 		//// Calculate the forward vector from the current position to the target position
-		glm::vec2 forward = glm::normalize(m_DirectionPoint - position);
+		glm::vec2 forward = glm::normalize(m_RotDirectionPoint - position);
+
+		//WI_INFO(" forward.x {} ", forward.x);
+		//WI_INFO(" forward.y {} ", forward.y);
 
 		//
 		//// Calculate the angle between the current forward vector and the target forward vector
@@ -118,13 +130,11 @@ void Wiwa::AgentAISystem::OnUpdate()
 		//
 		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, tRot);
 
-		//WI_INFO(" angle {}", angle);
+		WI_INFO(" angle {}", angle);
 		transform->localRotation.y = interpolatedRotation;
 		//WI_INFO(" Interpolation Rotation {}", interpolatedRotation);
 		//WI_INFO(" target Rotation {}", targetRotation);
-
-		
-	}
+	}	
 
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
