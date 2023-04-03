@@ -253,6 +253,19 @@ namespace Wiwa {
 
 	void EntityManager::Update()
 	{
+		// Apply systems in pool
+		size_t ssize = m_SystemsToInit.size();
+
+		for (size_t i = 0; i < ssize; i++) {
+			m_SystemsToInit[i]->Awake();
+		}
+
+		for (size_t i = 0; i < ssize; i++) {
+			m_SystemsToInit[i]->Init();
+		}
+
+		m_SystemsToInit.clear();
+
 		// Remove entities in pool
 		size_t rsize = m_EntitiesToDestroy.size();
 
@@ -946,6 +959,29 @@ namespace Wiwa {
 		return true;
 	}
 
+	System* EntityManager::_applySystemImpl(EntityId entityId, SystemHash system_hash)
+	{
+		const Type* stype = Application::Get().GetSystemTypeH(system_hash);
+
+		System* system = NULL;
+
+		if (stype) {
+			system = (System*)stype->New();
+			system->SetEntity(entityId);
+			system->SetScene(m_Scene);
+			system->OnSystemAdded();
+
+			m_EntitySystems[entityId].push_back(system);
+			m_EntitySystemHashes[entityId].push_back(system_hash);
+			m_SystemsByHash[stype->hash].push_back(system);
+		}
+		else {
+			WI_CORE_ERROR("System hash not found [{}]", system_hash);
+		}
+
+		return system;
+	}
+
 	void EntityManager::_saveEntityImpl(File& file, EntityId eid)
 	{
 		const char* e_name = GetEntityName(eid);
@@ -1100,25 +1136,10 @@ namespace Wiwa {
 	{
 		if (HasSystem(eid, system_hash)) return;
 
-		const Type* stype = Application::Get().GetSystemTypeH(system_hash);
+		System* sys = _applySystemImpl(eid, system_hash);
 
-		if (stype) {
-			System* system = (System*)stype->New();
-			system->SetEntity(eid);
-			system->SetScene(m_Scene);
-			system->OnSystemAdded();
-
-			if (m_InitSystemsOnApply) {
-				system->Awake();
-				system->Init();
-			}
-
-			m_EntitySystems[eid].push_back(system);
-			m_EntitySystemHashes[eid].push_back(system_hash);
-			m_SystemsByHash[stype->hash].push_back(system);
-		}
-		else {
-			WI_CORE_ERROR("System hash not found [{}]", system_hash);
+		if (m_InitSystemsOnApply && sys) {
+			m_SystemsToInit.push_back(sys);
 		}
 	}
 
