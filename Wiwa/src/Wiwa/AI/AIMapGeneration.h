@@ -48,9 +48,19 @@ namespace Wiwa {
 		static bool CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec2 startPos);
 		static bool BakeMap();
 		static bool BakeCube(const CollisionBody& body, const ColliderCube& cube, EntityId actualId, EntityManager& em);
-		static void DrawRect(const glm::vec2 top_left, const glm::vec2 bottom_left, const glm::vec2 bottom_right, const glm::vec2 top_right);
+		static void DrawRect();
+		static void DrawMinMaxRect();
 		static void SetPositionUnWalkable(glm::ivec2 world_pos);
 		static bool DebugDrawMap();
+
+		static glm::vec2 topLeft;
+		static glm::vec2 bottomLeft;
+		static glm::vec2 bottomRight;
+		static glm::vec2 topRight;
+		static float minX;
+		static float minY;
+		static float maxX;
+		static float maxY;
 
 		// Space translations for the pathfinding
 		static glm::vec2 MapToWorld(int x, int y);
