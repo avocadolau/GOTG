@@ -4,6 +4,7 @@
 #include "Wiwa/ui/UiManager.h"
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/audio/Audio.h>
 namespace Wiwa
 {
 	GuiCanvas::GuiCanvas(Scene* scene, unsigned int id,bool active)
@@ -65,7 +66,10 @@ namespace Wiwa
 		{
 			DpadUp = false;
 			idGuiSelected++;
-
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
+			}
 			if (idGuiSelected >= controlsForSelection.size())
 			{
 				idGuiSelected = 0;
@@ -75,6 +79,10 @@ namespace Wiwa
 		{
 			DpadDown = false;
 			idGuiSelected--;
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
+			}
 			if (idGuiSelected <= -1)
 			{
 				idGuiSelected = controlsForSelection.size() - 1;
