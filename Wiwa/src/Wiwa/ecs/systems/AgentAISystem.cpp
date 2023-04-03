@@ -101,26 +101,27 @@ void Wiwa::AgentAISystem::OnUpdate()
 		// Rotation Things:
 		
 		float timeToRotate = distance / agent->angularSpeed;
-
+		
 		float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
-
-		// Calculate the forward vector from the current position to the target position
+		//
+		//// Calculate the forward vector from the current position to the target position
 		glm::vec2 forward = glm::normalize(m_DirectionPoint - position);
 
-		// Calculate the angle between the current forward vector and the target forward vector
+		//
+		//// Calculate the angle between the current forward vector and the target forward vector
 		float angle = glm::angle(forward, { 0.0f, 1.0f });
-		if (forward.y < 0.0f) {
+		if (forward.x < 0.0f) {
 			angle = (-angle);
 		}
-
+		//
 		float targetRotation = angle * 180 / glm::pi<float>();
-
+		//
 		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, tRot);
 
-
+		//WI_INFO(" angle {}", angle);
 		transform->localRotation.y = interpolatedRotation;
-		WI_INFO(" Interpolation Rotation {}", interpolatedRotation);
-		//WI_INFO(" Viva Messi {}", targetRotation);
+		//WI_INFO(" Interpolation Rotation {}", interpolatedRotation);
+		//WI_INFO(" target Rotation {}", targetRotation);
 
 		
 	}
