@@ -138,25 +138,7 @@ namespace Wiwa
 			break;
 		}
 
-		if (animatedControl)
-		{
-			timeForAnim += 1.0f;
-			if (timeForAnim >= animSpeed)
-			{
-				if (framesAnimation < positionsForAnimations.size() - 1)
-				{
-					framesAnimation++;
-				}
-				else
-				{
-					framesAnimation = 0;
-				}
-				timeForAnim = 0.0f;
-				render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(framesAnimation));
-
-			}
-		}
-
+		HandleAnim(render);
 		return false;
 	}
 }

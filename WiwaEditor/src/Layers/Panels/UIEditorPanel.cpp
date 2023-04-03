@@ -250,6 +250,29 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 	}
 }
 
+void UIEditorPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
+{
+	for (size_t i = 0; i < list.size(); i++)
+	{
+		ImGui::PushID(i);
+		ImGui::Text("Animation frame: %d", i);
+		ImGui::InputInt2("Anim position", &(list.at(i).x, list.at(i).y));
+		ImGui::InputInt2("Anim size", &(list.at(i).width, list.at(i).height));
+		ImGui::PopID();
+	}
+	if (ImGui::Button("+"))
+	{
+		list.push_back({ 0,0,0,0 });
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("-"))
+	{
+		list.erase(list.begin() + list.size() - 1);
+	}
+
+	animationRects = list;
+}
+
 void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 {
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
@@ -262,6 +285,7 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.width = size[0];
 	control->position.height = size[1];
 	control->audioEventForButton = audioEventForButton.c_str();
+	control->positionsForAnimations = animationRects;
 	if (callbackID != WI_INVALID_INDEX)
 	{
 		control->callbackID = callbackID;

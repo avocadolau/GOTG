@@ -24,6 +24,5 @@ namespace Wiwa
 
 		bool clicked = false;
 
-		float timeForAnim = 0;
 	};
 }

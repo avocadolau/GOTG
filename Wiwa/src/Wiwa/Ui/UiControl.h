@@ -194,9 +194,27 @@ namespace Wiwa
 			}
 		}
 
-		void HandleAnim()
+		void HandleAnim(Wiwa::Renderer2D* r2d)
 		{
-			
+
+			if (animatedControl)
+			{
+				timeForAnim += 1.0f;
+				if (timeForAnim >= animSpeed)
+				{
+					if (framesAnimation < positionsForAnimations.size() - 1)
+					{
+						framesAnimation++;
+					}
+					else
+					{
+						framesAnimation = 0;
+					}
+					timeForAnim = 0.0f;
+					r2d->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(framesAnimation));
+
+				}
+			}
 		}
 		
 	public:
@@ -235,6 +253,7 @@ namespace Wiwa
 		bool animatedControl; 
 		size_t framesAnimation;
 		float animSpeed;
+		float timeForAnim = 0;
 
 	};
 }
