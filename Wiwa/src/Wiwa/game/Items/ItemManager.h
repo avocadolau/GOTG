@@ -1,0 +1,46 @@
+#pragma once
+#include <Wiwa/core/Core.h>
+
+#include "Item.h"
+
+#include <map>
+
+//This class let's the game know which items are available during the run
+namespace Wiwa
+{
+	class WI_API ItemManager
+	{
+	private:
+		ItemManager() = delete;
+		~ItemManager() = delete;
+	public:
+
+		static void AddAbility(Ability ability);
+		static void DeleteAbility(std::string name);
+
+		static void AddPassive(PassiveSkill passive);
+		static void DeletePassive(std::string name);
+
+		static void AddBuff(Buff buff);
+		static void DeleteBuff(std::string name);
+
+		static void AddConsumable(Consumable consumable);
+		static void DeleteConsumable(std::string name);
+
+		static Ability* GetAbility(const char* name);
+		static PassiveSkill* GetPassive(const char* name);
+		static Buff* GetBuff(const char* name);
+		static Consumable* GetConsumable(const char* name);
+
+		inline static std::map<std::string, Ability>& GetAbilities() { return m_AbilityPool; }
+		inline static std::map<std::string, PassiveSkill>& GetSkills() { return m_PassiveSkillPool; }
+		inline static std::map<std::string, Buff>& GetBuffs() { return m_BuffPool; }
+		inline static std::map<std::string, Consumable>& GetConsumables() { return m_ConsumablePool; }
+
+	private:
+		static std::map<std::string, Ability> m_AbilityPool;
+		static std::map<std::string, PassiveSkill> m_PassiveSkillPool;
+		static std::map<std::string, Buff> m_BuffPool;
+		static std::map<std::string, Consumable> m_ConsumablePool;
+	};
+}
