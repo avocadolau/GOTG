@@ -53,7 +53,6 @@ namespace Wiwa
 
 	void GuiCanvas::InputController()
 	{
-
 		if (Wiwa::Input::IsButtonPressed(0, 13))
 		{
 			DpadUp = true;

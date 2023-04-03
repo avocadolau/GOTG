@@ -180,13 +180,10 @@ namespace Wiwa
 			return true;
 		}
 
-		void SwapText(const char* word, Wiwa::Renderer2D& r2d)
+		void SwapText(const char* word, Wiwa::Renderer2D& r2d,Text* newText)
 		{
-			/*text = word;
-			Text* newText = new Text();
-			newText = Text::InitFont("assets/Fonts/arial.ttf", (char*)word);
-			
-			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());*/
+			text = word;
+			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());
 		}
 
 		void SetValueForUIbar(float value)
