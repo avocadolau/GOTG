@@ -808,11 +808,9 @@ namespace Wiwa {
 			}
 		}
 		else {
-			this;
 			glBindVertexArray(vao);
 			glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
-		
 		}
 	}
 

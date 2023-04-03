@@ -24,7 +24,7 @@ namespace Wiwa {
 
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 
-		if (anim == nullptr) return;
+		if (anim == nullptr && anim->animator != nullptr) return;
 
 		//anim->animator->Update(Time::GetRealTimeSinceStartup());
 

@@ -68,7 +68,7 @@ namespace Wiwa {
 		//glEnable(GL_FRAMEBUFFER_SRGB);
 		if (clear) {
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 	}
 
@@ -83,7 +83,7 @@ namespace Wiwa {
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 }
