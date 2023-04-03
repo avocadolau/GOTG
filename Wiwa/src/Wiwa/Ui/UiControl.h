@@ -196,7 +196,6 @@ namespace Wiwa
 
 		void HandleAnim(Wiwa::Renderer2D* r2d)
 		{
-
 			if (animatedControl)
 			{
 				timeForAnim += 1.0f;
@@ -250,7 +249,7 @@ namespace Wiwa
 
 		//THINGS FOR ANIMATIONS
 		std::vector<Rect2i> positionsForAnimations;
-		bool animatedControl; 
+		bool animatedControl = false; 
 		size_t framesAnimation;
 		float animSpeed;
 		float timeForAnim = 0;

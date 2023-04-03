@@ -94,10 +94,8 @@ namespace Wiwa
 					if (callback)
 						callback->Execute();
 				}
-				//DETECT CONTROLLER CLICKS
 			}
 		}
-
 		return false;
 	}
 
@@ -163,7 +161,7 @@ namespace Wiwa
 		default:
 			break;
 		}
-
+		HandleAnim(render);
 		return false;
 	}
 }

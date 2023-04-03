@@ -46,8 +46,8 @@ public:
 	std::string pathForExtraAsset;
 	std::string audioEventForButton;
 
-	bool animated = false;
-	float animSpeed = 0;
+	bool animated;
+	float animSpeed;
 	std::vector<Wiwa::Rect2i> animationRects;
 
 };

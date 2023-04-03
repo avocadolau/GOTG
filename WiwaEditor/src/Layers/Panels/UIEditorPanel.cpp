@@ -97,6 +97,12 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 	originSize[1] = control->texturePosition.height;
 	callbackID = control->callbackID;
 	audioEventForButton = control->audioEventForButton;
+	animated = control->animatedControl;
+	if (animated)
+	{
+		animSpeed = control->animSpeed;
+		animationRects = control->positionsForAnimations;
+	}
 	if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
 	{
 		extraOriginPos[0] = control->extraTexturePosition.x;
@@ -240,6 +246,13 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			
 			ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
 			
+			if (control->type == Wiwa::GuiControlType::IMAGE || control->type == Wiwa::GuiControlType::BUTTON || control->type == Wiwa::GuiControlType::CHECKBOX)
+			{
+				ImGui::Text("Animations");
+				ImGui::Checkbox("animated", &animated);
+				ImGui::InputFloat("Animation speed", &animSpeed);
+				VectorEdit(animationRects);
+			}
 		}
 		
 		if (ImGui::Button("Update"))
@@ -285,7 +298,12 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.width = size[0];
 	control->position.height = size[1];
 	control->audioEventForButton = audioEventForButton.c_str();
-	control->positionsForAnimations = animationRects;
+	control->animatedControl = animated;
+	if (control->animatedControl)
+	{
+		control->positionsForAnimations = animationRects;
+		control->animSpeed = animSpeed;
+	}
 	if (callbackID != WI_INVALID_INDEX)
 	{
 		control->callbackID = callbackID;
