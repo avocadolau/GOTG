@@ -139,7 +139,7 @@ namespace Wiwa
 		bool OnLoad(OnLoadEvent &e);
 		bool OnSave(OnSaveEvent &e);
 
-		const char *m_EngineVersion = "0.3";
+		const char *m_EngineVersion = "0.5";
 		std::string m_ProjectName = "New project";
 		std::string m_ProjectCompany = "Default Company";
 		std::string m_ProjectVersion = "0.1";

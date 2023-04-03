@@ -2,6 +2,7 @@
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/game/Items/Inventory.h>
 #include <Wiwa/game/GameStateManager.h>
+#include "../../Utils/EditorUtils.h"
 
 #define MAX_DESCRIPTION_CHARACTERS 256
 
@@ -47,23 +48,6 @@ void InventoryPanel::Draw()
 
 void InventoryPanel::DrawConsumablePool(int& id)
 {
-	std::map<std::string, Wiwa::Consumable>& consumables = Wiwa::ItemManager::GetConsumables();
-	char* buffer;
-	for (auto& it : consumables)
-	{
-		ImGui::PushID(id++);
-		Wiwa::Consumable* consumable = Wiwa::ItemManager::GetConsumable(it.first.c_str());
-		ImGui::Text(consumable->Name.c_str());
-		buffer = (char*)consumable->Description.c_str();
-		ImGui::InputTextMultiline("Description", buffer, MAX_DESCRIPTION_CHARACTERS);
-		consumable->Description = buffer;
-
-		if (ImGui::Button("Delete"))
-		{
-			Wiwa::ItemManager::DeleteConsumable(it.first.c_str());
-		}
-		ImGui::PopID();
-	}
 	if (ImGui::Button("Add Consumable"))
 	{
 		ImGui::OpenPopup("Create consumable");
@@ -72,39 +56,106 @@ void InventoryPanel::DrawConsumablePool(int& id)
 	{
 		static char nameBuffer[256];
 		ImGui::InputText("Name", nameBuffer, 256);
-
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
 			Wiwa::ItemManager::AddConsumable({ nameBuffer });
 			ImGui::CloseCurrentPopup();
 		}
-		if (ImGui::Button("Close"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
 		ImGui::EndPopup();
 	}
+	std::map<std::string, Wiwa::Consumable>& consumables = Wiwa::ItemManager::GetConsumables();
+	if (!consumables.empty())
+	{
+		const char* types[] =
+		{
+			"Heal",
+			"Shield"
+		};
+
+		if (ImGui::BeginTable("consumables", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Type");
+			ImGui::TableSetupColumn("Buff %");
+			ImGui::TableHeadersRow();
+
+			for (auto& it : consumables)
+			{
+				Wiwa::Consumable* consumable = Wiwa::ItemManager::GetConsumable(it.first.c_str());
+
+				ImGui::PushID(id++);
+				
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(consumable->Name.c_str());
+				
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete"))
+				{
+					Wiwa::ItemManager::DeleteConsumable(it.first.c_str());
+				}
+				ImGui::PopStyleColor();
+
+				ImGui::TableNextColumn();
+				ImGui::Image((ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(consumable->Icon)->GetTextureId(), {64, 64});
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS;
+						
+						if (ImageExtensionComp(p))
+						{
+							consumable->Icon = Wiwa::Resources::Load<Wiwa::Image>(p.string().c_str());
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				ImGui::TableNextColumn();
+				static const char* currentItem = types[0];
+
+				static Wiwa::ConsumableType type;
+
+				if (ImGui::BeginCombo("##type", currentItem))
+				{
+					for (int i = 0; i < 2; i++)
+					{
+						bool isSelected = (currentItem == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentItem = types[i];
+							type = (Wiwa::ConsumableType)(i);
+							consumable->Type = type;
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##percent", &consumable->BuffPercent);
+
+				ImGui::PopID();
+			}
+			ImGui::EndTable();
+		}
+	}
+	
 }
 
 void InventoryPanel::DrawBuffPool(int& id)
 {
 	std::map<std::string, Wiwa::Buff>& buffs = Wiwa::ItemManager::GetBuffs();
-	char* buffer;
-	for (auto& it : buffs)
-	{
-		ImGui::PushID(id++);
-		Wiwa::Buff* buff = Wiwa::ItemManager::GetBuff(it.first.c_str());
-		ImGui::Text(buff->Name.c_str());
-		buffer = (char*)buff->Description.c_str();
-		ImGui::InputTextMultiline("Description", buffer, MAX_DESCRIPTION_CHARACTERS);
-		buff->Description = buffer;
-
-		if (ImGui::Button("Delete"))
-		{
-			Wiwa::ItemManager::DeleteBuff(it.first.c_str());
-		}
-		ImGui::PopID();
-	}
 	if (ImGui::Button("Add Buff"))
 	{
 		ImGui::OpenPopup("Create buff");
@@ -125,28 +176,83 @@ void InventoryPanel::DrawBuffPool(int& id)
 		}
 		ImGui::EndPopup();
 	}
+	if (!buffs.empty())
+	{
+		if (ImGui::BeginTable("buffs", 7, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Description");
+			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Buff %");
+			ImGui::TableSetupColumn("Duration");
+			ImGui::TableSetupColumn("Cooldown");
+			ImGui::TableSetupColumn("Price");
+			ImGui::TableHeadersRow();
+
+			for (auto& it : buffs)
+			{
+				Wiwa::Buff* buff = Wiwa::ItemManager::GetBuff(it.first.c_str());
+				ImGui::PushID(id++);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(buff->Name.c_str());
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete"))
+				{
+					Wiwa::ItemManager::DeleteBuff(it.first.c_str());
+				}
+				ImGui::PopStyleColor();
+
+				ImGui::TableNextColumn();
+				ImGui::InputTextMultiline("Description", &buff->Description, {200, 100});
+
+
+				ImGui::TableNextColumn();
+				ImGui::Image((ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(buff->Icon)->GetTextureId(), { 64, 64 });
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS;
+
+						if (ImageExtensionComp(p))
+						{
+							buff->Icon = Wiwa::Resources::Load<Wiwa::Image>(p.string().c_str());
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##buffpercent", &buff->BuffPercent);
+
+				ImGui::TableNextColumn();
+				ImGui::InputFloat("##duration", &buff->Duration);
+
+				ImGui::TableNextColumn();
+				ImGui::InputFloat("##cooldown", &buff->Cooldown);
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##price", &buff->Price);
+
+
+
+				ImGui::PopID();
+			}
+			ImGui::EndTable();
+		}
+
+	}
 }
 
 void InventoryPanel::DrawPassivePool(int& id)
 {
 	std::map<std::string, Wiwa::PassiveSkill>& passives = Wiwa::ItemManager::GetSkills();
-	
-	char* buff;
-	for (auto& it : passives)
-	{
-		ImGui::PushID(id++);
-		Wiwa::PassiveSkill* passive = Wiwa::ItemManager::GetPassive(it.first.c_str());
-		ImGui::Text(passive->Name.c_str());
-		buff = (char*)passive->Description.c_str();
-		ImGui::InputTextMultiline("Description", buff, MAX_DESCRIPTION_CHARACTERS);
-		passive->Description = buff;
-
-		if (ImGui::Button("Delete"))
-		{
-			Wiwa::ItemManager::DeletePassive(it.first.c_str());
-		}
-		ImGui::PopID();
-	}
 	if (ImGui::Button("Add Passive"))
 	{
 		ImGui::OpenPopup("Create passive");
@@ -167,27 +273,66 @@ void InventoryPanel::DrawPassivePool(int& id)
 		}
 		ImGui::EndPopup();
 	}
+	if (!passives.empty())
+	{
+		if (ImGui::BeginTable("passives", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Description");
+			ImGui::TableSetupColumn("Icon");
+		
+			ImGui::TableHeadersRow();
+
+			for (auto& it : passives)
+			{
+				Wiwa::PassiveSkill* passive = Wiwa::ItemManager::GetPassive(it.first.c_str());
+				ImGui::PushID(id++);
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(passive->Name.c_str());
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete"))
+				{
+					Wiwa::ItemManager::DeletePassive(it.first.c_str());
+				}
+				ImGui::PopStyleColor();
+
+
+				ImGui::TableNextColumn();
+				ImGui::InputTextMultiline("##description", &passive->Description, {200, 100});
+
+				ImGui::TableNextColumn();
+				ImGui::Image((ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(passive->Icon)->GetTextureId(), { 64, 64 });
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS;
+
+						if (ImageExtensionComp(p))
+						{
+							passive->Icon = Wiwa::Resources::Load<Wiwa::Image>(p.string().c_str());
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+				ImGui::PopID();
+			}
+			ImGui::EndTable();
+		}
+	}
+	
 }
 
 void InventoryPanel::DrawAbilityPool(int& id)
 {
 	std::map<std::string, Wiwa::Ability>& abilities = Wiwa::ItemManager::GetAbilities();
-	char* buff;
-	for (auto& it : abilities)
-	{
-		ImGui::PushID(id++);
-		Wiwa::Ability* ability = Wiwa::ItemManager::GetAbility(it.first.c_str());
-		ImGui::Text(ability->Name.c_str());
-		buff = (char*)ability->Description.c_str();
-		ImGui::InputTextMultiline("Description", buff, MAX_DESCRIPTION_CHARACTERS);
-		ability->Description = buff;
-
-		if (ImGui::Button("Delete"))
-		{
-			Wiwa::ItemManager::DeleteAbility(it.first.c_str());
-		}
-		ImGui::PopID();
-	}
 	if (ImGui::Button("Add Ability"))
 	{
 		ImGui::OpenPopup("Create ability");
@@ -208,4 +353,78 @@ void InventoryPanel::DrawAbilityPool(int& id)
 		}
 		ImGui::EndPopup();
 	}
+	if (!abilities.empty())
+	{
+		if (ImGui::BeginTable("actives", 8, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Description");
+			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Damage");
+			ImGui::TableSetupColumn("Range");
+			ImGui::TableSetupColumn("Area");
+			ImGui::TableSetupColumn("Cooldown");
+			ImGui::TableSetupColumn("Price");
+			ImGui::TableHeadersRow();
+			for (auto& it : abilities)
+			{
+				Wiwa::Ability* ability = Wiwa::ItemManager::GetAbility(it.first.c_str());
+				ImGui::PushID(id++);
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(ability->Name.c_str());
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete"))
+				{
+					Wiwa::ItemManager::DeleteAbility(it.first.c_str());
+				}
+				ImGui::PopStyleColor();
+
+				ImGui::TableNextColumn();
+				ImGui::InputTextMultiline("##description", &ability->Description, {200, 100});
+
+				ImGui::TableNextColumn();
+
+				ImGui::Image((ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(ability->Icon)->GetTextureId(), { 64, 64 });
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS;
+
+						if (ImageExtensionComp(p))
+						{
+							ability->Icon = Wiwa::Resources::Load<Wiwa::Image>(p.string().c_str());
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##damage", &ability->Damage);
+
+				ImGui::TableNextColumn();
+				ImGui::InputFloat("##range", &ability->Range);
+
+				ImGui::TableNextColumn();
+				ImGui::InputFloat("##area", &ability->Area);
+
+				ImGui::TableNextColumn();
+				ImGui::InputFloat("##cooldown", &ability->Cooldown);
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##price", &ability->Price);
+
+				ImGui::PopID();
+			}
+			ImGui::EndTable();
+		}
+	}
+	
 }
