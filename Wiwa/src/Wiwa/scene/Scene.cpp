@@ -8,6 +8,7 @@
 
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 
 namespace Wiwa
 {
@@ -150,6 +151,9 @@ namespace Wiwa
 		}
 		m_PhysicsManager->DebugDrawWorld();
 		// m_PhysicsManager->LogBodies();
+
+		Wiwa::AIMapGeneration::DrawRect();
+		Wiwa::AIMapGeneration::DrawMinMaxRect();
 
 		if (!SceneManager::IsPlaying())
 		{

@@ -193,7 +193,7 @@ void Wiwa::AIPathFindingManager::SetMap(uint32_t width, uint32_t height, const s
 	m_Height = height;
 
 	m_MapPathFinding.clear();
-	m_MapPathFinding.resize(width * height, DEFAULT_WALK_CODE);
+	m_MapPathFinding.assign(width * height, DEFAULT_WALK_CODE);
 	m_MapSize = width * height;
 	std::copy(data.begin(), data.end(), m_MapPathFinding.begin());
 	//memcpy(m_Map, data, width * height * sizeof(unsigned char));
