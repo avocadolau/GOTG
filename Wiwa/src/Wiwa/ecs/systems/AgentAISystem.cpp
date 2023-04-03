@@ -98,8 +98,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 		/*transform->localPosition.x += agent->speed * direction.x * Time::GetDeltaTimeSeconds();
 		transform->localPosition.z += agent->speed * direction.y * Time::GetDeltaTimeSeconds();*/
 
-		m_IsRotating = true; // temporal
-		m_RotDirectionPoint = m_DirectionPoint; // temporal
+		AllowRotation(); // temporal
+		LookAtPosition(m_DirectionPoint); // temporal
 	}
 
 	
@@ -130,7 +130,7 @@ void Wiwa::AgentAISystem::OnUpdate()
 		//
 		float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, tRot);
 
-		WI_INFO(" angle {}", angle);
+		//WI_INFO(" angle {}", angle);
 		transform->localRotation.y = interpolatedRotation;
 		//WI_INFO(" Interpolation Rotation {}", interpolatedRotation);
 		//WI_INFO(" target Rotation {}", targetRotation);
@@ -227,4 +227,9 @@ bool Wiwa::AgentAISystem::HasPath()
 	{
 		return true;
 	}	
+}
+
+void Wiwa::AgentAISystem::LookAtPosition(glm::vec2 direction_point)
+{
+	m_RotDirectionPoint = direction_point;
 }

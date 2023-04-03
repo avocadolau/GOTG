@@ -46,6 +46,8 @@ namespace Wiwa {
 		void AllowRotation() { m_IsRotating = true; }
 
 		void DisableRotation() { m_IsRotating = false; }
+
+		void LookAtPosition(glm::vec2 direction_point);
 	};
 }
 
