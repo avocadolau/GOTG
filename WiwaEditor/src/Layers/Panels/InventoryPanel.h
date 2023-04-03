@@ -9,6 +9,8 @@ public:
 	virtual ~InventoryPanel();
 
 	void Draw() override;
-	void DrawPassivePool(int id);
-	void DrawAbilityPool(int id);
+	void DrawConsumablePool(int& id);
+	void DrawBuffPool(int& id);
+	void DrawPassivePool(int& id);
+	void DrawAbilityPool(int& id);
 };

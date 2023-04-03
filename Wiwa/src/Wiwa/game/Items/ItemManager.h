@@ -8,6 +8,7 @@
 //This class let's the game know which items are available during the run
 namespace Wiwa
 {
+	class JSONDocument;
 	class WI_API ItemManager
 	{
 	private:
@@ -26,6 +27,9 @@ namespace Wiwa
 
 		static void AddConsumable(Consumable consumable);
 		static void DeleteConsumable(std::string name);
+
+		static void Serialize(JSONDocument* doc);
+		static void Deserialize(JSONDocument* doc);
 
 		static Ability* GetAbility(const char* name);
 		static PassiveSkill* GetPassive(const char* name);

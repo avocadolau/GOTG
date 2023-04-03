@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "GameStateManager.h"
 #include "Wiwa/scene/SceneManager.h"
+#include "Items/ItemManager.h"
 
 namespace Wiwa
 {
@@ -489,6 +490,8 @@ namespace Wiwa
 		doc.AddMember("gamepad_deadzone", s_GamepadDeadzone);
 		doc.AddMember("current_character", s_CurrentCharacter);
 
+		ItemManager::Serialize(&doc);
+
 		doc.save_file("config/room_data.json");
 	}
 
@@ -570,6 +573,8 @@ namespace Wiwa
 			s_GamepadDeadzone = doc["gamepad_deadzone"].as_float();
 		if (doc.HasMember("current_character"))
 			s_CurrentCharacter = doc["current_character"].as_int();
+
+		Wiwa::ItemManager::Deserialize(&doc);
 	}
 }
 
