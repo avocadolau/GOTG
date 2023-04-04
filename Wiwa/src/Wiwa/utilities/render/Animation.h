@@ -41,6 +41,8 @@ namespace Wiwa {
 
 		inline float GetDuration() { return m_Duration; }
 
+		inline bool HasFinished() { return m_HasFinished; }
+
 		inline std::vector<Bone*> GetBones() { return m_Bones; }
 
 		inline const NodeData& GetRootNode() { return m_RootNode; }
@@ -73,6 +75,8 @@ namespace Wiwa {
 		bool m_Loop;
 		
 		bool m_HasFinished;
+
+		float m_CurrentTime = 0;
 
 		float m_Duration = 0;
 

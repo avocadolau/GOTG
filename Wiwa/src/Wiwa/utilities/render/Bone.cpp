@@ -106,7 +106,7 @@ namespace Wiwa {
     {
         for (size_t index = 0; index < m_NumPositionKeys - 1; ++index)
         {
-            if (animationTime < m_Positions[index + 1].time)
+            if (animationTime <= m_Positions[index + 1].time)
                 return index;
         }
         assert(0);
@@ -116,7 +116,7 @@ namespace Wiwa {
     {
         for (size_t index = 0; index < m_NumRotationKeys - 1; ++index)
         {
-            if (animationTime < m_Rotations[index + 1].time)
+            if (animationTime <= m_Rotations[index + 1].time)
                 return index;
         }
         assert(0);
@@ -126,7 +126,7 @@ namespace Wiwa {
     {
         for (size_t index = 0; index < m_NumScalingKeys - 1; ++index)
         {
-            if (animationTime < m_Scales[index + 1].time)
+            if (animationTime <= m_Scales[index + 1].time)
                 return index;
         }
         assert(0);

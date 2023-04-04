@@ -25,21 +25,10 @@ namespace Wiwa {
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 
 		if (anim == nullptr && anim->animator != nullptr) return;
+		
+		//update animator
+		anim->animator->Update(Time::GetRealDeltaTime());
 
-		//anim->animator->Update(Time::GetRealTimeSinceStartup());
-
-		anim->animator->m_AnimationTime = anim->animationTime;
-
-		if (!anim->Play) return;	
-
-		if (!anim->Blend)
-		{
-			anim->animator->UpdateAnimation(Time::GetRealTimeSinceStartup());
-		}
-		else if(anim->animator->GetCurrentAnimation()&& anim->animator->GetTargetAnimation()){
-			anim->animator->m_BlendWeight = anim->weight;
-			anim->animator->BlendTwoAnimations(anim->animator->GetCurrentAnimation(),anim->animator->GetTargetAnimation(),anim->weight, Time::GetRealTimeSinceStartup());
-		}		
 	}
 	void AnimatorSystem::OnDestroy()
 	{
@@ -132,7 +121,7 @@ namespace Wiwa {
 		
 		if (!anim) return;
 		
-		anim->animator->SetAnimationSatate(state);
+		anim->animator->SetAnimationState(state);
 	}
 	void AnimatorSystem::Restart()
 	{
