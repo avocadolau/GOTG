@@ -1184,15 +1184,31 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 						emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
 
-						if (emitter->textureId != WI_INVALID_INDEX)
+						//clear path
+						for (size_t i = 0; i < 128; i++)
 						{
-							std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
+							emitter->texturePath[i] = (char)"";
+						}
+
+						//check for name length
+						if (pathS.length() < 128)
+						{
+							if (emitter->textureId != WI_INVALID_INDEX)
+							{
+								
+								std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
+							}
+							else
+							{
+								WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
+								std::strncpy(emitter->texturePath, "", 1);
+
+							}
 						}
 						else
 						{
-							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
+							WI_CORE_INFO("Texture name too long! Max: [128] characters.");
 							std::strncpy(emitter->texturePath, "", 1);
-
 						}
 					}
 				}
