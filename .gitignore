@@ -66,3 +66,4 @@ Editor/game/Wiwa.lib
 
 # Rider files
 .idea/
+*sln.DotSettings.user
