@@ -60,6 +60,20 @@ namespace Wiwa
 		skinnedTexturedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		skinnedTexturedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured", skinnedTexturedShader);
+		// Init skinned textured outlined
+		ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
+		Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
+		skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
+		skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedTexturedOutlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		skinnedTexturedOutlinedShader->addUniform("u_ToonLevels", UniformType::Int);
+		skinnedTexturedOutlinedShader->addUniform("u_RimLightPower", UniformType::Float);
+		skinnedTexturedOutlinedShader->addUniform("u_SpecularValue", UniformType::Float);
+		skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
 		//init skinned Outline
 		ResourceId skinnedOutlineShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_outline");
 		Shader* skinnedOutlineShader = Wiwa::Resources::GetResourceById<Shader>(skinnedOutlineShaderId);

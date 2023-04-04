@@ -29,7 +29,7 @@ void main()
 
     gl_Position = u_Proj * u_View * u_Model  * BoneTransform * vec4(aPos, 1.0);
 	TexCoord = aTex;
-	Normal = mat3(transpose(inverse(u_Model))) * aNormal;
+	Normal =(u_Model* BoneTransform * vec4(aNormal, 0)).xyz;
 	LocalPos = vec3(u_Model * vec4(aPos, 1.0f));
 
 	LightSpacePos = u_LightMVP * vec4(LocalPos, 1.0);
