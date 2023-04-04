@@ -346,28 +346,25 @@ namespace Wiwa
 				{
 				case Wiwa::GuiControlType::BUTTON:
 					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition,audioEvent.c_str(),active, animated, animSpeed, animRects);
-					control->active = active;
 					break;
 				case Wiwa::GuiControlType::TEXT:
 					control = gm.CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active);
-					control->active = active;
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
 					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
-					control->active = active;
 					break;
 				case Wiwa::GuiControlType::SLIDER:
 					control = gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition, audioEvent.c_str(), active);
-					control->active = active;
 					break;
 				case Wiwa::GuiControlType::BAR:
 					control = gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active);
-					control->active = active;
 					break;
 				case Wiwa::GuiControlType::IMAGE:
 					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
-					control->active = active;
 					break;
+			case Wiwa::GuiControlType::ABILITY:
+				control = gm.CreateGuiControl_Ability(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects);
+				break;
 				default:
 					break;
 				}

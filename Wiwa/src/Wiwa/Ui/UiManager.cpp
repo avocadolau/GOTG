@@ -8,6 +8,7 @@
 #include "UiText.h"
 #include "UiImage.h"
 #include "UiBar.h"
+#include "UiAbility.h"
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/scene/Scene.h>
@@ -110,6 +111,15 @@ namespace Wiwa
 			}
 			if (control != nullptr) canvas.at(canvas_id)->controls.push_back(control);
 		
+		return control;
+	}
+
+	GuiControl* GuiManager::CreateGuiControl_Ability(GuiControlType type, unsigned int id,unsigned int canvas_id,Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active,bool animated,std::vector<Rect2i> animationRects)
+	{
+		GuiControl* control = nullptr;
+
+		control = new GuiAbility(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active,animated, animationRects);
+		canvas.at(canvas_id)->controls.push_back(control);
 		return control;
 	}
 
@@ -491,6 +501,9 @@ namespace Wiwa
 					break;
 				case Wiwa::GuiControlType::IMAGE:
 					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
+					break;
+				case Wiwa::GuiControlType::ABILITY:
+					control = CreateGuiControl_Ability(guiType, id,canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects);
 					break;
 				default:
 					break;

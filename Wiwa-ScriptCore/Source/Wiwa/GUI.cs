@@ -18,5 +18,10 @@
         {
             InternalCalls.SetValueForUIbar(value, id_canvas, id_control);
         }
+
+        public static void SetNextFrame(int value, int id_canvas, int id_control)
+        {
+            InternalCalls.SetNextFrame(value, id_canvas, id_control);
+        }
     }
 }

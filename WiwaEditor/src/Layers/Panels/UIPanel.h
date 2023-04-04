@@ -18,6 +18,7 @@ enum class GuiType
 		SLIDER,
 		IMAGE,
 		BAR,
+		ABILITY,
 };
 class UIPanel : public Panel
 {
@@ -42,6 +43,7 @@ public:
 	void DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawBarCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
+	void DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 

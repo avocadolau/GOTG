@@ -201,6 +201,8 @@ namespace Wiwa
         internal extern static void SwapText(string word, int id_canvas, int id_control);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetValueForUIbar(float value, int id_canvas, int id_control);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void SetNextFrame(int value, int id_canvas, int id_control);
         #endregion
 
         #region Game

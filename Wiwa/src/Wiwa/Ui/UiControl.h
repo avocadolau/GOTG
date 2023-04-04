@@ -21,6 +21,7 @@ namespace Wiwa
 		INPUTBOX,
 		IMAGE,
 		BAR,
+		ABILITY,
 	};
 
 	enum class GuiControlState
@@ -191,6 +192,15 @@ namespace Wiwa
 			if (type == GuiControlType::BAR)
 			{
 				extraPosition.width = (int)((value * (float)position.width) / 100);
+			}
+		}
+
+		//Used for abilites,buffs,etc 
+		void SetNextFrame(int value, Wiwa::Renderer2D* r2d)
+		{
+			if (animatedControl && type == GuiControlType::ABILITY)
+			{
+				r2d->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(value));
 			}
 		}
 
