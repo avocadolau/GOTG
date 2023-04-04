@@ -4,26 +4,27 @@
 #include <mono/metadata/object.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 
-void Blend(MonoString* targetAnim, float blendTime, size_t entity)
+void Blend(MonoString* targetAnim, bool loop,float blendTime, size_t entity)
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(entity);
 
-	const char* ev_p = mono_string_to_utf8(targetAnim);
+	const char* animName = mono_string_to_utf8(targetAnim);
 
-	animator->Blend(ev_p, blendTime);
+
+	animator->Blend(animName, loop, true, blendTime);
 }
 
-void PlayAnimationName(MonoString* name, size_t entity)
+void PlayAnimationName(MonoString* name, bool loop, size_t entity)
 {
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(entity);
 
-	const char* ev_p = mono_string_to_utf8(name);
+	const char* animName = mono_string_to_utf8(name);
 
-	animator->PlayAnimation(ev_p);
+	animator->PlayAnimation(animName,loop);
 }
 
 void PlayAnimation(size_t entity)
@@ -51,4 +52,13 @@ void RestartAnimation(size_t entity)
 	Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(entity);
 
 	animator->Restart();
+}
+
+bool HasFinished(size_t entity)
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+	Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(entity);
+
+	return animator->HasFinished();
 }

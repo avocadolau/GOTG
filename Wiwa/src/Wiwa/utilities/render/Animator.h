@@ -25,15 +25,31 @@ namespace Wiwa {
 
         void Blend(std::string name, float blendTime);
 
+        void SetBlendDuration(float blendDuration);
+
+        void SetBlendTime(float blendTime);
+
         void PlayAnimation(Animation* pAnimation);
 
         void PlayAnimation(std::string name, bool loop = false , bool transition = false, float transitionTime = 0.0f );
 
-        void PlayAnimationName(std::string name);
+        void PlayAnimationName(std::string name, bool loop);
 
         void PlayAnimation();
 
         void PauseAnimation();
+
+        void PlayBlending(bool play) { m_PlayBlending = play; }
+
+        inline bool CurrentAnimationHasFinished() { return m_CurrentAnimation->HasFinished(); }
+
+        void ResetAnimation() { m_CurrentTime = 0; }
+
+        void Loop(bool Loop)
+        {
+            if (m_CurrentAnimation != nullptr)
+                m_CurrentAnimation->m_Loop = Loop;
+        }
 
         void BlendTwoAnimations(Animation* baseAnim, Animation* layerAnim, float blendFactor, float deltaTime);
 
@@ -51,19 +67,11 @@ namespace Wiwa {
 
         static Animator* LoadWiAnimator(const char* path);
 
-        void ResetTime() { m_CurrentTime = 0; }
-
-        void Loop(bool Loop) 
-        {
-            if(m_CurrentAnimation != nullptr)
-             m_CurrentAnimation->m_Loop = Loop; 
-        }
-
         void SetCurrentAnimation(Animation* anim) { m_CurrentAnimation = anim; }
 
         void SetTargetAnimation(Animation* anim) { m_TargetAnimation = anim; }
 
-        void SetAnimationSatate(AnimationState state) { m_AnimationState = state; }
+        void SetAnimationState(AnimationState state) { m_AnimationState = state; }
 
         Animation* GetCurrentAnimation() { return m_CurrentAnimation; }
 
@@ -81,16 +89,19 @@ namespace Wiwa {
         float m_BlendWeight;
         float m_BlendDuration;
         float m_AnimationTime;
+
     private:
         std::vector<glm::mat4> m_FinalBoneMatrices;
         //Animator
         Animation* m_CurrentAnimation = nullptr;
         float m_CurrentTime;
         float m_DeltaTime = 0;
+        float m_LastTime;
 
         std::string m_RootNodeName;
         //blending
         Animation* m_TargetAnimation = nullptr;
         float m_BlendTime = 0.0f;
+        bool m_PlayBlending = false;
     };
 }

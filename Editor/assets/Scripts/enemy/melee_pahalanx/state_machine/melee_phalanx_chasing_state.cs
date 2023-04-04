@@ -13,7 +13,7 @@ namespace Game
         public override void EnterState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
-            Animator.PlayAnimationName("run", entityId);
+            Animator.PlayAnimationName("run",true, entityId);
             enemy.timer = 0;
          
         }

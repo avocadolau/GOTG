@@ -33,15 +33,30 @@ namespace Wiwa
 
 	void Animator::Update(float dt)
 	{
+		if (m_CurrentAnimation == nullptr) 
+			return;
+
+		//convert miliseconds to seconds
+		m_DeltaTime = dt * 0.001;
+
 		switch (m_AnimationState)
 		{
 		case AnimationState::Blending:
-			UpdateBlendingAnimation(dt);
+			if (m_TargetAnimation == nullptr)
+				return;
+			if (m_PlayBlending)
+				UpdateBlendingAnimation(m_DeltaTime);
+			else
+				CalculateBlendedBoneTransform(m_CurrentAnimation,&m_CurrentAnimation->GetRootNode(),
+												m_TargetAnimation,&m_TargetAnimation->GetRootNode(),
+												m_CurrentAnimation->m_CurrentTime,m_TargetAnimation->m_CurrentTime,
+												glm::mat4(1),m_BlendWeight);
 			break;
 		case AnimationState::Paused:
+			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 			break;
 		case AnimationState::Playing:
-			UpdateAnimation(dt);
+			UpdateAnimation(m_DeltaTime);
 			break;
 		default:
 			break;
@@ -50,44 +65,43 @@ namespace Wiwa
 
 	void Animator::UpdateAnimation(float dt)
 	{
-		m_DeltaTime = dt;
-		if (m_CurrentAnimation)
+		// update animation time
+		float TicksPerSecond = (float)(m_CurrentAnimation->m_TicksPerSecond != 0 ? m_CurrentAnimation->m_TicksPerSecond : 25.0f);
+		
+		float framesPerDeltaTime = dt * TicksPerSecond;
+
+		m_CurrentTime += framesPerDeltaTime;
+
+		m_CurrentAnimation->m_CurrentTime = fmod(m_CurrentTime, (float)m_CurrentAnimation->m_Duration);
+
+		if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
 		{
+			 m_CurrentAnimation->m_HasFinished = true;
+			 if (m_CurrentAnimation->m_Loop)
+			 {
+				m_CurrentAnimation->m_HasFinished = false;
+				m_CurrentTime = 0;
+			 }
+			 else {
 
-			// update animation time
-			float TicksPerSecond = (float)(m_CurrentAnimation->m_TicksPerSecond != 0 ? m_CurrentAnimation->m_TicksPerSecond : 25.0f);
-			float TimeInTicks = dt * TicksPerSecond;
-			// float TimeInTicks = m_AnimationTime * TicksPerSecond;
-			float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
-			m_CurrentTime = AnimationTimeTicks;
-
-			if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
-			{
-				// m_CurrentAnimation->m_HasFinished = true;
-				// m_AnimationTime = 0;
-				// if (m_CurrentAnimation->m_Loop)
-				//{
-				//	m_CurrentAnimation->m_HasFinished = false;
-				//	m_AnimationTime = m_CurrentAnimation->m_Duration;
-				//	m_AnimationState = AnimationState::Playing;
-				// }
-				// else
-				//	return;
-			}
-
-			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+				 m_AnimationState = AnimationState::Paused;
+			 }
 		}
+		CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 	}
 
 	void Animator::UpdateBlendingAnimation(float dt)
 	{
-		if (m_BlendTime <= 0)
+		//update blending parameters
+		if (m_BlendTime < 0)
 		{
 			m_AnimationState = AnimationState::Playing;
+			m_CurrentAnimation = m_TargetAnimation;
 			return;
 		}
 		m_BlendTime -= dt;
 		m_BlendWeight = 0 + m_BlendTime * (1 - 0);
+		
 		BlendTwoAnimations(m_CurrentAnimation, m_TargetAnimation, m_BlendWeight, dt);
 	}
 
@@ -99,23 +113,35 @@ namespace Wiwa
 		m_AnimationState = AnimationState::Blending;
 	}
 
+	void Animator::SetBlendDuration(float blendDuration)
+	{
+		m_BlendDuration = blendDuration;
+	}
+
+	void Animator::SetBlendTime(float blendTime)
+	{
+		m_BlendTime = blendTime;
+	}
+
 	void Animator::PlayAnimation(Animation *pAnimation)
 	{
 		m_CurrentAnimation = pAnimation;
 		m_CurrentTime = 0;
-		m_AnimationTime = pAnimation->GetDuration();
+		m_CurrentAnimation->m_CurrentTime = 0;
 	}
 
 	void Animator::PlayAnimation(std::string name, bool loop, bool transition, float transitionTime)
 	{
+		m_CurrentTime = 0;
+		//its the same anim just reset the animation with the new parameters
 		if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
 		{
-			m_AnimationTime = m_CurrentAnimation->m_Duration;
+			m_CurrentAnimation->m_CurrentTime = 0;
 			m_AnimationState = AnimationState::Playing;
 			m_CurrentAnimation->m_Loop = loop;
 			return;
 		}
-
+		//find the animation and given the parameters blend or not and or loop
 		for (auto &animation : m_Animations)
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
@@ -123,16 +149,20 @@ namespace Wiwa
 				if (transition)
 				{
 					m_TargetAnimation = animation;
-					m_AnimationTime = animation->m_Duration;
 					m_BlendDuration = transitionTime;
+					m_BlendTime = 0;
+					m_TargetAnimation->m_CurrentTime = 0;
 					m_TargetAnimation->m_Loop = loop;
+					m_TargetAnimation->m_HasFinished = false;
 					m_AnimationState = AnimationState::Blending;
 				}
 				else
 				{
 					m_CurrentAnimation = animation;
-					m_AnimationTime = animation->m_Duration;
+					m_CurrentAnimation->m_CurrentTime = 0;
+					m_BlendTime = 0;
 					m_CurrentAnimation->m_Loop = loop;
+					m_CurrentAnimation->m_HasFinished = false;
 					m_AnimationState = AnimationState::Playing;
 					return;
 				}
@@ -194,13 +224,14 @@ namespace Wiwa
 		return animator;
 	}
 
-	void Animator::PlayAnimationName(std::string name)
+	void Animator::PlayAnimationName(std::string name, bool loop)
 	{
 		if (m_CurrentAnimation)
 		{
 			if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
 			{
-				m_AnimationTime = m_CurrentAnimation->m_Duration;
+				//m_CurrentAnimation->m_CurrentTime = 0;
+				m_CurrentAnimation->m_Loop = loop;
 				m_AnimationState = AnimationState::Playing;
 				return;
 			}
@@ -211,7 +242,8 @@ namespace Wiwa
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 			{
 				m_CurrentAnimation = animation;
-				m_AnimationTime = animation->m_Duration;
+				//m_CurrentAnimation->m_CurrentTime = 0;
+				m_CurrentAnimation->m_Loop = loop;
 				m_AnimationState = AnimationState::Playing;
 				return;
 			}
@@ -221,10 +253,9 @@ namespace Wiwa
 	void Animator::PlayAnimation()
 	{
 		m_AnimationState = AnimationState::Playing;
+		m_CurrentTime = 0;
 		if (m_CurrentAnimation != nullptr)
-		{
-			m_AnimationTime = m_CurrentAnimation->m_Duration;
-		}
+			m_CurrentAnimation->m_CurrentTime = 0;
 	}
 
 	void Animator::PauseAnimation()
@@ -248,13 +279,13 @@ namespace Wiwa
 		float TicksPerSecond = (float)(m_CurrentAnimation->m_TicksPerSecond != 0 ? m_CurrentAnimation->m_TicksPerSecond : 25.0f);
 		float TimeInTicks = deltaTime * TicksPerSecond * animSpeedMultiplierUp;
 		float AnimationTimeTicks = fmod(TimeInTicks, (float)m_CurrentAnimation->m_Duration);
-		currentTimeBase = AnimationTimeTicks;
+		m_CurrentAnimation->m_CurrentTime = AnimationTimeTicks;
 
 		static float currentTimeLayered = 0.0f;
 		TicksPerSecond = (float)(m_TargetAnimation->m_TicksPerSecond != 0 ? m_TargetAnimation->m_TicksPerSecond : 25.0f);
 		TimeInTicks = deltaTime * TicksPerSecond * animSpeedMultiplierDown;
 		AnimationTimeTicks = fmod(TimeInTicks, (float)m_TargetAnimation->m_Duration);
-		currentTimeLayered = AnimationTimeTicks;
+		m_TargetAnimation->m_CurrentTime = AnimationTimeTicks;
 
 		CalculateBlendedBoneTransform(baseAnim, &baseAnim->GetRootNode(), layerAnim, &layerAnim->GetRootNode(), currentTimeBase, currentTimeLayered, glm::mat4(1.0f), blendFactor);
 	}
@@ -267,7 +298,7 @@ namespace Wiwa
 		Bone *pBone = animationBase->FindBone(nodeName);
 		if (pBone)
 		{
-			pBone->Update(currentTimeBase);
+			pBone->Update(m_CurrentAnimation->m_CurrentTime);
 			nodeTransform = pBone->GetLocalTransform();
 		}
 
@@ -275,7 +306,7 @@ namespace Wiwa
 		pBone = animationLayer->FindBone(nodeName);
 		if (pBone)
 		{
-			pBone->Update(currentTimeLayered);
+			pBone->Update(m_TargetAnimation->m_CurrentTime);
 			layeredNodeTransform = pBone->GetLocalTransform();
 		}
 
@@ -309,7 +340,7 @@ namespace Wiwa
 			if (boneInfoMap.find(bone->m_Name) != boneInfoMap.end())
 			{
 				// interpolate local bone matrix
-				bone->Update(m_CurrentTime);
+				bone->Update(m_CurrentAnimation->m_CurrentTime);
 
 				int index = boneInfoMap[bone->m_Name].id;
 
@@ -330,7 +361,7 @@ namespace Wiwa
 
 		if (Bone)
 		{
-			Bone->Update(m_CurrentTime);
+			Bone->Update(m_CurrentAnimation->m_CurrentTime);
 			nodeTransform = Bone->GetLocalTransform();
 		}
 

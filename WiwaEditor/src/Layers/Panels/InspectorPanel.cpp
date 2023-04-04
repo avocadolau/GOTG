@@ -488,8 +488,6 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				current_item = animationItems[n];
 				ImGui::SetItemDefaultFocus();
 				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
-				animator->animator->PlayAnimation();
-				animator->animator->Loop(animator->Loop);
 			}
 		}
 		ImGui::EndCombo();
@@ -508,11 +506,22 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	{
 		animator->animator->Loop(animator->Loop);
 	}
-	ImGui::Text(std::to_string(animator->animator->GetCurrentAnimation()->GetDuration()).c_str());
-	float maxTime =animator->animator->GetCurrentAnimation()->GetDuration()/24;
-	ImGui::SliderFloat("Aniamtion time", &animator->animationTime, 0, maxTime);
+
+	ImGui::Text("frames: ");
+	ImGui::SameLine();
+	ImGui::Text(std::to_string(trunc(animator->animator->GetCurrentAnimation()->GetDuration())).c_str());
+
+	float maxTime = animator->animator->GetCurrentAnimation()->GetDuration()/24;
+	ImGui::Text("Base animation time");
+
+	if (ImGui::SliderFloat("Aniamtion time", &animator->baseAnimTime, 0, maxTime))
+	{
+		animator->animator->GetCurrentAnimation()->m_CurrentTime = animator->baseAnimTime * animator->animator->GetCurrentAnimation()->m_TicksPerSecond;
+	}
+	ImGui::Separator();
 
 	ImGui::Checkbox("Blend", &animator->Blend);
+
 	if (animator->Blend)
 	{
 		if (ImGui::TreeNodeEx("Blending"))
@@ -526,7 +535,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 			const char* current_item = NULL;
 			if (animator->animator->GetTargetAnimation() != nullptr)
 				current_item = animator->animator->GetTargetAnimation()->m_Name.c_str();
-			ImGui::Text("Blend to animation");
+			ImGui::Text("Layer animation");
 			if (ImGui::BeginCombo("blend anim", current_item))
 			{
 				for (int n = 0; n < animator->animator->m_Animations.size(); n++)
@@ -537,24 +546,39 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 						current_item = animationItems[n];
 						ImGui::SetItemDefaultFocus();
 						animator->animator->SetTargetAnimation(animator->animator->m_Animations[n]);
+						animator->animator->SetAnimationState(Wiwa::AnimationState::Blending);
 					}
 				}
 				ImGui::EndCombo();
 			}
-			if(ImGui::SliderFloat("Weight", &animator->weight, 0, 1))
+			if (ImGui::Checkbox("PlayBlending", &animator->PlayBlend))
 			{
-
+				animator->animator->PlayBlending(animator->PlayBlend);
 			}
-			if(ImGui::SliderFloat("Blend Duration", &animator->blendDuration, 0, 5))
+			if(ImGui::InputFloat("Blend Duration", &animator->blendDuration, 0, 5))
 			{
-
+				animator->animator->SetBlendTime(animator->blendDuration);
 			}
-
+			if (ImGui::SliderFloat("Weight", &animator->weight, 0, 1))
+			{
+				animator->animator->m_BlendWeight = animator->weight;
+			}
+			ImGui::Separator();
 			if (animator->animator->GetTargetAnimation())
 			{
-				animator->animator->SetAnimationSatate(Wiwa::AnimationState::Blending);
-			}
+				ImGui::Text("frames: ");
+				ImGui::SameLine();
+				ImGui::Text(std::to_string(trunc(animator->animator->GetTargetAnimation()->GetDuration())).c_str());
 
+				float maxTime = animator->animator->GetTargetAnimation()->GetDuration() / 24;
+				ImGui::Text("Layer animation time");
+
+				if (ImGui::SliderFloat("Aniamtion time", &animator->layerAnimTime, 0, maxTime))
+				{
+					animator->animator->GetTargetAnimation()->m_CurrentTime = animator->layerAnimTime * animator->animator->GetTargetAnimation()->m_TicksPerSecond;
+				}
+
+			}
 			ImGui::TreePop();
 		}
 	}
@@ -1160,15 +1184,31 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 						emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
 
-						if (emitter->textureId != WI_INVALID_INDEX)
+						//clear path
+						for (size_t i = 0; i < 128; i++)
 						{
-							std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
+							emitter->texturePath[i] = (char)"";
+						}
+
+						//check for name length
+						if (pathS.length() < 128)
+						{
+							if (emitter->textureId != WI_INVALID_INDEX)
+							{
+								
+								std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
+							}
+							else
+							{
+								WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
+								std::strncpy(emitter->texturePath, "", 1);
+
+							}
 						}
 						else
 						{
-							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
+							WI_CORE_INFO("Texture name too long! Max: [128] characters.");
 							std::strncpy(emitter->texturePath, "", 1);
-
 						}
 					}
 				}

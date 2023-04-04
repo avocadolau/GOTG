@@ -53,7 +53,7 @@ namespace Game
             Console.WriteLine(this.GetType().Name + System.Reflection.MethodBase.GetCurrentMethod().Name);
             GenerateAttack(ref enemy, ref entityId, ref firstAttack);
             enemy.timer = 0;
-            Animator.PlayAnimationName("atack", entityId);
+            Animator.PlayAnimationName("atack",true, entityId);
             enemy.ChasePlayer(enemy, entityId);
 
         }

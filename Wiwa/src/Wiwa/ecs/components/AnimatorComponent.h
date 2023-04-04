@@ -13,9 +13,12 @@ namespace Wiwa {
 		bool Play;
 		bool Loop;
 		bool Blend;
+		bool PlayBlend;
 		float weight;
-		float animationTime;
+		float baseAnimTime;
+		float layerAnimTime;
 		float blendDuration;
+		float blendTime;
 
 		Animator* animator;
 	};

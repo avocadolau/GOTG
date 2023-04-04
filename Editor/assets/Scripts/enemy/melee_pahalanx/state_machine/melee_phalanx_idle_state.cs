@@ -14,7 +14,7 @@ namespace Game
         }
         public override void UpdateState(ref EnemyMeleePhalanx enemy, EntityId entityId)
         {
-            Animator.PlayAnimationName("idle", entityId);
+            Animator.PlayAnimationName("idle",true, entityId);
 
             if (enemy.timer > 2)
             {
