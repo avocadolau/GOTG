@@ -357,8 +357,8 @@ void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
 	if (index >= 0 && index < m_Map.size() && AIPathFindingManager::CheckBoundaries(vec))
 	{
 		m_Map[index] = INVALID_WALK_CODE;
-		WI_INFO("Index i: {}", index);
-		WI_INFO("UnWalkable x: {} , y: {}", vec.x, vec.y);
+	/*	WI_INFO("Index i: {}", index);
+		WI_INFO("UnWalkable x: {} , y: {}", vec.x, vec.y);*/
 	}
 }
 
@@ -377,9 +377,9 @@ bool Wiwa::AIMapGeneration::DebugDrawMap()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(camera->getView()));
 
-	for (int i = 0; i < m_MapData.height - 1; i++)
+	for (int i = 0; i < m_MapData.height; i++)
 	{
-		for (int j = 0; j < m_MapData.width - 1; j++)
+		for (int j = 0; j < m_MapData.width; j++)
 		{
 			glm::vec2 vec = Wiwa::AIMapGeneration::MapToWorld(i, j);
 			if (m_Map[i * m_MapData.width + j] == 255)

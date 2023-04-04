@@ -2,16 +2,11 @@
 #include "WaveSystem.h"
 #include "../../PhysicsSystem.h"
 #include "../../AgentAISystem.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
 
 #include <random>
 namespace Wiwa
 {
-	struct Enemy
-	{
-		int enemyType;
-		bool hasFinished;
-	};
-
 	WaveSystem::WaveSystem()
 	{
 		m_Wave = {WI_INVALID_INDEX, WI_INVALID_INDEX};

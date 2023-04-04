@@ -8,6 +8,7 @@
 #include <glm/gtx/norm.hpp>
 #include <glm/gtx/vector_angle.hpp> // for glm::angle()
 #include "glew.h"
+#include "PhysicsSystem.h"
 
 Wiwa::AgentAISystem::AgentAISystem()
 {
@@ -21,7 +22,6 @@ void Wiwa::AgentAISystem::OnAwake()
 {
 	m_AgentAI = GetComponentIterator<Wiwa::AgentAI>();
 	m_Transform = GetComponentIterator<Wiwa::Transform3D>();
-	
 }
 
 void Wiwa::AgentAISystem::OnInit()
@@ -36,6 +36,7 @@ void Wiwa::AgentAISystem::OnInit()
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
+
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 
@@ -90,6 +91,14 @@ void Wiwa::AgentAISystem::OnUpdate()
 		}*/
 		
 		// Update the character's position and rotation to the interpolated position and rotation
+		//Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		//Wiwa::PhysicsManager& physicsManager = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+
+		//Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
+		//glm::vec2 dirNorm  = glm::normalize(interpolatedPosition);
+		///*dirNorm += agent->speed;*/
+		//physicsManager.SetVelocity(obj, glm::vec3(-dirNorm.x, 0.0f, -dirNorm.y));
+
 		transform->localPosition.x = interpolatedPosition.x;
 		transform->localPosition.z = interpolatedPosition.y;
 
@@ -178,7 +187,12 @@ bool Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 	glm::ivec2 currentPositionMap = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
 	glm::ivec2 targetInMap = Wiwa::AIMapGeneration::WorldToMap(targetPos.x, targetPos.z);
 	
+	//auto start_time = std::chrono::high_resolution_clock::now();
 	int check = Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
+	//auto end_time = std::chrono::high_resolution_clock::now();
+	//// Calculate the elapsed time
+	//auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+	//WI_INFO("Pathfinding time: {}", elapsed_time);
 
 	if (check != -1)
 	{

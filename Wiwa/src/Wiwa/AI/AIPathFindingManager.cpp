@@ -8,7 +8,6 @@
 //#include <glew.h>
 
 #include <Wiwa/utilities/Log.h>
-//#include "Wiwa/utilities/time/Time.h"
 
 //#include <glm/gtc/quaternion.hpp>
 //#include <glm/gtx/matrix_decompose.hpp>
@@ -73,6 +72,38 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
 
+	// north-east
+	cell = pos;
+	cell.y = pos.y + 1;
+	cell.x = pos.x + 1;
+
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
+
+	// south-east
+	cell = pos;
+	cell.y = pos.y - 1;
+	cell.x = pos.x + 1;
+
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
+
+	// north-west
+	cell = pos;
+	cell.y = pos.y + 1;
+	cell.x = pos.x - 1;
+
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
+
+	// south-west
+	cell = pos;
+	cell.y = pos.y - 1;
+	cell.x = pos.x - 1;
+
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
+
 	return (uint32_t)listToFill.pathList.size();
 }
 
@@ -132,16 +163,20 @@ Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::Find
 
 Wiwa::AIPathFindingManager::PathNode* Wiwa::AIPathFindingManager::PathList::GetNodeLowestScore()
 {
-	Wiwa::AIPathFindingManager::PathNode* ret = nullptr;
+	Wiwa::AIPathFindingManager::PathNode* ret = &(*pathList.rbegin());
 
 	int min = 65535;
 	for (std::list<PathNode>::reverse_iterator item = pathList.rbegin(); item != pathList.rend(); item++)
 	{
-		if (item->Score() < min)
+		if (item->Score() < ret->Score() || item->Score() == ret->Score() && item->h < ret->h)
+		{
+			ret = &(*item);
+		}
+		/*if (item->Score() < min)
 		{
 			min = item->Score();
 			ret = &(*item);
-		}
+		}*/
 	}
 	return ret;
 	
@@ -266,24 +301,34 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			// If it is NOT found, calculate its F and add it to the open list
 			PathNode* adjacentInOpen = open.Find(item.pos);
-			if (adjacentInOpen == nullptr)
+			int newMovementCostToAdjacent = node->g + GetDistance(node->pos, item.pos);
+			if (newMovementCostToAdjacent < item.g || adjacentInOpen == nullptr)
 			{
-				item.CalculateF(destination);
-				open.pathList.emplace_back(item);
+				item.g = newMovementCostToAdjacent;
+				item.h = GetDistance(item.pos, destination);
+				item.parent = node;
+				//item.CalculateF(destination);
+				if (adjacentInOpen == nullptr)
+					open.pathList.emplace_back(item);
 			}
 			else
 			{
-				// If it is already in the open list, check if it is a better path (compare G)
-				if (adjacentInOpen->g > item.g + 1)
-				{
-					adjacentInOpen->parent = item.parent;
-					adjacentInOpen->CalculateF(destination);
-				}
+				//// If it is already in the open list, check if it is a better path (compare G)
+				//if (adjacentInOpen->g > item.g)
+				//{
+				//	item.g = newMovementCostToAdjacent;
+				//	item.h = GetDistance(item.pos, destination);
+				//	*adjacentInOpen = item;
+				//	/*adjacentInOpen->parent = item.parent;
+				//	adjacentInOpen->g = newMovementCostToAdjacent;
+				//	adjacentInOpen->h = GetDistance(adjacentInOpen->pos, destination);*/
+				//	//adjacentInOpen->CalculateF(destination);
+				//}
 			}
 		}
 		++iterations;
 	}
-
+	
 	return ret;
 }
 
@@ -310,4 +355,14 @@ unsigned char Wiwa::AIPathFindingManager::GetTileAt(const glm::ivec2& pos)
 		return m_MapPathFinding[(pos.y * m_Width) + pos.x];
 
 	return INVALID_WALK_CODE;
+}
+
+int Wiwa::AIPathFindingManager::GetDistance(const glm::ivec2& node_a, const glm::ivec2& node_b)
+{
+	int dstX = std::abs(node_a.x - node_b.x);
+	int dstY = std::abs(node_a.y - node_b.y);
+
+	if (dstX > dstY)
+		return 14 * dstY + 10 * (dstX - dstY);
+	return 14 * dstX + 10 * (dstY - dstX);
 }

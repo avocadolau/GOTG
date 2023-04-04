@@ -6,23 +6,15 @@
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
 #include <Wiwa/ecs/components/game/Character.h>
-#include <Wiwa/ecs/components/game/enemy/Wave.h>
+#include <Wiwa/ecs/components/game/wave/Wave.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 
 #include <vector>
 
 typedef size_t SceneId;
 
 namespace Wiwa {
-	struct WavesSpawner
-	{
-		int maxEnemiesPerWave;
-		int maxWaveCount;
-		int currentWaveCount;
-		float timeBetweenWaves;
-		bool hasFinished;
-		bool hasTriggered;
-		int spawnOffset;
-	};
+
 	struct DefaultCharacterSettings
 	{
 		int MaxHealth;

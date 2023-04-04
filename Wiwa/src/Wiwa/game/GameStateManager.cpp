@@ -126,36 +126,36 @@ namespace Wiwa
 
 	void GameStateManager::UpdateCombatRoom()
 	{
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		em.RegisterComponent<WavesSpawner>();
-		size_t size = 0;
-		ComponentHash cmpHash = FNV1A_HASH("WavesSpawner");
-		Wiwa::WavesSpawner* enemySpawnerList = (Wiwa::WavesSpawner*)em.GetComponentsByHash(cmpHash, &size);
+		//Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		//em.RegisterComponent<WaveSpawner>();
+		//size_t size = 0;
+		//ComponentHash cmpHash = FNV1A_HASH("WavesSpawner");
+		//Wiwa::WaveSpawner* enemySpawnerList = (Wiwa::WaveSpawner*)em.GetComponentsByHash(cmpHash, &size);
 
-		s_TotalSpawners = 0;
-		s_SpawnersFinished = 0;
-		if (enemySpawnerList)
-		{
-			for (int i = 0; i < size; i++)
-			{
-				if (em.IsComponentRemovedByHash(cmpHash, i)) {
-					//WI_INFO("Removed at: [{}]", i);
-				}
-				else
-				{
-					s_TotalSpawners += 1;
+		//s_TotalSpawners = 0;
+		//s_SpawnersFinished = 0;
+		//if (enemySpawnerList)
+		//{
+		//	for (int i = 0; i < size; i++)
+		//	{
+		//		if (em.IsComponentRemovedByHash(cmpHash, i)) {
+		//			//WI_INFO("Removed at: [{}]", i);
+		//		}
+		//		else
+		//		{
+		//			s_TotalSpawners += 1;
 
-					Wiwa::WavesSpawner* c = &enemySpawnerList[i];
-					if (c)
-					{
-						if (c->hasFinished)
-							s_SpawnersFinished += 1;
-					}
-				}
-			}
-			s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
-			s_CanPassNextRoom = s_HasFinshedRoom;
-		}
+		//			Wiwa::WavesSpawner* c = &enemySpawnerList[i];
+		//			if (c)
+		//			{
+		//				if (c->hasFinished)
+		//					s_SpawnersFinished += 1;
+		//			}
+		//		}
+		//	}
+		//	s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
+		//	s_CanPassNextRoom = s_HasFinshedRoom;
+		//}
 	
 
 		if (s_HasFinshedRoom)
@@ -301,8 +301,6 @@ namespace Wiwa
 	void GameStateManager::ResetCombatRoomData()
 	{
 		if (debug) WI_INFO("GAME STATE: ResetCombatRoomData()");
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		em.RegisterComponent<WavesSpawner>();
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
 	}

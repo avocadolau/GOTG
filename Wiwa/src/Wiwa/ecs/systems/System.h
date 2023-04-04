@@ -76,6 +76,11 @@ namespace Wiwa
 		virtual bool OnComponentAdded(byte *data, const Type *type) { return true; }
 
 		virtual bool OnComponentRemoved(byte *data, const Type *type) { return true; }
+
+		inline Scene& getScene() const { return *m_Scene; };
+
+		inline const bool getInit() const { return m_Inited; };
+		inline const bool getAwake() const { return m_Awaken; };
 	};
 
 	template <class T>

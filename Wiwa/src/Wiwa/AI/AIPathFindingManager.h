@@ -4,7 +4,6 @@
 #include <Wiwa/core/Core.h>
 
 #include <Wiwa/ecs/components/AgentAI.h>
-//#include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
 #include <vector>
@@ -92,6 +91,7 @@ namespace Wiwa {
 		// Utility: return the walkability value of a tile
 		static unsigned char GetTileAt(const glm::ivec2& pos);
 
+		static int GetDistance(const glm::ivec2& node_a, const glm::ivec2& node_b);
 		private:
 
 		// size of the map
@@ -104,6 +104,7 @@ namespace Wiwa {
 		static int m_MapSize;
 		// we store the created path here
 		static std::vector<glm::vec2> m_LastPath;
+
 	};
 }
 

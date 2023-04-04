@@ -263,8 +263,8 @@ enum class TypeHash : size_t {
 	Character = FNV1A_HASH("Character"),
 	Player = FNV1A_HASH("Player"),
 	PlayerSpawner = FNV1A_HASH("PlayerSpawner"),
-	//Enemy = FNV1A_HASH("Enemy"),
-	EnemySpawner = FNV1A_HASH("EnemySpawner"),
 	Wave = FNV1A_HASH("Wave"),
+	WaveSpawner = FNV1A_HASH("WaveSpawner"),
+	Enemy = FNV1A_HASH("Enemy"),
 	ParticleEmitter = FNV1A_HASH("ParticleEmitter")
 };

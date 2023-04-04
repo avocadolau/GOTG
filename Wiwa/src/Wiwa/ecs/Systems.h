@@ -11,7 +11,8 @@
 
 // Game systems
 #include "systems/AgentAISystem.h"
-//#include "systems/game/enemy/EnemySystem.h"
-//#include "systems/game/enemy/EnemySpawnerSystem.h"
-#include "systems/game/enemy/WaveSystem.h"
+#include "systems/game/enemy/EnemySystem.h"
+#include "systems/game/wave/WaveSystem.h"
+#include "systems/game/wave/WaveSpawnerSystem.h"
+#include "systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h"
 #include "systems/ParticleEmitterExecutor.h"
