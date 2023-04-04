@@ -40,6 +40,11 @@ namespace Wiwa
 			ComponentId cid;
 		};
 
+		struct applySystemData {
+			EntityId eid;
+			SystemHash system_hash;
+		};
+
 		// Scene where entity manager acts
 		Scene *m_Scene;
 
@@ -59,6 +64,8 @@ namespace Wiwa
 		std::vector<EntityId> m_EntitiesAlive;
 		std::vector<EntityId> m_ParentEntitiesAlive;
 		std::vector<EntityId> m_EntitiesToDestroy;
+
+		std::vector<System*> m_SystemsToInit;
 
 		// Create an entity and return its ID
 		EntityId CreateEntity_impl();
@@ -88,6 +95,8 @@ namespace Wiwa
 
 		bool OnComponentAdded(EntityId entityId, byte *data, const Type *type);
 		bool OnComponentRemoved(EntityId entityId, byte *data, const Type *type);
+
+		System* _applySystemImpl(EntityId entityId, SystemHash system_hash);
 
 		void _saveEntityImpl(File& file, EntityId eid);
 		EntityId _loadEntityImpl(File& file, EntityId parent, bool is_parent);
