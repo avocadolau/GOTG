@@ -322,9 +322,6 @@ void InspectorPanel::DrawMeshComponent(byte *data)
 	Wiwa::Model *mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 	mod = mod->getModelAt(mesh->modelIndex);
 
-	// DEBUG
-	// ImGui::SliderFloat("Animation time: ", &mod->GetParent()->animationTime, 0, mod->GetParent()->GetAnimations()[0]->duration);
-
 	AssetContainer(std::filesystem::path(mod->getModelPath()).stem().string().c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -468,32 +465,83 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 		return;
 
 	// get animaitons
-	const char* animationItems[10];
+	ImGui::Separator();
+	const char* animationBaseItems[10];
+
 	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
 	{
-		animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+		animationBaseItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
 	}
+	animationBaseItems[animator->animator->m_Animations.size()] = "none";
 
 	const char* current_item = NULL;
 	if (animator->animator->GetCurrentAnimation() != nullptr)
 		current_item = animator->animator->GetCurrentAnimation()->m_Name.c_str();
-	ImGui::Text("Current animation");
-	if (ImGui::BeginCombo("animaiton", current_item))
+	ImGui::Text("Base animation");
+	if (ImGui::BeginCombo("base", current_item))
 	{
 		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
 		{
-			bool is_selected = (current_item == animationItems[n]);
-			if (ImGui::Selectable(animationItems[n], is_selected))
+			bool is_selected = (current_item == animationBaseItems[n]);
+			if (ImGui::Selectable(animationBaseItems[n], is_selected))
 			{
-				current_item = animationItems[n];
+				current_item = animationBaseItems[n];
 				ImGui::SetItemDefaultFocus();
-				animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+				if (current_item == "none")
+				{
+					animator->animator->SetCurrentAnimation(nullptr);
+				}
+				else {
+
+					animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+					animator->animator->GetCurrentAnimation()->m_Loop = animator->Loop;
+				}
+				
 			}
 		}
 		ImGui::EndCombo();
 	}
+	ImGui::Separator();
+	const char* animationLayerItems[10];
+
+	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
+	{
+		animationLayerItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
+	}
+
+	animationLayerItems[animator->animator->m_Animations.size()] = "none";
+	
+	const char* current_item2 = NULL;
+
+	if (animator->animator->GetTargetAnimation() != nullptr)
+		current_item2 = animator->animator->GetTargetAnimation()->m_Name.c_str();
+	ImGui::Text("Layer animation");
+	if (ImGui::BeginCombo("layer", current_item2))
+	{
+		for (int n = 0; n < animator->animator->m_Animations.size(); n++)
+		{
+			bool is_selected = (current_item2 == animationLayerItems[n]);
+			if (ImGui::Selectable(animationLayerItems[n], is_selected))
+			{
+				current_item2 = animationLayerItems[n];
+				ImGui::SetItemDefaultFocus();
+				if (current_item2 == "none")
+				{
+					animator->animator->SetTargetAnimation(nullptr);
+				}
+				else {
+
+					animator->animator->SetTargetAnimation(animator->animator->m_Animations[n]);
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::Separator();
+
 	if (!animator->animator->GetCurrentAnimation())
 		return;
+
 	if (ImGui::Checkbox("Play", &animator->Play))
 	{
 		if (animator->Play)
@@ -506,6 +554,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	{
 		animator->animator->Loop(animator->Loop);
 	}
+	ImGui::Separator();
 
 	ImGui::Text("frames: ");
 	ImGui::SameLine();
@@ -514,73 +563,47 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 	float maxTime = animator->animator->GetCurrentAnimation()->GetDuration()/24;
 	ImGui::Text("Base animation time");
 
-	if (ImGui::SliderFloat("Aniamtion time", &animator->baseAnimTime, 0, maxTime))
+	if (ImGui::SliderFloat("base time", &animator->baseAnimTime, 0, maxTime))
 	{
 		animator->animator->GetCurrentAnimation()->m_CurrentTime = animator->baseAnimTime * animator->animator->GetCurrentAnimation()->m_TicksPerSecond;
 	}
 	ImGui::Separator();
 
-	ImGui::Checkbox("Blend", &animator->Blend);
-
-	if (animator->Blend)
+	if (animator->animator->GetTargetAnimation())
 	{
-		if (ImGui::TreeNodeEx("Blending"))
+		ImGui::Text("frames: ");
+		ImGui::SameLine();
+		ImGui::Text(std::to_string(trunc(animator->animator->GetTargetAnimation()->GetDuration())).c_str());
+
+		float maxTime = animator->animator->GetTargetAnimation()->GetDuration() / 24;
+		ImGui::Text("Layer animation time");
+
+		if (ImGui::SliderFloat("layer time", &animator->layerAnimTime, 0, maxTime))
 		{
-			const char* animationItems[10];
-			for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
-			{
-				animationItems[i] = animator->animator->m_Animations[i]->m_Name.c_str();
-			}
-
-			const char* current_item = NULL;
-			if (animator->animator->GetTargetAnimation() != nullptr)
-				current_item = animator->animator->GetTargetAnimation()->m_Name.c_str();
-			ImGui::Text("Layer animation");
-			if (ImGui::BeginCombo("blend anim", current_item))
-			{
-				for (int n = 0; n < animator->animator->m_Animations.size(); n++)
-				{
-					bool is_selected = (current_item == animationItems[n]);
-					if (ImGui::Selectable(animationItems[n], is_selected))
-					{
-						current_item = animationItems[n];
-						ImGui::SetItemDefaultFocus();
-						animator->animator->SetTargetAnimation(animator->animator->m_Animations[n]);
-						animator->animator->SetAnimationState(Wiwa::AnimationState::Blending);
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (ImGui::Checkbox("PlayBlending", &animator->PlayBlend))
-			{
-				animator->animator->PlayBlending(animator->PlayBlend);
-			}
-			if(ImGui::InputFloat("Blend Duration", &animator->blendDuration, 0, 5))
-			{
-				animator->animator->SetBlendTime(animator->blendDuration);
-			}
-			if (ImGui::SliderFloat("Weight", &animator->weight, 0, 1))
-			{
-				animator->animator->m_BlendWeight = animator->weight;
-			}
-			ImGui::Separator();
-			if (animator->animator->GetTargetAnimation())
-			{
-				ImGui::Text("frames: ");
-				ImGui::SameLine();
-				ImGui::Text(std::to_string(trunc(animator->animator->GetTargetAnimation()->GetDuration())).c_str());
-
-				float maxTime = animator->animator->GetTargetAnimation()->GetDuration() / 24;
-				ImGui::Text("Layer animation time");
-
-				if (ImGui::SliderFloat("Aniamtion time", &animator->layerAnimTime, 0, maxTime))
-				{
-					animator->animator->GetTargetAnimation()->m_CurrentTime = animator->layerAnimTime * animator->animator->GetTargetAnimation()->m_TicksPerSecond;
-				}
-
-			}
-			ImGui::TreePop();
+			animator->animator->GetTargetAnimation()->m_CurrentTime = animator->layerAnimTime * animator->animator->GetTargetAnimation()->m_TicksPerSecond;
 		}
+
+	}
+	
+	ImGui::Separator();
+	if (ImGui::Checkbox("Blend", &animator->Blend))
+	{
+		if(animator->Blend)
+			animator->animator->SetAnimationState(Wiwa::AnimationState::Blending);
+		else
+			animator->animator->SetAnimationState(Wiwa::AnimationState::PausedBlending);
+	}
+	if (ImGui::Checkbox("Loop Blending", &animator->LoopBlend))
+	{
+		animator->animator->m_LoopBlend = animator->LoopBlend;
+	}
+	if(ImGui::SliderFloat("Blend Duration", &animator->blendDuration,0,1))
+	{
+		animator->animator->SetBlendDuration(animator->blendDuration);
+	}
+	if (ImGui::SliderFloat("Weight", &animator->weight, 0, 1))
+	{
+		animator->animator->m_BlendWeight = animator->weight;
 	}
 }
 

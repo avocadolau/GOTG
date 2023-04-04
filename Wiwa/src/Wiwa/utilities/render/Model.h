@@ -265,9 +265,6 @@ namespace Wiwa {
 
 		std::map<std::string, BoneInfo> GetBoneMap() { return m_BoneInfoMap; }
 
-	/*	void SetCurrentAnimation(Animation* newAnimation) { currentAnimation = newAnimation; }
-		Animation* GetCurrentAnimation() { return currentAnimation; }
-		std::vector<Animation*> GetAnimations() {return animations; }*/
 		void LoadMesh(const char* file, ModelSettings* settings);
 		void LoadWiMesh(const char* file);
 
