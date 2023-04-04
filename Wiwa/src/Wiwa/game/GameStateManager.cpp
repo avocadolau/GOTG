@@ -68,6 +68,7 @@ namespace Wiwa
 
 		if(debug)
 			WI_CORE_INFO("Player progression saved");
+		s_PlayerInventory->Serialize(&doc);
 	}
 
 	void GameStateManager::LoadProgression()
@@ -106,6 +107,8 @@ namespace Wiwa
 		}
 		if (debug)
 			WI_CORE_INFO("Player progression loaded");
+		s_PlayerInventory->Deserialize(&doc);
+
 	}
 
 

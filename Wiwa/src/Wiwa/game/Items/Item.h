@@ -64,7 +64,6 @@ namespace Wiwa
 
 		ResourceId Icon;
 
-
 		PassiveSkill() = default;
 		PassiveSkill(const PassiveSkill& passive)
 		{

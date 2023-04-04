@@ -15,3 +15,4 @@ namespace Wiwa
     };
 }
     
+REGISTER_SYSTEM(Wiwa::CharacterInventory);

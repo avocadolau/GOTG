@@ -19,19 +19,20 @@ namespace Wiwa
 
 		void InitGame();
 		void AddAbility(Ability* ability);
+		void AddBuff(Buff* buff);
 		void AddPassive(const PassiveSkill& skill);
 
 		void Update();
 		
 		void UseAbility(size_t index);
-
+		void UseBuff(size_t index);
 		void Clear();
 
 	private:
 		Ability** m_Abilities;
 		Buff** m_Buffs;
 		std::vector<PassiveSkill> m_PassiveSkill;
-		
+		int m_Tokens;
 		friend class GameStateManager;
 	};
 }

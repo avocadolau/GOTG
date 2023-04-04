@@ -9,10 +9,10 @@ namespace Wiwa
     struct WI_API Item
     {
         const char* Name;
-        uint8_t Type;
+        uint8_t item_type;
     };
 }
 REFLECTION_BEGIN(Wiwa::Item)
     REFLECT_MEMBER(Name)
-    REFLECT_MEMBER(Type)
+    REFLECT_MEMBER(item_type)
 REFLECTION_END;

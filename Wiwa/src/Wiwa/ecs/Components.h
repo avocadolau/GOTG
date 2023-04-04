@@ -29,6 +29,7 @@
 // Game components
 #include "components/game/Character.h"
 #include "components/game/enemy/Wave.h"
+#include "components/game/items/Item.h"
 
 // Particle components
 #include "components/ParticleEmitter.h"

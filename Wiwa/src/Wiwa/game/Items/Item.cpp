@@ -5,6 +5,7 @@ namespace Wiwa
 {
     void Ability::Use()
     {
+      
     }
     void PassiveSkill::Use()
     {
