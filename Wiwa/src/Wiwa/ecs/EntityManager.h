@@ -43,6 +43,7 @@ namespace Wiwa
 		struct applySystemData {
 			EntityId eid;
 			SystemHash system_hash;
+			System* system;
 		};
 
 		// Scene where entity manager acts
@@ -55,7 +56,7 @@ namespace Wiwa
 		std::vector<std::string> m_EntityNames;
 		std::vector<std::map<ComponentId, size_t>> m_EntityComponents;
 		std::vector<std::vector<SystemHash>> m_EntitySystemHashes;
-		std::vector<std::vector<System *>> m_EntitySystems;
+		std::vector<std::vector<System*>> m_EntitySystems;
 		std::vector<EntityId> m_EntityParent;
 		std::vector<bool> m_EntityActive;
 		std::vector<std::vector<EntityId>> m_EntityChildren;
@@ -65,7 +66,7 @@ namespace Wiwa
 		std::vector<EntityId> m_ParentEntitiesAlive;
 		std::vector<EntityId> m_EntitiesToDestroy;
 
-		std::vector<System*> m_SystemsToInit;
+		std::vector<applySystemData> m_SystemsToApply;
 
 		// Create an entity and return its ID
 		EntityId CreateEntity_impl();

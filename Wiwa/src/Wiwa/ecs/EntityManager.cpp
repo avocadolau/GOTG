@@ -254,17 +254,23 @@ namespace Wiwa {
 	void EntityManager::Update()
 	{
 		// Apply systems in pool
-		size_t ssize = m_SystemsToInit.size();
+		size_t ssize = m_SystemsToApply.size();
 
 		for (size_t i = 0; i < ssize; i++) {
-			m_SystemsToInit[i]->Awake();
+			m_SystemsToApply[i].system = _applySystemImpl(m_SystemsToApply[i].eid, m_SystemsToApply[i].system_hash);
 		}
 
-		for (size_t i = 0; i < ssize; i++) {
-			m_SystemsToInit[i]->Init();
+		if (m_InitSystemsOnApply) {
+			for (size_t i = 0; i < ssize; i++) {
+				m_SystemsToApply[i].system->Awake();
+			}
+
+			for (size_t i = 0; i < ssize; i++) {
+				m_SystemsToApply[i].system->Init();
+			}
 		}
 
-		m_SystemsToInit.clear();
+		m_SystemsToApply.clear();
 
 		// Remove entities in pool
 		size_t rsize = m_EntitiesToDestroy.size();
@@ -1136,11 +1142,7 @@ namespace Wiwa {
 	{
 		if (HasSystem(eid, system_hash)) return;
 
-		System* sys = _applySystemImpl(eid, system_hash);
-
-		if (m_InitSystemsOnApply && sys) {
-			m_SystemsToInit.push_back(sys);
-		}
+		m_SystemsToApply.push_back({ eid, system_hash, NULL });
 	}
 
 	void EntityManager::ApplySystem(EntityId eid, const Type* system_type)
