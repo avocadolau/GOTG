@@ -3,12 +3,9 @@
 #include <Wiwa/core/Core.h>
 
 #include <Wiwa/ecs/EntityManager.h>
-#include <Wiwa/utilities/filesystem/FileSystem.h>
-
-#include <Wiwa/ecs/components/game/Character.h>
-#include <Wiwa/ecs/components/game/enemy/Wave.h>
-
 #include <vector>
+#include "Items/Inventory.h"
+
 
 typedef size_t SceneId;
 
@@ -71,6 +68,14 @@ namespace Wiwa {
 		size_t id;
 	};
 
+	enum class ItemType : uint8_t
+	{
+		ABILITY = 0,
+		PASSIVE = 1,
+		BUFF = 2,
+		CONSUMABLE = 3
+	};
+	
 	class WI_API GameStateManager {
 	private:
 		static RoomType s_RoomType;
@@ -102,6 +107,8 @@ namespace Wiwa {
 		static void EndRun();
 		static void InitHub();
 		static void InitPlayerData();
+
+		static void Update();
 		static void Die();
 		static void StartNewRoom();
 		static void SetPlayerId(EntityId id, Scene* scene);
@@ -126,11 +133,11 @@ namespace Wiwa {
 
 		static int NextRoom();
 
-
+		static void CleanUp();
 
 		static void SerializeData();
 		static void DeserializeData();
-
+		
 
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
@@ -153,5 +160,7 @@ namespace Wiwa {
 		static EntityId s_PlayerId;
 
 		static Scene* s_CurrentScene;
+
+		static Inventory* s_PlayerInventory;
 	};
 }

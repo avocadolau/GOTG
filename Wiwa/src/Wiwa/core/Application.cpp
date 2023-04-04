@@ -132,6 +132,7 @@ namespace Wiwa
 		RenderManager::Destroy();
 		ScriptEngine::ShutDown();
 		Audio::Terminate();
+		GameStateManager::CleanUp();
 	}
 
 	void Application::Run()

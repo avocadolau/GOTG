@@ -2,6 +2,7 @@
 #include "GameStateManager.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Items/ItemManager.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 namespace Wiwa
 {
@@ -33,6 +34,7 @@ namespace Wiwa
 	EntityId GameStateManager::s_PlayerId = 0;
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
+	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -175,6 +177,7 @@ namespace Wiwa
 	{
 		if (debug) WI_INFO("GAME STATE: EndRun()");
 		SetRoomType(RoomType::NONE);
+		s_PlayerInventory->Clear();
 	}
 
 	void GameStateManager::InitHub()
@@ -187,6 +190,7 @@ namespace Wiwa
 		s_CurrentRoomsCount = 3;
 		s_RoomsToBoss = 20;
 		s_RoomsToShop = 10;
+
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -238,6 +242,11 @@ namespace Wiwa
 			WI_CORE_INFO("Player init loaded");
 	}
 
+	void GameStateManager::Update()
+	{
+		s_PlayerInventory->Update();
+	}
+
 	void GameStateManager::Die()
 	{
 		if (debug)
@@ -246,8 +255,7 @@ namespace Wiwa
 		gm.canvas.at(0)->SwapActive(); //Swap active of normal HUD canvas
 		gm.canvas.at(3)->SwapActive(); //Activate death UI
 		SceneManager::PauseCurrentScene();
-		
-		//TODO: @Alejandro Pop the deadth menu
+		EndRun();
 	}
 
 	void GameStateManager::StartNewRoom()
@@ -439,6 +447,14 @@ namespace Wiwa
 		
 	}
 
+	void GameStateManager::CleanUp()
+	{
+		WI_INFO("Game state manager clean up");
+		delete s_PlayerInventory;
+		s_RewardRooms.clear();
+		s_CombatRooms.clear();
+		s_ShopRooms.clear();
+	}
 
 
 	void GameStateManager::SerializeData()

@@ -3,6 +3,8 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
+#include "Wiwa/ecs/components/game/enemy/Wave.h"
+
 namespace Wiwa {
 	class WI_API WaveSystem : public System {
 	private:

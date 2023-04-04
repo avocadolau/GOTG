@@ -8,42 +8,42 @@ std::map<std::string, Wiwa::PassiveSkill> Wiwa::ItemManager::m_PassiveSkillPool;
 std::map<std::string, Wiwa::Buff> Wiwa::ItemManager::m_BuffPool;
 std::map<std::string, Wiwa::Consumable> Wiwa::ItemManager::m_ConsumablePool;
 
-void Wiwa::ItemManager::AddAbility(Ability ability)
+void Wiwa::ItemManager::AddAbility(const Ability& ability)
 {
 	m_AbilityPool.emplace(ability.Name, ability);
 }
 
-void Wiwa::ItemManager::DeleteAbility(std::string name)
+void Wiwa::ItemManager::DeleteAbility(const std::string& name)
 {
 	m_AbilityPool.erase(name);
 }
 
-void Wiwa::ItemManager::AddPassive(PassiveSkill passive)
+void Wiwa::ItemManager::AddPassive(const PassiveSkill& passive)
 {
 	m_PassiveSkillPool[passive.Name] = passive;
 }
 
-void Wiwa::ItemManager::DeletePassive(std::string name)
+void Wiwa::ItemManager::DeletePassive(const std::string& name)
 {
 	m_PassiveSkillPool.erase(name);
 }
 
-void Wiwa::ItemManager::AddBuff(Buff buff)
+void Wiwa::ItemManager::AddBuff(const Buff& buff)
 {
 	m_BuffPool[buff.Name] = buff;
 }
 
-void Wiwa::ItemManager::DeleteBuff(std::string name)
+void Wiwa::ItemManager::DeleteBuff(const std::string& name)
 {
 	m_BuffPool.erase(name);
 }
 
-void Wiwa::ItemManager::AddConsumable(Consumable consumable)
+void Wiwa::ItemManager::AddConsumable(const Consumable& consumable)
 {
 	m_ConsumablePool[consumable.Name] = consumable;
 }
 
-void Wiwa::ItemManager::DeleteConsumable(std::string name)
+void Wiwa::ItemManager::DeleteConsumable(const std::string& name)
 {
 	m_ConsumablePool.erase(name);
 }
