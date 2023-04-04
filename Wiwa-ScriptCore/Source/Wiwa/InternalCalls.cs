@@ -253,15 +253,17 @@ namespace Wiwa
 
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Blend(string targetAnimation, float blendDuration, EntityId entity);
+        internal extern static void Blend(string targetAnimation,bool loop, float blendDuration, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void PlayAnimationName(string name, EntityId entity);
+        internal extern static void PlayAnimationName(string name,bool loop, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PlayAnimation(EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PauseAnimation(EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void RestartAnimation(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool HasFinished(EntityId entity);
         #endregion
 
         #region Particles

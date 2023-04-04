@@ -133,6 +133,7 @@ namespace Wiwa
 	void Animator::PlayAnimation(std::string name, bool loop, bool transition, float transitionTime)
 	{
 		m_CurrentTime = 0;
+		//its the same anim just reset the animation with the new parameters
 		if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
 		{
 			m_CurrentAnimation->m_CurrentTime = 0;
@@ -140,7 +141,7 @@ namespace Wiwa
 			m_CurrentAnimation->m_Loop = loop;
 			return;
 		}
-
+		//find the animation and given the parameters blend or not and or loop
 		for (auto &animation : m_Animations)
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
@@ -149,6 +150,7 @@ namespace Wiwa
 				{
 					m_TargetAnimation = animation;
 					m_BlendDuration = transitionTime;
+					m_BlendTime = 0;
 					m_TargetAnimation->m_CurrentTime = 0;
 					m_TargetAnimation->m_Loop = loop;
 					m_TargetAnimation->m_HasFinished = false;
@@ -158,6 +160,7 @@ namespace Wiwa
 				{
 					m_CurrentAnimation = animation;
 					m_CurrentAnimation->m_CurrentTime = 0;
+					m_BlendTime = 0;
 					m_CurrentAnimation->m_Loop = loop;
 					m_CurrentAnimation->m_HasFinished = false;
 					m_AnimationState = AnimationState::Playing;
@@ -221,14 +224,14 @@ namespace Wiwa
 		return animator;
 	}
 
-	void Animator::PlayAnimationName(std::string name)
+	void Animator::PlayAnimationName(std::string name, bool loop)
 	{
-		m_CurrentTime = 0;
 		if (m_CurrentAnimation)
 		{
 			if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
 			{
-				m_CurrentAnimation->m_CurrentTime = 0;
+				//m_CurrentAnimation->m_CurrentTime = 0;
+				m_CurrentAnimation->m_Loop = loop;
 				m_AnimationState = AnimationState::Playing;
 				return;
 			}
@@ -239,7 +242,8 @@ namespace Wiwa
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 			{
 				m_CurrentAnimation = animation;
-				m_CurrentAnimation->m_CurrentTime = 0;
+				//m_CurrentAnimation->m_CurrentTime = 0;
+				m_CurrentAnimation->m_Loop = loop;
 				m_AnimationState = AnimationState::Playing;
 				return;
 			}

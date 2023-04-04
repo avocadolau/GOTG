@@ -87,7 +87,7 @@ namespace Wiwa {
 		
 		anim->animator->PlayAnimation();
 	}
-	void AnimatorSystem::PlayAnimation(std::string name)
+	void AnimatorSystem::PlayAnimation(std::string name, bool loop)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 
@@ -97,19 +97,45 @@ namespace Wiwa {
 		
 		if (!anim) return;
 		
-		anim->animator->PlayAnimationName(name);
+		anim->animator->PlayAnimationName(name,loop);
 	}
-	void AnimatorSystem::Blend(std::string targetAnim, float blendDuration)
+	void AnimatorSystem::Blend(std::string name, bool loop, bool transition, float transitionTime)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 
 		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
 
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
-		
+
 		if (!anim) return;
-		
-		anim->animator->Blend(targetAnim, blendDuration);
+
+		anim->animator->PlayAnimation(name,loop,transition,transitionTime);
+	}
+
+	void AnimatorSystem::LoopAnimation(bool loop)
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+
+		if (!anim) return;
+
+		anim->animator->Loop(loop);
+	}
+	bool AnimatorSystem::HasFinished()
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return false;
+
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+
+		if (!anim) return false;
+
+
+		return anim->animator->CurrentAnimationHasFinished();
 	}
 	void AnimatorSystem::SetAnimationSate(Wiwa::AnimationState state)
 	{
@@ -133,6 +159,6 @@ namespace Wiwa {
 		
 		if (!anim) return;
 		
-		anim->animator->ResetTime();
+		anim->animator->ResetAnimation();
 	}
 }

@@ -33,7 +33,7 @@ namespace Wiwa {
 
         void PlayAnimation(std::string name, bool loop = false , bool transition = false, float transitionTime = 0.0f );
 
-        void PlayAnimationName(std::string name);
+        void PlayAnimationName(std::string name, bool loop);
 
         void PlayAnimation();
 
@@ -42,6 +42,14 @@ namespace Wiwa {
         void PlayBlending(bool play) { m_PlayBlending = play; }
 
         inline bool CurrentAnimationHasFinished() { return m_CurrentAnimation->HasFinished(); }
+
+        void ResetAnimation() { m_CurrentTime = 0; }
+
+        void Loop(bool Loop)
+        {
+            if (m_CurrentAnimation != nullptr)
+                m_CurrentAnimation->m_Loop = Loop;
+        }
 
         void BlendTwoAnimations(Animation* baseAnim, Animation* layerAnim, float blendFactor, float deltaTime);
 
@@ -58,14 +66,6 @@ namespace Wiwa {
         static void SaveWiAnimator(Animator* animator, const char* path);
 
         static Animator* LoadWiAnimator(const char* path);
-
-        void ResetTime() { m_CurrentTime = 0; }
-
-        void Loop(bool Loop) 
-        {
-            if(m_CurrentAnimation != nullptr)
-             m_CurrentAnimation->m_Loop = Loop; 
-        }
 
         void SetCurrentAnimation(Animation* anim) { m_CurrentAnimation = anim; }
 

@@ -106,7 +106,7 @@ namespace Game
                 isAiming = true;
                 if (animTimer > animDur)
                 {
-                    Animator.PlayAnimationName("aiming", m_EntityId);
+                    Animator.PlayAnimationName("aiming",true, m_EntityId);
                 }
             }
             //FIRES the weapon, if the player is not aiming shoots the bullet is shot to the direction the character is looking
@@ -152,7 +152,7 @@ namespace Game
             if (controller.Health <= 0)
             {
                 dieTimer -= Time.DeltaTime();
-                Animator.PlayAnimationName("death", m_EntityId);
+                Animator.PlayAnimationName("death",false, m_EntityId);
                 if (dieTimer <= 0)
                     GameState.Die();
 
@@ -238,13 +238,13 @@ namespace Game
             isWalking = false;
             if (input == Vector3Values.zero && animTimer > animDur && !isAiming)
             {
-                Animator.PlayAnimationName("idle", m_EntityId);
+                Animator.PlayAnimationName("idle",true, m_EntityId);
                 return;
             }
             else if (input != Vector3Values.zero)
             {
                 isWalking = true;
-                Animator.PlayAnimationName("running", m_EntityId);
+                Animator.PlayAnimationName("running",true, m_EntityId);
             }
         }
         void Dash(ref Vector3 velocity, Vector3 input, Character controller, Transform3D transform, ref CollisionBody cb)
@@ -316,16 +316,16 @@ namespace Game
                 if (shooter.ShootRight)
                 {
                     spawnPoint = right;
-                    Animator.PlayAnimationName("shoot_right", m_EntityId);
+                    Animator.PlayAnimationName("shoot_right",false, m_EntityId);
                 }
                 else
                 {
                     spawnPoint = left;
-                    Animator.PlayAnimationName("shoot_left", m_EntityId);
+                    Animator.PlayAnimationName("shoot_left",false, m_EntityId);
                 }
                 if (isWalking)
                 {
-                    Animator.Blend("running", 1f, m_EntityId);
+                    Animator.Blend("running",true, 1f, m_EntityId);
                 }
 
                 shooter.ShootRight = !shooter.ShootRight;

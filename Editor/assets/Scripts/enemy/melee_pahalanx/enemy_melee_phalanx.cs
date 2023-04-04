@@ -25,7 +25,7 @@ namespace Game
             EnemyMeleePhalanx self = this;
             currentState.EnterState(ref self, m_EntityId);
             timer = 0.0f;
-            Animator.PlayAnimationName("spawn", m_EntityId);
+            Animator.PlayAnimationName("spawn",true, m_EntityId);
         }
 
         public override void Update()
