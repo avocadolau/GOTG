@@ -3,14 +3,19 @@
 #include "StateMachine/MeleePhalanxAttack.h";
 #include "StateMachine/MeleePhalanxChasing.h";
 #include "StateMachine/MeleePhalanxIdle.h";
+#include "StateMachine/MeleePhalanxSpawn.h";
+#include "StateMachine/MeleePhalanxDeath.h";
 
 namespace Wiwa {
 	class WI_API EnemyMeleePhalanx : public EnemySystem {
 	public:
 		MeleePhalanxBaseState* m_CurrentState;
 		MeleePhalanxIdleState* m_IdleState;
+		MeleePhalanxSpawnState* m_SpawnState;
 		MeleePhalanxChasingState* m_ChasingState;
 		MeleePhalanxAttackState* m_AttackingState;
+		MeleePhalanxDeathState* m_DeathState;
+
 		float m_Timer;
 	public:
 		EnemyMeleePhalanx();

@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	3315939568	melee_moving			\Default Work Unit\enemies\melee\melee_moving	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	930925044	sound_meleeenemy_moving	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Melee\sound_meleeenemy_moving_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Melee\sound_meleeenemy_moving		784916
+

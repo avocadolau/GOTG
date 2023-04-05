@@ -6,9 +6,11 @@ namespace Wiwa
 	EnemyRangedPhalanx::EnemyRangedPhalanx()
 	{
 		m_CurrentState = nullptr;
+		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
+		m_DeathState = nullptr;
 	}
 
 	EnemyRangedPhalanx::~EnemyRangedPhalanx()
@@ -19,25 +21,34 @@ namespace Wiwa
 	{
 		EnemySystem::OnAwake();
 		m_IdleState = new RangedPhalanxIdleState();
+		m_SpawnState = new RangedPhalanxSpawnState();
 		m_ChasingState = new RangedPhalanxChasingState();
 		m_AttackingState = new RangedPhalanxAttackState();
+		m_DeathState = new RangedPhalanxDeathState();
 	}
 
 	void EnemyRangedPhalanx::OnInit()
 	{
 		EnemySystem::OnInit();
-		m_CurrentState = m_IdleState;
+		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
-		animator->PlayAnimation("spawn", false);
 	}
 
 	void EnemyRangedPhalanx::OnUpdate()
 	{
+		if (!getAwake())
+			System::Awake();
+		if (!getInit())
+			System::Init();
 		EnemySystem::OnUpdate();
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
+
+		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
+		if (stats->Health <= 0 && m_CurrentState != m_DeathState)
+		{
+			SwitchState(m_DeathState);
+		}
 	}
 
 	void EnemyRangedPhalanx::OnDestroy()
@@ -45,16 +56,24 @@ namespace Wiwa
 		if (m_IdleState != nullptr)
 			delete m_IdleState;
 
+		if (m_SpawnState != nullptr)
+			delete m_SpawnState;
+
 		if (m_ChasingState != nullptr)
 			delete m_ChasingState;
 
 		if (m_AttackingState != nullptr)
 			delete m_AttackingState;
 
+		if (m_DeathState != nullptr)
+			delete m_DeathState;
+
 		m_CurrentState = nullptr;
+		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
+		m_DeathState = nullptr;
 	}
 
 	void EnemyRangedPhalanx::OnCollisionEnter(Object* body1, Object* body2)

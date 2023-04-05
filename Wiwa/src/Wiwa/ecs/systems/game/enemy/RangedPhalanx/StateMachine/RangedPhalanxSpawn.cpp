@@ -16,13 +16,18 @@ namespace Wiwa
 
 	void RangedPhalanxSpawnState::EnterState(EnemyRangedPhalanx* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		animator->PlayAnimation("spawn", false);
 	}
 
 	void RangedPhalanxSpawnState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
-	
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		if (animator->HasFinished())
+			enemy->SwitchState(enemy->m_ChasingState);
 	}
-
 
 	void RangedPhalanxSpawnState::ExitState(EnemyRangedPhalanx* enemy)
 	{

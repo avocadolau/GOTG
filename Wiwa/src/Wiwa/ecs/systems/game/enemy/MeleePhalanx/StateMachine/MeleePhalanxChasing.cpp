@@ -22,6 +22,7 @@ namespace Wiwa
 
 		animator->PlayAnimation("run", true);
 
+		//PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);
 		enemy->m_Timer = 0;
 	}
 	
@@ -41,10 +42,15 @@ namespace Wiwa
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		
 		if (agentPtr)
 		{
+			agentPtr->AllowRotationByTile();
 			if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 4.0f)
 			{
+				agentPtr->DisableRotationByTile();
 				enemy->SwitchState(enemy->m_AttackingState);
 			}
 		}

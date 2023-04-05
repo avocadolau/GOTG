@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	453607781	ranged_moving			\Default Work Unit\enemies\ranged\ranged_moving	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	267442382	sound_rangedenemy_moving	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Ranged\sound_rangedenemy_moving_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Ranged\sound_rangedenemy_moving		979580
+
