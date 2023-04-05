@@ -19,10 +19,11 @@ namespace Wiwa
 		enemy->m_Timer = 0;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		animator->PlayAnimation("atack", false);
-
+		m_TimerAttackCooldown = 0.0f;
+		//animator->PlayAnimation("atack", false);
+		animator->Blend("atack", false, 0.2f);
 		//PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
-
+	
 		GenerateAttack(enemy);
 		//enemy->ChasePlayer();
 	}
@@ -45,10 +46,15 @@ namespace Wiwa
 		if (animator->HasFinished())
 		{
 			m_TimerAttackCooldown += Time::GetDeltaTime();
-			if (m_TimerAttackCooldown > 1500.0f || glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f)
+			if ( glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f)
 			{
+
 				m_TimerAttackCooldown = 0.0f;
 				enemy->SwitchState(enemy->m_ChasingState);
+			}
+			else if (m_TimerAttackCooldown > 1000.0f){
+
+				enemy->SwitchState(enemy->m_AttackingState);
 			}
 		}
 

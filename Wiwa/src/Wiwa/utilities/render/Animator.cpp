@@ -189,6 +189,7 @@ namespace Wiwa
 					m_TargetAnimation->m_CurrentTime = 0;
 					m_TargetAnimation->m_Loop = loop;
 					m_TargetAnimation->m_HasFinished = false;
+					m_LoopBlend = false;
 					m_AnimationState = AnimationState::Blending;
 				}
 				else

@@ -20,7 +20,7 @@ namespace Wiwa
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("run", true);
+		animator->Blend("run",true,0.2f);
 
 		//PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);
 		enemy->m_Timer = 0;

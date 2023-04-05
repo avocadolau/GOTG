@@ -93,7 +93,7 @@ namespace Wiwa {
         float m_BlendWeight;
         float m_BlendDuration;
         float m_AnimationTime;
-        bool m_LoopBlend;
+        bool m_LoopBlend = false;
     private:
         std::vector<glm::mat4> m_FinalBoneMatrices;
         //Animator

@@ -13,7 +13,7 @@ void Blend(MonoString* targetAnim, bool loop,float blendTime, size_t entity)
 	const char* animName = mono_string_to_utf8(targetAnim);
 
 
-	animator->Blend(animName, loop, true, blendTime);
+	animator->Blend(animName, loop, blendTime);
 }
 
 void PlayAnimationName(MonoString* name, bool loop, size_t entity)
