@@ -29,6 +29,7 @@ namespace Wiwa {
 	void System::Init()
 	{
 		if (m_Inited) return;
+		if (!m_Awaken) return;
 
 		OnInit();
 
@@ -37,7 +38,8 @@ namespace Wiwa {
 
 	void System::Update()
 	{
-		if (!m_Awaken || !m_Inited) return;
+		if (!m_Awaken) return;
+		if (!m_Inited) return;
 
 		OnUpdate();
 	}
