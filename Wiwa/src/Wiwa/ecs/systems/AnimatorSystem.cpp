@@ -166,7 +166,7 @@ namespace Wiwa {
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 
-		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return;
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return "noname";
 
 		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
 
