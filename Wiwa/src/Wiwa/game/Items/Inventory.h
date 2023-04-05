@@ -21,7 +21,7 @@ namespace Wiwa
 		void AddAbility(Ability* ability);
 		void AddBuff(Buff* buff);
 		void AddPassive(const PassiveSkill& skill);
-
+		void AddConsumable(const Consumable& consumable);
 		void Update();
 		
 		void UseAbility(size_t index);
@@ -31,6 +31,7 @@ namespace Wiwa
 	private:
 		Ability** m_Abilities;
 		Buff** m_Buffs;
+		Consumable m_Consumable;
 		std::vector<PassiveSkill> m_PassiveSkill;
 		int m_Tokens;
 		friend class GameStateManager;

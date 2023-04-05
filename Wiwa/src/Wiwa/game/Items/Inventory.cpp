@@ -167,6 +167,12 @@ void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
     m_PassiveSkill.emplace_back(skill);
 }
 
+void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
+{
+	m_Consumable = consumable;
+	m_Consumable.Use();
+}
+
 void Wiwa::Inventory::Update()
 {
     
