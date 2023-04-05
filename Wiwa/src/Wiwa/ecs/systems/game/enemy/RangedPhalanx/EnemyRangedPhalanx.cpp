@@ -1,9 +1,9 @@
 #include <wipch.h>
-#include "EnemyMeleePhalanx.h"
+#include "EnemyRangedPhalanx.h"
 
 namespace Wiwa
 {
-	EnemyMeleePhalanx::EnemyMeleePhalanx()
+	EnemyRangedPhalanx::EnemyRangedPhalanx()
 	{
 		m_CurrentState = nullptr;
 		m_IdleState = nullptr;
@@ -11,19 +11,19 @@ namespace Wiwa
 		m_AttackingState = nullptr;
 	}
 
-	EnemyMeleePhalanx::~EnemyMeleePhalanx()
+	EnemyRangedPhalanx::~EnemyRangedPhalanx()
 	{
 	}
 
-	void EnemyMeleePhalanx::OnAwake()
+	void EnemyRangedPhalanx::OnAwake()
 	{
 		EnemySystem::OnAwake();
-		m_IdleState = new MeleePhalanxIdleState();
-		m_ChasingState = new MeleePhalanxChasingState();
-		m_AttackingState = new MeleePhalanxAttackState();
+		m_IdleState = new RangedPhalanxIdleState();
+		m_ChasingState = new RangedPhalanxChasingState();
+		m_AttackingState = new RangedPhalanxAttackState();
 	}
 
-	void EnemyMeleePhalanx::OnInit()
+	void EnemyRangedPhalanx::OnInit()
 	{
 		EnemySystem::OnInit();
 		m_CurrentState = m_IdleState;
@@ -33,18 +33,14 @@ namespace Wiwa
 		animator->PlayAnimation("spawn", false);
 	}
 
-	void EnemyMeleePhalanx::OnUpdate()
+	void EnemyRangedPhalanx::OnUpdate()
 	{
-		if (!getAwake())
-			System::Awake();
-		if (!getInit())
-			System::Init();
 		EnemySystem::OnUpdate();
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
 	}
 
-	void EnemyMeleePhalanx::OnDestroy()
+	void EnemyRangedPhalanx::OnDestroy()
 	{
 		if (m_IdleState != nullptr)
 			delete m_IdleState;
@@ -61,20 +57,20 @@ namespace Wiwa
 		m_AttackingState = nullptr;
 	}
 
-	void EnemyMeleePhalanx::OnCollisionEnter(Object* body1, Object* body2)
+	void EnemyRangedPhalanx::OnCollisionEnter(Object* body1, Object* body2)
 	{
 		EnemySystem::OnCollisionEnter(body1, body2);
 		if (m_CurrentState)
 			m_CurrentState->OnCollisionEnter(this, body1, body2);
 	}
 
-	void EnemyMeleePhalanx::ReceiveDamage(int damage)
+	void EnemyRangedPhalanx::ReceiveDamage(int damage)
 	{
 		EnemySystem::ReceiveDamage(damage);
 	
 	}
 
-	void EnemyMeleePhalanx::SwitchState(MeleePhalanxBaseState* state)
+	void EnemyRangedPhalanx::SwitchState(RangedPhalanxBaseState* state)
 	{
 		m_CurrentState->ExitState(this);
 		m_CurrentState = state;

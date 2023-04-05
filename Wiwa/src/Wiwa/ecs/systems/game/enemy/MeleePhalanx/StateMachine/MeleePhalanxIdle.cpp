@@ -16,21 +16,11 @@ namespace Wiwa
 
 	void MeleePhalanxIdleState::EnterState(EnemyMeleePhalanx* enemy)
 	{
-		enemy->m_Timer = 0;
 	}
 
 	void MeleePhalanxIdleState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
-		animator->PlayAnimation("idle", true);
-
-		if (enemy->m_Timer > 2)
-		{
-			enemy->SwitchState(enemy->m_ChasingState);
-		}
 	}
 
 
