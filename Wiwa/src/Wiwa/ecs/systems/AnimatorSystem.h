@@ -42,6 +42,8 @@ namespace Wiwa {
 		void SetAnimationSate(Wiwa::AnimationState state);
 
 		void Restart();
+
+		const std::string GetCurrentAnimName();
 	};
 }
 
