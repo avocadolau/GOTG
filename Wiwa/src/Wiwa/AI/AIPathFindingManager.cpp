@@ -72,37 +72,37 @@ uint32_t Wiwa::AIPathFindingManager::PathNode::FindWalkableAdjacents(Wiwa::AIPat
 	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
 		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
 
-	//// north-east
-	//cell = pos;
-	//cell.y = pos.y + 1;
-	//cell.x = pos.x + 1;
+	// north-east
+	cell = pos;
+	cell.y = pos.y + 1;
+	cell.x = pos.x + 1;
 
-	//if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-	//	listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
-	//// south-east
-	//cell = pos;
-	//cell.y = pos.y - 1;
-	//cell.x = pos.x + 1;
+	// south-east
+	cell = pos;
+	cell.y = pos.y - 1;
+	cell.x = pos.x + 1;
 
-	//if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-	//	listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this));
 
-	//// north-west
-	//cell = pos;
-	//cell.y = pos.y + 1;
-	//cell.x = pos.x - 1;
+	// north-west
+	cell = pos;
+	cell.y = pos.y + 1;
+	cell.x = pos.x - 1;
 
-	//if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-	//	listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
-	//// south-west
-	//cell = pos;
-	//cell.y = pos.y - 1;
-	//cell.x = pos.x - 1;
+	// south-west
+	cell = pos;
+	cell.y = pos.y - 1;
+	cell.x = pos.x - 1;
 
-	//if (Wiwa::AIPathFindingManager::IsWalkable(cell))
-	//	listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
+	if (Wiwa::AIPathFindingManager::IsWalkable(cell))
+		listToFill.pathList.emplace_back(PathNode(-1, -1, cell, this)); // Pushes an element at the back
 
 	return (uint32_t)listToFill.pathList.size();
 }
