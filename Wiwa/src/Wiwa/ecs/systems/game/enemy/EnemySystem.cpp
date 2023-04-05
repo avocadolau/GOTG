@@ -57,8 +57,8 @@ namespace Wiwa
 	{
 		if (Input::IsKeyPressed(Wiwa::Key::M))
 		{
-			Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
-			self->hasFinished = true;
+			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
+			stats->Health = 0;
 		}
 	}
 
