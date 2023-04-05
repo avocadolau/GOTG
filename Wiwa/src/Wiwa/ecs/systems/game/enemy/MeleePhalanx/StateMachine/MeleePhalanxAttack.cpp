@@ -20,6 +20,9 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		animator->PlayAnimation("atack", false);
+
+		//PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+
 		GenerateAttack(enemy);
 		//enemy->ChasePlayer();
 	}

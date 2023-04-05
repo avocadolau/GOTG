@@ -6,6 +6,8 @@
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
+#include "Wiwa/scripting/embed_functions/embed_audio_functions.h"
+#include "Wiwa/scripting/ScriptEngine.h"
 
 namespace Wiwa {
 	class WI_API EnemySystem : public System {

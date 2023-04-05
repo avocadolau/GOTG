@@ -1,3 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
 	1557725171	sentinel_hit			\Default Work Unit\enemies\sentinel\sentinel_hit	
 
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	178375262	sound_sentinelenemy_hit	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Sentinel\sound_sentinelenemy_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Sentinel\sound_sentinelenemy_hit		153696
+

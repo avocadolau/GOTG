@@ -1,3 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
 	1037358615	subjugator_hit			\Default Work Unit\enemies\subjugator\subjugator_hit	
 
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	407467954	sound_subjugatorenemy_hit	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Subjugator\sound_subjugatorenemy_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Subjugator\sound_subjugatorenemy_hit		235616
+
