@@ -8,6 +8,9 @@
 #include <cmath>
 namespace Wiwa
 {
+
+
+
 	Animator::Animator()
 	{
 		m_Name = "New Animator";
@@ -42,25 +45,42 @@ namespace Wiwa
 		switch (m_AnimationState)
 		{
 		case AnimationState::Blending:
+
 			if (m_TargetAnimation == nullptr)
 				return;
-			if (m_PlayBlending)
+
 				UpdateBlendingAnimation(m_DeltaTime);
-			else
-				CalculateBlendedBoneTransform(m_CurrentAnimation,&m_CurrentAnimation->GetRootNode(),
-												m_TargetAnimation,&m_TargetAnimation->GetRootNode(),
-												m_CurrentAnimation->m_CurrentTime,m_TargetAnimation->m_CurrentTime,
-												glm::mat4(1),m_BlendWeight);
+
+			break;
+		case AnimationState::PausedBlending:
+
+			CalculateBlendedBoneTransform(m_CurrentAnimation, &m_CurrentAnimation->GetRootNode(),
+				m_TargetAnimation, &m_TargetAnimation->GetRootNode(),
+				m_CurrentAnimation->m_CurrentTime, m_TargetAnimation->m_CurrentTime,
+				glm::mat4(1), m_BlendWeight);
+
 			break;
 		case AnimationState::Paused:
+			if (m_PrevAnimationState == AnimationState::Playing) // if animation was playing before it was paused
+			{
+				m_PausedTime = m_CurrentAnimation->m_CurrentTime;
+				m_CurrentTime = 0;
+				m_AnimationState = AnimationState::Paused;
+			}
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 			break;
 		case AnimationState::Playing:
+			if (m_PrevAnimationState == AnimationState::Paused) // if animation was paused before it was played
+			{
+				m_CurrentAnimation->m_CurrentTime = m_PausedTime;
+				m_CurrentTime = 0;
+			}
 			UpdateAnimation(m_DeltaTime);
 			break;
 		default:
 			break;
 		}
+		m_PrevAnimationState = m_AnimationState;
 	}
 
 	void Animator::UpdateAnimation(float dt)
@@ -95,10 +115,17 @@ namespace Wiwa
 		//update blending parameters
 		if (m_BlendTime < 0)
 		{
-			m_AnimationState = AnimationState::Playing;
-			m_CurrentAnimation = m_TargetAnimation;
-			return;
+			if (m_LoopBlend)
+			{
+				m_BlendTime = m_BlendDuration;
+			}
+			else {
+				m_AnimationState = AnimationState::Playing;
+				m_CurrentAnimation = m_TargetAnimation;
+				return;
+			}			
 		}
+
 		m_BlendTime -= dt;
 		m_BlendWeight = 0 + m_BlendTime * (1 - 0);
 		
@@ -164,7 +191,6 @@ namespace Wiwa
 					m_CurrentAnimation->m_Loop = loop;
 					m_CurrentAnimation->m_HasFinished = false;
 					m_AnimationState = AnimationState::Playing;
-					return;
 				}
 
 				return;

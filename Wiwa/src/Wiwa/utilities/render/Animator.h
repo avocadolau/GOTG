@@ -4,11 +4,14 @@
 #include <Wiwa/utilities/render/Bone.h>
 
 namespace Wiwa {
+
     enum class AnimationState {
         Playing,
         Paused,
-        Blending
+        Blending,
+        PausedBlending
     };
+
     class WI_API Animator {
     public:
         Animator();
@@ -85,11 +88,12 @@ namespace Wiwa {
         std::string m_Name;
         unsigned int m_NumAnimations;
         AnimationState m_AnimationState = AnimationState::Paused;
+        AnimationState m_PrevAnimationState = AnimationState::Paused;
 
         float m_BlendWeight;
         float m_BlendDuration;
         float m_AnimationTime;
-
+        bool m_LoopBlend;
     private:
         std::vector<glm::mat4> m_FinalBoneMatrices;
         //Animator
@@ -97,11 +101,14 @@ namespace Wiwa {
         float m_CurrentTime;
         float m_DeltaTime = 0;
         float m_LastTime;
-
+        float m_PausedTime;
         std::string m_RootNodeName;
         //blending
         Animation* m_TargetAnimation = nullptr;
         float m_BlendTime = 0.0f;
+        float m_LeftBlendTime;
         bool m_PlayBlending = false;
+
+
     };
 }

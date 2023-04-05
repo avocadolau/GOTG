@@ -32,4 +32,5 @@
 #define PI_F 3.14159265359f
 
 #define WI_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
-const unsigned long long WI_INVALID_INDEX = -1;
+#define WI_HARD_INL __forceinline
+constexpr unsigned long long WI_INVALID_INDEX = -1;

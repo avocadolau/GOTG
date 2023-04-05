@@ -3,6 +3,9 @@
 #include "../../Utils/EditorUtils.h"
 #include <Wiwa/scene/Scene.h>
 #include <Wiwa/utilities/time/Time.h>
+
+#include "Wiwa/ecs/components/game/Character.h"
+
 GameLogPanel::GameLogPanel(EditorLayer* instance)
 	: Panel("Game Log", ICON_FK_GAMEPAD, instance)
 {

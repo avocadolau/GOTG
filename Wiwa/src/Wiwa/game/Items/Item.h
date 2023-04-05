@@ -6,24 +6,39 @@
 
 namespace Wiwa
 {
-	enum class ConsumableType : uint16_t
+	enum class ConsumableType
 	{
-		HEAL,
-		SHIELD
+		HEAL = BIT(0),
+		SHIELD = BIT(1)
+	};
+	enum class AbilityType
+	{
+		YONDUS_SEEDS = BIT(0),
+		GROOTS_SEEDS = BIT(1),
+		PHYLAS_QUANTUM_SWORD = BIT(2),
+		STARHAWKS_BLAST = BIT(3)
+	};
+	// Defines which attributes will be modified via the passive
+	enum class PassiveType
+	{
+		MOVEMENT = BIT(0),
+		ROF = BIT(1),
+		BUFF = BIT(2),
+		ATTACK = BIT(3)
 	};
 
 	struct Ability
 	{
 		std::string Name;
 		std::string Description;
-
+		
 		ResourceId Icon;
 
 		int Damage;
 		float Range;
 		float Area;
 		float Cooldown;
-
+		float CurrentTime;
 		int Price;
 
 		Ability() = default;
@@ -34,9 +49,13 @@ namespace Wiwa
 			  Range(0.f),
 			  Area(0.f),
 			  Cooldown(0.f),
-			  Price(0)
+			  Price(0),
+			  CurrentTime(0.f)
 		{}
+
+		void Use();
 	};
+
 
 	struct PassiveSkill
 	{
@@ -45,10 +64,19 @@ namespace Wiwa
 
 		ResourceId Icon;
 
-
 		PassiveSkill() = default;
+		PassiveSkill(const PassiveSkill& passive)
+		{
+			this->Name = passive.Name;
+			this->Description = passive.Description;
+			this->Icon = passive.Icon;
+		}
 		PassiveSkill(const char* name)
-			: Name(name), Icon(0) {}
+			: Name(name),
+		      Icon(0)
+		{}
+
+		void Use();
 	};
 
 	struct Buff
@@ -61,6 +89,8 @@ namespace Wiwa
 		int BuffPercent;
 		float Duration;
 		float Cooldown;
+		float CurrentTime;
+		float CoolDownTimer;
 		int Price;
 
 		Buff() = default;
@@ -70,26 +100,29 @@ namespace Wiwa
 			  BuffPercent(0),
 			  Duration(0.f),
 			  Cooldown(0.f),
-			  Price(0)
+			  Price(0),
+		      CurrentTime(0.f),
+              CoolDownTimer(0.f)
 		{}
+
+		void Use();
 	};
 
 	struct Consumable
 	{
 		std::string Name;
-
 		ResourceId Icon;
-
 		ConsumableType Type;
-
 		int BuffPercent;
 
 		Consumable() = default;
 		Consumable(const char* name)
 			: Name(name),
-			  Type(ConsumableType::HEAL),
 			  Icon(0),
+			  Type(ConsumableType::HEAL),
 			  BuffPercent(0)
 		{}
+
+		void Use();
 	};
 }
