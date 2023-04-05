@@ -37,8 +37,6 @@ namespace Wiwa {
 
 	void System::Update()
 	{
-		if (!m_Awaken || !m_Inited) return;
-
 		OnUpdate();
 	}
 
