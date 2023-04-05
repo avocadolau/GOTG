@@ -34,9 +34,18 @@ namespace Wiwa
 	}
 
 
-	bool DialogManager::Update()
+	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		
+		//if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsKeyPressed(Wiwa::Key::GamepadY)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		//{
+		//	actualConversation = conversations[0];
+		//	actualConversationState = 0;
+		//}
+		//
+		//if (actualConversationState == 0 || actualConversationState == 1)
+		//{
+		//	UpdateConversation(actualConversation, &Wiwa::Application::Get().GetRenderer2D());
+		//}
 		
 		return true;
 	}
@@ -55,7 +64,36 @@ namespace Wiwa
 		return true;
 	}
 
-	Text* DialogManager::InitFont(const char* path, char* _word)
+	void DialogManager::UpdateConversation(Conversation conversation, Renderer2D* render)
+	{
+		int currentNode = 0;
+		if(actualConversationState == 0) actualConversationState = 1;
+
+		if (actualConversationState == 1)
+		{
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.dialogImgID, Vector2i{ 0,0 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render character and bubble
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text1_imgModeID, Vector2i{500,500}, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 1
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text2_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 2
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text3_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 3
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text4_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 4
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text5_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 5
+
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.continueImgID, Vector2i{ 650,650 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render continue button
+
+			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsKeyPressed(Wiwa::Key::GamepadY)))
+			{
+				currentNode++;
+				if (currentNode > conversation.nodes.size())
+				{
+					actualConversationState = 2;
+				}
+			}
+		}
+	}
+
+	Text* DialogManager::InitFont(const char* path, char* _word, Conversation conversation)
 	{
 		
 		/* load font file */
@@ -146,5 +184,92 @@ namespace Wiwa
 
 		return text;
 	}
+
+	//void DialogManager::SetActiveNode(size_t id, Conversation conversation)
+	//{
+	//	if (id >= 0 && id < conversation.nodes.size())
+	//	{
+	//		conversation.activeNode = &conversation.nodes[id];
+	//
+	//		size_t opts = conversation.activeNode->options.size();
+	//		SDL_Rect bounds =
+	//		{
+	//			conversation.posX,
+	//			conversation.posY + conversation.dialogHeight,
+	//			0,
+	//			conversation.dialogHeight / 4
+	//		};
+	//
+	//		Font& fontobj = app->fonts->GetFont(conversation.dialogFont);
+	//
+	//		conversation.buttons.clear();
+	//		for (size_t i = 0; i < opts; i++)
+	//		{
+	//			bounds.w = fontobj.char_w * (conversation.activeNode->options[i].length() + 4);
+	//			conversation.buttons.emplace_back(bounds, conversation.dialogImg, conversation.activeNode->options[i].c_str(), conversation.dialogFont);
+	//			bounds.x += bounds.w;
+	//		}
+	//
+	//		conversation.texts.clear();
+	//		//SplitText(conversation.activeNode->text);
+	//
+	//		int lines = conversation.texts.size();
+	//
+	//		conversation.textXOffset = conversation.dialogWidth / 2 - (conversation.max_chars_line * conversation.char_width) / 2;
+	//		conversation.textYOffset = conversation.dialogHeight / 2 - (lines * conversation.char_height) / 2;
+	//
+	//		if (lines > 1)
+	//		{
+	//			conversation.textYOffset -= ((lines - 1) * conversation.char_height / 2);
+	//		}
+	//	}
+	//}
+	//
+	//bool DialogManager::Finished(Conversation conversation)
+	//{
+	//
+	//
+	//	return false;
+	//}
+	//
+	//void DialogManager::SetPosition(int x, int y, Conversation conversation)
+	//{
+	//	conversation.posX = x;
+	//	conversation.posY = y;
+	//}
+	//
+	//void DialogManager::SetFont(int font, Conversation conversation)
+	//{
+	//	conversation.dialogFont = font;
+	//
+	//	Font& fontobj = app->fonts->GetFont(conversation.dialogFont);
+	//
+	//	SDL_Rect bounds =
+	//	{
+	//			conversation.posX,
+	//			conversation.posY + conversation.dialogHeight,
+	//			fontobj.char_w * (sizeof("continue") + 4),
+	//			conversation.dialogHeight / 4
+	//	};
+	//
+	//	//conversation.continueButton = Button(bounds, conversation.dialogImg, "continue", conversation.dialogFont);
+	//
+	//	bounds.w = fontobj.char_w * (sizeof("finish") + 4);
+	//	//conversation.finishButton = Button(bounds, conversation.dialogImg, "finish", conversation.dialogFont);
+	//
+	//	conversation.char_width = fontobj.char_w;
+	//	conversation.char_height = fontobj.char_h;
+	//
+	//	conversation.max_chars_line = conversation.dialogWidth / conversation.char_width - conversation.char_width * 4;
+	//}
+	//
+	//void DialogManager::SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation)
+	//{
+	//	conversation.dialogImg = dialog_bg;
+	//	conversation.dialogWidth = width;
+	//	conversation.dialogHeight = height;
+	//
+	//	SetFont(conversation.dialogFont, conversation);
+	//}
 	
 }
