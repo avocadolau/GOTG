@@ -36,7 +36,10 @@ void Wiwa::AgentAISystem::OnInit()
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
-
+	if (!getAwake())
+		System::Awake();
+	if (!getInit())
+		System::Init();
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 
@@ -187,12 +190,12 @@ bool Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 	glm::ivec2 currentPositionMap = Wiwa::AIMapGeneration::WorldToMap(transform->position.x, transform->position.z);
 	glm::ivec2 targetInMap = Wiwa::AIMapGeneration::WorldToMap(targetPos.x, targetPos.z);
 	
-	//auto start_time = std::chrono::high_resolution_clock::now();
+	auto start_time = std::chrono::high_resolution_clock::now();
 	int check = Wiwa::AIPathFindingManager::CreatePath(currentPositionMap, targetInMap);
-	//auto end_time = std::chrono::high_resolution_clock::now();
-	//// Calculate the elapsed time
-	//auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-	//WI_INFO("Pathfinding time: {}", elapsed_time);
+	auto end_time = std::chrono::high_resolution_clock::now();
+	// Calculate the elapsed time
+	auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+	WI_INFO("Pathfinding time: {}", elapsed_time);
 
 	if (check != -1)
 	{

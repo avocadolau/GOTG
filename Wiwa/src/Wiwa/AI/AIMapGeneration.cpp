@@ -452,6 +452,7 @@ bool Wiwa::AIMapGeneration::OnSave()
 		{
 			SaveMapData(id);
 			hasMapData = true;
+			AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
 			return true;
 		}
 	}
@@ -459,6 +460,7 @@ bool Wiwa::AIMapGeneration::OnSave()
 	if (!m_Map.empty() && !hasMapData && (m_Map[0] != '\0'))
 	{
 		CreateNewEntityAndSaveData();
+		AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
 		return true;
 	}
 	return false;
