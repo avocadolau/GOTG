@@ -19,6 +19,7 @@
 #include <Wiwa/ecs/components/ParticleEmitter.h>
 #include <Wiwa/ecs/components/CollisionBody.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
+#include <Wiwa/ecs/components/game/items/Item.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -59,6 +60,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleEmitterComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
+		if (type->hash == (size_t)TypeHash::Item) { DrawItemComponent(data); }else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -119,6 +121,10 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		else if (type->hash == (size_t)TypeHash::AgentAI)
 		{
 			DrawAiAgentComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::Item)
+		{
+			DrawItemComponent(data);
 		}
 		else
 
@@ -1270,6 +1276,15 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 		//	agentSys->GoToNextPosition();
 		//}
 	}
+}
+
+void InspectorPanel::DrawItemComponent(byte* data)
+{
+	Wiwa::Item* item = (Wiwa::Item*)data;
+	if (item->Name == NULL) item->Name = "";
+	std::string str(item->Name);
+	ImGui::InputText("Name",&str);
+	ImGui::InputInt("Item type", (int*)item->item_type);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)
