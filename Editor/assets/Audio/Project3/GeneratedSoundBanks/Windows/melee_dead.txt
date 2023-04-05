@@ -1,3 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
 	3947834608	melee_dead			\Default Work Unit\enemies\melee\melee_dead	
 
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	419110321	sound_meleeenemy_dead	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Melee\sound_meleeenemy_dead_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Melee\sound_meleeenemy_dead		340064
+

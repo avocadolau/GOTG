@@ -1,3 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
 	69331918	sentinel_dead			\Default Work Unit\enemies\sentinel\sentinel_dead	
 
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	775403989	sound_sentinelenemy_dead	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Sentinel\sound_sentinelenemy_dead_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Sentinel\sound_sentinelenemy_dead		341052
+

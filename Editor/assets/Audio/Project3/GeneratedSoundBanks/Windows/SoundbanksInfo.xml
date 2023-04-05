@@ -9,18 +9,38 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="69331918" Type="User" Language="SFX" Hash="{C468A3C1-16B0-E0FD-A962-2AC814F6FC55}">
+		<SoundBank Id="69331918" Type="User" Language="SFX" Hash="{9E225F04-DBBE-0D86-CE48-F52A17065442}">
 			<ShortName>sentinel_dead</ShortName>
 			<Path>sentinel_dead.bnk</Path>
+			<Media>
+				<File Id="775403989" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sentinel\sound_sentinelenemy_dead.wav</ShortName>
+					<CachePath>SFX/Sentinel/sound_sentinelenemy_dead_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="69331918" Name="sentinel_dead"/>
+				<Event Id="69331918" Name="sentinel_dead">
+					<MediaRefs>
+						<MediaRef Id="775403989"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="169915878" Type="User" Language="SFX" Hash="{564C0DFA-D5D0-0B5D-932E-ABFA68C40E2B}">
+		<SoundBank Id="169915878" Type="User" Language="SFX" Hash="{B8A8896C-B918-F21A-6031-4CBD7B179C58}">
 			<ShortName>ranged_hit</ShortName>
 			<Path>ranged_hit.bnk</Path>
+			<Media>
+				<File Id="1001122462" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ranged\sound_rangedenemy_hit.wav</ShortName>
+					<CachePath>SFX/Ranged/sound_rangedenemy_hit_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="169915878" Name="ranged_hit"/>
+				<Event Id="169915878" Name="ranged_hit">
+					<MediaRefs>
+						<MediaRef Id="1001122462"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 		<SoundBank Id="412874053" Type="User" Language="SFX" Hash="{1319D680-CDBD-BDF3-15EE-35A9F4F72232}">
@@ -45,39 +65,89 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="453607781" Type="User" Language="SFX" Hash="{DE62C76A-B688-2B36-6EE4-D89D885A451D}">
+		<SoundBank Id="453607781" Type="User" Language="SFX" Hash="{DC01DAF9-2473-3E0F-21FA-81F985FD697F}">
 			<ShortName>ranged_moving</ShortName>
 			<Path>ranged_moving.bnk</Path>
+			<Media>
+				<File Id="267442382" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ranged\sound_rangedenemy_moving.wav</ShortName>
+					<CachePath>SFX/Ranged/sound_rangedenemy_moving_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="453607781" Name="ranged_moving"/>
+				<Event Id="453607781" Name="ranged_moving">
+					<MediaRefs>
+						<MediaRef Id="267442382"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="827139402" Type="User" Language="SFX" Hash="{3FFB7E30-3070-1608-3041-7BF52D43AA5E}">
+		<SoundBank Id="827139402" Type="User" Language="SFX" Hash="{C37AD3D1-3E53-F457-AB15-F3B93D38A03C}">
 			<ShortName>melee_heavy_attack</ShortName>
 			<Path>melee_heavy_attack.bnk</Path>
+			<Media>
+				<File Id="423824848" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Melee\sound_meleeenemy_heavyattack.wav</ShortName>
+					<CachePath>SFX/Melee/sound_meleeenemy_heavyattack_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="827139402" Name="melee_heavy_attack"/>
+				<Event Id="827139402" Name="melee_heavy_attack">
+					<MediaRefs>
+						<MediaRef Id="423824848"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="953720134" Type="User" Language="SFX" Hash="{07B194F8-1985-9133-401A-488F7F54CE36}">
+		<SoundBank Id="953720134" Type="User" Language="SFX" Hash="{D9F46A20-AE79-D70B-9A58-F85FB9A9FBFF}">
 			<ShortName>sentinel_moving</ShortName>
 			<Path>sentinel_moving.bnk</Path>
+			<Media>
+				<File Id="519944578" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sentinel\sound_sentinelenemy_moving.wav</ShortName>
+					<CachePath>SFX/Sentinel/sound_sentinelenemy_moving_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="953720134" Name="sentinel_moving"/>
+				<Event Id="953720134" Name="sentinel_moving">
+					<MediaRefs>
+						<MediaRef Id="519944578"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1037358615" Type="User" Language="SFX" Hash="{33DFB916-2C79-C830-4877-EFC7C57E4FDD}">
+		<SoundBank Id="1037358615" Type="User" Language="SFX" Hash="{29155E90-ACCB-A7DA-2148-CB63269F2641}">
 			<ShortName>subjugator_hit</ShortName>
 			<Path>subjugator_hit.bnk</Path>
+			<Media>
+				<File Id="407467954" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Subjugator\sound_subjugatorenemy_hit.wav</ShortName>
+					<CachePath>SFX/Subjugator/sound_subjugatorenemy_hit_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="1037358615" Name="subjugator_hit"/>
+				<Event Id="1037358615" Name="subjugator_hit">
+					<MediaRefs>
+						<MediaRef Id="407467954"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1255748329" Type="User" Language="SFX" Hash="{241C03EA-05D4-8434-05D8-B661657E772E}">
+		<SoundBank Id="1255748329" Type="User" Language="SFX" Hash="{69FE5D7C-DBF9-A380-E12C-471B13FFE8B8}">
 			<ShortName>melee_hit</ShortName>
 			<Path>melee_hit.bnk</Path>
+			<Media>
+				<File Id="665356295" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Melee\sound_meleeenemy_hit.wav</ShortName>
+					<CachePath>SFX/Melee/sound_meleeenemy_hit_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="1255748329" Name="melee_hit"/>
+				<Event Id="1255748329" Name="melee_hit">
+					<MediaRefs>
+						<MediaRef Id="665356295"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{06A916D2-9CAE-44F3-0F4C-967E78967209}">
@@ -222,18 +292,38 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1557725171" Type="User" Language="SFX" Hash="{48C0CDAC-2A45-8BC3-38F3-03B1EF6143FE}">
+		<SoundBank Id="1557725171" Type="User" Language="SFX" Hash="{B166842A-9B7F-2E38-AF0A-F98A54358388}">
 			<ShortName>sentinel_hit</ShortName>
 			<Path>sentinel_hit.bnk</Path>
+			<Media>
+				<File Id="178375262" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sentinel\sound_sentinelenemy_hit.wav</ShortName>
+					<CachePath>SFX/Sentinel/sound_sentinelenemy_hit_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="1557725171" Name="sentinel_hit"/>
+				<Event Id="1557725171" Name="sentinel_hit">
+					<MediaRefs>
+						<MediaRef Id="178375262"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1736784962" Type="User" Language="SFX" Hash="{7C76DC86-0D73-2ED7-33DD-9888CF70E7D4}">
+		<SoundBank Id="1736784962" Type="User" Language="SFX" Hash="{C2A3CFEB-1BD3-540C-AE99-3C8AD3BD8E24}">
 			<ShortName>subjugator_moving</ShortName>
 			<Path>subjugator_moving.bnk</Path>
+			<Media>
+				<File Id="21432604" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Subjugator\sound_subjugatorenemy_moving.wav</ShortName>
+					<CachePath>SFX/Subjugator/sound_subjugatorenemy_moving_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="1736784962" Name="subjugator_moving"/>
+				<Event Id="1736784962" Name="subjugator_moving">
+					<MediaRefs>
+						<MediaRef Id="21432604"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 		<SoundBank Id="2308042502" Type="User" Language="SFX" Hash="{8E8C4C48-F56C-C7D4-7986-0E49B634398D}">
@@ -339,11 +429,21 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3315939568" Type="User" Language="SFX" Hash="{A5D53948-178D-C4DF-D026-28275DA66EF6}">
+		<SoundBank Id="3315939568" Type="User" Language="SFX" Hash="{7ABC3352-E787-C4CC-E900-11B9055EAFCA}">
 			<ShortName>melee_moving</ShortName>
 			<Path>melee_moving.bnk</Path>
+			<Media>
+				<File Id="930925044" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Melee\sound_meleeenemy_moving.wav</ShortName>
+					<CachePath>SFX/Melee/sound_meleeenemy_moving_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="3315939568" Name="melee_moving"/>
+				<Event Id="3315939568" Name="melee_moving">
+					<MediaRefs>
+						<MediaRef Id="930925044"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 		<SoundBank Id="3332217831" Type="User" Language="SFX" Hash="{7434420E-AD7D-FE22-9759-341AD1754BF4}">
@@ -387,11 +487,21 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3947834608" Type="User" Language="SFX" Hash="{619FFEEC-799D-53C5-20EF-5312B3362B98}">
+		<SoundBank Id="3947834608" Type="User" Language="SFX" Hash="{C169F27A-4F0B-1032-9219-FB6B2C1413A2}">
 			<ShortName>melee_dead</ShortName>
 			<Path>melee_dead.bnk</Path>
+			<Media>
+				<File Id="419110321" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Melee\sound_meleeenemy_dead.wav</ShortName>
+					<CachePath>SFX/Melee/sound_meleeenemy_dead_10C4C929.wem</CachePath>
+				</File>
+			</Media>
 			<Events>
-				<Event Id="3947834608" Name="melee_dead"/>
+				<Event Id="3947834608" Name="melee_dead">
+					<MediaRefs>
+						<MediaRef Id="419110321"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{10D8F725-2F55-C1BB-539D-4F92663636BE}">
@@ -412,5 +522,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{3E2EF7B9-2901-475B-1BDD-FA18BFCB8311}</FileHash>
+	<FileHash>{43E2A76B-466F-5A0B-D75F-A0074E019EAD}</FileHash>
 </SoundBanksInfo>

@@ -126,29 +126,139 @@
 					<ChildrenList>
 						<Folder Name="melee" ID="{FBA8B6BC-C14A-4106-A66C-6FB4EF0F10D2}" ShortID="222082729">
 							<ChildrenList>
-								<Event Name="melee_moving" ID="{681F3834-03D9-4144-9C82-EC1B072B9C2A}"/>
-								<Event Name="melee_dead" ID="{C939DACA-312D-4D57-9BC7-E0908A4906EA}"/>
-								<Event Name="melee_heavy_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}"/>
-								<Event Name="melee_hit" ID="{0AEE33D0-11CF-4BA3-B285-E2EF320CE3C5}"/>
+								<Event Name="melee_moving" ID="{681F3834-03D9-4144-9C82-EC1B072B9C2A}">
+									<ChildrenList>
+										<Action Name="" ID="{3830F7D5-C4CF-4B22-A3E6-1C4F8DE67CB0}" ShortID="473547754">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_meleeenemy_moving" ID="{B212FD28-FB16-4A47-A7E1-FD0E978FEF3A}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="melee_dead" ID="{C939DACA-312D-4D57-9BC7-E0908A4906EA}">
+									<ChildrenList>
+										<Action Name="" ID="{086D679F-882F-4CA5-A405-C4D063BBE629}" ShortID="319628109">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_meleeenemy_dead" ID="{41F4FFD5-68ED-4758-865D-463A2B166D9F}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="melee_heavy_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}">
+									<ChildrenList>
+										<Action Name="" ID="{4AE0816B-B52C-4768-AEF0-3641C2253C00}" ShortID="682086814">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_meleeenemy_heavyattack" ID="{B3458E72-FE56-4D0B-AE0E-1AAC72BFB09D}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="melee_hit" ID="{0AEE33D0-11CF-4BA3-B285-E2EF320CE3C5}">
+									<ChildrenList>
+										<Action Name="" ID="{44870BBF-62AD-4186-B130-EA80D72480DA}" ShortID="74886939">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_meleeenemy_hit" ID="{8E081D64-43D6-40CD-811D-885AD1AE8759}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="ranged" ID="{59D66D52-1936-4559-9003-739179050936}" ShortID="204451734">
 							<ChildrenList>
-								<Event Name="ranged_moving" ID="{C3675D87-3EEE-4275-ACEA-A0B97707EB3D}"/>
-								<Event Name="ranged_hit" ID="{D655EF29-2F8B-41EA-85CC-4DCFB82CC7B9}"/>
+								<Event Name="ranged_moving" ID="{C3675D87-3EEE-4275-ACEA-A0B97707EB3D}">
+									<ChildrenList>
+										<Action Name="" ID="{2AA9E346-0377-47B1-9619-2B3FF462AF38}" ShortID="69967507">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_rangedenemy_moving" ID="{ED72EDCD-32E5-4974-B525-C05118EB0345}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="ranged_hit" ID="{D655EF29-2F8B-41EA-85CC-4DCFB82CC7B9}">
+									<ChildrenList>
+										<Action Name="" ID="{9207BFBE-D83F-439B-ABD0-9C65ABA6ECA9}" ShortID="1064442830">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_rangedenemy_hit" ID="{F3722224-FD01-4442-978D-ED7031641321}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="sentinel" ID="{F9CB83E4-23F6-496C-A2D0-0AD2D0143428}" ShortID="577568553">
 							<ChildrenList>
-								<Event Name="sentinel_dead" ID="{813DF0FC-D2BD-4709-89FD-2E0F536AC319}"/>
-								<Event Name="sentinel_hit" ID="{78B0612B-B2D1-48A1-B671-C573D33D366D}"/>
-								<Event Name="sentinel_moving" ID="{CDBA5A5B-273F-4308-AAB9-DCF12886D523}"/>
+								<Event Name="sentinel_dead" ID="{813DF0FC-D2BD-4709-89FD-2E0F536AC319}">
+									<ChildrenList>
+										<Action Name="" ID="{146AB856-EABD-49C5-8CD9-A71F318E5684}" ShortID="323228324">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_sentinelenemy_dead" ID="{53783580-2C86-43AE-BF16-009739001980}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="sentinel_hit" ID="{78B0612B-B2D1-48A1-B671-C573D33D366D}">
+									<ChildrenList>
+										<Action Name="" ID="{6829C2A9-56FD-4076-BC7B-5CA472A54418}" ShortID="189091772">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_sentinelenemy_hit" ID="{0FAF5869-A401-43CB-AB2C-4132CCFC3582}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="sentinel_moving" ID="{CDBA5A5B-273F-4308-AAB9-DCF12886D523}">
+									<ChildrenList>
+										<Action Name="" ID="{AF31C024-CADF-4FF9-ABE4-5CC6AD5EE832}" ShortID="813191195">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_sentinelenemy_moving" ID="{B094D0D8-01C3-4FFA-8BB1-DCBDC45A24CB}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="subjugator" ID="{7D2F2C80-DC48-49D7-B6AB-53BC1F6FE5ED}" ShortID="368684513">
 							<ChildrenList>
-								<Event Name="subjugator_hit" ID="{CEF39E44-961F-498B-BC4F-A5B56C5BC03A}"/>
-								<Event Name="subjugator_moving" ID="{70D61CF0-04FF-4AFD-8363-05F20796110C}"/>
+								<Event Name="subjugator_hit" ID="{CEF39E44-961F-498B-BC4F-A5B56C5BC03A}">
+									<ChildrenList>
+										<Action Name="" ID="{1F468480-23FF-4A22-8BFA-2132AA22C69F}" ShortID="80141906">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_subjugatorenemy_hit" ID="{35F7D2BB-F0C3-494C-9EFE-27EAA0C8DCF4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="subjugator_moving" ID="{70D61CF0-04FF-4AFD-8363-05F20796110C}">
+									<ChildrenList>
+										<Action Name="" ID="{044E7229-01F3-4C89-BB60-E6100F877EBC}" ShortID="330944784">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sound_subjugatorenemy_moving" ID="{DA641F00-BE66-4963-95C1-2F1E0E89150F}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
 					</ChildrenList>

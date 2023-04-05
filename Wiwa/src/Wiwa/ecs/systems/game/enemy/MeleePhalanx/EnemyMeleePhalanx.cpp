@@ -87,6 +87,7 @@ namespace Wiwa
 	{
 		EnemySystem::ReceiveDamage(damage);
 		
+		//PlaySound(ScriptEngine::CreateString("melee_hit"), m_PlayerId);
 	}
 
 	void EnemyMeleePhalanx::SwitchState(MeleePhalanxBaseState* state)
