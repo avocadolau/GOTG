@@ -88,7 +88,7 @@ namespace Wiwa
 	void WaveSpawnerSystem::SpawnWave()
 	{
 		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 
@@ -96,7 +96,7 @@ namespace Wiwa
 
 		// Create an empty entity
 		std::string waveName = em.GetEntityName(m_EntityId);
-		waveName += "_wave_" + enemySpawner->currentWaveCount;
+		waveName += "_wave_" + std::to_string(enemySpawner->currentWaveCount);
 		m_CurrentWaveEntityId = em.CreateEntity(waveName.c_str());
 
 		Transform3D* waveTransform = em.AddComponent<Transform3D>(m_CurrentWaveEntityId);

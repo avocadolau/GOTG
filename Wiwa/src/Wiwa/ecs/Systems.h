@@ -17,5 +17,4 @@
 #include "systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h"
 #include "systems/game/CharacterInventory.h"
 
-#include "systems/game/enemy/WaveSystem.h"
 #include "systems/ParticleEmitterExecutor.h"
