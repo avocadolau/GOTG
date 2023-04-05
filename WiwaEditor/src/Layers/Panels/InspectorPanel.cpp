@@ -1281,10 +1281,8 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 void InspectorPanel::DrawItemComponent(byte* data)
 {
 	Wiwa::Item* item = (Wiwa::Item*)data;
-	if (item->Name == NULL) item->Name = "";
-	std::string str(item->Name);
-	ImGui::InputText("Name",&str);
-	ImGui::InputInt("Item type", (int*)item->item_type);
+	ImGui::InputText("Name",item->Name, 128);
+	ImGui::InputScalar("ItemType", ImGuiDataType_U8,&item->item_type);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)

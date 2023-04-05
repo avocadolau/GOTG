@@ -8,7 +8,7 @@ namespace Wiwa
 {
     struct WI_API Item
     {
-        const char* Name;
+        char Name[128];
         uint8_t item_type;
     };
 }

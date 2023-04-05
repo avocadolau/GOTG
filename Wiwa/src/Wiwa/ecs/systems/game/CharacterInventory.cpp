@@ -28,8 +28,8 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		}
 		else if (item->item_type == 3)//CONSUMABLE
 		{
-			Consumable* buff = Wiwa::ItemManager::GetConsumable(item->Name);
-			//Wiwa::GameStateManager::s_PlayerInventory->(buff);
+			Consumable* consumable = Wiwa::ItemManager::GetConsumable(item->Name);
+			Wiwa::GameStateManager::s_PlayerInventory->AddConsumable(*consumable);
 			//TODO:  consumables will be automatically used or the player can decide whether to use them?
 		}
 	}
