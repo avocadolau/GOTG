@@ -96,16 +96,24 @@ namespace Wiwa
 
 		if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
 		{
-			 m_CurrentAnimation->m_HasFinished = true;
-			 if (m_CurrentAnimation->m_Loop)
-			 {
+
+			//give a frame to check if the animation has finished
+			if (!m_CurrentAnimation->m_HasFinished)
+			{
+				m_CurrentAnimation->m_HasFinished = true;
+				return;
+			}
+
+			if (m_CurrentAnimation->m_Loop)
+			{
 				m_CurrentAnimation->m_HasFinished = false;
 				m_CurrentTime = 0;
-			 }
-			 else {
+			}
+			else {
+				m_AnimationState = AnimationState::Paused;
+			}
 
-				 m_AnimationState = AnimationState::Paused;
-			 }
+			return;
 		}
 		CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 	}
@@ -181,6 +189,7 @@ namespace Wiwa
 					m_TargetAnimation->m_CurrentTime = 0;
 					m_TargetAnimation->m_Loop = loop;
 					m_TargetAnimation->m_HasFinished = false;
+					m_LoopBlend = false;
 					m_AnimationState = AnimationState::Blending;
 				}
 				else

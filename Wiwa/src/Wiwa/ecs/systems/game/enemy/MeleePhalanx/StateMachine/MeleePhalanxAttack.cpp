@@ -19,7 +19,11 @@ namespace Wiwa
 		enemy->m_Timer = 0;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		animator->PlayAnimation("atack", false);
+		m_TimerAttackCooldown = 0.0f;
+		//animator->PlayAnimation("atack", false);
+		animator->Blend("atack", false, 0.2f);
+		//PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+	
 		GenerateAttack(enemy);
 		//enemy->ChasePlayer();
 	}
@@ -31,6 +35,8 @@ namespace Wiwa
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+
+		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 	
 		/*if ()
 		{
@@ -40,12 +46,19 @@ namespace Wiwa
 		if (animator->HasFinished())
 		{
 			m_TimerAttackCooldown += Time::GetDeltaTime();
-			if (m_TimerAttackCooldown > 1500.0f || glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f)
+			if ( glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f)
 			{
+
 				m_TimerAttackCooldown = 0.0f;
 				enemy->SwitchState(enemy->m_ChasingState);
 			}
+			else if (m_TimerAttackCooldown > 1000.0f){
+
+				enemy->SwitchState(enemy->m_AttackingState);
+			}
 		}
+
+		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
 
 		/*if (m_TimerAttackCooldown > 500.0f)
 		{
@@ -76,9 +89,12 @@ namespace Wiwa
 		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-		if (distance <= 3.0f)
+		if (playerStats != nullptr && selfStats != nullptr)
 		{
-			playerStats->Health -= selfStats->Damage;
-		}
+			if (distance <= 3.0f)
+			{
+				playerStats->Health -= selfStats->Damage;
+			}
+		}		
 	}
 }

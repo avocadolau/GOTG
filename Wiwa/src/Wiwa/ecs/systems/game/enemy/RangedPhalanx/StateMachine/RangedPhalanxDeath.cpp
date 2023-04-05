@@ -16,11 +16,20 @@ namespace Wiwa
 
 	void RangedPhalanxDeathState::EnterState(EnemyRangedPhalanx* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		animator->PlayAnimation("death", false);
 	}
 
 	void RangedPhalanxDeathState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
-
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		if (animator->HasFinished())
+		{
+			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+			self->hasFinished = true;
+		}
 	}
 
 	void RangedPhalanxDeathState::ExitState(EnemyRangedPhalanx* enemy)

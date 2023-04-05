@@ -16,13 +16,18 @@ namespace Wiwa
 
 	void MeleePhalanxSpawnState::EnterState(EnemyMeleePhalanx* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		animator->PlayAnimation("spawn", false);
 	}
 
 	void MeleePhalanxSpawnState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
-
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		if (animator->HasFinished())
+			enemy->SwitchState(enemy->m_ChasingState);
 	}
-
 
 	void MeleePhalanxSpawnState::ExitState(EnemyMeleePhalanx* enemy)
 	{

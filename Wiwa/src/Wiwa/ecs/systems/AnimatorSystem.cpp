@@ -99,7 +99,7 @@ namespace Wiwa {
 		
 		anim->animator->PlayAnimationName(name,loop);
 	}
-	void AnimatorSystem::Blend(std::string name, bool loop, bool transition, float transitionTime)
+	void AnimatorSystem::Blend(std::string name, bool loop, float transitionTime)
 	{
 		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
 
@@ -109,7 +109,7 @@ namespace Wiwa {
 
 		if (!anim) return;
 
-		anim->animator->PlayAnimation(name,loop,transition,transitionTime);
+		anim->animator->PlayAnimation(name,loop,true,transitionTime);
 	}
 
 	void AnimatorSystem::LoopAnimation(bool loop)
@@ -160,5 +160,18 @@ namespace Wiwa {
 		if (!anim) return;
 		
 		anim->animator->ResetAnimation();
+	}
+
+	const std::string AnimatorSystem::GetCurrentAnimName()
+	{
+		m_AnimatorComponent = GetComponentIterator<AnimatorComponent>();
+
+		if (m_AnimatorComponent.c_id == WI_INVALID_INDEX) return "noname";
+
+		Wiwa::AnimatorComponent* anim = GetComponentByIterator<Wiwa::AnimatorComponent>(m_AnimatorComponent);
+
+		if (!anim) "noname";
+
+		return anim->animator->GetCurrentAnimation()->m_Name;
 	}
 }

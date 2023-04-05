@@ -326,9 +326,9 @@
 				</Folder>
 				<Folder Name="Enemies" ID="{ED4367A5-69E1-4DCC-926B-B54A39B95D31}" ShortID="181944280">
 					<ChildrenList>
-						<Folder Name="Melee" ID="{FFB02A62-A43E-4AA2-B098-2CF4C3C6C3BC}" ShortID="5625439">
+						<Folder Name="Melee" ID="{ADF844E3-80DE-4DB2-A666-1AE3D54DE39D}" ShortID="99093209">
 							<ChildrenList>
-								<Sound Name="197656-SovinaSlime26" ID="{BACDAEE4-B6E5-4462-9CE8-AD90EA3F6943}" ShortID="440424758">
+								<Sound Name="sound_meleeenemy_dead" ID="{41F4FFD5-68ED-4758-865D-463A2B166D9F}" ShortID="768496318">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -338,23 +338,89 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="197656-SovinaSlime26" ID="{F58FF357-DB11-4EBF-AFE7-EC572EC3D3C0}">
+										<AudioFileSource Name="sound_meleeenemy_dead" ID="{0FC5D5D6-6712-44CC-A5EB-88B91C391B74}">
 											<Language>SFX</Language>
-											<AudioFile>Enemies\Melee\197656-SovinaSlime26.wav</AudioFile>
+											<AudioFile>Melee\sound_meleeenemy_dead.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="144484845"/>
+												<MediaID ID="419110321"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="197656-SovinaSlime26" ID="{F58FF357-DB11-4EBF-AFE7-EC572EC3D3C0}" Platform="Linked"/>
+										<ActiveSource Name="sound_meleeenemy_dead" ID="{0FC5D5D6-6712-44CC-A5EB-88B91C391B74}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_meleeenemy_heavyattack" ID="{B3458E72-FE56-4D0B-AE0E-1AAC72BFB09D}" ShortID="188135107">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_meleeenemy_heavyattack" ID="{751F0088-C0BA-4BE8-AF05-9F591F796E0D}">
+											<Language>SFX</Language>
+											<AudioFile>Melee\sound_meleeenemy_heavyattack.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="423824848"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_meleeenemy_heavyattack" ID="{751F0088-C0BA-4BE8-AF05-9F591F796E0D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_meleeenemy_hit" ID="{8E081D64-43D6-40CD-811D-885AD1AE8759}" ShortID="319650641">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_meleeenemy_hit" ID="{0C80643E-80DD-4047-8463-27875769D691}">
+											<Language>SFX</Language>
+											<AudioFile>Melee\sound_meleeenemy_hit.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="665356295"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_meleeenemy_hit" ID="{0C80643E-80DD-4047-8463-27875769D691}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_meleeenemy_moving" ID="{B212FD28-FB16-4A47-A7E1-FD0E978FEF3A}" ShortID="434091895">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_meleeenemy_moving" ID="{CA76680D-3811-4969-BC0C-F2570BE1E33E}">
+											<Language>SFX</Language>
+											<AudioFile>Melee\sound_meleeenemy_moving.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="930925044"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_meleeenemy_moving" ID="{CA76680D-3811-4969-BC0C-F2570BE1E33E}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Ranged" ID="{6E26C0F6-FDE5-49FD-9F28-949494E807DC}" ShortID="783274755">
+						<Folder Name="Ranged" ID="{4CFFC9B6-B50F-41FB-937A-32DEBEB5EF64}" ShortID="308477193">
 							<ChildrenList>
-								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{3B815756-5C95-4243-92F0-82C9E1FF563B}" ShortID="936135286">
+								<Sound Name="sound_rangedenemy_hit" ID="{F3722224-FD01-4442-978D-ED7031641321}" ShortID="2907651">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -364,23 +430,45 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{98DBCC2D-1ED5-499C-B28C-BEEC16F8C6A4}">
+										<AudioFileSource Name="sound_rangedenemy_hit" ID="{9D883CF0-531A-443A-8A66-BB86B21F523C}">
 											<Language>SFX</Language>
-											<AudioFile>Enemies\Ranged\184478-Time_Glitch_-aquatic_density-4.wav</AudioFile>
+											<AudioFile>Ranged\sound_rangedenemy_hit.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="160020738"/>
+												<MediaID ID="1001122462"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{98DBCC2D-1ED5-499C-B28C-BEEC16F8C6A4}" Platform="Linked"/>
+										<ActiveSource Name="sound_rangedenemy_hit" ID="{9D883CF0-531A-443A-8A66-BB86B21F523C}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_rangedenemy_moving" ID="{ED72EDCD-32E5-4974-B525-C05118EB0345}" ShortID="739406248">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_rangedenemy_moving" ID="{C1D3D5B3-62D5-456A-B86E-66AAB0E941CF}">
+											<Language>SFX</Language>
+											<AudioFile>Ranged\sound_rangedenemy_moving.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="267442382"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_rangedenemy_moving" ID="{C1D3D5B3-62D5-456A-B86E-66AAB0E941CF}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Sentinel" ID="{F1C55FCE-F954-4650-8878-4FBA0C480628}" ShortID="917367290">
+						<Folder Name="Sentinel" ID="{22F166C5-A60E-4F2C-AD5F-537DCFD9B8E1}" ShortID="505189340">
 							<ChildrenList>
-								<Sound Name="sentinel_moving" ID="{BDD18B92-4B35-4D61-B22B-CDE58E106CFC}" ShortID="952419831">
+								<Sound Name="sound_sentinelenemy_dead" ID="{53783580-2C86-43AE-BF16-009739001980}" ShortID="973009512">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -390,23 +478,67 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="sentinel_moving" ID="{B27905E3-A2B0-43E9-B843-17761A709741}">
+										<AudioFileSource Name="sound_sentinelenemy_dead" ID="{C87B48B1-3969-40E7-8979-D490EDE004A6}">
 											<Language>SFX</Language>
-											<AudioFile>Enemies\Sentinel\sentinel_moving.wav</AudioFile>
+											<AudioFile>Sentinel\sound_sentinelenemy_dead.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="1073341136"/>
+												<MediaID ID="775403989"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="sentinel_moving" ID="{B27905E3-A2B0-43E9-B843-17761A709741}" Platform="Linked"/>
+										<ActiveSource Name="sound_sentinelenemy_dead" ID="{C87B48B1-3969-40E7-8979-D490EDE004A6}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_sentinelenemy_hit" ID="{0FAF5869-A401-43CB-AB2C-4132CCFC3582}" ShortID="403307930">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_sentinelenemy_hit" ID="{92327D8A-3B32-43C5-A2B2-3925B9B9371B}">
+											<Language>SFX</Language>
+											<AudioFile>Sentinel\sound_sentinelenemy_hit.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="178375262"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_sentinelenemy_hit" ID="{92327D8A-3B32-43C5-A2B2-3925B9B9371B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_sentinelenemy_moving" ID="{B094D0D8-01C3-4FFA-8BB1-DCBDC45A24CB}" ShortID="33556655">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_sentinelenemy_moving" ID="{E62F3298-D94B-453E-ABC5-B2A42C2ED6CD}">
+											<Language>SFX</Language>
+											<AudioFile>Sentinel\sound_sentinelenemy_moving.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="519944578"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_sentinelenemy_moving" ID="{E62F3298-D94B-453E-ABC5-B2A42C2ED6CD}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Subjugator" ID="{AB2E4D75-7275-4179-B6C8-E21A3CE8E4B4}" ShortID="431440389">
+						<Folder Name="Subjugator" ID="{06448BA0-DB72-4139-8C24-281C5BBC20C2}" ShortID="964889696">
 							<ChildrenList>
-								<Sound Name="184478-Time_Glitch_-aquatic_density-4" ID="{5AC88DA5-DC1D-42B5-A558-883657A907DC}" ShortID="992356666">
+								<Sound Name="sound_subjugatorenemy_hit" ID="{35F7D2BB-F0C3-494C-9EFE-27EAA0C8DCF4}" ShortID="322168854">
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -416,16 +548,38 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{762E2BF8-C820-48BA-A935-1AE603254B92}">
+										<AudioFileSource Name="sound_subjugatorenemy_hit" ID="{A73A1DF3-0EA1-4642-8001-94A45FC6DFCD}">
 											<Language>SFX</Language>
-											<AudioFile>Enemies\Subjugator\184478-Time_Glitch_-aquatic_density-4.wav</AudioFile>
+											<AudioFile>Subjugator\sound_subjugatorenemy_hit.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="830773921"/>
+												<MediaID ID="407467954"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<ActiveSourceList>
-										<ActiveSource Name="184478-Time_Glitch_-aquatic_density-4" ID="{762E2BF8-C820-48BA-A935-1AE603254B92}" Platform="Linked"/>
+										<ActiveSource Name="sound_subjugatorenemy_hit" ID="{A73A1DF3-0EA1-4642-8001-94A45FC6DFCD}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="sound_subjugatorenemy_moving" ID="{DA641F00-BE66-4963-95C1-2F1E0E89150F}" ShortID="248236522">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_subjugatorenemy_moving" ID="{CCD99047-8BAD-4D46-A676-78B5F3997F11}">
+											<Language>SFX</Language>
+											<AudioFile>Subjugator\sound_subjugatorenemy_moving.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="21432604"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_subjugatorenemy_moving" ID="{CCD99047-8BAD-4D46-A676-78B5F3997F11}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>

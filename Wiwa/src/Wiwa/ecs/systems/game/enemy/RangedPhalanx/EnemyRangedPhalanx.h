@@ -17,6 +17,7 @@ namespace Wiwa {
 		RangedPhalanxDeathState* m_DeathState;
 
 		float m_Timer;
+		float m_DistanceToFire;
 	public:
 		EnemyRangedPhalanx();
 		~EnemyRangedPhalanx();

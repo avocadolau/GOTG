@@ -33,7 +33,7 @@ namespace Wiwa {
 
 		void PlayAnimation(std::string name, bool loop);
 
-		void Blend(std::string targetAnim, bool loop, bool transition, float transitionTime);
+		void Blend(std::string targetAnim, bool loop, float transitionTime);
 
 		void LoopAnimation(bool loop);
 
@@ -42,6 +42,8 @@ namespace Wiwa {
 		void SetAnimationSate(Wiwa::AnimationState state);
 
 		void Restart();
+
+		const std::string GetCurrentAnimName();
 	};
 }
 
