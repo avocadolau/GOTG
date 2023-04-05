@@ -1,0 +1,3 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1037358615	subjugator_hit			\Default Work Unit\enemies\subjugator\subjugator_hit	
+

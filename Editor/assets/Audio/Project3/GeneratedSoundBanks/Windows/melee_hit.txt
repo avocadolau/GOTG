@@ -1,0 +1,3 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1255748329	melee_hit			\Default Work Unit\enemies\melee\melee_hit	
+

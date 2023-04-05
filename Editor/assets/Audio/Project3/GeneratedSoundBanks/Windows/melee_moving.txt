@@ -1,0 +1,3 @@
+Event	ID	Name			Wwise Object Path	Notes
+	3315939568	melee_moving			\Default Work Unit\enemies\melee\melee_moving	
+

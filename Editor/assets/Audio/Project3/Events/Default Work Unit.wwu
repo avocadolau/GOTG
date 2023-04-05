@@ -122,6 +122,37 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Folder Name="enemies" ID="{9DD12A92-FC92-4275-98E4-F65921D75363}" ShortID="498136158">
+					<ChildrenList>
+						<Folder Name="melee" ID="{FBA8B6BC-C14A-4106-A66C-6FB4EF0F10D2}" ShortID="222082729">
+							<ChildrenList>
+								<Event Name="melee_moving" ID="{681F3834-03D9-4144-9C82-EC1B072B9C2A}"/>
+								<Event Name="melee_dead" ID="{C939DACA-312D-4D57-9BC7-E0908A4906EA}"/>
+								<Event Name="melee_heavy_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}"/>
+								<Event Name="melee_hit" ID="{0AEE33D0-11CF-4BA3-B285-E2EF320CE3C5}"/>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="ranged" ID="{59D66D52-1936-4559-9003-739179050936}" ShortID="204451734">
+							<ChildrenList>
+								<Event Name="ranged_moving" ID="{C3675D87-3EEE-4275-ACEA-A0B97707EB3D}"/>
+								<Event Name="ranged_hit" ID="{D655EF29-2F8B-41EA-85CC-4DCFB82CC7B9}"/>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="sentinel" ID="{F9CB83E4-23F6-496C-A2D0-0AD2D0143428}" ShortID="577568553">
+							<ChildrenList>
+								<Event Name="sentinel_dead" ID="{813DF0FC-D2BD-4709-89FD-2E0F536AC319}"/>
+								<Event Name="sentinel_hit" ID="{78B0612B-B2D1-48A1-B671-C573D33D366D}"/>
+								<Event Name="sentinel_moving" ID="{CDBA5A5B-273F-4308-AAB9-DCF12886D523}"/>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="subjugator" ID="{7D2F2C80-DC48-49D7-B6AB-53BC1F6FE5ED}" ShortID="368684513">
+							<ChildrenList>
+								<Event Name="subjugator_hit" ID="{CEF39E44-961F-498B-BC4F-A5B56C5BC03A}"/>
+								<Event Name="subjugator_moving" ID="{70D61CF0-04FF-4AFD-8363-05F20796110C}"/>
+							</ChildrenList>
+						</Folder>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

@@ -1,0 +1,3 @@
+Event	ID	Name			Wwise Object Path	Notes
+	3947834608	melee_dead			\Default Work Unit\enemies\melee\melee_dead	
+

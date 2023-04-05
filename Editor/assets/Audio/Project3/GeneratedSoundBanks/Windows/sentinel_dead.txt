@@ -1,0 +1,3 @@
+Event	ID	Name			Wwise Object Path	Notes
+	69331918	sentinel_dead			\Default Work Unit\enemies\sentinel\sentinel_dead	
+
