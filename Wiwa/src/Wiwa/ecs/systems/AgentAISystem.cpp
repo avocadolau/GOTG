@@ -204,7 +204,21 @@ void Wiwa::AgentAISystem::RotateAgent(const float distance, const AgentAI& agent
 	}
 
 	float targetRotation = angle * 180 / glm::pi<float>();
-	float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, tRot);
+
+	// Calculate the difference between the current rotation and target rotation
+	float rotationDifference = targetRotation - transform->localRotation.y;
+
+	// Adjust the rotation difference to be within the range of -180 to 180 degrees
+	while (rotationDifference > 180.0f) {
+		rotationDifference -= 360.0f;
+	}
+	while (rotationDifference < -180.0f) {
+		rotationDifference += 360.0f;
+	}
+
+	// Calculate the new interpolated rotation
+	float interpolatedRotation = transform->localRotation.y + rotationDifference * tRot;
 
 	transform->localRotation.y = interpolatedRotation;
 }
+
