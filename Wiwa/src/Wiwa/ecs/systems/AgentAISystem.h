@@ -43,9 +43,9 @@ namespace Wiwa {
 
 		bool HasPath();
 
-		void AllowRotation() { m_IsRotatingByTile = true; }
+		void AllowRotationByTile() { m_IsRotatingByTile = true; }
 
-		void DisableRotation() { m_IsRotatingByTile = false; }
+		void DisableRotationByTile() { m_IsRotatingByTile = false; }
 
 		void LookAtPosition(glm::vec2 direction_point);
 

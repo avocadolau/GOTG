@@ -34,8 +34,9 @@ namespace Wiwa
 		// Change rotation logic from ai agent to enemy local script one
 		if (aiSystem->GetPathSize() <= 4 && glm::distance(selfTr->localPosition, playerTr->localPosition) <= 10)
 		{
-			aiSystem->DisableRotation();
+			//aiSystem->DisableRotationByTile();
 			// Rotate towards player
+			aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
 		}
 
 		if (animator->HasFinished())

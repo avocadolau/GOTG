@@ -84,10 +84,9 @@ void Wiwa::AgentAISystem::OnUpdate()
 			LookAtPosition(m_DirectionPoint);
 	}
 	
-	if (m_IsRotatingByTile)
-	{	
-		RotateAgent(distance, *agent, position, transform);
-	}
+	
+	RotateAgent(distance, *agent, position, transform);
+	
 
 	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 

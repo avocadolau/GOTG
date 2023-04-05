@@ -31,6 +31,8 @@ namespace Wiwa
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+
+		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 	
 		/*if ()
 		{
@@ -46,6 +48,8 @@ namespace Wiwa
 				enemy->SwitchState(enemy->m_ChasingState);
 			}
 		}
+
+		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
 
 		/*if (m_TimerAttackCooldown > 500.0f)
 		{
@@ -76,9 +80,12 @@ namespace Wiwa
 		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-		if (distance <= 3.0f)
+		if (playerStats != nullptr && selfStats != nullptr)
 		{
-			playerStats->Health -= selfStats->Damage;
-		}
+			if (distance <= 3.0f)
+			{
+				playerStats->Health -= selfStats->Damage;
+			}
+		}		
 	}
 }
