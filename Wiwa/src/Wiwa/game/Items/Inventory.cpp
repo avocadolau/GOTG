@@ -157,7 +157,7 @@ void Wiwa::Inventory::InitGame()
 	m_Tokens = 0;
 }
 
-void Wiwa::Inventory::AddAbility(Ability* ability)
+void Wiwa::Inventory::AddAbility(const Ability* ability) const
 {
     for (size_t i = 0; i < MAX_ABILITIES; i++)
     {
@@ -170,7 +170,7 @@ void Wiwa::Inventory::AddAbility(Ability* ability)
     
 }
 
-void Wiwa::Inventory::AddBuff(Buff* buff)
+void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
     for (size_t i = 0; i < MAX_BUFFS; i++)
     {
@@ -198,11 +198,11 @@ void Wiwa::Inventory::Update()
 	
 }
 
-void Wiwa::Inventory::UseAbility(size_t index)
+void Wiwa::Inventory::UseAbility(size_t index) const
 {
 	m_Abilities[index]->Use();
 }
-void Wiwa::Inventory::UseBuff(size_t index)
+void Wiwa::Inventory::UseBuff(size_t index) const
 {
 	m_Buffs[index]->Use();
 }
