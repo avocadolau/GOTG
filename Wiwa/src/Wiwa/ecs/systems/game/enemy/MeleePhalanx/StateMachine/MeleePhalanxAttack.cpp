@@ -22,7 +22,7 @@ namespace Wiwa
 		m_TimerAttackCooldown = 0.0f;
 		//animator->PlayAnimation("atack", false);
 		animator->Blend("atack", false, 0.2f);
-		//PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+		PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
 	
 		GenerateAttack(enemy);
 		//enemy->ChasePlayer();
@@ -47,7 +47,7 @@ namespace Wiwa
 		//{
 			m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
 			//WI_INFO(" Cooldown before: {}", m_TimerAttackCooldown);
-			if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f)
+			if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f) // animation->HasFinished()
 			{
 				m_TimerAttackCooldown = 0.0f;
 				enemy->SwitchState(enemy->m_ChasingState);
@@ -55,7 +55,7 @@ namespace Wiwa
 			else if (m_TimerAttackCooldown > 2000.0f)
 			{					
 				animator->Blend("atack", false, 0.2f);
-				//PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+				PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
 				GenerateAttack(enemy);
 
 				// Reset the timer after generating the attack
