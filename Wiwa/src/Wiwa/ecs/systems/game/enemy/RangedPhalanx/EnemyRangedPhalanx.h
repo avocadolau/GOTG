@@ -15,6 +15,7 @@ namespace Wiwa {
 		RangedPhalanxChasingState* m_ChasingState;
 		RangedPhalanxAttackState* m_AttackingState;
 		RangedPhalanxDeathState* m_DeathState;
+		EntityManager::ComponentIterator m_GunTransformIt;
 
 		float m_Timer;
 		float m_DistanceToFire;

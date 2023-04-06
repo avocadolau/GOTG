@@ -11,6 +11,9 @@ namespace Wiwa
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
+		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_DistanceToFire = 0.0f;
+		m_Timer = 0.0f;
 	}
 
 	EnemyRangedPhalanx::~EnemyRangedPhalanx()
@@ -25,6 +28,10 @@ namespace Wiwa
 		m_ChasingState = new RangedPhalanxChasingState();
 		m_AttackingState = new RangedPhalanxAttackState();
 		m_DeathState = new RangedPhalanxDeathState();
+
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
+		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);
 	}
 
 	void EnemyRangedPhalanx::OnInit()
@@ -32,6 +39,8 @@ namespace Wiwa
 		EnemySystem::OnInit();
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
+
+		m_DistanceToFire = 6.0f;
 	}
 
 	void EnemyRangedPhalanx::OnUpdate()
