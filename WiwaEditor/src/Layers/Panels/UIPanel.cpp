@@ -138,6 +138,7 @@ void UIPanel::DrawGuiElementCreation(const char* current_item)
 		break;
 	case GuiType::IMAGE:
 		DrawImageCreation(canvasSelected, Wiwa::SceneManager::getActiveScene()->GetGuiManager());
+		break;
 	case GuiType::ABILITY:
 		DrawAbilityCreation(canvasSelected, Wiwa::SceneManager::getActiveScene()->GetGuiManager());
 		break;
