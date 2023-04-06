@@ -5,7 +5,7 @@
 			<ChildrenList>
 				<Folder Name="In-game" ID="{D61CB3D3-1C5E-41D5-AA10-131682CB6584}" ShortID="329264051">
 					<ChildrenList>
-						<Sound Name="consumable_1" ID="{E5A76443-771A-42FC-9143-536EEF51D138}" ShortID="282665267">
+						<Sound Name="sound_message_in" ID="{8F6219DA-767A-4310-8A1D-4C68CD670A77}" ShortID="1430169">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -15,19 +15,19 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="consumable_1" ID="{BE30B53F-18DB-40AB-9622-1BDF891903C9}">
+								<AudioFileSource Name="sound_message_in" ID="{928ABF8D-D190-45AB-82E8-57DE589E7481}">
 									<Language>SFX</Language>
-									<AudioFile>In-game\consumable_1.wav</AudioFile>
+									<AudioFile>sound_message_in.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="623798631"/>
+										<MediaID ID="1024400845"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="consumable_1" ID="{BE30B53F-18DB-40AB-9622-1BDF891903C9}" Platform="Linked"/>
+								<ActiveSource Name="sound_message_in" ID="{928ABF8D-D190-45AB-82E8-57DE589E7481}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="consumable_2" ID="{A91BF359-B1E3-4351-807C-A329CCA28B6C}" ShortID="516472535">
+						<Sound Name="sound_opening_door" ID="{C3AB37EC-AAEC-48A8-BA8A-9EADA9EECBB2}" ShortID="806337078">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -37,19 +37,19 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="consumable_2" ID="{E0F3C75B-1C21-4919-910E-33FBE0B03266}">
+								<AudioFileSource Name="sound_opening_door" ID="{3CF78B70-F0A4-4257-997D-0550F62A90A5}">
 									<Language>SFX</Language>
-									<AudioFile>In-game\consumable_2.wav</AudioFile>
+									<AudioFile>sound_opening_door.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="352460321"/>
+										<MediaID ID="617951744"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="consumable_2" ID="{E0F3C75B-1C21-4919-910E-33FBE0B03266}" Platform="Linked"/>
+								<ActiveSource Name="sound_opening_door" ID="{3CF78B70-F0A4-4257-997D-0550F62A90A5}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="low_health" ID="{F5648E4D-98F8-4E3F-938F-4E24FB2BFC91}" ShortID="628337052">
+						<Sound Name="sound_low_health" ID="{43D5FE8E-244C-4DD9-934E-8E619E7BB3C2}" ShortID="589529998">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -59,19 +59,19 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="low_health" ID="{5C82F368-7CF0-4C1D-84BC-9E01501EE475}">
+								<AudioFileSource Name="sound_low_health" ID="{918A4E29-FD46-4EFA-9AFD-5D8E26EA7C06}">
 									<Language>SFX</Language>
-									<AudioFile>In-game\low_health.wav</AudioFile>
+									<AudioFile>sound_low_health.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="927412136"/>
+										<MediaID ID="759064555"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="low_health" ID="{5C82F368-7CF0-4C1D-84BC-9E01501EE475}" Platform="Linked"/>
+								<ActiveSource Name="sound_low_health" ID="{918A4E29-FD46-4EFA-9AFD-5D8E26EA7C06}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="message_in" ID="{6C835ABE-4A9B-4666-975C-58F7E62A7329}" ShortID="90477818">
+						<Sound Name="sound_message_out" ID="{5B3D9AC7-F94E-4749-86FE-83CC3B50E9E5}" ShortID="989411343">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -81,60 +81,16 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="message_in" ID="{82160E72-0C4B-4479-BCEC-B1C3DF2632FB}">
+								<AudioFileSource Name="sound_message_out" ID="{AEB5052B-9FD9-433A-A087-4144137C4E7F}">
 									<Language>SFX</Language>
-									<AudioFile>In-game\message_in.wav</AudioFile>
+									<AudioFile>sound_message_out.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="593278821"/>
+										<MediaID ID="78367026"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="message_in" ID="{82160E72-0C4B-4479-BCEC-B1C3DF2632FB}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="message_out" ID="{1F577612-7B65-4504-A60F-C3F4BF4E5D8D}" ShortID="72650523">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="message_out" ID="{D91EFC32-4AA1-46E8-92AA-8C4D5135C8EA}">
-									<Language>SFX</Language>
-									<AudioFile>In-game\message_out.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="834588755"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="message_out" ID="{D91EFC32-4AA1-46E8-92AA-8C4D5135C8EA}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="object_equiped" ID="{6FBF1C0D-122A-42A3-8B4F-B1630549F46C}" ShortID="749956004">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="object_equiped" ID="{807E603D-7C30-48B1-8922-AA9096DF733D}">
-									<Language>SFX</Language>
-									<AudioFile>In-game\object_equiped.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="170811150"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="object_equiped" ID="{807E603D-7C30-48B1-8922-AA9096DF733D}" Platform="Linked"/>
+								<ActiveSource Name="sound_message_out" ID="{AEB5052B-9FD9-433A-A087-4144137C4E7F}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
@@ -317,9 +273,82 @@
 										<MediaID ID="735369989"/>
 									</MediaIDList>
 								</AudioFileSource>
+								<AudioFileSource Name="starlord_ulti_01" ID="{08979B5C-84B3-475C-83C2-753B1766B619}">
+									<Language>SFX</Language>
+									<AudioFile>starlord_ulti.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="478784282"/>
+									</MediaIDList>
+								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="starlord_ulti" ID="{32FE553E-C47A-4E3B-993E-99F17587381D}" Platform="Linked"/>
+								<ActiveSource Name="starlord_ulti_01" ID="{08979B5C-84B3-475C-83C2-753B1766B619}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sound_rocket_shot" ID="{5F5A2415-FFE4-4925-AE4C-4D2850678F12}" ShortID="202132223">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sound_rocket_shot" ID="{BC01756B-9E03-40D2-915E-E00607B91A28}">
+									<Language>SFX</Language>
+									<AudioFile>sound_rocket_shot.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="389930594"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sound_rocket_shot" ID="{BC01756B-9E03-40D2-915E-E00607B91A28}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sound_starlord_shot_v1" ID="{E048B5B6-4854-43EC-A9F2-CBA1B14B8C97}" ShortID="432774715">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sound_starlord_shot_v1" ID="{F7260607-EEF2-4DCA-91A6-6861035C72E0}">
+									<Language>SFX</Language>
+									<AudioFile>sound_starlord_shot_v1.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="837037624"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sound_starlord_shot_v1" ID="{F7260607-EEF2-4DCA-91A6-6861035C72E0}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="sound_starlord_shot_v2" ID="{51D4A92E-BC64-40BF-B340-F01C992BB83E}" ShortID="239662984">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="sound_starlord_shot_v2" ID="{54075570-92B7-4013-BFAF-10EC6DE6D800}">
+									<Language>SFX</Language>
+									<AudioFile>sound_starlord_shot_v2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="526678014"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="sound_starlord_shot_v2" ID="{54075570-92B7-4013-BFAF-10EC6DE6D800}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
@@ -586,6 +615,8 @@
 						</Folder>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Unorganized" ID="{5F0A9C23-8CC5-4269-8E01-FF3A1C47988D}" ShortID="118153759"/>
+				<Folder Name="Player" ID="{05AB9E65-3F88-4FEE-80B1-66983CBEFBFD}" ShortID="740111758"/>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

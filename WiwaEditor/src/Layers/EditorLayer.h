@@ -165,6 +165,7 @@ private:
 	std::vector<std::function<void()>> m_EditorThreadQueue;
 	std::mutex m_EditorThreadMutex;
 
+	int m_GameVolume = 0;
 public:
 	static std::string s_SolVersion;
 	static std::string s_BuildConf;

@@ -27,6 +27,9 @@
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/audio/Audio.h>
 
+#include <Wiwa/audio/Audio.h>
+
+
 #include "../Entities.h"
 EditorLayer *EditorLayer::s_Instance = nullptr;
 std::string EditorLayer::s_SolVersion = "vs2022";
@@ -579,6 +582,7 @@ void EditorLayer::MainMenuBar()
 			if (ImGui::Button(ICON_FK_EXPAND))
 				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 
+
 			ImGui::SetCursorPosX(Wiwa::Application::Get().GetWindow().GetWidth() / 2 - 15.0f);
 			const char *play = Wiwa::Time::IsPlaying() ? ICON_FK_STOP : ICON_FK_PLAY;
 
@@ -639,6 +643,7 @@ void EditorLayer::MainMenuBar()
 				}
 			}
 
+
 			if (ImGui::Button(ICON_FK_STEP_FORWARD))
 			{
 				if (is_playing)
@@ -650,7 +655,32 @@ void EditorLayer::MainMenuBar()
 			ImGui::PopStyleColor();
 			ImGui::EndMenuBar();
 		}
+
+		
 		ImGui::End();
+	}
+
+	viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
+	window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+	height = ImGui::GetFrameHeight();
+	
+
+	if (ImGui::BeginViewportSideBar("##ThirdMenuBar", viewport, ImGuiDir_Up, height, window_flags))
+	{
+		if (ImGui::BeginMenuBar())
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0, 0, 0, 0 });
+			ImGui::PushItemWidth(200);
+			
+			if (ImGui::SliderInt("Volume", &m_GameVolume, 0, 100, "%d", 0, 17))
+				Audio::ChangeMasterVolume(m_GameVolume);
+
+			ImGui::PopItemWidth();
+			ImGui::PopStyleColor();
+			ImGui::EndMenuBar();
+
+			ImGui::End();
+		}
 	}
 
 	if (ImGui::BeginViewportSideBar("##MainStatusBar", viewport, ImGuiDir_Down, height, window_flags))
@@ -664,7 +694,7 @@ void EditorLayer::MainMenuBar()
 
 			ImGuiLog log = Wiwa::Application::Get().GetImGuiLayer().GetConsole();
 
-			ImGui::PushStyleColor(ImGuiCol_Button, {0.0, 0, 0, 0});
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.0, 0, 0, 0 });
 			ImGui::AlignTextToFramePadding();
 
 			char buff[16];
@@ -688,6 +718,7 @@ void EditorLayer::MainMenuBar()
 		}
 		ImGui::End();
 	}
+	
 }
 
 void EditorLayer::StopScene()

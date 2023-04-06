@@ -99,6 +99,23 @@
 				</Event>
 			</Events>
 		</SoundBank>
+		<SoundBank Id="871813740" Type="User" Language="SFX" Hash="{A131BF49-4BBB-E9B6-F743-B4C35EAB8BDD}">
+			<ShortName>player_hit</ShortName>
+			<Path>player_hit.bnk</Path>
+			<Media>
+				<File Id="759064555" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>sound_low_health.wav</ShortName>
+					<CachePath>SFX/sound_low_health_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="871813740" Name="player_hit">
+					<MediaRefs>
+						<MediaRef Id="759064555"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
 		<SoundBank Id="953720134" Type="User" Language="SFX" Hash="{D9F46A20-AE79-D70B-9A58-F85FB9A9FBFF}">
 			<ShortName>sentinel_moving</ShortName>
 			<Path>sentinel_moving.bnk</Path>
@@ -522,5 +539,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{43E2A76B-466F-5A0B-D75F-A0074E019EAD}</FileHash>
+	<FileHash>{2899EB43-E88B-7BDB-C965-7BC27F0E2792}</FileHash>
 </SoundBanksInfo>

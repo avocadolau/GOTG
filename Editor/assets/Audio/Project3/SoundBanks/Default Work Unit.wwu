@@ -3,13 +3,6 @@
 	<SoundBanks>
 		<WorkUnit Name="Default Work Unit" ID="{B0B09002-1B2B-4E9D-9DAF-53D25465CF1F}" PersistMode="Standalone">
 			<ChildrenList>
-				<SoundBank Name="player_shoot" ID="{852D44FD-58B9-4B4E-98F0-0A725EDEED84}">
-					<ObjectInclusionList>
-						<ObjectRef Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
 				<SoundBank Name="character_selection" ID="{C1CD90D7-8C02-4410-ABEC-3AE818653A77}">
 					<ObjectInclusionList>
 						<ObjectRef Name="character_selection" ID="{02DA4D1A-F03D-40D2-97F6-AA890A789216}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
@@ -42,13 +35,6 @@
 					<ObjectInclusionList>
 						<ObjectRef Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="player_walking" ID="{6018BF2B-026E-4FE7-BBEE-5788AD0142A5}">
-					<ObjectInclusionList>
-						<ObjectRef Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
@@ -163,6 +149,31 @@
 								</SoundBank>
 							</ChildrenList>
 						</Folder>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Player" ID="{D8F176F3-8410-496B-BFA1-528A68042DA9}" ShortID="914030171">
+					<ChildrenList>
+						<SoundBank Name="player_walking" ID="{6018BF2B-026E-4FE7-BBEE-5788AD0142A5}">
+							<ObjectInclusionList>
+								<ObjectRef Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+							</ObjectInclusionList>
+							<ObjectExclusionList/>
+							<GameSyncExclusionList/>
+						</SoundBank>
+						<SoundBank Name="player_shoot" ID="{852D44FD-58B9-4B4E-98F0-0A725EDEED84}">
+							<ObjectInclusionList>
+								<ObjectRef Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+							</ObjectInclusionList>
+							<ObjectExclusionList/>
+							<GameSyncExclusionList/>
+						</SoundBank>
+						<SoundBank Name="player_hit" ID="{DCE867BE-A068-4BB8-8BEC-3B6EC4FE2388}">
+							<ObjectInclusionList>
+								<ObjectRef Name="player_hit" ID="{1986CFF1-DFAB-4D66-88D3-610E6B6568E4}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+							</ObjectInclusionList>
+							<ObjectExclusionList/>
+							<GameSyncExclusionList/>
+						</SoundBank>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

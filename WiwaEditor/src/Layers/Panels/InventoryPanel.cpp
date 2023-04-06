@@ -521,7 +521,8 @@ void InventoryPanel::DrawAbilityPool(int& id)
 					ImGui::EndDragDropTarget();
 				}
 				ImGui::TableNextColumn();
-				const char* currentItem = types[(int)ability->abilityType];
+				
+				const char* currentItem = types[(int)ability->AbilityType];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
 					for (int i = 0; i < 4; i++)
@@ -530,7 +531,7 @@ void InventoryPanel::DrawAbilityPool(int& id)
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
-							ability->abilityType = (Wiwa::AbilityType)(i);
+							ability->AbilityType = (Wiwa::AbilityType)(i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();

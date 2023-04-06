@@ -43,8 +43,8 @@ namespace Wiwa
 		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
-		if (animator->HasFinished()) //check if animation changed this frame; THIS DOES NOT WORK RN
+		
+		if (animator->HasFinished()) 
 		{
 			PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);
 		}
