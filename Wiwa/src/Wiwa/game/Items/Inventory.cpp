@@ -1,5 +1,6 @@
 #include <wipch.h>
 #include "Inventory.h"
+#include <Wiwa/core/Input.h>
 
 #define MAX_ABILITIES 2
 #define MAX_BUFFS 2
@@ -33,6 +34,24 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			Abilites.AddMember("cooldown", m_Abilities[i]->Cooldown);
 			Abilites.AddMember("current_time", m_Abilities[i]->CurrentTime);
 			Abilites.AddMember("price", m_Abilities[i]->Price);
+			switch (m_Abilities[i]->abilityType)
+			{
+			case AbilityType::YONDUS_SEEDS:
+				Abilites.AddMember("type",1);
+				break;
+			case AbilityType::GROOTS_SEEDS:
+				Abilites.AddMember("type", 2);
+				break;
+			case AbilityType::PHYLAS_QUANTUM_SWORD:
+				Abilites.AddMember("type", 4);
+				break;
+			case AbilityType::STARHAWKS_BLAST:
+				Abilites.AddMember("type", 8);
+				break;
+			default:
+				break;
+			}
+			
 		}
 	}
 	for (size_t i = 0; i < MAX_BUFFS; i++)
@@ -50,6 +69,30 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			Buffs.AddMember("current_time", m_Buffs[i]->CurrentTime);
 			Buffs.AddMember("cooldown_timer", m_Buffs[i]->CoolDownTimer);
 			Buffs.AddMember("price", m_Buffs[i]->Price);
+			switch (m_Buffs[i]->buffType)
+			{
+			case BuffType::MAJOR_VICTORY_SHIELD:
+				Buffs.AddMember("type", 1);
+				break;
+			case BuffType::NIKKIS_TOUCH:
+				Buffs.AddMember("type", 2);
+				break;
+			case BuffType::COSMOS_PAW:
+				Buffs.AddMember("type", 4);
+				break;
+			case BuffType::MARTINEX_THERMOKINESIS:
+				Buffs.AddMember("type", 8);
+				break;
+			case BuffType::BUGS_LEGS:
+				Buffs.AddMember("type", 16);
+				break;
+			case BuffType::CHARLIE27_FIST:
+				Buffs.AddMember("type", 32);
+				break;
+			default:
+				break;
+			}
+			
 		}
 	}
 	
@@ -62,6 +105,24 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			passive_object.AddMember("name", m_PassiveSkill.at(i).Name.c_str());
 			passive_object.AddMember("description", m_PassiveSkill.at(i).Description.c_str());
 			passive_object.AddMember("icon", m_PassiveSkill.at(i).Icon);
+			switch (m_PassiveSkill.at(i).passiveType)
+			{
+			case PassiveType::MOVEMENT:
+				passive_object.AddMember("type", 1);
+				break;
+			case PassiveType::ROF:
+				passive_object.AddMember("type", 2);
+				break;
+			case PassiveType::BUFF:
+				passive_object.AddMember("type", 4);
+				break;
+			case PassiveType::ATTACK:
+				passive_object.AddMember("type", 8);
+				break;
+			default:
+				break;
+			}
+			
 		}
 	}
 	
@@ -92,6 +153,10 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			m_Abilities[i]->Cooldown = ability["cooldown"].as_float();
 			m_Abilities[i]->CurrentTime = ability["current_time"].as_float();
 			m_Abilities[i]->Price = ability["price"].as_int();
+			if (m_Abilities[i]->Name == "Yondu's Fin")
+			{
+				m_Abilities[i]->abilityType = AbilityType::YONDUS_SEEDS;
+			}
 		}
 	}
 	for (size_t i = 0; i < MAX_BUFFS; i++)
@@ -109,6 +174,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			m_Buffs[i]->CurrentTime = buff["current_time"].as_float();
 			m_Buffs[i]->CoolDownTimer = buff["cooldown_timer"].as_float();
 			m_Buffs[i]->Price = buff["price"].as_int();
+			//m_Buffs[i]->buffType = buff["type"];
 		}
 	}
 	for (size_t i = 0; i < m_PassiveSkill.size(); i++)
@@ -120,6 +186,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			m_PassiveSkill.at(i).Name = buff["name"].as_string();
 			m_PassiveSkill.at(i).Description = buff["description"].as_string();
 			m_PassiveSkill.at(i).Icon = buff["icon"];
+			//m_PassiveSkill.at(i).passiveType = buff["type"];
 		}
 	}
 	/*if (doc->HasMember("tokens")) {
@@ -175,7 +242,7 @@ void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
 
 void Wiwa::Inventory::Update()
 {
-    
+   // if(Wiwa::Input::IsButtonReleased()
 }
 
 void Wiwa::Inventory::UseAbility(size_t index)
