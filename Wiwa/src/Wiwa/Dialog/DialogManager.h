@@ -77,22 +77,25 @@ namespace Wiwa
 
 		void UpdateConversation(Conversation conversation, Renderer2D* render);
 
-		Text* InitFont(const char* path,char* word, Conversation conversation);
+		//Text* InitFont(const char* path,char* word, Conversation conversation);
 
 		// Set a node ID as active
-		void SetActiveNode(size_t id, Conversation conversation);
+		//void SetActiveNode(size_t id, Conversation conversation);
 
 		// Return if the dialog has finished
-		bool Finished(Conversation conversation);
+		//bool Finished(Conversation conversation);
 
 		// Set position of dialog
-		void SetPosition(int x, int y, Conversation conversation);
+		//void SetPosition(int x, int y, Conversation conversation);
 
 		// Set the dialog font
-		void SetFont(int font, Conversation conversation);
+		//void SetFont(int font, Conversation conversation);
+		void SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int conversationNode, int textLine);
 
 		// Set the dialog background image
-		void SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation);
+		//void SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation);
+		void SetDialogBubbleImage(const char* path, Conversation conversation);
+		void SetContinueIndicatorImage(const char* path, Conversation conversation);
 
 	public:
 
