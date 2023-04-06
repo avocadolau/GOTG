@@ -429,8 +429,8 @@ namespace Wiwa
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>({&Application::OnWindowClose, this});
-		dispatcher.Dispatch<OnSaveEvent>({&Application::OnSave, this});
-		dispatcher.Dispatch<OnLoadEvent>({&Application::OnLoad, this});
+		dispatcher.Dispatch<OnSaveEvent>({ &Application::OnSave, this});
+		dispatcher.Dispatch<OnLoadEvent>({ &Application::OnLoad, this});
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{

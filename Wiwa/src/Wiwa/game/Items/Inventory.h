@@ -28,6 +28,12 @@ namespace Wiwa
 		void UseBuff(size_t index);
 		void Clear();
 
+		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }
+		WI_HARD_INL Buff**& GetBuffs() { return m_Buffs; }
+
+		WI_HARD_INL std::vector<PassiveSkill>& GetPassives() { return m_PassiveSkill; }
+		WI_HARD_INL int GetTokens() const { return m_Tokens; }
+		
 	private:
 		Ability** m_Abilities;
 		Buff** m_Buffs;

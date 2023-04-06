@@ -20,7 +20,7 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 	JSONValue Abilites = doc->AddMemberArray("abilities");
 	for (size_t i = 0; i < MAX_ABILITIES; i++)
 	{
-		if (m_Abilities[i] != NULL)
+		if (m_Abilities[i])
 		{
 			JSONValue ability = Abilites.PushBackObject();
 			ability.AddMember("name", m_Abilities[i]->Name.c_str());

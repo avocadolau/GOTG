@@ -41,7 +41,73 @@ void InventoryPanel::Draw()
 	ImGui::Separator();
 	if (ImGui::CollapsingHeader("Player inventory"))
 	{
+		Wiwa::Inventory& playerInventory = Wiwa::GameStateManager::GetPlayerInventory();
 
+		ImGui::Text("Tokens %i", playerInventory.GetTokens());
+		
+		Wiwa::Ability**& abilities = playerInventory.GetAbilities();
+		
+		ImGui::Text("Abilities");
+		ImGui::Separator();
+		ImGui::Indent();
+		
+		ImGui::Text("Slot 1");
+		ImGui::Indent();
+		if(abilities[0])
+			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		ImGui::Unindent();
+		ImGui::Separator();
+
+		ImGui::Text("Slot 2");
+		ImGui::Indent();
+		if(abilities[1])
+			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		ImGui::Unindent();
+		ImGui::Unindent();
+		
+		ImGui::Separator();
+		ImGui::Text("Passives");
+		ImGui::Separator();
+		ImGui::Indent();
+		
+		std::vector<Wiwa::PassiveSkill>& passives = playerInventory.GetPassives();
+		for (const auto& passive : passives)
+		{
+			ImGui::Text("Name %s", passive.Name.c_str());
+		}
+		
+		ImGui::Unindent();
+		ImGui::Separator();
+
+		Wiwa::Buff**& buffs = playerInventory.GetBuffs();
+		
+		ImGui::Text("Buffs");
+		ImGui::Separator();
+		ImGui::Indent();
+		
+		ImGui::Text("Slot 1");
+		ImGui::Indent();
+		if(buffs[0])
+			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		ImGui::Unindent();
+		ImGui::Separator();
+		
+		ImGui::Text("Slot 2");
+		ImGui::Indent();
+		if(buffs[1])
+			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		
+		ImGui::Unindent();
+		
+		
 	}
 	ImGui::End();
 }
