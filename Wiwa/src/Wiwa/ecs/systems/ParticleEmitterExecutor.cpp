@@ -33,7 +33,6 @@ namespace Wiwa {
 				m_emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(m_emitter->texturePath);
 			}
 		}
-		
 	}
 
 	void ParticleEmitterExecutor::OnInit()
@@ -121,7 +120,7 @@ namespace Wiwa {
 
 	void ParticleEmitterExecutor::EmitBatch(EntityId eid)
 	{
-		if (!m_Scene)
+		if (m_Scene == nullptr)
 			return;
 		ParticleManager& pman = m_Scene->GetParticleManager();
 		if(&pman)

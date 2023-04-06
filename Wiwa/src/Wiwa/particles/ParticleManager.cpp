@@ -231,7 +231,7 @@ namespace Wiwa {
 
 					if (p.followSpawn)
 					{
-						p.startingPosition = t3D->localPosition;
+						p.startingPosition = t3D->position;
 					}
 
 					glm::vec3 resultantPosition = p.startingPosition + p.transform.localPosition + resultantVertex + p.offset;

@@ -23,6 +23,15 @@ namespace Wiwa
 	
 	void RangedPhalanxChasingState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
+		m_ChasingTimer += Time::GetDeltaTime();
+
+		if (m_ChasingTimer > 100.0f)
+		{
+			m_ChasingTimer = 0.0f;
+			enemy->ChasePlayer();
+
+		}
+
 		// Check if player is in range
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);

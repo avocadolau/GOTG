@@ -135,7 +135,7 @@ bool Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 	auto end_time = std::chrono::high_resolution_clock::now();
 	// Calculate the elapsed time
 	auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-	WI_INFO("Pathfinding time: {}", elapsed_time);
+	//WI_INFO("Pathfinding time: {}", elapsed_time);
 
 	if (check != -1)
 	{
@@ -204,7 +204,21 @@ void Wiwa::AgentAISystem::RotateAgent(const float distance, const AgentAI& agent
 	}
 
 	float targetRotation = angle * 180 / glm::pi<float>();
-	float interpolatedRotation = glm::mix(transform->localRotation.y, targetRotation, tRot);
+
+	// Calculate the difference between the current rotation and target rotation
+	float rotationDifference = targetRotation - transform->localRotation.y;
+
+	// Adjust the rotation difference to be within the range of -180 to 180 degrees
+	while (rotationDifference > 180.0f) {
+		rotationDifference -= 360.0f;
+	}
+	while (rotationDifference < -180.0f) {
+		rotationDifference += 360.0f;
+	}
+
+	// Calculate the new interpolated rotation
+	float interpolatedRotation = transform->localRotation.y + rotationDifference * tRot;
 
 	transform->localRotation.y = interpolatedRotation;
 }
+

@@ -308,5 +308,10 @@ namespace Wiwa {
 				delta -= 360;
 			return a + delta * std::clamp(t, 0.0f, 1.0f);
 		}
+
+		inline glm::vec3 GetWorldPosition(glm::mat4& mat)
+		{
+			return glm::vec3(mat[3]);
+		}
 	}
 }

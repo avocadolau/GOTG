@@ -11,6 +11,8 @@ namespace Wiwa
         CharacterInventory() = default;
         virtual ~CharacterInventory() = default;
 
+        void OnUpdate() override;
+
         void OnCollisionEnter(Object* body1, Object* body2) override;
     };
 }

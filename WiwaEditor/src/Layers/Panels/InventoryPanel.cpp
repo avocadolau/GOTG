@@ -41,7 +41,71 @@ void InventoryPanel::Draw()
 	ImGui::Separator();
 	if (ImGui::CollapsingHeader("Player inventory"))
 	{
+		Wiwa::Inventory& playerInventory = Wiwa::GameStateManager::GetPlayerInventory();
 
+		ImGui::Text("Tokens %i", playerInventory.GetTokens());
+		
+		Wiwa::Ability**& abilities = playerInventory.GetAbilities();
+		
+		ImGui::Text("Abilities");
+		ImGui::Separator();
+		ImGui::Indent();
+		
+		ImGui::Text("Slot 1");
+		ImGui::Indent();
+		if(abilities[0])
+			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		ImGui::Unindent();
+		ImGui::Separator();
+
+		ImGui::Text("Slot 2");
+		ImGui::Indent();
+		if(abilities[1])
+			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		ImGui::Unindent();
+		ImGui::Unindent();
+		
+		ImGui::Separator();
+		ImGui::Text("Passives");
+		ImGui::Separator();
+		ImGui::Indent();
+		
+		std::vector<Wiwa::PassiveSkill>& passives = playerInventory.GetPassives();
+		for (const auto& passive : passives)
+		{
+			ImGui::Text("Name %s", passive.Name.c_str());
+		}
+		
+		ImGui::Unindent();
+		ImGui::Separator();
+
+		Wiwa::Buff**& buffs = playerInventory.GetBuffs();
+		
+		ImGui::Text("Buffs");
+		ImGui::Separator();
+		ImGui::Indent();
+		
+		ImGui::Text("Slot 1");
+		ImGui::Indent();
+		if(buffs[0])
+			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		ImGui::Unindent();
+		ImGui::Separator();
+		
+		ImGui::Text("Slot 2");
+		ImGui::Indent();
+		if(buffs[1])
+			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		else
+			ImGui::Text("Empty slot");
+		
+		ImGui::Unindent();
 	}
 	ImGui::End();
 }
@@ -54,12 +118,13 @@ void InventoryPanel::DrawConsumablePool(int& id)
 	}
 	if (ImGui::BeginPopup("Create consumable"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
+		static std::string name;
+		ImGui::InputText("Name", &name);
 		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddConsumable({ nameBuffer });
+			Wiwa::ItemManager::AddConsumable({ name.c_str() });
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -119,10 +184,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				}
 
 				ImGui::TableNextColumn();
-				static const char* currentItem = types[0];
-
-				static Wiwa::ConsumableType type;
-
+				const char* currentItem = types[(int)consumable->Type];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
 					for (int i = 0; i < 2; i++)
@@ -131,8 +193,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
-							type = (Wiwa::ConsumableType)(i);
-							consumable->Type = type;
+							consumable->Type = (Wiwa::ConsumableType)(i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();
@@ -162,23 +223,30 @@ void InventoryPanel::DrawBuffPool(int& id)
 	}
 	if (ImGui::BeginPopup("Create buff"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
-
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddBuff({ nameBuffer });
-			ImGui::CloseCurrentPopup();
-		}
-		if (ImGui::Button("Close"))
-		{
+			Wiwa::ItemManager::AddBuff({ name.c_str() });
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
 	}
 	if (!buffs.empty())
 	{
-		if (ImGui::BeginTable("buffs", 7, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* types[] =
+		{
+			"Major Victory Shield",
+			"Nikki's Touch",
+			"Cosmo's Paw",
+			"Martinex Thermokinesis",
+			"Bugs legs",
+			"Charlie 27 fist"
+		};
+
+		if (ImGui::BeginTable("buffs", 8, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
@@ -187,6 +255,7 @@ void InventoryPanel::DrawBuffPool(int& id)
 			ImGui::TableSetupColumn("Duration");
 			ImGui::TableSetupColumn("Cooldown");
 			ImGui::TableSetupColumn("Price");
+			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
 			for (auto& it : buffs)
@@ -227,7 +296,6 @@ void InventoryPanel::DrawBuffPool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
-
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##buffpercent", &buff->BuffPercent);
 
@@ -240,7 +308,24 @@ void InventoryPanel::DrawBuffPool(int& id)
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##price", &buff->Price);
 
+				ImGui::TableNextColumn();
+				const char* currentBuff = types[(int)buff->buffType];
+				if (ImGui::BeginCombo("##type", currentBuff))
+				{
+					for (int i = 0; i < 6; i++)
+					{
+						bool isSelected = (currentBuff == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentBuff = types[i];
+							buff->buffType = (Wiwa::BuffType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
 
+					ImGui::EndCombo();
+				}
 
 				ImGui::PopID();
 			}
@@ -259,28 +344,33 @@ void InventoryPanel::DrawPassivePool(int& id)
 	}
 	if (ImGui::BeginPopup("Create passive"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
-
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddPassive({ nameBuffer });
+			Wiwa::ItemManager::AddPassive({ name.c_str()});
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
-		if (ImGui::Button("Close"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
+
 		ImGui::EndPopup();
 	}
 	if (!passives.empty())
 	{
-		if (ImGui::BeginTable("passives", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* types[] =
+		{
+			"Movement",
+			"Rate of Fire",
+			"Buff",
+			"Attack",
+		};
+		if (ImGui::BeginTable("passives", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
 			ImGui::TableSetupColumn("Icon");
-		
+			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
 			for (auto& it : passives)
@@ -322,6 +412,26 @@ void InventoryPanel::DrawPassivePool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
+
+				ImGui::TableNextColumn();
+				const char* currentItem = types[(int)passive->passiveType];
+				if (ImGui::BeginCombo("##type", currentItem))
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						bool isSelected = (currentItem == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentItem = types[i];
+							passive->passiveType = (Wiwa::PassiveType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
@@ -339,27 +449,32 @@ void InventoryPanel::DrawAbilityPool(int& id)
 	}
 	if (ImGui::BeginPopup("Create ability"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
-
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddAbility({ nameBuffer });
-			ImGui::CloseCurrentPopup();
-		}
-		if (ImGui::Button("Close"))
-		{
+			Wiwa::ItemManager::AddAbility({ name.c_str() });
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
 	}
 	if (!abilities.empty())
 	{
-		if (ImGui::BeginTable("actives", 8, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* types[] =
+		{
+			"Yondu's Fin",
+			"Groot's seeds",
+			"Phylas Quantum Sword",
+			"StarHawks blast",
+		};
+		if (ImGui::BeginTable("actives", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
 			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Type");
 			ImGui::TableSetupColumn("Damage");
 			ImGui::TableSetupColumn("Range");
 			ImGui::TableSetupColumn("Area");
@@ -405,7 +520,24 @@ void InventoryPanel::DrawAbilityPool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
+				ImGui::TableNextColumn();
+				const char* currentItem = types[(int)ability->abilityType];
+				if (ImGui::BeginCombo("##type", currentItem))
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						bool isSelected = (currentItem == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentItem = types[i];
+							ability->abilityType = (Wiwa::AbilityType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
 
+					ImGui::EndCombo();
+				}
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##damage", &ability->Damage);
 

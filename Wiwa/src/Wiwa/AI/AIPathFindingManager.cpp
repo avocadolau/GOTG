@@ -285,7 +285,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 
 			//std::reverse(m_LastPath.begin(), m_LastPath.end());
 			ret = m_LastPath.size();
-			WI_INFO("Path size: {}", ret);
+			//WI_INFO("Path size: {}", ret);
 
 			break;
 		}
@@ -327,13 +327,13 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		auto end_time_neighbour = std::chrono::high_resolution_clock::now();
 		// Calculate the elapsed time
 		auto elapsed_time_neighbour = std::chrono::duration_cast<std::chrono::microseconds>(start_time_neighbour - end_time_neighbour).count();
-		WI_INFO("Neighbour time: {}", elapsed_time_neighbour);
+		//WI_INFO("Neighbour time: {}", elapsed_time_neighbour);
 		++iterations;
 	}
 	auto end_time_it = std::chrono::high_resolution_clock::now();
 	// Calculate the elapsed time
 	auto elapsed_time_it = std::chrono::duration_cast<std::chrono::milliseconds>(start_time_it - end_time_it).count();
-	WI_INFO("Iteration: {} Iteration time: {}", iterations, elapsed_time_it);
+	//WI_INFO("Iteration: {} Iteration time: {}", iterations, elapsed_time_it);
 	return ret;
 }
 

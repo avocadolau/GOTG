@@ -131,7 +131,8 @@ namespace Wiwa {
 
 		static void SerializeData();
 		static void DeserializeData();
-		
+
+		WI_HARD_INL static Inventory& GetPlayerInventory() { return *s_PlayerInventory; }
 
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];

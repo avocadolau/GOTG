@@ -18,16 +18,22 @@ namespace Wiwa
 		void Deserialize(JSONDocument* doc);
 
 		void InitGame();
-		void AddAbility(Ability* ability);
-		void AddBuff(Buff* buff);
+		void AddAbility(const Ability* ability) const;
+		void AddBuff(const Buff* buff) const;
 		void AddPassive(const PassiveSkill& skill);
 		void AddConsumable(const Consumable& consumable);
 		void Update();
 		
-		void UseAbility(size_t index);
-		void UseBuff(size_t index);
+		void UseAbility(size_t index) const;
+		void UseBuff(size_t index) const ;
 		void Clear();
 
+		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }
+		WI_HARD_INL Buff**& GetBuffs() { return m_Buffs; }
+
+		WI_HARD_INL std::vector<PassiveSkill>& GetPassives() { return m_PassiveSkill; }
+		WI_HARD_INL int GetTokens() const { return m_Tokens; }
+		
 	private:
 		Ability** m_Abilities;
 		Buff** m_Buffs;

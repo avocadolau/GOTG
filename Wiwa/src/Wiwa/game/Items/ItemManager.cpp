@@ -62,6 +62,7 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		activeObj.AddMember("area", active.second.Area);
 		activeObj.AddMember("cooldown", active.second.Cooldown);
 		activeObj.AddMember("price", active.second.Price);
+		activeObj.AddMember("type", (int)active.second.abilityType);
 	}
 
 	JSONValue passives = doc->AddMemberArray("passives");
@@ -71,6 +72,7 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		passiveObj.AddMember("name", passive.second.Name.c_str());
 		passiveObj.AddMember("description", passive.second.Description.c_str());
 		passiveObj.AddMember("path", Resources::getResourcePathById<Image>(passive.second.Icon));
+		passiveObj.AddMember("type", (int)passive.second.passiveType);
 	}
 
 	JSONValue buffs = doc->AddMemberArray("buffs");
@@ -84,6 +86,7 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		buffObj.AddMember("duration", buff.second.Duration);
 		buffObj.AddMember("cooldown", buff.second.Cooldown);
 		buffObj.AddMember("price", buff.second.Price);
+		buffObj.AddMember("type", (int)buff.second.buffType);
 	}
 
 	JSONValue consumables = doc->AddMemberArray("consumables");
@@ -117,7 +120,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Area = actives[i]["area"].as_float();
 				ability.Cooldown = actives[i]["cooldown"].as_float();
 				ability.Price = actives[i]["price"].as_int();
-
+				ability.abilityType = (AbilityType)actives[i]["type"].as_int();
 				AddAbility(ability);
 			}
 		}
@@ -133,7 +136,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Name = passives[i]["name"].as_string();
 				ability.Description = passives[i]["description"].as_string();
 				ability.Icon = Resources::Load<Image>(passives[i]["path"].as_string());
-
+				ability.passiveType = (PassiveType)passives[i]["type"].as_int();
 				AddPassive(ability);
 			}
 		}
@@ -143,7 +146,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue actives = document["buffs"];
 		if (actives.IsArray())
 		{
-			for (size_t i = 0; i < actives.Size(); i++)
+			for (uint32_t i = 0; i < actives.Size(); i++)
 			{
 				Wiwa::Buff ability;
 				ability.Name = actives[i]["name"].as_string();
@@ -152,6 +155,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.BuffPercent = actives[i]["buff_percent"].as_int();
 				ability.Cooldown = actives[i]["cooldown"].as_float();
 				ability.Price = actives[i]["price"].as_int();
+				ability.buffType = (BuffType)actives[i]["type"].as_int();
 				AddBuff(ability);
 			}
 		}
