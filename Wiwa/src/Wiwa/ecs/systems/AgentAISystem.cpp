@@ -83,39 +83,12 @@ void Wiwa::AgentAISystem::OnUpdate()
 		if (m_IsRotatingByTile)
 			LookAtPosition(m_DirectionPoint);
 	}
-	
-	
+
+	distance = glm::distance(position, m_RotDirectionPoint);
 	RotateAgent(distance, *agent, position, transform);
-	
 
-	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-
-	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-	camera->frameBuffer->Bind(false);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(glm::value_ptr(camera->getView()));
-	
-	Wiwa::AIMapGeneration::MapData& data = Wiwa::AIMapGeneration::GetMapData();
-
-	for (int i = 0; i < lastPath.size(); i++)
-	{
-		glm::vec2 vec = lastPath.at(i);
-		glColor3f(0, 1, 0);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_3D); // Set the polygon mode to wireframe
-		glBegin(GL_QUADS); // Begin drawing the quad
-		glVertex3f(vec.x, 0.5f, vec.y + data.tileHeight); // Bottom-left vertex
-		glVertex3f(vec.x + data.tileWidth, 0.5f, vec.y + data.tileHeight); // Bottom-right vertex
-		glVertex3f(vec.x + data.tileWidth, 0.5f, vec.y); // Top-right vertex
-		glVertex3f(vec.x, 0.5f, vec.y); // Top-left vertex
-		
-		glEnd();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
-	}
-	
-	camera->frameBuffer->Unbind();
+	if (Wiwa::AIMapGeneration::m_DebugDraw)
+		DrawPath();
 }
 
 void Wiwa::AgentAISystem::OnDestroy()
@@ -220,5 +193,37 @@ void Wiwa::AgentAISystem::RotateAgent(const float distance, const AgentAI& agent
 	float interpolatedRotation = transform->localRotation.y + rotationDifference * tRot;
 
 	transform->localRotation.y = interpolatedRotation;
+}
+
+void Wiwa::AgentAISystem::DrawPath()
+{
+	Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+
+	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+	camera->frameBuffer->Bind(false);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(glm::value_ptr(camera->getProjection()));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(glm::value_ptr(camera->getView()));
+
+	Wiwa::AIMapGeneration::MapData& data = Wiwa::AIMapGeneration::GetMapData();
+
+	for (int i = 0; i < lastPath.size(); i++)
+	{
+		glm::vec2 vec = lastPath.at(i);
+		glColor3f(0, 1, 0);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_3D); // Set the polygon mode to wireframe
+		glBegin(GL_QUADS); // Begin drawing the quad
+		glVertex3f(vec.x, 0.5f, vec.y + data.tileHeight); // Bottom-left vertex
+		glVertex3f(vec.x + data.tileWidth, 0.5f, vec.y + data.tileHeight); // Bottom-right vertex
+		glVertex3f(vec.x + data.tileWidth, 0.5f, vec.y); // Top-right vertex
+		glVertex3f(vec.x, 0.5f, vec.y); // Top-left vertex
+
+		glEnd();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode back to fill
+	}
+
+	camera->frameBuffer->Unbind();
 }
 

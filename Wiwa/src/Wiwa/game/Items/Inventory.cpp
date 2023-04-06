@@ -2,6 +2,9 @@
 #include "Inventory.h"
 #include <Wiwa/core/Input.h>
 
+#include "Wiwa/core/KeyCodes.h"
+#include "Wiwa/utilities/time/Time.h"
+
 #define MAX_ABILITIES 2
 #define MAX_BUFFS 2
 
@@ -10,19 +13,16 @@ Wiwa::Inventory::Inventory()
     InitGame();
 }
 
-Wiwa::Inventory::~Inventory()
-{
-
-}
+Wiwa::Inventory::~Inventory() = default;
 
 void Wiwa::Inventory::Serialize(JSONDocument* doc)
 {
-	JSONValue Abilites = doc->AddMemberArray("abilities");
+	JSONValue abilities = doc->AddMemberArray("abilities");
 	for (size_t i = 0; i < MAX_ABILITIES; i++)
 	{
 		if (m_Abilities[i])
 		{
-			JSONValue ability = Abilites.PushBackObject();
+			JSONValue ability = abilities.PushBackObject();
 			ability.AddMember("name", m_Abilities[i]->Name.c_str());
 			ability.AddMember("description", m_Abilities[i]->Description.c_str());
 			ability.AddMember("icon", m_Abilities[i]->Icon);
@@ -32,7 +32,7 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			ability.AddMember("cooldown", m_Abilities[i]->Cooldown);
 			ability.AddMember("current_time", m_Abilities[i]->CurrentTime);
 			ability.AddMember("price", m_Abilities[i]->Price);
-			ability.AddMember("type", (int)m_Abilities[i]->abilityType);
+			ability.AddMember("type", (int)m_Abilities[i]->AbilityType);
 			
 		}
 	}
@@ -69,72 +69,67 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 		}
 	}
 	
-	/*JSONValue Tokens = doc->AddMemberObject("tokens");
-	Tokens.AddMember("tokens", m_Tokens);*/
+	JSONValue tokens = doc->AddMemberObject("tokens");
+	tokens.AddMember("tokens", m_Tokens);
 	
 	doc->save_file("config/player_data.json");
 }
 
 void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 {
-	for (size_t i = 0; i < MAX_ABILITIES; i++)
-	{
-		
-		if (doc->HasMember("abilities")) {
 
-			JSONValue abilities = (*doc)["abilities"];
-			if (abilities.IsArray())
+	if (doc->HasMember("abilities")) {
+
+		JSONValue abilities = (*doc)["abilities"];
+		if (abilities.IsArray())
+		{
+			for (uint32_t i = 0; i < abilities.Size(); i++)
 			{
-				for (size_t i = 0; i < abilities.Size(); i++)
-				{
-					Wiwa::Ability ability;
-					ability.Name = abilities[i]["name"].as_string();
-					ability.Description = abilities[i]["description"].as_string();
-					ability.Icon = abilities[i]["icon"];
-					ability.Damage = abilities[i]["damage"].as_int();
-					ability.Range = abilities[i]["range"].as_float();
-					ability.Area = abilities[i]["area"].as_float();
-					ability.Cooldown = abilities[i]["cooldown"].as_float();
-					ability.CurrentTime = abilities[i]["current_time"].as_float();
-					ability.Price = abilities[i]["price"].as_float();
-					ability.abilityType = (AbilityType)abilities[i]["type"].as_int();
-					AddAbility(&ability);
-				}
+				Wiwa::Ability ability;
+				ability.Name = abilities[i]["name"].as_string();
+				ability.Description = abilities[i]["description"].as_string();
+				ability.Icon = abilities[i]["icon"];
+				ability.Damage = abilities[i]["damage"].as_int();
+				ability.Range = abilities[i]["range"].as_float();
+				ability.Area = abilities[i]["area"].as_float();
+				ability.Cooldown = abilities[i]["cooldown"].as_float();
+				ability.CurrentTime = abilities[i]["current_time"].as_float();
+				ability.Price = abilities[i]["price"].as_int();
+				ability.AbilityType = (AbilityType)abilities[i]["type"].as_int();
+				AddAbility(&ability);
 			}
 		}
 	}
-	for (size_t i = 0; i < MAX_BUFFS; i++)
-	{
-		if (doc->HasMember("buffs")) {
 
-			JSONValue buffs = (*doc)["buffs"];
-			if (buffs.IsArray())
+	if (doc->HasMember("buffs"))
+	{
+		JSONValue buffs = (*doc)["buffs"];
+		if (buffs.IsArray())
+		{
+			for (uint32_t i = 0; i < buffs.Size(); i++)
 			{
-				for (size_t i = 0; i < buffs.Size(); i++)
-				{
-					Wiwa::Buff buff;
-					buff.Name = buffs[i]["name"].as_string();
-					buff.Description = buffs[i]["description"].as_string();
-					buff.Icon = buffs[i]["icon"];
-					buff.BuffPercent = buffs[i]["buff_percent"].as_int();
-					buff.Duration = buffs[i]["duration"].as_float();
-					buff.Cooldown = buffs[i]["cooldown"].as_float();
-					buff.CurrentTime = buffs[i]["current_time"].as_float();
-					buff.CoolDownTimer = buffs[i]["cooldown_timer"].as_float();
-					buff.Price = buffs[i]["price"].as_float();
-					buff.buffType = (BuffType)buffs[i]["type"].as_int();
-					AddBuff(&buff);
-				}
+				Wiwa::Buff buff;
+				buff.Name = buffs[i]["name"].as_string();
+				buff.Description = buffs[i]["description"].as_string();
+				buff.Icon = buffs[i]["icon"];
+				buff.BuffPercent = buffs[i]["buff_percent"].as_int();
+				buff.Duration = buffs[i]["duration"].as_float();
+				buff.Cooldown = buffs[i]["cooldown"].as_float();
+				buff.CurrentTime = buffs[i]["current_time"].as_float();
+				buff.CoolDownTimer = buffs[i]["cooldown_timer"].as_float();
+				buff.Price = buffs[i]["price"].as_int();
+				buff.buffType = (BuffType)buffs[i]["type"].as_int();
+				AddBuff(&buff);
 			}
 		}
 	}
+
 	
 	if (doc->HasMember("passives"))
 	{
-		JSONValue passives = (*doc)["passives"];
-		if (passives.IsArray())
+		if (JSONValue passives = (*doc)["passives"]; passives.IsArray())
 		{
-			for (size_t i = 0; i < passives.Size(); i++)
+			for (uint32_t i = 0; i < passives.Size(); i++)
 			{
 				Wiwa::PassiveSkill passive;
 				passive.Name = passives[i]["name"].as_string();
@@ -145,12 +140,12 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			}
 		}
 	}
-	/*if (doc->HasMember("tokens")) {
+	if (doc->HasMember("tokens")) {
 
 		JSONValue tokens = (*doc)["tokens"];
 		m_Tokens = tokens.as_int();
 
-	}*/
+	}
 }
 
 void Wiwa::Inventory::InitGame()
@@ -160,26 +155,26 @@ void Wiwa::Inventory::InitGame()
 	m_Tokens = 0;
 }
 
-void Wiwa::Inventory::AddAbility(Ability* ability)
+void Wiwa::Inventory::AddAbility(const Ability* ability) const
 {
     for (size_t i = 0; i < MAX_ABILITIES; i++)
     {
 		if (m_Abilities[i] != ability)
 		{
-			m_Abilities[i] = ability;
+			m_Abilities[i] = new Ability(*ability);
 			break;
 		}
     }
     
 }
 
-void Wiwa::Inventory::AddBuff(Buff* buff)
+void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
     for (size_t i = 0; i < MAX_BUFFS; i++)
     {
         if (m_Buffs[i] != buff)
         {
-            m_Buffs[i] = buff;
+            m_Buffs[i] = new Buff(*buff);
             break;
         }
     }
@@ -198,14 +193,39 @@ void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
 
 void Wiwa::Inventory::Update()
 {
-	
+	if(Time::IsPlaying())
+	{
+		// Input
+		float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
+		float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
+
+		// Ability 1
+		if(m_Abilities[0])
+		{
+			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
+			{
+				WI_CORE_INFO("Ability 1 activated");
+				UseAbility(0);
+			}
+		}
+		if(m_Abilities[1])
+		{
+			if(Input::IsKeyPressed(Key::E) || rightTrigger >= -0.9f)
+			{
+				WI_CORE_INFO("Ability 2 activated");
+				UseAbility(1);
+			}
+		}
+
+		
+	}
 }
 
-void Wiwa::Inventory::UseAbility(size_t index)
+void Wiwa::Inventory::UseAbility(size_t index) const
 {
 	m_Abilities[index]->Use();
 }
-void Wiwa::Inventory::UseBuff(size_t index)
+void Wiwa::Inventory::UseBuff(size_t index) const
 {
 	m_Buffs[index]->Use();
 }

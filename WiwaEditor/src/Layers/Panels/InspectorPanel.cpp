@@ -750,17 +750,18 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 	ImGui::Text("Animated");
 
 	// number of animations
+	// number of animations
 	if (emitter->isAnimated)
 	{
 		ParticleTab();
 
-		ImGui::Text("Number of Animations");
+		ImGui::Text("Animation Speed");
 
 		ImGui::Dummy(ImVec2(38, 0));
 		ImGui::SameLine();
 		ImGui::PushItemWidth(100.0f);
 
-		ImGui::DragInt("##particle_aniamtions_number", &emitter->number_animations, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##particle_aniamtions_speed", &emitter->particle_animation_speed, 0.05f, 0.0f, 0.0f, "%.2f");
 
 		ImGui::PopItemWidth();
 	}
@@ -1183,7 +1184,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			uint32_t image_id = 0;
 			Wiwa::Image* texture = nullptr;
 			Wiwa::ResourceId textureResource = -4;
-			
+
 			bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(emitter->texturePath);
 
 			if (importedCorrectly)
@@ -1200,10 +1201,10 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 			if (ImGui::BeginDragDropTarget())
 			{
-				if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 				{
 
-					const wchar_t *path = (const wchar_t *)payload->Data;
+					const wchar_t* path = (const wchar_t*)payload->Data;
 					std::wstring ws(path);
 					std::string pathS(ws.begin(), ws.end());
 					std::filesystem::path p = pathS.c_str();
@@ -1213,31 +1214,15 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 						emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
 
-						//clear path
-						for (size_t i = 0; i < 128; i++)
+						if (emitter->textureId != WI_INVALID_INDEX)
 						{
-							emitter->texturePath[i] = (char)"";
-						}
-
-						//check for name length
-						if (pathS.length() < 128)
-						{
-							if (emitter->textureId != WI_INVALID_INDEX)
-							{
-								
-								std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
-							}
-							else
-							{
-								WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
-								std::strncpy(emitter->texturePath, "", 1);
-
-							}
+							std::strncpy(emitter->texturePath, pathS.c_str(), pathS.length());
 						}
 						else
 						{
-							WI_CORE_INFO("Texture name too long! Max: [128] characters.");
+							WI_CORE_INFO("Error loading Image: [WI_INVALID_INDEX]");
 							std::strncpy(emitter->texturePath, "", 1);
+
 						}
 					}
 				}
@@ -1249,6 +1234,30 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 				ImGui::Text("[Drop a suitable texture here]");
 			else
 				ImGui::Text("[Drop a suitable texture to change the current texture]");
+		}
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Colour"))
+	{
+		// particle colour
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_colour_isRanged", &emitter->particle_colour_range);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();
+
+			ImGui::Text("Particle Colour");
+			if (emitter->particle_colour_range)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::ColorPicker4("Color##4", emitter->colorParticles, ImGuiColorEditFlags_None);
+			}
 		}
 
 		ImGui::TreePop();

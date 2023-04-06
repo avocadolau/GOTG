@@ -24,6 +24,7 @@ namespace Wiwa
 		m_PlayerTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_PlayerStatsIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_PlayerId = -1;
+		m_WasSpawnedBySpawner = false;
 	}
 
 	EnemySystem::~EnemySystem()
@@ -83,10 +84,10 @@ namespace Wiwa
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 
 		statsSelf->Health = statsSelf->Health - damage;
-		if (statsSelf->Health <= 0)
+		/*if (statsSelf->Health <= 0)
 		{
 			self->hasFinished = true;
-		}
+		}*/
 	}
 
 	void EnemySystem::ChasePlayer()

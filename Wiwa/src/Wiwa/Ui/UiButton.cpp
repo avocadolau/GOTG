@@ -8,7 +8,7 @@
 
 namespace Wiwa
 {
-	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active) : GuiControl(scene, GuiControlType::BUTTON, id)
+	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active,bool animated, float animFrames, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
@@ -94,10 +94,8 @@ namespace Wiwa
 					if (callback)
 						callback->Execute();
 				}
-				//DETECT CONTROLLER CLICKS
 			}
 		}
-
 		return false;
 	}
 
@@ -163,7 +161,7 @@ namespace Wiwa
 		default:
 			break;
 		}
-
+		HandleAnim(render);
 		return false;
 	}
 }

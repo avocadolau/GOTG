@@ -414,7 +414,7 @@ namespace Game
         {
             Console.WriteLine("fired");
 
-            string bulletName = "Bullet" + bulletCount;
+            string bulletName = "Bullet";
             bulletCount++;
 
             EntityId bullet = CreateEntityNamed(bulletName);

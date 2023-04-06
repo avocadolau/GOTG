@@ -50,6 +50,8 @@ namespace Wiwa {
 		void LookAtPosition(glm::vec2 direction_point);
 
 		void RotateAgent(const float distance, const AgentAI& agent, const glm::vec2& position, Transform3D* transform);
+
+		void DrawPath();
 		
 		inline const int GetPathSize() { return lastPath.size(); };
 	};

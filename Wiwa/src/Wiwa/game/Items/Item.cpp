@@ -5,18 +5,27 @@ namespace Wiwa
 {
     void Ability::Use()
     {
-        switch (abilityType)
+        switch (AbilityType)
         {
-        case Wiwa::AbilityType::YONDUS_SEEDS:
-            WI_INFO("USING YONDU'S FIN");
+        case AbilityType::YONDUS_SEEDS:
+            {
+                
+            }
             break;
-        case Wiwa::AbilityType::GROOTS_SEEDS:
+        case AbilityType::GROOTS_SEEDS:
+            {
+                
+            }
             break;
-        case Wiwa::AbilityType::PHYLAS_QUANTUM_SWORD:
+        case AbilityType::PHYLAS_QUANTUM_SWORD:
+            {
+                
+            }
             break;
-        case Wiwa::AbilityType::STARHAWKS_BLAST:
-            break;
-        default:
+        case AbilityType::STARHAWKS_BLAST:
+            {
+                
+            }
             break;
         }
     }

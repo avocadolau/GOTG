@@ -21,6 +21,7 @@ namespace Wiwa
 		INPUTBOX,
 		IMAGE,
 		BAR,
+		ABILITY,
 	};
 
 	enum class GuiControlState
@@ -180,13 +181,10 @@ namespace Wiwa
 			return true;
 		}
 
-		void SwapText(const char* word, Wiwa::Renderer2D& r2d)
+		void SwapText(const char* word, Wiwa::Renderer2D& r2d,Text* newText)
 		{
-			/*text = word;
-			Text* newText = new Text();
-			newText = Text::InitFont("assets/Fonts/arial.ttf", (char*)word);
-			
-			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());*/
+			text = word;
+			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());
 		}
 
 		void SetValueForUIbar(float value)
@@ -194,6 +192,37 @@ namespace Wiwa
 			if (type == GuiControlType::BAR)
 			{
 				extraPosition.width = (int)((value * (float)position.width) / 100);
+			}
+		}
+
+		//Used for abilites,buffs,etc 
+		void SetNextFrame(int value, Wiwa::Renderer2D* r2d)
+		{
+			if (animatedControl && type == GuiControlType::ABILITY)
+			{
+				r2d->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(value));
+			}
+		}
+
+		void HandleAnim(Wiwa::Renderer2D* r2d)
+		{
+			if (animatedControl)
+			{
+				timeForAnim += 1.0f;
+				if (timeForAnim >= animSpeed)
+				{
+					if (framesAnimation < positionsForAnimations.size() - 1)
+					{
+						framesAnimation++;
+					}
+					else
+					{
+						framesAnimation = 0;
+					}
+					timeForAnim = 0.0f;
+					r2d->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(framesAnimation));
+
+				}
 			}
 		}
 		
@@ -229,9 +258,11 @@ namespace Wiwa
 		Callback* callback;
 
 		//THINGS FOR ANIMATIONS
-		List<Rect2i> positionsForAnimations;
-		bool animated; 
+		std::vector<Rect2i> positionsForAnimations;
+		bool animatedControl = false; 
 		size_t framesAnimation;
 		float animSpeed;
+		float timeForAnim = 0;
+
 	};
 }

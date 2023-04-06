@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	871813740	player_hit			\Default Work Unit\player\player_hit	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	759064555	sound_low_health	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\sound_low_health_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\In-game\sound_low_health		2909092
+

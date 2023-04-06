@@ -29,6 +29,8 @@ namespace Wiwa
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
+			if (!enemy->m_WasSpawnedBySpawner)
+				em.DestroyEntity(enemy->GetEntity());
 		}
 	}
 

@@ -50,12 +50,25 @@ namespace Wiwa
 		float CurrentTime;
 		int Price;
 
-		AbilityType abilityType;
+		AbilityType AbilityType;
 
 		Ability() = default;
+		Ability(const Ability& ability)
+		{
+			this->Name = ability.Name;
+			this->Description = ability.Description;
+			this->Icon = ability.Icon;
+			this->Damage = ability.Damage;
+			this->Range = ability.Range;
+			this->Cooldown = ability.Cooldown;
+			this->CurrentTime = ability.CurrentTime;
+			this->Price = ability.Price;
+			
+		}
+		
 		Ability(const char* name)
 			: Name(name),
-			  abilityType(AbilityType::YONDUS_SEEDS),
+			  AbilityType(AbilityType::YONDUS_SEEDS),
 			  Icon(0),
 			  Damage(0),
 			  Range(0.f),
@@ -112,6 +125,18 @@ namespace Wiwa
 		int Price;
 
 		Buff() = default;
+		Buff(const Buff& buff)
+		{
+			this->Name = buff.Name;
+			this->Icon = buff.Icon;
+			this->buffType = buff.buffType;
+			this->BuffPercent = buff.BuffPercent;
+			this->Duration = buff.Duration;
+			this->Cooldown = buff.Cooldown;
+			this->Price = buff.Price;
+			this->CurrentTime = buff.CurrentTime;
+			this->CoolDownTimer = buff.CoolDownTimer;
+		}
 		Buff(const char* name)
 			: Name(name),
 			  Icon(0),
@@ -135,6 +160,13 @@ namespace Wiwa
 		int BuffPercent;
 
 		Consumable() = default;
+		Consumable(const Consumable& consumable)
+		{
+			this->Name = consumable.Name;
+			this->Icon = consumable.Icon;
+			this->Type = consumable.Type;
+			this->BuffPercent = consumable.BuffPercent;
+		}
 		Consumable(const char* name)
 			: Name(name),
 			  Icon(0),

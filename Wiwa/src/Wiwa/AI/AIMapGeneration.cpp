@@ -30,6 +30,7 @@ float Wiwa::AIMapGeneration::minX = 0;
 float Wiwa::AIMapGeneration::minY = 0;
 float Wiwa::AIMapGeneration::maxX = 0;
 float Wiwa::AIMapGeneration::maxY = 0;
+bool Wiwa::AIMapGeneration::m_DebugDraw = false;
 
 bool Wiwa::AIMapGeneration::CreateWalkabilityMap(int width, int height, float tileWidth, float tileHeight, glm::vec2 startPos)
 {
@@ -364,6 +365,9 @@ void Wiwa::AIMapGeneration::SetPositionUnWalkable(glm::ivec2 vec)
 
 bool Wiwa::AIMapGeneration::DebugDrawMap()
 {
+	if (!m_DebugDraw)
+		return false;
+
 	if (m_Map.empty())
 		return false;
 

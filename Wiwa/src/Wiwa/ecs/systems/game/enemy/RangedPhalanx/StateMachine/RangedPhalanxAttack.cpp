@@ -20,8 +20,14 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		animator->PlayAnimation("shot", false);
 		// Fire shot
+		if (m_TimerAttackCooldown == 0.0f)
+		{
+			Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
+			animator->PlayAnimation("shot", false);
+		}
 	}
 	
 	void RangedPhalanxAttackState::UpdateState(EnemyRangedPhalanx* enemy)
@@ -33,8 +39,12 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
+		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
+		int distPath = aiSystem->GetPathSize();
+		WI_INFO("Dist2Player: {}", dist2Player);
+		WI_INFO("DistPath: {}", distPath);
 		// Change rotation logic from ai agent to enemy local script one
-		if (aiSystem->GetPathSize() <= 4 && glm::distance(selfTr->localPosition, playerTr->localPosition) <= 10)
+		if (dist2Player <= enemy->m_RangeOfAttack)
 		{
 			//aiSystem->DisableRotationByTile();
 			// Rotate towards player
@@ -49,12 +59,12 @@ namespace Wiwa
 				// Play fire anim and fire shot
 				m_TimerAttackCooldown = 0.0f;
 				Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
-				
 				SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
+				animator->PlayAnimation("shot", false);
 			}
 		}
 
-		if (aiSystem->GetPathSize() > 4 && glm::distance(selfTr->localPosition, playerTr->localPosition) > 10)
+		if (dist2Player > enemy->m_RangeOfAttack)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
@@ -117,8 +127,11 @@ namespace Wiwa
 		//entityManager.ApplySystem<Wiwa::PhysicsSystem>(newBulletId);
 	}
 
-	glm::vec3& RangedPhalanxAttackState::CalculateForward(const Transform3D& t3d)
+	glm::vec3 RangedPhalanxAttackState::CalculateForward(const Transform3D& t3d)
 	{
+		/*glm::vec4 forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+		glm::vec4 transformed = t3d.worldMatrix * forward;
+		return glm::normalize(glm::vec3(transformed));*/
 		glm::vec3 rotrad = glm::radians(t3d.rotation);
 
 		glm::vec3 forward;
@@ -128,7 +141,7 @@ namespace Wiwa
 		forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
 
 		forward = glm::degrees(forward);
-
+		
 		return glm::normalize(forward);
 	}
 

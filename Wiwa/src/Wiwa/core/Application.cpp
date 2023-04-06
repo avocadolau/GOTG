@@ -186,6 +186,8 @@ namespace Wiwa
 			}
 			m_ImGuiLayer->End();
 
+			GameStateManager::Update();
+			
 			// Update main window
 			m_Window->OnUpdate();
 			Time::PostUpdate();
