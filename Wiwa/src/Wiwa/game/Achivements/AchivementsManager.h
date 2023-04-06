@@ -1,34 +1,44 @@
 #pragma once
-#include <Wiwa/core/Resources.h>
+
 #include <Wiwa/core/Core.h>
+
 #include <string>
+
 #include <map>
+
 #include "Achivement.h"
+
 namespace Wiwa {
 	class JSONDocument;
 	class WI_API AchivementsManager {
+	private:
+		AchivementsManager() = delete;
+		~AchivementsManager() = delete;
 	public:
-		AchivementsManager();
 		//adds a property
-		void DefineProperty(std::string name, int initialValue, ActivationRules activationMode, int value);
+		static void DefineProperty(std::string name, int initialValue, ActivationRules activationMode, int value);
 		//adds a Miscellaneous achivement 
-		void DefineAchivementAchivement(std::string name, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
+		static void DefineAchivement(std::string name, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
 		//retruns the value of the property
-		int GetValue(std::string name);
+		static int GetValue(std::string name);
 		//sets the current value to the property
-		void SetValue(std::string name, int value);
+		static void SetValue(std::string name, int value);
 		//adds a value to the current m_value 
-		void AddValue(std::vector<std::string> properties, int value);
+		static void AddValue(std::vector<std::string> properties, int value);
+		//pass by all the achivements and checks if they are completed
+		static std::vector<Achivement*> CheckAchivements();
 		//save the achivements
-		void Serialize(JSONDocument* doc);
+		static void Serialize(JSONDocument* doc);
 		//load achivements
-		void Deserialize(JSONDocument* doc);
-
-		std::vector<Achivement*> CheckAchivements();
+		static void Deserialize(JSONDocument* doc);
+		//gets all the properties list (rules that need to be completed before unlocking an achivement)
+		static 	std::map<std::string, Property> GetProperties() { return m_Properties; }
+		//gets the achivements list
+		static 	std::map<std::string, Achivement> GetAchivements() { return m_Achivements; }
 	private:
 		//are used to determine if an Achivement is active or not
-		std::map<std::string, Property> m_Properties;
+		static std::map<std::string, Property> m_Properties;
 		//are used to determine if some extra boost are can be applied
-		std::map<std::string, Achivement> m_Achivements;
+		static std::map<std::string, Achivement> m_Achivements;
 	};
 }

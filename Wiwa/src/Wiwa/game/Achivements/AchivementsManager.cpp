@@ -3,19 +3,17 @@
 
 
 namespace Wiwa
-{
-	AchivementsManager::AchivementsManager()
-	{
-		m_Properties = {};
-		m_Achivements = {};
-	}
+{	
+
+	std::map<std::string, Property> Wiwa::AchivementsManager::m_Properties;
+	std::map<std::string, Achivement> Wiwa::AchivementsManager::m_Achivements;
 
 	void AchivementsManager::DefineProperty(std::string name, int initialValue, ActivationRules activationMode, int value)
 	{
 		m_Properties[name] = Property(name, initialValue, activationMode, value);
 	}
 
-	void AchivementsManager::DefineAchivementAchivement(std::string name, int max_capacity, std::vector<int> costs, std::vector<Property> properties)
+	void AchivementsManager::DefineAchivement(std::string name, int max_capacity, std::vector<int> costs, std::vector<Property> properties)
 	{
 		m_Achivements[name] = Achivement(name, max_capacity, costs, properties);
 	}
@@ -74,4 +72,14 @@ namespace Wiwa
 		}
 		return result;
 	}
+
+	void AchivementsManager::Serialize(JSONDocument* doc)
+	{
+	}
+
+	void AchivementsManager::Deserialize(JSONDocument* doc)
+	{
+	}
+
+
 }
