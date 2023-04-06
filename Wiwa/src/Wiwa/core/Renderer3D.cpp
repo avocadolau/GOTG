@@ -129,6 +129,7 @@ namespace Wiwa
 		m_ParticleShader = Resources::GetResourceById<Shader>(m_ParticleShaderId);
 		m_ParticleShader->Compile("resources/shaders/particle_display");
 		m_ParticleShader->addUniform("u_Texture", Wiwa::UniformType::Sampler2D);
+		m_ParticleShader->addUniform("u_ColorP", Wiwa::UniformType::fVec4);
 		m_ParticleUniforms.Model = m_ParticleShader->getUniformLocation("u_Model");
 		m_ParticleUniforms.View = m_ParticleShader->getUniformLocation("u_View");
 		m_ParticleUniforms.Projection = m_ParticleShader->getUniformLocation("u_Proj");
@@ -473,9 +474,13 @@ namespace Wiwa
 		camera->frameBuffer->Unbind();
 	}
 
-	void Renderer3D::RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, const size_t &directional,
-								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, Material *material, bool clear, Camera *camera, bool cull, Image *texture, const Size2i &srcSize)
+	void Renderer3D::RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* texture, const Size2i& srcSize, float colorParticles[4], bool isColorRanged)
 	{
+		/*colorParticles[4] /= 255.0f;*/
+		/*g /= 255.0f;
+		b /= 255.0f;*/
+
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 		camera->frameBuffer->Bind(clear);
@@ -487,13 +492,33 @@ namespace Wiwa
 		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
 		model = glm::scale(model, scale);
 
-		Shader *matShader = material->getShader();
+		Shader* matShader = material->getShader();
+
+		/*Shader* particleShader = Resources::GetResourceById<Shader>(m_ParticleShaderId);*/
 
 		matShader->Bind();
+
+		/*particleShader->setUniformVec3(particleShader->getUniform("u_Color")->location, glm::vec3(r, g ,b));*/
+
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+
+		if (isColorRanged)
+		{
+			matShader->setUniformVec3(matShader->getUniform("u_ColorP")->location, glm::vec3(colorParticles[0], colorParticles[1], colorParticles[2]));
+		}
+
+		else
+		{
+			matShader->setUniformVec3(matShader->getUniform("u_ColorP")->location, glm::vec3(1.0, 1.0, 1.0));
+		}
+
+		/*matShader->setUniform(matShader->getUniform("u_ColorP")->location, 250);*/
+
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
+
+		/*glColor4f(r, g, b ,1);*/
 
 		glDisable(GL_CULL_FACE);
 
@@ -508,51 +533,10 @@ namespace Wiwa
 		glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, (GLsizei)0);
 		glBindVertexArray(0);
 
-		/*glBindVertexArray(VAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);*/
-
 		material->UnBind();
 		glActiveTexture(GL_TEXTURE1);
 		camera->frameBuffer->Unbind();
 		glEnable(GL_CULL_FACE);
-
-
-
-		/*
-		GLboolean depth;
-		GLboolean blend;
-
-		glGetBooleanv(GL_DEPTH_TEST, &depth);
-		glGetBooleanv(GL_BLEND, &blend);
-
-		glDisable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//Solution to the material.cpp GL_TEXTURE1 on the void Material::Bind() function
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
-		//------------------------------
-
-		glDrawElements(GL_TRIANGLES, ebo_data.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
-		
-		//reset data
-		material->UnBind();
-		glActiveTexture(GL_TEXTURE1);
-		camera->frameBuffer->Unbind();
-
-		if (depth == GL_TRUE)
-			glEnable(GL_DEPTH_TEST);
-
-		if (blend == GL_TRUE)
-			glEnable(GL_BLEND);
-		
-		*/
 	}
 
 	void Renderer3D::RenderSkybox()

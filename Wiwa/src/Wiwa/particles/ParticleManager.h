@@ -5,6 +5,7 @@
 #include "Wiwa/ecs/components/ParticleEmitter.h"
 #include <Wiwa/utilities/render/TextureAnimation.h>
 #include <Wiwa/ecs/EntityManager.h>
+#include "../vendor/stb/stb_image.h"
 
 #include <vector>
 #include <string>
@@ -102,6 +103,8 @@ namespace Wiwa {
 		void AddParticles(ParticleEmitter* emitter);
 
 		void UpdateParticles();
+
+		int CalculateNumberOfAnimations(char texturePath[128]);
 
 		int currentFrameParticles;
 		
