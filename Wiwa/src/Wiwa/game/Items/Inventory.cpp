@@ -164,11 +164,11 @@ void Wiwa::Inventory::AddAbility(Ability* ability)
 {
     for (size_t i = 0; i < MAX_ABILITIES; i++)
     {
-        if (m_Abilities[i] == nullptr)
-        {
-            m_Abilities[i] = ability;
-            break;
-        }
+		if (m_Abilities[i] != ability)
+		{
+			m_Abilities[i] = ability;
+			break;
+		}
     }
     
 }
@@ -177,7 +177,7 @@ void Wiwa::Inventory::AddBuff(Buff* buff)
 {
     for (size_t i = 0; i < MAX_BUFFS; i++)
     {
-        if (m_Buffs[i] == nullptr)
+        if (m_Buffs[i] != buff)
         {
             m_Buffs[i] = buff;
             break;
@@ -198,7 +198,7 @@ void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
 
 void Wiwa::Inventory::Update()
 {
-   // if(Wiwa::Input::IsButtonReleased()
+	
 }
 
 void Wiwa::Inventory::UseAbility(size_t index)
