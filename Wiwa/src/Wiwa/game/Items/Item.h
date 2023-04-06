@@ -13,27 +13,27 @@ namespace Wiwa
 	};
 	enum class AbilityType
 	{
-		YONDUS_SEEDS = BIT(0),
-		GROOTS_SEEDS = BIT(1),
-		PHYLAS_QUANTUM_SWORD = BIT(2),
-		STARHAWKS_BLAST = BIT(3)
+		YONDUS_SEEDS,
+		GROOTS_SEEDS,
+		PHYLAS_QUANTUM_SWORD,
+		STARHAWKS_BLAST
 	};
 	enum class BuffType
 	{
-		MAJOR_VICTORY_SHIELD = BIT(0),
-		NIKKIS_TOUCH = BIT(1),
-		COSMOS_PAW = BIT(2),
-		MARTINEX_THERMOKINESIS = BIT(3),
-		BUGS_LEGS = BIT(4),
-		CHARLIE27_FIST = BIT(5)
+		MAJOR_VICTORY_SHIELD,
+		NIKKIS_TOUCH,
+		COSMOS_PAW,
+		MARTINEX_THERMOKINESIS,
+		BUGS_LEGS,
+		CHARLIE27_FIST
 	};
 	// Defines which attributes will be modified via the passive
 	enum class PassiveType
 	{
-		MOVEMENT = BIT(0),
-		ROF = BIT(1),
-		BUFF = BIT(2),
-		ATTACK = BIT(3)
+		MOVEMENT,
+		ROF,
+		BUFF,
+		ATTACK
 	};
 
 	struct Ability

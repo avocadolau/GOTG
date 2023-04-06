@@ -172,7 +172,17 @@ void InventoryPanel::DrawBuffPool(int& id)
 	}
 	if (!buffs.empty())
 	{
-		if (ImGui::BeginTable("buffs", 7, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* types[] =
+		{
+			"Major Victory Shield",
+			"Nikki's Touch",
+			"Cosmo's Paw",
+			"Martinex Thermokinesis",
+			"Bugs legs",
+			"Charlie 27 fist"
+		};
+
+		if (ImGui::BeginTable("buffs", 8, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
@@ -181,6 +191,7 @@ void InventoryPanel::DrawBuffPool(int& id)
 			ImGui::TableSetupColumn("Duration");
 			ImGui::TableSetupColumn("Cooldown");
 			ImGui::TableSetupColumn("Price");
+			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
 			for (auto& it : buffs)
@@ -221,7 +232,6 @@ void InventoryPanel::DrawBuffPool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
-
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##buffpercent", &buff->BuffPercent);
 
@@ -234,7 +244,24 @@ void InventoryPanel::DrawBuffPool(int& id)
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##price", &buff->Price);
 
+				ImGui::TableNextColumn();
+				const char* currentBuff = types[(int)buff->buffType];
+				if (ImGui::BeginCombo("##type", currentBuff))
+				{
+					for (int i = 0; i < 6; i++)
+					{
+						bool isSelected = (currentBuff == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentBuff = types[i];
+							buff->buffType = (Wiwa::BuffType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
 
+					ImGui::EndCombo();
+				}
 
 				ImGui::PopID();
 			}
@@ -267,12 +294,19 @@ void InventoryPanel::DrawPassivePool(int& id)
 	}
 	if (!passives.empty())
 	{
-		if (ImGui::BeginTable("passives", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* types[] =
+		{
+			"Movement",
+			"Rate of Fire",
+			"Buff",
+			"Attack",
+		};
+		if (ImGui::BeginTable("passives", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
 			ImGui::TableSetupColumn("Icon");
-		
+			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
 			for (auto& it : passives)
@@ -314,6 +348,26 @@ void InventoryPanel::DrawPassivePool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
+
+				ImGui::TableNextColumn();
+				const char* currentItem = types[(int)passive->passiveType];
+				if (ImGui::BeginCombo("##type", currentItem))
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						bool isSelected = (currentItem == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentItem = types[i];
+							passive->passiveType = (Wiwa::PassiveType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
@@ -344,11 +398,19 @@ void InventoryPanel::DrawAbilityPool(int& id)
 	}
 	if (!abilities.empty())
 	{
-		if (ImGui::BeginTable("actives", 8, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* types[] =
+		{
+			"Yondu's Fin",
+			"Groot's seeds",
+			"Phylas Quantum Sword",
+			"StarHawks blast",
+		};
+		if (ImGui::BeginTable("actives", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
 			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Type");
 			ImGui::TableSetupColumn("Damage");
 			ImGui::TableSetupColumn("Range");
 			ImGui::TableSetupColumn("Area");
@@ -394,7 +456,24 @@ void InventoryPanel::DrawAbilityPool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
+				ImGui::TableNextColumn();
+				const char* currentItem = types[(int)ability->abilityType];
+				if (ImGui::BeginCombo("##type", currentItem))
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						bool isSelected = (currentItem == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							currentItem = types[i];
+							ability->abilityType = (Wiwa::AbilityType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
 
+					ImGui::EndCombo();
+				}
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##damage", &ability->Damage);
 
