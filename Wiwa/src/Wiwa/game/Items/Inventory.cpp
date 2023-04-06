@@ -77,29 +77,26 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 
 void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 {
-	for (size_t i = 0; i < MAX_ABILITIES; i++)
-	{
-		
-		if (doc->HasMember("abilities")) {
 
-			JSONValue abilities = (*doc)["abilities"];
-			if (abilities.IsArray())
+	if (doc->HasMember("abilities")) {
+
+		JSONValue abilities = (*doc)["abilities"];
+		if (abilities.IsArray())
+		{
+			for (uint32_t i = 0; i < abilities.Size(); i++)
 			{
-				for (size_t i = 0; i < abilities.Size(); i++)
-				{
-					Wiwa::Ability ability;
-					ability.Name = abilities[i]["name"].as_string();
-					ability.Description = abilities[i]["description"].as_string();
-					ability.Icon = abilities[i]["icon"];
-					ability.Damage = abilities[i]["damage"].as_int();
-					ability.Range = abilities[i]["range"].as_float();
-					ability.Area = abilities[i]["area"].as_float();
-					ability.Cooldown = abilities[i]["cooldown"].as_float();
-					ability.CurrentTime = abilities[i]["current_time"].as_float();
-					ability.Price = abilities[i]["price"].as_float();
-					ability.abilityType = (AbilityType)abilities[i]["type"].as_int();
-					AddAbility(&ability);
-				}
+				Wiwa::Ability ability;
+				ability.Name = abilities[i]["name"].as_string();
+				ability.Description = abilities[i]["description"].as_string();
+				ability.Icon = abilities[i]["icon"];
+				ability.Damage = abilities[i]["damage"].as_int();
+				ability.Range = abilities[i]["range"].as_float();
+				ability.Area = abilities[i]["area"].as_float();
+				ability.Cooldown = abilities[i]["cooldown"].as_float();
+				ability.CurrentTime = abilities[i]["current_time"].as_float();
+				ability.Price = abilities[i]["price"].as_int();
+				ability.abilityType = (AbilityType)abilities[i]["type"].as_int();
+				AddAbility(&ability);
 			}
 		}
 	}
@@ -166,7 +163,7 @@ void Wiwa::Inventory::AddAbility(Ability* ability)
     {
 		if (m_Abilities[i] != ability)
 		{
-			m_Abilities[i] = ability;
+			m_Abilities[i] = new Ability(*ability);
 			break;
 		}
     }
@@ -179,7 +176,7 @@ void Wiwa::Inventory::AddBuff(Buff* buff)
     {
         if (m_Buffs[i] != buff)
         {
-            m_Buffs[i] = buff;
+            m_Buffs[i] = new Buff(*buff);
             break;
         }
     }

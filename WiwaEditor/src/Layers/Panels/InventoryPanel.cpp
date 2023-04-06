@@ -106,8 +106,6 @@ void InventoryPanel::Draw()
 			ImGui::Text("Empty slot");
 		
 		ImGui::Unindent();
-		
-		
 	}
 	ImGui::End();
 }

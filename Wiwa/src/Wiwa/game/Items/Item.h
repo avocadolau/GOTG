@@ -53,6 +53,19 @@ namespace Wiwa
 		AbilityType abilityType;
 
 		Ability() = default;
+		Ability(const Ability& ability)
+		{
+			this->Name = ability.Name;
+			this->Description = ability.Description;
+			this->Icon = ability.Icon;
+			this->Damage = ability.Damage;
+			this->Range = ability.Range;
+			this->Cooldown = ability.Cooldown;
+			this->CurrentTime = ability.CurrentTime;
+			this->Price = ability.Price;
+			
+		}
+		
 		Ability(const char* name)
 			: Name(name),
 			  abilityType(AbilityType::YONDUS_SEEDS),
