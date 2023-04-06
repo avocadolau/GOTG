@@ -143,7 +143,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue actives = document["buffs"];
 		if (actives.IsArray())
 		{
-			for (size_t i = 0; i < actives.Size(); i++)
+			for (uint32_t i = 0; i < actives.Size(); i++)
 			{
 				Wiwa::Buff ability;
 				ability.Name = actives[i]["name"].as_string();
