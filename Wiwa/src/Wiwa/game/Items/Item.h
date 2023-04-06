@@ -18,6 +18,15 @@ namespace Wiwa
 		PHYLAS_QUANTUM_SWORD = BIT(2),
 		STARHAWKS_BLAST = BIT(3)
 	};
+	enum class BuffType
+	{
+		MAJOR_VICTORY_SHIELD = BIT(0),
+		NIKKIS_TOUCH = BIT(1),
+		COSMOS_PAW = BIT(2),
+		MARTINEX_THERMOKINESIS = BIT(3),
+		BUGS_LEGS = BIT(4),
+		CHARLIE27_FIST = BIT(5)
+	};
 	// Defines which attributes will be modified via the passive
 	enum class PassiveType
 	{
@@ -41,9 +50,12 @@ namespace Wiwa
 		float CurrentTime;
 		int Price;
 
+		AbilityType abilityType;
+
 		Ability() = default;
 		Ability(const char* name)
 			: Name(name),
+			  abilityType(AbilityType::YONDUS_SEEDS),
 			  Icon(0),
 			  Damage(0),
 			  Range(0.f),
@@ -64,15 +76,19 @@ namespace Wiwa
 
 		ResourceId Icon;
 
+		PassiveType passiveType;
+
 		PassiveSkill() = default;
 		PassiveSkill(const PassiveSkill& passive)
 		{
 			this->Name = passive.Name;
 			this->Description = passive.Description;
 			this->Icon = passive.Icon;
+			this->passiveType = passive.passiveType;
 		}
 		PassiveSkill(const char* name)
 			: Name(name),
+			  passiveType(PassiveType::ATTACK),
 		      Icon(0)
 		{}
 
@@ -85,6 +101,8 @@ namespace Wiwa
 		std::string Description;
 
 		ResourceId Icon;
+		
+		BuffType buffType;
 
 		int BuffPercent;
 		float Duration;
@@ -97,6 +115,7 @@ namespace Wiwa
 		Buff(const char* name)
 			: Name(name),
 			  Icon(0),
+			  buffType(BuffType::MAJOR_VICTORY_SHIELD),
 			  BuffPercent(0),
 			  Duration(0.f),
 			  Cooldown(0.f),
