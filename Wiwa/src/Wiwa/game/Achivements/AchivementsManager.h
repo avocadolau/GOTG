@@ -16,9 +16,13 @@ namespace Wiwa {
 		~AchivementsManager() = delete;
 	public:
 		//adds a property
-		static void DefineProperty(std::string name, int initialValue, ActivationRules activationMode, int value);
+		static void DefineProperty(std::string name, std::string description, int initialValue, ActivationRules activationMode, int value);
 		//adds a Miscellaneous achivement 
-		static void DefineAchivement(std::string name, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
+		static void DefineAchivement(std::string name, std::string description, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
+		//add property
+		static void AddProperty(const Property& prop);
+		//add Achivement
+		static void AddAchivement(const Achivement& achivement);
 		//retruns the value of the property
 		static int GetValue(std::string name);
 		//sets the current value to the property
@@ -35,6 +39,10 @@ namespace Wiwa {
 		static 	std::map<std::string, Property> GetProperties() { return m_Properties; }
 		//gets the achivements list
 		static 	std::map<std::string, Achivement> GetAchivements() { return m_Achivements; }
+		//return property
+		static Property* GetProperty(const char* name);
+		//returns achivement
+		static Achivement* GetAchivement(const char* name);
 	private:
 		//are used to determine if an Achivement is active or not
 		static std::map<std::string, Property> m_Properties;

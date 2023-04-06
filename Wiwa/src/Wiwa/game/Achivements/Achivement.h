@@ -4,7 +4,7 @@ namespace Wiwa {
 	class Achivement {
 	public:
 		Achivement();
-		Achivement(std::string id, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
+		Achivement(std::string name, std::string description, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
 
 		void UpdateCost();
 
@@ -12,6 +12,8 @@ namespace Wiwa {
 
 		//achivements names
 		std::string m_Name;
+		//achivements names
+		std::string m_Description;
 		//properties to be able to unlock it
 		std::vector<Property> m_Porperties;
 		//check if its unlocked yet

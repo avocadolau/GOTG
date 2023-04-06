@@ -15,9 +15,10 @@ namespace  Wiwa {
 		}
 	}
 
-	Property::Property(std::string name, int initialValue, ActivationRules activation, int activationvalue)
+	Property::Property(std::string name,std::string descripion, int initialValue, ActivationRules activation, int activationvalue)
 	{
 		m_Name = name;
+		m_Description = descripion;
 		m_InitialValue = initialValue;
 		m_Activation = activation;
 		m_ActivationValue = activationvalue;
