@@ -8,9 +8,6 @@
 #include <cmath>
 namespace Wiwa
 {
-
-
-
 	Animator::Animator()
 	{
 		m_Name = "New Animator";
