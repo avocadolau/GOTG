@@ -12,7 +12,8 @@ namespace Wiwa
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_DistanceToFire = 0.0f;
+		m_RangeOfAttack = 20.0f;
+		m_MinimumPath = 5;
 		m_Timer = 0.0f;
 	}
 
@@ -39,8 +40,6 @@ namespace Wiwa
 		EnemySystem::OnInit();
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
-
-		m_DistanceToFire = 6.0f;
 	}
 
 	void EnemyRangedPhalanx::OnUpdate()
@@ -95,7 +94,9 @@ namespace Wiwa
 	void EnemyRangedPhalanx::ReceiveDamage(int damage)
 	{
 		EnemySystem::ReceiveDamage(damage);
-	
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
+		animator->PlayAnimation("damage", false);
 	}
 
 	void EnemyRangedPhalanx::SwitchState(RangedPhalanxBaseState* state)

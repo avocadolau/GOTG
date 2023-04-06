@@ -18,7 +18,8 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_GunTransformIt;
 
 		float m_Timer;
-		float m_DistanceToFire;
+		float m_RangeOfAttack = 0.0f;
+		int m_MinimumPath = 0;
 	public:
 		EnemyRangedPhalanx();
 		~EnemyRangedPhalanx();

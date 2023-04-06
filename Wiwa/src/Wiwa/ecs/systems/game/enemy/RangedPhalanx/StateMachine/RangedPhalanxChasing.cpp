@@ -42,8 +42,9 @@ namespace Wiwa
 		{
 			agentPtr->AllowRotationByTile();
 
-			if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_DistanceToFire)
+			if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfAttack)
 			{
+				agentPtr->StopMoving();
 				agentPtr->DisableRotationByTile();
 				enemy->SwitchState(enemy->m_AttackingState);				
 			}			

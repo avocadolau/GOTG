@@ -85,6 +85,7 @@ namespace Wiwa {
 			return m_Map;
 		}
 
+		static bool m_DebugDraw;
 	private:
 
 		// data of the map

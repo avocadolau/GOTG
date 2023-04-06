@@ -82,6 +82,7 @@ void AIMapBakingPanel::Draw()
 	}
 
 	ImGui::Checkbox("Draw Map Grid", &m_DrawGrid);
+	Wiwa::AIMapGeneration::m_DebugDraw = m_DrawGrid;
 
 	if (m_DrawGrid)
 	{

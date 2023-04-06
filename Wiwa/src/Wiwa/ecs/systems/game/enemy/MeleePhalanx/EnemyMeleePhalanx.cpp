@@ -86,7 +86,9 @@ namespace Wiwa
 	void EnemyMeleePhalanx::ReceiveDamage(int damage)
 	{
 		EnemySystem::ReceiveDamage(damage);
-		
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
+		animator->PlayAnimation("hit", false);
 		//PlaySound(ScriptEngine::CreateString("melee_hit"), m_PlayerId);
 	}
 
