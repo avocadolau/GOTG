@@ -141,6 +141,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				passive.Description = passives[i]["description"].as_string();
 				passive.Icon = passives[i]["icon"];
 				passive.passiveType = (PassiveType)passives[i]["type"].as_int();
+				AddPassive(passive);
 			}
 		}
 	}
