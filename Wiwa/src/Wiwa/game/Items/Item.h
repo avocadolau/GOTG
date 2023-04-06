@@ -8,8 +8,8 @@ namespace Wiwa
 {
 	enum class ConsumableType
 	{
-		HEAL = BIT(0),
-		SHIELD = BIT(1)
+		HEAL,
+		SHIELD 
 	};
 	enum class AbilityType
 	{

@@ -119,10 +119,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				}
 
 				ImGui::TableNextColumn();
-				static const char* currentItem = types[0];
-
-				static Wiwa::ConsumableType type;
-
+				const char* currentItem = types[(int)consumable->Type];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
 					for (int i = 0; i < 2; i++)
@@ -131,8 +128,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
-							type = (Wiwa::ConsumableType)(i);
-							consumable->Type = type;
+							consumable->Type = (Wiwa::ConsumableType)(i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();
