@@ -121,8 +121,11 @@ namespace Wiwa {
 
 	void ParticleEmitterExecutor::EmitBatch(EntityId eid)
 	{
+		if (!m_Scene)
+			return;
 		ParticleManager& pman = m_Scene->GetParticleManager();
-		pman.EmitBatch(eid);
+		if(&pman)
+			pman.EmitBatch(eid);
 	}
 
 	void ParticleEmitterExecutor::Play(EntityId eid, float delaySec)

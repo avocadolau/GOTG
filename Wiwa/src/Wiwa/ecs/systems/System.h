@@ -23,6 +23,9 @@ namespace Wiwa
 		EntityManager::ComponentIterator GetComponentIterator();
 
 		template<class T>
+		EntityManager::ComponentIterator GetComponentIterator(size_t id);
+
+		template<class T>
 		T* GetComponentByIterator(const EntityManager::ComponentIterator& c_it);
 
 		virtual void OnAwake() {}
@@ -94,6 +97,14 @@ namespace Wiwa
 	}
 
 	template<class T>
+	inline EntityManager::ComponentIterator System::GetComponentIterator(size_t id)
+	{
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		return em.GetComponentIterator<T>(id);
+	}
+
+	template<class T>
 	inline T* System::GetComponentByIterator(const EntityManager::ComponentIterator& c_it) {
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
@@ -101,4 +112,5 @@ namespace Wiwa
 
 		return component;
 	}
+
 }

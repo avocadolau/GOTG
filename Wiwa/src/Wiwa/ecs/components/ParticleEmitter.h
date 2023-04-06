@@ -30,19 +30,24 @@ namespace Wiwa {
 		float	particle_lifetime_range_0;
 		float	particle_lifetime_range_1;
 
-		bool isPlaying;
-		float timer;
+		bool    isPlaying;
+		float   timer;
 
-		bool isAnimated;
+		int	    number_animations;
+		bool    isAnimated;
 
-		bool activateBillboard;
+		bool    activateBillboard;
 
-		bool followOnSpawn;
+		bool    followOnSpawn;
 
 		//std::list<ColorTime> particle_color;
 
 		int nextPos;
 		glm::vec4 nextColor;
+
+		//offset
+		glm::vec3	particle_Offset;
+		bool		particle_Offset_isRanged;
 
 		//position
 		glm::vec3	particle_startingPosition;
@@ -110,12 +115,15 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitter)
 	REFLECT_MEMBER(particle_lifetime_range_0)
 	REFLECT_MEMBER(particle_lifetime_range_1)
 	REFLECT_MEMBER(isPlaying)
+	REFLECT_MEMBER(number_animations)
 	REFLECT_MEMBER(isAnimated)
 	REFLECT_MEMBER(activateBillboard)
 	REFLECT_MEMBER(followOnSpawn)
 	REFLECT_MEMBER(repeat)
 	REFLECT_MEMBER(nextPos)
 	REFLECT_MEMBER(nextColor)
+	REFLECT_MEMBER(particle_Offset)
+	REFLECT_MEMBER(particle_Offset_isRanged)
 	REFLECT_MEMBER(particle_startingPosition)
 	REFLECT_MEMBER(particle_startingPosition_isRanged)
 	REFLECT_MEMBER(particle_startingPosition_range_0)

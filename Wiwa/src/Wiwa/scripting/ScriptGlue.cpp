@@ -19,11 +19,12 @@
 #include "embed_functions/embed_screen_functions.h"
 #include "embed_functions/embed_ui_functions.h"
 #include "embed_functions/embed_scene_functions.h"
+#include "embed_functions/embed_game_functions.h"
 #include "embed_functions/embed_animator_functions.h"
 #include "embed_functions/embed_application_functions.h"
+#include "embed_functions/embed_animator_functions.h"
 #include "embed_functions/embed_artificialintelligence_functions.h"
 #include "embed_functions/embed_particles_functions.h"
-
 
 #define WI_ADD_INTERNAL_CALL(Name) mono_add_internal_call("Wiwa.InternalCalls::" #Name, Name)
 
@@ -58,8 +59,13 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CreateEntity);
 		WI_ADD_INTERNAL_CALL(CreateEntityNamed);
 		WI_ADD_INTERNAL_CALL(DestroyEntity);
+		WI_ADD_INTERNAL_CALL(GetEntityName);
+		WI_ADD_INTERNAL_CALL(GetEntityByName);
+		WI_ADD_INTERNAL_CALL(GetChildByName);
 		WI_ADD_INTERNAL_CALL(SavePrefabIntr);
 		WI_ADD_INTERNAL_CALL(LoadPrefabIntr);
+		WI_ADD_INTERNAL_CALL(LoadPrefabAsChildIntr);
+		WI_ADD_INTERNAL_CALL(CreateChildByName);
 
 		// Time
 		WI_ADD_INTERNAL_CALL(GetDeltaTimeIntr);
@@ -126,10 +132,19 @@ namespace Wiwa
 
 		WI_ADD_INTERNAL_CALL(StopAllEvents);
 
+		WI_ADD_INTERNAL_CALL(ChangeMasterVolume);
+
 		// Physics
 		WI_ADD_INTERNAL_CALL(SetLinearVelocity);
+		WI_ADD_INTERNAL_CALL(GetLinearVelocity);
 		WI_ADD_INTERNAL_CALL(AddBodyToLog);
 		WI_ADD_INTERNAL_CALL(RemoveBodyFromLog);
+		WI_ADD_INTERNAL_CALL(GetEntityTagString);
+		WI_ADD_INTERNAL_CALL(GetEntityTagBits);
+		WI_ADD_INTERNAL_CALL(GetTagBitsByString);
+		WI_ADD_INTERNAL_CALL(RayCastDistanceWalls);
+		WI_ADD_INTERNAL_CALL(SetTrigger);
+		WI_ADD_INTERNAL_CALL(ChangeCollisionTags);
 
 		// UI
 		WI_ADD_INTERNAL_CALL(ActivateGuiCanvas);
@@ -137,6 +152,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SwapText);
 
 		WI_ADD_INTERNAL_CALL(SetValueForUIbar);
+		WI_ADD_INTERNAL_CALL(SetNextFrame);
 
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);
@@ -152,11 +168,24 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PlayAnimation);
 		WI_ADD_INTERNAL_CALL(PauseAnimation);
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
+		WI_ADD_INTERNAL_CALL(Blend);
 
 		//Particles
 		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayBatch);
 		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayLoop);
 		WI_ADD_INTERNAL_CALL(ParticleEmitterStopLoop);
 
+
+		// Game
+		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);
+		WI_ADD_INTERNAL_CALL(InitHub);
+		WI_ADD_INTERNAL_CALL(StartRun);
+		WI_ADD_INTERNAL_CALL(EndRun);
+		WI_ADD_INTERNAL_CALL(SetPlayer);
+		WI_ADD_INTERNAL_CALL(GetControllerDeadzone);
+		WI_ADD_INTERNAL_CALL(LoadPlayerProgression);
+		WI_ADD_INTERNAL_CALL(SavePlayerProgression);
+		WI_ADD_INTERNAL_CALL(Die);
+		WI_ADD_INTERNAL_CALL(GetPlayerId);
 	}
 }

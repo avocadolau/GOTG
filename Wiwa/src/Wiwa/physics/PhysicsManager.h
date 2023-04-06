@@ -101,7 +101,9 @@ namespace Wiwa {
 
 		bool SetRotation(Object* body, const glm::vec3 euler_angles);
 
-		//void SetTrigger(MyObject* body, const bool isTrigger);
+		void SetTrigger(Object* body, bool isTrigger);
+
+		void ChangeCollisionTags(Object* body, int filterGroup, int filterBits);
 
 		Object* FindByEntityId(size_t id);
 
@@ -161,7 +163,8 @@ namespace Wiwa {
 		DebugDrawer* m_Debug_draw;
 
 	public:
-		std::map<std::string, int> filterMap;
+		std::map<std::string, int> filterMapStringKey;
+		std::map<int, std::string> filterMapIntKey;
 
 		/*std::vector<std::string> filterStrings;
 		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;*/

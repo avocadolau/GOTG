@@ -139,7 +139,7 @@ namespace Wiwa {
 	void EntityManager::UpdateChildTransforms(EntityId eid, Transform3D* t3dparent)
 	{
 		Transform3D* t3d = GetComponent<Transform3D>(eid);
-		
+		if (!t3d) return;
 		// Update transforms
 		t3d->position = t3dparent->position + t3d->localPosition;
 		t3d->rotation = t3dparent->rotation + t3d->localRotation;
@@ -173,6 +173,8 @@ namespace Wiwa {
 			EntityId p_ent = m_ParentEntitiesAlive[i];
 
 			Transform3D* t3d = GetComponent<Transform3D>(p_ent);
+
+			if (!t3d) return;
 
 			t3d->position = t3d->localPosition;
 			t3d->rotation = t3d->localRotation;
@@ -242,7 +244,7 @@ namespace Wiwa {
 
 				for (size_t j = 0; j < system_size; j++) {
 					System* s = m_EntitySystems[i][j];
-
+					if (!s) continue;
 					s->Update();
 				}
 			}
@@ -431,6 +433,23 @@ namespace Wiwa {
 
 		if (file.IsOpen()) {
 			eid = _loadEntityImpl(file, eid, true);
+		}
+
+		file.Close();
+
+		return eid;
+	}
+
+	EntityId EntityManager::LoadPrefab(const char* path, EntityId parent)
+	{
+		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		if (file.IsOpen()) {
+			eid = _loadEntityImpl(file, parent, true);
 		}
 
 		file.Close();
@@ -714,6 +733,40 @@ namespace Wiwa {
 		return IsComponentRemoved(cid, index);
 	}
 
+	EntityId EntityManager::GetEntityByName(const char* name)
+	{
+		size_t ecount = m_EntityNames.size();
+
+		EntityId eid = WI_INVALID_INDEX;
+
+		for (size_t i = 0; i < ecount; i++) {
+			if (m_EntityNames[i] == name) {
+				eid = i;
+				break;
+			}
+		}
+
+		return eid;
+	}
+
+	EntityId EntityManager::GetChildByName(EntityId parent, const char* name)
+	{
+		EntityId eid = WI_INVALID_INDEX;
+
+		size_t ecount = m_EntityChildren[parent].size();
+
+		for (size_t i = 0; i < ecount; i++) {
+			EntityId id = m_EntityChildren[parent][i];
+
+			if (m_EntityNames[id] == name) {
+				eid = id;
+				break;
+			}
+		}
+
+		return eid;
+	}
+
 	size_t EntityManager::GetComponentIndex(EntityId entityId, ComponentId componentId, size_t componentSize)
 	{
 		size_t index = -1;
@@ -832,19 +885,19 @@ namespace Wiwa {
 		std::vector<System*>& systems = m_EntitySystems[entityId];
 		size_t s_size = systems.size();
 
-		if (type->hash == (size_t)TypeHash::CollisionBody)
-		{
-			Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
-			rigidBody->positionOffset = { 0,0,0 };
-			rigidBody->scalingOffset = { 1,1,1 };
-			rigidBody->isTrigger = false;
-			rigidBody->isStatic = false;
-			rigidBody->doContinuousCollision = false;
-			rigidBody->selfTag = 0;
-			rigidBody->filterBits |= 1 << 0;
-			//rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCube)
+		//if (type->hash == (size_t)TypeHash::CollisionBody)
+		//{
+		//	Wiwa::CollisionBody* rigidBody = (Wiwa::CollisionBody*)data;
+		//	rigidBody->positionOffset = { 0,0,0 };
+		//	rigidBody->scalingOffset = { 1,1,1 };
+		//	rigidBody->isTrigger = false;
+		//	rigidBody->isStatic = false;
+		//	rigidBody->doContinuousCollision = false;
+		//	rigidBody->selfTag = 0;
+		//	rigidBody->filterBits |= 1 << 0;
+		//	//rigidBody->filterBits ^= (-0 ^ rigidBody->filterBits) & (1UL << 32);
+		//}
+		/*if (type->hash == (size_t)TypeHash::ColliderCube)
 		{ 
 			Wiwa::ColliderCube* colliderCube = (Wiwa::ColliderCube*)data;
 			colliderCube->halfExtents= { 2,2,2 };
@@ -859,20 +912,20 @@ namespace Wiwa {
 			Wiwa::ColliderCylinder* colliderCube = (Wiwa::ColliderCylinder*)data;
 			colliderCube->height = 1;
 			colliderCube->radius = 1;
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCapsule)
+		}*/
+		/*else if (type->hash == (size_t)TypeHash::ColliderCapsule)
 		{
 			Wiwa::ColliderCapsule* colliderCapsule = (Wiwa::ColliderCapsule*)data;
 			colliderCapsule->height = 1;
 			colliderCapsule->radius = 1;
-		}
-		else if (type->hash == (size_t)TypeHash::RayCast)
+		}*/
+		/*else if (type->hash == (size_t)TypeHash::RayCast)
 		{
 			Wiwa::RayCast* rayCast = (Wiwa::RayCast*)data;
 			rayCast->rayFromWorld = { 0,0,0 };
 			rayCast->rayToWorld = { 0,0,0 };
 			rayCast->doRayCasting = false;
-		}
+		}*/
 
 		for (size_t i = 0; i < s_size; i++) {
 			systems[i]->OnComponentAdded(data, type);

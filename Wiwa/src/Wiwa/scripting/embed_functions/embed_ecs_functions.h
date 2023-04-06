@@ -19,10 +19,18 @@ size_t CreateEntity(void* scene);
 
 size_t CreateEntityNamed(MonoString* name_entity, void* scene);
 
+MonoString* GetEntityName(size_t id, void* scene);
+
+EntityId GetEntityByName(MonoString* name_entity, void* scene);
+
+EntityId GetChildByName(EntityId parent, MonoString* name, void* scene);
+EntityId CreateChildByName(EntityId parent, MonoString* name, void* scene);
+
 void DestroyEntity(size_t eid, void* scene);
 
-size_t LoadPrefabIntr(const char* file);
-void SavePrefabIntr(size_t id, const char* file);
+size_t LoadPrefabIntr(MonoString* file, void* scene);
+size_t LoadPrefabAsChildIntr(MonoString* file, size_t id, void* scene);
+void SavePrefabIntr(size_t id, MonoString* file, void* scene);
 
 // Help functions
 

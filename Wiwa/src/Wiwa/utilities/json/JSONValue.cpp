@@ -92,6 +92,7 @@ namespace Wiwa
 		return m_Value->HasMember(mem);
 	}
 
+
 	JSONValue JSONValue::operator[](const char *key)
 	{
 		return JSONValue(&m_Value->operator[](key), m_Allocator);

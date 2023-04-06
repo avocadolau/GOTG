@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" SchemaVersion="110">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}">
+					<ChildrenList>
+						<Action Name="" ID="{A1EB4EDE-9453-4B5F-A546-30F43C603E09}" ShortID="805077965">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="starlord_shot" ID="{3DE54C51-419B-46DA-8A10-DCB685E336A6}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}">
+					<ChildrenList>
+						<Action Name="" ID="{8068FEBF-7723-4489-A44B-DF20CBD99D67}" ShortID="915690533">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="default_footsteps_random" ID="{0DD4C1C8-B173-4CD7-8A86-BA99C55D9B35}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="menu_song" ID="{49FAEAA0-81A2-4DC8-A6F5-928DD67CED8C}">
+					<ChildrenList>
+						<Action Name="" ID="{E299A2C9-AB64-43EB-BEB7-C1C015E9FA98}" ShortID="885417708">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="menu_song" ID="{E320DD80-C102-43E8-9291-F5BEEC354B68}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="pause_sound" ID="{B9C6E3D0-3987-46F5-89D7-8C7B4E184648}">
+					<ChildrenList>
+						<Action Name="" ID="{90DCE654-9EED-4F7F-961A-4D8EBECB7F20}" ShortID="809832085">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="pause_sound" ID="{3ECED16A-1D1E-4FF2-A6C6-E13A06E3A5AA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="character_selection" ID="{02DA4D1A-F03D-40D2-97F6-AA890A789216}">
+					<ChildrenList>
+						<Action Name="" ID="{9A413931-1ED7-40CD-8BD7-B7062B7A64A6}" ShortID="176200875">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="character_selection" ID="{809FE8AB-BE4F-4163-81AE-89316C24CDB2}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="logo_intro" ID="{E3D47F86-37B9-435C-ABE0-9996A7C18E4B}">
+					<ChildrenList>
+						<Action Name="" ID="{F81A912C-C98C-47C7-AF1A-852B9ADEAB27}" ShortID="729503507">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="logo_intro" ID="{543B43CA-CA49-43AB-B466-8E9AC1007B01}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Set_Bus_Master_Volume" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}">
+					<ChildrenList>
+						<Action Name="" ID="{B1289A08-05F6-408E-9F80-CA8173CB4C3D}" ShortID="205418363">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="38"/>
+								<Property Name="GameParameterValue" Type="Real64" Value="76"/>
+								<Property Name="Scope" Type="int16" Value="1"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="MasterVolume" ID="{37155977-97CE-402C-89A9-1AE619F18259}" WorkUnitID="{02E271C5-C17C-4AA5-B1B0-C26312712607}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Set_Bus_Volume_Master_Audio_Bus_01" ID="{03903AD0-6338-4E2F-9E48-AF41550E07C7}">
+					<ChildrenList>
+						<Action Name="" ID="{2CA7BE9A-BEFF-43BC-BF12-74A6572FF198}" ShortID="1000534739">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="11"/>
+								<Property Name="Scope" Type="int16" Value="1"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}">
+					<ChildrenList>
+						<Action Name="" ID="{6ED117A5-62B7-4D7D-82D9-4C759F7555CF}" ShortID="922518561">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="on_hover" ID="{C0413F64-E9E0-4B28-A0C5-A859611A1B64}">
+					<ChildrenList>
+						<Action Name="" ID="{C22D4225-B20D-4433-96F0-EA2873B2EC5A}" ShortID="919270292">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="pause_sound" ID="{3ECED16A-1D1E-4FF2-A6C6-E13A06E3A5AA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

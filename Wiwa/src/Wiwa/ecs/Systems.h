@@ -8,6 +8,10 @@
 
 #include "systems/PhysicsSystem.h"
 #include "systems/RayCastSystem.h"
-#include "systems/AgentAISystem.h"
-#include "systems/ParticleEmitterExecutor.h"
 
+// Game systems
+#include "systems/AgentAISystem.h"
+//#include "systems/game/enemy/EnemySystem.h"
+//#include "systems/game/enemy/EnemySpawnerSystem.h"
+#include "systems/game/enemy/WaveSystem.h"
+#include "systems/ParticleEmitterExecutor.h"

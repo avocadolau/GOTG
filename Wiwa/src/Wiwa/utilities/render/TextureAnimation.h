@@ -27,6 +27,7 @@ namespace Wiwa {
         // Allows the animation to keep going back and forth
         bool pingpong = false;
         bool mustFlip = false;
+        std::vector<float> creationTimes;
 
     private:
         float currentFrame = 0.0f;
@@ -61,20 +62,23 @@ namespace Wiwa {
             return !loop && !pingpong && loopCount > 0;
         }
 
-        void Update()
+        void Update(double elapsedTimeParticles)
         {
             std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
             float elapsedSeconds = std::chrono::duration<float>(now - lastUpdate).count();
             lastUpdate = now;
 
-            currentFrame += speed * elapsedSeconds;
-            if (currentFrame >= totalFrames)
+            for (int i = 0; i < creationTimes.size(); ++i)
             {
-                currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;
-                ++loopCount;
+                currentFrame = creationTimes[i] + speed * elapsedTimeParticles;
+                if (currentFrame >= totalFrames)
+                {
+                    currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;
+                    ++loopCount;
 
-                if (pingpong)
-                    pingpongDirection = -pingpongDirection;
+                    if (pingpong)
+                        pingpongDirection = -pingpongDirection;
+                }
             }
         }
 

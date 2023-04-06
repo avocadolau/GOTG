@@ -8,13 +8,13 @@
 
 namespace Wiwa
 {
-	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName) : GuiControl(scene, GuiControlType::BUTTON, id)
+	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active,bool animated, float animFrames, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
 		name = "Button";
 		m_Scene = scene;
-		active = true;
+		this->active = active;
 		text = "none";
 		audioEventForButton = audioEventName;
 		
@@ -31,9 +31,11 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-		
-		
-		
+		if (!active)
+		{
+			r2d.DisableInstance(m_Scene, id_quad_normal);
+
+		}
 		
 		state = GuiControlState::NORMAL;
 		canClick = true;
@@ -48,13 +50,18 @@ namespace Wiwa
 	{
 		if (state != GuiControlState::DISABLED)
 		{
-			// L14: TODO 3_D: Update the state of the GUiButton according to the mouse position
+			
 			float mouseX, mouseY;
 			mouseX = Wiwa::Input::GetMouseX();
 			mouseY = Wiwa::Input::GetMouseY();
 			if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
+				if (state == GuiControlState::NORMAL)
+				{
+					//Audio::PostEvent("on_hover");
+				}
+
 				state = GuiControlState::FOCUSED;
 			
 			}
@@ -87,10 +94,8 @@ namespace Wiwa
 					if (callback)
 						callback->Execute();
 				}
-				//DETECT CONTROLLER CLICKS
 			}
 		}
-
 		return false;
 	}
 
@@ -156,7 +161,7 @@ namespace Wiwa
 		default:
 			break;
 		}
-
+		HandleAnim(render);
 		return false;
 	}
 }

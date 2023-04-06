@@ -53,18 +53,33 @@ namespace Wiwa {
 		glm::mat4 GetBoneTransform(int index) {return m_Bones[index]->GetLocalTransform(); };
 
 		void LoadAnimation(const aiAnimation* animation);
+
 		static Animation* LoadWiAnimation(const char* filepath);
+
 		static void SaveWiAnimation(Animation* animation, const char* path);
+
 		void SaveNodeData(File& file, NodeData* node);
+
 		NodeData* LoadNodeData(File& file);
+
 		static Animation* GetAnimationFromFile(const char* filepath);
 
-		std::string m_SavePath;
-		float m_Duration = 0;
-		int m_TicksPerSecond = 0;
-		int m_NumChannels = 0;
-		std::string m_Name;
 		void PrintGlmMatrix(const glm::mat4& mat);
+
+		std::string m_Name;
+
+		std::string m_SavePath;
+
+		bool m_Loop;
+		
+		bool m_HasFinished;
+
+		float m_Duration = 0;
+
+		int m_TicksPerSecond = 0;
+
+		int m_NumChannels = 0;
+
 	private:
 		void ReadMissingBones(const aiAnimation* animation, Model& model);
 
@@ -77,8 +92,6 @@ namespace Wiwa {
 		std::map<std::string, BoneInfo> m_BoneInfoMap;
 		std::map<std::string, std::vector<glm::mat4>> m_CalculatedBoneMatrices;
 		unsigned int m_BoneCount;
-
-
 	};
 }
 

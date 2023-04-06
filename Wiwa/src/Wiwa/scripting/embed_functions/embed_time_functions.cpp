@@ -4,7 +4,7 @@
 
 float GetDeltaTimeIntr()
 {
-    return Wiwa::Time::GetDeltaTime();
+    return Wiwa::Time::GetDeltaTimeSeconds();
 }
 
 float GetTimeIntr()

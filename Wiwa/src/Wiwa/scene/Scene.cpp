@@ -13,8 +13,8 @@ namespace Wiwa
 {
 	Scene::Scene() : m_InstanceRenderer(40500)
 	{
-		mMaxTimeEntering = 300;
-		mMaxTimeLeaving = 300;
+		mMaxTimeEntering = 450;
+		mMaxTimeLeaving = 450;
 
 		// Initialize instance renderer with shader
 		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
@@ -47,7 +47,7 @@ namespace Wiwa
 		delete m_LightManager;
 		delete m_GuiManager;
 
-		/*delete m_ParticleManager;*/
+		delete m_ParticleManager;
 
 		// Clear entity manager
 		m_EntityManager.Clear();
@@ -182,10 +182,15 @@ namespace Wiwa
 
 	void Scene::ChangeScene(size_t scene, int flags)
 	{
+		WI_INFO("ChangeScene() with scene: {}", scene);
 		m_SceneToChange = scene;
 		m_SceneChangeFlags = flags;
 		m_CurrentState = SCENE_LEAVING;
 		m_TransitionTimer = 0;
+
+		//SceneChangeEvent event(scene);
+		//Action<Event&> action = { &Application::OnEvent, this };
+		//action(event);
 	}
 
 	void Scene::UpdateEnter()

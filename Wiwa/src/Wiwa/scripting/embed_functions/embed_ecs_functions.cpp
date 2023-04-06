@@ -12,6 +12,8 @@
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/core/Application.h>
 
+#include <Wiwa/scripting/ScriptEngine.h>
+
 #include <Wiwa/ecs/components/Mesh.h>
 
 #include "../MonoWiwaTranslations.h"
@@ -105,6 +107,39 @@ size_t CreateEntityNamed(MonoString* name_entity, void* scene)
 	return em.CreateEntity(name_p);
 }
 
+MonoString* GetEntityName(size_t id, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	return 	Wiwa::ScriptEngine::CreateString(_scene->GetEntityManager().GetEntityName(id));
+}
+
+EntityId GetEntityByName(MonoString* name_entity, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	const char* name = mono_string_to_utf8(name_entity);
+
+	return em.GetEntityByName(name);
+}
+
+EntityId GetChildByName(EntityId parent, MonoString* name, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	const char* cname = mono_string_to_utf8(name);
+
+	return em.GetChildByName(parent, cname);
+}
+
+EntityId CreateChildByName(EntityId parent, MonoString* name, void* scene)
+{
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	const char* cname = mono_string_to_utf8(name);
+
+	return em.CreateEntity(cname, parent);
+}
+
 void DestroyEntity(size_t eid, void* scene)
 {
 	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
@@ -113,16 +148,31 @@ void DestroyEntity(size_t eid, void* scene)
 	em.DestroyEntity(eid);
 }
 
-size_t LoadPrefabIntr(const char* file)
+size_t LoadPrefabIntr(MonoString* file, void* scene)
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	return em.LoadPrefab(file);
+	char* str = mono_string_to_utf8(file);
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	return em.LoadPrefab(str);
 }
 
-void SavePrefabIntr(size_t id, const char* file)
+size_t LoadPrefabAsChildIntr(MonoString* file, size_t parent, void* scene)
 {
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	em.SavePrefab(id, file);
+	char* str = mono_string_to_utf8(file);
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	size_t id = em.LoadPrefab(str);
+	em.SetParent(id, parent);
+	return id;
+}
+
+void SavePrefabIntr(size_t id, MonoString* file, void* scene)
+{
+	char* str = mono_string_to_utf8(file);
+	Wiwa::Scene* _scene = (Wiwa::Scene*)scene;
+	Wiwa::EntityManager& em = _scene->GetEntityManager();
+	em.SavePrefab(id, str);
+
 }
 
 size_t LoadResourceModel(MonoString* str)

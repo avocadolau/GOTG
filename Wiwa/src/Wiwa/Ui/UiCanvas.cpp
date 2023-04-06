@@ -4,6 +4,7 @@
 #include "Wiwa/ui/UiManager.h"
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/audio/Audio.h>
 namespace Wiwa
 {
 	GuiCanvas::GuiCanvas(Scene* scene, unsigned int id,bool active)
@@ -16,6 +17,13 @@ namespace Wiwa
 	GuiCanvas::~GuiCanvas()
 	{
 
+	}
+
+	bool GuiCanvas::Update()
+	{
+		InputController();
+
+		return true;
 	}
 
 	void GuiCanvas::SwapActive()
@@ -41,5 +49,50 @@ namespace Wiwa
 			}
 		}
 		
+	}
+
+	void GuiCanvas::InputController()
+	{
+		if (Wiwa::Input::IsButtonPressed(0, 13))
+		{
+			DpadUp = true;
+		}
+		if (Wiwa::Input::IsButtonPressed(0, 11))
+		{
+			DpadDown = true;
+		}
+		if (Wiwa::Input::IsButtonReleased(0, 13) && DpadUp)
+		{
+			DpadUp = false;
+			idGuiSelected++;
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
+			}
+			if (idGuiSelected >= controlsForSelection.size())
+			{
+				idGuiSelected = 0;
+			}
+		}
+		if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
+		{
+			DpadDown = false;
+			idGuiSelected--;
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
+			}
+			if (idGuiSelected <= -1)
+			{
+				idGuiSelected = controlsForSelection.size() - 1;
+			}
+		}
+		if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
+		{
+			SelectElement(idGuiSelected);
+
+		}
+
+
 	}
 }

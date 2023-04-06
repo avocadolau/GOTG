@@ -45,16 +45,40 @@ namespace Wiwa
 		// Init skinned
 		ResourceId skinnedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned");
 		Shader *skinnedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedShaderId);
-		skinnedShader->Compile("resources/shaders/skinned/skinned");
-		// skinnedShader->addUniform("u_Texture", UniformType::Sampler2D);
-		// skinnedShader->addUniform("u_ToonLevels", UniformType::Float);
-		// skinnedShader->addUniform("u_RimLightPower", UniformType::Float);
-		// skinnedShader->addUniform("u_SpecularValue", UniformType::Float);
-		// skinnedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
-		// skinnedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
-		// skinnedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
-		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned", skinnedShader);
 
+		skinnedShader->Compile("resources/shaders/skinned/skinned");
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned", skinnedShader);
+		// Init skinned textured
+		ResourceId skinnedTexturedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured");
+		Shader* skinnedTexturedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedShaderId);
+		skinnedTexturedShader->Compile("resources/shaders/skinned/skinned_textured");
+		skinnedTexturedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedTexturedShader->addUniform("u_ToonLevels", UniformType::Int);
+		skinnedTexturedShader->addUniform("u_RimLightPower", UniformType::Float);
+		skinnedTexturedShader->addUniform("u_SpecularValue", UniformType::Float);
+		skinnedTexturedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		skinnedTexturedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		skinnedTexturedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured", skinnedTexturedShader);
+		// Init skinned textured outlined
+		//ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
+		//Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
+		//skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
+		//skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		//skinnedTexturedOutlinedShader->addUniform("u_ToonLevels", UniformType::Int);
+		//skinnedTexturedOutlinedShader->addUniform("u_RimLightPower", UniformType::Float);
+		//skinnedTexturedOutlinedShader->addUniform("u_SpecularValue", UniformType::Float);
+		//skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		//skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		//skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		//skinnedTexturedOutlinedShader->addUniform("u_NearFar", UniformType::fVec2);
+		//Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
+		// Init skinned depth
+		ResourceId skinnedDepthShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_depth");
+		Shader* skinnedDepthShader = Wiwa::Resources::GetResourceById<Shader>(skinnedDepthShaderId);
+		skinnedDepthShader->Compile("resources/shaders/skinned/skinned_depth");
+		skinnedDepthShader->addUniform("u_Texture", UniformType::Sampler2D);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_depth", skinnedDepthShader);
 		// Init bone debug
 		ResourceId debugBonesShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/debug_bones");
 		Shader *debugBoneShader = Wiwa::Resources::GetResourceById<Shader>(debugBonesShaderId);
@@ -305,33 +329,33 @@ namespace Wiwa
 		{
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
-		//// Setting the shadow map buffer
-		camera->shadowBuffer->Bind(clear);
+		////// Setting the shadow map buffer
+		//camera->shadowBuffer->Bind(clear);
 
-		Wiwa::Transform3D *lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
-		glm::mat4 view;
-		glm::mat4 projection;
+		//Wiwa::Transform3D *lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
+		//glm::mat4 view;
+		//glm::mat4 projection;
 
-		if (lightTrans)
-		{
-			view = glm::lookAt(
-				lightTrans->localPosition,
-				lightTrans->localPosition + lightTrans->localRotation,
-				glm::vec3(0.0f, 1.0f, 0.0f));
-			projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+		//if (lightTrans)
+		//{
+		//	view = glm::lookAt(
+		//		lightTrans->localPosition,
+		//		lightTrans->localPosition + lightTrans->localRotation,
+		//		glm::vec3(0.0f, 1.0f, 0.0f));
+		//	projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
 
-			m_DepthShader->Bind();
-			m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
-			m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
+		//	m_DepthShader->Bind();
+		//	m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
+		//	m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
 
-			m_DepthShader->setUniform(m_DepthShaderUniforms.Model, lightTrans->localMatrix);
-		}
+		//	m_DepthShader->setUniform(m_DepthShaderUniforms.Model, lightTrans->localMatrix);
+		//}
 
-		mesh->Render();
+		//mesh->Render();
 
-		m_DepthShader->UnBind();
+		//m_DepthShader->UnBind();
 
-		camera->shadowBuffer->Unbind();
+		//camera->shadowBuffer->Unbind();
 
 		// Set up color buffer
 
@@ -344,14 +368,14 @@ namespace Wiwa
 
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
-		if (lightTrans)
+	/*	if (lightTrans)
 		{
 			glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
 
 			matShader->setUniform(matShader->getUniformLocation("u_LightMVP"), lightMVP);
-		}
+		}*/
 
-		camera->shadowBuffer->BindTexture();
+		//camera->shadowBuffer->BindTexture();
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
@@ -387,6 +411,9 @@ namespace Wiwa
 	}
 	void Renderer3D::RenderMesh(Model *mesh, const glm::mat4 &transform, Material *material, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, const std::vector<glm::mat4> &finalBoneMatrices, bool clear, Camera *camera, bool cull)
 	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+
 		if (!camera)
 		{
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
@@ -523,12 +550,14 @@ namespace Wiwa
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
 				camera->frameBuffer->Bind(false);
 				glDepthFunc(GL_LEQUAL);
-				Shader *shader = m_DefaultSkybox.m_Material->getShader();
+				Shader* shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
-				shader->setUniform(shader->getViewLoc(), camera->getView());
+				glm::mat4 view = glm::mat4(glm::mat3(camera->getView()));
+				shader->setUniform(shader->getViewLoc(), view);
 				m_DefaultSkybox.Render();
 				shader->UnBind();
 				glDepthFunc(GL_LESS);

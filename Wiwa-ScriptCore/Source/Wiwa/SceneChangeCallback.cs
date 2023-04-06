@@ -1,14 +1,13 @@
 using System;
-using System.Runtime.Hosting;
 
 namespace Wiwa
 {
     [Callback]
-    class PlayGame
+    class GoToMilanoHub
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(2, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
     [Callback]
@@ -16,7 +15,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(0, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
 
@@ -36,6 +35,8 @@ namespace Wiwa
         static void OnExecute()
         {
             InternalCalls.PauseScene();
+            InternalCalls.ActivateGuiCanvas(1);
+            InternalCalls.ActivateGuiCanvas(0);
         }
     }
 
@@ -83,7 +84,8 @@ namespace Wiwa
         static void OnExecute(float level)
         {
             //InternalCalls.SetFullscreenIntr(ret);
-            Console.WriteLine($"slider actual level is :{level}");
+            //Console.WriteLine($"slider actual level is :{level}");
+            InternalCalls.ChangeMasterVolume(((int)level));
         }
     }
 
@@ -93,7 +95,7 @@ namespace Wiwa
         static void OnExecute(float level)
         {
             //InternalCalls.SetVsyncIntr(ret);
-            Console.WriteLine($"slider actual level is :{level}");
+            //Console.WriteLine($"slider actual level is :{level}");
         }
     }
 }

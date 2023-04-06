@@ -1,9 +1,3 @@
-{
-    "name": "vcpkg-example",
-    "version": "1.83",
-    "dependencies": [
-        "imgui",
-        "imguizmo",
-        "stb"
-    ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a6f2d4265b1f27e16222c9ed8d22011b51838cb39e232e04fc7a91b216389c88
+size 142

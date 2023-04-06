@@ -12,6 +12,7 @@ namespace Wiwa {
 		glm::vec3 target;
 		bool hasArrived;
 		bool hasPath;
+		float angularSpeed;
 	};
 }
 
@@ -20,4 +21,5 @@ REFLECTION_BEGIN(Wiwa::AgentAI)
 	REFLECT_MEMBER(target)
 	REFLECT_MEMBER(hasArrived)
 	REFLECT_MEMBER(hasPath)
+	REFLECT_MEMBER(angularSpeed)
 REFLECTION_END;

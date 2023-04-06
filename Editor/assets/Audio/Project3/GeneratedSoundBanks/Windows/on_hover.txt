@@ -1,0 +1,7 @@
+Event	ID	Name			Wwise Object Path	Notes
+	412874053	on_hover			\Default Work Unit\on_hover	
+	2715313045	pause_sound			\Default Work Unit\pause_sound	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	845486800	pause_sound	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Menu\pause_sound_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Menu\pause_sound		166328
+

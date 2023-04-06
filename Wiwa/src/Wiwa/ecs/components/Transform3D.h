@@ -39,4 +39,5 @@ REFLECTION_BEGIN(Wiwa::Transform3D)
 	REFLECT_MEMBER(localRotation)
 	REFLECT_MEMBER(localScale)
 	REFLECT_MEMBER(worldMatrix)
+	REFLECT_MEMBER(localMatrix)
 REFLECTION_END;

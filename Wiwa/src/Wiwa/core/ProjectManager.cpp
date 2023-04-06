@@ -52,8 +52,8 @@ namespace Wiwa
 				size_t size = scene_list.Size();
 				SceneData sd;
 
-				for (uint32_t i = 0; i < size; i++) {
-					JSONValue scene = scene_list[i];
+				for (size_t i = 0; i < size; i++) {
+					JSONValue scene = scene_list[(uint32_t)i];
 					
 					sd.scene_name = scene["name"].as_string();
 					sd.scene_path = scene["path"].as_string();
@@ -98,7 +98,6 @@ namespace Wiwa
 	void ProjectManager::SaveProjectAs(const char* file)
 	{
 		std::string path = file;
-		path += ".wiproject";
 		Wiwa::JSONDocument doc(path.c_str());
 		m_CurrentProject = path;
 		doc.AddMember("name", m_Name.c_str());

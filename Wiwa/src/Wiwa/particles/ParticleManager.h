@@ -33,6 +33,7 @@ namespace Wiwa {
 		glm::vec4	color;
 
 		//position
+		glm::vec3	offset;
 		glm::vec3	startingPosition;
 		glm::vec3	velocity;
 		glm::vec3	acceleration;
@@ -54,6 +55,10 @@ namespace Wiwa {
 		bool        isActive = false;
 
 		class AnimationParticles* animation = nullptr;
+
+		double startTime;
+
+		int animationCreationTime;
 
 		ParticleBillboard();
 
@@ -98,7 +103,7 @@ namespace Wiwa {
 
 		void UpdateParticles();
 
-
+		int currentFrameParticles;
 		
 		float dt;
 

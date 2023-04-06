@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{B0B09002-1B2B-4E9D-9DAF-53D25465CF1F}" SchemaVersion="110">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{B0B09002-1B2B-4E9D-9DAF-53D25465CF1F}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="player_shoot" ID="{852D44FD-58B9-4B4E-98F0-0A725EDEED84}">
+					<ObjectInclusionList>
+						<ObjectRef Name="player_shoot" ID="{9C13F365-FCC2-463B-AF1F-7EC376B99101}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="character_selection" ID="{C1CD90D7-8C02-4410-ABEC-3AE818653A77}">
+					<ObjectInclusionList>
+						<ObjectRef Name="character_selection" ID="{02DA4D1A-F03D-40D2-97F6-AA890A789216}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="logo_intro" ID="{1AB09DD4-6B1B-4C3B-966F-1C6C68F3EB40}">
+					<ObjectInclusionList>
+						<ObjectRef Name="logo_intro" ID="{E3D47F86-37B9-435C-ABE0-9996A7C18E4B}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="menu_intro" ID="{38824FAA-9140-4DAF-B909-E7F92287DABE}">
+					<ObjectInclusionList>
+						<ObjectRef Name="menu_song" ID="{49FAEAA0-81A2-4DC8-A6F5-928DD67CED8C}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="pause_sound" ID="{58E87580-5255-4F8C-B9AA-A540BFC9AB22}">
+					<ObjectInclusionList>
+						<ObjectRef Name="pause_sound" ID="{B9C6E3D0-3987-46F5-89D7-8C7B4E184648}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="background_song" ID="{125180E6-B5FA-4A10-8C9F-6B882A37F14D}">
+					<ObjectInclusionList>
+						<ObjectRef Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="player_walking" ID="{6018BF2B-026E-4FE7-BBEE-5788AD0142A5}">
+					<ObjectInclusionList>
+						<ObjectRef Name="player_walk" ID="{A1A473A8-6702-4480-B4FE-CCC9851193CC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Set_Bus_Master_Volume" ID="{F228E7C7-B1A8-4636-812F-C520697C1253}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Set_Bus_Master_Volume" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="on_hover" ID="{3DF9D049-96A7-4BE7-ABCF-CBE65496C74F}">
+					<ObjectInclusionList>
+						<ObjectRef Name="on_hover" ID="{C0413F64-E9E0-4B28-A0C5-A859611A1B64}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="pause_sound" ID="{3ECED16A-1D1E-4FF2-A6C6-E13A06E3A5AA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

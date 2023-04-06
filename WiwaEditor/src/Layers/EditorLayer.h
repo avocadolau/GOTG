@@ -34,6 +34,7 @@
 #include "Panels/UIPanel.h"
 #include "Panels/UIEditorPanel.h"
 #include "Panels/AIMapBakingPanel.h"
+#include "Panels/GameLogPanel.h"
 
 
 #include <Wiwa/scene/SceneManager.h>
@@ -65,6 +66,7 @@ public:
 
 	void SubmitToMainThread(const std::function<void()> func);
 
+	void StopScene();
 	static void RegenSol();
 
 	std::string getOpenedScenePath() { return m_OpenedScenePath; };
@@ -132,6 +134,7 @@ private:
 	std::unique_ptr<Panel> m_UiPanel;
 	std::unique_ptr<Panel> m_UiEditorPanel;
 	std::unique_ptr<Panel> m_AIMapBakingPanel;
+	std::unique_ptr<Panel> m_GameLogPanel;
 
 
 	std::vector<Panel *> m_Panels;
@@ -161,6 +164,7 @@ private:
 public:
 	static std::string s_SolVersion;
 	static std::string s_BuildConf;
+	static bool s_BuildAutomatic;
 private:
 	static EditorLayer* s_Instance;
 	static std::thread* s_RegenThread;

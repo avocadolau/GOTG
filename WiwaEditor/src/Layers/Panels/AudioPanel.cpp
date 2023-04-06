@@ -10,6 +10,8 @@
 AudioPanel::AudioPanel(EditorLayer* instance) 
 	: Panel("Audio", ICON_FK_HEADPHONES, instance)
 {
+	bank_list = std::vector<Audio::BankData>();
+	event_list = std::vector<Audio::EventData>();
 }
 
 AudioPanel::~AudioPanel()
@@ -20,7 +22,7 @@ void AudioPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
 
-	bool loaded_project = Audio::LoadedProject();
+	loaded_project = Audio::LoadedProject();
 
 	if (loaded_project) {
 		ImGui::TextColored(ImVec4(0, 255, 0, 1), "Loaded");
@@ -31,7 +33,7 @@ void AudioPanel::Draw()
 
 	ImGui::SameLine();
 	if (ImGui::Button("Load project##audio")) {
-		std::string filename = Wiwa::FileDialogs::OpenFile("Wwise bank (*.bnk)\0*.bnk\0");
+		filename = Wiwa::FileDialogs::OpenFile("Wwise bank (*.bnk)\0*.bnk\0");
 
 		if (filename != "") {
 			filename = Wiwa::Resources::_assetToLibPath(filename);
@@ -39,7 +41,7 @@ void AudioPanel::Draw()
 			std::filesystem::path p = std::filesystem::relative(filename);
 			filename = p.string();
 
-			bool ret = Audio::LoadProject(filename.c_str());
+			ret = Audio::LoadProject(filename.c_str());
 
 			if (!ret) {
 				WI_ERROR("Error loading project [{}]", Audio::GetLastError());
@@ -48,11 +50,11 @@ void AudioPanel::Draw()
 	}
 
 	if (ImGui::CollapsingHeader("Banks##audio")) {
-		const std::vector<Audio::BankData>& bank_list = Audio::GetLoadedBankList();
+		bank_list = Audio::GetLoadedBankList();
 
-		size_t b_size = bank_list.size();
+		b_size = bank_list.size();
 
-		uint32_t del_bank_id = Audio::INVALID_ID;
+		del_bank_id = Audio::INVALID_ID;
 
 		for (size_t i = 0; i < b_size; i++) {
 			ImGui::Text(bank_list[i].name.c_str());
@@ -67,13 +69,13 @@ void AudioPanel::Draw()
 		}
 
 		if (ImGui::Button("Load bank##audio")) {
-			std::string filename = Wiwa::FileDialogs::OpenFile("Wwise bank (*.bnk)\0*.bnk\0");
+			filename = Wiwa::FileDialogs::OpenFile("Wwise bank (*.bnk)\0*.bnk\0");
 
 			if (filename != "") {
 				filename = Wiwa::Resources::_assetToLibPath(filename);
 				std::filesystem::path p = std::filesystem::relative(filename);
 				filename = p.string();
-				bool ret = Audio::LoadBank(filename.c_str());
+				ret = Audio::LoadBank(filename.c_str());
 
 				if (!ret) {
 					WI_ERROR("Error loading project [{}]", Audio::GetLastError());
@@ -83,9 +85,9 @@ void AudioPanel::Draw()
 	}
 
 	if (ImGui::CollapsingHeader("Events##audio")) {
-		const std::vector<Audio::EventData>& event_list = Audio::GetLoadedEventList();
+		event_list = Audio::GetLoadedEventList();
 
-		size_t e_size = event_list.size();
+		e_size = event_list.size();
 
 		for (size_t i = 0; i < e_size; i++) {
 			ImGui::Text(event_list[i].name.c_str());
@@ -109,13 +111,13 @@ void AudioPanel::Draw()
 	if (ImGui::BeginPopup("Load event##audio")) {
 		ImGui::SetCursorPosX((ImGui::GetWindowWidth() - ImGui::CalcTextSize("Load event").x) / 2.f);
 		ImGui::Text("Load event");
-		static char buffer[64] = { 0 };
+		buffer[64] = { 0 };
 		ImGui::Text("Event name");
 		ImGui::SameLine();
 		ImGui::InputText("##inputEvent", buffer, IM_ARRAYSIZE(buffer));
 
 		if (ImGui::Button("Load##audio")) {
-			bool ret = Audio::LoadEvent(buffer);
+			ret = Audio::LoadEvent(buffer);
 
 			if (!ret) {
 				WI_ERROR("Error loading event [{}]", Audio::GetLastError());
@@ -133,7 +135,7 @@ void AudioPanel::Draw()
 	}
 
 	if (ImGui::Button("Reload project##audio")) {
-		bool ret = Audio::ReloadProject();
+		ret = Audio::ReloadProject();
 
 		if (!ret) {
 			WI_ERROR("Error reloading audio [{}]", Audio::GetLastError());
@@ -142,3 +144,25 @@ void AudioPanel::Draw()
 
 	ImGui::End();
 }
+
+void AudioPanel::OnEvent(Wiwa::Event& e)
+{
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({ &AudioPanel::OnSceneChange, this });
+}
+
+bool AudioPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
+{
+	loaded_project = false;
+	filename = "";
+	ret = false;
+	bank_list = std::vector<Audio::BankData>();
+	event_list = std::vector<Audio::EventData>();
+	b_size = 0;
+	e_size = 0;
+	del_bank_id = 0;
+	buffer[64] = { 0 };
+
+	return true;
+}
+

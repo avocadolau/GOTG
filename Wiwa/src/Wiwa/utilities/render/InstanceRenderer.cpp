@@ -184,7 +184,7 @@ namespace Wiwa {
 
 	void InstanceRenderer::UpdateInstancePosition(uint32_t id, const Vector2i& position, Renderer2D::Pivot pivot)
 	{
-		Size2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex[id].scale.h};
+		Size2i s = { (int)m_InstanceVertex[id].scale.w, (int)m_InstanceVertex[id].scale.h };
 		
 		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(position, s, pivot);
 	}

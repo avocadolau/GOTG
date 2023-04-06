@@ -6,23 +6,27 @@
 #include <Wiwa/core/Renderer2D.h>
 namespace Wiwa
 {
-	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text) : GuiControl(scene, GuiControlType::TEXT, id)
+	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, bool active) : GuiControl(scene, GuiControlType::TEXT, id)
 	{
 		this->position = bounds;
 		name = "Text";
-		active = true;
 		text = string_text;
+		this->active = active;
 		audioEventForButton = "none";
 		callbackID = WI_INVALID_INDEX;
 
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		text_res = new Text();
-		text_res = gm.InitFont("assets/Fonts/arial.ttf", (char*)string_text);
+		text_res = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)string_text);
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text_res->GetTextureId(), text_res->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		
-		
+		if (!active)
+		{
+			r2d.DisableInstance(m_Scene, id_quad_normal);
+
+		}
 	}
 
 	GuiText::~GuiText()

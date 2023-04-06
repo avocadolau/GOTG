@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/particle_display","uniforms":{"u_Texture":"assets/player/bullet/lazerbeamstarlordelectro-01.png"}}
