@@ -22,6 +22,7 @@ namespace Game
 
         private bool isShooting = false;
         private float shootTimer = 0f;
+        private int bulletCount = 0;
 
         private float footstepTimer = 0f;
         private float walkStepTimer = 0.62f;
@@ -36,7 +37,6 @@ namespace Game
         private float dieTimer = 5f;
         private bool pendingToLoad = true;
         Vector3 lastDir = Vector3Values.zero;
-
         void Awake()
         {
             //Setting components
@@ -65,6 +65,8 @@ namespace Game
             //Debug remove once tested
             if (CheckDeath(ref controller))
                 return;
+            //Debug remove when respective actions added
+            CheckParticles(ref controller);
 
             Vector3 velocity = Vector3Values.zero;
             Vector3 input = Vector3Values.zero;
@@ -159,6 +161,43 @@ namespace Game
                 return true;
             }
             return false;
+        }
+
+        bool debugR = false;
+        bool tempR = false;
+        private void CheckParticles(ref Character controller)
+        {
+            tempR = debugR;
+            if(Input.IsKeyDown(KeyCode.R))
+            {
+                debugR = true;
+                
+            }
+            else
+            {
+                debugR = false;
+            }
+
+            //check if input is pressed once
+            if (tempR != debugR)
+            {
+                //if is pressed
+                if (debugR)
+                {
+                    //Console.WriteLine("Presed R");
+                    //Hurt player
+                    EntityId pe_hurt = GetChildByName("PE_Hurt");
+                    ParticleEmitterManger.ParticleEmitterPlayBatch(pe_hurt);
+                }
+                //if is released
+                else
+                {
+                    //Console.WriteLine("Released R");
+
+                }
+            }
+
+
         }
 
         Vector3 GetMovementInput(ref Character controller)
@@ -373,7 +412,12 @@ namespace Game
         }
         void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
         {
-            EntityId bullet = CreateEntityNamed("Bullet");
+            Console.WriteLine("fired");
+
+            string bulletName = "Bullet" + bulletCount;
+            bulletCount++;
+
+            EntityId bullet = CreateEntityNamed(bulletName);
             ref Transform3D playerTransform = ref GetComponent<Transform3D>();
             ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
             ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);

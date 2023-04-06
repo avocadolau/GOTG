@@ -135,7 +135,7 @@ bool Wiwa::AgentAISystem::CreatePath(const glm::vec3& targetPos)
 	auto end_time = std::chrono::high_resolution_clock::now();
 	// Calculate the elapsed time
 	auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-	WI_INFO("Pathfinding time: {}", elapsed_time);
+	//WI_INFO("Pathfinding time: {}", elapsed_time);
 
 	if (check != -1)
 	{
