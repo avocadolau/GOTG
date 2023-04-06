@@ -54,12 +54,13 @@ void InventoryPanel::DrawConsumablePool(int& id)
 	}
 	if (ImGui::BeginPopup("Create consumable"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
+		static std::string name;
+		ImGui::InputText("Name", &name);
 		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddConsumable({ nameBuffer });
+			Wiwa::ItemManager::AddConsumable({ name.c_str() });
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -158,16 +159,13 @@ void InventoryPanel::DrawBuffPool(int& id)
 	}
 	if (ImGui::BeginPopup("Create buff"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
-
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddBuff({ nameBuffer });
-			ImGui::CloseCurrentPopup();
-		}
-		if (ImGui::Button("Close"))
-		{
+			Wiwa::ItemManager::AddBuff({ name.c_str() });
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
@@ -255,18 +253,16 @@ void InventoryPanel::DrawPassivePool(int& id)
 	}
 	if (ImGui::BeginPopup("Create passive"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
-
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddPassive({ nameBuffer });
+			Wiwa::ItemManager::AddPassive({ name.c_str()});
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
-		if (ImGui::Button("Close"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
+
 		ImGui::EndPopup();
 	}
 	if (!passives.empty())
@@ -335,16 +331,13 @@ void InventoryPanel::DrawAbilityPool(int& id)
 	}
 	if (ImGui::BeginPopup("Create ability"))
 	{
-		static char nameBuffer[256];
-		ImGui::InputText("Name", nameBuffer, 256);
-
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
 		if (ImGui::Button("Create"))
 		{
-			Wiwa::ItemManager::AddAbility({ nameBuffer });
-			ImGui::CloseCurrentPopup();
-		}
-		if (ImGui::Button("Close"))
-		{
+			Wiwa::ItemManager::AddAbility({ name.c_str() });
+			name.clear();
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
