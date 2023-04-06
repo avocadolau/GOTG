@@ -1,18 +1,18 @@
 #include <wipch.h>
 #include <Wiwa/core/Input.h>
-#include "UiImage.h"
+#include "UiAbility.h"
 #include <Wiwa/utilities/Log.h>
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
 
 namespace Wiwa
 {
-	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active, bool animated, float animFrames, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::IMAGE, id)
+	GuiAbility::GuiAbility(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active,bool animated,std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::ABILITY, id)
 	{
 		this->position = bounds;
 		this->texture = texture;
 		texturePosition = boundsOriginTex;
-		name = "Image";
+		name = "Ability";
 		m_Scene = scene;
 		this->active = active;
 		text = "none";
@@ -39,16 +39,15 @@ namespace Wiwa
 		}
 		framesAnimation = 0;
 		animatedControl = animated;
-		animSpeed = animFrames;
 		positionsForAnimations = animationRects;
 	}
 
-	GuiImage::~GuiImage()
+	GuiAbility::~GuiAbility()
 	{
 
 	}
 
-	bool GuiImage::Update()
+	bool GuiAbility::Update()
 	{
 		if (state != GuiControlState::DISABLED)
 		{
@@ -77,17 +76,17 @@ namespace Wiwa
 				state = GuiControlState::NORMAL;
 			}
 
-			
+
 		}
 
 		return false;
 	}
 
-	bool GuiImage::Draw(Renderer2D* render)
+	bool GuiAbility::Draw(Renderer2D* render)
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-		
+
 		switch (state)
 		{
 
@@ -96,7 +95,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		case GuiControlState::NORMAL:
@@ -104,7 +103,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
@@ -114,7 +113,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 		case GuiControlState::PRESSED:
 		{
@@ -122,7 +121,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		/******/
@@ -132,13 +131,11 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 		default:
 			break;
 		}
-
-		HandleAnim(render);
 		return false;
 	}
 }
