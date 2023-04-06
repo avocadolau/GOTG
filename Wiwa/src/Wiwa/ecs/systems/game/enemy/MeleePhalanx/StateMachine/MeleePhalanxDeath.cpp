@@ -18,7 +18,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		animator->PlayAnimation("death", false);
+		animator->PlayAnimation("dead", false);
 	}
 
 	void MeleePhalanxDeathState::UpdateState(EnemyMeleePhalanx* enemy)

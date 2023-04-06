@@ -12,7 +12,7 @@
 //#define STB_TRUETYPE_IMPLEMENTATION 
 #include "../vendor/stb/stb_truetype.h"
 
-
+#include <Wiwa/scene/SceneManager.h>
 
 namespace Wiwa
 {
@@ -30,22 +30,37 @@ namespace Wiwa
 		//InitFont("assets/arial.ttf");
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
+
+		Conversation newConversation;
+
+		SetDialogBubbleImage("assets/HUD_Images/dialog_images/dialog_test_placeholder.png", newConversation);
+		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder2.png", newConversation);
+
+		SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", newConversation, 0, 1);
+		SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", newConversation, 0, 2);
+		SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", newConversation, 0, 4);
+
+		SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", newConversation, 1, 2);
+		SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", newConversation, 1, 5);
+
+		conversations.push_back(newConversation);
+
 		return true;
 	}
 
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		//if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsKeyPressed(Wiwa::Key::GamepadY)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
-		//{
-		//	actualConversation = conversations[0];
-		//	actualConversationState = 0;
-		//}
-		//
-		//if (actualConversationState == 0 || actualConversationState == 1)
-		//{
-		//	UpdateConversation(actualConversation, &Wiwa::Application::Get().GetRenderer2D());
-		//}
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsKeyPressed(Wiwa::Key::GamepadY)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		{
+			actualConversation = conversations[0];
+			actualConversationState = 0;
+		}
+		
+		if (actualConversationState == 0 || actualConversationState == 1)
+		{
+			UpdateConversation(actualConversation, &Wiwa::Application::Get().GetRenderer2D());
+		}
 		
 		return true;
 	}
@@ -74,11 +89,11 @@ namespace Wiwa
 
 			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.dialogImgID, Vector2i{ 0,0 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render character and bubble
 
-			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text1_imgModeID, Vector2i{500,500}, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 1
-			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text2_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 2
-			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text3_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 3
-			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text4_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 4
-			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text5_imgModeID, Vector2i{ 500,500 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 5
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text1_imgModeID, Vector2i{ 500,560 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 1
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text2_imgModeID, Vector2i{ 550,560 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 2
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text3_imgModeID, Vector2i{ 600,560 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 3
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text4_imgModeID, Vector2i{ 650,560 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 4
+			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.nodes[currentNode].text5_imgModeID, Vector2i{ 700,560 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render text line 5
 
 			render->UpdateInstancedQuadTexPosition(m_Scene, conversation.continueImgID, Vector2i{ 650,650 }, Wiwa::Renderer2D::Pivot::UPLEFT); // Render continue button
 
@@ -93,97 +108,131 @@ namespace Wiwa
 		}
 	}
 
-	Text* DialogManager::InitFont(const char* path, char* _word, Conversation conversation)
+	void DialogManager::SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int conversationNode, int textLine)
 	{
-		
-		/* load font file */
-		long size;
-		byte* fontBuffer;
-		
-		//Extracted from https://github.com/justinmeiners/stb-truetype-example/blob/master/main.c
-		//Read the fontFile lines 19 to 27
-		FILE* fontFile = fopen(path, "rb");
-		if (!fontFile)
-		{
-			WI_CORE_INFO("Seems like font at {} doesn't exist", path);
-			return false;
-		}
-		fseek(fontFile, 0, SEEK_END);
-		size = ftell(fontFile);
-		fseek(fontFile, 0, SEEK_SET);
+		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+		Text* text = gm.InitFont(fontPath, dialogText);
 
-		fontBuffer = (byte*)malloc(size);
+		Renderer2D render = Wiwa::Application::Get().GetRenderer2D();
 
-		fread(fontBuffer, size, 1, fontFile);
-		fclose(fontFile);
-
-
-		/* prepare font */
-		stbtt_fontinfo info;
-		if (!stbtt_InitFont(&info, fontBuffer, 0))
-		{
-			WI_CORE_ERROR("Failed to load font at {}", path);
-			return false;
-		}
-
-		int b_w = 512; /* bitmap width */
-		int b_h = 512; /* bitmap height */
-		int l_h = 64; /* line height */
-
-		/* create a bitmap for the phrase */
-		byte* bitmap = (byte*)calloc(b_w * b_h, sizeof(unsigned char));
-
-		/* calculate font scaling */
-		float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
-
-		char* word = _word;
-
-		int x = 0;
-
-		int ascent, descent, lineGap;
-		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
-
-		ascent = (int)round(ascent * scale);
-		descent = (int)round(descent * scale);
-
-		int i;
-		for (i = 0; i < strlen(word); ++i)
-		{
-			/* how wide is this character */
-			int ax;
-			int lsb;
-			stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
-			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
-
-			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
-			int c_x1, c_y1, c_x2, c_y2;
-			stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
-
-			/* compute y (different characters have different heights) */
-			int y = ascent + c_y1;
-
-			/* render character (stride and offset is important here) */
-			int byteOffset =(int)(x + roundf(lsb * scale) + (y * b_w));
-			stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);
-
-			/* advance x */
-			x += (int)roundf(ax * scale);
-
-			/* add kerning */
-			int kern;
-			kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
-			x += (int)roundf(kern * scale);
-		}
-	
-		
-		Text* text = new Text();
-		text->Init(b_w, b_h, bitmap);
-
-		free(fontBuffer);
-		free(bitmap);
-
-		return text;
+		if (textLine == 1) conversation.nodes[conversationNode].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 500,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 2) conversation.nodes[conversationNode].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 550,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 3) conversation.nodes[conversationNode].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 600,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 4) conversation.nodes[conversationNode].text4_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 650,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 5) conversation.nodes[conversationNode].text5_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 700,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 	}
+
+	void DialogManager::SetDialogBubbleImage(const char* path, Conversation conversation)
+	{
+		Renderer2D render = Wiwa::Application::Get().GetRenderer2D();
+
+		uint32_t textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+		Image* texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+
+		conversation.dialogImgID = render.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { 420,0 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+	}
+
+	void DialogManager::SetContinueIndicatorImage(const char* path, Conversation conversation)
+	{
+		Renderer2D render = Wiwa::Application::Get().GetRenderer2D();
+
+		uint32_t textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+		Image* texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+
+		conversation.dialogImgID = render.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { 1020,1020 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+	}
+
+	//Text* DialogManager::InitFont(const char* path, char* _word, Conversation conversation)
+	//{
+	//
+	//	/* load font file */
+	//	long size;
+	//	byte* fontBuffer;
+	//
+	//	//Extracted from https://github.com/justinmeiners/stb-truetype-example/blob/master/main.c
+	//	//Read the fontFile lines 19 to 27
+	//	FILE* fontFile = fopen(path, "rb");
+	//	if (!fontFile)
+	//	{
+	//		WI_CORE_INFO("Seems like font at {} doesn't exist", path);
+	//		return false;
+	//	}
+	//	fseek(fontFile, 0, SEEK_END);
+	//	size = ftell(fontFile);
+	//	fseek(fontFile, 0, SEEK_SET);
+	//
+	//	fontBuffer = (byte*)malloc(size);
+	//
+	//	fread(fontBuffer, size, 1, fontFile);
+	//	fclose(fontFile);
+	//
+	//
+	//	/* prepare font */
+	//	stbtt_fontinfo info;
+	//	if (!stbtt_InitFont(&info, fontBuffer, 0))
+	//	{
+	//		WI_CORE_ERROR("Failed to load font at {}", path);
+	//		return false;
+	//	}
+	//
+	//	int b_w = 512; /* bitmap width */
+	//	int b_h = 512; /* bitmap height */
+	//	int l_h = 64; /* line height */
+	//
+	//	/* create a bitmap for the phrase */
+	//	byte* bitmap = (byte*)calloc(b_w * b_h, sizeof(unsigned char));
+	//
+	//	/* calculate font scaling */
+	//	float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
+	//
+	//	char* word = _word;
+	//
+	//	int x = 0;
+	//
+	//	int ascent, descent, lineGap;
+	//	stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
+	//
+	//	ascent = (int)round(ascent * scale);
+	//	descent = (int)round(descent * scale);
+	//
+	//	int i;
+	//	for (i = 0; i < strlen(word); ++i)
+	//	{
+	//		/* how wide is this character */
+	//		int ax;
+	//		int lsb;
+	//		stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
+	//		/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
+	//
+	//		/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
+	//		int c_x1, c_y1, c_x2, c_y2;
+	//		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+	//
+	//		/* compute y (different characters have different heights) */
+	//		int y = ascent + c_y1;
+	//
+	//		/* render character (stride and offset is important here) */
+	//		int byteOffset = (int)(x + roundf(lsb * scale) + (y * b_w));
+	//		stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);
+	//
+	//		/* advance x */
+	//		x += (int)roundf(ax * scale);
+	//
+	//		/* add kerning */
+	//		int kern;
+	//		kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
+	//		x += (int)roundf(kern * scale);
+	//	}
+	//
+	//
+	//	Text* text = new Text();
+	//	text->Init(b_w, b_h, bitmap);
+	//
+	//	free(fontBuffer);
+	//	free(bitmap);
+	//
+	//	return text;
+	//}
 
 	//void DialogManager::SetActiveNode(size_t id, Conversation conversation)
 	//{
