@@ -125,6 +125,18 @@ namespace Wiwa
 		int Price;
 
 		Buff() = default;
+		Buff(const Buff& buff)
+		{
+			this->Name = buff.Name;
+			this->Icon = buff.Icon;
+			this->buffType = buff.buffType;
+			this->BuffPercent = buff.BuffPercent;
+			this->Duration = buff.Duration;
+			this->Cooldown = buff.Cooldown;
+			this->Price = buff.Price;
+			this->CurrentTime = buff.CurrentTime;
+			this->CoolDownTimer = buff.CoolDownTimer;
+		}
 		Buff(const char* name)
 			: Name(name),
 			  Icon(0),
@@ -148,6 +160,13 @@ namespace Wiwa
 		int BuffPercent;
 
 		Consumable() = default;
+		Consumable(const Consumable& consumable)
+		{
+			this->Name = consumable.Name;
+			this->Icon = consumable.Icon;
+			this->Type = consumable.Type;
+			this->BuffPercent = consumable.BuffPercent;
+		}
 		Consumable(const char* name)
 			: Name(name),
 			  Icon(0),

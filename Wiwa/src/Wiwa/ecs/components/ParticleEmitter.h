@@ -34,6 +34,7 @@ namespace Wiwa {
 		float   timer;
 
 		int	    number_animations;
+		float   particle_animation_speed;
 		bool    isAnimated;
 
 		bool    activateBillboard;
@@ -92,6 +93,10 @@ namespace Wiwa {
 		bool		particle_followEmitterRotation;
 		bool		particle_followEmitterPosition;
 		bool		particle_followParticle;
+
+		bool particle_colour_range;
+
+		float colorParticles[4];
 
 		ResourceId textureId;
 		EntityId entityOwnerId;

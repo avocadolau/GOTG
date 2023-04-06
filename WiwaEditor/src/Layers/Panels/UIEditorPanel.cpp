@@ -97,6 +97,12 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 	originSize[1] = control->texturePosition.height;
 	callbackID = control->callbackID;
 	audioEventForButton = control->audioEventForButton;
+	animated = control->animatedControl;
+	if (animated)
+	{
+		animSpeed = control->animSpeed;
+		animationRects = control->positionsForAnimations;
+	}
 	if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
 	{
 		extraOriginPos[0] = control->extraTexturePosition.x;
@@ -240,12 +246,44 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			
 			ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
 			
+			if (control->type == Wiwa::GuiControlType::IMAGE || control->type == Wiwa::GuiControlType::BUTTON || control->type == Wiwa::GuiControlType::CHECKBOX)
+			{
+				ImGui::Text("Animations");
+				ImGui::Checkbox("animated", &animated);
+				ImGui::InputFloat("Animation speed", &animSpeed);
+				VectorEdit(animationRects);
+			}
 		}
 		
-
-		UpdateElements(control);
+		if (ImGui::Button("Update"))
+		{
+			UpdateElements(control);
+		}
 		
 	}
+}
+
+void UIEditorPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
+{
+	for (size_t i = 0; i < list.size(); i++)
+	{
+		ImGui::PushID(i);
+		ImGui::Text("Animation frame: %d", i);
+		ImGui::InputInt2("Anim position", &(list.at(i).x, list.at(i).y));
+		ImGui::InputInt2("Anim size", &(list.at(i).width, list.at(i).height));
+		ImGui::PopID();
+	}
+	if (ImGui::Button("+"))
+	{
+		list.push_back({ 0,0,0,0 });
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("-"))
+	{
+		list.erase(list.begin() + list.size() - 1);
+	}
+
+	animationRects = list;
 }
 
 void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
@@ -260,13 +298,18 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 	control->position.width = size[0];
 	control->position.height = size[1];
 	control->audioEventForButton = audioEventForButton.c_str();
+	control->animatedControl = animated;
+	if (control->animatedControl)
+	{
+		control->positionsForAnimations = animationRects;
+		control->animSpeed = animSpeed;
+	}
 	if (callbackID != WI_INVALID_INDEX)
 	{
 		control->callbackID = callbackID;
 		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 	}
 	if(control->type != Wiwa::GuiControlType::TEXT)r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
-	r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, vector, Wiwa::Renderer2D::Pivot::UPLEFT);
 	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
 	if (control->type != Wiwa::GuiControlType::TEXT)
 	{

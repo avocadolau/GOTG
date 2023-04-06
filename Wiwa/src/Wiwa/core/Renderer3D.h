@@ -92,7 +92,7 @@ namespace Wiwa {
 		void RenderShadows(Camera* camera, const size_t& directional);
 
 		void RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,
-			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* textureId, const Size2i& srcSize);
+			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* textureId, const Size2i& srcSize, float colorParticles[4], bool isColorRanged);
 
 		void RenderSkybox();
 

@@ -21,7 +21,7 @@ namespace Wiwa {
         AnimationParticles() {}
 
     public:
-        float speed = 1.0f;
+        float speedParticlesAnimation = 1.0f;
         std::vector<glm::vec4> frames;
         bool loop = true;
         // Allows the animation to keep going back and forth
@@ -70,7 +70,7 @@ namespace Wiwa {
 
             for (int i = 0; i < creationTimes.size(); ++i)
             {
-                currentFrame = creationTimes[i] + speed * elapsedTimeParticles;
+                currentFrame = creationTimes[i] + speedParticlesAnimation * elapsedTimeParticles;
                 if (currentFrame >= totalFrames)
                 {
                     currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;

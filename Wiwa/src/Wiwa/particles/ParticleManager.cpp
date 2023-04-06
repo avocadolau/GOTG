@@ -112,7 +112,7 @@ namespace Wiwa {
 				{
 					p.lifetime = -1;
 				}
-					
+
 
 				//particle death
 				if (p.lifetime < 0)
@@ -241,7 +241,7 @@ namespace Wiwa {
 
 					if (p.followEmitterPosition)
 					{
-						resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex;
+						resultantPosition = t3D->localPosition + p.startingPosition + p.transform.localPosition + resultantVertex + p.offset;
 					}
 
 					p.vertices[i] = resultantPosition;
@@ -356,7 +356,7 @@ namespace Wiwa {
 
 						if (texture)
 							r3d.RenderQuad(VAO, indices, p.transform.position - (camera->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
-								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, texture, texture->GetSize());
+								lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, camera, true, texture, texture->GetSize(), p.emitterOwner->colorParticles, p.emitterOwner->particle_colour_range);
 					}
 
 					Wiwa::CameraManager& cm = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
@@ -366,9 +366,8 @@ namespace Wiwa {
 
 					//show in editor window
 					if (texture)
-						r3d.RenderQuad(VAO, indices, p.transform.position  - (cam->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
-							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, texture, texture->GetSize());
-
+						r3d.RenderQuad(VAO, indices, p.transform.position - (cam->getPosition() * (float)p.emitterOwner->activateBillboard), p.transform.rotation, p.transform.localScale,
+							lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), m_Material, false, man.editorCamera, true, texture, texture->GetSize(), p.emitterOwner->colorParticles, p.emitterOwner->particle_colour_range);
 
 					glDeleteVertexArrays(1, &VAO);
 					glDeleteBuffers(1, &VBO);
@@ -391,6 +390,55 @@ namespace Wiwa {
 		particle->transform.rotation.z = cam->getRotation().z + offset.z;
 	}
 
+	int ParticleManager::CalculateNumberOfAnimations(char texturePath[128])
+	{
+		// Load the image data using stb_image
+		int width, height, channels;
+		unsigned char* image_data = stbi_load(texturePath, &width, &height, &channels, 0);
+
+		// Check if there is data for each square of the animation
+		int square_size = width / 4;
+		int num_animations = 0;
+
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				int x = col * square_size;
+				int y = row * square_size;
+				bool has_data = false;
+
+				for (int i = 0; i < square_size; i++)
+				{
+					for (int j = 0; j < square_size; j++)
+					{
+						int index = ((y + i) * width + (x + j)) * channels;
+
+						if (image_data[index + 3] > 0)
+						{
+							has_data = true;
+							break;
+						}
+					}
+
+					if (has_data)
+					{
+						break;
+					}
+				}
+
+				if (has_data)
+				{
+					num_animations++;
+				}
+			}
+		}
+
+		// Free the image data
+		stbi_image_free(image_data);
+
+		return num_animations;
+	}
 
 	void ParticleManager::AddEmitter(ParticleEmitter* emitter)
 	{
@@ -436,7 +484,7 @@ namespace Wiwa {
 		{
 			return false;
 		}
-		
+
 		for (std::shared_ptr<ParticleEmitter> item : emitterList)
 		{
 			if (item->entityOwnerId == emitter->entityOwnerId)
@@ -614,6 +662,11 @@ namespace Wiwa {
 			p.followSpawn = emitter->followOnSpawn;
 			p.offset = emitter->particle_Offset;
 
+			if (!p.emitterOwner->particle_Offset_isRanged)
+			{
+				p.offset = glm::vec3(0.0f, 0.0f, 0.0f);
+			}
+
 
 			//set geometry
 			for (size_t i = 0; i < 4; i++)
@@ -659,73 +712,29 @@ namespace Wiwa {
 
 				p.animation->creationTimes.push_back(p.animationCreationTime);
 
+				//Calculates the total number of animations
+				int numberOfAnimations = CalculateNumberOfAnimations(emitter->texturePath);
+
 				if (p.animation != nullptr)
 				{
-					//p.animation->speed = 1.0f;
-					//p.animation->loop = true;
-					//p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-					//p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-					//p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-
-					p.animation->speed = 1.0f;
+					p.animation->speedParticlesAnimation = p.emitterOwner->particle_animation_speed;
 					p.animation->loop = false;
 
-					switch (p.emitterOwner->number_animations)
+					float frameX = 0.0f;
+					float frameY = 0.0f;
+
+					for (int i = 0; i < numberOfAnimations; i++)
 					{
 
-					case 1:
-					{
-						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f));
-					}
-					break;
+						p.animation->PushBack(glm::vec4(frameX, frameY, 0.25f, 0.25f));
 
-					case 2:
-					{
-						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-					}
-					break;
+						frameX = frameX + 0.25f;
 
-					case 3:
-					{
-						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-					}
-					break;
-
-					case 4:
-					{
-						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
-					}
-					break;
-
-					case 5:
-					{
-						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
-					}
-					break;
-
-					case 6:
-					{
-						p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
-						p.animation->PushBack(glm::vec4(0.25f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.5f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.75f, 0.0f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.0f, 0.25f, 0.25f, 0.25f));
-						p.animation->PushBack(glm::vec4(0.25f, 0.25f, 0.25f, 0.25f));
-					}
-					break;
-
-					default:
-						break;
+						if (frameX > 0.75)
+						{
+							frameY = frameY + 0.25;
+							frameX = 0.0f;
+						}
 					}
 
 					//p.animation->PushBack(glm::vec4(0.0f, 0.0f, 0.25f, 0.25f)); // Add the frames of the animation here
