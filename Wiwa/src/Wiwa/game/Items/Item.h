@@ -50,7 +50,7 @@ namespace Wiwa
 		float CurrentTime;
 		int Price;
 
-		AbilityType abilityType;
+		AbilityType AbilityType;
 
 		Ability() = default;
 		Ability(const Ability& ability)
@@ -68,7 +68,7 @@ namespace Wiwa
 		
 		Ability(const char* name)
 			: Name(name),
-			  abilityType(AbilityType::YONDUS_SEEDS),
+			  AbilityType(AbilityType::YONDUS_SEEDS),
 			  Icon(0),
 			  Damage(0),
 			  Range(0.f),
