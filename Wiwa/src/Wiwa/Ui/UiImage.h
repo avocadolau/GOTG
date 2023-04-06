@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active,bool animated,float animFrames,std::vector<Rect2i> animationRects);
+		GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active);
 		virtual ~GuiImage();
 
 		bool Update();
@@ -24,5 +24,6 @@ namespace Wiwa
 
 		bool clicked = false;
 
+		float timeForAnim;
 	};
 }

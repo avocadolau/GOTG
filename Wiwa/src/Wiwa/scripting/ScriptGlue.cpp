@@ -152,7 +152,6 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(SwapText);
 
 		WI_ADD_INTERNAL_CALL(SetValueForUIbar);
-		WI_ADD_INTERNAL_CALL(SetNextFrame);
 
 		// AI
 		WI_ADD_INTERNAL_CALL(SendAIToPosition);

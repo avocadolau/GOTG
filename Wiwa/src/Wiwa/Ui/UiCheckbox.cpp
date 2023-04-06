@@ -184,7 +184,7 @@ namespace Wiwa
 		default:
 			break;
 		}
-		//HandleAnim(render);
+
 		return false;
 	}
 	bool GuiCheckbox::SwapTexture()
@@ -193,12 +193,15 @@ namespace Wiwa
 
 		if (checked)
 		{
-			//r2d.UpdateInstancedQuadTexClip()
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 		}
 		else
 		{
-			//r2d.UpdateInstancedQuadTexClip()
+			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		}
+		r2d.RemoveInstance(m_Scene, id_quad_normal);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
 		return true;
 	}
 }

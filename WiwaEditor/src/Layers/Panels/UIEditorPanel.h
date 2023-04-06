@@ -30,7 +30,6 @@ public:
 
 	void OnEvent(Wiwa::Event& e) override;
 	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
-	void VectorEdit(std::vector<Wiwa::Rect2i> list);
 
 	int elementSelected;
 
@@ -45,9 +44,5 @@ public:
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 	std::string audioEventForButton;
-
-	bool animated;
-	float animSpeed;
-	std::vector<Wiwa::Rect2i> animationRects;
 
 };
