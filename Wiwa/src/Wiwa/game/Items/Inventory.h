@@ -28,6 +28,9 @@ namespace Wiwa
 		
 		void UseAbility(size_t index) const;
 		void UseBuff(size_t index) const ;
+
+		void SwapUITexture(ResourceId id, int indexUI);
+
 		void Clear();
 
 		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }

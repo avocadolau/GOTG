@@ -18,11 +18,14 @@ namespace Wiwa
 		//Conversation() {};
 
 		// All nodes
-		std::vector<DialogNode> nodes;
+		std::vector<DialogNode*> nodes;
 
 		// Dialog bg image and continue button
 		Wiwa::Renderer2D::InstanceData dialogImgID;
 		Wiwa::Renderer2D::InstanceData continueImgID;
+
+		Image* dialogImg = nullptr;
+		Image* continueImg = nullptr;
 		//int dialogWidth, dialogHeight;
 
 		// Whether the dialog has finished or not
@@ -78,11 +81,11 @@ namespace Wiwa
 		void UpdateConversation(Conversation conversation, Renderer2D* render);
 
 		// Set the dialog font and texts
-		void SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int textLine);
+		void SetDialogText(char* dialogText, const char* fontPath, Conversation& conversation, int textLine);
 
 		// Set the dialog background images
-		void SetDialogBubbleImage(const char* path, Conversation conversation);
-		void SetContinueIndicatorImage(const char* path, Conversation conversation);
+		void SetDialogBubbleImage(const char* path, Conversation& conversation);
+		void SetContinueIndicatorImage(const char* path, Conversation& conversation);
 
 		
 		//void SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation);
@@ -101,7 +104,7 @@ namespace Wiwa
 	public:
 
 		Conversation actualConversation;
-		std::vector<Conversation> conversations;
+		std::vector<Conversation*> conversations;
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
 	};
