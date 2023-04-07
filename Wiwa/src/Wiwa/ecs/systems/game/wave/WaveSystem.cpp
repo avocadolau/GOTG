@@ -80,7 +80,23 @@ namespace Wiwa
 	{
 		// Create an enemy from prefab
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
-		EntityId newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
+		int selection = RAND(1, 2);
+		EntityId newEnemyId = -1;
+		switch (selection)
+		{
+		case 1:
+		{
+			newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
+			break;
+		}
+		case 2:
+		{
+			newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
+			break;
+		}
+		default:
+			break;
+		}
 		entityManager.RemoveSystem(newEnemyId, physicsSystemHash);
 
 		// Set readable name
