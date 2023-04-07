@@ -85,7 +85,7 @@ namespace Wiwa
 
 	void AchivementsManager::Serialize(JSONDocument* doc)
 	{
-		JSONValue properties = doc->AddMemberArray("property");
+	/*	JSONValue properties = doc->AddMemberArray("property");
 		for (const auto& prop : m_Properties)
 		{
 			JSONValue propObj = properties.PushBackObject();
@@ -121,67 +121,67 @@ namespace Wiwa
 			{
 				properties.PushBack(prop.m_Name);
 			}
-		}
+		}*/
 	}
 
 	void AchivementsManager::Deserialize(JSONDocument* doc)
 	{
-		JSONDocument& document = *doc;
-		if (doc->HasMember("property"))
-		{
-			JSONValue props = document["property"];
-			if (props.IsArray())
-			{
-				for (size_t i = 0; i < props.Size(); i++)
-				{
-					Wiwa::Property porperty;
-					porperty.m_Name= props[i]["name"].as_string();
-					porperty.m_Description = props[i]["description"].as_string();
-					porperty.m_Activation = props[i]["activation"];
-					porperty.m_ActivationValue= props[i]["activation_value"].as_int();
-					porperty.m_InitialValue = props[i]["initial_value"].as_int();
-					porperty.m_Value= props[i]["value"].as_int();
-					AddProperty(porperty);
-				}
-			}
-		}
-		if (doc->HasMember("achivements"))
-		{
-			JSONValue achivements = document["property"];
-			if (achivements.IsArray())
-			{
-				for (size_t i = 0; i < achivements.Size(); i++)
-				{
-					Wiwa::Achivement achivement;
-					achivement.m_Name = achivements[i]["name"].as_string();
-					achivement.m_Description = achivements[i]["description"].as_string();
-					achivement.m_Count = achivements[i]["count"].as_int();
-					achivement.m_MaxCap = achivements[i]["max_cap"].as_int();
-					achivement.m_CurrentCost = achivements[i]["current_cost"].as_int();
-					achivement.m_Unlocked = achivements[i]["unlocked"].as_bool();
+		//JSONDocument& document = *doc;
+		//if (doc->HasMember("property"))
+		//{
+		//	JSONValue props = document["property"];
+		//	if (props.IsArray())
+		//	{
+		//		for (size_t i = 0; i < props.Size(); i++)
+		//		{
+		//			Wiwa::Property porperty;
+		//			porperty.m_Name= props[i]["name"].as_string();
+		//			porperty.m_Description = props[i]["description"].as_string();
+		//			porperty.m_Activation = props[i]["activation"];
+		//			porperty.m_ActivationValue= props[i]["activation_value"].as_int();
+		//			porperty.m_InitialValue = props[i]["initial_value"].as_int();
+		//			porperty.m_Value= props[i]["value"].as_int();
+		//			AddProperty(porperty);
+		//		}
+		//	}
+		//}
+		//if (doc->HasMember("achivements"))
+		//{
+		//	JSONValue achivements = document["property"];
+		//	if (achivements.IsArray())
+		//	{
+		//		for (size_t i = 0; i < achivements.Size(); i++)
+		//		{
+		//			Wiwa::Achivement achivement;
+		//			achivement.m_Name = achivements[i]["name"].as_string();
+		//			achivement.m_Description = achivements[i]["description"].as_string();
+		//			achivement.m_Count = achivements[i]["count"].as_int();
+		//			achivement.m_MaxCap = achivements[i]["max_cap"].as_int();
+		//			achivement.m_CurrentCost = achivements[i]["current_cost"].as_int();
+		//			achivement.m_Unlocked = achivements[i]["unlocked"].as_bool();
 
-					JSONValue costs = achivements["costs"];
-					if (costs.IsArray())
-					{
-						for (size_t i = 0; i < costs.Size(); i++)
-						{
-							achivement.m_Costs.push_back(costs[i].as_int());
-						}
-					}
+		//			//JSONValue costs = achivements["costs"];
+		//			//if (costs.IsArray())
+		//			//{
+		//			//	for (size_t i = 0; i < costs.Size(); i++)
+		//			//	{
+		//			//		achivement.m_Costs.push_back(costs[i].as_int());
+		//			//	}
+		//			//}
 
-					JSONValue props = achivements["properties"];
-					if (props.IsArray())
-					{
-						for (size_t i = 0; i < props.Size(); i++)
-						{
-							achivement.m_Porperties.push_back(*GetProperty(props[i].as_string()));
-						}
-					}
+		//			//JSONValue props = achivements["properties"];
+		//			//if (props.IsArray())
+		//			//{
+		//			//	for (size_t i = 0; i < props.Size(); i++)
+		//			//	{
+		//			//		achivement.m_Porperties.push_back(*GetProperty(props[i].as_string()));
+		//			//	}
+		//			//}
 
-					AddAchivement(achivement);
-				}
-			}
-		}
+		//			AddAchivement(achivement);
+		//		}
+		//	}
+		//}
 	}
 
 	Property* AchivementsManager::GetProperty(const char* name)
