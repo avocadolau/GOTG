@@ -135,7 +135,7 @@ namespace Wiwa
 		float CurrentTime;
 		float CoolDownTimer;
 		int Price;
-
+		bool IsActive;
 		Buff() = default;
 		Buff(const Buff& buff)
 		{
@@ -159,10 +159,12 @@ namespace Wiwa
 			  Cooldown(0.f),
 		      CurrentTime(0.f),
               CoolDownTimer(0.f),
-			  Price(0)
+			  Price(0),
+			  IsActive(false)
 		{}
 
 		void Use();
+		void UnUse();
 	};
 
 	struct Consumable

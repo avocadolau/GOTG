@@ -95,6 +95,7 @@ namespace Wiwa
     }
     void Buff::Use()
     {
+        IsActive = true;
         switch (buffType)
         {
         case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
@@ -127,6 +128,44 @@ namespace Wiwa
                 
             }
             break;
+        }
+    }
+
+    void Buff::UnUse()
+    {
+        IsActive = false;
+        switch (buffType)
+        {
+        case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
+        {
+
+        }
+        break;
+        case Wiwa::BuffType::NIKKIS_TOUCH:
+        {
+
+        }
+        break;
+        case Wiwa::BuffType::COSMOS_PAW:
+        {
+
+        }
+        break;
+        case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
+        {
+
+        }
+        break;
+        case Wiwa::BuffType::BUGS_LEGS:
+        {
+
+        }
+        break;
+        case Wiwa::BuffType::CHARLIE27_FIST:
+        {
+
+        }
+        break;
         }
     }
 

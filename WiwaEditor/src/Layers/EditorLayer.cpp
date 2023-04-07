@@ -651,7 +651,11 @@ void EditorLayer::MainMenuBar()
 					Wiwa::Time::Step();
 				}
 			}
-
+			ImGui::PushItemWidth(200);
+			if (ImGui::SliderInt("Volume", &m_GameVolume, 0, 100, "%d", 0, 17))
+				Audio::ChangeMasterVolume(m_GameVolume);
+			ImGui::PopItemWidth();
+			
 			ImGui::PopStyleColor();
 			ImGui::EndMenuBar();
 		}
@@ -664,24 +668,6 @@ void EditorLayer::MainMenuBar()
 	window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
 	height = ImGui::GetFrameHeight();
 	
-
-	if (ImGui::BeginViewportSideBar("##ThirdMenuBar", viewport, ImGuiDir_Up, height, window_flags))
-	{
-		if (ImGui::BeginMenuBar())
-		{
-			ImGui::PushStyleColor(ImGuiCol_Button, { 0, 0, 0, 0 });
-			ImGui::PushItemWidth(200);
-			
-			if (ImGui::SliderInt("Volume", &m_GameVolume, 0, 100, "%d", 0, 17))
-				Audio::ChangeMasterVolume(m_GameVolume);
-
-			ImGui::PopItemWidth();
-			ImGui::PopStyleColor();
-			ImGui::EndMenuBar();
-
-			ImGui::End();
-		}
-	}
 
 	if (ImGui::BeginViewportSideBar("##MainStatusBar", viewport, ImGuiDir_Down, height, window_flags))
 	{
@@ -711,9 +697,10 @@ void EditorLayer::MainMenuBar()
 			ImGui::PopStyleColor();
 			ImGui::Text(ICON_FK_EXCLAMATION_CIRCLE);
 
-			/*const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
-			ImGui::TextUnformatted(beg, log.Buf.end());*/
-
+			const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
+			ImGui::TextUnformatted(beg, log.Buf.end());
+			
+			
 			ImGui::EndMenuBar();
 		}
 		ImGui::End();

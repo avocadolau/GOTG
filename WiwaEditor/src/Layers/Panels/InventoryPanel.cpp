@@ -92,7 +92,7 @@ void InventoryPanel::Draw()
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
 		if(buffs[0])
-			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+			ImGui::Text("Name %s", buffs[0]->Name.c_str());
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -101,7 +101,7 @@ void InventoryPanel::Draw()
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
 		if(buffs[1])
-			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+			ImGui::Text("Name %s", buffs[1]->Name.c_str());
 		else
 			ImGui::Text("Empty slot");
 		
@@ -259,18 +259,21 @@ void InventoryPanel::DrawBuffPool(int& id)
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
-			for (auto& it : buffs)
+			for (const auto& key : buffs | std::views::keys)
 			{
-				Wiwa::Buff* buff = Wiwa::ItemManager::GetBuff(it.first.c_str());
+				Wiwa::Buff* buff = Wiwa::ItemManager::GetBuff(key.c_str());
 				ImGui::PushID(id++);
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text(buff->Name.c_str());
-
+				if(ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddBuff(buff);
+				}
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeleteBuff(it.first.c_str());
+					Wiwa::ItemManager::DeleteBuff(key);
 				}
 				ImGui::PopStyleColor();
 
@@ -386,7 +389,10 @@ void InventoryPanel::DrawPassivePool(int& id)
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text(passive->Name.c_str());
-
+				if(ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddPassive(*passive);
+				}
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
@@ -495,6 +501,11 @@ void InventoryPanel::DrawAbilityPool(int& id)
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text(ability->Name.c_str());
 
+				if(ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddAbility(ability);
+				}
+				
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{

@@ -156,27 +156,28 @@ void Wiwa::Inventory::InitGame()
 
 void Wiwa::Inventory::AddAbility(const Ability* ability) const
 {
-    for (size_t i = 0; i < MAX_ABILITIES; i++)
-    {
-		if (m_Abilities[i] != ability)
-		{
-			m_Abilities[i] = new Ability(*ability);
-			break;
-		}
-    }
-    
+	// If the first slot is occupied shift the ability one place
+	if(m_Abilities[0])
+	{
+		// TODO: Instead of deleting just spawn the ability on the floor
+		delete m_Abilities[1];
+		m_Abilities[1] = m_Abilities[0];
+	}
+	
+	m_Abilities[0] = new Ability(*ability);
 }
 
 void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
-    for (size_t i = 0; i < MAX_BUFFS; i++)
-    {
-        if (m_Buffs[i] != buff)
-        {
-            m_Buffs[i] = new Buff(*buff);
-            break;
-        }
-    }
+	// If the first slot is occupied shift the ability one place
+	if(m_Buffs[0])
+	{
+		// TODO: Instead of deleting just spawn the ability on the floor
+		delete m_Buffs[1];
+		m_Buffs[1] = m_Buffs[0];
+	}
+
+	m_Buffs[0] = new Buff(*buff);
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
@@ -230,6 +231,10 @@ void Wiwa::Inventory::Update()
 		if(m_Buffs[1])
 		{
 			m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
+			if (m_Buffs[1]->IsActive)
+			{
+
+			}
 			if(Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 			{
 				WI_CORE_INFO("Buff 2 activated");
@@ -256,6 +261,7 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 	{
 		m_Buffs[index]->CurrentTime = 0.f;
 		m_Buffs[index]->Use();
+		
 		return;
 	}
 	WI_CORE_INFO("Buff {} is on cooldown", index);
