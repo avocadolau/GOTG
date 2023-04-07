@@ -32,9 +32,19 @@ namespace Wiwa
 		m_Properties[prop.m_Name] =  prop;
 	}
 
+	void AchievementsManager::RemoveProperty(const char* prop)
+	{
+		m_Properties.erase(prop);
+	}
+
 	void AchievementsManager::AddAchievement(const Achievement& Achievement)
 	{
 		m_Achievements[Achievement.m_Name] = Achievement;
+	}
+
+	void AchievementsManager::RemoveAchievement(const char* achivement)
+	{
+		m_Achievements.erase(achivement);
 	}
 
 	int AchievementsManager::GetValue(std::string name)

@@ -21,8 +21,12 @@ namespace Wiwa {
 		static void DefineAchievement(std::string name, std::string description, int max_capacity, std::vector<int> costs, std::vector<Property> properties);
 		//add property
 		static void AddProperty(const Property& prop);
+		//remove achivement
+		static void RemoveProperty(const char* prop);
 		//add Achievement
 		static void AddAchievement(const Achievement& Achievement);
+		//removes an achivement
+		static void RemoveAchievement(const char* achivement);
 		//retruns the value of the property
 		static int GetValue(std::string name);
 		//sets the current value to the property
