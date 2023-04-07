@@ -31,19 +31,19 @@ namespace Wiwa
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
 
-		Conversation newConversation;
+		/*Conversation newConversation;
 
 		SetDialogBubbleImage("assets/HUD_Images/dialog_images/dialog_test_placeholder.png", newConversation);
 		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder2.png", newConversation);
 
-		SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", newConversation, 0, 1);
-		SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", newConversation, 0, 2);
-		SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", newConversation, 0, 4);
+		SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", newConversation, 1);
+		SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", newConversation, 2);
+		SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", newConversation, 4);
 
-		SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", newConversation, 1, 2);
-		SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", newConversation, 1, 5);
+		SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", newConversation, 2);
+		SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", newConversation, 5);
 
-		conversations.push_back(newConversation);
+		conversations.push_back(newConversation);*/
 
 		return true;
 	}
@@ -51,16 +51,16 @@ namespace Wiwa
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsKeyPressed(Wiwa::Key::GamepadY)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
-		{
-			actualConversation = conversations[0];
-			actualConversationState = 0;
-		}
-		
-		if (actualConversationState == 0 || actualConversationState == 1)
-		{
-			UpdateConversation(actualConversation, &Wiwa::Application::Get().GetRenderer2D());
-		}
+		//if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsKeyPressed(Wiwa::Key::GamepadY)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		//{
+		//	actualConversation = conversations[0];
+		//	actualConversationState = 0;
+		//}
+		//
+		//if (actualConversationState == 0 || actualConversationState == 1)
+		//{
+		//	UpdateConversation(actualConversation, &Wiwa::Application::Get().GetRenderer2D());
+		//}
 		
 		return true;
 	}
@@ -108,18 +108,23 @@ namespace Wiwa
 		}
 	}
 
-	void DialogManager::SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int conversationNode, int textLine)
+	void DialogManager::SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int textLine)
 	{
-		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		Text* text = gm.InitFont(fontPath, dialogText);
+		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+		Text* text = new Text();
+		text = gm.InitFont(fontPath, dialogText);
 
 		Renderer2D render = Wiwa::Application::Get().GetRenderer2D();
 
-		if (textLine == 1) conversation.nodes[conversationNode].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 500,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		if (textLine == 2) conversation.nodes[conversationNode].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 550,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		if (textLine == 3) conversation.nodes[conversationNode].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 600,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		if (textLine == 4) conversation.nodes[conversationNode].text4_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 650,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		if (textLine == 5) conversation.nodes[conversationNode].text5_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 700,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		DialogNode newDialogNode;
+
+		if (textLine == 1) newDialogNode.text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 500,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 2) newDialogNode.text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 550,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 3) newDialogNode.text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 600,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 4) newDialogNode.text4_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 650,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		if (textLine == 5) newDialogNode.text5_imgModeID = render.CreateInstancedQuadTex(m_Scene, text->GetTextureId(), text->GetSize(), { 700,560 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+
+		conversation.nodes.push_back(newDialogNode);
 	}
 
 	void DialogManager::SetDialogBubbleImage(const char* path, Conversation conversation)
@@ -139,7 +144,7 @@ namespace Wiwa
 		uint32_t textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		Image* texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		conversation.dialogImgID = render.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { 1020,1020 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversation.continueImgID = render.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { 1020,1020 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 	}
 
 	//Text* DialogManager::InitFont(const char* path, char* _word, Conversation conversation)

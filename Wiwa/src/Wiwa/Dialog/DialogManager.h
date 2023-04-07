@@ -15,13 +15,21 @@ namespace Wiwa
 	struct Conversation
 	{
 		// Constructor
-		Conversation() {};
+		//Conversation() {};
 
 		// All nodes
 		std::vector<DialogNode> nodes;
 
+		// Dialog bg image and continue button
+		uint32_t dialogImgID;
+		uint32_t continueImgID;
+		//int dialogWidth, dialogHeight;
+
+		// Whether the dialog has finished or not
+		//bool finished;
+
 		// Active node
-		DialogNode* activeNode;
+		//DialogNode* activeNode;
 
 		// Active buttons
 		//std::vector<std::uint32_t> texts_imgMode;
@@ -31,24 +39,16 @@ namespace Wiwa
 		//GuiButton finishButton;
 
 		// Dialog position
-		int posX, posY;
-		int max_chars_line;
+		//int posX, posY;
+		//int max_chars_line;
 
 		// Text offsetting
-		int char_width;
-		int char_height;
-		int textXOffset, textYOffset;
+		//int char_width;
+		//int char_height;
+		//int textXOffset, textYOffset;
 
 		// Dialog fong
 		//int dialogFont;
-
-		// Dialog bg image and continue button
-		uint32_t dialogImgID;
-		uint32_t continueImgID;
-		int dialogWidth, dialogHeight;
-
-		// Whether the dialog has finished or not
-		bool finished;
 	};
 
 	class WI_API DialogManager
@@ -77,6 +77,16 @@ namespace Wiwa
 
 		void UpdateConversation(Conversation conversation, Renderer2D* render);
 
+		// Set the dialog font and texts
+		void SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int textLine);
+
+		// Set the dialog background images
+		void SetDialogBubbleImage(const char* path, Conversation conversation);
+		void SetContinueIndicatorImage(const char* path, Conversation conversation);
+
+		
+		//void SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation);
+
 		//Text* InitFont(const char* path,char* word, Conversation conversation);
 
 		// Set a node ID as active
@@ -87,15 +97,6 @@ namespace Wiwa
 
 		// Set position of dialog
 		//void SetPosition(int x, int y, Conversation conversation);
-
-		// Set the dialog font
-		//void SetFont(int font, Conversation conversation);
-		void SetDialogText(char* dialogText, const char* fontPath, Conversation conversation, int conversationNode, int textLine);
-
-		// Set the dialog background image
-		//void SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation);
-		void SetDialogBubbleImage(const char* path, Conversation conversation);
-		void SetContinueIndicatorImage(const char* path, Conversation conversation);
 
 	public:
 
