@@ -11,12 +11,13 @@ namespace Wiwa {
 	class Property {
 	public:
 		Property();
-		Property(std::string name, int initialValue, ActivationRules activation, int activationvalue);
+		Property(std::string name,std::string description, int initialValue, ActivationRules activation, int activationvalue);
 		~Property();
 
 		bool IsActive();
 
 		std::string m_Name;
+		std::string m_Description;
 		ActivationRules m_Activation;
 		int m_Value;
 		int m_ActivationValue;

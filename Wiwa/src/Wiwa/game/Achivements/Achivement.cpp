@@ -14,9 +14,9 @@ namespace Wiwa
 		m_Costs = {};
 	}
 
-	Achivement::Achivement(std::string id, int max_capacity, std::vector<int> costs, std::vector<Property> properties)
+	Achivement::Achivement(std::string name, std::string description, int max_capacity, std::vector<int> costs, std::vector<Property> properties)
 	{
-		m_Name = id;
+		m_Name = name;
 		m_MaxCap = max_capacity;
 		m_Costs = costs;
 		m_Porperties = properties;
