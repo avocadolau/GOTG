@@ -223,8 +223,13 @@ namespace Wiwa {
 					}
 					else
 					{
-						//fix rotation
-						glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-(p.transform.localRotation.y + p.transform.rotation.y)), glm::vec3(0, 1, 0));
+						// Rotate around all three axes
+						float xRotation = p.transform.localRotation.x + p.transform.rotation.x;
+						float yRotation = p.transform.localRotation.y + p.transform.rotation.y;
+						float zRotation = p.transform.localRotation.z + p.transform.rotation.z;
+						glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-yRotation), glm::vec3(0, 1, 0))
+							* glm::rotate(glm::mat4(1.0f), glm::radians(-xRotation), glm::vec3(1, 0, 0))
+							* glm::rotate(glm::mat4(1.0f), glm::radians(-zRotation), glm::vec3(0, 0, 1));
 						glm::vec4 rotatedVertex = rotationMatrix * glm::vec4(scaledVertex, 1.0f);
 						resultantVertex = glm::vec3(rotatedVertex);
 					}
