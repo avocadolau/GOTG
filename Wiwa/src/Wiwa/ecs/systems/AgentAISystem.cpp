@@ -37,10 +37,14 @@ void Wiwa::AgentAISystem::OnInit()
 
 void Wiwa::AgentAISystem::OnUpdate()
 {
-	if (!getAwake())
+	/*if (!getAwake())
 		System::Awake();
 	if (!getInit())
-		System::Init();
+		System::Init();*/
+
+	if (!getAwake() && !getInit())
+		return;
+
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
 

@@ -32,7 +32,6 @@ namespace Wiwa
 		enemySpawner->hasTriggered = false;
 
 		SpawnWave();
-		enemySpawner->hasTriggered = true;
 	}
 
 	void WaveSpawnerSystem::OnUpdate()
@@ -43,7 +42,7 @@ namespace Wiwa
 		// Check current wave
 		if (currentWave)
 		{
-			if (!m_PreviousWaveDestroy)
+			if (!m_PreviousWaveDestroy && enemySpawner->hasTriggered)
 				m_PreviousWaveDestroy = IsWaveFinished(*currentWave);
 		}
 
@@ -106,13 +105,13 @@ namespace Wiwa
 
 		// Create a wave component and wave system
 		Wave* wave = em.AddComponent<Wave>(m_CurrentWaveEntityId);
-		wave->currentEnemiesAlive = enemySpawner->maxEnemiesPerWave;
 		wave->maxEnemies = enemySpawner->maxEnemiesPerWave;
 		wave->hasFinished = false;
 		em.ApplySystem<WaveSystem>(m_CurrentWaveEntityId);
 
 		// Save the wave as current wave
 		m_CurrentWaveIt = GetComponentIterator<Wave>(m_CurrentWaveEntityId);
+		em.GetSystem<WaveSystem>(m_CurrentWaveEntityId)->SetSpawner(m_CurrentWaveIt);
 
 		m_PreviousWaveDestroy = false;
 	}
