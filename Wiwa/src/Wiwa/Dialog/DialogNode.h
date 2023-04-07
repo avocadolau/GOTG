@@ -3,6 +3,7 @@
 #include <string>
 
 #include <Wiwa/core/Renderer2D.h>
+#include <Wiwa/utilities/render/Text.h>
 
 struct DialogNode
 {
@@ -12,6 +13,12 @@ struct DialogNode
 	Wiwa::Renderer2D::InstanceData text3_imgModeID;
 	Wiwa::Renderer2D::InstanceData text4_imgModeID;
 	Wiwa::Renderer2D::InstanceData text5_imgModeID;
+
+	Wiwa::Text* text1_imgMode;
+	Wiwa::Text* text2_imgMode;
+	Wiwa::Text* text3_imgMode;
+	Wiwa::Text* text4_imgMode;
+	Wiwa::Text* text5_imgMode;
 
 	//bool isNodeOccupied = false;
 
