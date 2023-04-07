@@ -37,6 +37,7 @@ namespace Wiwa
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
 		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		
 	
 		/*if ()
 		{
@@ -111,8 +112,8 @@ namespace Wiwa
 		{
 			if (distance <= 3.0f)
 			{
-				EntityId pe_hurt = em.GetChildByName(player,"PE_Hurt");
-				pman.EmitBatch(pe_hurt);
+				//EntityId pe_hurt = em.GetChildByName(player,"PE_Hurt");
+				//pman.EmitBatch(pe_hurt);
 				playerStats->Health -= selfStats->Damage;
 			}
 		}		
