@@ -9,7 +9,7 @@
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/core/Renderer2D.h>
 
-#define MAX_INSTANCE_TEXTURES 16
+#define MAX_INSTANCE_TEXTURES 32
 
 namespace Wiwa {
 	class WI_API InstanceRenderer {
