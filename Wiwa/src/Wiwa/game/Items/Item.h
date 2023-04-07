@@ -33,7 +33,12 @@ namespace Wiwa
 		MOVEMENT,
 		ROF,
 		BUFF,
-		ATTACK
+		ATTACK,
+		PROJECTILE,
+		HEALTH,
+		RANGE,
+		SHIELD_CHARGE,
+		
 	};
 
 	struct Ability
@@ -60,22 +65,24 @@ namespace Wiwa
 			this->Icon = ability.Icon;
 			this->Damage = ability.Damage;
 			this->Range = ability.Range;
+			this->Area = ability.Area;
 			this->Cooldown = ability.Cooldown;
 			this->CurrentTime = ability.CurrentTime;
 			this->Price = ability.Price;
-			
+			this->AbilityType = ability.AbilityType;
 		}
 		
 		Ability(const char* name)
 			: Name(name),
-			  AbilityType(AbilityType::YONDUS_SEEDS),
+			  Description(""),
 			  Icon(0),
 			  Damage(0),
 			  Range(0.f),
 			  Area(0.f),
 			  Cooldown(0.f),
+			  CurrentTime(0.f),
 			  Price(0),
-			  CurrentTime(0.f)
+			  AbilityType(AbilityType::YONDUS_SEEDS)
 		{}
 
 		void Use();
@@ -89,20 +96,25 @@ namespace Wiwa
 
 		ResourceId Icon;
 
-		PassiveType passiveType;
+		int BuffPercent;
+		
+		PassiveType PassiveType;
 
 		PassiveSkill() = default;
 		PassiveSkill(const PassiveSkill& passive)
 		{
 			this->Name = passive.Name;
 			this->Description = passive.Description;
+			this->BuffPercent = passive.BuffPercent;
 			this->Icon = passive.Icon;
-			this->passiveType = passive.passiveType;
+			this->PassiveType = passive.PassiveType;
 		}
 		PassiveSkill(const char* name)
 			: Name(name),
-			  passiveType(PassiveType::ATTACK),
-		      Icon(0)
+		      Description(""),
+		      Icon(0),
+			  BuffPercent(0),
+			  PassiveType(PassiveType::ATTACK)
 		{}
 
 		void Use();
@@ -139,14 +151,15 @@ namespace Wiwa
 		}
 		Buff(const char* name)
 			: Name(name),
+		      Description(""),
 			  Icon(0),
 			  buffType(BuffType::MAJOR_VICTORY_SHIELD),
 			  BuffPercent(0),
 			  Duration(0.f),
 			  Cooldown(0.f),
-			  Price(0),
 		      CurrentTime(0.f),
-              CoolDownTimer(0.f)
+              CoolDownTimer(0.f),
+			  Price(0)
 		{}
 
 		void Use();
@@ -158,7 +171,8 @@ namespace Wiwa
 		ResourceId Icon;
 		ConsumableType Type;
 		int BuffPercent;
-
+		bool IsEgosHelp;
+		
 		Consumable() = default;
 		Consumable(const Consumable& consumable)
 		{
@@ -166,14 +180,16 @@ namespace Wiwa
 			this->Icon = consumable.Icon;
 			this->Type = consumable.Type;
 			this->BuffPercent = consumable.BuffPercent;
+			this->IsEgosHelp = consumable.IsEgosHelp;
 		}
 		Consumable(const char* name)
 			: Name(name),
 			  Icon(0),
 			  Type(ConsumableType::HEAL),
-			  BuffPercent(0)
+			  BuffPercent(0),
+		      IsEgosHelp(false)
 		{}
-
+		
 		void Use();
 	};
 }

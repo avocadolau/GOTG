@@ -1,26 +1,26 @@
 #include "InventoryPanel.h"
+
+#include <ranges>
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/game/Items/Inventory.h>
 #include <Wiwa/game/GameStateManager.h>
 #include "../../Utils/EditorUtils.h"
 
-#define MAX_DESCRIPTION_CHARACTERS 256
+
 
 InventoryPanel::InventoryPanel(EditorLayer* instance)
 	: Panel("Inventory", ICON_FK_DATABASE, instance)
 {
 }
 
-InventoryPanel::~InventoryPanel()
-{
-}
+InventoryPanel::~InventoryPanel() = default;
 
 void InventoryPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
-	int id = 0;
 	if (ImGui::CollapsingHeader("Items pool"))
 	{
+		int id = 0;
 		ImGui::Text("Abilities");
 		DrawAbilityPool(id);
 		ImGui::Separator();
@@ -159,7 +159,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeleteConsumable(it.first.c_str());
+					Wiwa::ItemManager::DeleteConsumable(it.first);
 				}
 				ImGui::PopStyleColor();
 
@@ -201,8 +201,9 @@ void InventoryPanel::DrawConsumablePool(int& id)
 
 					ImGui::EndCombo();
 				}
-
-
+				ImGui::Checkbox("Is Ego's help", &consumable->IsEgosHelp);
+				HelpMarker("If checked the item will behave like Ego's help");
+				
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##percent", &consumable->BuffPercent);
 
@@ -314,7 +315,7 @@ void InventoryPanel::DrawBuffPool(int& id)
 				{
 					for (int i = 0; i < 6; i++)
 					{
-						bool isSelected = (currentBuff == types[i]);
+						const bool isSelected = (currentBuff == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentBuff = types[i];
@@ -326,7 +327,7 @@ void InventoryPanel::DrawBuffPool(int& id)
 
 					ImGui::EndCombo();
 				}
-
+				
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
@@ -364,6 +365,10 @@ void InventoryPanel::DrawPassivePool(int& id)
 			"Rate of Fire",
 			"Buff",
 			"Attack",
+			"Projectile",
+			"Health",
+			"Range",
+			"Shield charge"
 		};
 		if (ImGui::BeginTable("passives", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
@@ -373,9 +378,9 @@ void InventoryPanel::DrawPassivePool(int& id)
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
-			for (auto& it : passives)
+			for (const auto& key : passives | std::views::keys)
 			{
-				Wiwa::PassiveSkill* passive = Wiwa::ItemManager::GetPassive(it.first.c_str());
+				Wiwa::PassiveSkill* passive = Wiwa::ItemManager::GetPassive(key.c_str());
 				ImGui::PushID(id++);
 
 				ImGui::TableNextRow();
@@ -385,7 +390,7 @@ void InventoryPanel::DrawPassivePool(int& id)
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeletePassive(it.first.c_str());
+					Wiwa::ItemManager::DeletePassive(key);
 				}
 				ImGui::PopStyleColor();
 
@@ -414,7 +419,7 @@ void InventoryPanel::DrawPassivePool(int& id)
 				}
 
 				ImGui::TableNextColumn();
-				const char* currentItem = types[(int)passive->passiveType];
+				const char* currentItem = types[(int)passive->PassiveType];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
 					for (int i = 0; i < 4; i++)
@@ -423,7 +428,7 @@ void InventoryPanel::DrawPassivePool(int& id)
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
-							passive->passiveType = (Wiwa::PassiveType)(i);
+							passive->PassiveType = (Wiwa::PassiveType)(i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();

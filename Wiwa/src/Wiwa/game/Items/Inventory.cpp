@@ -64,7 +64,7 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			passive.AddMember("name", m_PassiveSkill.at(i).Name.c_str());
 			passive.AddMember("description", m_PassiveSkill.at(i).Description.c_str());
 			passive.AddMember("icon", m_PassiveSkill.at(i).Icon);
-			passive.AddMember("type", (int)m_PassiveSkill.at(i).passiveType);
+			passive.AddMember("type", (int)m_PassiveSkill.at(i).PassiveType);
 			
 		}
 	}
@@ -123,7 +123,6 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			}
 		}
 	}
-
 	
 	if (doc->HasMember("passives"))
 	{
@@ -135,7 +134,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				passive.Name = passives[i]["name"].as_string();
 				passive.Description = passives[i]["description"].as_string();
 				passive.Icon = passives[i]["icon"];
-				passive.passiveType = (PassiveType)passives[i]["type"].as_int();
+				passive.PassiveType = (PassiveType)passives[i]["type"].as_int();
 				AddPassive(passive);
 			}
 		}
@@ -198,10 +197,11 @@ void Wiwa::Inventory::Update()
 		// Input
 		float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
 		float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
-
+		
 		// Ability 1
 		if(m_Abilities[0])
 		{
+			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
 			{
 				WI_CORE_INFO("Ability 1 activated");
@@ -210,6 +210,7 @@ void Wiwa::Inventory::Update()
 		}
 		if(m_Abilities[1])
 		{
+			m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if(Input::IsKeyPressed(Key::E) || rightTrigger >= -0.9f)
 			{
 				WI_CORE_INFO("Ability 2 activated");
@@ -217,17 +218,47 @@ void Wiwa::Inventory::Update()
 			}
 		}
 
+		if(m_Buffs[0])
+		{
+			m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
+			if(Input::IsKeyPressed(Key::R) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadX))
+			{
+				WI_CORE_INFO("Buff 1 activated");
+				UseBuff(0);
+			}
+		}
+		if(m_Buffs[1])
+		{
+			m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
+			if(Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+			{
+				WI_CORE_INFO("Buff 2 activated");
+				UseBuff(1);
+			}
+		}
 		
 	}
 }
 
 void Wiwa::Inventory::UseAbility(size_t index) const
 {
-	m_Abilities[index]->Use();
+	if(m_Abilities[index]->CurrentTime >= m_Abilities[index]->Cooldown)
+	{
+		m_Abilities[index]->CurrentTime = 0.f;
+		m_Abilities[index]->Use();
+		return;
+	}
+	WI_CORE_INFO("Ability {} is on cooldown", index);
 }
 void Wiwa::Inventory::UseBuff(size_t index) const
 {
-	m_Buffs[index]->Use();
+	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown)
+	{
+		m_Buffs[index]->CurrentTime = 0.f;
+		m_Buffs[index]->Use();
+		return;
+	}
+	WI_CORE_INFO("Buff {} is on cooldown", index);
 }
 
 void Wiwa::Inventory::Clear()
