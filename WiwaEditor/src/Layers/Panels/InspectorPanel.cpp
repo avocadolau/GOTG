@@ -1212,6 +1212,11 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 					{
 						bool importedCorrectly = Wiwa::Resources::CheckImport<Wiwa::Image>(pathS.c_str());
 
+						for (size_t i = 0; i < 128; i++)
+						{
+							emitter->texturePath[i] = (char)"";
+						}
+
 						emitter->textureId = Wiwa::Resources::Load<Wiwa::Image>(pathS.c_str());
 
 						if (emitter->textureId != WI_INVALID_INDEX)
