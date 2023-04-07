@@ -30,7 +30,7 @@ namespace Wiwa
 	void EnemyMeleePhalanx::OnInit()
 	{
 		EnemySystem::OnInit();
-		m_CurrentState = m_IdleState;
+		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
 	}
 

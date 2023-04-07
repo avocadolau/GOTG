@@ -387,10 +387,10 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		originRect.height = originSize[1];
 
 		Wiwa::Rect2i sliderOriginRect;
-		sliderOriginRect.x = originPos[0];
-		sliderOriginRect.y = originPos[1];
-		sliderOriginRect.width = originSize[0];
-		sliderOriginRect.height = originSize[1];
+		sliderOriginRect.x = sliderOriginPos[0];
+		sliderOriginRect.y = sliderOriginPos[1];
+		sliderOriginRect.width = sliderOriginSize[0];
+		sliderOriginRect.height = sliderOriginSize[1];
 		if (canvas_id > -1) m_GuiManager.CreateGuiControl(GuiControlType::SLIDER, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(),rect2, canvas_id, callbackID,originRect,sliderOriginRect, audioEventForButton.c_str(), true);
 	}
 
