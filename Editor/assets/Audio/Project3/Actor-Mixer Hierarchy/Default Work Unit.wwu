@@ -624,6 +624,97 @@
 				</Folder>
 				<Folder Name="Unorganized" ID="{5F0A9C23-8CC5-4269-8E01-FF3A1C47988D}" ShortID="118153759"/>
 				<Folder Name="Player" ID="{05AB9E65-3F88-4FEE-80B1-66983CBEFBFD}" ShortID="740111758"/>
+				<Folder Name="Music" ID="{FB7F70B1-B8FA-4E2A-940A-86BAB22E32B4}" ShortID="800781217">
+					<ChildrenList>
+						<Sound Name="track_levelmusic_1" ID="{AE5E7530-9A8D-4532-87FF-EF3809326D6B}" ShortID="136268783">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-14</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="track_levelmusic_1" ID="{35A8F335-C901-499E-85D9-4A9CBD222721}">
+									<Language>SFX</Language>
+									<AudioFile>track_levelmusic_1.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="57065480"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="track_levelmusic_1" ID="{35A8F335-C901-499E-85D9-4A9CBD222721}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="track_levelmusic_2" ID="{BAF461B7-2E0F-4C37-A990-352250610C48}" ShortID="397978282">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-11</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="track_levelmusic_2" ID="{6BFD0207-251C-4FB7-9C1A-8B21ABBB72C0}">
+									<Language>SFX</Language>
+									<AudioFile>track_levelmusic_2.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="212473418"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="track_levelmusic_2" ID="{6BFD0207-251C-4FB7-9C1A-8B21ABBB72C0}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="track_levelmusic_3" ID="{531B0292-CA30-4D23-934E-B3D1563C1241}" ShortID="943343002">
+							<PropertyList>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-11</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="track_levelmusic_3" ID="{A8D4096D-7DB5-47E3-BC23-E1DDEB082A1C}">
+									<Language>SFX</Language>
+									<AudioFile>track_levelmusic_3.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="489304910"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="track_levelmusic_3" ID="{A8D4096D-7DB5-47E3-BC23-E1DDEB082A1C}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

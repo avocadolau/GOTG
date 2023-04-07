@@ -4,6 +4,8 @@
 
 #include "Wiwa/core/KeyCodes.h"
 #include "Wiwa/utilities/time/Time.h"
+#include "Wiwa/scene/SceneManager.h"
+#include "Wiwa/core/Application.h"
 
 #define MAX_ABILITIES 2
 #define MAX_BUFFS 2
@@ -25,7 +27,7 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			JSONValue ability = abilities.PushBackObject();
 			ability.AddMember("name", m_Abilities[i]->Name.c_str());
 			ability.AddMember("description", m_Abilities[i]->Description.c_str());
-			ability.AddMember("icon", m_Abilities[i]->Icon);
+			ability.AddMember("icon", (int)m_Abilities[i]->Icon);
 			ability.AddMember("damage", m_Abilities[i]->Damage);
 			ability.AddMember("range", m_Abilities[i]->Range);
 			ability.AddMember("area", m_Abilities[i]->Area);
@@ -44,7 +46,7 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			JSONValue buff = Buffs.PushBackObject();
 			buff.AddMember("name", m_Buffs[i]->Name.c_str());
 			buff.AddMember("description", m_Buffs[i]->Description.c_str());
-			buff.AddMember("icon", m_Buffs[i]->Icon);
+			buff.AddMember("icon", (int)m_Buffs[i]->Icon);
 			buff.AddMember("buff_percent", m_Buffs[i]->BuffPercent);
 			buff.AddMember("duration", m_Buffs[i]->Duration);
 			buff.AddMember("cooldown", m_Buffs[i]->Cooldown);
@@ -63,8 +65,8 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			JSONValue passive = Passives.PushBackObject();
 			passive.AddMember("name", m_PassiveSkill.at(i).Name.c_str());
 			passive.AddMember("description", m_PassiveSkill.at(i).Description.c_str());
-			passive.AddMember("icon", m_PassiveSkill.at(i).Icon);
-			passive.AddMember("type", (int)m_PassiveSkill.at(i).passiveType);
+			passive.AddMember("icon", (int)m_PassiveSkill.at(i).Icon);
+			passive.AddMember("type", (int)m_PassiveSkill.at(i).PassiveType);
 			
 		}
 	}
@@ -88,7 +90,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				Wiwa::Ability ability;
 				ability.Name = abilities[i]["name"].as_string();
 				ability.Description = abilities[i]["description"].as_string();
-				ability.Icon = abilities[i]["icon"];
+				ability.Icon = (ResourceId)abilities[i]["icon"].as_int();
 				ability.Damage = abilities[i]["damage"].as_int();
 				ability.Range = abilities[i]["range"].as_float();
 				ability.Area = abilities[i]["area"].as_float();
@@ -111,7 +113,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				Wiwa::Buff buff;
 				buff.Name = buffs[i]["name"].as_string();
 				buff.Description = buffs[i]["description"].as_string();
-				buff.Icon = buffs[i]["icon"];
+				buff.Icon = (ResourceId)buffs[i]["icon"].as_int();
 				buff.BuffPercent = buffs[i]["buff_percent"].as_int();
 				buff.Duration = buffs[i]["duration"].as_float();
 				buff.Cooldown = buffs[i]["cooldown"].as_float();
@@ -123,7 +125,6 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			}
 		}
 	}
-
 	
 	if (doc->HasMember("passives"))
 	{
@@ -134,8 +135,8 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				Wiwa::PassiveSkill passive;
 				passive.Name = passives[i]["name"].as_string();
 				passive.Description = passives[i]["description"].as_string();
-				passive.Icon = passives[i]["icon"];
-				passive.passiveType = (PassiveType)passives[i]["type"].as_int();
+				passive.Icon = (ResourceId)passives[i]["icon"].as_int();
+				passive.PassiveType = (PassiveType)passives[i]["type"].as_int();
 				AddPassive(passive);
 			}
 		}
@@ -157,32 +158,34 @@ void Wiwa::Inventory::InitGame()
 
 void Wiwa::Inventory::AddAbility(const Ability* ability) const
 {
-    for (size_t i = 0; i < MAX_ABILITIES; i++)
-    {
-		if (m_Abilities[i] != ability)
-		{
-			m_Abilities[i] = new Ability(*ability);
-			break;
-		}
-    }
-    
+	// If the first slot is occupied shift the ability one place
+	if(m_Abilities[0])
+	{
+		// TODO: Instead of deleting just spawn the ability on the floor
+		delete m_Abilities[1];
+		m_Abilities[1] = m_Abilities[0];
+	}
+	
+	m_Abilities[0] = new Ability(*ability);
 }
 
 void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
-    for (size_t i = 0; i < MAX_BUFFS; i++)
-    {
-        if (m_Buffs[i] != buff)
-        {
-            m_Buffs[i] = new Buff(*buff);
-            break;
-        }
-    }
+	// If the first slot is occupied shift the ability one place
+	if(m_Buffs[0])
+	{
+		// TODO: Instead of deleting just spawn the ability on the floor
+		delete m_Buffs[1];
+		m_Buffs[1] = m_Buffs[0];
+	}
+
+	m_Buffs[0] = new Buff(*buff);
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
 {
     m_PassiveSkill.emplace_back(skill);
+	m_PassiveSkill.back().Use();
 }
 
 void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
@@ -198,18 +201,24 @@ void Wiwa::Inventory::Update()
 		// Input
 		float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
 		float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
+		
+		
 
 		// Ability 1
 		if(m_Abilities[0])
 		{
+			SwapUITexture(m_Abilities[0]->Icon, 3);
+			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
-			{
-				//WI_CORE_INFO("Ability 1 activated");
+			{	
 				UseAbility(0);
 			}
 		}
 		if(m_Abilities[1])
 		{
+			SwapUITexture(m_Abilities[1]->Icon, 4);
+
+			m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if(Input::IsKeyPressed(Key::E) || rightTrigger >= -0.9f)
 			{
 				WI_CORE_INFO("Ability 2 activated");
@@ -217,17 +226,83 @@ void Wiwa::Inventory::Update()
 			}
 		}
 
+		if(m_Buffs[0])
+		{
+			SwapUITexture(m_Buffs[0]->Icon, 5);
+			m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
+			if (m_Buffs[0]->IsActive)
+			{
+				m_Buffs[0]->CoolDownTimer += Time::GetDeltaTimeSeconds();
+				if (m_Buffs[0]->CoolDownTimer >= m_Buffs[0]->Duration)
+					m_Buffs[0]->UnUse();
+			}
+			if(Input::IsKeyPressed(Key::R) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadX))
+			{
+				WI_CORE_INFO("Buff 1 activated");
+				UseBuff(0);
+			}
+		}
+		if(m_Buffs[1])
+		{
+			SwapUITexture(m_Buffs[1]->Icon, 6);
+			m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
+			if (m_Buffs[1]->IsActive)
+			{
+				m_Buffs[1]->CoolDownTimer += Time::GetDeltaTimeSeconds();
+				if(m_Buffs[1]->CoolDownTimer >= m_Buffs[1]->Duration)
+					m_Buffs[1]->UnUse();
+			}
+			
+			if(Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+			{
+				WI_CORE_INFO("Buff 2 activated");
+				UseBuff(1);
+			}
+		}
 		
 	}
 }
 
 void Wiwa::Inventory::UseAbility(size_t index) const
 {
-	m_Abilities[index]->Use();
+	if(m_Abilities[index]->CurrentTime >= m_Abilities[index]->Cooldown)
+	{
+		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
+		EntityId player = em.GetEntityByName("Player");
+
+		if (player)
+		{
+			EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
+			pman.EmitBatch(pe_spark);
+			EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
+			pman.EmitBatch(pe_line);
+		}
+		m_Abilities[index]->CurrentTime = 0.f;
+		m_Abilities[index]->Use();
+		return;
+	}
+	WI_CORE_INFO("Ability {} is on cooldown", index);
 }
 void Wiwa::Inventory::UseBuff(size_t index) const
 {
-	m_Buffs[index]->Use();
+	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown)
+	{
+		m_Buffs[index]->CurrentTime = 0.f;
+		m_Buffs[index]->Use();
+		
+		return;
+	}
+	WI_CORE_INFO("Buff {} is on cooldown", index);
+}
+
+void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
+	gm.canvas.at(0)->controls.at(indexUI)->texture = Wiwa::Resources::GetResourceById<Image>(id);
+	r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(0)->controls.at(indexUI)->id_quad_normal, gm.canvas.at(0)->controls.at(indexUI)->texture->GetTextureId());
 }
 
 void Wiwa::Inventory::Clear()

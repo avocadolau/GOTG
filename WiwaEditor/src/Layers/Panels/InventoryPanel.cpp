@@ -1,26 +1,26 @@
 #include "InventoryPanel.h"
+
+#include <ranges>
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/game/Items/Inventory.h>
 #include <Wiwa/game/GameStateManager.h>
 #include "../../Utils/EditorUtils.h"
 
-#define MAX_DESCRIPTION_CHARACTERS 256
+
 
 InventoryPanel::InventoryPanel(EditorLayer* instance)
 	: Panel("Inventory", ICON_FK_DATABASE, instance)
 {
 }
 
-InventoryPanel::~InventoryPanel()
-{
-}
+InventoryPanel::~InventoryPanel() = default;
 
 void InventoryPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
-	int id = 0;
 	if (ImGui::CollapsingHeader("Items pool"))
 	{
+		int id = 0;
 		ImGui::Text("Abilities");
 		DrawAbilityPool(id);
 		ImGui::Separator();
@@ -53,8 +53,14 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if(abilities[0])
-			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		if (abilities[0])
+		{
+			ImGui::Text("%s", abilities[0]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", abilities[0]->CurrentTime);
+			ImGui::Text("Cooldown %f", abilities[0]->Cooldown);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -62,8 +68,14 @@ void InventoryPanel::Draw()
 
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if(abilities[1])
-			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		if (abilities[1])
+		{
+			ImGui::Text("%s", abilities[1]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", abilities[1]->CurrentTime);
+			ImGui::Text("Cooldown %f", abilities[1]->Cooldown);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -91,8 +103,16 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if(buffs[0])
-			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		if (buffs[0])
+		{
+			ImGui::Text("%s", buffs[0]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", buffs[0]->CurrentTime);
+			ImGui::Text("Cooldown %f", buffs[0]->Cooldown);
+			ImGui::Text("Duration %f", buffs[0]->Duration);
+			ImGui::Text("Cooldown timer %f", buffs[0]->CoolDownTimer);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -100,8 +120,16 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if(buffs[1])
-			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		if (buffs[1])
+		{
+			ImGui::Text("%s", buffs[1]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", buffs[1]->CurrentTime);
+			ImGui::Text("Cooldown %f", buffs[1]->Cooldown);
+			ImGui::Text("Duration %f", buffs[1]->Duration);
+			ImGui::Text("Cooldown timer %f", buffs[1]->CoolDownTimer);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		
@@ -129,7 +157,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 		}
 		ImGui::EndPopup();
 	}
-	std::map<std::string, Wiwa::Consumable>& consumables = Wiwa::ItemManager::GetConsumables();
+	const std::map<std::string, Wiwa::Consumable>& consumables = Wiwa::ItemManager::GetConsumables();
 	if (!consumables.empty())
 	{
 		const char* types[] =
@@ -146,9 +174,9 @@ void InventoryPanel::DrawConsumablePool(int& id)
 			ImGui::TableSetupColumn("Buff %");
 			ImGui::TableHeadersRow();
 
-			for (auto& it : consumables)
+			for (const auto& key : consumables | std::views::keys)
 			{
-				Wiwa::Consumable* consumable = Wiwa::ItemManager::GetConsumable(it.first.c_str());
+				Wiwa::Consumable* consumable = Wiwa::ItemManager::GetConsumable(key.c_str());
 
 				ImGui::PushID(id++);
 				
@@ -159,7 +187,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeleteConsumable(it.first.c_str());
+					Wiwa::ItemManager::DeleteConsumable(key);
 				}
 				ImGui::PopStyleColor();
 
@@ -189,7 +217,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				{
 					for (int i = 0; i < 2; i++)
 					{
-						bool isSelected = (currentItem == types[i]);
+						const bool isSelected = (currentItem == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
@@ -201,8 +229,9 @@ void InventoryPanel::DrawConsumablePool(int& id)
 
 					ImGui::EndCombo();
 				}
-
-
+				ImGui::Checkbox("Is Ego's help", &consumable->IsEgosHelp);
+				HelpMarker("If checked the item will behave like Ego's help");
+				
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##percent", &consumable->BuffPercent);
 
@@ -258,18 +287,21 @@ void InventoryPanel::DrawBuffPool(int& id)
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
-			for (auto& it : buffs)
+			for (const auto& key : buffs | std::views::keys)
 			{
-				Wiwa::Buff* buff = Wiwa::ItemManager::GetBuff(it.first.c_str());
+				Wiwa::Buff* buff = Wiwa::ItemManager::GetBuff(key.c_str());
 				ImGui::PushID(id++);
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text(buff->Name.c_str());
-
+				if(ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddBuff(buff);
+				}
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeleteBuff(it.first.c_str());
+					Wiwa::ItemManager::DeleteBuff(key);
 				}
 				ImGui::PopStyleColor();
 
@@ -314,7 +346,7 @@ void InventoryPanel::DrawBuffPool(int& id)
 				{
 					for (int i = 0; i < 6; i++)
 					{
-						bool isSelected = (currentBuff == types[i]);
+						const bool isSelected = (currentBuff == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentBuff = types[i];
@@ -326,7 +358,7 @@ void InventoryPanel::DrawBuffPool(int& id)
 
 					ImGui::EndCombo();
 				}
-
+				
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
@@ -364,28 +396,36 @@ void InventoryPanel::DrawPassivePool(int& id)
 			"Rate of Fire",
 			"Buff",
 			"Attack",
+			"Projectile",
+			"Health",
+			"Range",
+			"Shield charge"
 		};
-		if (ImGui::BeginTable("passives", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		if (ImGui::BeginTable("passives", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
 			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Buff percent");
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
-			for (auto& it : passives)
+			for (const auto& key : passives | std::views::keys)
 			{
-				Wiwa::PassiveSkill* passive = Wiwa::ItemManager::GetPassive(it.first.c_str());
+				Wiwa::PassiveSkill* passive = Wiwa::ItemManager::GetPassive(key.c_str());
 				ImGui::PushID(id++);
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text(passive->Name.c_str());
-
+				if(ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddPassive(*passive);
+				}
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeletePassive(it.first.c_str());
+					Wiwa::ItemManager::DeletePassive(key);
 				}
 				ImGui::PopStyleColor();
 
@@ -412,18 +452,20 @@ void InventoryPanel::DrawPassivePool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##buffpercent", &passive->BuffPercent);
 
 				ImGui::TableNextColumn();
-				const char* currentItem = types[(int)passive->passiveType];
+				const char* currentItem = types[(int)passive->PassiveType];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < sizeof(types) / sizeof(char*); i++)
 					{
 						bool isSelected = (currentItem == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
-							passive->passiveType = (Wiwa::PassiveType)(i);
+							passive->PassiveType = (Wiwa::PassiveType)(i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();
@@ -490,6 +532,11 @@ void InventoryPanel::DrawAbilityPool(int& id)
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text(ability->Name.c_str());
 
+				if(ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddAbility(ability);
+				}
+				
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{

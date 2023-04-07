@@ -72,7 +72,7 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		passiveObj.AddMember("name", passive.second.Name.c_str());
 		passiveObj.AddMember("description", passive.second.Description.c_str());
 		passiveObj.AddMember("path", Resources::getResourcePathById<Image>(passive.second.Icon));
-		passiveObj.AddMember("type", (int)passive.second.passiveType);
+		passiveObj.AddMember("type", (int)passive.second.PassiveType);
 	}
 
 	JSONValue buffs = doc->AddMemberArray("buffs");
@@ -97,6 +97,7 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		consumObj.AddMember("path", Resources::getResourcePathById<Image>(consumable.second.Icon));
 		consumObj.AddMember("type", (int)consumable.second.Type);
 		consumObj.AddMember("buff_percent", consumable.second.BuffPercent);
+		consumObj.AddMember("is_egos_help", consumable.second.IsEgosHelp);
 	}
 
 }
@@ -136,7 +137,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Name = passives[i]["name"].as_string();
 				ability.Description = passives[i]["description"].as_string();
 				ability.Icon = Resources::Load<Image>(passives[i]["path"].as_string());
-				ability.passiveType = (PassiveType)passives[i]["type"].as_int();
+				ability.PassiveType = (PassiveType)passives[i]["type"].as_int();
 				AddPassive(ability);
 			}
 		}
@@ -153,6 +154,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Description = actives[i]["description"].as_string();
 				ability.Icon = Resources::Load<Image>(actives[i]["path"].as_string());
 				ability.BuffPercent = actives[i]["buff_percent"].as_int();
+				ability.Duration = actives[i]["duration"].as_float();
 				ability.Cooldown = actives[i]["cooldown"].as_float();
 				ability.Price = actives[i]["price"].as_int();
 				ability.buffType = (BuffType)actives[i]["type"].as_int();
@@ -172,6 +174,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Type = (ConsumableType)actives[i]["type"].as_int();
 				ability.Icon = Resources::Load<Image>(actives[i]["path"].as_string());
 				ability.BuffPercent = actives[i]["buff_percent"].as_int();
+				ability.IsEgosHelp = actives[i]["is_egos_help"].as_bool();
 				AddConsumable(ability);
 			}
 		}

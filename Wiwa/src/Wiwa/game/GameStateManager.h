@@ -5,7 +5,6 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <vector>
 #include "Items/Inventory.h"
-#include "Achivements/AchivementsManager.h"
 
 #include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/components/game/wave/Wave.h>
@@ -134,7 +133,8 @@ namespace Wiwa {
 		static void DeserializeData();
 
 		WI_HARD_INL static Inventory& GetPlayerInventory() { return *s_PlayerInventory; }
-
+		WI_HARD_INL static Scene* GetCurrentScene() { return s_CurrentScene; }
+		WI_HARD_INL static EntityId GetPlayerId() { return s_PlayerId; }
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
@@ -158,7 +158,5 @@ namespace Wiwa {
 		static Scene* s_CurrentScene;
 
 		static Inventory* s_PlayerInventory;
-
-		static AchivementsManager* s_AchivementsManager;
 	};
 }
