@@ -446,7 +446,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3315939568" Type="User" Language="SFX" Hash="{7ABC3352-E787-C4CC-E900-11B9055EAFCA}">
+		<SoundBank Id="3315939568" Type="User" Language="SFX" Hash="{70713AA7-3F18-C94D-8B9D-82F49605FE95}">
 			<ShortName>melee_moving</ShortName>
 			<Path>melee_moving.bnk</Path>
 			<Media>
@@ -539,5 +539,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{2899EB43-E88B-7BDB-C965-7BC27F0E2792}</FileHash>
+	<FileHash>{76EC019A-3C94-1B53-E8D8-78214F1F4045}</FileHash>
 </SoundBanksInfo>
