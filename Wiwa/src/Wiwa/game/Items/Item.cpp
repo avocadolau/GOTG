@@ -133,6 +133,7 @@ namespace Wiwa
 
     void Buff::UnUse()
     {
+        CoolDownTimer = 0.f;
         IsActive = false;
         switch (buffType)
         {

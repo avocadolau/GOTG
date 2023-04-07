@@ -53,8 +53,14 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if(abilities[0])
-			ImGui::Text("Name %s", abilities[0]->Name.c_str());
+		if (abilities[0])
+		{
+			ImGui::Text("%s", abilities[0]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", abilities[0]->CurrentTime);
+			ImGui::Text("Cooldown %f", abilities[0]->Cooldown);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -62,8 +68,14 @@ void InventoryPanel::Draw()
 
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if(abilities[1])
-			ImGui::Text("Name %s", abilities[1]->Name.c_str());
+		if (abilities[1])
+		{
+			ImGui::Text("%s", abilities[1]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", abilities[1]->CurrentTime);
+			ImGui::Text("Cooldown %f", abilities[1]->Cooldown);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -91,8 +103,16 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if(buffs[0])
-			ImGui::Text("Name %s", buffs[0]->Name.c_str());
+		if (buffs[0])
+		{
+			ImGui::Text("%s", buffs[0]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", buffs[0]->CurrentTime);
+			ImGui::Text("Cooldown %f", buffs[0]->Cooldown);
+			ImGui::Text("Duration %f", buffs[0]->Duration);
+			ImGui::Text("Cooldown timer %f", buffs[0]->CoolDownTimer);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		ImGui::Unindent();
@@ -100,8 +120,16 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if(buffs[1])
-			ImGui::Text("Name %s", buffs[1]->Name.c_str());
+		if (buffs[1])
+		{
+			ImGui::Text("%s", buffs[1]->Name.c_str());
+			ImGui::Indent();
+			ImGui::Text("Current time %f", buffs[1]->CurrentTime);
+			ImGui::Text("Cooldown %f", buffs[1]->Cooldown);
+			ImGui::Text("Duration %f", buffs[1]->Duration);
+			ImGui::Text("Cooldown timer %f", buffs[1]->CoolDownTimer);
+			ImGui::Unindent();
+		}
 		else
 			ImGui::Text("Empty slot");
 		
@@ -129,7 +157,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 		}
 		ImGui::EndPopup();
 	}
-	std::map<std::string, Wiwa::Consumable>& consumables = Wiwa::ItemManager::GetConsumables();
+	const std::map<std::string, Wiwa::Consumable>& consumables = Wiwa::ItemManager::GetConsumables();
 	if (!consumables.empty())
 	{
 		const char* types[] =
@@ -146,9 +174,9 @@ void InventoryPanel::DrawConsumablePool(int& id)
 			ImGui::TableSetupColumn("Buff %");
 			ImGui::TableHeadersRow();
 
-			for (auto& it : consumables)
+			for (const auto& key : consumables | std::views::keys)
 			{
-				Wiwa::Consumable* consumable = Wiwa::ItemManager::GetConsumable(it.first.c_str());
+				Wiwa::Consumable* consumable = Wiwa::ItemManager::GetConsumable(key.c_str());
 
 				ImGui::PushID(id++);
 				
@@ -159,7 +187,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
 				if (ImGui::Button("Delete"))
 				{
-					Wiwa::ItemManager::DeleteConsumable(it.first);
+					Wiwa::ItemManager::DeleteConsumable(key);
 				}
 				ImGui::PopStyleColor();
 
@@ -189,7 +217,7 @@ void InventoryPanel::DrawConsumablePool(int& id)
 				{
 					for (int i = 0; i < 2; i++)
 					{
-						bool isSelected = (currentItem == types[i]);
+						const bool isSelected = (currentItem == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))
 						{
 							currentItem = types[i];
@@ -373,11 +401,12 @@ void InventoryPanel::DrawPassivePool(int& id)
 			"Range",
 			"Shield charge"
 		};
-		if (ImGui::BeginTable("passives", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		if (ImGui::BeginTable("passives", 5, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
 			ImGui::TableSetupColumn("Icon");
+			ImGui::TableSetupColumn("Buff percent");
 			ImGui::TableSetupColumn("Type");
 			ImGui::TableHeadersRow();
 
@@ -423,12 +452,14 @@ void InventoryPanel::DrawPassivePool(int& id)
 					}
 					ImGui::EndDragDropTarget();
 				}
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##buffpercent", &passive->BuffPercent);
 
 				ImGui::TableNextColumn();
 				const char* currentItem = types[(int)passive->PassiveType];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < sizeof(types) / sizeof(char*); i++)
 					{
 						bool isSelected = (currentItem == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))

@@ -154,6 +154,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Description = actives[i]["description"].as_string();
 				ability.Icon = Resources::Load<Image>(actives[i]["path"].as_string());
 				ability.BuffPercent = actives[i]["buff_percent"].as_int();
+				ability.Duration = actives[i]["duration"].as_float();
 				ability.Cooldown = actives[i]["cooldown"].as_float();
 				ability.Price = actives[i]["price"].as_int();
 				ability.buffType = (BuffType)actives[i]["type"].as_int();

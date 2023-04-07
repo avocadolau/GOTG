@@ -184,6 +184,7 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
 {
     m_PassiveSkill.emplace_back(skill);
+	m_PassiveSkill.back().Use();
 }
 
 void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
@@ -200,25 +201,14 @@ void Wiwa::Inventory::Update()
 		float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
 		float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
 		
-		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
-		EntityId player = em.GetEntityByName("Player");
-
+		
 
 		// Ability 1
 		if(m_Abilities[0])
 		{
 			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
-			{
-				//WI_CORE_INFO("Ability 1 activated");
-				if (player)
-				{
-					EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
-					pman.EmitBatch(pe_spark);
-					EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
-					pman.EmitBatch(pe_line);
-				}
+			{	
 				UseAbility(0);
 			}
 		}
@@ -235,6 +225,12 @@ void Wiwa::Inventory::Update()
 		if(m_Buffs[0])
 		{
 			m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
+			if (m_Buffs[0]->IsActive)
+			{
+				m_Buffs[0]->CoolDownTimer += Time::GetDeltaTimeSeconds();
+				if (m_Buffs[0]->CoolDownTimer >= m_Buffs[0]->Duration)
+					m_Buffs[0]->UnUse();
+			}
 			if(Input::IsKeyPressed(Key::R) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadX))
 			{
 				WI_CORE_INFO("Buff 1 activated");
@@ -246,8 +242,11 @@ void Wiwa::Inventory::Update()
 			m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if (m_Buffs[1]->IsActive)
 			{
-
+				m_Buffs[1]->CoolDownTimer += Time::GetDeltaTimeSeconds();
+				if(m_Buffs[1]->CoolDownTimer >= m_Buffs[1]->Duration)
+					m_Buffs[1]->UnUse();
 			}
+			
 			if(Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 			{
 				WI_CORE_INFO("Buff 2 activated");
@@ -262,6 +261,17 @@ void Wiwa::Inventory::UseAbility(size_t index) const
 {
 	if(m_Abilities[index]->CurrentTime >= m_Abilities[index]->Cooldown)
 	{
+		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
+		EntityId player = em.GetEntityByName("Player");
+
+		if (player)
+		{
+			EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
+			pman.EmitBatch(pe_spark);
+			EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
+			pman.EmitBatch(pe_line);
+		}
 		m_Abilities[index]->CurrentTime = 0.f;
 		m_Abilities[index]->Use();
 		return;

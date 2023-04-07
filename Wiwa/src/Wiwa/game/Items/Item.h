@@ -126,7 +126,7 @@ namespace Wiwa
 		std::string Description;
 
 		ResourceId Icon;
-		
+
 		BuffType buffType;
 
 		int BuffPercent;
@@ -136,7 +136,19 @@ namespace Wiwa
 		float CoolDownTimer;
 		int Price;
 		bool IsActive;
-		Buff() = default;
+		Buff()
+			:Name(""),
+			Description(""),
+			Icon(0),
+			buffType(BuffType::MAJOR_VICTORY_SHIELD),
+			BuffPercent(0),
+			Duration(0.f),
+			Cooldown(0.f),
+			CurrentTime(0.f),
+			CoolDownTimer(0.f),
+			Price(0),
+			IsActive(false)
+		{};
 		Buff(const Buff& buff)
 		{
 			this->Name = buff.Name;
