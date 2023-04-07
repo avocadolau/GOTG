@@ -175,6 +175,27 @@ namespace Wiwa {
 		return instance_id;
 	}
 
+	uint32_t InstanceRenderer::AddInstance(VertexInstanceTexture& data)
+	{
+		size_t remove_size = m_RemovedInstances.size();
+		size_t instance_id = WI_INVALID_INDEX;
+
+		if (remove_size > 0) {
+			instance_id = m_RemovedInstances[remove_size - 1];
+			m_RemovedInstances.pop_back();
+		}
+		else {
+			if (m_InstanceCount == m_MaxInstances)
+				return instance_id;
+
+			instance_id = m_InstanceCount++;
+		}
+
+		m_InstanceVertex[instance_id] = data;
+
+		return instance_id;
+	}
+
 	void InstanceRenderer::UpdateInstance(uint32_t id, const Vector2i& position, const  Size2i& size, const Color4f& color, Renderer2D::Pivot pivot)
 	{
 		m_InstanceVertex[id].position = Renderer2D::CalculateScreenGlPos(position, size, pivot);
@@ -216,10 +237,6 @@ namespace Wiwa {
 	{
 		size_t texSize = m_Textures.size();
 
-		if (texSize > MAX_INSTANCE_TEXTURES) {
-			WI_ASSERT_MSG("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
-		}
-
 		int index = static_cast<int>(texSize);
 
 		for (size_t i = 0; i < texSize; i++) {
@@ -230,7 +247,14 @@ namespace Wiwa {
 		}
 
 		if (index == texSize) {
-			m_Textures.push_back(texture);
+			if (texSize >= MAX_INSTANCE_TEXTURES) {
+				return -1;
+				//WI_ASSERT_MSG("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
+			}
+			else
+			{
+				m_Textures.push_back(texture);
+			}
 		}
 
 		return index;

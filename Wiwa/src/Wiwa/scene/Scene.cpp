@@ -13,13 +13,10 @@
 
 namespace Wiwa
 {
-	Scene::Scene() : m_InstanceRenderer(40500)
+	Scene::Scene()
 	{
 		mMaxTimeEntering = 450;
 		mMaxTimeLeaving = 450;
-
-		// Initialize instance renderer with shader
-		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
 
 		m_GuiManager = new GuiManager();
 		m_GuiManager->Init(this);
@@ -200,6 +197,17 @@ namespace Wiwa
 		SceneChangeEvent event(scene);
 		Action<Event&> action = { &Application::OnEvent, &Application::Get() };
 		action(event);
+	}
+
+	uint32_t Scene::CreateInstanceRenderer()
+	{
+		uint32_t id = m_InstanceRenderers.size();
+
+		m_InstanceRenderers.emplace_back(40500);
+
+		m_InstanceRenderers[id].Init("resources/shaders/instanced_tex_color");
+
+		return id;
 	}
 
 	void Scene::UpdateEnter()

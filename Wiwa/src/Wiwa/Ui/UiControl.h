@@ -102,7 +102,8 @@ namespace Wiwa
 		{
 			return extraTexture;
 		}
-		uint32_t GetExtraIdQuad()
+
+		Renderer2D::InstanceData GetExtraIdQuad()
 		{
 			return id_quad_extra;
 		}
@@ -248,9 +249,9 @@ namespace Wiwa
 		Image* texture;
 		Image* extraTexture;	// Texture atlas reference
 
-		uint32_t id_quad_normal;
+		Renderer2D::InstanceData id_quad_normal;
 
-		uint32_t id_quad_extra;
+		Renderer2D::InstanceData id_quad_extra;
 
 		size_t callbackID;
 
