@@ -261,7 +261,7 @@ namespace Wiwa {
 						/*int animationFrame = currentFrameParticles - p.animationCreationTime;*/
 
 						// Update the animation
-						p.animation->Update(elapsedTime);
+						p.animation->Update(elapsedTime, p.emitterOwner->particle_animation_speed);
 
 						// Get the current frame of the animation
 						glm::vec4& frame = p.animation->GetCurrentFrame();
@@ -722,7 +722,7 @@ namespace Wiwa {
 
 				if (p.animation != nullptr)
 				{
-					p.animation->speedParticlesAnimation = p.emitterOwner->particle_animation_speed;
+					/*p.animation->speedParticlesAnimation = p.emitterOwner->particle_animation_speed;*/
 					p.animation->loop = false;
 
 					float frameX = 0.0f;
