@@ -43,6 +43,38 @@ namespace Game
                     GUI.ActivateGuiCanvas(0);
                     GUI.ActivateGuiCanvas(1);
                 }
+                //THIS ARE JUST EXAMPLES WITH GAMEPAD NOT FUNCTIONAL FOR REAL GAME
+                //SHIELD PLAYER
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadLeft))
+                {
+                    GUI.SetNextFrame(1, 0, 1);
+                }
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadRight))
+                {
+                    GUI.SetNextFrame(0, 0, 1);
+                }
+                //ABILITIES
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadLeft))
+                {
+                    GUI.SetNextFrame(3, 0, 3);
+                    GUI.SetNextFrame(3, 0, 4);
+                }
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadRight))
+                {
+                    GUI.SetNextFrame(0, 0, 3);
+                    GUI.SetNextFrame(0, 0, 4);
+                }
+                //BUFFS
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadLeft))
+                {
+                    GUI.SetNextFrame(3, 0, 5);
+                    GUI.SetNextFrame(3, 0, 6);
+                }
+                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadRight))
+                {
+                    GUI.SetNextFrame(0, 0, 5);
+                    GUI.SetNextFrame(0, 0, 6);
+                }
             }
             else
             {
