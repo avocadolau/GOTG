@@ -29,10 +29,11 @@ namespace Wiwa {
 		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 
+		void DeleteBody();
+		void CreateBody();
 		Object* getBody();
 	private:
 		Object* obj = nullptr;
-		void DeleteBody();
 	};
 }
 

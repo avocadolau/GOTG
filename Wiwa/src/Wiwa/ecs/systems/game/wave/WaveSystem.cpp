@@ -9,8 +9,10 @@ namespace Wiwa
 {
 	WaveSystem::WaveSystem()
 	{
-		m_Wave = {WI_INVALID_INDEX, WI_INVALID_INDEX};
-		init = false;
+		m_WaveIt = {WI_INVALID_INDEX, WI_INVALID_INDEX};
+		m_SpawnerIt = {WI_INVALID_INDEX, WI_INVALID_INDEX};
+		m_SpawnDelay = 2.0f;
+		m_TimeSinceLastSpawn = 0.0f;
 	}
 
 	WaveSystem::~WaveSystem()
@@ -24,29 +26,41 @@ namespace Wiwa
 
 	void WaveSystem::OnInit()
 	{
-		m_Wave = GetComponentIterator<Wave>();
-		Wave *wave = GetComponentByIterator<Wave>(m_Wave);
+		m_WaveIt = GetComponentIterator<Wave>();
+		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
 
 		m_EnemiesCmp.reserve(wave->maxEnemies);
 		m_EnemiesId.reserve(wave->maxEnemies);
-		wave->currentEnemiesAlive = wave->maxEnemies;
+		//wave->currentEnemiesAlive = wave->maxEnemies;
 
-		for (int i = 0; i < wave->maxEnemies; i++)
-			SpawnEnemy(i);
+		/*for (int i = 0; i < wave->maxEnemies; i++)
+			SpawnEnemy(i);*/
 
-		init = true;
 	}
 
 	void WaveSystem::OnUpdate()
 	{
-		if (!init)
+		/*if (!getAwake())
+			System::Awake();
+		if (!getInit())
+			System::Init();*/
+		if (!getAwake() && !getInit())
+			return;
+		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
+		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
+
+		static int i = 0;
+		if (wave->currentEnemiesAlive < wave->maxEnemies)
 		{
-			OnInit();
-			init = true;
+			m_TimeSinceLastSpawn += Time::GetDeltaTimeSeconds();
+			if (m_TimeSinceLastSpawn >= m_SpawnDelay) {
+				spawner->hasTriggered = true;
+				SpawnEnemy(i++);
+				wave->currentEnemiesAlive++;
+				m_TimeSinceLastSpawn = 0.0f;
+			}
 		}
-
-		Wave *wave = GetComponentByIterator<Wave>(m_Wave);
-
+		
 		// Wave has finished
 		if (wave->currentEnemiesAlive <= 0)
 		{
@@ -87,23 +101,25 @@ namespace Wiwa
 		case 1:
 		{
 			newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
-			break;
 		}
+		break;
 		case 2:
 		{
 			newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-			break;
 		}
+		break;
 		default:
+			WI_INFO(":(");
 			break;
 		}
-		entityManager.RemoveSystem(newEnemyId, physicsSystemHash);
-
+		//entityManager.RemoveSystem(newEnemyId, physicsSystemHash);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newEnemyId);
+		physSys->DeleteBody();
 		// Set readable name
-		Wave *wave = GetComponentByIterator<Wave>(m_Wave);
-		std::string enemyName = entityManager.GetEntityName(m_EntityId);
+		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
+		std::string enemyName = entityManager.GetEntityName(newEnemyId);
 		enemyName += "_enemy_" + std::to_string(index);
-		entityManager.SetEntityName(m_EntityId, enemyName.c_str());
+		entityManager.SetEntityName(newEnemyId, enemyName.c_str());
 
 		// Set intial positions
 		Transform3D* spawnTransform = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(m_EntityId));
@@ -128,67 +144,8 @@ namespace Wiwa
 		m_EnemiesCmp.emplace_back(GetComponentIterator<Enemy>(newEnemyId));
 		m_EnemiesId.emplace_back(newEnemyId);
 
-		//// Create collision body
-		// ColliderCapsule capsule;
-		// capsule.height = 0.7f;
-		// capsule.radius = 0.7f;
-		// entityManager.AddComponent<ColliderCapsule>(newEnemyId, capsule);
-
-		// CollisionBody initCollBody;
-		// initCollBody.positionOffset.x = 0;
-		// initCollBody.positionOffset.y = 0;
-		// initCollBody.positionOffset.z = 0;
-		// initCollBody.scalingOffset.x = 1;
-		// initCollBody.scalingOffset.y = 1;
-		// initCollBody.scalingOffset.z = 1;
-		// initCollBody.isTrigger = true;
-		// initCollBody.isStatic = false;
-		// initCollBody.doContinuousCollision = false;
-		// initCollBody.selfTag = 4;
-		// initCollBody.filterBits = 1 << 0;
-		// collBodyPtr->positionOffset.x = 0;
-		// collBodyPtr->positionOffset.y = 0;
-		// collBodyPtr->positionOffset.z = 0;
-		// collBodyPtr->scalingOffset.x = 1;
-		// collBodyPtr->scalingOffset.y = 1;
-		// collBodyPtr->scalingOffset.z = 1;
-		// collBodyPtr->isTrigger = true;
-		// collBodyPtr->isStatic = false;
-		// collBodyPtr->doContinuousCollision = false;
-		// collBodyPtr->selfTag = m_Scene->GetPhysicsManager().GetFilterTag("ENEMY");
-		// collBodyPtr->filterBits |= 1 << m_Scene->GetPhysicsManager().GetFilterTag("WALL");
-		// collBodyPtr->filterBits |= 1 << m_Scene->GetPhysicsManager().GetFilterTag("PLAYER");
-
-		// Character stats;
-		// stats.healthPoints = 30;
-		// stats.damage = 10;
-		// stats.range = 3;//shord distance
-		// stats.rof = 1;
-		// stats.shieldRegeneration = 0;
-		// stats.speed = 10.0f;
-		// entityManager.AddComponent<Character>(newEnemyId, stats);
-
-		//// AgentAI component
-
-		// AgentAI agent;
-		// agent.speed = stats.speed;
-		// agent.target = { 0,0,0 };
-		// AgentAI* agentPtr = entityManager.AddComponent<AgentAI>(newEnemyId, agent);
-		// agentPtr->speed = stats.speed;
-		// agentPtr->target = { 0,0,0 };
-
-		//// Mesh component
-
-		//// Create a enemy component and enemy system
-		// Enemy enemy;
-		// enemy.enemyType = 0;
-		// enemy.hasFinished = false;
-		// entityManager.AddComponent<Enemy>(newEnemyId, enemy);
-		// SystemHash sysHash = FNV1A_HASH("EnemySystem");
-
-		// entityManager.ApplySystem(newEnemyId, sysHash);
-		// entityManager.ApplySystem<Wiwa::AgentAISystem>(newEnemyId);
-		entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
+		physSys->CreateBody();
+		//entityManager.ApplySystem<Wiwa::PhysicsSystem>(newEnemyId);
 	}
 
 	void WaveSystem::DestroyEnemy(int index)
@@ -199,5 +156,10 @@ namespace Wiwa
 		// Delete the enemy entity entirely
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
 		entityManager.DestroyEntity(id);
+	}
+
+	void WaveSystem::SetSpawner(const EntityManager::ComponentIterator& m_WaveIt)
+	{
+		m_SpawnerIt = m_WaveIt;
 	}
 }
