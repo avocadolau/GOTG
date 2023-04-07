@@ -31,7 +31,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		//if (animator->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

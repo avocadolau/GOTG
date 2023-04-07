@@ -104,6 +104,24 @@ namespace Wiwa
 		//RotateTo(playerTr.Position,  enemy, entityId);                   
 	}
 
+	bool EnemySystem::GoToPosition(glm::vec3 targetedPosition)
+	{
+		bool ret = false;
+
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		//Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
+		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(m_EntityId);
+
+		if (agentPtr)
+		{
+			ret = agentPtr->CreatePath(targetedPosition);
+		}
+		//RotateTo(playerTr.Position,  enemy, entityId);        
+
+		return ret;
+	}
+
 	void EnemySystem::RotateTo(const glm::vec3& target)
 	{
 		float angle = glm::degrees(std::atan2(target.x, target.z));

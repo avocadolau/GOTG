@@ -44,7 +44,7 @@ namespace Wiwa
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		
-		if (animator->HasFinished()) 
+		if (animator->HasFinished() )//&& !IsPlaying(enemy->GetEntity())
 		{
 			PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);
 		}
