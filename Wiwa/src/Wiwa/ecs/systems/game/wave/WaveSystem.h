@@ -8,10 +8,10 @@
 namespace Wiwa {
 	class WI_API WaveSystem : public System {
 	private:
-		EntityManager::ComponentIterator m_Wave;
+		EntityManager::ComponentIterator m_SpawnerIt;
+		EntityManager::ComponentIterator m_WaveIt;
 		std::vector<EntityManager::ComponentIterator> m_EnemiesCmp;
 		std::vector<EntityId> m_EnemiesId;
-		bool init = false;
 		SystemHash physicsSystemHash;
 	public:
 		WaveSystem();
@@ -30,6 +30,11 @@ namespace Wiwa {
 		void SpawnEnemy(int index);
 
 		void DestroyEnemy(int index);
+
+		void SetSpawner(const EntityManager::ComponentIterator& m_WaveIt);
+
+		float m_SpawnDelay = 1.0f;
+		float m_TimeSinceLastSpawn = 0.0f;
 	};
 }
 

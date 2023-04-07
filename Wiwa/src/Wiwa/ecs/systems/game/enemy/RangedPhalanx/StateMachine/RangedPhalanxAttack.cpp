@@ -41,28 +41,32 @@ namespace Wiwa
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 		int distPath = aiSystem->GetPathSize();
-		WI_INFO("Dist2Player: {}", dist2Player);
-		WI_INFO("DistPath: {}", distPath);
+		//WI_INFO("Dist2Player: {}", dist2Player);
+		//WI_INFO("DistPath: {}", distPath);
 		// Change rotation logic from ai agent to enemy local script one
-		if (dist2Player <= enemy->m_RangeOfAttack)
-		{
+		//if (dist2Player <= enemy->m_RangeOfAttack)
+		//{
 			//aiSystem->DisableRotationByTile();
 			// Rotate towards player
 			aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
-		}
+		//}
 
-		if (animator->HasFinished())
-		{
+		//if (animator->HasFinished())
+		//{
 			m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
+
+			//WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
+
 			if (m_TimerAttackCooldown > stats->RateOfFire)
 			{
 				// Play fire anim and fire shot
 				m_TimerAttackCooldown = 0.0f;
 				Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+				//WI_INFO(" gunTr {},{},{}", gunTr->localPosition.x , gunTr->localPosition.y, gunTr->localPosition.z);
 				SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
 				animator->PlayAnimation("shot", false);
 			}
-		}
+		//}
 
 		if (dist2Player > enemy->m_RangeOfAttack)
 		{
@@ -103,6 +107,10 @@ namespace Wiwa
 		// Set intial positions
 		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+		ParticleManager& pman = enemy->getScene().GetParticleManager();
+
+		pman.EmitBatch(newBulletId);
 
 		if (!bulletTr || !playerTr)
 			return;

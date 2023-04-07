@@ -18,6 +18,12 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		ParticleManager& pman = enemy->getScene().GetParticleManager();
+
+		EntityId currentEnemy = enemy->GetEntity();
+
+		pman.EmitBatch(currentEnemy);
+
 		animator->PlayAnimation("spawn", false);
 	}
 
@@ -25,7 +31,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		//if (animator->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

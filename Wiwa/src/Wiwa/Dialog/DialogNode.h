@@ -2,14 +2,16 @@
 #include <vector>
 #include <string>
 
+#include <Wiwa/core/Renderer2D.h>
+
 struct DialogNode
 {
 	// The dialog text lines
-	std::uint32_t text1_imgModeID;
-	std::uint32_t text2_imgModeID;
-	std::uint32_t text3_imgModeID;
-	std::uint32_t text4_imgModeID;
-	std::uint32_t text5_imgModeID;
+	Wiwa::Renderer2D::InstanceData text1_imgModeID;
+	Wiwa::Renderer2D::InstanceData text2_imgModeID;
+	Wiwa::Renderer2D::InstanceData text3_imgModeID;
+	Wiwa::Renderer2D::InstanceData text4_imgModeID;
+	Wiwa::Renderer2D::InstanceData text5_imgModeID;
 
 	//bool isNodeOccupied = false;
 

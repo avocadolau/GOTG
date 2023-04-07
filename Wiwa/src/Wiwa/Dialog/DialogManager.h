@@ -21,8 +21,8 @@ namespace Wiwa
 		std::vector<DialogNode> nodes;
 
 		// Dialog bg image and continue button
-		uint32_t dialogImgID;
-		uint32_t continueImgID;
+		Wiwa::Renderer2D::InstanceData dialogImgID;
+		Wiwa::Renderer2D::InstanceData continueImgID;
 		//int dialogWidth, dialogHeight;
 
 		// Whether the dialog has finished or not

@@ -87,6 +87,6 @@ namespace Wiwa {
 			asrc->isPlaying = false;
 		}
 
-		WI_CORE_INFO("Audio finished [{}]", ev_name);
+		//WI_CORE_INFO("Audio finished [{}]", ev_name);
 	}
 }
