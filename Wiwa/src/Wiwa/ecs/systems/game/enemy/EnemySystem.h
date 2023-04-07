@@ -8,6 +8,7 @@
 #include <Wiwa/ecs/systems/AgentAISystem.h>
 #include "Wiwa/scripting/embed_functions/embed_audio_functions.h"
 #include "Wiwa/scripting/ScriptEngine.h"
+#include "Wiwa/AI/AIMapGeneration.h"
 
 namespace Wiwa {
 	class WI_API EnemySystem : public System {
@@ -39,6 +40,8 @@ namespace Wiwa {
 		virtual void ReceiveDamage(int damage);
 
 		void ChasePlayer();
+
+		bool GoToPosition(glm::vec3 targetedPosition);
 
 		void RotateTo(const glm::vec3& target);
 		//void OnDestroy() override;

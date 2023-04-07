@@ -44,12 +44,12 @@ namespace Wiwa
 		//WI_INFO("Dist2Player: {}", dist2Player);
 		//WI_INFO("DistPath: {}", distPath);
 		// Change rotation logic from ai agent to enemy local script one
-		if (dist2Player <= enemy->m_RangeOfAttack)
-		{
+		//if (dist2Player <= enemy->m_RangeOfAttack)
+		//{
 			//aiSystem->DisableRotationByTile();
 			// Rotate towards player
 			aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
-		}
+		//}
 
 		//if (animator->HasFinished())
 		//{

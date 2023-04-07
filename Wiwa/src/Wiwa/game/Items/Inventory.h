@@ -18,9 +18,11 @@ namespace Wiwa
 		void Deserialize(JSONDocument* doc);
 
 		void InitGame();
+		
 		void AddAbility(const Ability* ability) const;
 		void AddBuff(const Buff* buff) const;
 		void AddPassive(const PassiveSkill& skill);
+		
 		void AddConsumable(const Consumable& consumable);
 		void Update();
 		

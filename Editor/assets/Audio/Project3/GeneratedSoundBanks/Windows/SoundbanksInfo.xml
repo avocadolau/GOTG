@@ -326,6 +326,57 @@
 				</Event>
 			</Events>
 		</SoundBank>
+		<SoundBank Id="1707297693" Type="User" Language="SFX" Hash="{3870320F-5C92-74B1-32D1-8872A995E6C9}">
+			<ShortName>level_music_01</ShortName>
+			<Path>level_music_01.bnk</Path>
+			<Media>
+				<File Id="57065480" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>track_levelmusic_1.wav</ShortName>
+					<CachePath>SFX/track_levelmusic_1_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="1707297693" Name="level_music_01">
+					<MediaRefs>
+						<MediaRef Id="57065480"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="1707297694" Type="User" Language="SFX" Hash="{AD09087B-BA8E-E7B7-5998-397B9D8B9E8C}">
+			<ShortName>level_music_02</ShortName>
+			<Path>level_music_02.bnk</Path>
+			<Media>
+				<File Id="212473418" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>track_levelmusic_2.wav</ShortName>
+					<CachePath>SFX/track_levelmusic_2_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="1707297694" Name="level_music_02">
+					<MediaRefs>
+						<MediaRef Id="212473418"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="1707297695" Type="User" Language="SFX" Hash="{D90BC874-A667-A5DC-2FBE-7D1E48854A63}">
+			<ShortName>level_music_03</ShortName>
+			<Path>level_music_03.bnk</Path>
+			<Media>
+				<File Id="489304910" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>track_levelmusic_3.wav</ShortName>
+					<CachePath>SFX/track_levelmusic_3_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="1707297695" Name="level_music_03">
+					<MediaRefs>
+						<MediaRef Id="489304910"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
 		<SoundBank Id="1736784962" Type="User" Language="SFX" Hash="{C2A3CFEB-1BD3-540C-AE99-3C8AD3BD8E24}">
 			<ShortName>subjugator_moving</ShortName>
 			<Path>subjugator_moving.bnk</Path>
@@ -539,5 +590,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{76EC019A-3C94-1B53-E8D8-78214F1F4045}</FileHash>
+	<FileHash>{9368747D-ADA6-8027-1062-C81D637333A5}</FileHash>
 </SoundBanksInfo>
