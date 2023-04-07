@@ -28,6 +28,7 @@ namespace Game
         private float walkStepTimer = 0.62f;
         private float runStepTimer = 0.458f;
         float stepParticleTimer = 0.0f;
+        float dashParticleTimer = 0.0f;
 
         private bool isWalking = false;
         private bool isAiming = false;
@@ -302,6 +303,23 @@ namespace Game
                 if (input == Vector3Values.zero)
                 {
                     input = Mathf.CalculateForward(ref transform);
+                }
+
+                dashParticleTimer -= Time.DeltaTime();
+
+                //------------------------
+
+                //EntityId pe_dash = GetChildByName("PE_Dash");
+                //pman.EmitBatch(pe_hurt);
+                //--------------------------------
+
+                if (dashParticleTimer < 0)
+                {
+                    EntityId pe_dash = GetChildByName("PE_Dash");
+
+                    ParticleEmitterManger.ParticleEmitterPlayBatch(pe_dash);
+
+                    dashParticleTimer = 0.1f; //better if random between 2 values
                 }
 
                 Vector3 targetPoint = Mathf.PointAlongDirection(lastPos, input, controller.DashDistance);

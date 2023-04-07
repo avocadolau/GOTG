@@ -204,7 +204,7 @@ void Wiwa::Inventory::Update()
 		{
 			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
 			{
-				WI_CORE_INFO("Ability 1 activated");
+				//WI_CORE_INFO("Ability 1 activated");
 				UseAbility(0);
 			}
 		}
