@@ -3,6 +3,8 @@
 #include "Wiwa/scene/SceneManager.h"
 #include "Items/ItemManager.h"
 #include <Wiwa/ecs/components/game/Character.h>
+#include "Achievements/AchievementsManager.h"
+
 
 namespace Wiwa
 {
@@ -509,6 +511,8 @@ namespace Wiwa
 
 		ItemManager::Serialize(&doc);
 
+		AchievementsManager::Serialize(&doc);
+
 		doc.save_file("config/room_data.json");
 	}
 
@@ -592,6 +596,8 @@ namespace Wiwa
 			s_CurrentCharacter = doc["current_character"].as_int();
 
 		Wiwa::ItemManager::Deserialize(&doc);
+
+		AchievementsManager::Deserialize(&doc);
 	}
 }
 

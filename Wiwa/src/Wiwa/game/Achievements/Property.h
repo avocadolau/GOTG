@@ -12,7 +12,7 @@ namespace Wiwa {
 	public:
 		Property();
 		Property(std::string name,std::string description, int initialValue, ActivationRules activation, int activationvalue);
-		~Property();
+		~Property() {};
 
 		bool IsActive();
 

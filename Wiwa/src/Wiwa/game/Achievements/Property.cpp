@@ -5,14 +5,12 @@
 namespace  Wiwa {
 
 	Property::Property()
-	{
-		{
-			m_Name = "";
-			m_Activation = ActivationRules::NONE;
-			m_Value = 0;
-			m_ActivationValue = 0;
-			m_InitialValue = 0;
-		}
+	{	
+		m_Name = "";
+		m_Activation = ActivationRules::NONE;
+		m_Value = 0;
+		m_ActivationValue = 0;
+		m_InitialValue = 0;
 	}
 
 	Property::Property(std::string name,std::string descripion, int initialValue, ActivationRules activation, int activationvalue)
@@ -23,11 +21,6 @@ namespace  Wiwa {
 		m_Activation = activation;
 		m_ActivationValue = activationvalue;
 	}
-
-	Property::~Property()
-	{
-	}
-
 	bool Property::IsActive()
 	{
 		bool ret = false;
