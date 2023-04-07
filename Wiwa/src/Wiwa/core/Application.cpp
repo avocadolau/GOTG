@@ -77,9 +77,6 @@ namespace Wiwa
 		m_Renderer3D = new Renderer3D();
 		m_Renderer3D->Init();
 
-		m_Renderer2D = new Renderer2D();
-		m_Renderer2D->Init();
-
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 

@@ -40,40 +40,7 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnSystemAdded()
 	{
-		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
-		const char* e_name = entityManager.GetEntityName(m_EntityId);
-
-		CollisionBody* rb = GetComponent<CollisionBody>();
-		Transform3D* transform = GetComponent<Transform3D>();
-
-		ColliderCube* cube = GetComponent<ColliderCube>();
-		ColliderSphere* sphere = GetComponent<ColliderSphere>();
-		ColliderCylinder* cylinder = GetComponent<ColliderCylinder>();
-		ColliderCapsule* capsule = GetComponent<ColliderCapsule>();
-
-		Mesh* mesh = GetComponent<Mesh>();
-
-		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
-
-		if (rb)
-		{
-			if (cube)
-			{
-				obj = physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
-			}
-			else if (sphere)
-			{
-				obj = physicsManager.AddBodySphere(m_EntityId, *sphere, *transform, *rb);
-			}
-			else if (cylinder)
-			{
-				obj = physicsManager.AddBodyCylinder(m_EntityId, *cylinder, *transform, *rb);
-			}
-			else if (capsule)
-			{
-				obj = physicsManager.AddBodyCapsule(m_EntityId, *capsule, *transform, *rb);
-			}
-		}
+		CreateBody();
 	}
 	void PhysicsSystem::OnSystemRemoved()
 	{
@@ -114,5 +81,43 @@ namespace Wiwa {
 			physicsManager.DeleteBody(obj);
 
 		obj = nullptr;
+	}
+
+	void PhysicsSystem::CreateBody()
+	{
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
+		const char* e_name = entityManager.GetEntityName(m_EntityId);
+
+		CollisionBody* rb = GetComponent<CollisionBody>();
+		Transform3D* transform = GetComponent<Transform3D>();
+
+		ColliderCube* cube = GetComponent<ColliderCube>();
+		ColliderSphere* sphere = GetComponent<ColliderSphere>();
+		ColliderCylinder* cylinder = GetComponent<ColliderCylinder>();
+		ColliderCapsule* capsule = GetComponent<ColliderCapsule>();
+
+		Mesh* mesh = GetComponent<Mesh>();
+
+		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+
+		if (rb)
+		{
+			if (cube)
+			{
+				obj = physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
+			}
+			else if (sphere)
+			{
+				obj = physicsManager.AddBodySphere(m_EntityId, *sphere, *transform, *rb);
+			}
+			else if (cylinder)
+			{
+				obj = physicsManager.AddBodyCylinder(m_EntityId, *cylinder, *transform, *rb);
+			}
+			else if (capsule)
+			{
+				obj = physicsManager.AddBodyCapsule(m_EntityId, *capsule, *transform, *rb);
+			}
+		}
 	}
 }

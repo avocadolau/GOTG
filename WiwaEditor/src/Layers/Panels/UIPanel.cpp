@@ -801,8 +801,10 @@ void UIPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
 	{
 		ImGui::PushID(i);
 		ImGui::Text("Animation frame: %d", i);
-		ImGui::InputInt2("Anim position", &(list.at(i).x,list.at(i).y));
-		ImGui::InputInt2("Anim size", &(list.at(i).width, list.at(i).height));
+		ImGui::InputInt("AnimPos_x", &list.at(i).x);
+		ImGui::InputInt("AnimPos_y", &list.at(i).y);
+		ImGui::InputInt("AnimPos_width", &list.at(i).width);
+		ImGui::InputInt("AnimPos_height", &list.at(i).height);
 		ImGui::PopID();
 	}
 	if (ImGui::Button("+"))

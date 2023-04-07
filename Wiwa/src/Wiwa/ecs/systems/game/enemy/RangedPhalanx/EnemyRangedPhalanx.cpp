@@ -44,10 +44,12 @@ namespace Wiwa
 
 	void EnemyRangedPhalanx::OnUpdate()
 	{
-		if (!getAwake())
+		/*if (!getAwake())
 			System::Awake();
 		if (!getInit())
-			System::Init();
+			System::Init();*/
+		if (!getAwake() && !getInit())
+			return;
 		EnemySystem::OnUpdate();
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
