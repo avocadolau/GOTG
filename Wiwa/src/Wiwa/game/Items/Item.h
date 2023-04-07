@@ -6,6 +6,13 @@
 
 namespace Wiwa
 {
+	enum class CooldownState
+	{
+		NO_CHARGED,
+		STARTING_CHARGE,
+		MEDIUM_CHARGE,
+		FULLY_CHARGED
+	};
 	enum class ConsumableType
 	{
 		HEAL,
@@ -57,6 +64,8 @@ namespace Wiwa
 
 		AbilityType AbilityType;
 
+		CooldownState cooldownState;
+
 		Ability() = default;
 		Ability(const Ability& ability)
 		{
@@ -82,7 +91,9 @@ namespace Wiwa
 			  Cooldown(0.f),
 			  CurrentTime(0.f),
 			  Price(0),
-			  AbilityType(AbilityType::YONDUS_SEEDS)
+			  AbilityType(AbilityType::YONDUS_SEEDS),
+			 cooldownState(CooldownState::NO_CHARGED)
+
 		{}
 
 		void Use();
@@ -136,6 +147,9 @@ namespace Wiwa
 		float CoolDownTimer;
 		int Price;
 		bool IsActive;
+
+		CooldownState cooldownState;
+
 		Buff()
 			:Name(""),
 			Description(""),
@@ -147,7 +161,8 @@ namespace Wiwa
 			CurrentTime(0.f),
 			CoolDownTimer(0.f),
 			Price(0),
-			IsActive(false)
+			IsActive(false),
+			cooldownState(CooldownState::NO_CHARGED)
 		{};
 		Buff(const Buff& buff)
 		{

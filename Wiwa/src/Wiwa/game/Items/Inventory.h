@@ -30,7 +30,8 @@ namespace Wiwa
 		void UseBuff(size_t index) const ;
 
 		void SwapUITexture(ResourceId id, int indexUI);
-
+		void CooldownState(Ability* ability, int indexUI);
+		void CooldownState(Buff* buff, int indexUI);
 		void Clear();
 
 		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }
