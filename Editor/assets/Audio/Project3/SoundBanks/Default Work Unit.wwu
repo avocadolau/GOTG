@@ -176,6 +176,31 @@
 						</SoundBank>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Music" ID="{B7231F27-B5C9-4E00-ADE1-0A382101E4CC}" ShortID="928095349">
+					<ChildrenList>
+						<SoundBank Name="level_music_01" ID="{8BC5199D-545E-4ABA-9A3E-6764339B0F2B}">
+							<ObjectInclusionList>
+								<ObjectRef Name="level_music_01" ID="{ECC5C8DA-5777-4390-9FC3-FD897B6E0DD0}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+							</ObjectInclusionList>
+							<ObjectExclusionList/>
+							<GameSyncExclusionList/>
+						</SoundBank>
+						<SoundBank Name="level_music_02" ID="{44035799-FC18-4F18-ABE1-546DF60DAE9D}">
+							<ObjectInclusionList>
+								<ObjectRef Name="level_music_02" ID="{E4B0AACA-AD76-40C1-8644-9F8B6145778B}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+							</ObjectInclusionList>
+							<ObjectExclusionList/>
+							<GameSyncExclusionList/>
+						</SoundBank>
+						<SoundBank Name="level_music_03" ID="{03D010C2-DB16-483A-A68F-85E1642CA05F}">
+							<ObjectInclusionList>
+								<ObjectRef Name="level_music_03" ID="{C7D8A2A5-B759-4FC7-A09A-3A78B03968A1}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+							</ObjectInclusionList>
+							<ObjectExclusionList/>
+							<GameSyncExclusionList/>
+						</SoundBank>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

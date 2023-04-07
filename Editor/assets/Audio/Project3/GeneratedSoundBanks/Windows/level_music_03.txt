@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1707297695	level_music_03			\Default Work Unit\music\level_music_03	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	489304910	track_levelmusic_3	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\track_levelmusic_3_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Music\track_levelmusic_3		22582900
+

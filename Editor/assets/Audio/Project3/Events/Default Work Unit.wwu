@@ -216,6 +216,39 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="level_music_01" ID="{ECC5C8DA-5777-4390-9FC3-FD897B6E0DD0}">
+							<ChildrenList>
+								<Action Name="" ID="{12E181C1-08D5-4C1C-A4A5-01F38E2B3CAF}" ShortID="488524899">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="track_levelmusic_1" ID="{AE5E7530-9A8D-4532-87FF-EF3809326D6B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="level_music_02" ID="{E4B0AACA-AD76-40C1-8644-9F8B6145778B}">
+							<ChildrenList>
+								<Action Name="" ID="{2C9166AB-C6A3-4C89-9E2E-83E2A8943071}" ShortID="393177643">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="track_levelmusic_2" ID="{BAF461B7-2E0F-4C37-A990-352250610C48}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="level_music_03" ID="{C7D8A2A5-B759-4FC7-A09A-3A78B03968A1}">
+							<ChildrenList>
+								<Action Name="" ID="{A1B3B943-1CB6-4C64-ADC4-56967C981FDA}" ShortID="305946202">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="track_levelmusic_3" ID="{531B0292-CA30-4D23-934E-B3D1563C1241}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="volume" ID="{584D449A-094E-4BE8-BF76-7144992B0248}" ShortID="715528837">
