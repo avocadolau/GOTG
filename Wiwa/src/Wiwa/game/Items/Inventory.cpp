@@ -4,6 +4,7 @@
 
 #include "Wiwa/core/KeyCodes.h"
 #include "Wiwa/utilities/time/Time.h"
+#include "Wiwa/scene/SceneManager.h"
 
 #define MAX_ABILITIES 2
 #define MAX_BUFFS 2
@@ -199,6 +200,11 @@ void Wiwa::Inventory::Update()
 		float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
 		float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
 		
+		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
+		EntityId player = em.GetEntityByName("Player");
+
+
 		// Ability 1
 		if(m_Abilities[0])
 		{
@@ -206,6 +212,13 @@ void Wiwa::Inventory::Update()
 			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
 			{
 				//WI_CORE_INFO("Ability 1 activated");
+				if (player)
+				{
+					EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
+					pman.EmitBatch(pe_spark);
+					EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
+					pman.EmitBatch(pe_line);
+				}
 				UseAbility(0);
 			}
 		}
