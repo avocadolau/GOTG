@@ -254,17 +254,19 @@ namespace Wiwa {
 	void EntityManager::Update()
 	{
 		// Apply systems in pool
-		size_t ssize = m_SystemsToInit.size();
-
-		for (size_t i = 0; i < ssize; i++) {
-			m_SystemsToInit[i]->Awake();
-		}
-
-		for (size_t i = 0; i < ssize; i++) {
-			m_SystemsToInit[i]->Init();
-		}
+		std::vector<System*> asd = m_SystemsToInit;
 
 		m_SystemsToInit.clear();
+
+		size_t ssize = asd.size();
+
+		for (size_t i = 0; i < ssize; i++) {
+			asd[i]->Awake();
+		}
+
+		for (size_t i = 0; i < ssize; i++) {
+			asd[i]->Init();
+		}
 
 		// Remove entities in pool
 		size_t rsize = m_EntitiesToDestroy.size();
