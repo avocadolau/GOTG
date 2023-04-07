@@ -7,6 +7,7 @@ namespace  Wiwa {
 	Property::Property()
 	{	
 		m_Name = "";
+		m_Description = "";
 		m_Activation = ActivationRules::NONE;
 		m_Value = 0;
 		m_ActivationValue = 0;

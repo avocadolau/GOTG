@@ -34,8 +34,6 @@ namespace Game
 
                 GUI.SetValeForUIbar(stats.Health, 0, 0);
 
-
-
                 if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadGuide) && !gamePaused)
                 {
 
@@ -43,16 +41,18 @@ namespace Game
                     GUI.ActivateGuiCanvas(0);
                     GUI.ActivateGuiCanvas(1);
                 }
-                //THIS ARE JUST EXAMPLES WITH GAMEPAD NOT FUNCTIONAL FOR REAL GAME
+                
                 //SHIELD PLAYER
-                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadLeft))
+                if (stats.Shield <= 0)
                 {
                     GUI.SetNextFrame(1, 0, 1);
                 }
-                if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadRight))
+                if (stats.Shield >= stats.MaxShield)
                 {
                     GUI.SetNextFrame(0, 0, 1);
                 }
+
+                //THIS ARE JUST EXAMPLES WITH GAMEPAD NOT FUNCTIONAL FOR REAL GAME
                 //ABILITIES
                 if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadDPadLeft))
                 {
