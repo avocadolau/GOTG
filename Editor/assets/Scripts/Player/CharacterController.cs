@@ -280,6 +280,8 @@ namespace Game
         }
         void UpdateAnimation(Vector3 input, Character controller)
         {
+            if (isDashing) return;
+
             animTimer += Time.DeltaTime();
             if (isShooting)
             {

@@ -7,17 +7,22 @@ namespace Game
     using EntityId = System.UInt64;
     public class PlayerDeath: PlayerBaseState
     {
-        public override void EnterState(ref PlayerController controller, EntityId entityId)
+        public override void EnterState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
-            Animator.PlayAnimationName("death", false, m_EntityId);
+            Console.WriteLine("Player death");
+            Animator.PlayAnimationName("death", false, stateMachine.GetEntity());
         }
-        public override void UpdateState(ref PlayerController controller, EntityId entityId)
+        public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
+        {
+            if (Animator.HasFinished(stateMachine.GetEntity()))
+            {
+                GameState.Die();
+            }
+        }
+        public override void ExitState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
         }
-        public override void ExitState(ref PlayerController controller, EntityId entityId)
-        {
-        }
-        public override void OnCollisionEnter(ref PlayerController controller, EntityId id1, EntityId id2, string str1, string str2)
+        public override void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
 
         }

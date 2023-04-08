@@ -4,7 +4,7 @@ using Wiwa;
 namespace Game
 {
     using EntityId = UInt64;
-    class PlayerStateMachine : PlayerController
+    public class PlayerStateMachine : PlayerController
     {
         PlayerBaseState currentState;
         public PlayerIdle idle = new PlayerIdle();
@@ -12,49 +12,45 @@ namespace Game
         public PlayerMove attack = new PlayerMove();
         public PlayerDash dash = new PlayerDash();
         public PlayerDeath death = new PlayerDeath();
-        public override void Awake()
+        
+        public void Awake()
         {
-            base.Awake();
+            Console.WriteLine("awake player state machine");
         }
 
-        public override void Init()
+        public void Init()
         {
-            base.Init();
             currentState = idle;
-            PlayerController self = this;
-            currentState.EnterState(ref self, m_EntityId);
+            PlayerStateMachine self = this;
+            currentState.EnterState(ref self, GetEntity());
         }
 
-        public override void Update()
+        public  void Update()
         {
-
-
-            base.Update();
-            PlayerController self = this;
-            currentState.UpdateState(ref self, m_EntityId);
+            PlayerStateMachine self = this;
+            currentState.UpdateState(ref self, GetEntity());
             CheckHealth();
         }
 
-        public override void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
+        public void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            base.OnCollisionEnter(id1, id2, str1, str2);
-            PlayerController self = this;
-            currentState.OnCollisionEnter(ref self, id1, id2, str1, str2);
+            currentState.OnCollisionEnter(id1, id2, str1, str2);
         }
 
-        public void SwitchState(PlayerBaseState state)
+        public void SwitchState(ref PlayerStateMachine stateMachine, PlayerBaseState state)
         {
-            PlayerController self = this;
-            currentState.ExitState(ref self, m_EntityId);
+            PlayerStateMachine self = this;
+            currentState.ExitState(ref self, GetEntity());
             currentState = state;
-            currentState.EnterState(ref self, m_EntityId);
+            currentState.EnterState(ref self, GetEntity());
         }
         void CheckHealth()
-        {
-            if(stats.Health <= 0)
+        {       
+            if (GetCharacter().Health <= 0)
             {
-                //moriste
-            }    
+                PlayerStateMachine self = this;
+                SwitchState(ref self, death);
+            }
         }
     }
 }

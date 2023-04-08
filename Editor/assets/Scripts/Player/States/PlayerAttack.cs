@@ -7,19 +7,22 @@ namespace Game
     using EntityId = System.UInt64;
     public class PlayerAttack : PlayerBaseState
     {
-        public override void EnterState(ref PlayerController controller, EntityId entityId)
+        private float shootTimer = 0f;
+        public override void EnterState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
-            Animator.PlayAnimationName("shootright", false, m_EntityId);
+            Console.WriteLine("Player attack");
+            Animator.PlayAnimationName("shootright", false, stateMachine.GetEntity());
         }
-        public override void UpdateState(ref PlayerController controller, EntityId entityId)
+        public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
         }
-        public override void ExitState(ref PlayerController controller, EntityId entityId)
+        public override void ExitState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
         }
-        public override void OnCollisionEnter(ref PlayerController controller, EntityId id1, EntityId id2, string str1, string str2)
+        public override void OnCollisionEnter( EntityId id1, EntityId id2, string str1, string str2)
         {
+        }
 
-        }
+      
     }
 }
