@@ -57,19 +57,19 @@ namespace Wiwa {
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
 
-		AddFilterTag("COLLISION_EVERYTHING");
-		AddFilterTag("PLAYER");
-		AddFilterTag("ENEMY");
-		AddFilterTag("BULLET");
-		AddFilterTag("START_RUN_TRIGGER");
-		AddFilterTag("END_ROOM_TRIGGER");
-		AddFilterTag("WALL");
-		AddFilterTag("COLUMN");
-		AddFilterTag("ENEMY_MELEE");
-		AddFilterTag("ENEMY_SPAWNER");
-		AddFilterTag("ITEM");
-		AddFilterTag("ENEMY_BULLET");
-		AddFilterTag("MAJOR_VICTORY_SHIELD");	
+		//AddFilterTag("COLLISION_EVERYTHING");
+		//AddFilterTag("PLAYER");
+		//AddFilterTag("ENEMY");
+		//AddFilterTag("BULLET");
+		//AddFilterTag("START_RUN_TRIGGER");
+		//AddFilterTag("END_ROOM_TRIGGER");
+		//AddFilterTag("WALL");
+		//AddFilterTag("COLUMN");
+		//AddFilterTag("ENEMY_MELEE");
+		//AddFilterTag("ENEMY_SPAWNER");
+		//AddFilterTag("ITEM");
+		//AddFilterTag("ENEMY_BULLET");
+		//AddFilterTag("MAJOR_VICTORY_SHIELD");	
 
 		return true;
 	}
@@ -597,8 +597,6 @@ namespace Wiwa {
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
-		/*filterStrings.erase(filterStrings.begin() + index);
-		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
 		for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)

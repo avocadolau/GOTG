@@ -102,7 +102,13 @@ namespace Wiwa
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Character* playerStats = (Character*)em.GetComponentByIterator(enemy->m_PlayerStatsIt);
+		Character* playerStats = nullptr;
+
+		if (enemy->m_PlayerStatsIt.c_id != WI_INVALID_INDEX && enemy->m_PlayerStatsIt.c_index != enemy->m_PlayerStatsIt.c_id)
+		{
+			(Character*)em.GetComponentByIterator(enemy->m_PlayerStatsIt);
+		}
+
 		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		ParticleManager& pman = enemy->getScene().GetParticleManager();
