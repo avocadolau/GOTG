@@ -22,9 +22,11 @@ namespace Wiwa
 
 		// Dialog bg image and continue button
 		Wiwa::Renderer2D::InstanceData dialogImgID;
+		Wiwa::Renderer2D::InstanceData characterImgID;
 		Wiwa::Renderer2D::InstanceData continueImgID;
 
 		Image* dialogImg = nullptr;
+		Image* characterImg = nullptr;
 		Image* continueImg = nullptr;
 		//int dialogWidth, dialogHeight;
 
@@ -81,10 +83,11 @@ namespace Wiwa
 		void UpdateConversation(Conversation conversation, Renderer2D* render);
 
 		// Set the dialog font and texts
-		void SetDialogText(char* dialogText, const char* fontPath, Conversation& conversation, int textLine, bool newNode);
+		void SetDialogText(char* line1Text, char* line2Text, char* line3Text, const char* fontPath, Conversation& conversation);
 
 		// Set the dialog background images
 		void SetDialogBubbleImage(const char* path, Conversation& conversation);
+		void SetCharacterImage(const char* path, Conversation& conversation);
 		void SetContinueIndicatorImage(const char* path, Conversation& conversation);
 
 		
