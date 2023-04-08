@@ -194,7 +194,6 @@ namespace Wiwa
 			{
 				float proportion = valueHealth / valueMaxHealth;
 				extraPosition.width = (int)(proportion * position.width);
-				if (extraPosition.width >= position.width) extraPosition.width = position.width;
 				extraTexturePosition.width = extraPosition.width;
 			}
 		}
