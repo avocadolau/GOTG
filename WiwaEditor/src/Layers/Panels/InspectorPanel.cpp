@@ -1243,6 +1243,30 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Colour"))
+	{
+		// particle colour
+		{
+			ImGui::Dummy(ImVec2(0, 0));
+			ImGui::SameLine();
+			ImGui::Checkbox("##particle_colour_isRanged", &emitter->particle_colour_range);
+			ImGui::SameLine();
+			ImGui::Dummy(ImVec2(2, 0));
+			ImGui::SameLine();
+			ImGui::SameLine();
+
+			ImGui::Text("Particle Colour");
+			if (emitter->particle_colour_range)
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::ColorPicker4("Color##4", emitter->colorParticles, ImGuiColorEditFlags_None);
+			}
+		}
+
+		ImGui::TreePop();
+	}
 }
 
 void InspectorPanel::DrawAiAgentComponent(byte* data)
