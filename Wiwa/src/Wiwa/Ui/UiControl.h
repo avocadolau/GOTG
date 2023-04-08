@@ -188,11 +188,13 @@ namespace Wiwa
 			r2d.UpdateInstancedQuadTexTexture(m_Scene, id_quad_normal, newText->GetTextureId());
 		}
 
-		void SetValueForUIbar(float value)
+		void SetValueForUIbar(float valueHealth,float valueMaxHealth)
 		{
 			if (type == GuiControlType::BAR)
 			{
-				extraPosition.width = (int)((value * (float)position.width) / 100);
+				float proportion = valueHealth / valueMaxHealth;
+				extraPosition.width = (int)(proportion * position.width);
+				if (extraPosition.width >= position.width) extraPosition.width = position.width;
 				extraTexturePosition.width = extraPosition.width;
 			}
 		}

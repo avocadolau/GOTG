@@ -33,10 +33,10 @@ void SwapText(MonoString* word, int id_canvas, int id_gui)
 	gm.canvas.at(id_canvas)->controls.at(id_gui)->SwapText(newWord, r2d,newText);
 }
 
-void SetValueForUIbar(float value, int id_canvas, int id_gui)
+void SetValueForUIbar(float value,float valueMaxHealth, int id_canvas, int id_gui)
 {
 	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-	gm.canvas.at(id_canvas)->controls.at(id_gui)->SetValueForUIbar(value);
+	gm.canvas.at(id_canvas)->controls.at(id_gui)->SetValueForUIbar(value, valueMaxHealth);
 }
 
 void SetNextFrame(int value, int id_canvas, int id_gui)
