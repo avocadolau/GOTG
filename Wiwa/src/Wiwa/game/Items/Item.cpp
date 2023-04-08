@@ -4,6 +4,7 @@
 #include "Wiwa/ecs/components/game/Character.h"
 #include "Wiwa/game/GameStateManager.h"
 #include "Wiwa/scene/Scene.h"
+#include "Wiwa/ecs/systems/PhysicsSystem.h"
 
 namespace Wiwa
 {
@@ -42,6 +43,7 @@ namespace Wiwa
 
     void Ability::YondusFin()
     {
+        
     }
 
     void Ability::GrootsSeeds()
@@ -123,7 +125,8 @@ namespace Wiwa
         {
         case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
             {
-                
+                 Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+                 EntityId shieldId = em.LoadPrefab("assets/Prefabs/VictoryShield.wiprefab");   
             }
             break;
         case Wiwa::BuffType::NIKKIS_TOUCH:
