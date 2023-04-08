@@ -64,7 +64,7 @@ namespace Wiwa
 
 		AbilityType AbilityType;
 
-		CooldownState cooldownState;
+		CooldownState CooldownState;
 
 		Ability() = default;
 		Ability(const Ability& ability)
@@ -79,6 +79,7 @@ namespace Wiwa
 			this->CurrentTime = ability.CurrentTime;
 			this->Price = ability.Price;
 			this->AbilityType = ability.AbilityType;
+			this->CooldownState = ability.CooldownState;
 		}
 		
 		Ability(const char* name)
@@ -92,11 +93,15 @@ namespace Wiwa
 			  CurrentTime(0.f),
 			  Price(0),
 			  AbilityType(AbilityType::YONDUS_SEEDS),
-			 cooldownState(CooldownState::NO_CHARGED)
+			  CooldownState(CooldownState::NO_CHARGED)
 
 		{}
 
 		void Use();
+		void YondusFin();
+		void GrootsSeeds();
+		void PhylasQuantumSword();
+		void StarhawksBlast();
 	};
 
 
@@ -148,7 +153,7 @@ namespace Wiwa
 		int Price;
 		bool IsActive;
 
-		CooldownState cooldownState;
+		CooldownState CooldownState;
 
 		Buff()
 			:Name(""),
@@ -162,7 +167,7 @@ namespace Wiwa
 			CoolDownTimer(0.f),
 			Price(0),
 			IsActive(false),
-			cooldownState(CooldownState::NO_CHARGED)
+			CooldownState(CooldownState::NO_CHARGED)
 		{};
 		Buff(const Buff& buff)
 		{
@@ -175,6 +180,7 @@ namespace Wiwa
 			this->Price = buff.Price;
 			this->CurrentTime = buff.CurrentTime;
 			this->CoolDownTimer = buff.CoolDownTimer;
+			this->CooldownState = buff.CooldownState;
 		}
 		Buff(const char* name)
 			: Name(name),

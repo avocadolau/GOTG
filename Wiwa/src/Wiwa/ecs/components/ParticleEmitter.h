@@ -4,7 +4,7 @@
 //#include <Wiwa/utilities/math/Vector3f.h>
 #include <glm/glm.hpp>
 #include <Wiwa/utilities/Reflection.h>
-#include <Wiwa/core/Resources.h>range
+#include <Wiwa/core/Resources.h>
 
 namespace Wiwa {
 

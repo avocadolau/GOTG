@@ -39,6 +39,23 @@ namespace Wiwa
             break;
         }
     }
+
+    void Ability::YondusFin()
+    {
+    }
+
+    void Ability::GrootsSeeds()
+    {
+    }
+
+    void Ability::PhylasQuantumSword()
+    {
+    }
+
+    void Ability::StarhawksBlast()
+    {
+    }
+
     void PassiveSkill::Use()
     {
         Character* player = GetPlayerComp();
@@ -95,6 +112,12 @@ namespace Wiwa
     }
     void Buff::Use()
     {
+        Character* player = GetPlayerComp();
+        if(!player)
+        {
+            WI_CORE_ERROR("Player can't be found");
+            return;
+        }
         IsActive = true;
         switch (buffType)
         {
@@ -133,6 +156,12 @@ namespace Wiwa
 
     void Buff::UnUse()
     {
+        Character* player = GetPlayerComp();
+        if(!player)
+        {
+            WI_CORE_ERROR("Player can't be found");
+            return;
+        }
         CoolDownTimer = 0.f;
         IsActive = false;
         switch (buffType)
