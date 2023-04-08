@@ -3,6 +3,7 @@
 #include "Wiwa/ecs/components/game/attack/VictoryShield.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
+#include <Wiwa/ecs/systems/MeshRenderer.h>
 
 namespace Wiwa
 {
@@ -34,6 +35,11 @@ namespace Wiwa
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
 		EntityId child = em.GetChildByName(m_EntityId, "Colider");
 		m_ColliderTransformIt = em.GetComponentIterator<Transform3D>(child);
+		Mesh* mesh = em.AddComponent<Mesh>(child);
+		
+		mesh->meshId = Resources::Load<Model>("assets/prefabs/victoryshield/planebullet.fbx");
+		mesh->materialId = Resources::Load<Material>("assets/prefabs/victoryshield/defaultmaterial.wimaterial");
+		em.ApplySystem<MeshRenderer>(child);
 	}
 
 	void VictoryShieldSystem::OnUpdate()

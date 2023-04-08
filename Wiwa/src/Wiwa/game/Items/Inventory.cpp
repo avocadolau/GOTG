@@ -225,14 +225,17 @@ void Wiwa::Inventory::Update()
 		if(m_Buffs[0])
 		{
 			SwapUITexture(m_Buffs[0]->Icon, 5);
-			m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			CooldownState(m_Buffs[0],5);
+
+			
 			if (m_Buffs[0]->IsActive)
 			{
 				m_Buffs[0]->CoolDownTimer += Time::GetDeltaTimeSeconds();
 				if (m_Buffs[0]->CoolDownTimer >= m_Buffs[0]->Duration)
 					m_Buffs[0]->UnUse();
 			}
+			else
+				m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if(Input::IsKeyPressed(Key::R) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadX))
 			{
 				WI_CORE_INFO("Buff 1 activated");
@@ -243,13 +246,14 @@ void Wiwa::Inventory::Update()
 		{
 			SwapUITexture(m_Buffs[1]->Icon, 6);
 			CooldownState(m_Buffs[1],6);
-			m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			if (m_Buffs[1]->IsActive)
 			{
 				m_Buffs[1]->CoolDownTimer += Time::GetDeltaTimeSeconds();
 				if(m_Buffs[1]->CoolDownTimer >= m_Buffs[1]->Duration)
 					m_Buffs[1]->UnUse();
 			}
+			else
+				m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			
 			if(Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 			{
