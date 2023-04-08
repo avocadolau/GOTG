@@ -292,19 +292,6 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 {
 	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown)
 	{
-		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
-		EntityId player = em.GetEntityByName("Player");
-
-		if (player)
-		{
-
-			EntityId pe_healing = em.GetChildByName(player, "PE_Healing");
-			pman.EmitBatch(pe_healing);
-			EntityId pe_shield = em.GetChildByName(player, "PE_Shield");
-			pman.EmitBatch(pe_shield);
-		}
-
 		m_Buffs[index]->CurrentTime = 0.f;
 		m_Buffs[index]->Use();
 		
