@@ -31,21 +31,21 @@ namespace Wiwa
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
 
-		Conversation* newConversation = new Conversation();
+		//Conversation* newConversation = new Conversation();
 
-		SetDialogBubbleImage("assets/HUD_Images/dialog_images/dialog_test_placeholder.png", *newConversation);
-		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder2.png", *newConversation);
+		//SetDialogBubbleImage("assets/HUD_Images/dialog_images/dialog_test_placeholder.png", *newConversation);
+		//SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder2.png", *newConversation);
 
-		SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", *newConversation, 1, true);
-		SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2, false);
-		SetDialogText("", "assets/Fonts/BADABB__.TTF", *newConversation, 3, false);
-		SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", *newConversation, 4, false);
-		SetDialogText("", "assets/Fonts/BADABB__.TTF", *newConversation, 5, false);
+		//SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", *newConversation, 1, true);
+		//SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2, false);
+		//SetDialogText("", "assets/Fonts/BADABB__.TTF", *newConversation, 3, false);
+		//SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", *newConversation, 4, false);
+		//SetDialogText("", "assets/Fonts/BADABB__.TTF", *newConversation, 5, false);
 
-		//SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2);
-		//SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", *newConversation, 5);
+		////SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2);
+		////SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", *newConversation, 5);
 
-		conversations.push_back(newConversation);
+		//conversations.push_back(newConversation);
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -56,16 +56,16 @@ namespace Wiwa
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
-		{
-			//actualConversation = conversations[0];
-			actualConversationState = 0;
-		}
-		
-		if (actualConversationState == 0 || actualConversationState == 1)
-		{
-			UpdateConversation(*conversations[0], &Wiwa::Application::Get().GetRenderer2D());
-		}
+		//if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		//{
+		//	//actualConversation = conversations[0];
+		//	actualConversationState = 0;
+		//}
+		//
+		//if (actualConversationState == 0 || actualConversationState == 1)
+		//{
+		//	UpdateConversation(*conversations[0], &Wiwa::Application::Get().GetRenderer2D());
+		//}
 		
 		return true;
 	}
