@@ -31,19 +31,24 @@ namespace Wiwa
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
 
-		/*Conversation* newConversation = new Conversation();
+		Conversation* newConversation = new Conversation();
 
 		SetDialogBubbleImage("assets/HUD_Images/dialog_images/dialog_test_placeholder.png", *newConversation);
 		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder2.png", *newConversation);
 
-		SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", *newConversation, 1);
-		SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2);
-		SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", *newConversation, 4);
+		SetDialogText("This is a test dialog in line 1", "assets/Fonts/BADABB__.TTF", *newConversation, 1, true);
+		SetDialogText("This is a test dialog in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2, false);
+		SetDialogText("", "assets/Fonts/BADABB__.TTF", *newConversation, 3, false);
+		SetDialogText("This is a test dialog in line 4", "assets/Fonts/BADABB__.TTF", *newConversation, 4, false);
+		SetDialogText("", "assets/Fonts/BADABB__.TTF", *newConversation, 5, false);
 
-		SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2);
-		SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", *newConversation, 5);
+		//SetDialogText("Now we are in another node in line 2", "assets/Fonts/BADABB__.TTF", *newConversation, 2);
+		//SetDialogText("Now we are in another node in line 5", "assets/Fonts/BADABB__.TTF", *newConversation, 5);
 
-		conversations.push_back(newConversation);*/
+		conversations.push_back(newConversation);
+
+		actualConversationState = 2;
+		currentNode = 0;
 
 		return true;
 	}
@@ -51,16 +56,16 @@ namespace Wiwa
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		//if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
-		//{
-		//	//actualConversation = conversations[0];
-		//	actualConversationState = 0;
-		//}
-		//
-		//if (actualConversationState == 0 || actualConversationState == 1)
-		//{
-		//	UpdateConversation(*conversations[0], &Wiwa::Application::Get().GetRenderer2D());
-		//}
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		{
+			//actualConversation = conversations[0];
+			actualConversationState = 0;
+		}
+		
+		if (actualConversationState == 0 || actualConversationState == 1)
+		{
+			UpdateConversation(*conversations[0], &Wiwa::Application::Get().GetRenderer2D());
+		}
 		
 		return true;
 	}
@@ -81,7 +86,6 @@ namespace Wiwa
 
 	void DialogManager::UpdateConversation(Conversation conversation, Renderer2D* render)
 	{
-		int currentNode = 0;
 		if(actualConversationState == 0) actualConversationState = 1;
 
 		if (actualConversationState == 1)
@@ -114,15 +118,19 @@ namespace Wiwa
 				render->DisableInstance(m_Scene, conversation.nodes[currentNode]->text5_imgModeID);
 
 				currentNode++;
-				if (currentNode > conversation.nodes.size())
+				if (currentNode >= conversation.nodes.size())
 				{
+					render->DisableInstance(m_Scene, conversation.dialogImgID);
+					render->DisableInstance(m_Scene, conversation.continueImgID);
+
+					currentNode = 0;
 					actualConversationState = 2;
 				}
 			}
 		}
 	}
 
-	void DialogManager::SetDialogText(char* dialogText, const char* fontPath, Conversation& conversation, int textLine)
+	void DialogManager::SetDialogText(char* dialogText, const char* fontPath, Conversation& conversation, int textLine, bool newNode)
 	{
 		DialogNode* newDialogNode = new DialogNode();
 
@@ -144,27 +152,27 @@ namespace Wiwa
 
 		if (textLine == 1)
 		{
-			newDialogNode->text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text1_imgMode->GetTextureId(), newDialogNode->text1_imgMode->GetSize(), { 500,500 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			newDialogNode->text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text1_imgMode->GetTextureId(), newDialogNode->text1_imgMode->GetSize(), { 500,500 }, { 1000,295 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render.DisableInstance(m_Scene, newDialogNode->text1_imgModeID);
 		}
 		if (textLine == 2)
 		{
-			newDialogNode->text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text2_imgMode->GetTextureId(), newDialogNode->text2_imgMode->GetSize(), { 500,550 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			newDialogNode->text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text2_imgMode->GetTextureId(), newDialogNode->text2_imgMode->GetSize(), { 500,800 }, { 1000,295 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render.DisableInstance(m_Scene, newDialogNode->text2_imgModeID);
 		}
 		if (textLine == 3)
 		{
-			newDialogNode->text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text3_imgMode->GetTextureId(), newDialogNode->text3_imgMode->GetSize(), { 500,600 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			newDialogNode->text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text3_imgMode->GetTextureId(), newDialogNode->text3_imgMode->GetSize(), { 500,1100 }, { 1000,295 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render.DisableInstance(m_Scene, newDialogNode->text3_imgModeID);
 		}
 		if (textLine == 4)
 		{
-			newDialogNode->text4_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text4_imgMode->GetTextureId(), newDialogNode->text4_imgMode->GetSize(), { 500,650 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			newDialogNode->text4_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text4_imgMode->GetTextureId(), newDialogNode->text4_imgMode->GetSize(), { 500,1400 }, { 1000,295 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render.DisableInstance(m_Scene, newDialogNode->text4_imgModeID);
 		}
 		if (textLine == 5)
 		{
-			newDialogNode->text5_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text5_imgMode->GetTextureId(), newDialogNode->text5_imgMode->GetSize(), { 500,700 }, { 650,45 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			newDialogNode->text5_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text5_imgMode->GetTextureId(), newDialogNode->text5_imgMode->GetSize(), { 500,1700 }, { 1000,295 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render.DisableInstance(m_Scene, newDialogNode->text5_imgModeID);
 		}
 
@@ -178,9 +186,9 @@ namespace Wiwa
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		conversation.dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		conversation.continueImg = new Image;
+		//conversation.dialogImg = new Image;
 
-		conversation.dialogImgID = render.CreateInstancedQuadTex(m_Scene, conversation.continueImg->GetTextureId(), conversation.continueImg->GetSize(), { 420,0 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversation.dialogImgID = render.CreateInstancedQuadTex(m_Scene, conversation.dialogImg->GetTextureId(), conversation.dialogImg->GetSize(), { 420,0 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversation.dialogImgID);
 	}
 
