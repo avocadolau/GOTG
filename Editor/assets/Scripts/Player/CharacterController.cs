@@ -387,12 +387,12 @@ namespace Game
                 if (shooter.ShootRight)
                 {
                     spawnPoint = right;
-                    Animator.PlayAnimationName("shoot_right",false, m_EntityId);
+                    Animator.PlayAnimationName("shootright",false, m_EntityId);
                 }
                 else
                 {
                     spawnPoint = left;
-                    Animator.PlayAnimationName("shoot_left",false, m_EntityId);
+                    Animator.PlayAnimationName("shootleft",false, m_EntityId);
                 }
                 if (isWalking)
                 {
@@ -444,8 +444,6 @@ namespace Game
         }
         void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
         {
-            Console.WriteLine("fired");
-
             string bulletName = "Bullet";
             bulletCount++;
 
