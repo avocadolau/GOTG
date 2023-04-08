@@ -15,12 +15,4 @@ struct DialogNode
 	Wiwa::Text* text1_imgMode;
 	Wiwa::Text* text2_imgMode;
 	Wiwa::Text* text3_imgMode;
-
-	//bool isNodeOccupied = false;
-
-	// The dialog ID of next nodes
-	//std::vector<size_t> nodes;
-
-	// The dialog text for the options
-	//std::vector<std::string> options;
 };
