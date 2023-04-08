@@ -152,22 +152,26 @@ namespace Wiwa
 		float CoolDownTimer;
 		int Price;
 		bool IsActive;
+		int MaxHealthInc;
+		int HealthInc;
+		int MaxShieldInc;
+		int ShieldInc;
 
 		CooldownState CooldownState;
 
 		Buff()
-			:Name(""),
-			Description(""),
-			Icon(0),
-			buffType(BuffType::MAJOR_VICTORY_SHIELD),
-			BuffPercent(0),
-			Duration(0.f),
-			Cooldown(0.f),
-			CurrentTime(0.f),
-			CoolDownTimer(0.f),
-			Price(0),
-			IsActive(false),
-			CooldownState(CooldownState::NO_CHARGED)
+			: Name(""),
+			  Description(""),
+			  Icon(0),
+			  buffType(BuffType::MAJOR_VICTORY_SHIELD),
+			  BuffPercent(0),
+			  Duration(0.f),
+			  Cooldown(0.f),
+			  CurrentTime(0.f),
+			  CoolDownTimer(0.f),
+			  Price(0),
+			  IsActive(false),
+			  CooldownState(CooldownState::NO_CHARGED)
 		{};
 		Buff(const Buff& buff)
 		{

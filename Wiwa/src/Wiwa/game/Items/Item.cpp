@@ -135,10 +135,15 @@ namespace Wiwa
             {
                 // TODO: Spawn some kind of feedback
                 const float buffPercent = ((float)BuffPercent / 100.f);
-                player->MaxHealth += (int)((float)player->MaxHealth * buffPercent);
-                player->Health += (int)((float)player->Health * buffPercent);
-                player->MaxShield += (int)((float)player->MaxShield * buffPercent);
-                player->Shield += (int)((float)player->Shield * buffPercent);
+                MaxHealthInc = (int)((float)player->MaxHealth * buffPercent);
+                HealthInc = (int)((float)player->Health * buffPercent);
+                MaxShieldInc = (int)((float)player->MaxShield * buffPercent);
+                ShieldInc = (int)((float)player->Shield * buffPercent);
+                
+                player->MaxHealth += MaxHealthInc;
+                player->Health += HealthInc;
+                player->MaxShield += MaxShieldInc;
+                player->Shield += ShieldInc;
             }
             break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
@@ -184,11 +189,10 @@ namespace Wiwa
         case Wiwa::BuffType::COSMOS_PAW:
         {
              // TODO: Spawn some kind of feedback
-             const float buffPercent = ((float)BuffPercent / 100.f);
-             player->MaxHealth -= (int)((float)player->MaxHealth * buffPercent);
-             player->Health -= (int)((float)player->Health * buffPercent);
-             player->MaxShield -= (int)((float)player->MaxShield * buffPercent);
-             player->Shield -= (int)((float)player->Shield * buffPercent);
+             player->MaxHealth -= MaxHealthInc;
+             player->Health -= HealthInc;
+             player->MaxShield -= MaxShieldInc;
+             player->Shield -= ShieldInc;
         }
         break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:

@@ -180,6 +180,7 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 	}
 
 	m_Buffs[0] = new Buff(*buff);
+	m_Buffs[0]->IsActive = false;
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
@@ -208,7 +209,7 @@ void Wiwa::Inventory::Update()
 			SwapUITexture(m_Abilities[0]->Icon, 3);
 			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			CooldownState(m_Abilities[0],3);
-			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
+			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= 0.f)
 			{	
 				UseAbility(0);
 			}
@@ -219,7 +220,7 @@ void Wiwa::Inventory::Update()
 
 			m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			CooldownState(m_Abilities[1],4);
-			if(Input::IsKeyPressed(Key::E) || rightTrigger >= -0.9f)
+			if(Input::IsKeyPressed(Key::E) || rightTrigger >= 0.f)
 			{
 				WI_CORE_INFO("Ability 2 activated");
 				UseAbility(1);
