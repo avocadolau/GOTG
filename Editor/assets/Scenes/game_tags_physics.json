@@ -1,9 +1,1 @@
-{
-    "tags_count": 6,
-    "tag_0": "COLUMN",
-    "tag_1": "ENEMY_MELEE",
-    "tag_2": "ENEMY_SPAWNER",
-    "tag_3": "ITEM",
-    "tag_4": "ENEMY_BULLET",
-    "tag_5": "MAJOR_VICTORY_SHIELD"
-}
+{"tags_count":2,"tag_0":"ENEMY_BULLET","tag_1":"MAJOR_VICTORY_SHIELD"}
