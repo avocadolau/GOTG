@@ -114,5 +114,7 @@ namespace Wiwa
 		int currentNode = 0;
 
 		int keyPressRefreshTimer = 0;
+
+		Conversation* conversationCreator_P;
 	};
 }
