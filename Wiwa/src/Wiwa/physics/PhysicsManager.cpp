@@ -56,11 +56,20 @@ namespace Wiwa {
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
-		//m_World->(GRAVITY);
 
 		AddFilterTag("COLLISION_EVERYTHING");
-
-		//WI_INFO("Physics Manager Init");
+		AddFilterTag("PLAYER");
+		AddFilterTag("ENEMY");
+		AddFilterTag("BULLET");
+		AddFilterTag("START_RUN_TRIGGER");
+		AddFilterTag("END_ROOM_TRIGGER");
+		AddFilterTag("WALL");
+		AddFilterTag("COLUMN");
+		AddFilterTag("ENEMY_MELEE");
+		AddFilterTag("ENEMY_SPAWNER");
+		AddFilterTag("ITEM");
+		AddFilterTag("ENEMY_BULLET");
+		AddFilterTag("MAJOR_VICTORY_SHIELD");	
 
 		return true;
 	}
@@ -566,13 +575,6 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddFilterTag(const char* str)
 	{
-		/*if (filterStrings.size() == 32)
-			return false;
-
-		filterStrings.emplace_back(str);
-		std::bitset<MAX_BITS> bset;
-		bset.set(filterStrings.size(), true);
-		fliterBitsSets.push_back(bset);*/
 		int size = filterMapStringKey.size();
 		if (filterMapStringKey.size() == 32)
 			return false;
