@@ -17,24 +17,24 @@ namespace Wiwa
     {
         switch (AbilityType)
         {
-        case AbilityType::YONDUS_SEEDS:
+        case AbilityType::YONDUS_FIN:
             {
-                
+                YondusFin();
             }
             break;
         case AbilityType::GROOTS_SEEDS:
             {
-                
+                GrootsSeeds();
             }
             break;
         case AbilityType::PHYLAS_QUANTUM_SWORD:
             {
-                
+                PhylasQuantumSword();
             }
             break;
         case AbilityType::STARHAWKS_BLAST:
             {
-                
+                StarhawksBlast();
             }
             break;
         }

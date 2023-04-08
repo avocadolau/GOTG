@@ -20,7 +20,7 @@ namespace Wiwa
 	};
 	enum class AbilityType
 	{
-		YONDUS_SEEDS,
+		YONDUS_FIN,
 		GROOTS_SEEDS,
 		PHYLAS_QUANTUM_SWORD,
 		STARHAWKS_BLAST
@@ -92,7 +92,7 @@ namespace Wiwa
 			  Cooldown(0.f),
 			  CurrentTime(0.f),
 			  Price(0),
-			  AbilityType(AbilityType::YONDUS_SEEDS),
+			  AbilityType(AbilityType::YONDUS_FIN),
 			  CooldownState(CooldownState::NO_CHARGED)
 
 		{}
