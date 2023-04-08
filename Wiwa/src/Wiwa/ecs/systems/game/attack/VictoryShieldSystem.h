@@ -12,7 +12,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_ShieldIt;
 		EntityManager::ComponentIterator m_ShieldTransfromIt;
 		EntityManager::ComponentIterator m_PlayerTransformIt;
-
+		EntityManager::ComponentIterator m_ColliderTransformIt;
 
 	public:
 		VictoryShieldSystem();

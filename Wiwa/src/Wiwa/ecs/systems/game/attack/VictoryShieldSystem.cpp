@@ -2,6 +2,7 @@
 #include "VictoryShieldSystem.h"
 #include "Wiwa/ecs/components/game/attack/VictoryShield.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/game/Items/ItemManager.h>
 
 namespace Wiwa
 {
@@ -24,23 +25,15 @@ namespace Wiwa
 
 	void VictoryShieldSystem::OnInit()
 	{
-		VictoryShield* shield = GetComponentByIterator<VictoryShield>(m_ShieldIt);
-
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		//Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
-
+		VictoryShield* shield = GetComponentByIterator<VictoryShield>(m_ShieldIt);
+		shield->velocity = 200.f;
+		shield->lifeTime = Wiwa::ItemManager::GetBuff("Major Victory's Shield")->Duration;
 		EntityId player = GameStateManager::GetPlayerId();
-
-		//Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		
-		m_PlayerTransformIt = GetComponentIterator<Transform3D>(player);
-
-		Wiwa::Transform3D* tranformShield = GetComponentByIterator<Transform3D>(m_ShieldTransfromIt);
-		Wiwa::Transform3D* transformPlayer = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-
-		tranformShield->position = transformPlayer->position - glm::vec3(2.0f, 0.0f, 0.0f);
-		//physicsManager.SetVelocity(obj, glm::normalize(shield->direction) * shield->velocity);
-		
+		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
+		EntityId child = em.GetChildByName(m_EntityId, "Colider");
+		m_ColliderTransformIt = em.GetComponentIterator<Transform3D>(child);
 	}
 
 	void VictoryShieldSystem::OnUpdate()
@@ -54,10 +47,13 @@ namespace Wiwa
 
 		Wiwa::Transform3D* tranformShield = GetComponentByIterator<Transform3D>(m_ShieldTransfromIt);
 		Wiwa::Transform3D* transformPlayer = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
+		Wiwa::Transform3D* transformCol = GetComponentByIterator<Transform3D>(m_ColliderTransformIt);
 
-		tranformShield->position = transformPlayer->position;
+		tranformShield->localPosition.x = transformPlayer->localPosition.x;
+		tranformShield->localPosition.z = transformPlayer->localPosition.z;
 		tranformShield->localRotation.y += shield->velocity * Time::GetDeltaTimeSeconds();
-
+		transformCol->localPosition.y = 0.f;
+		m_Timer += Time::GetDeltaTimeSeconds();
 		if (m_Timer >= shield->lifeTime)
 		{
 			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
