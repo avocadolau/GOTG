@@ -1,5 +1,5 @@
 {
-  "tags_count": 12,
+  "tags_count": 13,
   "tag_0": "COLLISION_EVERYTHING",
   "tag_1": "PLAYER",
   "tag_2": "ENEMY",
@@ -11,5 +11,6 @@
   "tag_8": "ENEMY_MELEE",
   "tag_9": "ENEMY_SPAWNER",
   "tag_10": "ITEM",
-  "tag_11": "ENEMY_BULLET"
+  "tag_11": "ENEMY_BULLET",
+  "tag_12": "MAJOR_VICTORY_SHIELD"
 }
