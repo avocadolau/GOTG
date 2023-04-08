@@ -230,9 +230,9 @@ namespace Wiwa {
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			// Get the position from the engine
-			glm::vec3 posEngine = transform3d->localPosition;
+			glm::vec3 posEngine = glm::vec3(transform3d->worldMatrix[3].x, transform3d->worldMatrix[3].y, transform3d->worldMatrix[3].z);
 			//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
-			glm::quat rotEngine = glm::quat(glm::radians(transform3d->localRotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
+			glm::quat rotEngine = glm::quat(glm::radians(transform3d->rotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
 			// Get the offset
@@ -241,7 +241,7 @@ namespace Wiwa {
 
 			// Apply the offset because offset, it is internal only(collider wise)
 			btTransform offsettedCollider;
-			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d->localMatrix));
+			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d->worldMatrix));
 			offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
 			offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
 
@@ -257,11 +257,13 @@ namespace Wiwa {
 		// Physics to Engine
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
+			EntityId parent = entityManager.GetEntityParent((*item)->id);
+			Transform3D* parentT3d = entityManager.GetComponent<Wiwa::Transform3D>(parent);
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			btTransform bulletTransform((*item)->collisionObject->getWorldTransform());
-
+			
 			// Get the transform from physics world
 			btVector3 posBullet = bulletTransform.getOrigin();
 			btQuaternion rotationBullet = bulletTransform.getRotation();
@@ -271,7 +273,17 @@ namespace Wiwa {
 			glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
 
 			// Remove the offset because offset is internal only(collider wise)
-			transform3d->localPosition = posEngine;
+			if (parent != (*item)->id)
+			{
+				glm::mat4x4 worldMat;
+				bulletTransform.getOpenGLMatrix(&worldMat[0][0]);
+				glm::mat4x4 localMat = glm::inverse(parentT3d->worldMatrix) * worldMat;
+				transform3d->localPosition = glm::vec3(localMat[3].x, localMat[3].y, localMat[3].z);
+			}
+			else
+			{
+				transform3d->localPosition = posEngine;
+			}
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			//bulletTransform.setRotation(rotationBullet);
 

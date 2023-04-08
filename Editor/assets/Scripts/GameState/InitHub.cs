@@ -5,7 +5,7 @@ namespace WiwaApp
     class InitHub : Behaviour
     {
         private bool pendingToLoad = true;
-        void Update()
+        void Init()
         {
             if (pendingToLoad)
             {

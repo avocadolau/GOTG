@@ -71,10 +71,8 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 		}
 	}
 	
-	JSONValue tokens = doc->AddMemberObject("tokens");
-	tokens.AddMember("tokens", m_Tokens);
-	
-	doc->save_file("config/player_data.json");
+
+	doc->AddMember("tokens", m_Tokens);
 }
 
 void Wiwa::Inventory::Deserialize(JSONDocument* doc)
@@ -142,10 +140,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 		}
 	}
 	if (doc->HasMember("tokens")) {
-
-		JSONValue tokens = (*doc)["tokens"];
-		m_Tokens = tokens.as_int();
-
+		m_Tokens = (*doc)["tokens"].as_int();
 	}
 }
 
