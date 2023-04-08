@@ -233,12 +233,24 @@ namespace Wiwa
             WI_CORE_INFO("Using Ego's help");
             return;
         }
-        
+
+        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+        ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
+        EntityId playerParticles = em.GetEntityByName("Player");
+
         const float buffPercent = ((float)BuffPercent / 100.f);
         switch (Type)
         {
         case Wiwa::ConsumableType::HEAL:
             {
+                if (playerParticles)
+                {
+
+                    EntityId pe_healing = em.GetChildByName(playerParticles, "PE_Healing");
+                    pman.EmitBatch(pe_healing);
+
+                }
+
                 int healAmount = (int)((float)player->Health * buffPercent);
                 player->Health += healAmount;
                 if(player->Health >= player->MaxHealth)
@@ -249,6 +261,14 @@ namespace Wiwa
             break;
         case Wiwa::ConsumableType::SHIELD:
             {
+                if (playerParticles)
+                {
+
+                    EntityId pe_shield = em.GetChildByName(playerParticles, "PE_Shield");
+                    pman.EmitBatch(pe_shield);
+
+                }
+
                 int shieldAmount = (int)((float)player->Shield * buffPercent);
                 player->Shield += shieldAmount;
                 if(player->Shield >= player->MaxShield)
