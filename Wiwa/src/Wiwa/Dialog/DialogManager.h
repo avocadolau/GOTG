@@ -28,6 +28,8 @@ namespace Wiwa
 		Image* dialogImg = nullptr;
 		Image* characterImg = nullptr;
 		Image* continueImg = nullptr;
+
+		char* conversationName;
 		//int dialogWidth, dialogHeight;
 
 		// Whether the dialog has finished or not
@@ -89,7 +91,6 @@ namespace Wiwa
 		void SetDialogBubbleImage(const char* path, Conversation& conversation);
 		void SetCharacterImage(const char* path, Conversation& conversation);
 		void SetContinueIndicatorImage(const char* path, Conversation& conversation);
-
 		
 		//void SetDialogBg(Image* dialog_bg, int width, int height, Conversation conversation);
 
@@ -106,10 +107,12 @@ namespace Wiwa
 
 	public:
 
-		Conversation actualConversation;
+		char* conversationToPlayName;
 		std::vector<Conversation*> conversations;
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
 		int currentNode = 0;
+
+		int keyPressRefreshTimer = 0;
 	};
 }
