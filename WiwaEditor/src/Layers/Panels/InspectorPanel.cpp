@@ -462,6 +462,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				pathS =	Wiwa::Resources::_assetToLibPath(pathS);
 				strcpy(animator->filePath, pathS.c_str());
 				animator->animator = Wiwa::Animator::LoadWiAnimator(pathS.c_str());
+				return;
 			}
 		}
 
@@ -472,7 +473,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 
 	// get animaitons
 	ImGui::Separator();
-	const char* animationBaseItems[10];
+	const char* animationBaseItems[25];
 
 	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
 	{
@@ -508,7 +509,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 		ImGui::EndCombo();
 	}
 	ImGui::Separator();
-	const char* animationLayerItems[10];
+	const char* animationLayerItems[25];
 
 	for (unsigned int i = 0; i < animator->animator->m_Animations.size(); i++)
 	{
