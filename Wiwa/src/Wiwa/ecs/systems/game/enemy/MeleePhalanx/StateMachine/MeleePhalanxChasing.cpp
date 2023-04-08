@@ -20,7 +20,7 @@ namespace Wiwa
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		animator->Blend("run",true,0.2f);
+		animator->Blend("walk",true,0.2f);
 
 		enemy->m_Timer = 0;
 	}
