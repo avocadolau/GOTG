@@ -281,6 +281,7 @@ void Wiwa::Inventory::UseAbility(size_t index) const
 			EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
 			pman.EmitBatch(pe_line);
 		}
+
 		m_Abilities[index]->CurrentTime = 0.f;
 		m_Abilities[index]->Use();
 		return;
@@ -291,6 +292,19 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 {
 	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown)
 	{
+		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
+		EntityId player = em.GetEntityByName("Player");
+
+		if (player)
+		{
+
+			EntityId pe_healing = em.GetChildByName(player, "PE_Healing");
+			pman.EmitBatch(pe_healing);
+			EntityId pe_shield = em.GetChildByName(player, "PE_Shield");
+			pman.EmitBatch(pe_shield);
+		}
+
 		m_Buffs[index]->CurrentTime = 0.f;
 		m_Buffs[index]->Use();
 		

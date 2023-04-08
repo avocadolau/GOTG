@@ -197,8 +197,11 @@ namespace Game
                     //EntityId pe_hurt = GetChildByName("PE_Hurt");
                     //ParticleEmitterManger.ParticleEmitterPlayBatch(pe_hurt);
 
-                    EntityId pe_death = GetChildByName("PE_Death");
-                    ParticleEmitterManger.ParticleEmitterPlayBatch(pe_death);
+                    //EntityId pe_death = GetChildByName("PE_Death");
+                    //ParticleEmitterManger.ParticleEmitterPlayBatch(pe_death);
+
+                    EntityId pe_shield = GetChildByName("PE_Shield");
+                    ParticleEmitterManger.ParticleEmitterPlayBatch(pe_shield);
                 }
                 //if is released
                 else

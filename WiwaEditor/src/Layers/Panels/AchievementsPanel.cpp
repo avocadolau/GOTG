@@ -22,69 +22,71 @@ void AchievementsPanel::Draw()
 
 	if (ImGui::CollapsingHeader("Properties"))
 	{
-		std::map<std::string, Wiwa::Property> properties = Wiwa::AchievementsManager::GetProperties();
-        ImGui::Begin("Property Editor");
+        //std::map<std::string, Wiwa::Property> properties = Wiwa::AchievementsManager::GetProperties();
+        //std::vector<std::string> keysToRemove; // Store keys to remove from the original map
 
-        // Display existing properties
-        for (auto item = properties.begin(); item != item; item++) {
-            ImGui::Text("%s:", item->first.c_str());
+        //// Create a copy of the map
+        //std::map<std::string, Wiwa::Property> copyProperties = properties;
 
-            // Edit name
-            std::string newName = name;
-            if (ImGui::InputText("##Name", &newName)) {
-                // Update map with new name
-                auto it = properties.find(name);
-                if (it != properties.end())
-                {
-                    auto s = it->second;
-                    Wiwa::AchievementsManager::RemoveProperty(it->first.c_str());
-                    s.m_Name = newName;
-                    Wiwa::AchievementsManager::AddProperty(s);
-                }
+        //// Display existing properties
+        //for (std::map<std::string, Wiwa::Property>::iterator item = copyProperties.begin(); item != copyProperties.end(); item++) {
+        //    ImGui::Text(item->first.c_str());
+        //    ImGui::Separator();
+        //    ImGui::Indent();
 
-            }
+        //    // Edit name
+        //    if (ImGui::InputText("Name", &item->second.m_Name, 56)) {
+        //        // Update map with new name
+        //        auto tmp = item->second;
+        //        keysToRemove.push_back(item->first);
+        //        properties.insert(std::make_pair(tmp.m_Name, tmp));
+        //    }
 
-            // Edit description
-            std::string newDesc = item->second.m_Description;
-            if (ImGui::InputText("Description", &newDesc)) {
-                item->second.m_Description = newDesc;
-            }
+        //    // Edit description
+        //    if (ImGui::InputText("Description", &item->second.m_Description)) {
+        //        properties[item->first].m_Description = item->second.m_Description;
+        //    }
 
-            // Edit activation rule
-            int activationIndex = static_cast<int>(item->second.m_Activation);
-            if (ImGui::Combo("Activation Rule", &activationIndex, "None\0GreaterThan\0LessThan\0EqualTo\0")) {
-                item->second.m_Activation = static_cast<Wiwa::ActivationRules>(activationIndex);
-            }
+        //    // Edit activation rule
+        //    int activationIndex = static_cast<int>(item->second.m_Activation);
+        //    if (ImGui::Combo("Activation Rule", &activationIndex, "None\0GreaterThan\0LessThan\0EqualTo\0")) {
+        //        auto tmp = item->second;
+        //        tmp.m_Activation = static_cast<Wiwa::ActivationRules>(activationIndex);
+        //        properties[item->first].m_Activation = tmp.m_Activation;
+        //    }
 
-            // Edit activation value
-            if (item->second.m_Activation != Wiwa::ActivationRules::NONE) {
-                if (ImGui::InputInt("Activation Value", &item->second.m_ActivationValue)) {
-                    item->second.m_ActivationValue = (item->second.m_ActivationValue, 0); // Make sure value is non-negative
-                }
-            }
+        //    // Edit activation value
+        //    if (item->second.m_Activation != Wiwa::ActivationRules::NONE) {
+        //        if (ImGui::InputInt("Activation Value", &item->second.m_ActivationValue)) {
+        //            properties[item->first].m_ActivationValue = std::max(item->second.m_ActivationValue, 0);
+        //        }
+        //    }
 
-            // Edit initial value
-            if (ImGui::InputInt("Initial Value", &item->second.m_InitialValue)) {
-                item->second.m_Value = item->second.m_InitialValue; // Reset value to initial value if changed
-            }
+        //    // Edit initial value
+        //    if (ImGui::InputInt("Initial Value", &item->second.m_InitialValue)) {
+        //        properties[item->first].m_InitialValue = item->second.m_InitialValue;
+        //    }
 
-            // Edit value
-            if (ImGui::InputInt("Value", &item->second.m_Value)) {
-                item->second.m_Value = abs(item->second.m_Value); // Make sure value is non-negative
-            }
+        //    // Edit value
+        //    if (ImGui::InputInt("Value", &item->second.m_Value)) {
+        //        properties[item->first].m_Value = std::max(item->second.m_Value, 0);
+        //    }
 
-            ImGui::Separator();
-        }
+        //    ImGui::Separator();
+        //    ImGui::Unindent();
+        //}
+
+        //// Remove keys from the original map
+        //for (auto key : keysToRemove) {
+        //    properties.erase(key);
+        //}
 
         // Button to add new property
-        if (ImGui::Button("Add Property")) {
-            //Wiwa::Property newProperty;
-            //newProperty.m_Name = "New Property";
-            //newProperty.m_Description = "Description";           
-            //Wiwa::AchievementsManager::AddProperty(newProperty);
+        if (ImGui::Button("Add Property")) {   
+            Wiwa::AchievementsManager::DefineProperty("new property","description",0,Wiwa::ActivationRules::NONE,0);
         }
 
-        ImGui::End();
+       
 		ImGui::Separator();
 		if (ImGui::Button("Save"))
 		{
