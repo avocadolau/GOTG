@@ -217,6 +217,7 @@ void HierarchyPanel::CreateNode(const EntityId& eid, const char* entName, ImGuiT
 	if (ImGui::BeginDragDropSource())
 	{
 		ImGui::SetDragDropPayload("HIERARCHY_ENTITY", &eid, sizeof(eid));
+		ImGui::Text(entName);
 		ImGui::EndDragDropSource();
 	}
 
