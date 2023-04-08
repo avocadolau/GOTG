@@ -193,6 +193,7 @@ namespace Wiwa
 			if (type == GuiControlType::BAR)
 			{
 				extraPosition.width = (int)((value * (float)position.width) / 100);
+				extraTexturePosition.width = extraPosition.width;
 			}
 		}
 
