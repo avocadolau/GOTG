@@ -55,19 +55,8 @@ namespace Wiwa
 		Wiwa::Transform3D* tranformShield = GetComponentByIterator<Transform3D>(m_ShieldTransfromIt);
 		Wiwa::Transform3D* transformPlayer = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 
-		shield->rotationAxis = glm::normalize(glm::cross(tranformShield->localPosition - transformPlayer->localPosition, glm::vec3(0, 1, 0)));
-
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), -transformPlayer->localPosition);
-		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), shield->angle, shield->rotationAxis);
-		glm::mat4 reverseTranslation = glm::translate(glm::mat4(1.0f), transformPlayer->localPosition);
-		glm::mat4 transformation = reverseTranslation * rotation * translation;
-
-		glm::vec4 objectPosition4 = glm::vec4(tranformShield->localPosition, 1.0f);
-		glm::vec4 transformedPosition4 = transformation * objectPosition4;
-		glm::vec3 transformedPosition = glm::vec3(transformedPosition4.x, transformedPosition4.y, transformedPosition4.z);
-
-		tranformShield->localPosition = transformedPosition;
-		m_Timer += Time::GetDeltaTimeSeconds();
+		tranformShield->position = transformPlayer->position;
+		tranformShield->localRotation.y += shield->velocity * Time::GetDeltaTimeSeconds();
 
 		if (m_Timer >= shield->lifeTime)
 		{

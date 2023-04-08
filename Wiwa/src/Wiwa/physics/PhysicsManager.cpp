@@ -58,7 +58,7 @@ namespace Wiwa {
 		m_World->setDebugDrawer(m_Debug_draw);
 
 		AddFilterTag("COLLISION_EVERYTHING");
-		AddFilterTag("PLAYER");
+		/*AddFilterTag("PLAYER");
 		AddFilterTag("ENEMY");
 		AddFilterTag("BULLET");
 		AddFilterTag("START_RUN_TRIGGER");
@@ -69,7 +69,7 @@ namespace Wiwa {
 		AddFilterTag("ENEMY_SPAWNER");
 		AddFilterTag("ITEM");
 		AddFilterTag("ENEMY_BULLET");
-		AddFilterTag("MAJOR_VICTORY_SHIELD");	
+		AddFilterTag("MAJOR_VICTORY_SHIELD");	*/
 
 		return true;
 	}
@@ -597,8 +597,6 @@ namespace Wiwa {
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
-		/*filterStrings.erase(filterStrings.begin() + index);
-		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
 		for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)
