@@ -279,9 +279,10 @@ namespace Wiwa {
 
 			glm::quat rotationEngine = glm::quat(rotationBullet.w(), rotationBullet.x(), rotationBullet.y(), rotationBullet.z());
 			glm::vec3 finalOffset = rotationEngine * rigidBody->positionOffset;
+			// Remove the offset because offset is internal only(collider wise)
 			glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
 
-			// Remove the offset because offset is internal only(collider wise)
+			// We only apply the transformation if there's a parent
 			if (parent != (*item)->id)
 			{
 				glm::mat4x4 worldMat;
