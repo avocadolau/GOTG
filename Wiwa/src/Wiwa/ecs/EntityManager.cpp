@@ -182,11 +182,11 @@ namespace Wiwa {
 
 			// Calculate local matrix
 			t3d->localMatrix = glm::mat4(1.0f);
-			t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-			t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->localScale.x, t3d->localScale.y, t3d->localScale.z));
+			t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->position.x, t3d->position.y, t3d->position.z));
+			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->scale.x, t3d->scale.y, t3d->scale.z));
 
 			// Calculate world matrix
 			t3d->worldMatrix = t3d->localMatrix;

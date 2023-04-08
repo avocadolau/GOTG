@@ -55,6 +55,7 @@ namespace Wiwa
 		void RemoveControl(GuiControl* control);
 
 		Text* InitFont(const char* path,char* word);
+		Text* InitFontForDialog(const char* path, char* word);
 
 		
 		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
