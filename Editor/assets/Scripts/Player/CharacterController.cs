@@ -5,7 +5,7 @@ using Wiwa;
 namespace Game
 {
     using EntityId = UInt64;
-    class CharacterControllerSystem : Behaviour
+    public class CharacterControllerSystem : Behaviour
     {
         private ComponentIterator characterControllerIt;
         private ComponentIterator transformIt;
@@ -406,21 +406,6 @@ namespace Game
 
         void PlayFootStep()
         {
-            // IF WALKING animation returns, activate this
-            //Console.WriteLine(footstepTimer);
-            //if (isWalking)
-            //{
-            //    if (footstepTimer >= walkStepTimer)
-            //    {
-            //        footstepTimer = 0;
-            //        Audio.PlaySound("player_walk", m_EntityId);
-            //    }
-            //}
-            //else if (footstepTimer >= runStepTimer)
-            //{
-            //    footstepTimer = 0;
-            //    Audio.PlaySound("player_walk", m_EntityId);
-            //}
             if (footstepTimer >= runStepTimer)
             {
                 footstepTimer = 0;
@@ -444,6 +429,8 @@ namespace Game
         }
         void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
         {
+            Console.WriteLine("fired");
+
             string bulletName = "Bullet";
             bulletCount++;
 
