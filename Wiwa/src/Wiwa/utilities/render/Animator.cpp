@@ -97,6 +97,7 @@ namespace Wiwa
 			//give a frame to check if the animation has finished
 			if (!m_CurrentAnimation->m_HasFinished)
 			{
+				m_CurrentTime = m_CurrentAnimation->GetDuration();
 				m_CurrentAnimation->m_HasFinished = true;
 				return;
 			}
