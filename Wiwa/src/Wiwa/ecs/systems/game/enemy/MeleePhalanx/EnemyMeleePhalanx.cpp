@@ -90,6 +90,14 @@ namespace Wiwa
 		EnemySystem::ReceiveDamage(damage);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
+
+		EntityId hit_1 = em.GetChildByName(m_EntityId, "E_Hit_1");
+		EntityId hit_2 = em.GetChildByName(m_EntityId, "E_Hit_2");
+		ParticleManager& pman = this->getScene().GetParticleManager();
+		pman.EmitBatch(hit_1);
+		pman.EmitBatch(hit_2);
+
+
 		animator->PlayAnimation("hit", false);
 		//PlaySound(ScriptEngine::CreateString("melee_hit"), m_PlayerId);
 	}

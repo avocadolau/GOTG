@@ -159,7 +159,10 @@ namespace Game
                 if (dieTimer <= 0)
                     GameState.Die();
 
-                return true;
+                if(Animator.HasFinished(m_EntityId))
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -305,6 +308,7 @@ namespace Game
                     input = Mathf.CalculateForward(ref transform);
                 }
 
+                Animator.PlayAnimationName("dash", false, m_EntityId);
                 dashParticleTimer -= Time.DeltaTime();
 
                 //------------------------
