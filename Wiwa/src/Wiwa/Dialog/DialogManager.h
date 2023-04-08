@@ -81,7 +81,7 @@ namespace Wiwa
 		void UpdateConversation(Conversation conversation, Renderer2D* render);
 
 		// Set the dialog font and texts
-		void SetDialogText(char* dialogText, const char* fontPath, Conversation& conversation, int textLine);
+		void SetDialogText(char* dialogText, const char* fontPath, Conversation& conversation, int textLine, bool newNode);
 
 		// Set the dialog background images
 		void SetDialogBubbleImage(const char* path, Conversation& conversation);
@@ -107,5 +107,6 @@ namespace Wiwa
 		std::vector<Conversation*> conversations;
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
+		int currentNode = 0;
 	};
 }

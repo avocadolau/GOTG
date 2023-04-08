@@ -155,6 +155,10 @@ namespace Game
             if (controller.Health <= 0)
             {
                 dieTimer -= Time.DeltaTime();
+
+                EntityId pe_death = GetChildByName("PE_Death");
+                ParticleEmitterManger.ParticleEmitterPlayBatch(pe_death);
+
                 Animator.PlayAnimationName("death",false, m_EntityId);
                 if (dieTimer <= 0)
                     GameState.Die();
@@ -190,8 +194,14 @@ namespace Game
                 {
                     //Console.WriteLine("Presed R");
                     //Hurt player
-                    EntityId pe_hurt = GetChildByName("PE_Hurt");
-                    ParticleEmitterManger.ParticleEmitterPlayBatch(pe_hurt);
+                    //EntityId pe_hurt = GetChildByName("PE_Hurt");
+                    //ParticleEmitterManger.ParticleEmitterPlayBatch(pe_hurt);
+
+                    //EntityId pe_death = GetChildByName("PE_Death");
+                    //ParticleEmitterManger.ParticleEmitterPlayBatch(pe_death);
+
+                    EntityId pe_shield = GetChildByName("PE_Shield");
+                    ParticleEmitterManger.ParticleEmitterPlayBatch(pe_shield);
                 }
                 //if is released
                 else

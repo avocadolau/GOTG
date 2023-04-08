@@ -201,6 +201,11 @@
 						</SoundBank>
 					</ChildrenList>
 				</Folder>
+				<SoundBank Name="GOTG_Project" ID="{26787A13-D784-4BFC-B094-CCC31483F3C6}">
+					<ObjectInclusionList/>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

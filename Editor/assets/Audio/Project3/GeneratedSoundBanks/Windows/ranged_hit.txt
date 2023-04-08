@@ -2,5 +2,5 @@ Event	ID	Name			Wwise Object Path	Notes
 	169915878	ranged_hit			\Default Work Unit\enemies\ranged\ranged_hit	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	1001122462	sound_rangedenemy_hit	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Ranged\sound_rangedenemy_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Ranged\sound_rangedenemy_hit		235616
+	744035345	phalanx_ranged_hit	C:\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\phalanx_ranged_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Misc\phalanx_ranged_hit		176232
 

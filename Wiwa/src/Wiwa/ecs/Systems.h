@@ -21,6 +21,9 @@
 
 #include "systems/game/attack/SimpleBulletSystem.h"
 
+
+#include "systems/game/attack/VictoryShieldSystem.h"
+
 #include "systems/game/CharacterInventory.h"
 
 #include "systems/ParticleEmitterExecutor.h"

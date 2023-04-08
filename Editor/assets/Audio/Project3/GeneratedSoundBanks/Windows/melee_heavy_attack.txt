@@ -2,5 +2,5 @@ Event	ID	Name			Wwise Object Path	Notes
 	827139402	melee_heavy_attack			\Default Work Unit\enemies\melee\melee_heavy_attack	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	423824848	sound_meleeenemy_heavyattack	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Melee\sound_meleeenemy_heavyattack_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Enemies\Melee\sound_meleeenemy_heavyattack		153696
+	663097480	phalanx_melee_attack	C:\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\phalanx_melee_attack_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Misc\phalanx_melee_attack		82548
 

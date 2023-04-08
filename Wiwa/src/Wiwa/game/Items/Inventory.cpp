@@ -171,15 +171,16 @@ void Wiwa::Inventory::AddAbility(const Ability* ability) const
 
 void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
-	// If the first slot is occupied shift the ability one place
+	// If the first slot is occupied shift the buff one place
 	if(m_Buffs[0])
 	{
-		// TODO: Instead of deleting just spawn the ability on the floor
+		// TODO: Instead of deleting just spawn the buff on the floor
 		delete m_Buffs[1];
 		m_Buffs[1] = m_Buffs[0];
 	}
 
 	m_Buffs[0] = new Buff(*buff);
+	m_Buffs[0]->IsActive = false;
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
@@ -199,10 +200,8 @@ void Wiwa::Inventory::Update()
 	if(Time::IsPlaying())
 	{
 		// Input
-		float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
-		float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
-		
-		
+		const float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
+		const float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
 
 		// Ability 1
 		if(m_Abilities[0])
@@ -210,7 +209,7 @@ void Wiwa::Inventory::Update()
 			SwapUITexture(m_Abilities[0]->Icon, 3);
 			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
 			CooldownState(m_Abilities[0],3);
-			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= -0.9f)
+			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= 0.f)
 			{	
 				UseAbility(0);
 			}
@@ -221,7 +220,7 @@ void Wiwa::Inventory::Update()
 
 			m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 			CooldownState(m_Abilities[1],4);
-			if(Input::IsKeyPressed(Key::E) || rightTrigger >= -0.9f)
+			if(Input::IsKeyPressed(Key::E) || rightTrigger >= 0.f)
 			{
 				WI_CORE_INFO("Ability 2 activated");
 				UseAbility(1);
@@ -282,6 +281,7 @@ void Wiwa::Inventory::UseAbility(size_t index) const
 			EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
 			pman.EmitBatch(pe_line);
 		}
+
 		m_Abilities[index]->CurrentTime = 0.f;
 		m_Abilities[index]->Use();
 		return;
@@ -292,6 +292,19 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 {
 	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown)
 	{
+		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
+		EntityId player = em.GetEntityByName("Player");
+
+		if (player)
+		{
+
+			EntityId pe_healing = em.GetChildByName(player, "PE_Healing");
+			pman.EmitBatch(pe_healing);
+			EntityId pe_shield = em.GetChildByName(player, "PE_Shield");
+			pman.EmitBatch(pe_shield);
+		}
+
 		m_Buffs[index]->CurrentTime = 0.f;
 		m_Buffs[index]->Use();
 		
@@ -316,22 +329,22 @@ void Wiwa::Inventory::CooldownState(Ability* ability,int indexUI)
 
 	if (ability->CurrentTime >= ability->Cooldown)
 	{
-		ability->cooldownState = CooldownState::FULLY_CHARGED;
+		ability->CooldownState = CooldownState::FULLY_CHARGED;
 	}
 	else if (ability->CurrentTime < ability->Cooldown && ability->CurrentTime >= ability->Cooldown / 2)
 	{
-		ability->cooldownState = CooldownState::MEDIUM_CHARGE;
+		ability->CooldownState = CooldownState::MEDIUM_CHARGE;
 	}
 	else if (ability->CurrentTime < ability->Cooldown / 2 && ability->CurrentTime > 0)
 	{
-		ability->cooldownState = CooldownState::STARTING_CHARGE;
+		ability->CooldownState = CooldownState::STARTING_CHARGE;
 	}
 	else if (ability->CurrentTime < 0.0f)
 	{
-		ability->cooldownState = CooldownState::NO_CHARGED;
+		ability->CooldownState = CooldownState::NO_CHARGED;
 	}
 
-	gm.canvas.at(0)->controls.at(indexUI)->SetNextFrame((int)ability->cooldownState, &r2d);
+	gm.canvas.at(0)->controls.at(indexUI)->SetNextFrame((int)ability->CooldownState, &r2d);
 }
 
 void Wiwa::Inventory::CooldownState(Buff* buff, int indexUI)
@@ -341,22 +354,22 @@ void Wiwa::Inventory::CooldownState(Buff* buff, int indexUI)
 
 	if (buff->CurrentTime >= buff->Cooldown)
 	{
-		buff->cooldownState = CooldownState::FULLY_CHARGED;
+		buff->CooldownState = CooldownState::FULLY_CHARGED;
 	}
 	else if (buff->CurrentTime < buff->Cooldown && buff->CurrentTime >= buff->Cooldown / 2)
 	{
-		buff->cooldownState = CooldownState::MEDIUM_CHARGE;
+		buff->CooldownState = CooldownState::MEDIUM_CHARGE;
 	}
 	else if (buff->CurrentTime < buff->Cooldown / 2 && buff->CurrentTime > 0)
 	{
-		buff->cooldownState = CooldownState::STARTING_CHARGE;
+		buff->CooldownState = CooldownState::STARTING_CHARGE;
 	}
 	else if (buff->CurrentTime < 0.0f)
 	{
-		buff->cooldownState = CooldownState::NO_CHARGED;
+		buff->CooldownState = CooldownState::NO_CHARGED;
 	}
 
-	gm.canvas.at(0)->controls.at(indexUI)->SetNextFrame((int)buff->cooldownState, &r2d);
+	gm.canvas.at(0)->controls.at(indexUI)->SetNextFrame((int)buff->CooldownState, &r2d);
 }
 
 void Wiwa::Inventory::Clear()

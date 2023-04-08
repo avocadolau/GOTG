@@ -20,7 +20,7 @@ namespace Wiwa
 	};
 	enum class AbilityType
 	{
-		YONDUS_SEEDS,
+		YONDUS_FIN,
 		GROOTS_SEEDS,
 		PHYLAS_QUANTUM_SWORD,
 		STARHAWKS_BLAST
@@ -64,7 +64,7 @@ namespace Wiwa
 
 		AbilityType AbilityType;
 
-		CooldownState cooldownState;
+		CooldownState CooldownState;
 
 		Ability() = default;
 		Ability(const Ability& ability)
@@ -79,6 +79,7 @@ namespace Wiwa
 			this->CurrentTime = ability.CurrentTime;
 			this->Price = ability.Price;
 			this->AbilityType = ability.AbilityType;
+			this->CooldownState = ability.CooldownState;
 		}
 		
 		Ability(const char* name)
@@ -91,12 +92,16 @@ namespace Wiwa
 			  Cooldown(0.f),
 			  CurrentTime(0.f),
 			  Price(0),
-			  AbilityType(AbilityType::YONDUS_SEEDS),
-			 cooldownState(CooldownState::NO_CHARGED)
+			  AbilityType(AbilityType::YONDUS_FIN),
+			  CooldownState(CooldownState::NO_CHARGED)
 
 		{}
 
 		void Use();
+		void YondusFin();
+		void GrootsSeeds();
+		void PhylasQuantumSword();
+		void StarhawksBlast();
 	};
 
 
@@ -147,22 +152,26 @@ namespace Wiwa
 		float CoolDownTimer;
 		int Price;
 		bool IsActive;
+		int MaxHealthInc;
+		int HealthInc;
+		int MaxShieldInc;
+		int ShieldInc;
 
-		CooldownState cooldownState;
+		CooldownState CooldownState;
 
 		Buff()
-			:Name(""),
-			Description(""),
-			Icon(0),
-			buffType(BuffType::MAJOR_VICTORY_SHIELD),
-			BuffPercent(0),
-			Duration(0.f),
-			Cooldown(0.f),
-			CurrentTime(0.f),
-			CoolDownTimer(0.f),
-			Price(0),
-			IsActive(false),
-			cooldownState(CooldownState::NO_CHARGED)
+			: Name(""),
+			  Description(""),
+			  Icon(0),
+			  buffType(BuffType::MAJOR_VICTORY_SHIELD),
+			  BuffPercent(0),
+			  Duration(0.f),
+			  Cooldown(0.f),
+			  CurrentTime(0.f),
+			  CoolDownTimer(0.f),
+			  Price(0),
+			  IsActive(false),
+			  CooldownState(CooldownState::NO_CHARGED)
 		{};
 		Buff(const Buff& buff)
 		{
@@ -175,6 +184,7 @@ namespace Wiwa
 			this->Price = buff.Price;
 			this->CurrentTime = buff.CurrentTime;
 			this->CoolDownTimer = buff.CoolDownTimer;
+			this->CooldownState = buff.CooldownState;
 		}
 		Buff(const char* name)
 			: Name(name),

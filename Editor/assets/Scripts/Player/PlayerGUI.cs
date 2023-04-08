@@ -32,7 +32,7 @@ namespace Game
             {
                 ref Character stats = ref GetComponentByIterator<Character>(playerStatsIt);
 
-                GUI.SetValeForUIbar(stats.Health, 0, 0);
+                GUI.SetValeForUIbar(stats.Health,stats.MaxHealth, 0, 0);
 
                 if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadGuide) && !gamePaused)
                 {

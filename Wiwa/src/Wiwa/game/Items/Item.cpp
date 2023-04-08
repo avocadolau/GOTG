@@ -4,6 +4,7 @@
 #include "Wiwa/ecs/components/game/Character.h"
 #include "Wiwa/game/GameStateManager.h"
 #include "Wiwa/scene/Scene.h"
+#include "Wiwa/ecs/systems/PhysicsSystem.h"
 
 namespace Wiwa
 {
@@ -17,28 +18,46 @@ namespace Wiwa
     {
         switch (AbilityType)
         {
-        case AbilityType::YONDUS_SEEDS:
+        case AbilityType::YONDUS_FIN:
             {
-                
+                YondusFin();
             }
             break;
         case AbilityType::GROOTS_SEEDS:
             {
-                
+                GrootsSeeds();
             }
             break;
         case AbilityType::PHYLAS_QUANTUM_SWORD:
             {
-                
+                PhylasQuantumSword();
             }
             break;
         case AbilityType::STARHAWKS_BLAST:
             {
-                
+                StarhawksBlast();
             }
             break;
         }
     }
+
+    void Ability::YondusFin()
+    {
+        
+    }
+
+    void Ability::GrootsSeeds()
+    {
+    }
+
+    void Ability::PhylasQuantumSword()
+    {
+    }
+
+    void Ability::StarhawksBlast()
+    {
+    }
+
     void PassiveSkill::Use()
     {
         Character* player = GetPlayerComp();
@@ -95,12 +114,19 @@ namespace Wiwa
     }
     void Buff::Use()
     {
+        Character* player = GetPlayerComp();
+        if(!player)
+        {
+            WI_CORE_ERROR("Player can't be found");
+            return;
+        }
         IsActive = true;
         switch (buffType)
         {
         case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
             {
-                
+                 Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+                 EntityId shieldId = em.LoadPrefab("assets/Prefabs/VictoryShield.wiprefab");   
             }
             break;
         case Wiwa::BuffType::NIKKIS_TOUCH:
@@ -110,7 +136,17 @@ namespace Wiwa
             break;
         case Wiwa::BuffType::COSMOS_PAW:
             {
+                // TODO: Spawn some kind of feedback
+                const float buffPercent = ((float)BuffPercent / 100.f);
+                MaxHealthInc = (int)((float)player->MaxHealth * buffPercent);
+                HealthInc = (int)((float)player->Health * buffPercent);
+                MaxShieldInc = (int)((float)player->MaxShield * buffPercent);
+                ShieldInc = (int)((float)player->Shield * buffPercent);
                 
+                player->MaxHealth += MaxHealthInc;
+                player->Health += HealthInc;
+                player->MaxShield += MaxShieldInc;
+                player->Shield += ShieldInc;
             }
             break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
@@ -133,6 +169,12 @@ namespace Wiwa
 
     void Buff::UnUse()
     {
+        Character* player = GetPlayerComp();
+        if(!player)
+        {
+            WI_CORE_ERROR("Player can't be found");
+            return;
+        }
         CoolDownTimer = 0.f;
         IsActive = false;
         switch (buffType)
@@ -149,7 +191,11 @@ namespace Wiwa
         break;
         case Wiwa::BuffType::COSMOS_PAW:
         {
-
+             // TODO: Spawn some kind of feedback
+             player->MaxHealth -= MaxHealthInc;
+             player->Health -= HealthInc;
+             player->MaxShield -= MaxShieldInc;
+             player->Shield -= ShieldInc;
         }
         break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
