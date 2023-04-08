@@ -5,7 +5,6 @@ namespace Game
 {
     class TagChangeTest : Behaviour
     {
-        public float Timer;
         ComponentIterator collIt;
         void Init()
         {
