@@ -17,4 +17,9 @@ public:
 
 	void Draw() override;
 
+	bool creatingNewDialog = false;
+	int numNodesOnCurrentCreation;
+	int currentCreationStep;
+
+	//Conversation* conversationCreation;
 };
