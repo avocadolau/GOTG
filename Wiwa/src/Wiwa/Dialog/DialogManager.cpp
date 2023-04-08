@@ -31,7 +31,7 @@ namespace Wiwa
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
 
-		/*Conversation* newConversation = new Conversation();
+		Conversation* newConversation = new Conversation();
 
 		newConversation->conversationName = "Test conversation";
 
@@ -51,7 +51,7 @@ namespace Wiwa
 		actualConversationState = 2;
 		currentNode = 0;
 
-		keyPressRefreshTimer = 0;*/
+		keyPressRefreshTimer = 0;
 
 		return true;
 	}
@@ -59,26 +59,26 @@ namespace Wiwa
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		//if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120) // Just for testing purposes, actual game logic goes here before UpdateConversation();
-		//{
-		//	conversationToPlayName = "Test conversation";
-		//	actualConversationState = 0;
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		{
+			conversationToPlayName = "Test conversation";
+			actualConversationState = 0;
 
-		//	keyPressRefreshTimer = 0;
-		//}
-		//
-		//if (actualConversationState == 0 || actualConversationState == 1)
-		//{
-		//	for (int i = 0; i < conversations.size(); i++)
-		//	{
-		//		if (conversations[i]->conversationName == conversationToPlayName)
-		//		{
-		//			UpdateConversation(*conversations[i], &Wiwa::Application::Get().GetRenderer2D());
-		//		}
-		//	}
-		//}
+			keyPressRefreshTimer = 0;
+		}
+		
+		if (actualConversationState == 0 || actualConversationState == 1)
+		{
+			for (int i = 0; i < conversations.size(); i++)
+			{
+				if (conversations[i]->conversationName == conversationToPlayName)
+				{
+					UpdateConversation(*conversations[i], &Wiwa::Application::Get().GetRenderer2D());
+				}
+			}
+		}
 
-		//keyPressRefreshTimer++;
+		keyPressRefreshTimer++;
 		
 		return true;
 	}
