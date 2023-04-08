@@ -197,8 +197,10 @@ namespace Wiwa {
 
 					if (p.followEmitterRotation)
 					{
-						p.transform.rotation = t3D->rotation /*+ t3D->localRotation*/;
+						p.transform.rotation = t3D->rotation;
 						p.transform.localRotation = t3D->localRotation;
+
+						glm::quat(t3D->rotation * dt);
 					}
 
 					glm::vec3 scaledVertex = ref_vertices[i] * p.transform.localScale;
