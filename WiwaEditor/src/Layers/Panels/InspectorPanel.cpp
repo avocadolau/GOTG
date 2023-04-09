@@ -289,6 +289,11 @@ void InspectorPanel::DrawCollisionTags()
 		{
 			ImGui::CloseCurrentPopup();
 		}
+		if (ImGui::Button("Save Tags", ImVec2(120, 0)))
+		{
+			// Save Physics Manager json Data
+			py.OnSave();
+		}
 		ImGui::EndPopup();
 	}
 

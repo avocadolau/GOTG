@@ -35,12 +35,17 @@ namespace Game
 
             if (timer >= bulletc.LifeTime)
             {
+                Console.WriteLine("BULLET TIME OUT");
                 DestroyEntity();
             }
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
+            Console.WriteLine("BULLET COLLISION");
+            Console.WriteLine(str1);
+            Console.WriteLine(str2);
+
             if (id1 != m_EntityId)
                 return;
 

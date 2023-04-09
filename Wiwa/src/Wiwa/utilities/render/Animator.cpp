@@ -51,8 +51,8 @@ namespace Wiwa
 			break;
 		case AnimationState::PausedBlending:
 
-			CalculateBlendedBoneTransform(m_CurrentAnimation, &m_CurrentAnimation->GetRootNode(),
-				m_TargetAnimation, &m_TargetAnimation->GetRootNode(),
+			CalculateBlendedBoneTransform(m_CurrentAnimation, m_CurrentAnimation->GetRootNode(),
+				m_TargetAnimation, m_TargetAnimation->GetRootNode(),
 				m_CurrentAnimation->m_CurrentTime, m_TargetAnimation->m_CurrentTime,
 				glm::mat4(1), m_BlendWeight);
 
@@ -64,7 +64,7 @@ namespace Wiwa
 				m_CurrentTime = 0;
 				m_AnimationState = AnimationState::Paused;
 			}
-			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+			CalculateBoneTransform(m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 			break;
 		case AnimationState::Playing:
 			if (m_PrevAnimationState == AnimationState::Paused) // if animation was paused before it was played
@@ -113,7 +113,7 @@ namespace Wiwa
 
 			return;
 		}
-		CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+		CalculateBoneTransform(m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 	}
 
 	void Animator::UpdateBlendingAnimation(float dt)
@@ -222,7 +222,15 @@ namespace Wiwa
 	{
 		m_CurrentAnimation = nullptr;
 		m_TargetAnimation = nullptr;
+
+		for (std::vector<Animation*>::iterator item = m_Animations.begin(); item != m_Animations.end(); item++)
+		{
+			delete* item;
+			*item = nullptr;
+		}
+
 		m_Animations.clear();
+		m_FinalBoneMatrices.clear();
 	}
 
 	void Animator::SaveWiAnimator(Animator *animator, const char *path)
@@ -333,7 +341,7 @@ namespace Wiwa
 		AnimationTimeTicks = fmod(TimeInTicks, (float)m_TargetAnimation->m_Duration);
 		m_TargetAnimation->m_CurrentTime = AnimationTimeTicks;
 
-		CalculateBlendedBoneTransform(baseAnim, &baseAnim->GetRootNode(), layerAnim, &layerAnim->GetRootNode(), currentTimeBase, currentTimeLayered, glm::mat4(1.0f), blendFactor);
+		CalculateBlendedBoneTransform(baseAnim, baseAnim->GetRootNode(), layerAnim, layerAnim->GetRootNode(), currentTimeBase, currentTimeLayered, glm::mat4(1.0f), blendFactor);
 	}
 
 	void Animator::CalculateBlendedBoneTransform(Animation *animationBase, const NodeData *node, Animation *animationLayer, const NodeData *nodeLayered, const float currentTimeBase, const float currentTimeLayered, const glm::mat4 &parentTransform, const float blendFactor)
@@ -375,7 +383,7 @@ namespace Wiwa
 		}
 
 		for (size_t i = 0; i < node->children.size(); ++i)
-			CalculateBlendedBoneTransform(animationBase, &node->children[i], animationLayer, &nodeLayered->children[i], currentTimeBase, currentTimeLayered, globalTransformation, blendFactor);
+			CalculateBlendedBoneTransform(animationBase, node->children[i], animationLayer, nodeLayered->children[i], currentTimeBase, currentTimeLayered, globalTransformation, blendFactor);
 	}
 
 	void Animator::CalculateBoneFinalTransform()
@@ -421,7 +429,7 @@ namespace Wiwa
 		}
 
 		for (int i = 0; i < rootNode->childrenCount; i++)
-			CalculateBoneTransform(&rootNode->children[i], globalTransformation);
+			CalculateBoneTransform(rootNode->children[i], globalTransformation);
 	}
 	Animation *Animator::GetAnimation(std::string name)
 	{

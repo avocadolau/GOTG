@@ -51,8 +51,17 @@ namespace Wiwa {
 
 	Animation::~Animation()
 	{
+		for (std::vector<Bone*>::iterator item = m_Bones.begin(); item != m_Bones.end(); item++)
+		{
+			delete* item;
+			*item = nullptr;
+		}
 		m_Bones.clear();
+
+		delete m_RootNode;
+
 		m_BoneInfoMap.clear();
+		m_CalculatedBoneMatrices.clear();
 	}
 
 	Bone* Animation::FindBone(const std::string& name)
@@ -89,7 +98,7 @@ namespace Wiwa {
 		m_BoneInfoMap = boneInfoMap;
 	}
 
-	void Animation::ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root, glm::mat4& parentTransform)
+	void Animation::ReadHeirarchyData(NodeData* dest, const ModelHierarchy* root, glm::mat4& parentTransform)
 	{
 		assert(root);		
 
@@ -100,14 +109,14 @@ namespace Wiwa {
 			m_BoneInfoMap[root->name].globalTransformation = globalTransform;
 		}
 
-		dest.name = root->name.data();
-		dest.transformation = root->Transformation;
-		dest.childrenCount = root->children.size();
+		dest->name = root->name.data();
+		dest->transformation = root->Transformation;
+		dest->childrenCount = root->children.size();
 
 		for (unsigned int i = 0; i < root->children.size(); i++) {
-			NodeData newData;
+			NodeData* newData = new NodeData();
 			ReadHeirarchyData(newData,root->children[i], globalTransform);
-			dest.children.push_back(newData);
+			dest->children.push_back(newData);
 		}
 	}
 	glm::mat4  Animation::CalculateGlobalTransform(const ModelHierarchy* bone, glm::mat4 parentTransform)
@@ -169,7 +178,7 @@ namespace Wiwa {
 		file.Write(&animation->m_Loop, sizeof(bool));
 
 		//save NodeAnim structure
-		animation->SaveNodeData(file, &animation->m_RootNode);
+		animation->SaveNodeData(file, animation->m_RootNode);
 
 		//save bone info map
 		size_t bone_index_size = animation->m_BoneInfoMap.size();
@@ -206,7 +215,7 @@ namespace Wiwa {
 
 		for (int i = 0; i < node->children.size(); i++)
 		{
-			SaveNodeData(file, &node->children[i]);
+			SaveNodeData(file, node->children[i]);
 		}
 	}
 
@@ -224,8 +233,9 @@ namespace Wiwa {
 
 		for (int i = 0; i < node->childrenCount; i++)
 		{
-			node->children.push_back(*LoadNodeData(file));
+			node->children.emplace_back(LoadNodeData(file));
 		}
+
 		return node;
 	}
 
@@ -238,7 +248,6 @@ namespace Wiwa {
 	
 	Animation* Animation::LoadWiAnimation(const char* filepath)
 	{
-
 		File file = Wiwa::FileSystem::OpenIB(filepath);
 		Animation* anim = new Animation();
 		//load name
@@ -259,7 +268,7 @@ namespace Wiwa {
 
 
 		//Load NodeAnim structure
-		anim->m_RootNode = *anim->LoadNodeData(file);
+		anim->m_RootNode = anim->LoadNodeData(file);
 
 		//save bone info map
 		size_t bone_index_size;
