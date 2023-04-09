@@ -4,6 +4,7 @@
 #include "Items/ItemManager.h"
 #include <Wiwa/ecs/components/game/Character.h>
 #include "Achievements/AchievementsManager.h"
+#include <Wiwa/ecs/components/game/items/Item.h>
 
 namespace Wiwa
 {
@@ -599,6 +600,125 @@ namespace Wiwa
 		Wiwa::ItemManager::Deserialize(&doc);
 
 		AchievementsManager::Deserialize(&doc);
+	}
+	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
+	{
+		uint32_t itemRand;
+		std::string_view name;
+		int i = 0;
+		switch (type)
+		{
+		case 0:
+		{
+			itemRand = RAND(0, ItemManager::GetAbilities().size());
+			for (const auto& ability : ItemManager::GetAbilities())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 1:
+		{
+			itemRand = RAND(0, ItemManager::GetSkills().size());
+			for (const auto& ability : ItemManager::GetSkills())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 2:
+		{
+			itemRand = RAND(0, ItemManager::GetBuffs().size());
+			for (const auto& ability : ItemManager::GetBuffs())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 3:
+		{
+			itemRand = RAND(0, ItemManager::GetConsumables().size());
+			for (const auto& ability : ItemManager::GetConsumables())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		default:
+		{
+			WI_CORE_ERROR("Item type doesn't match any type!");
+			return;
+		}break;
+		}
+		EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
+
+		Item* item = em.GetComponent<Item>(id);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
+		t3d->localPosition = position;
+		item->item_type = type;
+		for (uint32_t i = 0; i < 128; i++)
+		{
+			if (i >= name.size())
+			{
+				break;
+			}
+			item->Name[i] = name[i];
+		}
+	}
+	void GameStateManager::SpawnItem(glm::vec3 position, uint8_t type, const char* name)
+	{
+		std::string_view newName;
+		switch (type)
+		{
+		case 0:
+		{
+			newName = ItemManager::GetAbility(name)->Name.c_str();
+		}break;
+		case 1:
+		{
+			newName = ItemManager::GetPassive(name)->Name.c_str();
+		}break;
+		case 2:
+		{
+			newName = ItemManager::GetBuff(name)->Name.c_str();
+		}break;
+		case 3:
+		{
+			newName = ItemManager::GetConsumable(name)->Name.c_str();
+		}break;
+		default:
+		{
+			WI_CORE_ERROR("Item type doesn't match any type!");
+			return;
+		}break;
+		}
+
+		EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
+
+		Item* item = em.GetComponent<Item>(id);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
+		t3d->localPosition = position;
+		item->item_type = type;
+		for (uint32_t i = 0; i < 128; i++)
+		{
+			if (i >= newName.size())
+			{
+				break;
+			}
+			item->Name[i] = newName[i];
+		}
+	}
+	Transform3D* GameStateManager::GetPlayerTransform()
+	{
+		return s_CurrentScene->GetEntityManager().GetComponent<Transform3D>(s_PlayerId);
 	}
 }
 

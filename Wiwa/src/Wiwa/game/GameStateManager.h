@@ -110,9 +110,9 @@ namespace Wiwa {
 		static void SetPlayerId(EntityId id, Scene* scene);
 		static void EndCurrentRoom();
 
-		inline static void SetRoomType(RoomType type) { s_RoomType = type; }
-		inline static void SetRoomState(RoomState type) { s_RoomState = type; }
-		inline static RoomType GetType() { return s_RoomType; }
+		WI_HARD_INL static void SetRoomType(RoomType type) { s_RoomType = type; }
+		WI_HARD_INL static void SetRoomState(RoomState type) { s_RoomState = type; }
+		WI_HARD_INL static RoomType GetType() { return s_RoomType; }
 
 		static void LogRoomState();
 		static const char* GetRoomState();
@@ -133,7 +133,21 @@ namespace Wiwa {
 
 		static void SerializeData();
 		static void DeserializeData();
+		/// <summary>
+		/// Spawns a random item of a given type in a given location
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
+		static void SpawnRandomItem(glm::vec3 position, uint8_t type);
+		/// <summary>
+		/// Spawns a given item of a given type in a given location
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
+		/// <paran name="name"></param>
+		static void SpawnItem(glm::vec3 position, uint8_t type, const char* name);
 
+		WI_HARD_INL static class Transform3D* GetPlayerTransform();
 		WI_HARD_INL static Inventory& GetPlayerInventory() { return *s_PlayerInventory; }
 		WI_HARD_INL static Scene* GetCurrentScene() { return s_CurrentScene; }
 		WI_HARD_INL static EntityId GetPlayerId() { return s_PlayerId; }

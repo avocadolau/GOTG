@@ -36,6 +36,8 @@
 #include <Wiwa/render/RenderManager.h>
 
 #include <Wiwa/core/ProjectManager.h>
+#include <stdlib.h>
+#include <time.h>
 
 USE_REFLECTION;
 
@@ -45,6 +47,12 @@ namespace Wiwa
 
 	Application::Application(int argc, char **argv)
 	{
+		//Set up random seed
+		struct timespec ts;
+		timespec_get(&ts, TIME_UTC);
+		srand(((unsigned int)ts.tv_nsec));
+
+
 		WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 
 		REFLECTION_REGISTER();

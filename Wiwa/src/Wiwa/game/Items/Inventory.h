@@ -34,18 +34,20 @@ namespace Wiwa
 		void CooldownState(Buff* buff, int indexUI);
 		void Clear();
 
+		WI_HARD_INL void AddTokens(uint32_t tokens) { m_Tokens += tokens; }
+
 		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }
 		WI_HARD_INL Buff**& GetBuffs() { return m_Buffs; }
 
 		WI_HARD_INL std::vector<PassiveSkill>& GetPassives() { return m_PassiveSkill; }
-		WI_HARD_INL int GetTokens() const { return m_Tokens; }
+		WI_HARD_INL uint32_t GetTokens() const { return m_Tokens; }
 		
 	private:
 		Ability** m_Abilities;
 		Buff** m_Buffs;
 		Consumable m_Consumable;
 		std::vector<PassiveSkill> m_PassiveSkill;
-		int m_Tokens;
+		uint32_t m_Tokens;
 		friend class GameStateManager;
 	};
 }

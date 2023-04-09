@@ -6,6 +6,7 @@
 #include "Wiwa/utilities/time/Time.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Application.h"
+#include <Wiwa/ecs/components/game/items/Item.h>
 
 #define MAX_ABILITIES 2
 #define MAX_BUFFS 2
@@ -159,7 +160,13 @@ void Wiwa::Inventory::AddAbility(const Ability* ability) const
 	if(m_Abilities[0])
 	{
 		// TODO: Instead of deleting just spawn the ability on the floor
-		delete m_Abilities[1];
+		
+		if (m_Abilities[1])
+		{
+			GameStateManager::SpawnItem(
+				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 0, m_Abilities[1]->Name.c_str());
+			delete m_Abilities[1];
+		}
 		m_Abilities[1] = m_Abilities[0];
 	}
 	
@@ -175,7 +182,13 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 	if(m_Buffs[0])
 	{
 		// TODO: Instead of deleting just spawn the buff on the floor
-		delete m_Buffs[1];
+		if (m_Buffs[1])
+		{
+
+			GameStateManager::SpawnItem(
+				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 2, m_Buffs[1]->Name.c_str());
+			delete m_Buffs[1];
+		}
 		m_Buffs[1] = m_Buffs[0];
 	}
 
