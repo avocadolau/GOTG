@@ -69,7 +69,8 @@ namespace Wiwa
 
 	void EnemySystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
-		if (body1->id == m_EntityId && strcmp(body2->selfTagStr,"BULLET") == 0)
+		std::string playerBulletStr = "PLAYER_BULLET";
+		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
@@ -80,6 +81,7 @@ namespace Wiwa
 
 	void EnemySystem::ReceiveDamage(int damage)
 	{
+		WI_INFO("Enemy hit by: {} damage", damage);
 		Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 

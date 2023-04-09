@@ -15,41 +15,39 @@ namespace Game
     class BulletController : Behaviour
     {
         private float timer = 0f;
+        float duration;
         private ComponentIterator bulletCompIt;
         void Init()
         {
             bulletCompIt = GetComponentIterator<BulletComponent>();
 
-            ref BulletComponent bulletc = ref GetComponentByIterator<BulletComponent>(bulletCompIt);
-            
+            BulletComponent bulletc = GetComponentByIterator<BulletComponent>(bulletCompIt);
+            float temp = bulletc.LifeTime;
+            duration = temp;
+
             //Mathf.Clamp
             PhysicsManager.SetLinearVelocity(m_EntityId, bulletc.Direction.normalized * bulletc.Velocity);
-            
+            timer = 0.0f;
         }
 
         void Update()
         {
-            ref BulletComponent bulletc = ref GetComponentByIterator<BulletComponent>(bulletCompIt);
-
             timer += Time.DeltaTime();
 
-            if (timer >= bulletc.LifeTime)
+            if (timer >= 5.0f)
             {
-                Console.WriteLine("BULLET TIME OUT");
+                Console.WriteLine("BULLET TIMEOUT:");
                 DestroyEntity();
             }
         }
 
         void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
-            Console.WriteLine("BULLET COLLISION");
-            Console.WriteLine(str1);
-            Console.WriteLine(str2);
+            Console.WriteLine("BULLET COLLISION:");
 
             if (id1 != m_EntityId)
                 return;
 
-            Console.WriteLine(str2);
             DestroyEntity();
         }
     }

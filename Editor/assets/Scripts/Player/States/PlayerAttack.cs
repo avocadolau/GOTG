@@ -31,8 +31,8 @@ namespace Game
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
          
             Vector3 worldPos = CameraManager.ScreenToWorlPosition(cam_id, mousePos, stateMachine.GetTransform().Position.y);
-            Console.WriteLine("mouse screen pos: "+ mousePos.x + " " + mousePos.y);
-            Console.WriteLine("mouse world pos: "+ worldPos.x + " " + worldPos.y + " " + worldPos.z);
+            //Console.WriteLine("mouse screen pos: "+ mousePos.x + " " + mousePos.y);
+            //Console.WriteLine("mouse world pos: "+ worldPos.x + " " + worldPos.y + " " + worldPos.z);
   
             if(stateMachine.shootInput == Vector3Values.zero)
             {
@@ -81,7 +81,7 @@ namespace Game
                     Animator.PlayAnimationName("shootleft", false, stateMachine.GetEntity());
                 }
                 shooter.ShootRight = !shooter.ShootRight;
-                stateMachine.SpawnBullet(spawnPoint, shooter, stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
+                stateMachine.SpawnBullet(ref spawnPoint, ref shooter, ref stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
             }
         }
     }

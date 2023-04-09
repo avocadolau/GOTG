@@ -57,20 +57,7 @@ namespace Wiwa {
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
 
-		//AddFilterTag("COLLISION_EVERYTHING");
-		//AddFilterTag("PLAYER");
-		//AddFilterTag("ENEMY");
-		//AddFilterTag("BULLET");
-		//AddFilterTag("START_RUN_TRIGGER");
-		//AddFilterTag("END_ROOM_TRIGGER");
-		//AddFilterTag("WALL");
-		//AddFilterTag("COLUMN");
-		//AddFilterTag("ENEMY_MELEE");
-		//AddFilterTag("ENEMY_SPAWNER");
-		//AddFilterTag("ITEM");
-		//AddFilterTag("ENEMY_BULLET");
-		//AddFilterTag("MAJOR_VICTORY_SHIELD");	
-
+		AddFilterTag("COLLISION_EVERYTHING");
 		return true;
 	}
 
@@ -88,23 +75,6 @@ namespace Wiwa {
 		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
-		
-		//static int o = 0;
-		//Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		//for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
-		//{
-		//	Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-		//	//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
-		//	o++;
-		//}
-
-		// Commented because it causes clipping :(
-		/*for (int i = 0; i < SUB_STEPS; i++)
-		{
-			UpdateObjects(dt / SUB_STEPS);
-			m_World->performDiscreteCollisionDetection();
-			ResolveContacts();
-		}*/
 
 		return true;
 	}
@@ -581,6 +551,7 @@ namespace Wiwa {
 			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
 			m_World->debugDrawWorld();
+			
 			m_Debug_draw->lineDisplayShader->UnBind();
 			camera->frameBuffer->Unbind();
 		}
@@ -787,21 +758,21 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 //void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 //{
-//	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-//	//GLfloat lineVertices[] = {
-//	//	from.x(), from.y(), from.z(),
-//	//	to.x(), to.y(), to.z()
-//	//};
-//	//glEnableClientState(GL_VERTEX_ARRAY);
-//	//glVertexPointer
-//	/*glUseProgram(0);
+//	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+//	GLfloat lineVertices[] = {
+//		from.x(), from.y(), from.z(),
+//		to.x(), to.y(), to.z()
+//	};
+//	glEnableClientState(GL_VERTEX_ARRAY);
+//	glVertexPointer
+//	glUseProgram(0);
 //	glColor3f(255, 0, 0);
 //	glLineWidth(3.0f);
 //	glBegin(GL_LINES);
 //	glVertex3f(from.getX(), from.getY(), from.getZ());
 //	glVertex3f(to.getX(), to.getY(), to.getZ());
 //	glEnd();
-//	glLineWidth(1.0f);*/
+//	glLineWidth(1.0f);
 //
 //}
 

@@ -144,7 +144,7 @@ namespace Game
             if (currentRotation.y >= 360f)
                 currentRotation.y = 0f;
         }
-        public void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
+        public void SpawnBullet(ref Transform3D transform, ref StarlordShooter shooter, ref Character character, Vector3 bullDir)
         {
             Console.WriteLine("fired");
 
@@ -168,8 +168,10 @@ namespace Game
             cb.isTrigger = true;
             cb.isStatic = false;
             cb.doContinuousCollision = false;
-            cb.selfTag = 3;
-            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY");
+            cb.selfTag = 10;
+
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY_MELEE");
+            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY_RANGED");
             cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("WALL");
             cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
 

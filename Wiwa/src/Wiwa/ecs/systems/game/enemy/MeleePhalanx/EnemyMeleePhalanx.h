@@ -31,7 +31,7 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
-		void ReceiveDamage(int damage);
+		void ReceiveDamage(int damage) override;
 
 		void SwitchState(MeleePhalanxBaseState* state);
 

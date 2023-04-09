@@ -1,1 +1,1 @@
-{"tags_count":11,"tag_0":"START_RUN_TRIGGER","tag_1":"END_ROOM_TRIGGER","tag_2":"WALL","tag_3":"COLUMN","tag_4":"ENEMY_MELEE","tag_5":"ENEMY_SPAWNER","tag_6":"ITEM","tag_7":"ENEMY_BULLET","tag_8":"MAJOR_VICTORY_SHIELD","tag_9":"PLAYER","tag_10":"ENEMY_RANGED"}
+{"tags_count":11,"tag_0":"END_ROOM_TRIGGER","tag_1":"WALL","tag_2":"COLUMN","tag_3":"ENEMY_MELEE","tag_4":"ENEMY_SPAWNER","tag_5":"ITEM","tag_6":"ENEMY_BULLET","tag_7":"MAJOR_VICTORY_SHIELD","tag_8":"PLAYER","tag_9":"ENEMY_RANGED","tag_10":"PLAYER_BULLET"}
