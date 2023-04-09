@@ -13,27 +13,32 @@ namespace Game
         public PlayerDash dash = new PlayerDash();
         public PlayerDeath death = new PlayerDeath();
         
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             Console.WriteLine("awake player state machine");
         }
 
-        public void Init()
+        public override void Init()
         {
+            base.Init();
             currentState = idle;
             PlayerStateMachine self = this;
             currentState.EnterState(ref self, GetEntity());
         }
 
-        public  void Update()
+        public override void Update()
         {
+            base.Update();
             PlayerStateMachine self = this;
             currentState.UpdateState(ref self, GetEntity());
             CheckHealth();
+            DashCooldown();
         }
 
-        public void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
+        public override void OnCollisionEnter(EntityId id1, EntityId id2, string str1, string str2)
         {
+            base.OnCollisionEnter(id1, id2, str1, str2);
             currentState.OnCollisionEnter(id1, id2, str1, str2);
         }
 
@@ -50,6 +55,17 @@ namespace Game
             {
                 PlayerStateMachine self = this;
                 SwitchState(ref self, death);
+            }
+        }
+
+        void DashCooldown()
+        {
+            if(!DashEnable)
+            {
+                //count cooldown
+                cooldownTimer -= Time.DeltaTime();
+                if (cooldownTimer <= 0)
+                    DashEnable = true;
             }
         }
     }

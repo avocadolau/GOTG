@@ -19,11 +19,29 @@ namespace Game
         public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
             if (stateMachine.movementInput == Vector3Values.zero)
+            {
                 stateMachine.SwitchState(ref stateMachine, stateMachine.idle);
+                return;
+            }
+            else if (stateMachine.shootInput != Vector3Values.zero) // attack
+            {
+                stateMachine.SwitchState(ref stateMachine, stateMachine.attack);
+                return;
+            }
+            else if ((Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadLeftBumper))
+                     && stateMachine.DashEnable)
+            { 
+                stateMachine.SwitchState(ref stateMachine, stateMachine.dash);
+                return;
+            }
 
+            stateMachine.direction = stateMachine.movementInput;
 
             stateMachine.velocity = stateMachine.movementInput * stateMachine.GetCharacter().Speed;
             PhysicsManager.SetLinearVelocity(stateMachine.GetEntity(), stateMachine.velocity);
+
+            stateMachine.SetPlayerRotation(ref stateMachine.GetTransform().LocalRotation, stateMachine.movementInput, 1f);
+
             PlayFootStep(stateMachine.GetEntity());
             SpawnParticle(stateMachine.GetEntity());
         }

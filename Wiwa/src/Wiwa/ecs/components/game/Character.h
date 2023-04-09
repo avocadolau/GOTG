@@ -22,6 +22,7 @@ namespace Wiwa {
 }
 
 REFLECTION_BEGIN(Wiwa::Character)
+	REFLECT_MEMBER(Speed)
 	REFLECT_MEMBER(MaxHealth)
 	REFLECT_MEMBER(Health)
 	REFLECT_MEMBER(MaxShield)

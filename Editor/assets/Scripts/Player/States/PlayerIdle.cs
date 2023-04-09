@@ -11,11 +11,28 @@ namespace Game
         {
             Console.WriteLine("Player idle");
             Animator.PlayAnimationName("idle", true, stateMachine.GetEntity());
+
+            PhysicsManager.SetLinearVelocity(stateMachine.GetEntity(), Vector3Values.zero);
+            stateMachine.SetPlayerRotation(ref stateMachine.GetTransform().LocalRotation, stateMachine.direction, 1f);
         }
         public override void UpdateState(ref  PlayerStateMachine stateMachine, EntityId entityId)
         {
-            if (stateMachine.movementInput != Vector3Values.zero)
+            if (stateMachine.movementInput != Vector3Values.zero) // move
+            { 
                 stateMachine.SwitchState(ref stateMachine, stateMachine.move);
+                return;
+            }
+            else if (stateMachine.shootInput != Vector3Values.zero) // attack
+            { 
+                stateMachine.SwitchState(ref stateMachine, stateMachine.attack);
+                return;
+            }
+            else if ((Input.IsKeyDown(KeyCode.LeftShift) || Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadLeftBumper)) 
+                    && stateMachine.DashEnable) // dash
+            { 
+                stateMachine.SwitchState(ref stateMachine, stateMachine.dash);
+                return;
+            }          
         }
         public override void ExitState(ref  PlayerStateMachine stateMachine, EntityId entityId)
         {

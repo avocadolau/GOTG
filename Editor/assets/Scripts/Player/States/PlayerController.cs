@@ -11,21 +11,19 @@ namespace Game
         public ComponentIterator transformIt;
         public ComponentIterator rigidBodyIt;
         public ComponentIterator shooterIt;
-        public ComponentIterator leftPosIt;
-        public ComponentIterator rightPosIt;
         public StarlordShooter shoot;
         public Vector3 shootInput;
         public Vector3 movementInput;
         public Vector3 velocity;
- 
+        public Vector3 direction;
+        public bool DashEnable;
+        public float  cooldownTimer;
         public virtual void Awake()
         {
             statsIt.componentId = Constants.WI_INVALID_INDEX;
             transformIt.componentIndex = Constants.WI_INVALID_INDEX;
             rigidBodyIt.componentId = Constants.WI_INVALID_INDEX;
             shooterIt.componentIndex = Constants.WI_INVALID_INDEX;
-            leftPosIt.componentId = Constants.WI_INVALID_INDEX;
-            rightPosIt.componentIndex = Constants.WI_INVALID_INDEX;
         }
 
         public virtual void Init()
@@ -34,6 +32,7 @@ namespace Game
             transformIt = GetComponentIterator<Transform3D>();
             rigidBodyIt = GetComponentIterator<CollisionBody>();
             shooterIt = GetComponentIterator<StarlordShooter>();
+            DashEnable = true;
         }
         public virtual void Update()
         {
@@ -58,6 +57,13 @@ namespace Game
         public EntityId GetEntity()
         {
             return m_EntityId;
+        }
+
+        public ref Transform3D GetFirePosition(string obj_name)
+        {
+            EntityId object_id = GetChildByName(obj_name);
+            ComponentIterator iterator = GetComponentIterator<Transform3D>(object_id);
+            return  ref GetComponentByIterator<Transform3D>(iterator);
         }
         public void ReceiveDamage(ref Character controller, int damage)
         {
@@ -128,7 +134,7 @@ namespace Game
         {
             return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         }
-        void SetPlayerRotation(ref Vector3 currentRotation, Vector3 input, float rotationSpeed)
+        public  void SetPlayerRotation(ref Vector3 currentRotation, Vector3 input, float rotationSpeed)
         {
             float angle = AngleFromVec2(new Vector2(input.x, input.z));
 
@@ -138,41 +144,7 @@ namespace Game
             if (currentRotation.y >= 360f)
                 currentRotation.y = 0f;
         }
-
-        void Fire(Vector3 shootInput)
-        {
-            //EntityId leftPos = GetChildByName("LeftPos");
-            //EntityId rigthPos = GetChildByName("RightPos");
-            //leftPosIt = GetComponentIterator<Transform3D>(leftPos);
-            //rightPosIt = GetComponentIterator<Transform3D>(rigthPos);
-            //ref Character character = ref GetComponentByIterator<Character>(statsIt);
-            //ref StarlordShooter shooter = ref GetComponentByIterator<StarlordShooter>(shooterIt);
-            //ref Transform3D left = ref GetComponentByIterator<Transform3D>(leftPosIt);
-            //ref Transform3D right = ref GetComponentByIterator<Transform3D>(rightPosIt);
-
-            //Transform3D spawnPoint;
-            ////Decide wich hand is going next
-            //if (shooter.ShootRight)
-            //{
-            //    spawnPoint = right;
-            //    Animator.PlayAnimationName("shootright", false, m_EntityId);
-            //}
-            //else
-            //{
-            //    spawnPoint = left;
-            //    Animator.PlayAnimationName("shootleft", false, m_EntityId);
-            //}
-            ////if (isWalking)
-            ////{
-            ////    Animator.Blend("running", true, 1f, m_EntityId);
-            ////}
-
-            //shooter.ShootRight = !shooter.ShootRight;
-            //SpawnBullet(spawnPoint, shooter, character, Mathf.CalculateForward(ref spawnPoint));
-            //}
-        }
-
-        void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
+        public void SpawnBullet(Transform3D transform, StarlordShooter shooter, Character character, Vector3 bullDir)
         {
             Console.WriteLine("fired");
 
