@@ -216,12 +216,17 @@ namespace Wiwa {
 						cameraId = cm.getActiveCameraId();
 						Wiwa::Camera* cam = cm.getCamera(cameraId);
 
+						float yRotation = p.transform.localRotation.y + p.transform.rotation.y;
 						//fix rotation
-						glm::mat4 rotationMatrix = cam->getView();
+						glm::mat4 rotationMatrix = cam->getView() * glm::rotate(glm::mat4(1.0f), glm::radians(-yRotation), glm::vec3(0, 1, 0));
 						glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
 
+						
+
+						//glm::vec4 rotatedVertex = billboardMatrix * glm::vec4(scaledVertex, 1.0f);
 
 						glm::vec4 rotatedVertex = billboardMatrix * glm::vec4(scaledVertex, 1.0f);
+
 						resultantVertex = glm::vec3(rotatedVertex);
 					}
 					else

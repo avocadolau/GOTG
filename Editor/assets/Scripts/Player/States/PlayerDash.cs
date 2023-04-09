@@ -10,6 +10,8 @@ namespace Game
         private float dashTimer = 0f;
         Vector3 targetPoint;
         Vector3 dashDirection;
+        float dashParticleTimer;
+        float maxDashTime = 1.5f;// to secure that the dash dosent go wiiii to the infinite
         public override void EnterState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
             Console.WriteLine("Player Dash");
@@ -26,7 +28,7 @@ namespace Game
             targetPoint = Mathf.PointAlongDirection(stateMachine.GetTransform().LocalPosition, dashDirection, stateMachine.GetCharacter().DashDistance);
 
             Animator.Blend("dash", false,0.1f, stateMachine.GetEntity());
-
+            maxDashTime = 1.5f;
         }
         public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
@@ -36,9 +38,31 @@ namespace Game
                 return;
             }
 
+            maxDashTime -= Time.DeltaTime();
+
+            if (maxDashTime <= 0)
+            {
+                stateMachine.SwitchState(ref stateMachine, stateMachine.idle);
+                return;
+            }
             stateMachine.velocity += dashDirection * stateMachine.GetCharacter().DashSpeed;
 
             PhysicsManager.SetLinearVelocity(stateMachine.GetEntity(), stateMachine.velocity);
+
+            //particles
+            dashParticleTimer -= Time.DeltaTime();
+            if (dashParticleTimer < 0)
+            {
+                EntityId pe_dash = stateMachine.GetChildByName("PE_Dash");
+
+                ref Transform3D transform = ref stateMachine.GetComponent<Transform3D>(pe_dash);
+
+                transform.Rotation.y = stateMachine.GetTransform().Rotation.y;
+
+                ParticleEmitterManger.ParticleEmitterPlayBatch(pe_dash);
+
+                dashParticleTimer = 0.1f; //better if random between 2 values
+            }
         }
         public override void ExitState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {

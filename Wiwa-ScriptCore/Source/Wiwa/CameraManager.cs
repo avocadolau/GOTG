@@ -27,9 +27,9 @@
         {
             InternalCalls.SetCameraRotation(camid, rot);
         }       
-        public static Vector3 ScreenToWorlPosition(CameraId camid, Vector2 screenPos)
+        public static Vector3 ScreenToWorlPosition(CameraId camid, Vector2 screenPos, float intersection_y)
         {
-            return  InternalCalls.ScreenToWorlPosition(camid, screenPos);
+            return  InternalCalls.ScreenToWorlPosition(camid, screenPos, intersection_y);
         }
     }
 }

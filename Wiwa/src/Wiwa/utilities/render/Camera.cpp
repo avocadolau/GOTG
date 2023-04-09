@@ -106,27 +106,26 @@ namespace Wiwa {
 		updateView();
 	}
 
-	glm::vec3 Camera::ScreenToWorlPosition(glm::vec2 screenPos)
+	glm::vec3 Camera::ScreenToWorlPosition(glm::vec2 screenPos, float intersection_Y)
 	{
+	
+		float ndcX = (2.0f * screenPos.x) / Application::Get().GetWindow().GetWidth() - 1.0f;
+		float ndcY = 1.0f - (2.0f * screenPos.y) / Application::Get().GetWindow().GetHeight();
 
-		//glm::vec2 ndcPos = glm::vec2(
-		//	(screenPos.x / Application::Get().GetWindow().GetWidth()) * 2.0f - 1.0f, // x in [-1, 1]
-		//	(screenPos.y / Application::Get().GetWindow().GetHeight()) * 2.0f - 1.0f  // y in [-1, 1]
-		//);	
-		glm::vec2 ndcPos = glm::vec2(
-			screenPos.x / (Application::Get().GetWindow().GetWidth() / 2) - 1.0, // x in [-1, 1]
-			screenPos.y / (Application::Get().GetWindow().GetHeight() / 2) - 1.0  // y in [-1, 1]
-		);
-		glm::vec4 clipPos = glm::vec4(ndcPos, 0.0f, 1.0f);
-		clipPos.z = 1.0f; // -1 near plane or 1.0f for the far plane
+		WI_INFO("NDC: {0} {1}", ndcX, ndcY);
 
-		glm::mat4 PVMat = getProjection() * getView();
+		// Calculate world position at intersection_Y plane
+		glm::vec3 rayOrigin = getPosition();
+		glm::vec3 rayDirection = glm::normalize(glm::unProject(
+			glm::vec3(ndcX, ndcY, 0.0f),
+			getView(),
+			getProjection(),
+			glm::vec4(0, 0, Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight())
+		) - rayOrigin);
+		float t = (intersection_Y - rayOrigin.y) / rayDirection.y;
+		glm::vec3 intersectionPoint = rayOrigin + t * rayDirection;
 
-		glm::mat4 invPVMatrix = glm::inverse(PVMat);
-		glm::vec4 worldPos = invPVMatrix * clipPos;
-		worldPos /= worldPos.w;
-
-		return worldPos;
+		return intersectionPoint;
 	}
 
 	void Camera::lookat(const glm::vec3 position)
