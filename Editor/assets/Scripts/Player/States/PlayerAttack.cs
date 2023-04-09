@@ -28,15 +28,24 @@ namespace Game
 
             mousePos.x = Input.GetMouseX();
             mousePos.y = Input.GetMouseY();
-            System.UInt64 cam_id = CameraManager.GetActiveCamera();
+        
          
-            Vector3 worldPos = CameraManager.ScreenToWorlPosition(cam_id, mousePos, stateMachine.GetTransform().Position.y);
-            Console.WriteLine("mouse screen pos: "+ mousePos.x + " " + mousePos.y);
-            Console.WriteLine("mouse world pos: "+ worldPos.x + " " + worldPos.y + " " + worldPos.z);
-  
-            if(stateMachine.shootInput == Vector3Values.zero)
+     
+   
+            
+
+            if (stateMachine.shootInput == Vector3Values.zero)
             {
-                stateMachine.direction = worldPos - stateMachine.GetTransform().Position;
+                System.UInt64 cam_id = CameraManager.GetActiveCamera();
+                //  stateMachine.direction = worldPos - stateMachine.GetTransform().Position;
+ 
+
+               Vector3 worldPos = CameraManager.ScreenToWorlPosition(cam_id, mousePos, stateMachine.GetTransform().Position.y);
+               // Vector2 wnp = CameraManager.GetNormalizedScreenPos(cam_id, mousePos);
+               //-x cuz of window origin
+                stateMachine.direction.x = -worldPos.x;
+                stateMachine.direction.y = worldPos.y;
+                stateMachine.direction.z = worldPos.z;
             }
             else
             {

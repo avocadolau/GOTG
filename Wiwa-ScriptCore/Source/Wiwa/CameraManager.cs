@@ -30,6 +30,10 @@
         public static Vector3 ScreenToWorlPosition(CameraId camid, Vector2 screenPos, float intersection_y)
         {
             return  InternalCalls.ScreenToWorlPosition(camid, screenPos, intersection_y);
+        }        
+        public static Vector2 GetNormalizedScreenPos(CameraId camid, Vector2 screenPos)
+        {
+            return  InternalCalls.GetNormalizedScreenPos(camid, screenPos);
         }
     }
 }

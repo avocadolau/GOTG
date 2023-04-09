@@ -45,3 +45,9 @@ glm::vec3 ScreenToWorlPosition(size_t camid, glm::vec2 screenPos, float intersec
 	Wiwa::Camera* cam = cm.getCamera(camid);
 	return cam->ScreenToWorlPosition(screenPos, intersection_y);
 }
+glm::vec2 GetNormalizedScreenPos(size_t camid, glm::vec2 screenPos)
+{
+	Wiwa::CameraManager& cm = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
+	Wiwa::Camera* cam = cm.getCamera(camid);
+	return cam->GetNormalizedScreenPos(screenPos);
+}

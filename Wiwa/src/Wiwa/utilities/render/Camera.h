@@ -61,6 +61,7 @@ namespace Wiwa {
 		void setFront(const glm::vec3 front);
 
 		glm::vec3 ScreenToWorlPosition(glm::vec2 screenPos, float intersection_Y);
+		glm::vec2 GetNormalizedScreenPos(glm::vec2 screenPos);
 
 
 		inline glm::vec3 getPosition() { return m_CameraPos; }
