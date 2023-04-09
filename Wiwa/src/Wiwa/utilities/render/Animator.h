@@ -46,7 +46,12 @@ namespace Wiwa {
 
         inline bool CurrentAnimationHasFinished() { return m_CurrentAnimation->HasFinished(); }
 
-        void ResetAnimation() { m_CurrentTime = 0; }
+        void ResetAnimation() 
+        { 
+            m_CurrentTime = 0;
+            if (m_CurrentAnimation != nullptr)
+                m_CurrentAnimation->m_CurrentTime = 0;
+        }
 
         void Loop(bool Loop)
         {

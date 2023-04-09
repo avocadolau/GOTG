@@ -30,7 +30,10 @@ namespace Wiwa
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
 			if (!enemy->m_WasSpawnedBySpawner)
-				em.DestroyEntity(enemy->GetEntity());
+			{
+				//em.DestroyEntity(enemy->GetEntity());
+				//GameStateManager::s_PhalanxMeleePool->ReturnToPool(enemy->GetEntity());
+			}
 		}
 	}
 

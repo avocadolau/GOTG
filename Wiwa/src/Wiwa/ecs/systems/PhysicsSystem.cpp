@@ -68,9 +68,26 @@ namespace Wiwa {
 		//WI_INFO("Collision leave of --> {}", e_name);
 	}
 
+	void PhysicsSystem::DeactivateBody()
+	{
+		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+	}
+
 	Object* PhysicsSystem::getBody()
 	{
 		return obj;
+	}
+
+	bool PhysicsSystem::OnEnabledFromPool()
+	{
+		
+		return false;
+	}
+
+	bool PhysicsSystem::OnDisabledFromPool()
+	{
+		obj->velocity = { 0,0,0 };
+		return false;
 	}
 
 	void PhysicsSystem::DeleteBody()

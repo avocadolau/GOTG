@@ -5,7 +5,6 @@
 #include <Wiwa/ecs/components/game/Character.h>
 #include "Achievements/AchievementsManager.h"
 
-
 namespace Wiwa
 {
 	RoomType GameStateManager::s_RoomType = RoomType::NONE;
@@ -37,6 +36,7 @@ namespace Wiwa
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
 	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
+	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -457,6 +457,7 @@ namespace Wiwa
 		s_RewardRooms.clear();
 		s_CombatRooms.clear();
 		s_ShopRooms.clear();
+		delete s_PoolManager;
 	}
 
 

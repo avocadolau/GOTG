@@ -12,6 +12,8 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_WaveIt;
 		std::vector<EntityManager::ComponentIterator> m_EnemiesCmp;
 		std::vector<EntityId> m_EnemiesId;
+		std::vector<int> m_PoolType;
+
 		SystemHash physicsSystemHash;
 	public:
 		WaveSystem();
@@ -35,6 +37,7 @@ namespace Wiwa {
 
 		float m_SpawnDelay = 1.0f;
 		float m_TimeSinceLastSpawn = 0.0f;
+		bool m_HasTriggered;
 	};
 }
 

@@ -29,7 +29,7 @@ namespace Wiwa
 		m_TransformIt = GetComponentIterator<Transform3D>();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		m_Timer = enemySpawner->timeBetweenWaves;
-		enemySpawner->hasTriggered = false;
+		enemySpawner->hasTriggered = true;
 
 		SpawnWave();
 	}
@@ -37,12 +37,14 @@ namespace Wiwa
 	void WaveSpawnerSystem::OnUpdate()
 	{
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
-		Wave* currentWave = GetComponentByIterator<Wave>(m_CurrentWaveIt);
+		Wave* currentWave = nullptr;
+		if (m_CurrentWaveIt.c_id != WI_INVALID_INDEX)
+			currentWave = GetComponentByIterator<Wave>(m_CurrentWaveIt);
 
 		// Check current wave
 		if (currentWave)
 		{
-			if (!m_PreviousWaveDestroy && enemySpawner->hasTriggered)
+			if (!m_PreviousWaveDestroy)
 				m_PreviousWaveDestroy = IsWaveFinished(*currentWave);
 		}
 

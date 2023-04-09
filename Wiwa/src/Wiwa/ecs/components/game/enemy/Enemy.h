@@ -9,7 +9,7 @@
 namespace Wiwa {
 	struct WI_API Enemy {
 		int enemyType;
-		int hasFinished;
+		bool hasFinished;
 		glm::vec3 currentRotation;
 	};
 }

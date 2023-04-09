@@ -49,7 +49,7 @@ namespace Wiwa
 
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
-		transform->localPosition.y = 0.0f;
+		//transform->localPosition.y = 0.0f;
 
 		self->currentRotation = transform->localRotation;
 	}
@@ -88,6 +88,44 @@ namespace Wiwa
 		{
 			self->hasFinished = true;
 		}*/
+	}
+
+	bool EnemySystem::OnEnabledFromPool()
+	{
+		Character* stats = GetComponent<Character>();
+		if (stats)
+		{
+			stats->Health = stats->MaxHealth;
+		}
+
+		Enemy* self = GetComponent<Enemy>();
+		if (self)
+		{
+			self->hasFinished = false;
+		}
+		return true;
+	}
+
+	bool EnemySystem::OnDisabledFromPool()
+	{
+		Transform3D* transform = GetComponent<Transform3D>();
+		if (transform)
+		{
+			transform->localPosition.y = 10000.0f;
+		}
+
+		Character* stats = GetComponent<Character>();
+		if (stats)
+		{
+			stats->Health = stats->MaxHealth;
+		}
+
+		Enemy* self = GetComponent<Enemy>();
+		if (self)
+		{
+			self->hasFinished = true;
+		}
+		return true;
 	}
 
 	void EnemySystem::ChasePlayer()

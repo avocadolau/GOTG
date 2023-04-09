@@ -114,4 +114,21 @@ namespace Wiwa
 		m_CurrentState = state;
 		m_CurrentState->EnterState(this);
 	}
+	bool EnemyRangedPhalanx::OnEnabledFromPool()
+	{
+		EnemySystem::OnEnabledFromPool();
+
+		if (m_CurrentState != nullptr && m_SpawnState != nullptr)
+		{
+			m_CurrentState = m_SpawnState;
+			m_CurrentState->EnterState(this);
+		}
+
+		return true;
+	}
+	bool EnemyRangedPhalanx::OnDisabledFromPool()
+	{
+		EnemySystem::OnDisabledFromPool();
+		return false;
+	}
 }

@@ -108,4 +108,23 @@ namespace Wiwa
 		m_CurrentState = state;
 		m_CurrentState->EnterState(this);
 	}
+
+	bool EnemyMeleePhalanx::OnEnabledFromPool()
+	{
+		EnemySystem::OnEnabledFromPool();
+
+		if (m_CurrentState != nullptr && m_SpawnState != nullptr)
+		{
+			m_CurrentState = m_SpawnState;
+			m_CurrentState->EnterState(this);
+		}
+		
+		return false;
+	}
+
+	bool EnemyMeleePhalanx::OnDisabledFromPool()
+	{
+		EnemySystem::OnDisabledFromPool();
+		return false;
+	}
 }

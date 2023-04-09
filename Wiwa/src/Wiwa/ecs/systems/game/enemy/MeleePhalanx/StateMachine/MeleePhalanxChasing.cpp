@@ -33,7 +33,6 @@ namespace Wiwa
 		{
 			m_ChasingTimer = 0.0f;
 			enemy->ChasePlayer();
-
 		}
 
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();

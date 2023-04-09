@@ -51,7 +51,6 @@ namespace Wiwa {
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
-		AIPathFindingManager& GetAIPathFindingManager() { return *m_AIPathFindingManager; }
 		std::vector<InstanceRenderer>& GetInstanceRenderers() { return m_InstanceRenderers; }
 		InstanceRenderer& GetInstanceRenderer(uint32_t index) { return m_InstanceRenderers[index]; }
 		LightManager& GetLightManager() { return *m_LightManager; }
@@ -76,7 +75,6 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		PhysicsManager* m_PhysicsManager;
-		AIPathFindingManager* m_AIPathFindingManager;
 		LightManager* m_LightManager;
 		ParticleManager* m_ParticleManager;
 		GuiManager* m_GuiManager;

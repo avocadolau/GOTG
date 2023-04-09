@@ -9,11 +9,13 @@
 #include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/components/game/wave/Wave.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/game/Pooling/GamePoolingManager.h>
 
 typedef size_t SceneId;
 
 namespace Wiwa {
-
+	class GamePoolingManager;
+	class AchivementsManager;
 	struct DefaultCharacterSettings
 	{
 		int MaxHealth;
@@ -158,5 +160,10 @@ namespace Wiwa {
 		static Scene* s_CurrentScene;
 
 		static Inventory* s_PlayerInventory;
+
+		static AchivementsManager* s_AchivementsManager;
+		
+	public:
+		static GamePoolingManager* s_PoolManager;
 	};
 }

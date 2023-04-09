@@ -39,6 +39,10 @@ namespace Wiwa {
 
 		virtual void ReceiveDamage(int damage);
 
+		bool OnEnabledFromPool() override;
+
+		bool OnDisabledFromPool() override;
+
 		void ChasePlayer();
 
 		bool GoToPosition(glm::vec3 targetedPosition);

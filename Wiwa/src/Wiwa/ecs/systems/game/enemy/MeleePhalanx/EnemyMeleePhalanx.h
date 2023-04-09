@@ -34,6 +34,11 @@ namespace Wiwa {
 		void ReceiveDamage(int damage);
 
 		void SwitchState(MeleePhalanxBaseState* state);
+
+		bool OnEnabledFromPool() override;
+
+		bool OnDisabledFromPool() override;
+
 	};
 }
 

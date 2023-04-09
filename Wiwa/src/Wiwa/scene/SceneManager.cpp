@@ -818,7 +818,6 @@ namespace Wiwa
 
 			AIMapGeneration::ClearMap();
 			AIMapGeneration::OnLoad();
-
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else

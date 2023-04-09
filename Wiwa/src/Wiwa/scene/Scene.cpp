@@ -173,6 +173,8 @@ namespace Wiwa
 
 	void Scene::Unload(bool unload_resources)
 	{
+		GameStateManager::s_PoolManager->UnloadAllPools();
+
 		Audio::StopAllEvents();
 		
 		// Sleep to wait till Audio thread stops all events

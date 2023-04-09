@@ -29,9 +29,15 @@ namespace Wiwa {
 		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 
+		void DeactivateBody();
+
 		void DeleteBody();
 		void CreateBody();
 		Object* getBody();
+
+		bool OnEnabledFromPool() override;
+
+		bool OnDisabledFromPool() override;
 	private:
 		Object* obj = nullptr;
 	};
