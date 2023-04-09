@@ -112,7 +112,7 @@ namespace Wiwa {
 		float ndcX = (2.0f * screenPos.x) / Application::Get().GetWindow().GetWidth() - 1.0f;
 		float ndcY = 1.0f - (2.0f * screenPos.y) / Application::Get().GetWindow().GetHeight();
 
-		WI_INFO("NDC: {0} {1}", ndcX, ndcY);
+		//WI_INFO("NDC: {0} {1}", ndcX, ndcY);
 
 		// Calculate world position at intersection_Y plane
 		glm::vec3 rayOrigin = getPosition();
