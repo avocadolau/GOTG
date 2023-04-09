@@ -110,6 +110,8 @@ namespace Wiwa
         internal extern static void SetCameraFront(System.UInt64 camid, Vector3 vec);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetCameraRotation(System.UInt64 camid, Vector3 vec);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static Vector3 ScreenToWorlPosition(System.UInt64 camid, Vector2 screenPos);
         #endregion
         #region Resources
         [MethodImplAttribute(MethodImplOptions.InternalCall)]

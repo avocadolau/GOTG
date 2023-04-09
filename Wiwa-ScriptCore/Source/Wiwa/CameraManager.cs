@@ -26,6 +26,10 @@
         public static void SetCameraRotation(CameraId camid, Vector3 rot)
         {
             InternalCalls.SetCameraRotation(camid, rot);
+        }       
+        public static Vector3 ScreenToWorlPosition(CameraId camid, Vector2 screenPos)
+        {
+            return  InternalCalls.ScreenToWorlPosition(camid, screenPos);
         }
     }
 }

@@ -88,6 +88,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(CameraLookAt);
 		WI_ADD_INTERNAL_CALL(SetCameraFront);
 		WI_ADD_INTERNAL_CALL(SetCameraRotation);
+		WI_ADD_INTERNAL_CALL(ScreenToWorlPosition);
 
 		// Resources
 		WI_ADD_INTERNAL_CALL(LoadResourceModel);

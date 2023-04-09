@@ -9,7 +9,7 @@ namespace Game
         PlayerBaseState currentState;
         public PlayerIdle idle = new PlayerIdle();
         public PlayerMove move = new PlayerMove();
-        public PlayerMove attack = new PlayerMove();
+        public PlayerAttack attack = new PlayerAttack();
         public PlayerDash dash = new PlayerDash();
         public PlayerDeath death = new PlayerDeath();
         

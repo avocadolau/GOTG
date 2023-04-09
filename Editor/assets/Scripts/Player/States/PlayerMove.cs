@@ -23,7 +23,7 @@ namespace Game
                 stateMachine.SwitchState(ref stateMachine, stateMachine.idle);
                 return;
             }
-            else if (stateMachine.shootInput != Vector3Values.zero) // attack
+            else if (stateMachine.shootInput != Vector3Values.zero || Input.IsMouseKeyDown(1)) // attack
             {
                 stateMachine.SwitchState(ref stateMachine, stateMachine.attack);
                 return;

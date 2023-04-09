@@ -8,6 +8,7 @@ namespace Game
     public class PlayerAttack : PlayerBaseState
     {
         private float shootTimer = 0f;
+        Vector2 mousePos;
         public override void EnterState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
             Console.WriteLine("Player attack");
@@ -15,26 +16,42 @@ namespace Game
         }
         public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
-            if (stateMachine.shootInput == Vector3Values.zero && stateMachine.movementInput == Vector3Values.zero)
+            if ((stateMachine.shootInput == Vector3Values.zero && !Input.IsMouseKeyDown(1)) && stateMachine.movementInput == Vector3Values.zero)
             {
                 stateMachine.SwitchState(ref stateMachine, stateMachine.idle);
                 return;
-            }else if(stateMachine.shootInput == Vector3Values.zero && stateMachine.movementInput != Vector3Values.zero)
+            }else if((stateMachine.shootInput == Vector3Values.zero && !Input.IsMouseKeyDown(1)) && stateMachine.movementInput != Vector3Values.zero)
             {
                 stateMachine.SwitchState(ref stateMachine, stateMachine.move);
                 return;
             }
-            stateMachine.direction = stateMachine.shootInput;
-            stateMachine.SetPlayerRotation(ref stateMachine.GetTransform().LocalRotation, stateMachine.shootInput, 1f);
+
+            mousePos.x = Input.GetMouseX();
+            mousePos.y = Input.GetMouseY();
+            System.UInt64 cam_id = CameraManager.GetActiveCamera();
+         
+            Vector3 worldPos = CameraManager.ScreenToWorlPosition(cam_id, mousePos);
+            worldPos.y = stateMachine.GetTransform().Position.y;
+            Console.WriteLine("mouse world pos: "+ worldPos.x + " " + worldPos.y + " " + worldPos.z);
+            if(stateMachine.shootInput == Vector3Values.zero)
+            {
+                stateMachine.direction = worldPos - stateMachine.GetTransform().LocalRotation;
+            }
+            else
+            {
+                stateMachine.direction = stateMachine.shootInput;
+            }
+
+            stateMachine.SetPlayerRotation(ref stateMachine.GetTransform().LocalRotation, stateMachine.direction, 1f);
             stateMachine.velocity = stateMachine.movementInput * stateMachine.GetCharacter().Speed;
             PhysicsManager.SetLinearVelocity(stateMachine.GetEntity(), stateMachine.velocity);
             shootTimer += Time.DeltaTime();
-            if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper) || Input.IsKeyDown(KeyCode.Space))
+            if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadRigthBumper) || Input.IsMouseKeyDown(0))
             { 
                 Fire(ref stateMachine, stateMachine.shootInput); 
             }
             if (stateMachine.velocity != Vector3Values.zero)
-                Animator.Blend("aiming", true, 0.2f, stateMachine.GetEntity());
+                Animator.PlayAnimationName("running", true, stateMachine.GetEntity());
         }
 
         public override void ExitState(ref PlayerStateMachine stateMachine, EntityId entityId)

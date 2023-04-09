@@ -106,6 +106,25 @@ namespace Wiwa {
 		updateView();
 	}
 
+	glm::vec3 Camera::ScreenToWorlPosition(glm::vec2 screenPos)
+	{
+
+		glm::vec2 ndcPos = glm::vec2(
+			(screenPos.x / Application::Get().GetWindow().GetWidth()) * 2.0f - 1.0f, // x in [-1, 1]
+			(screenPos.y / Application::Get().GetWindow().GetHeight()) * 2.0f - 1.0f  // y in [-1, 1]
+		);
+		glm::vec4 clipPos = glm::vec4(ndcPos, 0.0f, 1.0f);
+		clipPos.z = -1.0f; // -1 near plane or 1.0f for the far plane
+
+		glm::mat4 PVMat = getProjection() * getView();
+
+		glm::mat4 invPVMatrix = glm::inverse(PVMat);
+		glm::vec4 worldPos = invPVMatrix * clipPos;
+		worldPos /= worldPos.w;
+
+		return worldPos;
+	}
+
 	void Camera::lookat(const glm::vec3 position)
 	{
 		m_CameraFront = position - m_CameraPos;
