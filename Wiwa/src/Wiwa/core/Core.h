@@ -26,7 +26,9 @@
 #define BIT(x) (1 << (x))
 #define CLAMP(x, mn, mx) (x) < (mn) ? (x) = (mn) : (x) = (x); (x) > (mx) ? (x) = (mx) : (x) = (x)
 
-#define RAND(min, max) rand() % (max - min + 1) + min;
+#define RAND(min, max) rand() % (max - min + 1) + min
+#define IN_BETWEEN(value, min, max) value >= min && value <= max
+#define IS_DROP_RATE(value, min, max) value >= min && value <= (min + max)
 
 #define PI 3.14159265359
 #define PI_F 3.14159265359f

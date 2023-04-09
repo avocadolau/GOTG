@@ -144,7 +144,7 @@ namespace Wiwa {
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
-		/// <paran name="name"></param>
+		/// <param name="name"></param>
 		static void SpawnItem(glm::vec3 position, uint8_t type, const char* name);
 
 		WI_HARD_INL static class Transform3D* GetPlayerTransform();
@@ -176,6 +176,12 @@ namespace Wiwa {
 		static Inventory* s_PlayerInventory;
 
 		static AchivementsManager* s_AchivementsManager;
+
+		static int s_EnemyDropChances;
+		static int s_ActiveSkillChances;
+		static int s_BuffChances;
+		static int s_PassiveSkillChances;
+		static int s_NPCRoomChances;
 		
 	public:
 		static GamePoolingManager* s_PoolManager;

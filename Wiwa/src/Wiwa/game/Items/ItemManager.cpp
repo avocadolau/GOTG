@@ -183,21 +183,21 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 
 Wiwa::Ability* Wiwa::ItemManager::GetAbility(const char* name)
 {
-	return &m_AbilityPool[name];
+	return &(*m_AbilityPool.find(name)).second;
 }
 
 Wiwa::PassiveSkill* Wiwa::ItemManager::GetPassive(const char* name)
 {
-	return &m_PassiveSkillPool[name];
+	return &(*m_PassiveSkillPool.find(name)).second;
 }
 
 Wiwa::Buff* Wiwa::ItemManager::GetBuff(const char* name)
 {
-	return &m_BuffPool[name];
+	return &(*m_BuffPool.find(name)).second;
 }
 
 Wiwa::Consumable* Wiwa::ItemManager::GetConsumable(const char* name)
 {
-	return &m_ConsumablePool[name];
+	return &(*m_ConsumablePool.find(name)).second;
 }
 
