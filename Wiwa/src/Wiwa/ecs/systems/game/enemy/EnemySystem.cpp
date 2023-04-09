@@ -116,23 +116,23 @@ namespace Wiwa
 				// Healing pills
 				if (chances <= 50)
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Healing Pills");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Healing Pills");
 				}
 				else if (IN_BETWEEN(chances, 51, 75))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Medkit");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Medkit");
 				}
 				else if (IN_BETWEEN(chances, 76, 85))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Shield Booster");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Shield Booster");
 				}
 				else if (IN_BETWEEN(chances, 86, 95))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "First Aid Kit");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "First Aid Kit");
 				}
 				else if (IN_BETWEEN(chances, 96, 100))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Ego's Help");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Ego's Help");
 				}
 			}
 		}
