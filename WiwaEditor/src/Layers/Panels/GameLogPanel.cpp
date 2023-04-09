@@ -19,7 +19,18 @@ void GameLogPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
 	ImGui::TextColored(ImVec4(102, 0, 255, 1), "Panel to check information about room");
-	ImGui::InputInt("Enemy item drop chance", &Wiwa::GameStateManager::s_EnemyDropChances);
+	
+	if (ImGui::CollapsingHeader("Chances"))
+	{
+
+		ImGui::InputInt("Enemy item drop chance", &Wiwa::GameStateManager::s_EnemyDropChances);
+		ImGui::Separator();
+		ImGui::InputInt("Active skill drop chance", &Wiwa::GameStateManager::s_ActiveSkillChances);
+		ImGui::InputInt("Passive skill drop chance", &Wiwa::GameStateManager::s_PassiveSkillChances);
+		ImGui::InputInt("Buff drop chance", &Wiwa::GameStateManager::s_BuffChances);
+		ImGui::InputInt("NPC room chance", &Wiwa::GameStateManager::s_NPCRoomChances);
+	}
+
 	DrawStateInfo();
 	DrawRoomSpawnersInfo();
 	DrawRoomVariables();

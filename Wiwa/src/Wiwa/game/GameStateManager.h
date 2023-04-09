@@ -178,6 +178,10 @@ namespace Wiwa {
 		static AchivementsManager* s_AchivementsManager;
 
 		static int s_EnemyDropChances;
+		static int s_ActiveSkillChances;
+		static int s_BuffChances;
+		static int s_PassiveSkillChances;
+		static int s_NPCRoomChances;
 		
 	public:
 		static GamePoolingManager* s_PoolManager;

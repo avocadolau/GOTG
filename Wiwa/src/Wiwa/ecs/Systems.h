@@ -27,3 +27,5 @@
 #include "systems/game/CharacterInventory.h"
 
 #include "systems/ParticleEmitterExecutor.h"
+
+#include "systems/game/items/RewardRoom.h"

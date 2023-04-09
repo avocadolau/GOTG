@@ -10,15 +10,19 @@ namespace Wiwa
 {
 	RoomType GameStateManager::s_RoomType = RoomType::NONE;
 	RoomState GameStateManager::s_RoomState = RoomState::NONE;
+	
 	bool GameStateManager::s_HasFinshedRoom = false;
 	bool GameStateManager::s_CanPassNextRoom = false;
 	bool GameStateManager::s_PlayerTriggerNext = false;
+	
 	std::vector<GameEvent> GameStateManager::s_PreStartEvents;
 	std::vector<GameEvent> GameStateManager::s_MiddleEvents;
 	std::vector<GameEvent> GameStateManager::s_PostFinishedEvents;
+	
 	int GameStateManager::s_TotalSpawners = 0;
 	int GameStateManager::s_SpawnersFinished = 0;
 	bool GameStateManager::debug = true;
+	
 	SceneId GameStateManager::s_CurrentRoomIndx;
 	SceneId GameStateManager::s_RoomsToShop;
 	SceneId GameStateManager::s_RoomsToBoss;
@@ -26,15 +30,24 @@ namespace Wiwa
 	SceneId GameStateManager::s_LastCombatRoom;
 	SceneId GameStateManager::s_LastRewardRoom;
 	SceneId GameStateManager::s_LastShopRoom;
+	
 	std::vector<int> GameStateManager::s_CombatRooms;
 	std::vector<int> GameStateManager::s_RewardRooms;
 	std::vector<int> GameStateManager::s_ShopRooms;
+	
 	int GameStateManager::s_CurrentRoomsCount;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
+
 	int GameStateManager::s_CurrentCharacter = 0;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
 	EntityId GameStateManager::s_PlayerId = 0;
+	
+	int GameStateManager::s_ActiveSkillChances = 20;
+	int GameStateManager::s_BuffChances = 20;
+	int GameStateManager::s_PassiveSkillChances = 35;
+	int GameStateManager::s_NPCRoomChances = 25;
 	int GameStateManager::s_EnemyDropChances = 100;
+
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
 	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
@@ -466,7 +479,13 @@ namespace Wiwa
 	void GameStateManager::SerializeData()
 	{
 		JSONDocument doc;
+		
 		doc.AddMember("enemy_item_chance", s_EnemyDropChances);
+		doc.AddMember("active_skill_chance", s_ActiveSkillChances);
+		doc.AddMember("passive_skill_chance", s_PassiveSkillChances);
+		doc.AddMember("buff_chance", s_BuffChances);
+		doc.AddMember("npc_chance", s_NPCRoomChances);
+
 		doc.AddMember("intro", s_IntroductionRoom);
 		JSONValue combatRooms = doc.AddMemberArray("combat");
 		for (size_t i = 0; i < s_CombatRooms.size(); i++)
@@ -527,6 +546,18 @@ namespace Wiwa
 		
 		if(doc.HasMember("enemy_item_chance"))
 			s_EnemyDropChances = doc["enemy_item_chance"].as_int();
+
+		if (doc.HasMember("active_skill_chance"))
+			s_ActiveSkillChances = doc["active_skill_chance"].as_int();
+
+		if (doc.HasMember("passive_skill_chance"))
+			s_PassiveSkillChances = doc["passive_skill_chance"].as_int();
+
+		if (doc.HasMember("buff_chance"))
+			s_BuffChances = doc["buff_chance"].as_int();
+		
+		if (doc.HasMember("npc_chance"))
+			s_NPCRoomChances = doc["npc_chance"].as_int();
 
 		if (doc.HasMember("intro")) {
 			s_IntroductionRoom = doc["intro"].as_int();
