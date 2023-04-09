@@ -14,7 +14,7 @@ namespace Game
         public override void EnterState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
             Console.WriteLine("Player move");
-            Animator.PlayAnimationName("running", true, stateMachine.GetEntity());
+            Animator.Blend("running", true, 0.2f, stateMachine.GetEntity());
         }
         public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {

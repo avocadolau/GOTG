@@ -17,6 +17,8 @@ namespace Game
         {
             base.Awake();
             Console.WriteLine("awake player state machine");
+            GameState.SetPlayer(m_EntityId, m_Scene);
+            GameState.LoadPlayerProgression();
         }
 
         public override void Init()

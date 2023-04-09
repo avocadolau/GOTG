@@ -25,7 +25,7 @@ namespace Game
 
             targetPoint = Mathf.PointAlongDirection(stateMachine.GetTransform().LocalPosition, dashDirection, stateMachine.GetCharacter().DashDistance);
 
-            Animator.PlayAnimationName("dash", false, stateMachine.GetEntity());
+            Animator.Blend("dash", false,0.1f, stateMachine.GetEntity());
 
         }
         public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
@@ -36,7 +36,7 @@ namespace Game
                 return;
             }
 
-            stateMachine.velocity = dashDirection * stateMachine.GetCharacter().DashSpeed;
+            stateMachine.velocity += dashDirection * stateMachine.GetCharacter().DashSpeed;
 
             PhysicsManager.SetLinearVelocity(stateMachine.GetEntity(), stateMachine.velocity);
         }

@@ -10,7 +10,7 @@ namespace Game
         public override void EnterState(ref  PlayerStateMachine stateMachine, EntityId entityId)
         {
             Console.WriteLine("Player idle");
-            Animator.PlayAnimationName("idle", true, stateMachine.GetEntity());
+            Animator.Blend("idle", true, 0.3f, stateMachine.GetEntity());
 
             PhysicsManager.SetLinearVelocity(stateMachine.GetEntity(), Vector3Values.zero);
             stateMachine.SetPlayerRotation(ref stateMachine.GetTransform().LocalRotation, stateMachine.direction, 1f);

@@ -167,7 +167,7 @@ namespace Wiwa
 	{
 		m_CurrentTime = 0;
 		//its the same anim just reset the animation with the new parameters
-		if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
+		if ( m_CurrentAnimation != nullptr && strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
 		{
 			m_CurrentAnimation->m_CurrentTime = 0;
 			m_AnimationState = AnimationState::Playing;
@@ -179,8 +179,21 @@ namespace Wiwa
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 			{
+				if (m_CurrentAnimation == nullptr)
+				{
+					m_CurrentAnimation = animation;
+					m_CurrentAnimation->m_CurrentTime = 0;
+					m_BlendTime = 0;
+					m_CurrentAnimation->m_Loop = loop;
+					m_CurrentAnimation->m_HasFinished = false;
+					m_AnimationState = AnimationState::Playing;
+					return;
+				}
 				if (transition)
 				{
+					if(m_CurrentAnimation == nullptr)
+						m_CurrentAnimation = animation;
+
 					m_TargetAnimation = animation;
 					m_BlendDuration = transitionTime;
 					m_BlendTime = 0;

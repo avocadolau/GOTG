@@ -109,9 +109,13 @@ namespace Wiwa {
 	glm::vec3 Camera::ScreenToWorlPosition(glm::vec2 screenPos)
 	{
 
+		//glm::vec2 ndcPos = glm::vec2(
+		//	(screenPos.x / Application::Get().GetWindow().GetWidth()) * 2.0f - 1.0f, // x in [-1, 1]
+		//	(screenPos.y / Application::Get().GetWindow().GetHeight()) * 2.0f - 1.0f  // y in [-1, 1]
+		//);	
 		glm::vec2 ndcPos = glm::vec2(
-			(screenPos.x / Application::Get().GetWindow().GetWidth()) * 2.0f - 1.0f, // x in [-1, 1]
-			(screenPos.y / Application::Get().GetWindow().GetHeight()) * 2.0f - 1.0f  // y in [-1, 1]
+			screenPos.x / (Application::Get().GetWindow().GetWidth() / 2) - 1.0, // x in [-1, 1]
+			screenPos.y / (Application::Get().GetWindow().GetHeight() / 2) - 1.0  // y in [-1, 1]
 		);
 		glm::vec4 clipPos = glm::vec4(ndcPos, 0.0f, 1.0f);
 		clipPos.z = 1.0f; // -1 near plane or 1.0f for the far plane
