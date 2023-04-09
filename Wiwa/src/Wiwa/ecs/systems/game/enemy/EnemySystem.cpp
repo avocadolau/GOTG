@@ -84,10 +84,28 @@ namespace Wiwa
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 
 		statsSelf->Health = statsSelf->Health - damage;
-		/*if (statsSelf->Health <= 0)
+		if (statsSelf->Health <= 0)
 		{
-			self->hasFinished = true;
-		}*/
+			// Notify the player and spawn an item
+			// TODO: Modify depending on the enemy
+			GameStateManager::GetPlayerInventory().AddTokens(15);
+			Character* player = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Character>(GameStateManager::GetPlayerId());
+			// As in the GDD for each enemy the player kills the shield regenerates
+			// TODO: Change with a stats
+			if (player)
+			{
+				player->Shield += 2;
+				if (player->Shield >= player->MaxShield)
+					player->Shield = player->MaxShield;
+			}
+			// Spawn an item
+			uint32_t chances = RAND(1, 100);
+			if (chances < 33)
+			{
+				Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
+				GameStateManager::SpawnRandomItem(t3d->localPosition, 3);
+			}
+		}
 	}
 
 	bool EnemySystem::OnEnabledFromPool()

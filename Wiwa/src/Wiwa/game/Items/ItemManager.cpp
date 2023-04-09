@@ -200,3 +200,4 @@ Wiwa::Consumable* Wiwa::ItemManager::GetConsumable(const char* name)
 {
 	return &m_ConsumablePool[name];
 }
+
