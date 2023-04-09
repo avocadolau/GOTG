@@ -742,7 +742,10 @@ namespace Wiwa
 		Item* item = em.GetComponent<Item>(id);
 		Transform3D* t3d = em.GetComponent<Transform3D>(id);
 
+		WI_CORE_INFO("Spawning item at {}x{}y{}z", position.x, position.y, position.z);
+		
 		t3d->localPosition = position;
+
 		item->item_type = type;
 		for (uint32_t i = 0; i < 128; i++)
 		{

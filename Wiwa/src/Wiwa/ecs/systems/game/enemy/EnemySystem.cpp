@@ -113,6 +113,7 @@ namespace Wiwa
 				// Ego's help 5% = 96 - 100
 				chances = RAND(1, 100);
 				Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
+				
 				// Healing pills
 				if (chances <= 50)
 				{

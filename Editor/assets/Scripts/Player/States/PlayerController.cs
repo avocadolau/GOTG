@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Wiwa;
 
 namespace Game
@@ -17,7 +16,7 @@ namespace Game
         public Vector3 velocity;
         public Vector3 direction;
         public bool DashEnable;
-        public float  cooldownTimer;
+        public float cooldownTimer;
         public virtual void Awake()
         {
             statsIt.componentId = Constants.WI_INVALID_INDEX;
@@ -41,7 +40,7 @@ namespace Game
         }
         public ref Character GetCharacter()
         {
-            return ref GetComponentByIterator<Character>(statsIt); 
+            return ref GetComponentByIterator<Character>(statsIt);
         }
 
         public ref Transform3D GetTransform()
@@ -63,7 +62,7 @@ namespace Game
         {
             EntityId object_id = GetChildByName(obj_name);
             ComponentIterator iterator = GetComponentIterator<Transform3D>(object_id);
-            return  ref GetComponentByIterator<Transform3D>(iterator);
+            return ref GetComponentByIterator<Transform3D>(iterator);
         }
         public void ReceiveDamage(ref Character controller, int damage)
         {
@@ -134,7 +133,7 @@ namespace Game
         {
             return Mathf.Atan2(vector.x, vector.y) * Mathf.Rad2Deg;
         }
-        public  void SetPlayerRotation(ref Vector3 currentRotation, Vector3 input, float rotationSpeed)
+        public void SetPlayerRotation(ref Vector3 currentRotation, Vector3 input, float rotationSpeed)
         {
             float angle = AngleFromVec2(new Vector2(input.x, input.z));
 
@@ -160,8 +159,8 @@ namespace Game
             AddMesh(bullet, "Player/Bullet/PlaneBullet", "Player/Bullet/defaultmaterial.wimaterial");
 
             bulletTransform.LocalPosition = transform.worldMatrix.GetPosition();
-            bulletTransform.LocalRotation = new Vector3(-90f, 0f, playerTransform.LocalRotation.y + 90f);
-            bulletTransform.LocalScale = transform.Scale;
+            bulletTransform.LocalRotation = new Vector3(-90f, playerTransform.LocalRotation.y - 90f, 0f);
+            bulletTransform.LocalScale = new Vector3(2f, 2f, 2f);
 
             cs.radius = 1;
             cb.scalingOffset = new Vector3(1f, 1f, 1f);
