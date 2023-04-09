@@ -1,11 +1,12 @@
 #include <wipch.h>
 #include "RewardRoom.h"
+#include <Wiwa/scene/SceneManager.h>
 
 void Wiwa::RewardRoom::OnInit()
 {
 	uint32_t randomNum = RAND(0, 100);
 	uint32_t counter = 0;
-	Transform3D* t3d = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Transform3D>(m_EntityId);
+	Transform3D* t3d = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(m_EntityId);
 	if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
 	{
 		GameStateManager::SpawnRandomItem(t3d->position, 0);
