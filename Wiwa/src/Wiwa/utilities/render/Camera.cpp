@@ -125,6 +125,7 @@ namespace Wiwa {
 		//return intersectionPoint;
 
 
+
 		//glm::vec4 ndc_coords(ndcX, ndcY, 0, 1);
 
 		//WI_INFO("ndc {0} {1}", ndcX, ndcY);

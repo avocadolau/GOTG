@@ -28,13 +28,8 @@ namespace Game
 
             mousePos.x = Input.GetMouseX();
             mousePos.y = Input.GetMouseY();
-        
-         
-     
-   
             
-
-            if (stateMachine.shootInput == Vector3Values.zero)
+            if(stateMachine.shootInput == Vector3Values.zero)
             {
                 System.UInt64 cam_id = CameraManager.GetActiveCamera();
                 //  stateMachine.direction = worldPos - stateMachine.GetTransform().Position;
@@ -90,7 +85,7 @@ namespace Game
                     Animator.PlayAnimationName("shootleft", false, stateMachine.GetEntity());
                 }
                 shooter.ShootRight = !shooter.ShootRight;
-                stateMachine.SpawnBullet(spawnPoint, shooter, stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
+                stateMachine.SpawnBullet(ref spawnPoint, ref shooter, ref stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
             }
         }
     }

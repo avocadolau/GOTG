@@ -387,12 +387,12 @@ namespace Game
                 if (shooter.ShootRight)
                 {
                     spawnPoint = right;
-                    Animator.PlayAnimationName("shootright",false, m_EntityId);
+                    Animator.PlayAnimationName("shootright", false, m_EntityId);
                 }
                 else
                 {
                     spawnPoint = left;
-                    Animator.PlayAnimationName("shootleft",false, m_EntityId);
+                    Animator.PlayAnimationName("shootleft", false, m_EntityId);
                 }
                 if (isWalking)
                 {
@@ -444,8 +444,8 @@ namespace Game
             AddMesh(bullet, "Player/Bullet/PlaneBullet", "Player/Bullet/defaultmaterial.wimaterial");
 
             bulletTransform.LocalPosition = transform.worldMatrix.GetPosition();
-            bulletTransform.LocalRotation = new Vector3(-90f, 0f, playerTransform.LocalRotation.y + 90f);
-            bulletTransform.LocalScale = transform.Scale;
+            bulletTransform.LocalRotation = new Vector3(-90f, playerTransform.LocalRotation.y - 90f, 0f);
+            bulletTransform.LocalScale = new Vector3(2.0f, 2.0f, 2.0f);
 
             cs.radius = 1;
             cb.scalingOffset = new Vector3(1f, 1f, 1f);

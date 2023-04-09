@@ -21,6 +21,7 @@ namespace Wiwa {
 		m_BoneInfoMap = model->GetBoneInfoMap();
 		m_Loop = false;
 		m_HasFinished = false;
+		m_RootNode = new NodeData();
 		ReadMissingBones(animation, *model);		
 		ReadHeirarchyData(m_RootNode, model->getModelHierarchy(), glm::mat4(1.f));
 	}

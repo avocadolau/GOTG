@@ -69,7 +69,8 @@ namespace Wiwa
 
 	void EnemySystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
-		if (body1->id == m_EntityId && strcmp(body2->selfTagStr,"BULLET") == 0)
+		std::string playerBulletStr = "PLAYER_BULLET";
+		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
@@ -80,6 +81,7 @@ namespace Wiwa
 
 	void EnemySystem::ReceiveDamage(int damage)
 	{
+		WI_INFO("Enemy hit by: {} damage", damage);
 		Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 
@@ -111,26 +113,27 @@ namespace Wiwa
 				// Ego's help 5% = 96 - 100
 				chances = RAND(1, 100);
 				Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
+				
 				// Healing pills
 				if (chances <= 50)
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Healing Pills");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Healing Pills");
 				}
 				else if (IN_BETWEEN(chances, 51, 75))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Medkit");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Medkit");
 				}
 				else if (IN_BETWEEN(chances, 76, 85))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Shield Booster");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Shield Booster");
 				}
 				else if (IN_BETWEEN(chances, 86, 95))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "First Aid Kit");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "First Aid Kit");
 				}
 				else if (IN_BETWEEN(chances, 96, 100))
 				{
-					GameStateManager::SpawnItem(t3d->position, 3, "Ego's Help");
+					GameStateManager::SpawnItem(t3d->localPosition, 3, "Ego's Help");
 				}
 			}
 		}

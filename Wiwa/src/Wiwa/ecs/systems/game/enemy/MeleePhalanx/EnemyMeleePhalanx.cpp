@@ -87,6 +87,8 @@ namespace Wiwa
 
 	void EnemyMeleePhalanx::ReceiveDamage(int damage)
 	{
+		WI_INFO("EnemyRangedPhalanx hit by: {} damage", damage);
+
 		EnemySystem::ReceiveDamage(damage);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
