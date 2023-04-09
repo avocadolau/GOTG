@@ -11,6 +11,9 @@
 
 #include <Wiwa/ecs/components/Mesh.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 namespace Wiwa {
 	
 	EntityManager::EntityManager()
@@ -146,13 +149,8 @@ namespace Wiwa {
 		t3d->scale = t3dparent->scale * t3d->localScale;
 
 		// Calculate local matrix
-		t3d->localMatrix = glm::mat4(1.0f);
-		t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z));
-		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-		t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->localScale.x, t3d->localScale.y, t3d->localScale.z));
-
+		glm::mat4 rotation = glm::toMat4(glm::quat(glm::radians(t3d->localRotation)));
+		t3d->localMatrix = glm::translate(glm::mat4(1.0f), t3d->localPosition) * rotation * glm::scale(glm::mat4(1.0f), t3d->localScale);
 		// Calculate world matrix
 		t3d->worldMatrix = t3dparent->worldMatrix * t3d->localMatrix;
 
@@ -181,13 +179,8 @@ namespace Wiwa {
 			t3d->scale = t3d->localScale;
 
 			// Calculate local matrix
-			t3d->localMatrix = glm::mat4(1.0f);
-			t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->position.x, t3d->position.y, t3d->position.z));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-			t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->scale.x, t3d->scale.y, t3d->scale.z));
-
+			glm::mat4 rotation = glm::toMat4(glm::quat(glm::radians(t3d->localRotation)));
+			t3d->localMatrix = glm::translate(glm::mat4(1.0f), t3d->localPosition) * rotation * glm::scale(glm::mat4(1.0f), t3d->localScale);
 			// Calculate world matrix
 			t3d->worldMatrix = t3d->localMatrix;
 

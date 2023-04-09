@@ -34,8 +34,8 @@ namespace Wiwa
 		Conversation* newConversation = new Conversation();
 
 		newConversation->conversationName = "Test conversation";
-
-	/*	SetDialogText("This is a test dialog in line 1", "We are on node... 1", "agniag", "assets/Fonts/Jade_Smile.ttf", *newConversation);
+		/*
+		SetDialogText("This is a test dialog in line 1", "We are on node... 1", "agniag", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Aaaaaaaa in line 1", "We are on node... 2", "agbQAGIU", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Is this a test dialog in line 1?", "We are on node... 3", "dfgnhNIUFniiauergnb", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("This is a test dialog in line 1!", "We are on node... 4", "hjs89hbjs", "assets/Fonts/Jade_Smile.ttf", *newConversation);
