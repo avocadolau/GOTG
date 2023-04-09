@@ -347,6 +347,7 @@ void AssetsPanel::Draw()
 				{
 					const wchar_t* itemPath = directoryEntry.path().c_str();
 					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+					ImGui::Text(directoryEntry.path().filename().string().c_str());
 					ImGui::EndDragDropSource();
 				}
 

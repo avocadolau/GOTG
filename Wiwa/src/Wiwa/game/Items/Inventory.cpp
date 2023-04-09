@@ -153,6 +153,8 @@ void Wiwa::Inventory::InitGame()
 
 void Wiwa::Inventory::AddAbility(const Ability* ability) const
 {
+	if (!ability)
+		return;
 	// If the first slot is occupied shift the ability one place
 	if(m_Abilities[0])
 	{
@@ -166,6 +168,9 @@ void Wiwa::Inventory::AddAbility(const Ability* ability) const
 
 void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
+	if (!buff)
+		return;
+
 	// If the first slot is occupied shift the buff one place
 	if(m_Buffs[0])
 	{

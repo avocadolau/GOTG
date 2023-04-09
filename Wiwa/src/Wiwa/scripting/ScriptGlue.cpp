@@ -169,6 +169,7 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(PauseAnimation);
 		WI_ADD_INTERNAL_CALL(RestartAnimation);
 		WI_ADD_INTERNAL_CALL(Blend);
+		WI_ADD_INTERNAL_CALL(HasFinished);
 
 		//Particles
 		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayBatch);

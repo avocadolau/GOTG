@@ -145,6 +145,9 @@ void ScenePanel::Draw()
             else if (p.extension() == ".wiscene")
             {
                 EditorLayer::Get().LoadScene(pathS);
+                Wiwa::SceneChangeEvent event(0);
+                Action<Wiwa::Event&> action = { &Wiwa::Application::OnEvent, &Wiwa::Application::Get() };
+                action(event);
             }
             else if (p.extension() == ".wiprefab")
             {
@@ -157,6 +160,7 @@ void ScenePanel::Draw()
                 gm.LoadWiUI(pathS.c_str());
             }
         }
+       
 
         ImGui::EndDragDropTarget();
     }
@@ -207,22 +211,9 @@ void ScenePanel::Draw()
             if (m_SelectedTransform)
             {
                 bool isParent = entityManager.GetEntityParent(m_EntSelected) == m_EntSelected;
-                float tmpMatrix[16];
-                float translation[3], rotation[3], scale[3];
+             
+                glm::mat4x4 tmpMat = m_SelectedTransform->worldMatrix;
 
-                translation[0] = m_SelectedTransform->position.x;
-                translation[1] = m_SelectedTransform->position.y;
-                translation[2] = m_SelectedTransform->position.z;
-
-                rotation[0] = m_SelectedTransform->rotation.x;
-                rotation[1] = m_SelectedTransform->rotation.y;
-                rotation[2] = m_SelectedTransform->rotation.z;
-
-                scale[0] = m_SelectedTransform->scale.x;
-                scale[1] = m_SelectedTransform->scale.y;
-                scale[2] = m_SelectedTransform->scale.z;                
-
-                ImGuizmo::RecomposeMatrixFromComponents(translation, rotation, scale, tmpMatrix);
                 ImGuizmo::MODE mode = isParent ? ImGuizmo::WORLD : ImGuizmo::LOCAL;
                 //Snaping
                 bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
@@ -234,12 +225,13 @@ void ScenePanel::Draw()
                 float snapValues[3] = { snapValue, snapValue, snapValue };
 
                 ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-                    (ImGuizmo::OPERATION)m_GizmoType, mode, tmpMatrix,
+                    (ImGuizmo::OPERATION)m_GizmoType, mode, glm::value_ptr(tmpMat),
                     nullptr, snap ? snapValues : nullptr);
 
                 if (ImGuizmo::IsUsing())
                 {
-                    ImGuizmo::DecomposeMatrixToComponents(tmpMatrix, translation, rotation, scale);
+                    float translation[3], rotation[3], scale[3];
+                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(tmpMat), translation, rotation, scale);
 
                     switch (m_GizmoType)
                     {

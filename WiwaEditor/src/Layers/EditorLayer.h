@@ -63,7 +63,7 @@ public:
 	void OnImGuiRender() override;
 	void OnEvent(Wiwa::Event &e) override;
 
-	void LoadScene(const std::string& m_Path);
+	SceneId LoadScene(const std::string& m_Path);
 
 	inline int GetGizmo() { return m_GizmoType; }
 

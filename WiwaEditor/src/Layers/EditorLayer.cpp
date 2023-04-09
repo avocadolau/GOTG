@@ -206,7 +206,7 @@ void EditorLayer::OnEvent(Wiwa::Event &e)
 	}
 }
 
-void EditorLayer::LoadScene(const std::string &m_Path)
+SceneId EditorLayer::LoadScene(const std::string &m_Path)
 {
 	// Load scene and prepare it
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str(), Wiwa::SceneManager::LoadFlags::LOAD_DEFAULT | Wiwa::SceneManager::LoadFlags::LOAD_NO_INIT);
@@ -217,6 +217,7 @@ void EditorLayer::LoadScene(const std::string &m_Path)
 	m_OpenedScenePath = m_Path;
 	m_EditorSceneId = id;
 	m_EditorScene = scene;
+	return id;
 }
 
 static bool threadExec = false;

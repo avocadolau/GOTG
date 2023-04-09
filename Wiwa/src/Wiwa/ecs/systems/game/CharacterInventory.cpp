@@ -20,6 +20,12 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		Wiwa::EntityManager& em = _scene->GetEntityManager();
 		Item* item = em.GetComponent<Item>(body2->id);
 		
+		if (!item)
+		{
+			WI_CORE_ERROR("Item component can't be find");
+			return;
+		}
+
 		if (item->item_type == 0)//ABILITY
 		{
 			Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
