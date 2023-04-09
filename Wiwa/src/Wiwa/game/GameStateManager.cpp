@@ -148,36 +148,35 @@ namespace Wiwa
 
 	void GameStateManager::UpdateCombatRoom()
 	{
-		//Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		//em.RegisterComponent<WaveSpawner>();
-		//size_t size = 0;
-		//ComponentHash cmpHash = FNV1A_HASH("WavesSpawner");
-		//Wiwa::WaveSpawner* enemySpawnerList = (Wiwa::WaveSpawner*)em.GetComponentsByHash(cmpHash, &size);
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		size_t size = 0;
+		ComponentId cmpId = em.GetComponentId<WaveSpawner>();
+		Wiwa::WaveSpawner* enemySpawnerList = (Wiwa::WaveSpawner*)em.GetComponents(cmpId, &size);
 
-		//s_TotalSpawners = 0;
-		//s_SpawnersFinished = 0;
-		//if (enemySpawnerList)
-		//{
-		//	for (int i = 0; i < size; i++)
-		//	{
-		//		if (em.IsComponentRemovedByHash(cmpHash, i)) {
-		//			//WI_INFO("Removed at: [{}]", i);
-		//		}
-		//		else
-		//		{
-		//			s_TotalSpawners += 1;
+		s_TotalSpawners = 0;
+		s_SpawnersFinished = 0;
+		if (enemySpawnerList)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (em.IsComponentRemoved(cmpId, i)) {
+					//WI_INFO("Removed at: [{}]", i);
+				}
+				else
+				{
+					s_TotalSpawners += 1;
 
-		//			Wiwa::WavesSpawner* c = &enemySpawnerList[i];
-		//			if (c)
-		//			{
-		//				if (c->hasFinished)
-		//					s_SpawnersFinished += 1;
-		//			}
-		//		}
-		//	}
-		//	s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
-		//	s_CanPassNextRoom = s_HasFinshedRoom;
-		//}
+					Wiwa::WaveSpawner* spawner = &enemySpawnerList[i];
+					if (spawner)
+					{
+						if (spawner->hasFinished)
+							s_SpawnersFinished += 1;
+					}
+				}
+			}
+			s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
+			s_CanPassNextRoom = s_HasFinshedRoom;
+		}
 	
 
 		if (s_HasFinshedRoom)

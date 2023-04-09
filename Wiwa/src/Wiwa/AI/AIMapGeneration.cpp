@@ -276,11 +276,11 @@ bool Wiwa::AIMapGeneration::BakeCube(const CollisionBody& body, const ColliderCu
 	//glm::ivec2 bottomRightTile = Wiwa::AIMapGeneration::WorldToMap(bottomRight.x, bottomRight.y);
 	//glm::ivec2 topRightTile = Wiwa::AIMapGeneration::WorldToMap(topRight.x, topRight.y);
 
-	//// Determine the minimum and maximum x and y tile indices
-	//minX = std::min({ topLeft.x, bottomLeft.x, bottomRight.x, topRight.x });
-	//minY = std::min({ topLeft.y, bottomLeft.y, bottomRight.y, topRight.y });
-	//maxX = std::max({ topLeft.x, bottomLeft.x, bottomRight.x, topRight.x });
-	//maxY = std::max({ topLeft.y, bottomLeft.y, bottomRight.y, topRight.y });
+	// Determine the minimum and maximum x and y tile indices
+	/*minX = std::min({ topLeftMap.x, bottomLeftMap.x, bottomRightMap.x, topRightMap.x });
+	minY = std::min({ topLeftMap.y, bottomLeftMap.y, bottomRightMap.y, topRightMap.y });
+	maxX = std::max({ topLeftMap.x, bottomLeftMap.x, bottomRightMap.x, topRightMap.x });
+	maxY = std::max({ topLeftMap.y, bottomLeftMap.y, bottomRightMap.y, topRightMap.y });*/
 	//// Loop over all tiles within the bounding box
 	//for (float y = minY; y <= maxY; y++) {
 	//	for (float x = minX; x <= maxX; x++) {
@@ -340,7 +340,14 @@ void Wiwa::AIMapGeneration::DrawMinMaxRect()
 	glLoadMatrixf(glm::value_ptr(camera->getView()));
 
 	glColor4f(1, 1, 0, 1);
-
+	//glm::ivec2 vecmin = MapToWorld(minX, minY);
+	//glm::ivec2 vecmax = MapToWorld(maxX, maxY);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode to wireframe
+	//glBegin(GL_QUADS); // Begin drawing the quad   
+	//glVertex3f(vecmin.x, 4, vecmin.y); // Bottom-left vertex
+	//glVertex3f(vecmax.x, 4, vecmin.y); // Bottom-right vertex
+	//glVertex3f(vecmax.x, 4, vecmax.y); // Top-right vertex
+	//glVertex3f(vecmin.x, 4, vecmax.y); // Top-left vertex
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Set the polygon mode to wireframe
 	glBegin(GL_QUADS); // Begin drawing the quad   
 	glVertex3f(minX, 4, minY); // Bottom-left vertex
