@@ -691,7 +691,7 @@ namespace Wiwa
 			return;
 		}break;
 		}
-		EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
 		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
 
 		Item* item = em.GetComponent<Item>(id);

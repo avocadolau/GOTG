@@ -34,7 +34,7 @@ namespace Wiwa
 		Conversation* newConversation = new Conversation();
 
 		newConversation->conversationName = "Test conversation";
-
+		/*
 		SetDialogText("This is a test dialog in line 1", "We are on node... 1", "agniag", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Aaaaaaaa in line 1", "We are on node... 2", "agbQAGIU", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Is this a test dialog in line 1?", "We are on node... 3", "dfgnhNIUFniiauergnb", "assets/Fonts/Jade_Smile.ttf", *newConversation);
@@ -44,7 +44,7 @@ namespace Wiwa
 
 		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *newConversation);
 		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *newConversation);
-		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *newConversation);
+		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *newConversation);*/
 
 		conversations.push_back(newConversation);
 

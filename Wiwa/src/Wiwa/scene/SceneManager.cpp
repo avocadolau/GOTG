@@ -761,8 +761,7 @@ namespace Wiwa
 				SaveEntity(scene_file, eid, em);
 			}
 
-			// Save Physics Manager json Data
-			sc->GetPhysicsManager().OnSave();
+			
 			AIMapGeneration::OnSave();
 			WI_CORE_INFO("Saved scene in file \"{0}\" successfully!", scene_path);
 		}
