@@ -114,7 +114,7 @@ namespace Wiwa {
 			(screenPos.y / Application::Get().GetWindow().GetHeight()) * 2.0f - 1.0f  // y in [-1, 1]
 		);
 		glm::vec4 clipPos = glm::vec4(ndcPos, 0.0f, 1.0f);
-		clipPos.z = -1.0f; // -1 near plane or 1.0f for the far plane
+		clipPos.z = 1.0f; // -1 near plane or 1.0f for the far plane
 
 		glm::mat4 PVMat = getProjection() * getView();
 
