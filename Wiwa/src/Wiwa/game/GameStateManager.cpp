@@ -34,6 +34,7 @@ namespace Wiwa
 	int GameStateManager::s_CurrentCharacter = 0;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
 	EntityId GameStateManager::s_PlayerId = 0;
+	int GameStateManager::s_EnemyDropChances = 100;
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
 	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
@@ -465,6 +466,7 @@ namespace Wiwa
 	void GameStateManager::SerializeData()
 	{
 		JSONDocument doc;
+		doc.AddMember("enemy_item_chance", s_EnemyDropChances);
 		doc.AddMember("intro", s_IntroductionRoom);
 		JSONValue combatRooms = doc.AddMemberArray("combat");
 		for (size_t i = 0; i < s_CombatRooms.size(); i++)
@@ -522,6 +524,10 @@ namespace Wiwa
 	{
 		JSONDocument doc;
 		doc.load_file("config/room_data.json");
+		
+		if(doc.HasMember("enemy_item_chance"))
+			s_EnemyDropChances = doc["enemy_item_chance"].as_int();
+
 		if (doc.HasMember("intro")) {
 			s_IntroductionRoom = doc["intro"].as_int();
 		}

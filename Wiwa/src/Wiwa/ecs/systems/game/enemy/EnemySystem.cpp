@@ -59,7 +59,7 @@ namespace Wiwa
 		if (Input::IsKeyPressed(Wiwa::Key::M))
 		{
 			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-			stats->Health = 0;
+			ReceiveDamage(100000);
 		}
 	}
 
@@ -99,11 +99,39 @@ namespace Wiwa
 					player->Shield = player->MaxShield;
 			}
 			// Spawn an item
-			uint32_t chances = RAND(1, 100);
-			if (chances < 33)
+			uint32_t chances = RAND(0, 100);
+			
+			if (chances <= GameStateManager::s_EnemyDropChances)
 			{
+				// Chances 09/04/2023 (all inclusive)
+				// Healing pills 50% = 1 - 50
+				// Medkit 25% = 51 - 75
+				// Shield booster 10% = 76 - 85
+				// First aid kit 10% = 86 - 95
+				// Ego's help 5% = 96 - 100
+				chances = RAND(1, 100);
 				Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
-				GameStateManager::SpawnRandomItem(t3d->localPosition, 3);
+				// Healing pills
+				if (chances <= 50)
+				{
+					GameStateManager::SpawnItem(t3d->position, 3, "Healing Pills");
+				}
+				else if (IN_BETWEEN(chances, 51, 75))
+				{
+					GameStateManager::SpawnItem(t3d->position, 3, "Medkit");
+				}
+				else if (IN_BETWEEN(chances, 76, 85))
+				{
+					GameStateManager::SpawnItem(t3d->position, 3, "Shield Booster");
+				}
+				else if (IN_BETWEEN(chances, 86, 95))
+				{
+					GameStateManager::SpawnItem(t3d->position, 3, "First Aid Kit");
+				}
+				else if (IN_BETWEEN(chances, 96, 100))
+				{
+					GameStateManager::SpawnItem(t3d->position, 3, "Ego's Help");
+				}
 			}
 		}
 	}
