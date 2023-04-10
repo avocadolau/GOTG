@@ -11,6 +11,7 @@ namespace Wiwa
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
+		m_HitState = nullptr;
 	}
 
 	EnemyMeleePhalanx::~EnemyMeleePhalanx()
@@ -25,6 +26,7 @@ namespace Wiwa
 		m_ChasingState = new MeleePhalanxChasingState();
 		m_AttackingState = new MeleePhalanxAttackState();
 		m_DeathState = new MeleePhalanxDeathState();
+		m_HitState = new MeleePhalanxHitState();
 	}
 
 	void EnemyMeleePhalanx::OnInit()
@@ -70,12 +72,15 @@ namespace Wiwa
 		if (m_DeathState != nullptr)
 			delete m_DeathState;
 
+		if (m_HitState != nullptr)
+			delete m_HitState;
+
 		m_CurrentState = nullptr;
 		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
-		m_DeathState = nullptr;
+		m_HitState = nullptr;
 	}
 
 	void EnemyMeleePhalanx::OnCollisionEnter(Object* body1, Object* body2)
@@ -90,7 +95,8 @@ namespace Wiwa
 		WI_INFO("EnemyRangedPhalanx hit by: {} damage", damage);
 
 		EnemySystem::ReceiveDamage(damage);
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		SwitchState(m_HitState);
+		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
 
 		EntityId hit_1 = em.GetChildByName(m_EntityId, "E_Hit_1");
@@ -100,7 +106,7 @@ namespace Wiwa
 		pman.EmitBatch(hit_2);
 
 
-		animator->PlayAnimation("hit", false);
+		animator->PlayAnimation("hit", false);*/
 		//PlaySound(ScriptEngine::CreateString("melee_hit"), m_PlayerId);
 	}
 

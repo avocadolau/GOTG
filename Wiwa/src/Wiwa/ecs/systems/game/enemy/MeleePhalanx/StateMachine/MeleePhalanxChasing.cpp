@@ -29,7 +29,7 @@ namespace Wiwa
 	{
 		m_ChasingTimer += Time::GetDeltaTime();
 
-		if (m_ChasingTimer > 100.0f)
+		if (m_ChasingTimer > 1000.0f)
 		{
 			m_ChasingTimer = 0.0f;
 			enemy->ChasePlayer();

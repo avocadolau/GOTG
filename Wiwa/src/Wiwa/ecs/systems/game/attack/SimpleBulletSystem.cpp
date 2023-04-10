@@ -64,6 +64,13 @@ namespace Wiwa
 	{
 		if (body1->id == m_EntityId)
 		{
+			std::string playerStr = "PLAYER";
+			if (playerStr == body2->selfTagStr)
+			{
+				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
+				GameStateManager::DamagePlayer(bullet->damage);
+			}
+	
 			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			em.DestroyEntity(m_EntityId);
 		}

@@ -29,6 +29,7 @@ namespace Wiwa
 		m_ChasingState = new RangedPhalanxChasingState();
 		m_AttackingState = new RangedPhalanxAttackState();
 		m_DeathState = new RangedPhalanxDeathState();
+		m_HitState = new RangedPhalanxHitState();
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
@@ -78,12 +79,16 @@ namespace Wiwa
 		if (m_DeathState != nullptr)
 			delete m_DeathState;
 
+		if (m_HitState != nullptr)
+			delete m_HitState;
+
 		m_CurrentState = nullptr;
 		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
+		m_HitState = nullptr;
 	}
 
 	void EnemyRangedPhalanx::OnCollisionEnter(Object* body1, Object* body2)
@@ -98,7 +103,8 @@ namespace Wiwa
 		WI_INFO("EnemyRangedPhalanx hit by: {} damage", damage);
 
 		EnemySystem::ReceiveDamage(damage);
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		SwitchState(m_HitState);
+		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
 
 		EntityId hitR_1 = em.GetChildByName(m_EntityId, "ER_Hit_1");
@@ -107,7 +113,7 @@ namespace Wiwa
 		pman.EmitBatch(hitR_1);
 		pman.EmitBatch(hitR_2);
 
-		animator->PlayAnimation("damage", false);
+		animator->PlayAnimation("damage", false);*/
 	}
 
 	void EnemyRangedPhalanx::SwitchState(RangedPhalanxBaseState* state)

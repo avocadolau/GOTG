@@ -20,11 +20,13 @@
 #include "systems/game/enemy/RangedPhalanx/EnemyRangedPhalanx.h"
 
 #include "systems/game/attack/SimpleBulletSystem.h"
-
+#include "systems/game/player/PlayerSpawner.h"
 
 #include "systems/game/attack/VictoryShieldSystem.h"
 
 #include "systems/game/attack/PhylasQuantumSwordSystem.h"
+
+#include "systems/game/attack/GrootSeedsSystem.h"
 
 #include "systems/game/CharacterInventory.h"
 

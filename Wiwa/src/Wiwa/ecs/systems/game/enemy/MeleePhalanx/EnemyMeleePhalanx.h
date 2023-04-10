@@ -5,6 +5,7 @@
 #include "StateMachine/MeleePhalanxIdle.h"
 #include "StateMachine/MeleePhalanxSpawn.h"
 #include "StateMachine/MeleePhalanxDeath.h"
+#include "StateMachine/MeleePhalanxHit.h"
 
 namespace Wiwa {
 	class WI_API EnemyMeleePhalanx : public EnemySystem {
@@ -15,6 +16,7 @@ namespace Wiwa {
 		MeleePhalanxChasingState* m_ChasingState;
 		MeleePhalanxAttackState* m_AttackingState;
 		MeleePhalanxDeathState* m_DeathState;
+		MeleePhalanxHitState* m_HitState;
 
 		float m_Timer;
 	public:
