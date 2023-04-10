@@ -147,7 +147,7 @@ namespace Game
         }
         public void SpawnBullet(ref Transform3D transform, ref StarlordShooter shooter, ref Character character, Vector3 bullDir)
         {
-            Console.WriteLine("fired");
+            //Console.WriteLine("fired");
 
             string bulletName = "Bullet";
 
