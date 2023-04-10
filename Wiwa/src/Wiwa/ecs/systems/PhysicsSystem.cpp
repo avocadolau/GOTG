@@ -120,8 +120,6 @@ namespace Wiwa {
 
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		rb->scalingOffset = glm::vec3(1, 1, 1);
-
 		if (rb)
 		{
 			if (cube)
