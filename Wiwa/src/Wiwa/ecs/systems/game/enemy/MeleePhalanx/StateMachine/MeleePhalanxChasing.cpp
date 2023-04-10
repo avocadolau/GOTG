@@ -31,18 +31,21 @@ namespace Wiwa
 	{
 		m_ChasingTimer += Time::GetDeltaTime();
 
-		if (m_ChasingTimer > 1000.0f)
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
+
+		if (m_ChasingTimer > 1000.0f && distance <= 50.0f)
 		{
 			m_ChasingTimer = 0.0f;
 			enemy->ChasePlayer();
 		}
 
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
-
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		
 		
 		if (animator->HasFinished() )//&& !IsPlaying(enemy->GetEntity())
 		{
