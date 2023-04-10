@@ -20,9 +20,9 @@ namespace Wiwa
 		std::vector<InstanceRenderer>& instance_list = scene->GetInstanceRenderers();
 		size_t size = instance_list.size();
 
-		int id = -1;
+		uint32_t id = -1;
 
-		for (size_t i = 0; i < size; i++) {
+		for (uint32_t i = 0; i < size; i++) {
 			int addtex = instance_list[i].AddTexture(textureId);
 
 			if (addtex != -1) {

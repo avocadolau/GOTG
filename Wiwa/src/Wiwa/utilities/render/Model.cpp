@@ -301,7 +301,7 @@ namespace Wiwa {
 		{
 			//allocate an index for a new bone
 			boneid = m_BoneInfoMap.size();
-			m_BoneInfoMap[bone_name].id = boneid;
+			m_BoneInfoMap[bone_name].id = (uint32_t)boneid;
 		}
 		else {
 			boneid = m_BoneInfoMap[bone_name].id;

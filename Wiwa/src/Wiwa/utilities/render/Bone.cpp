@@ -181,7 +181,7 @@ namespace Wiwa {
         int p0Index = GetScaleIndex(animationTime);
         int p1Index = p0Index + 1;
         float scaleFactor = GetScaleFactor(m_Scales[p0Index].time,
-            m_Scales[p1Index].time, animationTime);
+            (float)m_Scales[p1Index].time, animationTime);
         glm::vec3 finalScale = glm::mix(m_Scales[p0Index].value, m_Scales[p1Index].value, scaleFactor);
         return glm::scale(glm::mat4(1.0f), finalScale);
     }

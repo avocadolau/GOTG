@@ -80,7 +80,7 @@ namespace Wiwa
 			idGuiSelected--;
 			if (idGuiSelected <= -1)
 			{
-				idGuiSelected = controlsForSelection.size() - 1;
+				idGuiSelected = (int)controlsForSelection.size() - 1;
 			}
 			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
 			{

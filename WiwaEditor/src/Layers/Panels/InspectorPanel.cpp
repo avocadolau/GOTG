@@ -1203,7 +1203,7 @@ void InspectorPanel::DrawParticleEmitterComponent(byte *data)
 			if (texture != nullptr)
 				image_id = texture->GetTextureId();
 
-			ImGui::Image(ImTextureID(image_id), { 128,128 });
+			ImGui::Image((ImTextureID)(intptr_t)(image_id), { 128,128 });
 
 			if (ImGui::BeginDragDropTarget())
 			{

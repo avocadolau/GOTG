@@ -110,7 +110,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue actives = document["actives"];
 		if (actives.IsArray())
 		{
-			for (size_t i = 0; i < actives.Size(); i++)
+			for (uint32_t i = 0; i < actives.Size(); i++)
 			{
 				Wiwa::Ability ability;
 				ability.Name = actives[i]["name"].as_string();
@@ -131,7 +131,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue passives = document["passives"];
 		if (passives.IsArray())
 		{
-			for (size_t i = 0; i < passives.Size(); i++)
+			for (uint32_t i = 0; i < passives.Size(); i++)
 			{
 				Wiwa::PassiveSkill ability;
 				ability.Name = passives[i]["name"].as_string();
@@ -167,7 +167,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue actives = document["consumables"];
 		if (actives.IsArray())
 		{
-			for (size_t i = 0; i < actives.Size(); i++)
+			for (uint32_t i = 0; i < actives.Size(); i++)
 			{
 				Wiwa::Consumable ability;
 				ability.Name = actives[i]["name"].as_string();

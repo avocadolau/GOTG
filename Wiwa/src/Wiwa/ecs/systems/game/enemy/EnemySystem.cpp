@@ -101,7 +101,7 @@ namespace Wiwa
 					player->Shield = player->MaxShield;
 			}
 			// Spawn an item
-			uint32_t chances = RAND(0, 100);
+			int chances = RAND(0, 100);
 			
 			if (chances <= GameStateManager::s_EnemyDropChances)
 			{

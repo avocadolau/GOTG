@@ -18,7 +18,12 @@ class ModelHierarchy;
 namespace Wiwa {
 	struct NodeData
 	{
-		NodeData() {};
+		NodeData()
+			: transformation(1.f),
+			globalTransformation(1.f),
+			name(),
+			childrenCount(0)
+		{};
 		~NodeData() {
 			for (auto child : children) {
 				delete child; 
