@@ -52,6 +52,8 @@ namespace Wiwa
 
     void Ability::PhylasQuantumSword()
     {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId phylasSword = em.LoadPrefab("assets/Prefabs/PhylasSword.wiprefab");
     }
 
     void Ability::StarhawksBlast()
