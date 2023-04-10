@@ -254,11 +254,21 @@ namespace Wiwa {
 		//load name
 		size_t name_len;
 		file.Read(&name_len, sizeof(size_t));
+		if (name_len > 100)
+		{
+			WI_ERROR("ANIMATION: string length oversize -- LoadWiAnimation");
+			return nullptr;
+		}
 		anim->m_Name.resize(name_len);
 		file.Read(&anim->m_Name[0], name_len);
 		//load save path
 		size_t savep_len;
 		file.Read(&savep_len, sizeof(size_t));
+		if (savep_len > 500)
+		{
+			WI_ERROR("ANIMATION: string length oversize -- LoadWiAnimation");
+			return nullptr;
+		}
 		anim->m_SavePath.resize(savep_len);
 		file.Read(&anim->m_SavePath[0], savep_len);
 
