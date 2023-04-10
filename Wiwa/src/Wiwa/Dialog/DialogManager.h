@@ -9,13 +9,16 @@
 
 #include "DialogNode.h"
 
+#define MAX_CONVERSATIONS 50
+#define MAX_CONVERSATION_NODES 25
+
 namespace Wiwa
 {
 	struct Conversation
 	{
 
 		// All nodes
-		std::vector<DialogNode*> nodes;
+		DialogNode nodes[MAX_CONVERSATION_NODES];
 
 		// Dialog bg image, character and continue button
 		Wiwa::Renderer2D::InstanceData dialogImgID;
@@ -27,6 +30,8 @@ namespace Wiwa
 		Image* continueImg = nullptr;
 
 		char* conversationName;
+
+		bool occupied = false;
 	};
 
 	class WI_API DialogManager
@@ -53,27 +58,27 @@ namespace Wiwa
 		// Called before quitting
 		bool CleanUp();
 
-		void UpdateConversation(Conversation conversation, Renderer2D* render);
+		void UpdateConversation(int conversationNumber, Renderer2D* render);
 
 		// Set the dialog font and texts
-		void SetDialogText(char* line1Text, char* line2Text, char* line3Text, const char* fontPath, Conversation& conversation);
+		void SetDialogText(char* line1Text, char* line2Text, char* line3Text, const char* fontPath, int conversationNumber, int nodeNumber);
 
 		// Set the dialog background images
-		void SetDialogBubbleImage(const char* path, Conversation& conversation);
-		void SetCharacterImage(const char* path, Conversation& conversation);
-		void SetContinueIndicatorImage(const char* path, Conversation& conversation);
+		void SetDialogBubbleImage(const char* path, int conversationNumber);
+		void SetCharacterImage(const char* path, int conversationNumber);
+		void SetContinueIndicatorImage(const char* path, int conversationNumber);
 
 	public:
 
 		char* conversationToPlayName;
-		std::vector<Conversation*> conversations;
+		Conversation conversations[MAX_CONVERSATIONS];
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
 		int currentNode = 0;
 
 		int keyPressRefreshTimer = 0;
 
-		Conversation* conversationCreator_P;
+		//Conversation* conversationCreator_P;
 
 		bool collidingWithNpc = false;
 		char* NpcConversationTag;

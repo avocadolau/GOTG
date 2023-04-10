@@ -15,4 +15,6 @@ struct DialogNode
 	Wiwa::Text* text1_imgMode;
 	Wiwa::Text* text2_imgMode;
 	Wiwa::Text* text3_imgMode;
+
+	bool occupied = false;
 };
