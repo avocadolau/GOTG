@@ -68,7 +68,7 @@ namespace Wiwa
 
 		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", 0);
 		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
-		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_watcher-01.png", 0);
+		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
 
 		conversations[0].occupied = true;
 
