@@ -69,6 +69,10 @@ namespace Wiwa
 			{
 				idGuiSelected = 0;
 			}
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
+			}
 		}
 		if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
 		{
@@ -78,13 +82,14 @@ namespace Wiwa
 			{
 				idGuiSelected = controlsForSelection.size() - 1;
 			}
-		}
-		if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
-		{
 			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
 			{
 				Audio::PostEvent("pause_sound");
 			}
+		}
+		if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
+		{
+			
 			SelectElement(idGuiSelected);
 
 		}

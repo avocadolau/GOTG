@@ -102,7 +102,7 @@ namespace Wiwa
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
-		//Wiwa::GameStateManager::DeserializeData();
+		Wiwa::GameStateManager::DeserializeData();
 	}
 
 	void Application::SetHwInfo()
