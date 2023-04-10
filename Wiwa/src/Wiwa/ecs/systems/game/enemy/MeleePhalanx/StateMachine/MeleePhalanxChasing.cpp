@@ -23,6 +23,8 @@ namespace Wiwa
 		animator->Blend("walk",true,0.2f);
 
 		enemy->m_Timer = 0;
+		enemy->ChasePlayer();
+
 	}
 	
 	void MeleePhalanxChasingState::UpdateState(EnemyMeleePhalanx* enemy)

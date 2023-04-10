@@ -350,7 +350,6 @@ namespace Game
                 {
                     ResetDash();
                 }
-
             }
         }
         void ResetDash()

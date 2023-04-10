@@ -9,9 +9,10 @@ namespace Game
         private Vector3 cameraLastPos;
         private Vector3 cameraPosition;
         private ComponentIterator transformIt;
+        private ComponentIterator playerIt;
         private float cameraYPos = 40f;
         private float cameraZOffset = -15f;
-        private float lerpTime = 0.1f;
+        private float lerpTime = 0.0001f;
         private Vector3 cameraFollowerPos;
         private Vector3 cameraAngles;
         void Init()
@@ -19,6 +20,7 @@ namespace Game
             cameraAngles = new Vector3(90, -70, 0);
             cameraFollowerPos = new Vector3(0f, 0f, 5f);
             transformIt = GetComponentIterator<Transform3D>(GetChildByName("CameraFollower"));
+            playerIt = GetComponentIterator<Transform3D>(GetChildByName("CameraFollower"));
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
             ref Transform3D t3d = ref GetComponentByIterator<Transform3D>(transformIt);
