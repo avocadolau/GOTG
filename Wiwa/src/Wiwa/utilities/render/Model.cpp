@@ -186,12 +186,12 @@ namespace Wiwa {
 
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
-				Animation* anim = new Animation(scene->mAnimations[i], this);
-				anim->SaveWiAnimation(anim, file);
+				std::shared_ptr<Animation> anim = std::make_shared<Animation>(scene->mAnimations[i], this);
+				anim->SaveWiAnimation(anim.get(), file);
 				animator->m_Animations.push_back(anim);
 			}
 
-			Animator::SaveWiAnimator(animator,file);
+			Animator::SaveWiAnimator(*animator,file);
 			delete animator;
 		}
 
