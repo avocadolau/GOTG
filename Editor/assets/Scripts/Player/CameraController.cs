@@ -17,7 +17,7 @@ namespace Game
         void Init()
         {
             cameraAngles = new Vector3(90, -70, 0);
-            cameraFollowerPos = new Vector3(0f, 0f, 2f);
+            cameraFollowerPos = new Vector3(0f, 0f, 5f);
             transformIt = GetComponentIterator<Transform3D>(GetChildByName("CameraFollower"));
 
             System.UInt64 cam_id = CameraManager.GetActiveCamera();
@@ -46,7 +46,7 @@ namespace Game
 
             cameraPosition = GetComponentByIterator<Transform3D>(transformIt).worldMatrix.GetPosition();
 
-            cameraPosition = Vector3.Lerp(cameraPosition, cameraLastPos, lerpTime);
+            cameraPosition = Vector3.Lerp(cameraPosition, cameraLastPos, lerpTime * Time.DeltaTime());
 
             cameraPosition.y = cameraYPos;
             cameraPosition.z += cameraZOffset;
