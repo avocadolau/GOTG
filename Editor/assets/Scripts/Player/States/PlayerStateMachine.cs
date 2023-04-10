@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Wiwa;
 namespace Game
 {
@@ -12,13 +11,11 @@ namespace Game
         public PlayerAttack attack = new PlayerAttack();
         public PlayerDash dash = new PlayerDash();
         public PlayerDeath death = new PlayerDeath();
-        
+
         public override void Awake()
         {
             base.Awake();
             Console.WriteLine("awake player state machine");
-            GameState.SetPlayer(m_EntityId, m_Scene);
-            GameState.LoadPlayerProgression();
         }
 
         public override void Init()
@@ -52,7 +49,7 @@ namespace Game
             currentState.EnterState(ref self, GetEntity());
         }
         void CheckHealth()
-        {       
+        {
             if (GetCharacter().Health <= 0)
             {
                 PlayerStateMachine self = this;
@@ -62,7 +59,7 @@ namespace Game
 
         void DashCooldown()
         {
-            if(!DashEnable)
+            if (!DashEnable)
             {
                 //count cooldown
                 cooldownTimer -= Time.DeltaTime();

@@ -127,7 +127,7 @@ namespace Wiwa {
 				if (mesh)
 				{
 			
-					Model* m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
+					//Model* m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 					////fix this 
 					//for (auto model : m->GetModelList())
 					//{
