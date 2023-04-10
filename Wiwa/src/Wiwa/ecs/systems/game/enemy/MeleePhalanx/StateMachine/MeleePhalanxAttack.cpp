@@ -22,7 +22,7 @@ namespace Wiwa
 		m_TimerAttackCooldown = 0.0f;
 		//animator->PlayAnimation("atack", false);
 		animator->Blend("atack", false, 0.2f);
-		PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+		PlaySound(ScriptEngine::CreateString("melee_attack"), enemy->m_PlayerId);
 	
 		GenerateAttack(enemy);
 		//enemy->ChasePlayer();

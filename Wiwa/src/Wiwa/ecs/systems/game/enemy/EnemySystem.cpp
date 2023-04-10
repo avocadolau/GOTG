@@ -33,6 +33,7 @@ namespace Wiwa
 		m_PlayerTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_PlayerStatsIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_PlayerId = -1;
+		m_WaveId = -1;
 		m_WasSpawnedBySpawner = false;
 	}
 

@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "RangedPhalanxDeath.h"
 #include <Wiwa/ecs/systems/game/enemy/RangedPhalanx/EnemyRangedPhalanx.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {
@@ -29,10 +30,10 @@ namespace Wiwa
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
-			if (!enemy->m_WasSpawnedBySpawner)
+			if (self->waveId != -1)
 			{
-				//em.DestroyEntity(enemy->GetEntity());
-				//GameStateManager::s_PhalanxMeleePool->ReturnToPool(enemy->GetEntity(), "phalanx_ranged");
+				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
+				waveSys->DestroyEnemy(enemy->GetEntity(), self->enemyType);
 			}
 		}
 	}

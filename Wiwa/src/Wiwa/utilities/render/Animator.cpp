@@ -1,6 +1,7 @@
 #include <wipch.h>
 
 #include "Animator.h"
+#include "Wiwa/utilities/AnimatorManager.h"
 #include <Wiwa/utilities/json/JSONDocument.h>
 #include <Wiwa/utilities/json/JSONValue.h>
 #include <glm/gtx/matrix_interpolation.hpp >
@@ -29,6 +30,21 @@ namespace Wiwa
 
 		for (int i = 0; i < 100; i++)
 			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
+	}
+
+	Animator::~Animator()
+	{
+		m_CurrentAnimation = nullptr;
+		m_TargetAnimation = nullptr;
+
+		//for (std::vector<Animation*>::iterator item = m_Animations.begin(); item != m_Animations.end(); item++)
+		//{
+		//	delete* item;
+		//	*item = nullptr;
+		//}
+
+		m_Animations.clear();
+		m_FinalBoneMatrices.clear();
 	}
 
 	void Animator::Update(float dt)
@@ -181,7 +197,7 @@ namespace Wiwa
 			{
 				if (m_CurrentAnimation == nullptr)
 				{
-					m_CurrentAnimation = animation;
+					m_CurrentAnimation = animation.get();
 					m_CurrentAnimation->m_CurrentTime = 0;
 					m_BlendTime = 0;
 					m_CurrentAnimation->m_Loop = loop;
@@ -192,9 +208,9 @@ namespace Wiwa
 				if (transition)
 				{
 					if(m_CurrentAnimation == nullptr)
-						m_CurrentAnimation = animation;
+						m_CurrentAnimation = animation.get();
 
-					m_TargetAnimation = animation;
+					m_TargetAnimation = animation.get();
 					m_BlendDuration = transitionTime;
 					m_BlendTime = 0;
 					m_TargetAnimation->m_CurrentTime = 0;
@@ -205,7 +221,7 @@ namespace Wiwa
 				}
 				else
 				{
-					m_CurrentAnimation = animation;
+					m_CurrentAnimation = animation.get();
 					m_CurrentAnimation->m_CurrentTime = 0;
 					m_BlendTime = 0;
 					m_CurrentAnimation->m_Loop = loop;
@@ -218,22 +234,8 @@ namespace Wiwa
 		}
 	}
 
-	Animator::~Animator()
-	{
-		m_CurrentAnimation = nullptr;
-		m_TargetAnimation = nullptr;
 
-		for (std::vector<Animation*>::iterator item = m_Animations.begin(); item != m_Animations.end(); item++)
-		{
-			delete* item;
-			*item = nullptr;
-		}
-
-		m_Animations.clear();
-		m_FinalBoneMatrices.clear();
-	}
-
-	void Animator::SaveWiAnimator(Animator *animator, const char *path)
+	void Animator::SaveWiAnimator(Animator& animator, const char *path)
 	{
 		std::filesystem::path filePath = path;
 		std::string name = filePath.filename().string();
@@ -246,7 +248,7 @@ namespace Wiwa
 		doc.AddMember("folderAsset", false);
 		JSONValue animations = doc.AddMemberArray("animations");
 
-		for (auto &anim : animator->m_Animations)
+		for (auto &anim : animator.m_Animations)
 		{
 			animations.PushBack(anim->m_SavePath.c_str());
 		}
@@ -271,7 +273,8 @@ namespace Wiwa
 					std::string path = animations[i].as_string();
 					if (!FileSystem::Exists(path.c_str()))
 						continue;
-					animator->m_Animations.push_back(Animation::LoadWiAnimation(path.c_str()));
+					//animator->m_Animations.push_back(Animation::LoadWiAnimation(path.c_str()));
+					animator->m_Animations.push_back(Wiwa::AnimatorManager::GetAnimation(path.c_str()));
 				}
 			}
 		}
@@ -284,7 +287,6 @@ namespace Wiwa
 		{
 			if (strcmp(m_CurrentAnimation->m_Name.c_str(), name.c_str()) == 0)
 			{
-				//m_CurrentAnimation->m_CurrentTime = 0;
 				m_CurrentAnimation->m_Loop = loop;
 				m_AnimationState = AnimationState::Playing;
 				return;
@@ -295,8 +297,7 @@ namespace Wiwa
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
 			{
-				m_CurrentAnimation = animation;
-				//m_CurrentAnimation->m_CurrentTime = 0;
+				m_CurrentAnimation = animation.get();
 				m_CurrentAnimation->m_Loop = loop;
 				m_AnimationState = AnimationState::Playing;
 				return;
@@ -436,7 +437,7 @@ namespace Wiwa
 		for (auto &animation : m_Animations)
 		{
 			if (strcmp(animation->m_Name.c_str(), name.c_str()) == 0)
-				return animation;
+				return animation.get();
 		}
 	}
 }

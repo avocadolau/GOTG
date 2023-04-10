@@ -22,6 +22,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_PlayerStatsIt;
 		EntityId m_PlayerId;
+		EntityId m_WaveId = -1;
 		bool m_WasSpawnedBySpawner = false;
 	public:
 		EnemySystem();

@@ -8,9 +8,9 @@ namespace Wiwa
 {
 	GamePoolingManager::GamePoolingManager()
 	{
-		s_PhalanxMeleePool = new EntityPool(1, 20, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
-		s_PhalanxRangedPool = new EntityPool(2, 20, "assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		s_SimpleBulletsPool = new EntityPool(3, 20, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
+		s_PhalanxMeleePool = new EntityPool(1, 13, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
+		s_PhalanxRangedPool = new EntityPool(2, 13, "assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
+		s_SimpleBulletsPool = new EntityPool(3, 1, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
 	}
 
 	GamePoolingManager::~GamePoolingManager()

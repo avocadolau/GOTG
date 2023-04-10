@@ -505,7 +505,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				}
 				else {
 
-					animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n]);
+					animator->animator->SetCurrentAnimation(animator->animator->m_Animations[n].get());
 					animator->animator->GetCurrentAnimation()->m_Loop = animator->Loop;
 				}
 				
@@ -543,7 +543,7 @@ void InspectorPanel::DrawAnimatorComponent(byte *data)
 				}
 				else {
 
-					animator->animator->SetTargetAnimation(animator->animator->m_Animations[n]);
+					animator->animator->SetTargetAnimation(animator->animator->m_Animations[n].get());
 				}
 			}
 		}

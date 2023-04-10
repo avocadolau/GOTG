@@ -5,6 +5,7 @@
 #include <Wiwa/ecs/components/game/Character.h>
 #include "Achievements/AchievementsManager.h"
 #include <Wiwa/ecs/components/game/items/Item.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 
 namespace Wiwa
 {
@@ -150,8 +151,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		size_t size = 0;
-		ComponentId cmpId = em.GetComponentId<WaveSpawner>();
-		Wiwa::WaveSpawner* enemySpawnerList = (Wiwa::WaveSpawner*)em.GetComponents(cmpId, &size);
+		Wiwa::WaveSpawner* enemySpawnerList = nullptr;
+		enemySpawnerList = em.GetComponents<WaveSpawner>(&size);
 
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
@@ -159,7 +160,7 @@ namespace Wiwa
 		{
 			for (int i = 0; i < size; i++)
 			{
-				if (em.IsComponentRemoved(cmpId, i)) {
+				if (em.IsComponentRemoved<WaveSpawner>(i)) {
 					//WI_INFO("Removed at: [{}]", i);
 				}
 				else

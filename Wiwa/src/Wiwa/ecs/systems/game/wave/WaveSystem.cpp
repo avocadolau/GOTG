@@ -32,6 +32,7 @@ namespace Wiwa
 		m_WaveIt = GetComponentIterator<Wave>();
 
 		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
+		/*wave->currentEnemiesAlive = 3;*/
 		wave->currentEnemiesAlive = wave->maxEnemies;
 
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
@@ -43,6 +44,8 @@ namespace Wiwa
 			m_HasTriggered = true;
 		}
 
+		m_MaxWavesEnemies = wave->maxEnemies;
+		m_CurrentEnemiesDead = 0;
 	}
 
 	void WaveSystem::OnUpdate()
@@ -52,22 +55,24 @@ namespace Wiwa
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		
 		// Wave has finished
-		if (wave->currentEnemiesAlive <= 0 && m_HasTriggered)
+		if (m_CurrentEnemiesDead >= m_MaxWavesEnemies && m_HasTriggered)
 		{
 			wave->hasFinished = true;
 		}
 
-		QueryEnemies(wave);
+		//QueryEnemies(m_WaveIt);
 	}
 
 	void WaveSystem::OnDestroy()
 	{
-		m_EnemiesCmp.clear();
-		m_EnemiesId.clear();
+		/*m_EnemiesCmp.clear();
+		m_EnemiesId.clear();*/
 	}
 
-	void WaveSystem::QueryEnemies(Wave *wave)
+	void WaveSystem::QueryEnemies(const EntityManager::ComponentIterator& m_WaveIt)
 	{
+	/*	Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
+
 		for (int i = 0; i < m_EnemiesCmp.size(); i++)
 		{
 			Enemy *enemy = GetComponentByIterator<Enemy>(m_EnemiesCmp[i]);
@@ -76,8 +81,12 @@ namespace Wiwa
 				DestroyEnemy(i);
 				i--;
 				wave->currentEnemiesAlive--;
+				if (wave->currentEnemiesAlive <= 0)
+				{
+					wave->hasFinished = true;
+				}
 			}
-		}
+		}*/
 	}
 
 	void WaveSystem::SpawnEnemy(int index)
@@ -92,9 +101,7 @@ namespace Wiwa
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
-
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
-			m_PoolType.emplace_back(1);
 		}
 		break;
 		case 2:
@@ -102,7 +109,6 @@ namespace Wiwa
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
-			m_PoolType.emplace_back(2);
 		}
 		break;
 		default:
@@ -140,21 +146,23 @@ namespace Wiwa
 
 		// Save the enemy component in the list
 		EntityManager::ComponentIterator enemyIt = GetComponentIterator<Enemy>(newEnemyId);
-		m_EnemiesCmp.emplace_back(enemyIt);
-		m_EnemiesId.emplace_back(newEnemyId);
+		/*m_EnemiesCmp.emplace_back(enemyIt);
+		m_EnemiesId.emplace_back(newEnemyId);*/
 		Enemy* enemy = (Enemy*)entityManager.GetComponentByIterator(enemyIt);
 		enemy->hasFinished = false;
+		enemy->enemyType = selection;
+		enemy->waveId = m_EntityId;
 
 		physSys->CreateBody();
 	}
 
-	void WaveSystem::DestroyEnemy(int index)
+	void WaveSystem::DestroyEnemy(size_t id, int enemy_type)
 	{
-		EntityId id = m_EnemiesId[index];
+		//EntityId id = m_EnemiesId[index];
 
 		// Delete the enemy entity entirely
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
-		switch (m_PoolType[index])
+		switch (enemy_type)
 		{
 		case 1:
 			GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
@@ -165,12 +173,19 @@ namespace Wiwa
 		default:
 			break;
 		}
-
+		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
+		wave->currentEnemiesAlive--;
+		m_CurrentEnemiesDead++;
 		//entityManager.DestroyEntity(id);
 
-		m_EnemiesCmp.erase(m_EnemiesCmp.begin() + index);
+		/*m_EnemiesCmp.erase(m_EnemiesCmp.begin() + index);
 		m_EnemiesId.erase(m_EnemiesId.begin() + index);
-		m_PoolType.erase(m_PoolType.begin() + index);
+		m_PoolType.erase(m_PoolType.begin() + index);*/
+
+		if (m_CurrentEnemiesDead >= m_MaxWavesEnemies)
+		{
+			wave->hasFinished = true;
+		}
 	}
 
 	void WaveSystem::SetSpawner(const EntityManager::ComponentIterator& m_WaveIt)

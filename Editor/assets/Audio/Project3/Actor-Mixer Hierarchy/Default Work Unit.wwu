@@ -479,6 +479,13 @@
 						<Folder Name="music" ID="{94AA7D2D-86CA-48B0-914A-9E3FBFABE232}" ShortID="274282580">
 							<ChildrenList>
 								<Sound Name="track_levelmusic_3" ID="{B15EECF8-4755-4A27-8901-A1AC7B729814}" ShortID="442446860">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-11</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -501,6 +508,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="track_levelmusic_2" ID="{6774A7D4-591D-4BB7-961C-5451C483AC89}" ShortID="428886659">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-11</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -523,6 +537,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="track_levelmusic_1" ID="{22460A46-7527-4910-9D79-4B234AD63B73}" ShortID="155425788">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-11</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>

@@ -71,7 +71,7 @@ namespace Wiwa {
 
         void CalculateBoneFinalTransform();
 
-        static void SaveWiAnimator(Animator* animator, const char* path);
+        static void SaveWiAnimator(Animator& animator, const char* path);
 
         static Animator* LoadWiAnimator(const char* path);
 
@@ -89,7 +89,7 @@ namespace Wiwa {
 
         std::vector<glm::mat4> GetFinalBoneMatrices(){return m_FinalBoneMatrices;}
 
-        std::vector<Animation*> m_Animations;
+        std::vector<std::shared_ptr<Animation>> m_Animations;
         std::string m_Name;
         unsigned int m_NumAnimations;
         AnimationState m_AnimationState = AnimationState::Paused;
@@ -99,6 +99,7 @@ namespace Wiwa {
         float m_BlendDuration;
         float m_AnimationTime;
         bool m_LoopBlend = false;
+        std::string storePath;
     private:
         std::vector<glm::mat4> m_FinalBoneMatrices;
         //Animator

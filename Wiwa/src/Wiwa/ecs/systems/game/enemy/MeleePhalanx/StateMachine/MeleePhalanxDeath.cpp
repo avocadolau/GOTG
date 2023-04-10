@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "MeleePhalanxDeath.h"
 #include <Wiwa/ecs/systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {
@@ -29,11 +30,14 @@ namespace Wiwa
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
-			if (!enemy->m_WasSpawnedBySpawner)
+			if (self->waveId != -1)
 			{
+				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
+				waveSys->DestroyEnemy(enemy->GetEntity(), self->enemyType);
+			}
 				//em.DestroyEntity(enemy->GetEntity());
 				//GameStateManager::s_PhalanxMeleePool->ReturnToPool(enemy->GetEntity());
-			}
+			
 		}
 	}
 
