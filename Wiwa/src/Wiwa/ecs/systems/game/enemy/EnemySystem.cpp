@@ -3,6 +3,7 @@
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
 #include <Wiwa/ecs/components/game/attack/PhylasQuantumSword.h>
+#include <Wiwa/ecs/components/game/attack/GrootSeeds.h>
 namespace Wiwa
 {
 	struct BulletComponent
@@ -94,6 +95,17 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			Wiwa::PhylasQuantumSword* phylasSword = em.GetComponent<Wiwa::PhylasQuantumSword>(body2->id);
 			ReceiveDamage(phylasSword->damage);
+		}
+
+		std::string groot_seeds = "GROOTS_SEEDS";
+		if (body1->id == m_EntityId && groot_seeds == body2->selfTagStr)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Wiwa::GrootSeeds* grootSeeds = em.GetComponent<Wiwa::GrootSeeds>(body2->id);
+			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
+			statsSelf->Speed -= 2.0f;
+			ReceiveDamage(grootSeeds->damage);
 		}
 	}
 

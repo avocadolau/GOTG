@@ -48,6 +48,8 @@ namespace Wiwa
 
     void Ability::GrootsSeeds()
     {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId grootSeeds = em.LoadPrefab("assets/Prefabs/GrootSeeds.wiprefab");
     }
 
     void Ability::PhylasQuantumSword()

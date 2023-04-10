@@ -26,6 +26,8 @@
 
 #include "systems/game/attack/PhylasQuantumSwordSystem.h"
 
+#include "systems/game/attack/GrootSeedsSystem.h"
+
 #include "systems/game/CharacterInventory.h"
 
 #include "systems/ParticleEmitterExecutor.h"
