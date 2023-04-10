@@ -158,21 +158,27 @@ namespace Wiwa
 
 
 		std::vector<const char *> skybox1_faces = {
-			"resources/images/skybox/right.jpg",
-			"resources/images/skybox/left.jpg",
-			"resources/images/skybox/top.jpg",
-			"resources/images/skybox/bottom.jpg",
-			"resources/images/skybox/front.jpg",
-			"resources/images/skybox/back.jpg"};
-		std::vector<const char*> skybox2_faces = {
+		"resources/images/skybox/right.jpg",
+		"resources/images/skybox/left.jpg",
+		"resources/images/skybox/top.jpg",
+		"resources/images/skybox/bottom.jpg",
+		"resources/images/skybox/front.jpg",
+		"resources/images/skybox/back.jpg"};
+		std::vector<const char*> dooms_day = {
 		"resources/images/skybox/dooms_day/right.png",
 		"resources/images/skybox/dooms_day/left.png",
 		"resources/images/skybox/dooms_day/top.png",
 		"resources/images/skybox/dooms_day/bottom.png",
 		"resources/images/skybox/dooms_day/front.png",
 		"resources/images/skybox/dooms_day/back.png" };
-
-		m_DefaultSkybox.LoadCubemap(skybox2_faces);
+		std::vector<const char*> urban_light = {
+		"resources/images/skybox/urban_light/right.png",
+		"resources/images/skybox/urban_light/left.png",
+		"resources/images/skybox/urban_light/top.png",
+		"resources/images/skybox/urban_light/bottom.png",
+		"resources/images/skybox/urban_light/front.png",
+		"resources/images/skybox/urban_light/back.png" };
+		m_DefaultSkybox.LoadCubemap(dooms_day);
 
 		return true;
 	}
