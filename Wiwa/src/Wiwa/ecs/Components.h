@@ -36,6 +36,7 @@
 
 #include "components/game/attack/SimpleBullet.h"
 #include "components/game/attack/PhylasQuantumSword.h"
+#include "components/game/attack/GrootSeeds.h"
 #include "components/game/attack/VictoryShield.h"
 #include "components/game/items/Item.h"
 

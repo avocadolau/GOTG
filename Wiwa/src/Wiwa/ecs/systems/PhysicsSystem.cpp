@@ -49,9 +49,9 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
-		/*Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(body1->id);
-		WI_INFO("Collision enter of --> {}", e_name);*/
+		//WI_INFO("Collision enter of --> {}", e_name);
 	}
 
 	void PhysicsSystem::OnCollision(Object* body1, Object* body2)
@@ -63,8 +63,8 @@ namespace Wiwa {
 
 	void PhysicsSystem::OnCollisionExit(Object* body1, Object* body2)
 	{
-		//Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		//const char* e_name = entityManager.GetEntityName(body1->id);
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		const char* e_name = entityManager.GetEntityName(body1->id);
 		//WI_INFO("Collision leave of --> {}", e_name);
 	}
 
