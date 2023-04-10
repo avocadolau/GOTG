@@ -21,7 +21,24 @@ namespace Wiwa
 
 	}
 
-	DialogManager::~DialogManager() {}
+	DialogManager::~DialogManager()
+	{
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
+		for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
+		{
+			render.RemoveInstance(m_Scene, conversations[i].characterImgID);
+			render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
+			render.RemoveInstance(m_Scene, conversations[i].continueImgID);
+
+			for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
+			{
+				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
+				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text2_imgModeID);
+				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text3_imgModeID);
+			}
+		}
+	}
 
 	bool DialogManager::Init(Scene* scene)
 	{
@@ -51,7 +68,7 @@ namespace Wiwa
 
 		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", 0);
 		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
-		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
+		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_watcher-01.png", 0);
 
 		conversations[0].occupied = true;
 
@@ -99,6 +116,11 @@ namespace Wiwa
 		
 		
 		return false;
+	}
+
+	void DialogManager::OnDestroy()
+	{
+		
 	}
 	
 	bool DialogManager::CleanUp()
@@ -160,19 +182,19 @@ namespace Wiwa
 		//conversations[conversationNumber].nodes[nodeNumber].text2_imgMode = new Text();
 		//conversations[conversationNumber].nodes[nodeNumber].text3_imgMode = new Text();
 
-		conversations[conversationNumber].nodes[nodeNumber].text1_imgMode = gm.InitFontForDialog(fontPath, line1Text);
-		conversations[conversationNumber].nodes[nodeNumber].text2_imgMode = gm.InitFontForDialog(fontPath, line2Text);
-		conversations[conversationNumber].nodes[nodeNumber].text3_imgMode = gm.InitFontForDialog(fontPath, line3Text);
+		conversations[conversationNumber].nodes[nodeNumber].text1_imgMode = *gm.InitFontForDialog(fontPath, line1Text);
+		conversations[conversationNumber].nodes[nodeNumber].text2_imgMode = *gm.InitFontForDialog(fontPath, line2Text);
+		conversations[conversationNumber].nodes[nodeNumber].text3_imgMode = *gm.InitFontForDialog(fontPath, line3Text);
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgMode->GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text1_imgMode->GetSize(), {720,650}, {1000,450}, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgMode.GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text1_imgMode.GetSize(), {720,650}, {1000,450}, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID);
 		
-		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgMode->GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text2_imgMode->GetSize(), { 720,700 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgMode.GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text2_imgMode.GetSize(), { 720,700 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID);
 		
-		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgMode->GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text3_imgMode->GetSize(), { 720,750 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgMode.GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text3_imgMode.GetSize(), { 720,750 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID);
 
 		conversations[conversationNumber].nodes[nodeNumber].occupied = true;

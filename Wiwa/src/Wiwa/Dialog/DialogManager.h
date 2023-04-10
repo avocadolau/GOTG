@@ -25,9 +25,9 @@ namespace Wiwa
 		Wiwa::Renderer2D::InstanceData characterImgID;
 		Wiwa::Renderer2D::InstanceData continueImgID;
 
-		Image* dialogImg = nullptr;
-		Image* characterImg = nullptr;
-		Image* continueImg = nullptr;
+		Image* dialogImg;
+		Image* characterImg;
+		Image* continueImg;
 
 		char* conversationName;
 
@@ -54,6 +54,8 @@ namespace Wiwa
 		bool Update();
 
 		bool Draw();
+
+		void OnDestroy();
 
 		// Called before quitting
 		bool CleanUp();

@@ -12,9 +12,9 @@ struct DialogNode
 	Wiwa::Renderer2D::InstanceData text2_imgModeID;
 	Wiwa::Renderer2D::InstanceData text3_imgModeID;
 
-	Wiwa::Text* text1_imgMode;
-	Wiwa::Text* text2_imgMode;
-	Wiwa::Text* text3_imgMode;
+	Wiwa::Text text1_imgMode;
+	Wiwa::Text text2_imgMode;
+	Wiwa::Text text3_imgMode;
 
 	bool occupied = false;
 };
