@@ -5,6 +5,7 @@
 #include "StateMachine/RangedPhalanxIdle.h";
 #include "StateMachine/RangedPhalanxSpawn.h";
 #include "StateMachine/RangedPhalanxDeath.h";
+#include "StateMachine/RangedPhalanxHit.h"
 
 namespace Wiwa {
 	class WI_API EnemyRangedPhalanx : public EnemySystem {
@@ -15,6 +16,7 @@ namespace Wiwa {
 		RangedPhalanxChasingState* m_ChasingState;
 		RangedPhalanxAttackState* m_AttackingState;
 		RangedPhalanxDeathState* m_DeathState;
+		RangedPhalanxHitState* m_HitState;
 		EntityManager::ComponentIterator m_GunTransformIt;
 
 		float m_Timer;

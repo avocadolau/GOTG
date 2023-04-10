@@ -216,10 +216,8 @@ namespace Wiwa
 	{
 		if (debug)
 			WI_CORE_INFO("Init progression");
-	
-		EntityManager& em = s_CurrentScene->GetEntityManager();
-		EntityManager::ComponentIterator it = em.GetComponentIterator<Character>(s_PlayerId);
-		Character* character = (Character*)em.GetComponentByIterator(it);
+		Character* character = GetPlayerCharacterComp();
+		
 		JSONDocument doc("config/room_data.json");
 		if (!character)
 		{
@@ -275,6 +273,44 @@ namespace Wiwa
 		gm.canvas.at(3)->SwapActive(); //Activate death UI
 		SceneManager::PauseCurrentScene();
 		EndRun();
+	}
+
+	Character* GameStateManager::GetPlayerCharacterComp()
+	{
+		EntityManager& em = s_CurrentScene->GetEntityManager();
+		EntityManager::ComponentIterator it = em.GetComponentIterator<Character>(s_PlayerId);
+		return (Character*)em.GetComponentByIterator(it);
+	}
+
+	void GameStateManager::DamagePlayer(uint32_t damage)
+	{
+		Character* character = GetPlayerCharacterComp();
+		if (!character)
+		{
+			WI_CORE_CRITICAL("Player can't take damage because character is nullptr");
+			return;
+		}
+		// The damage from this function doesn't expand to the health
+		// this means that if there's remaining shield the damage doesn't apply
+		// to the health even when this surpases the shield ammount
+
+		// If there's no shield we take damage from the health
+		if (character->Shield <= 0)
+		{
+			character->Health -= damage;
+			if (character->Health <= 0)
+			{
+				Die();
+			}
+			return;
+		}
+		
+		
+		if (character->Shield > 0)
+			character->Shield -= damage;
+
+		if (character->Shield <= 0)
+			character->Shield = 0;
 	}
 
 	void GameStateManager::StartNewRoom()
