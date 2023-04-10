@@ -81,7 +81,7 @@
 								</SoundBank>
 								<SoundBank Name="melee_heavy_attack" ID="{0529BF94-2F49-4987-94DE-6BC6BBC2D563}">
 									<ObjectInclusionList>
-										<ObjectRef Name="melee_heavy_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+										<ObjectRef Name="melee_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 									</ObjectInclusionList>
 									<ObjectExclusionList/>
 									<GameSyncExclusionList/>

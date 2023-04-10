@@ -12,18 +12,18 @@
 										<Action Name="" ID="{7B598B8E-95D1-4516-993C-443EB6BBA2D4}" ShortID="479478646">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_melee_death" ID="{029C2206-FD14-4D4D-9151-117B5D2A7447}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+													<ObjectRef Name="phalanx_melee_death(no sabemos)" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
 									</ChildrenList>
 								</Event>
-								<Event Name="melee_heavy_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}">
+								<Event Name="melee_attack" ID="{4090D8B4-C8E9-4408-AB7F-95A4749C08E0}">
 									<ChildrenList>
 										<Action Name="" ID="{D6AA4223-8EA7-4DB8-B13A-765C9DC752BF}" ShortID="588938793">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_melee_attack" ID="{028CA1BC-C361-40F6-AB0C-D6ABB88454DA}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+													<ObjectRef Name="phalanx_melee_attack" ID="{3764DF50-C258-449D-9434-D16F104342A1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -34,7 +34,7 @@
 										<Action Name="" ID="{A21B1EE6-8601-4B14-A549-90A5BE46681E}" ShortID="673213382">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_melee_hit" ID="{2F3CF33F-71D8-4672-898E-D54A5E141758}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+													<ObjectRef Name="phalanx_melee_hit" ID="{608ADDD0-93F4-4684-9310-CCC7E1B778A4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -79,47 +79,17 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="sentinel" ID="{F9CB83E4-23F6-496C-A2D0-0AD2D0143428}" ShortID="577568553">
+						<Event Name="spawn" ID="{59F55566-A946-41DE-B389-EF37154F2EAA}">
 							<ChildrenList>
-								<Event Name="sentinel_dead" ID="{813DF0FC-D2BD-4709-89FD-2E0F536AC319}">
-									<ChildrenList>
-										<Action Name="" ID="{146AB856-EABD-49C5-8CD9-A71F318E5684}" ShortID="323228324">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="sound_sentinelenemy_dead" ID="{53783580-2C86-43AE-BF16-009739001980}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-								<Event Name="sentinel_hit" ID="{78B0612B-B2D1-48A1-B671-C573D33D366D}">
-									<ChildrenList>
-										<Action Name="" ID="{6829C2A9-56FD-4076-BC7B-5CA472A54418}" ShortID="189091772">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="sound_sentinelenemy_hit" ID="{0FAF5869-A401-43CB-AB2C-4132CCFC3582}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
+								<Action Name="" ID="{8C9939E7-EA7F-4E47-83BF-20CA50921BD5}" ShortID="957662079">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="phalanx_melee_spawn" ID="{B5DF3ABB-4670-43A1-9151-88EEC400E6EC}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
 							</ChildrenList>
-						</Folder>
-						<Folder Name="subjugator" ID="{7D2F2C80-DC48-49D7-B6AB-53BC1F6FE5ED}" ShortID="368684513">
-							<ChildrenList>
-								<Event Name="subjugator_hit" ID="{CEF39E44-961F-498B-BC4F-A5B56C5BC03A}">
-									<ChildrenList>
-										<Action Name="" ID="{1F468480-23FF-4A22-8BFA-2132AA22C69F}" ShortID="80141906">
-											<ReferenceList>
-												<Reference Name="Target">
-													<ObjectRef Name="sound_subjugatorenemy_hit" ID="{35F7D2BB-F0C3-494C-9EFE-27EAA0C8DCF4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-												</Reference>
-											</ReferenceList>
-										</Action>
-									</ChildrenList>
-								</Event>
-							</ChildrenList>
-						</Folder>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="hud" ID="{1870E9FE-0342-4D2F-8DDF-2D24D8FAC816}" ShortID="166723439">
@@ -129,7 +99,7 @@
 								<Action Name="" ID="{9A413931-1ED7-40CD-8BD7-B7062B7A64A6}" ShortID="176200875">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="character_selection" ID="{809FE8AB-BE4F-4163-81AE-89316C24CDB2}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="s_character_selected" ID="{0F5F3D65-0466-4AE5-90A9-D23334371459}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -140,7 +110,7 @@
 								<Action Name="" ID="{90DCE654-9EED-4F7F-961A-4D8EBECB7F20}" ShortID="809832085">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="pause_sound" ID="{3ECED16A-1D1E-4FF2-A6C6-E13A06E3A5AA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="s_game_pause" ID="{AF901AC6-032D-40EC-8E78-193A834F7FD1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -151,7 +121,7 @@
 								<Action Name="" ID="{F81A912C-C98C-47C7-AF1A-852B9ADEAB27}" ShortID="729503507">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="logo_intro" ID="{543B43CA-CA49-43AB-B466-8E9AC1007B01}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="game_intro" ID="{42A80673-FE15-4D51-8697-DDD469142191}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -162,7 +132,7 @@
 								<Action Name="" ID="{C22D4225-B20D-4433-96F0-EA2873B2EC5A}" ShortID="919270292">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="pause_sound" ID="{3ECED16A-1D1E-4FF2-A6C6-E13A06E3A5AA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="s_button_hover" ID="{F34895A4-EAA8-4FE7-AD14-02969DBF74D4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -205,34 +175,12 @@
 				</Folder>
 				<Folder Name="music" ID="{8FFD6009-9EDA-4DA6-9A5D-690B789291CC}" ShortID="588284070">
 					<ChildrenList>
-						<Event Name="background_song" ID="{7AD1864C-A338-4954-A366-7149AB4C64AC}">
-							<ChildrenList>
-								<Action Name="" ID="{6ED117A5-62B7-4D7D-82D9-4C759F7555CF}" ShortID="922518561">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="background_song" ID="{92A6BBB6-5AEF-4CA4-BBFC-CC1E6EB4DC5B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="menu_song" ID="{49FAEAA0-81A2-4DC8-A6F5-928DD67CED8C}">
-							<ChildrenList>
-								<Action Name="" ID="{E299A2C9-AB64-43EB-BEB7-C1C015E9FA98}" ShortID="885417708">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="menu_song" ID="{E320DD80-C102-43E8-9291-F5BEEC354B68}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
 						<Event Name="level_music_01" ID="{ECC5C8DA-5777-4390-9FC3-FD897B6E0DD0}">
 							<ChildrenList>
 								<Action Name="" ID="{12E181C1-08D5-4C1C-A4A5-01F38E2B3CAF}" ShortID="488524899">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="track_levelmusic_1" ID="{AE5E7530-9A8D-4532-87FF-EF3809326D6B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="track_levelmusic_1" ID="{22460A46-7527-4910-9D79-4B234AD63B73}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -243,7 +191,7 @@
 								<Action Name="" ID="{2C9166AB-C6A3-4C89-9E2E-83E2A8943071}" ShortID="393177643">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="track_levelmusic_2" ID="{BAF461B7-2E0F-4C37-A990-352250610C48}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="track_levelmusic_2" ID="{6774A7D4-591D-4BB7-961C-5451C483AC89}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -254,7 +202,7 @@
 								<Action Name="" ID="{A1B3B943-1CB6-4C64-ADC4-56967C981FDA}" ShortID="305946202">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="track_levelmusic_3" ID="{531B0292-CA30-4D23-934E-B3D1563C1241}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="track_levelmusic_3" ID="{B15EECF8-4755-4A27-8901-A1AC7B729814}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
