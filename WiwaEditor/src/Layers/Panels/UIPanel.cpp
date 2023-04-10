@@ -789,21 +789,7 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 		originRect.width = originSize[0];
 		originRect.height = originSize[1];
 		const char* audioEvent = audioEventForButton.c_str();
-		if (canvas_id > -1)
-			m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX,
-				m_GuiManager.canvas.at(canvas_id)->controls.size(),
-				rect,
-				pathForAsset.c_str(),
-				pathForExtraAsset.c_str(),
-				canvas_id,
-				callbackID,
-				originRect,
-				audioEvent,
-				true,
-				animated,
-				animSpeed,
-				animationRects
-			);
+		if (canvas_id > -1) m_GuiManager.CreateGuiControl_Simple(GuiControlType::CHECKBOX, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), pathForExtraAsset.c_str(), canvas_id, callbackID, originRect, audioEvent, true, animated, animSpeed, animationRects);
 	}
 
 	ImGui::PopID();

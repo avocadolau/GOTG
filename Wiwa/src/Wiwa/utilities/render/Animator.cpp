@@ -37,7 +37,7 @@ namespace Wiwa
 			return;
 
 		//convert miliseconds to seconds
-		m_DeltaTime = dt * 0.001f;
+		m_DeltaTime = dt * 0.001;
 
 		switch (m_AnimationState)
 		{

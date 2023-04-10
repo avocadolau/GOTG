@@ -1,10 +1,10 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/RangedPhalanxAttack.h"
-#include "StateMachine/RangedPhalanxChasing.h"
-#include "StateMachine/RangedPhalanxIdle.h"
-#include "StateMachine/RangedPhalanxSpawn.h"
-#include "StateMachine/RangedPhalanxDeath.h"
+#include "StateMachine/RangedPhalanxAttack.h";
+#include "StateMachine/RangedPhalanxChasing.h";
+#include "StateMachine/RangedPhalanxIdle.h";
+#include "StateMachine/RangedPhalanxSpawn.h";
+#include "StateMachine/RangedPhalanxDeath.h";
 
 namespace Wiwa {
 	class WI_API EnemyRangedPhalanx : public EnemySystem {

@@ -744,9 +744,9 @@ namespace Wiwa {
 
 							frameX = frameX + 0.25f;
 
-							if (frameX > 0.75f)
+							if (frameX > 0.75)
 							{
-								frameY = frameY + 0.25f;
+								frameY = frameY + 0.25;
 								frameX = 0.0f;
 							}
 						}

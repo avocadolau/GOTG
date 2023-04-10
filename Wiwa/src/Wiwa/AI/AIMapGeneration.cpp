@@ -570,4 +570,5 @@ void Wiwa::AIMapGeneration::CreateNewEntityAndSaveData()
 	em.AddComponent<Wiwa::MapAI>(newId, newMap);
 	em.AddComponent<Wiwa::Transform3D>(newId);
 	AIPathFindingManager::SetMap(m_MapData.width, m_MapData.height, m_Map);
+
 }

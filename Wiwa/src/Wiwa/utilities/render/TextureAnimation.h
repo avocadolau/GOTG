@@ -70,7 +70,7 @@ namespace Wiwa {
 
             for (int i = 0; i < creationTimes.size(); ++i)
             {
-                currentFrame = creationTimes[i] + speedParticles * (float)elapsedTimeParticles;
+                currentFrame = creationTimes[i] + speedParticles * elapsedTimeParticles;
                 if (currentFrame >= totalFrames)
                 {
                     currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;
