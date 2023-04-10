@@ -49,5 +49,7 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			Consumable* consumable = Wiwa::ItemManager::GetConsumable(item->Name);
 			Wiwa::GameStateManager::s_PlayerInventory->AddConsumable(*consumable);
 		}
+
+		em.DestroyEntity(body2->id);
 	}
 }
