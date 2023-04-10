@@ -31,3 +31,5 @@
 #include "systems/ParticleEmitterExecutor.h"
 
 #include "systems/game/items/RewardRoom.h"
+
+#include "systems/game/NpcSystem.h"

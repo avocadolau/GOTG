@@ -28,7 +28,7 @@ namespace Wiwa
 		m_Scene = scene;
 		
 
-		Conversation* newConversation = new Conversation();
+		/*Conversation* newConversation = new Conversation();
 
 		newConversation->conversationName = "Test conversation";
 		
@@ -40,7 +40,7 @@ namespace Wiwa
 		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *newConversation);
 		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *newConversation);
 
-		conversations.push_back(newConversation);
+		conversations.push_back(newConversation);*/
 
 		Conversation* newConversation2 = new Conversation();
 
@@ -64,6 +64,9 @@ namespace Wiwa
 
 		collidingWithNpc = false;
 
+		//newConversation = nullptr;
+		newConversation2 = nullptr;
+
 		return true;
 	}
 
@@ -82,7 +85,7 @@ namespace Wiwa
 		{
 			for (int i = 0; i < conversations.size(); i++)
 			{
-				if (conversations[i]->conversationName == conversationToPlayName)
+				if (!strcmp(conversations[i]->conversationName, conversationToPlayName))
 				{
 					UpdateConversation(*conversations[i], &Wiwa::Application::Get().GetRenderer2D());
 				}
