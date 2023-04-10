@@ -14,7 +14,9 @@ void Wiwa::CharacterInventory::OnUpdate()
 
 void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 {
-	if (body1->id == m_EntityId && strcmp(body2->selfTagStr, "ITEM") == 0)
+	std::string tag_item = "ITEM";
+
+	if (body1->id == m_EntityId && tag_item == body2->selfTagStr)
 	{
 		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 		Wiwa::EntityManager& em = _scene->GetEntityManager();
