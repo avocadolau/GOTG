@@ -62,7 +62,7 @@ namespace Wiwa
 
 		keyPressRefreshTimer = 0;
 
-		collidingWithNpc = false;*/
+		collidingWithNpc = false;
 
 		//newConversation = nullptr;
 		newConversation2 = nullptr;
