@@ -156,6 +156,9 @@ namespace Wiwa
 		int HealthInc;
 		int MaxShieldInc;
 		int ShieldInc;
+		float RoFInc;
+		int AttackDmgInc;
+
 
 		CooldownState CooldownState;
 

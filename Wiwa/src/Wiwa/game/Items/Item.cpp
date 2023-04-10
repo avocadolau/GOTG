@@ -155,17 +155,23 @@ namespace Wiwa
             break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
             {
-                
             }
             break;
         case Wiwa::BuffType::BUGS_LEGS:
             {
+                const float buffPercent = ((float)BuffPercent / 100.f);
+                RoFInc = ((float)player->RateOfFire * buffPercent);
                 
+                player->RateOfFire += RoFInc;
             }
             break;
         case Wiwa::BuffType::CHARLIE27_FIST:
             {
-                
+
+                const float buffPercent = ((float)BuffPercent / 100.f);
+                AttackDmgInc = (int)((float)player->Damage * buffPercent);
+
+                player->Damage += AttackDmgInc;
             }
             break;
         }
@@ -209,12 +215,12 @@ namespace Wiwa
         break;
         case Wiwa::BuffType::BUGS_LEGS:
         {
-
+            player->RateOfFire -= RoFInc;
         }
         break;
         case Wiwa::BuffType::CHARLIE27_FIST:
         {
-
+            player->Damage -= AttackDmgInc;
         }
         break;
         }
