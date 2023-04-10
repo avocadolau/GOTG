@@ -7,7 +7,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(2, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
     [Callback]
@@ -15,7 +15,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(0, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
 
