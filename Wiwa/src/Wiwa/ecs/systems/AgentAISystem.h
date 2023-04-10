@@ -53,7 +53,7 @@ namespace Wiwa {
 
 		void DrawPath();
 		
-		inline const int GetPathSize() { return lastPath.size(); };
+		inline size_t GetPathSize() { return lastPath.size(); };
 	};
 }
 

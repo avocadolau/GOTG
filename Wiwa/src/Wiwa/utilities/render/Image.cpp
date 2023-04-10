@@ -57,6 +57,11 @@ namespace Wiwa {
 
     bool Image::InitDDS(const char* path)
     {
+        if (!std::filesystem::exists(path))
+        {
+            WI_CORE_CRITICAL("Image at path {} doesn't exist", path);
+            return false;
+        }    
         int w, h, ch;
 
         gli::texture texture = gli::load_dds(path);

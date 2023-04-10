@@ -102,7 +102,7 @@ namespace Wiwa
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
-		Wiwa::GameStateManager::DeserializeData();
+		
 	}
 
 	void Application::SetHwInfo()
@@ -146,6 +146,12 @@ namespace Wiwa
 		while (m_Running)
 		{
 			OPTICK_FRAME("Application Loop");
+
+			if (FinishedImport)
+			{
+				FinishedImport = false;
+				Wiwa::GameStateManager::DeserializeData();
+			}
 
 			// Limit the frame time if needed
 			if (Time::IsFrameCap())

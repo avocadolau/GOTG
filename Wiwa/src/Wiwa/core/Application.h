@@ -160,7 +160,9 @@ namespace Wiwa
 
 		std::vector<std::function<void()>> m_MainThreadQueue;
 		std::mutex m_MainThreadQueueMutex;
-
+	
+	public:
+		bool FinishedImport = false;
 	private:
 		static Application *s_Instance;
 	};

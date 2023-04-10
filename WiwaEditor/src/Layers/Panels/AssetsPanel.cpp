@@ -69,6 +69,7 @@ void AssetsPanel::InitImports(const std::filesystem::path& path)
 			CheckImport(p);
 		}
 	}
+	Wiwa::Application::Get().FinishedImport = true;
 }
 void AssetsPanel::UpdateImports(const std::filesystem::directory_entry& path)
 {
