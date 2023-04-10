@@ -74,5 +74,8 @@ namespace Wiwa
 		int keyPressRefreshTimer = 0;
 
 		Conversation* conversationCreator_P;
+
+		bool collidingWithNpc = false;
+		char* NpcConversationTag;
 	};
 }
