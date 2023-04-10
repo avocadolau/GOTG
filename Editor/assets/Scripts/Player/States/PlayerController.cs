@@ -23,6 +23,8 @@ namespace Game
             transformIt.componentIndex = Constants.WI_INVALID_INDEX;
             rigidBodyIt.componentId = Constants.WI_INVALID_INDEX;
             shooterIt.componentIndex = Constants.WI_INVALID_INDEX;
+            GameState.SetPlayer(m_EntityId, m_Scene);
+            GameState.LoadPlayerProgression();
         }
 
         public virtual void Init()

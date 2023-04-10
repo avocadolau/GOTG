@@ -2,7 +2,7 @@
 #include "EnemySystem.h"
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
-
+#include <Wiwa/ecs/components/game/attack/PhylasQuantumSword.h>
 namespace Wiwa
 {
 	struct BulletComponent
@@ -12,6 +12,14 @@ namespace Wiwa
 		int Damage;
 		glm::vec3 Direction;
 	};
+
+	/*struct PhylasQuantumSword
+	{
+		float velocity;
+		float lifeTime;
+		int damage;
+		glm::vec3 direction;
+	};*/
 
 	Wiwa::EnemySystem::EnemySystem()
 	{
@@ -42,7 +50,6 @@ namespace Wiwa
 		m_ColliderIt = GetComponentIterator<CollisionBody>();
 		m_AgentIt = GetComponentIterator<AgentAI>();
 		m_TransformIt = GetComponentIterator<Transform3D>();
-
 		m_PlayerId = Wiwa::GameStateManager::s_PlayerId;
 		m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);
 		m_PlayerStatsIt = GetComponentIterator<Character>(m_PlayerId);
@@ -61,6 +68,8 @@ namespace Wiwa
 			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 			ReceiveDamage(100000);
 		}
+		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+		transform->localPosition.y = 0.0f;
 	}
 
 	void EnemySystem::OnDestroy()
@@ -76,6 +85,15 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
 			ReceiveDamage(bullet->Damage);
+		}
+
+		std::string phylasSword = "PHYLAS_QUANTUM_SWORD";
+		if (body1->id == m_EntityId && phylasSword == body2->selfTagStr)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Wiwa::PhylasQuantumSword* phylasSword = em.GetComponent<Wiwa::PhylasQuantumSword>(body2->id);
+			ReceiveDamage(phylasSword->damage);
 		}
 	}
 

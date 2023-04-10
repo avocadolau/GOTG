@@ -27,9 +27,6 @@ namespace Wiwa
 	{
 		m_Scene = scene;
 		
-		//InitFont("assets/arial.ttf");
-		//Test remove once done
-		//InitFont("assets/arial.ttf","prueba1");
 
 		Conversation* newConversation = new Conversation();
 

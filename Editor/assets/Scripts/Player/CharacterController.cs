@@ -47,8 +47,7 @@ namespace Game
             shooterIt = GetComponentIterator<StarlordShooter>();
             dashTimer = GetComponentByIterator<Character>(characterControllerIt).DashCooldown;
 
-            GameState.SetPlayer(m_EntityId, m_Scene);
-            GameState.LoadPlayerProgression();
+
         }
         void Init()
         {
