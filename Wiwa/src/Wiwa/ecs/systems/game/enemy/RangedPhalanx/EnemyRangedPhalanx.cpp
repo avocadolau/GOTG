@@ -100,6 +100,9 @@ namespace Wiwa
 
 	void EnemyRangedPhalanx::ReceiveDamage(int damage)
 	{
+		if (m_CurrentState == m_DeathState)
+			return;
+
 		WI_INFO("EnemyRangedPhalanx hit by: {} damage", damage);
 
 		EnemySystem::ReceiveDamage(damage);

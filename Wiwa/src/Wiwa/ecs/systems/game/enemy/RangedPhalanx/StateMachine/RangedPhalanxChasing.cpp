@@ -33,6 +33,8 @@ namespace Wiwa
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
         offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
 		animator->PlayAnimation("walk", true);
+        enemy->ChasePlayer();
+
 	}
 	
     void RangedPhalanxChasingState::UpdateState(EnemyRangedPhalanx* enemy)
