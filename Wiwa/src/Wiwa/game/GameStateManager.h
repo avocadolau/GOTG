@@ -106,6 +106,8 @@ namespace Wiwa {
 
 		static void Update();
 		static void Die();
+		static struct Character* GetPlayerCharacterComp();
+		static void DamagePlayer(uint32_t damage);
 		static void StartNewRoom();
 		static void SetPlayerId(EntityId id, Scene* scene);
 		static void EndCurrentRoom();
