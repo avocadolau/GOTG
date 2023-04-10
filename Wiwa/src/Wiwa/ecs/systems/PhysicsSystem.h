@@ -38,6 +38,8 @@ namespace Wiwa {
 		bool OnEnabledFromPool() override;
 
 		bool OnDisabledFromPool() override;
+
+		void SetBoundingBoxes(Model* root, ColliderCube* cube, Transform3D* transform));
 	private:
 		Object* obj = nullptr;
 	};

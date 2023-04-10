@@ -237,6 +237,8 @@ namespace Wiwa {
 		Model(const char* file);
 		~Model();
 
+		std::vector<Model*> GetModelList() { return models; }
+
 		void Render();
 
 		void DrawBoudingBox();

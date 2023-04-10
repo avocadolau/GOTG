@@ -107,6 +107,20 @@ namespace Wiwa
 		colorShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_color", colorShader);
+		//toon textured outlined
+		ResourceId outlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/toon_textured_outlined");
+		Shader* outlinedShader = Wiwa::Resources::GetResourceById<Shader>(outlinedShaderId);
+		outlinedShader->Compile("resources/shaders/light/toon_textured_outlined");
+		outlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		outlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		outlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		outlinedShader->addUniform("u_ToonLevels", UniformType::Int);
+		outlinedShader->addUniform("u_RimLightPower", UniformType::Float);
+		outlinedShader->addUniform("u_SpecularValue", UniformType::Float);
+		outlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		outlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		outlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured_outlined", outlinedShader);
 
 		// Normal Display Shader
 		m_NormalDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/normal_display");

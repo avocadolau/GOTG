@@ -90,6 +90,8 @@ namespace Wiwa {
 		return false;
 	}
 
+
+
 	void PhysicsSystem::DeleteBody()
 	{
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
@@ -104,6 +106,7 @@ namespace Wiwa {
 	{
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
+	
 
 		CollisionBody* rb = GetComponent<CollisionBody>();
 		Transform3D* transform = GetComponent<Transform3D>();
@@ -117,10 +120,30 @@ namespace Wiwa {
 
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
+		rb->scalingOffset = glm::vec3(1, 1, 1);
+
 		if (rb)
 		{
 			if (cube)
 			{
+				if (mesh)
+				{
+			
+					Model* m = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
+					////fix this 
+					//for (auto model : m->GetModelList())
+					//{
+					//	if (model->IsRoot())
+					//		continue;
+					//	WI_INFO("half size {0} {1} {2}", model->boundingBox.HalfSize().x, model->boundingBox.HalfSize().y, model->boundingBox.HalfSize().z);
+
+					//	cube->halfExtents.x = model->boundingBox.HalfSize().x * transform->scale.x;
+					//	cube->halfExtents.y = model->boundingBox.HalfSize().y * transform->scale.y;
+					//	cube->halfExtents.z = model->boundingBox.HalfSize().z * transform->scale.z;
+
+					//	break;
+					//}
+				}
 				obj = physicsManager.AddBodyCube(m_EntityId, *cube, *transform, *rb);
 			}
 			else if (sphere)
@@ -136,5 +159,8 @@ namespace Wiwa {
 				obj = physicsManager.AddBodyCapsule(m_EntityId, *capsule, *transform, *rb);
 			}
 		}
+	}
+	void PhysicsSystem::SetBoundingBoxes(Model* root, ColliderCube* cube, Transform3D* transform)
+	{
 	}
 }
