@@ -97,31 +97,22 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::ParticleManager& pm = enemy->getScene().GetParticleManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		
-
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Character* playerStats = nullptr;
-
-		if (enemy->m_PlayerStatsIt.c_id != WI_INVALID_INDEX && enemy->m_PlayerStatsIt.c_index != enemy->m_PlayerStatsIt.c_id)
-		{
-			(Character*)em.GetComponentByIterator(enemy->m_PlayerStatsIt);
-		}
 
 		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-		
+		ParticleManager& pman = enemy->getScene().GetParticleManager();	
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-		if (playerStats != nullptr && selfStats != nullptr)
+		if (selfStats != nullptr)
 		{
 			if (distance <= 3.0f)
 			{
+				GameStateManager::DamagePlayer(selfStats->Damage);
 				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId,"PE_Hurt");
 				pman.EmitBatch(pe_hurt);
-				playerStats->Health -= selfStats->Damage;
 			}
 		}
 	}

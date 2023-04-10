@@ -212,11 +212,20 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
 		Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
+		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+
 		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(m_EntityId);
 
 		if (agentPtr)
 		{
 			agentPtr->CreatePath(playerTr->localPosition);
+
+			/*float dist = glm::distance(playerTr->localPosition, transform->localPosition);
+			WI_INFO("Distance to player is {}", dist);
+			if (dist < 60 || !agentPtr->HasPath())
+			{
+				agentPtr->CreatePath(playerTr->localPosition);
+			}*/
 		}
 		//RotateTo(playerTr.Position,  enemy, entityId);                   
 	}

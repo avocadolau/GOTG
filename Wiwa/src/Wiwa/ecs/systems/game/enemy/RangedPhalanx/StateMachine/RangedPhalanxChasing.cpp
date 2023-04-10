@@ -53,7 +53,7 @@ namespace Wiwa
         //    offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
         //}
 
-        if (m_ChasingTimer > 100.0f)
+        if (m_ChasingTimer > 1000.0f)
         {
             m_ChasingTimer = 0.0f;
                 //enemy->ChasePlayer();
