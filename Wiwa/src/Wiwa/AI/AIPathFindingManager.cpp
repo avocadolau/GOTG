@@ -329,6 +329,9 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		auto elapsed_time_neighbour = std::chrono::duration_cast<std::chrono::microseconds>(start_time_neighbour - end_time_neighbour).count();
 		//WI_INFO("Neighbour time: {}", elapsed_time_neighbour);
 		++iterations;
+
+		if (iterations >= 25)
+			return false;
 	}
 	auto end_time_it = std::chrono::high_resolution_clock::now();
 	// Calculate the elapsed time

@@ -10,11 +10,11 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_SpawnerIt;
 		EntityManager::ComponentIterator m_WaveIt;
-		std::vector<EntityManager::ComponentIterator> m_EnemiesCmp;
-		std::vector<EntityId> m_EnemiesId;
-		std::vector<int> m_PoolType;
 
 		SystemHash physicsSystemHash;
+
+		int m_MaxWavesEnemies = 0;
+		int m_CurrentEnemiesDead = 0;
 	public:
 		WaveSystem();
 		~WaveSystem();
@@ -27,11 +27,11 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void QueryEnemies(Wave* wave);
+		void QueryEnemies(const EntityManager::ComponentIterator& wave);
 
 		void SpawnEnemy(int index);
 
-		void DestroyEnemy(int index);
+		void DestroyEnemy(size_t id, int enemy_type);
 
 		void SetSpawner(const EntityManager::ComponentIterator& m_WaveIt);
 

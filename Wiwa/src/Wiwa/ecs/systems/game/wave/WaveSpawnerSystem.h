@@ -13,7 +13,9 @@ namespace Wiwa {
 		EntityId m_CurrentWaveEntityId;
 
 		float m_Timer = 0.0f;
-		bool m_PreviousWaveDestroy = false;
+		bool m_HasWave = false;
+		int maxWavesCounter = 0;
+		int currentWavesCounter = 0;
 	public:
 		WaveSpawnerSystem();
 		~WaveSpawnerSystem();
