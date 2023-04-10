@@ -35,9 +35,6 @@ namespace Wiwa
 		SetDialogText("This is a test dialog in line 1", "We are on node... 1", "agniag", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Aaaaaaaa in line 1", "We are on node... 2", "agbQAGIU", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Is this a test dialog in line 1?", "We are on node... 3", "dfgnhNIUFniiauergnb", "assets/Fonts/Jade_Smile.ttf", *newConversation);
-		SetDialogText("This is a test dialog in line 1!", "We are on node... 4", "hjs89hbjs", "assets/Fonts/Jade_Smile.ttf", *newConversation);
-		SetDialogText("Line 1", "We are on node... 5", "sbgsgjs", "assets/Fonts/Jade_Smile.ttf", *newConversation);
-		SetDialogText("....................", "We are on node... 6", "gsks8gksr", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 
 		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *newConversation);
 		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *newConversation);
@@ -45,10 +42,27 @@ namespace Wiwa
 
 		conversations.push_back(newConversation);
 
+		Conversation* newConversation2 = new Conversation();
+
+		newConversation2->conversationName = "NPC_1";
+
+		SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", *newConversation2);
+		SetDialogText("constantly updating their data banks.", "With them the architecture, too, gets", "updated. ", "assets/Fonts/Jade_Smile.ttf", *newConversation2);
+		SetDialogText("Surprisingly, some of the collector’s", "inventory of weaponsandgadgets", "has been seen in the vicinity.", "assets/Fonts/Jade_Smile.ttf", *newConversation2);
+		SetDialogText("Do not get lost in the labyrinth of", "machinery, Guardian.", "And good luck.", "assets/Fonts/Jade_Smile.ttf", *newConversation2);
+
+		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *newConversation2);
+		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *newConversation2);
+		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *newConversation2);
+
+		conversations.push_back(newConversation2);
+
 		actualConversationState = 2;
 		currentNode = 0;
 
 		keyPressRefreshTimer = 0;
+
+		collidingWithNpc = false;
 
 		return true;
 	}
@@ -56,9 +70,9 @@ namespace Wiwa
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120) // Just for testing purposes, actual game logic goes here before UpdateConversation();
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 		{
-			conversationToPlayName = "Test conversation";
+			conversationToPlayName = NpcConversationTag;
 			actualConversationState = 0;
 
 			keyPressRefreshTimer = 0;
@@ -154,13 +168,13 @@ namespace Wiwa
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		newDialogNode->text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text1_imgMode->GetTextureId(), newDialogNode->text1_imgMode->GetSize(), { 720,650 }, { 1500,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		newDialogNode->text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text1_imgMode->GetTextureId(), newDialogNode->text1_imgMode->GetSize(), { 720,650 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, newDialogNode->text1_imgModeID);
 		
-		newDialogNode->text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text2_imgMode->GetTextureId(), newDialogNode->text2_imgMode->GetSize(), { 720,700 }, { 1500,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		newDialogNode->text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text2_imgMode->GetTextureId(), newDialogNode->text2_imgMode->GetSize(), { 720,700 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, newDialogNode->text2_imgModeID);
 		
-		newDialogNode->text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text3_imgMode->GetTextureId(), newDialogNode->text3_imgMode->GetSize(), { 720,750 }, { 1500,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		newDialogNode->text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, newDialogNode->text3_imgMode->GetTextureId(), newDialogNode->text3_imgMode->GetSize(), { 720,750 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, newDialogNode->text3_imgModeID);
 
 		conversation.nodes.push_back(newDialogNode);
