@@ -13,7 +13,7 @@
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
 #include <Wiwa/core/Resources.h>
-
+#include <Wiwa/ecs/EntityManager.h>
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
@@ -35,8 +35,12 @@ namespace Wiwa {
 			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_) {};
 
 		btCollisionObject* collisionObject;
+		EntityManager::ComponentIterator transformIt;
+		EntityManager::ComponentIterator parentTransformIt;
+		EntityManager::ComponentIterator collisionBodyIt;
 		btVector3 velocity;
 		size_t id;
+		size_t parentId;
 		int selfTag;
 		const char* selfTagStr;
 		bool doContinuousCollision;

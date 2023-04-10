@@ -299,7 +299,7 @@ int Wiwa::AIPathFindingManager::CreatePath(const glm::ivec2& origin, const glm::
 		// If it is a better path, Update the parent
 		for (auto& item : adjacent.pathList)
 		{
-			if (closed.Find(item.pos) != nullptr)
+			if (closed.Find(item.pos) != nullptr || !IsWalkable(item.pos))
 				continue;
 
 			// If it is NOT found, calculate its F and add it to the open list

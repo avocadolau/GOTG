@@ -68,6 +68,8 @@ namespace Wiwa
 			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 			ReceiveDamage(100000);
 		}
+		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+		transform->localPosition.y = 0.0f;
 	}
 
 	void EnemySystem::OnDestroy()

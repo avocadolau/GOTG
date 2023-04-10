@@ -47,6 +47,8 @@ void Wiwa::AgentAISystem::OnUpdate()
 
 	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
 	Wiwa::Transform3D* transform = GetComponentByIterator<Wiwa::Transform3D>(m_Transform);
+	Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
+	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(m_EntityId);
 
 	if (lastPath.empty() == false && m_IsMoving == false)
 	{
@@ -81,9 +83,12 @@ void Wiwa::AgentAISystem::OnUpdate()
 		// Interpolate the character's position between the current position and the target position using the interpolation factor
 		glm::vec2 interpolatedPosition = glm::mix(position, m_DirectionPoint, t);
 
-		transform->localPosition.x = interpolatedPosition.x;
-		transform->localPosition.z = interpolatedPosition.y;
+		glm::vec2 norm = interpolatedPosition - glm::vec2(transform->localPosition.x, transform->localPosition.z);
 
+		/*transform->localPosition.x = interpolatedPosition.x;
+		transform->localPosition.z = interpolatedPosition.y;*/
+		norm *= agent->speed* agent->speed;
+		physSys->getBody()->velocity = btVector3(norm.x, 0, norm.y);
 		if (m_IsRotatingByTile)
 			LookAtPosition(m_DirectionPoint);
 	}

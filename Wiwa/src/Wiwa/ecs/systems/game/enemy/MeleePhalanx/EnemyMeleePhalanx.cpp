@@ -47,7 +47,7 @@ namespace Wiwa
 		m_Timer += Time::GetDeltaTimeSeconds();
 
 		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-		if (stats->Health == 0 && m_CurrentState != m_DeathState)
+		if (stats->Health <= 0 && m_CurrentState != m_DeathState)
 		{
 			SwitchState(m_DeathState);
 		}
