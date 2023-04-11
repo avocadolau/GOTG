@@ -28,7 +28,9 @@ namespace Wiwa
 
 	}
 
-	GuiManager::~GuiManager() {}
+	GuiManager::~GuiManager() {
+		CleanUp();
+	}
 
 	bool GuiManager::Init(Scene* scene)
 	{
