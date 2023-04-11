@@ -814,7 +814,7 @@ void UIPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
 	ImGui::SameLine();
 	if (ImGui::Button("-"))
 	{
-		list.erase(list.begin() + list.size() - 1);
+		if (list.size() > 0)list.erase(list.begin() + list.size() - 1);
 	}
 	
 	animationRects = list;

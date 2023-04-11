@@ -4,6 +4,10 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa/scripting/ScriptEngine.h>
 #include <Wiwa/core/Application.h>
+#include <Wiwa/utilities/render/Text.h>
+#include <ImGuizmo.h>
+#include "../EditorLayer.h"
+
 UIEditorPanel::UIEditorPanel(EditorLayer* instance)
 	: Panel("UI editor", ICON_FK_MAGIC, instance)
 {
@@ -121,146 +125,74 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		ImGui::SameLine();
 		ImGui::Text("%i", control->id);
 		ImGui::NewLine();
-		ImGui::InputInt2("position",pos);
+		ImGui::InputInt2("position", pos);
 		ImGui::InputInt2("size", size);
-		ImGui::InputInt2("origin position", originPos);
-		ImGui::InputInt2("origin size", originSize);
-		if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
+		switch (control->type)
 		{
+		case Wiwa::GuiControlType::ABILITY:
+			ImGui::InputInt2("origin position", originPos);
+			ImGui::InputInt2("origin size", originSize);
+			ImGui::Text("Animations");
+			ImGui::Checkbox("animated", &animated);
+			ImGui::InputFloat("Animation speed", &animSpeed);
+			VectorEdit(animationRects);
+			AssetContainerPath();
+			break;
+		case Wiwa::GuiControlType::BAR:
+			ImGui::InputInt2("origin position", originPos);
+			ImGui::InputInt2("origin size", originSize);
 			ImGui::InputInt2("origin position slider", extraOriginPos);
 			ImGui::InputInt2("origin size slider", extraOriginSize);
+			ImGui::Text("Animations");
+			ImGui::Checkbox("animated", &animated);
+			ImGui::InputFloat("Animation speed", &animSpeed);
+			VectorEdit(animationRects);
+			AssetContainerPath();
+			AssetContainerExtraPath();
+			break;
+		case Wiwa::GuiControlType::BUTTON:
+			ImGui::InputInt2("origin position", originPos);
+			ImGui::InputInt2("origin size", originSize);
+			CallbackElements(control);
+			AssetContainerPath();
+			break;
+		case Wiwa::GuiControlType::CHECKBOX:
+			ImGui::InputInt2("origin position", originPos);
+			ImGui::InputInt2("origin size", originSize);
+			CallbackElements(control);
+			AssetContainerPath();
+			break;
+		case Wiwa::GuiControlType::IMAGE:
+			ImGui::InputInt2("origin position", originPos);
+			ImGui::InputInt2("origin size", originSize);
+			ImGui::Text("Animations");
+			ImGui::Checkbox("animated", &animated);
+			ImGui::InputFloat("Animation speed", &animSpeed);
+			VectorEdit(animationRects);
+			AssetContainerPath();
+			break;
+		case Wiwa::GuiControlType::SLIDER:
+			ImGui::InputInt2("origin position", originPos);
+			ImGui::InputInt2("origin size", originSize);
+			ImGui::InputInt2("origin position slider", extraOriginPos);
+			ImGui::InputInt2("origin size slider", extraOriginSize);
+			CallbackElements(control);
+			AssetContainerPath();
+			AssetContainerExtraPath();
+			break;
+		case Wiwa::GuiControlType::TEXT:
+			ImGui::InputText("text", &pathForAsset);
+			break;
+		default:
+			break;
 		}
-		if (control->type != Wiwa::GuiControlType::TEXT || control->type != Wiwa::GuiControlType::BAR)
-		{
 
-			Wiwa::Application& app = Wiwa::Application::Get();
-			if (callbackID != WI_INVALID_INDEX)
-			{
-				size_t cbcount = app.GetCallbacksCount();
-
-				if (cbcount > 0) {
-					Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
-
-					ImGui::Text("Callback type:");
-
-					if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
-					{
-						for (size_t n = 0; n < cbcount; n++)
-						{
-							bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
-							current_cb = app.getCallbackAt(n);
-							switch (control->type)
-							{
-							case Wiwa::GuiControlType::BUTTON:
-								if (current_cb->getParamCount() == 0) {
-									if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-									{
-										callbackID = n;
-										if (is_selected)
-											ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-									}
-								}
-								break;
-							case Wiwa::GuiControlType::CHECKBOX:
-								if (current_cb->getParamCount() == 1) {
-									if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-										if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-										{
-											callbackID = n;
-											if (is_selected)
-												ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-										}
-									}
-								}
-								break;
-							case Wiwa::GuiControlType::SLIDER:
-								if (current_cb->getParamCount() == 1) {
-									if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-										if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-										{
-											callbackID = n;
-											if (is_selected)
-												ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-										}
-									}
-								}
-								break;
-							case Wiwa::GuiControlType::IMAGE:
-								if (current_cb->getParamCount() == 0) {
-									if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-									{
-										callbackID = n;
-										if (is_selected)
-											ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-									}
-								}
-								break;
-							default:
-								break;
-							}
-						}
-						ImGui::EndCombo();
-					}
-				}
-			}
-
-
-			 
-			AssetContainer(pathForAsset.c_str());
-			if (ImGui::BeginDragDropTarget())
-			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-				{
-					const wchar_t* path = (const wchar_t*)payload->Data;
-					std::wstring ws(path);
-					std::string pathS(ws.begin(), ws.end());
-					std::filesystem::path p = pathS.c_str();
-					if (p.extension() == ".png")
-					{
-						pathForAsset = pathS;
-					}
-				}
-
-				ImGui::EndDragDropTarget();
-			}
-			if (control->type == Wiwa::GuiControlType::CHECKBOX || control->type == Wiwa::GuiControlType::SLIDER)
-			{
-				AssetContainer(pathForExtraAsset.c_str());
-				if (ImGui::BeginDragDropTarget())
-				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-					{
-						const wchar_t* path = (const wchar_t*)payload->Data;
-						std::wstring ws(path);
-						std::string pathS(ws.begin(), ws.end());
-						std::filesystem::path p = pathS.c_str();
-						if (p.extension() == ".png")
-						{
-							pathForExtraAsset = pathS;
-						}
-					}
-
-					ImGui::EndDragDropTarget();
-				}
-			}
-			
-			ImGui::InputText("Audio event name", (char*)audioEventForButton.c_str(), 64);
-			
-			if (control->type == Wiwa::GuiControlType::IMAGE || control->type == Wiwa::GuiControlType::BUTTON || control->type == Wiwa::GuiControlType::CHECKBOX)
-			{
-				ImGui::Text("Animations");
-				ImGui::Checkbox("animated", &animated);
-				ImGui::InputFloat("Animation speed", &animSpeed);
-				VectorEdit(animationRects);
-			}
-		}
-		
 		if (ImGui::Button("Update"))
 		{
 			UpdateElements(control);
 		}
-		
 	}
+	
 }
 
 void UIEditorPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
@@ -282,7 +214,7 @@ void UIEditorPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
 	ImGui::SameLine();
 	if (ImGui::Button("-"))
 	{
-		list.erase(list.begin() + list.size() - 1);
+		if(list.size()>0)list.erase(list.begin() + list.size() - 1);
 	}
 
 	animationRects = list;
@@ -323,6 +255,178 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 			control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForExtraAsset.c_str());
 			control->extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId2);
 			r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetTextureId());
+		}
+	}
+	if (control->type == Wiwa::GuiControlType::TEXT)
+	{
+		control->text = pathForAsset.c_str();
+		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+		Wiwa::Text* newText = new Wiwa::Text;
+		newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)pathForAsset.c_str());
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());
+	}
+}
+
+void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
+{
+	Wiwa::Application& app = Wiwa::Application::Get();
+	if (callbackID != WI_INVALID_INDEX)
+	{
+		size_t cbcount = app.GetCallbacksCount();
+
+		if (cbcount > 0) {
+			Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
+
+			ImGui::Text("Callback type:");
+
+			if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+			{
+				for (size_t n = 0; n < cbcount; n++)
+				{
+					bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
+					current_cb = app.getCallbackAt(n);
+					switch (control->type)
+					{
+					case Wiwa::GuiControlType::BUTTON:
+						if (current_cb->getParamCount() == 0) {
+							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+						break;
+					case Wiwa::GuiControlType::CHECKBOX:
+						if (current_cb->getParamCount() == 1) {
+							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
+								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+								{
+									callbackID = n;
+									if (is_selected)
+										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+								}
+							}
+						}
+						break;
+					case Wiwa::GuiControlType::SLIDER:
+						if (current_cb->getParamCount() == 1) {
+							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
+								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+								{
+									callbackID = n;
+									if (is_selected)
+										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+								}
+							}
+						}
+						break;
+					case Wiwa::GuiControlType::IMAGE:
+						if (current_cb->getParamCount() == 0) {
+							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+						break;
+					default:
+						break;
+					}
+				}
+				ImGui::EndCombo();
+			}
+		}
+	}
+}
+
+void UIEditorPanel::AssetContainerPath()
+{
+	AssetContainer(pathForAsset.c_str());
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".png")
+			{
+				pathForAsset = pathS;
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+}
+
+void UIEditorPanel::AssetContainerExtraPath()
+{
+	AssetContainer(pathForExtraAsset.c_str());
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".png")
+			{
+				pathForExtraAsset = pathS;
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+}
+
+void UIEditorPanel::ControlGuizmos()
+{
+	if (elementSelected != -1)
+	{
+		
+		m_GizmoType = instance->GetGizmo();
+		if (m_GizmoType != -1)
+		{
+			glm::mat4x4 tmpMat = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f, -1.0f, 1.0f);
+
+			//Snaping
+			bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
+			float snapValue = 0.5f; //Snap to 0.5m for translation/scale
+
+			
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			/*ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(tmpMat),
+				nullptr, snap ? snapValues : nullptr);
+			if (ImGuizmo::IsUsing())
+			{
+				float translation[3], rotation[3], scale[3];
+				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(tmpMat), translation, rotation, scale);
+
+				switch (m_GizmoType)
+				{
+				case ImGuizmo::OPERATION::TRANSLATE:
+				{
+					m_SelectedTransform->localPosition += glm::vec3(translation[0], translation[1], translation[2]) - m_SelectedTransform->position;
+				}break;
+				case ImGuizmo::OPERATION::ROTATE:
+				{
+					m_SelectedTransform->localRotation += glm::vec3(rotation[0], rotation[1], rotation[2]) - m_SelectedTransform->rotation;
+				}break;
+				case ImGuizmo::OPERATION::SCALE:
+				{
+					m_SelectedTransform->localScale += glm::vec3(scale[0], scale[1], scale[2]) - m_SelectedTransform->scale;
+				}break;
+				default:
+					break;
+				}*/
+			}
+			
 		}
 	}
 }

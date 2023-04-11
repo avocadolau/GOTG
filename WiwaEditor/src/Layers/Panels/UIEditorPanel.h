@@ -27,12 +27,22 @@ public:
 
 	void UpdateElements(Wiwa::GuiControl* control);
 
+	void CallbackElements(Wiwa::GuiControl* control);
+
+	void AssetContainerPath();
+
+	void AssetContainerExtraPath();
+
+	void ControlGuizmos();
+
 
 	void OnEvent(Wiwa::Event& e) override;
 	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
 	void VectorEdit(std::vector<Wiwa::Rect2i> list);
 
 	int elementSelected;
+
+	int m_GizmoType;
 
 	//Variables to change
 	int pos[2];
