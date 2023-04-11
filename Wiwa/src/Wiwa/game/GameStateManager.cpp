@@ -395,12 +395,12 @@ namespace Wiwa
 	int GameStateManager::NextRoom()
 	{
 		WI_INFO("ROOM STATE: NextRoom()");
-		if (s_CurrentRoomsCount > s_RoomsToShop)
-		{
-			GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-			SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
-			return 1;
-		}
+		//if (s_CurrentRoomsCount > s_RoomsToShop)
+		//{
+		//	GameStateManager::SetRoomType(RoomType::ROOM_HUB);
+		//	SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
+		//	return 1;
+		//}
 
 		RoomType type = GameStateManager::GetType();
 		switch (type)
