@@ -43,8 +43,8 @@ namespace Wiwa
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			
-			_scene->GetDialogManager().collidingWithNpc = true;
-			_scene->GetDialogManager().NpcConversationTag = (char*)em.GetEntityName(body1->id);
+			/*_scene->GetDialogManager().collidingWithNpc = true;
+			_scene->GetDialogManager().NpcConversationTag = (char*)em.GetEntityName(body1->id);*/
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace Wiwa
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 
-			_scene->GetDialogManager().collidingWithNpc = false;
+			//_scene->GetDialogManager().collidingWithNpc = false;
 		}
 	}
 }

@@ -56,7 +56,7 @@ namespace Wiwa {
 		LightManager& GetLightManager() { return *m_LightManager; }
 		ParticleManager& GetParticleManager() { return *m_ParticleManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
-		DialogManager& GetDialogManager() { return *m_DialogManager; }
+		//DialogManager& GetDialogManager() { return *m_DialogManager; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -78,7 +78,7 @@ namespace Wiwa {
 		LightManager* m_LightManager;
 		ParticleManager* m_ParticleManager;
 		GuiManager* m_GuiManager;
-		DialogManager* m_DialogManager;
+		//DialogManager* m_DialogManager;
 
 	public:
 	private:

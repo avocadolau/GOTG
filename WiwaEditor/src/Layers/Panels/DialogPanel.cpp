@@ -19,7 +19,7 @@ DialogPanel::~DialogPanel()
 
 void DialogPanel::Draw()
 {
-	Wiwa::DialogManager& dm = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
+	//Wiwa::DialogManager& dm = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
 
 	
 
