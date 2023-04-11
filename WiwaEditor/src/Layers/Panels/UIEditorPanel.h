@@ -16,6 +16,8 @@ public:
 	void Draw() override;
 
 	int canvasSelectedID = -1;
+
+	void DrawGameWindow();
 	
 	void GetSelectedCanvas();
 

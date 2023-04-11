@@ -6,6 +6,8 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/utilities/render/Text.h>
 #include <ImGuizmo.h>
+#include <glm/gtx/quaternion.hpp>
+
 #include "../EditorLayer.h"
 
 UIEditorPanel::UIEditorPanel(EditorLayer* instance)
@@ -22,21 +24,157 @@ UIEditorPanel::~UIEditorPanel()
 void UIEditorPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
-	ImGui::Text("UI editor panel");
-	GetSelectedCanvas();
-	if (ImGui::CollapsingHeader("Edit canvas"))
+	if(ImGui::BeginTable("##ui_editor", 2, ImGuiTableFlags_Resizable))
 	{
+		ImGui::TableNextColumn();
+		ImGui::Text("UI editor panel");
+
+		if (ImGui::Button(ICON_FK_ARROWS))
+			m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+		ImGui::SameLine();
+
+		if (ImGui::Button(ICON_FK_EXPAND))
+			m_GizmoType = ImGuizmo::OPERATION::SCALE;
 		
-		if(canvasSelectedID < 0)ImGui::Text("Select a canvas to edit");
-		if (canvasSelectedID > -1) {
-			ImGui::Text("Canvas: %i", canvasSelectedID);
-			ImGui::NewLine();
-			DrawCanvasItems();
+		GetSelectedCanvas();
+		if (ImGui::CollapsingHeader("Edit canvas"))
+		{
+		
+			if(canvasSelectedID < 0)ImGui::Text("Select a canvas to edit");
+			if (canvasSelectedID > -1) {
+				ImGui::Text("Canvas: %i", canvasSelectedID);
+				ImGui::NewLine();
+				DrawCanvasItems();
 			
+			}
 		}
+		ImGui::TableNextColumn();
+		DrawGameWindow();
 		
+		ImGui::EndTable();
 	}
 	ImGui::End();
+}
+// Convert 2D screen coordinates to 2D world positions
+glm::vec2 screenToWorld(glm::vec2 screenPos, glm::mat4 invProjMatrix, int screenWidth, int screenHeight) {
+	// Convert screen coordinates to NDC
+	float ndc_x = 2 * screenPos.x / screenWidth - 1;
+	float ndc_y = 1 - 2 * screenPos.y / screenHeight;
+
+	// Apply inverse projection matrix to get world position
+	glm::vec4 ndcPos(ndc_x, ndc_y, 1, 1);
+	glm::vec4 worldPos = invProjMatrix * ndcPos;
+	return glm::vec2(worldPos.x / worldPos.w, worldPos.y / worldPos.w);
+}
+
+// Convert 2D world positions to 2D screen coordinates
+glm::ivec2 worldToScreen(glm::vec2 worldPos, glm::mat4 projMatrix, int screenWidth, int screenHeight) {
+	// Apply projection matrix to get NDC coordinates
+	glm::vec4 worldPosHomog(worldPos.x, worldPos.y, 0, 1);
+	glm::vec4 ndcPos = projMatrix * worldPosHomog;
+
+	// Convert NDC coordinates to screen coordinates
+	int screen_x = static_cast<int>((ndcPos.x + 1) / 2 * screenWidth);
+	int screen_y = static_cast<int>((1 - ndcPos.y) / 2 * screenHeight);
+
+	return glm::ivec2(screen_x, screen_y);
+}
+void UIEditorPanel::DrawGameWindow()
+{
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+	Wiwa::Size2i resolution = Wiwa::Application::Get().GetTargetResolution();
+	float ar = resolution.w / (float)resolution.h;
+	Wiwa::Size2f scales = { viewportPanelSize.x / (float)resolution.w, viewportPanelSize.y / (float)resolution.h };
+
+	float scale = scales.x < scales.y ? scales.x : scales.y;
+	ImVec2 isize = { resolution.w * scale, resolution.h * scale };
+	
+	ImTextureID tex = (ImTextureID)(intptr_t)Wiwa::RenderManager::getColorTexture();
+	
+	ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
+
+	if (elementSelected != -1)
+	{
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::SetDrawlist();
+		const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+		const Wiwa::Size2i resolution = Wiwa::Application::Get().GetTargetResolution();
+		float ar = resolution.w / (float)resolution.h;
+		const Wiwa::Size2f scales = { viewportPanelSize.x / (float)resolution.w, viewportPanelSize.y / (float)resolution.h };
+
+		const float scale = scales.x < scales.y ? scales.x : scales.y;
+		
+		const ImVec2 rectPos = ImGui::GetItemRectMin();
+		const ImVec2 isize = { resolution.w * scale, resolution.h * scale };
+		ImGuizmo::SetRect(rectPos.x, rectPos.y, isize.x, isize.y);
+		
+		glm::mat4 cameraView = Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView();
+		
+		const glm::mat4& cameraProjection = glm::ortho(0.0f, (float)resolution.w, (float)resolution.h, 0.0f, -1.0f, 1.0f);
+
+		
+		//Snaping
+		
+		bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
+		
+		float snapValue = 0.5f; //Snap to 0.5m for translation/scale
+		
+		float snapValues[3] = { snapValue, snapValue, snapValue };
+		
+		glm::vec2 position = screenToWorld(glm::vec2(pos[0], pos[1]), glm::inverse(cameraProjection), resolution.w, resolution.h);
+		glm::mat4 tmpMat =
+		glm::translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0.f)) *
+			glm::toMat4(glm::quat(glm::vec3(0.f, 0.f, 0.f))) *
+				glm::scale(glm::mat4(1.f), glm::vec3(size[0], size[1], 0.f));
+
+
+		
+		ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+		
+			(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(tmpMat),
+		
+			nullptr, snap ? snapValues : nullptr);
+		
+		if (ImGuizmo::IsUsing())
+		
+		{
+		
+			float translation[3], rotation[3], scale[3];
+		
+			ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(tmpMat), translation, rotation, scale);
+
+		
+			switch (m_GizmoType)
+		
+			{
+		
+			case ImGuizmo::OPERATION::TRANSLATE:
+		
+				{
+		
+					
+		
+				}break;
+		
+			case ImGuizmo::OPERATION::SCALE:
+		
+				{
+		
+					
+		
+				}break;
+		
+			default:
+		
+				break;
+		
+			}
+		
+		}
+	}
+	ControlGuizmos();
 }
 
 void UIEditorPanel::GetSelectedCanvas()
@@ -139,7 +277,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			AssetContainerPath();
 			break;
 		case Wiwa::GuiControlType::BAR:
-			ImGui::InputInt2("origin position", originPos);
+			ImGui::DragInt2("origin position", originPos);
 			ImGui::InputInt2("origin size", originSize);
 			ImGui::InputInt2("origin position slider", extraOriginPos);
 			ImGui::InputInt2("origin size slider", extraOriginSize);
@@ -385,51 +523,10 @@ void UIEditorPanel::AssetContainerExtraPath()
 
 void UIEditorPanel::ControlGuizmos()
 {
-	if (elementSelected != -1)
-	{
+	
 		
-		m_GizmoType = instance->GetGizmo();
-		if (m_GizmoType != -1)
-		{
-			glm::mat4x4 tmpMat = glm::ortho(0.0f, 1920.0f, 1080.0f, 0.0f, -1.0f, 1.0f);
-
-			//Snaping
-			bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
-			float snapValue = 0.5f; //Snap to 0.5m for translation/scale
-
-			
-			float snapValues[3] = { snapValue, snapValue, snapValue };
-
-			/*ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(tmpMat),
-				nullptr, snap ? snapValues : nullptr);
-			if (ImGuizmo::IsUsing())
-			{
-				float translation[3], rotation[3], scale[3];
-				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(tmpMat), translation, rotation, scale);
-
-				switch (m_GizmoType)
-				{
-				case ImGuizmo::OPERATION::TRANSLATE:
-				{
-					m_SelectedTransform->localPosition += glm::vec3(translation[0], translation[1], translation[2]) - m_SelectedTransform->position;
-				}break;
-				case ImGuizmo::OPERATION::ROTATE:
-				{
-					m_SelectedTransform->localRotation += glm::vec3(rotation[0], rotation[1], rotation[2]) - m_SelectedTransform->rotation;
-				}break;
-				case ImGuizmo::OPERATION::SCALE:
-				{
-					m_SelectedTransform->localScale += glm::vec3(scale[0], scale[1], scale[2]) - m_SelectedTransform->scale;
-				}break;
-				default:
-					break;
-				}*/
-			}
-			
-		}
-	}
 }
+
 
 void UIEditorPanel::OnEvent(Wiwa::Event& e)
 {
