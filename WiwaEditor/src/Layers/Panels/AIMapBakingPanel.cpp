@@ -14,7 +14,7 @@
 //#include "glew.h"
 
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
-	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
+	: Panel("AI Map Baking", ICON_FK_MAGIC, instance)
 {
 	m_DrawGrid = true;
 }

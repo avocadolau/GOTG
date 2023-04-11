@@ -1,5 +1,5 @@
 #pragma once
-
+#include <memory>
 #ifdef WI_PLATFORM_WINDOWS
 	#ifdef WI_BUILD_DLL 
 		#define WI_API __declspec(dllexport)
