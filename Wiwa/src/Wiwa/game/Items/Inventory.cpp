@@ -319,11 +319,15 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 
 void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)
 {
-	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	if (!em.GetEntitiesAlive()->empty())
+	{
+		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-	gm.canvas.at(0)->controls.at(indexUI)->texture = Wiwa::Resources::GetResourceById<Image>(id);
-	r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(0)->controls.at(indexUI)->id_quad_normal, gm.canvas.at(0)->controls.at(indexUI)->texture->GetTextureId());
+		gm.canvas.at(0)->controls.at(indexUI)->texture = Wiwa::Resources::GetResourceById<Image>(id);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(0)->controls.at(indexUI)->id_quad_normal, gm.canvas.at(0)->controls.at(indexUI)->texture->GetTextureId());
+	}
 }
 
 void Wiwa::Inventory::CooldownState(Ability* ability,int indexUI)
