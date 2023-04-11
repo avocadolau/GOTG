@@ -59,7 +59,7 @@ public:
 	std::string audioEventForButton;
 
 	bool animated;
-	float animSpeed;
+	float animSpeed = 0.0f;
 	std::vector<Wiwa::Rect2i> animationRects;
 
 };

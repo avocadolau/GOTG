@@ -263,13 +263,13 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		ImGui::SameLine();
 		ImGui::Text("%i", control->id);
 		ImGui::NewLine();
-		ImGui::InputInt2("position", pos);
-		ImGui::InputInt2("size", size);
+		ImGui::DragInt2("position", pos);
+		ImGui::DragInt2("size", size);
 		switch (control->type)
 		{
 		case Wiwa::GuiControlType::ABILITY:
-			ImGui::InputInt2("origin position", originPos);
-			ImGui::InputInt2("origin size", originSize);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
 			ImGui::Text("Animations");
 			ImGui::Checkbox("animated", &animated);
 			ImGui::InputFloat("Animation speed", &animSpeed);
@@ -278,9 +278,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			break;
 		case Wiwa::GuiControlType::BAR:
 			ImGui::DragInt2("origin position", originPos);
-			ImGui::InputInt2("origin size", originSize);
-			ImGui::InputInt2("origin position slider", extraOriginPos);
-			ImGui::InputInt2("origin size slider", extraOriginSize);
+			ImGui::DragInt2("origin size", originSize);
+			ImGui::DragInt2("origin position slider", extraOriginPos);
+			ImGui::DragInt2("origin size slider", extraOriginSize);
 			ImGui::Text("Animations");
 			ImGui::Checkbox("animated", &animated);
 			ImGui::InputFloat("Animation speed", &animSpeed);
@@ -289,20 +289,20 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			AssetContainerExtraPath();
 			break;
 		case Wiwa::GuiControlType::BUTTON:
-			ImGui::InputInt2("origin position", originPos);
-			ImGui::InputInt2("origin size", originSize);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
 			CallbackElements(control);
 			AssetContainerPath();
 			break;
 		case Wiwa::GuiControlType::CHECKBOX:
-			ImGui::InputInt2("origin position", originPos);
-			ImGui::InputInt2("origin size", originSize);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
 			CallbackElements(control);
 			AssetContainerPath();
 			break;
 		case Wiwa::GuiControlType::IMAGE:
-			ImGui::InputInt2("origin position", originPos);
-			ImGui::InputInt2("origin size", originSize);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
 			ImGui::Text("Animations");
 			ImGui::Checkbox("animated", &animated);
 			ImGui::InputFloat("Animation speed", &animSpeed);
@@ -310,10 +310,10 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			AssetContainerPath();
 			break;
 		case Wiwa::GuiControlType::SLIDER:
-			ImGui::InputInt2("origin position", originPos);
-			ImGui::InputInt2("origin size", originSize);
-			ImGui::InputInt2("origin position slider", extraOriginPos);
-			ImGui::InputInt2("origin size slider", extraOriginSize);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
+			ImGui::DragInt2("origin position slider", extraOriginPos);
+			ImGui::DragInt2("origin size slider", extraOriginSize);
 			CallbackElements(control);
 			AssetContainerPath();
 			AssetContainerExtraPath();
