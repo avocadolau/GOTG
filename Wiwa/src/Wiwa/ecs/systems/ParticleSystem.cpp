@@ -20,7 +20,6 @@ namespace Wiwa {
 		{
 			m_Particles[i] = Particle();
 		}
-		m_VAO = GetVAO(m_ParticleMesh);
 	}
 	void ParticleSystem::OnUpdate()
 	{
@@ -33,7 +32,7 @@ namespace Wiwa {
 
 			if (particle.life_time > 0.0f)
 			{	
-				particle.position -= particle.velocity * dt;
+				particle.position += particle.velocity * dt;
 
 			}
 		}
@@ -45,20 +44,25 @@ namespace Wiwa {
 	void ParticleSystem::Render()
 	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		m_Material.Bind();
+		m_Material->Bind();
 		for (unsigned int i = 0; i < m_MaxParticles; ++i)
 		{
 			Particle& particle = m_Particles[i];
 			if (particle.life_time > 0.0f)
 			{
-				m_Material.SetUniformData("offset", particle.position);
-				m_Material.SetUniformData("color", particle.color);
+				m_Material->SetUniformData("offset", particle.position);
+				m_Material->SetUniformData("color", particle.color);
 				glBindVertexArray(m_VAO);
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 				glBindVertexArray(0);
 			}
 		}
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	void ParticleSystem::SetValues(ParticleEmitter settings)
+	{
+
 	}
 
 	void ParticleSystem::SpawnParticle(Particle& particle, Transform3D& emmiter, glm::vec2 offset)
