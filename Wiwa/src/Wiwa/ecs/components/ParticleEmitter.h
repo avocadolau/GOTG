@@ -8,38 +8,18 @@
 
 namespace Wiwa {
 
+	enum ParticleSimulationSpace
+	{
+		//The simulation depends on the Emitter's transform.
+		LOCAL,
+		//The simulation is independent from the Emitter's transform.
+		WORLD,
+	};
 
-	struct WI_API ParticleEmitter {
+	struct WI_API ParticleEmitterComponent {
 
-		//variables
-		// 
-		// material
-		// mesh
-		// max particles
-		// 
-		// lifetime
-		// size start
-		// size end
-		// 
-		// initial offset position
-		// 
-		// initial rotation
-		// 
-		// initial velocity
-		// 
-		// initial acceleration
-		// 
-		// spawn inside volume (mesh)
-		// 
-		// color over lifetime (alejandro)
-		// 
-		// spawn loop
-		// spawn rate
-		// 
-		// start delay
-		// 
-
-		//Emitter data
+		//Emitter data			----------------------------------------
+		
 		ResourceId m_materialId;
 		char m_materialPath[128];
 
@@ -47,43 +27,84 @@ namespace Wiwa {
 
 		unsigned int m_maxParticles;
 
+		//spawning
 		bool m_loopSpawning;
-		float spawnRate;
-		float spawnDelay;
+		float m_spawnRate;
+		float m_spawnDelay;
+
+		bool m_active;
+
+		
 
 
-		//Particles Data
+		//Particle Data			----------------------------------------
 
 		//general data
-		float m_particle_maxLifetime;
+		float m_particle_maxLifeTime;
 
-		bool billboardActive;
+		bool m_billboardActive;
 
 
 		//transform data
 
+		//Follow emitter options only available on world space.
+
 		//position & translation
-		bool m_particle_followEmitterPosition;
-		glm::vec3 m_particle_initialPositionOffset;
-		glm::vec3 m_particle_initialVelocity;
+		bool m_p_followEmitterPosOnlyOnSpawn;
+		glm::vec3 m_p_initialPositionOffset;
+		glm::vec3 m_p_initialVelocity;
 		//glm::vec3 particle_m_initialAcceleration;
 
 		//rotation
-		bool m_particle_followEmitterRotation;
-		glm::vec3 m_particle_initialRotation;
+		bool m_p_followEmitterRotOnlyOnSpawn;
+		glm::vec3 m_p_initialRotation;
+		glm::vec3 m_p_initialAngularVelocity;
 
 		//size
-		bool m_particle_followEmitterScale;
-		glm::vec3 m_particle_initialScale;
+		bool m_p_followEmitterScaleOnlyOnSpawn;
+		glm::vec3 m_p_initialScale;
+		glm::vec3 m_p_initialGrowthVelocity;
+
+
+		std::vector<Color3f> m_p_colorsOverLifetime;
+
 		
 
-		std::vector<Color3f> m_particle_colorsOverLifetime;
+		// todo					----------------------------------------
+		// 
+		// ranged data!!!!
+		// 
+		// animations
+		// accelerations
+		// data over lifetime
+		// emit particles over a certain time
+		// gravity?
+		// 
 
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::ParticleEmitter)
+REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 
-
+	REFLECT_MEMBER(m_materialId);
+	REFLECT_MEMBER(m_materialPath);
+	REFLECT_MEMBER(m_mesh);
+	REFLECT_MEMBER(m_maxParticles);
+	REFLECT_MEMBER(m_loopSpawning);
+	REFLECT_MEMBER(m_spawnRate);
+	REFLECT_MEMBER(m_spawnDelay);
+	REFLECT_MEMBER(m_active);
+	REFLECT_MEMBER(m_particle_maxLifeTime);
+	REFLECT_MEMBER(m_billboardActive);
+	REFLECT_MEMBER(m_p_followEmitterPosOnlyOnSpawn);
+	REFLECT_MEMBER(m_p_initialPositionOffset);
+	REFLECT_MEMBER(m_p_initialVelocity);
+	REFLECT_MEMBER(m_p_followEmitterRotOnlyOnSpawn);
+	REFLECT_MEMBER(m_p_initialRotation);
+	REFLECT_MEMBER(m_p_initialAngularVelocity);
+	REFLECT_MEMBER(m_p_followEmitterScaleOnlyOnSpawn);
+	REFLECT_MEMBER(m_p_initialScale);
+	REFLECT_MEMBER(m_p_initialGrowthVelocity);
+	REFLECT_MEMBER(m_p_colorsOverLifetime);
 
 REFLECTION_END;
