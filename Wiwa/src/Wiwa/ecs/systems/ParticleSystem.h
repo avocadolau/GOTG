@@ -4,6 +4,7 @@
 #include <Wiwa/core/Core.h>
 
 #include "Wiwa/ecs/components/Transform3D.h"
+#include "Wiwa/ecs/components/ParticleEmitter.h"
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
 #include <Wiwa/core/Resources.h>
@@ -59,6 +60,7 @@ namespace Wiwa
 
 		void Render();
 
+		void SetValues(ParticleEmitter settings);
 
 		void SpawnParticle(Particle& particle, Transform3D& emmiter, glm::vec2 offset);
 
@@ -72,7 +74,7 @@ namespace Wiwa
 		unsigned int m_VAO;
 		std::vector<Particle> m_Particles;
 		ParticleMeshType m_ParticleMesh = ParticleMeshType::UNDEFINED;
-		Material m_Material;
+		Material* m_Material;
 	};
 
 }

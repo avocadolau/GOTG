@@ -691,6 +691,11 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 	}
 }
 
+void InspectorPanel::DrawParticleSystemComponent(byte* data)
+{
+
+}
+
 InspectorPanel::InspectorPanel(EditorLayer *instance)
 	: Panel("Inspector", ICON_FK_INFO_CIRCLE, instance)
 {
