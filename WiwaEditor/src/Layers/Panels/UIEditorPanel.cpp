@@ -94,87 +94,87 @@ void UIEditorPanel::DrawGameWindow()
 	
 	ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
 
-	if (elementSelected != -1)
-	{
-		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::SetDrawlist();
-		const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+	//if (elementSelected != -1)
+	//{
+	//	ImGuizmo::SetOrthographic(false);
+	//	ImGuizmo::SetDrawlist();
+	//	const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-		const Wiwa::Size2i resolution = Wiwa::Application::Get().GetTargetResolution();
-		float ar = resolution.w / (float)resolution.h;
-		const Wiwa::Size2f scales = { viewportPanelSize.x / (float)resolution.w, viewportPanelSize.y / (float)resolution.h };
+	//	const Wiwa::Size2i resolution = Wiwa::Application::Get().GetTargetResolution();
+	//	float ar = resolution.w / (float)resolution.h;
+	//	const Wiwa::Size2f scales = { viewportPanelSize.x / (float)resolution.w, viewportPanelSize.y / (float)resolution.h };
 
-		const float scale = scales.x < scales.y ? scales.x : scales.y;
-		
-		const ImVec2 rectPos = ImGui::GetItemRectMin();
-		const ImVec2 isize = { resolution.w * scale, resolution.h * scale };
-		ImGuizmo::SetRect(rectPos.x, rectPos.y, isize.x, isize.y);
-		
-		glm::mat4 cameraView = Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView();
-		
-		const glm::mat4& cameraProjection = glm::ortho(0.0f, (float)resolution.w, (float)resolution.h, 0.0f, -1.0f, 1.0f);
+	//	const float scale = scales.x < scales.y ? scales.x : scales.y;
+	//	
+	//	const ImVec2 rectPos = ImGui::GetItemRectMin();
+	//	const ImVec2 isize = { resolution.w * scale, resolution.h * scale };
+	//	ImGuizmo::SetRect(rectPos.x, rectPos.y, isize.x, isize.y);
+	//	
+	//	glm::mat4 cameraView = Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView();
+	//	
+	//	const glm::mat4& cameraProjection = glm::ortho(0.0f, (float)resolution.w, (float)resolution.h, 0.0f, -1.0f, 1.0f);
 
-		
-		//Snaping
-		
-		bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
-		
-		float snapValue = 0.5f; //Snap to 0.5m for translation/scale
-		
-		float snapValues[3] = { snapValue, snapValue, snapValue };
-		
-		glm::vec2 position = screenToWorld(glm::vec2(pos[0], pos[1]), glm::inverse(cameraProjection), resolution.w, resolution.h);
-		glm::mat4 tmpMat =
-		glm::translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0.f)) *
-			glm::toMat4(glm::quat(glm::vec3(0.f, 0.f, 0.f))) *
-				glm::scale(glm::mat4(1.f), glm::vec3(size[0], size[1], 0.f));
+	//	
+	//	//Snaping
+	//	
+	//	bool snap = Wiwa::Input::IsKeyRepeat(Wiwa::Key::LeftControl);
+	//	
+	//	float snapValue = 0.5f; //Snap to 0.5m for translation/scale
+	//	
+	//	float snapValues[3] = { snapValue, snapValue, snapValue };
+	//	
+	//	glm::vec2 position = screenToWorld(glm::vec2(pos[0], pos[1]), glm::inverse(cameraProjection), resolution.w, resolution.h);
+	//	glm::mat4 tmpMat =
+	//	glm::translate(glm::mat4(1.f), glm::vec3(position.x, position.y, 0.f)) *
+	//		glm::toMat4(glm::quat(glm::vec3(0.f, 0.f, 0.f))) *
+	//			glm::scale(glm::mat4(1.f), glm::vec3(size[0], size[1], 0.f));
 
 
-		
-		ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-		
-			(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(tmpMat),
-		
-			nullptr, snap ? snapValues : nullptr);
-		
-		if (ImGuizmo::IsUsing())
-		
-		{
-		
-			float translation[3], rotation[3], scale[3];
-		
-			ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(tmpMat), translation, rotation, scale);
+	//	
+	//	ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+	//	
+	//		(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(tmpMat),
+	//	
+	//		nullptr, snap ? snapValues : nullptr);
+	//	
+	//	if (ImGuizmo::IsUsing())
+	//	
+	//	{
+	//	
+	//		float translation[3], rotation[3], scale[3];
+	//	
+	//		ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(tmpMat), translation, rotation, scale);
 
-		
-			switch (m_GizmoType)
-		
-			{
-		
-			case ImGuizmo::OPERATION::TRANSLATE:
-		
-				{
-		
-					
-		
-				}break;
-		
-			case ImGuizmo::OPERATION::SCALE:
-		
-				{
-		
-					
-		
-				}break;
-		
-			default:
-		
-				break;
-		
-			}
-		
-		}
-	}
-	ControlGuizmos();
+	//	
+	//		switch (m_GizmoType)
+	//	
+	//		{
+	//	
+	//		case ImGuizmo::OPERATION::TRANSLATE:
+	//	
+	//			{
+	//	
+	//				
+	//	
+	//			}break;
+	//	
+	//		case ImGuizmo::OPERATION::SCALE:
+	//	
+	//			{
+	//	
+	//				
+	//	
+	//			}break;
+	//	
+	//		default:
+	//	
+	//			break;
+	//	
+	//		}
+	//	
+	//	}
+	//}
+	//ControlGuizmos();
 }
 
 void UIEditorPanel::GetSelectedCanvas()
@@ -381,13 +381,25 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 		control->callbackID = callbackID;
 		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 	}
-	if(control->type != Wiwa::GuiControlType::TEXT)r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
-	r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
+	if (control->type != Wiwa::GuiControlType::TEXT) {
+		if (control->type == Wiwa::GuiControlType::BAR)
+		{
+			//DO NOTHING TODO: IMPROVE THIS
+		}
+		else
+		{
+			r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+
+		}
+	}
+	
+	if(control->type != Wiwa::GuiControlType::BAR)r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
+	if (control->type == Wiwa::GuiControlType::BAR)r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
 	if (control->type != Wiwa::GuiControlType::TEXT)
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
 		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
-		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
+		if (control->type != Wiwa::GuiControlType::BAR)r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
 		if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
 		{
 			control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForExtraAsset.c_str());

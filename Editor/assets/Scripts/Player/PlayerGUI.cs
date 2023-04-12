@@ -32,7 +32,7 @@ namespace Game
             {
                 ref Character stats = ref GetComponentByIterator<Character>(playerStatsIt);
 
-                GUI.SetValeForUIbar(stats.Health,stats.MaxHealth, 0, 0);
+                GUI.SetValeForUIbar(stats.Health,stats.MaxHealth, 0, 1);
 
                 if (Input.IsButtonPressed(Gamepad.GamePad1, KeyCode.GamepadGuide) && !gamePaused)
                 {
@@ -41,16 +41,8 @@ namespace Game
                     GUI.ActivateGuiCanvas(0);
                     GUI.ActivateGuiCanvas(1);
                 }
-                
-                //SHIELD PLAYER
-                if (stats.Shield <= 0)
-                {
-                    GUI.SetNextFrame(1, 0, 1);
-                }
-                if (stats.Shield >= stats.MaxShield)
-                {
-                    GUI.SetNextFrame(0, 0, 1);
-                }
+
+                GUI.SetValeForUIbar(stats.Shield, stats.MaxShield, 0, 2);
             }
             else
             {

@@ -270,8 +270,8 @@ namespace Wiwa
 		if (debug)
 			WI_CORE_INFO("Player dead");
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		gm.canvas.at(0)->SwapActive(); //Swap active of normal HUD canvas
-		gm.canvas.at(3)->SwapActive(); //Activate death UI
+		//gm.canvas.at(0)->SwapActive(); //Swap active of normal HUD canvas
+		//gm.canvas.at(3)->SwapActive(); //Activate death UI
 		SceneManager::PauseCurrentScene();
 		EndRun();
 	}
@@ -285,6 +285,7 @@ namespace Wiwa
 
 	void GameStateManager::DamagePlayer(uint32_t damage)
 	{
+		Wiwa::GuiManager& gm = s_CurrentScene->GetGuiManager();
 		Character* character = GetPlayerCharacterComp();
 		if (!character)
 		{
