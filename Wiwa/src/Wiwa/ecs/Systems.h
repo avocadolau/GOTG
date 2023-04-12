@@ -6,6 +6,8 @@
 
 #include "systems/AnimatorSystem.h"
 
+#include "systems/ParticleSystem.h"
+
 #include "systems/PhysicsSystem.h"
 #include "systems/RayCastSystem.h"
 
