@@ -11,6 +11,8 @@ namespace Wiwa
 		s_PhalanxMeleePool = new EntityPool(1, 13, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 		s_PhalanxRangedPool = new EntityPool(2, 13, "assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 		s_SimpleBulletsPool = new EntityPool(3, 1, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
+		s_SentinelPool = new EntityPool(4, 13, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
+
 	}
 
 	GamePoolingManager::~GamePoolingManager()
@@ -18,6 +20,7 @@ namespace Wiwa
 		delete s_PhalanxMeleePool;
 		delete s_PhalanxRangedPool;
 		delete s_SimpleBulletsPool;
+		delete s_SentinelPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -25,6 +28,7 @@ namespace Wiwa
 		s_PhalanxMeleePool->SetScene(scene);
 		s_PhalanxRangedPool->SetScene(scene);
 		s_SimpleBulletsPool->SetScene(scene);
+		s_SentinelPool->SetScene(scene);
 	}
 
 	void GamePoolingManager::LoadPool(int type, Scene* scene)
@@ -39,6 +43,9 @@ namespace Wiwa
 			break;
 		case 3:
 			LoadSimpleBulletPool(scene);
+			break;
+		case 4:
+			LoadSentinelPool(scene);
 			break;
 		default:
 			break;
@@ -56,6 +63,9 @@ namespace Wiwa
 			break;
 		case 3:
 			UnloadSimpleBulletPool();
+			break;
+		case 4:
+			UnloadSentinelPool();
 			break;
 		default:
 			break;
@@ -100,16 +110,31 @@ namespace Wiwa
 		s_SimpleBulletsPool->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadSentinelPool(Scene* scene)
+	{
+		s_SentinelPool->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_SentinelPool->getMaxSize());
+		for (int i = 0; i < s_SentinelPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_SentinelPool->getPath());
+		s_SentinelPool->IncreasePoolSize(meleeEnemyIds);
+	}
+	void GamePoolingManager::UnloadSentinelPool()
+	{
+		s_SentinelPool->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		LoadPhalanxMeleePool(scene);
 		LoadPhalanxRangedPool(scene);
 		LoadSimpleBulletPool(scene);
+		LoadSentinelPool(scene);
 	}
 	void GamePoolingManager::UnloadAllPools()
 	{
 		UnloadPhalanxMeleePool();
 		UnloadPhalanxRangedPool();
 		UnloadSimpleBulletPool();
+		UnloadSentinelPool();
 	}
 }

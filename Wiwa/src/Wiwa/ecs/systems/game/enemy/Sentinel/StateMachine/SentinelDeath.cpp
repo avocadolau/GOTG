@@ -1,6 +1,6 @@
 #include <wipch.h>
 #include "SentinelDeath.h"
-#include <Wiwa/ecs/systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h>
+#include <Wiwa/ecs/systems/game/enemy/Sentinel/EnemySentinel.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
@@ -17,28 +17,26 @@ namespace Wiwa
 
 	void SentinelDeathState::EnterState(EnemySentinel* enemy)
 	{
-		/*Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		animator->PlayAnimation("dead", false);*/
+		animator->PlayAnimation("dead", false);
 	}
 
 	void SentinelDeathState::UpdateState(EnemySentinel* enemy)
 	{
-		//Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//if (animator->HasFinished())
-		//{
-		//	Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
-		//	self->hasFinished = true;
-		//	if (self->waveId != -1)
-		//	{
-		//		Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-		//		waveSys->DestroyEnemy(enemy->GetEntity(), self->enemyType);
-		//	}
-		//	//em.DestroyEntity(enemy->GetEntity());
-		//	//GameStateManager::s_PhalanxMeleePool->ReturnToPool(enemy->GetEntity());
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		if (animator->HasFinished())
+		{
+			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+			self->hasFinished = true;
+			if (self->waveId != -1)
+			{
+				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
+				waveSys->DestroyEnemy(enemy->GetEntity(), self->enemyType);
+			}
 
-		//}
+		}
 	}
 
 	void SentinelDeathState::ExitState(EnemySentinel* enemy)

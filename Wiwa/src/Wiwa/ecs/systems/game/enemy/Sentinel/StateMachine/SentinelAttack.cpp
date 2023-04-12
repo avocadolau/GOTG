@@ -87,8 +87,8 @@ namespace Wiwa
 			if (distance <= 3.0f)
 			{
 				GameStateManager::DamagePlayer(selfStats->Damage);
-				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
-				pman.EmitBatch(pe_hurt);
+				/*EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
+				pman.EmitBatch(pe_hurt);*/
 			}
 		}
 	}

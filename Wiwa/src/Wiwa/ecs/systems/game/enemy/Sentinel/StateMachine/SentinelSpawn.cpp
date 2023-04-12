@@ -18,11 +18,11 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
+		/*ParticleManager& pman = enemy->getScene().GetParticleManager();*/
 
 		EntityId currentEnemy = enemy->GetEntity();
 
-		pman.EmitBatch(currentEnemy);
+		/*pman.EmitBatch(currentEnemy);*/
 
 		animator->PlayAnimation("spawn", false);
 	}
