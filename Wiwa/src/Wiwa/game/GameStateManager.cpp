@@ -268,11 +268,7 @@ namespace Wiwa
 	void GameStateManager::Die()
 	{
 		if (debug)
-			WI_CORE_INFO("Player dead");
-		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		//gm.canvas.at(0)->SwapActive(); //Swap active of normal HUD canvas
-		//gm.canvas.at(3)->SwapActive(); //Activate death UI
-		SceneManager::PauseCurrentScene();
+			WI_CORE_INFO("Player dead");		
 		EndRun();
 	}
 
@@ -301,7 +297,6 @@ namespace Wiwa
 		if (character->Shield <= 0)
 		{
 			character->Health -= damage;
-			gm.canvas.at(0)->controls.at(1)->SetValueForUIbar(character->Health, character->MaxHealth);
 			if (character->Health <= 0)
 			{
 				Die();
@@ -319,7 +314,6 @@ namespace Wiwa
 			character->Shield = 0;
 
 
-		gm.canvas.at(0)->controls.at(2)->SetValueForUIbar(character->Shield, character->MaxShield);
 	}
 
 	void GameStateManager::StartNewRoom()

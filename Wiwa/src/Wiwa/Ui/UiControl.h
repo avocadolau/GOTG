@@ -144,8 +144,10 @@ namespace Wiwa
 			active = !active;
 			if (active)
 			{
-				
-				r2d.EnableInstance(m_Scene, id_quad_normal);
+				if (type != GuiControlType::BAR)
+				{
+					r2d.EnableInstance(m_Scene, id_quad_normal);
+				}
 				
 
 				if (type == GuiControlType::SLIDER)
@@ -160,7 +162,10 @@ namespace Wiwa
 			}
 			else
 			{
-				r2d.DisableInstance(m_Scene, id_quad_normal);
+				if (type != GuiControlType::BAR)
+				{
+					r2d.DisableInstance(m_Scene, id_quad_normal);
+				}
 
 				if (type == GuiControlType::SLIDER)
 				{

@@ -221,7 +221,6 @@ void Wiwa::Inventory::Update()
 		{
 			SwapUITexture(m_Abilities[0]->Icon, 3);
 			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
-			CooldownState(m_Abilities[0],3);
 			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= 0.f)
 			{	
 				UseAbility(0);
@@ -232,7 +231,6 @@ void Wiwa::Inventory::Update()
 			SwapUITexture(m_Abilities[1]->Icon, 4);
 
 			m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
-			CooldownState(m_Abilities[1],4);
 			if(Input::IsKeyPressed(Key::E) || rightTrigger >= 0.f)
 			{
 				WI_CORE_INFO("Ability 2 activated");
@@ -243,9 +241,6 @@ void Wiwa::Inventory::Update()
 		if(m_Buffs[0])
 		{
 			SwapUITexture(m_Buffs[0]->Icon, 5);
-			CooldownState(m_Buffs[0],5);
-
-			
 			if (m_Buffs[0]->IsActive)
 			{
 				m_Buffs[0]->CoolDownTimer += Time::GetDeltaTimeSeconds();
@@ -263,7 +258,6 @@ void Wiwa::Inventory::Update()
 		if(m_Buffs[1])
 		{
 			SwapUITexture(m_Buffs[1]->Icon, 6);
-			CooldownState(m_Buffs[1],6);
 			if (m_Buffs[1]->IsActive)
 			{
 				m_Buffs[1]->CoolDownTimer += Time::GetDeltaTimeSeconds();
@@ -319,7 +313,7 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 
 void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)
 {
-	/*Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	if (!em.GetEntitiesAlive()->empty())
 	{
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
@@ -327,59 +321,8 @@ void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)
 
 		gm.canvas.at(0)->controls.at(indexUI)->texture = Wiwa::Resources::GetResourceById<Image>(id);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(0)->controls.at(indexUI)->id_quad_normal, gm.canvas.at(0)->controls.at(indexUI)->texture->GetTextureId());
-	}*/
+	}
 }
-
-void Wiwa::Inventory::CooldownState(Ability* ability,int indexUI)
-{
-	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
-	if (ability->CurrentTime >= ability->Cooldown)
-	{
-		ability->CooldownState = CooldownState::FULLY_CHARGED;
-	}
-	else if (ability->CurrentTime < ability->Cooldown && ability->CurrentTime >= ability->Cooldown / 2)
-	{
-		ability->CooldownState = CooldownState::MEDIUM_CHARGE;
-	}
-	else if (ability->CurrentTime < ability->Cooldown / 2 && ability->CurrentTime > 0)
-	{
-		ability->CooldownState = CooldownState::STARTING_CHARGE;
-	}
-	else if (ability->CurrentTime < 0.0f)
-	{
-		ability->CooldownState = CooldownState::NO_CHARGED;
-	}
-
-	gm.canvas.at(0)->controls.at(indexUI)->SetNextFrame((int)ability->CooldownState, &r2d);
-}
-
-void Wiwa::Inventory::CooldownState(Buff* buff, int indexUI)
-{
-	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
-	if (buff->CurrentTime >= buff->Cooldown)
-	{
-		buff->CooldownState = CooldownState::FULLY_CHARGED;
-	}
-	else if (buff->CurrentTime < buff->Cooldown && buff->CurrentTime >= buff->Cooldown / 2)
-	{
-		buff->CooldownState = CooldownState::MEDIUM_CHARGE;
-	}
-	else if (buff->CurrentTime < buff->Cooldown / 2 && buff->CurrentTime > 0)
-	{
-		buff->CooldownState = CooldownState::STARTING_CHARGE;
-	}
-	else if (buff->CurrentTime < 0.0f)
-	{
-		buff->CooldownState = CooldownState::NO_CHARGED;
-	}
-
-	gm.canvas.at(0)->controls.at(indexUI)->SetNextFrame((int)buff->CooldownState, &r2d);
-}
-
 void Wiwa::Inventory::Clear()
 {
     for(size_t i = 0; i < MAX_ABILITIES; i++)

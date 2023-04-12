@@ -34,6 +34,7 @@
 
 #include "systems/game/items/RewardRoom.h"
 
+#include "systems/game/gui/PlayerGUISystem.h"
 
 #include "systems/game/camera/CameraController.h"
 
