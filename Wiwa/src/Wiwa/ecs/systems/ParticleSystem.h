@@ -4,15 +4,14 @@
 #include <Wiwa/core/Core.h>
 
 #include "Wiwa/ecs/components/Transform3D.h"
-#include "Wiwa/ecs/components/ParticleEmitter.h"
+#include "Wiwa/ecs/components/ParticleEmitterComponent.h"
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
 #include <Wiwa/core/Resources.h>
 
-#include <glm/glm.hpp>
+#include <Wiwa/utilities/Reflection.h>
 
-#include <vector>
-#include <map>
+#include <glm/glm.hpp>
 
 namespace Wiwa
 {
@@ -35,6 +34,16 @@ namespace Wiwa
 			scale(0.0f),
 			velocity(0.0f),
 			color(0.0f) {};
+
+		Particle(float _life, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec3 _velocity, glm::vec4 _color) 
+		{
+			life_time = _life;
+			position = _position;
+			rotation = _rotation;
+			scale = _scale;
+			velocity = _velocity;
+			color = _color;		
+		};
 		
 		float life_time = 0;
 		glm::vec3 position;
@@ -42,6 +51,7 @@ namespace Wiwa
 		glm::vec3 scale;
 		glm::vec3 velocity;
 		glm::vec4 color;
+		glm::mat4 transform;
 	};
 
 	class WI_API ParticleSystem : public System
@@ -60,23 +70,28 @@ namespace Wiwa
 
 		void Render();
 
-		void SetValues(ParticleEmitter settings);
+		void SetValues(ParticleEmitterComponent settings);
 
 		void SpawnParticle(Particle& particle, Transform3D& emmiter, glm::vec2 offset);
+
+		unsigned int FirstUnusedParticle();
 
 		unsigned int GetVAO() { return m_VAO; }
 
 		unsigned int  m_MaxParticles;
-		unsigned int lastUsedParticle = 0;
-		unsigned int FirstUnusedParticle();
 
+		unsigned int m_LastUsedParticle = 0;
+
+		float m_Duration = 0.0f;
+	
 	private:
 		unsigned int m_VAO;
 		std::vector<Particle> m_Particles;
 		ParticleMeshType m_ParticleMesh = ParticleMeshType::UNDEFINED;
 		Material* m_Material;
+		Model* m_Model;
+		std::string m_MeshFilePath;
 	};
-
 }
-
+REGISTER_SYSTEM(Wiwa::ParticleSystem);
 
