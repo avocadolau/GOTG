@@ -147,7 +147,7 @@ namespace Wiwa
 	void Renderer3D::Update()
 	{
 		OPTICK_EVENT("Renderer 3D Update");
-		RenderSkybox();
+		//RenderSkybox();
 	}
 
 	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
