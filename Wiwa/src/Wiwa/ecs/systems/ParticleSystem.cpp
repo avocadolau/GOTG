@@ -23,14 +23,15 @@ namespace Wiwa {
 		ParticleEmitterComponent* emmiter = GetComponent<ParticleEmitterComponent>();
 		Transform3D* t3d = GetComponent<Transform3D>();
 
-		//m_Model = Wiwa::Resources::Load<Model>();
+		ResourceId meshid = Wiwa::Resources::Load<Model>(emmiter->m_meshPath);
+		m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
 		// init particle struct
 		m_Particles.reserve(m_MaxParticles);
 		for (int i = 0; i < m_MaxParticles; i++)
 		{
 			m_Particles[i] = Particle(emmiter->m_particle_maxLifeTime,
 						t3d->localPosition,t3d->localRotation,t3d->localScale,
-						emmiter->m_p_initialVelocity, emmiter->m_p_colorsOverLifetime[0]);
+						emmiter->m_p_initialVelocity, glm::vec4(1.0f,1.0f,1.0f,1.0f));
 		}
 	}
 	void ParticleSystem::OnUpdate()

@@ -68,7 +68,7 @@ namespace Wiwa
 
 		unsigned int GetVAO() { return m_VAO; }
 
-		unsigned int  m_MaxParticles;
+		unsigned int  m_MaxParticles = 10;
 
 		bool m_Loop;
 
