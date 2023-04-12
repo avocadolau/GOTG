@@ -297,9 +297,11 @@ namespace Wiwa
 		// to the health even when this surpases the shield ammount
 
 		// If there's no shield we take damage from the health
+		
 		if (character->Shield <= 0)
 		{
 			character->Health -= damage;
+			gm.canvas.at(0)->controls.at(1)->SetValueForUIbar(character->Health, character->MaxHealth);
 			if (character->Health <= 0)
 			{
 				Die();
@@ -309,10 +311,15 @@ namespace Wiwa
 		
 		
 		if (character->Shield > 0)
+		{
 			character->Shield -= damage;
+		}
 
 		if (character->Shield <= 0)
 			character->Shield = 0;
+
+
+		gm.canvas.at(0)->controls.at(2)->SetValueForUIbar(character->Shield, character->MaxShield);
 	}
 
 	void GameStateManager::StartNewRoom()
