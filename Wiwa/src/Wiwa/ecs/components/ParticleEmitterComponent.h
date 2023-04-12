@@ -24,6 +24,7 @@ namespace Wiwa {
 		char m_materialPath[128];
 
 		ResourceId m_mesh;
+		char m_meshPath[128];
 
 		unsigned int m_maxParticles;
 
@@ -33,8 +34,6 @@ namespace Wiwa {
 		float m_spawnDelay;
 
 		bool m_active;
-
-		
 
 
 		//Particle Data			----------------------------------------
@@ -50,18 +49,18 @@ namespace Wiwa {
 		//Follow emitter options only available on world space.
 
 		//position & translation
-		bool m_p_followEmitterPosOnlyOnSpawn;
+		//bool m_p_followEmitterPosOnlyOnSpawn;
 		glm::vec3 m_p_initialPositionOffset;
 		glm::vec3 m_p_initialVelocity;
 		//glm::vec3 particle_m_initialAcceleration;
 
 		//rotation
-		bool m_p_followEmitterRotOnlyOnSpawn;
+		//bool m_p_followEmitterRotOnlyOnSpawn;
 		glm::vec3 m_p_initialRotation;
 		glm::vec3 m_p_initialAngularVelocity;
 
 		//size
-		bool m_p_followEmitterScaleOnlyOnSpawn;
+		//bool m_p_followEmitterScaleOnlyOnSpawn;
 		glm::vec3 m_p_initialScale;
 		glm::vec3 m_p_initialGrowthVelocity;
 
@@ -96,13 +95,13 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 	REFLECT_MEMBER(m_active);
 	REFLECT_MEMBER(m_particle_maxLifeTime);
 	REFLECT_MEMBER(m_billboardActive);
-	REFLECT_MEMBER(m_p_followEmitterPosOnlyOnSpawn);
+	//REFLECT_MEMBER(m_p_followEmitterPosOnlyOnSpawn);
 	REFLECT_MEMBER(m_p_initialPositionOffset);
 	REFLECT_MEMBER(m_p_initialVelocity);
-	REFLECT_MEMBER(m_p_followEmitterRotOnlyOnSpawn);
+	//REFLECT_MEMBER(m_p_followEmitterRotOnlyOnSpawn);
 	REFLECT_MEMBER(m_p_initialRotation);
 	REFLECT_MEMBER(m_p_initialAngularVelocity);
-	REFLECT_MEMBER(m_p_followEmitterScaleOnlyOnSpawn);
+	//REFLECT_MEMBER(m_p_followEmitterScaleOnlyOnSpawn);
 	REFLECT_MEMBER(m_p_initialScale);
 	REFLECT_MEMBER(m_p_initialGrowthVelocity);
 	REFLECT_MEMBER(m_p_colorsOverLifetime);

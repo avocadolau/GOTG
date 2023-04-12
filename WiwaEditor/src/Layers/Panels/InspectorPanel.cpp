@@ -18,6 +18,7 @@
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/CollisionBody.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -57,6 +58,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
+		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleSystemComponent(data); } else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -113,6 +115,10 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		else if (type->hash == (size_t)TypeHash::AgentAI)
 		{
 			DrawAiAgentComponent(data);
+		}
+		else if (type->hash == (size_t)TypeHash::ParticleEmitter)
+		{
+			DrawParticleSystemComponent(data);
 		}
 		else
 
@@ -693,7 +699,64 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 
 void InspectorPanel::DrawParticleSystemComponent(byte* data)
 {
+	Wiwa::ParticleEmitterComponent* emitter = (Wiwa::ParticleEmitterComponent*)data;
 
+	ImGui::Separator();
+	ImGui::Text("Emitter Parameters");
+	ImGui::Separator();
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Checkbox("##m_active", &emitter->m_active);
+	ImGui::SameLine();
+	ImGui::Text("Active");
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	//set mesh
+	AssetContainer(emitter->m_meshPath);
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".fbx")
+			{
+				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+				pathS = Wiwa::Resources::_assetToLibPath(pathS);
+				strcpy(emitter->m_meshPath, pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Checkbox("##m_loopSpawning", &emitter->m_loopSpawning);
+	ImGui::SameLine();
+	ImGui::Text("Loop Spawning");
+
+	//spawning ranged
+
+
+	ImGui::Separator();
+	ImGui::Text("Particle attributes");
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::DragFloat("##m_particle_maxLifeTime", &emitter->m_particle_maxLifeTime);
+	ImGui::SameLine();
+	ImGui::Text("Particle LifeTime");
+
+
+
+	ImGui::Dummy(ImVec2(0, 4));
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)
