@@ -25,6 +25,10 @@ namespace Wiwa {
 
 		ResourceId meshid = Wiwa::Resources::Load<Model>(emmiter->m_meshPath);
 		m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+
+		ResourceId matid = Wiwa::Resources::Load<Material>(emmiter->m_materialPath);
+		m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+
 		// init particle struct
 		m_Particles.reserve(m_MaxParticles);
 		for (int i = 0; i < m_MaxParticles; i++)
@@ -71,13 +75,17 @@ namespace Wiwa {
 				particle.transform = transform;
 
 			}
-			else if(m_Loop){
-
+			else /*if (m_Loop)*/ {
+				m_AvailableParticles++;
 			}
 		}
+
+		Render();
 	}
 	void ParticleSystem::OnDestroy()
 	{
+		m_Model = nullptr;
+		m_Material = nullptr;
 	}
 	void ParticleSystem::Render()
 	{
@@ -104,7 +112,7 @@ namespace Wiwa {
 				Particle& particle = m_Particles[i];
 				if (particle.life_time > 0.0f)
 				{
-					r3d.RenderMesh(m_Model, t3d->worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+					r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
 				}
 			}
 			
@@ -116,7 +124,7 @@ namespace Wiwa {
 				Particle& particle = m_Particles[i];
 				if (particle.life_time > 0.0f)
 				{
-					r3d.RenderMesh(m_Model, t3d->worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
+					r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 				}
 			}
 		}
@@ -146,9 +154,18 @@ namespace Wiwa {
 
 	void ParticleSystem::SpawnParticle(Particle& particle, Transform3D& emmiter)
 	{
+
+		ParticleEmitterComponent* particleemmiter = GetComponent<ParticleEmitterComponent>();
+
 		particle.position = emmiter.localPosition;
 		particle.rotation = emmiter.localRotation;
 		particle.scale = emmiter.localScale;
+
+		particle.velocity = particleemmiter->m_p_initialVelocity;
+
+		particle.life_time = particleemmiter->m_particle_maxLifeTime;
+
+		m_AvailableParticles--;
 		
 	}
 
