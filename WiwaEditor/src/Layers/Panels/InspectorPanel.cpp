@@ -713,7 +713,31 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
+
+	//set material
+	ImGui::Text("Particle Material");
+	AssetContainer(emitter->m_materialPath);
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".wimaterial")
+			{
+				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+				pathS = Wiwa::Resources::_assetToLibPath(pathS);
+				strcpy(emitter->m_materialPath, pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
 	//set mesh
+	ImGui::Text("Particle Mesh Type");
 	AssetContainer(emitter->m_meshPath);
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -744,7 +768,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 
 	ImGui::Separator();
-	ImGui::Text("Particle attributes");
+	ImGui::Text("Particle attributes TEST");
 	ImGui::Separator();
 	ImGui::Dummy(ImVec2(0, 4));
 
@@ -753,6 +777,20 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::DragFloat("##m_particle_maxLifeTime", &emitter->m_particle_maxLifeTime);
 	ImGui::SameLine();
 	ImGui::Text("Particle LifeTime");
+
+	bool temp;
+
+	ImGui::Dummy(ImVec2(0, 0));
+	ImGui::SameLine();
+	ImGui::Checkbox("##m_p_initialVelocity_Ranged", &temp);
+	ImGui::SameLine();
+	ImGui::Dummy(ImVec2(2, 0));
+	ImGui::SameLine();
+	ImGui::Text("Particle Initial Velocity");
+
+	ImGui::Dummy(ImVec2(38, 0));
+	ImGui::SameLine();
+	ImGui::DragFloat3("##m_p_initialVelocity", &(emitter->m_p_initialVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 
 
 
