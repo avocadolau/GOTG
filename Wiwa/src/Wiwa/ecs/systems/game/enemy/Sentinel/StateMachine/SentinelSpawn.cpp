@@ -16,12 +16,23 @@ namespace Wiwa
 
 	void SentinelSpawnState::EnterState(EnemySentinel* enemy)
 	{
-		
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		ParticleManager& pman = enemy->getScene().GetParticleManager();
+
+		EntityId currentEnemy = enemy->GetEntity();
+
+		pman.EmitBatch(currentEnemy);
+
+		animator->PlayAnimation("spawn", false);
 	}
 
 	void SentinelSpawnState::UpdateState(EnemySentinel* enemy)
 	{
-		
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		if (animator->HasFinished())
+			enemy->SwitchState(enemy->m_ChasingState);
 	}
 
 	void SentinelSpawnState::ExitState(EnemySentinel* enemy)

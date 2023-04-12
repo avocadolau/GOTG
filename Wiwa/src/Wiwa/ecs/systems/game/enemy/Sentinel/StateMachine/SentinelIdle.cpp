@@ -21,7 +21,16 @@ namespace Wiwa
 
 	void SentinelIdleState::UpdateState(EnemySentinel* enemy)
 	{
-		
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		animator->PlayAnimation("idle", true);
+
+		if (enemy->m_Timer > 2)
+		{
+			enemy->SwitchState(enemy->m_ChasingState);
+		}
 	}
 
 	void SentinelIdleState::ExitState(EnemySentinel* enemy)
