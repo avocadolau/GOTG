@@ -26,7 +26,8 @@ namespace Wiwa {
 		ResourceId m_mesh;
 		char m_meshPath[128];
 
-		unsigned int m_maxParticles;
+		
+		int m_maxParticles;
 
 		//spawning
 		bool m_loopSpawning;

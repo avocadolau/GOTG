@@ -668,11 +668,6 @@ void InspectorPanel::DrawRayCastComponent(byte *data)
 	ImGui::Checkbox("Enabled", &rayCast->doRayCasting);
 }
 
-void ParticleTab()
-{
-	ImGui::Dummy(ImVec2(38, 0));
-	ImGui::SameLine();
-}
 
 void InspectorPanel::DrawAiAgentComponent(byte* data)
 {
@@ -695,6 +690,12 @@ void InspectorPanel::DrawAiAgentComponent(byte* data)
 		//	agentSys->GoToNextPosition();
 		//}
 	}
+}
+
+void ParticleTab()
+{
+	ImGui::Dummy(ImVec2(38, 0));
+	ImGui::SameLine();
 }
 
 void InspectorPanel::DrawParticleSystemComponent(byte* data)
@@ -758,6 +759,16 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::EndDragDropTarget();
 	}
 
+	ImGui::Text("Max Particles");
+
+	ImGui::Dummy(ImVec2(38, 0));
+	ImGui::SameLine();
+	ImGui::PushItemWidth(100.0f);
+
+	ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+
+
 	ImGui::Dummy(ImVec2(0, 4));
 
 	ImGui::Checkbox("##m_loopSpawning", &emitter->m_loopSpawning);
@@ -766,35 +777,129 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	//spawning ranged
 
+	//spawning ranged
 
-	ImGui::Separator();
-	ImGui::Text("Particle attributes TEST");
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0, 4));
+	if (emitter->m_loopSpawning)
+	{
+		ParticleTab();
 
-	ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Spawn Rate");
 
-	ImGui::DragFloat("##m_particle_maxLifeTime", &emitter->m_particle_maxLifeTime);
-	ImGui::SameLine();
-	ImGui::Text("Particle LifeTime");
+		ParticleTab();
 
-	bool temp;
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
 
-	ImGui::Dummy(ImVec2(0, 0));
-	ImGui::SameLine();
-	ImGui::Checkbox("##m_p_initialVelocity_Ranged", &temp);
-	ImGui::SameLine();
-	ImGui::Dummy(ImVec2(2, 0));
-	ImGui::SameLine();
-	ImGui::Text("Particle Initial Velocity");
+		ImGui::DragFloat("##m_spawnRate", &emitter->m_spawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+
+	ImGui::Text("Spawn Delay");
 
 	ImGui::Dummy(ImVec2(38, 0));
 	ImGui::SameLine();
-	ImGui::DragFloat3("##m_p_initialVelocity", &(emitter->m_p_initialVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+	ImGui::PushItemWidth(100.0f);
 
-
+	ImGui::DragFloat("##m_spawnDelay", &emitter->m_spawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
 
 	ImGui::Dummy(ImVec2(0, 4));
+
+
+
+
+
+
+
+
+	ImGui::Separator();
+	ImGui::Text("Particle attributes");
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Checkbox("##m_billboardActive", &emitter->m_billboardActive);
+	ImGui::SameLine();
+	ImGui::Text("Use Billboarding");
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Text("Maximum Life Time");
+	ImGui::SameLine();
+	ImGui::PushItemWidth(100.0f);
+
+	ImGui::DragFloat("##m_particle_maxLifeTime", &emitter->m_particle_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+	ImGui::PopItemWidth();
+
+	if (ImGui::TreeNode("Position & Translation"))
+	{
+
+		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Initial Offset Position");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::DragFloat3("##m_p_initialPositionOffset", &(emitter->m_p_initialPositionOffset)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Initial Velocity");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::DragFloat3("##m_p_initialVelocity", &(emitter->m_p_initialVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Rotation & Angular Translation"))
+	{
+
+		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Initial Rotation");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::DragFloat3("##m_p_initialRotation", &(emitter->m_p_initialRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Initial Angular Velocity");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::DragFloat3("##m_p_initialAngularVelocity", &(emitter->m_p_initialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Scaling & Growth"))
+	{
+
+		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Initial Scale");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Initial Growth Velocity");
+
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		ImGui::TreePop();
+	}
+
+
+
+
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)

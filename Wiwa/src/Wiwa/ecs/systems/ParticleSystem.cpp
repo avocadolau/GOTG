@@ -37,6 +37,18 @@ namespace Wiwa {
 						t3d->localPosition,t3d->localRotation,t3d->localScale,
 						emmiter->m_p_initialVelocity, glm::vec4(1.0f,1.0f,1.0f,1.0f));
 		}
+
+		/* this compiles but no particles
+		
+		// init particle struct
+		for (int i = 0; i < m_MaxParticles; i++)
+		{
+			m_Particles.push_back(Particle(emitter->m_particle_maxLifeTime,
+				t3d->localPosition, t3d->localRotation, t3d->localScale,
+				emitter->m_p_initialVelocity, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
+		}
+		
+		*/
 	}
 	void ParticleSystem::OnUpdate()
 	{
