@@ -66,7 +66,7 @@ namespace Wiwa {
 		glm::vec3 m_p_initialGrowthVelocity;
 
 
-		std::vector<Color3f> m_p_colorsOverLifetime;
+		std::vector<glm::vec4> m_p_colorsOverLifetime;
 
 		
 

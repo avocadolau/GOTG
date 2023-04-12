@@ -15,16 +15,6 @@
 
 namespace Wiwa
 {
-	enum class ParticleMeshType
-	{
-		QUAD,
-		CUBE,
-		CONE,
-		CYLYNDER,
-		SPHERE,
-		UNDEFINED
-	};
-
 	struct Particle
 	{
 		Particle() :
@@ -72,7 +62,7 @@ namespace Wiwa
 
 		void SetValues(ParticleEmitterComponent settings);
 
-		void SpawnParticle(Particle& particle, Transform3D& emmiter, glm::vec2 offset);
+		void SpawnParticle(Particle& particle, Transform3D& emmiter);
 
 		unsigned int FirstUnusedParticle();
 
@@ -80,17 +70,22 @@ namespace Wiwa
 
 		unsigned int  m_MaxParticles;
 
-		unsigned int m_LastUsedParticle = 0;
+		bool m_Loop;
 
 		float m_Duration = 0.0f;
 	
 	private:
 		unsigned int m_VAO;
+
+		unsigned int m_LastUsedParticle = 0;
+		
+		unsigned int m_AvailableParticles = 0;
+
 		std::vector<Particle> m_Particles;
-		ParticleMeshType m_ParticleMesh = ParticleMeshType::UNDEFINED;
+
 		Material* m_Material;
+
 		Model* m_Model;
-		std::string m_MeshFilePath;
 	};
 }
 REGISTER_SYSTEM(Wiwa::ParticleSystem);
