@@ -266,17 +266,17 @@ namespace Wiwa
         internal extern static void RestartAnimation(EntityId entity);
         #endregion
 
-        #region Particles
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void ParticleEmitterPlayBatch(EntityId entity);
+        //#region Particles
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void ParticleEmitterPlayBatch(EntityId entity);
 
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void ParticleEmitterPlayLoop(EntityId entity, float delaySec);
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void ParticleEmitterPlayLoop(EntityId entity, float delaySec);
 
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void ParticleEmitterStopLoop(EntityId entity); 
+        //[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        //internal extern static void ParticleEmitterStopLoop(EntityId entity); 
 
-        #endregion
+        //#endregion
 
     }
 }

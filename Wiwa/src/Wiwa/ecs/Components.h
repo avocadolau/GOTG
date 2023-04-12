@@ -30,9 +30,6 @@
 #include "components/game/Character.h"
 #include "components/game/enemy/Wave.h"
 
-// Particle components
-#include "components/ParticleEmitter.h"
-
 // Ai components
 #include "components/AgentAI.h"
 #include "components/MapAI.h"
