@@ -25,6 +25,8 @@ namespace Wiwa
         void CooldownState(Buff** buff, Wiwa::GuiManager& gm);
 
         void PlayerElements(Wiwa::GuiManager& gm, Character* character);
+
+        bool test = false;
     };
 }
 
