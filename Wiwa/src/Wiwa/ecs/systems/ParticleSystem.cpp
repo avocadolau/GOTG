@@ -15,10 +15,7 @@ namespace Wiwa {
 	ParticleSystem::~ParticleSystem()
 	{
 	}
-	void ParticleSystem::OnAwake()
-	{
-	}
-	void ParticleSystem::OnInit()
+	void ParticleSystem::OnSystemAdded()
 	{
 		ParticleEmitterComponent* emmiter = GetComponent<ParticleEmitterComponent>();
 		Transform3D* t3d = GetComponent<Transform3D>();
@@ -37,13 +34,20 @@ namespace Wiwa {
 
 
 		// init particle struct
-		m_Particles.reserve(m_MaxParticles);
+		m_Particles.resize(m_MaxParticles);
 		for (int i = 0; i < m_MaxParticles; i++)
 		{
 			m_Particles[i] = Particle(emmiter->m_p_lifeTime,
-									initPosition,initRotation,initScale,
-									emmiter->m_p_initialVelocity,glm::vec4 (1.0f, 1.0f, 1.0f, 1.0f));
+				initPosition, initRotation, initScale,
+				emmiter->m_p_initialVelocity, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
+	}
+	void ParticleSystem::OnAwake()
+	{
+	}
+	void ParticleSystem::OnInit()
+	{
+		
 	}
 	void ParticleSystem::OnUpdate()
 	{
@@ -106,6 +110,8 @@ namespace Wiwa {
 	}
 	void ParticleSystem::Render()
 	{
+
+		WI_INFO("Rendering transparent...");
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		Renderer3D& r3d = Application::Get().GetRenderer3D();
@@ -117,7 +123,7 @@ namespace Wiwa {
 		std::vector<CameraId>& cameras = man.getCameras();
 
 		glEnable(GL_BLEND);
-		glEnable(GL_ALPHA_TEST);
+		glDisable(GL_DEPTH_TEST);
 		glDepthMask(false);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

@@ -235,18 +235,35 @@ namespace Wiwa {
 
 	void EntityManager::SystemsUpdate()
 	{
-		// Update entity systems
-		size_t entitySize = m_EntitySystems.size();
+		//// Update entity systems
+		//size_t entitySize = m_EntitySystems.size();
 
-		for (size_t i = 0; i < entitySize; i++) {
-			if (IsActive(i)) {
-				size_t system_size = m_EntitySystems[i].size();
+		//for (size_t i = 0; i < entitySize; i++) {
+		//	if (IsActive(i)) {
+		//		size_t system_size = m_EntitySystems[i].size();
 
-				for (size_t j = 0; j < system_size; j++) {
-					System* s = m_EntitySystems[i][j];
-					if (!s) continue;
-					s->Update();
-				}
+		//		for (size_t j = 0; j < system_size; j++) {
+		//			System* s = m_EntitySystems[i][j];
+		//			if (!s) continue;
+		//			s->Update();
+		//		}
+		//	}
+		//}
+
+		//update by systems
+
+		std::map<SystemHash, std::vector<System*>>::iterator it;
+
+		for (it = m_SystemsByHash.begin(); it != m_SystemsByHash.end(); it++)
+		{
+			size_t system_size = it->second.size();
+			for (size_t i = 0; i < system_size; i++)
+			{
+				System* s = it->second[i];
+
+				if (!s) continue;
+
+				s->Update();
 			}
 		}
 	}

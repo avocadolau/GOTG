@@ -50,6 +50,8 @@ namespace Wiwa
 		ParticleSystem();
 		~ParticleSystem();
 
+		void OnSystemAdded() override;
+
 		void OnAwake() override;
 
 		void OnInit() override;

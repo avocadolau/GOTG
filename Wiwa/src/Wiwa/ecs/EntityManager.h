@@ -81,7 +81,7 @@ namespace Wiwa
 		void UpdateTransforms();
 
 		// System management
-		std::unordered_map<SystemHash, std::vector<System *>> m_SystemsByHash;
+		std::map<SystemHash, std::vector<System *>,std::greater<SystemHash>> m_SystemsByHash;
 		std::vector<SystemHash> m_SystemWhiteList;
 
 		size_t getSystemIndex(EntityId entityId, SystemHash system_hash);
