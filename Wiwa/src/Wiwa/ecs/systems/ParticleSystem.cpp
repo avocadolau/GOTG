@@ -61,6 +61,7 @@ namespace Wiwa {
 			m_SpawnRate = emmiter->m_spawnRate;
 		}
 
+		WI_CORE_INFO("emitter volume type = {0}", emmiter->m_spawnVolume);
 
 		for (unsigned int i = 0; i < m_MaxParticles; ++i)
 		{

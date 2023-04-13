@@ -701,6 +701,7 @@ void ParticleTab()
 void InspectorPanel::DrawParticleSystemComponent(byte* data)
 {
 	Wiwa::ParticleEmitterComponent* emitter = (Wiwa::ParticleEmitterComponent*)data;
+	Wiwa::EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 
 	ImGui::Separator();
 	ImGui::Text("Emitter Parameters");
@@ -771,7 +772,11 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	if (ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f"))
 	{
-		//system->max_particles = emitter->m_maxParticles   ->future
+		std::vector<Wiwa::System*> emitterSystems =  eman.GetEntitySystems(emitter->emitterOwner);
+		for (Wiwa::System* sys : emitterSystems)
+		{
+			
+		}
 	}
 	ImGui::PopItemWidth();
 
@@ -849,6 +854,86 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	if (ImGui::TreeNode("Position & Translation"))
 	{
+
+		ImGui::Text("Use Volume:");
+		ImGui::SameLine();
+		const char* volumeItems[] = { "None", "Cube", "Sphere" };
+		static const char* volumeCurrentItem = NULL;
+
+		switch (emitter->m_spawnVolume)
+		{
+		case Wiwa::ParticleSpawnVolume::NONE:
+		{
+			volumeCurrentItem = "None";
+		}
+		break;
+		case Wiwa::ParticleSpawnVolume::CUBE:
+		{
+			volumeCurrentItem = "Cube";
+
+		}
+		break;
+		case Wiwa::ParticleSpawnVolume::SPHERE:
+		{
+			volumeCurrentItem = "Sphere";
+
+		}
+		break;
+		default:
+		{
+			volumeCurrentItem = "None";
+
+		}
+		break;
+		}
+
+
+		ImGui::PushItemWidth(100);
+		if (ImGui::BeginCombo("##combo", volumeCurrentItem)) // The second parameter is the label previewed before opening the combo.
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(volumeItems); n++)
+			{
+				bool is_selected = (volumeCurrentItem == volumeItems[n]); // You can store your selection however you want, outside or inside your objects
+				if (ImGui::Selectable(volumeItems[n], is_selected))
+				{
+					volumeCurrentItem = volumeItems[n];
+
+					switch (n)
+					{
+					case Wiwa::ParticleSpawnVolume::NONE:
+					{
+						emitter->m_spawnVolume = Wiwa::ParticleSpawnVolume::NONE;
+					}
+					break;
+					case Wiwa::ParticleSpawnVolume::CUBE:
+					{
+						emitter->m_spawnVolume = Wiwa::ParticleSpawnVolume::CUBE;
+
+					}
+					break;
+					case Wiwa::ParticleSpawnVolume::SPHERE:
+					{
+						emitter->m_spawnVolume = Wiwa::ParticleSpawnVolume::SPHERE;
+
+					}
+					break;
+
+					default:
+					{
+						emitter->m_spawnVolume = Wiwa::ParticleSpawnVolume::NONE;
+					}
+						break;
+					}
+				}
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::PopItemWidth();
+
+
+
 		ImGui::Checkbox("##m_p_rangedInitialPosition", &emitter->m_p_rangedInitialPosition);
 		ImGui::SameLine();
 		ImGui::Text("Initial Position");
@@ -870,6 +955,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 		}
 
+		
 		ImGui::Dummy(ImVec2(0, 8));
 
 		ImGui::Checkbox("##m_p_rangedVelocity", &emitter->m_p_rangedVelocity);

@@ -18,7 +18,7 @@ namespace Wiwa {
 
 	enum ParticleSpawnVolume
 	{
-		NONE, CUBE, SPHERE
+		NONE = 0, CUBE = 1, SPHERE = 2
 	};
 
 
@@ -47,6 +47,7 @@ namespace Wiwa {
 
 		ParticleSpawnVolume m_spawnVolume;
 
+		EntityId emitterOwner;
 		//Particle Data			----------------------------------------
 
 		//general data
