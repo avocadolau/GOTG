@@ -34,11 +34,13 @@ IncludeDirs["GLI"] = "%{wks.location}/Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
 IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
 IncludeDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/include"
+IncludeDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/include"
 
 LibraryDirs = {}
 LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"
 LibraryDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/lib/x64_vc170/Debug(StaticCRT)/lib/"
 LibraryDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/lib/"
+LibraryDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/lib"
 
 Library = {}
 Library["mono"] = "%{LibraryDirs.mono}/libmono-static-sgen.lib"
@@ -53,7 +55,16 @@ Library["bullet_dynamics_release"] = "%{LibraryDirs.bullet}/BulletDynamics_vs201
 Library["bullet_linear_math_release"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_release.lib"
 Library["bullet_collision_debug"] = "%{LibraryDirs.bullet}/BulletCollision_vs2010_x64_debug.lib"
 Library["bullet_dynamics_debug"] = "%{LibraryDirs.bullet}/BulletDynamics_vs2010_x64_debug.lib"
-Library["bullet_linear_math_debug"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_debug.lib"
+Library["DebugUtils_debug"] = "%{LibraryDirs.recastnavigation}/debug/DebugUtils.lib"
+Library["DebugUtils_release"] = "%{LibraryDirs.recastnavigation}/release/DebugUtils.lib"
+Library["Detour_debug"] = "%{LibraryDirs.recastnavigation}/debug/Detour.lib"
+Library["Detour_release"] = "%{LibraryDirs.recastnavigation}/release/Detour.lib"
+Library["DetourCrowd_debug"] = "%{LibraryDirs.recastnavigation}/debug/DetourCrowd.lib"
+Library["DetourCrowd_release"] = "%{LibraryDirs.recastnavigation}/release/DetourCrowd.lib"
+Library["DetourTileCache_debug"] = "%{LibraryDirs.recastnavigation}/debug/DetourTileCache.lib"
+Library["DetourTileCache_release"] = "%{LibraryDirs.recastnavigation}/release/DetourTileCache.lib"
+Library["Recast_debug"] = "%{LibraryDirs.recastnavigation}/debug/Recast.lib"
+Library["Recast_release"] = "%{LibraryDirs.recastnavigation}/release/Recast.lib"
 
 
 Library["WinSock"] = "Ws2_32.lib"
