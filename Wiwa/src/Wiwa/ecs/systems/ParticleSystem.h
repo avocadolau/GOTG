@@ -62,7 +62,7 @@ namespace Wiwa
 
 		void SetValues(ParticleEmitterComponent settings);
 
-		void SpawnParticle(Particle& particle, Transform3D& emmiter);
+		void SpawnParticle(Particle& particle);
 
 		unsigned int FirstUnusedParticle();
 
@@ -80,6 +80,8 @@ namespace Wiwa
 		unsigned int m_LastUsedParticle = 0;
 		
 		unsigned int m_AvailableParticles = 0;
+
+		float m_SpawnRate;
 
 		std::vector<Particle> m_Particles;
 

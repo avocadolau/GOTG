@@ -29,34 +29,36 @@ namespace Wiwa {
 		ResourceId matid = Wiwa::Resources::Load<Material>(emmiter->m_materialPath);
 		m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
 
+		m_SpawnRate = emmiter->m_spawnRate;
+
+		glm::vec3 initPosition = emmiter->m_p_initialPositionOffset + t3d->localPosition;
+		glm::vec3 initRotation = emmiter->m_p_initialRotation + t3d->localRotation;
+		glm::vec3 initScale = emmiter->m_p_initialScale + t3d->localScale;
+
+
 		// init particle struct
 		m_Particles.reserve(m_MaxParticles);
 		for (int i = 0; i < m_MaxParticles; i++)
 		{
 			m_Particles[i] = Particle(emmiter->m_particle_maxLifeTime,
-						t3d->localPosition,t3d->localRotation,t3d->localScale,
-						emmiter->m_p_initialVelocity, glm::vec4(1.0f,1.0f,1.0f,1.0f));
+									initPosition,initRotation,initScale,
+									emmiter->m_p_initialVelocity,glm::vec4 (1.0f, 1.0f, 1.0f, 1.0f));
 		}
-
-		/* this compiles but no particles
-		
-		// init particle struct
-		for (int i = 0; i < m_MaxParticles; i++)
-		{
-			m_Particles.push_back(Particle(emitter->m_particle_maxLifeTime,
-				t3d->localPosition, t3d->localRotation, t3d->localScale,
-				emitter->m_p_initialVelocity, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
-		}
-		
-		*/
 	}
 	void ParticleSystem::OnUpdate()
 	{
-		Transform3D* t3d = GetComponent<Transform3D>();
-		for (unsigned int i = 0; i < m_AvailableParticles; ++i)
+		ParticleEmitterComponent* emmiter = GetComponent<ParticleEmitterComponent>();
+
+		m_SpawnRate -= Time::GetDeltaTime() * 0.001;
+		if (m_SpawnRate > 0 )
 		{
-			int unusedParticle = FirstUnusedParticle();
-			SpawnParticle(m_Particles[unusedParticle], *t3d);
+			for (unsigned int i = 0; i < m_AvailableParticles; ++i)
+			{
+				int unusedParticle = FirstUnusedParticle();
+				SpawnParticle(m_Particles[unusedParticle]);
+			}
+
+			m_SpawnRate = emmiter->m_spawnRate;
 		}
 
 
@@ -87,7 +89,8 @@ namespace Wiwa {
 				particle.transform = transform;
 
 			}
-			else /*if (m_Loop)*/ {
+			else if (emmiter->m_loopSpawning) 
+			{
 				m_AvailableParticles++;
 			}
 		}
@@ -164,14 +167,22 @@ namespace Wiwa {
 
 	}
 
-	void ParticleSystem::SpawnParticle(Particle& particle, Transform3D& emmiter)
+	void ParticleSystem::SpawnParticle(Particle& particle)
 	{
 
 		ParticleEmitterComponent* particleemmiter = GetComponent<ParticleEmitterComponent>();
+		Transform3D* t3d = GetComponent<Transform3D>();
 
-		particle.position = emmiter.localPosition;
-		particle.rotation = emmiter.localRotation;
-		particle.scale = emmiter.localScale;
+
+		glm::vec3 initPosition = particleemmiter->m_p_initialPositionOffset + t3d->localPosition;
+		glm::vec3 initRotation = particleemmiter->m_p_initialRotation + t3d->localRotation;
+		glm::vec3 initScale = particleemmiter->m_p_initialScale + t3d->localScale;
+
+
+
+		particle.position = initPosition;
+		particle.rotation = initRotation;
+		particle.scale = initScale;
 
 		particle.velocity = particleemmiter->m_p_initialVelocity;
 
