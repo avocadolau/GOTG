@@ -50,12 +50,13 @@ namespace Wiwa {
 		ParticleEmitterComponent* emmiter = GetComponent<ParticleEmitterComponent>();
 
 		m_SpawnRate -= Time::GetDeltaTime() * 0.001;
-		if (m_SpawnRate > 0 )
+		if (m_SpawnRate < 0 )
 		{
 			for (unsigned int i = 0; i < m_AvailableParticles; ++i)
 			{
 				int unusedParticle = FirstUnusedParticle();
 				SpawnParticle(m_Particles[unusedParticle]);
+				break;
 			}
 
 			m_SpawnRate = emmiter->m_spawnRate;
@@ -66,7 +67,7 @@ namespace Wiwa {
 		for (unsigned int i = 0; i < m_MaxParticles; ++i)
 		{
 			Particle& particle = m_Particles[i];
-			float dt = Time::GetRealTimeSinceStartup() * 0.001f;
+			float dt = Time::GetDeltaTime() * 0.001f;
 
 			particle.life_time -= dt;
 
@@ -115,6 +116,11 @@ namespace Wiwa {
 		size_t cameraCount = man.getCameraSize();
 		std::vector<CameraId>& cameras = man.getCameras();
 
+		glEnable(GL_BLEND);
+		glEnable(GL_ALPHA_TEST);
+		glDepthMask(false);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		for (size_t i = 0; i < cameraCount; i++)
 		{
 			CameraId cam_id = cameras[i];
@@ -144,23 +150,9 @@ namespace Wiwa {
 				}
 			}
 		}
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		//m_Material->Bind();
-		//for (unsigned int i = 0; i < m_MaxParticles; ++i)
-		//{
-		//	Particle& particle = m_Particles[i];
-		//	if (particle.life_time > 0.0f)
-		//	{
-		//	
-
-
-		//		m_Material->getShader()->SetMVP(particle.transform,camera,);
-		//		glBindVertexArray(m_VAO);
-		//		glDrawArrays(GL_TRIANGLES, 0, 6);
-		//		glBindVertexArray(0);
-		//	}
-		//}
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(true);
+		glDisable(GL_BLEND);
 	}
 
 	void ParticleSystem::SetValues(ParticleEmitterComponent settings)
