@@ -86,56 +86,9 @@ namespace Wiwa
 	{
 		// Draw the right button depending on state
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-
-		switch (state)
-		{
-
-		case GuiControlState::DISABLED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-
-		case GuiControlState::NORMAL:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-
-		//L14: TODO 4: Draw the button according the GuiControl State
-		case GuiControlState::FOCUSED:
-		{
-
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-		case GuiControlState::PRESSED:
-		{
-
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-
-		/******/
-
-		case GuiControlState::SELECTED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-		default:
-			break;
-		}
-		return false;
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), texturePosition);
+		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		return true;
 	}
 }

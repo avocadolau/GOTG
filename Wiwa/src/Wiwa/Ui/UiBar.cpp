@@ -46,7 +46,7 @@ namespace Wiwa
 	{
 		extraPosition.x = position.x;
 		extraPosition.y = position.y;
-		//render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render->UpdateInstancedQuadTexClip(m_Scene, id_quad_extra, extraTexture->GetSize(),extraTexturePosition);
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		return false;

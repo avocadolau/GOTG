@@ -96,7 +96,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		case GuiControlState::NORMAL:
@@ -104,7 +104,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		//L14: TODO 4: Draw the button according the GuiControl State
@@ -114,7 +114,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 		case GuiControlState::PRESSED:
 		{
@@ -122,7 +122,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 
 		/******/
@@ -132,7 +132,7 @@ namespace Wiwa
 			Vector2i newPosition;
 			newPosition.x = this->position.x;
 			newPosition.y = this->position.y;
-			
+			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
 		default:
 			break;

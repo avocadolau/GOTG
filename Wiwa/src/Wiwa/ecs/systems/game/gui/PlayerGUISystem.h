@@ -26,7 +26,6 @@ namespace Wiwa
 
         void PlayerElements(Wiwa::GuiManager& gm, Character* character);
 
-        bool test = false;
     };
 }
 

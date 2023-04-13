@@ -523,6 +523,7 @@ namespace Wiwa
 				if (position.height < desired_size.h)
 				{
 					position.height = EaseLinearIn(Wiwa::Time::GetDeltaTime(), starting_size.w, desired_size.w - starting_size.w, duration);
+
 				}
 				break;
 			case Wiwa::GuiControlEasing::LinearOut:
@@ -758,6 +759,13 @@ namespace Wiwa
 			default:
 				break;
 			}
+
+			texturePosition.width = position.width;
+			texturePosition.height = position.height;
+			extraPosition.width = position.width;
+			extraPosition.height = position.height;
+			extraTexturePosition.width = extraTexturePosition.width;
+			extraTexturePosition.height = extraTexturePosition.height;
 
 		}
 	public:
