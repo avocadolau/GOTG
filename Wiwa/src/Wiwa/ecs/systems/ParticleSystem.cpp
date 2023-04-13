@@ -31,7 +31,7 @@ namespace Wiwa {
 
 		m_SpawnRate = emmiter->m_spawnRate;
 
-		glm::vec3 initPosition = emmiter->m_p_initialPositionOffset + t3d->localPosition;
+		glm::vec3 initPosition = emmiter->m_p_initialPosition + t3d->localPosition;
 		glm::vec3 initRotation = emmiter->m_p_initialRotation + t3d->localRotation;
 		glm::vec3 initScale = emmiter->m_p_initialScale + t3d->localScale;
 
@@ -40,7 +40,7 @@ namespace Wiwa {
 		m_Particles.reserve(m_MaxParticles);
 		for (int i = 0; i < m_MaxParticles; i++)
 		{
-			m_Particles[i] = Particle(emmiter->m_particle_maxLifeTime,
+			m_Particles[i] = Particle(emmiter->m_p_lifeTime,
 									initPosition,initRotation,initScale,
 									emmiter->m_p_initialVelocity,glm::vec4 (1.0f, 1.0f, 1.0f, 1.0f));
 		}
@@ -174,7 +174,7 @@ namespace Wiwa {
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 
-		glm::vec3 initPosition = particleemmiter->m_p_initialPositionOffset + t3d->localPosition;
+		glm::vec3 initPosition = particleemmiter->m_p_initialPosition + t3d->localPosition;
 		glm::vec3 initRotation = particleemmiter->m_p_initialRotation + t3d->localRotation;
 		glm::vec3 initScale = particleemmiter->m_p_initialScale + t3d->localScale;
 
@@ -186,7 +186,7 @@ namespace Wiwa {
 
 		particle.velocity = particleemmiter->m_p_initialVelocity;
 
-		particle.life_time = particleemmiter->m_particle_maxLifeTime;
+		particle.life_time = particleemmiter->m_p_lifeTime;
 
 		m_AvailableParticles--;
 		

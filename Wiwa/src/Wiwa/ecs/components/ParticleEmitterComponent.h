@@ -16,6 +16,12 @@ namespace Wiwa {
 		WORLD,
 	};
 
+	enum ParticleSpawnVolume
+	{
+		NONE, CUBE, SPHERE
+	};
+
+
 	struct WI_API ParticleEmitterComponent {
 
 		//Emitter data			----------------------------------------
@@ -32,15 +38,23 @@ namespace Wiwa {
 		//spawning
 		bool m_loopSpawning;
 		float m_spawnRate;
-		float m_spawnDelay;
+		bool		m_p_rangedSpawnRate;
+		glm::vec3	m_p_minSpawnRate;
+		glm::vec3	m_p_maxSpawnRate;
+		//float m_spawnDelay;
 
 		bool m_active;
 
+		ParticleSpawnVolume m_spawnVolume;
 
 		//Particle Data			----------------------------------------
 
 		//general data
-		float m_particle_maxLifeTime;
+		float m_p_lifeTime;
+		bool		m_p_rangedLifeTime;
+		glm::vec3	m_p_minLifeTime;
+		glm::vec3	m_p_maxLifeTime;
+
 
 		bool m_billboardActive;
 
@@ -51,19 +65,40 @@ namespace Wiwa {
 
 		//position & translation
 		//bool m_p_followEmitterPosOnlyOnSpawn;
-		glm::vec3 m_p_initialPositionOffset;
+		glm::vec3 m_p_initialPosition;
+		bool		m_p_rangedInitialPosition;
+		glm::vec3	m_p_minInitialPosition;
+		glm::vec3	m_p_maxInitialPosition;
+
 		glm::vec3 m_p_initialVelocity;
+		bool		m_p_rangedVelocity;
+		glm::vec3	m_p_minVelocity;
+		glm::vec3	m_p_maxVelocity;
+
 		//glm::vec3 particle_m_initialAcceleration;
 
 		//rotation
 		//bool m_p_followEmitterRotOnlyOnSpawn;
 		glm::vec3 m_p_initialRotation;
-		glm::vec3 m_p_initialAngularVelocity;
+		bool		m_p_rangedInitialRotation;
+		glm::vec3	m_p_minInitialRotation;
+		glm::vec3	m_p_maxInitialRotation;
 
+		glm::vec3 m_p_initialAngularVelocity;
+		bool		m_p_rangedAngularVelocity;
+		glm::vec3	m_p_minAngularVelocity;
+		glm::vec3	m_p_maxAngularVelocity;
 		//size
 		//bool m_p_followEmitterScaleOnlyOnSpawn;
 		glm::vec3 m_p_initialScale;
+		bool		m_p_rangedInitialScale;
+		glm::vec3	m_p_minInitialScale;
+		glm::vec3	m_p_maxInitialScale;
+
 		glm::vec3 m_p_initialGrowthVelocity;
+		bool		m_p_rangedGrowthVelocity;
+		glm::vec3	m_p_minInitialGrowthVelocity;
+		glm::vec3	m_p_maxInitialGrowthVelocity;
 
 
 		std::vector<glm::vec4> m_p_colorsOverLifetime;
@@ -92,12 +127,12 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 	REFLECT_MEMBER(m_maxParticles);
 	REFLECT_MEMBER(m_loopSpawning);
 	REFLECT_MEMBER(m_spawnRate);
-	REFLECT_MEMBER(m_spawnDelay);
+	//REFLECT_MEMBER(m_spawnDelay);
 	REFLECT_MEMBER(m_active);
-	REFLECT_MEMBER(m_particle_maxLifeTime);
+	REFLECT_MEMBER(m_p_lifeTime);
 	REFLECT_MEMBER(m_billboardActive);
 	//REFLECT_MEMBER(m_p_followEmitterPosOnlyOnSpawn);
-	REFLECT_MEMBER(m_p_initialPositionOffset);
+	REFLECT_MEMBER(m_p_initialPosition);
 	REFLECT_MEMBER(m_p_initialVelocity);
 	//REFLECT_MEMBER(m_p_followEmitterRotOnlyOnSpawn);
 	REFLECT_MEMBER(m_p_initialRotation);

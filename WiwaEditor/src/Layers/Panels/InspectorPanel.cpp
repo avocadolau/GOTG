@@ -706,36 +706,6 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::Text("Emitter Parameters");
 	ImGui::Separator();
 
-	ImGui::Dummy(ImVec2(0, 4));
-
-	ImGui::Checkbox("##m_active", &emitter->m_active);
-	ImGui::SameLine();
-	ImGui::Text("Active");
-
-	ImGui::Dummy(ImVec2(0, 4));
-
-
-	//set material
-	ImGui::Text("Particle Material");
-	AssetContainer(emitter->m_materialPath);
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-		{
-			const wchar_t* path = (const wchar_t*)payload->Data;
-			std::wstring ws(path);
-			std::string pathS(ws.begin(), ws.end());
-			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".wimaterial")
-			{
-				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
-				pathS = Wiwa::Resources::_assetToLibPath(pathS);
-				strcpy(emitter->m_materialPath, pathS.c_str());
-			}
-		}
-
-		ImGui::EndDragDropTarget();
-	}
 
 	//set mesh
 	ImGui::Text("Particle Mesh Type");
@@ -759,14 +729,52 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::EndDragDropTarget();
 	}
 
-	ImGui::Text("Max Particles");
 
-	ImGui::Dummy(ImVec2(38, 0));
+	ImGui::Dummy(ImVec2(0, 4));
+
+	//set material
+	ImGui::Text("Particle Material");
+	AssetContainer(emitter->m_materialPath);
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".wimaterial")
+			{
+				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
+				pathS = Wiwa::Resources::_assetToLibPath(pathS);
+				strcpy(emitter->m_materialPath, pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	
+
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Checkbox("##m_active", &emitter->m_active);
 	ImGui::SameLine();
+	ImGui::Text("Active");
+
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+	ImGui::Text("Max Particles");
 	ImGui::PushItemWidth(100.0f);
 
-	ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f");
+	if (ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f"))
+	{
+		//system->max_particles = emitter->m_maxParticles   ->future
+	}
 	ImGui::PopItemWidth();
+
 
 
 	ImGui::Dummy(ImVec2(0, 4));
@@ -775,43 +783,36 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::SameLine();
 	ImGui::Text("Loop Spawning");
 
-	//spawning ranged
-
-	//spawning ranged
 
 	if (emitter->m_loopSpawning)
 	{
 		ParticleTab();
-
+		ImGui::Checkbox("##m_p_rangedSpawnRate", &emitter->m_p_rangedSpawnRate);
+		ImGui::SameLine();
 		ImGui::Text("Spawn Rate");
 
-		ParticleTab();
+		if (emitter->m_p_rangedSpawnRate)
+		{
+			ParticleTab();
+			ImGui::PushItemWidth(46.f);
 
-		ImGui::Dummy(ImVec2(38, 0));
-		ImGui::SameLine();
-		ImGui::PushItemWidth(100.0f);
+			ImGui::DragFloat("##m_p_minSpawnRate", &emitter->m_p_minSpawnRate[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::DragFloat("##m_p_maxSpawnRate", &emitter->m_p_maxSpawnRate[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
+		else
+		{
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(100.0f);
 
-		ImGui::DragFloat("##m_spawnRate", &emitter->m_spawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
-		ImGui::PopItemWidth();
+			ImGui::DragFloat("##m_spawnRate", &emitter->m_spawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
 	}
 
-	ImGui::Text("Spawn Delay");
-
-	ImGui::Dummy(ImVec2(38, 0));
-	ImGui::SameLine();
-	ImGui::PushItemWidth(100.0f);
-
-	ImGui::DragFloat("##m_spawnDelay", &emitter->m_spawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
-	ImGui::PopItemWidth();
-
 	ImGui::Dummy(ImVec2(0, 4));
-
-
-
-
-
-
-
 
 	ImGui::Separator();
 	ImGui::Text("Particle attributes");
@@ -824,77 +825,185 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
-	ImGui::Text("Maximum Life Time");
+	//lifetime
+	ImGui::Checkbox("##m_p_rangedLifeTime", &emitter->m_p_rangedLifeTime);
 	ImGui::SameLine();
-	ImGui::PushItemWidth(100.0f);
+	ImGui::Text("Life Time");
 
-	ImGui::DragFloat("##m_particle_maxLifeTime", &emitter->m_particle_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
-	ImGui::PopItemWidth();
+	if (emitter->m_p_rangedLifeTime)
+	{
+		ImGui::PushItemWidth(46.f);
+
+		ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::SameLine();
+		ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+	else
+	{
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+	ImGui::Dummy(ImVec2(0, 4));
 
 	if (ImGui::TreeNode("Position & Translation"))
 	{
-
-		ImGui::Dummy(ImVec2(0, 4));
-		ImGui::Text("Initial Offset Position");
-
-		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::Checkbox("##m_p_rangedInitialPosition", &emitter->m_p_rangedInitialPosition);
 		ImGui::SameLine();
-		ImGui::DragFloat3("##m_p_initialPositionOffset", &(emitter->m_p_initialPositionOffset)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::Text("Initial Position");
+
+		if (emitter->m_p_rangedInitialPosition)
+		{
+			ImGui::Text("Min");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_minInitialPosition", &(emitter->m_p_minInitialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Max");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_maxInitialPosition", &(emitter->m_p_maxInitialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+
+			ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 
 
-		ImGui::Dummy(ImVec2(0, 4));
+		}
+
+		ImGui::Dummy(ImVec2(0, 8));
+
+		ImGui::Checkbox("##m_p_rangedVelocity", &emitter->m_p_rangedVelocity);
+		ImGui::SameLine();
 		ImGui::Text("Initial Velocity");
 
-		ImGui::Dummy(ImVec2(38, 0));
-		ImGui::SameLine();
-		ImGui::DragFloat3("##m_p_initialVelocity", &(emitter->m_p_initialVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+		if (emitter->m_p_rangedVelocity)
+		{
 
 
+			ImGui::Text("Min");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_minVelocity", &(emitter->m_p_minVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Max");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_maxVelocity", &(emitter->m_p_maxVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+
+			ImGui::DragFloat3("##m_p_initialVelocity", &(emitter->m_p_initialVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		}
+		
 		ImGui::TreePop();
+		ImGui::Dummy(ImVec2(0, 8));
 	}
 
-	if (ImGui::TreeNode("Rotation & Angular Translation"))
+	if (ImGui::TreeNode("Rotation & Angular Velocity"))
 	{
-
-		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Checkbox("##m_p_initialRotation", &emitter->m_p_rangedInitialRotation);
+		ImGui::SameLine();
 		ImGui::Text("Initial Rotation");
 
-		ImGui::Dummy(ImVec2(38, 0));
+		if (emitter->m_p_rangedInitialRotation)
+		{
+			ImGui::Text("Min");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_minInitialRotation", &(emitter->m_p_minInitialRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Max");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_maxInitialRotation", &(emitter->m_p_maxInitialRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+
+			ImGui::DragFloat3("##m_p_initialRotation", &(emitter->m_p_initialRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		}
+
+		ImGui::Dummy(ImVec2(0, 8));
+
+		ImGui::Checkbox("##m_p_rangedAngularVelocity", &emitter->m_p_rangedAngularVelocity);
 		ImGui::SameLine();
-		ImGui::DragFloat3("##m_p_initialRotation", &(emitter->m_p_initialRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
-		ImGui::Dummy(ImVec2(0, 4));
 		ImGui::Text("Initial Angular Velocity");
 
-		ImGui::Dummy(ImVec2(38, 0));
-		ImGui::SameLine();
-		ImGui::DragFloat3("##m_p_initialAngularVelocity", &(emitter->m_p_initialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 
+		if (emitter->m_p_rangedAngularVelocity)
+		{
+
+
+			ImGui::Text("Min");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_minAngularVelocity", &(emitter->m_p_minAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Max");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_maxAngularVelocity", &(emitter->m_p_maxAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+
+			ImGui::DragFloat3("##m_p_initialAngularVelocity", &(emitter->m_p_initialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		}
 
 		ImGui::TreePop();
+		ImGui::Dummy(ImVec2(0, 8));
 	}
 
 	if (ImGui::TreeNode("Scaling & Growth"))
 	{
-
-		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Checkbox("##m_p_rangedInitialScale", &emitter->m_p_rangedInitialScale);
+		ImGui::SameLine();
 		ImGui::Text("Initial Scale");
 
-		ImGui::Dummy(ImVec2(38, 0));
+		if (emitter->m_p_rangedInitialScale)
+		{
+			ImGui::Text("Min");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_minInitialScale", &(emitter->m_p_minInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Max");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_maxInitialScale", &(emitter->m_p_maxInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+
+			ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		}
+
+		ImGui::Dummy(ImVec2(0, 8));
+
+		ImGui::Checkbox("##m_p_rangedGrowthVelocity", &emitter->m_p_rangedGrowthVelocity);
 		ImGui::SameLine();
-		ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
-		ImGui::Dummy(ImVec2(0, 4));
 		ImGui::Text("Initial Growth Velocity");
 
-		ImGui::Dummy(ImVec2(38, 0));
-		ImGui::SameLine();
-		ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 
+		if (emitter->m_p_rangedGrowthVelocity)
+		{
+
+
+			ImGui::Text("Min");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_minInitialGrowthVelocity", &(emitter->m_p_minInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Max");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_maxInitialGrowthVelocity", &(emitter->m_p_maxInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		else
+		{
+
+			ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+
+		}
 
 		ImGui::TreePop();
+		ImGui::Dummy(ImVec2(0, 8));
 	}
 
 
