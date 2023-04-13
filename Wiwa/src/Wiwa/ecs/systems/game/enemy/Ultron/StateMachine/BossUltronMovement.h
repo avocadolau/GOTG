@@ -1,6 +1,8 @@
 #pragma once
 #include "BossUltronBase.h"
 
+#define NUMBER_OF_RANDOM_ACTIONS 4
+
 namespace Wiwa {
 	class BossUltronMovementState : public BossUltronBaseState {
 	public:

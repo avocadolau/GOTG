@@ -236,3 +236,17 @@ void Wiwa::AgentAISystem::DrawPath()
 	camera->frameBuffer->Unbind();
 }
 
+bool Wiwa::AgentAISystem::HasArrived()
+{
+	Wiwa::AgentAI* agent = GetComponentByIterator<Wiwa::AgentAI>(m_AgentAI);
+
+	if (agent->hasArrived)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+

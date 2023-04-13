@@ -54,6 +54,8 @@ namespace Wiwa {
 		void DrawPath();
 		
 		inline size_t GetPathSize() { return lastPath.size(); };
+
+		bool HasArrived();
 	};
 }
 

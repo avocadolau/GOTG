@@ -21,20 +21,68 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
+		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
-		EntityId currentEnemy = enemy->GetEntity();
+		//EntityId currentEnemy = enemy->GetEntity();
+
 
 		//pman.EmitBatch(currentEnemy);
 
-		//animator->PlayAnimation("spawn", false);
+		//animator->PlayAnimation("move", true);
+
+		enemy->GoToPosition(RandomPremadePosition());
+
+		if (agentPtr != nullptr)
+		{
+			agentPtr->DisableRotationByTile();
+		}
 	}
 
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
+		
+		if (agentPtr != nullptr)
+		{
+			agentPtr->LookAtPosition(playerTr->position);
+
+			if (agentPtr->HasArrived()) // change it for a timer?
+			{
+				agentPtr->StopMoving();
+				std::srand(std::time(0));
+
+				int randomAction = std::rand() % (NUMBER_OF_RANDOM_ACTIONS);
+
+				switch (randomAction)
+				{
+				case 0:
+				{
+					enemy->SwitchState(enemy->m_BulletStormAttackState);
+				}
+				break;
+				case 1:
+				{
+					enemy->SwitchState(enemy->m_ClusterShotsAttackState);
+				}
+				break;
+				case 2:
+				{
+					enemy->SwitchState(enemy->m_LaserBeamAttackState);
+				}
+				break;
+				case 3:
+				{
+					enemy->SwitchState(enemy->m_DashState);
+				}
+				}
+			}
+		}		
 	}
 
 	void BossUltronMovementState::ExitState(BossUltron* enemy)

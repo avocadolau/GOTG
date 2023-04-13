@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "BossUltronDeath.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {
@@ -16,11 +17,11 @@ namespace Wiwa
 
 	void BossUltronDeathState::EnterState(BossUltron* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-		EntityId currentEnemy = enemy->GetEntity();
+		//Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//ParticleManager& pman = enemy->getScene().GetParticleManager();
+		
+		//EntityId currentEnemy = enemy->GetEntity();
 
 		//pman.EmitBatch(currentEnemy);
 
@@ -30,9 +31,17 @@ namespace Wiwa
 	void BossUltronDeathState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_ChasingState);
+		//{
+			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+			self->hasFinished = true;
+			if (self->waveId != -1)
+			{
+				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
+				waveSys->DestroyEnemy(enemy->GetEntity(), self->enemyType);
+			}
+		//}
 	}
 
 	void BossUltronDeathState::ExitState(BossUltron* enemy)
