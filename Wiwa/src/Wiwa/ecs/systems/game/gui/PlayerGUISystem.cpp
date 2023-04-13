@@ -100,9 +100,21 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	CooldownState(abilitiesList, gm);
 	CooldownState(buffsList, gm);
 
+	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, 12))
+	{
+		test = true;
+	}
+	if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, 12) && test)
+	{
+		test = false;
+		
+	}
+
+	gm.canvas.at(0)->controls.at(0)->MoveGUIElement({ 900,600 }, 100, { gm.canvas.at(0)->controls.at(0)->position.x,gm.canvas.at(0)->controls.at(0)->position.y },Wiwa::GuiControlEasing::EaseBounceInOut);
+
 	if (leftTrigger >= 0.f)
 	{
-
+		
 	}
 	if (rightTrigger >= 0.f)
 	{
