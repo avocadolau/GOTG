@@ -1,16 +1,19 @@
 #include <wipch.h>
 #include "UIPanel.h"
 #include "imgui.h"
-#include "Time.h"
-
+#include <Wiwa/scene/SceneManager.h>
+#include "Wiwa/scene/Scene.h"
 #include <Wiwa/core/Application.h>
-
+#include "../../Utils/EditorUtils.h"
 using namespace Wiwa;
 
 UIPanel::UIPanel(EditorLayer* instance)
-	: Panel("UI", ICON_FK_TELEVISION, instance)
+	: Panel("UI", ICON_FK_TELEVISION, instance), m_Instance(instance)
 {
-	
+	position = glm::ivec2(0.f);
+	size = glm::ivec2(0.f);
+	originPos = glm::ivec2(0.f);
+	originSize = glm::ivec2(0.f);
 }
 
 UIPanel::~UIPanel()
@@ -188,10 +191,10 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateButton");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Origin position", originPos);
-	ImGui::DragInt2("Origin size", originSize);
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Origin position", glm::value_ptr(originPos));
+	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -204,6 +207,7 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
 			}
 		}
 
@@ -258,15 +262,15 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	if (ImGui::Button("Create button"))
 	{
 		Wiwa::Rect2i rect;
-		rect.x = position[0];
-		rect.y = position[1];
-		rect.width = size[0];
-		rect.height = size[1];
+		rect.x = position.x;
+		rect.y = position.y;
+		rect.width = size.x;
+		rect.height = size.y;
 		Wiwa::Rect2i originRect;
-		originRect.x = originPos[0];
-		originRect.y = originPos[1];
-		originRect.width = originSize[0];
-		originRect.height = originSize[1];
+		originRect.x = originPos.x;
+		originRect.y = originPos.y;
+		originRect.width = originSize.x;
+		originRect.height = originSize.y;
 		if (canvas_id > -1)
 		{
 			m_GuiManager.CreateGuiControl_Simple(GuiControlType::BUTTON, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(), nullptr, canvas_id, callbackID, originRect, audioEventForButton.c_str(),true, animated, animSpeed, animationRects);
@@ -280,12 +284,12 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateSlider");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Origin position", originPos);
-	ImGui::DragInt2("Origin size", originSize);
-	ImGui::DragInt2("Slider origin position", sliderOriginPos);
-	ImGui::DragInt2("Slider origin size", sliderOriginSize);
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Origin position", glm::value_ptr(originPos));
+	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
+	ImGui::DragInt2("Slider origin position", glm::value_ptr(sliderOriginPos));
+	ImGui::DragInt2("Slider origin size", glm::value_ptr(sliderOriginSize));
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -298,6 +302,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
 			}
 		}
 
@@ -315,6 +320,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForExtraAsset = pathS;
+
 			}
 		}
 
@@ -401,12 +407,12 @@ void UIPanel::DrawBarCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateBar");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Origin position", originPos);
-	ImGui::DragInt2("Origin size", originSize);
-	ImGui::DragInt2("Slider origin position", sliderOriginPos);
-	ImGui::DragInt2("Slider origin size", sliderOriginSize);
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Origin position", glm::value_ptr(originPos));
+	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
+	ImGui::DragInt2("Slider origin position", glm::value_ptr(sliderOriginPos));
+	ImGui::DragInt2("Slider origin size", glm::value_ptr(sliderOriginSize));
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -419,6 +425,7 @@ void UIPanel::DrawBarCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
 			}
 		}
 
@@ -436,6 +443,7 @@ void UIPanel::DrawBarCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForExtraAsset = pathS;
+
 			}
 		}
 
@@ -476,10 +484,10 @@ void UIPanel::DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateAbility");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Origin position", originPos);
-	ImGui::DragInt2("Origin size", originSize);
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Origin position", glm::value_ptr(originPos));
+	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -492,6 +500,7 @@ void UIPanel::DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
 			}
 		}
 
@@ -568,10 +577,10 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateImage");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Origin position", originPos);
-	ImGui::DragInt2("Origin size", originSize);
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Origin position", glm::value_ptr(originPos));
+	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -584,6 +593,7 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			if (p.extension() == ".png")
 			{
 				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
 			}
 		}
 
@@ -662,8 +672,8 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::PushID("CreateText");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	ImGui::InputText("String", (char*)pathForAsset.c_str(),64);
 
 	if (ImGui::Button("Create Text"))
@@ -683,10 +693,10 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	ImGui::PushID("CreateCheckbox");
 	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
-	ImGui::DragInt2("Origin position", originPos);
-	ImGui::DragInt2("Origin size", originSize);
-	ImGui::DragInt2("Position", position);
-	ImGui::DragInt2("Size", size);
+	ImGui::DragInt2("Origin position", glm::value_ptr(originPos));
+	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -699,6 +709,7 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 			if (p.extension() == ".png")
 			{
 				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
 			}
 		}
 
@@ -818,6 +829,15 @@ void UIPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
 	}
 	
 	animationRects = list;
+}
+void UIPanel::SetSizeByTexture(const char* file)
+{
+	const ResourceId id = Resources::Load<Image>(file);
+	Image* img = Resources::GetResourceById<Image>(id);
+	size.x = img->GetSize().x;
+	size.y = img->GetSize().y;
+	originSize.x = img->GetSize().x;
+	originSize.y = img->GetSize().y;
 }
 void UIPanel::OnEvent(Wiwa::Event& e)
 {

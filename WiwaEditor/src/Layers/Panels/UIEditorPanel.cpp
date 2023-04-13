@@ -263,8 +263,14 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		ImGui::SameLine();
 		ImGui::Text("%i", control->id);
 		ImGui::NewLine();
-		ImGui::DragInt2("position", pos);
-		ImGui::DragInt2("size", size);
+		if(ImGui::DragInt2("position", pos))
+		{
+			UpdateElements(control);
+		}
+		if(ImGui::DragInt2("size", size))
+		{
+			UpdateElements(control);
+		}
 		switch (control->type)
 		{
 		case Wiwa::GuiControlType::ABILITY:
