@@ -20,8 +20,8 @@ namespace Wiwa
 
 		m_GuiManager = new GuiManager();
 		m_GuiManager->Init(this);
-		/*m_DialogManager = new DialogManager();
-		m_DialogManager->Init(this);*/
+		m_DialogManager = new DialogManager();
+		m_DialogManager->Init(this);
 
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
@@ -47,7 +47,7 @@ namespace Wiwa
 		delete m_CameraManager;
 		delete m_LightManager;
 		delete m_GuiManager;
-		//delete m_DialogManager;
+		delete m_DialogManager;
 
 		delete m_ParticleManager;
 
@@ -102,7 +102,7 @@ namespace Wiwa
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
 			m_GuiManager->Update();
-			//m_DialogManager->Update();
+			m_DialogManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
