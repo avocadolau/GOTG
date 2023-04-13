@@ -2,19 +2,14 @@
 #include "BossUltronBase.h"
 
 namespace Wiwa {
-	class BossUltronMovementState : public BossUltronBaseState {
+	class BossUltronDashState : public BossUltronBaseState {
 	public:
-		BossUltronMovementState();
-		~BossUltronMovementState();
+		BossUltronDashState();
+		~BossUltronDashState();
 
 		void EnterState(BossUltron* enemy) override;
 		void UpdateState(BossUltron* enemy) override;
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
-
-		glm::vec3 RandomPremadePosition();
-	private:
-
-		std::vector<glm::vec3> m_PremadePositions;
 	};
 }

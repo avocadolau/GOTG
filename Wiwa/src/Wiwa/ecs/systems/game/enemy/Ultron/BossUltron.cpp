@@ -13,6 +13,7 @@ namespace Wiwa
 		m_ClusterShotsAttackState = nullptr;
 		m_LaserBeamAttackState = nullptr;
 		m_BulletStormAttackState = nullptr;
+		m_DashState = nullptr;
 		
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_RangeOfAttack = 100.0f;
@@ -83,6 +84,8 @@ namespace Wiwa
 		if (m_BulletStormAttackState != nullptr)
 			delete m_BulletStormAttackState;
 
+		if (m_DashState != nullptr)
+			delete m_DashState;
 
 		m_CurrentState = nullptr;
 		m_SpawnState = nullptr;
@@ -92,6 +95,7 @@ namespace Wiwa
 		m_ClusterShotsAttackState = nullptr;
 		m_LaserBeamAttackState = nullptr;
 		m_BulletStormAttackState = nullptr;
+		m_DashState = nullptr;
 		
 	}
 

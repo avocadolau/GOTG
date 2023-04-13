@@ -7,6 +7,7 @@
 #include "StateMachine/BossUltronLaserBeamAttack.h";
 #include "StateMachine/BossUltronBulletStormAttack.h";
 #include "StateMachine/BossUltronDeath.h";
+#include "StateMachine/BossUltronDash.h"
 
 namespace Wiwa {
 	class WI_API BossUltron : public EnemySystem {
@@ -20,6 +21,7 @@ namespace Wiwa {
 		BossUltronLaserBeamAttackState* m_LaserBeamAttackState;
 		BossUltronBulletStormAttackState* m_BulletStormAttackState;
 		BossUltronDeathState* m_DeathState;
+		BossUltronDashState* m_DashState;
 
 		
 		EntityManager::ComponentIterator m_GunTransformIt;

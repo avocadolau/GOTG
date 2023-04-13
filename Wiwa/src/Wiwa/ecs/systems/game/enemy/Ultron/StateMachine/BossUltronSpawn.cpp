@@ -17,22 +17,24 @@ namespace Wiwa
 	void BossUltronSpawnState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
+		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 
 		EntityId currentEnemy = enemy->GetEntity();
 
-		//pman.EmitBatch(currentEnemy);
-
-		//animator->PlayAnimation("spawn", false);
+		//play particles
+		//play Animation		
 	}
 
 	void BossUltronSpawnState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		
+		// when animation finishes, pass to the movement state
+		
 		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_ChasingState);
+		//enemy->SwitchState(enemy->m_MovementSatte);
 	}
 
 	void BossUltronSpawnState::ExitState(BossUltron* enemy)
