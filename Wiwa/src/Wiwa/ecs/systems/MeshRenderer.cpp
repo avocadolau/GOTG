@@ -20,8 +20,6 @@ namespace Wiwa {
 
 	void MeshRenderer::OnUpdate()
 	{
-
-		WI_INFO("Rendering opaque...");
 		Transform3D* t3d = GetComponent<Transform3D>();
 		Mesh* mesh = GetComponent<Mesh>();
 		AnimatorComponent* animator = GetComponent<AnimatorComponent>();

@@ -110,8 +110,6 @@ namespace Wiwa {
 	}
 	void ParticleSystem::Render()
 	{
-
-		WI_INFO("Rendering transparent...");
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		Renderer3D& r3d = Application::Get().GetRenderer3D();
@@ -123,8 +121,7 @@ namespace Wiwa {
 		std::vector<CameraId>& cameras = man.getCameras();
 
 		glEnable(GL_BLEND);
-		glDisable(GL_DEPTH_TEST);
-		glDepthMask(false);
+		glDepthMask(GL_FALSE);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		for (size_t i = 0; i < cameraCount; i++)
@@ -156,8 +153,7 @@ namespace Wiwa {
 				}
 			}
 		}
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(true);
+		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
 	}
 

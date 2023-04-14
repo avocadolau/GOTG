@@ -17,6 +17,7 @@ namespace Wiwa {
 		RenderManager();
 
 		static FrameBuffer m_FrameBuffer;
+		static FrameBuffer m_ShadowBuffer;
 		static glm::mat4 m_OrthoProj;
 		static glm::mat4 m_View;
 		static glm::mat4 m_Model;

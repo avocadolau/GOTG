@@ -17,13 +17,14 @@ namespace Wiwa {
 		int m_Width, m_Height;
 
 		bool m_Init;
-
+		unsigned int m_ColorBuffers[2];
 		
 	public:
 		FrameBuffer();
 		~FrameBuffer();
 
 		void Init(int width, int height, bool depth=true);
+		void Init(int width, int height, int n_Colorbuffers,int n_Atatchments, bool depth = true);
 
 		void Bind(bool clear=true);
 		void Unbind();

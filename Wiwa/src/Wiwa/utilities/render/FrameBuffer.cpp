@@ -19,7 +19,7 @@ namespace Wiwa {
 		}
 	}
 
-	void FrameBuffer::Init(int width, int height, bool depth/*depth=true*/)
+	void FrameBuffer::Init(int width, int height, int n_Colorbuffers, int n_Atatchments, bool depth)
 	{
 		m_Init = true;		
 
@@ -33,6 +33,65 @@ namespace Wiwa {
 		// Color texture
 		glGenTextures(1, &m_ColorBufferTexture);
 		glBindTexture(GL_TEXTURE_2D, m_ColorBufferTexture);
+
+		//add 2 color buffer, one for normal rendering and the other for bloom
+		glGenTextures(2, m_ColorBuffers);
+		for (unsigned int i = 0; i < 2; i++)
+		{
+			glBindTexture(GL_TEXTURE_2D, m_ColorBuffers[i]);
+			glTexImage2D(
+				GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL
+			);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			// attach texture to framebuffer
+			glFramebufferTexture2D(
+				GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, m_ColorBuffers[i], 0
+			);
+		}
+
+		if (depth) {
+			// Render buffer object for depth
+			glGenRenderbuffers(1, &m_RBO);
+			glBindRenderbuffer(GL_RENDERBUFFER, m_RBO);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+			glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RBO);
+		}
+
+		// tell OpenGL which color attachments we'll use (of this framebuffer) for rendering 
+		unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+		glDrawBuffers(2, attachments);
+
+		// Check framebuffer status
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			WI_CORE_ASSERT_MSG("Framebuffer not completed")
+		}
+		else
+			WI_CORE_INFO("Framebuffer completed");
+	
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	void FrameBuffer::Init(int width, int height, bool depth)
+	{
+		m_Init = true;		
+
+		m_Width = width;
+		m_Height = height;
+
+		// FRAMEBUFFER
+		glGenFramebuffers(1, &m_FBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+
+		// Color texture
+		glGenTextures(1, &m_ColorBufferTexture);
+		glBindTexture(GL_TEXTURE_2D, m_ColorBufferTexture);
+
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
