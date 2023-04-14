@@ -55,6 +55,7 @@ Library["bullet_dynamics_release"] = "%{LibraryDirs.bullet}/BulletDynamics_vs201
 Library["bullet_linear_math_release"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_release.lib"
 Library["bullet_collision_debug"] = "%{LibraryDirs.bullet}/BulletCollision_vs2010_x64_debug.lib"
 Library["bullet_dynamics_debug"] = "%{LibraryDirs.bullet}/BulletDynamics_vs2010_x64_debug.lib"
+Library["bullet_linear_math_debug"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_debug.lib"
 Library["DebugUtils_debug"] = "%{LibraryDirs.recastnavigation}/debug/DebugUtils.lib"
 Library["DebugUtils_release"] = "%{LibraryDirs.recastnavigation}/release/DebugUtils.lib"
 Library["Detour_debug"] = "%{LibraryDirs.recastnavigation}/debug/Detour.lib"
