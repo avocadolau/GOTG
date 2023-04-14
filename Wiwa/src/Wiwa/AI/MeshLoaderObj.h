@@ -1,5 +1,3 @@
-#pragma once
-#include "DebugDraw.h"
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
 //
@@ -17,17 +15,42 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 //
-// 4. Remark from the GOTG developers, this is an ALTERED version of the software provided in the recast demo.
-/// OpenGL debug draw implementation.
-class DebugDrawGL : public duDebugDraw
+
+#ifndef MESHLOADER_OBJ
+#define MESHLOADER_OBJ
+
+#include <string>
+
+class rcMeshLoaderObj
 {
 public:
-	virtual void depthMask(bool state);
-	virtual void texture(bool state);
-	virtual void begin(duDebugDrawPrimitives prim, float size = 1.0f);
-	virtual void vertex(const float* pos, unsigned int color);
-	virtual void vertex(const float x, const float y, const float z, unsigned int color);
-	virtual void vertex(const float* pos, unsigned int color, const float* uv);
-	virtual void vertex(const float x, const float y, const float z, unsigned int color, const float u, const float v);
-	virtual void end();
+	rcMeshLoaderObj();
+	~rcMeshLoaderObj();
+	
+	bool load(const std::string& fileName);
+
+	const float* getVerts() const { return m_verts; }
+	const float* getNormals() const { return m_normals; }
+	const int* getTris() const { return m_tris; }
+	int getVertCount() const { return m_vertCount; }
+	int getTriCount() const { return m_triCount; }
+	const std::string& getFileName() const { return m_filename; }
+
+private:
+	// Explicitly disabled copy constructor and copy assignment operator.
+	rcMeshLoaderObj(const rcMeshLoaderObj&);
+	rcMeshLoaderObj& operator=(const rcMeshLoaderObj&);
+	
+	void addVertex(float x, float y, float z, int& cap);
+	void addTriangle(int a, int b, int c, int& cap);
+	
+	std::string m_filename;
+	float m_scale;	
+	float* m_verts;
+	int* m_tris;
+	float* m_normals;
+	int m_vertCount;
+	int m_triCount;
 };
+
+#endif // MESHLOADER_OBJ
