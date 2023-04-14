@@ -1131,6 +1131,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 		}
 
+		
 
 		//todo: add delete color and duplicate color
 		ImGui::Dummy(ImVec2(0, 8));
@@ -1169,7 +1170,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
 
 			std::string colorCodePickerPopup = "##colorCodePickerPopup_" + std::to_string(i);
-			if (ImGui::Button(colorCode.c_str(), ImVec2(100, 20)))
+			
+			if (ImGui::Button(colorCode.c_str(), ImVec2(75, 20)))
 			{
 				ImGui::OpenPopup(colorCodePickerPopup.c_str());
 			}
@@ -1192,6 +1194,18 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::PushItemWidth(50);
 			ImGui::DragFloat(colorCodeAlpha.c_str(), &emitter->m_p_colorsOverLifetime[i].color.w, 0.01f, 0.0f, 1.0f, "%.2f");
 			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+			if (ImGui::Button("Duplicate"))
+			{
+
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("-"))
+			{
+
+			}
 
 		}
 		ImGui::TreePop();
