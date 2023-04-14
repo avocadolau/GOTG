@@ -234,7 +234,7 @@ namespace Wiwa
 		//Used for abilites,buffs,etc 
 		void SetNextFrame(int value, Wiwa::Renderer2D* r2d)
 		{
-			if (animatedControl && type == GuiControlType::ABILITY)
+			if (animatedControl)
 			{
 				r2d->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), positionsForAnimations.at(value));
 			}

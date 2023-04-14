@@ -303,6 +303,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		case Wiwa::GuiControlType::CHECKBOX:
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
+			VectorEdit(animationRects);
 			CallbackElements(control);
 			AssetContainerPath();
 			break;

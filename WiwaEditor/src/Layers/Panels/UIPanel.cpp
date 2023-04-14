@@ -697,6 +697,7 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -715,24 +716,6 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 
 		ImGui::EndDragDropTarget();
 	}
-	AssetContainer(pathForExtraAsset.c_str());
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-		{
-			const wchar_t* path = (const wchar_t*)payload->Data;
-			std::wstring ws(path);
-			std::string pathS(ws.begin(), ws.end());
-			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".png")
-			{
-				pathForExtraAsset = pathS;
-			}
-		}
-
-		ImGui::EndDragDropTarget();
-	}
-
 	static size_t current_item = WI_INVALID_INDEX;
 
 	Wiwa::Application& app = Wiwa::Application::Get();
