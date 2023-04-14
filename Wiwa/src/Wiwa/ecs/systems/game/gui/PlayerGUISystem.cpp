@@ -100,7 +100,8 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	CooldownState(abilitiesList, gm);
 	CooldownState(buffsList, gm);
 
-	gm.canvas.at(0)->controls.at(0)->ScaleGUIElement({ 900,600 }, 100, { gm.canvas.at(0)->controls.at(0)->position.width,gm.canvas.at(0)->controls.at(0)->position.height },Wiwa::GuiControlEasing::EaseBounceInOut);
+	gm.canvas.at(0)->controls.at(0)->ScaleGUIElement({ 900.0f,600.0f }, 100.0f,
+		{ (float)gm.canvas.at(0)->controls.at(0)->position.width,(float)gm.canvas.at(0)->controls.at(0)->position.height },Wiwa::GuiControlEasing::EaseBounceInOut);
 
 	if (leftTrigger >= 0.f)
 	{
