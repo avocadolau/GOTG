@@ -61,7 +61,7 @@ namespace Wiwa
 				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName,active,animated,framesAnim,animRects);
 				break;
 			case GuiControlType::CHECKBOX:
-				control = new GuiCheckbox(m_Scene, id, bounds, path, extraPath, callbackID, boundsOriginTex, audioEventName, active);
+				control = new GuiCheckbox(m_Scene, id, bounds, path,callbackID, boundsOriginTex, audioEventName, active,animated,animRects);
 				break;
 			case GuiControlType::IMAGE:
 				control = new GuiImage(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active, animated, framesAnim, animRects);

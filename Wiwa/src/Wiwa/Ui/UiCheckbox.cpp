@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active) : GuiControl(scene, GuiControlType::CHECKBOX, id)
+	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
@@ -22,11 +22,6 @@ namespace Wiwa
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		}
 
-		if (extraPath != "") {
-			textId2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
-			extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
-		}
-
 		this->callbackID = callbackID;
 		if (callbackID != WI_INVALID_INDEX)
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
@@ -39,6 +34,10 @@ namespace Wiwa
 
 		}
 		canClick = true;
+
+		framesAnimation = 0;
+		animatedControl = animated;
+		positionsForAnimations = animationRects;
 	}
 
 	GuiCheckbox::~GuiCheckbox()
@@ -74,6 +73,7 @@ namespace Wiwa
 				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
 				{
 					checked = !checked;
+					clicked = false;
 					void* params[] = { &checked };
 					callback->Execute(params);
 				}*/
@@ -95,11 +95,21 @@ namespace Wiwa
 						callback->Execute(params);
 				}
 				
+				
 			}
+			if (checked)
+			{
+				SetNextFrame(1, &r2d);
+			}
+			else if(!checked)
+			{
+				SetNextFrame(0, &r2d);
+			}
+
 		}
 
-		SwapTexture();
-
+		
+		
 		return false;
 	}
 
@@ -190,19 +200,5 @@ namespace Wiwa
 		}
 		//HandleAnim(render);
 		return false;
-	}
-	bool GuiCheckbox::SwapTexture()
-	{
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
-		if (checked)
-		{
-			//r2d.UpdateInstancedQuadTexClip()
-		}
-		else
-		{
-			//r2d.UpdateInstancedQuadTexClip()
-		}
-		return true;
 	}
 }
