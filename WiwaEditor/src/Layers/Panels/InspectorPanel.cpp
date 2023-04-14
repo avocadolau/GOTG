@@ -1092,7 +1092,110 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::Dummy(ImVec2(0, 8));
 	}
 
+	if (ImGui::TreeNode("Color"))
+	{
+		
+		ImGui::Text("Color Nodes: ");
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::Dummy(ImVec2(0, 8));
 
+		if (emitter->m_colorsUsed < 1)
+		{
+			emitter->m_colorsUsed = 1;
+		}
+
+		if (ImGui::Button("Sort Colors by Percentage"))
+		{
+			for (int i = 0; i < emitter->m_colorsUsed; i++) {
+				int minIndex = i;
+				for (int j = i + 1; j < emitter->m_colorsUsed; j++) {
+					if (emitter->m_p_colorsOverLifetime[j].m_percentage < emitter->m_p_colorsOverLifetime[minIndex].m_percentage) {
+						minIndex = j;
+					}
+				}
+				auto temp = emitter->m_p_colorsOverLifetime[i];
+				emitter->m_p_colorsOverLifetime[i] = emitter->m_p_colorsOverLifetime[minIndex];
+				emitter->m_p_colorsOverLifetime[minIndex] = temp;
+			}
+		}
+
+		if (ImGui::Button("Reset unused Colors"))
+		{
+			for (size_t i = emitter->m_colorsUsed; i < 128; i++)
+			{
+				emitter->m_p_colorsOverLifetime[i].m_percentage = 0;
+				emitter->m_p_colorsOverLifetime[i].color = glm::vec4(0,0,0,1);
+			}
+		}
+
+
+		//todo: add delete color and duplicate color
+		ImGui::Dummy(ImVec2(0, 8));
+		ImGui::Text("Colors over lifetime:");
+		ImGui::Dummy(ImVec2(0, 4));
+
+		for (size_t i = 0; i < emitter->m_colorsUsed; i++)
+		{
+			std::string colorCodePercentage = "##colorCodePer_" + std::to_string(i);
+			std::string colorCode = "##colorCode_" + std::to_string(i);
+
+			ImGui::Text("At");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(75);
+			ImGui::DragFloat(colorCodePercentage.c_str(), &emitter->m_p_colorsOverLifetime[i].m_percentage, 0.1f, 0.0f, 100.0f, "%.2f");
+			ImGui::PopItemWidth();
+			ImGui::SameLine();
+			ImGui::Text("%% use");
+			ImGui::SameLine();
+			//ImGui::ColorEdit4(colorCode.c_str(), &emitter->m_p_colorsOverLifetime[i].color.x);
+
+
+			ImVec4 imCol = {
+				emitter->m_p_colorsOverLifetime[i].color.x,
+				emitter->m_p_colorsOverLifetime[i].color.y,
+				emitter->m_p_colorsOverLifetime[i].color.z,
+				emitter->m_p_colorsOverLifetime[i].color.w };
+
+			ImVec4 temp = ImVec4(0.2, 0.8, 0.4, 1);
+
+			ImGui::PushStyleColor(ImGuiCol_Button, imCol);
+
+			float bordergrey = 0.75f;
+			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(bordergrey, bordergrey, bordergrey, 1));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.25));
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
+
+			std::string colorCodePickerPopup = "##colorCodePickerPopup_" + std::to_string(i);
+			if (ImGui::Button(colorCode.c_str(), ImVec2(100, 20)))
+			{
+				ImGui::OpenPopup(colorCodePickerPopup.c_str());
+			}
+
+			// Display a color picker inside a popup
+			if (ImGui::BeginPopup(colorCodePickerPopup.c_str()))
+			{
+				std::string colorCodePicker = "##colorCodePicker_" + std::to_string(i);
+				ImGui::ColorPicker4(colorCodePicker.c_str(), (float*)&emitter->m_p_colorsOverLifetime[i].color.x);
+				ImGui::EndPopup();
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::PopStyleVar();
+			ImGui::SameLine();
+			std::string colorCodeAlpha = "##colorCodeAlpha_" + std::to_string(i);
+			
+
+			ImGui::Text("A:", i);
+			ImGui::SameLine();
+			ImGui::PushItemWidth(50);
+			ImGui::DragFloat(colorCodeAlpha.c_str(), &emitter->m_p_colorsOverLifetime[i].color.w, 0.01f, 0.0f, 1.0f, "%.2f");
+			ImGui::PopItemWidth();
+
+		}
+		ImGui::TreePop();
+	}
 
 
 }

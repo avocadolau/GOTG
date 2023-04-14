@@ -26,6 +26,18 @@ namespace Wiwa {
 
 		//Emitter data			----------------------------------------
 		
+		struct ColorNode
+		{
+			float m_percentage;
+			glm::vec4 color;
+
+			ColorNode()
+			{
+				m_percentage = 0.f;
+				color = glm::vec4(1, 1, 1, 1);
+			}
+		};
+
 		ResourceId m_materialId;
 		char m_materialPath[128];
 
@@ -102,13 +114,13 @@ namespace Wiwa {
 		glm::vec3	m_p_maxInitialGrowthVelocity;
 
 
-		std::vector<glm::vec4> m_p_colorsOverLifetime;
+		ColorNode m_p_colorsOverLifetime[128] = {ColorNode()};
+		int m_colorsUsed;
 
 		
 
 		// todo					----------------------------------------
 		// 
-		// ranged data!!!!
 		// 
 		// animations
 		// accelerations
