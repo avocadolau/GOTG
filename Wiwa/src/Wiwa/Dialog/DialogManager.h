@@ -24,9 +24,6 @@ namespace Wiwa
 		Wiwa::Renderer2D::InstanceData dialogImgID;
 		Wiwa::Renderer2D::InstanceData characterImgID;
 
-		Image* dialogImg;
-		Image* characterImg;
-
 		char* conversationName;
 
 		bool occupied = false;
@@ -70,9 +67,6 @@ namespace Wiwa
 
 	public:
 
-		Wiwa::Renderer2D::InstanceData continueImgID;
-		Image* continueImg;
-
 		char* conversationToPlayName;
 		Conversation conversations[MAX_CONVERSATIONS];
 
@@ -85,5 +79,7 @@ namespace Wiwa
 
 		bool collidingWithNpc = false;
 		char* NpcConversationTag;
+
+		Wiwa::Renderer2D::InstanceData continueImgID;
 	};
 }

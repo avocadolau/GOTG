@@ -44,11 +44,11 @@ namespace Wiwa
 	bool DialogManager::Init(Scene* scene)
 	{
 		m_Scene = scene;
-
+		
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		ResourceId indicatorImageID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png");
-		continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(indicatorImageID);
+		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png");
+		Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, continueImgID);
@@ -56,7 +56,7 @@ namespace Wiwa
 		/*Conversation* newConversation = new Conversation();
 
 		newConversation->conversationName = "Test conversation";
-
+		
 		SetDialogText("This is a test dialog in line 1", "We are on node... 1", "agniag", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Aaaaaaaa in line 1", "We are on node... 2", "agbQAGIU", "assets/Fonts/Jade_Smile.ttf", *newConversation);
 		SetDialogText("Is this a test dialog in line 1?", "We are on node... 3", "dfgnhNIUFniiauergnb", "assets/Fonts/Jade_Smile.ttf", *newConversation);
@@ -66,7 +66,6 @@ namespace Wiwa
 		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *newConversation);
 
 		conversations.push_back(newConversation);*/
-
 
 		conversations[0].conversationName = "NPC_1";
 
@@ -187,23 +186,19 @@ namespace Wiwa
 	{
 		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 
-		//conversations[conversationNumber].nodes[nodeNumber].text1_imgMode = new Text();
-		//conversations[conversationNumber].nodes[nodeNumber].text2_imgMode = new Text();
-		//conversations[conversationNumber].nodes[nodeNumber].text3_imgMode = new Text();
-
-		conversations[conversationNumber].nodes[nodeNumber].text1_imgMode = *gm.InitFontForDialog(fontPath, line1Text);
-		conversations[conversationNumber].nodes[nodeNumber].text2_imgMode = *gm.InitFontForDialog(fontPath, line2Text);
-		conversations[conversationNumber].nodes[nodeNumber].text3_imgMode = *gm.InitFontForDialog(fontPath, line3Text);
+		Text* text1_imgMode = gm.InitFontForDialog(fontPath, line1Text);
+		Text* text2_imgMode = gm.InitFontForDialog(fontPath, line2Text);
+		Text* text3_imgMode = gm.InitFontForDialog(fontPath, line3Text);
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgMode.GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text1_imgMode.GetSize(), {720,650}, {1000,450}, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text1_imgMode->GetTextureId(), text1_imgMode->GetSize(), {720,650}, {1000,450}, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID);
 		
-		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgMode.GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text2_imgMode.GetSize(), { 720,700 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text2_imgMode->GetTextureId(), text2_imgMode->GetSize(), { 720,700 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID);
 		
-		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgMode.GetTextureId(), conversations[conversationNumber].nodes[nodeNumber].text3_imgMode.GetSize(), { 720,750 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text3_imgMode->GetTextureId(), text3_imgMode->GetSize(), { 720,750 }, { 1000,450 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID);
 
 		conversations[conversationNumber].nodes[nodeNumber].occupied = true;
@@ -213,10 +208,10 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		ResourceId bubbleImageID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		conversations[conversationNumber].dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(bubbleImageID);
+		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+		Image* dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].dialogImg->GetTextureId(), conversations[conversationNumber].dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 	}
 
@@ -224,10 +219,12 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		ResourceId characterImageID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		conversations[conversationNumber].characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(characterImageID);
+		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+		Image* characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].characterImg->GetTextureId(), conversations[conversationNumber].characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		//conversations[conversationNumber].characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+
+		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 	}
 
@@ -235,10 +232,10 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		ResourceId indicatorImageID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		conversations[conversationNumber].continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(indicatorImageID);
+		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+		Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		conversations[conversationNumber].continueImgID = render.CreateInstancedQuadTex(m_Scene, conversations[conversationNumber].continueImg->GetTextureId(), conversations[conversationNumber].continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].continueImgID);
 	}*/
 	
