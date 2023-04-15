@@ -27,15 +27,13 @@ public:
 
 	void SetInitialValues(Wiwa::GuiControl* control);
 
-	void UpdateElements(Wiwa::GuiControl* control);
+	void UpdateElements(Wiwa::GuiControl* control,Wiwa::GuiControlType type);
 
 	void CallbackElements(Wiwa::GuiControl* control);
 
 	void AssetContainerPath();
 
 	void AssetContainerExtraPath();
-
-	void ControlGuizmos();
 
 
 	void OnEvent(Wiwa::Event& e) override;
