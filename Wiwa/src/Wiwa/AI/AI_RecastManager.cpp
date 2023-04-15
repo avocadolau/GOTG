@@ -120,10 +120,16 @@ namespace Wiwa
 	void RecastManager::Cleanup()
 	{
 		if (m_RecastMesh)
+		{
 			delete m_RecastMesh;
+			m_RecastMesh = nullptr;
+		}
 
 		if (m_Geom)
+		{
 			delete m_Geom;
+			m_Geom = nullptr;
+		}
 	}
 
 }
