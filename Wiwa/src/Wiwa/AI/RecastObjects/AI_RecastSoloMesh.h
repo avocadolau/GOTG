@@ -67,12 +67,12 @@ public:
 	RecastSoloMesh();
 	virtual ~RecastSoloMesh();
 
-	//virtual void handleSettings();
-	//virtual void handleTools();
+	virtual void handleSettings();
+	virtual void handleTools();
 	virtual void handleDebugMode();
 
 	virtual void handleRender();
-	//virtual void handleRenderOverlay(double* proj, double* model, int* view);
+	virtual void handleRenderOverlay(double* proj, double* model, int* view);
 	virtual void handleMeshChanged(class InputGeom* geom);
 	virtual bool handleBuild();
 

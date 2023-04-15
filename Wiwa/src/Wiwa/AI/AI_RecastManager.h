@@ -27,5 +27,7 @@ namespace Wiwa
 		static bool Load();
 
 		static void Cleanup();
+
+		static void CalcGridSize(const float* minBounds, const float* maxBounds, float cellSize, int* sizeX, int* sizeZ);
 	};
 }

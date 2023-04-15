@@ -49,6 +49,46 @@ enum SamplePartitionType
 	SAMPLE_PARTITION_LAYERS
 };
 
+/// Tool types.
+enum SampleToolType
+{
+	TOOL_NONE = 0,
+	TOOL_TILE_EDIT,
+	TOOL_TILE_HIGHLIGHT,
+	TOOL_TEMP_OBSTACLE,
+	TOOL_NAVMESH_TESTER,
+	TOOL_NAVMESH_PRUNE,
+	TOOL_OFFMESH_CONNECTION,
+	TOOL_CONVEX_VOLUME,
+	TOOL_CROWD,
+	MAX_TOOLS
+};
+
+struct SampleTool
+{
+	virtual ~SampleTool();
+	virtual int type() = 0;
+	virtual void init(class RecastCommon* sample) = 0;
+	virtual void reset() = 0;
+	virtual void handleMenu() = 0;
+	virtual void handleClick(const float* s, const float* p, bool shift) = 0;
+	virtual void handleRender() = 0;
+	virtual void handleRenderOverlay(double* proj, double* model, int* view) = 0;
+	virtual void handleToggle() = 0;
+	virtual void handleStep() = 0;
+	virtual void handleUpdate(const float dt) = 0;
+};
+
+struct SampleToolState {
+	virtual ~SampleToolState();
+	virtual void init(class RecastCommon* sample) = 0;
+	virtual void reset() = 0;
+	virtual void handleRender() = 0;
+	virtual void handleRenderOverlay(double* proj, double* model, int* view) = 0;
+	virtual void handleUpdate(const float dt) = 0;
+};
+
+
 class WI_API RecastCommon
 {
 protected:
@@ -80,8 +120,8 @@ protected:
 	bool m_filterLedgeSpans;
 	bool m_filterWalkableLowHeightSpans;
 
-	/*SampleTool* m_tool;
-	SampleToolState* m_toolStates[MAX_TOOLS];*/
+	SampleTool* m_tool;
+	SampleToolState* m_toolStates[MAX_TOOLS];
 
 	BuildContext* m_ctx;
 
@@ -96,32 +136,32 @@ public:
 
 	void setContext(BuildContext* ctx) { m_ctx = ctx; }
 
-	/*	void setTool(SampleTool* tool);
-		SampleToolState* getToolState(int type) { return m_toolStates[type]; }
-		void setToolState(int type, SampleToolState* s) { m_toolStates[type] = s; }*/
+	void setTool(SampleTool* tool);
+	SampleToolState* getToolState(int type) { return m_toolStates[type]; }
+	void setToolState(int type, SampleToolState* s) { m_toolStates[type] = s; }
 
 	DebugDrawGL& getDebugDraw() { return m_dd; }
 
-	//virtual void handleSettings();
-	//virtual void handleTools();
+	virtual void handleSettings();
+	virtual void handleTools();
 	virtual void handleDebugMode();
-	//virtual void handleClick(const float* s, const float* p, bool shift);
-	//virtual void handleToggle();
-	//virtual void handleStep();
+	virtual void handleClick(const float* s, const float* p, bool shift);
+	virtual void handleToggle();
+	virtual void handleStep();
 	virtual void handleRender();
-	//virtual void handleRenderOverlay(double* proj, double* model, int* view);
+	virtual void handleRenderOverlay(double* proj, double* model, int* view);
 	virtual void handleMeshChanged(class InputGeom* geom);
 	virtual bool handleBuild();
-	//virtual void handleUpdate(const float dt);
+	virtual void handleUpdate(const float dt);
 	virtual void collectSettings(struct BuildSettings& settings);
 
 	virtual class InputGeom* getInputGeom() { return m_geom; }
 	virtual class dtNavMesh* getNavMesh() { return m_navMesh; }
 	virtual class dtNavMeshQuery* getNavMeshQuery() { return m_navQuery; }
 	virtual class dtCrowd* getCrowd() { return m_crowd; }
-	virtual float getAgentRadius() { return m_settings.agentRadius; }
-	virtual float getAgentHeight() { return m_settings.agentHeight; }
-	virtual float getAgentClimb() { return m_settings.agentMaxClimb; }
+	virtual float getAgentRadius() { return m_agentRadius; }
+	virtual float getAgentHeight() { return m_agentHeight; }
+	virtual float getAgentClimb() { return m_agentMaxClimb; }
 
 	virtual bool Save(const char* path);
 	virtual bool Load(const char* path);
@@ -129,11 +169,11 @@ public:
 	unsigned char getNavMeshDrawFlags() const { return m_navMeshDrawFlags; }
 	void setNavMeshDrawFlags(unsigned char flags) { m_navMeshDrawFlags = flags; }
 
-	//void updateToolStates(const float dt);
-	//void initToolStates(RecastCommon* sample);
-	//void resetToolStates();
-	//void renderToolStates();
-	//void renderOverlayToolStates(double* proj, double* model, int* view);
+	void updateToolStates(const float dt);
+	void initToolStates(RecastCommon* sample);
+	void resetToolStates();
+	void renderToolStates();
+	void renderOverlayToolStates(double* proj, double* model, int* view);
 
 	void resetCommonSettings();
 	void handleCommonSettings();

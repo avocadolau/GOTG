@@ -49,6 +49,8 @@ void AIPanel::Draw()
 	if (ImGui::Button("Setup Recast"))
 		Wiwa::RecastManager::CreateRecast();
 
+	HandleSettings();
+
 	ImGui::Text("Build the navmesh through recast");
 	ImGui::SameLine();
 	if (ImGui::Button("Build Map"))
@@ -67,13 +69,32 @@ void AIPanel::Draw()
 	if (ImGui::Button("Clean up"))
 		HandleCleanUp();
 
+	if (ImGui::Button("Deffault settings"))
+		ResetSettings();
+
 	if (ImGui::CollapsingHeader("Debug draw (Open to debug draw)", &m_DebugDraw, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		HandleRender();
 		HandleDebugSettings();
+		if (Wiwa::RecastManager::m_RecastMesh)
+		{
+			Wiwa::RecastManager::m_RecastMesh->handleTools();
+		}
 	}
 
 	ImGui::End();
+}
+
+void AIPanel::HandleSettings()
+{
+	if (Wiwa::RecastManager::m_RecastMesh)
+		Wiwa::RecastManager::m_RecastMesh->handleCommonSettings();
+}
+
+void AIPanel::ResetSettings()
+{
+	if (Wiwa::RecastManager::m_RecastMesh)
+		Wiwa::RecastManager::m_RecastMesh->resetCommonSettings();
 }
 
 void AIPanel::HandleDragAndDrop()

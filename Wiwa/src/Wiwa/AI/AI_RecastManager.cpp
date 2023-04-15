@@ -58,7 +58,7 @@ namespace Wiwa
 
 		m_RecastMesh = new RecastSoloMesh();
 		m_Geom = new InputGeom();
-
+		
 		if (!m_Geom->load(&ctx, path))
 		{
 			delete m_Geom;
@@ -84,6 +84,7 @@ namespace Wiwa
 
 	bool RecastManager::Render()
 	{
+
 		Wiwa::Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
@@ -93,12 +94,17 @@ namespace Wiwa
 		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
 		glMatrixMode(GL_MODELVIEW);
 		glLoadMatrixf(glm::value_ptr(camera->getView()));
+		glEnable(GL_CULL_FACE);
+
+		if (m_RecastMesh)
+			m_RecastMesh->handleUpdate(1.0f/60.0f);
 
 		if (m_RecastMesh)
 			m_RecastMesh->handleRender();
 
 		glEnd();
 		camera->frameBuffer->Unbind();
+		glDisable(GL_CULL_FACE);
 		return true;
 	}
 
@@ -177,6 +183,11 @@ namespace Wiwa
 			WI_INFO("AI PANEL: Couldn't load the navmesh at path {}", path.c_str());
 		}
 		return true;
+	}
+
+	void RecastManager::CalcGridSize(const float* minBounds, const float* maxBounds, float cellSize, int* sizeX, int* sizeZ)
+	{
+		rcCalcGridSize(minBounds, maxBounds, cellSize, sizeX, sizeZ);
 	}
 
 	void RecastManager::Cleanup()

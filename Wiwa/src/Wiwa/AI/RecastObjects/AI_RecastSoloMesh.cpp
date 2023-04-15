@@ -10,7 +10,7 @@
 
 #include "Wiwa/ImGui/ImGuiLayer.h"
 #include <glew.h>
-
+#include <Wiwa/AI/Support/AI_NavMeshTesterTool.h>
 
 void RecastSoloMesh::cleanup()
 {
@@ -48,43 +48,76 @@ RecastSoloMesh::~RecastSoloMesh()
 	cleanup();
 }
 
+void RecastSoloMesh::handleSettings()
+{
+}
+
+void RecastSoloMesh::handleTools()
+{
+	int type = !m_tool ? TOOL_NONE : m_tool->type();
+
+	if (ImGui::CollapsingHeader("Tools", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		if (ImGui::RadioButton("Test Navmesh", &type, TOOL_NAVMESH_TESTER))
+		{
+			type = TOOL_NAVMESH_TESTER;
+			setTool(new NavMeshTesterTool);
+		}
+	}
+	
+	/*if (ImGui::Button("Prune Navmesh", type == TOOL_NAVMESH_PRUNE))
+	{
+		setTool(new NavMeshPruneTool);
+	}
+	if (ImGui::Button("Create Off-Mesh Connections", type == TOOL_OFFMESH_CONNECTION))
+	{
+		setTool(new OffMeshConnectionTool);
+	}
+	if (ImGui::Button("Create Convex Volumes", type == TOOL_CONVEX_VOLUME))
+	{
+		setTool(new ConvexVolumeTool);
+	}
+	if (ImGui::Button("Create Crowds", type == TOOL_CROWD))
+	{
+		setTool(new CrowdTool);
+	}*/
+
+	ImGui::Separator();
+
+	ImGui::Indent(16.0f);
+
+	if (m_tool)
+		m_tool->handleMenu();
+
+	ImGui::Indent();
+}
+
 void RecastSoloMesh::handleDebugMode()
 {
-	ImGui::Text("Draw");
-	if (ImGui::Button("Input Mesh"))
-		m_drawMode = DRAWMODE_MESH;
-	if (ImGui::Button("Navmesh"))
-		m_drawMode = DRAWMODE_NAVMESH;
-	if (ImGui::Button("Navmesh Invis"))
-		m_drawMode = DRAWMODE_NAVMESH_INVIS;
-	if (ImGui::Button("Navmesh Trans"))
-		m_drawMode = DRAWMODE_NAVMESH_TRANS;
-	if (ImGui::Button("Navmesh BVTree"))
-		m_drawMode = DRAWMODE_NAVMESH_BVTREE;
-	if (ImGui::Button("Navmesh Nodes"))
-		m_drawMode = DRAWMODE_NAVMESH_NODES;
-	if (ImGui::Button("Voxels"))
-		m_drawMode = DRAWMODE_VOXELS;
-	if (ImGui::Button("Walkable Voxels"))
-		m_drawMode = DRAWMODE_VOXELS_WALKABLE;
-	if (ImGui::Button("Compact"))
-		m_drawMode = DRAWMODE_COMPACT;
-	if (ImGui::Button("Compact Distance"))
-		m_drawMode = DRAWMODE_COMPACT_DISTANCE;
-	if (ImGui::Button("Compact Regions"))
-		m_drawMode = DRAWMODE_COMPACT_REGIONS;
-	if (ImGui::Button("Region Connections"))
-		m_drawMode = DRAWMODE_REGION_CONNECTIONS;
-	if (ImGui::Button("Raw Contours"))
-		m_drawMode = DRAWMODE_RAW_CONTOURS;
-	if (ImGui::Button("Both Contours"))
-		m_drawMode = DRAWMODE_BOTH_CONTOURS;
-	if (ImGui::Button("Contours"))
-		m_drawMode = DRAWMODE_CONTOURS;
-	if (ImGui::Button("Poly Mesh"))
-		m_drawMode = DRAWMODE_POLYMESH;
-	if (ImGui::Button("Poly Mesh Detail"))
-		m_drawMode = DRAWMODE_POLYMESH_DETAIL;
+	ImGui::Text("Draw modes");
+	ImGui::RadioButton("Input Mesh", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_MESH);
+	ImGui::RadioButton("Navmesh", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_NAVMESH);
+	ImGui::RadioButton("Navmesh Invis", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_NAVMESH_INVIS);
+	ImGui::RadioButton("Navmesh Trans", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_NAVMESH_TRANS);
+	ImGui::RadioButton("Navmesh BVTree", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_NAVMESH_BVTREE);
+	ImGui::RadioButton("Navmesh Nodes", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_NAVMESH_NODES);
+
+	if (m_geom)
+	{
+		ImGui::RadioButton("Voxels", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_VOXELS);
+		ImGui::RadioButton("Walkable Voxels", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_VOXELS_WALKABLE);
+		ImGui::RadioButton("Compact", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_COMPACT);
+		ImGui::RadioButton("Compact Distance", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_COMPACT_DISTANCE);
+		ImGui::RadioButton("Compact Regions", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_COMPACT_REGIONS);
+		ImGui::RadioButton("Region Connections", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_REGION_CONNECTIONS);
+		ImGui::RadioButton("Raw Contours", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_RAW_CONTOURS);
+		ImGui::RadioButton("Both Contours", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_BOTH_CONTOURS);
+		ImGui::RadioButton("Contours", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_CONTOURS);
+		ImGui::RadioButton("Poly Mesh", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_POLYMESH);
+		ImGui::RadioButton("Poly Mesh Detail", reinterpret_cast<int*>(&m_drawMode), DRAWMODE_POLYMESH_DETAIL);
+	}
+	
+	ImGui::Separator();
 }
 
 void RecastSoloMesh::handleRender()
@@ -93,8 +126,8 @@ void RecastSoloMesh::handleRender()
 
 	if (m_geom && m_geom->getMesh())
 	{
-		glEnable(GL_FOG);
-		glDepthMask(GL_TRUE);
+		/*glEnable(GL_FOG);
+		glDepthMask(GL_TRUE);*/
 
 		const float texScale = 1.0f / (m_cellSize * 10.0f);
 
@@ -107,8 +140,8 @@ void RecastSoloMesh::handleRender()
 			m_geom->drawOffMeshConnections(&m_dd);
 		}
 
-		glDisable(GL_FOG);
-		glDepthMask(GL_FALSE);
+		/*glDisable(GL_FOG);
+		glDepthMask(GL_FALSE);*/
 
 		// Draw bounds
 		const float* bmin = m_geom->getNavMeshBoundsMin();
@@ -199,11 +232,18 @@ void RecastSoloMesh::handleRender()
 	if (m_geom && m_geom->getMesh())
 		m_geom->drawConvexVolumes(&m_dd);
 
-	//if (m_tool)
-	//	m_tool->handleRender();
-	//renderToolStates();
+	if (m_tool)
+		m_tool->handleRender();
+	renderToolStates();
 
 	glDepthMask(GL_TRUE);
+}
+
+void RecastSoloMesh::handleRenderOverlay(double* proj, double* model, int* view)
+{
+	if (m_tool)
+		m_tool->handleRenderOverlay(proj, model, view);
+	renderOverlayToolStates(proj, model, view);
 }
 
 void RecastSoloMesh::handleMeshChanged(InputGeom* geom)
@@ -213,13 +253,13 @@ void RecastSoloMesh::handleMeshChanged(InputGeom* geom)
 	dtFreeNavMesh(m_navMesh);
 	m_navMesh = 0;
 
-	//if (m_tool)
-	//{
-	//	m_tool->reset();
-	//	m_tool->init(this);
-	//}
-	//resetToolStates();
-	//initToolStates(this);
+	if (m_tool)
+	{
+		m_tool->reset();
+		m_tool->init(this);
+	}
+	resetToolStates();
+	initToolStates(this);
 }
 
 bool RecastSoloMesh::handleBuild()
@@ -601,9 +641,9 @@ bool RecastSoloMesh::handleBuild()
 
 	m_totalBuildTimeMs = m_ctx->getAccumulatedTime(RC_TIMER_TOTAL) / 1000.0f;
 
-	//if (m_tool)
-	//	m_tool->init(this);
-	//initToolStates(this);
+	if (m_tool)
+		m_tool->init(this);
+	initToolStates(this);
 
 	return true;
 }
@@ -627,6 +667,16 @@ bool RecastSoloMesh::Load(const char* path)
 
 	if (!m_navMesh)
 		return false;
+
+	m_navQuery->init(m_navMesh, 2048);
+
+	if (m_tool)
+	{
+		m_tool->reset();
+		m_tool->init(this);
+	}
+	resetToolStates();
+	initToolStates(this);
 
 	return true;
 }

@@ -3,7 +3,7 @@
 #include "Panel.h"
 #include <glm/glm.hpp>
 #include <Wiwa/ecs/components/Mesh.h>
-
+#include <Wiwa/AI/Support/AI_BuildSettings.h>
 
 typedef size_t EntityId;
 
@@ -14,6 +14,8 @@ public:
 	virtual ~AIPanel();
 
 	void Draw() override;
+	void HandleSettings();
+	void ResetSettings();
 	void HandleDragAndDrop();
 	void HandleDebugSettings();
 	void HandleRender();
@@ -30,7 +32,6 @@ private:
 	
 	bool m_DebugDraw;
 	EntityId m_Id = -1;
-	//RecastCommon* m_RecastMesh;
 	//InputGeom* m_Geom;
 	//BuildContext ctx;
 };

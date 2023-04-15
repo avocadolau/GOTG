@@ -141,14 +141,15 @@ RecastCommon::RecastCommon() :
 	m_filterLowHangingObstacles(true),
 	m_filterLedgeSpans(true),
 	m_filterWalkableLowHeightSpans(true),
+	m_tool(0),
 	m_ctx(0)
 {
 	resetCommonSettings();
 	m_navQuery = dtAllocNavMeshQuery();
 	m_crowd = dtAllocCrowd();
 
-	/*for (int i = 0; i < MAX_TOOLS; i++)
-		m_toolStates[i] = 0;*/
+	for (int i = 0; i < MAX_TOOLS; i++)
+		m_toolStates[i] = 0;
 }
 
 RecastCommon::~RecastCommon()
@@ -156,14 +157,48 @@ RecastCommon::~RecastCommon()
 	dtFreeNavMeshQuery(m_navQuery);
 	dtFreeNavMesh(m_navMesh);
 	dtFreeCrowd(m_crowd);
-	/*delete m_tool;
+	delete m_tool;
 	for (int i = 0; i < MAX_TOOLS; i++)
-		delete m_toolStates[i];*/
+		delete m_toolStates[i];
+}
+
+void RecastCommon::setTool(SampleTool* tool)
+{
+	delete m_tool;
+	m_tool = tool;
+	if (tool)
+		m_tool->init(this);
+}
+
+void RecastCommon::handleSettings()
+{
+}
+
+void RecastCommon::handleTools()
+{
 }
 
 void RecastCommon::handleDebugMode()
 {
 
+}
+
+void RecastCommon::handleClick(const float* s, const float* p, bool shift)
+{
+	if (m_tool)
+		m_tool->handleClick(s, p, shift);
+}
+
+void RecastCommon::handleToggle()
+{
+	if (m_tool)
+		m_tool->handleToggle();
+}
+
+void RecastCommon::handleStep()
+{
+	if (m_tool)
+		m_tool->handleStep();
 }
 
 void RecastCommon::handleRender()
@@ -178,6 +213,10 @@ void RecastCommon::handleRender()
 	const float* bmin = m_geom->getMeshBoundsMin();
 	const float* bmax = m_geom->getMeshBoundsMax();
 	duDebugDrawBoxWire(&m_dd, bmin[0], bmin[1], bmin[2], bmax[0], bmax[1], bmax[2], duRGBA(255, 255, 255, 128), 1.0f);
+}
+
+void RecastCommon::handleRenderOverlay(double* proj, double* model, int* view)
+{
 }
 
 void RecastCommon::handleMeshChanged(InputGeom* geom)
@@ -209,6 +248,13 @@ bool RecastCommon::handleBuild()
 	return false;
 }
 
+void RecastCommon::handleUpdate(const float dt)
+{
+	if (m_tool)
+		m_tool->handleUpdate(dt);
+	updateToolStates(dt);
+}
+
 void RecastCommon::collectSettings(BuildSettings& settings)
 {
 	settings.cellSize = m_cellSize;
@@ -237,6 +283,51 @@ bool RecastCommon::Load(const char* path)
 	return false;
 }
 
+void RecastCommon::updateToolStates(const float dt)
+{
+	for (int i = 0; i < MAX_TOOLS; i++)
+	{
+		if (m_toolStates[i])
+			m_toolStates[i]->handleUpdate(dt);
+	}
+}
+
+void RecastCommon::initToolStates(RecastCommon* sample)
+{
+	for (int i = 0; i < MAX_TOOLS; i++)
+	{
+		if (m_toolStates[i])
+			m_toolStates[i]->init(sample);
+	}
+}
+
+void RecastCommon::resetToolStates()
+{
+	for (int i = 0; i < MAX_TOOLS; i++)
+	{
+		if (m_toolStates[i])
+			m_toolStates[i]->reset();
+	}
+}
+
+void RecastCommon::renderToolStates()
+{
+	for (int i = 0; i < MAX_TOOLS; i++)
+	{
+		if (m_toolStates[i])
+			m_toolStates[i]->handleRender();
+	}
+}
+
+void RecastCommon::renderOverlayToolStates(double* proj, double* model, int* view)
+{
+	for (int i = 0; i < MAX_TOOLS; i++)
+	{
+		if (m_toolStates[i])
+			m_toolStates[i]->handleRenderOverlay(proj, model, view);
+	}
+}
+
 
 void RecastCommon::resetCommonSettings()
 {
@@ -258,5 +349,63 @@ void RecastCommon::resetCommonSettings()
 
 void RecastCommon::handleCommonSettings()
 {
-	return;
+	ImGui::Separator();
+	float value01f = 0.1f;
+	float value0 = 0.0f;
+	float value1f = 1.0f;
+	float value3f = 3.0f;
+	float value5f = 5.0f;
+	float value12f = 12.0f;
+	float value16f = 16.0f;
+	float value50f = 50.0f;
+	float value90f = 90.0f;
+	ImGui::Text("Rasterization");
+	ImGui::SliderScalar("Cell Size", ImGuiDataType_Float, &m_cellSize, &value01f, &value1f, "%.2f");
+	ImGui::SliderScalar("Cell Height", ImGuiDataType_Float, &m_cellHeight, &value01f, &value1f, "%.2f");
+	if (m_geom)
+	{
+		const float* bmin = m_geom->getNavMeshBoundsMin();
+		const float* bmax = m_geom->getNavMeshBoundsMax();
+		int gw = 0, gh = 0;
+
+		rcCalcGridSize(bmin, bmax, m_cellSize, &gw, &gh);
+		char text[64];
+		snprintf(text, 64, "Voxels  %d x %d", gw, gh);
+		ImGui::Text(text);
+	}
+	ImGui::Separator();
+	ImGui::SliderScalar("Height", ImGuiDataType_Float, &m_agentHeight, &value01f, &value5f, "%.2f");
+	ImGui::SliderScalar("Radius", ImGuiDataType_Float, &m_agentRadius, &value0, &value5f, "%.2f");
+	ImGui::SliderScalar("Max Climb", ImGuiDataType_Float, &m_agentMaxClimb, &value01f, &value5f, "%.2f");
+	ImGui::SliderScalar("Max Slope", ImGuiDataType_Float, &m_agentMaxSlope, &value0, &value90f, "%.2f");
+
+	ImGui::Separator();
+	ImGui::Text("Partitioning");
+	if (ImGui::RadioButton("Watershed", reinterpret_cast<int*>(&m_partitionType), SAMPLE_PARTITION_WATERSHED))
+		m_partitionType = SAMPLE_PARTITION_WATERSHED;
+	if (ImGui::RadioButton("Monotone", reinterpret_cast<int*>(&m_partitionType), SAMPLE_PARTITION_MONOTONE))
+		m_partitionType = SAMPLE_PARTITION_MONOTONE;
+	if (ImGui::RadioButton("Layers", reinterpret_cast<int*>(&m_partitionType), SAMPLE_PARTITION_LAYERS))
+		m_partitionType = SAMPLE_PARTITION_LAYERS;
+
+	ImGui::Separator();
+	ImGui::Text("Polygonization");
+	ImGui::SliderScalar("Max Edge Length", ImGuiDataType_Float, &m_edgeMaxLen, &value0, &value50f, "%.2f");
+	ImGui::SliderScalar("Max Edge Error", ImGuiDataType_Float, &m_edgeMaxError, &value01f, &value3f, "%.2f");
+	ImGui::SliderScalar("Verts Per Poly Climb", ImGuiDataType_Float, &m_vertsPerPoly, &value3f, &value12f, "%.2f");
+
+	ImGui::Separator();
+	ImGui::Text("Detail Mesh");
+	ImGui::SliderScalar("Sample Distance", ImGuiDataType_Float, &m_detailSampleDist, &value0, &value16f, "%.2f");
+	ImGui::SliderScalar("Max Sample Error", ImGuiDataType_Float, &m_detailSampleMaxError, &value0, &value16f, "%.2f");
+
+	ImGui::Separator();
+}
+
+SampleTool::~SampleTool()
+{
+}
+
+SampleToolState::~SampleToolState()
+{
 }
