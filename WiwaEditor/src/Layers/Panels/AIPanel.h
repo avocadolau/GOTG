@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <Wiwa/ecs/components/Mesh.h>
 
+
 typedef size_t EntityId;
 
 class AIPanel : public Panel
@@ -14,8 +15,20 @@ public:
 
 	void Draw() override;
 	void HandleDragAndDrop();
-	void HandleCreationObj();
+	void HandleDebugSettings();
+	void HandleRender();
+	void HandleCleanUp();
+	//void HandleCreationObj();
+	//void HandleCreationRecast();
+
+	//void HandleRenderRecast();
+	void RefreshManager();
+	
 private:
-	Wiwa::Mesh* m_Mesh;
+	
+	bool m_DebugDraw;
 	EntityId m_Id = -1;
+	//RecastCommon* m_RecastMesh;
+	//InputGeom* m_Geom;
+	//BuildContext ctx;
 };

@@ -17,10 +17,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 // 4. Remark from the GOTG developers, this is an ALTERED version of the software provided in the recast demo.
-#include "Recast.h"
-#include "AI_BuildSettings.h"
-#include "AI_DebugDrawer.h"
-#include "AI_BuildContext.h"
+#include <Recast.h>
+#include "../Support/AI_BuildSettings.h"
+#include "../Support/AI_DebugDrawer.h"
+#include "../Support/AI_BuildContext.h"
 /// These are just sample areas to use consistent values across the samples.
 /// The use should specify these base on his needs.
 enum SamplePolyAreas
@@ -49,7 +49,7 @@ enum SamplePartitionType
 	SAMPLE_PARTITION_LAYERS
 };
 
-class RecastCommon
+class WI_API RecastCommon
 {
 protected:
 	class InputGeom* m_geom;

@@ -21,7 +21,7 @@
 
 #include "ChunkyTriMesh.h"
 #include "MeshLoaderObj.h"
-#include "AI_BuildSettings.h"
+#include "../Support/AI_BuildSettings.h"
 
 static const int MAX_CONVEXVOL_PTS = 12;
 struct ConvexVolume
@@ -32,7 +32,7 @@ struct ConvexVolume
 	int area;
 };
 
-class InputGeom
+class WI_API InputGeom
 {
 	rcChunkyTriMesh* m_chunkyMesh;
 	rcMeshLoaderObj* m_mesh;

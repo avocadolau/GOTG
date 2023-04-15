@@ -19,12 +19,12 @@
 // 4. Remark from the GOTG developers, this is an ALTERED version of the software provided in the recast demo.
 
 #include "PerfTimer.h"
-#include "DebugDraw.h"
-#include "Recast.h"
-#include "RecastDump.h"
+#include <DebugDraw.h>
+#include <Recast.h>
+#include <RecastDump.h>
 
 /// Recast build context.
-class BuildContext : public rcContext
+class WI_API BuildContext : public rcContext
 {
 	TimeVal m_startTime[RC_MAX_TIMERS];
 	TimeVal m_accTime[RC_MAX_TIMERS];
@@ -49,11 +49,11 @@ public:
 protected:
 	/// Virtual functions for custom implementations.
 	///@{
-	virtual void doResetLog();
-	virtual void doLog(const rcLogCategory category, const char* msg, const int len);
-	virtual void doResetTimers();
-	virtual void doStartTimer(const rcTimerLabel label);
-	virtual void doStopTimer(const rcTimerLabel label);
-	virtual int doGetAccumulatedTime(const rcTimerLabel label) const;
+	void doResetLog() override;
+	void doLog(const rcLogCategory category, const char* msg, const int len) override;
+	void doResetTimers() override;
+	void doStartTimer(const rcTimerLabel label) override;
+	void doStopTimer(const rcTimerLabel label) override;
+	int doGetAccumulatedTime(const rcTimerLabel label) const override;
 	///@}
 };

@@ -21,7 +21,7 @@
 
 #include <string>
 
-class rcMeshLoaderObj
+class WI_API rcMeshLoaderObj
 {
 public:
 	rcMeshLoaderObj();

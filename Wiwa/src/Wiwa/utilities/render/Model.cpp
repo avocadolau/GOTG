@@ -1014,11 +1014,11 @@ namespace Wiwa {
 		if (exporter.Export(scene, "obj", assets_output_path.c_str())) {
 			std::cout << "FBX file successfully converted to OBJ." << std::endl;
 		}
-		else {
+		/*else {
 			std::cerr << "Failed to convert FBX file to OBJ." << std::endl;
 			aiReleaseImport(scene);
 			return;
-		}
+		}*/
 		aiReleaseImport(scene);
 	}
 }

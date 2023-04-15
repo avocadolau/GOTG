@@ -22,7 +22,7 @@
 #include "DetourNavMesh.h"
 #include "Recast.h"
 
-class RecastSoloMesh : public RecastCommon
+class WI_API RecastSoloMesh : public RecastCommon
 {
 protected:
 	bool m_keepInterResults;

@@ -6,7 +6,7 @@
 #include "DetourNavMesh.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourCrowd.h"
-#include "InputGeom.h"
+#include "../Geometry/InputGeom.h"
 
 #include "Wiwa/ImGui/ImGuiLayer.h"
 #include <glew.h>
@@ -89,6 +89,8 @@ void RecastSoloMesh::handleDebugMode()
 
 void RecastSoloMesh::handleRender()
 {
+	RecastCommon::handleRender();
+
 	if (!m_geom || !m_geom->getMesh())
 		return;
 
