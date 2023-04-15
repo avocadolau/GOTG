@@ -58,20 +58,36 @@ namespace Wiwa
 
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 		//transform->localPosition.y = 0.0f;
-
+		stats->Slowed = false;
+		stats->CounterSlowed = 0.0f;
 		self->currentRotation = transform->localRotation;
 	}
 
 	void EnemySystem::OnUpdate()
 	{
+		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 		if (Input::IsKeyPressed(Wiwa::Key::M))
 		{
-			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 			ReceiveDamage(100000);
 		}
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
 		transform->localPosition.y = 0.0f;
+		
+		//SLOWED LOGIC
+		if (stats->Slowed)
+		{
+			stats->CounterSlowed += Time::GetDeltaTimeSeconds();
+		}
+
+		if (stats->CounterSlowed >= timerSlow && stats->Slowed)
+		{
+			stats->Slowed = false;
+			stats->CounterSlowed = 0.0f;
+			AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
+			statsSelf->speed = previousSpeed;
+		}
 	}
 
 	void EnemySystem::OnDestroy()
@@ -88,18 +104,21 @@ namespace Wiwa
 			BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
 
 			//MARTINEX THERMOKINESIS
-			//TODO: Implement it maybe in another place for the enemies
+			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 			Inventory& player = Wiwa::GameStateManager::GetPlayerInventory();
 			Buff** listBuffs = player.GetBuffs();
 			for (int i = 0; i < 2; i++)
 			{
 				if (listBuffs[i] != nullptr)
 				{
-					if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive)
+					if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive && !stats->Slowed)
 					{
 						AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
 						const float buffPercent = ((float)listBuffs[i]->BuffPercent / 100.f);
+						previousSpeed = statsSelf->speed;
+						timerSlow = listBuffs[i]->Duration;
 						statsSelf->speed = statsSelf->speed * buffPercent;
+						stats->Slowed = true;
 						break;
 					}
 				}
