@@ -259,6 +259,7 @@ enum class TypeHash : size_t {
 	RayCast = FNV1A_HASH("RayCast"),
 	AgentAI = FNV1A_HASH("AgentAI"),
 	Item = FNV1A_HASH("Item"),
+	AINavMesh = FNV1A_HASH("AINavMesh"),
 
 	// Game Controller
 	Character = FNV1A_HASH("Character"),

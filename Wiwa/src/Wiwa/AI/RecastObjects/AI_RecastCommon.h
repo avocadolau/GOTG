@@ -123,6 +123,9 @@ public:
 	virtual float getAgentHeight() { return m_settings.agentHeight; }
 	virtual float getAgentClimb() { return m_settings.agentMaxClimb; }
 
+	virtual bool Save(const char* path);
+	virtual bool Load(const char* path);
+
 	unsigned char getNavMeshDrawFlags() const { return m_navMeshDrawFlags; }
 	void setNavMeshDrawFlags(unsigned char flags) { m_navMeshDrawFlags = flags; }
 

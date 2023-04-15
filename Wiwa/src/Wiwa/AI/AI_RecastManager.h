@@ -23,6 +23,9 @@ namespace Wiwa
 		static bool CreateRecast();
 		static bool Build();
 
+		static bool Save();
+		static bool Load();
+
 		static void Cleanup();
 	};
 }

@@ -8,7 +8,7 @@
 #include "Wiwa/ecs/components/Mesh.h"
 #include "../vendor/Glew/include/GL/glew.h"
 #include "Wiwa/AI/AI_RecastManager.h"
-
+#include "Wiwa/ecs/components/ai/AINavMesh.h"
 //#include <Wiwa/audio/Audio.h>
 //#include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 //#include <Wiwa/utilities/filesystem/FileSystem.h>
@@ -39,20 +39,39 @@ void AIPanel::Draw()
 	ImGui::Begin(iconName.c_str(), &active);
 	HandleDragAndDrop();
 
+	ImGui::Text("Need obj as input geometry");
+	ImGui::SameLine();
 	if (ImGui::Button("Create OBJ file"))
 		Wiwa::RecastManager::CreateObj();
 
+	ImGui::Text("Need recast to build, save or load");
+	ImGui::SameLine();
 	if (ImGui::Button("Setup Recast"))
 		Wiwa::RecastManager::CreateRecast();
 
+	ImGui::Text("Build the navmesh through recast");
+	ImGui::SameLine();
 	if (ImGui::Button("Build Map"))
 		Wiwa::RecastManager::Build();
+
+	ImGui::Text("Save navmesh");
+	ImGui::SameLine();
+	if (ImGui::Button("Save Map"))
+		HandleSave();
+
+	ImGui::Text("Load navmesh");
+	ImGui::SameLine();
+	if (ImGui::Button("Load Map"))
+		HandleLoad();
 
 	if (ImGui::Button("Clean up"))
 		HandleCleanUp();
 
-	HandleRender();
-	HandleDebugSettings();
+	if (ImGui::CollapsingHeader("Debug draw (Open to debug draw)", &m_DebugDraw, ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		HandleRender();
+		HandleDebugSettings();
+	}
 
 	ImGui::End();
 }
@@ -102,8 +121,6 @@ void AIPanel::HandleDebugSettings()
 
 void AIPanel::HandleRender()
 {
-	ImGui::Checkbox("Debug draw", &m_DebugDraw);
-
 	if (m_DebugDraw)
 		Wiwa::RecastManager::Render();
 }
@@ -114,72 +131,15 @@ void AIPanel::HandleCleanUp()
 	m_Id = -1;
 }
 
-//void AIPanel::HandleCreationObj()
-//{
-//	if (m_Mesh == nullptr)
-//		return;
-//
-//	Wiwa::Model* mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(m_Mesh->meshId);
-//	mod->SaveModelAsOBJ(mod, mod->getModelPath());
-//}
+void AIPanel::HandleSave()
+{
+	Wiwa::RecastManager::Save();
+}
 
-//void AIPanel::HandleCreationRecast()
-//{
-//	if (m_Geom)
-//	{
-//		delete m_Geom;
-//		m_Geom = nullptr;
-//	}
-//
-//	Wiwa::Model* mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(m_Mesh->meshId);
-//	std::string path = " ";
-//
-//	if (mod)
-//		path = mod->getModelPath();
-//
-//	m_RecastMesh = new RecastSoloMesh();
-//	m_Geom = new InputGeom();
-//
-//	if (!m_Geom->load(&ctx, path))
-//	{
-//		delete m_Geom;
-//		m_Geom = 0;
-//
-//		// Destroy the sample if it already had geometry loaded, as we've just deleted it!
-//		if (m_RecastMesh && m_RecastMesh->getInputGeom())
-//		{
-//			delete m_RecastMesh;
-//			m_RecastMesh = 0;
-//		}
-//
-//
-//		//ctx.dumpLog("Geom load log %s:", meshName.c_str());
-//	}
-//
-//	if (m_RecastMesh && m_Geom)
-//	{
-//		m_RecastMesh->handleMeshChanged(m_Geom);
-//	}
-//
-//}
-
-//void AIPanel::HandleRenderRecast()
-//{
-//	Wiwa::Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-//
-//	glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-//	camera->frameBuffer->Bind(false);
-//
-//	glMatrixMode(GL_PROJECTION);
-//	glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-//	glMatrixMode(GL_MODELVIEW);
-//	glLoadMatrixf(glm::value_ptr(camera->getView()));
-//
-//
-//
-//	glEnd();
-//	camera->frameBuffer->Unbind();
-//}
+void AIPanel::HandleLoad()
+{
+	Wiwa::RecastManager::Load();
+}
 
 void AIPanel::RefreshManager()
 {

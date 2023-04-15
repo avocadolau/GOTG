@@ -89,35 +89,35 @@ void RecastSoloMesh::handleDebugMode()
 
 void RecastSoloMesh::handleRender()
 {
-	RecastCommon::handleRender();
+	//RecastCommon::handleRender();
 
-	if (!m_geom || !m_geom->getMesh())
-		return;
-
-	glEnable(GL_FOG);
-	glDepthMask(GL_TRUE);
-
-	const float texScale = 1.0f / (m_cellSize * 10.0f);
-
-	if (m_drawMode != DRAWMODE_NAVMESH_TRANS)
+	if (m_geom && m_geom->getMesh())
 	{
-		// Draw mesh
-		duDebugDrawTriMeshSlope(&m_dd, m_geom->getMesh()->getVerts(), m_geom->getMesh()->getVertCount(),
-			m_geom->getMesh()->getTris(), m_geom->getMesh()->getNormals(), m_geom->getMesh()->getTriCount(),
-			m_agentMaxSlope, texScale);
-		m_geom->drawOffMeshConnections(&m_dd);
+		glEnable(GL_FOG);
+		glDepthMask(GL_TRUE);
+
+		const float texScale = 1.0f / (m_cellSize * 10.0f);
+
+		if (m_drawMode != DRAWMODE_NAVMESH_TRANS)
+		{
+			// Draw mesh
+			duDebugDrawTriMeshSlope(&m_dd, m_geom->getMesh()->getVerts(), m_geom->getMesh()->getVertCount(),
+				m_geom->getMesh()->getTris(), m_geom->getMesh()->getNormals(), m_geom->getMesh()->getTriCount(),
+				m_agentMaxSlope, texScale);
+			m_geom->drawOffMeshConnections(&m_dd);
+		}
+
+		glDisable(GL_FOG);
+		glDepthMask(GL_FALSE);
+
+		// Draw bounds
+		const float* bmin = m_geom->getNavMeshBoundsMin();
+		const float* bmax = m_geom->getNavMeshBoundsMax();
+		duDebugDrawBoxWire(&m_dd, bmin[0], bmin[1], bmin[2], bmax[0], bmax[1], bmax[2], duRGBA(255, 255, 255, 128), 1.0f);
+		m_dd.begin(DU_DRAW_POINTS, 5.0f);
+		m_dd.vertex(bmin[0], bmin[1], bmin[2], duRGBA(255, 255, 255, 128));
+		m_dd.end();
 	}
-
-	glDisable(GL_FOG);
-	glDepthMask(GL_FALSE);
-
-	// Draw bounds
-	const float* bmin = m_geom->getNavMeshBoundsMin();
-	const float* bmax = m_geom->getNavMeshBoundsMax();
-	duDebugDrawBoxWire(&m_dd, bmin[0], bmin[1], bmin[2], bmax[0], bmax[1], bmax[2], duRGBA(255, 255, 255, 128), 1.0f);
-	m_dd.begin(DU_DRAW_POINTS, 5.0f);
-	m_dd.vertex(bmin[0], bmin[1], bmin[2], duRGBA(255, 255, 255, 128));
-	m_dd.end();
 
 	if (m_navMesh && m_navQuery &&
 		(m_drawMode == DRAWMODE_NAVMESH ||
@@ -196,7 +196,8 @@ void RecastSoloMesh::handleRender()
 		glDepthMask(GL_TRUE);
 	}
 
-	m_geom->drawConvexVolumes(&m_dd);
+	if (m_geom && m_geom->getMesh())
+		m_geom->drawConvexVolumes(&m_dd);
 
 	//if (m_tool)
 	//	m_tool->handleRender();
@@ -606,3 +607,27 @@ bool RecastSoloMesh::handleBuild()
 
 	return true;
 }
+
+bool RecastSoloMesh::Save(const char* path)
+{
+	if (m_navMesh)
+	{
+		saveAll(path, m_navMesh);
+		return true;
+	}
+	return false;
+}
+
+bool RecastSoloMesh::Load(const char* path)
+{
+	dtFreeNavMesh(m_navMesh);
+	m_navMesh = 0;
+
+	m_navMesh = loadAll(path);
+
+	if (!m_navMesh)
+		return false;
+
+	return true;
+}
+

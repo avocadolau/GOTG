@@ -227,6 +227,16 @@ void RecastCommon::collectSettings(BuildSettings& settings)
 	settings.partitionType = m_partitionType;
 }
 
+bool RecastCommon::Save(const char* path)
+{
+	return false;
+}
+
+bool RecastCommon::Load(const char* path)
+{
+	return false;
+}
+
 
 void RecastCommon::resetCommonSettings()
 {

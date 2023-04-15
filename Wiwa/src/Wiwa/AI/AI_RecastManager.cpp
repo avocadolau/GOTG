@@ -2,7 +2,8 @@
 #include "AI_RecastManager.h"
 #include <Wiwa/scene/SceneManager.h>
 #include <glew.h>
-
+#include "Wiwa/ecs/components/ai/AINavMesh.h"
+#include <Wiwa/ecs/systems/ai/AINavMeshLoadingSystem.h>
 namespace Wiwa
 {
 	EntityId RecastManager::m_Id = -1;
@@ -114,6 +115,67 @@ namespace Wiwa
 	{
 		if (m_RecastMesh)
 			m_RecastMesh->handleDebugMode();
+		return true;
+	}
+
+	bool RecastManager::Save()
+	{
+		if (!m_RecastMesh)
+		{
+			WI_INFO("Coulnd't save navmesh, as there is no entity navmesh to save");
+			return false;
+		}
+
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		// After all null checks save the file
+		std::string path = "library\\navmesh\\";
+		path += Wiwa::SceneManager::getActiveScene()->getName();
+		path += ".winavmesh";
+		m_RecastMesh->Save(path.c_str());
+
+		// Create an entity and store the path to the file
+		EntityId id = WI_INVALID_INDEX;
+		id = em.GetEntityByName("NavMesh_Data");
+
+		if (id != WI_INVALID_INDEX)
+			em.DestroyEntity(id);
+
+		id = em.CreateEntity("NavMesh_Data");
+		Wiwa::AINavMesh navMesh;
+		strcpy(navMesh.filePath, path.c_str());
+		em.AddComponent<Wiwa::AINavMesh>(id, navMesh);
+		em.ApplySystem<Wiwa::AINavMeshLoadingSystem>(id);
+		return true;
+	}
+
+	bool RecastManager::Load()
+	{
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		EntityId id = em.GetEntityByName("NavMesh_Data");
+		
+		if (id == WI_INVALID_INDEX)
+		{
+			WI_INFO("Coulnd't load navmesh, as there is no entity NavMesh_Data");
+			return false;
+		}
+
+		Wiwa::AINavMesh* navMesh = em.GetComponent<Wiwa::AINavMesh>(id);
+		if (!navMesh)
+		{
+			WI_INFO("Coulnd't load navmesh, as there is no component navMesh");
+			return false;
+		}
+
+		if (!m_RecastMesh)
+		{
+			m_RecastMesh = new RecastSoloMesh();
+		}
+
+		std::string path = navMesh->filePath;
+		if (!m_RecastMesh->Load(path.c_str()))
+		{
+			WI_INFO("AI PANEL: Couldn't load the navmesh at path {}", path.c_str());
+		}
 		return true;
 	}
 

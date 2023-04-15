@@ -76,6 +76,8 @@ public:
 	virtual void handleMeshChanged(class InputGeom* geom);
 	virtual bool handleBuild();
 
+	bool Save(const char* path) override;
+	bool Load(const char* path) override;
 private:
 	// Explicitly disabled copy constructor and copy assignment operator.
 	RecastSoloMesh(const RecastSoloMesh&);

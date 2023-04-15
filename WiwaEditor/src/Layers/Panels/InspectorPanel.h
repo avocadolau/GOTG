@@ -32,6 +32,7 @@ private:
 	void DrawParticleEmitterComponent(byte* data);
 	void DrawAiAgentComponent(byte* data);
 	void DrawItemComponent(byte* data);
+	void DrawAiNavMeshComponent(byte* data);
 public:
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();

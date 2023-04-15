@@ -18,6 +18,8 @@ public:
 	void HandleDebugSettings();
 	void HandleRender();
 	void HandleCleanUp();
+	void HandleSave();
+	void HandleLoad();
 	//void HandleCreationObj();
 	//void HandleCreationRecast();
 
