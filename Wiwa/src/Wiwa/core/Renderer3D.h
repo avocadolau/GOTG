@@ -63,6 +63,11 @@ namespace Wiwa {
 
 		Skybox m_DefaultSkybox;
 
+		ResourceId m_HDRShaderId;
+		Shader* m_HDRShader;
+		DefaultUnlitUniforms m_HDRUniforms;
+		FrameBuffer m_HDRFrameBuffer;
+
 	public:
 		Renderer3D();
 		~Renderer3D();
@@ -98,6 +103,7 @@ namespace Wiwa {
 
 
 		void Close();
+
 		void RenderFrustrums();
 
 		// Getters
@@ -106,6 +112,7 @@ namespace Wiwa {
 		inline FrameBuffer* getFrameBuffer() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer; }
 
 		glm::mat4 GetPersProjection() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getProjection(); }
+
 		glm::mat4 GetView() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView(); }
 	};
 }

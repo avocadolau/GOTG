@@ -103,8 +103,6 @@ namespace Wiwa {
 		m_Shader.setUniform(m_OrthoLoc, m_OrthoProj);
 		m_Shader.setUniform(m_ViewLoc, m_View);
 		m_Shader.setUniform(m_ModelLoc, m_Model);
-
-
 		// Bind VAO
 		glBindVertexArray(m_VAO);
 

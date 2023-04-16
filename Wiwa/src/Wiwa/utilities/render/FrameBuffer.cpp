@@ -19,24 +19,20 @@ namespace Wiwa {
 		}
 	}
 
-	void FrameBuffer::Init(int width, int height, int n_Colorbuffers, int n_Atatchments, bool depth)
+	void FrameBuffer::Init(int width, int height, int n_Colorbuffers, bool depth)
 	{
 		m_Init = true;		
 
 		m_Width = width;
 		m_Height = height;
-
 		// FRAMEBUFFER
 		glGenFramebuffers(1, &m_FBO);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 
-		// Color texture
-		glGenTextures(1, &m_ColorBufferTexture);
-		glBindTexture(GL_TEXTURE_2D, m_ColorBufferTexture);
-
+		m_ColorBuffers.resize(n_Colorbuffers);
 		//add 2 color buffer, one for normal rendering and the other for bloom
-		glGenTextures(2, m_ColorBuffers);
-		for (unsigned int i = 0; i < 2; i++)
+		glGenTextures(m_ColorBuffers.size(), &m_ColorBuffers[0]);
+		for (unsigned int i = 0; i < m_ColorBuffers.size(); i++)
 		{
 			glBindTexture(GL_TEXTURE_2D, m_ColorBuffers[i]);
 			glTexImage2D(
@@ -63,8 +59,9 @@ namespace Wiwa {
 		}
 
 		// tell OpenGL which color attachments we'll use (of this framebuffer) for rendering 
-		unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-		glDrawBuffers(2, attachments);
+		m_Atachtments.push_back(GL_COLOR_ATTACHMENT0);
+		m_Atachtments.push_back(GL_COLOR_ATTACHMENT1);
+		glDrawBuffers(m_Atachtments.size(),&m_Atachtments[0]);
 
 		// Check framebuffer status
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -76,6 +73,33 @@ namespace Wiwa {
 	
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	void FrameBuffer::InitBlur(int width, int height)
+	{
+		m_Init = true;
+
+		m_Width = width;
+		m_Height = height;
+		m_FBO = -1;
+
+		m_FBOs.resize(2);
+		m_ColorBuffers.resize(2);
+		glGenFramebuffers(2, &m_FBOs[0]);
+		glGenTextures(2, &m_ColorBuffers[0]);
+		for (unsigned int i = 0; i < 2; i++)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, m_FBOs[i]);
+			glBindTexture(GL_TEXTURE_2D, m_ColorBuffers[i]);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // we clamp to the edge as the blur filter would otherwise sample repeated texture values!
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBuffers[i], 0);
+			// also check if framebuffers are complete (no need for depth buffer)
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+				std::cout << "Framebuffer not complete!" << std::endl;
+		}
 	}
 	void FrameBuffer::Init(int width, int height, bool depth)
 	{
@@ -122,7 +146,7 @@ namespace Wiwa {
 	}
 
 	void FrameBuffer::Bind(bool clear)
-	{
+	{	
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 		//glEnable(GL_FRAMEBUFFER_SRGB);
 		if (clear) {

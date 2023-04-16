@@ -131,6 +131,16 @@ namespace Wiwa
 		m_DepthShaderUniforms.View = m_DepthShader->getUniformLocation("u_View");
 		m_DepthShaderUniforms.Projection = m_DepthShader->getUniformLocation("u_Proj");
 
+		m_HDRShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/hdr");
+		m_HDRShader = Resources::GetResourceById<Shader>(m_HDRShaderId);
+		m_HDRShader->Compile("resources/shaders/renderlayer/hdr");
+		m_HDRUniforms.Model = m_HDRShader->getUniformLocation("u_Model");
+		m_HDRUniforms.View = m_HDRShader->getUniformLocation("u_View");
+		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Proj");
+	/*	m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_HdrBuffer");
+		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Hdr");
+		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Exposure");*/
+
 		std::vector<const char *> faces = {
 			"resources/images/skybox/right.jpg",
 			"resources/images/skybox/left.jpg",
@@ -148,6 +158,29 @@ namespace Wiwa
 	{
 		OPTICK_EVENT("Renderer 3D Update");
 		//RenderSkybox();
+		//post porcess buffers
+		// active cam -> color buffer
+		Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+		m_HDRShader->Bind();
+		m_HDRShader->setUniformInt(m_HDRShader->getUniformLocation("u_Hdr"), (int)true);
+		m_HDRShader->setUniformFloat(m_HDRShader->getUniformLocation("u_Exposure"), 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D,cam->frameBuffer->getColorBufferTexture());
+		m_HDRShader->UnBind();
+
+
+//		//all cams should use HDR shader
+//		glBindTexture(GL_TEXTURE_2D, colorBuffer);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+//		glBindFramebuffer(GL_FRAMEBUFFER, m_HDRFrameBuffer.getFBO());
+//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//
+//		// now render hdr color buffer to 2D screen-filling quad with tone mapping shader
+		//m_HDRShader->Bind();
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
+//		RenderQuad();
+
 	}
 
 	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
@@ -358,6 +391,10 @@ namespace Wiwa
 		//camera->shadowBuffer->Unbind();
 
 		// Set up color buffer
+
+
+
+
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 

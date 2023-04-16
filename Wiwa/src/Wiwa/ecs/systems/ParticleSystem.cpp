@@ -26,6 +26,7 @@ namespace Wiwa {
 		ResourceId matid = Wiwa::Resources::Load<Material>(emmiter->m_materialPath);
 		m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
 
+		m_MaxParticles = emmiter->m_maxParticles;
 		m_SpawnRate = emmiter->m_spawnRate;
 
 		glm::vec3 initPosition = emmiter->m_p_initialPosition + t3d->localPosition;
@@ -140,7 +141,6 @@ namespace Wiwa {
 					r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
 				}
 			}
-			
 		}
 		if (man.editorCamera)
 		{
