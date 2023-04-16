@@ -272,7 +272,7 @@ namespace Wiwa
 		}
 		
 	}
-	Text* GuiManager::InitFont(const char* path, char* _word)
+	Text* GuiManager::InitFont(const char* path, const char* _word)
 	{
 		
 		/* load font file */
@@ -315,7 +315,7 @@ namespace Wiwa
 		/* calculate font scaling */
 		float scale = stbtt_ScaleForPixelHeight(&info, (float)l_h);
 
-		char* word = _word;
+		const char* word = _word;
 
 		int x = 0;
 

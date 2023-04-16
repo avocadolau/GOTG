@@ -10,13 +10,10 @@ in float f_Active;
 out vec4 out_color;
 
 void main() {
-	if(f_Active < 0.5f) discard;
+	if(f_Active < 0.5) discard;
 
 	vec2 texCoordFlip = f_TexCoord;
 	int index = int(f_TexID);
-
+	
 	out_color = texture2D(u_Textures[index], texCoordFlip) * f_Color;
-
-	if(out_color.a < 0.1)
-		discard;
 }

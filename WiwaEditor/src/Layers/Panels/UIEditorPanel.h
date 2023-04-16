@@ -51,6 +51,8 @@ public:
 	int originSize[2];
 	int extraOriginPos[2];
 	int extraOriginSize[2];
+
+	float rotation;
 	size_t callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;

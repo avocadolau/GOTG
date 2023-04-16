@@ -117,7 +117,7 @@ namespace Wiwa {
 				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			}
 		}
-
+		
 		// Unbind shader and framebuffer
 		m_Shader.UnBind();
 		m_FrameBuffer.Unbind();
