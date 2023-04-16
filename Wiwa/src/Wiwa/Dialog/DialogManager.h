@@ -24,7 +24,7 @@ namespace Wiwa
 		Wiwa::Renderer2D::InstanceData dialogImgID;
 		Wiwa::Renderer2D::InstanceData characterImgID;
 
-		char* conversationName;
+		std::string conversationName;
 
 		bool occupied = false;
 	};
@@ -67,7 +67,7 @@ namespace Wiwa
 
 	public:
 
-		char* conversationToPlayName;
+		std::string conversationToPlayName;
 		Conversation conversations[MAX_CONVERSATIONS];
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
@@ -78,7 +78,7 @@ namespace Wiwa
 		//Conversation* conversationCreator_P;
 
 		bool collidingWithNpc = false;
-		char* NpcConversationTag;
+		std::string NpcConversationTag;
 
 		Wiwa::Renderer2D::InstanceData continueImgID;
 	};

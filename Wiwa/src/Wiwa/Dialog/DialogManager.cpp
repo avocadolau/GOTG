@@ -97,9 +97,9 @@ namespace Wiwa
 	{
 		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 		{
-			conversationToPlayName = NpcConversationTag;
+			conversationToPlayName = NpcConversationTag.c_str();
 			actualConversationState = 0;
-
+  
 			keyPressRefreshTimer = 0;
 		}
 		
@@ -107,7 +107,7 @@ namespace Wiwa
 		{
 			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
 			{
-				if (!strcmp(conversations[i].conversationName, conversationToPlayName))
+				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()))
 				{
 					UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
 				}
