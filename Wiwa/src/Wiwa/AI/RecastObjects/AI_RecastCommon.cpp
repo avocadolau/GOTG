@@ -374,6 +374,7 @@ void RecastCommon::handleCommonSettings()
 		ImGui::Text(text);
 	}
 	ImGui::Separator();
+	ImGui::Text("Agent");
 	ImGui::SliderScalar("Height", ImGuiDataType_Float, &m_agentHeight, &value01f, &value5f, "%.2f");
 	ImGui::SliderScalar("Radius", ImGuiDataType_Float, &m_agentRadius, &value0, &value5f, "%.2f");
 	ImGui::SliderScalar("Max Climb", ImGuiDataType_Float, &m_agentMaxClimb, &value01f, &value5f, "%.2f");
