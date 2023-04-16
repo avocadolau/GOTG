@@ -265,11 +265,11 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		ImGui::NewLine();
 		if(ImGui::DragInt2("position", pos))
 		{
-			UpdateElements(control);
+			UpdateElements(control,control->type);
 		}
 		if(ImGui::DragInt2("size", size))
 		{
-			UpdateElements(control);
+			UpdateElements(control,control->type);
 		}
 		switch (control->type)
 		{
@@ -291,7 +291,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			ImGui::Checkbox("animated", &animated);
 			ImGui::InputFloat("Animation speed", &animSpeed);
 			VectorEdit(animationRects);
-			AssetContainerPath();
+			//AssetContainerPath();
 			AssetContainerExtraPath();
 			break;
 		case Wiwa::GuiControlType::BUTTON:
@@ -334,7 +334,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 
 		if (ImGui::Button("Update"))
 		{
-			UpdateElements(control);
+			UpdateElements(control, control->type);
 		}
 	}
 	
@@ -365,11 +365,9 @@ void UIEditorPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
 	animationRects = list;
 }
 
-void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
+void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlType type)
 {
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-	Wiwa::Vector2i vector = { pos[0],pos[1] };
-	Wiwa::Size2i size_ = { size[0],size[1] };
 	Wiwa::Rect2i originTexRect = { originPos[0],originPos[1],originSize[0],originSize[1] };
 	Wiwa::Rect2i extraOriginTexRect = { extraOriginPos[0],extraOriginPos[1],extraOriginSize[0],extraOriginSize[1] };
 	control->position.x = pos[0];
@@ -388,42 +386,83 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control)
 		control->callbackID = callbackID;
 		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 	}
-	if (control->type != Wiwa::GuiControlType::TEXT) {
-		if (control->type == Wiwa::GuiControlType::BAR)
-		{
-			//DO NOTHING TODO: IMPROVE THIS
-		}
-		else
-		{
-			r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
 
-		}
-	}
-	
-	if(control->type != Wiwa::GuiControlType::BAR)r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
-	if (control->type == Wiwa::GuiControlType::BAR)r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, { pos[0], pos[1] }, size_, Wiwa::Renderer2D::Pivot::UPLEFT);
-	if (control->type != Wiwa::GuiControlType::TEXT)
+	switch (type)
+	{
+	case Wiwa::GuiControlType::BUTTON:
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
 		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
-		if (control->type != Wiwa::GuiControlType::BAR)r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
-		if (control->type == Wiwa::GuiControlType::SLIDER || control->type == Wiwa::GuiControlType::BAR)
-		{
-			control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForExtraAsset.c_str());
-			control->extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId2);
-			r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetTextureId());
-		}
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
 	}
-	if (control->type == Wiwa::GuiControlType::TEXT)
+	break;
+	case Wiwa::GuiControlType::TEXT:
 	{
 		control->text = pathForAsset.c_str();
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		Wiwa::Text* newText = new Wiwa::Text;
 		newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)pathForAsset.c_str());
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetSize(), originTexRect);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());
 	}
+	break;
+	case Wiwa::GuiControlType::CHECKBOX:
+	{
+		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
+		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
+	}
+	break;
+	case Wiwa::GuiControlType::SLIDER:
+	{
+		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
+		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
+		control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
+		control->extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId2);
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->texture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->texture->GetTextureId());
+	}
+	break;
+	case Wiwa::GuiControlType::IMAGE:
+	{
+		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
+		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
+	}	
+	break;
+	case Wiwa::GuiControlType::BAR:
+	{
+		control->textId2 = Wiwa::Resources::Load<Wiwa::Image>(pathForExtraAsset.c_str());
+		control->extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId2);
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->extraTexture->GetTextureId());
+	}
+	break;
+	case Wiwa::GuiControlType::ABILITY:
+	{
+		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
+		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
+		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
+	}
+	break;
+	default:
+		break;
+	}
 }
-
 void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 {
 	Wiwa::Application& app = Wiwa::Application::Get();
@@ -538,12 +577,6 @@ void UIEditorPanel::AssetContainerExtraPath()
 
 		ImGui::EndDragDropTarget();
 	}
-}
-
-void UIEditorPanel::ControlGuizmos()
-{
-	
-		
 }
 
 
