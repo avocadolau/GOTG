@@ -402,6 +402,24 @@ void RecastCommon::handleCommonSettings()
 	ImGui::Separator();
 }
 
+void RecastCommon::getCommonSettings(BuildSettings& settings)
+{
+	settings.cellSize = m_cellSize;
+	settings.cellHeight = m_cellHeight;
+	settings.agentHeight = m_agentHeight;
+	settings.agentRadius = m_agentRadius;
+	settings.agentMaxClimb = m_agentMaxClimb;
+	settings.agentMaxSlope = m_agentMaxSlope;
+	settings.regionMinSize = m_regionMinSize;
+	settings.regionMergeSize = m_regionMergeSize;
+	settings.edgeMaxLen = m_edgeMaxLen;
+	settings.edgeMaxError = m_edgeMaxError;
+	settings.vertsPerPoly = m_vertsPerPoly;
+	settings.detailSampleDist = m_detailSampleDist;
+	settings.detailSampleMaxError = m_detailSampleMaxError;
+	settings.partitionType = m_partitionType;
+}
+
 SampleTool::~SampleTool()
 {
 }

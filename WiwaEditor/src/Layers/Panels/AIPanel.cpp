@@ -171,3 +171,15 @@ void AIPanel::RefreshManager()
 	Wiwa::RecastManager::m_Id = m_Id;
 	Wiwa::RecastManager::m_MeshIt = em.GetComponentIterator<Wiwa::Mesh>(m_Id);
 }
+
+void AIPanel::OnEvent(Wiwa::Event& e)
+{
+	Wiwa::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<Wiwa::SceneChangeEvent>({ &AIPanel::OnSceneChange, this });
+}
+
+bool AIPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
+{
+	m_Id = -1;
+	return false;
+}

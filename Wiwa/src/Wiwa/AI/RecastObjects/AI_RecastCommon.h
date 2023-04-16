@@ -177,7 +177,7 @@ public:
 
 	void resetCommonSettings();
 	void handleCommonSettings();
-
+	void getCommonSettings(BuildSettings& settings);
 private:
 	// Explicitly disabled copy constructor and copy assignment operator.
 	RecastCommon(const RecastCommon&);

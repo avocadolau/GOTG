@@ -67,7 +67,7 @@ public:
 	
 	
 	bool load(class rcContext* ctx, const std::string& filepath);
-	bool saveGeomSet(const BuildSettings* settings);
+	bool saveGeomSet(const BuildSettings* settings, const std::string& filepath);
 	
 	/// Method to return static mesh data.
 	const rcMeshLoaderObj* getMesh() const { return m_mesh; }

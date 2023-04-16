@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/AI/Support/AI_BuildSettings.h>
+#include <Wiwa/Events/ApplicationEvent.h>
 
 typedef size_t EntityId;
 
@@ -27,7 +28,9 @@ public:
 
 	//void HandleRenderRecast();
 	void RefreshManager();
-	
+
+	void OnEvent(Wiwa::Event& e) override;
+	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
 private:
 	
 	bool m_DebugDraw;

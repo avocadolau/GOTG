@@ -1005,9 +1005,12 @@ namespace Wiwa {
 			return;
 		}
 
-		// Convert from assets to library path, change extension to obj
-		std::string assets_output_path = input_path.substr(0, input_path.find_last_of('.')) + ".obj";
-		assets_output_path = Wiwa::Resources::_assetToLibPath(assets_output_path);
+		// Convert from assets to library path, to navmesh folder, change extension to obj
+		std::string assets_output_path = "library\\navmesh\\";
+		std::filesystem::path pathObj(input_path);
+		assets_output_path += pathObj.filename().string();
+		assets_output_path = assets_output_path.substr(0, assets_output_path.find_last_of('.')) + ".obj";
+		
 
 		Assimp::Exporter exporter;
 		// Export the scene to an OBJ file

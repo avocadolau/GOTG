@@ -314,12 +314,13 @@ bool InputGeom::load(rcContext* ctx, const std::string& filepath)
 	return false;
 }
 
-bool InputGeom::saveGeomSet(const BuildSettings* settings)
+bool InputGeom::saveGeomSet(const BuildSettings* settings, const std::string& filepath_)
 {
 	if (!m_mesh) return false;
 	
-	// Change extension
-	std::string filepath = m_mesh->getFileName();
+	//// Change extension
+	//std::string filepath = m_mesh->getFileName();
+	std::string filepath = filepath_;
 	size_t extPos = filepath.find_last_of('.');
 	if (extPos != std::string::npos)
 		filepath = filepath.substr(0, extPos);

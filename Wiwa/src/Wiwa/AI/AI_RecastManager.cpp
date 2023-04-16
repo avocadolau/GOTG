@@ -56,10 +56,15 @@ namespace Wiwa
 
 		path = path.substr(0, path.find_last_of('.')) + ".obj";
 
+		// Convert from assets to library path, to navmesh folder, change extension to obj
+		std::string assets_output_path = "library\\navmesh\\";
+		std::filesystem::path pathObj(path);
+		assets_output_path += pathObj.filename().string();
+
 		m_RecastMesh = new RecastSoloMesh();
 		m_Geom = new InputGeom();
 		
-		if (!m_Geom->load(&ctx, path))
+		if (!m_Geom->load(&ctx, assets_output_path))
 		{
 			delete m_Geom;
 			m_Geom = 0;
@@ -137,8 +142,9 @@ namespace Wiwa
 		std::string path = "library\\navmesh\\";
 		path += Wiwa::SceneManager::getActiveScene()->getName();
 		path += ".winavmesh";
-		m_RecastMesh->Save(path.c_str());
 
+		m_RecastMesh->Save(path.c_str());
+	
 		// Create an entity and store the path to the file
 		EntityId id = WI_INVALID_INDEX;
 		id = em.GetEntityByName("NavMesh_Data");
@@ -151,6 +157,8 @@ namespace Wiwa
 		strcpy(navMesh.filePath, path.c_str());
 		em.AddComponent<Wiwa::AINavMesh>(id, navMesh);
 		em.ApplySystem<Wiwa::AINavMeshLoadingSystem>(id);
+
+		
 		return true;
 	}
 
@@ -178,6 +186,38 @@ namespace Wiwa
 		}
 
 		std::string path = navMesh->filePath;
+
+		std::string gsetPath = path;
+		gsetPath = gsetPath.substr(0, gsetPath.find_last_of('.')) + ".gset";
+		if (m_Geom)
+		{
+			delete m_Geom;
+			m_Geom = nullptr;
+		}
+		m_Geom = new InputGeom();
+
+		if (!m_Geom->load(&ctx, gsetPath))
+		{
+			delete m_Geom;
+			m_Geom = 0;
+
+			// Destroy the sample if it already had geometry loaded, as we've just deleted it!
+			if (m_RecastMesh && m_RecastMesh->getInputGeom())
+			{
+				delete m_RecastMesh;
+				m_RecastMesh = 0;
+			}
+			//ctx.dumpLog("Geom load log %s:", meshName.c_str());
+		}
+
+		if (m_RecastMesh)
+			m_RecastMesh->setContext(&ctx);
+
+		if (m_RecastMesh && m_Geom)
+		{
+			m_RecastMesh->handleMeshChanged(m_Geom);
+		}
+
 		if (!m_RecastMesh->Load(path.c_str()))
 		{
 			WI_INFO("AI PANEL: Couldn't load the navmesh at path {}", path.c_str());

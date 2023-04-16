@@ -653,30 +653,25 @@ bool RecastSoloMesh::Save(const char* path)
 	if (m_navMesh)
 	{
 		saveAll(path, m_navMesh);
-		return true;
+	}
+
+	if (m_geom)
+	{
+		BuildSettings set;
+		getCommonSettings(set);
+		m_geom->saveGeomSet(&set, path);
 	}
 	return false;
 }
 
 bool RecastSoloMesh::Load(const char* path)
 {
-	dtFreeNavMesh(m_navMesh);
-	m_navMesh = 0;
-
 	m_navMesh = loadAll(path);
 
 	if (!m_navMesh)
 		return false;
 
 	m_navQuery->init(m_navMesh, 2048);
-
-	if (m_tool)
-	{
-		m_tool->reset();
-		m_tool->init(this);
-	}
-	resetToolStates();
-	initToolStates(this);
 
 	return true;
 }
