@@ -16,4 +16,7 @@ void main() {
 	int index = int(f_TexID);
 	
 	out_color = texture2D(u_Textures[index], texCoordFlip) * f_Color;
+
+	if(out_color.a < 0.1)
+		discard;
 }
