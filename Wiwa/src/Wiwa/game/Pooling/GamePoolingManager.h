@@ -10,8 +10,10 @@ namespace Wiwa
         ~GamePoolingManager();
         EntityPool* s_PhalanxMeleePool;
         EntityPool* s_PhalanxRangedPool;
-        EntityPool* s_SimpleBulletsPool;
         EntityPool* s_SentinelPool;
+        EntityPool* s_SimpleBulletsPool;
+        EntityPool* s_SentinelExplosion;
+        
         
         void SetScene(Scene* scene);
 
@@ -28,10 +30,13 @@ namespace Wiwa
         void LoadPhalanxRangedPool(Scene* scene);
         void UnloadPhalanxRangedPool();
 
+        void LoadSentinelPool(Scene* scene);
+        void UnloadSentinelPool();
+
         void LoadSimpleBulletPool(Scene* scene);
         void UnloadSimpleBulletPool();
 
-        void LoadSentinelPool(Scene* scene);
-        void UnloadSentinelPool();
+        void LoadSentinelExplosionPool(Scene* scene);
+        void UnloadSentinelExplosionPool();
     };
 }

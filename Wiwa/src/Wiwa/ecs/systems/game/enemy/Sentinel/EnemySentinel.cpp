@@ -34,6 +34,10 @@ namespace Wiwa
 		EnemySystem::OnInit();
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
+
+		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
+		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);*/
 	}
 
 	void EnemySentinel::OnUpdate()

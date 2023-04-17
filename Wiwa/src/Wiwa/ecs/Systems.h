@@ -22,6 +22,7 @@
 #include "systems/game/enemy/Ultron/BossUltron.h"
 
 #include "systems/game/attack/SimpleBulletSystem.h"
+#include "systems/game/attack/SentinelExplosionSystem.h"
 #include "systems/game/player/PlayerSpawner.h"
 
 #include "systems/game/attack/VictoryShieldSystem.h"
