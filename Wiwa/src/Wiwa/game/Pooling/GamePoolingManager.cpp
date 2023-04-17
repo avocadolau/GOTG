@@ -10,9 +10,9 @@ namespace Wiwa
 	{
 		s_PhalanxMeleePool = new EntityPool(1, 13, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 		s_PhalanxRangedPool = new EntityPool(2, 13, "assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		s_SentinelPool = new EntityPool(3, 13, "assets\\enemy\\prefabs\\test_sentinel.wiprefab");
+		s_SentinelPool = new EntityPool(3, 3, "assets\\enemy\\prefabs\\test_sentinel.wiprefab");
 		s_SimpleBulletsPool = new EntityPool(4, 1, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
-		s_SentinelExplosion = new EntityPool(5, 1, "assets\\enemy\\explosions\\test_explosion_3.wiprefab");
+		s_SentinelExplosion = new EntityPool(5, 3, "assets\\enemy\\explosions\\test_explosion_3.wiprefab");
 	}
 
 	GamePoolingManager::~GamePoolingManager()

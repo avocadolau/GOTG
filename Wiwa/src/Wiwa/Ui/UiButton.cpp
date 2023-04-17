@@ -62,45 +62,48 @@ namespace Wiwa
 			if ((mouseX > position.x && mouseX < (position.x + position.width)) &&
 				(mouseY > position.y && mouseY < position.y + position.height))
 			{
-				if (state == GuiControlState::NORMAL)
-				{
-					SetNextFrame(0, &r2d_1);
-				}
-
-				state = GuiControlState::FOCUSED;
-			
+				
 			}
-			if (state == GuiControlState::FOCUSED)
+
+
+			if (state == GuiControlState::NORMAL)
 			{
-				/*if (Wiwa::Input::IsMouseButtonPressed(0))
+				SetNextFrame(0, &r2d_1);
+			}
+
+			//state = GuiControlState::FOCUSED;
+
+		}
+		if (state == GuiControlState::FOCUSED)
+		{
+			/*if (Wiwa::Input::IsMouseButtonPressed(0))
+			{
+				state = GuiControlState::PRESSED;
+				clicked = true;
+			}
+			if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
+			{
+				clicked = false;
+				Audio::PostEvent("character_selection");
+				if (callback)
+					callback->Execute();
+			}*/
+			SetNextFrame(1, &r2d_1);
+			if (Wiwa::Input::IsButtonPressed(0, 0))
+			{
+				state = GuiControlState::PRESSED;
+				clicked = true;
+			}
+			if (clicked && Wiwa::Input::IsButtonReleased(0, 0))
+			{
+				SetNextFrame(2, &r2d_1);
+				clicked = false;
+				if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 				{
-					state = GuiControlState::PRESSED;
-					clicked = true;
+					Audio::PostEvent(audioEventForButton.c_str());
 				}
-				if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
-				{
-					clicked = false;
-					Audio::PostEvent("character_selection");
-					if (callback)
-						callback->Execute();
-				}*/
-				if(Wiwa::Input::IsButtonPressed(0, 0))
-				{
-					state = GuiControlState::PRESSED;
-					SetNextFrame(1, &r2d_1);
-					clicked = true;
-				} 
-				if (clicked && Wiwa::Input::IsButtonReleased(0,0))
-				{
-					SetNextFrame(2, &r2d_1);
-					clicked = false;
-					if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
-					{
-						Audio::PostEvent(audioEventForButton.c_str());
-					}
-					if (callback)
-						callback->Execute();
-				}
+				if (callback)
+					callback->Execute();
 			}
 		}
 		return false;

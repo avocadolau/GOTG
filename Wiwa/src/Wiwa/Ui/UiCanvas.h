@@ -28,7 +28,7 @@ namespace Wiwa
 
 		 void InputController();
 
-		 void SelectElement(size_t id);
+		 void SelectElement(int id);
 		 bool active;
 		 bool selected;
 		 int id;
