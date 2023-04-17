@@ -109,7 +109,7 @@ namespace Wiwa {
 		glVertexAttribDivisor(10, 1);
 
 		glEnableVertexAttribArray(11);
-		glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void*)(18 * sizeof(float)));
+		glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(18 * sizeof(float)));
 
 
 

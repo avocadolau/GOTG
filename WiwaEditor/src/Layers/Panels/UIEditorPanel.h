@@ -34,7 +34,7 @@ public:
 	void AssetContainerPath();
 
 	void AssetContainerExtraPath();
-
+	void UpdateRotation(Wiwa::GuiControl* control);
 
 	void OnEvent(Wiwa::Event& e) override;
 	bool OnSceneChange(Wiwa::SceneChangeEvent& e);

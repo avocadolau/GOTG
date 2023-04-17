@@ -277,8 +277,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		}
 		if (ImGui::SliderFloat("rotation", &rotation, 0.0f, 360.f, "%.1f"))
 		{
-			UpdateElements(control, control->type);
+			UpdateRotation(control);
 		}
+
 		switch (control->type)
 		{
 		case Wiwa::GuiControlType::ABILITY:
@@ -450,9 +451,9 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
 		control->texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(control->textId1);
+		r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, rotation);
 		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::CENTER);
 		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetSize(), originTexRect);
-		r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, rotation);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, control->texture->GetTextureId());
 	}	
 	break;
@@ -596,6 +597,13 @@ void UIEditorPanel::AssetContainerExtraPath()
 
 		ImGui::EndDragDropTarget();
 	}
+}
+
+
+void UIEditorPanel::UpdateRotation(Wiwa::GuiControl* control)
+{
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+	r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, rotation);
 }
 
 

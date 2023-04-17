@@ -11,7 +11,6 @@ layout (location = 5) in float l_TexID;
 layout (location = 6) in vec2 l_TexClip[4]; // from loc 6 to 9
 layout (location = 10) in float l_Active;
 layout (location = 11) in float l_Rotation;
-layout (location = 12) in vec3 l_VOffset;
 
 //uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -33,7 +32,7 @@ void main()
 {	
 	if(l_Active > 0.5){
 
-		mat4 model = rotationZ(radians(0.0));
+		mat4 model = rotationZ(radians(l_Rotation));
 		vec4 vpos = vec4(l_VPos, 1.0);
 	
 		//Scale		
