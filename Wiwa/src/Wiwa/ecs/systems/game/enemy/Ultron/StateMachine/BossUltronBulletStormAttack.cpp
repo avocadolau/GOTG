@@ -100,6 +100,7 @@ namespace Wiwa
 		//bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
+		bullet->damage = 10;
 
 	}
 
