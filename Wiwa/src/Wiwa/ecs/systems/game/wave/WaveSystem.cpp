@@ -94,12 +94,12 @@ namespace Wiwa
 		// Create an enemy from prefab
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
 
-		int numbers[] = { 1, 2, 4 };
+		/*int numbers[] = { 1, 2, 4 };
 		std::srand(std::time(nullptr));
 		int selection_index = std::rand() % 3;
-		int selection = numbers[selection_index];
+		int selection = numbers[selection_index];*/
 
-		/*int selection = RAND(1, 2);*/
+		int selection = RAND(1, 2, 3);
 
 		EntityId newEnemyId = -1;
 
@@ -119,7 +119,7 @@ namespace Wiwa
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
 		}
 		break;
-		case 4:
+		case 3:
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
@@ -185,7 +185,7 @@ namespace Wiwa
 		case 2:
 			GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
 			break;
-		case 4:
+		case 3:
 			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
 			break;
 		default:

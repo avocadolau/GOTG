@@ -25,6 +25,7 @@ public:
 
 	void OpenEditGuiControl(Wiwa::GuiControl* control);
 
+	void CleanInitialValues();
 	void SetInitialValues(Wiwa::GuiControl* control);
 
 	void UpdateElements(Wiwa::GuiControl* control,Wiwa::GuiControlType type);
@@ -34,7 +35,7 @@ public:
 	void AssetContainerPath();
 
 	void AssetContainerExtraPath();
-
+	void UpdateRotation(Wiwa::GuiControl* control);
 
 	void OnEvent(Wiwa::Event& e) override;
 	bool OnSceneChange(Wiwa::SceneChangeEvent& e);
@@ -61,5 +62,6 @@ public:
 	bool animated;
 	float animSpeed = 0.0f;
 	std::vector<Wiwa::Rect2i> animationRects;
+	std::vector<Wiwa::Rect2i> empty;
 
 };

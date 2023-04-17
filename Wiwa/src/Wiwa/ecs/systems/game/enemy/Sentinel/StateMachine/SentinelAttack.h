@@ -1,5 +1,8 @@
 #pragma once
 #include "SentinelBase.h"
+#include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/components/Transform3D.h>
+#include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
 	class SentinelAttackState : public SentinelBaseState {
@@ -12,8 +15,8 @@ namespace Wiwa {
 		void ExitState(EnemySentinel* enemy) override;
 		void OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2) override;
 
-		void GenerateAttack(EnemySentinel* enemy);
+		/*void SpawnExplosion(EnemySentinel* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character);*/
 
-		float m_TimerAttackCooldown = 0.0f;
+		float m_TimerExplosion = 0.0f;
 	};
 }

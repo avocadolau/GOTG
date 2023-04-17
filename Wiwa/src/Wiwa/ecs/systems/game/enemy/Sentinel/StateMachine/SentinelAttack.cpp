@@ -1,12 +1,16 @@
 #include <wipch.h>
 #include "SentinelAttack.h"
 #include <Wiwa/ecs/systems/game/enemy/Sentinel/EnemySentinel.h>
+#include "Wiwa/ecs/systems/PhysicsSystem.h"
+//#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
+#include "Wiwa/ecs/components/game/attack/SentinelExplosion.h"
 
 namespace Wiwa
 {
 	SentinelAttackState::SentinelAttackState()
 	{
-		m_TimerAttackCooldown = 0.0f;
+		m_TimerExplosion = 0.0f;
+
 	}
 
 	SentinelAttackState::~SentinelAttackState()
@@ -16,46 +20,79 @@ namespace Wiwa
 
 	void SentinelAttackState::EnterState(EnemySentinel* enemy)
 	{
-		enemy->m_Timer = 0;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		m_TimerAttackCooldown = 0.0f;
-		//animator->PlayAnimation("atack", false);
-		animator->Blend("atack", false, 0.2f);
-		PlaySound(ScriptEngine::CreateString("melee_attack"), enemy->m_PlayerId);
+		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		GenerateAttack(enemy);
+		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+		//Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+
+		//// Fire shot
+		//if (m_TimerExplosion == 0.0f)
+		//{
+		//	/*Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+		//	Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);*/
+
+		//	/*SpawnExplosion(enemy, selfTr, stats);*/
+
+		//	/*animator->PlayAnimation("shot", false);*/ //SentinelAnim
+		//}
 	}
 
 	void SentinelAttackState::UpdateState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
+		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
+		int distPath = aiSystem->GetPathSize();
+		//WI_INFO("Dist2Player: {}", dist2Player);
+		//WI_INFO("DistPath: {}", distPath);
+		// Change rotation logic from ai agent to enemy local script one
+		//if (dist2Player <= enemy->m_RangeOfAttack)
+		//{
+			//aiSystem->DisableRotationByTile();
+			// Rotate towards player
+		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
+		//}
 
-		m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
+		/*enemy->SwitchState(enemy->m_DeathState);*/
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f) // animation->HasFinished()
+		////if (animator->HasFinished())
+		////{
+		//m_TimerExplosion += Time::GetDeltaTimeSeconds();
+
+		////WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
+
+		//if (m_TimerExplosion > stats->RateOfFire)
+		//{
+		//	// Play fire anim and fire shot
+		//	m_TimerExplosion = 0.0f;
+		//	Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+		//	//WI_INFO(" gunTr {},{},{}", gunTr->localPosition.x , gunTr->localPosition.y, gunTr->localPosition.z);
+
+
+		//	/*SpawnExplosion(enemy, selfTr, stats);*/
+
+		//	/*animator->PlayAnimation("shot", false);*/ //SentinelAnim
+
+		//	
+		//}
+		////}
+
+		if (dist2Player > enemy->m_RangeOfExplosion)
 		{
-			m_TimerAttackCooldown = 0.0f;
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
-		else if (m_TimerAttackCooldown > 2000.0f)
+
+		if (dist2Player <= enemy->m_RangeOfExplosion)
 		{
-			animator->Blend("atack", false, 0.2f);
-			PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
-			GenerateAttack(enemy);
-
-			// Reset the timer after generating the attack
-			m_TimerAttackCooldown = 0.0f;
+			enemy->SwitchState(enemy->m_DeathState);
 		}
-	
-		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
-
 	}
 
 	void SentinelAttackState::ExitState(EnemySentinel* enemy)
@@ -68,28 +105,28 @@ namespace Wiwa
 
 	}
 
-	void SentinelAttackState::GenerateAttack(EnemySentinel* enemy)
-	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::ParticleManager& pm = enemy->getScene().GetParticleManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+	//void SentinelAttackState::SpawnExplosion(EnemySentinel* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character/*, const glm::vec3& bull_dir*/)
+	//{
+	//	Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+	//	EntityId newExplosionId = entityManager.LoadPrefab("assets\\enemy\\explosions\\test_explosion_3.wiprefab");
 
-		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+	//	// Set intial positions
+	//	Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
+	//	Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
 
-		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+	//	ParticleManager& pman = enemy->getScene().GetParticleManager();
 
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
+	//	pman.EmitBatch(newExplosionId);
 
-		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-		if (selfStats != nullptr)
-		{
-			if (distance <= 3.0f)
-			{
-				GameStateManager::DamagePlayer(selfStats->Damage);
-				/*EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
-				pman.EmitBatch(pe_hurt);*/
-			}
-		}
-	}
+	//	if (!explosionTr || !playerTr)
+	//	{
+	//		return;
+	//	}
+	//		
+	//	explosionTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
+	//	explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
+	//	explosionTr->localScale = transform->localScale;
+	//	/*SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+	//	bullet->direction = bull_dir; */
+	//}
 }

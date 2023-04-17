@@ -10,7 +10,6 @@ namespace Game
         public ComponentIterator transformIt;
         public ComponentIterator rigidBodyIt;
         public ComponentIterator shooterIt;
-        public StarlordShooter shoot;
         public Vector3 shootInput;
         public Vector3 movementInput;
         public Vector3 velocity;

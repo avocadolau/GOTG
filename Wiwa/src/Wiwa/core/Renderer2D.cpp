@@ -211,7 +211,7 @@ namespace Wiwa
 		instanceRenderer.UpdateInstancePosition(id.instance_id, position, pivot);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTexRotation(Scene* scene, InstanceData id, const float rotation)
+	void Renderer2D::UpdateInstancedQuadTexRotation(Scene* scene, InstanceData id, float rotation)
 	{
 		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
 		instanceRenderer.UpdateInstanceRotation(id.instance_id, rotation);
