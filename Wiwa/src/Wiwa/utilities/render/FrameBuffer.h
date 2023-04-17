@@ -10,9 +10,6 @@ namespace Wiwa {
 	
 	class WI_API FrameBuffer {
 	private:
-		uint32_t m_FBO;
-		uint32_t m_ColorBufferTexture;
-
 		uint32_t m_RBO;
 		int m_Width, m_Height;
 
@@ -26,7 +23,7 @@ namespace Wiwa {
 		~FrameBuffer();
 
 		void Init(int width, int height, bool depth=true);
-		void Init(int width, int height, int n_Colorbuffers, bool depth = true);
+		void Init(int width, int height, int n_Textures, bool depth = true);
 		void InitBlur(int width, int height);
 
 		void Bind(bool clear=true);
@@ -38,10 +35,10 @@ namespace Wiwa {
 		inline int getWidth() { return m_Width; }
 		inline int getHeight() { return m_Height; }
 
-		inline uint32_t getFBO() { return m_FBO; }
+		inline uint32_t getFBO() { return m_FBOs.front(); }
 		inline std::vector<uint32_t> getFBOs() { return m_FBOs; }
-		inline uint32_t getColorBufferTexture() { return m_ColorBufferTexture; }
-		inline std::vector<uint32_t> getColorBuffers() { return m_ColorBuffers; }
+		inline uint32_t getColorBufferTexture() { return m_ColorBuffers.front(); }
+		inline std::vector<uint32_t> getColorBuffers();
 		inline uint32_t getDepthBufferTexture() { return m_RBO; }
 		
 	};

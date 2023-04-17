@@ -13,27 +13,38 @@ namespace Wiwa {
 	FrameBuffer::~FrameBuffer()
 	{
 		if (m_Init) {
-			glDeleteTextures(1, &m_ColorBufferTexture);
+			//glDeleteTextures(1, &m_ColorBufferTexture);
 			glDeleteRenderbuffers(1, &m_RBO);
-			glDeleteFramebuffers(1, &m_FBO);
+			//glDeleteFramebuffers(1, &m_FBOs);
+
+			for (int i = 0; i < m_FBOs.size(); i++)
+			{
+				glDeleteFramebuffers(1, &m_FBOs[i]);
+			}
+			for (int i = 0; i < m_ColorBuffers.size(); i++)
+			{
+				glDeleteFramebuffers(1, &m_ColorBuffers[i]);
+			}
 		}
 	}
 
-	void FrameBuffer::Init(int width, int height, int n_Colorbuffers, bool depth)
+	void FrameBuffer::Init(int width, int height, int n_Textures, bool depth)
 	{
 		m_Init = true;		
 
 		m_Width = width;
 		m_Height = height;
 		// FRAMEBUFFER
-		glGenFramebuffers(1, &m_FBO);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		m_FBOs.resize(1);
+		glGenFramebuffers(1, &m_FBOs[0]);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBOs[0]);
 
-		m_ColorBuffers.resize(n_Colorbuffers);
+		m_ColorBuffers.resize(n_Textures);
 		//add 2 color buffer, one for normal rendering and the other for bloom
 		glGenTextures(m_ColorBuffers.size(), &m_ColorBuffers[0]);
 		for (unsigned int i = 0; i < m_ColorBuffers.size(); i++)
 		{
+	
 			glBindTexture(GL_TEXTURE_2D, m_ColorBuffers[i]);
 			glTexImage2D(
 				GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL
@@ -80,7 +91,6 @@ namespace Wiwa {
 
 		m_Width = width;
 		m_Height = height;
-		m_FBO = -1;
 
 		m_FBOs.resize(2);
 		m_ColorBuffers.resize(2);
@@ -107,21 +117,22 @@ namespace Wiwa {
 
 		m_Width = width;
 		m_Height = height;
-
+		m_FBOs.resize(1);
 		// FRAMEBUFFER
-		glGenFramebuffers(1, &m_FBO);
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		glGenFramebuffers(1, &m_FBOs[0]);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBOs[0]);
 
+		m_ColorBuffers.resize(1);
 		// Color texture
-		glGenTextures(1, &m_ColorBufferTexture);
-		glBindTexture(GL_TEXTURE_2D, m_ColorBufferTexture);
+		glGenTextures(1, &m_ColorBuffers[0]);
+		glBindTexture(GL_TEXTURE_2D, m_ColorBuffers[0]);
 
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBufferTexture, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBuffers[0], 0);
 		
 		if (depth) {
 			// Render buffer object for depth
@@ -147,7 +158,7 @@ namespace Wiwa {
 
 	void FrameBuffer::Bind(bool clear)
 	{	
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBOs[0]);
 		//glEnable(GL_FRAMEBUFFER_SRGB);
 		if (clear) {
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -164,9 +175,13 @@ namespace Wiwa {
 
 	void FrameBuffer::Clear()
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBOs[0]);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	inline std::vector<uint32_t> FrameBuffer::getColorBuffers()
+	{
+		return m_ColorBuffers;
 	}
 }

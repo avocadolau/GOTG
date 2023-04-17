@@ -18,8 +18,9 @@ namespace Wiwa {
 		};
 		Math::Frustum frustrum;
 		FrameBuffer* frameBuffer;
+		FrameBuffer* hdrBuffer;
+		FrameBuffer* blurBuffer;
 		ShadowBuffer* shadowBuffer;
-
 
 		bool cull = false;
 		bool drawBoundingBoxes = false;

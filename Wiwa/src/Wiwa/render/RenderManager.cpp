@@ -6,8 +6,10 @@
 
 namespace Wiwa {
 	RenderLayer RenderManager::m_RenderLayers[MAX_LAYERS];
+	FrameBuffer RenderManager::m_BlurBuffer;
 	FrameBuffer RenderManager::m_FrameBuffer;
 	Shader RenderManager::m_Shader;
+	Shader RenderManager::m_BlurShader;
 	uint32_t RenderManager::m_VAO;
 	uint32_t RenderManager::m_VBO;
 	uint32_t RenderManager::m_EBO;
@@ -61,11 +63,16 @@ namespace Wiwa {
 
 		// Render objects
 		m_FrameBuffer.Init(width, height);
+		m_BlurBuffer.InitBlur(width, height);
+		m_Shader.Init("resources/shaders/renderlayer/blur");
 		m_Shader.Init("resources/shaders/renderlayer/renderlayer");
 
 		m_OrthoLoc = m_Shader.getUniformLocation("u_Proj");
 		m_ViewLoc = m_Shader.getUniformLocation("u_View");
 		m_ModelLoc = m_Shader.getUniformLocation("u_Model");
+
+
+
 
 		for (unsigned int i = 0; i < MAX_BONES; i++) {
 			char Name[128];
@@ -95,7 +102,6 @@ namespace Wiwa {
 		m_FrameBuffer.Bind(false); // No clear so we clear without transparency
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		// Bind shader
 		m_Shader.Bind();
 
@@ -103,6 +109,8 @@ namespace Wiwa {
 		m_Shader.setUniform(m_OrthoLoc, m_OrthoProj);
 		m_Shader.setUniform(m_ViewLoc, m_View);
 		m_Shader.setUniform(m_ModelLoc, m_Model);
+
+
 		// Bind VAO
 		glBindVertexArray(m_VAO);
 
@@ -110,8 +118,12 @@ namespace Wiwa {
 			// Take cameras in reverse order for proper drawing order
 			Camera* cam = m_RenderLayers[MAX_LAYERS - i - 1].getCamera();
 			if (cam) {
-				// Bind texture
-				glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
+				if (cam->frameBuffer->getColorBuffers().size() > 1)
+				{	
+					glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
+				}
+				else
+					glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
 				// Draw elements
 				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			}
@@ -135,6 +147,11 @@ namespace Wiwa {
 		}
 
 		glBindVertexArray(0);
+	}
+
+	void RenderManager::BindVAO()
+	{
+		 glBindVertexArray(m_VAO); 
 	}
 
 	void RenderManager::Destroy()

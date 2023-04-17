@@ -66,7 +66,17 @@ namespace Wiwa {
 		ResourceId m_HDRShaderId;
 		Shader* m_HDRShader;
 		DefaultUnlitUniforms m_HDRUniforms;
-		FrameBuffer m_HDRFrameBuffer;
+
+		ResourceId m_BlurShaderId;
+		Shader* m_BlurShader;
+		DefaultUnlitUniforms m_BlurUniforms;
+
+		ResourceId m_BloomShaderId;
+		Shader* m_BloomShader;
+		DefaultUnlitUniforms m_BloomUniforms;
+
+		FrameBuffer m_BlurFrameBuffer;
+
 
 	public:
 		Renderer3D();

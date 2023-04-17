@@ -134,12 +134,25 @@ namespace Wiwa
 		m_HDRShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/hdr");
 		m_HDRShader = Resources::GetResourceById<Shader>(m_HDRShaderId);
 		m_HDRShader->Compile("resources/shaders/renderlayer/hdr");
+		m_HDRShader->addUniform("u_HdrBufferTexture", Wiwa::UniformType::Sampler2D);
 		m_HDRUniforms.Model = m_HDRShader->getUniformLocation("u_Model");
 		m_HDRUniforms.View = m_HDRShader->getUniformLocation("u_View");
 		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Proj");
-	/*	m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_HdrBuffer");
-		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Hdr");
-		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Exposure");*/
+
+		m_BlurShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/blur");
+		m_BlurShader = Resources::GetResourceById<Shader>(m_BlurShaderId);
+		m_BlurShader->Compile("resources/shaders/renderlayer/blur");
+		m_BlurUniforms.Model = m_BlurShader->getUniformLocation("u_Model");
+		m_BlurUniforms.View = m_BlurShader->getUniformLocation("u_View");
+		m_BlurUniforms.Projection = m_BlurShader->getUniformLocation("u_Proj");
+
+		m_BloomShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/bloom");
+		m_BloomShader = Resources::GetResourceById<Shader>(m_BloomShaderId);
+		m_BloomShader->Compile("resources/shaders/renderlayer/bloom");
+		m_BloomUniforms.Model = m_BlurShader->getUniformLocation("u_Model");
+		m_BloomUniforms.View = m_BlurShader->getUniformLocation("u_View");
+		m_BloomUniforms.Projection = m_BlurShader->getUniformLocation("u_Proj");
+
 
 		std::vector<const char *> faces = {
 			"resources/images/skybox/right.jpg",
@@ -151,6 +164,7 @@ namespace Wiwa
 
 		m_DefaultSkybox.LoadCubemap(faces);
 
+
 		return true;
 	}
 
@@ -160,27 +174,61 @@ namespace Wiwa
 		//RenderSkybox();
 		//post porcess buffers
 		// active cam -> color buffer
+		//Get camera color buffer and render the color texture passing by a hdr shader
 		Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
-		m_HDRShader->Bind();
-		m_HDRShader->setUniformInt(m_HDRShader->getUniformLocation("u_Hdr"), (int)true);
-		m_HDRShader->setUniformFloat(m_HDRShader->getUniformLocation("u_Exposure"), 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D,cam->frameBuffer->getColorBufferTexture());
-		m_HDRShader->UnBind();
-
-
-//		//all cams should use HDR shader
-//		glBindTexture(GL_TEXTURE_2D, colorBuffer);
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
-//		glBindFramebuffer(GL_FRAMEBUFFER, m_HDRFrameBuffer.getFBO());
-//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//
-//		// now render hdr color buffer to 2D screen-filling quad with tone mapping shader
 		//m_HDRShader->Bind();
+		//m_HDRShader->setUniformInt(m_HDRShader->getUniformLocation("u_Hdr"), (int)true);
+		//m_HDRShader->setUniformFloat(m_HDRShader->getUniformLocation("u_Exposure"), 1);
+		//m_HDRShader->setUniform(m_HDRShader->getUniformLocation("u_HdrBufferTexture"), cam->frameBuffer->getColorBuffers()[0]);
 		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
-//		RenderQuad();
+		//glBindTexture(GL_TEXTURE_2D,cam->frameBuffer->getColorBuffers()[1]);
+		//m_HDRShader->UnBind();
 
+		//// Bind the source and destination color buffers
+		//glBindFramebuffer(GL_READ_FRAMEBUFFER, cam->frameBuffer->getColorBuffers()[1]);
+		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, cam->frameBuffer->getColorBuffers()[0]);
+
+		//// Set the region of the source color buffer to blit
+		//glBlitFramebuffer(0, 0, cam->frameBuffer->getWidth(), cam->frameBuffer->getHeight(), 0, 0, cam->frameBuffer->getWidth(), cam->frameBuffer->getHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+		//// Unbind the color buffers
+		//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+		// 2. blur bright fragments with two-pass Gaussian Blur 
+		// --------------------------------------------------    
+		//bufer--------------------------------
+
+		// Bind VAO
+		//RenderManager::BindVAO();
+		//bool horizontal = true, first_iteration = true;
+		//unsigned int amount = 10;
+		//m_BlurShader->Bind();
+		//for (unsigned int i = 0; i < amount; i++)
+		//{
+		//	glBindFramebuffer(GL_FRAMEBUFFER, RenderManager::getBlurFBOs()[(int)horizontal]);
+		//	m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
+		//	glBindTexture(GL_TEXTURE_2D, first_iteration ? cam->frameBuffer->getColorBuffers()[1] : RenderManager::getBlurTextures()[(int)!horizontal]);  // bind texture of other framebuffer (or scene if first iteration)
+		//	// Draw elements
+		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//	horizontal = !horizontal;
+		//	if (first_iteration)
+		//		first_iteration = false;
+		//}
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//// Pass the blurred texture to the second color attachment of the camera's frame buffer
+		//cam->frameBuffer->getColorBuffers()[1] = RenderManager::getBlurTextures()[(int)!horizontal];
+		//glBindVertexArray(0);
+		//// 3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+		//// --------------------------------------------------------------------------------------------------------------------------
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//m_BloomShader->Bind();
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
+		//glActiveTexture(GL_TEXTURE1);
+		//glBindTexture(GL_TEXTURE_2D, RenderManager::getBlurTextures()[(int)!horizontal]);
+		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int) true);
+		//m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"),5);
 	}
 
 	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
@@ -393,18 +441,6 @@ namespace Wiwa
 		// Set up color buffer
 
 
-
-
-
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-
-		camera->frameBuffer->Bind(clear);
-
-		Shader *matShader = material->getShader();
-		matShader->Bind();
-
-		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
-
 	/*	if (lightTrans)
 		{
 			glm::mat4 lightMVP = lightTrans->localMatrix * projection * view;
@@ -413,6 +449,17 @@ namespace Wiwa
 		}*/
 
 		//camera->shadowBuffer->BindTexture();
+
+
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		camera->frameBuffer->Bind(clear);
+
+		Shader *matShader = material->getShader();
+
+		matShader->Bind();
+
+		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
