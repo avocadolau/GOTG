@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active, bool animated, float animFrames, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::IMAGE, id)
+	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active, bool animated, float animFrames, std::vector<Rect2i> animationRects, float rotation) : GuiControl(scene, GuiControlType::IMAGE, id)
 	{
 		this->position = bounds;
 		this->texture = texture;
@@ -27,7 +27,7 @@ namespace Wiwa
 		}
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 
 		state = GuiControlState::NORMAL;
 		canClick = true;
@@ -37,6 +37,7 @@ namespace Wiwa
 			r2d.DisableInstance(m_Scene, id_quad_normal);
 
 		}
+		this->rotation = rotation;
 		framesAnimation = 0;
 		animatedControl = animated;
 		animSpeed = animFrames;
@@ -85,58 +86,9 @@ namespace Wiwa
 
 	bool GuiImage::Draw(Renderer2D* render)
 	{
-		// Draw the right button depending on state
-		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-		
-		switch (state)
-		{
-
-		case GuiControlState::DISABLED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-
-		case GuiControlState::NORMAL:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-
-		//L14: TODO 4: Draw the button according the GuiControl State
-		case GuiControlState::FOCUSED:
-		{
-
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-		case GuiControlState::PRESSED:
-		{
-
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-
-		/******/
-
-		case GuiControlState::SELECTED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);		} break;
-		default:
-			break;
-		}
+		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);
 
 		HandleAnim(render);
 		return false;

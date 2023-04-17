@@ -6,7 +6,7 @@
 #include <Wiwa/core/Renderer2D.h>
 namespace Wiwa
 {
-	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, bool active) : GuiControl(scene, GuiControlType::TEXT, id)
+	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, bool active, float rotation) : GuiControl(scene, GuiControlType::TEXT, id)
 	{
 		this->position = bounds;
 		name = "Text";
@@ -20,13 +20,15 @@ namespace Wiwa
 		text_res = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)string_text);
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text_res->GetTextureId(), text_res->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, text_res->GetTextureId(), text_res->GetSize(), { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		
 		if (!active)
 		{
 			r2d.DisableInstance(m_Scene, id_quad_normal);
 
 		}
+
+		this->rotation = rotation;
 	}
 
 	GuiText::~GuiText()
@@ -37,17 +39,10 @@ namespace Wiwa
 
 	bool GuiText::Draw(Renderer2D* render)
 	{
-		// Draw the right button depending on state
-		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-
-		Vector2i newPosition;
-		newPosition.x = this->position.x;
-		newPosition.y = this->position.y;
-		Size2i newSize;
-		newSize.w = this->position.width;
-		newSize.h = this->position.height;
-		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+	
+		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);
 	
 
 		return false;

@@ -33,7 +33,7 @@ void main()
 {	
 	if(l_Active > 0.5){
 
-		mat4 model = rotationZ(radians(90.0));
+		mat4 model = rotationZ(radians(0.0));
 		vec4 vpos = vec4(l_VPos, 1.0);
 	
 		//Scale		

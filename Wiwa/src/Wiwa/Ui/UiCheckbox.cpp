@@ -7,7 +7,7 @@
 
 namespace Wiwa
 {
-	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, std::vector<Rect2i> animationRects) : GuiControl(scene, GuiControlType::CHECKBOX, id)
+	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, std::vector<Rect2i> animationRects, float rotation) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
 		texturePosition = boundsOriginTex;
@@ -27,14 +27,14 @@ namespace Wiwa
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::UPLEFT);
+		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 		if (!active)
 		{
 			r2d.DisableInstance(m_Scene, id_quad_normal);
 
 		}
 		canClick = true;
-
+		this->rotation = rotation;
 		framesAnimation = 0;
 		animatedControl = animated;
 		positionsForAnimations = animationRects;
@@ -115,89 +115,11 @@ namespace Wiwa
 
 	bool GuiCheckbox::Draw(Renderer2D* render)
 	{
-		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
+	
+		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
+		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);
 
-		switch (state)
-		{
-
-		case GuiControlState::DISABLED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			Size2i newSize;
-			newSize.w = this->position.width;
-			newSize.h = this->position.height;
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-		} break;
-
-
-		case GuiControlState::NORMAL:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			Size2i newSize;
-			newSize.w = this->position.width;
-			newSize.h = this->position.height;
-			color = { 1.0f,1.0f,1.0f,1.0f };
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-		} break;
-
-		//L14: TODO 4: Draw the button according the GuiControl State
-		case GuiControlState::FOCUSED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			Size2i newSize;
-			newSize.w = this->position.width;
-			newSize.h = this->position.height;
-			color = { 0.6f, 0.6f, 0.6f, 1.0f };
-
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-		} break;
-		case GuiControlState::PRESSED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			Size2i newSize;
-			newSize.w = this->position.width;
-			newSize.h = this->position.height;
-			color = { 0.1f, 0.1f, 0.1f, 1.0f };
-
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-		} break;
-
-		/******/
-
-		case GuiControlState::SELECTED:
-		{
-			Vector2i newPosition;
-			newPosition.x = this->position.x;
-			newPosition.y = this->position.y;
-			Size2i newSize;
-			newSize.w = this->position.width;
-			newSize.h = this->position.height;
-			color = { 0.6f, 0.6f, 0.6f, 1.0f };
-
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, newPosition, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-		} break;
-		default:
-			break;
-		}
 		//HandleAnim(render);
 		return false;
 	}
