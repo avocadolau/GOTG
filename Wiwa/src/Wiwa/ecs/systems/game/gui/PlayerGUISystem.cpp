@@ -48,17 +48,20 @@ void Wiwa::PlayerGUISystem::CooldownState(Ability** ability,Wiwa::GuiManager& gm
 				ability[i]->CooldownState = CooldownState::NO_CHARGED;
 			}
 			//TODO: WHEN ART DONE WITH ABILITES ASSIGN THIS
-			//gm.canvas.at(CanvasHUD)->controls.at(i+7)->SetNextFrame((int)ability[i]->CooldownState, &r2d);
+			//gm.canvas.at(CanvasHUD)->controls.at(8)->SetNextFrame((int)ability[0]->CooldownState, &r2d);
 		}
 		
 	}
+	
 }
 
 void Wiwa::PlayerGUISystem::CooldownState(Buff** buff, Wiwa::GuiManager& gm)
 {
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
 	for (int i = 0; i < 2; i++)
 	{
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		
 		for (int i = 0; i < 2; i++)
 		{
 			if (buff[i] != nullptr)
@@ -79,11 +82,14 @@ void Wiwa::PlayerGUISystem::CooldownState(Buff** buff, Wiwa::GuiManager& gm)
 				{
 					buff[i]->CooldownState = CooldownState::NO_CHARGED;
 				}
-				//TODO: WHEN ART DONE WITH BUFFS ASSIGN THIS
-				//gm.canvas.at(CanvasHUD)->controls.at(i + 7)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+				int index = i + 9;
+				gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+				
+					
 			}
 		}
 	}
+	
 }
 
 void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* character)

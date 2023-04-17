@@ -6,10 +6,7 @@
 
 void Wiwa::CharacterInventory::OnUpdate()
 {
-	if (Wiwa::Input::IsButtonPressed(0, 13))
-	{
-		Wiwa::GameStateManager::s_PlayerInventory->UseAbility(0);
-	}
+	
 }
 
 void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)

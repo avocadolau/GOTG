@@ -210,6 +210,7 @@ void UIEditorPanel::DrawCanvasItems()
 		if (ImGui::Button("Edit"))
 		{
 			elementSelected = (int)i;
+			CleanInitialValues();
 			SetInitialValues(canvas->controls.at(i));
 		}
 		ImGui::SameLine();
@@ -228,6 +229,35 @@ void UIEditorPanel::DrawCanvasItems()
 	if(elementSelected > -1)OpenEditGuiControl(canvas->controls.at(elementSelected));
 	
 	
+}
+
+void UIEditorPanel::CleanInitialValues()
+{
+	pos[0] = 0;
+	pos[1] = 0;
+	size[0] = 0;
+	size[1] = 0;
+	originPos[0] = 0;
+	originPos[1] = 0;
+	originSize[0] = 0;
+	originSize[1] = 0;
+	callbackID = WI_INVALID_INDEX;
+	audioEventForButton = "";
+	animated = false;
+	rotation = 0.0f;
+	if (animated)
+	{
+		animSpeed = 0.0f;
+		animationRects = empty;
+	}
+
+	extraOriginPos[0] = 0;
+	extraOriginPos[1] = 0;
+	extraOriginSize[0] = 0;
+	extraOriginSize[1] = 0;
+
+	pathForAsset = "";
+	pathForExtraAsset = "";
 }
 
 void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
@@ -303,6 +333,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
 			CallbackElements(control);
+			ImGui::Text("Animations");
+			ImGui::Checkbox("animated", &animated);
+			VectorEdit(animationRects);
 			AssetContainerPath();
 			break;
 		case Wiwa::GuiControlType::CHECKBOX:
