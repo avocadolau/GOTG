@@ -99,9 +99,7 @@ namespace Wiwa
 		int selection_index = std::rand() % 3;
 		int selection = numbers[selection_index];*/
 
-		/*int selection = RAND(1, 2, 3);*/
-
-		int selection = 3;
+		int selection = RAND(1, 2, 3);
 
 		EntityId newEnemyId = -1;
 
