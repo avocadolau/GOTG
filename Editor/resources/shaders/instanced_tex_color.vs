@@ -22,17 +22,19 @@ out vec2 f_TexCoord;
 out float f_TexID;
 out float f_Active;
 
-mat2 rotationZ( in float angle ) {
-    return mat2(cos(angle), -sin(angle),
-                sin(angle), cos(angle));
+mat4 rotationZ( in float angle ) {
+    return mat4(cos(angle), -sin(angle), 0.0, 0.0,
+                sin(angle), cos(angle), 0.0, 0.0,
+				0.0, 0.0, 1.0, 0.0,
+				0.0, 0.0, 0.0, 1.0);
 }
 
 void main()
 {	
 	if(l_Active > 0.5){
 
-		mat2 model = rotationZ(radians(90.0));
-		vec3 vpos = l_VPos;
+		mat4 model = rotationZ(radians(90.0));
+		vec4 vpos = vec4(l_VPos, 1.0);
 	
 		//Scale		
 		vpos.xy = vpos.xy * l_Scale.xy;
@@ -42,7 +44,7 @@ void main()
 		vpos.xy += l_PosOffset;
 
 		// Out position
-		gl_Position = u_Proj * u_View * vec4(vpos, 1.0);
+		gl_Position = u_Proj * u_View * vpos;
 		
 		f_Color = l_Color;
 		f_TexCoord = l_TexClip[gl_VertexID];
