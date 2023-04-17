@@ -195,6 +195,7 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -290,6 +291,7 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Slider origin size", glm::value_ptr(sliderOriginSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -413,6 +415,7 @@ void UIPanel::DrawBarCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Slider origin size", glm::value_ptr(sliderOriginSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -488,6 +491,7 @@ void UIPanel::DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -581,6 +585,7 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -674,6 +679,7 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	if (canvas_id < 0)ImGui::Text("Please select a canvas");
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	ImGui::InputText("String", (char*)pathForAsset.c_str(),64);
 
 	if (ImGui::Button("Create Text"))
@@ -697,7 +703,7 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 	ImGui::DragInt2("Origin size", glm::value_ptr(originSize));
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
-
+	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
 	AssetContainer(pathForAsset.c_str());
 	if (ImGui::BeginDragDropTarget())
 	{

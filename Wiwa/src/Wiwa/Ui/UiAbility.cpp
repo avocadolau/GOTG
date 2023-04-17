@@ -85,7 +85,7 @@ namespace Wiwa
 	bool GuiAbility::Draw(Renderer2D* render)
 	{
 		// Draw the right button depending on state
-		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+		
 		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), texturePosition);
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
