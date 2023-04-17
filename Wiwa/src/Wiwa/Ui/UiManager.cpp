@@ -505,6 +505,7 @@ namespace Wiwa
 				GuiControlType guiType;
 				GuiControlState state;
 				Rect2i position;
+				float rotation;
 				std::string textureGui;
 				std::string extraTextureGui;
 
@@ -537,6 +538,7 @@ namespace Wiwa
 				File.Read(&guiType, sizeof(GuiControlType));
 				File.Read(&state, sizeof(GuiControlState));
 				File.Read(&position, sizeof(Rect2i));
+				File.Read(&rotation, sizeof(float));
 				File.Read(&callbackID, sizeof(int));
 				File.Read(&animated, 1);
 				File.Read(&animSpeed, sizeof(float));
@@ -647,6 +649,7 @@ namespace Wiwa
 				GuiControlType guiType = control->GetType();
 				GuiControlState guiState = control->GetState();
 				Rect2i position = control->GetPosition();
+				float rotation = control->rotation;
 				int callbackID = control->callbackID;
 				Rect2i texturePosition = control->texturePosition;
 				Rect2i extraTexturePosition = control->extraTexturePosition;
@@ -673,7 +676,7 @@ namespace Wiwa
 				File.Write(&guiType, sizeof(GuiControlType));
 				File.Write(&guiState, sizeof(GuiControlState));
 				File.Write(&position, sizeof(Rect2i));
-
+				File.Write(&rotation, sizeof(float));
 				File.Write(&callbackID, sizeof(int));
 
 				File.Write(&animated, 1);

@@ -274,6 +274,10 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		{
 			UpdateElements(control,control->type);
 		}
+		if (ImGui::SliderFloat("rotation", &rotation, 0.0f, 360.f, "%.1f"))
+		{
+			UpdateElements(control, control->type);
+		}
 		switch (control->type)
 		{
 		case Wiwa::GuiControlType::ABILITY:
@@ -313,7 +317,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		case Wiwa::GuiControlType::IMAGE:
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
-			ImGui::SliderFloat("rotation", &rotation, 0.0f, 360.f, "%.1f");
+			
 			ImGui::Text("Animations");
 			ImGui::Checkbox("animated", &animated);
 			ImGui::InputFloat("Animation speed", &animSpeed);

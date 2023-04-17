@@ -31,7 +31,7 @@ namespace Wiwa
 
 	class WI_API DialogManager
 	{
-	private:
+	public:
 		Scene* m_Scene;
 	public:
 

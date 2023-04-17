@@ -804,7 +804,9 @@ namespace Wiwa
 		bool animatedControl = false; 
 		size_t framesAnimation;
 		float animSpeed;
-		float timeForAnim = 0;
+		float timeForAnim = 0.0f;
+
+		float rotation = 0.0f;
 
 	};
 }

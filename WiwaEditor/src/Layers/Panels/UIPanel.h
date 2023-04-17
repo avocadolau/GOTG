@@ -55,6 +55,7 @@ public:
 	int elementSelected = -1;
 	glm::ivec2 position;
 	glm::ivec2 size;
+	float rotation;
 	glm::ivec2 originPos;
 	glm::ivec2 originSize;
 	glm::ivec2 sliderOriginPos;
