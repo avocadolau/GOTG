@@ -83,7 +83,7 @@ namespace Wiwa
 		
 		unsigned int m_AvailableParticles = 0;
 
-		float m_SpawnRate;
+		float m_SpawnTimer;
 
 		std::vector<Particle> m_Particles;
 

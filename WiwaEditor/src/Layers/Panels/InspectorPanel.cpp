@@ -755,10 +755,16 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::EndDragDropTarget();
 	}
 
+	ImGui::Dummy(ImVec2(0, 4));
 	
+	std::string activeParticles = "Active Particles: " + std::to_string(emitter->m_activeParticles);
 
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0.5f, 1));
+	ImGui::Text(activeParticles.c_str());
+	ImGui::PopStyleColor();
 
 	ImGui::Dummy(ImVec2(0, 4));
+
 
 	ImGui::Checkbox("##m_active", &emitter->m_active);
 	ImGui::SameLine();
@@ -767,17 +773,13 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
+	
+
 	ImGui::Text("Max Particles");
 	ImGui::PushItemWidth(100.0f);
+	
+	ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f");
 
-	if (ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f"))
-	{
-		std::vector<Wiwa::System*> emitterSystems =  eman.GetEntitySystems(emitter->emitterOwner);
-		for (Wiwa::System* sys : emitterSystems)
-		{
-			
-		}
-	}
 	ImGui::PopItemWidth();
 
 
@@ -801,9 +803,9 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ParticleTab();
 			ImGui::PushItemWidth(46.f);
 
-			ImGui::DragFloat("##m_p_minSpawnRate", &emitter->m_p_minSpawnRate[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_minSpawnRate", &emitter->m_p_minSpawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
 			ImGui::SameLine();
-			ImGui::DragFloat("##m_p_maxSpawnRate", &emitter->m_p_maxSpawnRate[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_maxSpawnRate", &emitter->m_p_maxSpawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
 			ImGui::PopItemWidth();
 		}
 		else
@@ -816,6 +818,41 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::PopItemWidth();
 		}
 	}
+
+	ImGui::Dummy(ImVec2(0, 4));
+
+
+
+	if (emitter->m_loopSpawning)
+	{
+
+		ImGui::Checkbox("##m_rangedSpawnAmount", &emitter->m_rangedSpawnAmount);
+		ImGui::SameLine();
+		ImGui::Text("Spawn Amount");
+
+		if (emitter->m_rangedSpawnAmount)
+		{
+
+			ImGui::PushItemWidth(46.f);
+
+			ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
+		else
+		{
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(100.0f);
+
+			ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
+	}
+
+
+
 
 	ImGui::Dummy(ImVec2(0, 4));
 
@@ -839,9 +876,9 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	{
 		ImGui::PushItemWidth(46.f);
 
-		ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
 		ImGui::SameLine();
-		ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 	}
 	else

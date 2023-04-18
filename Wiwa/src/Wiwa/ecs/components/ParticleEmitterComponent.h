@@ -47,12 +47,21 @@ namespace Wiwa {
 		
 		int m_maxParticles;
 
+		int m_activeParticles;
+
 		//spawning
 		bool m_loopSpawning;
 		float m_spawnRate;
-		bool		m_p_rangedSpawnRate;
-		glm::vec3	m_p_minSpawnRate;
-		glm::vec3	m_p_maxSpawnRate;
+		
+		bool m_rangedSpawnAmount;
+		int  m_spawnAmount;
+		int  m_minSpawnAmount;
+		int  m_maxSpawnAmount;
+
+
+		bool	m_p_rangedSpawnRate;
+		float	m_p_minSpawnRate;
+		float	m_p_maxSpawnRate;
 		//float m_spawnDelay;
 
 		bool m_active;
@@ -65,8 +74,8 @@ namespace Wiwa {
 		//general data
 		float m_p_lifeTime;
 		bool		m_p_rangedLifeTime;
-		glm::vec3	m_p_minLifeTime;
-		glm::vec3	m_p_maxLifeTime;
+		float	m_p_minLifeTime;
+		float	m_p_maxLifeTime;
 
 
 		bool m_billboardActive;
@@ -78,12 +87,12 @@ namespace Wiwa {
 
 		//position & translation
 		//bool m_p_followEmitterPosOnlyOnSpawn;
-		glm::vec3 m_p_initialPosition;
+		glm::vec3	m_p_initialPosition;
 		bool		m_p_rangedInitialPosition;
 		glm::vec3	m_p_minInitialPosition;
 		glm::vec3	m_p_maxInitialPosition;
 
-		glm::vec3 m_p_initialVelocity;
+		glm::vec3	m_p_initialVelocity;
 		bool		m_p_rangedVelocity;
 		glm::vec3	m_p_minVelocity;
 		glm::vec3	m_p_maxVelocity;
@@ -92,23 +101,23 @@ namespace Wiwa {
 
 		//rotation
 		//bool m_p_followEmitterRotOnlyOnSpawn;
-		glm::vec3 m_p_initialRotation;
+		glm::vec3	m_p_initialRotation;
 		bool		m_p_rangedInitialRotation;
 		glm::vec3	m_p_minInitialRotation;
 		glm::vec3	m_p_maxInitialRotation;
 
-		glm::vec3 m_p_initialAngularVelocity;
+		glm::vec3	m_p_initialAngularVelocity;
 		bool		m_p_rangedAngularVelocity;
 		glm::vec3	m_p_minAngularVelocity;
 		glm::vec3	m_p_maxAngularVelocity;
 		//size
 		//bool m_p_followEmitterScaleOnlyOnSpawn;
-		glm::vec3 m_p_initialScale;
+		glm::vec3	m_p_initialScale;
 		bool		m_p_rangedInitialScale;
 		glm::vec3	m_p_minInitialScale;
 		glm::vec3	m_p_maxInitialScale;
 
-		glm::vec3 m_p_initialGrowthVelocity;
+		glm::vec3	m_p_initialGrowthVelocity;
 		bool		m_p_rangedGrowthVelocity;
 		glm::vec3	m_p_minInitialGrowthVelocity;
 		glm::vec3	m_p_maxInitialGrowthVelocity;
