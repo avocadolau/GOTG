@@ -986,9 +986,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		else
 		{
-
 			ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
 
 		}
 
@@ -1132,12 +1130,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	if (ImGui::TreeNode("Color"))
 	{
 		
-		ImGui::Text("Color Nodes: ");
-		ImGui::SameLine();
-		ImGui::PushItemWidth(100.0f);
-		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
-		ImGui::PopItemWidth();
-		ImGui::Dummy(ImVec2(0, 8));
+
 
 		if (emitter->m_colorsUsed < 1)
 		{
@@ -1173,6 +1166,14 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		//todo: add delete color and duplicate color
 		ImGui::Dummy(ImVec2(0, 8));
 		ImGui::Text("Colors over lifetime:");
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		if (ImGui::Button("+") && emitter->m_colorsUsed < 128) emitter->m_colorsUsed++;
+		ImGui::SameLine();
+		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
 		ImGui::Dummy(ImVec2(0, 4));
 
 		for (size_t i = 0; i < emitter->m_colorsUsed; i++)
@@ -1233,14 +1234,32 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::PopItemWidth();
 
 			ImGui::SameLine();
-			if (ImGui::Button("Duplicate"))
+			std::string colorCodeDuplicate = "++##colorCodeDuplicate_" + std::to_string(i);
+			if (ImGui::Button(colorCodeDuplicate.c_str()))
 			{
-
+				emitter->m_colorsUsed++;
+				for (size_t j = emitter->m_colorsUsed; j > i; j--)
+				{
+					emitter->m_p_colorsOverLifetime[j + 1].m_percentage = emitter->m_p_colorsOverLifetime[j].m_percentage;
+					emitter->m_p_colorsOverLifetime[j + 1].color = emitter->m_p_colorsOverLifetime[j].color;
+				}
+				emitter->m_p_colorsOverLifetime[i + 1].m_percentage = emitter->m_p_colorsOverLifetime[i].m_percentage;
+				emitter->m_p_colorsOverLifetime[i + 1].color = emitter->m_p_colorsOverLifetime[i].color;
 			}
 
 			ImGui::SameLine();
-			if (ImGui::Button("-"))
+
+			std::string colorCodeDelete = "-##colorCodeDelete_" + std::to_string(i);
+			if (ImGui::Button(colorCodeDelete.c_str()))
 			{
+				for (size_t j = i + 1; j < emitter->m_colorsUsed; j++)
+				{
+					emitter->m_p_colorsOverLifetime[j - 1].m_percentage = emitter->m_p_colorsOverLifetime[j].m_percentage;
+					emitter->m_p_colorsOverLifetime[j - 1].color = emitter->m_p_colorsOverLifetime[j].color;
+				}
+				emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].m_percentage = 0;
+				emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].color = glm::vec4(0, 0, 0, 1);
+				emitter->m_colorsUsed--;
 
 			}
 
