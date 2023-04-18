@@ -132,6 +132,9 @@ namespace Wiwa {
 		frameBuffer = new FrameBuffer();
 		frameBuffer->Init(res.w, res.h, 2,true);
 
+		blurBuffer = new FrameBuffer();
+		blurBuffer->InitBlur(res.w,res.h);
+
 		shadowBuffer = new ShadowBuffer();
 		shadowBuffer->Init();
 	}

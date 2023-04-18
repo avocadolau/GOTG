@@ -5,6 +5,7 @@ layout (location = 0) in vec3 l_Pos;
 layout (location = 1) in vec2 l_TexCoord;
 
 out vec2 s_TexCoord;
+out vec3 Pos;
 
 layout(location = 2)uniform mat4 u_Model;
 layout(location = 3)uniform mat4 u_View;

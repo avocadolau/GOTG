@@ -64,7 +64,7 @@ namespace Wiwa {
 		// Render objects
 		m_FrameBuffer.Init(width, height);
 		m_BlurBuffer.InitBlur(width, height);
-		m_Shader.Init("resources/shaders/renderlayer/blur");
+		m_BlurShader.Init("resources/shaders/renderlayer/blur");
 		m_Shader.Init("resources/shaders/renderlayer/renderlayer");
 
 		m_OrthoLoc = m_Shader.getUniformLocation("u_Proj");
@@ -118,12 +118,14 @@ namespace Wiwa {
 			// Take cameras in reverse order for proper drawing order
 			Camera* cam = m_RenderLayers[MAX_LAYERS - i - 1].getCamera();
 			if (cam) {
-				if (cam->frameBuffer->getColorBuffers().size() > 1)
-				{	
-					glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
-				}
-				else
-					glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
+				//if (cam->frameBuffer->getColorBuffers().size() > 1)
+				//{	
+				//	glActiveTexture(GL_TEXTURE0);
+				//	glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
+				//	m_Shader.setUniformInt(m_Shader.getUniformLocation("u_LayerTex"), 0);
+				//}
+				//else
+				glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
 				// Draw elements
 				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			}
