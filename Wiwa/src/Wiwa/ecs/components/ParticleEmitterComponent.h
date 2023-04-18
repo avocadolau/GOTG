@@ -88,9 +88,10 @@ namespace Wiwa {
 		//position & translation
 		//bool m_p_followEmitterPosOnlyOnSpawn;
 		glm::vec3	m_p_initialPosition;
-		bool		m_p_rangedInitialPosition;
-		glm::vec3	m_p_minInitialPosition;
-		glm::vec3	m_p_maxInitialPosition;
+		glm::vec3	m_p_initialPositionSphCenter;
+		float		m_p_initialPositionSphRadius;
+		glm::vec3	m_p_InitialPositionBoxA;
+		glm::vec3	m_p_InitialPositionBoxB;
 
 		glm::vec3	m_p_initialVelocity;
 		bool		m_p_rangedVelocity;

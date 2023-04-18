@@ -951,7 +951,6 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 					case Wiwa::ParticleSpawnVolume::SPHERE:
 					{
 						emitter->m_spawnVolume = Wiwa::ParticleSpawnVolume::SPHERE;
-
 					}
 					break;
 
@@ -970,25 +969,48 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::PopItemWidth();
 
 
-
-		ImGui::Checkbox("##m_p_rangedInitialPosition", &emitter->m_p_rangedInitialPosition);
-		ImGui::SameLine();
-		ImGui::Text("Initial Position");
-
-		if (emitter->m_p_rangedInitialPosition)
+		switch (emitter->m_spawnVolume)
 		{
-			ImGui::Text("Min");
-			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_minInitialPosition", &(emitter->m_p_minInitialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::Text("Max");
-			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_maxInitialPosition", &(emitter->m_p_maxInitialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-		}
-		else
+		case Wiwa::ParticleSpawnVolume::NONE:
 		{
+
+			ImGui::Text("Initial Position");
 			ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
 		}
+		break;
+		case Wiwa::ParticleSpawnVolume::CUBE:
+		{
+
+			ImGui::Text("Spawn Area:");
+
+			ImGui::Text("Corner A");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_InitialPositionBoxA", &(emitter->m_p_InitialPositionBoxA)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Corner B");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_InitialPositionBoxB", &(emitter->m_p_InitialPositionBoxB)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		break;
+		case Wiwa::ParticleSpawnVolume::SPHERE:
+		{
+			ImGui::Text("Center Position");
+			ImGui::DragFloat3("##m_p_initialPositionSphCenter", &(emitter->m_p_initialPositionSphCenter)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+
+			ImGui::Text("Spawn Radius");
+			ImGui::DragFloat("##m_p_initialPositionSphRadius", &emitter->m_p_initialPositionSphRadius, 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		break;
+
+		default:
+		{
+
+			ImGui::Text("Initial Position");
+			ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
+		break;
+		}
+
+
 
 		
 		ImGui::Dummy(ImVec2(0, 8));

@@ -209,18 +209,47 @@ namespace Wiwa {
 		glm::vec3 initScale(0, 0, 0);
 
 		//initial position
-		if (emitter->m_p_rangedInitialPosition)
-		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialPosition.x, emitter->m_p_maxInitialPosition.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialPosition.y, emitter->m_p_maxInitialPosition.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialPosition.z, emitter->m_p_maxInitialPosition.z);
 
-			initPosition = emitter->m_p_initialPosition + t3d->localPosition + glm::vec3(x, y, z);
-		}
-		else
+
+		switch (emitter->m_spawnVolume)
+		{
+		case Wiwa::ParticleSpawnVolume::NONE:
 		{
 			initPosition = emitter->m_p_initialPosition + t3d->localPosition;
 		}
+		break;
+		case Wiwa::ParticleSpawnVolume::CUBE:
+		{
+			float x = Wiwa::Math::RandomRange(emitter->m_p_InitialPositionBoxA.x, emitter->m_p_InitialPositionBoxB.x);
+			float y = Wiwa::Math::RandomRange(emitter->m_p_InitialPositionBoxA.y, emitter->m_p_InitialPositionBoxB.y);
+			float z = Wiwa::Math::RandomRange(emitter->m_p_InitialPositionBoxA.z, emitter->m_p_InitialPositionBoxB.z);
+
+			initPosition = emitter->m_p_initialPosition + t3d->localPosition + glm::vec3(x, y, z);
+		}
+		break;
+		case Wiwa::ParticleSpawnVolume::SPHERE:
+		{
+			//Spawn in sphere
+
+			float x = Wiwa::Math::RandomRange(1.0f,-1.0f);
+			float y = Wiwa::Math::RandomRange(1.0f,-1.0f);
+			float z = Wiwa::Math::RandomRange(1.0f,-1.0f);
+
+
+			initPosition = emitter->m_p_initialPosition + t3d->localPosition + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
+
+		}
+		break;
+
+		default:
+		{
+			initPosition = emitter->m_p_initialPosition + t3d->localPosition;
+
+		}
+		break;
+		}
+
+
 
 		//initial rotation
 		if (emitter->m_p_rangedInitialRotation)
