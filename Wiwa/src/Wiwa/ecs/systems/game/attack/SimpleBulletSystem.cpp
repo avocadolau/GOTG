@@ -2,6 +2,7 @@
 #include "SimpleBulletSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/utilities/EntityPool.h>
 
 namespace Wiwa
 {
@@ -72,7 +73,8 @@ namespace Wiwa
 			}
 	
 			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);
+			//em.DestroyEntity(m_EntityId);
+			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 		}
 	}
 

@@ -39,6 +39,40 @@ namespace Wiwa
 
 		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
 
+		if (m_TimerClusterBullet01Lifetime >= CLUSTER_BULLET_LIFETIME)
+		{
+			m_ClusterBullet01Id
+		}
+
+		if (m_TimerClusterBullet01Lifetime >= 0.0f)
+		{
+			m_TimerClusterBullet01Lifetime += Time::GetDeltaTimeSeconds();
+		}
+
+		if (m_TimerClusterBullet02Lifetime >= 0.0f)
+		{
+			m_TimerClusterBullet02Lifetime += Time::GetDeltaTimeSeconds();
+		}
+
+		
+
+		if(m_TimerBetweenBullet == 0.0f)
+		{
+			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			m_ClusterBullet01Id = SpawnClusterBullet(enemy, CalculateForward(*playerTr));
+		}
+		else if (m_TimerBetweenBullet == 2.0f)
+		{
+			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			m_ClusterBullet02Id = SpawnClusterBullet(enemy, CalculateForward(*playerTr));
+		}
+		else if (m_TimerBetweenBullet == 4.0f)
+		{
+			enemy->SwitchState(enemy->m_MovementState);
+		}
+
+		m_TimerBetweenBullet += Time::GetDeltaTimeSeconds();
+
 	}
 
 	void BossUltronClusterShotsAttackState::ExitState(BossUltron* enemy)
@@ -74,7 +108,7 @@ namespace Wiwa
 		bullet->damage = 10;
 	}
 
-	EntityId BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
+	EntityId* BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\simple_bullet\\simple_bullet.wiprefab"); // to be changed
@@ -89,7 +123,7 @@ namespace Wiwa
 		pman.EmitBatch(newBulletId);
 
 		if (!bulletTr || !enemyTr)
-			return newBulletId;
+			return &newBulletId;
 
 		bulletTr->localPosition = glm::normalize(enemyTr->localPosition);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
@@ -97,8 +131,8 @@ namespace Wiwa
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
 		bullet->damage = 30;
-		bullet->lifeTime = 5.0f;
-		return newBulletId;
+		bullet->lifeTime = CLUSTER_BULLET_LIFETIME;
+		return &newBulletId;
 	}
 
 	void BossUltronClusterShotsAttackState::BlowClusterBullet(EntityId bulletId, BossUltron* enemy)
@@ -119,5 +153,23 @@ namespace Wiwa
 			glm::vec3 direction(xDir, 0.0f, yDir);
 			SpawnBullet(enemy, direction, bulletId);
 		}
+	}
+
+	glm::vec3 BossUltronClusterShotsAttackState::CalculateForward(const Transform3D& t3d)
+	{
+		/*glm::vec4 forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+		glm::vec4 transformed = t3d.worldMatrix * forward;
+		return glm::normalize(glm::vec3(transformed));*/
+		glm::vec3 rotrad = glm::radians(t3d.rotation);
+
+		glm::vec3 forward;
+
+		forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
+		forward.y = -glm::sin(rotrad.x);
+		forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
+
+		forward = glm::degrees(forward);
+
+		return glm::normalize(forward);
 	}
 }

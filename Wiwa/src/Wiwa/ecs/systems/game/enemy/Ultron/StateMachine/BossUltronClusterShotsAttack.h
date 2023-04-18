@@ -2,6 +2,8 @@
 #include "BossUltronBase.h"
 //#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 
+#define CLUSTER_BULLET_LIFETIME 5.0f
+
 namespace Wiwa {
 	class BossUltronClusterShotsAttackState : public BossUltronBaseState {
 	public:
@@ -14,16 +16,19 @@ namespace Wiwa {
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
 		void SpawnBullet(BossUltron* enemy, const glm::vec3& bull_dir, EntityId clusterBullet);
-		EntityId SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir);
+		EntityId* SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir);
 
 		void BlowClusterBullet(EntityId bulletId, BossUltron* enemy);
+
+		glm::vec3 CalculateForward(const Transform3D& t3d);
 
 	private:
 
 		float m_TimerClusterBullet01Lifetime = -1.0f;
 		float m_TimerClusterBullet02Lifetime = -1.0f;
+		float m_TimerBetweenBullet = 0.0f;
 		
-		EntityId m_ClusterBullet01Id;
-		EntityId m_ClusterBullet02Id;
+		EntityId* m_ClusterBullet01Id;
+		EntityId* m_ClusterBullet02Id;
 	};
 }
