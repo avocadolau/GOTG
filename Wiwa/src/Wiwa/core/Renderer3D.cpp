@@ -200,35 +200,41 @@ namespace Wiwa
 		//bufer--------------------------------
 
 		// Bind VAO
-		//RenderManager::BindVAO();
-		//bool horizontal = true, first_iteration = true;
-		//unsigned int amount = 10;
-		//m_BlurShader->Bind();
-		//for (unsigned int i = 0; i < amount; i++)
-		//{
-		//	glBindFramebuffer(GL_FRAMEBUFFER, RenderManager::getBlurFBOs()[(int)horizontal]);
-		//	m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
-		//	glBindTexture(GL_TEXTURE_2D, first_iteration ? cam->frameBuffer->getColorBuffers()[1] : RenderManager::getBlurTextures()[(int)!horizontal]);  // bind texture of other framebuffer (or scene if first iteration)
-		//	// Draw elements
-		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		//	horizontal = !horizontal;
-		//	if (first_iteration)
-		//		first_iteration = false;
-		//}
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//// Pass the blurred texture to the second color attachment of the camera's frame buffer
-		//cam->frameBuffer->getColorBuffers()[1] = RenderManager::getBlurTextures()[(int)!horizontal];
-		//glBindVertexArray(0);
-		//// 3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
-		//// --------------------------------------------------------------------------------------------------------------------------
+		RenderManager::BindVAO();
+		bool horizontal = true, first_iteration = true;
+		unsigned int amount = 10;
+		m_BlurShader->Bind();
+		for (unsigned int i = 0; i < amount; i++)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, RenderManager::getBlurFBOs()[(int)horizontal]);
+			glBindTexture(GL_TEXTURE_2D, first_iteration ? cam->frameBuffer->getColorBuffers()[1] : RenderManager::getBlurTextures()[(int)!horizontal]);  // bind texture of other framebuffer (or scene if first iteration)
+			m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
+			m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Image"), first_iteration ? cam->frameBuffer->getColorBuffers()[1] : RenderManager::getBlurTextures()[(int)!horizontal]);
+			// Draw elements
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			horizontal = !horizontal;
+			if (first_iteration)
+				first_iteration = false;
+		}
+		m_BlurShader->UnBind();
+
+		// Pass the blurred texture to the second color attachment of the camera's frame buffer
+		cam->frameBuffer->getColorBuffers()[1] = RenderManager::getBlurTextures()[1];
+		glBindVertexArray(0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		// 3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+		// --------------------------------------------------------------------------------------------------------------------------
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//m_BloomShader->Bind();
 		//glActiveTexture(GL_TEXTURE0);
 		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
 		//glActiveTexture(GL_TEXTURE1);
 		//glBindTexture(GL_TEXTURE_2D, RenderManager::getBlurTextures()[(int)!horizontal]);
+		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Scene"), GL_TEXTURE0);
+		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_BloomBlur"), GL_TEXTURE1);
 		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int) true);
-		//m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"),5);
+		//m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"),1000);
+		//m_BloomShader->UnBind();
 	}
 
 	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
