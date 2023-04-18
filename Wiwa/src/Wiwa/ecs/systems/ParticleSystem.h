@@ -19,6 +19,8 @@ namespace Wiwa
 	{
 		Particle() :
 			life_time(0.0f),
+			life_time_start(0.0f),
+			life_percentage(0.0f),
 			position(0.0f),
 			rotation(0.0f),
 			scale(0.0f),
@@ -28,6 +30,8 @@ namespace Wiwa
 		Particle(float _life, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, glm::vec3 _velocity, glm::vec4 _color) 
 		{
 			life_time = _life;
+			life_time_start = _life;
+			life_percentage = 0.0f;
 			position = _position;
 			rotation = _rotation;
 			scale = _scale;
@@ -36,6 +40,8 @@ namespace Wiwa
 		};
 		
 		float life_time = 0;
+		float life_time_start = 0;
+		float life_percentage = 0;
 		glm::vec3 position;
 		glm::vec3 rotation;
 		glm::vec3 scale;
@@ -65,6 +71,9 @@ namespace Wiwa
 		void SetValues(ParticleEmitterComponent settings);
 
 		void SpawnParticle(Particle& particle);
+
+		void UpdateParticleLife(Particle& particle, float deltaTime);
+		void SetParticleLifeTime(Particle& particle, float lifeTime);
 
 		unsigned int FirstUnusedParticle();
 

@@ -111,12 +111,21 @@ namespace Wiwa {
 		bool		m_p_rangedAngularVelocity;
 		glm::vec3	m_p_minAngularVelocity;
 		glm::vec3	m_p_maxAngularVelocity;
-		//size
-		//bool m_p_followEmitterScaleOnlyOnSpawn;
+
+		bool		m_p_rotationOverTime;
+		glm::vec3	m_p_rotationOverTimeStart;
+		glm::vec3	m_p_rotationOverTimeEnd;
+		
+
+
 		glm::vec3	m_p_initialScale;
 		bool		m_p_rangedInitialScale;
 		glm::vec3	m_p_minInitialScale;
 		glm::vec3	m_p_maxInitialScale;
+
+		bool		m_p_scaleOverTime;
+		glm::vec3	m_p_scaleOverTimeStart;
+		glm::vec3	m_p_scaleOverTimeEnd;
 
 		glm::vec3	m_p_initialGrowthVelocity;
 		bool		m_p_rangedGrowthVelocity;

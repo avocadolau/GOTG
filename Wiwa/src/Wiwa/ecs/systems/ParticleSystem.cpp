@@ -108,7 +108,7 @@ namespace Wiwa {
 				Particle& particle = m_Particles[i];
 				float dt = Time::GetDeltaTime() * 0.001f;
 
-				particle.life_time -= dt;
+				UpdateParticleLife(particle, dt);
 
 				if (particle.life_time > 0.0f)
 				{
@@ -117,6 +117,15 @@ namespace Wiwa {
 					//calculate everything
 					particle.position += particle.velocity * dt;
 
+					if (emitter->m_p_scaleOverTime)
+					{
+						particle.scale = emitter->m_p_scaleOverTimeStart * (1 - particle.life_percentage) + emitter->m_p_scaleOverTimeEnd * particle.life_percentage;
+					}
+
+					if (emitter->m_p_rotationOverTime)
+					{
+						particle.rotation = emitter->m_p_rotationOverTimeStart * (1 - particle.life_percentage) + emitter->m_p_rotationOverTimeEnd * particle.life_percentage;
+					}
 
 
 					// Convert rotation angles from degrees to radians
@@ -196,6 +205,18 @@ namespace Wiwa {
 	void ParticleSystem::SetValues(ParticleEmitterComponent settings)
 	{
 
+	}
+
+	void ParticleSystem::SetParticleLifeTime(Particle& particle, float lifeTime)
+	{
+		particle.life_time_start = lifeTime;
+		particle.life_time = lifeTime;
+		particle.life_percentage = 0.f;
+	}
+	void ParticleSystem::UpdateParticleLife(Particle& particle, float deltaTime)
+	{
+		particle.life_time -= deltaTime;
+		particle.life_percentage = 1 - particle.life_time / particle.life_time_start;
 	}
 
 	void ParticleSystem::SpawnParticle(Particle& particle)
@@ -300,11 +321,11 @@ namespace Wiwa {
 
 		if (emitter->m_p_rangedLifeTime)
 		{
-			particle.life_time = Wiwa::Math::RandomRange(emitter->m_p_minLifeTime, emitter->m_p_maxLifeTime);
+			SetParticleLifeTime(particle, Wiwa::Math::RandomRange(emitter->m_p_minLifeTime, emitter->m_p_maxLifeTime));
 		}
 		else
 		{
-			particle.life_time = emitter->m_p_lifeTime;
+			SetParticleLifeTime(particle, emitter->m_p_lifeTime);
 		}
 
 		//particle.life_time = emitter->m_p_lifeTime;
