@@ -179,12 +179,12 @@ namespace Wiwa
 		"resources/images/skybox/urban_light/front.png",
 		"resources/images/skybox/urban_light/back.png" };
 		std::vector<const char*> main_menu = {
-		"library/hud_images/menus/start menu",
-		"library/images/skybox/urban_light/left.png",
-		"library/images/skybox/urban_light/top.png",
-		"library/images/skybox/urban_light/bottom.png",
-		"library/images/skybox/urban_light/front.png",
-		"library/images/skybox/urban_light/back.png" };
+		"resources/images/skybox/main_menu/UI_RightSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_BottomSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_FrontSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_BackSkyBox_01.png" };
 		m_DefaultSkybox.LoadCubemap(dooms_day);
 
 		return true;
