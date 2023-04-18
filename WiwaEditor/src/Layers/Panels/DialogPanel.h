@@ -23,4 +23,7 @@ public:
 
 	int currentConversation = 0;
 	int currentNode = 0;
+
+	std::string pathForAsset;
+	std::string pathForAsset2;
 };

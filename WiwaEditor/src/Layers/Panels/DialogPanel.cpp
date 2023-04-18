@@ -45,6 +45,11 @@ void DialogPanel::Draw()
 				currentNode = 0;
 				currentConversation = 0;
 
+				for (int k = 0; dm.conversations[k].occupied == true; k++)
+				{
+					currentConversation++;
+				}
+
 				currentCreationStep = 1;
 			}
 
@@ -103,7 +108,9 @@ void DialogPanel::Draw()
 			{
 				ImGui::Text("Bubble image:");
 				ImGui::SameLine();
-				AssetContainer("");
+				//Wiwa::Image* mat = Wiwa::Resources::GetResourceById<Wiwa::Image>(mesh->materialId);
+				//AssetContainer(std::filesystem::path(mat->GetTextureId()).stem().string().c_str());
+				AssetContainer(pathForAsset.c_str());
 				if (ImGui::BeginDragDropTarget())
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -114,6 +121,7 @@ void DialogPanel::Draw()
 						std::filesystem::path p = pathS.c_str();
 						if (p.extension() == ".png")
 						{
+							pathForAsset = pathS;
 							dm.SetDialogBubbleImage(pathS.c_str(), currentConversation);
 						}
 					}
@@ -131,7 +139,7 @@ void DialogPanel::Draw()
 			{
 				ImGui::Text("Character image:");
 				ImGui::SameLine();
-				AssetContainer("");
+				AssetContainer(pathForAsset2.c_str());
 				if (ImGui::BeginDragDropTarget())
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -142,6 +150,7 @@ void DialogPanel::Draw()
 						std::filesystem::path p = pathS.c_str();
 						if (p.extension() == ".png")
 						{
+							pathForAsset2 = pathS;
 							dm.SetCharacterImage(pathS.c_str(), currentConversation);
 						}
 					}

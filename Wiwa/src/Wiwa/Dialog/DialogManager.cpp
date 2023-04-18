@@ -67,18 +67,17 @@ namespace Wiwa
 
 		conversations.push_back(newConversation);*/
 
-		conversations[0].conversationName = "NPC_1";
+		//conversations[0].conversationName = "NPC_1";
 
-		SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
-		SetDialogText("constantly updating their data banks.", "With them the architecture, too, gets", "updated. ", "assets/Fonts/Jade_Smile.ttf", 0, 1);
-		SetDialogText("Surprisingly, some of the collector’s", "inventory of weaponsandgadgets", "has been seen in the vicinity.", "assets/Fonts/Jade_Smile.ttf", 0, 2);
-		SetDialogText("Do not get lost in the labyrinth of", "machinery, Guardian.", "And good luck.", "assets/Fonts/Jade_Smile.ttf", 0, 3);
+		//SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
+		//SetDialogText("constantly updating their data banks.", "With them the architecture, too, gets", "updated. ", "assets/Fonts/Jade_Smile.ttf", 0, 1);
+		//SetDialogText("Surprisingly, some of the collector’s", "inventory of weaponsandgadgets", "has been seen in the vicinity.", "assets/Fonts/Jade_Smile.ttf", 0, 2);
+		//SetDialogText("Do not get lost in the labyrinth of", "machinery, Guardian.", "And good luck.", "assets/Fonts/Jade_Smile.ttf", 0, 3);
 
-		//SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", 0);
-		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
-		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
+		//SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
+		//SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
 
-		conversations[0].occupied = true;
+		//conversations[0].occupied = true;
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -97,7 +96,7 @@ namespace Wiwa
 	{
 		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 		{
-			conversationToPlayName = NpcConversationTag.c_str();
+ 			conversationToPlayName = NpcConversationTag.c_str();
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
