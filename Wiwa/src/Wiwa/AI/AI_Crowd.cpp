@@ -117,17 +117,29 @@ const float* Crowd::GetAgentPosition(int agentIndex) const
 
 const float* Crowd::GetAgentVelocity(int agentIndex) const
 {
+    if (agentIndex >= 0 && agentIndex < m_agents.size()) {
+        const dtCrowdAgent* agent = m_crowd->getAgent(agentIndex);
+        return agent->dvel;
+    }
     return nullptr;
 }
 
 glm::vec3 Crowd::GetAgentPositionVec(int agentIndex) const
 {
-    return glm::vec3();
+    if (agentIndex >= 0 && agentIndex < m_agents.size()) {
+        const dtCrowdAgent* agent = m_crowd->getAgent(agentIndex);
+        return glm::vec3(agent->npos[0], agent->npos[1], agent->npos[2]);
+    }
+    return glm::vec3(0.0f);
 }
 
 glm::vec3 Crowd::GetAgentVelocityVec(int agentIndex) const
 {
-    return glm::vec3();
+    if (agentIndex >= 0 && agentIndex < m_agents.size()) {
+        const dtCrowdAgent* agent = m_crowd->getAgent(agentIndex);
+        return glm::vec3(agent->dvel[0], agent->dvel[1], agent->dvel[2]);
+    }
+    return glm::vec3(0.0f);
 }
 
 
