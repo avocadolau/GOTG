@@ -41,7 +41,7 @@ namespace Wiwa
 
 		if (m_TimerClusterBullet01Lifetime >= CLUSTER_BULLET_LIFETIME)
 		{
-			m_ClusterBullet01Id
+			//m_ClusterBullet01Id
 		}
 
 		if (m_TimerClusterBullet01Lifetime >= 0.0f)
