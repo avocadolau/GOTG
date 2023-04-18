@@ -13,15 +13,17 @@ namespace Wiwa
 		s_SentinelPool = new EntityPool(3, 3, "assets\\enemy\\prefabs\\test_sentinel.wiprefab");
 		s_SimpleBulletsPool = new EntityPool(4, 1, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
 		s_SentinelExplosion = new EntityPool(5, 3, "assets\\enemy\\explosions\\test_explosion_3.wiprefab");
+		s_BossUltron = new EntityPool(6, 1, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 	}
 
 	GamePoolingManager::~GamePoolingManager()
 	{
 		delete s_PhalanxMeleePool;
 		delete s_PhalanxRangedPool;
-		delete s_SentinelPool;
+		delete s_SentinelPool;	
 		delete s_SimpleBulletsPool;
 		delete s_SentinelExplosion;	
+		delete s_BossUltron;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -31,7 +33,9 @@ namespace Wiwa
 		s_SentinelPool->SetScene(scene);
 		s_SimpleBulletsPool->SetScene(scene);
 		s_SentinelExplosion->SetScene(scene);
+		s_BossUltron->SetScene(scene);
 	}
+
 
 	void GamePoolingManager::LoadPool(int type, Scene* scene)
 	{
@@ -51,6 +55,9 @@ namespace Wiwa
 			break;
 		case 5:
 			LoadSentinelExplosionPool(scene);
+			break;
+		case 6:
+			LoadBossUltronPool(scene);
 			break;
 		
 		default:
@@ -75,6 +82,9 @@ namespace Wiwa
 			break;
 		case 5:
 			UnloadSentinelExplosionPool();
+			break;
+		case 6:
+			UnloadBossUltronPool();
 			break;
 		
 		default:
@@ -145,6 +155,19 @@ namespace Wiwa
 		s_SentinelExplosion->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadBossUltronPool(Scene* scene)
+	{
+		s_BossUltron->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_BossUltron->getMaxSize());
+		for (int i = 0; i < s_BossUltron->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_BossUltron->getPath());
+		s_BossUltron->IncreasePoolSize(meleeEnemyIds);
+	}
+	void GamePoolingManager::UnloadBossUltronPool()
+	{
+		s_BossUltron->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		LoadPhalanxMeleePool(scene);
@@ -152,6 +175,7 @@ namespace Wiwa
 		LoadSentinelPool(scene);
 		LoadSimpleBulletPool(scene);
 		LoadSentinelExplosionPool(scene);
+		LoadBossUltronPool(scene);
 
 	}
 	void GamePoolingManager::UnloadAllPools()
@@ -161,5 +185,6 @@ namespace Wiwa
 		UnloadSentinelPool();
 		UnloadSimpleBulletPool();
 		UnloadSentinelExplosionPool();
+		UnloadBossUltronPool();
 	}
 }
