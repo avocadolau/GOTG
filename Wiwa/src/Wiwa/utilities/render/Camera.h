@@ -7,6 +7,7 @@
 #include <Wiwa/utilities/math/Frustum.h>
 #include <Wiwa/utilities/render/FrameBuffer.h>
 #include <Wiwa/utilities/render/buffers/ShadowBuffer.h>
+#include <Wiwa/utilities/render/buffers/BlurBuffer.h>
 namespace Wiwa {
 	class WI_API Camera
 	{
@@ -19,7 +20,8 @@ namespace Wiwa {
 		Math::Frustum frustrum;
 		FrameBuffer* frameBuffer;
 		FrameBuffer* hdrBuffer;
-		FrameBuffer* blurBuffer;
+		BlurBuffer* vBlurBuffer;
+		BlurBuffer* hBlurBuffer;
 		ShadowBuffer* shadowBuffer;
 
 		bool cull = false;

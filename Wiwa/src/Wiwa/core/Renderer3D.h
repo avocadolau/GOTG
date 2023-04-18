@@ -43,7 +43,7 @@ namespace Wiwa {
 		};
 	private:
 		glm::mat4 m_PersProj{ 0.0f };
-		glm::mat4 m_View{ 0.0f };
+		//glm::mat4 m_View{ 0.0f };
 
 		ResourceId m_BBDisplayShaderId;
 		Shader* m_BBDisplayShader;
@@ -77,6 +77,9 @@ namespace Wiwa {
 
 		FrameBuffer m_BlurFrameBuffer;
 
+		glm::mat4 m_OrthoProj;
+		glm::mat4 m_View;
+		glm::mat4 m_Model;
 
 	public:
 		Renderer3D();

@@ -165,6 +165,18 @@ namespace Wiwa
 		m_DefaultSkybox.LoadCubemap(faces);
 
 
+
+		// Init orthographic projection
+		m_OrthoProj = glm::ortho(0.0f, (float)1920, (float)920, 0.0f, 0.1f, 100.0f);
+		// Init main camera view
+		m_View = glm::mat4(1.0f);
+		m_View = glm::translate(m_View, glm::vec3(0.0f, 0.0f, -3.0f));
+		// Init model
+		m_Model = glm::mat4(1.0f);
+		m_Model = glm::translate(m_Model, glm::vec3((float)1920 / 2.0f, (float)920 / 2.0f, 0.0f));
+		m_Model = glm::scale(m_Model, glm::vec3((float)1920, (float)920, 1.0f));
+
+
 		return true;
 	}
 
@@ -175,49 +187,76 @@ namespace Wiwa
 		//once everything is rendered and passed by the hdr 
 		
 		Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
-		// blur bright fragments with two-pass Gaussian Blur 
-				// Init orthographic projection
-		//glm::mat4 m_OrthoProj = glm::ortho(0.0f, (float)width, (float)height, 0.0f, 0.1f, 100.0f);
-		//// Init main camera view
-		//glm::mat4 m_View = glm::mat4(1.0f);
-		//m_View = glm::translate(m_View, glm::vec3(0.0f, 0.0f, -3.0f));
-		//// Init model
-		//glm::mat4 m_Model = glm::mat4(1.0f);
-		//m_Model = glm::translate(m_Model, glm::vec3(width / 2.0f, height / 2.0f, 0.0f));
-		//m_Model = glm::scale(m_Model, glm::vec3((float)width, (float)height, 1.0f));
+
+		if (cam == nullptr)
+			return;
 		// Bind VAO
 		RenderManager::BindVAO();
+		glDisable(GL_DEPTH_TEST);
 		bool horizontal = true, first_iteration = false;
 		unsigned int amount = 10;
 		m_BlurShader->Bind();
-		//for (unsigned int i = 0; i < amount; i++)
-		//{
-		//	glBindFramebuffer(GL_FRAMEBUFFER, cam->blurBuffer->getFBOs()[horizontal]);
-		//	m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"),horizontal);
-		//	glBindTexture(
-		//		GL_TEXTURE_2D, first_iteration ? cam->frameBuffer->getColorBuffers()[1] : cam->blurBuffer->getColorBuffers()[!horizontal]
-		//	);
-		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		//	horizontal = !horizontal;
-		//	if (first_iteration)
-		//		first_iteration = false;
-		//}
-		glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
-		// Draw elements
+
+		// blur bright fragments with two-pass Gaussian Blur 
+		for (unsigned int i = 0; i < amount; i++)
+		{
+			m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
+			if (first_iteration){
+				glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
+				first_iteration = false;
+			}
+			else {
+				if (horizontal)	{
+					cam->vBlurBuffer->Bind(false);
+					cam->vBlurBuffer->BindTexture();	
+				}else {
+					cam->vBlurBuffer->Bind(false);
+					cam->hBlurBuffer->BindTexture();
+				}
+			}
+
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			horizontal = !horizontal;
+		}
+		m_BlurShader->UnBind();
+		glEnable(GL_DEPTH_TEST);
+
+		 //3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+		 //--------------------------------------------------------------------------------------------------------------------------
+		m_BloomShader->Bind();
+		
+		cam->frameBuffer->Bind(false);
+
+		glActiveTexture(GL_TEXTURE0);		
+		glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
+
+
+		m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int) true);
+		m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"),5);
+		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		////TESTING overwrite text 0 with text 1 color
-		//// Bind the framebuffer object
+
+		m_BloomShader->UnBind();
+
+		glBindVertexArray(0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+	/*	TESTING overwrite text 0 with text 1 color
+		Bind the framebuffer object*/
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, cam->frameBuffer->getFBO());
 
 		//// Set the source and destination textures
 		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
+		//glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
 		//glActiveTexture(GL_TEXTURE1);
 		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
 
 		//// Copy the content of texture 1 to texture 0
 		//glCopyImageSubData(
-		//	cam->frameBuffer->getColorBuffers()[1], GL_TEXTURE_2D, 0, 0, 0, 0,
+		//	cam->vBlurBuffer->getColorTexture(), GL_TEXTURE_2D, 0, 0, 0, 0,
 		//	cam->frameBuffer->getColorBuffers()[0], GL_TEXTURE_2D, 0, 0, 0, 0,
 		//	cam->frameBuffer->getWidth(), cam->frameBuffer->getHeight(), 1
 		//);
@@ -225,29 +264,9 @@ namespace Wiwa
 		//// Unbind the textures and framebuffer object
 		//glBindTexture(GL_TEXTURE_2D, 0);
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		//glBindVertexArray(0);
 
 
-		//cam->frameBuffer->getColorBuffers()[1] = RenderManager::getBlurTextures()[!horizontal];
-		//cam->frameBuffer->getColorBuffers()[0] = cam->frameBuffer->getColorBuffers()[1];
-		//m_BlurShader->UnBind();
-		//glBindVertexArray(0);
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//RenderManager::BindVAO();
-		// 3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
-		// --------------------------------------------------------------------------------------------------------------------------
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//m_BloomShader->Bind();
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
-		//glActiveTexture(GL_TEXTURE1);
-		//glBindTexture(GL_TEXTURE_2D, RenderManager::getBlurTextures()[!horizontal]);
-		////m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Scene"), GL_TEXTURE0);
-		////m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_BloomBlur"), GL_TEXTURE1);
-		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int) true);
-		//m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"),5);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		//m_BloomShader->UnBind();
-		//glBindVertexArray(0);
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 

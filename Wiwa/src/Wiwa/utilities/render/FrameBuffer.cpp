@@ -83,37 +83,7 @@ namespace Wiwa {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-	void FrameBuffer::InitBlur(int width, int height)
-	{
-		m_Init = true;
-
-		m_Width = width;
-		m_Height = height;
-
-		m_FBOs.resize(2);
-		m_ColorBuffers.resize(2);
-		glGenFramebuffers(2, &m_FBOs[0]);
-		glGenTextures(2, &m_ColorBuffers[0]);
-		for (unsigned int i = 0; i < 2; i++)
-		{
-			glBindFramebuffer(GL_FRAMEBUFFER, m_FBOs[i]);
-			glBindTexture(GL_TEXTURE_2D, m_ColorBuffers[i]);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // we clamp to the edge as the blur filter would otherwise sample repeated texture values!
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBuffers[i], 0);
-
-			// also check if framebuffers are complete (no need for depth buffer)
-			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-				std::cout << "Framebuffer not complete!" << std::endl;
-
-		
-		}
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
+	
 	void FrameBuffer::Init(int width, int height, bool depth)
 	{
 		m_Init = true;		

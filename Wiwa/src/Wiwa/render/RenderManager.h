@@ -17,7 +17,6 @@ namespace Wiwa {
 		RenderManager();
 
 		static FrameBuffer m_FrameBuffer;
-		static FrameBuffer m_BlurBuffer;
 		static FrameBuffer m_ShadowBuffer;
 		static glm::mat4 m_OrthoProj;
 		static glm::mat4 m_View;
@@ -52,9 +51,6 @@ namespace Wiwa {
 
 		// Get color texture
 		static uint32_t getColorTexture() { return m_FrameBuffer.getColorBufferTexture(); }
-
-		static std::vector<uint32_t> getBlurTextures() { return m_BlurBuffer.getColorBuffers(); }
-		static std::vector<uint32_t> getBlurFBOs() { return m_BlurBuffer.getFBOs(); }
 
 		static void BindVAO();
 
