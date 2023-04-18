@@ -72,7 +72,18 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		//em.DestroyEntity(m_EntityId);
 
-		BlowClusterBullet(m_EntityId);
+		Math::RandomRange(0,1);
+
+		int randomValue = Math::RandomRange(0, 1);
+
+		if (randomValue == 0)
+		{
+			BlowClusterBullet01(m_EntityId);
+		}
+		else
+		{
+			BlowClusterBullet02(m_EntityId);
+		}
 
 		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 	}
@@ -103,7 +114,7 @@ void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId 
 	bullet->damage = 10;
 }
 
-void Wiwa::ClusterBulletSystem::BlowClusterBullet(EntityId bulletId)
+void Wiwa::ClusterBulletSystem::BlowClusterBullet01(EntityId bulletId)
 {
 	Wiwa::EntityManager& entityManager = this->getScene().GetEntityManager();
 
@@ -120,5 +131,29 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet(EntityId bulletId)
 
 		glm::vec3 direction(xDir, 0.0f, yDir);
 		this->SpawnBullet(direction, bulletId);
+	}
+}
+
+void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
+{
+	Wiwa::EntityManager& entityManager = this->getScene().GetEntityManager();
+
+	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(bulletId));
+
+	int numGroups = 10;
+	int numBulletsPerGroup = 3;
+	float degreeStep = 360.0f / numGroups;
+	float groupDegreeStep = 10.0f; // The angle between bullets in a group
+
+	for (int i = 0; i < numGroups; ++i) {
+		for (int j = 0; j < numBulletsPerGroup; ++j) {
+			float directionAngle = i * degreeStep + j * groupDegreeStep;
+			float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+			float xDir = cos(radian);
+			float yDir = sin(radian);
+
+			glm::vec3 direction(xDir, yDir, 0.0f);
+			SpawnBullet(direction, bulletId);
+		}
 	}
 }

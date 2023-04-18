@@ -28,7 +28,8 @@ namespace Wiwa {
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
 		void SpawnBullet(const glm::vec3& bull_dir, EntityId clusterBullet);
-		void BlowClusterBullet(EntityId bulletId);
+		void BlowClusterBullet01(EntityId bulletId);
+		void BlowClusterBullet02(EntityId bulletId);
 	};
 }
 

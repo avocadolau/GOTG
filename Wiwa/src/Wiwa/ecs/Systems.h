@@ -43,3 +43,4 @@
 
 #include "systems/game/NpcSystem.h"
 
+#include "systems/game/attack/ClusterBulletSystem.h"

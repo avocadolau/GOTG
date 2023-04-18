@@ -69,7 +69,7 @@ namespace Wiwa
 	EntityId* BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\simple_bullet\\simple_bullet.wiprefab"); // to be changed
+		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\cluster_bullet\\cluster_bullet.wiprefab"); 
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions
@@ -88,8 +88,7 @@ namespace Wiwa
 		//bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
-		bullet->damage = 30;
-		bullet->lifeTime = CLUSTER_BULLET_LIFETIME;
+		
 		return &newBulletId;
 	}
 
