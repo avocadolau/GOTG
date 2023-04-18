@@ -1,0 +1,53 @@
+#pragma once
+#include <DetourCrowd.h>
+#include <vector>
+#include <glm/glm.hpp>
+#include "AI_RecastManager.h"
+#define MAX_AGENTS 30
+
+class Crowd {
+public:
+
+    static Crowd* instancePtr;
+    Crowd(const Crowd& obj)
+        = delete;
+    
+    static Crowd* getInstance()
+    {
+        if (instancePtr == NULL)
+        {
+            instancePtr = new Crowd();
+            instancePtr->Init();
+            return instancePtr;
+        }
+        else
+        {
+            return instancePtr;
+        }
+    }
+
+    void Update(float deltaTime);
+    int AddAgent(const float* position);
+    void RemoveAgent(int agentIndex);
+    void SetAgentTarget(int agentIndex, const float* target);
+    void SetAgentMaxSpeed(int agentIndex, float speed);
+    void SetAgentMaxAcceleration(int agentIndex, float acceleration);
+    void SetAgentParameters(int agentIndex, const dtCrowdAgentParams& param);
+    int GetAgentCount() const;
+    const float* GetAgentPosition(int agentIndex) const;
+    const float* GetAgentVelocity(int agentIndex) const;
+    glm::vec3 GetAgentPositionVec(int agentIndex) const;
+    glm::vec3 GetAgentVelocityVec(int agentIndex) const;
+
+    void Init();
+    void CleanUp();
+
+    dtCrowd& getCrowd() { return *m_crowd; };
+    
+private:
+    Crowd();
+    ~Crowd();
+    dtCrowd* m_crowd;
+    dtCrowdAgentParams m_agentParams;
+    std::vector<int> m_agents;
+};

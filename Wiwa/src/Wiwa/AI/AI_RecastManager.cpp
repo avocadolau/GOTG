@@ -230,6 +230,15 @@ namespace Wiwa
 		rcCalcGridSize(minBounds, maxBounds, cellSize, sizeX, sizeZ);
 	}
 
+	dtNavMesh* RecastManager::getNavMesh()
+	{
+		if (m_RecastMesh)
+		{
+			return m_RecastMesh->getNavMesh();
+		}
+		return nullptr;
+	}
+
 	void RecastManager::Cleanup()
 	{
 		if (m_RecastMesh)

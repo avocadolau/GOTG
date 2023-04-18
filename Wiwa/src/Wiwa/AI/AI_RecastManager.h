@@ -29,5 +29,7 @@ namespace Wiwa
 		static void Cleanup();
 
 		static void CalcGridSize(const float* minBounds, const float* maxBounds, float cellSize, int* sizeX, int* sizeZ);
+
+		static dtNavMesh* getNavMesh();
 	};
 }
