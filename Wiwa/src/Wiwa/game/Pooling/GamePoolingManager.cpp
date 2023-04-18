@@ -14,6 +14,7 @@ namespace Wiwa
 		s_SimpleBulletsPool = new EntityPool(4, 1, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
 		s_SentinelExplosion = new EntityPool(5, 3, "assets\\enemy\\explosions\\test_explosion_3.wiprefab");
 		s_BossUltron = new EntityPool(6, 1, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
+		s_ClusterBulletsPool = new EntityPool(7,3, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab"); // temporary
 	}
 
 	GamePoolingManager::~GamePoolingManager()
@@ -22,8 +23,9 @@ namespace Wiwa
 		delete s_PhalanxRangedPool;
 		delete s_SentinelPool;	
 		delete s_SimpleBulletsPool;
-		delete s_SentinelExplosion;	
+		delete s_SentinelExplosion;
 		delete s_BossUltron;
+		delete s_ClusterBulletsPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -34,6 +36,7 @@ namespace Wiwa
 		s_SimpleBulletsPool->SetScene(scene);
 		s_SentinelExplosion->SetScene(scene);
 		s_BossUltron->SetScene(scene);
+		s_ClusterBulletsPool->SetScene(scene);
 	}
 
 
@@ -59,7 +62,9 @@ namespace Wiwa
 		case 6:
 			LoadBossUltronPool(scene);
 			break;
-		
+		case 7:
+			LoadClusterBulletPool(scene);
+			break;
 		default:
 			break;
 		}
@@ -86,7 +91,9 @@ namespace Wiwa
 		case 6:
 			UnloadBossUltronPool();
 			break;
-		
+		case 7:
+			UnloadClusterBulletPool();
+			break;
 		default:
 			break;
 		}
@@ -166,6 +173,20 @@ namespace Wiwa
 	void GamePoolingManager::UnloadBossUltronPool()
 	{
 		s_BossUltron->ReleaseAllPools();
+	}
+
+	void GamePoolingManager::LoadClusterBulletPool(Scene* scene)
+	{
+		s_ClusterBulletsPool->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_ClusterBulletsPool->getMaxSize());
+		for (int i = 0; i < s_ClusterBulletsPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_ClusterBulletsPool->getPath());
+		s_ClusterBulletsPool->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadClusterBulletPool()
+	{
+		s_ClusterBulletsPool->ReleaseAllPools();
 	}
 
 	void GamePoolingManager::LoadAllPools(Scene* scene)
