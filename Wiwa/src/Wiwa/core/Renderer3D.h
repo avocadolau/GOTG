@@ -86,7 +86,9 @@ namespace Wiwa {
 		~Renderer3D();
 
 		bool Init();
+		void PreUpdate();
 		void Update();
+		void PostUpdate();
 
 		void SetOption(Options option);
 		void DisableOption(Options option);

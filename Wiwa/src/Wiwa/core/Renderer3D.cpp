@@ -257,12 +257,23 @@ namespace Wiwa
 		return true;
 	}
 
+	void Renderer3D::PreUpdate()
+	{
+
+		RenderSkybox();
+	}
+
 	void Renderer3D::Update()
 	{
 		OPTICK_EVENT("Renderer 3D Update");
-		//RenderSkybox();
-		//once everything is rendered and passed by the hdr 
+
 		
+	}
+
+	void Renderer3D::PostUpdate()
+	{
+		//once everything is rendered and passed by the hdr 
+
 		Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 
 		if (cam == nullptr)
@@ -278,15 +289,16 @@ namespace Wiwa
 		for (unsigned int i = 0; i < amount; i++)
 		{
 			m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
-			if (first_iteration){
+			if (first_iteration) {
 				glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
 				first_iteration = false;
 			}
 			else {
-				if (horizontal)	{
+				if (horizontal) {
 					cam->vBlurBuffer->Bind(false);
-					cam->vBlurBuffer->BindTexture();	
-				}else {
+					cam->vBlurBuffer->BindTexture();
+				}
+				else {
 					cam->vBlurBuffer->Bind(false);
 					cam->hBlurBuffer->BindTexture();
 				}
@@ -298,21 +310,21 @@ namespace Wiwa
 		m_BlurShader->UnBind();
 		glEnable(GL_DEPTH_TEST);
 
-		 //3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
-		 //--------------------------------------------------------------------------------------------------------------------------
+		//3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+		//--------------------------------------------------------------------------------------------------------------------------
 		m_BloomShader->Bind();
-		
+
 		cam->frameBuffer->Bind(false);
 
-		glActiveTexture(GL_TEXTURE0);		
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
 
 
-		m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int) true);
-		m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"),5);
-		
+		m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int)true);
+		m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"), 5);
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		m_BloomShader->UnBind();
@@ -321,30 +333,30 @@ namespace Wiwa
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-	/*	TESTING overwrite text 0 with text 1 color
-		Bind the framebuffer object*/
-		//glBindFramebuffer(GL_READ_FRAMEBUFFER, cam->frameBuffer->getFBO());
+		/*	TESTING overwrite text 0 with text 1 color
+			Bind the framebuffer object*/
+			//glBindFramebuffer(GL_READ_FRAMEBUFFER, cam->frameBuffer->getFBO());
 
-		//// Set the source and destination textures
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
-		//glActiveTexture(GL_TEXTURE1);
-		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
+			//// Set the source and destination textures
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
 
-		//// Copy the content of texture 1 to texture 0
-		//glCopyImageSubData(
-		//	cam->vBlurBuffer->getColorTexture(), GL_TEXTURE_2D, 0, 0, 0, 0,
-		//	cam->frameBuffer->getColorBuffers()[0], GL_TEXTURE_2D, 0, 0, 0, 0,
-		//	cam->frameBuffer->getWidth(), cam->frameBuffer->getHeight(), 1
-		//);
+			//// Copy the content of texture 1 to texture 0
+			//glCopyImageSubData(
+			//	cam->vBlurBuffer->getColorTexture(), GL_TEXTURE_2D, 0, 0, 0, 0,
+			//	cam->frameBuffer->getColorBuffers()[0], GL_TEXTURE_2D, 0, 0, 0, 0,
+			//	cam->frameBuffer->getWidth(), cam->frameBuffer->getHeight(), 1
+			//);
 
-		//// Unbind the textures and framebuffer object
-		//glBindTexture(GL_TEXTURE_2D, 0);
-		//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
-		//glBindVertexArray(0);
+			//// Unbind the textures and framebuffer object
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+			//glBindVertexArray(0);
 
 
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
@@ -736,7 +748,7 @@ namespace Wiwa
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 				camera->frameBuffer->Bind(false);
-				glDepthFunc(GL_LEQUAL);
+				glDepthFunc(GL_ALWAYS);
 				Shader* shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
@@ -756,7 +768,7 @@ namespace Wiwa
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 				camera->frameBuffer->Bind(false);
-				glDepthFunc(GL_LEQUAL);
+				glDepthFunc(GL_ALWAYS);
 				Shader *shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());

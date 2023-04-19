@@ -4,6 +4,7 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
@@ -128,6 +129,8 @@ namespace Wiwa
 	void Scene::ModuleUpdate()
 	{
 		m_CameraManager->Update();
+
+		Application::Get().GetRenderer3D().RenderSkybox();
 
 		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
 		r2d.UpdateInstanced(this);
