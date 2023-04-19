@@ -16,6 +16,7 @@ namespace Wiwa
 		s_BossUltron = new EntityPool(6, 1, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 		s_ClusterBulletsPool = new EntityPool(7,3, "assets\\enemy\\cluster_bullet\\cluster_bullet.wiprefab"); 
 		s_UltronLaserBeamPool = new EntityPool(8, 1, "assets\\enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
+		s_Subjugator = new EntityPool(9, 3, "assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 	}
 
 	GamePoolingManager::~GamePoolingManager()
@@ -28,6 +29,7 @@ namespace Wiwa
 		delete s_BossUltron;
 		delete s_ClusterBulletsPool;
 		delete s_UltronLaserBeamPool;
+		delete s_Subjugator;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -40,6 +42,7 @@ namespace Wiwa
 		s_BossUltron->SetScene(scene);
 		s_ClusterBulletsPool->SetScene(scene);
 		s_UltronLaserBeamPool->SetScene(scene);
+		s_Subjugator->SetScene(scene);
 	}
 
 
@@ -70,6 +73,9 @@ namespace Wiwa
 			break;
 		case 8:
 			LoadUltronLaserBeamPool(scene);
+			break;
+		case 9:
+			LoadSubjugatorPool(scene);
 			break;
 		default:
 			break;
@@ -102,6 +108,9 @@ namespace Wiwa
 			break;
 		case 8:
 			UnloadUltronLaserBeamPool();
+			break;
+		case 9:
+			UnloadSubjugatorPool();
 			break;
 		default:
 			break;
@@ -212,6 +221,20 @@ namespace Wiwa
 		s_UltronLaserBeamPool->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadSubjugatorPool(Scene* scene)
+	{
+		s_Subjugator->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_Subjugator->getMaxSize());
+		for (int i = 0; i < s_Subjugator->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_Subjugator->getPath());
+		s_Subjugator->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadSubjugatorPool()
+	{
+		s_Subjugator->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		LoadPhalanxMeleePool(scene);
@@ -222,7 +245,7 @@ namespace Wiwa
 		LoadBossUltronPool(scene);
 		LoadClusterBulletPool(scene);
 		LoadUltronLaserBeamPool(scene);
-
+		LoadSubjugatorPool(scene);
 	}
 	void GamePoolingManager::UnloadAllPools()
 	{
@@ -234,5 +257,6 @@ namespace Wiwa
 		UnloadBossUltronPool();
 		UnloadClusterBulletPool();
 		UnloadUltronLaserBeamPool();
+		UnloadSubjugatorPool();
 	}
 }
