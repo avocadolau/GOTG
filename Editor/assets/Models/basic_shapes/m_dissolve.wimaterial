@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/dissolve","uniforms":{"u_Color":{"r":0.0,"g":0.9704641103744507,"b":0.884473443031311,"a":1.0},"u_DissolveAmount":0.5,"u_Texture":"library/default_texture.dds","u_DissolveTexture":"library/textures/t_perlin_noise.dds"}}

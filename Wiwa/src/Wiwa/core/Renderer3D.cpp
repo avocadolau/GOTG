@@ -107,6 +107,22 @@ namespace Wiwa
 		
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/base_color", basecolorShader);
 
+		ResourceId dissolveShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/dissolve");
+		Shader* dissolveShader = Wiwa::Resources::GetResourceById<Shader>(dissolveShaderId);
+		dissolveShader->Compile("resources/shaders/vfx/dissolve");
+
+		dissolveShader->addUniform("u_Color", UniformType::fVec4);
+		dissolveShader->addUniform("u_Texture", UniformType::Sampler2D);
+		dissolveShader->addUniform("u_DissolveAmount", UniformType::Float);
+		dissolveShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+
+
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/dissolve", dissolveShader);
+
+
+		//===========================================================================================================
+
 		// Normal Display Shader
 		m_NormalDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/normal_display");
 		m_NormalDisplayShader = Resources::GetResourceById<Shader>(m_NormalDisplayShaderId);
