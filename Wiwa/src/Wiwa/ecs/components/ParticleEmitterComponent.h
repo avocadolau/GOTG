@@ -109,8 +109,8 @@ namespace Wiwa {
 
 		glm::vec3	m_p_initialAngularVelocity;
 		bool		m_p_rangedAngularVelocity;
-		glm::vec3	m_p_minAngularVelocity;
-		glm::vec3	m_p_maxAngularVelocity;
+		glm::vec3	m_p_minInitialAngularVelocity;
+		glm::vec3	m_p_maxInitialAngularVelocity;
 
 		bool		m_p_rotationOverTime;
 		glm::vec3	m_p_rotationOverTimeStart;

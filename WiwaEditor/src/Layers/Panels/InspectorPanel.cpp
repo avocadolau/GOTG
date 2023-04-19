@@ -1153,10 +1153,10 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 				ImGui::Text("Min");
 				ImGui::SameLine();
-				ImGui::DragFloat3("##m_p_minAngularVelocity", &(emitter->m_p_minAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##m_p_minInitialAngularVelocity", &(emitter->m_p_minInitialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 				ImGui::Text("Max");
 				ImGui::SameLine();
-				ImGui::DragFloat3("##m_p_maxAngularVelocity", &(emitter->m_p_maxAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat3("##m_p_maxInitialAngularVelocity", &(emitter->m_p_maxInitialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			}
 			else
 			{
