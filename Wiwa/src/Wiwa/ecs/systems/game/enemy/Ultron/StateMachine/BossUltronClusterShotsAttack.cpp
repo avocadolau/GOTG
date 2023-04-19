@@ -19,7 +19,6 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
 
 		EntityId currentEnemy = enemy->GetEntity();
 
@@ -75,10 +74,6 @@ namespace Wiwa
 		// Set intial positions
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
 		Transform3D* enemyTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(enemy->GetEntity()));
-
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-		pman.EmitBatch(newBulletId);
 
 		if (!bulletTr || !enemyTr)
 			return &newBulletId;

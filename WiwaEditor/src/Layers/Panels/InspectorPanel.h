@@ -32,7 +32,9 @@ private:
 	void DrawAiAgentComponent(byte* data);
 	void DrawParticleSystemComponent(byte* data);
 	void DrawItemComponent(byte* data);
+
 public:
+
 	InspectorPanel(EditorLayer* instance);
 	virtual ~InspectorPanel();
 
@@ -50,7 +52,6 @@ public:
 		id = m_CurrentID;
 		return m_EntitySet;
 	}
-
 private:
 	
 	int m_CurrentID = 0;

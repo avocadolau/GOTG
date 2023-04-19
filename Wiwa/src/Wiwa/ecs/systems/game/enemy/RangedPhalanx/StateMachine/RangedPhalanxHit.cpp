@@ -16,13 +16,6 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
-		EntityId hitR_1 = em.GetChildByName(enemy->GetEntity(), "ER_Hit_1");
-		EntityId hitR_2 = em.GetChildByName(enemy->GetEntity(), "ER_Hit_2");
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-		pman.EmitBatch(hitR_1);
-		pman.EmitBatch(hitR_2);
-
 		animator->PlayAnimation("damage", false);
 	}
 

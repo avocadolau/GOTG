@@ -108,9 +108,6 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
 
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-		pman.EmitBatch(newBulletId);
 
 		if (!bulletTr || !playerTr)
 			return;

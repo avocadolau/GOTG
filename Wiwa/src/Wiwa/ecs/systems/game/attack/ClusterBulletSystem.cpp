@@ -113,9 +113,6 @@ void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId 
 	//Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
 	Transform3D* clusterBulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(simpleBullet));
 
-	ParticleManager& pman = this->getScene().GetParticleManager();
-
-	pman.EmitBatch(newBulletId);
 
 	if (!clusterBulletTr)
 		return;

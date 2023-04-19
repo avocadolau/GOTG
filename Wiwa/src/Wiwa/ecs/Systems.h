@@ -14,7 +14,7 @@
 // Game systems
 #include "systems/AgentAISystem.h"
 
-#include "systems/game/enemy/WaveSystem.h"
+//#include "systems/game/enemy/WaveSystem.h"
 
 #include "systems/game/enemy/EnemySystem.h"
 #include "systems/game/wave/WaveSystem.h"
@@ -36,8 +36,6 @@
 #include "systems/game/attack/GrootSeedsSystem.h"
 
 #include "systems/game/CharacterInventory.h"
-
-#include "systems/ParticleEmitterExecutor.h"
 
 #include "systems/game/items/RewardRoom.h"
 

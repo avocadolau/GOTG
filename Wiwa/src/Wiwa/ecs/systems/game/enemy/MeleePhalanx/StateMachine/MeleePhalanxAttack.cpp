@@ -95,15 +95,12 @@ namespace Wiwa
 	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::ParticleManager& pm = enemy->getScene().GetParticleManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
 		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
-
-		ParticleManager& pman = enemy->getScene().GetParticleManager();	
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 		if (selfStats != nullptr)
@@ -112,7 +109,6 @@ namespace Wiwa
 			{
 				GameStateManager::DamagePlayer(selfStats->Damage);
 				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId,"PE_Hurt");
-				pman.EmitBatch(pe_hurt);
 			}
 		}
 	}
