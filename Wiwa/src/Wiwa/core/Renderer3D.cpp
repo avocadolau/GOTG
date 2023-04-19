@@ -139,12 +139,25 @@ namespace Wiwa
 		Shader* dissolveShader = Wiwa::Resources::GetResourceById<Shader>(dissolveShaderId);
 		dissolveShader->Compile("resources/shaders/vfx/dissolve");
 
+		dissolveShader->addUniform("u_LifeTime", UniformType::Float);
 		dissolveShader->addUniform("u_Color", UniformType::fVec4);
 		dissolveShader->addUniform("u_Texture", UniformType::Sampler2D);
 		dissolveShader->addUniform("u_DissolveAmount", UniformType::Float);
 		dissolveShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/dissolve", dissolveShader);
+
+
+		ResourceId shieldShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/shield");
+		Shader* shieldShader = Wiwa::Resources::GetResourceById<Shader>(shieldShaderId);
+		shieldShader->Compile("resources/shaders/vfx/shield");
+
+		shieldShader->addUniform("u_LifeTime", UniformType::Float);
+		shieldShader->addUniform("u_Color", UniformType::fVec4);
+		shieldShader->addUniform("u_Texture", UniformType::Sampler2D);
+		shieldShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
 		//===========================================================================================================
 
 		// Normal Display Shader

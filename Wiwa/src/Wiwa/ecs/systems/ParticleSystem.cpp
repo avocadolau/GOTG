@@ -137,7 +137,7 @@ namespace Wiwa {
 					if (u_color != nullptr)
 						u_color->setData(color, UniformType::fVec4);
 
-					Uniform* u_life = m_Material->getUniform("u_DissolveAmount");
+					Uniform* u_life = m_Material->getUniform("u_LifeTime");
 					if (u_life != nullptr)
 						u_life->setData(particle.life_percentage, UniformType::Float);
 					// 
