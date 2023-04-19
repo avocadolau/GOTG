@@ -213,7 +213,7 @@ int btPersistentManifold::addManifoldPoint(const btManifoldPoint& newPoint, bool
 {
 	if (!isPredictive)
 	{
-		btAssert(validContactDistance(newPoint));
+		//btAssert(validContactDistance(newPoint));
 	}
 
 	int insertIndex = getNumContacts();

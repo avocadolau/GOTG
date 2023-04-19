@@ -21,6 +21,7 @@ namespace Wiwa {
 		m_BoneInfoMap = model->GetBoneInfoMap();
 		m_Loop = false;
 		m_HasFinished = false;
+		m_RootNode = new NodeData();
 		ReadMissingBones(animation, *model);		
 		ReadHeirarchyData(m_RootNode, model->getModelHierarchy(), glm::mat4(1.f));
 	}
@@ -51,8 +52,17 @@ namespace Wiwa {
 
 	Animation::~Animation()
 	{
+		for (std::vector<Bone*>::iterator item = m_Bones.begin(); item != m_Bones.end(); item++)
+		{
+			delete* item;
+			*item = nullptr;
+		}
 		m_Bones.clear();
+
+		delete m_RootNode;
+
 		m_BoneInfoMap.clear();
+		m_CalculatedBoneMatrices.clear();
 	}
 
 	Bone* Animation::FindBone(const std::string& name)
@@ -89,7 +99,7 @@ namespace Wiwa {
 		m_BoneInfoMap = boneInfoMap;
 	}
 
-	void Animation::ReadHeirarchyData(NodeData& dest, const ModelHierarchy* root, glm::mat4& parentTransform)
+	void Animation::ReadHeirarchyData(NodeData* dest, const ModelHierarchy* root, glm::mat4& parentTransform)
 	{
 		assert(root);		
 
@@ -100,14 +110,14 @@ namespace Wiwa {
 			m_BoneInfoMap[root->name].globalTransformation = globalTransform;
 		}
 
-		dest.name = root->name.data();
-		dest.transformation = root->Transformation;
-		dest.childrenCount = root->children.size();
+		dest->name = root->name.data();
+		dest->transformation = root->Transformation;
+		dest->childrenCount = root->children.size();
 
 		for (unsigned int i = 0; i < root->children.size(); i++) {
-			NodeData newData;
+			NodeData* newData = new NodeData();
 			ReadHeirarchyData(newData,root->children[i], globalTransform);
-			dest.children.push_back(newData);
+			dest->children.push_back(newData);
 		}
 	}
 	glm::mat4  Animation::CalculateGlobalTransform(const ModelHierarchy* bone, glm::mat4 parentTransform)
@@ -169,7 +179,7 @@ namespace Wiwa {
 		file.Write(&animation->m_Loop, sizeof(bool));
 
 		//save NodeAnim structure
-		animation->SaveNodeData(file, &animation->m_RootNode);
+		animation->SaveNodeData(file, animation->m_RootNode);
 
 		//save bone info map
 		size_t bone_index_size = animation->m_BoneInfoMap.size();
@@ -206,7 +216,7 @@ namespace Wiwa {
 
 		for (int i = 0; i < node->children.size(); i++)
 		{
-			SaveNodeData(file, &node->children[i]);
+			SaveNodeData(file, node->children[i]);
 		}
 	}
 
@@ -224,8 +234,9 @@ namespace Wiwa {
 
 		for (int i = 0; i < node->childrenCount; i++)
 		{
-			node->children.push_back(*LoadNodeData(file));
+			node->children.emplace_back(LoadNodeData(file));
 		}
+
 		return node;
 	}
 
@@ -238,17 +249,26 @@ namespace Wiwa {
 	
 	Animation* Animation::LoadWiAnimation(const char* filepath)
 	{
-
 		File file = Wiwa::FileSystem::OpenIB(filepath);
 		Animation* anim = new Animation();
 		//load name
 		size_t name_len;
 		file.Read(&name_len, sizeof(size_t));
+		if (name_len > 100)
+		{
+			WI_ERROR("ANIMATION: string length oversize -- LoadWiAnimation");
+			return nullptr;
+		}
 		anim->m_Name.resize(name_len);
 		file.Read(&anim->m_Name[0], name_len);
 		//load save path
 		size_t savep_len;
 		file.Read(&savep_len, sizeof(size_t));
+		if (savep_len > 500)
+		{
+			WI_ERROR("ANIMATION: string length oversize -- LoadWiAnimation");
+			return nullptr;
+		}
 		anim->m_SavePath.resize(savep_len);
 		file.Read(&anim->m_SavePath[0], savep_len);
 
@@ -259,7 +279,7 @@ namespace Wiwa {
 
 
 		//Load NodeAnim structure
-		anim->m_RootNode = *anim->LoadNodeData(file);
+		anim->m_RootNode = anim->LoadNodeData(file);
 
 		//save bone info map
 		size_t bone_index_size;

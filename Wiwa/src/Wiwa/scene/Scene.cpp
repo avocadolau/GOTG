@@ -7,20 +7,21 @@
 #include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
+#include <Wiwa/Dialog/DialogManager.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/AI/AIMapGeneration.h>
 
 namespace Wiwa
 {
-	Scene::Scene() : m_InstanceRenderer(40500)
+	Scene::Scene()
 	{
 		mMaxTimeEntering = 450;
 		mMaxTimeLeaving = 450;
 
-		// Initialize instance renderer with shader
-		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
-
 		m_GuiManager = new GuiManager();
 		m_GuiManager->Init(this);
+		m_DialogManager = new DialogManager();
+		m_DialogManager->Init(this);
 
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
@@ -45,6 +46,7 @@ namespace Wiwa
 		delete m_CameraManager;
 		delete m_LightManager;
 		delete m_GuiManager;
+		delete m_DialogManager;
 
 		// Clear entity manager
 		m_EntityManager.Clear();
@@ -95,6 +97,7 @@ namespace Wiwa
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
 			m_GuiManager->Update();
+			m_DialogManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -145,6 +148,9 @@ namespace Wiwa
 		m_PhysicsManager->DebugDrawWorld();
 		// m_PhysicsManager->LogBodies();
 
+		Wiwa::AIMapGeneration::DrawRect();
+		Wiwa::AIMapGeneration::DrawMinMaxRect();
+
 		if (!SceneManager::IsPlaying())
 		{
 			m_EntityManager.UpdateWhitelist();
@@ -161,6 +167,8 @@ namespace Wiwa
 
 	void Scene::Unload(bool unload_resources)
 	{
+		GameStateManager::s_PoolManager->UnloadAllPools();
+
 		Audio::StopAllEvents();
 		
 		// Sleep to wait till Audio thread stops all events
@@ -182,9 +190,20 @@ namespace Wiwa
 		m_CurrentState = SCENE_LEAVING;
 		m_TransitionTimer = 0;
 
-		//SceneChangeEvent event(scene);
-		//Action<Event&> action = { &Application::OnEvent, this };
-		//action(event);
+		SceneChangeEvent event(scene);
+		Action<Event&> action = { &Application::OnEvent, &Application::Get() };
+		action(event);
+	}
+
+	uint32_t Scene::CreateInstanceRenderer()
+	{
+		uint32_t id = m_InstanceRenderers.size();
+
+		m_InstanceRenderers.emplace_back(40500);
+
+		m_InstanceRenderers[id].Init("resources/shaders/instanced_tex_color");
+
+		return id;
 	}
 
 	void Scene::UpdateEnter()

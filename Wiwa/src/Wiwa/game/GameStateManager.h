@@ -3,26 +3,19 @@
 #include <Wiwa/core/Core.h>
 
 #include <Wiwa/ecs/EntityManager.h>
-#include <Wiwa/utilities/filesystem/FileSystem.h>
+#include <vector>
+#include "Items/Inventory.h"
 
 #include <Wiwa/ecs/components/game/Character.h>
-#include <Wiwa/ecs/components/game/enemy/Wave.h>
-
-#include <vector>
+#include <Wiwa/ecs/components/game/wave/Wave.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/game/Pooling/GamePoolingManager.h>
 
 typedef size_t SceneId;
 
 namespace Wiwa {
-	struct WavesSpawner
-	{
-		int maxEnemiesPerWave;
-		int maxWaveCount;
-		int currentWaveCount;
-		float timeBetweenWaves;
-		bool hasFinished;
-		bool hasTriggered;
-		int spawnOffset;
-	};
+	class GamePoolingManager;
+	class AchivementsManager;
 	struct DefaultCharacterSettings
 	{
 		int MaxHealth;
@@ -71,6 +64,14 @@ namespace Wiwa {
 		size_t id;
 	};
 
+	enum class ItemType : uint8_t
+	{
+		ABILITY = 0,
+		PASSIVE = 1,
+		BUFF = 2,
+		CONSUMABLE = 3
+	};
+	
 	class WI_API GameStateManager {
 	private:
 		static RoomType s_RoomType;
@@ -102,14 +103,18 @@ namespace Wiwa {
 		static void EndRun();
 		static void InitHub();
 		static void InitPlayerData();
+
+		static void Update();
 		static void Die();
+		static struct Character* GetPlayerCharacterComp();
+		static void DamagePlayer(uint32_t damage);
 		static void StartNewRoom();
 		static void SetPlayerId(EntityId id, Scene* scene);
 		static void EndCurrentRoom();
 
-		inline static void SetRoomType(RoomType type) { s_RoomType = type; }
-		inline static void SetRoomState(RoomState type) { s_RoomState = type; }
-		inline static RoomType GetType() { return s_RoomType; }
+		WI_HARD_INL static void SetRoomType(RoomType type) { s_RoomType = type; }
+		WI_HARD_INL static void SetRoomState(RoomState type) { s_RoomState = type; }
+		WI_HARD_INL static RoomType GetType() { return s_RoomType; }
 
 		static void LogRoomState();
 		static const char* GetRoomState();
@@ -126,12 +131,28 @@ namespace Wiwa {
 
 		static int NextRoom();
 
-
+		static void CleanUp();
 
 		static void SerializeData();
 		static void DeserializeData();
+		/// <summary>
+		/// Spawns a random item of a given type in a given location
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
+		static void SpawnRandomItem(glm::vec3 position, uint8_t type);
+		/// <summary>
+		/// Spawns a given item of a given type in a given location
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
+		/// <param name="name"></param>
+		static void SpawnItem(glm::vec3 position, uint8_t type, const char* name);
 
-
+		WI_HARD_INL static class Transform3D* GetPlayerTransform();
+		WI_HARD_INL static Inventory& GetPlayerInventory() { return *s_PlayerInventory; }
+		WI_HARD_INL static Scene* GetCurrentScene() { return s_CurrentScene; }
+		WI_HARD_INL static EntityId GetPlayerId() { return s_PlayerId; }
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
@@ -153,5 +174,18 @@ namespace Wiwa {
 		static EntityId s_PlayerId;
 
 		static Scene* s_CurrentScene;
+
+		static Inventory* s_PlayerInventory;
+
+		static AchivementsManager* s_AchivementsManager;
+
+		static int s_EnemyDropChances;
+		static int s_ActiveSkillChances;
+		static int s_BuffChances;
+		static int s_PassiveSkillChances;
+		static int s_NPCRoomChances;
+		
+	public:
+		static GamePoolingManager* s_PoolManager;
 	};
 }

@@ -295,5 +295,23 @@ namespace Wiwa {
 			return ret;
 
 		}
+
+		inline float Repeat(float t, float length)
+		{
+			return std::clamp(t - std::floor(t / length) * length, 0.0f, length);
+		}
+
+		inline float LerpAngle(float a, float b, float t)
+		{
+			float delta = Repeat((b - a), 360);
+			if (delta > 180)
+				delta -= 360;
+			return a + delta * std::clamp(t, 0.0f, 1.0f);
+		}
+
+		inline glm::vec3 GetWorldPosition(glm::mat4& mat)
+		{
+			return glm::vec3(mat[3]);
+		}
 	}
 }

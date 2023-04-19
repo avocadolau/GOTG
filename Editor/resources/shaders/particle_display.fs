@@ -12,6 +12,8 @@ in vec2 texCoord;
 // Gets the Texture Unit from the main function
 uniform sampler2D u_Texture;
 
+// Gets the color from the main function
+uniform vec3 u_ColorP;
 
 void main()
 {
@@ -19,5 +21,6 @@ void main()
     
     if(texColor.a < 0.1)
         discard;
-    FragColor = texColor;
+
+    FragColor = vec4(texColor.rgb * u_ColorP, texColor);
 }

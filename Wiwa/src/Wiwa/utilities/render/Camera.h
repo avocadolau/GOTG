@@ -3,6 +3,7 @@
 #include <Wiwa/core/Core.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/utilities/math/Frustum.h>
 #include <Wiwa/utilities/render/FrameBuffer.h>
@@ -61,6 +62,9 @@ namespace Wiwa {
 
 		void setPosition(const glm::vec3 position);
 		void setFront(const glm::vec3 front);
+
+		glm::vec3 ScreenToWorlPosition(glm::vec2 screenPos, float intersection_Y);
+		glm::vec2 GetNormalizedScreenPos(glm::vec2 screenPos);
 
 
 		inline glm::vec3 getPosition() { return m_CameraPos; }

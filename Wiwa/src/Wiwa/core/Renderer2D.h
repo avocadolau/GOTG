@@ -31,6 +31,11 @@ namespace Wiwa
 	class WI_API Renderer2D
 	{
 	public:
+		struct InstanceData {
+			uint32_t instance_id;
+			uint32_t renderer_id;
+		};
+
 		enum class Pivot
 		{
 			UPLEFT,
@@ -45,6 +50,7 @@ namespace Wiwa
 
 		Camera m_ActiveCamera;
 
+		uint32_t getInstanceRenderer(Scene* scene, uint32_t textureId);
 	public:
 		Renderer2D();
 		~Renderer2D();
@@ -59,22 +65,23 @@ namespace Wiwa
 		void Close();
 
 		// Instance rendering functions
-		uint32_t CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot = Pivot::CENTER);
-		uint32_t CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot = Pivot::CENTER);
-		uint32_t CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot = Pivot::CENTER);
+		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot = Pivot::CENTER, const float rotation = 0.f);
+		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot = Pivot::CENTER, const float rotation = 0.f);
+		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot = Pivot::CENTER, const float rotation = 0.f);
 
-		void RemoveInstance(Scene *scene, uint32_t instance);
-		void EnableInstance(Scene *scene, uint32_t instance);
-		void DisableInstance(Scene *scene, uint32_t instance);
-		void SetInstanceEnabled(Scene *scene, uint32_t instance, bool enabled);
+		void RemoveInstance(Scene *scene, InstanceData instance);
+		void EnableInstance(Scene *scene, InstanceData instance);
+		void DisableInstance(Scene *scene, InstanceData instance);
+		void SetInstanceEnabled(Scene *scene, InstanceData instance, bool enabled);
 
-		void UpdateInstancedQuadTexPosition(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
-		void UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
-		void UpdateInstancedQuadTexClip(Scene* scene, uint32_t id, const Size2i& srcSize, const Rect2i& clip);
-		void UpdateInstancedQuadTexTexture(Scene* scene, uint32_t id, uint32_t tex_id);
-		void UpdateInstancedQuadTexColor(Scene* scene, uint32_t id, const Color4f& color);
+		void UpdateInstancedQuadTexPosition(Scene *scene, InstanceData id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
+		void UpdateInstancedQuadTexRotation(Scene* scene, InstanceData id, const float rotation);
+		void UpdateInstancedQuadTexSize(Scene* scene, InstanceData id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		void UpdateInstancedQuadTexClip(Scene* scene, InstanceData id, const Size2i& srcSize, const Rect2i& clip);
+		void UpdateInstancedQuadTexTexture(Scene* scene, InstanceData& id, uint32_t tex_id);
+		void UpdateInstancedQuadTexColor(Scene* scene, InstanceData id, const Color4f& color);
 
-		void UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color);
+		void UpdateInstancedQuad(Scene* scene, InstanceData id, const Vector2i &position, const Size2i &size, const Color4f &color);
 
 		void UpdateInstanced(Scene *scene);
 

@@ -15,7 +15,9 @@ namespace Wiwa {
 		glm::vec2 nextPos;
 
 		glm::vec2 m_DirectionPoint;
+		glm::vec2 m_RotDirectionPoint = glm::vec2{0,0};
 		bool m_IsMoving = false;
+		bool m_IsRotatingByTile = true;
 
 	public:
 		AgentAISystem();
@@ -40,6 +42,20 @@ namespace Wiwa {
 		void StopMoving();
 
 		bool HasPath();
+
+		void AllowRotationByTile() { m_IsRotatingByTile = true; }
+
+		void DisableRotationByTile() { m_IsRotatingByTile = false; }
+
+		void LookAtPosition(glm::vec2 direction_point);
+
+		void RotateAgent(const float distance, const AgentAI& agent, const glm::vec2& position, Transform3D* transform);
+
+		void DrawPath();
+		
+		inline size_t GetPathSize() { return lastPath.size(); };
+
+		bool HasArrived();
 	};
 }
 

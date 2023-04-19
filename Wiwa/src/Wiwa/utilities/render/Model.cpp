@@ -89,7 +89,11 @@ namespace Wiwa {
 				mat_path += name.C_Str();
 				mat_path += ".wimaterial";
 
-				ResourceId matID = Resources::Load<Material>(mat_path.string().c_str());
+				ResourceId matID = -1;
+
+				if(Resources::Import<Material>(mat_path.string().c_str()))
+					matID = Resources::Load<Material>(mat_path.string().c_str());
+
 				if (matID == -1)
 				{
 					Material material; // Default settings
@@ -186,12 +190,12 @@ namespace Wiwa {
 
 			for (unsigned int i = 0; i < scene->mNumAnimations; i++)
 			{
-				Animation* anim = new Animation(scene->mAnimations[i], this);
-				anim->SaveWiAnimation(anim, file);
+				std::shared_ptr<Animation> anim = std::make_shared<Animation>(scene->mAnimations[i], this);
+				anim->SaveWiAnimation(anim.get(), file);
 				animator->m_Animations.push_back(anim);
 			}
 
-			Animator::SaveWiAnimator(animator,file);
+			Animator::SaveWiAnimator(*animator,file);
 			delete animator;
 		}
 
@@ -808,11 +812,9 @@ namespace Wiwa {
 			}
 		}
 		else {
-			this;
 			glBindVertexArray(vao);
 			glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
-		
 		}
 	}
 

@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	2709296900	menu_song			\Default Work Unit\menu_song	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	339486545	menu_song	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Menu\menu_song_914A974D.wem		\Actor-Mixer Hierarchy\Default Work Unit\Menu\menu_song		19450328
-

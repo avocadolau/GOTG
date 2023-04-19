@@ -31,13 +31,19 @@ namespace Wiwa {
 
 		void Play();
 
-		void PlayAnimation(std::string name);
+		void PlayAnimation(std::string name, bool loop);
 
-		void Blend(std::string targetAnim, float blendTime);
+		void Blend(std::string targetAnim, bool loop, float transitionTime);
+
+		void LoopAnimation(bool loop);
+
+		bool HasFinished();
 
 		void SetAnimationSate(Wiwa::AnimationState state);
 
 		void Restart();
+
+		const std::string GetCurrentAnimName();
 	};
 }
 

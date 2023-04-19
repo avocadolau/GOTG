@@ -62,7 +62,6 @@ void GamePanel::Draw()
 
     if (cameraManager.getCameraSize() > 0)
     {
-        uint32_t cbt = Wiwa::Application::Get().GetRenderer2D().getColorBufferTexture();
 
         ImTextureID tex = (ImTextureID)(intptr_t)Wiwa::RenderManager::getColorTexture();
 

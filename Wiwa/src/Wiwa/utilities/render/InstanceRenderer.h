@@ -9,7 +9,7 @@
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/core/Renderer2D.h>
 
-#define MAX_INSTANCE_TEXTURES 16
+#define MAX_INSTANCE_TEXTURES 32
 
 namespace Wiwa {
 	class WI_API InstanceRenderer {
@@ -38,7 +38,8 @@ namespace Wiwa {
 		void Update();
 		void Render(glm::mat4& proj, glm::mat4& view);
 
-		uint32_t AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
+		uint32_t AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER, float rotation = 0.f);
+		uint32_t AddInstance(VertexInstanceTexture& data);
 
 		void UpdateInstance(uint32_t id, const Vector2i& position, const Size2i& size, const Color4f& color, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
 		
@@ -47,6 +48,10 @@ namespace Wiwa {
 		void UpdateInstanceTexture(uint32_t id, uint32_t textureId);
 		void UpdateInstanceClip(uint32_t id, const TextureClip& clip);
 		void UpdateInstanceColor(uint32_t id, const Color4f& color);
+		void UpdateInstanceRotation(uint32_t id, float rotation);
+
+		VertexInstanceTexture& getInstanceData(uint32_t id) { return m_InstanceVertex[id]; }
+		void setInstanceData(uint32_t id, VertexInstanceTexture& data) { m_InstanceVertex[id] = data; }
 
 		int AddTexture(uint32_t texture);
 

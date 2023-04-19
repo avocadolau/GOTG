@@ -29,15 +29,15 @@ namespace Wiwa
 	void GuiCanvas::SwapActive()
 	{
 		active = !active;
-		for (size_t i = 0; i < controls.size(); i++)
+		for (int i = 0; i < controls.size(); i++)
 		{
 			controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
 		}
 	}
 
-	void GuiCanvas::SelectElement(size_t id)
+	void GuiCanvas::SelectElement(int id)
 	{
-		for (size_t i = 0; i < controlsForSelection.size(); i++)
+		for (int i = 0; i < controlsForSelection.size(); i++)
 		{
 			if (i == id)
 			{
@@ -65,30 +65,31 @@ namespace Wiwa
 		{
 			DpadUp = false;
 			idGuiSelected++;
-			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
-			{
-				Audio::PostEvent("pause_sound");
-			}
 			if (idGuiSelected >= controlsForSelection.size())
 			{
 				idGuiSelected = 0;
+			}
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
 			}
 		}
 		if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
 		{
 			DpadDown = false;
 			idGuiSelected--;
-			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
-			{
-				Audio::PostEvent("pause_sound");
-			}
 			if (idGuiSelected <= -1)
 			{
 				idGuiSelected = controlsForSelection.size() - 1;
 			}
+			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("pause_sound");
+			}
 		}
 		if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
 		{
+			
 			SelectElement(idGuiSelected);
 
 		}

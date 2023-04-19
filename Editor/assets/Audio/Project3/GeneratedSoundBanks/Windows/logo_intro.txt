@@ -1,6 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
-	3785327939	logo_intro			\Default Work Unit\logo_intro	
+	3785327939	logo_intro			\Default Work Unit\hud\logo_intro	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	950593736	logo_intro	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Menu\logo_intro_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Menu\logo_intro		1710432
+	734765540	game_intro	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\scene_events\game_intro_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\game_intro		25754496
 

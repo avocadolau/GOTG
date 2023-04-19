@@ -28,18 +28,21 @@ namespace Wiwa {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_RED);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_RED);
+	
 		glTexImage2D(
 			GL_TEXTURE_2D,
 			0,
-			GL_ALPHA,
+			GL_RED,
 			width,
 			height,
 			0,
-			GL_ALPHA,
+			GL_RED,
 			GL_UNSIGNED_BYTE,
 			data);
-		
-	
+
 
 
 		m_ImageSize.x = w;

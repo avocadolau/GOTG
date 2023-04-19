@@ -2142,6 +2142,76 @@ Content provided by Vincent Gagnon
 								<ActiveSource Name="DENIED 03" ID="{92EECB7A-08E8-401B-A8ED-E1E418D246E3}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
+						<Folder Name="New" ID="{B8E28B58-E6A0-4258-AC91-53D9A3EB229B}" ShortID="433526595">
+							<ChildrenList>
+								<Sound Name="sound_dialog_start" ID="{A0E680D6-628E-4E8D-B5D5-7E409042F705}" ShortID="1025103937">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="sound_dialog_start" ID="{5EC757BD-B71C-44DF-88CC-611393152D63}">
+											<Language>SFX</Language>
+											<AudioFile>sound_dialog_start.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="696338629"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="sound_dialog_start" ID="{5EC757BD-B71C-44DF-88CC-611393152D63}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="ui_action_accepted" ID="{269331CD-2069-4F5A-86CD-EEEAFF6C282A}" ShortID="162066288">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="ui_action_accepted" ID="{24B76D89-9EE9-40AE-9C40-D05318DAA904}">
+											<Language>SFX</Language>
+											<AudioFile>ui_action_accepted.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="545172717"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="ui_action_accepted" ID="{24B76D89-9EE9-40AE-9C40-D05318DAA904}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="ui_action_denied" ID="{63E4A29A-F100-41ED-A21E-EEC8261F07CA}" ShortID="439664167">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="ui_action_denied" ID="{F7003188-4867-4B9A-AA39-8C3589050A42}">
+											<Language>SFX</Language>
+											<AudioFile>ui_action_denied.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="69301618"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="ui_action_denied" ID="{F7003188-4867-4B9A-AA39-8C3589050A42}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="SFX" ID="{3DB737F0-EA3C-4EFE-9744-4CB5B432D997}" ShortID="630299464">
@@ -9089,6 +9159,13 @@ Content provided by Vincent Gagnon
 						<Folder Name="Footsteps" ID="{022F02A4-ECE6-4C12-991E-5D2E9C99AC52}" ShortID="33812279">
 							<ChildrenList>
 								<RandomSequenceContainer Name="default_footsteps_random" ID="{0DD4C1C8-B173-4CD7-8A86-BA99C55D9B35}" ShortID="359050428">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -9300,6 +9377,318 @@ Content provided by Vincent Gagnon
 								<ActiveSource Name="Sci_Fi_Shot_Element" ID="{46DAAB2F-0932-4B46-9AA4-6B4F15ED6006}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
+						<Folder Name="Misc" ID="{45DFF28A-BD71-4807-8C43-3496287DA7EA}" ShortID="1060046309">
+							<ChildrenList>
+								<Sound Name="barrel_explosion" ID="{03F9593D-EAD9-48F0-8DA5-9C19E3FB5E20}" ShortID="958606419">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="barrel_explosion" ID="{BD8F53C3-DD08-491B-B8A1-9DB905A81448}">
+											<Language>SFX</Language>
+											<AudioFile>barrel_explosion.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="105041362"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="barrel_explosion" ID="{BD8F53C3-DD08-491B-B8A1-9DB905A81448}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="bullet_hit" ID="{6590BC17-137B-4BC3-9071-20641EB6560A}" ShortID="890741646">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="bullet_hit" ID="{EF61CC27-2234-4177-BC30-1057D0234813}">
+											<Language>SFX</Language>
+											<AudioFile>bullet_hit.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="653486268"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="bullet_hit" ID="{EF61CC27-2234-4177-BC30-1057D0234813}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="bullet_hit_wall" ID="{90243584-2E1B-4369-AA95-1616DA8CD3C9}" ShortID="419849016">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="bullet_hit_wall" ID="{503B426D-E1D3-46A2-9FCA-3B1AC339AACA}">
+											<Language>SFX</Language>
+											<AudioFile>bullet_hit_wall.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="198507814"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="bullet_hit_wall" ID="{503B426D-E1D3-46A2-9FCA-3B1AC339AACA}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="bullte_hit_wall" ID="{6E017B17-C546-4719-9961-93195B49FC78}" ShortID="482121322">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="bullte_hit_wall" ID="{58B7C6B0-9830-4CFC-9AD9-4AD8B22C0D9D}">
+											<Language>SFX</Language>
+											<AudioFile>bullte_hit_wall.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="420640484"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="bullte_hit_wall" ID="{58B7C6B0-9830-4CFC-9AD9-4AD8B22C0D9D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="palyer_hit" ID="{2835FA08-E894-4CF3-894B-FF506C5CDCE4}" ShortID="61834696">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="palyer_hit" ID="{2FEB00BB-CE6C-4038-8CCD-20B0DA4EEAD0}">
+											<Language>SFX</Language>
+											<AudioFile>palyer_hit.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="258955352"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="palyer_hit" ID="{2FEB00BB-CE6C-4038-8CCD-20B0DA4EEAD0}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_melee_attack" ID="{028CA1BC-C361-40F6-AB0C-D6ABB88454DA}" ShortID="1054205744">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_melee_attack" ID="{3BEAD6C2-FA2F-4D64-95DF-EF448C3D7214}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_melee_attack.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="663097480"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_melee_attack" ID="{3BEAD6C2-FA2F-4D64-95DF-EF448C3D7214}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_melee_death" ID="{029C2206-FD14-4D4D-9151-117B5D2A7447}" ShortID="322888598">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_melee_death" ID="{C4DE9559-954D-498D-A4F3-939F021EC411}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_melee_death.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="158477839"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_melee_death" ID="{C4DE9559-954D-498D-A4F3-939F021EC411}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_melee_hit" ID="{2F3CF33F-71D8-4672-898E-D54A5E141758}" ShortID="608117392">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_melee_hit" ID="{DDB57F1B-39F6-44B2-A615-614F02301475}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_melee_hit.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="685077507"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_melee_hit" ID="{DDB57F1B-39F6-44B2-A615-614F02301475}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_melee_spawn" ID="{D38768CE-99BF-4A4E-8C19-105DDF72D6A1}" ShortID="458786134">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_melee_spawn" ID="{1EFBDCC3-2301-4671-999B-886807E15852}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_melee_spawn.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="848078969"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_melee_spawn" ID="{1EFBDCC3-2301-4671-999B-886807E15852}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_ranged_attack" ID="{706D54BF-DF81-473C-8AA8-244FFCB93732}" ShortID="703871690">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_ranged_attack" ID="{6ACB0D66-34E3-4808-82E2-2A93EE8BA94B}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_ranged_attack.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="940771860"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_ranged_attack" ID="{6ACB0D66-34E3-4808-82E2-2A93EE8BA94B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_ranged_death" ID="{C43774A7-739A-40D1-B5E8-C3890C4B0C2D}" ShortID="1055114997">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_ranged_death" ID="{8FCA5322-6CF5-4E9E-8BA8-F4A17D539682}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_ranged_death.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="991118371"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_ranged_death" ID="{8FCA5322-6CF5-4E9E-8BA8-F4A17D539682}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="phalanx_ranged_hit" ID="{9957D140-C773-44B2-81B5-4D525D7B3B26}" ShortID="401053268">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="phalanx_ranged_hit" ID="{AF89E75B-38CC-4005-9B76-96A24BCFEB64}">
+											<Language>SFX</Language>
+											<AudioFile>phalanx_ranged_hit.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="744035345"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="phalanx_ranged_hit" ID="{AF89E75B-38CC-4005-9B76-96A24BCFEB64}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="player_shoot" ID="{EF807C36-76F9-4AF8-8A5B-702C9F0C3523}" ShortID="87914329">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="player_shoot" ID="{A4E38B6A-8F6E-4127-8C79-4C61956F10D4}">
+											<Language>SFX</Language>
+											<AudioFile>player_shoot.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="355932145"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="player_shoot" ID="{A4E38B6A-8F6E-4127-8C79-4C61956F10D4}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="wave_start" ID="{E1D63CBE-D9C0-41B9-A37B-A9FB71C861C9}" ShortID="126031190">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="wave_start" ID="{2BFB5079-87DB-43B0-AF8C-C4FB65BB08DA}">
+											<Language>SFX</Language>
+											<AudioFile>wave_start.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="887822812"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="wave_start" ID="{2BFB5079-87DB-43B0-AF8C-C4FB65BB08DA}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="Instruments" ID="{B717E3BA-327D-4122-B62E-C5B36729E5BE}" ShortID="34790640">

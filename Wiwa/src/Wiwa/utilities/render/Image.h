@@ -20,7 +20,7 @@ namespace Wiwa {
 
 		bool CreateCheckerText();
 
-		uint32_t GetTextureId() { return m_TextureId; }
+		inline uint32_t GetTextureId() { return m_TextureId; }
 		int GetChannels() { return m_ImageChannels; }
 
 		int GetWidth() { return m_ImageSize.w; }

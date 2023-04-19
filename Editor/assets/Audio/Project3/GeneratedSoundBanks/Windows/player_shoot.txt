@@ -1,6 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
-	4004702906	player_shoot			\Default Work Unit\player_shoot	
+	4004702906	player_shoot			\Default Work Unit\player\player_shoot	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	253953353	starlord_shot	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapons\starlord_shot_3C816656.wem		\Actor-Mixer Hierarchy\Default Work Unit\Weapons\starlord_shot		60936
+	355932145	player_shoot	C:\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\player_shoot_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Misc\player_shoot		264696
 

@@ -4,6 +4,8 @@
 #include <Wiwa/Events/Event.h>
 #include "../../Events/PanelEvents.h"
 #include <FontIcons/IconsForkAwesome.h>
+#include <misc/cpp/imgui_stdlib.h>
+
 class EditorLayer;
 
 class Panel

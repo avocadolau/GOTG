@@ -14,7 +14,7 @@
 //#include "glew.h"
 
 AIMapBakingPanel::AIMapBakingPanel(EditorLayer* instance)
-	: Panel(" AI Map Baking", ICON_FK_MAGIC, instance)
+	: Panel("AI Map Baking", ICON_FK_MAGIC, instance)
 {
 	m_DrawGrid = true;
 }
@@ -82,6 +82,7 @@ void AIMapBakingPanel::Draw()
 	}
 
 	ImGui::Checkbox("Draw Map Grid", &m_DrawGrid);
+	Wiwa::AIMapGeneration::m_DebugDraw = m_DrawGrid;
 
 	if (m_DrawGrid)
 	{

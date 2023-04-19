@@ -2,13 +2,11 @@
 
 #include "Panel.h"
 
-#include "Wiwa/scene/Scene.h"
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/Ui/UiCanvas.h>
 #include <Wiwa/Ui/UiManager.h>
-#include <Wiwa/scene/SceneManager.h>
-#include "../../Utils/EditorUtils.h"
 #include "Wiwa/Events/ApplicationEvent.h"
+#include <glm/glm.hpp>
 
 enum class GuiType
 {
@@ -49,16 +47,19 @@ public:
 
 	void VectorEdit(std::vector<Wiwa::Rect2i> list);
 
+	void SetSizeByTexture(const char* file);
+
 	GuiType type;
 
 	int canvasSelected = -1;
 	int elementSelected = -1;
-	int position[2] = { 0,0 };
-	int size[2] = { 0,0 };
-	int originPos[2] = { 0,0 };
-	int originSize[2] = { 0,0 };
-	int sliderOriginPos[2] = { 0,0 };
-	int sliderOriginSize[2] = { 0,0 };
+	glm::ivec2 position;
+	glm::ivec2 size;
+	float rotation;
+	glm::ivec2 originPos;
+	glm::ivec2 originSize;
+	glm::ivec2 sliderOriginPos;
+	glm::ivec2 sliderOriginSize;
 	int callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
@@ -68,4 +69,5 @@ public:
 	bool animated = false;
 	float animSpeed = 0;
 	std::vector<Wiwa::Rect2i> animationRects;
+	EditorLayer* m_Instance;
 };

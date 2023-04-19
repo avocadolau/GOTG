@@ -7,7 +7,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(2, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
     [Callback]
@@ -15,7 +15,7 @@ namespace Wiwa
     {
         static void OnExecute()
         {
-            InternalCalls.ChangeSceneByIndex(1, (int)LoadFlags.LOAD_DEFAULT);
+            InternalCalls.ChangeSceneByIndex(0, (int)LoadFlags.LOAD_DEFAULT);
         }
     }
 
@@ -96,6 +96,36 @@ namespace Wiwa
         {
             //InternalCalls.SetVsyncIntr(ret);
             //Console.WriteLine($"slider actual level is :{level}");
+        }
+    }
+
+    [Callback]
+    class PlaceHolderButton
+    {
+        static void OnExecute()
+        {
+            //InternalCalls.SetVsyncIntr(ret);
+            //Console.WriteLine($"slider actual level is :{level}");
+        }
+    }
+
+    [Callback]
+    class ActivateOptionsMenu
+    {
+        static void OnExecute()
+        {
+            InternalCalls.ActivateGuiCanvas(0);
+            InternalCalls.ActivateGuiCanvas(1);
+        }
+    }
+
+    [Callback]
+    class DeActivateOptionsMenu
+    {
+        static void OnExecute()
+        {
+            InternalCalls.ActivateGuiCanvas(1);
+            InternalCalls.ActivateGuiCanvas(0);
         }
     }
 }

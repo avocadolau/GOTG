@@ -106,6 +106,48 @@ namespace Wiwa {
 		updateView();
 	}
 
+	glm::vec3 Camera::ScreenToWorlPosition(glm::vec2 screenPos, float intersection_Y)
+	{
+	
+		float ndcX = (2.0f * screenPos.x) / Application::Get().GetWindow().GetWidth() - 1.0f;
+		float ndcY = 1.0f - (2.0f * screenPos.y) / Application::Get().GetWindow().GetHeight();
+
+		//// Calculate world position at intersection_Y plane
+		//glm::vec3 rayOrigin = getPosition();
+		//glm::vec3 rayDirection = glm::normalize(glm::unProject(
+		//	glm::vec3(ndcX, ndcY, 1.0f),
+		//	getView(),
+		//	getProjection(),
+		//	glm::vec4(0, 0, Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight())
+		//) - rayOrigin);
+		//float t = (intersection_Y - rayOrigin.y) / rayDirection.y;
+		//glm::vec3 intersectionPoint = rayOrigin + t * rayDirection;
+		//return intersectionPoint;
+
+
+
+		//glm::vec4 ndc_coords(ndcX, ndcY, 0, 1);
+
+		//WI_INFO("ndc {0} {1}", ndcX, ndcY);
+
+		//// Transform to clip space
+		//glm::vec4 clip_coords = m_NearPlaneDist * ndc_coords;
+
+		//// Transform to world space
+		//glm::mat4 clip_to_world = glm::inverse(m_Projection* m_View);
+		//glm::vec4 world_coords = clip_to_world * clip_coords;
+
+		return  glm::vec3(ndcX,0,ndcY);
+	}
+
+	glm::vec2 Camera::GetNormalizedScreenPos(glm::vec2 screenPos)
+	{
+		float ndcX = (2.0f * screenPos.x) / Application::Get().GetWindow().GetWidth() - 1.0f;
+		float ndcY = 1.0f - (2.0f * screenPos.y) / Application::Get().GetWindow().GetHeight();
+		
+		return glm::vec2(ndcX,ndcY);
+	}
+
 	void Camera::lookat(const glm::vec3 position)
 	{
 		m_CameraFront = position - m_CameraPos;

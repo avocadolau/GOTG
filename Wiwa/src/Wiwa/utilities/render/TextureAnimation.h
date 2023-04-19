@@ -21,7 +21,7 @@ namespace Wiwa {
         AnimationParticles() {}
 
     public:
-        float speed = 1.0f;
+        /*float speedParticlesAnimation = 1.0f;*/
         std::vector<glm::vec4> frames;
         bool loop = true;
         // Allows the animation to keep going back and forth
@@ -62,15 +62,15 @@ namespace Wiwa {
             return !loop && !pingpong && loopCount > 0;
         }
 
-        void Update(double elapsedTimeParticles)
+        void Update(double elapsedTimeParticles, float speedParticles)
         {
-            std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
+           /* std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
             float elapsedSeconds = std::chrono::duration<float>(now - lastUpdate).count();
-            lastUpdate = now;
+            lastUpdate = now;*/
 
             for (int i = 0; i < creationTimes.size(); ++i)
             {
-                currentFrame = creationTimes[i] + speed * elapsedTimeParticles;
+                currentFrame = creationTimes[i] + speedParticles * elapsedTimeParticles;
                 if (currentFrame >= totalFrames)
                 {
                     currentFrame = (loop || pingpong) ? 0.0f : totalFrames - 1;

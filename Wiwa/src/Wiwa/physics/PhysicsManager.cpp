@@ -56,12 +56,8 @@ namespace Wiwa {
 
 		m_Debug_draw->setDebugMode(m_Debug_draw->DBG_MAX_DEBUG_DRAW_MODE);
 		m_World->setDebugDrawer(m_Debug_draw);
-		//m_World->(GRAVITY);
 
 		AddFilterTag("COLLISION_EVERYTHING");
-
-		//WI_INFO("Physics Manager Init");
-
 		return true;
 	}
 
@@ -76,26 +72,9 @@ namespace Wiwa {
 		//Step simulation
 		float dt = 1.0f / 60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
-		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
+		UpdateObjects(dt);
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
-
-		//static int o = 0;
-		//Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		//for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
-		//{
-		//	Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-		//	//SetRotation((*item), glm::vec3(transform3d->localRotation.x, o, transform3d->localRotation.z));
-		//	o++;
-		//}
-
-		// Commented because it causes clipping :(
-		/*for (int i = 0; i < SUB_STEPS; i++)
-		{
-			UpdateObjects(dt / SUB_STEPS);
-			m_World->performDiscreteCollisionDetection();
-			ResolveContacts();
-		}*/
 
 		return true;
 	}
@@ -230,9 +209,9 @@ namespace Wiwa {
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			// Get the position from the engine
-			glm::vec3 posEngine = transform3d->localPosition;
+			glm::vec3 posEngine = glm::vec3(transform3d->worldMatrix[3].x, transform3d->worldMatrix[3].y, transform3d->worldMatrix[3].z);
 			//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
-			glm::quat rotEngine = glm::quat(glm::radians(transform3d->localRotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
+			glm::quat rotEngine = glm::quat(glm::radians(transform3d->rotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
 			//glm::quat rotEngine = entityData->transform3d->rotation; old
 
 			// Get the offset
@@ -241,7 +220,7 @@ namespace Wiwa {
 
 			// Apply the offset because offset, it is internal only(collider wise)
 			btTransform offsettedCollider;
-			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d->localMatrix));
+			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d->worldMatrix));
 			offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
 			offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
 
@@ -257,21 +236,34 @@ namespace Wiwa {
 		// Physics to Engine
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
+			EntityId parent = entityManager.GetEntityParent((*item)->id);
+			Transform3D* parentT3d = entityManager.GetComponent<Wiwa::Transform3D>(parent);
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			btTransform bulletTransform((*item)->collisionObject->getWorldTransform());
-
+			
 			// Get the transform from physics world
 			btVector3 posBullet = bulletTransform.getOrigin();
 			btQuaternion rotationBullet = bulletTransform.getRotation();
 
 			glm::quat rotationEngine = glm::quat(rotationBullet.w(), rotationBullet.x(), rotationBullet.y(), rotationBullet.z());
 			glm::vec3 finalOffset = rotationEngine * rigidBody->positionOffset;
+			// Remove the offset because offset is internal only(collider wise)
 			glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
 
-			// Remove the offset because offset is internal only(collider wise)
-			transform3d->localPosition = posEngine;
+			// We only apply the transformation if there's a parent
+			if (parent != (*item)->id)
+			{
+				glm::mat4x4 worldMat;
+				bulletTransform.getOpenGLMatrix(&worldMat[0][0]);
+				glm::mat4x4 localMat = glm::inverse(parentT3d->worldMatrix) * worldMat;
+				transform3d->localPosition = glm::vec3(localMat[3].x, localMat[3].y, localMat[3].z);
+			}
+			else
+			{
+				transform3d->localPosition = posEngine;
+			}
 			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
 			//bulletTransform.setRotation(rotationBullet);
 
@@ -426,6 +418,12 @@ namespace Wiwa {
 		collision_object->setUserIndex2(1);
 		//collision_object->setCollisionFlags(rigid_body.)
 
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		myObjData->parentId = entityManager.GetEntityParent(id);
+		myObjData->parentTransformIt = entityManager.GetComponentIterator<Wiwa::Transform3D>(myObjData->parentId);
+		myObjData->transformIt = entityManager.GetComponentIterator<Wiwa::Transform3D>(id);
+		myObjData->collisionBodyIt = entityManager.GetComponentIterator<Wiwa::CollisionBody>(id);
+
 		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
 		int bits = 0;
 		bits |= (1 << rigid_body.selfTag);
@@ -559,6 +557,7 @@ namespace Wiwa {
 			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
 			m_World->debugDrawWorld();
+			
 			m_Debug_draw->lineDisplayShader->UnBind();
 			camera->frameBuffer->Unbind();
 		}
@@ -566,13 +565,6 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddFilterTag(const char* str)
 	{
-		/*if (filterStrings.size() == 32)
-			return false;
-
-		filterStrings.emplace_back(str);
-		std::bitset<MAX_BITS> bset;
-		bset.set(filterStrings.size(), true);
-		fliterBitsSets.push_back(bset);*/
 		int size = filterMapStringKey.size();
 		if (filterMapStringKey.size() == 32)
 			return false;
@@ -582,8 +574,6 @@ namespace Wiwa {
 	}
 	void PhysicsManager::RemoveFilterTag(const int index)
 	{
-		/*filterStrings.erase(filterStrings.begin() + index);
-		fliterBitsSets.erase(fliterBitsSets.begin() + index);*/
 		for (const auto& [key, value] : filterMapStringKey)
 		{
 			if (value == index)
@@ -774,21 +764,21 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 
 //void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 //{
-//	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-//	//GLfloat lineVertices[] = {
-//	//	from.x(), from.y(), from.z(),
-//	//	to.x(), to.y(), to.z()
-//	//};
-//	//glEnableClientState(GL_VERTEX_ARRAY);
-//	//glVertexPointer
-//	/*glUseProgram(0);
+//	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
+//	GLfloat lineVertices[] = {
+//		from.x(), from.y(), from.z(),
+//		to.x(), to.y(), to.z()
+//	};
+//	glEnableClientState(GL_VERTEX_ARRAY);
+//	glVertexPointer
+//	glUseProgram(0);
 //	glColor3f(255, 0, 0);
 //	glLineWidth(3.0f);
 //	glBegin(GL_LINES);
 //	glVertex3f(from.getX(), from.getY(), from.getZ());
 //	glVertex3f(to.getX(), to.getY(), to.getZ());
 //	glEnd();
-//	glLineWidth(1.0f);*/
+//	glLineWidth(1.0f);
 //
 //}
 

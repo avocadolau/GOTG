@@ -14,6 +14,7 @@
 namespace Wiwa {
 	class LightManager;
 	class GuiManager;
+	class DialogManager;
 
 
 	class WI_API Scene {
@@ -45,14 +46,15 @@ namespace Wiwa {
 
 		void SwapPauseActive() { pausedGame = !pausedGame; }
 
+		uint32_t CreateInstanceRenderer();
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
-		AIPathFindingManager& GetAIPathFindingManager() { return *m_AIPathFindingManager; }
-
+		std::vector<InstanceRenderer>& GetInstanceRenderers() { return m_InstanceRenderers; }
+		InstanceRenderer& GetInstanceRenderer(uint32_t index) { return m_InstanceRenderers[index]; }
 		LightManager& GetLightManager() { return *m_LightManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
-		InstanceRenderer& GetInstanceRenderer() { return m_InstanceRenderer; }
+		DialogManager& GetDialogManager() { return *m_DialogManager; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -71,15 +73,15 @@ namespace Wiwa {
 		EntityManager m_EntityManager;
 		CameraManager* m_CameraManager;
 		PhysicsManager* m_PhysicsManager;
-		AIPathFindingManager* m_AIPathFindingManager;
 		LightManager* m_LightManager;
 		GuiManager* m_GuiManager;
+		DialogManager* m_DialogManager;
 
 	public:
 	private:
-		InstanceRenderer m_InstanceRenderer;
+		std::vector<InstanceRenderer> m_InstanceRenderers;
 
-		uint32_t m_TransitionInstance;
+		Renderer2D::InstanceData m_TransitionInstance;
 
 		State m_CurrentState = SCENE_ENTERING;
 		size_t m_TransitionTimer = 0;

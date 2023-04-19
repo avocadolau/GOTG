@@ -36,6 +36,8 @@
 #include <Wiwa/render/RenderManager.h>
 
 #include <Wiwa/core/ProjectManager.h>
+#include <stdlib.h>
+#include <time.h>
 
 USE_REFLECTION;
 
@@ -45,6 +47,12 @@ namespace Wiwa
 
 	Application::Application(int argc, char **argv)
 	{
+		//Set up random seed
+		struct timespec ts;
+		timespec_get(&ts, TIME_UTC);
+		srand(((unsigned int)ts.tv_nsec));
+
+
 		WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 
 		REFLECTION_REGISTER();
@@ -77,9 +85,6 @@ namespace Wiwa
 		m_Renderer3D = new Renderer3D();
 		m_Renderer3D->Init();
 
-		m_Renderer2D = new Renderer2D();
-		m_Renderer2D->Init();
-
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
@@ -97,7 +102,7 @@ namespace Wiwa
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
-		Wiwa::GameStateManager::DeserializeData();
+		
 	}
 
 	void Application::SetHwInfo()
@@ -132,6 +137,7 @@ namespace Wiwa
 		RenderManager::Destroy();
 		ScriptEngine::ShutDown();
 		Audio::Terminate();
+		GameStateManager::CleanUp();
 	}
 
 	void Application::Run()
@@ -140,6 +146,12 @@ namespace Wiwa
 		while (m_Running)
 		{
 			OPTICK_FRAME("Application Loop");
+
+			if (FinishedImport)
+			{
+				FinishedImport = false;
+				Wiwa::GameStateManager::DeserializeData();
+			}
 
 			// Limit the frame time if needed
 			if (Time::IsFrameCap())
@@ -185,6 +197,8 @@ namespace Wiwa
 			}
 			m_ImGuiLayer->End();
 
+			GameStateManager::Update();
+			
 			// Update main window
 			m_Window->OnUpdate();
 			Time::PostUpdate();
@@ -428,8 +442,8 @@ namespace Wiwa
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>({&Application::OnWindowClose, this});
-		dispatcher.Dispatch<OnSaveEvent>({&Application::OnSave, this});
-		dispatcher.Dispatch<OnLoadEvent>({&Application::OnLoad, this});
+		dispatcher.Dispatch<OnSaveEvent>({ &Application::OnSave, this});
+		dispatcher.Dispatch<OnLoadEvent>({ &Application::OnLoad, this});
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{

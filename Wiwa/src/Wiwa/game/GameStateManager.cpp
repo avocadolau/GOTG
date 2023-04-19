@@ -1,20 +1,29 @@
 #include <wipch.h>
 #include "GameStateManager.h"
 #include "Wiwa/scene/SceneManager.h"
+#include "Items/ItemManager.h"
+#include <Wiwa/ecs/components/game/Character.h>
+#include "Achievements/AchievementsManager.h"
+#include <Wiwa/ecs/components/game/items/Item.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 
 namespace Wiwa
 {
 	RoomType GameStateManager::s_RoomType = RoomType::NONE;
 	RoomState GameStateManager::s_RoomState = RoomState::NONE;
+	
 	bool GameStateManager::s_HasFinshedRoom = false;
 	bool GameStateManager::s_CanPassNextRoom = false;
 	bool GameStateManager::s_PlayerTriggerNext = false;
+	
 	std::vector<GameEvent> GameStateManager::s_PreStartEvents;
 	std::vector<GameEvent> GameStateManager::s_MiddleEvents;
 	std::vector<GameEvent> GameStateManager::s_PostFinishedEvents;
+	
 	int GameStateManager::s_TotalSpawners = 0;
 	int GameStateManager::s_SpawnersFinished = 0;
 	bool GameStateManager::debug = true;
+	
 	SceneId GameStateManager::s_CurrentRoomIndx;
 	SceneId GameStateManager::s_RoomsToShop;
 	SceneId GameStateManager::s_RoomsToBoss;
@@ -22,16 +31,28 @@ namespace Wiwa
 	SceneId GameStateManager::s_LastCombatRoom;
 	SceneId GameStateManager::s_LastRewardRoom;
 	SceneId GameStateManager::s_LastShopRoom;
+	
 	std::vector<int> GameStateManager::s_CombatRooms;
 	std::vector<int> GameStateManager::s_RewardRooms;
 	std::vector<int> GameStateManager::s_ShopRooms;
+	
 	int GameStateManager::s_CurrentRoomsCount;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
+
 	int GameStateManager::s_CurrentCharacter = 0;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
 	EntityId GameStateManager::s_PlayerId = 0;
+	
+	int GameStateManager::s_ActiveSkillChances = 20;
+	int GameStateManager::s_BuffChances = 20;
+	int GameStateManager::s_PassiveSkillChances = 35;
+	int GameStateManager::s_NPCRoomChances = 25;
+	int GameStateManager::s_EnemyDropChances = 100;
+
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
+	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
+	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -65,6 +86,7 @@ namespace Wiwa
 
 		if(debug)
 			WI_CORE_INFO("Player progression saved");
+		s_PlayerInventory->Serialize(&doc);
 	}
 
 	void GameStateManager::LoadProgression()
@@ -103,6 +125,8 @@ namespace Wiwa
 		}
 		if (debug)
 			WI_CORE_INFO("Player progression loaded");
+		s_PlayerInventory->Deserialize(&doc);
+
 	}
 
 
@@ -126,10 +150,9 @@ namespace Wiwa
 	void GameStateManager::UpdateCombatRoom()
 	{
 		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		em.RegisterComponent<WavesSpawner>();
 		size_t size = 0;
-		ComponentHash cmpHash = FNV1A_HASH("WavesSpawner");
-		Wiwa::WavesSpawner* enemySpawnerList = (Wiwa::WavesSpawner*)em.GetComponentsByHash(cmpHash, &size);
+		Wiwa::WaveSpawner* enemySpawnerList = nullptr;
+		enemySpawnerList = em.GetComponents<WaveSpawner>(&size);
 
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
@@ -137,17 +160,17 @@ namespace Wiwa
 		{
 			for (int i = 0; i < size; i++)
 			{
-				if (em.IsComponentRemovedByHash(cmpHash, i)) {
+				if (em.IsComponentRemoved<WaveSpawner>(i)) {
 					//WI_INFO("Removed at: [{}]", i);
 				}
 				else
 				{
 					s_TotalSpawners += 1;
 
-					Wiwa::WavesSpawner* c = &enemySpawnerList[i];
-					if (c)
+					Wiwa::WaveSpawner* spawner = &enemySpawnerList[i];
+					if (spawner)
 					{
-						if (c->hasFinished)
+						if (spawner->hasFinished)
 							s_SpawnersFinished += 1;
 					}
 				}
@@ -174,6 +197,7 @@ namespace Wiwa
 	{
 		if (debug) WI_INFO("GAME STATE: EndRun()");
 		SetRoomType(RoomType::NONE);
+		s_PlayerInventory->Clear();
 	}
 
 	void GameStateManager::InitHub()
@@ -186,16 +210,15 @@ namespace Wiwa
 		s_CurrentRoomsCount = 3;
 		s_RoomsToBoss = 20;
 		s_RoomsToShop = 10;
+
 	}
 
 	void GameStateManager::InitPlayerData()
 	{
 		if (debug)
 			WI_CORE_INFO("Init progression");
-	
-		EntityManager& em = s_CurrentScene->GetEntityManager();
-		EntityManager::ComponentIterator it = em.GetComponentIterator<Character>(s_PlayerId);
-		Character* character = (Character*)em.GetComponentByIterator(it);
+		Character* character = GetPlayerCharacterComp();
+		
 		JSONDocument doc("config/room_data.json");
 		if (!character)
 		{
@@ -237,16 +260,60 @@ namespace Wiwa
 			WI_CORE_INFO("Player init loaded");
 	}
 
+	void GameStateManager::Update()
+	{
+		s_PlayerInventory->Update();
+	}
+
 	void GameStateManager::Die()
 	{
 		if (debug)
-			WI_CORE_INFO("Player dead");
-		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		gm.canvas.at(0)->SwapActive(); //Swap active of normal HUD canvas
-		gm.canvas.at(3)->SwapActive(); //Activate death UI
-		SceneManager::PauseCurrentScene();
+			WI_CORE_INFO("Player dead");		
+		EndRun();
+	}
+
+	Character* GameStateManager::GetPlayerCharacterComp()
+	{
+		EntityManager& em = s_CurrentScene->GetEntityManager();
+		EntityManager::ComponentIterator it = em.GetComponentIterator<Character>(s_PlayerId);
+		return (Character*)em.GetComponentByIterator(it);
+	}
+
+	void GameStateManager::DamagePlayer(uint32_t damage)
+	{
+		Wiwa::GuiManager& gm = s_CurrentScene->GetGuiManager();
+		Character* character = GetPlayerCharacterComp();
+		if (!character)
+		{
+			WI_CORE_CRITICAL("Player can't take damage because character is nullptr");
+			return;
+		}
+		// The damage from this function doesn't expand to the health
+		// this means that if there's remaining shield the damage doesn't apply
+		// to the health even when this surpases the shield ammount
+
+		// If there's no shield we take damage from the health
 		
-		//TODO: @Alejandro Pop the deadth menu
+		if (character->Shield <= 0)
+		{
+			character->Health -= damage;
+			if (character->Health <= 0)
+			{
+				Die();
+			}
+			return;
+		}
+		
+		
+		if (character->Shield > 0)
+		{
+			character->Shield -= damage;
+		}
+
+		if (character->Shield <= 0)
+			character->Shield = 0;
+
+
 	}
 
 	void GameStateManager::StartNewRoom()
@@ -300,8 +367,6 @@ namespace Wiwa
 	void GameStateManager::ResetCombatRoomData()
 	{
 		if (debug) WI_INFO("GAME STATE: ResetCombatRoomData()");
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		em.RegisterComponent<WavesSpawner>();
 		s_TotalSpawners = 0;
 		s_SpawnersFinished = 0;
 	}
@@ -332,12 +397,12 @@ namespace Wiwa
 	int GameStateManager::NextRoom()
 	{
 		WI_INFO("ROOM STATE: NextRoom()");
-		if (s_CurrentRoomsCount > s_RoomsToShop)
-		{
-			GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-			SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
-			return 1;
-		}
+		//if (s_CurrentRoomsCount > s_RoomsToShop)
+		//{
+		//	GameStateManager::SetRoomType(RoomType::ROOM_HUB);
+		//	SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
+		//	return 1;
+		//}
 
 		RoomType type = GameStateManager::GetType();
 		switch (type)
@@ -438,11 +503,27 @@ namespace Wiwa
 		
 	}
 
+	void GameStateManager::CleanUp()
+	{
+		WI_INFO("Game state manager clean up");
+		delete s_PlayerInventory;
+		s_RewardRooms.clear();
+		s_CombatRooms.clear();
+		s_ShopRooms.clear();
+		delete s_PoolManager;
+	}
 
 
 	void GameStateManager::SerializeData()
 	{
 		JSONDocument doc;
+		
+		doc.AddMember("enemy_item_chance", s_EnemyDropChances);
+		doc.AddMember("active_skill_chance", s_ActiveSkillChances);
+		doc.AddMember("passive_skill_chance", s_PassiveSkillChances);
+		doc.AddMember("buff_chance", s_BuffChances);
+		doc.AddMember("npc_chance", s_NPCRoomChances);
+
 		doc.AddMember("intro", s_IntroductionRoom);
 		JSONValue combatRooms = doc.AddMemberArray("combat");
 		for (size_t i = 0; i < s_CombatRooms.size(); i++)
@@ -489,6 +570,10 @@ namespace Wiwa
 		doc.AddMember("gamepad_deadzone", s_GamepadDeadzone);
 		doc.AddMember("current_character", s_CurrentCharacter);
 
+		ItemManager::Serialize(&doc);
+
+		AchievementsManager::Serialize(&doc);
+
 		doc.save_file("config/room_data.json");
 	}
 
@@ -496,6 +581,22 @@ namespace Wiwa
 	{
 		JSONDocument doc;
 		doc.load_file("config/room_data.json");
+		
+		if(doc.HasMember("enemy_item_chance"))
+			s_EnemyDropChances = doc["enemy_item_chance"].as_int();
+
+		if (doc.HasMember("active_skill_chance"))
+			s_ActiveSkillChances = doc["active_skill_chance"].as_int();
+
+		if (doc.HasMember("passive_skill_chance"))
+			s_PassiveSkillChances = doc["passive_skill_chance"].as_int();
+
+		if (doc.HasMember("buff_chance"))
+			s_BuffChances = doc["buff_chance"].as_int();
+		
+		if (doc.HasMember("npc_chance"))
+			s_NPCRoomChances = doc["npc_chance"].as_int();
+
 		if (doc.HasMember("intro")) {
 			s_IntroductionRoom = doc["intro"].as_int();
 		}
@@ -570,6 +671,132 @@ namespace Wiwa
 			s_GamepadDeadzone = doc["gamepad_deadzone"].as_float();
 		if (doc.HasMember("current_character"))
 			s_CurrentCharacter = doc["current_character"].as_int();
+
+		Wiwa::ItemManager::Deserialize(&doc);
+
+		AchievementsManager::Deserialize(&doc);
+	}
+	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
+	{
+		uint32_t itemRand;
+		std::string_view name;
+		int i = 0;
+		switch (type)
+		{
+		case 0:
+		{
+			itemRand = RAND(0, ItemManager::GetAbilities().size());
+			for (const auto& ability : ItemManager::GetAbilities())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 1:
+		{
+			itemRand = RAND(0, ItemManager::GetSkills().size());
+			for (const auto& ability : ItemManager::GetSkills())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 2:
+		{
+			itemRand = RAND(0, ItemManager::GetBuffs().size());
+			for (const auto& ability : ItemManager::GetBuffs())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 3:
+		{
+			itemRand = RAND(0, ItemManager::GetConsumables().size());
+			for (const auto& ability : ItemManager::GetConsumables())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		default:
+		{
+			WI_CORE_ERROR("Item type doesn't match any type!");
+			return;
+		}break;
+		}
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
+
+		Item* item = em.GetComponent<Item>(id);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
+		t3d->localPosition = position;
+		item->item_type = type;
+		for (uint32_t i = 0; i < 128; i++)
+		{
+			if (i >= name.size())
+			{
+				break;
+			}
+			item->Name[i] = name[i];
+		}
+	}
+	void GameStateManager::SpawnItem(glm::vec3 position, uint8_t type, const char* name)
+	{
+		std::string_view newName;
+		switch (type)
+		{
+		case 0:
+		{
+			newName = ItemManager::GetAbility(name)->Name.c_str();
+		}break;
+		case 1:
+		{
+			newName = ItemManager::GetPassive(name)->Name.c_str();
+		}break;
+		case 2:
+		{
+			newName = ItemManager::GetBuff(name)->Name.c_str();
+		}break;
+		case 3:
+		{
+			newName = ItemManager::GetConsumable(name)->Name.c_str();
+		}break;
+		default:
+		{
+			WI_CORE_ERROR("Item type doesn't match any type!");
+			return;
+		}break;
+		}
+
+		EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
+
+		Item* item = em.GetComponent<Item>(id);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
+		WI_CORE_INFO("Spawning item at {}x{}y{}z", position.x, position.y, position.z);
+		
+		t3d->localPosition = position;
+
+		item->item_type = type;
+		for (uint32_t i = 0; i < 128; i++)
+		{
+			if (i >= newName.size())
+			{
+				break;
+			}
+			item->Name[i] = newName[i];
+		}
+	}
+	Transform3D* GameStateManager::GetPlayerTransform()
+	{
+		return s_CurrentScene->GetEntityManager().GetComponent<Transform3D>(s_PlayerId);
 	}
 }
 

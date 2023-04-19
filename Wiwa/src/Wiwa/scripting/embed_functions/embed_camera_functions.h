@@ -10,3 +10,7 @@ void CameraLookAt(size_t camid, glm::vec3 vec);
 void SetCameraFront(size_t camid, glm::vec3 vector);
 
 void SetCameraRotation(size_t camid, glm::vec3 angles);
+
+glm::vec3 ScreenToWorlPosition(size_t camid, glm::vec2 screenPos, float intersection_y);
+
+glm::vec2 GetNormalizedScreenPos(size_t camid, glm::vec2 screenPos);

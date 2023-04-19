@@ -33,8 +33,11 @@
 
 #include "Panels/UIPanel.h"
 #include "Panels/UIEditorPanel.h"
+#include "Panels/DialogPanel.h"
 #include "Panels/AIMapBakingPanel.h"
 #include "Panels/GameLogPanel.h"
+#include "Panels/InventoryPanel.h"
+#include "Panels/AchievementsPanel.h"
 
 
 #include <Wiwa/scene/SceneManager.h>
@@ -60,7 +63,7 @@ public:
 	void OnImGuiRender() override;
 	void OnEvent(Wiwa::Event &e) override;
 
-	void LoadScene(const std::string& m_Path);
+	SceneId LoadScene(const std::string& m_Path);
 
 	inline int GetGizmo() { return m_GizmoType; }
 
@@ -132,9 +135,12 @@ private:
 	std::unique_ptr<Panel>  m_AnimatorPanel;
 	std::unique_ptr<Panel> m_AnimationPanel;
 	std::unique_ptr<Panel> m_UiPanel;
+	std::unique_ptr<Panel> m_DialogPanel;
 	std::unique_ptr<Panel> m_UiEditorPanel;
 	std::unique_ptr<Panel> m_AIMapBakingPanel;
 	std::unique_ptr<Panel> m_GameLogPanel;
+	std::unique_ptr<Panel> m_InventoryPanel;
+	std::unique_ptr<Panel> m_AchievementsPanel;
 
 
 	std::vector<Panel *> m_Panels;
@@ -161,6 +167,7 @@ private:
 	std::vector<std::function<void()>> m_EditorThreadQueue;
 	std::mutex m_EditorThreadMutex;
 
+	int m_GameVolume = 0;
 public:
 	static std::string s_SolVersion;
 	static std::string s_BuildConf;

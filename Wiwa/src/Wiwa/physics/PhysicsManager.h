@@ -13,7 +13,7 @@
 #include <Wiwa/utilities/render/shaders/Shader.h>
 #include <Wiwa/utilities/render/Uniforms.h>
 #include <Wiwa/core/Resources.h>
-
+#include <Wiwa/ecs/EntityManager.h>
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 
@@ -35,8 +35,12 @@ namespace Wiwa {
 			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_) {};
 
 		btCollisionObject* collisionObject;
+		EntityManager::ComponentIterator transformIt;
+		EntityManager::ComponentIterator parentTransformIt;
+		EntityManager::ComponentIterator collisionBodyIt;
 		btVector3 velocity;
 		size_t id;
+		size_t parentId;
 		int selfTag;
 		const char* selfTagStr;
 		bool doContinuousCollision;
@@ -139,19 +143,12 @@ namespace Wiwa {
 		btCollisionDispatcher* m_Dispatcher;
 		btBroadphaseInterface* m_Broad_phase;
 		btSequentialImpulseConstraintSolver* m_Solver;
-
 		btOverlapFilterCallback* m_filterCallback;
-
-		//  btDefaultVehicleRaycaster* v_Vehicle_raycaster;
-		
 
 		std::list<btCollisionShape*> m_Shapes;
 		std::list<Object*> m_CollObjects;
-		//std::list<btDefaultMotionState*> m_Motions;
 		std::list<btTypedConstraint*> m_Constraints;
-
 		std::vector<CollisionData> m_CollisionList;
-
 	private:
 		std::list<Object*> m_BodiesToLog;
 
@@ -165,16 +162,6 @@ namespace Wiwa {
 	public:
 		std::map<std::string, int> filterMapStringKey;
 		std::map<int, std::string> filterMapIntKey;
-
-		/*std::vector<std::string> filterStrings;
-		std::vector<std::bitset<MAX_BITS>> fliterBitsSets;*/
-		/*void bin(unsigned n)
-		{
-			if (n > 1)
-				bin(n >> 1);
-
-			WI_INFO("{}", n & 1);
-		}*/
 
 		static void bin(int n, const char* str)
 		{

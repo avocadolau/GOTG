@@ -15,6 +15,29 @@
 
 namespace Wiwa
 {
+	uint32_t Renderer2D::getInstanceRenderer(Scene* scene, uint32_t textureId)
+	{
+		std::vector<InstanceRenderer>& instance_list = scene->GetInstanceRenderers();
+		size_t size = instance_list.size();
+
+		int id = -1;
+
+		for (size_t i = 0; i < size; i++) {
+			int addtex = instance_list[i].AddTexture(textureId);
+
+			if (addtex != -1) {
+				id = i;
+				break;
+			}
+		}
+
+		if (id == -1) {
+			id = scene->CreateInstanceRenderer();
+		}
+
+		return id;
+	}
+
 	Renderer2D::Renderer2D()
 	{
 		// IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
@@ -115,18 +138,22 @@ namespace Wiwa
 		// delete instanceRenderer;
 	}
 
-	uint32_t Renderer2D::CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot)
+	Renderer2D::InstanceData Renderer2D::CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot, const float rotation)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
+		uint32_t renderer_id = getInstanceRenderer(scene, textureId);
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(renderer_id);
 
 		TextureClip tclip = CalculateTextureClip(clip, srcSize);
 
-		return instanceRenderer.AddInstance(textureId, position, size, color, tclip, pivot);
+		uint32_t instance_id = instanceRenderer.AddInstance(textureId, position, size, color, tclip, pivot, rotation);
+
+		return { instance_id, renderer_id };
 	}
 
-	uint32_t Renderer2D::CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot)
+	Renderer2D::InstanceData Renderer2D::CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot, const float rotation)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
+		uint32_t renderer_id = getInstanceRenderer(scene, textureId);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(renderer_id);
 
 		TextureClip clip = {
 			{1.0f, 1.0f},
@@ -136,100 +163,125 @@ namespace Wiwa
 
 		Color4f color = Color::WHITE;
 
-		return instanceRenderer.AddInstance(textureId, position, size, color, clip, pivot);
+		uint32_t instance_id = instanceRenderer.AddInstance(textureId, position, size, color, clip, pivot, rotation);
+
+		return { instance_id, renderer_id };
 	}
 
-	uint32_t Renderer2D::CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot)
+	Renderer2D::InstanceData Renderer2D::CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot, const float rotation)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
+		uint32_t renderer_id = getInstanceRenderer(scene, textureId);
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(renderer_id);
 
 		TextureClip tclip = CalculateTextureClip(clip, srcSize);
 
 		Color4f color = Color::WHITE;
-		return instanceRenderer.AddInstance(textureId, position, size, color, tclip, pivot);
+		uint32_t instance_id = instanceRenderer.AddInstance(textureId, position, size, color, tclip, pivot, rotation);
+
+		return { instance_id, renderer_id };
 	}
 
-	void Renderer2D::RemoveInstance(Scene *scene, uint32_t instance)
+	void Renderer2D::RemoveInstance(Scene *scene, InstanceData instance)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.RemoveInstance(instance);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(instance.renderer_id);
+		instanceRenderer.RemoveInstance(instance.instance_id);
 	}
 
-	void Renderer2D::EnableInstance(Scene *scene, uint32_t instance)
+	void Renderer2D::EnableInstance(Scene *scene, InstanceData instance)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.EnableInstance(instance);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(instance.renderer_id);
+		instanceRenderer.EnableInstance(instance.instance_id);
 	}
 
-	void Renderer2D::DisableInstance(Scene *scene, uint32_t instance)
+	void Renderer2D::DisableInstance(Scene *scene, InstanceData instance)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.DisableInstance(instance);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(instance.renderer_id);
+		instanceRenderer.DisableInstance(instance.instance_id);
 	}
 
-	void Renderer2D::SetInstanceEnabled(Scene *scene, uint32_t instance, bool enabled)
+	void Renderer2D::SetInstanceEnabled(Scene *scene, InstanceData instance, bool enabled)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.SetEnabled(instance, enabled);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(instance.renderer_id);
+		instanceRenderer.SetEnabled(instance.instance_id, enabled);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTexPosition(Scene *scene, uint32_t id, const Vector2i &position, Pivot pivot)
+	void Renderer2D::UpdateInstancedQuadTexPosition(Scene *scene, InstanceData id, const Vector2i &position, Pivot pivot)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstancePosition(id, position, pivot);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.UpdateInstancePosition(id.instance_id, position, pivot);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTexSize(Scene* scene, uint32_t id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot)
+	void Renderer2D::UpdateInstancedQuadTexRotation(Scene* scene, InstanceData id, float rotation)
 	{
-		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstanceSize(id, pos, size, pivot);
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.UpdateInstanceRotation(id.instance_id, rotation);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTexClip(Scene* scene, uint32_t id, const Size2i& srcSize, const Rect2i& clip)
+	void Renderer2D::UpdateInstancedQuadTexSize(Scene* scene, InstanceData id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot)
+	{
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.UpdateInstanceSize(id.instance_id, pos, size, pivot);
+	}
+
+	void Renderer2D::UpdateInstancedQuadTexClip(Scene* scene, InstanceData id, const Size2i& srcSize, const Rect2i& clip)
 	{
 		TextureClip tclip = CalculateTextureClip(clip, srcSize);
 
-		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstanceClip(id, tclip);
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.UpdateInstanceClip(id.instance_id, tclip);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTexTexture(Scene* scene, uint32_t id, uint32_t tex_id)
+	void Renderer2D::UpdateInstancedQuadTexTexture(Scene* scene, InstanceData& id, uint32_t tex_id)
 	{
-		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstanceTexture(id, tex_id);
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+
+		int addTexture = instanceRenderer.AddTexture(tex_id);
+
+		if (addTexture == -1) {
+			VertexInstanceTexture& vtex = instanceRenderer.getInstanceData(id.instance_id);
+			instanceRenderer.RemoveInstance(id.instance_id);
+
+			id.renderer_id = getInstanceRenderer(scene, tex_id);
+			instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+
+			id.instance_id = instanceRenderer.AddInstance(vtex);
+		}
+
+		instanceRenderer.UpdateInstanceTexture(id.instance_id, tex_id);
 	}
 
-	void Renderer2D::UpdateInstancedQuadTexColor(Scene* scene, uint32_t id, const Color4f& color)
+	void Renderer2D::UpdateInstancedQuadTexColor(Scene* scene, InstanceData id, const Color4f& color)
 	{
-		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstanceColor(id, color);
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.UpdateInstanceColor(id.instance_id, color);
 	}
 
-	void Renderer2D::UpdateInstancedQuad(Scene* scene,uint32_t id, const Vector2i &position, const Size2i &size, const Color4f &color)
+	void Renderer2D::UpdateInstancedQuad(Scene* scene, InstanceData id, const Vector2i &position, const Size2i &size, const Color4f &color)
 	{
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
-		instanceRenderer.UpdateInstance(id, position, size, color);
+		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.UpdateInstance(id.instance_id, position, size, color);
 	}
 
-	void Renderer2D::UpdateInstanced(Scene *scene)
+	void Renderer2D::UpdateInstanced(Scene* scene)
 	{
-		glEnable(GL_BLEND);
-		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer();
+		std::vector<InstanceRenderer> &instanceRenderers = scene->GetInstanceRenderers();
+		size_t instance_size = instanceRenderers.size();
 
 		FrameBuffer &framebuffer = *m_ActiveCamera.frameBuffer;
 		glViewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight());
 
 		framebuffer.Bind();
-
-		instanceRenderer.Update();
-		instanceRenderer.Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
-
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		for (size_t i = 0; i < instance_size; i++) {
+			instanceRenderers[i].Update();
+			instanceRenderers[i].Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
+		}
+        glDisable(GL_BLEND);
 		framebuffer.Unbind();
 
 		m_RenderCallsInstancedCount++;
 
-		glDisable(GL_BLEND);
+
 	}
 }

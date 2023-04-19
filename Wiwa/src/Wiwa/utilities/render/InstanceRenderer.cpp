@@ -108,6 +108,11 @@ namespace Wiwa {
 		glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(17 * sizeof(float)));
 		glVertexAttribDivisor(10, 1);
 
+		glEnableVertexAttribArray(11);
+		glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(18 * sizeof(float)));
+
+
+
 		m_InstanceVertex = new VertexInstanceTexture[m_MaxInstances];
 
 		m_OrthoLocation = m_InstanceShader.getUniformLocation("u_Proj");
@@ -144,7 +149,7 @@ namespace Wiwa {
 		m_InstanceShader.UnBind();
 	}
 
-	uint32_t InstanceRenderer::AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot)
+	uint32_t InstanceRenderer::AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot, float rotation)
 	{
 		size_t remove_size = m_RemovedInstances.size();
 		size_t instance_id = WI_INVALID_INDEX;
@@ -163,6 +168,7 @@ namespace Wiwa {
 		m_InstanceVertex[instance_id].position = Renderer2D::CalculateScreenGlPos(position, size, pivot);
 		m_InstanceVertex[instance_id].scale = { static_cast<float>(size.x), static_cast<float>(size.y) };
 		m_InstanceVertex[instance_id].color = color;
+		m_InstanceVertex[instance_id].rotation = rotation;
 
 		int texid = AddTexture(textureId);
 
@@ -171,6 +177,27 @@ namespace Wiwa {
 		m_InstanceVertex[instance_id].textureClip = clip;
 
 		m_InstanceVertex[instance_id].active = 1.0f;
+
+		return instance_id;
+	}
+
+	uint32_t InstanceRenderer::AddInstance(VertexInstanceTexture& data)
+	{
+		size_t remove_size = m_RemovedInstances.size();
+		size_t instance_id = WI_INVALID_INDEX;
+
+		if (remove_size > 0) {
+			instance_id = m_RemovedInstances[remove_size - 1];
+			m_RemovedInstances.pop_back();
+		}
+		else {
+			if (m_InstanceCount == m_MaxInstances)
+				return instance_id;
+
+			instance_id = m_InstanceCount++;
+		}
+
+		m_InstanceVertex[instance_id] = data;
 
 		return instance_id;
 	}
@@ -212,13 +239,14 @@ namespace Wiwa {
 		m_InstanceVertex[id].color = color;
 	}
 
+	void InstanceRenderer::UpdateInstanceRotation(uint32_t id, float rotation)
+	{
+		m_InstanceVertex[id].rotation = rotation;
+	}
+
 	int InstanceRenderer::AddTexture(uint32_t texture)
 	{
 		size_t texSize = m_Textures.size();
-
-		if (texSize > MAX_INSTANCE_TEXTURES) {
-			WI_ASSERT_MSG("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
-		}
 
 		int index = static_cast<int>(texSize);
 
@@ -230,7 +258,14 @@ namespace Wiwa {
 		}
 
 		if (index == texSize) {
-			m_Textures.push_back(texture);
+			if (texSize >= MAX_INSTANCE_TEXTURES) {
+				return -1;
+				//WI_ASSERT_MSG("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
+			}
+			else
+			{
+				m_Textures.push_back(texture);
+			}
 		}
 
 		return index;

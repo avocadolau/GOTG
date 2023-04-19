@@ -11,6 +11,9 @@
 
 #include <Wiwa/ecs/components/Mesh.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 namespace Wiwa {
 	
 	EntityManager::EntityManager()
@@ -146,13 +149,8 @@ namespace Wiwa {
 		t3d->scale = t3dparent->scale * t3d->localScale;
 
 		// Calculate local matrix
-		t3d->localMatrix = glm::mat4(1.0f);
-		t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z));
-		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-		t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-		t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->localScale.x, t3d->localScale.y, t3d->localScale.z));
-
+		glm::mat4 rotation = glm::toMat4(glm::quat(glm::radians(t3d->localRotation)));
+		t3d->localMatrix = glm::translate(glm::mat4(1.0f), t3d->localPosition) * rotation * glm::scale(glm::mat4(1.0f), t3d->localScale);
 		// Calculate world matrix
 		t3d->worldMatrix = t3dparent->worldMatrix * t3d->localMatrix;
 
@@ -181,13 +179,8 @@ namespace Wiwa {
 			t3d->scale = t3d->localScale;
 
 			// Calculate local matrix
-			t3d->localMatrix = glm::mat4(1.0f);
-			t3d->localMatrix = glm::translate(t3d->localMatrix, glm::vec3(t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-			t3d->localMatrix = glm::rotate(t3d->localMatrix, glm::radians(t3d->localRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-			t3d->localMatrix = glm::scale(t3d->localMatrix, glm::vec3(t3d->localScale.x, t3d->localScale.y, t3d->localScale.z));
-
+			glm::mat4 rotation = glm::toMat4(glm::quat(glm::radians(t3d->localRotation)));
+			t3d->localMatrix = glm::translate(glm::mat4(1.0f), t3d->localPosition) * rotation * glm::scale(glm::mat4(1.0f), t3d->localScale);
 			// Calculate world matrix
 			t3d->worldMatrix = t3d->localMatrix;
 
@@ -270,6 +263,21 @@ namespace Wiwa {
 
 	void EntityManager::Update()
 	{
+		// Apply systems in pool
+		std::vector<System*> asd = m_SystemsToInit;
+
+		m_SystemsToInit.clear();
+
+		size_t ssize = asd.size();
+
+		for (size_t i = 0; i < ssize; i++) {
+			asd[i]->Awake();
+		}
+
+		for (size_t i = 0; i < ssize; i++) {
+			asd[i]->Init();
+		}
+
 		// Remove entities in pool
 		size_t rsize = m_EntitiesToDestroy.size();
 
@@ -963,6 +971,29 @@ namespace Wiwa {
 		return true;
 	}
 
+	System* EntityManager::_applySystemImpl(EntityId entityId, SystemHash system_hash)
+	{
+		const Type* stype = Application::Get().GetSystemTypeH(system_hash);
+
+		System* system = NULL;
+
+		if (stype) {
+			system = (System*)stype->New();
+			system->SetEntity(entityId);
+			system->SetScene(m_Scene);
+			system->OnSystemAdded();
+
+			m_EntitySystems[entityId].push_back(system);
+			m_EntitySystemHashes[entityId].push_back(system_hash);
+			m_SystemsByHash[stype->hash].push_back(system);
+		}
+		else {
+			WI_CORE_ERROR("System hash not found [{}]", system_hash);
+		}
+
+		return system;
+	}
+
 	void EntityManager::_saveEntityImpl(File& file, EntityId eid)
 	{
 		const char* e_name = GetEntityName(eid);
@@ -1117,25 +1148,10 @@ namespace Wiwa {
 	{
 		if (HasSystem(eid, system_hash)) return;
 
-		const Type* stype = Application::Get().GetSystemTypeH(system_hash);
+		System* sys = _applySystemImpl(eid, system_hash);
 
-		if (stype) {
-			System* system = (System*)stype->New();
-			system->SetEntity(eid);
-			system->SetScene(m_Scene);
-			system->OnSystemAdded();
-
-			if (m_InitSystemsOnApply) {
-				system->Awake();
-				system->Init();
-			}
-
-			m_EntitySystems[eid].push_back(system);
-			m_EntitySystemHashes[eid].push_back(system_hash);
-			m_SystemsByHash[stype->hash].push_back(system);
-		}
-		else {
-			WI_CORE_ERROR("System hash not found [{}]", system_hash);
+		if (m_InitSystemsOnApply && sys) {
+			m_SystemsToInit.push_back(sys);
 		}
 	}
 

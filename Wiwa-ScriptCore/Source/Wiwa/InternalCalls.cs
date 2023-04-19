@@ -110,6 +110,10 @@ namespace Wiwa
         internal extern static void SetCameraFront(System.UInt64 camid, Vector3 vec);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetCameraRotation(System.UInt64 camid, Vector3 vec);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static Vector3 ScreenToWorlPosition(System.UInt64 camid, Vector2 screenPos, float intersection_y);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static Vector2 GetNormalizedScreenPos(System.UInt64 camid, Vector2 screenPos);
         #endregion
         #region Resources
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -200,7 +204,7 @@ namespace Wiwa
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SwapText(string word, int id_canvas, int id_control);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void SetValueForUIbar(float value, int id_canvas, int id_control);
+        internal extern static void SetValueForUIbar(float valueHealth,float valueMaxHealth, int id_canvas, int id_control);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void SetNextFrame(int value, int id_canvas, int id_control);
         #endregion
@@ -255,15 +259,17 @@ namespace Wiwa
 
         #region Animations
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Blend(string targetAnimation, float blendDuration, EntityId entity);
+        internal extern static void Blend(string targetAnimation,bool loop, float blendDuration, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void PlayAnimationName(string name, EntityId entity);
+        internal extern static void PlayAnimationName(string name,bool loop, EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PlayAnimation(EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void PauseAnimation(EntityId entity);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void RestartAnimation(EntityId entity);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool HasFinished(EntityId entity);
         #endregion
 
         //#region Particles

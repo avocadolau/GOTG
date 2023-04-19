@@ -61,18 +61,27 @@ namespace Wiwa
 		skinnedTexturedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured", skinnedTexturedShader);
 		// Init skinned textured outlined
-		//ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
-		//Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
-		//skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
-		//skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
-		//skinnedTexturedOutlinedShader->addUniform("u_ToonLevels", UniformType::Int);
-		//skinnedTexturedOutlinedShader->addUniform("u_RimLightPower", UniformType::Float);
-		//skinnedTexturedOutlinedShader->addUniform("u_SpecularValue", UniformType::Float);
-		//skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
-		//skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
-		//skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
-		//skinnedTexturedOutlinedShader->addUniform("u_NearFar", UniformType::fVec2);
-		//Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
+		ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
+		Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
+		skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
+		skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedTexturedOutlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		skinnedTexturedOutlinedShader->addUniform("u_ToonLevels", UniformType::Int);
+		skinnedTexturedOutlinedShader->addUniform("u_RimLightPower", UniformType::Float);
+		skinnedTexturedOutlinedShader->addUniform("u_SpecularValue", UniformType::Float);
+		skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
+		//init skinned Outline
+		ResourceId skinnedOutlineShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_outline");
+		Shader* skinnedOutlineShader = Wiwa::Resources::GetResourceById<Shader>(skinnedOutlineShaderId);
+		skinnedOutlineShader->Compile("resources/shaders/skinned/skinned_outline");
+		skinnedOutlineShader->addUniform("u_Texture", UniformType::Sampler2D);
+		skinnedOutlineShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		skinnedOutlineShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_outline", skinnedOutlineShader);
 		// Init skinned depth
 		ResourceId skinnedDepthShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_depth");
 		Shader* skinnedDepthShader = Wiwa::Resources::GetResourceById<Shader>(skinnedDepthShaderId);
@@ -98,6 +107,20 @@ namespace Wiwa
 		colorShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		colorShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_color", colorShader);
+		//toon textured outlined
+		ResourceId outlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/toon_textured_outlined");
+		Shader* outlinedShader = Wiwa::Resources::GetResourceById<Shader>(outlinedShaderId);
+		outlinedShader->Compile("resources/shaders/light/toon_textured_outlined");
+		outlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		outlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		outlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		outlinedShader->addUniform("u_ToonLevels", UniformType::Int);
+		outlinedShader->addUniform("u_RimLightPower", UniformType::Float);
+		outlinedShader->addUniform("u_SpecularValue", UniformType::Float);
+		outlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		outlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		outlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured_outlined", outlinedShader);
 
 
 		ResourceId basecolorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/base_color");
@@ -145,6 +168,7 @@ namespace Wiwa
 		m_ParticleShader = Resources::GetResourceById<Shader>(m_ParticleShaderId);
 		m_ParticleShader->Compile("resources/shaders/particle_display");
 		m_ParticleShader->addUniform("u_Texture", Wiwa::UniformType::Sampler2D);
+		m_ParticleShader->addUniform("u_ColorP", Wiwa::UniformType::fVec4);
 		m_ParticleUniforms.Model = m_ParticleShader->getUniformLocation("u_Model");
 		m_ParticleUniforms.View = m_ParticleShader->getUniformLocation("u_View");
 		m_ParticleUniforms.Projection = m_ParticleShader->getUniformLocation("u_Proj");
@@ -155,7 +179,7 @@ namespace Wiwa
 		m_DepthShaderUniforms.Model = m_DepthShader->getUniformLocation("u_Model");
 		m_DepthShaderUniforms.View = m_DepthShader->getUniformLocation("u_View");
 		m_DepthShaderUniforms.Projection = m_DepthShader->getUniformLocation("u_Proj");
-
+		
 		m_HDRShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/hdr");
 		m_HDRShader = Resources::GetResourceById<Shader>(m_HDRShaderId);
 		m_HDRShader->Compile("resources/shaders/renderlayer/hdr");
@@ -187,7 +211,35 @@ namespace Wiwa
 			"resources/images/skybox/front.jpg",
 			"resources/images/skybox/back.jpg"};
 
-		m_DefaultSkybox.LoadCubemap(faces);
+		std::vector<const char *> skybox1_faces = {
+		"resources/images/skybox/right.jpg",
+		"resources/images/skybox/left.jpg",
+		"resources/images/skybox/top.jpg",
+		"resources/images/skybox/bottom.jpg",
+		"resources/images/skybox/front.jpg",
+		"resources/images/skybox/back.jpg"};
+		std::vector<const char*> dooms_day = {
+		"resources/images/skybox/dooms_day/right.png",
+		"resources/images/skybox/dooms_day/left.png",
+		"resources/images/skybox/dooms_day/top.png",
+		"resources/images/skybox/dooms_day/bottom.png",
+		"resources/images/skybox/dooms_day/front.png",
+		"resources/images/skybox/dooms_day/back.png" };
+		std::vector<const char*> urban_light = {
+		"resources/images/skybox/urban_light/right.png",
+		"resources/images/skybox/urban_light/left.png",
+		"resources/images/skybox/urban_light/top.png",
+		"resources/images/skybox/urban_light/bottom.png",
+		"resources/images/skybox/urban_light/front.png",
+		"resources/images/skybox/urban_light/back.png" };
+		std::vector<const char*> main_menu = {
+		"resources/images/skybox/main_menu/UI_RightSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_BottomSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_FrontSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_BackSkyBox_01.png" };
+		m_DefaultSkybox.LoadCubemap(dooms_day);
 
 
 
@@ -559,8 +611,7 @@ namespace Wiwa
 	}
 	void Renderer3D::RenderMesh(Model *mesh, const glm::mat4 &transform, Material *material, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, const std::vector<glm::mat4> &finalBoneMatrices, bool clear, Camera *camera, bool cull)
 	{
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
+
 
 		if (!camera)
 		{
@@ -568,6 +619,11 @@ namespace Wiwa
 		}
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		//prepare buffers
+
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 
 		camera->frameBuffer->Bind(clear);
 
@@ -579,11 +635,8 @@ namespace Wiwa
 		matShader->SetBoneTransform(finalBoneMatrices);
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
-
 		material->Bind();
-
 		mesh->Render();
-
 		material->UnBind();
 
 		if (mesh->showNormals)
@@ -609,9 +662,13 @@ namespace Wiwa
 		camera->frameBuffer->Unbind();
 	}
 
-	void Renderer3D::RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale, const size_t &directional,
-								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, Material *material, bool clear, Camera *camera, bool cull, Image *texture, const Size2i &srcSize)
+	void Renderer3D::RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,
+		const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* texture, const Size2i& srcSize, float colorParticles[4], bool isColorRanged)
 	{
+		/*colorParticles[4] /= 255.0f;*/
+		/*g /= 255.0f;
+		b /= 255.0f;*/
+
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 		camera->frameBuffer->Bind(clear);
@@ -623,13 +680,33 @@ namespace Wiwa
 		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
 		model = glm::scale(model, scale);
 
-		Shader *matShader = material->getShader();
+		Shader* matShader = material->getShader();
+
+		/*Shader* particleShader = Resources::GetResourceById<Shader>(m_ParticleShaderId);*/
 
 		matShader->Bind();
+
+		/*particleShader->setUniformVec3(particleShader->getUniform("u_Color")->location, glm::vec3(r, g ,b));*/
+
 		matShader->SetMVP(model, camera->getView(), camera->getProjection());
+
+		if (isColorRanged)
+		{
+			matShader->setUniformVec3(matShader->getUniform("u_ColorP")->location, glm::vec3(colorParticles[0], colorParticles[1], colorParticles[2]));
+		}
+
+		else
+		{
+			matShader->setUniformVec3(matShader->getUniform("u_ColorP")->location, glm::vec3(1.0, 1.0, 1.0));
+		}
+
+		/*matShader->setUniform(matShader->getUniform("u_ColorP")->location, 250);*/
+
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
 		material->Bind();
+
+		/*glColor4f(r, g, b ,1);*/
 
 		glDisable(GL_CULL_FACE);
 
@@ -644,51 +721,10 @@ namespace Wiwa
 		glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, (GLsizei)0);
 		glBindVertexArray(0);
 
-		/*glBindVertexArray(VAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);*/
-
 		material->UnBind();
 		glActiveTexture(GL_TEXTURE1);
 		camera->frameBuffer->Unbind();
 		glEnable(GL_CULL_FACE);
-
-
-
-		/*
-		GLboolean depth;
-		GLboolean blend;
-
-		glGetBooleanv(GL_DEPTH_TEST, &depth);
-		glGetBooleanv(GL_BLEND, &blend);
-
-		glDisable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//Solution to the material.cpp GL_TEXTURE1 on the void Material::Bind() function
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
-		//------------------------------
-
-		glDrawElements(GL_TRIANGLES, ebo_data.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
-		
-		//reset data
-		material->UnBind();
-		glActiveTexture(GL_TEXTURE1);
-		camera->frameBuffer->Unbind();
-
-		if (depth == GL_TRUE)
-			glEnable(GL_DEPTH_TEST);
-
-		if (blend == GL_TRUE)
-			glEnable(GL_BLEND);
-		
-		*/
 	}
 
 	void Renderer3D::RenderSkybox()

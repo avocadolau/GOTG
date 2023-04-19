@@ -27,6 +27,9 @@
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/audio/Audio.h>
 
+#include <Wiwa/audio/Audio.h>
+
+
 #include "../Entities.h"
 EditorLayer *EditorLayer::s_Instance = nullptr;
 std::string EditorLayer::s_SolVersion = "vs2022";
@@ -87,8 +90,11 @@ void EditorLayer::OnAttach()
 	m_EnvPanel = std::make_unique<EnvironmentPanel>(this);
 	m_UiPanel = std::make_unique<UIPanel>(this);
 	m_UiEditorPanel = std::make_unique<UIEditorPanel>(this);
+	m_DialogPanel = std::make_unique<DialogPanel>(this);
 	m_AIMapBakingPanel = std::make_unique<AIMapBakingPanel>(this);
 	m_GameLogPanel = std::make_unique<GameLogPanel>(this);
+	m_InventoryPanel = std::make_unique<InventoryPanel>(this);
+	m_AchievementsPanel = std::make_unique<AchievementsPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
 	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
@@ -117,9 +123,12 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_AnimationPanel.get());
 	m_Panels.push_back(m_UiPanel.get());
 	m_Panels.push_back(m_UiEditorPanel.get());
+	m_Panels.push_back(m_DialogPanel.get());
 	m_Panels.push_back(m_AudioPanel.get());
 	m_Panels.push_back(m_AIMapBakingPanel.get());
 	m_Panels.push_back(m_GameLogPanel.get());
+	m_Panels.push_back(m_InventoryPanel.get());
+	m_Panels.push_back(m_AchievementsPanel.get());
 
 	
 	m_Settings.push_back(m_ProjectPanel.get());
@@ -197,7 +206,7 @@ void EditorLayer::OnEvent(Wiwa::Event &e)
 	}
 }
 
-void EditorLayer::LoadScene(const std::string &m_Path)
+SceneId EditorLayer::LoadScene(const std::string &m_Path)
 {
 	// Load scene and prepare it
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str(), Wiwa::SceneManager::LoadFlags::LOAD_DEFAULT | Wiwa::SceneManager::LoadFlags::LOAD_NO_INIT);
@@ -208,6 +217,7 @@ void EditorLayer::LoadScene(const std::string &m_Path)
 	m_OpenedScenePath = m_Path;
 	m_EditorSceneId = id;
 	m_EditorScene = scene;
+	return id;
 }
 
 static bool threadExec = false;
@@ -575,6 +585,7 @@ void EditorLayer::MainMenuBar()
 			if (ImGui::Button(ICON_FK_EXPAND))
 				m_GizmoType = ImGuizmo::OPERATION::SCALE;
 
+
 			ImGui::SetCursorPosX(Wiwa::Application::Get().GetWindow().GetWidth() / 2 - 15.0f);
 			const char *play = Wiwa::Time::IsPlaying() ? ICON_FK_STOP : ICON_FK_PLAY;
 
@@ -635,6 +646,7 @@ void EditorLayer::MainMenuBar()
 				}
 			}
 
+
 			if (ImGui::Button(ICON_FK_STEP_FORWARD))
 			{
 				if (is_playing)
@@ -642,12 +654,23 @@ void EditorLayer::MainMenuBar()
 					Wiwa::Time::Step();
 				}
 			}
-
+			ImGui::PushItemWidth(200);
+			if (ImGui::SliderInt("Volume", &m_GameVolume, 0, 100, "%d", 0, 17))
+				Audio::ChangeMasterVolume(m_GameVolume);
+			ImGui::PopItemWidth();
+			
 			ImGui::PopStyleColor();
 			ImGui::EndMenuBar();
 		}
+
+		
 		ImGui::End();
 	}
+
+	viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
+	window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+	height = ImGui::GetFrameHeight();
+	
 
 	if (ImGui::BeginViewportSideBar("##MainStatusBar", viewport, ImGuiDir_Down, height, window_flags))
 	{
@@ -660,7 +683,7 @@ void EditorLayer::MainMenuBar()
 
 			ImGuiLog log = Wiwa::Application::Get().GetImGuiLayer().GetConsole();
 
-			ImGui::PushStyleColor(ImGuiCol_Button, {0.0, 0, 0, 0});
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.0, 0, 0, 0 });
 			ImGui::AlignTextToFramePadding();
 
 			char buff[16];
@@ -677,13 +700,15 @@ void EditorLayer::MainMenuBar()
 			ImGui::PopStyleColor();
 			ImGui::Text(ICON_FK_EXCLAMATION_CIRCLE);
 
-			/*const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
-			ImGui::TextUnformatted(beg, log.Buf.end());*/
-
+			const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
+			ImGui::TextUnformatted(beg, log.Buf.end());
+			
+			
 			ImGui::EndMenuBar();
 		}
 		ImGui::End();
 	}
+	
 }
 
 void EditorLayer::StopScene()

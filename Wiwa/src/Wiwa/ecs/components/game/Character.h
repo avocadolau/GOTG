@@ -18,10 +18,14 @@ namespace Wiwa {
 		float DashSpeed;
 		float DashCooldown;
 		float WalkTreshold;
+
+		bool Slowed;
+		float CounterSlowed;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::Character)
+	REFLECT_MEMBER(Speed)
 	REFLECT_MEMBER(MaxHealth)
 	REFLECT_MEMBER(Health)
 	REFLECT_MEMBER(MaxShield)
@@ -32,4 +36,6 @@ REFLECTION_BEGIN(Wiwa::Character)
 	REFLECT_MEMBER(DashSpeed)
 	REFLECT_MEMBER(DashCooldown)
 	REFLECT_MEMBER(WalkTreshold)
+	REFLECT_MEMBER(Slowed)
+	REFLECT_MEMBER(CounterSlowed)
 REFLECTION_END;
