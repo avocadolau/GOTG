@@ -260,7 +260,7 @@ namespace Wiwa
 	void Renderer3D::Update()
 	{
 		OPTICK_EVENT("Renderer 3D Update");
-		//RenderSkybox();
+		RenderSkybox();
 		//once everything is rendered and passed by the hdr 
 		
 		Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
