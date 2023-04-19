@@ -41,7 +41,7 @@ namespace Wiwa {
 		m_Particles.resize(m_MaxParticles);
 		for (int i = 0; i < m_MaxParticles; i++)
 		{
-			m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 
 
@@ -69,7 +69,7 @@ namespace Wiwa {
 			
 			for (int i = 0; i < m_MaxParticles; i++)
 			{
-				m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+				m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 
 		}
@@ -129,10 +129,18 @@ namespace Wiwa {
 					{
 						particle.scale = emitter->m_p_scaleOverTimeStart * (1 - particle.life_percentage) + emitter->m_p_scaleOverTimeEnd * particle.life_percentage;
 					}
+					else
+					{
+						particle.scale += particle.growthVelocity * dt;
+					}
 
 					if (emitter->m_p_rotationOverTime)
 					{
-						particle.rotation = glm::radians(emitter->m_p_rotationOverTimeStart) * (1 - particle.life_percentage) + glm::radians(emitter->m_p_rotationOverTimeEnd) * particle.life_percentage;
+						particle.rotation = emitter->m_p_rotationOverTimeStart * (1 - particle.life_percentage) + emitter->m_p_rotationOverTimeEnd * particle.life_percentage;
+					}
+					else
+					{
+						particle.rotation += particle.angularVelocity * dt;
 					}
 
 
@@ -177,7 +185,7 @@ namespace Wiwa {
 					else
 					{
 						// Convert rotation angles from degrees to radians
-						glm::vec3 rotationRad = glm::radians(particle.rotation);
+						glm::vec3 rotationRad = particle.rotation;
 
 
 						transform = glm::translate(transform, particle.position);
@@ -369,6 +377,34 @@ namespace Wiwa {
 		else
 		{
 			particle.velocity = emitter->m_p_initialVelocity;
+		}
+
+		//initial angular velocity
+		if (emitter->m_p_rangedAngularVelocity)
+		{
+			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialAngularVelocity.x, emitter->m_p_maxInitialAngularVelocity.x);
+			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialAngularVelocity.y, emitter->m_p_maxInitialAngularVelocity.y);
+			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialAngularVelocity.z, emitter->m_p_maxInitialAngularVelocity.z);
+
+			particle.angularVelocity = glm::vec3(x, y, z);
+		}
+		else
+		{
+			particle.angularVelocity = emitter->m_p_initialAngularVelocity;
+		}
+
+		//initial growth velocity
+		if (emitter->m_p_rangedGrowthVelocity)
+		{
+			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.x, emitter->m_p_maxInitialGrowthVelocity.x);
+			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.y, emitter->m_p_maxInitialGrowthVelocity.y);
+			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.z, emitter->m_p_maxInitialGrowthVelocity.z);
+
+			particle.growthVelocity = glm::vec3(x, y, z);
+		}
+		else
+		{
+			particle.growthVelocity = emitter->m_p_initialGrowthVelocity;
 		}
 
 		if (emitter->m_p_rangedLifeTime)
