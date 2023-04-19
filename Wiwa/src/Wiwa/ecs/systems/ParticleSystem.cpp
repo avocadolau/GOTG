@@ -103,11 +103,6 @@ namespace Wiwa {
 			//WI_CORE_INFO("emitter volume type = {0}", emitter->m_spawnVolume);
 
 
-			glm::vec4 color = emitter->m_p_colorsOverLifetime[0].color;
-			
-			Uniform* u_color = m_Material->getUniform("u_Color");
-			if (u_color != nullptr)
-				u_color->setData(color, UniformType::fVec4);
 
 
 			int activeParticles = 0;
@@ -116,11 +111,29 @@ namespace Wiwa {
 				Particle& particle = m_Particles[i];
 				float dt = Time::GetDeltaTime() * 0.001f;
 
-				UpdateParticleLife(particle, dt);
-
 				if (particle.life_time > 0.0f)
 				{
+					UpdateParticleLife(particle, dt);
+
 					activeParticles++;
+
+					glm::vec4 color = emitter->m_p_colorsOverLifetime[0].color;
+
+					//Shader* shader = m_Material->getShader();
+
+					//shader->setUniformFloat(shader->getUniformLocation("u_DissolveAmount"), particle.life_percentage);
+					//shader->setUniformVec4(shader->getUniformLocation("u_Color"), particle.color);
+
+					Uniform* u_color = m_Material->getUniform("u_Color");
+					if (u_color != nullptr)
+						u_color->setData(color, UniformType::fVec4);
+
+					Uniform* u_life = m_Material->getUniform("u_DissolveAmount");
+					if (u_life != nullptr)
+						u_life->setData(particle.life_percentage, UniformType::Float);
+					// 
+					//u_Time
+					//u_
 
 					//calculate everything
 					particle.position += particle.velocity * dt;
@@ -155,8 +168,6 @@ namespace Wiwa {
 						rotationRad.y = glm::atan(rotationMatrix[0][2], rotationMatrix[2][2]);
 						rotationRad.z = glm::atan(rotationMatrix[1][0], rotationMatrix[1][1]);
 
-
-
 						transform = glm::translate(transform, particle.position);
 
 						//transform = billboardMatrix * transform;
@@ -189,10 +200,6 @@ namespace Wiwa {
 						//pass transformation matrix
 						particle.transform = transform;
 					}
-					
-
-					
-
 				}
 			}
 

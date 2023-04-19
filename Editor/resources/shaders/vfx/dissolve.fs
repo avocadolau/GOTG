@@ -8,9 +8,16 @@ in vec2 TexCoord;
 in vec3 Normal;
 in vec3 LocalPos;
 
+//====================================
+// all vfx must have this unifroms
+//lifetime form 1 to 0,  100% normalized
+uniform float u_LifeTime;
 uniform vec4 u_Color;
-uniform sampler2D u_Texture;
+//=====================
+
 uniform float u_DissolveAmount;
+
+uniform sampler2D u_Texture;
 uniform sampler2D u_DiscardTex;
 
 void main()
@@ -27,7 +34,6 @@ void main()
     vec4 finalColor = texture2D(u_Texture, TexCoord) * u_Color;
 
     FragColor = finalColor;
-
 
     // check whether result is higher than some threshold, if so, output as bloom threshold color
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
