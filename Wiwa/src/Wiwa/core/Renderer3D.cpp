@@ -99,6 +99,14 @@ namespace Wiwa
 		colorShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_color", colorShader);
 
+		ResourceId basecolorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/base_color");
+		Shader* basecolorShader = Wiwa::Resources::GetResourceById<Shader>(basecolorShaderId);
+		basecolorShader->Compile("resources/shaders/light/base_color");
+
+		basecolorShader->addUniform("u_Color", UniformType::fVec4);
+		
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/base_color", basecolorShader);
+
 		// Normal Display Shader
 		m_NormalDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/normal_display");
 		m_NormalDisplayShader = Resources::GetResourceById<Shader>(m_NormalDisplayShaderId);

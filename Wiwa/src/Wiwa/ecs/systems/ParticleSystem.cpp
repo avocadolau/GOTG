@@ -102,6 +102,15 @@ namespace Wiwa {
 
 			//WI_CORE_INFO("emitter volume type = {0}", emitter->m_spawnVolume);
 
+
+			glm::vec4 color = emitter->m_p_colorsOverLifetime[0].color;
+
+			Shader* shader = m_Material->getShader();
+			Uniform* u_color = m_Material->getUniform("u_Color");
+			u_color->setData(color, UniformType::fVec4);
+
+
+
 			int activeParticles = 0;
 			for (unsigned int i = 0; i < m_MaxParticles; ++i)
 			{
@@ -196,6 +205,7 @@ namespace Wiwa {
 				{
 					r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 				}
+				
 			}
 		}
 		glDepthMask(GL_TRUE);
