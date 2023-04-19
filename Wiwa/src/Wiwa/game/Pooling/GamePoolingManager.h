@@ -16,6 +16,7 @@ namespace Wiwa
         EntityPool* s_BossUltron;
         EntityPool* s_ClusterBulletsPool;
         EntityPool* s_UltronLaserBeamPool;
+        EntityPool* s_Subjugator;
         
         
         void SetScene(Scene* scene);
@@ -50,5 +51,8 @@ namespace Wiwa
 
         void LoadUltronLaserBeamPool(Scene* scene);
         void UnloadUltronLaserBeamPool();
+
+        void LoadSubjugatorPool(Scene* scene);
+        void UnloadSubjugatorPool();
     };
 }
