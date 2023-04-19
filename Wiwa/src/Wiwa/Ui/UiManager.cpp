@@ -203,11 +203,25 @@ namespace Wiwa
 	{
 		for (size_t i = 0; i < canvas.size(); i++)
 		{
+			for (int j = 0; j < canvas.at(i)->controls.size(); j++)
+			{
+				delete canvas.at(i)->controls.at(j);
+			}
 			canvas.at(i)->controls.clear();
+			canvas.at(i)->controls.shrink_to_fit();
+			
+			for (int k = 0; k < canvas.at(i)->controls.size(); k++)
+			{
+				delete canvas.at(i)->controlsForSelection.at(k);
+			}
 			canvas.at(i)->controlsForSelection.clear();
-		}
+			canvas.at(i)->controlsForSelection.shrink_to_fit();
 
+			delete canvas.at(i);
+		}
 		canvas.clear();
+		canvas.shrink_to_fit();
+		
 		return true;
 	}
 
