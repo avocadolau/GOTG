@@ -1,4 +1,5 @@
 #version 330
+ #extension GL_ARB_explicit_uniform_location : enable
 
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
@@ -12,7 +13,6 @@ uniform sampler2D u_Texture;
 uniform float u_DissolveAmount;
 uniform sampler2D u_DiscardTex;
 
-
 void main()
 {
     //calculate dissolve
@@ -22,13 +22,12 @@ void main()
     float visible = dissolve - u_DissolveAmount;
 
     if(visible < 0)
-    {
         discard;
-        return;
-    }  
-    vec4 texColor = texture2D(u_Texture, TexCoord) * u_Color;
 
-    FragColor = texColor;
+    vec4 finalColor = texture2D(u_Texture, TexCoord) * u_Color;
+
+    FragColor = finalColor;
+
 
     // check whether result is higher than some threshold, if so, output as bloom threshold color
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

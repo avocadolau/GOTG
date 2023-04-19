@@ -51,8 +51,11 @@ namespace Wiwa {
 		}break;
 		case Wiwa::UniformType::Sampler2D:
 		{
-			glActiveTexture(textureId++);
+			glActiveTexture(textureId);
 			glBindTexture(GL_TEXTURE_2D, ((SamplerData*)m_Data)->tex_id);
+			glUniform1i(m_UniformID, textureId - GL_TEXTURE0);
+			textureId++;
+
 		}break;
 		default:
 			break;

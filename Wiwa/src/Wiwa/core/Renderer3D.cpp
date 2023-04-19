@@ -121,11 +121,7 @@ namespace Wiwa
 		dissolveShader->addUniform("u_DissolveAmount", UniformType::Float);
 		dissolveShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
-
-
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/dissolve", dissolveShader);
-
-
 		//===========================================================================================================
 
 		// Normal Display Shader
