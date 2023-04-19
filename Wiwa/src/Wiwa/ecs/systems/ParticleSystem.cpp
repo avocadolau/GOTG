@@ -104,10 +104,9 @@ namespace Wiwa {
 
 
 			glm::vec4 color = emitter->m_p_colorsOverLifetime[0].color;
-
-			Shader* shader = m_Material->getShader();
-			shader->setUniformVec4(shader->getUniformLocation("u_Color"), color);
-
+			
+			Uniform* u_color = m_Material->getUniform("u_Color");
+			u_color->setData(color, UniformType::fVec4);
 
 
 			int activeParticles = 0;
@@ -132,23 +131,66 @@ namespace Wiwa {
 
 					if (emitter->m_p_rotationOverTime)
 					{
-						particle.rotation = emitter->m_p_rotationOverTimeStart * (1 - particle.life_percentage) + emitter->m_p_rotationOverTimeEnd * particle.life_percentage;
+						particle.rotation = glm::radians(emitter->m_p_rotationOverTimeStart) * (1 - particle.life_percentage) + glm::radians(emitter->m_p_rotationOverTimeEnd) * particle.life_percentage;
 					}
 
 
-					// Convert rotation angles from degrees to radians
-					glm::vec3 rotationRad = glm::radians(particle.rotation);
-
 					// Create transformation matrix
 					glm::mat4 transform = glm::mat4(1.0f);
-					transform = glm::translate(transform, particle.position);
-					transform = glm::rotate(transform, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
-					transform = glm::rotate(transform, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-					transform = glm::rotate(transform, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
-					transform = glm::scale(transform, particle.scale);
 
-					//pass transformation matrix
-					particle.transform = transform;
+					if (emitter->m_billboardActive)
+					{
+						Wiwa::CameraManager& cm = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
+						CameraId cameraId;
+						cameraId = cm.getActiveCameraId();
+						Wiwa::Camera* cam = cm.getCamera(cameraId);
+
+						//fix rotation
+						glm::mat4 rotationMatrix = cam->getView();
+						glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
+
+						glm::vec3 rotationRad = glm::vec3(0, 0, 0);
+						rotationRad.x = -glm::asin(rotationMatrix[1][2]);
+						rotationRad.y = glm::atan(rotationMatrix[0][2], rotationMatrix[2][2]);
+						rotationRad.z = glm::atan(rotationMatrix[1][0], rotationMatrix[1][1]);
+
+
+
+						transform = glm::translate(transform, particle.position);
+
+						//transform = billboardMatrix * transform;
+
+						transform = glm::rotate(transform, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+						transform = glm::rotate(transform, particle.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+						transform = glm::rotate(transform, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+
+						//debug
+						rotationRad.x = glm::degrees(glm::asin(rotationMatrix[1][2]));
+						rotationRad.y = glm::degrees(glm::atan(rotationMatrix[0][2], rotationMatrix[2][2]));
+						rotationRad.z = glm::degrees(glm::atan(rotationMatrix[1][0], rotationMatrix[1][1]));
+
+						//pass transformation matrix
+						particle.transform = transform;
+						
+					}
+					else
+					{
+						// Convert rotation angles from degrees to radians
+						glm::vec3 rotationRad = glm::radians(particle.rotation);
+
+
+						transform = glm::translate(transform, particle.position);
+						transform = glm::rotate(transform, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+						transform = glm::rotate(transform, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+						transform = glm::rotate(transform, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+						transform = glm::scale(transform, particle.scale);
+
+						//pass transformation matrix
+						particle.transform = transform;
+					}
+					
+
+					
 
 				}
 			}
