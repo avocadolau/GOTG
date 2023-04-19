@@ -3,10 +3,10 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
-#include "Wiwa/ecs/components/game/wave/Wave.h"
+//#include "Wiwa/ecs/components/game/wave/Wave.h"
 
-#define CLUSTER_BULLET_LIFETIME 5.0f
-#define CLUSTER_BULLET_DAMAGE 30
+//#define CLUSTER_BULLET_LIFETIME 5.0f
+//#define CLUSTER_BULLET_DAMAGE 30
 
 namespace Wiwa {
 	class WI_API ClusterBulletSystem : public System {

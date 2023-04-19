@@ -5,14 +5,17 @@
 
 //#include "Wiwa/ecs/components/game/wave/Wave.h"
 
+//#define ULTRON_LASER_LIFETIME 3.0f
+//#define ULTRON_LASER_DAMAGE 30 // per second
+
 namespace Wiwa {
-	class WI_API SimpleBulletSystem : public System {
+	class WI_API UltronLaserBeamSystem : public System {
 	private:
 		float m_Timer = 0;
-		EntityManager::ComponentIterator m_BulletIt;
+		EntityManager::ComponentIterator m_LaserIt;
 	public:
-		SimpleBulletSystem();
-		~SimpleBulletSystem();
+		UltronLaserBeamSystem();
+		~UltronLaserBeamSystem();
 
 		void OnAwake() override;
 
@@ -23,7 +26,8 @@ namespace Wiwa {
 		void OnDestroy() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
+
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::SimpleBulletSystem);
+REGISTER_SYSTEM(Wiwa::UltronLaserBeamSystem);

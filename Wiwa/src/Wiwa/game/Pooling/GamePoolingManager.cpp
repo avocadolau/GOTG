@@ -14,7 +14,8 @@ namespace Wiwa
 		s_SimpleBulletsPool = new EntityPool(4, 1, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
 		s_SentinelExplosion = new EntityPool(5, 3, "assets\\enemy\\explosions\\test_explosion_3.wiprefab");
 		s_BossUltron = new EntityPool(6, 1, "assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
-		s_ClusterBulletsPool = new EntityPool(7,3, "assets\\enemy\\simple_bullet\\simple_bullet.wiprefab"); // temporary
+		s_ClusterBulletsPool = new EntityPool(7,3, "assets\\enemy\\cluster_bullet\\cluster_bullet.wiprefab"); 
+		s_UltronLaserBeamPool = new EntityPool(8, 1, "assets\\enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
 	}
 
 	GamePoolingManager::~GamePoolingManager()
@@ -26,6 +27,7 @@ namespace Wiwa
 		delete s_SentinelExplosion;
 		delete s_BossUltron;
 		delete s_ClusterBulletsPool;
+		delete s_UltronLaserBeamPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -37,6 +39,7 @@ namespace Wiwa
 		s_SentinelExplosion->SetScene(scene);
 		s_BossUltron->SetScene(scene);
 		s_ClusterBulletsPool->SetScene(scene);
+		s_UltronLaserBeamPool->SetScene(scene);
 	}
 
 
@@ -64,6 +67,9 @@ namespace Wiwa
 			break;
 		case 7:
 			LoadClusterBulletPool(scene);
+			break;
+		case 8:
+			LoadUltronLaserBeamPool(scene);
 			break;
 		default:
 			break;
@@ -93,6 +99,9 @@ namespace Wiwa
 			break;
 		case 7:
 			UnloadClusterBulletPool();
+			break;
+		case 8:
+			UnloadUltronLaserBeamPool();
 			break;
 		default:
 			break;
@@ -189,6 +198,20 @@ namespace Wiwa
 		s_ClusterBulletsPool->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadUltronLaserBeamPool(Scene* scene)
+	{
+		s_UltronLaserBeamPool->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_UltronLaserBeamPool->getMaxSize());
+		for (int i = 0; i < s_UltronLaserBeamPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_UltronLaserBeamPool->getPath());
+		s_UltronLaserBeamPool->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadUltronLaserBeamPool()
+	{
+		s_UltronLaserBeamPool->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		LoadPhalanxMeleePool(scene);
@@ -197,6 +220,8 @@ namespace Wiwa
 		LoadSimpleBulletPool(scene);
 		LoadSentinelExplosionPool(scene);
 		LoadBossUltronPool(scene);
+		LoadClusterBulletPool(scene);
+		LoadUltronLaserBeamPool(scene);
 
 	}
 	void GamePoolingManager::UnloadAllPools()
@@ -207,5 +232,7 @@ namespace Wiwa
 		UnloadSimpleBulletPool();
 		UnloadSentinelExplosionPool();
 		UnloadBossUltronPool();
+		UnloadClusterBulletPool();
+		UnloadUltronLaserBeamPool();
 	}
 }

@@ -13,7 +13,7 @@ Wiwa::ClusterBulletSystem::ClusterBulletSystem()
 
 Wiwa::ClusterBulletSystem::~ClusterBulletSystem()
 {
-	m_BulletIt = GetComponentIterator<ClusterBullet>();
+	
 }
 
 void Wiwa::ClusterBulletSystem::OnAwake()
@@ -25,8 +25,8 @@ void Wiwa::ClusterBulletSystem::OnInit()
 {
 	ClusterBullet* bullet = GetComponentByIterator<ClusterBullet>(m_BulletIt);
 
-	bullet->damage = CLUSTER_BULLET_DAMAGE;
-	bullet->lifeTime = CLUSTER_BULLET_LIFETIME;
+	//bullet->damage = CLUSTER_BULLET_DAMAGE;
+	//bullet->lifeTime = CLUSTER_BULLET_LIFETIME;
 
 	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 	Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
@@ -49,8 +49,20 @@ void Wiwa::ClusterBulletSystem::OnUpdate()
 
 	if (m_Timer >= bullet->lifeTime)
 	{
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		em.DestroyEntity(m_EntityId);
+		Math::RandomRange(0, 1);
+
+		int randomValue = Math::RandomRange(0, 1);
+
+		if (randomValue == 0)
+		{
+			BlowClusterBullet01(m_EntityId);
+		}
+		else
+		{
+			BlowClusterBullet02(m_EntityId);
+		}
+
+		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 	}
 }
 
@@ -67,23 +79,25 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 		{
 			ClusterBullet* bullet = GetComponentByIterator<ClusterBullet>(m_BulletIt);
 			GameStateManager::DamagePlayer(bullet->damage);
+
+			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 		}
 
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		//em.DestroyEntity(m_EntityId);
 
-		Math::RandomRange(0,1);
-
-		int randomValue = Math::RandomRange(0, 1);
-
-		if (randomValue == 0)
-		{
-			BlowClusterBullet01(m_EntityId);
-		}
-		else
-		{
-			BlowClusterBullet02(m_EntityId);
-		}
+		//Math::RandomRange(0,1);
+		//
+		//int randomValue = Math::RandomRange(0, 1);
+		//
+		//if (randomValue == 0)
+		//{
+		//	BlowClusterBullet01(m_EntityId);
+		//}
+		//else
+		//{
+		//	BlowClusterBullet02(m_EntityId);
+		//}
 
 		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 	}
