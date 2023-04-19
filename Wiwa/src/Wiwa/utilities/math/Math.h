@@ -17,6 +17,11 @@
 
 namespace Wiwa {
 	namespace Math {
+
+		namespace Vector3 {
+			glm::vec3 ZERO = { 0.f, 0.f, 0.f };
+		}
+
 		inline void ScreenPosToWorldRay(
 			int mouseX, int mouseY,             // Mouse position, in pixels, from bottom-left corner of the window
 			int screenWidth, int screenHeight,  // Window size, in pixels

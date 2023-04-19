@@ -28,6 +28,8 @@
 
 // Game components
 #include "components/game/Character.h"
+#include "components/game/player/RocketShooter.h"
+#include "components/game/player/StarLordShooter.h"
 
 #include "components/game/wave/Wave.h"
 #include "components/game/wave/WaveSpawner.h"

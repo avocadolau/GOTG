@@ -450,9 +450,11 @@ namespace Wiwa {
 
 	EntityId EntityManager::LoadPrefab(const char* path, EntityId parent)
 	{
-		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
+		std::string filePath = Resources::_assetToLibPath(path);
 
-		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+		if (!Wiwa::FileSystem::Exists(filePath.c_str())) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(filePath.c_str(), FileSystem::OM_IN | FileSystem::OM_BINARY);
 
 		EntityId eid = WI_INVALID_INDEX;
 

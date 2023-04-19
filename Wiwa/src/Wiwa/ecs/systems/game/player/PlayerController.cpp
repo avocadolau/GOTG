@@ -1,7 +1,11 @@
+#include <wipch.h>
 #include "PlayerController.h"
 
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/ecs/Components.h>
+
+#include <Wiwa/utilities/math/Math.h>
+#include <Wiwa/audio/Audio.h>
 
 Wiwa::PlayerController::PlayerController()
 {
@@ -26,7 +30,7 @@ void Wiwa::PlayerController::OnInit()
 	m_StatsIt = GetComponentIterator<Character>();
 	m_TransformIt = GetComponentIterator<Transform3D>();
 	m_RigidbodyIt = GetComponentIterator<CollisionBody>();
-	//m_ShooterIt = GetComponent<StarLordShooter>();
+	m_ShooterIt = GetComponentIterator<StarLordShooter>();
 	GameStateManager::LoadProgression();
 }
 
@@ -61,6 +65,18 @@ Wiwa::Transform3D* Wiwa::PlayerController::GetFirePosition(const char* name)
 void Wiwa::PlayerController::TakeDamage(uint32_t damage)
 {
 
+}
+
+void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir)
+{
+	EntityId bullet = GetEntityManager().LoadPrefab("Prefabs/StarLordBullet.wiprefab");
+	Transform3D* bulletTransform = GetEntityManager().GetComponent<Transform3D>(bullet);
+	Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_TransformIt);
+
+	bulletTransform->localPosition = Math::GetWorldPosition(transform.worldMatrix);
+	bulletTransform->localRotation = glm::vec3(-90.f, playerTransform->localRotation.y - 90.f, 0.f);
+	
+	// TODO: Play bullet sound here
 }
 
 glm::vec3 Wiwa::PlayerController::GetMovementInput()

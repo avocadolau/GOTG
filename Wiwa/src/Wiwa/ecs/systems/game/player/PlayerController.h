@@ -4,6 +4,9 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
+	struct StarLordShooter;
+	struct RocketShooter;
+
 	class WI_API PlayerController : public System {
 		bool m_PlayerSet = false;
 		EntityId playerId = -1;
@@ -17,21 +20,30 @@ namespace Wiwa {
 		void OnUpdate() override;
 		
 		WI_HARD_INL Character* GetCharacter();
-		Transform3D* GetTransform();
-		CollisionBody* GetRigidBody();
+		WI_HARD_INL Transform3D* GetTransform();
+		WI_HARD_INL CollisionBody* GetRigidBody();
 		WI_HARD_INL EntityId GetEntity() { return m_EntityId; }
+		WI_HARD_INL glm::vec3 GetDirection() { return m_Direction; }
+		WI_HARD_INL glm::vec3 GetMovementInput() { return m_MovementInput; }
+		WI_HARD_INL glm::vec3 GetShootInput() { return m_ShootInput; }
+		WI_HARD_INL glm::vec3 GetVelocity() { return m_Velocity; }
+		WI_HARD_INL bool IsDashEnable() { return m_DashEnable; }
 
 		Transform3D* GetFirePosition(const char* name);
 		void TakeDamage(uint32_t damage);
 
-	private:
+		void SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir);
+
+
 		glm::vec3 GetMovementInput();
 		glm::vec3 GetShootingInput();
 
 		void SetPlayerRotation(glm::vec3 currentRotation, const glm::vec3& input, const float rotationSpeed);
 		float AngleFromVec2(const glm::vec2& vector);
 
-	private:
+
+
+	protected:
 		EntityManager::ComponentIterator m_TransformIt;
 		EntityManager::ComponentIterator m_StatsIt;
 		EntityManager::ComponentIterator m_RigidbodyIt;
