@@ -99,6 +99,7 @@ namespace Wiwa
 		colorShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_color", colorShader);
 
+
 		ResourceId basecolorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/base_color");
 		Shader* basecolorShader = Wiwa::Resources::GetResourceById<Shader>(basecolorShaderId);
 		basecolorShader->Compile("resources/shaders/light/base_color");
@@ -106,6 +107,10 @@ namespace Wiwa
 		basecolorShader->addUniform("u_Color", UniformType::fVec4);
 		
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/base_color", basecolorShader);
+
+		//===========================================================================================================
+		// VFX shaders
+		//===========================================================================================================
 
 		ResourceId dissolveShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/dissolve");
 		Shader* dissolveShader = Wiwa::Resources::GetResourceById<Shader>(dissolveShaderId);
