@@ -80,12 +80,15 @@ namespace Wiwa
 					}*/
 
 					//RIGHT
+					
 					if (Wiwa::Input::IsButtonPressed(0, 12))
 					{
 						extraPosition.width += 1;
 						if (extraPosition.width >= position.width)
 						{
+							extraTexturePosition.width = extraPosition.width;
 							extraPosition.width = position.width;
+							
 						}
 
 					}
@@ -95,6 +98,7 @@ namespace Wiwa
 						extraPosition.width -= 1;
 						if (extraPosition.width <= 0)
 						{
+							extraTexturePosition.width = extraPosition.width;
 							extraPosition.width = 0;
 						}
 
@@ -126,72 +130,16 @@ namespace Wiwa
 
 	bool GuiSlider::Draw(Renderer2D* render)
 	{
-		// Draw the right button depending on state
-		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
-		Color4f color = { 1.0f,1.0f,1.0f,1.0f };
 		extraPosition.x = position.x;
 		extraPosition.y = position.y;
+		extraTexturePosition.width = extraPosition.width;
 
-		switch (state)
-		{
-
-		case GuiControlState::DISABLED:
-		{
-			//render->DrawTexture2(texture, position.x, position.y, NULL); <-- Old way to do it (example)
-			//render->DrawTexture2(textureForSlider, extraPosition.x, extraPosition.y, NULL); <-- Old way to do it (example)
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-
-			
-		} break;
-
-		case GuiControlState::NORMAL:
-		{
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			color = { 1.0f,1.0f,1.0f,1.0f };
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
+		
+		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render->UpdateInstancedQuadTexClip(m_Scene, id_quad_extra, extraTexture->GetSize(), extraTexturePosition);
 
 
-		} break;
-
-		//L14: TODO 4: Draw the button according the GuiControl State
-		case GuiControlState::FOCUSED:
-		{
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			color = { 0.6f, 0.6f, 0.6f, 1.0f };
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-
-
-		} break;
-		case GuiControlState::PRESSED:
-		{
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-
-			color = { 0.1f, 0.1f, 0.1f, 1.0f };
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-
-
-		} break;
-
-		/******/
-
-		case GuiControlState::SELECTED:
-		{
-			render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			color = { 0.6f, 0.6f, 0.6f, 1.0f };
-			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, color);
-
-
-		}break;
-		default:
-			break;
-		}
 
 		return false;
 	}

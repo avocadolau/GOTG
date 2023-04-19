@@ -209,8 +209,8 @@ void UIEditorPanel::DrawCanvasItems()
 		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))
 		{
-			elementSelected = (int)i;
 			CleanInitialValues();
+			elementSelected = (int)i;
 			SetInitialValues(canvas->controls.at(i));
 		}
 		ImGui::SameLine();
@@ -245,11 +245,10 @@ void UIEditorPanel::CleanInitialValues()
 	audioEventForButton = "";
 	animated = false;
 	rotation = 0.0f;
-	if (animated)
-	{
-		animSpeed = 0.0f;
-		animationRects = empty;
-	}
+	
+	animSpeed = 0.0f;
+	animationRects = empty;
+	
 
 	extraOriginPos[0] = 0;
 	extraOriginPos[1] = 0;

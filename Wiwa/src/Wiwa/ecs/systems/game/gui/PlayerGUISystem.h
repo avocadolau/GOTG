@@ -24,6 +24,8 @@ namespace Wiwa
         void CooldownState(Ability** ability,Wiwa::GuiManager& gm);
         void CooldownState(Buff** buff, Wiwa::GuiManager& gm);
 
+        void HandleActiveAbilities(Ability** ability, Wiwa::GuiManager& gm);
+        void HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm);
         void PlayerElements(Wiwa::GuiManager& gm, Character* character);
 
     };
