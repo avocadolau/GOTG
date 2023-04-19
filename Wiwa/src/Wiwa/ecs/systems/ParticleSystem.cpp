@@ -106,7 +106,8 @@ namespace Wiwa {
 			glm::vec4 color = emitter->m_p_colorsOverLifetime[0].color;
 			
 			Uniform* u_color = m_Material->getUniform("u_Color");
-			u_color->setData(color, UniformType::fVec4);
+			if (u_color != nullptr)
+				u_color->setData(color, UniformType::fVec4);
 
 
 			int activeParticles = 0;
