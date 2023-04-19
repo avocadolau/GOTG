@@ -5,12 +5,12 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	struct WI_API AINavMesh
+	struct WI_API NavMesh
 	{
 		char filePath[128];
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::AINavMesh)
+REFLECTION_BEGIN(Wiwa::NavMesh)
 REFLECT_MEMBER(filePath)
 REFLECTION_END;

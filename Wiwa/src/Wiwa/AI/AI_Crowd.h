@@ -8,11 +8,16 @@
 class Crowd {
 public:
 
-    static Crowd* instancePtr;
+    //static Crowd* instancePtr;
     Crowd(const Crowd& obj)
         = delete;
     
-    static Crowd* getInstance()
+    static Crowd& getInstance()
+    {
+        static Crowd instance;
+        return instance;
+    }
+    /*static Crowd* getInstance()
     {
         if (instancePtr == NULL)
         {
@@ -24,10 +29,10 @@ public:
         {
             return instancePtr;
         }
-    }
+    }*/
 
     void Update(float deltaTime);
-    int AddAgent(const float* position);
+    int AddAgent(const float* position, dtCrowdAgentParams* param, bool defaultParam = false);
     void RemoveAgent(int agentIndex);
     void SetAgentTarget(int agentIndex, const float* target);
     void SetAgentMaxSpeed(int agentIndex, float speed);

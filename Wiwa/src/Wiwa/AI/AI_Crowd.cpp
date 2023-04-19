@@ -1,3 +1,4 @@
+#include <wipch.h>
 #include "AI_Crowd.h"
 
 Crowd::Crowd() : m_crowd(nullptr)
@@ -38,14 +39,18 @@ void Crowd::Update(float deltaTime)
     m_crowd->update(deltaTime, nullptr);
 }
 
-int Crowd::AddAgent(const float* position)
+int Crowd::AddAgent(const float* position, dtCrowdAgentParams* param, bool defaultParam)
 {
-    dtCrowdAgentParams agentParams = m_agentParams;
-    agentParams.userData = &m_agents.back();
+    if (!param)
+        return -1;
 
-    int index = m_crowd->addAgent(position, &agentParams);
+    if (defaultParam){
+        *param = m_agentParams;
+    }
+    int index = m_crowd->addAgent(position, param);
     if (index != -1) {
         m_agents.emplace_back(index);
+        param->userData = &m_agents.back();
     }
     return index;
 }
@@ -54,7 +59,7 @@ void Crowd::RemoveAgent(int agentIndex)
 {
     if (agentIndex >= 0) {
         m_crowd->removeAgent(agentIndex);
-        std::vector<int>::iterator it = std::find(m_agents.begin(), m_agents.end(), 3);
+        std::vector<int>::iterator it = std::find(m_agents.begin(), m_agents.end(), agentIndex);
         if (it != m_agents.end()) {
             m_agents.erase(it);
         }

@@ -2,8 +2,8 @@
 #include "AI_RecastManager.h"
 #include <Wiwa/scene/SceneManager.h>
 #include <glew.h>
-#include "Wiwa/ecs/components/ai/AINavMesh.h"
-#include <Wiwa/ecs/systems/ai/AINavMeshLoadingSystem.h>
+#include "Wiwa/ecs/components/ai/NavMesh.h"
+#include <Wiwa/ecs/systems/ai/NavMeshLoadingSystem.h>
 namespace Wiwa
 {
 	EntityId RecastManager::m_Id = -1;
@@ -153,10 +153,10 @@ namespace Wiwa
 			em.DestroyEntity(id);
 
 		id = em.CreateEntity("NavMesh_Data");
-		Wiwa::AINavMesh navMesh;
+		Wiwa::NavMesh navMesh;
 		strcpy(navMesh.filePath, path.c_str());
-		em.AddComponent<Wiwa::AINavMesh>(id, navMesh);
-		em.ApplySystem<Wiwa::AINavMeshLoadingSystem>(id);
+		em.AddComponent<Wiwa::NavMesh>(id, navMesh);
+		em.ApplySystem<Wiwa::NavMeshLoadingSystem>(id);
 
 		
 		return true;
@@ -173,7 +173,7 @@ namespace Wiwa
 			return false;
 		}
 
-		Wiwa::AINavMesh* navMesh = em.GetComponent<Wiwa::AINavMesh>(id);
+		Wiwa::NavMesh* navMesh = em.GetComponent<Wiwa::NavMesh>(id);
 		if (!navMesh)
 		{
 			WI_INFO("Coulnd't load navmesh, as there is no component navMesh");

@@ -10,7 +10,7 @@
 #include "systems/RayCastSystem.h"
 
 #include "systems/AgentAISystem.h"
-#include "systems/ai/AINavMeshLoadingSystem.h"
+#include "systems/ai/NavMeshLoadingSystem.h"
 
 // Game systems
 #include "systems/game/enemy/EnemySystem.h"

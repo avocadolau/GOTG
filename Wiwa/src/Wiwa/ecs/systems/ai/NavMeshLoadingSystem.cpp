@@ -1,0 +1,28 @@
+#include <wipch.h>
+#include "NavMeshLoadingSystem.h"
+#include <Wiwa/AI/AI_RecastManager.h>
+#include <Wiwa/AI/AI_Crowd.h>
+
+namespace Wiwa
+{
+	NavMeshLoadingSystem::NavMeshLoadingSystem()
+	{
+		RecastManager::Load();
+	}
+
+	NavMeshLoadingSystem::~NavMeshLoadingSystem()
+	{
+	}
+
+	void NavMeshLoadingSystem::OnSystemAdded()
+	{		
+		Crowd& crowd = Crowd::getInstance();
+		crowd.Init();
+	}
+
+	void NavMeshLoadingSystem::OnUpdate()
+	{
+		Crowd& crowd = Crowd::getInstance();
+		crowd.Update(1.0f / 60.0f);
+	}
+}

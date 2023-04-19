@@ -20,7 +20,7 @@
 #include <Wiwa/ecs/components/CollisionBody.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
 #include <Wiwa/ecs/components/game/items/Item.h>
-#include <Wiwa/ecs/components/ai/AINavMesh.h>
+#include <Wiwa/ecs/components/ai/NavMesh.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -62,7 +62,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Item) { DrawItemComponent(data); }else
-		if (type->hash == (size_t)TypeHash::AINavMesh) { DrawAiNavMeshComponent(data); }else
+		if (type->hash == (size_t)TypeHash::NavMesh) { DrawNavMeshComponent(data); }else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -128,9 +128,9 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		{
 			DrawItemComponent(data);
 		}
-		else if (type->hash == (size_t)TypeHash::AINavMesh)
+		else if (type->hash == (size_t)TypeHash::NavMesh)
 		{
-			DrawAiNavMeshComponent(data);
+			DrawNavMeshComponent(data);
 		}
 		else
 
@@ -1311,9 +1311,9 @@ void InspectorPanel::DrawItemComponent(byte* data)
 	ImGui::InputScalar("ItemType", ImGuiDataType_U8,&item->item_type);
 }
 
-void InspectorPanel::DrawAiNavMeshComponent(byte* data)
+void InspectorPanel::DrawNavMeshComponent(byte* data)
 {
-	Wiwa::AINavMesh* navMesh = (Wiwa::AINavMesh*)data;
+	Wiwa::NavMesh* navMesh = (Wiwa::NavMesh*)data;
 
 	AssetContainer(navMesh->filePath);
 }
