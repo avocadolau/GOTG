@@ -17,6 +17,7 @@ namespace Wiwa {
 	}
 	void ParticleSystem::OnSystemAdded()
 	{
+
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		Transform3D* t3d = GetComponent<Transform3D>();
 
@@ -27,6 +28,7 @@ namespace Wiwa {
 		m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
 
 		m_MaxParticles = emitter->m_maxParticles;
+		emitter->m_meshChanged = false;
 
 		//init with delay
 		float delay = 0;
@@ -57,6 +59,13 @@ namespace Wiwa {
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 
+		if (emitter->m_meshChanged)
+		{
+			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
+			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+			emitter->m_meshChanged = false;
+
+		}
 		
 		if (m_MaxParticles != emitter->m_maxParticles)
 		{

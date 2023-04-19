@@ -784,6 +784,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 				WI_INFO("Trying to load payload at path {0}", pathS.c_str());
 				pathS = Wiwa::Resources::_assetToLibPath(pathS);
 				strcpy(emitter->m_meshPath, pathS.c_str());
+				emitter->m_meshChanged = true;
 			}
 		}
 
