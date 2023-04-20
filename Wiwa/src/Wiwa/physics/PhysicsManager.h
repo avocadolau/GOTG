@@ -31,7 +31,7 @@ class Camera;
 namespace Wiwa {
 
 	struct Object {
-		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), nextPosition(0.0f, 0.0f, 0.0f), id(id_),
+		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_),
 			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_) {};
 
 		btCollisionObject* collisionObject;
@@ -39,7 +39,6 @@ namespace Wiwa {
 		EntityManager::ComponentIterator parentTransformIt;
 		EntityManager::ComponentIterator collisionBodyIt;
 		btVector3 velocity;
-		btVector3 nextPosition;
 		size_t id;
 		size_t parentId;
 		int selfTag;
@@ -85,6 +84,10 @@ namespace Wiwa {
 
 		bool UpdatePhysicsToEngine();
 
+		void UpdateSingleEngineToPhys(const glm::vec3& new_pos, const Transform3D& transform, const CollisionBody& coll_body, Object* obj);
+
+		void UpdateSinglePhysToEngine(EntityId parent, Transform3D& transform, const Transform3D& parent_transform, const CollisionBody& coll_body, Object* obj);
+
 		bool CleanWorld();
 
 		bool DeleteBody(Object* body);
@@ -105,8 +108,6 @@ namespace Wiwa {
 		bool SetVelocity(Object* body, const glm::vec3 velocity);
 
 		bool SetRotation(Object* body, const glm::vec3 euler_angles);
-
-		bool SetNextPosition(Object* body, const glm::vec3 nest_position);
 
 		void SetTrigger(Object* body, bool isTrigger);
 

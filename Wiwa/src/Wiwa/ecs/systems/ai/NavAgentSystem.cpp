@@ -65,29 +65,18 @@ namespace Wiwa
                 m_currentPos.x = agent->npos[0];
                 m_currentPos.y = agent->npos[1];
                 m_currentPos.z = agent->npos[2];
-                //WI_INFO("X: {}, Y: {}, Z: {}", m_currentPos.x, m_currentPos.y, m_currentPos.z);
             }
             Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_agentParams.maxSpeed);
             Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_agentParams.maxAcceleration);
             Crowd::getInstance().SetAgentParameters(m_agentIndex, m_agentParams);
-            /* Crowd::getInstance().SetAgentPosition(m_agentIndex, &m_currentPos[0]);
-             Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_maxSpeed);
-             Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_maxAcceleration);*/
+
             Render();
 
             Wiwa::EntityManager& em = m_Scene->GetEntityManager();
             Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
-            // Check if entity has collision body
-            if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId) && agent)
-            {
-                //physSys->getBody()->velocity = btVector3(agent->vel[0], agent->vel[1], agent->vel[2]);
-                m_Scene->GetPhysicsManager().SetNextPosition(physSys->getBody(), m_currentPos);
-            }
-            else
-            {
-                Transform3D* tr = GetComponent<Transform3D>();
-                tr->localPosition = m_currentPos;
-            }
+
+            Transform3D* tr = GetComponent<Transform3D>();
+            tr->localPosition = m_currentPos;
         }
     }
 

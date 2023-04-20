@@ -39,7 +39,7 @@ RecastSoloMesh::RecastSoloMesh() :
 	m_cset(0),
 	m_pmesh(0),
 	m_dmesh(0),
-	m_drawMode(DRAWMODE_NAVMESH_TRANS)
+	m_drawMode(DRAWMODE_NAVMESH_INVIS)
 {
 }
 
