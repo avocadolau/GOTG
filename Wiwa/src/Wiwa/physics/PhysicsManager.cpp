@@ -187,18 +187,18 @@ namespace Wiwa {
 	{
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
-			if ((*item)->velocity.isZero())
-				continue;
+			if (!(*item)->velocity.isZero())
+			{
+				btVector3 position = (*item)->collisionObject->getWorldTransform().getOrigin();
+				position += (*item)->velocity * dt;
+				(*item)->collisionObject->getWorldTransform().setOrigin(position);
+			}			
 
-			btVector3 position = (*item)->collisionObject->getWorldTransform().getOrigin();
-			position += (*item)->velocity * dt;
-			(*item)->collisionObject->getWorldTransform().setOrigin(position);
-
-			if ((*item)->nextPosition.isZero())
-				continue;
-
-			(*item)->collisionObject->getWorldTransform().setOrigin((*item)->nextPosition);
-			(*item)->nextPosition.setZero();
+			if (!(*item)->nextPosition.isZero())
+			{
+				(*item)->collisionObject->getWorldTransform().setOrigin((*item)->nextPosition);
+				(*item)->nextPosition.setZero();
+			}
 		}
 		return true;
 	}
@@ -451,9 +451,10 @@ namespace Wiwa {
 		return true;
 	}
 
-	bool PhysicsManager::SetNextPosition(Object* body, const glm::vec3 nest_position)
+	bool PhysicsManager::SetNextPosition(Object* body, const glm::vec3 next_postion)
 	{
-		body->collisionObject->getWorldTransform().setOrigin(btVector3(nest_position.x, nest_position.y, nest_position.z));
+		//body->collisionObject->getWorldTransform().setOrigin(btVector3(next_postion.x, next_postion.y, next_postion.z));
+		body->nextPosition = btVector3(next_postion.x, next_postion.y, next_postion.z);
 		return true;
 	}
 
