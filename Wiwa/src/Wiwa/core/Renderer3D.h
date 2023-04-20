@@ -43,7 +43,7 @@ namespace Wiwa {
 		};
 	private:
 		glm::mat4 m_PersProj{ 0.0f };
-		glm::mat4 m_View{ 0.0f };
+		//glm::mat4 m_View{ 0.0f };
 
 		ResourceId m_BBDisplayShaderId;
 		Shader* m_BBDisplayShader;
@@ -63,12 +63,32 @@ namespace Wiwa {
 
 		Skybox m_DefaultSkybox;
 
+		ResourceId m_HDRShaderId;
+		Shader* m_HDRShader;
+		DefaultUnlitUniforms m_HDRUniforms;
+
+		ResourceId m_BlurShaderId;
+		Shader* m_BlurShader;
+		DefaultUnlitUniforms m_BlurUniforms;
+
+		ResourceId m_BloomShaderId;
+		Shader* m_BloomShader;
+		DefaultUnlitUniforms m_BloomUniforms;
+
+		FrameBuffer m_BlurFrameBuffer;
+
+		glm::mat4 m_OrthoProj;
+		glm::mat4 m_View;
+		glm::mat4 m_Model;
+
 	public:
 		Renderer3D();
 		~Renderer3D();
 
 		bool Init();
+		void PreUpdate();
 		void Update();
+		void PostUpdate();
 
 		void SetOption(Options option);
 		void DisableOption(Options option);
@@ -98,6 +118,7 @@ namespace Wiwa {
 
 
 		void Close();
+
 		void RenderFrustrums();
 
 		// Getters
@@ -106,6 +127,7 @@ namespace Wiwa {
 		inline FrameBuffer* getFrameBuffer() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->frameBuffer; }
 
 		glm::mat4 GetPersProjection() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getProjection(); }
+
 		glm::mat4 GetView() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView(); }
 	};
 }

@@ -17,6 +17,7 @@ namespace Wiwa {
 		RenderManager();
 
 		static FrameBuffer m_FrameBuffer;
+		static FrameBuffer m_ShadowBuffer;
 		static glm::mat4 m_OrthoProj;
 		static glm::mat4 m_View;
 		static glm::mat4 m_Model;
@@ -24,6 +25,7 @@ namespace Wiwa {
 		static RenderLayer m_RenderLayers[MAX_LAYERS];
 
 		static Shader m_Shader;
+		static Shader m_BlurShader;
 
 		static uint32_t m_VAO;
 		static uint32_t m_VBO;
@@ -49,6 +51,8 @@ namespace Wiwa {
 
 		// Get color texture
 		static uint32_t getColorTexture() { return m_FrameBuffer.getColorBufferTexture(); }
+
+		static void BindVAO();
 
 		// Destroy render manager
 		static void Destroy();

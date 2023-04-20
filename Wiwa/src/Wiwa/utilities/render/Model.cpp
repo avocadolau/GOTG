@@ -89,7 +89,11 @@ namespace Wiwa {
 				mat_path += name.C_Str();
 				mat_path += ".wimaterial";
 
-				ResourceId matID = Resources::Load<Material>(mat_path.string().c_str());
+				ResourceId matID = -1;
+
+				if(Resources::Import<Material>(mat_path.string().c_str()))
+					matID = Resources::Load<Material>(mat_path.string().c_str());
+
 				if (matID == -1)
 				{
 					Material material; // Default settings

@@ -64,7 +64,7 @@ namespace Wiwa
 
 		if (m_RoundCounter >= NUMBER_OF_ROUNDS)
 		{
-			m_RoundCounter = 0.f;
+			m_RoundCounter = 0;
 			enemy->SwitchState(enemy->m_MovementState);
 			
 		}
@@ -88,10 +88,6 @@ namespace Wiwa
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
 		Transform3D* enemyTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(enemy->GetEntity()));
 
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-		pman.EmitBatch(newBulletId);
-
 		if (!bulletTr || !enemyTr)
 			return;
 
@@ -100,6 +96,7 @@ namespace Wiwa
 		//bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
+		bullet->damage = 10;
 
 	}
 

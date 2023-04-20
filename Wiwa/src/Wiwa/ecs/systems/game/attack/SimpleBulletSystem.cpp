@@ -2,6 +2,7 @@
 #include "SimpleBulletSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/utilities/EntityPool.h>
 
 namespace Wiwa
 {
@@ -48,8 +49,9 @@ namespace Wiwa
 
 		if (m_Timer >= bullet->lifeTime)
 		{
-			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);
+			//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			//em.DestroyEntity(m_EntityId);
+			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 		}
 		
 	}
@@ -71,8 +73,9 @@ namespace Wiwa
 				GameStateManager::DamagePlayer(bullet->damage);
 			}
 	
-			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);
+			//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			//em.DestroyEntity(m_EntityId);
+			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 		}
 	}
 

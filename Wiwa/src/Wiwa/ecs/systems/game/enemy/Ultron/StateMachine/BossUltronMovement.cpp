@@ -30,7 +30,11 @@ namespace Wiwa
 
 		//animator->PlayAnimation("move", true);
 
-		enemy->GoToPosition(RandomPremadePosition());
+		glm::vec2 destination2D = RandomPremadePosition();
+
+		glm::vec3 destination3D = {destination2D.x,0.0f,destination2D.y};
+
+		enemy->GoToPosition(destination3D);
 
 		if (agentPtr != nullptr)
 		{
@@ -57,7 +61,7 @@ namespace Wiwa
 				agentPtr->StopMoving();
 				std::srand(std::time(0));
 
-				int randomAction = std::rand() % (NUMBER_OF_RANDOM_ACTIONS);
+				int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
 
 				switch (randomAction)
 				{
@@ -93,10 +97,4 @@ namespace Wiwa
 	{
 	}
 
-	glm::vec3 BossUltronMovementState::RandomPremadePosition()
-	{
-		std::srand(std::time(0));
-		
-		return m_PremadePositions.at(rand() % (m_PremadePositions.size() + 1));
-	}
 }

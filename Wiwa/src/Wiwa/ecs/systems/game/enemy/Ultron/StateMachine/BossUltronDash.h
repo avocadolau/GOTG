@@ -1,5 +1,6 @@
 #pragma once
 #include "BossUltronBase.h"
+#include "BossUltronMovement.h"
 
 namespace Wiwa {
 	class BossUltronDashState : public BossUltronBaseState {
@@ -11,5 +12,13 @@ namespace Wiwa {
 		void UpdateState(BossUltron* enemy) override;
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
+
+	private:
+
+		bool m_AlreadyHitted;
+
+		float m_Timer;
+
+		glm::vec2 m_FinalPosition;
 	};
 }

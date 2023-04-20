@@ -255,8 +255,6 @@ namespace Wiwa
             return;
         }
 
-       
-        ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
         EntityId playerParticles = em.GetEntityByName("Player");
 
         const float buffPercent = ((float)BuffPercent / 100.f);
@@ -268,7 +266,6 @@ namespace Wiwa
                 {
 
                     EntityId pe_healing = em.GetChildByName(playerParticles, "PE_Healing");
-                    pman.EmitBatch(pe_healing);
 
                 }
 
@@ -286,7 +283,6 @@ namespace Wiwa
                 {
 
                     EntityId pe_shield = em.GetChildByName(playerParticles, "PE_Shield");
-                    pman.EmitBatch(pe_shield);
 
                 }
 

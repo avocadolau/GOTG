@@ -166,6 +166,9 @@ namespace Wiwa
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			//render skybox basically
+			m_Renderer3D->PreUpdate();
+
 			// Update scene manager
 			SceneManager::ModuleUpdate();
 
@@ -178,9 +181,12 @@ namespace Wiwa
 			// Update inputs
 			Input::Update();
 
+
 			// Update renderers
 			m_Renderer2D->Update();
 			m_Renderer3D->Update();
+			//render post processing
+			m_Renderer3D->PostUpdate();
 
 			RenderManager::Update();
 

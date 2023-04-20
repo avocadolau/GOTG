@@ -119,10 +119,12 @@ namespace Wiwa {
 	inline void Shader::setUniform<int>(unsigned int uniform_id, int value) {
 		setUniformInt(uniform_id, value);
 	}
+
 	template<>
 	inline void Shader::setUniform<unsigned int>(unsigned int uniform_id, unsigned int value) {
 		setUniformUInt(uniform_id, value);
 	}
+
 	template<>
 	inline void Shader::setUniform<glm::mat4>(unsigned int uniform_id, glm::mat4 value) {
 		setUniformMat4(uniform_id, value);

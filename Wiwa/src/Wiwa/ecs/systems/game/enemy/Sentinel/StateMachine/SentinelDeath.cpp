@@ -40,15 +40,12 @@ namespace Wiwa
 			//--------------------------------------
 			//Sentinel Explosion
 			Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-			EntityId newExplosionId = entityManager.LoadPrefab("assets\\enemy\\explosions\\test_explosion_3.wiprefab");
+			EntityId newExplosionId = entityManager.LoadPrefab("assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 
 			// Set intial positions
 			Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
 
-			ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-			pman.EmitBatch(newExplosionId);
 
 			if (!explosionTr || !playerTr)
 			{

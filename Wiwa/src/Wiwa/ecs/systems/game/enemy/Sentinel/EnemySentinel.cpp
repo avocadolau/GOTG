@@ -46,7 +46,7 @@ namespace Wiwa
 			return;
 		EnemySystem::OnUpdate();
 		m_CurrentState->UpdateState(this);
-		m_Timer += Time::GetDeltaTimeSeconds();
+		m_TimerSentinel += Time::GetDeltaTimeSeconds();
 
 		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 		if (stats->Health <= 0 && m_CurrentState != m_DeathState)

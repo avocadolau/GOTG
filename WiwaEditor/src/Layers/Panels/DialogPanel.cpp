@@ -45,44 +45,45 @@ void DialogPanel::Draw()
 				currentNode = 0;
 				currentConversation = 0;
 
+				for (int k = 0; dm.conversations[k].occupied == true; k++)
+				{
+					currentConversation++;
+				}
+
 				currentCreationStep = 1;
 			}
 
 			if (currentCreationStep == 1)
 			{
-				ImGui::PushID(numNodesOnCurrentCreation);
+				
 
 				std::string collapsingHeaderName = "Edit Node #" + numNodesOnCurrentCreation;
 
-				if (ImGui::CollapsingHeader("Node editor"))
+				ImGui::Text("Currently Editing Node # %i", numNodesOnCurrentCreation);
+
+				static char textLine1Buffer[1024] = { 0 };
+				ImGui::InputText("Line 1 text", textLine1Buffer, IM_ARRAYSIZE(textLine1Buffer));
+				static char textLine2Buffer[1024] = { 0 };
+				ImGui::InputText("Line 2 text", textLine2Buffer, IM_ARRAYSIZE(textLine2Buffer));
+				static char textLine3Buffer[1024] = { 0 };
+				ImGui::InputText("Line 3 text", textLine3Buffer, IM_ARRAYSIZE(textLine3Buffer));
+
+				ImGui::Text("WARNING, Only Press this button if you fully finished creating the current dialog node:");
+				ImGui::PushID(numNodesOnCurrentCreation);
+				if (ImGui::Button("Save Current Node's Text Lines"))
 				{
-					ImGui::Text("Currently Editing Node # %i", numNodesOnCurrentCreation);
+					dm.SetDialogText(textLine1Buffer, textLine2Buffer, textLine3Buffer, "assets/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
+					dm.conversations[currentConversation].nodes[currentNode].occupied = true;
+					numNodesOnCurrentCreation++;
+					currentNode++;
+				}
+				ImGui::PopID();
 
-					static char textLine1Buffer[1024] = { 0 };
-					ImGui::InputText("Line 1 text", textLine1Buffer, IM_ARRAYSIZE(textLine1Buffer));
-					static char textLine2Buffer[1024] = { 0 };
-					ImGui::InputText("Line 2 text", textLine2Buffer, IM_ARRAYSIZE(textLine2Buffer));
-					static char textLine3Buffer[1024] = { 0 };
-					ImGui::InputText("Line 3 text", textLine3Buffer, IM_ARRAYSIZE(textLine3Buffer));
-
-					ImGui::Text("WARNING, Only Press this button if you fully finished creating the current dialog node:");
-					ImGui::PushID(numNodesOnCurrentCreation);
-					if (ImGui::Button("Save Current Node's Text Lines"))
-					{
-						dm.SetDialogText(textLine1Buffer, textLine2Buffer, textLine3Buffer, "assets/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
-						dm.conversations[currentConversation].nodes[currentNode].occupied = true;
-						numNodesOnCurrentCreation++;
-						currentNode++;
-					}
-					ImGui::PopID();
-
-					ImGui::Text("WARNING, Only Press this button if you fully finished creating all the dialog nodes:");
-					ImGui::PushID(numNodesOnCurrentCreation);
-					if (ImGui::Button("Finished Creating All Dialog Nodes"))
-					{
-						currentCreationStep = 2;
-					}
-					ImGui::PopID();
+				ImGui::Text("WARNING, Only Press this button if you fully finished creating all the dialog nodes:");
+				ImGui::PushID(numNodesOnCurrentCreation);
+				if (ImGui::Button("Finished Creating All Dialog Nodes"))
+				{
+					currentCreationStep = 2;
 				}
 				ImGui::PopID();
 			}
@@ -92,13 +93,13 @@ void DialogPanel::Draw()
 			{
 				//dm.SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *dm.conversationCreator_P);
 
-				Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+				/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 				ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png");
 				Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 				dm.continueImgID = render.CreateInstancedQuadTex(dm.m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-				render.DisableInstance(dm.m_Scene, dm.continueImgID);
+				render.DisableInstance(dm.m_Scene, dm.continueImgID);*/
 
 				currentCreationStep = 3;
 			}
@@ -107,18 +108,26 @@ void DialogPanel::Draw()
 			{
 				ImGui::Text("Bubble image:");
 				ImGui::SameLine();
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				//Wiwa::Image* mat = Wiwa::Resources::GetResourceById<Wiwa::Image>(mesh->materialId);
+				//AssetContainer(std::filesystem::path(mat->GetTextureId()).stem().string().c_str());
+				AssetContainer(pathForAsset.c_str());
+				if (ImGui::BeginDragDropTarget())
 				{
-					const wchar_t* path = (const wchar_t*)payload->Data;
-					std::wstring ws(path);
-					std::string pathS(ws.begin(), ws.end());
-					std::filesystem::path p = pathS.c_str();
-					if (p.extension() == ".png")
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 					{
-						dm.SetDialogBubbleImage(pathS.c_str(), currentConversation);
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS.c_str();
+						if (p.extension() == ".png")
+						{
+							pathForAsset = pathS;
+							dm.SetDialogBubbleImage(pathS.c_str(), currentConversation);
+						}
 					}
+					ImGui::EndDragDropTarget();
 				}
-				//dm.SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *dm.conversationCreator_P);
+				//dm.SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", currentConversation);
 				ImGui::Text("WARNING, Only Press this button if you finished importing the bubble image:");
 				if (ImGui::Button("Finished Importing Bubble Image"))
 				{
@@ -130,18 +139,24 @@ void DialogPanel::Draw()
 			{
 				ImGui::Text("Character image:");
 				ImGui::SameLine();
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				AssetContainer(pathForAsset2.c_str());
+				if (ImGui::BeginDragDropTarget())
 				{
-					const wchar_t* path = (const wchar_t*)payload->Data;
-					std::wstring ws(path);
-					std::string pathS(ws.begin(), ws.end());
-					std::filesystem::path p = pathS.c_str();
-					if (p.extension() == ".png")
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 					{
-						dm.SetCharacterImage(pathS.c_str(), currentConversation);
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS.c_str();
+						if (p.extension() == ".png")
+						{
+							pathForAsset2 = pathS;
+							dm.SetCharacterImage(pathS.c_str(), currentConversation);
+						}
 					}
+					ImGui::EndDragDropTarget();
 				}
-				//dm.SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *dm.conversationCreator_P);
+				//dm.SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", currentConversation);
 				ImGui::Text("WARNING, Only Press this button if you finished importing the character image:");
 				if (ImGui::Button("Finished Importing Character Image"))
 				{
@@ -159,6 +174,7 @@ void DialogPanel::Draw()
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
 					dm.conversations[currentConversation].occupied = true;
+					dm.SaveAllDialogs();
 					currentConversation++;
 
 					currentCreationStep = 6;

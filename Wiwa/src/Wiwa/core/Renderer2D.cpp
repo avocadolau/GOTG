@@ -272,11 +272,14 @@ namespace Wiwa
 
 		framebuffer.Bind();
 		glEnable(GL_BLEND);
+		//glBlendEquation(GL_ADD);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
 			instanceRenderers[i].Update();
 			instanceRenderers[i].Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
 		}
+		//glDepthMask(true);
         glDisable(GL_BLEND);
 		framebuffer.Unbind();
 

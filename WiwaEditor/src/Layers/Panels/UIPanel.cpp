@@ -800,12 +800,12 @@ void UIPanel::VectorEdit(std::vector<Wiwa::Rect2i> list)
 }
 void UIPanel::SetSizeByTexture(const char* file)
 {
-	const ResourceId id = Resources::Load<Image>(file);
+	/*const ResourceId id = Resources::Load<Image>(file);
 	Image* img = Resources::GetResourceById<Image>(id);
 	size.x = img->GetSize().x;
 	size.y = img->GetSize().y;
 	originSize.x = img->GetSize().x;
-	originSize.y = img->GetSize().y;
+	originSize.y = img->GetSize().y;*/
 }
 void UIPanel::OnEvent(Wiwa::Event& e)
 {

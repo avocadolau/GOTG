@@ -282,15 +282,13 @@ void Wiwa::Inventory::UseAbility(size_t index) const
 	if(m_Abilities[index]->CurrentTime >= m_Abilities[index]->Cooldown)
 	{
 		Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
 		EntityId player = em.GetEntityByName("Player");
 
 		if (player)
 		{
 			EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
-			pman.EmitBatch(pe_spark);
 			EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
-			pman.EmitBatch(pe_line);
+
 		}
 
 		m_Abilities[index]->CurrentTime = 0.f;

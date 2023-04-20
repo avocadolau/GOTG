@@ -14,6 +14,8 @@
 
 #include <Wiwa/scene/SceneManager.h>
 
+#include <Wiwa/utilities/json/JSONDocument.h>
+
 namespace Wiwa
 {
 	DialogManager::DialogManager()
@@ -37,6 +39,16 @@ namespace Wiwa
 				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
 				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text2_imgModeID);
 				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text3_imgModeID);
+			}
+		}
+
+		for (int l = 0; l < MAX_CONVERSATIONS; l++)
+		{
+			conversations[l].occupied = false;
+
+			for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
+			{
+				conversations[l].nodes[m].occupied = false;
 			}
 		}
 	}
@@ -67,18 +79,19 @@ namespace Wiwa
 
 		conversations.push_back(newConversation);*/
 
-		conversations[0].conversationName = "NPC_1";
+		//conversations[0].conversationName = "NPC_1";
 
-		SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
-		SetDialogText("constantly updating their data banks.", "With them the architecture, too, gets", "updated. ", "assets/Fonts/Jade_Smile.ttf", 0, 1);
-		SetDialogText("Surprisingly, some of the collector’s", "inventory of weaponsandgadgets", "has been seen in the vicinity.", "assets/Fonts/Jade_Smile.ttf", 0, 2);
-		SetDialogText("Do not get lost in the labyrinth of", "machinery, Guardian.", "And good luck.", "assets/Fonts/Jade_Smile.ttf", 0, 3);
+		//SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
+		//SetDialogText("constantly updating their data banks.", "With them the architecture, too, gets", "updated. ", "assets/Fonts/Jade_Smile.ttf", 0, 1);
+		//SetDialogText("Surprisingly, some of the collector’s", "inventory of weaponsandgadgets", "has been seen in the vicinity.", "assets/Fonts/Jade_Smile.ttf", 0, 2);
+		//SetDialogText("Do not get lost in the labyrinth of", "machinery, Guardian.", "And good luck.", "assets/Fonts/Jade_Smile.ttf", 0, 3);
 
-		//SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", 0);
-		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
-		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
+		//SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
+		//SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
 
-		conversations[0].occupied = true;
+		//conversations[0].occupied = true;
+
+		LoadAllDialogs();
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -97,7 +110,7 @@ namespace Wiwa
 	{
 		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 		{
-			conversationToPlayName = NpcConversationTag.c_str();
+ 			conversationToPlayName = NpcConversationTag.c_str();
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
@@ -190,6 +203,10 @@ namespace Wiwa
 		Text* text2_imgMode = gm.InitFontForDialog(fontPath, line2Text);
 		Text* text3_imgMode = gm.InitFontForDialog(fontPath, line3Text);
 
+		conversations[conversationNumber].nodes[nodeNumber].text1 = (std::string)line1Text;
+		conversations[conversationNumber].nodes[nodeNumber].text2 = (std::string)line2Text;
+		conversations[conversationNumber].nodes[nodeNumber].text3 = (std::string)line3Text;
+
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text1_imgMode->GetTextureId(), text1_imgMode->GetSize(), {720,650}, {1000,450}, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -208,6 +225,8 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
+		conversations[conversationNumber].bubbleImagePath = (std::string)path;
+
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		Image* dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
@@ -219,6 +238,8 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
+		conversations[conversationNumber].characterImagePath = (std::string)path;
+
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		Image* characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
@@ -226,6 +247,117 @@ namespace Wiwa
 
 		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+	}
+
+	void DialogManager::SaveAllDialogs()
+	{
+		Wiwa::JSONDocument doc;
+
+		for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
+		{
+			std::string s = std::to_string(i);
+
+			std::string memberNameConversation = "Name_Conversation" + s;
+			std::string memberNameBubbleImage = "BubbleImagePath_Conversation" + s;
+			std::string memberNameCharacterImage = "CharacterImagePath_Conversation" + s;
+
+			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
+			doc.AddMember(memberNameBubbleImage.c_str(), conversations[i].bubbleImagePath.c_str());
+			doc.AddMember(memberNameCharacterImage.c_str(), conversations[i].characterImagePath.c_str());
+
+			for (int j = 0; j < MAX_CONVERSATION_NODES && conversations[i].nodes[j].occupied == true; j++)
+			{
+				std::string s2 = std::to_string(j);
+
+				std::string conv = "Conversation" + s;
+
+				std::string memberNameLine1 = "_Line1_Node" + s2;
+				std::string memberNameLine2 = "_Line2_Node" + s2;
+				std::string memberNameLine3 = "_Line3_Node" + s2;
+				memberNameLine1 = conv + memberNameLine1;
+				memberNameLine2 = conv + memberNameLine2;
+				memberNameLine3 = conv + memberNameLine3;
+
+				doc.AddMember(memberNameLine1.c_str(), conversations[i].nodes[j].text1.c_str());
+				doc.AddMember(memberNameLine2.c_str(), conversations[i].nodes[j].text2.c_str());
+				doc.AddMember(memberNameLine3.c_str(), conversations[i].nodes[j].text3.c_str());
+
+			}
+		}
+
+		std::string path = "config/conversations";
+		path += ".wiconversation";
+		doc.save_file(path.c_str());
+	}
+
+	void DialogManager::LoadAllDialogs()
+	{
+
+		bool breakConversationsLoop = false;
+		bool breakNodesLoop = false;
+
+		Wiwa::JSONDocument doc("config/conversations.wiconversation");
+		if (doc.IsObject())
+		{
+			for (int i = 0; (i < MAX_CONVERSATIONS) && breakConversationsLoop == false; i++)
+			{
+				std::string s = std::to_string(i);
+
+				std::string memberNameConversation = "Name_Conversation" + s;
+				std::string memberNameBubbleImage = "BubbleImagePath_Conversation" + s;
+				std::string memberNameCharacterImage = "CharacterImagePath_Conversation" + s;
+
+				if (doc.HasMember(memberNameConversation.c_str())
+					&& doc.HasMember(memberNameBubbleImage.c_str())
+					&& doc.HasMember(memberNameCharacterImage.c_str()))
+				{
+					breakNodesLoop = false;
+				}
+
+				for (int j = 0; (j < MAX_CONVERSATION_NODES) && breakNodesLoop == false; j++)
+				{
+					std::string s2 = std::to_string(j);
+
+					std::string conv = "Conversation" + s;
+
+					std::string memberNameLine1 = "_Line1_Node" + s2;
+					std::string memberNameLine2 = "_Line2_Node" + s2;
+					std::string memberNameLine3 = "_Line3_Node" + s2;
+					memberNameLine1 = conv + memberNameLine1;
+					memberNameLine2 = conv + memberNameLine2;
+					memberNameLine3 = conv + memberNameLine3;
+
+					if (doc.HasMember(memberNameLine1.c_str())
+						&& doc.HasMember(memberNameLine2.c_str())
+						&& doc.HasMember(memberNameLine3.c_str()))
+					{
+						SetDialogText((char*)doc[memberNameLine1.c_str()].as_string(), (char*)doc[memberNameLine2.c_str()].as_string(), (char*)doc[memberNameLine3.c_str()].as_string(), "assets/Fonts/Jade_Smile.ttf", i, j);
+					}
+					else
+					{
+						breakNodesLoop = true;
+					}
+				}
+
+				if (doc.HasMember(memberNameConversation.c_str())
+					&& doc.HasMember(memberNameBubbleImage.c_str())
+					&& doc.HasMember(memberNameCharacterImage.c_str()))
+				{
+					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
+					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
+					SetCharacterImage(doc[memberNameCharacterImage.c_str()].as_string(), i);
+					conversations[i].occupied = true;
+
+				}
+				else
+				{
+					breakConversationsLoop = true;
+				}
+
+			}
+		}
+
+		doc.save_file("config/conversations.wiconversation");
 	}
 
 	/*void DialogManager::SetContinueIndicatorImage(const char* path, int conversationNumber)

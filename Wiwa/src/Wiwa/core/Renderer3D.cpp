@@ -122,6 +122,65 @@ namespace Wiwa
 		outlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured_outlined", outlinedShader);
 
+
+		ResourceId basecolorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/base_color");
+		Shader* basecolorShader = Wiwa::Resources::GetResourceById<Shader>(basecolorShaderId);
+		basecolorShader->Compile("resources/shaders/light/base_color");
+
+		basecolorShader->addUniform("u_Color", UniformType::fVec4);
+		
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/base_color", basecolorShader);
+
+		//===========================================================================================================
+		// VFX shaders
+		//===========================================================================================================
+
+		ResourceId dissolveShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/dissolve");
+		Shader* dissolveShader = Wiwa::Resources::GetResourceById<Shader>(dissolveShaderId);
+		dissolveShader->Compile("resources/shaders/vfx/dissolve");
+
+		dissolveShader->addUniform("u_LifeTime", UniformType::Float);
+		dissolveShader->addUniform("u_Color", UniformType::fVec4);
+		dissolveShader->addUniform("u_Texture", UniformType::Sampler2D);
+		dissolveShader->addUniform("u_DissolveAmount", UniformType::Float);
+		dissolveShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/dissolve", dissolveShader);
+
+
+		ResourceId shieldShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/shield");
+		Shader* shieldShader = Wiwa::Resources::GetResourceById<Shader>(shieldShaderId);
+		shieldShader->Compile("resources/shaders/vfx/shield");
+
+		shieldShader->addUniform("u_LifeTime", UniformType::Float);
+		shieldShader->addUniform("u_Color", UniformType::fVec4);
+		shieldShader->addUniform("u_Texture", UniformType::Sampler2D);
+		shieldShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
+
+		ResourceId justTextureShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/justtexture");
+		Shader* justTextureShader = Wiwa::Resources::GetResourceById<Shader>(justTextureShaderId);
+		justTextureShader->Compile("resources/shaders/vfx/justtexture");
+
+		justTextureShader->addUniform("u_LifeTime", UniformType::Float);
+		justTextureShader->addUniform("u_Color", UniformType::fVec4);
+		justTextureShader->addUniform("u_Texture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/justtexture", justTextureShader);
+
+		ResourceId impactShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/shot_impact");
+		Shader* impactShader = Wiwa::Resources::GetResourceById<Shader>(impactShaderId);
+		impactShader->Compile("resources/shaders/vfx/shot_impact");
+
+		impactShader->addUniform("u_LifeTime", UniformType::Float);
+		impactShader->addUniform("u_Color", UniformType::fVec4);
+		impactShader->addUniform("u_Texture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shot_impact", impactShader);
+
+		//===========================================================================================================
+
 		// Normal Display Shader
 		m_NormalDisplayShaderId = Resources::Load<Shader>("resources/shaders/debug/normal_display");
 		m_NormalDisplayShader = Resources::GetResourceById<Shader>(m_NormalDisplayShaderId);
@@ -154,8 +213,37 @@ namespace Wiwa
 		m_DepthShaderUniforms.Model = m_DepthShader->getUniformLocation("u_Model");
 		m_DepthShaderUniforms.View = m_DepthShader->getUniformLocation("u_View");
 		m_DepthShaderUniforms.Projection = m_DepthShader->getUniformLocation("u_Proj");
+		
+		m_HDRShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/hdr");
+		m_HDRShader = Resources::GetResourceById<Shader>(m_HDRShaderId);
+		m_HDRShader->Compile("resources/shaders/renderlayer/hdr");
+		m_HDRShader->addUniform("u_HdrBufferTexture", Wiwa::UniformType::Sampler2D);
+		m_HDRUniforms.Model = m_HDRShader->getUniformLocation("u_Model");
+		m_HDRUniforms.View = m_HDRShader->getUniformLocation("u_View");
+		m_HDRUniforms.Projection = m_HDRShader->getUniformLocation("u_Proj");
+
+		m_BlurShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/blur");
+		m_BlurShader = Resources::GetResourceById<Shader>(m_BlurShaderId);
+		m_BlurShader->Compile("resources/shaders/renderlayer/blur");
+		m_BlurUniforms.Model = m_BlurShader->getUniformLocation("u_Model");
+		m_BlurUniforms.View = m_BlurShader->getUniformLocation("u_View");
+		m_BlurUniforms.Projection = m_BlurShader->getUniformLocation("u_Proj");
+
+		m_BloomShaderId = Resources::Load<Shader>("resources/shaders/renderlayer/bloom");
+		m_BloomShader = Resources::GetResourceById<Shader>(m_BloomShaderId);
+		m_BloomShader->Compile("resources/shaders/renderlayer/bloom");
+		m_BloomUniforms.Model = m_BlurShader->getUniformLocation("u_Model");
+		m_BloomUniforms.View = m_BlurShader->getUniformLocation("u_View");
+		m_BloomUniforms.Projection = m_BlurShader->getUniformLocation("u_Proj");
 
 
+		std::vector<const char *> faces = {
+			"resources/images/skybox/right.jpg",
+			"resources/images/skybox/left.jpg",
+			"resources/images/skybox/top.jpg",
+			"resources/images/skybox/bottom.jpg",
+			"resources/images/skybox/front.jpg",
+			"resources/images/skybox/back.jpg"};
 
 		std::vector<const char *> skybox1_faces = {
 		"resources/images/skybox/right.jpg",
@@ -179,21 +267,130 @@ namespace Wiwa
 		"resources/images/skybox/urban_light/front.png",
 		"resources/images/skybox/urban_light/back.png" };
 		std::vector<const char*> main_menu = {
-		"library/hud_images/menus/start menu",
-		"library/images/skybox/urban_light/left.png",
-		"library/images/skybox/urban_light/top.png",
-		"library/images/skybox/urban_light/bottom.png",
-		"library/images/skybox/urban_light/front.png",
-		"library/images/skybox/urban_light/back.png" };
+		"resources/images/skybox/main_menu/UI_RightSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_BottomSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_FrontSkyBox_01.png",
+		"resources/images/skybox/main_menu/UI_BackSkyBox_01.png" };
 		m_DefaultSkybox.LoadCubemap(dooms_day);
 
+
+
+		// Init orthographic projection
+		m_OrthoProj = glm::ortho(0.0f, (float)1920, (float)920, 0.0f, 0.1f, 100.0f);
+		// Init main camera view
+		m_View = glm::mat4(1.0f);
+		m_View = glm::translate(m_View, glm::vec3(0.0f, 0.0f, -3.0f));
+		// Init model
+		m_Model = glm::mat4(1.0f);
+		m_Model = glm::translate(m_Model, glm::vec3((float)1920 / 2.0f, (float)920 / 2.0f, 0.0f));
+		m_Model = glm::scale(m_Model, glm::vec3((float)1920, (float)920, 1.0f));
+
+
 		return true;
+	}
+
+	void Renderer3D::PreUpdate()
+	{
+
+		RenderSkybox();
 	}
 
 	void Renderer3D::Update()
 	{
 		OPTICK_EVENT("Renderer 3D Update");
-		RenderSkybox();
+
+		
+	}
+
+	void Renderer3D::PostUpdate()
+	{
+		//once everything is rendered and passed by the hdr 
+
+		/*Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+
+		if (cam == nullptr)
+			return;*/
+		//// Bind VAO
+		//RenderManager::BindVAO();
+		//glDisable(GL_DEPTH_TEST);
+		//bool horizontal = true, first_iteration = false;
+		//unsigned int amount = 10;
+		//m_BlurShader->Bind();
+
+		//// blur bright fragments with two-pass Gaussian Blur 
+		//for (unsigned int i = 0; i < amount; i++)
+		//{
+		//	m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
+		//	if (first_iteration) {
+		//		glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
+		//		first_iteration = false;
+		//	}
+		//	else {
+		//		if (horizontal) {
+		//			cam->vBlurBuffer->Bind(false);
+		//			cam->vBlurBuffer->BindTexture();
+		//		}
+		//		else {
+		//			cam->vBlurBuffer->Bind(false);
+		//			cam->hBlurBuffer->BindTexture();
+		//		}
+		//	}
+
+		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//	horizontal = !horizontal;
+		//}
+		//m_BlurShader->UnBind();
+		//glEnable(GL_DEPTH_TEST);
+
+		////3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+		////--------------------------------------------------------------------------------------------------------------------------
+		//m_BloomShader->Bind();
+
+		//cam->frameBuffer->Bind(false);
+
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
+		//glActiveTexture(GL_TEXTURE1);
+		//glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
+
+
+		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int)true);
+		//m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"), 5);
+
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		//m_BloomShader->UnBind();
+
+		//glBindVertexArray(0);
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+		/*	TESTING overwrite text 0 with text 1 color
+			Bind the framebuffer object*/
+			//glBindFramebuffer(GL_READ_FRAMEBUFFER, cam->frameBuffer->getFBO());
+
+			//// Set the source and destination textures
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
+
+			//// Copy the content of texture 1 to texture 0
+			//glCopyImageSubData(
+			//	cam->vBlurBuffer->getColorTexture(), GL_TEXTURE_2D, 0, 0, 0, 0,
+			//	cam->frameBuffer->getColorBuffers()[0], GL_TEXTURE_2D, 0, 0, 0, 0,
+			//	cam->frameBuffer->getWidth(), cam->frameBuffer->getHeight(), 1
+			//);
+
+			//// Unbind the textures and framebuffer object
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			//glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+			//glBindVertexArray(0);
+
+
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void Renderer3D::RenderMesh(Model *mesh, const Transform3D &t3d, Material *material, const size_t &directional,
@@ -405,14 +602,6 @@ namespace Wiwa
 
 		// Set up color buffer
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-
-		camera->frameBuffer->Bind(clear);
-
-		Shader *matShader = material->getShader();
-		matShader->Bind();
-
-		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 	/*	if (lightTrans)
 		{
@@ -422,6 +611,17 @@ namespace Wiwa
 		}*/
 
 		//camera->shadowBuffer->BindTexture();
+
+
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		camera->frameBuffer->Bind(clear);
+
+		Shader *matShader = material->getShader();
+
+		matShader->Bind();
+
+		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
 
@@ -582,7 +782,7 @@ namespace Wiwa
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 				camera->frameBuffer->Bind(false);
-				glDepthFunc(GL_LEQUAL);
+				glDepthFunc(GL_ALWAYS);
 				Shader* shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
@@ -602,7 +802,7 @@ namespace Wiwa
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
 				camera->frameBuffer->Bind(false);
-				glDepthFunc(GL_LEQUAL);
+				glDepthFunc(GL_ALWAYS);
 				Shader *shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());

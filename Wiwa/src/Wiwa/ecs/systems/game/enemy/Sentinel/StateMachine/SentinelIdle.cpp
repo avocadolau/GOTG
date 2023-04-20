@@ -16,7 +16,7 @@ namespace Wiwa
 
 	void SentinelIdleState::EnterState(EnemySentinel* enemy)
 	{
-		enemy->m_Timer = 0;
+		enemy->m_TimerSentinel = 0;
 	}
 
 	void SentinelIdleState::UpdateState(EnemySentinel* enemy)
@@ -27,7 +27,7 @@ namespace Wiwa
 
 		animator->PlayAnimation("idle", true);
 
-		if (enemy->m_Timer > 2)
+		if (enemy->m_TimerSentinel > 2)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}

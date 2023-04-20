@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "SceneManager.h"
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/events/Event.h>
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/events/ApplicationEvent.h>
@@ -805,6 +806,7 @@ namespace Wiwa
 
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
 			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
 
 			// Load Physics Manager json Data
 			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
