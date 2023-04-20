@@ -28,7 +28,9 @@ namespace Wiwa {
 		WI_HARD_INL glm::vec3 GetShootInput() { return m_ShootInput; }
 		WI_HARD_INL glm::vec3 GetVelocity() { return m_Velocity; }
 		WI_HARD_INL bool IsDashEnable() { return m_DashEnable; }
-		inline void SetDashEnable(bool value) { m_DashEnable = value; }
+		WI_HARD_INL void SetDashEnable(bool value) { m_DashEnable = value; }
+		WI_HARD_INL void SetDirection(const glm::vec3& value) { m_Direction = value; }
+		WI_HARD_INL void SetVelocity(const glm::vec3& velocity) { m_Velocity = velocity; }
 
 		Transform3D* GetFirePosition(const char* name);
 		void TakeDamage(uint32_t damage);

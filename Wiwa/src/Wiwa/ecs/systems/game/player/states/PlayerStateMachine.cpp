@@ -51,19 +51,13 @@ void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
 	m_CurrentState->OnCollisionEnter(body1, body2);
 }
 
-bool Wiwa::PlayerStateMachine::CanDash()
-{
-	return (Input::IsKeyPressed(Key::LeftShift) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadLeftBumper)) && IsDashEnable();
-}
 
-bool Wiwa::PlayerStateMachine::CanMove()
+void Wiwa::PlayerStateMachine::UpdateMovement()
 {
-	return  GetInput() != glm::vec3(0.f);
-}
+	this->m_Direction = this->m_MovementInput;
+	this->m_Velocity = this->m_MovementInput * GetCharacter()->Speed;
 
-bool Wiwa::PlayerStateMachine::CanAttack()
-{
-	return GetShootInput() != glm::vec3(0.f) || Input::IsMouseButtonPressed(1);
+	SetPlayerRotation(GetTransform()->localRotation, m_MovementInput, 1.f);
 }
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
@@ -90,4 +84,9 @@ void Wiwa::PlayerStateMachine::DashCooldown()
 		if (m_CooldownTimer <= 0)
 			SetDashEnable(true);
 	}
+}
+
+void Wiwa::PlayerStateMachine::ResetCooldown()
+{
+	m_CooldownTimer = GetCharacter()->DashCooldown;
 }

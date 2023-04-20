@@ -15,3 +15,8 @@ Wiwa::AnimatorSystem* Wiwa::PlayerBaseState::GetAnimator()
 {
 	return SceneManager::getActiveScene()->GetEntityManager().GetSystem<Wiwa::AnimatorSystem>(m_Id);
 }
+
+Wiwa::PhysicsSystem* Wiwa::PlayerBaseState::GetPhysics()
+{
+	return SceneManager::getActiveScene()->GetEntityManager().GetSystem<Wiwa::PhysicsSystem>(m_Id);
+}

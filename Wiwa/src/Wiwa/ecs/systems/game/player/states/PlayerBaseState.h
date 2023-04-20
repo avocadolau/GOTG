@@ -1,6 +1,8 @@
 #pragma once
 #include "PlayerStateMachine.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <LinearMath/btVector3.h>
 
 namespace Wiwa
 {
@@ -18,6 +20,7 @@ namespace Wiwa
 		virtual void OnCollisionEnter(Object* object1, Object* object2) = 0;
 
 		AnimatorSystem* GetAnimator();
+		PhysicsSystem* GetPhysics();
 	protected:
 		EntityId m_Id;
 		PlayerStateMachine* m_StateMachine;

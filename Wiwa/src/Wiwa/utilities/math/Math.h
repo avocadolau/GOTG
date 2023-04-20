@@ -14,10 +14,55 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
+#include <LinearMath\btVector3.h>
 
 namespace Wiwa {
 	namespace Math {
 
+		btVector3 ToBulletVector3(const glm::vec3& vector)
+		{
+			return btVector3(vector.x, vector.y, vector.z);
+		}
+
+		float Distance(const glm::vec3& a, const glm::vec3& b)
+		{
+			float diff_x = a.x - b.x;
+			float diff_y = a.y - b.y;
+			float diff_z = a.z - b.z;
+			return glm::sqrt(diff_x * diff_x + diff_y * diff_y + diff_z * diff_z);
+		}
+
+		glm::vec3 PointAlongDirection(const glm::vec3& origin, const glm::vec3& direction, float distance) const
+		{
+			return origin + glm::normalize(direction) * distance;
+		}
+
+		float RadToDeg(float rad)
+		{
+			return rad * 180.0f / PI_F;
+		}
+		float DegToRad(float deg)
+		{
+			return deg * PI_F / 180.0f;
+		}
+		glm::vec3 CalculateForward(Transform3D* t3d)
+		{
+			glm::vec3 rotrad;
+			rotrad.x = DegToRad(t3d->rotation.x);
+			rotrad.y = DegToRad(t3d->rotation.y);
+			rotrad.z = DegToRad(t3d->rotation.z);
+
+			glm::vec3 forward;
+			forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
+			forward.y = -glm::sin(rotrad.x);
+			forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
+
+			forward.x = RadToDeg(forward.x);
+			forward.y = RadToDeg(forward.y);
+			forward.z = RadToDeg(forward.z);
+
+			return glm::normalize(forward);
+		}
 		
 
 		inline void ScreenPosToWorldRay(
@@ -317,4 +362,5 @@ namespace Wiwa {
 			return glm::vec3(mat[3]);
 		}
 	}
+
 }

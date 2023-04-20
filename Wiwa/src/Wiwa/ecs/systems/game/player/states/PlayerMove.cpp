@@ -32,10 +32,13 @@ void Wiwa::PlayerMove::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
 		return;
 	}
+
+	m_StateMachine->UpdateMovement();
 }
 
 void Wiwa::PlayerMove::ExitState()
 {
+	GetAnimator()->Restart();
 }
 
 void Wiwa::PlayerMove::OnCollisionEnter(Object* object1, Object* object2)

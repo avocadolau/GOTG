@@ -20,6 +20,7 @@ void Wiwa::PlayerIdle::EnterState()
 	GetAnimator()->Blend("idle", true, 0.3f);
 
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetTransform()->localRotation, m_StateMachine->GetDirection(), 1.f);
+	GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 }
 
 void Wiwa::PlayerIdle::UpdateState()
