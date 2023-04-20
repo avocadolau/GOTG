@@ -219,6 +219,11 @@ namespace Wiwa {
 						particle.position += particle.velocity * dt;
 					}
 
+					if (emitter->m_p_useGravity)
+					{
+						float grav = emitter->m_p_gravity * dt;
+						particle.velocity.y -= grav;
+					}
 
 					if (emitter->m_p_scaleOverTime)
 					{
