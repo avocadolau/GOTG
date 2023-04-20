@@ -29,6 +29,7 @@ namespace Wiwa {
 
 		m_MaxParticles = emitter->m_maxParticles;
 		emitter->m_meshChanged = false;
+		emitter->m_materialChanged = false;
 
 		//init with delay
 		float delay = 0;
@@ -92,6 +93,15 @@ namespace Wiwa {
 			emitter->m_meshChanged = false;
 
 		}
+
+		if (emitter->m_materialChanged)
+		{
+			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+			emitter->m_materialChanged = false;
+
+		}
+
 		if (emitter->m_activeTimeChanged && emitter->m_startActive)
 		{
 			if (emitter->m_activeOverTime)
@@ -249,6 +259,7 @@ namespace Wiwa {
 						rotationRad.x = glm::degrees(glm::asin(rotationMatrix[1][2]));
 						rotationRad.y = glm::degrees(glm::atan(rotationMatrix[0][2], rotationMatrix[2][2]));
 						rotationRad.z = glm::degrees(glm::atan(rotationMatrix[1][0], rotationMatrix[1][1]));
+						transform = glm::scale(transform, particle.scale);
 
 						//pass transformation matrix
 						particle.transform = transform;

@@ -45,6 +45,7 @@ namespace Wiwa {
 		char m_meshPath[128];
 
 		bool m_meshChanged;
+		bool m_materialChanged;
 
 		
 		int m_maxParticles;
