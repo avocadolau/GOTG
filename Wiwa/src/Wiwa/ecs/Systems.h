@@ -24,6 +24,7 @@
 #include "systems/game/enemy/RangedPhalanx/EnemyRangedPhalanx.h"
 #include "systems/game/enemy/Sentinel/EnemySentinel.h"
 #include "systems/game/enemy/Ultron/BossUltron.h"
+#include "systems/game/enemy/Subjugator/EnemySubjugator.h"
 
 #include "systems/game/attack/SimpleBulletSystem.h"
 #include "systems/game/attack/SentinelExplosionSystem.h"
