@@ -93,13 +93,13 @@ void DialogPanel::Draw()
 			{
 				//dm.SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *dm.conversationCreator_P);
 
-				Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+				/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 				ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png");
 				Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 				dm.continueImgID = render.CreateInstancedQuadTex(dm.m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-				render.DisableInstance(dm.m_Scene, dm.continueImgID);
+				render.DisableInstance(dm.m_Scene, dm.continueImgID);*/
 
 				currentCreationStep = 3;
 			}
@@ -174,7 +174,7 @@ void DialogPanel::Draw()
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
 					dm.conversations[currentConversation].occupied = true;
-					dm.SaveDialog(currentConversation);
+					dm.SaveAllDialogs();
 					currentConversation++;
 
 					currentCreationStep = 6;

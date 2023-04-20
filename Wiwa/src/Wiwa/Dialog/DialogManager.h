@@ -68,7 +68,7 @@ namespace Wiwa
 		void SetCharacterImage(const char* path, int conversationNumber);
 		//void SetContinueIndicatorImage(const char* path, int conversationNumber);
 
-		void SaveDialog(int conversationNumber);
+		void SaveAllDialogs();
 		void LoadAllDialogs();
 
 	public:
