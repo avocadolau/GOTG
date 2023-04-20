@@ -193,6 +193,12 @@ namespace Wiwa {
 			btVector3 position = (*item)->collisionObject->getWorldTransform().getOrigin();
 			position += (*item)->velocity * dt;
 			(*item)->collisionObject->getWorldTransform().setOrigin(position);
+
+			if ((*item)->nextPosition.isZero())
+				continue;
+
+			(*item)->collisionObject->getWorldTransform().setOrigin((*item)->nextPosition);
+			(*item)->nextPosition.setZero();
 		}
 		return true;
 	}

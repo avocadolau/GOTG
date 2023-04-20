@@ -31,7 +31,7 @@ class Camera;
 namespace Wiwa {
 
 	struct Object {
-		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), id(id_),
+		Object(btCollisionObject& body_, const size_t id_, int selfTag_, const char* selfTagStr_, const bool doContinuousCollision_ = false) : collisionObject(&body_), velocity(0.0f, 0.0f, 0.0f), nextPosition(0.0f, 0.0f, 0.0f), id(id_),
 			doContinuousCollision(doContinuousCollision_), selfTag(selfTag_), selfTagStr(selfTagStr_) {};
 
 		btCollisionObject* collisionObject;
@@ -39,6 +39,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator parentTransformIt;
 		EntityManager::ComponentIterator collisionBodyIt;
 		btVector3 velocity;
+		btVector3 nextPosition;
 		size_t id;
 		size_t parentId;
 		int selfTag;

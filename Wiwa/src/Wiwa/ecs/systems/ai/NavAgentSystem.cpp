@@ -48,7 +48,7 @@ namespace Wiwa
     void NavAgentSystem::OnUpdate()
     {
         RefreshParamters();
-        const dtQueryFilter* filter= Crowd::getInstance().getCrowd().getFilter(m_agentIndex);
+       /* const dtQueryFilter* filter= Crowd::getInstance().getCrowd().getFilter(m_agentIndex);
         const dtNavMeshQuery* query = Crowd::getInstance().getCrowd().getNavMeshQuery();
         dtPolyRef startRef;
         float m_spos[3];
@@ -56,7 +56,7 @@ namespace Wiwa
         if (dtStatusSucceed(status))
         {
             SetDestination(glm::vec3(m_spos[0], m_spos[1], m_spos[2]));
-        }
+        }*/
 
         if (m_agentIndex != -1) {
             const dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getAgent(m_agentIndex);
@@ -78,9 +78,10 @@ namespace Wiwa
             Wiwa::EntityManager& em = m_Scene->GetEntityManager();
             Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
             // Check if entity has collision body
-            if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId))
+            if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId) && agent)
             {
-                physSys->getBody()->velocity = btVector3(agent->vel[0], agent->vel[1], agent->vel[2]);
+                //physSys->getBody()->velocity = btVector3(agent->vel[0], agent->vel[1], agent->vel[2]);
+                m_Scene->GetPhysicsManager().SetNextPosition(physSys->getBody(), m_currentPos);
             }
             else
             {
