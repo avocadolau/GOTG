@@ -174,6 +174,7 @@ void DialogPanel::Draw()
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
 					dm.conversations[currentConversation].occupied = true;
+					dm.SaveDialog(currentConversation);
 					currentConversation++;
 
 					currentCreationStep = 6;
