@@ -95,7 +95,7 @@ protected:
 	class InputGeom* m_geom;
 	class dtNavMesh* m_navMesh;
 	class dtNavMeshQuery* m_navQuery;
-	class dtCrowd* m_crowd;
+	class dtCrowd* m_Crowd;
 
 	unsigned char m_navMeshDrawFlags;
 
@@ -158,7 +158,7 @@ public:
 	virtual class InputGeom* getInputGeom() { return m_geom; }
 	virtual class dtNavMesh* getNavMesh() { return m_navMesh; }
 	virtual class dtNavMeshQuery* getNavMeshQuery() { return m_navQuery; }
-	virtual class dtCrowd* getCrowd() { return m_crowd; }
+	virtual class dtCrowd* getCrowd() { return m_Crowd; }
 	virtual float getAgentRadius() { return m_agentRadius; }
 	virtual float getAgentHeight() { return m_agentHeight; }
 	virtual float getAgentClimb() { return m_agentMaxClimb; }

@@ -136,7 +136,7 @@ RecastCommon::RecastCommon() :
 	m_geom(0),
 	m_navMesh(0),
 	m_navQuery(0),
-	m_crowd(0),
+	m_Crowd(0),
 	m_navMeshDrawFlags(DU_DRAWNAVMESH_OFFMESHCONS | DU_DRAWNAVMESH_CLOSEDLIST),
 	m_filterLowHangingObstacles(true),
 	m_filterLedgeSpans(true),
@@ -146,7 +146,7 @@ RecastCommon::RecastCommon() :
 {
 	resetCommonSettings();
 	m_navQuery = dtAllocNavMeshQuery();
-	m_crowd = dtAllocCrowd();
+	m_Crowd = dtAllocCrowd();
 
 	for (int i = 0; i < MAX_TOOLS; i++)
 		m_toolStates[i] = 0;
@@ -156,7 +156,7 @@ RecastCommon::~RecastCommon()
 {
 	dtFreeNavMeshQuery(m_navQuery);
 	dtFreeNavMesh(m_navMesh);
-	dtFreeCrowd(m_crowd);
+	dtFreeCrowd(m_Crowd);
 	delete m_tool;
 	for (int i = 0; i < MAX_TOOLS; i++)
 		delete m_toolStates[i];

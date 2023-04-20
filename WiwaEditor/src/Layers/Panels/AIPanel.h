@@ -36,5 +36,5 @@ private:
 	bool m_DebugDraw;
 	EntityId m_Id = -1;
 	//InputGeom* m_Geom;
-	//BuildContext ctx;
+	//BuildContext m_Ctx;
 };

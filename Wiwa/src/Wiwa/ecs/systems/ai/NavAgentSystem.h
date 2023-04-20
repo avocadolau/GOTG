@@ -38,7 +38,7 @@ namespace Wiwa
         int m_agentIndex;
         glm::vec3 m_currentPos;
         glm::vec3 m_currentVel;
-        dtCrowdAgentParams m_agentParams;
+        dtCrowdAgentParams m_AgentParams;
 
         EntityManager::ComponentIterator m_NavAgentIt;
         //EntityManager::ComponentIterator m_Transform;

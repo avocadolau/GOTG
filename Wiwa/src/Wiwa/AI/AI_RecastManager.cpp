@@ -10,7 +10,7 @@ namespace Wiwa
 	EntityManager::ComponentIterator RecastManager::m_MeshIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	RecastCommon* RecastManager::m_RecastMesh = nullptr;
 	InputGeom* RecastManager::m_Geom = nullptr;
-	BuildContext RecastManager::ctx = BuildContext();
+	BuildContext RecastManager::m_Ctx = BuildContext();
 	bool RecastManager::ExecutePipeline()
 	{
 		return false;
@@ -64,7 +64,7 @@ namespace Wiwa
 		m_RecastMesh = new RecastSoloMesh();
 		m_Geom = new InputGeom();
 		
-		if (!m_Geom->load(&ctx, library_output))
+		if (!m_Geom->load(&m_Ctx, library_output))
 		{
 			delete m_Geom;
 			m_Geom = 0;
@@ -75,11 +75,11 @@ namespace Wiwa
 				delete m_RecastMesh;
 				m_RecastMesh = 0;
 			}
-			//ctx.dumpLog("Geom load log %s:", meshName.c_str());
+			//m_Ctx.dumpLog("Geom load log %s:", meshName.c_str());
 		}
 
 		if (m_RecastMesh)
-			m_RecastMesh->setContext(&ctx);
+			m_RecastMesh->setContext(&m_Ctx);
 
 		if (m_RecastMesh && m_Geom)
 		{
@@ -205,7 +205,7 @@ namespace Wiwa
 		}
 		m_Geom = new InputGeom();
 
-		if (!m_Geom->load(&ctx, gsetPath))
+		if (!m_Geom->load(&m_Ctx, gsetPath))
 		{
 			delete m_Geom;
 			m_Geom = 0;
@@ -216,11 +216,11 @@ namespace Wiwa
 				delete m_RecastMesh;
 				m_RecastMesh = 0;
 			}
-			//ctx.dumpLog("Geom load log %s:", meshName.c_str());
+			//m_Ctx.dumpLog("Geom load log %s:", meshName.c_str());
 		}
 
 		if (m_RecastMesh)
-			m_RecastMesh->setContext(&ctx);
+			m_RecastMesh->setContext(&m_Ctx);
 
 		if (m_RecastMesh && m_Geom)
 		{

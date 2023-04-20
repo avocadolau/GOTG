@@ -13,7 +13,7 @@ namespace Wiwa
 		static EntityId m_Id;
 		static RecastCommon* m_RecastMesh;
 		static InputGeom* m_Geom;
-		static BuildContext ctx;
+		static BuildContext m_Ctx;
 
 		static bool ExecutePipeline();
 		static bool Render();

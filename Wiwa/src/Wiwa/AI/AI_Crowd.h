@@ -17,19 +17,6 @@ public:
         static Crowd instance;
         return instance;
     }
-    /*static Crowd* getInstance()
-    {
-        if (instancePtr == NULL)
-        {
-            instancePtr = new Crowd();
-            instancePtr->Init();
-            return instancePtr;
-        }
-        else
-        {
-            return instancePtr;
-        }
-    }*/
 
     void Update(float deltaTime);
     int AddAgent(const float* position, dtCrowdAgentParams* param, bool defaultParam = false);
@@ -47,12 +34,12 @@ public:
     void Init();
     void CleanUp();
 
-    dtCrowd& getCrowd() { return *m_crowd; };
+    dtCrowd& getCrowd() { return *m_Crowd; };
     
 private:
     Crowd();
     ~Crowd();
-    dtCrowd* m_crowd;
-    dtCrowdAgentParams m_agentParams;
-    std::vector<int> m_agents;
+    dtCrowd* m_Crowd;
+    dtCrowdAgentParams m_AgentParams;
+    std::vector<int> m_Agents;
 };

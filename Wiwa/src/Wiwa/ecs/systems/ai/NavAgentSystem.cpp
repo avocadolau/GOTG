@@ -10,16 +10,16 @@ namespace Wiwa
     {
         m_agentIndex = -1;
       
-        //m_agentParams.radius = ;
-        //m_agentParams.height = m_height;
-        //m_agentParams.maxSpeed = m_maxSpeed;
-        //m_agentParams.maxAcceleration = m_maxAcceleration;
-        //m_agentParams.collisionQueryRange = m_radius * 12.f;
-        //m_agentParams.pathOptimizationRange = m_radius * 30.f;
-        //m_agentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
-        //m_agentParams.obstacleAvoidanceType = 3;
-        //m_agentParams.queryFilterType = 0;
-        //m_agentParams.separationWeight = 1;
+        //m_AgentParams.radius = ;
+        //m_AgentParams.height = m_height;
+        //m_AgentParams.maxSpeed = m_maxSpeed;
+        //m_AgentParams.maxAcceleration = m_maxAcceleration;
+        //m_AgentParams.collisionQueryRange = m_radius * 12.f;
+        //m_AgentParams.pathOptimizationRange = m_radius * 30.f;
+        //m_AgentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
+        //m_AgentParams.obstacleAvoidanceType = 3;
+        //m_AgentParams.queryFilterType = 0;
+        //m_AgentParams.separationWeight = 1;
     }
 
     NavAgentSystem::~NavAgentSystem()
@@ -66,9 +66,9 @@ namespace Wiwa
                 m_currentPos.y = agent->npos[1];
                 m_currentPos.z = agent->npos[2];
             }
-            Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_agentParams.maxSpeed);
-            Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_agentParams.maxAcceleration);
-            Crowd::getInstance().SetAgentParameters(m_agentIndex, m_agentParams);
+            Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_AgentParams.maxSpeed);
+            Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_AgentParams.maxAcceleration);
+            Crowd::getInstance().SetAgentParameters(m_agentIndex, m_AgentParams);
 
             Render();
 
@@ -102,12 +102,12 @@ namespace Wiwa
 
     void NavAgentSystem::SetMaxSpeed(float maxSpeed)
     {
-        m_agentParams.maxSpeed = maxSpeed;
+        m_AgentParams.maxSpeed = maxSpeed;
     }
 
     void NavAgentSystem::SetMaxAcceleration(float maxAcceleration)
     {
-        m_agentParams.maxAcceleration = maxAcceleration;
+        m_AgentParams.maxAcceleration = maxAcceleration;
     }
 
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const
@@ -122,18 +122,18 @@ namespace Wiwa
 
     float NavAgentSystem::GetMaxSpeed() const
     {
-        return m_agentParams.maxSpeed;
+        return m_AgentParams.maxSpeed;
     }
 
     float NavAgentSystem::GetMaxAcceleration() const
     {
-        return m_agentParams.maxAcceleration;
+        return m_AgentParams.maxAcceleration;
     }
 
     void NavAgentSystem::RegisterWithCrowd()
     {
-        m_agentIndex = Crowd::getInstance().AddAgent(&m_currentPos[0], &m_agentParams);
-        Crowd::getInstance().SetAgentParameters(m_agentIndex, m_agentParams);
+        m_agentIndex = Crowd::getInstance().AddAgent(&m_currentPos[0], &m_AgentParams);
+        Crowd::getInstance().SetAgentParameters(m_agentIndex, m_AgentParams);
     }
 
     void NavAgentSystem::RefreshParamters()
@@ -141,16 +141,16 @@ namespace Wiwa
         Wiwa::NavAgent* agent = GetComponentByIterator<Wiwa::NavAgent>(m_NavAgentIt);
         if (agent)
         {
-            m_agentParams.radius = agent->radius;
-            m_agentParams.height = agent->height;
-            m_agentParams.maxSpeed = agent->maxSpeed;
-            m_agentParams.maxAcceleration = agent->maxAcceleration;
-            m_agentParams.collisionQueryRange = agent->radius * 12.f;
-            m_agentParams.pathOptimizationRange = agent->radius * 30.f;
-            m_agentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
-            m_agentParams.obstacleAvoidanceType = 3;
-            m_agentParams.queryFilterType = 0;
-            m_agentParams.separationWeight = 1;
+            m_AgentParams.radius = agent->radius;
+            m_AgentParams.height = agent->height;
+            m_AgentParams.maxSpeed = agent->maxSpeed;
+            m_AgentParams.maxAcceleration = agent->maxAcceleration;
+            m_AgentParams.collisionQueryRange = agent->radius * 12.f;
+            m_AgentParams.pathOptimizationRange = agent->radius * 30.f;
+            m_AgentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
+            m_AgentParams.obstacleAvoidanceType = 3;
+            m_AgentParams.queryFilterType = 0;
+            m_AgentParams.separationWeight = 1;
         }
     }
 
@@ -184,18 +184,18 @@ namespace Wiwa
         dd.depthMask(false);
 
         // Agent dimensions.	
-        duDebugDrawCylinderWire(&dd, m_currentPos.x - m_agentParams.radius, m_currentPos.y + 0.02f, m_currentPos.z - m_agentParams.radius, m_currentPos.x + m_agentParams.radius, m_currentPos.y + m_agentParams.height, m_currentPos.z + m_agentParams.radius, startCol, 2.0f);
+        duDebugDrawCylinderWire(&dd, m_currentPos.x - m_AgentParams.radius, m_currentPos.y + 0.02f, m_currentPos.z - m_AgentParams.radius, m_currentPos.x + m_AgentParams.radius, m_currentPos.y + m_AgentParams.height, m_currentPos.z + m_AgentParams.radius, startCol, 2.0f);
 
-        duDebugDrawCircle(&dd, m_currentPos.x, m_currentPos.y + 1, m_currentPos.z, m_agentParams.radius, duRGBA(0, 0, 0, 64), 1.0f);
+        duDebugDrawCircle(&dd, m_currentPos.x, m_currentPos.y + 1, m_currentPos.z, m_AgentParams.radius, duRGBA(0, 0, 0, 64), 1.0f);
 
         unsigned int colb = duRGBA(0, 0, 0, 196);
         dd.begin(DU_DRAW_LINES);
         dd.vertex(m_currentPos.x, m_currentPos.y - 1, m_currentPos.z, colb);
         dd.vertex(m_currentPos.x, m_currentPos.y + 1, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x - m_agentParams.radius / 2, m_currentPos.y + 0.02f, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x + m_agentParams.radius / 2, m_currentPos.y + 0.02f, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z - m_agentParams.radius / 2, colb);
-        dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z + m_agentParams.radius / 2, colb);
+        dd.vertex(m_currentPos.x - m_AgentParams.radius / 2, m_currentPos.y + 0.02f, m_currentPos.z, colb);
+        dd.vertex(m_currentPos.x + m_AgentParams.radius / 2, m_currentPos.y + 0.02f, m_currentPos.z, colb);
+        dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z - m_AgentParams.radius / 2, colb);
+        dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z + m_AgentParams.radius / 2, colb);
         dd.end();
         dd.depthMask(true);
         
