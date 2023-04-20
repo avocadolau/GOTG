@@ -23,7 +23,7 @@ namespace Wiwa
         void SetMaxAcceleration(float maxAcceleration);
 
         const glm::vec3& GetCurrentPosition() const;
-        const glm::vec3& GetCurrentVelocity() const;
+        //const glm::vec3& GetCurrentVelocity() const;
 
         float GetMaxSpeed() const;
         float GetMaxAcceleration() const;
@@ -35,9 +35,9 @@ namespace Wiwa
         void DrawAgent();
         void DrawPath();
 
-        int m_agentIndex;
-        glm::vec3 m_currentPos;
-        glm::vec3 m_currentVel;
+        int m_AgentIndex;
+        glm::vec3 m_CurrentPos;
+        //glm::vec3 m_CurrentVel;
         dtCrowdAgentParams m_AgentParams;
 
         EntityManager::ComponentIterator m_NavAgentIt;

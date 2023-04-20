@@ -8,7 +8,7 @@ namespace Wiwa
 {
     NavAgentSystem::NavAgentSystem()
     {
-        m_agentIndex = -1;
+        m_AgentIndex = -1;
       
         //m_AgentParams.radius = ;
         //m_AgentParams.height = m_height;
@@ -24,15 +24,15 @@ namespace Wiwa
 
     NavAgentSystem::~NavAgentSystem()
     {
-        if (m_agentIndex != -1) {
-            Crowd::getInstance().RemoveAgent(m_agentIndex);
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().RemoveAgent(m_AgentIndex);
         }
     }
 
     void NavAgentSystem::OnInit()
     {
         Transform3D* tr = GetComponent<Transform3D>();
-        m_currentPos = tr->localPosition;
+        m_CurrentPos = tr->localPosition;
         m_NavAgentIt = GetComponentIterator<Wiwa::NavAgent>();
         RefreshParamters();
         RegisterWithCrowd();
@@ -48,7 +48,8 @@ namespace Wiwa
     void NavAgentSystem::OnUpdate()
     {
         RefreshParamters();
-       /* const dtQueryFilter* filter= Crowd::getInstance().getCrowd().getFilter(m_agentIndex);
+        Crowd& crowd = Crowd::getInstance();
+       /* const dtQueryFilter* filter= Crowd::getInstance().getCrowd().getFilter(m_AgentIndex);
         const dtNavMeshQuery* query = Crowd::getInstance().getCrowd().getNavMeshQuery();
         dtPolyRef startRef;
         float m_spos[3];
@@ -58,17 +59,41 @@ namespace Wiwa
             SetDestination(glm::vec3(m_spos[0], m_spos[1], m_spos[2]));
         }*/
 
-        if (m_agentIndex != -1) {
-            const dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getAgent(m_agentIndex);
-            if (agent)
+        if (m_AgentIndex != -1) {
+            const dtCrowdAgent* crowdAgent = crowd.getCrowd().getAgent(m_AgentIndex);
+            Wiwa::NavAgent* navAgent = GetComponentByIterator<Wiwa::NavAgent>(m_NavAgentIt);
+
+            if (crowdAgent)
             {
-                m_currentPos.x = agent->npos[0];
-                m_currentPos.y = agent->npos[1];
-                m_currentPos.z = agent->npos[2];
+                m_CurrentPos.x = crowdAgent->npos[0];
+                m_CurrentPos.y = crowdAgent->npos[1];
+                m_CurrentPos.z = crowdAgent->npos[2];
+
+            /*    if (glm::distance(m_CurrentPos, glm::vec3(crowdAgent->targetPos[0], crowdAgent->targetPos[1], crowdAgent->targetPos[2])) <= navAgent->stoppingDistance)
+                {
+                    crowd.getCrowd().resetMoveTarget(m_AgentIndex);
+                }*/
+                // Calculate distance to target
+                float distanceToTarget = glm::distance(m_CurrentPos, glm::vec3(crowdAgent->targetPos[0], crowdAgent->targetPos[1], crowdAgent->targetPos[2]));
+
+                if (distanceToTarget > navAgent->stoppingDistance) {
+                    // Set agent target and speed
+                    crowd.SetAgentMaxAcceleration(m_AgentIndex, m_AgentParams.maxAcceleration);
+                    crowd.SetAgentMaxSpeed(m_AgentIndex, m_AgentParams.maxSpeed);
+                }
+                else {
+                    // Slow down agent as it approaches target
+                    float deceleration = (m_AgentParams.maxSpeed * m_AgentParams.maxSpeed) / (2 * navAgent->stoppingDistance);
+                    float desiredSpeed = (distanceToTarget / navAgent->stoppingDistance) * m_AgentParams.maxSpeed;
+                    float speed = std::min(desiredSpeed, m_AgentParams.maxSpeed);
+                    speed = std::max(speed, 0.0f);
+                    crowd.SetAgentMaxAcceleration(m_AgentIndex, m_AgentParams.maxAcceleration);
+                    crowd.SetAgentMaxSpeed(m_AgentIndex, speed);
+                }
             }
-            Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_AgentParams.maxSpeed);
-            Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_AgentParams.maxAcceleration);
-            Crowd::getInstance().SetAgentParameters(m_agentIndex, m_AgentParams);
+
+            //crowd.SetAgentMaxSpeed(m_AgentIndex, m_AgentParams.maxSpeed);
+            //crowd.SetAgentParameters(m_AgentIndex, m_AgentParams);
 
             Render();
 
@@ -76,21 +101,22 @@ namespace Wiwa
             Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
 
             Transform3D* tr = GetComponent<Transform3D>();
-            tr->localPosition = m_currentPos;
+            tr->localPosition = m_CurrentPos;
         }
     }
 
     void NavAgentSystem::SetDestination(const glm::vec3& target)
     {
-        if (m_agentIndex != -1) {
-            Crowd::getInstance().SetAgentTarget(m_agentIndex, &target[0]);
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().SetAgentTarget(m_AgentIndex, &target[0]);
         }
     }
 
     void NavAgentSystem::SetPosition(const glm::vec3& position)
     {
-        if (m_agentIndex != -1) {
-            dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_agentIndex);
+        if (m_AgentIndex != -1) {
+            dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_AgentIndex);
+
             if (agent)
             {
                 agent->npos[0] = position.x;
@@ -112,13 +138,13 @@ namespace Wiwa
 
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const
     {
-        return m_currentPos;
+        return m_CurrentPos;
     }
 
-    const glm::vec3& NavAgentSystem::GetCurrentVelocity() const
+  /*  const glm::vec3& NavAgentSystem::GetCurrentVelocity() const
     {
-        return m_currentVel;
-    }
+        return m_CurrentVel;
+    }*/
 
     float NavAgentSystem::GetMaxSpeed() const
     {
@@ -132,8 +158,8 @@ namespace Wiwa
 
     void NavAgentSystem::RegisterWithCrowd()
     {
-        m_agentIndex = Crowd::getInstance().AddAgent(&m_currentPos[0], &m_AgentParams);
-        Crowd::getInstance().SetAgentParameters(m_agentIndex, m_AgentParams);
+        m_AgentIndex = Crowd::getInstance().AddAgent(&m_CurrentPos[0], &m_AgentParams);
+        Crowd::getInstance().SetAgentParameters(m_AgentIndex, m_AgentParams);
     }
 
     void NavAgentSystem::RefreshParamters()
@@ -184,18 +210,18 @@ namespace Wiwa
         dd.depthMask(false);
 
         // Agent dimensions.	
-        duDebugDrawCylinderWire(&dd, m_currentPos.x - m_AgentParams.radius, m_currentPos.y + 0.02f, m_currentPos.z - m_AgentParams.radius, m_currentPos.x + m_AgentParams.radius, m_currentPos.y + m_AgentParams.height, m_currentPos.z + m_AgentParams.radius, startCol, 2.0f);
+        duDebugDrawCylinderWire(&dd, m_CurrentPos.x - m_AgentParams.radius, m_CurrentPos.y + 0.02f, m_CurrentPos.z - m_AgentParams.radius, m_CurrentPos.x + m_AgentParams.radius, m_CurrentPos.y + m_AgentParams.height, m_CurrentPos.z + m_AgentParams.radius, startCol, 2.0f);
 
-        duDebugDrawCircle(&dd, m_currentPos.x, m_currentPos.y + 1, m_currentPos.z, m_AgentParams.radius, duRGBA(0, 0, 0, 64), 1.0f);
+        duDebugDrawCircle(&dd, m_CurrentPos.x, m_CurrentPos.y + 1, m_CurrentPos.z, m_AgentParams.radius, duRGBA(0, 0, 0, 64), 1.0f);
 
         unsigned int colb = duRGBA(0, 0, 0, 196);
         dd.begin(DU_DRAW_LINES);
-        dd.vertex(m_currentPos.x, m_currentPos.y - 1, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x, m_currentPos.y + 1, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x - m_AgentParams.radius / 2, m_currentPos.y + 0.02f, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x + m_AgentParams.radius / 2, m_currentPos.y + 0.02f, m_currentPos.z, colb);
-        dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z - m_AgentParams.radius / 2, colb);
-        dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z + m_AgentParams.radius / 2, colb);
+        dd.vertex(m_CurrentPos.x, m_CurrentPos.y - 1, m_CurrentPos.z, colb);
+        dd.vertex(m_CurrentPos.x, m_CurrentPos.y + 1, m_CurrentPos.z, colb);
+        dd.vertex(m_CurrentPos.x - m_AgentParams.radius / 2, m_CurrentPos.y + 0.02f, m_CurrentPos.z, colb);
+        dd.vertex(m_CurrentPos.x + m_AgentParams.radius / 2, m_CurrentPos.y + 0.02f, m_CurrentPos.z, colb);
+        dd.vertex(m_CurrentPos.x, m_CurrentPos.y + 0.02f, m_CurrentPos.z - m_AgentParams.radius / 2, colb);
+        dd.vertex(m_CurrentPos.x, m_CurrentPos.y + 0.02f, m_CurrentPos.z + m_AgentParams.radius / 2, colb);
         dd.end();
         dd.depthMask(true);
         
@@ -205,8 +231,8 @@ namespace Wiwa
         const unsigned int startCol = duRGBA(128, 25, 0, 192);
         duDebugDraw& dd = Wiwa::RecastManager::m_RecastMesh->getDebugDraw();
 
-        if (m_agentIndex != -1) {
-            const dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getAgent(m_agentIndex);
+        if (m_AgentIndex != -1) {
+            const dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getAgent(m_AgentIndex);
             if (agent)
             {
                 dd.depthMask(false);
