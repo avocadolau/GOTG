@@ -1168,6 +1168,19 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 		}
 
+		ImGui::Dummy(ImVec2(0, 8));
+
+		ImGui::Checkbox("##m_p_useGravity", &emitter->m_p_useGravity);
+		ImGui::SameLine();
+		ImGui::Text("Use Gravity");
+
+		if (emitter->m_p_useGravity)
+		{
+			ImGui::PushItemWidth(100.0f);
+			ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_gravity, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
+
 		ImGui::TreePop();
 		ImGui::Dummy(ImVec2(0, 8));
 	}

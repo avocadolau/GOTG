@@ -112,6 +112,9 @@ namespace Wiwa {
 		glm::vec3	m_p_minVelocity;
 		glm::vec3	m_p_maxVelocity;
 
+		bool m_p_useGravity;
+		float m_p_gravity;
+
 		//glm::vec3 particle_m_initialAcceleration;
 
 		//rotation
