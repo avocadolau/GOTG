@@ -168,6 +168,17 @@ namespace Wiwa
 		justTextureShader->addUniform("u_Texture", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/justtexture", justTextureShader);
+
+		ResourceId impactShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/shot_impact");
+		Shader* impactShader = Wiwa::Resources::GetResourceById<Shader>(impactShaderId);
+		impactShader->Compile("resources/shaders/vfx/shot_impact");
+
+		impactShader->addUniform("u_LifeTime", UniformType::Float);
+		impactShader->addUniform("u_Color", UniformType::fVec4);
+		impactShader->addUniform("u_Texture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shot_impact", impactShader);
+
 		//===========================================================================================================
 
 		// Normal Display Shader
