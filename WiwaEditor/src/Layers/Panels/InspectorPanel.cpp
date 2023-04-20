@@ -832,9 +832,9 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::SameLine();
 	ImGui::Text("Active");
 
-	ImGui::Checkbox("##m_activeOverTime", &emitter->m_activeOverTime);
+	/*ImGui::Checkbox("##m_activeOverTime", &emitter->m_activeOverTime);
 	ImGui::SameLine();
-	ImGui::Text("Active Over Time");
+	ImGui::Text("Active Over Time");*/
 
 	if (emitter->m_activeOverTime)
 	{

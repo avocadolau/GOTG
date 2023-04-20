@@ -34,6 +34,7 @@ namespace Wiwa {
 		//init with delay
 		float delay = 0;
 		m_SpawnTimer = delay;
+		m_AvailableParticles = emitter->m_maxParticles;
 
 		emitter->m_activeTimeChanged = false;
 
@@ -156,8 +157,11 @@ namespace Wiwa {
 			{
 				for (unsigned int i = 0; i < emitter->m_spawnAmount; ++i)
 				{
-					int unusedParticle = FirstUnusedParticle();
-					SpawnParticle(m_Particles[unusedParticle]);
+					if (m_AvailableParticles > 0)
+					{
+						int unusedParticle = FirstUnusedParticle();
+						SpawnParticle(m_Particles[unusedParticle]);
+					}
 				}
 
 				m_SpawnTimer = emitter->m_spawnRate;
@@ -291,6 +295,7 @@ namespace Wiwa {
 			}
 
 			emitter->m_activeParticles = activeParticles;
+			m_AvailableParticles = emitter->m_maxParticles - activeParticles;
 			Render();
 		}
 		if (emitter->m_ActiveTimer < 0)  emitter->m_ActiveTimer = 0;
