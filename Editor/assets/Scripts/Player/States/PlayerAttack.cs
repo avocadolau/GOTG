@@ -68,25 +68,25 @@ namespace Game
         }
         public void Fire(ref PlayerStateMachine stateMachine, Vector3 shootInput)
         {
-            ref StarlordShooter shooter = ref stateMachine.GetComponentByIterator<StarlordShooter>(stateMachine.shooterIt);
-            Transform3D spawnPoint;
-            //Decide wich hand is going next
-            if (shootTimer >= stateMachine.GetCharacter().RateOfFire)
-            {
-                shootTimer = 0;
-                if (shooter.ShootRight)
-                {
-                    spawnPoint = stateMachine.GetFirePosition("RightPos");
-                    Animator.PlayAnimationName("shootright", false, stateMachine.GetEntity());
-                }
-                else
-                {
-                    spawnPoint = stateMachine.GetFirePosition("LeftPos"); ;
-                    Animator.PlayAnimationName("shootleft", false, stateMachine.GetEntity());
-                }
-                shooter.ShootRight = !shooter.ShootRight;
-                stateMachine.SpawnBullet(ref spawnPoint, ref shooter, ref stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
-            }
+           // ref StarlordShooter shooter = ref stateMachine.GetComponentByIterator<StarlordShooter>(stateMachine.shooterIt);
+            //Transform3D spawnPoint;
+            ////Decide wich hand is going next
+            //if (shootTimer >= stateMachine.GetCharacter().RateOfFire)
+            //{
+            //    shootTimer = 0;
+            //    if (shooter.ShootRight)
+            //    {
+            //        spawnPoint = stateMachine.GetFirePosition("RightPos");
+            //        Animator.PlayAnimationName("shootright", false, stateMachine.GetEntity());
+            //    }
+            //    else
+            //    {
+            //        spawnPoint = stateMachine.GetFirePosition("LeftPos"); ;
+            //        Animator.PlayAnimationName("shootleft", false, stateMachine.GetEntity());
+            //    }
+            //    shooter.ShootRight = !shooter.ShootRight;
+            //    stateMachine.SpawnBullet(ref spawnPoint, ref shooter, ref stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
+            //}
         }
     }
 }

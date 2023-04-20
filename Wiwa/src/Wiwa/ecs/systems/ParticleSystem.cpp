@@ -29,6 +29,7 @@ namespace Wiwa {
 
 		m_MaxParticles = emitter->m_maxParticles;
 		emitter->m_meshChanged = false;
+		emitter->m_materialChanged = false;
 
 		//init with delay
 		float delay = 0;
@@ -92,6 +93,15 @@ namespace Wiwa {
 			emitter->m_meshChanged = false;
 
 		}
+
+		if (emitter->m_materialChanged)
+		{
+			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+			emitter->m_materialChanged = false;
+
+		}
+
 		if (emitter->m_activeTimeChanged && emitter->m_startActive)
 		{
 			if (emitter->m_activeOverTime)
@@ -128,14 +138,21 @@ namespace Wiwa {
 
 		emitter->m_activeParticles = 0;
 
-		if (emitter->m_active || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
+		if (emitter->m_active || emitter->m_activeOverTime)
 		{
 			float dt = Time::GetDeltaTime() * 0.001;
 
-			m_SpawnTimer -= dt;
-			emitter->m_ActiveTimer -= dt;
+			if (emitter->m_activeOverTime)
+			{
+				if (emitter->m_ActiveTimer > 0)
+					m_SpawnTimer -= dt;
+				emitter->m_ActiveTimer -= dt;
+			}
+			else
+				m_SpawnTimer -= dt;
 
-			if (m_SpawnTimer < 0)
+
+			if (m_SpawnTimer < 0 || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
 			{
 				for (unsigned int i = 0; i < emitter->m_spawnAmount; ++i)
 				{
@@ -249,6 +266,7 @@ namespace Wiwa {
 						rotationRad.x = glm::degrees(glm::asin(rotationMatrix[1][2]));
 						rotationRad.y = glm::degrees(glm::atan(rotationMatrix[0][2], rotationMatrix[2][2]));
 						rotationRad.z = glm::degrees(glm::atan(rotationMatrix[1][0], rotationMatrix[1][1]));
+						transform = glm::scale(transform, particle.scale);
 
 						//pass transformation matrix
 						particle.transform = transform;
@@ -301,7 +319,7 @@ namespace Wiwa {
 		glEnable(GL_BLEND);
 		glDepthMask(GL_FALSE);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+		glBlendEquation(GL_FUNC_ADD);
 		for (size_t i = 0; i < cameraCount; i++)
 		{
 			CameraId cam_id = cameras[i];

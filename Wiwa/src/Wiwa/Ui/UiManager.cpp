@@ -231,13 +231,8 @@ namespace Wiwa
 		{
 			size_t ealive = canvasToDestroy->controls.size();
 			Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-			if(canvasToDestroy->controls.at(i)->type != GuiControlType::BAR)
-				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_normal);
+			r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_normal);
 			if (canvasToDestroy->controls.at(i)->type == GuiControlType::SLIDER)
-			{
-				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_extra);
-			}
-			if (canvasToDestroy->controls.at(i)->type == GuiControlType::BAR)
 			{
 				r2d.RemoveInstance(m_Scene, canvasToDestroy->controls.at(i)->id_quad_extra);
 			}

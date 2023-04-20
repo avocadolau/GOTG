@@ -158,6 +158,16 @@ namespace Wiwa
 		shieldShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
+
+		ResourceId justTextureShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/justtexture");
+		Shader* justTextureShader = Wiwa::Resources::GetResourceById<Shader>(justTextureShaderId);
+		justTextureShader->Compile("resources/shaders/vfx/justtexture");
+
+		justTextureShader->addUniform("u_LifeTime", UniformType::Float);
+		justTextureShader->addUniform("u_Color", UniformType::fVec4);
+		justTextureShader->addUniform("u_Texture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/justtexture", justTextureShader);
 		//===========================================================================================================
 
 		// Normal Display Shader
@@ -287,63 +297,63 @@ namespace Wiwa
 	{
 		//once everything is rendered and passed by the hdr 
 
-		Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+		/*Camera* cam = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 
 		if (cam == nullptr)
-			return;
-		// Bind VAO
-		RenderManager::BindVAO();
-		glDisable(GL_DEPTH_TEST);
-		bool horizontal = true, first_iteration = false;
-		unsigned int amount = 10;
-		m_BlurShader->Bind();
+			return;*/
+		//// Bind VAO
+		//RenderManager::BindVAO();
+		//glDisable(GL_DEPTH_TEST);
+		//bool horizontal = true, first_iteration = false;
+		//unsigned int amount = 10;
+		//m_BlurShader->Bind();
 
-		// blur bright fragments with two-pass Gaussian Blur 
-		for (unsigned int i = 0; i < amount; i++)
-		{
-			m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
-			if (first_iteration) {
-				glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
-				first_iteration = false;
-			}
-			else {
-				if (horizontal) {
-					cam->vBlurBuffer->Bind(false);
-					cam->vBlurBuffer->BindTexture();
-				}
-				else {
-					cam->vBlurBuffer->Bind(false);
-					cam->hBlurBuffer->BindTexture();
-				}
-			}
+		//// blur bright fragments with two-pass Gaussian Blur 
+		//for (unsigned int i = 0; i < amount; i++)
+		//{
+		//	m_BlurShader->setUniformInt(m_BlurShader->getUniformLocation("u_Horizontal"), (int)horizontal);
+		//	if (first_iteration) {
+		//		glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[1]);
+		//		first_iteration = false;
+		//	}
+		//	else {
+		//		if (horizontal) {
+		//			cam->vBlurBuffer->Bind(false);
+		//			cam->vBlurBuffer->BindTexture();
+		//		}
+		//		else {
+		//			cam->vBlurBuffer->Bind(false);
+		//			cam->hBlurBuffer->BindTexture();
+		//		}
+		//	}
 
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			horizontal = !horizontal;
-		}
-		m_BlurShader->UnBind();
-		glEnable(GL_DEPTH_TEST);
+		//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//	horizontal = !horizontal;
+		//}
+		//m_BlurShader->UnBind();
+		//glEnable(GL_DEPTH_TEST);
 
-		//3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
-		//--------------------------------------------------------------------------------------------------------------------------
-		m_BloomShader->Bind();
+		////3. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+		////--------------------------------------------------------------------------------------------------------------------------
+		//m_BloomShader->Bind();
 
-		cam->frameBuffer->Bind(false);
+		//cam->frameBuffer->Bind(false);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBuffers()[0]);
+		//glActiveTexture(GL_TEXTURE1);
+		//glBindTexture(GL_TEXTURE_2D, cam->vBlurBuffer->getColorTexture());
 
 
-		m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int)true);
-		m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"), 5);
+		//m_BloomShader->setUniformInt(m_BloomShader->getUniformLocation("u_Bloom"), (int)true);
+		//m_BloomShader->setUniformFloat(m_BloomShader->getUniformLocation("u_exposure"), 5);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		m_BloomShader->UnBind();
+		//m_BloomShader->UnBind();
 
-		glBindVertexArray(0);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glBindVertexArray(0);
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 		/*	TESTING overwrite text 0 with text 1 color
