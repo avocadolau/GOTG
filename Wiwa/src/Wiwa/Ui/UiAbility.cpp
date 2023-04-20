@@ -5,10 +5,20 @@
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/core/Renderer2D.h>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+
 namespace Wiwa
 {
 	GuiAbility::GuiAbility(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active,bool animated,std::vector<Rect2i> animationRects, float rotation) : GuiControl(scene, GuiControlType::ABILITY, id)
 	{
+
+		std::string videoName = "D:\\\SomeVideo\\\Video.mp4";
+
+		cv::VideoCapture cap(videoName);
+
 		this->position = bounds;
 		this->texture = texture;
 		texturePosition = boundsOriginTex;
@@ -25,7 +35,6 @@ namespace Wiwa
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);
 			texture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId1);
 		}
-
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
 
