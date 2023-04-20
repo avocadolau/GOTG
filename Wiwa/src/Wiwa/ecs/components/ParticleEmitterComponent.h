@@ -66,7 +66,16 @@ namespace Wiwa {
 		float	m_p_maxSpawnRate;
 		//float m_spawnDelay;
 
-		bool m_active;
+		//if it starts counting down from start (if using active over time)
+		bool	m_startActive;
+		bool	m_active;
+		bool	m_activeTimeChanged;
+		bool	m_rangedTimeActive;
+		bool	m_activeOverTime;
+		float	m_ActiveTimer;
+		float	m_initialTimeActive;
+		float	m_minInitialTimeActive;
+		float	m_maxInitialTimeActive;
 
 		ParticleSpawnVolume m_spawnVolume;
 
@@ -74,8 +83,8 @@ namespace Wiwa {
 		//Particle Data			----------------------------------------
 
 		//general data
-		float m_p_lifeTime;
-		bool		m_p_rangedLifeTime;
+		float	m_p_lifeTime;
+		bool	m_p_rangedLifeTime;
 		float	m_p_minLifeTime;
 		float	m_p_maxLifeTime;
 
@@ -92,8 +101,10 @@ namespace Wiwa {
 		glm::vec3	m_p_initialPosition;
 		glm::vec3	m_p_initialPositionSphCenter;
 		float		m_p_initialPositionSphRadius;
-		glm::vec3	m_p_InitialPositionBoxA;
-		glm::vec3	m_p_InitialPositionBoxB;
+		glm::vec3	m_p_initialPositionBoxA;
+		glm::vec3	m_p_initialPositionBoxB;
+		bool		m_p_positionTowardsPoint;
+		glm::vec3	m_p_positionTowardsPointPos;
 
 		glm::vec3	m_p_initialVelocity;
 		bool		m_p_rangedVelocity;

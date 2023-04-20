@@ -22,6 +22,7 @@ namespace Wiwa
 			life_time_start(0.0f),
 			life_percentage(0.0f),
 			position(0.0f),
+			startPosition(0.0f),
 			rotation(0.0f),
 			angularVelocity(0.0f),
 			scale(0.0f),
@@ -29,12 +30,13 @@ namespace Wiwa
 			velocity(0.0f),
 			color(0.0f) {};
 
-		Particle(float _life, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _angularVelocity, glm::vec3 _scale, glm::vec3 _growthVelocity, glm::vec3 _velocity, glm::vec4 _color)
+		Particle(float _life, glm::vec3 _startPosition, glm::vec3 _rotation, glm::vec3 _angularVelocity, glm::vec3 _scale, glm::vec3 _growthVelocity, glm::vec3 _velocity, glm::vec4 _color)
 		{
 			life_time = _life;
 			life_time_start = _life;
 			life_percentage = 0.0f;
-			position = _position;
+			startPosition = _startPosition;
+			position = startPosition;
 			rotation = _rotation;
 			angularVelocity = _angularVelocity;
 			scale = _scale;
@@ -47,6 +49,7 @@ namespace Wiwa
 		float life_time_start = 0;
 		float life_percentage = 0;
 		glm::vec3 position;
+		glm::vec3 startPosition;
 		glm::vec3 velocity;
 		glm::vec3 rotation;
 		glm::vec3 angularVelocity;

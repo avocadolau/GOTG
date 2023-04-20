@@ -831,6 +831,59 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::SameLine();
 	ImGui::Text("Active");
 
+	ImGui::Checkbox("##m_activeOverTime", &emitter->m_activeOverTime);
+	ImGui::SameLine();
+	ImGui::Text("Active Over Time");
+
+	if (emitter->m_activeOverTime)
+	{
+		std::string activeTime = "Time Active: " + std::to_string(emitter->m_ActiveTimer);
+
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 1, 1));
+		ImGui::Text(activeTime.c_str());
+		ImGui::PopStyleColor();
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		ParticleTab();
+		ImGui::Checkbox("##m_startActive", &emitter->m_startActive);
+		ImGui::SameLine();
+		ImGui::Text("Start Active");
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		ParticleTab();
+		ImGui::Checkbox("##m_rangedTimeActive", &emitter->m_rangedTimeActive);
+		ImGui::SameLine();
+		ImGui::Text("Ranged");
+
+		if (emitter->m_rangedTimeActive)
+		{
+			ParticleTab();
+			ImGui::PushItemWidth(46.f);
+
+			
+			if (ImGui::DragFloat("##m_minInitialTimeActive", &emitter->m_minInitialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f"))
+				emitter->m_activeTimeChanged = true;
+			ImGui::SameLine();
+			if (ImGui::DragFloat("##m_maxInitialTimeActive", &emitter->m_maxInitialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f")) 
+				emitter->m_activeTimeChanged = true;
+			ImGui::PopItemWidth();
+
+		}
+		else
+		{
+
+			ImGui::Dummy(ImVec2(38, 0));
+			ImGui::SameLine();
+			ImGui::PushItemWidth(100.0f);
+			if (ImGui::DragFloat("##m_initialTimeActive", &emitter->m_initialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f")) emitter->m_activeTimeChanged = true;
+			ImGui::PopItemWidth();
+		}
+	}
+
+	
+
 
 	ImGui::Dummy(ImVec2(0, 4));
 
@@ -1029,14 +1082,19 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		ImGui::PopItemWidth();
 
+		
+
 
 		switch (emitter->m_spawnVolume)
 		{
 		case Wiwa::ParticleSpawnVolume::NONE:
 		{
-
-			ImGui::Text("Initial Position");
-			ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			if (emitter->m_p_positionTowardsPoint)
+			{
+				ImGui::Text("Initial Position");
+				ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			
 		}
 		break;
 		case Wiwa::ParticleSpawnVolume::CUBE:
@@ -1046,10 +1104,10 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 			ImGui::Text("Corner A");
 			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_InitialPositionBoxA", &(emitter->m_p_InitialPositionBoxA)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat3("##m_p_initialPositionBoxA", &(emitter->m_p_initialPositionBoxA)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 			ImGui::Text("Corner B");
 			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_InitialPositionBoxB", &(emitter->m_p_InitialPositionBoxB)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat3("##m_p_initialPositionBoxB", &(emitter->m_p_initialPositionBoxB)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		break;
 		case Wiwa::ParticleSpawnVolume::SPHERE:
@@ -1070,9 +1128,18 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		break;
 		}
+		ImGui::Dummy(ImVec2(0, 4));
 
+		ImGui::Checkbox("##m_p_positionTowardsPoint", &emitter->m_p_positionTowardsPoint);
+		ImGui::SameLine();
+		ImGui::Text("Move Towards Point");
 
-
+		if (emitter->m_p_positionTowardsPoint)
+		{
+			ImGui::Text("Point ");
+			ImGui::SameLine();
+			ImGui::DragFloat3("##m_p_positionTowardsPointPos", &(emitter->m_p_positionTowardsPointPos)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+		}
 
 		ImGui::Dummy(ImVec2(0, 8));
 

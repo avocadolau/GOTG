@@ -34,6 +34,11 @@ namespace Wiwa {
 		float delay = 0;
 		m_SpawnTimer = delay;
 
+		emitter->m_activeTimeChanged = false;
+
+
+
+
 		glm::vec3 initPosition = emitter->m_p_initialPosition + t3d->localPosition;
 		glm::vec3 initRotation = emitter->m_p_initialRotation + t3d->localRotation;
 		glm::vec3 initScale = emitter->m_p_initialScale + t3d->localScale;
@@ -53,7 +58,28 @@ namespace Wiwa {
 	}
 	void ParticleSystem::OnInit()
 	{
-		
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+
+		if (emitter->m_activeOverTime)
+		{
+			if (emitter->m_startActive)
+			{
+				if (emitter->m_rangedTimeActive)
+				{
+					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+				}
+				else
+				{
+					emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+				}
+			}
+			else
+			{
+				emitter->m_ActiveTimer = 0;
+			}
+			
+		}
 	}
 	void ParticleSystem::OnUpdate()
 	{
@@ -65,6 +91,21 @@ namespace Wiwa {
 			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
 			emitter->m_meshChanged = false;
 
+		}
+		if (emitter->m_activeTimeChanged && emitter->m_startActive)
+		{
+			if (emitter->m_activeOverTime)
+			{
+				if (emitter->m_rangedTimeActive)
+				{
+					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+				}
+				else
+				{
+					emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+				}
+			}
+			emitter->m_activeTimeChanged = false;
 		}
 		
 		if (m_MaxParticles != emitter->m_maxParticles)
@@ -87,10 +128,12 @@ namespace Wiwa {
 
 		emitter->m_activeParticles = 0;
 
-		if (emitter->m_active)
+		if (emitter->m_active || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
 		{
+			float dt = Time::GetDeltaTime() * 0.001;
 
-			m_SpawnTimer -= Time::GetDeltaTime() * 0.001;
+			m_SpawnTimer -= dt;
+			emitter->m_ActiveTimer -= dt;
 
 			if (m_SpawnTimer < 0)
 			{
@@ -145,7 +188,16 @@ namespace Wiwa {
 					//u_
 
 					//calculate everything
-					particle.position += particle.velocity * dt;
+
+					if (emitter->m_p_positionTowardsPoint)
+					{
+						particle.position = particle.startPosition * (1 - particle.life_percentage) + emitter->m_p_positionTowardsPointPos * particle.life_percentage;
+					}
+					else
+					{
+						particle.position += particle.velocity * dt;
+					}
+
 
 					if (emitter->m_p_scaleOverTime)
 					{
@@ -223,11 +275,16 @@ namespace Wiwa {
 			emitter->m_activeParticles = activeParticles;
 			Render();
 		}
+		if (emitter->m_ActiveTimer < 0)  emitter->m_ActiveTimer = 0;
 	}
 	void ParticleSystem::OnDestroy()
 	{
+		
 		m_Model = nullptr;
 		m_Material = nullptr;
+
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		emitter->m_ActiveTimer = 0;
 	}
 	void ParticleSystem::Render()
 	{
@@ -317,9 +374,9 @@ namespace Wiwa {
 		break;
 		case Wiwa::ParticleSpawnVolume::CUBE:
 		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_InitialPositionBoxA.x, emitter->m_p_InitialPositionBoxB.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_InitialPositionBoxA.y, emitter->m_p_InitialPositionBoxB.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_InitialPositionBoxA.z, emitter->m_p_InitialPositionBoxB.z);
+			float x = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.x, emitter->m_p_initialPositionBoxB.x);
+			float y = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.y, emitter->m_p_initialPositionBoxB.y);
+			float z = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.z, emitter->m_p_initialPositionBoxB.z);
 
 			initPosition = emitter->m_p_initialPosition + t3d->localPosition + glm::vec3(x, y, z);
 		}
@@ -333,7 +390,7 @@ namespace Wiwa {
 			float z = Wiwa::Math::RandomRange(1.0f,-1.0f);
 
 
-			initPosition = emitter->m_p_initialPosition + t3d->localPosition + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
+			initPosition = emitter->m_p_initialPosition + t3d->localPosition + emitter->m_p_initialPositionSphCenter + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
 
 		}
 		break;
@@ -376,6 +433,7 @@ namespace Wiwa {
 			initScale = emitter->m_p_initialScale + t3d->localScale;
 		}
 
+		particle.startPosition = initPosition;
 		particle.position = initPosition;
 		particle.rotation = initRotation;
 		particle.scale = initScale;
