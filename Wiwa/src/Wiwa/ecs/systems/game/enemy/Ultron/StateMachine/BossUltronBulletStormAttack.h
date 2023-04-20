@@ -21,9 +21,7 @@ namespace Wiwa {
 
 		void SpawnFirstPattern(BossUltron* enemy);
 		void SpawnSecondPattern(BossUltron* enemy);
-		void SpawnThirdPattern(BossUltron* enemy);
-
-	
+		void SpawnThirdPattern(BossUltron* enemy);	
 
 		float m_TimerRoundCooldown = 0.0f;
 		int m_RoundCounter = 0;

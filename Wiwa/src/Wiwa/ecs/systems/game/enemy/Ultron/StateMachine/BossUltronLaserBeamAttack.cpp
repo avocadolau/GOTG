@@ -17,22 +17,28 @@ namespace Wiwa
 
 	void BossUltronLaserBeamAttackState::EnterState(BossUltron* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
-		EntityId currentEnemy = enemy->GetEntity();
-
-		//pman.EmitBatch(currentEnemy);
-
-		//animator->PlayAnimation("spawn", false);
+		m_Timer = 0.0f;		
+		shootLaser = true;
 	}
 
 	void BossUltronLaserBeamAttackState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_ChasingState);
+		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+
+		if (m_Timer >= 2.f && shootLaser == true)
+		{
+			SpawnLaserBeam(enemy, CalculateForward(*selfTr));
+
+			shootLaser = false;
+		}
+		
+		if (m_Timer >= 8.f)
+		{
+			enemy->SwitchState(enemy->m_MovementState);
+		}		
+
+		m_Timer += Time::GetDeltaTimeSeconds();
 	}
 
 	void BossUltronLaserBeamAttackState::ExitState(BossUltron* enemy)

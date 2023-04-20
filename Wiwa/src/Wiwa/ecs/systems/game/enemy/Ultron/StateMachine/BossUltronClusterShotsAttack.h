@@ -22,6 +22,8 @@ namespace Wiwa {
 		glm::vec3 CalculateForward(const Transform3D& t3d);
 
 		float m_TimerBetweenBullet = 0.0f;
+
+		bool m_RoundOne, m_RoundTwo, m_RoundThree;
 		
 	};
 }
