@@ -158,6 +158,16 @@ namespace Wiwa
 		shieldShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
+
+		ResourceId justTextureShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/justtexture");
+		Shader* justTextureShader = Wiwa::Resources::GetResourceById<Shader>(justTextureShaderId);
+		justTextureShader->Compile("resources/shaders/vfx/justtexture");
+
+		justTextureShader->addUniform("u_LifeTime", UniformType::Float);
+		justTextureShader->addUniform("u_Color", UniformType::fVec4);
+		justTextureShader->addUniform("u_Texture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/justtexture", justTextureShader);
 		//===========================================================================================================
 
 		// Normal Display Shader
