@@ -138,14 +138,21 @@ namespace Wiwa {
 
 		emitter->m_activeParticles = 0;
 
-		if (emitter->m_active || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
+		if (emitter->m_active || emitter->m_activeOverTime)
 		{
 			float dt = Time::GetDeltaTime() * 0.001;
 
-			m_SpawnTimer -= dt;
-			emitter->m_ActiveTimer -= dt;
+			if (emitter->m_activeOverTime)
+			{
+				if (emitter->m_ActiveTimer > 0)
+					m_SpawnTimer -= dt;
+				emitter->m_ActiveTimer -= dt;
+			}
+			else
+				m_SpawnTimer -= dt;
 
-			if (m_SpawnTimer < 0)
+
+			if (m_SpawnTimer < 0 || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
 			{
 				for (unsigned int i = 0; i < emitter->m_spawnAmount; ++i)
 				{
