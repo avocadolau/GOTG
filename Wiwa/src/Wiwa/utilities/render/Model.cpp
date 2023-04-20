@@ -1004,17 +1004,25 @@ namespace Wiwa {
 			WI_ERROR("Couldn't load mesh file: {0}", input_path.c_str());
 			return;
 		}
-
 		// Convert from assets to library path, to navmesh folder, change extension to obj
-		std::string assets_output_path = "library\\navmesh\\";
+		//std::string library_output = "library\\navmesh\\";
+		std::string assets_output = "assets\\navmesh\\";
+		//FileSystem::CreateDir(library_output.c_str());
+		FileSystem::CreateDir(assets_output.c_str());
+
 		std::filesystem::path pathObj(input_path);
-		assets_output_path += pathObj.filename().string();
-		assets_output_path = assets_output_path.substr(0, assets_output_path.find_last_of('.')) + ".obj";
+		/*library_output += pathObj.filename().string();
+		library_output = library_output.substr(0, library_output.find_last_of('.')) + ".obj";*/
 		
+		assets_output += pathObj.filename().string();
+		assets_output = assets_output.substr(0, assets_output.find_last_of('.')) + ".obj";
 
 		Assimp::Exporter exporter;
 		// Export the scene to an OBJ file
-		if (exporter.Export(scene, "obj", assets_output_path.c_str())) {
+		/*if (exporter.Export(scene, "obj", library_output.c_str())) {
+			std::cout << "FBX file successfully converted to OBJ." << std::endl;
+		}*/
+		if (exporter.Export(scene, "obj", assets_output.c_str())) {
 			std::cout << "FBX file successfully converted to OBJ." << std::endl;
 		}
 		/*else {

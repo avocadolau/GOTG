@@ -445,6 +445,12 @@ namespace Wiwa {
 		return true;
 	}
 
+	bool PhysicsManager::SetNextPosition(Object* body, const glm::vec3 nest_position)
+	{
+		body->collisionObject->getWorldTransform().setOrigin(btVector3(nest_position.x, nest_position.y, nest_position.z));
+		return true;
+	}
+
 	void PhysicsManager::SetTrigger(Object* body, bool isTrigger)
 	{
 		if (isTrigger)

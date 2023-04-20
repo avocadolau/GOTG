@@ -57,14 +57,14 @@ namespace Wiwa
 		path = path.substr(0, path.find_last_of('.')) + ".obj";
 
 		// Convert from assets to library path, to navmesh folder, change extension to obj
-		std::string assets_output_path = "library\\navmesh\\";
+		std::string library_output = "library\\navmesh\\";
 		std::filesystem::path pathObj(path);
-		assets_output_path += pathObj.filename().string();
+		library_output += pathObj.filename().string();
 
 		m_RecastMesh = new RecastSoloMesh();
 		m_Geom = new InputGeom();
 		
-		if (!m_Geom->load(&ctx, assets_output_path))
+		if (!m_Geom->load(&ctx, library_output))
 		{
 			delete m_Geom;
 			m_Geom = 0;
@@ -139,7 +139,7 @@ namespace Wiwa
 
 		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		// After all null checks save the file
-		std::string path = "library\\navmesh\\";
+		std::string path = "assets\\navmesh\\";
 		path += Wiwa::SceneManager::getActiveScene()->getName();
 		path += ".winavmesh";
 
@@ -186,9 +186,18 @@ namespace Wiwa
 		}
 
 		std::string path = navMesh->filePath;
-
+		path = Wiwa::Resources::_assetToLibPath(path);
 		std::string gsetPath = path;
 		gsetPath = gsetPath.substr(0, gsetPath.find_last_of('.')) + ".gset";
+
+		/*std::filesystem::path p = gsetPath;
+		if (p.extension() == ".gset") {
+			std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(p.string().c_str());
+			std::filesystem::path rp = rpath.remove_filename();
+			std::filesystem::create_directories(rp);
+			Wiwa::FileSystem::Copy(p.string().c_str(), rpath.string().c_str());
+		}*/
+
 		if (m_Geom)
 		{
 			delete m_Geom;

@@ -105,6 +105,8 @@ namespace Wiwa {
 
 		bool SetRotation(Object* body, const glm::vec3 euler_angles);
 
+		bool SetNextPosition(Object* body, const glm::vec3 nest_position);
+
 		void SetTrigger(Object* body, bool isTrigger);
 
 		void ChangeCollisionTags(Object* body, int filterGroup, int filterBits);

@@ -2,6 +2,7 @@
 #include "NavAgentSystem.h"
 #include "Wiwa/ecs/components/ai/NavAgent.h"
 #include <glew.h>
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
 
 namespace Wiwa
 {
@@ -87,19 +88,28 @@ namespace Wiwa
     {
         if (m_agentIndex != -1) {
             Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+            Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
+
             dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_agentIndex);
             if (agent)
             {
                 agent->npos[0] = position.x;
                 agent->npos[1] = position.y;
                 agent->npos[2] = position.z;
+
+                // Check if entity has collision body
+                if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId))
+                {
+                    physSys->getBody()->velocity = btVector3(agent->vel[0], agent->vel[1], agent->vel[2]);
+                }
+                else
+                {
+                    Transform3D* tr = GetComponent<Transform3D>();
+                    tr->localPosition = position;
+                }
             }
 
-            // Check if entity has collision body
-            if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId))
-            {
-
-            }
+            
         }
     }
 
