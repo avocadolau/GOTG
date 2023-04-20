@@ -101,7 +101,7 @@ namespace Wiwa
 	void RangedPhalanxAttackState::SpawnBullet(EnemyRangedPhalanx* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
+		EntityId newBulletId = entityManager.LoadPrefab("assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions
