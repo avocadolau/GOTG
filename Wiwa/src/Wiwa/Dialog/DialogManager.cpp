@@ -14,6 +14,8 @@
 
 #include <Wiwa/scene/SceneManager.h>
 
+#include <Wiwa/utilities/json/JSONDocument.h>
+
 namespace Wiwa
 {
 	DialogManager::DialogManager()
@@ -189,6 +191,10 @@ namespace Wiwa
 		Text* text2_imgMode = gm.InitFontForDialog(fontPath, line2Text);
 		Text* text3_imgMode = gm.InitFontForDialog(fontPath, line3Text);
 
+		conversations[conversationNumber].nodes[nodeNumber].text1 = (std::string)line1Text;
+		conversations[conversationNumber].nodes[nodeNumber].text2 = (std::string)line2Text;
+		conversations[conversationNumber].nodes[nodeNumber].text3 = (std::string)line3Text;
+
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text1_imgMode->GetTextureId(), text1_imgMode->GetSize(), {720,650}, {1000,450}, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -207,6 +213,8 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
+		conversations[conversationNumber].bubbleImagePath = (std::string)path;
+
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		Image* dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
@@ -218,6 +226,8 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
+		conversations[conversationNumber].characterImagePath = (std::string)path;
+
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		Image* characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
@@ -225,6 +235,43 @@ namespace Wiwa
 
 		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+	}
+
+	void DialogManager::SaveDialog(int conversationNumber)
+	{
+		std::string s = std::to_string(conversationNumber);
+
+		std::string memberNameConversation = "Name_Conversation" + s;
+		std::string memberNameBubbleImage = "BubbleImagePath_Conversation" + s;
+		std::string memberNameCharacterImage = "CharacterImagePath_Conversation" + s;
+
+		Wiwa::JSONDocument doc;
+		doc.AddMember(memberNameConversation.c_str(), conversations[conversationNumber].conversationName.c_str());
+		doc.AddMember(memberNameBubbleImage.c_str(), conversations[conversationNumber].bubbleImagePath.c_str());
+		doc.AddMember(memberNameCharacterImage.c_str(), conversations[conversationNumber].characterImagePath.c_str());
+
+		for (int i = 0; i < MAX_CONVERSATION_NODES && conversations[conversationNumber].nodes[i].occupied == true; i++)
+		{
+			std::string s2 = std::to_string(i);
+
+			std::string memberNameLine1 = "Line1_Node" + s2;
+			std::string memberNameLine2 = "Line2_Node" + s2;
+			std::string memberNameLine3 = "Line3_Node" + s2;
+			
+			doc.AddMember(memberNameLine1.c_str(), conversations[conversationNumber].nodes[i].text1.c_str());
+			doc.AddMember(memberNameLine2.c_str(), conversations[conversationNumber].nodes[i].text2.c_str());
+			doc.AddMember(memberNameLine3.c_str(), conversations[conversationNumber].nodes[i].text3.c_str());
+
+		}
+
+		std::string path = "config/conversations";
+		path += ".wiconversation";
+		doc.save_file(path.c_str());
+	}
+
+	void DialogManager::LoadAllDialogs()
+	{
+
 	}
 
 	/*void DialogManager::SetContinueIndicatorImage(const char* path, int conversationNumber)

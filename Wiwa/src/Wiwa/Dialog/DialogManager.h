@@ -26,6 +26,9 @@ namespace Wiwa
 
 		std::string conversationName;
 
+		std::string bubbleImagePath;
+		std::string characterImagePath;
+
 		bool occupied = false;
 	};
 
@@ -64,6 +67,9 @@ namespace Wiwa
 		void SetDialogBubbleImage(const char* path, int conversationNumber);
 		void SetCharacterImage(const char* path, int conversationNumber);
 		//void SetContinueIndicatorImage(const char* path, int conversationNumber);
+
+		void SaveDialog(int conversationNumber);
+		void LoadAllDialogs();
 
 	public:
 

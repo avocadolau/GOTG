@@ -64,7 +64,7 @@ namespace Wiwa
 
 		if (m_RoundCounter >= NUMBER_OF_ROUNDS)
 		{
-			m_RoundCounter = 0.f;
+			m_RoundCounter = 0;
 			enemy->SwitchState(enemy->m_MovementState);
 			
 		}
