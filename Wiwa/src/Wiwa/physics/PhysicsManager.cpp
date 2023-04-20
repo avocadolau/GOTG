@@ -211,8 +211,10 @@ namespace Wiwa {
 
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
-			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
-			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
+			Transform3D* transform3d = (Transform3D*)entityManager.GetComponentByIterator((*item)->transformIt);
+			CollisionBody* rigidBody = (CollisionBody*)entityManager.GetComponentByIterator((*item)->collisionBodyIt);
+			/*Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);*/
 
 			// Get the position from the engine
 			glm::vec3 posEngine = glm::vec3(transform3d->worldMatrix[3].x, transform3d->worldMatrix[3].y, transform3d->worldMatrix[3].z);
@@ -246,6 +248,10 @@ namespace Wiwa {
 			Transform3D* parentT3d = entityManager.GetComponent<Wiwa::Transform3D>(parent);
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
+			/*EntityId parent = entityManager.GetEntityParent((*item)->id);
+			Transform3D* parentT3d = entityManager.GetComponent<Wiwa::Transform3D>(parent);
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);*/
 
 			btTransform bulletTransform((*item)->collisionObject->getWorldTransform());
 			
