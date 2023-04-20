@@ -74,6 +74,19 @@ namespace Wiwa
              Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_maxSpeed);
              Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_maxAcceleration);*/
             Render();
+
+            Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+            Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
+            // Check if entity has collision body
+            if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId))
+            {
+                physSys->getBody()->velocity = btVector3(agent->vel[0], agent->vel[1], agent->vel[2]);
+            }
+            else
+            {
+                Transform3D* tr = GetComponent<Transform3D>();
+                tr->localPosition = m_currentPos;
+            }
         }
     }
 
@@ -87,29 +100,13 @@ namespace Wiwa
     void NavAgentSystem::SetPosition(const glm::vec3& position)
     {
         if (m_agentIndex != -1) {
-            Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-            Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
-
             dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_agentIndex);
             if (agent)
             {
                 agent->npos[0] = position.x;
                 agent->npos[1] = position.y;
                 agent->npos[2] = position.z;
-
-                // Check if entity has collision body
-                if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId))
-                {
-                    physSys->getBody()->velocity = btVector3(agent->vel[0], agent->vel[1], agent->vel[2]);
-                }
-                else
-                {
-                    Transform3D* tr = GetComponent<Transform3D>();
-                    tr->localPosition = position;
-                }
             }
-
-            
         }
     }
 

@@ -24,6 +24,6 @@ namespace Wiwa
 	{
 		OPTICK_EVENT("Crowd Update")
 		Crowd& crowd = Crowd::getInstance();
-		crowd.Update(1.0f / 60.0f);
+		crowd.Update(Wiwa::Time::GetDeltaTimeSeconds());
 	}
 }
