@@ -190,7 +190,7 @@ namespace Wiwa {
 
 					activeParticles++;
 
-					glm::vec4 color = emitter->m_p_colorsOverLifetime[0].color;
+					glm::vec4 color = particle.color = ColorInterpolation(emitter->m_p_colorsOverLifetime[0].color, emitter->m_p_colorsOverLifetime[1].color, particle.life_percentage);
 
 					//Shader* shader = m_Material->getShader();
 
@@ -296,6 +296,11 @@ namespace Wiwa {
 						//pass transformation matrix
 						particle.transform = transform;
 					}
+
+
+					
+					//WI_CORE_INFO("Color: {0}, {1}, {3}, {4}", particle.color.x, particle.color.y, particle.color.z, particle.color.w);
+
 				}
 			}
 
@@ -305,6 +310,14 @@ namespace Wiwa {
 		}
 		if (emitter->m_ActiveTimer < 0)  emitter->m_ActiveTimer = 0;
 	}
+
+
+	glm::vec4 ParticleSystem::ColorInterpolation(glm::vec4 col1, glm::vec4 col2, float percentage)
+	{
+		return col1 * (1 - percentage) + col2 * percentage;
+	}
+
+
 	void ParticleSystem::OnDestroy()
 	{
 		

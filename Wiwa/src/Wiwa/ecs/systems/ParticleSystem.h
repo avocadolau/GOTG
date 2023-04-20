@@ -93,7 +93,9 @@ namespace Wiwa
 		bool m_Loop;
 
 		float m_Duration = 0.0f;
-	
+
+		glm::vec4 ColorInterpolation(glm::vec4 col1, glm::vec4 col2, float percentage);
+
 	private:
 		unsigned int m_VAO;
 
