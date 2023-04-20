@@ -96,7 +96,36 @@ void UIEditorPanel::DrawGameWindow()
 	ImTextureID tex = (ImTextureID)(intptr_t)Wiwa::RenderManager::getColorTexture();
 	
 	ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS;
+			if (p.extension() == ".wiscene")
+			{
+				EditorLayer::Get().LoadScene(pathS);
+				Wiwa::SceneChangeEvent event(0);
+				Action<Wiwa::Event&> action = { &Wiwa::Application::OnEvent, &Wiwa::Application::Get() };
+				action(event);
+			}
+			else if (p.extension() == ".wiprefab")
+			{
+				Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+				em.LoadPrefab(pathS.c_str());
+			}
+			else if (p.extension() == ".wiGUI")
+			{
+				Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+				gm.LoadWiUI(pathS.c_str());
+			}
+		}
 
+
+		ImGui::EndDragDropTarget();
+	}
 	//if (elementSelected != -1)
 	//{
 	//	ImGuizmo::SetOrthographic(false);
