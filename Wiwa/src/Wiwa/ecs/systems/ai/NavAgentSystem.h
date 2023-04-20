@@ -31,8 +31,9 @@ namespace Wiwa
         void RegisterWithCrowd();
         void RefreshParamters();
     private:
+        void Render();
         void DrawAgent();
-        //void DrawPath();
+        void DrawPath();
 
         int m_agentIndex;
         glm::vec3 m_currentPos;

@@ -136,29 +136,30 @@ namespace Wiwa
 
 		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
 		r2d.UpdateInstanced(this);
-
+		OPTICK_EVENT("UI 2D update");
 		m_GuiManager->Draw();
-
+		OPTICK_EVENT("ECS update");
 		m_EntityManager.Update();
-
+		OPTICK_EVENT("Bullet update");
 		m_PhysicsManager->UpdateEngineToPhysics();
 
 		if (SceneManager::IsPlaying())
 		{
+			OPTICK_EVENT("Physics Gampeplay update");
 			m_PhysicsManager->StepSimulation();
 			m_PhysicsManager->UpdatePhysicsToEngine();
 			m_ParticleManager->Update();
 
 			// m_PhysicsManager->LogBodies();
 		}
+		OPTICK_EVENT("Physics debug draw update");
 		m_PhysicsManager->DebugDrawWorld();
 		// m_PhysicsManager->LogBodies();
 
-		Wiwa::AIMapGeneration::DrawRect();
-		Wiwa::AIMapGeneration::DrawMinMaxRect();
 
 		if (!SceneManager::IsPlaying())
 		{
+			OPTICK_EVENT("ECS whitelist update");
 			m_EntityManager.UpdateWhitelist();
 		}
 
@@ -214,6 +215,7 @@ namespace Wiwa
 
 	void Scene::UpdateEnter()
 	{
+		
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		r2d.EnableInstance(this, m_TransitionInstance);

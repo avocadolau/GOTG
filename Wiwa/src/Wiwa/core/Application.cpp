@@ -170,18 +170,24 @@ namespace Wiwa
 			SceneManager::ModuleUpdate();
 
 			// Update audio
+			
 			Audio::Update();
 
 			// Execute main thread queue
+
 			ExecuteMainThreadQueue();
 
 			// Update inputs
+			OPTICK_EVENT("Input update");
 			Input::Update();
 
 			// Update renderers
+			
 			m_Renderer2D->Update();
+			
 			m_Renderer3D->Update();
 
+			
 			RenderManager::Update();
 
 			// Update layers
@@ -189,6 +195,7 @@ namespace Wiwa
 				layer->OnUpdate();
 
 			// Render layers
+
 			m_ImGuiLayer->Begin();
 			{
 				// TODO: Optick On ImGuiRender call
@@ -196,7 +203,7 @@ namespace Wiwa
 					layer->OnImGuiRender();
 			}
 			m_ImGuiLayer->End();
-
+			
 			GameStateManager::Update();
 			
 			// Update main window

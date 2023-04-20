@@ -37,9 +37,25 @@ namespace Wiwa
         RegisterWithCrowd();
     }
 
+    // Returns a random number [0..1]
+    static float frand()
+    {
+        //	return ((float)(rand() & 0xffff)/(float)0xffff);
+        return (float)rand() / (float)RAND_MAX;
+    }
+
     void NavAgentSystem::OnUpdate()
     {
         RefreshParamters();
+        const dtQueryFilter* filter= Crowd::getInstance().getCrowd().getFilter(m_agentIndex);
+        const dtNavMeshQuery* query = Crowd::getInstance().getCrowd().getNavMeshQuery();
+        dtPolyRef startRef;
+        float m_spos[3];
+        dtStatus status = query->findRandomPoint(filter, frand, &startRef, m_spos);
+        if (dtStatusSucceed(status))
+        {
+            SetDestination(glm::vec3(m_spos[0], m_spos[1], m_spos[2]));
+        }
 
         if (m_agentIndex != -1) {
             const dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getAgent(m_agentIndex);
@@ -48,7 +64,7 @@ namespace Wiwa
                 m_currentPos.x = agent->npos[0];
                 m_currentPos.y = agent->npos[1];
                 m_currentPos.z = agent->npos[2];
-                WI_INFO("X: {}, Y: {}, Z: {}", m_currentPos.x, m_currentPos.y, m_currentPos.z);
+                //WI_INFO("X: {}, Y: {}, Z: {}", m_currentPos.x, m_currentPos.y, m_currentPos.z);
             }
             Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_agentParams.maxSpeed);
             Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_agentParams.maxAcceleration);
@@ -56,7 +72,7 @@ namespace Wiwa
             /* Crowd::getInstance().SetAgentPosition(m_agentIndex, &m_currentPos[0]);
              Crowd::getInstance().SetAgentMaxSpeed(m_agentIndex, m_maxSpeed);
              Crowd::getInstance().SetAgentMaxAcceleration(m_agentIndex, m_maxAcceleration);*/
-            DrawAgent();
+            Render();
         }
     }
 
@@ -70,12 +86,19 @@ namespace Wiwa
     void NavAgentSystem::SetPosition(const glm::vec3& position)
     {
         if (m_agentIndex != -1) {
+            Wiwa::EntityManager& em = m_Scene->GetEntityManager();
             dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_agentIndex);
             if (agent)
             {
                 agent->npos[0] = position.x;
                 agent->npos[1] = position.y;
                 agent->npos[2] = position.z;
+            }
+
+            // Check if entity has collision body
+            if (em.HasComponent<Wiwa::CollisionBody>(m_EntityId))
+            {
+
             }
         }
     }
@@ -134,9 +157,13 @@ namespace Wiwa
         }
     }
 
-    void NavAgentSystem::DrawAgent()
+    void NavAgentSystem::Render()
     {
         Wiwa::Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+
+        if (!camera->drawBoundingBoxes)
+            return;
+
         glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
         camera->frameBuffer->Bind(false);
 
@@ -145,6 +172,15 @@ namespace Wiwa
         glMatrixMode(GL_MODELVIEW);
         glLoadMatrixf(glm::value_ptr(camera->getView()));
 
+        DrawAgent();
+
+        DrawPath();
+
+        camera->frameBuffer->Unbind();
+    }
+
+    void NavAgentSystem::DrawAgent()
+    {
         const unsigned int startCol = duRGBA(128, 25, 0, 192);
         duDebugDraw& dd = Wiwa::RecastManager::m_RecastMesh->getDebugDraw();
 
@@ -165,7 +201,31 @@ namespace Wiwa
         dd.vertex(m_currentPos.x, m_currentPos.y + 0.02f, m_currentPos.z + m_agentParams.radius / 2, colb);
         dd.end();
         dd.depthMask(true);
-        camera->frameBuffer->Unbind();
+        
+    }
+    void NavAgentSystem::DrawPath()
+    {
+        const unsigned int startCol = duRGBA(128, 25, 0, 192);
+        duDebugDraw& dd = Wiwa::RecastManager::m_RecastMesh->getDebugDraw();
+
+        if (m_agentIndex != -1) {
+            const dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getAgent(m_agentIndex);
+            if (agent)
+            {
+                dd.depthMask(false);
+                const unsigned int spathCol = duRGBA(64, 16, 0, 220);
+                /*const unsigned int offMeshCol = duRGBA(128, 96, 0, 220);*/
+                dd.begin(DU_DRAW_LINES, 2.0f);
+                for (int i = 0; i < agent->ncorners - 1; ++i)
+                {
+                    dd.vertex(agent->cornerVerts[i * 3], agent->cornerVerts[i * 3 + 1] + 0.4f, agent->cornerVerts[i * 3 + 2], spathCol);
+                    dd.vertex(agent->cornerVerts[(i + 1) * 3], agent->cornerVerts[(i + 1) * 3 + 1] + 0.4f, agent->cornerVerts[(i + 1) * 3 + 2], spathCol);
+                }
+                dd.end();
+            }
+        }
+        dd.depthMask(true);
+
     }
 }
 

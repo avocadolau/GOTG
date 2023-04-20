@@ -22,6 +22,7 @@ namespace Wiwa
 
 	void NavMeshLoadingSystem::OnUpdate()
 	{
+		OPTICK_EVENT("Crowd Update")
 		Crowd& crowd = Crowd::getInstance();
 		crowd.Update(1.0f / 60.0f);
 	}

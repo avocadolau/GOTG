@@ -3,7 +3,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "AI_RecastManager.h"
-#define MAX_AGENTS 30
+#define MAX_AGENTS 60
 
 class Crowd {
 public:
