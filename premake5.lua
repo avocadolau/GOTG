@@ -34,15 +34,11 @@ IncludeDirs["GLI"] = "%{wks.location}/Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
 IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
 IncludeDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/include"
-IncludeDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/include"
-
 
 LibraryDirs = {}
 LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"
 LibraryDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/lib/x64_vc170/Debug(StaticCRT)/lib/"
 LibraryDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/lib/"
-LibraryDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/lib/"
-
 
 Library = {}
 Library["mono"] = "%{LibraryDirs.mono}/libmono-static-sgen.lib"
@@ -58,21 +54,7 @@ Library["bullet_linear_math_release"] = "%{LibraryDirs.bullet}/LinearMath_vs2010
 Library["bullet_collision_debug"] = "%{LibraryDirs.bullet}/BulletCollision_vs2010_x64_debug.lib"
 Library["bullet_dynamics_debug"] = "%{LibraryDirs.bullet}/BulletDynamics_vs2010_x64_debug.lib"
 Library["bullet_linear_math_debug"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_debug.lib"
-Library["opencv_calib3d"] = "%{LibraryDirs.OpenCV}/opencv_calib3d470.lib"
-Library["opencv_core"] = "%{LibraryDirs.OpenCV}/opencv_core470.lib"
-Library["opencv_dnn"] = "%{LibraryDirs.OpenCV}/opencv_dnn470.lib"
-Library["opencv_features2d"] = "%{LibraryDirs.OpenCV}/opencv_features2d470.lib"
-Library["opencv_flann"] = "%{LibraryDirs.OpenCV}/opencv_flann470.lib"
-Library["opencv_gapi"] = "%{LibraryDirs.OpenCV}/opencv_gapi470.lib"
-Library["opencv_highgui"] = "%{LibraryDirs.OpenCV}/opencv_highgui470.lib"
-Library["opencv_imgcodecs"] = "%{LibraryDirs.OpenCV}/opencv_imgcodecs470.lib"
-Library["opencv_imgproc"] = "%{LibraryDirs.OpenCV}/opencv_imgproc470.lib"
-Library["opencv_ml"] = "%{LibraryDirs.OpenCV}/opencv_ml470.lib"
-Library["opencv_objdetect"] = "%{LibraryDirs.OpenCV}/opencv_objdetect470.lib"
-Library["opencv_photo"] = "%{LibraryDirs.OpenCV}/opencv_photo470.lib"
-Library["opencv_stitching"] = "%{LibraryDirs.OpenCV}/opencv_stitching470.lib"
-Library["opencv_video"] = "%{LibraryDirs.OpenCV}/opencv_video470.lib"
-Library["opencv_videoio"] = "%{LibraryDirs.OpenCV}/opencv_videoio470.lib"
+
 
 Library["WinSock"] = "Ws2_32.lib"
 Library["WinMM"] = "Winmm.lib"

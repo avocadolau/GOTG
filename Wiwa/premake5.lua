@@ -38,8 +38,7 @@ project "Wiwa"
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.IconFontCppHeaders}",
-		"%{IncludeDirs.bullet}",
-		"%{IncludeDirs.OpenCV}"
+		"%{IncludeDirs.bullet}"
 	}
 
 	links
@@ -103,22 +102,7 @@ project "Wiwa"
 		{
 			"%{Library.bullet_dynamics_debug}",
 			"%{Library.bullet_collision_debug}",
-			"%{Library.bullet_linear_math_debug}",
-			"%{Library.opencv_calib3d}",
-			"%{Library.opencv_core}",
-			"%{Library.opencv_dnn}",
-			"%{Library.opencv_features2d}",
-			"%{Library.opencv_flann}",
-			"%{Library.opencv_gapi}",
-			"%{Library.opencv_highgui}",
-			"%{Library.opencv_imgcodecs}",
-			"%{Library.opencv_imgproc}",
-			"%{Library.opencv_ml}",
-			"%{Library.opencv_objdetect}",
-			"%{Library.opencv_photo}",
-			"%{Library.opencv_stitching}",
-			"%{Library.opencv_video}",
-			"%{Library.opencv_videoio}"
+			"%{Library.bullet_linear_math_debug}"
 		}
 
 
@@ -131,22 +115,7 @@ project "Wiwa"
 		{
 			"%{Library.bullet_dynamics_release}",
 			"%{Library.bullet_collision_release}",
-			"%{Library.bullet_linear_math_release}",
-			"%{Library.opencv_calib3d}",
-			"%{Library.opencv_core}",
-			"%{Library.opencv_dnn}",
-			"%{Library.opencv_features2d}",
-			"%{Library.opencv_flann}",
-			"%{Library.opencv_gapi}",
-			"%{Library.opencv_highgui}",
-			"%{Library.opencv_imgcodecs}",
-			"%{Library.opencv_imgproc}",
-			"%{Library.opencv_ml}",
-			"%{Library.opencv_objdetect}",
-			"%{Library.opencv_photo}",
-			"%{Library.opencv_stitching}",
-			"%{Library.opencv_video}",
-			"%{Library.opencv_videoio}"
+			"%{Library.bullet_linear_math_release}"
 		}
 
 	filter "configurations:Dist"
