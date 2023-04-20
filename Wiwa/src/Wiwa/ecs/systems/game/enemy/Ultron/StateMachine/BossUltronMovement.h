@@ -14,9 +14,12 @@ namespace Wiwa {
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
-		glm::vec3 RandomPremadePosition();
+		static glm::vec2 RandomPremadePosition()
+		{
+			return m_PremadePositions[Math::RandomRange(0, m_PremadePositions.size())];			
+		}
+	
 	private:
-
-		std::vector<glm::vec3> m_PremadePositions;
+		static std::vector<glm::vec2> m_PremadePositions;
 	};
 }
