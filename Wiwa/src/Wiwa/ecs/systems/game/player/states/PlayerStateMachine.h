@@ -19,16 +19,19 @@ namespace Wiwa
 		virtual void OnUpdate() override;
 		virtual void OnCollisionEnter(Object* body1, Object* body2) override;
 
+		WI_HARD_INL bool CanDash();
+		WI_HARD_INL bool CanMove();
+		WI_HARD_INL bool CanAttack();
 
 		void SwitchState(PlayerBaseState* state);
 		void CheckHealth();
 		void DashCooldown();
 	public:
-		class PlayerIdle* m_IdleState;
-		class PlayerMove* m_MoveState;
-		class PlayerAttack* m_AttackState;
-		class PlayerDash* m_DashState;
-		class PlayerDeath* m_DeathState;
+		class PlayerBaseState* m_IdleState;
+		class PlayerBaseState* m_MoveState;
+		class PlayerBaseState* m_AttackState;
+		class PlayerBaseState* m_DashState;
+		class PlayerBaseState* m_DeathState;
 
 	private:
 		PlayerBaseState* m_CurrentState;

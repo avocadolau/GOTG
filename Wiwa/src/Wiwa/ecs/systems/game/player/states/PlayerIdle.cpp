@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "PlayerIdle.h"
-#include <Wiwa/utilities/render/Animator.h>
+#include "PlayerMove.h"
+#include "PlayerAttack.h"
+#include "PlayerDash.h"
 
 Wiwa::PlayerIdle::PlayerIdle(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id)
@@ -22,18 +24,17 @@ void Wiwa::PlayerIdle::EnterState()
 
 void Wiwa::PlayerIdle::UpdateState()
 {
-	if (m_StateMachine->GetMovementInput() != Math::Vector3::ZERO)
+	if (m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
 		return;
 	}
-	if (m_StateMachine->GetShootingInput() != Math::Vector3::ZERO || Input::IsMouseButtonPressed(1))
+	if (m_StateMachine->CanAttack())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_AttackState);
 		return;
 	}
-	if ((Input::IsKeyPressed(Key::LeftShift) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadLeftBumper))
-		&& m_StateMachine->IsDashEnable())
+	if (m_StateMachine->CanDash())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
 		return;

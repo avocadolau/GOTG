@@ -3,6 +3,9 @@
 #include "PlayerBaseState.h"
 #include "PlayerIdle.h"
 #include "PlayerAttack.h"
+#include "PlayerMove.h"
+#include "PlayerDash.h"
+#include "PlayerDeath.h"
 
 Wiwa::PlayerStateMachine::PlayerStateMachine()
 {
@@ -48,6 +51,21 @@ void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
 	m_CurrentState->OnCollisionEnter(body1, body2);
 }
 
+bool Wiwa::PlayerStateMachine::CanDash()
+{
+	return (Input::IsKeyPressed(Key::LeftShift) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadLeftBumper)) && IsDashEnable();
+}
+
+bool Wiwa::PlayerStateMachine::CanMove()
+{
+	return  GetInput() != glm::vec3(0.f);
+}
+
+bool Wiwa::PlayerStateMachine::CanAttack()
+{
+	return GetShootInput() != glm::vec3(0.f) || Input::IsMouseButtonPressed(1);
+}
+
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 {
 	m_CurrentState->ExitState();
@@ -65,4 +83,11 @@ void Wiwa::PlayerStateMachine::CheckHealth()
 
 void Wiwa::PlayerStateMachine::DashCooldown()
 {
+	if (!IsDashEnable())
+	{
+		//count cooldown
+		m_CooldownTimer -= Time::GetDeltaTimeSeconds();
+		if (m_CooldownTimer <= 0)
+			SetDashEnable(true);
+	}
 }
