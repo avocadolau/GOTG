@@ -276,6 +276,7 @@ namespace Wiwa {
 
 		static Model* GetModelFromFile(const char* file, ModelSettings* settings);
 		static void SaveModel(Model* model, const char* file);
+		static void SaveModelAsOBJ(Model* model, const char* file);
 
 		bool HasBones() { return has_bones; }
 		auto& GetBoneInfoMap() { return m_BoneInfoMap; }

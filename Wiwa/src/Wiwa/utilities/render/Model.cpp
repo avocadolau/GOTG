@@ -13,6 +13,7 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/Exporter.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -32,7 +33,7 @@ namespace Wiwa {
 	bool Model::getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers)
 	{
 		unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;//aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipUVs;
-
+		
 		if (settings->preTranslatedVertices) {
 			//flags |= aiProcess_PreTransformVertices;
 		}
@@ -43,7 +44,7 @@ namespace Wiwa {
 		WI_INFO("Loaded with bytes: {}", file_buf_size);
 
 		const aiScene* scene = aiImportFileFromMemory(file_data, file_buf_size, flags, NULL);
-
+		
 		delete[] file_data;
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -984,5 +985,55 @@ namespace Wiwa {
 		}
 
 		f.Close();
+	}
+
+	void Model::SaveModelAsOBJ(Model* model, const char* file)
+	{
+		unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;//aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipUVs;
+		
+		// Convert from library to assets path, change extension to fbx
+		std::string input_path = file;
+		Wiwa::Resources::SetAssetPath(input_path);
+		input_path = input_path.substr(0, input_path.find_last_of('.')) + ".fbx";
+
+		sbyte* file_data = NULL;
+		size_t file_buf_size = FileSystem::ReadAll(input_path.c_str(), &file_data);
+
+		WI_INFO("Loaded with bytes: {}", file_buf_size);
+		const aiScene* scene = aiImportFileFromMemory(file_data, file_buf_size, flags, NULL);
+
+		delete[] file_data;
+
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+			WI_ERROR("Couldn't load mesh file: {0}", input_path.c_str());
+			return;
+		}
+		// Convert from assets to library path, to navmesh folder, change extension to obj
+		//std::string library_output = "library\\navmesh\\";
+		std::string assets_output = "assets\\navmesh\\";
+		//FileSystem::CreateDir(library_output.c_str());
+		FileSystem::CreateDir(assets_output.c_str());
+
+		std::filesystem::path pathObj(input_path);
+		/*library_output += pathObj.filename().string();
+		library_output = library_output.substr(0, library_output.find_last_of('.')) + ".obj";*/
+		
+		assets_output += pathObj.filename().string();
+		assets_output = assets_output.substr(0, assets_output.find_last_of('.')) + ".obj";
+
+		Assimp::Exporter exporter;
+		// Export the scene to an OBJ file
+		/*if (exporter.Export(scene, "obj", library_output.c_str())) {
+			std::cout << "FBX file successfully converted to OBJ." << std::endl;
+		}*/
+		if (exporter.Export(scene, "obj", assets_output.c_str())) {
+			std::cout << "FBX file successfully converted to OBJ." << std::endl;
+		}
+		/*else {
+			std::cerr << "Failed to convert FBX file to OBJ." << std::endl;
+			aiReleaseImport(scene);
+			return;
+		}*/
+		aiReleaseImport(scene);
 	}
 }

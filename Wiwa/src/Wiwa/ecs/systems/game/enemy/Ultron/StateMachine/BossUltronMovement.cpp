@@ -6,6 +6,8 @@
 namespace Wiwa
 {
 
+	std::vector<glm::vec2> BossUltronMovementState::m_PremadePositions;
+
 	BossUltronMovementState::BossUltronMovementState()
 	{
 		//m_PremadePositions.push_back({ 0,0,0 });
