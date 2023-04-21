@@ -15,13 +15,13 @@ namespace Wiwa {
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
 		//glm::vec3 CalculateForward(const Transform3D& t3d);
+	private:
+
 		void SpawnBullet(BossUltron* enemy, const glm::vec3& bull_dir);
 
 		void SpawnFirstPattern(BossUltron* enemy);
 		void SpawnSecondPattern(BossUltron* enemy);
-		void SpawnThirdPattern(BossUltron* enemy);
-
-	private:
+		void SpawnThirdPattern(BossUltron* enemy);	
 
 		float m_TimerRoundCooldown = 0.0f;
 		int m_RoundCounter = 0;

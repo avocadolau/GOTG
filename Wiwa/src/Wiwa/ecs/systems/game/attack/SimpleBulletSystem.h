@@ -3,7 +3,7 @@
 
 #include <Wiwa/utilities/Reflection.h>
 
-#include "Wiwa/ecs/components/game/wave/Wave.h"
+//#include "Wiwa/ecs/components/game/wave/Wave.h"
 
 namespace Wiwa {
 	class WI_API SimpleBulletSystem : public System {

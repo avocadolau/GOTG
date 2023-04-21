@@ -17,9 +17,10 @@ namespace Wiwa
 		SentinelChasingState* m_ChasingState;
 		SentinelAttackState* m_AttackingState;
 		SentinelDeathState* m_DeathState;
-		SentinelHitState* m_HitState;
+		SentinelHitState* m_HitState; 
 
-		float m_Timer;
+		float m_TimerSentinel; 
+		float m_RangeOfExplosion = 3.0f;
 	public:
 		EnemySentinel();
 		~EnemySentinel();

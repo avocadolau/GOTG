@@ -34,6 +34,10 @@ namespace Wiwa
 		EnemySystem::OnInit();
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
+
+		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
+		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);*/
 	}
 
 	void EnemySentinel::OnUpdate()
@@ -42,7 +46,7 @@ namespace Wiwa
 			return;
 		EnemySystem::OnUpdate();
 		m_CurrentState->UpdateState(this);
-		m_Timer += Time::GetDeltaTimeSeconds();
+		m_TimerSentinel += Time::GetDeltaTimeSeconds();
 
 		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 		if (stats->Health <= 0 && m_CurrentState != m_DeathState)

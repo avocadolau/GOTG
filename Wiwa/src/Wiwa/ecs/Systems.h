@@ -6,6 +6,8 @@
 
 #include "systems/AnimatorSystem.h"
 
+#include "systems/ParticleSystem.h"
+
 #include "systems/PhysicsSystem.h"
 #include "systems/RayCastSystem.h"
 
@@ -21,8 +23,10 @@
 #include "systems/game/enemy/RangedPhalanx/EnemyRangedPhalanx.h"
 #include "systems/game/enemy/Sentinel/EnemySentinel.h"
 #include "systems/game/enemy/Ultron/BossUltron.h"
+#include "systems/game/enemy/Subjugator/EnemySubjugator.h"
 
 #include "systems/game/attack/SimpleBulletSystem.h"
+#include "systems/game/attack/SentinelExplosionSystem.h"
 #include "systems/game/player/PlayerSpawner.h"
 
 #include "systems/game/attack/VictoryShieldSystem.h"
@@ -33,8 +37,6 @@
 
 #include "systems/game/CharacterInventory.h"
 
-#include "systems/ParticleEmitterExecutor.h"
-
 #include "systems/game/items/RewardRoom.h"
 
 #include "systems/game/gui/PlayerGUISystem.h"
@@ -43,3 +45,6 @@
 
 #include "systems/game/NpcSystem.h"
 
+#include "systems/game/attack/ClusterBulletSystem.h"
+
+#include "systems/game/attack/UltronLaserBeamSystem.h";

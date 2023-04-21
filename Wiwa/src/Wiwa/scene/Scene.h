@@ -8,7 +8,6 @@
 #include <Wiwa/AI/AIPathFindingManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
-#include <Wiwa/particles/ParticleManager.h>
 
 #include <Wiwa/utilities/render/InstanceRenderer.h>
 
@@ -54,7 +53,6 @@ namespace Wiwa {
 		std::vector<InstanceRenderer>& GetInstanceRenderers() { return m_InstanceRenderers; }
 		InstanceRenderer& GetInstanceRenderer(uint32_t index) { return m_InstanceRenderers[index]; }
 		LightManager& GetLightManager() { return *m_LightManager; }
-		ParticleManager& GetParticleManager() { return *m_ParticleManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		DialogManager& GetDialogManager() { return *m_DialogManager; }
 		inline const char* getName() { return m_Name.c_str(); }
@@ -76,7 +74,6 @@ namespace Wiwa {
 		CameraManager* m_CameraManager;
 		PhysicsManager* m_PhysicsManager;
 		LightManager* m_LightManager;
-		ParticleManager* m_ParticleManager;
 		GuiManager* m_GuiManager;
 		DialogManager* m_DialogManager;
 

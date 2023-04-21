@@ -4,6 +4,7 @@
 
 #include <Wiwa/core/Application.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/utilities/render/LightManager.h>
 
 #include <Wiwa/Ui/UiManager.h>
@@ -27,7 +28,6 @@ namespace Wiwa
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
 		m_PhysicsManager = new PhysicsManager();
-		m_ParticleManager = new ParticleManager();
 
 		uint32_t imgid = Resources::LoadNative<Wiwa::Image>("resources/images/transitions/transision.png");
 		Wiwa::Image* img = Resources::GetResourceById<Wiwa::Image>(imgid);
@@ -49,12 +49,8 @@ namespace Wiwa
 		delete m_GuiManager;
 		delete m_DialogManager;
 
-		delete m_ParticleManager;
-
 		// Clear entity manager
 		m_EntityManager.Clear();
-
-		/*delete m_ParticleManager;*/
 
 		// Clear physics world
 		m_PhysicsManager->CleanWorld();
@@ -134,32 +130,31 @@ namespace Wiwa
 	{
 		m_CameraManager->Update();
 
-		Wiwa::Renderer2D &r2d = Wiwa::Application::Get().GetRenderer2D();
+		Application::Get().GetRenderer3D().RenderSkybox();
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
 		r2d.UpdateInstanced(this);
-		OPTICK_EVENT("UI 2D update");
+
 		m_GuiManager->Draw();
-		OPTICK_EVENT("ECS update");
+		
+
 		m_EntityManager.Update();
-		OPTICK_EVENT("Bullet update");
+
 		m_PhysicsManager->UpdateEngineToPhysics();
 
 		if (SceneManager::IsPlaying())
 		{
-			OPTICK_EVENT("Physics Gampeplay update");
 			m_PhysicsManager->StepSimulation();
 			m_PhysicsManager->UpdatePhysicsToEngine();
-			m_ParticleManager->Update();
 
 			// m_PhysicsManager->LogBodies();
 		}
-		OPTICK_EVENT("Physics debug draw update");
 		m_PhysicsManager->DebugDrawWorld();
 		// m_PhysicsManager->LogBodies();
 
 
 		if (!SceneManager::IsPlaying())
 		{
-			OPTICK_EVENT("ECS whitelist update");
 			m_EntityManager.UpdateWhitelist();
 		}
 

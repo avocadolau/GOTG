@@ -22,7 +22,7 @@ namespace Wiwa
 
 		animator->Blend("walk", true, 0.2f);
 
-		enemy->m_Timer = 0;
+		enemy->m_TimerSentinel = 0;
 		enemy->ChasePlayer();
 	}
 

@@ -9,6 +9,7 @@ namespace Wiwa
     {
     private:
         int CanvasHUD = 0;
+        int PauseHUD = 1;
         int DeathHUD = 4;
         bool deathHud = false;
         Ability** abilitiesList;
@@ -24,7 +25,13 @@ namespace Wiwa
         void CooldownState(Ability** ability,Wiwa::GuiManager& gm);
         void CooldownState(Buff** buff, Wiwa::GuiManager& gm);
 
+        void HandleActiveAbilities(Ability** ability, Wiwa::GuiManager& gm);
+        void HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm);
         void PlayerElements(Wiwa::GuiManager& gm, Character* character);
+
+        void PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm);
+
+        void Tokens(uint32_t tokens, Wiwa::GuiManager& gm);
 
     };
 }

@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "SceneManager.h"
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/events/Event.h>
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/events/ApplicationEvent.h>
@@ -268,6 +269,7 @@ namespace Wiwa
 				GuiControlType guiType;
 				GuiControlState state;
 				Rect2i position;
+				float rotation;
 				std::string textureGui;
 				std::string extraTextureGui;
 
@@ -300,6 +302,7 @@ namespace Wiwa
 				scene_file.Read(&guiType, sizeof(GuiControlType));
 				scene_file.Read(&state, sizeof(GuiControlState));
 				scene_file.Read(&position, sizeof(Rect2i));
+				scene_file.Read(&rotation, sizeof(float));
 				scene_file.Read(&callbackID, sizeof(int));
 				scene_file.Read(&animated, 1);
 				scene_file.Read(&animSpeed, sizeof(float));
@@ -345,25 +348,25 @@ namespace Wiwa
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition,audioEvent.c_str(),active, animated, animSpeed, animRects);
+					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition,audioEvent.c_str(),active, animated, animSpeed, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					control = gm.CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active);
+					control = gm.CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active, rotation);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
+					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
-					control = gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition, audioEvent.c_str(), active);
+					control = gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition,extraTexturePosition, audioEvent.c_str(), active, rotation);
 					break;
 				case Wiwa::GuiControlType::BAR:
-					control = gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active);
+					control = gm.CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active, rotation);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects);
+					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects, rotation);
 					break;
 			case Wiwa::GuiControlType::ABILITY:
-				control = gm.CreateGuiControl_Ability(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects);
+					control = gm.CreateGuiControl_Ability(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
 				break;
 				default:
 					break;
@@ -570,6 +573,7 @@ namespace Wiwa
 					GuiControlType guiType = control->GetType();
 					GuiControlState guiState = control->GetState();
 					Rect2i position = control->GetPosition();
+					float rotation = control->rotation;
 					int callbackID = control->callbackID;
 					Rect2i texturePosition = control->texturePosition;
 					Rect2i extraTexturePosition = control->extraTexturePosition;
@@ -596,7 +600,7 @@ namespace Wiwa
 					scene_file.Write(&guiType, sizeof(GuiControlType));
 					scene_file.Write(&guiState, sizeof(GuiControlState));
 					scene_file.Write(&position, sizeof(Rect2i));
-
+					scene_file.Write(&rotation, sizeof(float));
 					scene_file.Write(&callbackID, sizeof(int));
 
 					scene_file.Write(&animated, 1);
@@ -802,6 +806,7 @@ namespace Wiwa
 
 			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
 			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
 
 			// Load Physics Manager json Data
 			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());

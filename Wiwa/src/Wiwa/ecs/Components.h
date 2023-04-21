@@ -35,13 +35,13 @@
 #include "components/game/wave/Wave.h"
 
 #include "components/game/attack/SimpleBullet.h"
+#include "components/game/attack/SentinelExplosion.h"
 #include "components/game/attack/PhylasQuantumSword.h"
 #include "components/game/attack/GrootSeeds.h"
 #include "components/game/attack/VictoryShield.h"
 #include "components/game/items/Item.h"
-
-// Particle components
-#include "components/ParticleEmitter.h"
+#include "components/game/attack/ClusterBullet.h";
+#include "components/game/attack/UltronLaserBeam.h";
 
 // Ai components
 #include "components/AgentAI.h"

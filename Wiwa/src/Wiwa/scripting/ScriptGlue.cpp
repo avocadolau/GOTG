@@ -174,10 +174,6 @@ namespace Wiwa
 		WI_ADD_INTERNAL_CALL(HasFinished);
 
 		//Particles
-		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayBatch);
-		WI_ADD_INTERNAL_CALL(ParticleEmitterPlayLoop);
-		WI_ADD_INTERNAL_CALL(ParticleEmitterStopLoop);
-
 
 		// Game
 		WI_ADD_INTERNAL_CALL(SetRoomStateTriggerNext);

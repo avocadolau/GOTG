@@ -172,37 +172,29 @@ namespace Wiwa
 			active = !active;
 			if (active)
 			{
-				if (type != GuiControlType::BAR)
-				{
-					r2d.EnableInstance(m_Scene, id_quad_normal);
-				}
+				
+				r2d.EnableInstance(m_Scene, id_quad_normal);
+				
 				
 
 				if (type == GuiControlType::SLIDER)
 				{
 					r2d.EnableInstance(m_Scene, id_quad_extra);
 				}
-				if (type == GuiControlType::BAR)
-				{
-					r2d.EnableInstance(m_Scene, id_quad_extra);
-				}
+				
 				
 			}
 			else
 			{
-				if (type != GuiControlType::BAR)
-				{
+				
 					r2d.DisableInstance(m_Scene, id_quad_normal);
-				}
+				
 
 				if (type == GuiControlType::SLIDER)
 				{
 					r2d.DisableInstance(m_Scene, id_quad_extra);
 				}
-				if (type == GuiControlType::BAR)
-				{
-					r2d.DisableInstance(m_Scene, id_quad_extra);
-				}
+				
 			}
 		}
 		bool SwapToNewTexture(const char* path, Wiwa::Renderer2D& r2d)
@@ -226,8 +218,8 @@ namespace Wiwa
 			if (type == GuiControlType::BAR)
 			{
 				float proportion = valueHealth / valueMaxHealth;
-				extraPosition.width = (int)(proportion * position.width);
-				extraTexturePosition.width = extraPosition.width;
+				position.width = (int)(proportion * extraPosition.width);
+				texturePosition.width = position.width;
 			}
 		}
 
@@ -804,7 +796,9 @@ namespace Wiwa
 		bool animatedControl = false; 
 		size_t framesAnimation;
 		float animSpeed;
-		float timeForAnim = 0;
+		float timeForAnim = 0.0f;
+
+		float rotation = 0.0f;
 
 	};
 }

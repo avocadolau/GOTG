@@ -19,9 +19,6 @@ namespace Wiwa
 
 		EntityId hit_1 = em.GetChildByName(enemy->GetEntity(), "E_Hit_1");
 		EntityId hit_2 = em.GetChildByName(enemy->GetEntity(), "E_Hit_2");
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-		pman.EmitBatch(hit_1);
-		pman.EmitBatch(hit_2);
 
 		animator->PlayAnimation("hit", false);
 		

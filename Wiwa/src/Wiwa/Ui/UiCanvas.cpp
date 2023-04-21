@@ -29,15 +29,15 @@ namespace Wiwa
 	void GuiCanvas::SwapActive()
 	{
 		active = !active;
-		for (size_t i = 0; i < controls.size(); i++)
+		for (int i = 0; i < controls.size(); i++)
 		{
 			controls.at(i)->SwapActive(Wiwa::Application::Get().GetRenderer2D());
 		}
 	}
 
-	void GuiCanvas::SelectElement(size_t id)
+	void GuiCanvas::SelectElement(int id)
 	{
-		for (size_t i = 0; i < controlsForSelection.size(); i++)
+		for (int i = 0; i < controlsForSelection.size(); i++)
 		{
 			if (i == id)
 			{

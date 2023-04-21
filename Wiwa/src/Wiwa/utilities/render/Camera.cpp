@@ -170,8 +170,15 @@ namespace Wiwa {
 		UpdateFrustrum();
 		Size2i res = Application::Get().GetTargetResolution();
 
+		//this buffer will have two color attatchements. 2 textures in a Fbo
 		frameBuffer = new FrameBuffer();
-		frameBuffer->Init(res.w, res.h);
+		frameBuffer->Init(res.w, res.h, 2,true);
+
+		vBlurBuffer = new BlurBuffer();
+		vBlurBuffer->Init(res.w,res.h);
+
+		hBlurBuffer = new BlurBuffer();
+		hBlurBuffer->Init(res.w, res.h);
 
 		shadowBuffer = new ShadowBuffer();
 		shadowBuffer->Init();

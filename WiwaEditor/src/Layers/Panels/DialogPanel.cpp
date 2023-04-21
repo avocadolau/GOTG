@@ -19,160 +19,196 @@ DialogPanel::~DialogPanel()
 
 void DialogPanel::Draw()
 {
-	//Wiwa::DialogManager& dm = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
+	Wiwa::DialogManager& dm = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
 
 	
 
 	ImGui::Begin(iconName.c_str(), &active);
 	
-	//ImGui::NewLine();
+	ImGui::NewLine();
 
-	//if (ImGui::CollapsingHeader("Create Conversations"))
-	//{
-	//	if (ImGui::Button("New Conversation"))
-	//	{
-	//		numNodesOnCurrentCreation = 1;
-	//		creatingNewDialog = true;
-	//		currentCreationStep = 0;
-	//	}
+	if (ImGui::CollapsingHeader("Create Conversations"))
+	{
+		if (ImGui::Button("New Conversation"))
+		{
+			numNodesOnCurrentCreation = 1;
+			creatingNewDialog = true;
+			currentCreationStep = 0;
+		}
 
-	//	ImGui::Text("WARNING functionallity not fully implemented... yet. IT WILL CRASH IF USED");
+		ImGui::Text("WARNING functionallity not fully implemented... yet. IT WILL CRASH IF USED");
 
-	//	if (creatingNewDialog == true)
-	//	{
-	//		if(currentCreationStep == 0)
-	//		{
-	//			dm.conversationCreator_P = new Conversation();
-	//			currentCreationStep = 1;
-	//		}
+		if (creatingNewDialog == true)
+		{
+			if(currentCreationStep == 0)
+			{
+				currentNode = 0;
+				currentConversation = 0;
 
-	//		if (currentCreationStep == 1)
-	//		{
-	//			ImGui::PushID(numNodesOnCurrentCreation);
+				for (int k = 0; dm.conversations[k].occupied == true; k++)
+				{
+					currentConversation++;
+				}
 
-	//			std::string collapsingHeaderName = "Edit Node #" + numNodesOnCurrentCreation;
+				currentCreationStep = 1;
+			}
 
-	//			if (ImGui::CollapsingHeader(collapsingHeaderName.c_str()))
-	//			{
-	//				static char textLine1Buffer[1024] = { 0 };
-	//				ImGui::InputText("Line 1 text", textLine1Buffer, IM_ARRAYSIZE(textLine1Buffer));
-	//				static char textLine2Buffer[1024] = { 0 };
-	//				ImGui::InputText("Line 2 text", textLine2Buffer, IM_ARRAYSIZE(textLine2Buffer));
-	//				static char textLine3Buffer[1024] = { 0 };
-	//				ImGui::InputText("Line 3 text", textLine3Buffer, IM_ARRAYSIZE(textLine3Buffer));
+			if (currentCreationStep == 1)
+			{
+				
 
-	//				ImGui::Text("WARNING, Only Press this button if you fully finished creating the current dialog node:");
-	//				ImGui::PushID(numNodesOnCurrentCreation);
-	//				if (ImGui::Button("Save Current Node's Text Lines"))
-	//				{
-	//					dm.SetDialogText(textLine1Buffer, textLine2Buffer, textLine3Buffer, "assets/Fonts/Jade_Smile.ttf", *dm.conversationCreator_P);
-	//					numNodesOnCurrentCreation++;
-	//				}
-	//				ImGui::PopID();
+				std::string collapsingHeaderName = "Edit Node #" + numNodesOnCurrentCreation;
 
-	//				ImGui::Text("WARNING, Only Press this button if you fully finished creating all the dialog nodes:");
-	//				ImGui::PushID(numNodesOnCurrentCreation);
-	//				if (ImGui::Button("Finished Creating All Dialog Nodes"))
-	//				{
-	//					currentCreationStep = 2;
-	//				}
-	//				ImGui::PopID();
-	//			}
-	//			ImGui::PopID();
-	//		}
-	//		//ImGui::SameLine();
+				ImGui::Text("Currently Editing Node # %i", numNodesOnCurrentCreation);
 
-	//		if (currentCreationStep == 2)
-	//		{
-	//			dm.SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *dm.conversationCreator_P);
-	//			currentCreationStep = 3;
-	//		}
+				static char textLine1Buffer[1024] = { 0 };
+				ImGui::InputText("Line 1 text", textLine1Buffer, IM_ARRAYSIZE(textLine1Buffer));
+				static char textLine2Buffer[1024] = { 0 };
+				ImGui::InputText("Line 2 text", textLine2Buffer, IM_ARRAYSIZE(textLine2Buffer));
+				static char textLine3Buffer[1024] = { 0 };
+				ImGui::InputText("Line 3 text", textLine3Buffer, IM_ARRAYSIZE(textLine3Buffer));
 
-	//		if (currentCreationStep == 3)
-	//		{
-	//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Bubble image"))
-	//			{
-	//				const wchar_t* path = (const wchar_t*)payload->Data;
-	//				std::wstring ws(path);
-	//				std::string pathS(ws.begin(), ws.end());
-	//				std::filesystem::path p = pathS.c_str();
-	//				if (p.extension() == ".png")
-	//				{
-	//					dm.SetDialogBubbleImage(pathS.c_str(), *dm.conversationCreator_P);
-	//				}
-	//			}
-	//			//dm.SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *dm.conversationCreator_P);
-	//			ImGui::Text("WARNING, Only Press this button if you finished importing the bubble image:");
-	//			if (ImGui::Button("Finished Importing Bubble Image"))
-	//			{
-	//				currentCreationStep = 4;
-	//			}
-	//		}
+				ImGui::Text("WARNING, Only Press this button if you fully finished creating the current dialog node:");
+				ImGui::PushID(numNodesOnCurrentCreation);
+				if (ImGui::Button("Save Current Node's Text Lines"))
+				{
+					dm.SetDialogText(textLine1Buffer, textLine2Buffer, textLine3Buffer, "assets/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
+					dm.conversations[currentConversation].nodes[currentNode].occupied = true;
+					numNodesOnCurrentCreation++;
+					currentNode++;
+				}
+				ImGui::PopID();
 
-	//		if (currentCreationStep == 4)
-	//		{
-	//			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Character Image"))
-	//			{
-	//				const wchar_t* path = (const wchar_t*)payload->Data;
-	//				std::wstring ws(path);
-	//				std::string pathS(ws.begin(), ws.end());
-	//				std::filesystem::path p = pathS.c_str();
-	//				if (p.extension() == ".png")
-	//				{
-	//					dm.SetCharacterImage(pathS.c_str(), *dm.conversationCreator_P);
-	//				}
-	//			}
-	//			//dm.SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *dm.conversationCreator_P);
-	//			ImGui::Text("WARNING, Only Press this button if you finished importing the character image:");
-	//			if (ImGui::Button("Finished Importing Character Image"))
-	//			{
-	//				currentCreationStep = 5;
-	//			}
-	//		}
+				ImGui::Text("WARNING, Only Press this button if you fully finished creating all the dialog nodes:");
+				ImGui::PushID(numNodesOnCurrentCreation);
+				if (ImGui::Button("Finished Creating All Dialog Nodes"))
+				{
+					currentCreationStep = 2;
+				}
+				ImGui::PopID();
+			}
+			//ImGui::SameLine();
 
-	//		if (currentCreationStep == 5)
-	//		{
-	//			static char conversationNameBuffer[1024] = { 0 };
-	//			ImGui::InputText("Conversation name", conversationNameBuffer, IM_ARRAYSIZE(conversationNameBuffer));
-	//			dm.conversationCreator_P->conversationName = conversationNameBuffer;
+			if (currentCreationStep == 2)
+			{
+				//dm.SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *dm.conversationCreator_P);
 
-	//			ImGui::Text("WARNING, Only Press this button if you finished creating the conversation");
-	//			if (ImGui::Button("Finish And Save Conversation"))
-	//			{
-	//				currentCreationStep = 6;
-	//			}
-	//		}
+				/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-	//		if (currentCreationStep == 6)
-	//		{
-	//			dm.conversations.push_back(dm.conversationCreator_P);
-	//			creatingNewDialog = false;
+				ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png");
+				Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-	//			delete dm.conversationCreator_P;
-	//		}
-	//	}
-	//}
-	//if (ImGui::CollapsingHeader("Edit Conversations"))
-	//{
-	//	if (dm.conversations.size() > 0)
-	//	{
-	//		for (int i = 0; i < dm.conversations.size(); i++)
-	//		{
-	//			//ImGui::PushID(i);
-	//			//if (ImGui::Button(dm.conversations[i]->conversationName))
-	//			//{
-	//			//
-	//			//}
-	//			//ImGui::PopID();
-	//		}
+				dm.continueImgID = render.CreateInstancedQuadTex(dm.m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				render.DisableInstance(dm.m_Scene, dm.continueImgID);*/
 
-	//		ImGui::Text("WARNING functionallity not fully implemented... yet. IT WILL CRASH IF USED");
-	//	}
-	//	else
-	//	{
-	//		ImGui::Text("No conversations have been created yet.");
-	//	}
-	//}
+				currentCreationStep = 3;
+			}
+
+			if (currentCreationStep == 3)
+			{
+				ImGui::Text("Bubble image:");
+				ImGui::SameLine();
+				//Wiwa::Image* mat = Wiwa::Resources::GetResourceById<Wiwa::Image>(mesh->materialId);
+				//AssetContainer(std::filesystem::path(mat->GetTextureId()).stem().string().c_str());
+				AssetContainer(pathForAsset.c_str());
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS.c_str();
+						if (p.extension() == ".png")
+						{
+							pathForAsset = pathS;
+							dm.SetDialogBubbleImage(pathS.c_str(), currentConversation);
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+				//dm.SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", currentConversation);
+				ImGui::Text("WARNING, Only Press this button if you finished importing the bubble image:");
+				if (ImGui::Button("Finished Importing Bubble Image"))
+				{
+					currentCreationStep = 4;
+				}
+			}
+
+			if (currentCreationStep == 4)
+			{
+				ImGui::Text("Character image:");
+				ImGui::SameLine();
+				AssetContainer(pathForAsset2.c_str());
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::wstring ws(path);
+						std::string pathS(ws.begin(), ws.end());
+						std::filesystem::path p = pathS.c_str();
+						if (p.extension() == ".png")
+						{
+							pathForAsset2 = pathS;
+							dm.SetCharacterImage(pathS.c_str(), currentConversation);
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+				//dm.SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", currentConversation);
+				ImGui::Text("WARNING, Only Press this button if you finished importing the character image:");
+				if (ImGui::Button("Finished Importing Character Image"))
+				{
+					currentCreationStep = 5;
+				}
+			}
+
+			if (currentCreationStep == 5)
+			{
+				static char conversationNameBuffer[1024] = { 0 };
+				ImGui::InputText("Conversation name", conversationNameBuffer, IM_ARRAYSIZE(conversationNameBuffer));
+				dm.conversations[currentConversation].conversationName = conversationNameBuffer;
+
+				ImGui::Text("WARNING, Only Press this button if you finished creating the conversation");
+				if (ImGui::Button("Finish And Save Conversation"))
+				{
+					dm.conversations[currentConversation].occupied = true;
+					dm.SaveAllDialogs();
+					currentConversation++;
+
+					currentCreationStep = 6;
+				}
+			}
+
+			if (currentCreationStep == 6)
+			{
+				creatingNewDialog = false;
+
+			}
+		}
+	}
+	if (ImGui::CollapsingHeader("Edit Conversations"))
+	{
+		if (dm.conversations[0].occupied == true)
+		{
+			for (int i = 0; i < MAX_CONVERSATIONS && dm.conversations[i].occupied == true; i++)
+			{
+				//ImGui::PushID(i);
+				//if (ImGui::Button(dm.conversations[i]->conversationName))
+				//{
+				//
+				//}
+				//ImGui::PopID();
+			}
+
+			ImGui::Text("WARNING functionallity not fully implemented... yet. IT WILL CRASH IF USED");
+		}
+		else
+		{
+			ImGui::Text("No conversations have been created yet.");
+		}
+	}
 	
 	ImGui::End();
 }

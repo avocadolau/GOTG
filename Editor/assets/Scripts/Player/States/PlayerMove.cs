@@ -69,7 +69,7 @@ namespace Game
 
             if (stepParticleTimer < 0)
             {
-                ParticleEmitterManger.ParticleEmitterPlayBatch(id);
+                //ParticleEmitterManger.ParticleEmitterPlayBatch(id);
 
                 stepParticleTimer = 0.4f; //better if random between 2 values
             }

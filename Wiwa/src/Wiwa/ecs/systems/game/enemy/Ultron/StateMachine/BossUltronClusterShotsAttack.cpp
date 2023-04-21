@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "BossUltronClusterShotsAttack.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
+#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 
 namespace Wiwa
 {
@@ -16,23 +17,42 @@ namespace Wiwa
 
 	void BossUltronClusterShotsAttackState::EnterState(BossUltron* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-		EntityId currentEnemy = enemy->GetEntity();
-
-		//pman.EmitBatch(currentEnemy);
-
-		//animator->PlayAnimation("spawn", false);
+		m_RoundOne = true;
+		m_RoundTwo = true;
+		m_RoundThree = true;
 	}
 
 	void BossUltronClusterShotsAttackState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_ChasingState);
+		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+
+		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
+
+		if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
+		{
+			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			SpawnClusterBullet(enemy, CalculateForward(*playerTr));
+
+			m_RoundOne = false;
+		}
+		else if (m_TimerBetweenBullet >= 2.0f && m_RoundTwo == true)
+		{
+			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			SpawnClusterBullet(enemy, CalculateForward(*playerTr));
+
+			m_RoundTwo = false;
+		}
+		else if (m_TimerBetweenBullet >= 4.0f && m_RoundThree == true)
+		{
+			enemy->SwitchState(enemy->m_MovementState);
+
+			m_RoundThree = false;
+		}
+
+		m_TimerBetweenBullet += Time::GetDeltaTimeSeconds();
+
 	}
 
 	void BossUltronClusterShotsAttackState::ExitState(BossUltron* enemy)
@@ -41,5 +61,45 @@ namespace Wiwa
 
 	void BossUltronClusterShotsAttackState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)
 	{
+	}	
+
+	EntityId* BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
+	{
+		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\cluster_bullet\\cluster_bullet.wiprefab"); 
+		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+
+		// Set intial positions
+		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+		Transform3D* enemyTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(enemy->GetEntity()));
+
+		if (!bulletTr || !enemyTr)
+			return &newBulletId;
+
+		bulletTr->localPosition = glm::normalize(enemyTr->localPosition);
+		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
+		//bulletTr->localScale = transform->localScale;
+		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+		bullet->direction = bull_dir;
+		
+		return &newBulletId;
+	}
+
+	glm::vec3 BossUltronClusterShotsAttackState::CalculateForward(const Transform3D& t3d)
+	{
+		/*glm::vec4 forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+		glm::vec4 transformed = t3d.worldMatrix * forward;
+		return glm::normalize(glm::vec3(transformed));*/
+		glm::vec3 rotrad = glm::radians(t3d.rotation);
+
+		glm::vec3 forward;
+
+		forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
+		forward.y = -glm::sin(rotrad.x);
+		forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
+
+		forward = glm::degrees(forward);
+
+		return glm::normalize(forward);
 	}
 }

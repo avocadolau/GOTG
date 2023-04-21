@@ -36,6 +36,8 @@ namespace Wiwa {
 
 		// render
 		float active;
+
+		float rotation;
 	};
 
 	struct Quad {

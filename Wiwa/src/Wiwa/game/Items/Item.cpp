@@ -86,6 +86,12 @@ namespace Wiwa
         case Wiwa::PassiveType::BUFF:
             {
                 // TODO: Increase current buffs duration
+                Inventory& PlayerInventory = GameStateManager::GetPlayerInventory();
+                Buff** playerCurrentBuffs = PlayerInventory.GetBuffs();
+                for (int i = 0; i < 2; i++)
+                {
+                    playerCurrentBuffs[i]->Duration += playerCurrentBuffs[i]->Duration * buffPercent;
+                }
             }
             break;
         case Wiwa::PassiveType::ATTACK:
@@ -135,7 +141,10 @@ namespace Wiwa
             break;
         case Wiwa::BuffType::NIKKIS_TOUCH:
             {
-                
+                const float buffPercent = ((float)BuffPercent / 100.f);
+                AttackDmgInc = (int)(float)player->Damage * buffPercent;
+
+                player->Damage += AttackDmgInc;
             }
             break;
         case Wiwa::BuffType::COSMOS_PAW:
@@ -155,7 +164,7 @@ namespace Wiwa
             break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
             {
-                
+                //Done in the enemy
             }
             break;
         case Wiwa::BuffType::BUGS_LEGS:
@@ -192,12 +201,12 @@ namespace Wiwa
         {
         case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
         {
-
+            //Also done
         }
         break;
         case Wiwa::BuffType::NIKKIS_TOUCH:
         {
-
+            player->Damage -= AttackDmgInc;
         }
         break;
         case Wiwa::BuffType::COSMOS_PAW:
@@ -211,7 +220,7 @@ namespace Wiwa
         break;
         case Wiwa::BuffType::MARTINEX_THERMOKINESIS:
         {
-
+            //Done in the enemy
         }
         break;
         case Wiwa::BuffType::BUGS_LEGS:
@@ -230,6 +239,7 @@ namespace Wiwa
 
     void Consumable::Use()
     {
+        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
         Character* player = GetPlayerComp();
         if(!player)
         {
@@ -245,8 +255,6 @@ namespace Wiwa
             return;
         }
 
-        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-        ParticleManager& pman = SceneManager::getActiveScene()->GetParticleManager();
         EntityId playerParticles = em.GetEntityByName("Player");
 
         const float buffPercent = ((float)BuffPercent / 100.f);
@@ -258,7 +266,6 @@ namespace Wiwa
                 {
 
                     EntityId pe_healing = em.GetChildByName(playerParticles, "PE_Healing");
-                    pman.EmitBatch(pe_healing);
 
                 }
 
@@ -276,7 +283,6 @@ namespace Wiwa
                 {
 
                     EntityId pe_shield = em.GetChildByName(playerParticles, "PE_Shield");
-                    pman.EmitBatch(pe_shield);
 
                 }
 

@@ -65,9 +65,9 @@ namespace Wiwa
 		void Close();
 
 		// Instance rendering functions
-		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot = Pivot::CENTER);
-		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot = Pivot::CENTER);
-		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot = Pivot::CENTER);
+		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Color4f &color, const Rect2i &clip, Pivot pivot = Pivot::CENTER, const float rotation = 0.f);
+		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, Pivot pivot = Pivot::CENTER, const float rotation = 0.f);
+		InstanceData CreateInstancedQuadTex(Scene *scene, uint32_t textureId, const Size2i &srcSize, const Vector2i &position, const Size2i &size, const Rect2i &clip, Pivot pivot = Pivot::CENTER, const float rotation = 0.f);
 
 		void RemoveInstance(Scene *scene, InstanceData instance);
 		void EnableInstance(Scene *scene, InstanceData instance);
@@ -75,6 +75,7 @@ namespace Wiwa
 		void SetInstanceEnabled(Scene *scene, InstanceData instance, bool enabled);
 
 		void UpdateInstancedQuadTexPosition(Scene *scene, InstanceData id, const Vector2i &position, Pivot pivot = Pivot::CENTER);
+		void UpdateInstancedQuadTexRotation(Scene* scene, InstanceData id, const float rotation);
 		void UpdateInstancedQuadTexSize(Scene* scene, InstanceData id, const Vector2i& pos, const Size2i& size, Renderer2D::Pivot pivot = Renderer2D::Pivot::CENTER);
 		void UpdateInstancedQuadTexClip(Scene* scene, InstanceData id, const Size2i& srcSize, const Rect2i& clip);
 		void UpdateInstancedQuadTexTexture(Scene* scene, InstanceData& id, uint32_t tex_id);

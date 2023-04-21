@@ -16,23 +16,26 @@ namespace Wiwa
 
 	void BossUltronDashState::EnterState(BossUltron* enemy)
 	{
+		m_AlreadyHitted = false;
+		m_Timer = 0.0f;
+		m_FinalPosition = { 0.0f, 0.0f };
+
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		ParticleManager& pman = enemy->getScene().GetParticleManager();
+		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
-		EntityId currentEnemy = enemy->GetEntity();
+		m_FinalPosition = Wiwa::BossUltronMovementState::RandomPremadePosition();
 
-		//pman.EmitBatch(currentEnemy);
-
-		//animator->PlayAnimation("spawn", false);
+		aiSystem->LookAtPosition(m_FinalPosition);
 	}
 
 	void BossUltronDashState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_ChasingState);
+		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
+		AgentAI* selfTr = (AgentAI*)em.GetComponentByIterator(enemy->m_AgentIt);
+
+
+		m_Timer += Time::GetDeltaTimeSeconds();
 	}
 
 	void BossUltronDashState::ExitState(BossUltron* enemy)
@@ -41,5 +44,12 @@ namespace Wiwa
 
 	void BossUltronDashState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)
 	{
+		std::string playerStr = "PLAYER";
+
+		if (body1->id == enemy->GetEntity() && playerStr == body2->selfTagStr && m_AlreadyHitted == false)
+		{
+			GameStateManager::DamagePlayer(20);
+			m_AlreadyHitted = true;
+		}
 	}
 }

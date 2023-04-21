@@ -10,7 +10,6 @@ namespace Game
         public ComponentIterator transformIt;
         public ComponentIterator rigidBodyIt;
         public ComponentIterator shooterIt;
-        public StarlordShooter shoot;
         public Vector3 shootInput;
         public Vector3 movementInput;
         public Vector3 velocity;
@@ -32,7 +31,7 @@ namespace Game
             statsIt = GetComponentIterator<Character>();
             transformIt = GetComponentIterator<Transform3D>();
             rigidBodyIt = GetComponentIterator<CollisionBody>();
-            shooterIt = GetComponentIterator<StarlordShooter>();
+           // shooterIt = GetComponentIterator<StarlordShooter>();
             DashEnable = true;
         }
         public virtual void Update()
@@ -145,48 +144,48 @@ namespace Game
             if (currentRotation.y >= 360f)
                 currentRotation.y = 0f;
         }
-        public void SpawnBullet(ref Transform3D transform, ref StarlordShooter shooter, ref Character character, Vector3 bullDir)
-        {
-            //Console.WriteLine("fired");
+        //public void SpawnBullet(ref Transform3D transform, ref StarlordShooter shooter, ref Character character, Vector3 bullDir)
+        //{
+        //    //Console.WriteLine("fired");
 
-            string bulletName = "Bullet";
+        //    string bulletName = "Bullet";
 
-            EntityId bullet = CreateEntityNamed(bulletName);
-            ref Transform3D playerTransform = ref GetComponent<Transform3D>();
-            ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
-            ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
-            ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
-            ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
+        //    EntityId bullet = CreateEntityNamed(bulletName);
+        //    ref Transform3D playerTransform = ref GetComponent<Transform3D>();
+        //    ref Transform3D bulletTransform = ref GetComponent<Transform3D>(bullet);
+        //    ref BulletComponent bulletComp = ref AddComponent<BulletComponent>(bullet);
+        //    ref CollisionBody cb = ref AddComponent<CollisionBody>(bullet);
+        //    ref ColliderSphere cs = ref AddComponent<ColliderSphere>(bullet);
 
-            AddMesh(bullet, "Player/Bullet/PlaneBullet", "Player/Bullet/defaultmaterial.wimaterial");
+        //    AddMesh(bullet, "Player/Bullet/PlaneBullet", "Player/Bullet/defaultmaterial.wimaterial");
 
-            bulletTransform.LocalPosition = transform.worldMatrix.GetPosition();
-            bulletTransform.LocalRotation = new Vector3(-90f, playerTransform.LocalRotation.y - 90f, 0f);
-            bulletTransform.LocalScale = new Vector3(2f, 2f, 2f);
+        //    bulletTransform.LocalPosition = transform.worldMatrix.GetPosition();
+        //    bulletTransform.LocalRotation = new Vector3(-90f, playerTransform.LocalRotation.y - 90f, 0f);
+        //    bulletTransform.LocalScale = new Vector3(2f, 2f, 2f);
 
-            cs.radius = 1;
-            cb.scalingOffset = new Vector3(1f, 1f, 1f);
-            cb.isTrigger = true;
-            cb.isStatic = false;
-            cb.doContinuousCollision = false;
-            cb.selfTag = 10;
+        //    cs.radius = 1;
+        //    cb.scalingOffset = new Vector3(1f, 1f, 1f);
+        //    cb.isTrigger = true;
+        //    cb.isStatic = false;
+        //    cb.doContinuousCollision = false;
+        //    cb.selfTag = 10;
 
-            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY_MELEE");
-            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY_RANGED");
-            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("WALL");
-            cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
+        //    cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY_MELEE");
+        //    cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("ENEMY_RANGED");
+        //    cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("WALL");
+        //    cb.filterBits |= 1 << PhysicsManager.GetTagBitsByString("COLUMN");
 
-            bulletComp.Velocity = shooter.BulletSpeed;
-            bulletComp.LifeTime = shooter.BulletLifeTime;
-            bulletComp.Damage = character.Damage;
-            bulletComp.Direction = bullDir;
+        //    bulletComp.Velocity = shooter.BulletSpeed;
+        //    bulletComp.LifeTime = shooter.BulletLifeTime;
+        //    bulletComp.Damage = character.Damage;
+        //    bulletComp.Direction = bullDir;
 
-            ApplySystem<MeshRenderer>(bullet);
-            ApplySystem<PhysicsSystem>(bullet);
-            ApplySystem<BulletController>(bullet);
-            ApplySystem<AudioSystem>(bullet);
+        //    ApplySystem<MeshRenderer>(bullet);
+        //    ApplySystem<PhysicsSystem>(bullet);
+        //    ApplySystem<BulletController>(bullet);
+        //    ApplySystem<AudioSystem>(bullet);
 
-            Audio.PlaySound("player_shoot", m_EntityId);
-        }
+        //    Audio.PlaySound("player_shoot", m_EntityId);
+        //}
     }
 }

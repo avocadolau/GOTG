@@ -14,7 +14,7 @@ namespace Wiwa
 	{
 	public:
 
-		GuiButton(Scene* scene, unsigned int id, Rect2i bounds, const char* path, const char* extraPath,size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active,bool animated, float animFrames, std::vector<Rect2i> animationRects);
+		GuiButton(Scene* scene, unsigned int id, Rect2i bounds, const char* path, const char* extraPath,size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active,bool animated, float animFrames, std::vector<Rect2i> animationRects, float rotation);
 		virtual ~GuiButton();
 
 		bool Update();

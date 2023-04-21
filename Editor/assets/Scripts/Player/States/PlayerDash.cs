@@ -59,7 +59,7 @@ namespace Game
 
                 transform.Rotation.y = stateMachine.GetTransform().Rotation.y;
 
-                ParticleEmitterManger.ParticleEmitterPlayBatch(pe_dash);
+               // ParticleEmitterManger.ParticleEmitterPlayBatch(pe_dash);
 
                 dashParticleTimer = 0.1f; //better if random between 2 values
             }

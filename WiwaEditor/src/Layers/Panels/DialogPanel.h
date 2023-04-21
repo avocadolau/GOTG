@@ -21,5 +21,9 @@ public:
 	int numNodesOnCurrentCreation;
 	int currentCreationStep;
 
-	//Conversation* conversationCreation;
+	int currentConversation = 0;
+	int currentNode = 0;
+
+	std::string pathForAsset;
+	std::string pathForAsset2;
 };

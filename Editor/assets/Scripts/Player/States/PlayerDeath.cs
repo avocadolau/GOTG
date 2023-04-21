@@ -14,7 +14,7 @@ namespace Game
             stateMachine.SetPlayerRotation(ref stateMachine.GetTransform().LocalRotation, stateMachine.direction, 1f);
 
             EntityId pe_death = stateMachine.GetChildByName("PE_Death");
-            ParticleEmitterManger.ParticleEmitterPlayBatch(pe_death);
+           // ParticleEmitterManger.ParticleEmitterPlayBatch(pe_death);
         }
         public override void UpdateState(ref PlayerStateMachine stateMachine, EntityId entityId)
         {
