@@ -15,7 +15,7 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::RayCast)
-REFLECT_MEMBER(rayFromWorld)
-REFLECT_MEMBER(rayToWorld)
-REFLECTION_END; 
+WI_REFLECTION_BEGIN(Wiwa::RayCast)
+	WI_REFLECT_MEMBER(rayFromWorld)
+	WI_REFLECT_MEMBER(rayToWorld)
+WI_REFLECTION_END;

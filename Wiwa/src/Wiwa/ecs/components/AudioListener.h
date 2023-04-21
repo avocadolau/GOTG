@@ -11,5 +11,5 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::AudioListener)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::AudioListener)
+WI_REFLECTION_END;

@@ -13,8 +13,8 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::DirectionalLight)
-	REFLECT_MEMBER(Color)
-	REFLECT_MEMBER(AmbientIntensity)
-	REFLECT_MEMBER(DiffuseIntensity)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::DirectionalLight)
+	WI_REFLECT_MEMBER(Color)
+	WI_REFLECT_MEMBER(AmbientIntensity)
+	WI_REFLECT_MEMBER(DiffuseIntensity)
+WI_REFLECTION_END;

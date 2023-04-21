@@ -64,6 +64,10 @@ Editor/game/build
 Editor/game/.vs
 Editor/game/Wiwa.lib
 
+# Game assembly
+Editor/game_assembly/.vs
+Editor/game_assembly/build
+
 # Rider files
 .idea/
 *sln.DotSettings.user

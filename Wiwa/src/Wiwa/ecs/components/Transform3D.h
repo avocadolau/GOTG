@@ -31,13 +31,13 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::Transform3D)
-	REFLECT_MEMBER(position)
-	REFLECT_MEMBER(rotation)
-	REFLECT_MEMBER(scale)
-	REFLECT_MEMBER(localPosition)
-	REFLECT_MEMBER(localRotation)
-	REFLECT_MEMBER(localScale)
-	REFLECT_MEMBER(worldMatrix)
-	REFLECT_MEMBER(localMatrix)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::Transform3D)
+	WI_REFLECT_MEMBER(position)
+	WI_REFLECT_MEMBER(rotation)
+	WI_REFLECT_MEMBER(scale)
+	WI_REFLECT_MEMBER(localPosition)
+	WI_REFLECT_MEMBER(localRotation)
+	WI_REFLECT_MEMBER(localScale)
+	WI_REFLECT_MEMBER(worldMatrix)
+	WI_REFLECT_MEMBER(localMatrix)
+WI_REFLECTION_END;

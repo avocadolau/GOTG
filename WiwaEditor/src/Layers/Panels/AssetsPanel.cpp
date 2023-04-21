@@ -20,7 +20,7 @@ std::vector<std::function<void()>> AssetsPanel::m_AssetsThreadQueue;
 std::mutex AssetsPanel::m_AssetsThreadQueueMutex;
 
 AssetsPanel::AssetsPanel(EditorLayer* instance)
-	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("assets")
+	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("assets"), m_AssemblyWatcher("game_assembly/build", OnAssemblyChange)
 {
 	ResourceId folderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/folder_icon.png");
 	ResourceId fileId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/file_icon.png");
@@ -48,7 +48,6 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	}
 
 	watcher = std::make_unique<filewatch::FileWatch<std::filesystem::path>>(s_AssetsPath, OnFolderEvent);
-
 
 	InitImports(s_AssetsPath);
 }
@@ -135,6 +134,39 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 			CheckImport(assetsPath);
 		}break;
 		};
+	});
+}
+
+void AssetsPanel::OnAssemblyChange(const std::filesystem::path& path, const filewatch::Event change_type)
+{
+	using namespace std::chrono_literals;
+	std::this_thread::sleep_for(500ms);
+	Wiwa::Application::Get().SubmitToMainThread([path, change_type]()
+	{
+		switch (change_type)
+		{
+			case filewatch::Event::added:
+				break;
+			case filewatch::Event::modified:
+				if (path.filename() == "WiwaGameAssembly.dll") {
+					WI_INFO("Reloading game assembly...");
+
+					Wiwa::Application& app = Wiwa::Application::Get();
+
+					app.UnloadGameAssembly();
+
+					Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
+
+					app.LoadGameAssembly();
+				}
+				break;
+			case filewatch::Event::removed:
+				break;
+			case filewatch::Event::renamed_old:
+				break;
+			case filewatch::Event::renamed_new:
+				break;
+		}
 	});
 }
 

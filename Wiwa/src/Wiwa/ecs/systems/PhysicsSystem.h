@@ -45,4 +45,4 @@ namespace Wiwa {
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::PhysicsSystem);
+WI_REGISTER_SYSTEM(Wiwa::PhysicsSystem);
