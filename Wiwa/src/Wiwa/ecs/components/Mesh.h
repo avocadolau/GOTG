@@ -16,11 +16,11 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::Mesh)
-	REFLECT_MEMBER(meshId)
-	REFLECT_MEMBER(materialId)
-	REFLECT_MEMBER(drawChildren)
-	REFLECT_MEMBER(modelIndex)
-	REFLECT_MEMBER(mesh_path)
-	REFLECT_MEMBER(mat_path)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::Mesh)
+	WI_REFLECT_MEMBER(meshId)
+	WI_REFLECT_MEMBER(materialId)
+	WI_REFLECT_MEMBER(drawChildren)
+	WI_REFLECT_MEMBER(modelIndex)
+	WI_REFLECT_MEMBER(mesh_path)
+	WI_REFLECT_MEMBER(mat_path)
+WI_REFLECTION_END;

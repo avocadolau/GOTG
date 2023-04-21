@@ -5,6 +5,7 @@
 
 namespace Wiwa
 {
+	std::vector<glm::vec2> BossUltronMovementState::m_PremadePositions;
 
 	std::vector<glm::vec2> BossUltronMovementState::m_PremadePositions;
 

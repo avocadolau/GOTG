@@ -2,6 +2,8 @@
 
 #include "wipch.h"
 #include <Wiwa/core/Core.h>
+#include <Wiwa/utilities/functions/Function.h>
+#include <Wiwa/utilities/functions/Action.h>
 
 namespace Wiwa {
 	enum class EventType

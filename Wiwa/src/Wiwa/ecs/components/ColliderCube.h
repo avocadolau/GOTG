@@ -13,6 +13,6 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::ColliderCube)
-REFLECT_MEMBER(halfExtents)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::ColliderCube)
+	WI_REFLECT_MEMBER(halfExtents)
+WI_REFLECTION_END;

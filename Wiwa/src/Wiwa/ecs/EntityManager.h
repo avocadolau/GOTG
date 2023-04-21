@@ -296,7 +296,7 @@ namespace Wiwa
 	{
 		const Type *ctype = GetType<T>();
 
-		return GetComponentId(ctype);
+		return GetComponentId(ctype->hash);
 	}
 
 	template<class T>
@@ -314,7 +314,7 @@ namespace Wiwa
 
 		byte *data = (byte *)&value;
 
-		T *component = (T *)AddComponent(entity, type, data);
+		T *component = (T *)AddComponent(entity, type->hash, data);
 
 		return component;
 	}
@@ -491,7 +491,9 @@ namespace Wiwa
 			return false;
 		}
 
-		ComponentId cid = GetComponentId<T>();
+		const Type* ctype = GetType<T>();
+
+		ComponentId cid = GetComponentId(ctype->hash);
 
 		std::map<ComponentId, size_t> *emap = &m_EntityComponents[entityId];
 
@@ -526,8 +528,6 @@ namespace Wiwa
 	inline void EntityManager::ApplySystem(EntityId eid)
 	{
 		const Type *stype = GetType<T>();
-
-		assert(stype->custom_id == 1);
 
 		ApplySystem(eid, stype->hash);
 	}

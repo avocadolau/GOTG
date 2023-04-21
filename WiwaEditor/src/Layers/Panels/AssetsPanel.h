@@ -27,6 +27,7 @@ private:
 	void TopBar();
 	static void CheckMeta(const std::filesystem::path& path);
 	static void OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type);
+	static void OnAssemblyChange(const std::filesystem::path& path, const filewatch::Event change_type);
 	static void DeleteFileAssets(std::filesystem::path& assetsPath);
 	static void CheckImport(const std::filesystem::path& path);
 	
@@ -51,5 +52,6 @@ private:
 	static std::vector<std::function<void()>> m_AssetsThreadQueue;
 	static std::mutex m_AssetsThreadQueueMutex;
 
+	filewatch::FileWatch<std::filesystem::path> m_AssemblyWatcher;
 	std::unique_ptr<filewatch::FileWatch<std::filesystem::path>> watcher;
 };

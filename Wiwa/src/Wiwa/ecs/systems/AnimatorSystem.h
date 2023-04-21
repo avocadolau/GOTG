@@ -47,4 +47,4 @@ namespace Wiwa {
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::AnimatorSystem);
+WI_REGISTER_SYSTEM(Wiwa::AnimatorSystem);

@@ -18,9 +18,8 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::Sprite);
-	REFLECT_MEMBER(sizeScreen);
-	REFLECT_MEMBER(spriteResource);
-	REFLECT_MEMBER(rect);
-
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::Sprite);
+	WI_REFLECT_MEMBER(sizeScreen);
+	WI_REFLECT_MEMBER(spriteResource);
+	WI_REFLECT_MEMBER(rect);
+WI_REFLECTION_END;

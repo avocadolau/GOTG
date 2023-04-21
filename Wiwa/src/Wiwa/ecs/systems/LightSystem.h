@@ -20,4 +20,4 @@ namespace Wiwa
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::LightSystem);
+WI_REGISTER_SYSTEM(Wiwa::LightSystem);

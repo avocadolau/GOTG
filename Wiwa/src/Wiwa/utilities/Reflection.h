@@ -9,10 +9,8 @@
 
 #include <functional>
 
-#include <Wiwa/core/Core.h>
 #include <Wiwa/utilities/containers/Array.h>
 #include <Wiwa/utilities/Hashing.h>
-
 #define memberoffset(type, member) (int)&((type*)0)->member
 
 struct Type {
@@ -22,6 +20,7 @@ struct Type {
 	bool is_class;
 	bool is_enum;
 	bool is_array;
+	bool is_function;
 	int custom_id;
 
 	std::function<void* ()> New;
@@ -31,16 +30,22 @@ struct Type {
 	bool Equals(const Type* other) const { return hash == other->hash; }
 };
 
+struct ParamData {
+	std::string name;
+	size_t hash;
+};
+
+struct Func : public Type {
+	std::string signature;
+	ParamData returnType;
+	std::vector<ParamData> params;
+	void* func;
+};
+
 struct Field {
 	const Type* type;
 	std::string name;
 	size_t offset;
-};
-
-struct Function {
-	Field returnValue;
-	Field parameters[3];
-	const char* name;
 };
 
 struct Class : public Type {
@@ -95,6 +100,75 @@ inline std::string ClearCppName(std::string cname)
 	return cname;
 }
 
+inline ParamData FindTypes(std::string signature, std::vector<ParamData>& params) {
+	ParamData ret;
+
+	// Find __cdecl
+	size_t cdec = signature.find("__cdecl");
+
+	// Find return data
+	std::string retstr = signature.substr(0, cdec);
+	signature.erase(0, cdec + 6);
+
+	retstr = ClearCppName(retstr);
+
+	size_t ind = retstr.find(' ');
+
+	ret.name = retstr.substr(0, ind);
+
+	retstr.erase(0, ind + 1);
+
+	ind = retstr.find("ptr");
+
+	if (ind != signature.npos) {
+		ret.name += "*";
+	}
+
+	ret.hash = FNV1A_HASH(ret.name.c_str());
+
+	// Find parameters data
+	ind = signature.find('(');
+
+	signature.erase(0, ind + 1);
+
+	ind = signature.find(',');
+
+	if (ind == signature.npos) {
+		ind = signature.find(')');
+	}
+
+	while (ind != signature.npos) {
+		ParamData pd;
+
+		pd.name = signature.substr(0, ind);
+		pd.name = ClearCppName(pd.name);
+
+		size_t ind2 = pd.name.find("ptr");
+
+		if (ind2 != pd.name.npos) {
+			ind2 = pd.name.find(' ');
+			pd.name = pd.name.substr(0, ind2);
+			pd.name += "*";
+		}
+
+		pd.hash = FNV1A_HASH(pd.name.c_str());
+
+		signature.erase(0, ind + 1);
+
+		ind = signature.find(',');
+
+		if (ind == signature.npos) {
+			ind = signature.find(')');
+		}
+
+		params.push_back(pd);
+	}
+	
+	printf("%s\n", signature.c_str());
+
+	return ret;
+}
+
 #define BASE_TYPE_BODY(T) \
 	type.name = ClearCppName(typeid(T).name()); \
 	type.size = sizeof(T); \
@@ -102,6 +176,7 @@ inline std::string ClearCppName(std::string cname)
 	type.is_class = false; \
 	type.is_enum = false; \
 	type.is_array = false; \
+	type.is_function = false; \
 	type.New = []() -> void* { return new T(); }; \
 	type.custom_id = 0;
 
@@ -138,6 +213,24 @@ const Type* GetCompileType() {
 	return GetType<type>(); \
 }
 
+// Register function
+#define REGISTER_FUNCTION(functype) REGISTER_TYPE(decltype(functype)); \
+template<> inline const Type* GetType_impl<decltype(functype)>(){ \
+	static Func type; \
+	type.name = #functype; \
+	type.signature = typeid(functype).name(); \
+	type.returnType = FindTypes(type.signature, type.params); \
+	type.hash = FNV1A_HASH(#functype); \
+	type.is_class = false; \
+	type.is_enum = false; \
+	type.is_array = false; \
+	type.is_function = true; \
+	type.custom_id = 2; \
+	type.func = functype; \
+	return &type; \
+}
+
+// Register system
 #define REGISTER_SYSTEM(rtype) REGISTER_TYPE(rtype); \
 template<> inline const Type* GetType_impl<rtype>(){ \
 	static Type type; \
@@ -179,10 +272,31 @@ template<> inline const Type* GetType_impl<rtype>(){ \
 
 #define ENUM_REFLECTION_END REFLECTION_END
 
+//======== Protect sub-apps from engine reflections ==========================================================================================
+#ifdef WI_BUILD_DLL
+#define WI_REFLECTION_BEGIN REFLECTION_BEGIN
+#define WI_REFLECT_MEMBER REFLECT_MEMBER
+#define WI_REFLECTION_END REFLECTION_END
+
+#define WI_REGISTER_FUNCTION REGISTER_FUNCTION
+#define WI_REGISTER_TYPE REGISTER_TYPE
+#define WI_REGISTER_SYSTEM REGISTER_SYSTEM
+#else
+#define WI_REFLECTION_BEGIN(...)
+#define WI_REFLECT_MEMBER(...)
+#define WI_REFLECTION_END
+
+#define WI_REGISTER_FUNCTION(...)
+#define WI_REGISTER_TYPE(...)
+#define WI_REGISTER_SYSTEM(...)
+#endif
+
 //======== Compile-time types ================================================================================================================
 
 // Type count of objects in the engine
 extern const size_t TYPE_COUNT;
+
+#define TYPELIST const Wiwa::Array<const Type*, TYPE_COUNT>*
 
 // No return foreach
 template <size_t N, size_t I = 0>

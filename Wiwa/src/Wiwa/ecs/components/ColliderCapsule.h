@@ -14,7 +14,7 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::ColliderCapsule)
-REFLECT_MEMBER(height)
-REFLECT_MEMBER(radius)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::ColliderCapsule)
+	WI_REFLECT_MEMBER(height)
+	WI_REFLECT_MEMBER(radius)
+WI_REFLECTION_END;

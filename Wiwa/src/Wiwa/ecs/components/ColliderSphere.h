@@ -13,6 +13,6 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::ColliderSphere)
-	REFLECT_MEMBER(radius)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::ColliderSphere)
+	WI_REFLECT_MEMBER(radius)
+WI_REFLECTION_END;
