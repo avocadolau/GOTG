@@ -12,6 +12,8 @@
 #include "Rectangle.h"
 #include <glm/glm.hpp>
 
+#include <glm/gtx/rotate_vector.hpp>
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 
@@ -313,5 +315,31 @@ namespace Wiwa {
 		{
 			return glm::vec3(mat[3]);
 		}
+
+		inline glm::vec3 CalculateForward(const glm::vec3& rotation)
+		{
+			glm::vec3 rotrad = glm::radians(rotation);
+
+			glm::vec3 forward;
+
+			forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
+			forward.y = -glm::sin(rotrad.x);
+			forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
+
+			forward = glm::degrees(forward);
+
+			return glm::normalize(forward);
+		}
+
+		inline void GetRightAndLeftRotatedFromForward(const glm::vec3& forward, glm::vec3& right, glm::vec3& left, float angle)
+		{
+			glm::vec3 up(0.0f, 1.0f, 0.0f);
+			float radiansAngleRight = glm::radians(angle);
+			float radiansAngleLeft = glm::radians(-angle);
+
+			right = glm::rotate(forward, radiansAngleRight, up);
+			left = glm::rotate(forward, radiansAngleLeft, up);
+		}
+
 	}
 }

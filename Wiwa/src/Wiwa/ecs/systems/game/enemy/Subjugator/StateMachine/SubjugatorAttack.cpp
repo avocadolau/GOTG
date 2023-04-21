@@ -24,8 +24,9 @@ namespace Wiwa
 		if (m_TimerAttackCooldown == 0.0f)
 		{
 			Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
-			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
-			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+			/*Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);*/
+			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 			animator->PlayAnimation("shot", false);
 		}
 	}
@@ -61,12 +62,21 @@ namespace Wiwa
 		{
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;
-			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+			/*Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);*/
 			//WI_INFO(" gunTr {},{},{}", gunTr->localPosition.x , gunTr->localPosition.y, gunTr->localPosition.z);
-			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
+
+			glm::vec3 rotateBulledLeft = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRight = glm::vec3(0.0f, 0.0f, 0.0f);
+
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
+
+			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
+			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
+			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
+
 			animator->PlayAnimation("shot", false);
 		}
-		//}
+		
 
 		if (dist2Player > enemy->m_RangeOfAttack)
 		{
@@ -101,7 +111,7 @@ namespace Wiwa
 	void SubjugatorAttackState::SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
+		EntityId newBulletId = entityManager.LoadPrefab("assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions
@@ -131,25 +141,5 @@ namespace Wiwa
 
 		//entityManager.ApplySystem<Wiwa::PhysicsSystem>(newBulletId);
 	}
-
-	glm::vec3 SubjugatorAttackState::CalculateForward(const Transform3D& t3d)
-	{
-		/*glm::vec4 forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-		glm::vec4 transformed = t3d.worldMatrix * forward;
-		return glm::normalize(glm::vec3(transformed));*/
-		glm::vec3 rotrad = glm::radians(t3d.rotation);
-
-		glm::vec3 forward;
-
-		forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
-		forward.y = -glm::sin(rotrad.x);
-		forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
-
-		forward = glm::degrees(forward);
-
-		return glm::normalize(forward);
-	}
-
-
 
 }

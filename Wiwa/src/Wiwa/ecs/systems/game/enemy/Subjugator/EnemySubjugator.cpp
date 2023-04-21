@@ -11,7 +11,7 @@ namespace Wiwa
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
-		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		/*m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };*/
 		m_RangeOfAttack = 20.0f;
 		m_MinimumPath = 5;
 		m_Timer = 0.0f;
@@ -32,8 +32,8 @@ namespace Wiwa
 		m_HitState = new SubjugatorHitState();
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
-		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);
+		/*EntityId gunId = em.GetChildByName(m_EntityId, "gun");
+		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);*/
 	}
 
 	void EnemySubjugator::OnInit()
