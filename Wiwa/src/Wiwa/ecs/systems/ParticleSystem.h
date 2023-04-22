@@ -75,7 +75,7 @@ namespace Wiwa
 
 		void OnDestroy() override;
 
-		void Render();
+		void Render(Particle& particle);
 
 		void SetValues(ParticleEmitterComponent settings);
 

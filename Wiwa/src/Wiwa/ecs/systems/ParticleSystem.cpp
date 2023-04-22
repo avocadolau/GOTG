@@ -131,8 +131,6 @@ namespace Wiwa {
 
 		}
 
-
-
 		emitter->m_activeParticles = 0;
 
 		if (emitter->m_active || emitter->m_activeOverTime)
@@ -182,10 +180,10 @@ namespace Wiwa {
 
 					glm::vec4 color = particle.color = ColorInterpolation(emitter->m_p_colorsOverLifetime[0].color, emitter->m_p_colorsOverLifetime[1].color, particle.life_percentage);
 
-					//Shader* shader = m_Material->getShader();
+		/*			Shader* shader = m_Material->getShader();
 
-					//shader->setUniformFloat(shader->getUniformLocation("u_DissolveAmount"), particle.life_percentage);
-					//shader->setUniformVec4(shader->getUniformLocation("u_Color"), particle.color);
+					shader->setUniformFloat(shader->getUniformLocation("u_LifeTime"), particle.life_percentage);
+					shader->setUniformVec4(shader->getUniformLocation("u_Color"), particle.color);*/
 
 					Uniform* u_color = m_Material->getUniform("u_Color");
 					if (u_color != nullptr)
@@ -279,13 +277,13 @@ namespace Wiwa {
 						//pass transformation matrix
 						particle.transform = transform;
 					}
-					//WI_CORE_INFO("Color: {0}, {1}, {3}, {4}", particle.color.x, particle.color.y, particle.color.z, particle.color.w);
+					Render(particle);
 				}
 			}
 
 			emitter->m_activeParticles = activeParticles;
 			m_AvailableParticles = emitter->m_maxParticles - activeParticles;
-			Render();
+
 		}
 		if (emitter->m_ActiveTimer < 0)  emitter->m_ActiveTimer = 0;
 	}
@@ -306,7 +304,7 @@ namespace Wiwa {
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		emitter->m_ActiveTimer = 0;
 	}
-	void ParticleSystem::Render()
+	void ParticleSystem::Render(Particle& particle)
 	{
 		Transform3D* t3d = GetComponent<Transform3D>();
 
@@ -329,26 +327,12 @@ namespace Wiwa {
 
 			if (camera->cull && !camera->frustrum.IsBoxVisible(m_Model->boundingBox.getMin(), m_Model->boundingBox.getMax()))
 				return;
-
-			for (unsigned int i = 0; i < m_MaxParticles; ++i)
-			{
-				Particle& particle = m_Particles[i];
-				if (particle.life_time > 0.0f)
-				{
-					r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
-				}
-			}
+			r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+			
 		}
 		if (man.editorCamera)
 		{
-			for (unsigned int i = 0; i < m_MaxParticles; ++i)
-			{
-				Particle& particle = m_Particles[i];
-				if (particle.life_time > 0.0f)
-				{
-					r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
-				}				
-			}
+			r3d.RenderMesh(m_Model, particle.transform, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 		}
 		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
