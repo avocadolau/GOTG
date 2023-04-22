@@ -31,4 +31,9 @@ public:
 	{
 		{true, true}
 	};
+
+	std::string currentEditingConversationName[MAX_CONVERSATIONS] = { "" };
+
+	int saved = 0;
+	int savedID = -1;
 };

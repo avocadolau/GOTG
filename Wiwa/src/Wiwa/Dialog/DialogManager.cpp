@@ -20,7 +20,7 @@ namespace Wiwa
 {
 	DialogManager::DialogManager()
 	{
-
+		
 	}
 
 	DialogManager::~DialogManager()
@@ -102,15 +102,34 @@ namespace Wiwa
 
 		//newConversation = nullptr;
 
+		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
+		{
+			editorConversations[e].bubbleImagePath = conversations[e].bubbleImagePath;
+			editorConversations[e].characterImagePath = conversations[e].characterImagePath;
+			editorConversations[e].conversationName = conversations[e].conversationName;
+			editorConversations[e].occupied = conversations[e].occupied;
+
+			for (int f = 0; f < MAX_CONVERSATION_NODES && conversations[e].nodes[f].occupied == true; f++)
+			{
+				editorConversations[e].nodes[f].text1 = conversations[e].nodes[f].text1;
+				editorConversations[e].nodes[f].text2 = conversations[e].nodes[f].text2;
+				editorConversations[e].nodes[f].text3 = conversations[e].nodes[f].text3;
+				editorConversations[e].nodes[f].occupied = conversations[e].nodes[f].occupied;
+
+			}
+
+
+		}
+
 		return true;
 	}
 
 
 	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120/* && collidingWithNpc == true*/)
 		{
- 			conversationToPlayName = NpcConversationTag.c_str();
+ 			conversationToPlayName = "Improvements test"/*NpcConversationTag.c_str()*/;
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;

@@ -17,6 +17,13 @@ DialogPanel::DialogPanel(EditorLayer* instance)
 			currentEditingNodeIsSaved[a][b] = true;
 		}
 	}
+
+	Wiwa::DialogManager& dm_onInit = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
+
+	for (int c = 0; c < MAX_CONVERSATIONS && dm_onInit.conversations[c].occupied == true; c++)
+	{
+		currentEditingConversationName[c] = dm_onInit.conversations[c].conversationName;
+	}
 }
 
 DialogPanel::~DialogPanel()
@@ -26,8 +33,6 @@ DialogPanel::~DialogPanel()
 void DialogPanel::Draw()
 {
 	Wiwa::DialogManager& dm = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
-
-	
 
 	ImGui::Begin(iconName.c_str(), &active);
 	
@@ -88,15 +93,19 @@ void DialogPanel::Draw()
 			{
 				if(currentCreatingNodeIsSaved[currentNode] == false) ImGui::TextWrapped("Currently Editing Node # %i (Unsaved*)", currentNode);
 				if (currentCreatingNodeIsSaved[currentNode] == true) ImGui::TextWrapped("Currently Editing Node # %i", currentNode);
+				ImGui::NewLine();
 
+				ImGui::Text("|<------------ Max Length ------------>|");
 				if (ImGui::InputText("Line 1 text", &dm.conversations[currentConversation].nodes[currentNode].text1))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
+				ImGui::Text("|<------------ Max Length ------------>|");
 				if (ImGui::InputText("Line 2 text", &dm.conversations[currentConversation].nodes[currentNode].text2))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
+				ImGui::Text("|<------------ Max Length ------------>|");
 				if (ImGui::InputText("Line 3 text", &dm.conversations[currentConversation].nodes[currentNode].text3))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
@@ -297,25 +306,29 @@ void DialogPanel::Draw()
 		for (int i = 0; i < MAX_CONVERSATIONS && dm.conversations[i].occupied == true; i++)
 		{
 			ImGui::PushID(i);
-			if (ImGui::CollapsingHeader(dm.conversations[i].conversationName.c_str()))
+			if (ImGui::CollapsingHeader(currentEditingConversationName[i].c_str()))
 			{
 				if(currentEditingNodeIsSaved[currentEditingNode[i]][i] == true) ImGui::TextWrapped("Node %i:", currentEditingNode[i]);
 				else if (currentEditingNodeIsSaved[currentEditingNode[i]][i] == false) ImGui::TextWrapped("Node %i (unsaved*):", currentEditingNode[i]);
+				ImGui::NewLine();
 
+				ImGui::Text("|<------------ Max Length ------------>|");
 				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 1 text", &dm.conversations[i].nodes[currentEditingNode[i]].text1))
+				if (ImGui::InputText("Line 1 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
+				ImGui::Text("|<------------ Max Length ------------>|");
 				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 2 text", &dm.conversations[i].nodes[currentEditingNode[i]].text2))
+				if (ImGui::InputText("Line 2 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text2))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
+				ImGui::Text("|<------------ Max Length ------------>|");
 				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 3 text", &dm.conversations[i].nodes[currentEditingNode[i]].text3))
+				if (ImGui::InputText("Line 3 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text3))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
@@ -339,7 +352,7 @@ void DialogPanel::Draw()
 				ImGui::PopID();
 				ImGui::SameLine();
 				ImGui::PushID(currentEditingNode[i]);
-				if (dm.conversations[i].nodes[currentEditingNode[i] + 1].occupied == true)
+				if (dm.editorConversations[i].nodes[currentEditingNode[i] + 1].occupied == true)
 				{
 					if (ImGui::Button("Next Node >"))
 					{
@@ -359,9 +372,9 @@ void DialogPanel::Draw()
 					bool exit = false;
 					for (int j = 0; j < MAX_CONVERSATION_NODES && exit == false; j++)
 					{
-						if (dm.conversations[i].nodes[j + 1].occupied == false)
+						if (dm.editorConversations[i].nodes[j + 1].occupied == false)
 						{
-							dm.conversations[i].nodes[j + 1].occupied = true;
+							dm.editorConversations[i].nodes[j + 1].occupied = true;
 							exit = true;
 						}
 					}
@@ -369,32 +382,43 @@ void DialogPanel::Draw()
 				ImGui::SameLine();
 				if (ImGui::Button("Delete Node"))
 				{
-					dm.conversations[i].nodes[currentEditingNode[i]].occupied = false;
+					dm.editorConversations[i].nodes[currentEditingNode[i]].occupied = false;
 
 					int isNodeOccupiedNumTimesFalse = 0;
 
 					for (int l = 0; (l < MAX_CONVERSATIONS) && (isNodeOccupiedNumTimesFalse < 2); l++)
 					{
-						if (dm.conversations[i].nodes[l].occupied == false)
+						if (dm.editorConversations[i].nodes[l].occupied == false)
 						{
 							isNodeOccupiedNumTimesFalse++;
 						}
 
 						if (isNodeOccupiedNumTimesFalse == 1)
 						{
-							dm.conversations[i].nodes[l].text1 = dm.conversations[i].nodes[l + 1].text1;
-							dm.conversations[i].nodes[l].text2 = dm.conversations[i].nodes[l + 1].text2;
-							dm.conversations[i].nodes[l].text3 = dm.conversations[i].nodes[l + 1].text3;
-							dm.conversations[i].nodes[l].occupied = dm.conversations[i].nodes[l + 1].occupied;
+							dm.editorConversations[i].nodes[l].text1 = dm.editorConversations[i].nodes[l + 1].text1;
+							dm.editorConversations[i].nodes[l].text2 = dm.editorConversations[i].nodes[l + 1].text2;
+							dm.editorConversations[i].nodes[l].text3 = dm.editorConversations[i].nodes[l + 1].text3;
+							dm.editorConversations[i].nodes[l].occupied = dm.editorConversations[i].nodes[l + 1].occupied;
 
 							currentEditingNodeIsSaved[currentEditingNode[i]][l] = currentEditingNodeIsSaved[currentEditingNode[i]][l + 1];
 						}
+
+						if (dm.editorConversations[l].occupied == false && isNodeOccupiedNumTimesFalse == 2 && currentEditingNode[i] > 0)
+						{
+							currentEditingNode[i]--;
+						}
 					}
+
+					
 				}
 
 				ImGui::PushID(currentEditingNode[i]);
 				if (ImGui::Button(" -= SAVE NODE =- "))
 				{
+					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
+					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
+					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
+
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
@@ -409,7 +433,7 @@ void DialogPanel::Draw()
 
 				ImGui::TextWrapped("Character image:");
 				ImGui::SameLine();
-				AssetContainer(dm.conversations[i].characterImagePath.c_str());
+				AssetContainer(dm.editorConversations[i].characterImagePath.c_str());
 				if (ImGui::BeginDragDropTarget())
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -420,23 +444,17 @@ void DialogPanel::Draw()
 						std::filesystem::path p = pathS.c_str();
 						if (p.extension() == ".png")
 						{
-							dm.conversations[i].characterImagePath = pathS;
+							dm.editorConversations[i].characterImagePath = pathS;
 							
 						}
 					}
 					ImGui::EndDragDropTarget();
 				}
-				ImGui::PushID(i);
-				if (ImGui::Button(" -= Save Character Image =- "))
-				{
-					dm.SetCharacterImage(dm.conversations[i].characterImagePath.c_str(), i);
-				}
-				ImGui::PopID();
 				ImGui::NewLine();
 
 				ImGui::TextWrapped("Bubble image:");
 				ImGui::SameLine();
-				AssetContainer(dm.conversations[i].bubbleImagePath.c_str());
+				AssetContainer(dm.editorConversations[i].bubbleImagePath.c_str());
 				if (ImGui::BeginDragDropTarget())
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -447,26 +465,46 @@ void DialogPanel::Draw()
 						std::filesystem::path p = pathS.c_str();
 						if (p.extension() == ".png")
 						{
-							dm.conversations[i].bubbleImagePath = pathS;
+							dm.editorConversations[i].bubbleImagePath = pathS;
 							
 						}
 					}
 					ImGui::EndDragDropTarget();
 				}
-				ImGui::PushID(i);
-				if (ImGui::Button(" -= Save Bubble Image =- "))
-				{
-					dm.SetDialogBubbleImage(dm.conversations[i].bubbleImagePath.c_str(), i);
-				}
-				ImGui::PopID();
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Conversation Name", &dm.editorConversations[i].conversationName);
+
 				ImGui::NewLine();
 
 				ImGui::TextWrapped("DONR FORGET SAVING!");
+				ImGui::TextWrapped("WARNING: This will overwite all previous versions.");
 				ImGui::PushID(i);
 				if (ImGui::Button(" ~ Save Conversation ~ "))
 				{
 					currentEditingNode[i] = 0;
+
+					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
+					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
+					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
+
+					dm.SetDialogText(
+						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
+						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
+						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
+						"assets/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
+
+					dm.conversations[i].characterImagePath = dm.editorConversations[i].characterImagePath;
+					dm.SetCharacterImage(dm.conversations[i].characterImagePath.c_str(), i);
+					dm.conversations[i].bubbleImagePath = dm.editorConversations[i].bubbleImagePath;
+					dm.SetDialogBubbleImage(dm.conversations[i].bubbleImagePath.c_str(), i);
+					dm.conversations[i].conversationName = dm.editorConversations[i].conversationName;
 					dm.SaveAllDialogs();
+
+					saved = 1;
+					currentEditingConversationName[i] = "Saving...";
+					savedID = i;
 				}
 				ImGui::PopID();
 				ImGui::SameLine();
@@ -510,12 +548,62 @@ void DialogPanel::Draw()
 						}
 					}
 
+					for (int d = 0; d < MAX_CONVERSATIONS && dm.conversations[d].occupied == true; d++)
+					{
+						currentEditingConversationName[d] = dm.conversations[d].conversationName;
+					}
+
+					dm.editorConversations[i].occupied = false;
+
+					int isOccupiedNumTimesFalse2 = 0;
+
+					for (int l = 0; (l < MAX_CONVERSATIONS) && (isOccupiedNumTimesFalse2 < 2); l++)
+					{
+						if (dm.editorConversations[l].occupied == false)
+						{
+							isOccupiedNumTimesFalse2++;
+						}
+
+						if (isOccupiedNumTimesFalse2 == 1)
+						{
+							dm.editorConversations[l].bubbleImagePath = dm.editorConversations[l + 1].bubbleImagePath;
+							dm.editorConversations[l].characterImagePath = dm.editorConversations[l + 1].characterImagePath;
+							dm.editorConversations[l].conversationName = dm.editorConversations[l + 1].conversationName;
+
+							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
+							{
+								dm.editorConversations[l].nodes[m].text1 = dm.editorConversations[l + 1].nodes[m].text1;
+								dm.editorConversations[l].nodes[m].text2 = dm.editorConversations[l + 1].nodes[m].text2;
+								dm.editorConversations[l].nodes[m].text3 = dm.editorConversations[l + 1].nodes[m].text3;
+								dm.editorConversations[l].nodes[m].occupied = dm.editorConversations[l + 1].nodes[m].occupied;
+
+								currentEditingNodeIsSaved[currentEditingNode[i]][m] = true;
+							}
+
+							dm.editorConversations[l].occupied = dm.editorConversations[l + 1].occupied;
+
+						}
+					}
+
+					for (int d = 0; d < MAX_CONVERSATIONS && dm.editorConversations[d].occupied == true; d++)
+					{
+						currentEditingConversationName[d] = dm.editorConversations[d].conversationName;
+					}
+
 					currentEditingNode[i] = 0;
 					dm.SaveAllDialogs();
 				}
 				ImGui::PopID();
 			}
 			ImGui::PopID();
+
+			if (saved == 65)
+			{
+				currentEditingConversationName[savedID] = dm.editorConversations[savedID].conversationName;
+				dm.conversations[savedID].conversationName = dm.editorConversations[savedID].conversationName;
+				saved = 0;
+			}
+			else if (saved >= 1 && saved < 65) saved++;
 		}
 	}
 	else
