@@ -24,8 +24,11 @@ public:
 	int currentConversation = 0;
 	int currentNode = 0;
 
-	int currentEditingNode = 0;
+	bool currentCreatingNodeIsSaved[MAX_CONVERSATION_NODES] = { false };
 
-	//std::string pathForAsset;
-	//std::string pathForAsset2;
+	int currentEditingNode[MAX_CONVERSATION_NODES] = { 0 };
+	bool currentEditingNodeIsSaved[MAX_CONVERSATIONS][MAX_CONVERSATION_NODES] =
+	{
+		{true, true}
+	};
 };

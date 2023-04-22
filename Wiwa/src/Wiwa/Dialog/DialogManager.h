@@ -9,7 +9,7 @@
 
 #include "DialogNode.h"
 
-#define MAX_CONVERSATIONS 50
+#define MAX_CONVERSATIONS 25
 #define MAX_CONVERSATION_NODES 25
 
 namespace Wiwa
