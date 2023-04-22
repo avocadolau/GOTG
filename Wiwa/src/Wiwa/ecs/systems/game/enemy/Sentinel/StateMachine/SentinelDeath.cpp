@@ -21,6 +21,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		//SentinelAudio - Dead Audio (explosion audio)
 		animator->PlayAnimation("dead", false);
 	}
 
@@ -33,11 +35,9 @@ namespace Wiwa
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
 		if (animator->HasFinished())
-		{
-			
+		{	
 			/*SpawnExplosion(enemy, selfTr, stats);*/
 
-			//--------------------------------------
 			//Sentinel Explosion
 			Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 			EntityId newExplosionId = entityManager.LoadPrefab("assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
@@ -46,6 +46,7 @@ namespace Wiwa
 			Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
 
+			//SentinelParticles - Sentinel Death Explosion Particle
 
 			if (!explosionTr || !playerTr)
 			{
@@ -55,12 +56,6 @@ namespace Wiwa
 			explosionTr->localPosition = Math::GetWorldPosition(selfTr->worldMatrix);
 			explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 			explosionTr->localScale = selfTr->localScale;
-			/*SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
-			bullet->direction = bull_dir; */
-
-
-			//--------------------------------------
-
 
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;

@@ -25,9 +25,11 @@ namespace Wiwa
 		{
 			Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-			/*Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);*/
-			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
+
+			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("shot", false);
+
+			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 		}
 	}
 
@@ -42,13 +44,6 @@ namespace Wiwa
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 		int distPath = aiSystem->GetPathSize();
-		//WI_INFO("Dist2Player: {}", dist2Player);
-		//WI_INFO("DistPath: {}", distPath);
-		// Change rotation logic from ai agent to enemy local script one
-		//if (dist2Player <= enemy->m_RangeOfAttack)
-		//{
-			//aiSystem->DisableRotationByTile();
-			// Rotate towards player
 		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
 		//}
 
@@ -62,9 +57,7 @@ namespace Wiwa
 		{
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;
-			/*Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);*/
-			//WI_INFO(" gunTr {},{},{}", gunTr->localPosition.x , gunTr->localPosition.y, gunTr->localPosition.z);
-
+		
 			glm::vec3 rotateBulledLeft = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulletRight = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -74,6 +67,7 @@ namespace Wiwa
 			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
 			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
 
+			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("shot", false);
 		}
 		
@@ -92,21 +86,6 @@ namespace Wiwa
 	{
 
 	}
-
-	//glm::vec3 RangedPhalanxAttackState::CalculateForward(const Wiwa::Transform3D* t3d)
-	//{
-	//	glm::vec3 rotrad = glm::radians(t3d->rotation);
-
-	//	glm::vec3 forward;
-
-	//	forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
-	//	forward.y = -glm::sin(rotrad.x);
-	//	forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
-
-	//	forward = glm::degrees(forward);
-
-	//	return glm::normalize(forward);
-	//}
 
 	void SubjugatorAttackState::SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
 	{
@@ -127,19 +106,6 @@ namespace Wiwa
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
-
-		/*WI_CORE_INFO("Spawned enemy at {}x {}y {}z", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
-		WI_CORE_INFO("Spawn transform at {}x {}y {}z", spawnTransform->localPosition.x, spawnTransform->localPosition.y, spawnTransform->localPosition.z);*/
-		// Set the correspondent tag
-	/*	CollisionBody* collBodyPtr = entityManager.GetComponent<CollisionBody>(newBulletId);
-		Wiwa::PhysicsManager& physicsManager = enemy->getScene().GetPhysicsManager();
-
-		collBodyPtr->selfTag = physicsManager.GetFilterTag("ENEMY_BULLET");
-		collBodyPtr->filterBits |= 1 << physicsManager.GetFilterTag("WALL");
-		collBodyPtr->filterBits |= 1 << physicsManager.GetFilterTag("COLUMN");
-		collBodyPtr->filterBits |= 1 << physicsManager.GetFilterTag("PLAYER");*/
-
-		//entityManager.ApplySystem<Wiwa::PhysicsSystem>(newBulletId);
 	}
 
 }

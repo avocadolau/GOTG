@@ -50,25 +50,14 @@ namespace Wiwa
         Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
-        //if (Wiwa::AIPathFindingManager::CheckBoundaries(Wiwa::AIMapGeneration::WorldToMap(offsetPosition.x, offsetPosition.z)) == false)
-        //{
-        //    offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
-        //}
-
-
         float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
         if (m_ChasingTimer > 1000.0f && distance <= 50.0f)
         {
             m_ChasingTimer = 0.0f;
-            //enemy->ChasePlayer();
-
+            
             remakeOffsetPosition = enemy->GoToPosition(offsetPosition);
-            //WI_INFO(" Player position: {},{},{}", playerTr->localPosition.x, playerTr->localPosition.y, playerTr->localPosition.z);
-            //WI_INFO(" Offset position: {},{},{}", offsetPosition.x, offsetPosition.y, offsetPosition.z);
-            //WI_INFO(" Distance: {},", glm::distance(selfTr->localPosition, offsetPosition));
-                //offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
-
+          
             if (remakeOffsetPosition == false)
             {
                 offsetPosition = CalculateOffsetPositionSubjugator(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.75f);
@@ -84,7 +73,6 @@ namespace Wiwa
                 agentPtr->StopMoving();
                 agentPtr->DisableRotationByTile();
                 agentPtr->LookAtPosition(playerTr->localPosition);
-                //WI_INFO(" Distance: {},", glm::distance(selfTr->localPosition, offsetPosition));
                 enemy->SwitchState(enemy->m_AttackingState);
             }
         }

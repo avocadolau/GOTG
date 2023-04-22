@@ -20,7 +20,7 @@ namespace Wiwa
 		SentinelHitState* m_HitState; 
 
 		float m_TimerSentinel; 
-		float m_RangeOfExplosion = 3.0f;
+		float m_RangeOfExplosion = 4.0f;
 	public:
 		EnemySentinel();
 		~EnemySentinel();
