@@ -75,6 +75,7 @@ namespace Wiwa
 
 		std::string conversationToPlayName;
 		Conversation conversations[MAX_CONVERSATIONS];
+		Conversation editorConversations[MAX_CONVERSATIONS];
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
 		int currentNode = 0;
