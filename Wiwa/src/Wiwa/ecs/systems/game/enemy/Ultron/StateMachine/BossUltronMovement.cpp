@@ -22,6 +22,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
 		//EntityId currentEnemy = enemy->GetEntity();
@@ -37,10 +38,16 @@ namespace Wiwa
 
 		enemy->GoToPosition(destination3D);
 
+		if (navAgentPtr != nullptr)
+		{
+			navAgentPtr->SetDestination(destination3D);
+		}
+
 		if (agentPtr != nullptr)
 		{
-			agentPtr->DisableRotationByTile();
+			agentPtr->AllowRotationByTile();
 		}
+
 	}
 
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
@@ -49,17 +56,20 @@ namespace Wiwa
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
 		
 		if (agentPtr != nullptr)
 		{
+			agentPtr->DisableRotationByTile();
 			agentPtr->LookAtPosition(playerTr->position);
 
 			if (agentPtr->HasArrived()) // change it for a timer?
 			{
-				agentPtr->StopMoving();
+				navAgentPtr->StopAgent();
+				//agentPtr->StopMoving();
 				std::srand(std::time(0));
 
 				int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
