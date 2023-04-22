@@ -35,12 +35,16 @@ IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
 IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
 IncludeDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/include"
 IncludeDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/include"
+IncludeDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/include"
+
 
 LibraryDirs = {}
 LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"
 LibraryDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/lib/x64_vc170/Debug(StaticCRT)/lib/"
 LibraryDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/lib/"
 LibraryDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/lib"
+LibraryDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/lib/"
+
 
 Library = {}
 Library["mono"] = "%{LibraryDirs.mono}/libmono-static-sgen.lib"
@@ -66,7 +70,21 @@ Library["DetourTileCache_debug"] = "%{LibraryDirs.recastnavigation}/debug/Detour
 Library["DetourTileCache_release"] = "%{LibraryDirs.recastnavigation}/release/DetourTileCache.lib"
 Library["Recast_debug"] = "%{LibraryDirs.recastnavigation}/debug/Recast.lib"
 Library["Recast_release"] = "%{LibraryDirs.recastnavigation}/release/Recast.lib"
-
+Library["opencv_calib3d"] = "%{LibraryDirs.OpenCV}/opencv_calib3d470.lib"
+Library["opencv_core"] = "%{LibraryDirs.OpenCV}/opencv_core470.lib"
+Library["opencv_dnn"] = "%{LibraryDirs.OpenCV}/opencv_dnn470.lib"
+Library["opencv_features2d"] = "%{LibraryDirs.OpenCV}/opencv_features2d470.lib"
+Library["opencv_flann"] = "%{LibraryDirs.OpenCV}/opencv_flann470.lib"
+Library["opencv_gapi"] = "%{LibraryDirs.OpenCV}/opencv_gapi470.lib"
+Library["opencv_highgui"] = "%{LibraryDirs.OpenCV}/opencv_highgui470.lib"
+Library["opencv_imgcodecs"] = "%{LibraryDirs.OpenCV}/opencv_imgcodecs470.lib"
+Library["opencv_imgproc"] = "%{LibraryDirs.OpenCV}/opencv_imgproc470.lib"
+Library["opencv_ml"] = "%{LibraryDirs.OpenCV}/opencv_ml470.lib"
+Library["opencv_objdetect"] = "%{LibraryDirs.OpenCV}/opencv_objdetect470.lib"
+Library["opencv_photo"] = "%{LibraryDirs.OpenCV}/opencv_photo470.lib"
+Library["opencv_stitching"] = "%{LibraryDirs.OpenCV}/opencv_stitching470.lib"
+Library["opencv_video"] = "%{LibraryDirs.OpenCV}/opencv_video470.lib"
+Library["opencv_videoio"] = "%{LibraryDirs.OpenCV}/opencv_videoio470.lib"
 
 Library["WinSock"] = "Ws2_32.lib"
 Library["WinMM"] = "Winmm.lib"
@@ -87,4 +105,3 @@ group "Core"
 group ""
 
 include "WiwaEditor"
-

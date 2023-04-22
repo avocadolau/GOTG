@@ -39,7 +39,8 @@ project "Wiwa"
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.IconFontCppHeaders}",
 		"%{IncludeDirs.bullet}",
-		"%{IncludeDirs.recastnavigation}"
+		"%{IncludeDirs.recastnavigation}",
+		"%{IncludeDirs.OpenCV}"
 	}
 
 	links
@@ -58,6 +59,12 @@ project "Wiwa"
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
 		"%{Library.Wwise_SA}",
+		"%{Library.opencv_core}",
+		"%{Library.opencv_video}",
+		"%{Library.opencv_videoio}",
+		"%{Library.opencv_highgui}",
+		"%{Library.opencv_imgproc}",
+		"%{Library.opencv_imgcodecs}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
@@ -128,6 +135,7 @@ project "Wiwa"
 			"%{Library.DetourCrowd_release}",
 			"%{Library.DetourTileCache_release}",
 			"%{Library.Recast_release}"
+			
 		}
 
 	filter "configurations:Dist"
