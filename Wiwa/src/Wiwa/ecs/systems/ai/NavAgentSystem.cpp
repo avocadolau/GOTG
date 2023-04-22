@@ -154,30 +154,18 @@ namespace Wiwa
             Crowd& crowd = Crowd::getInstance();
             const dtCrowdAgent* crowdAgent = crowd.getCrowd().getAgent(m_AgentIndex);
 
-            //glm::vec3 velocity(crowdAgent->vel[0], crowdAgent->vel[1], crowdAgent->vel[2]);
             glm::vec3 nextPos(crowdAgent->cornerVerts[0], crowdAgent->cornerVerts[1], crowdAgent->cornerVerts[2]);
 
-            //if (glm::length(velocity) == 0.0f)
-            //    return glm::vec3(0.0f);
-
-            //// Construct a look-at matrix from the agent's velocity vector
-            //glm::vec3 pos(crowdAgent->npos[0], crowdAgent->npos[1], crowdAgent->npos[2]);
-            //glm::vec3 target = pos + glm::normalize(velocity);
-            //glm::vec3 up(0.0f, 1.0f, 0.0f);
-            //glm::mat4 lookAtMatrix = glm::lookAt(pos, target, up);
-
-            //// Extract Euler angles from the look-at matrix
-            //glm::vec3 eulerAngles = glm::eulerAngles(glm::quat_cast(lookAtMatrix));
-            //eulerAngles = glm::degrees(eulerAngles);
-            //return eulerAngles;
             float distance = glm::distance(m_CurrentPos, nextPos);
 
-            float timeToRotate = distance / 4.0f;
+            float timeToRotate = distance / 30.0f;
             float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
+
             // Calculate the forward vector from the current position to the target position
-            glm::vec2 forward = glm::normalize(nextPos - m_CurrentPos);
+            glm::vec3 forward = glm::normalize(nextPos - m_CurrentPos);
+
             // Calculate the angle between the current forward vector and the target forward vector
-            float angle = glm::angle(forward, { 0.0f, 1.0f });
+            float angle = glm::angle(forward, { 0.0f, 1.0f, 0.0f });
             if (forward.x < 0.0f) {
                 angle = (-angle);
             }
