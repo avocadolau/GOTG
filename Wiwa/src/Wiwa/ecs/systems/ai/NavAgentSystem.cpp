@@ -138,6 +138,13 @@ namespace Wiwa
         m_AgentParams.maxAcceleration = maxAcceleration;
     }
 
+    void NavAgentSystem::StopAgent()
+    {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
+        }
+    }
+
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const
     {
         return m_CurrentPos;

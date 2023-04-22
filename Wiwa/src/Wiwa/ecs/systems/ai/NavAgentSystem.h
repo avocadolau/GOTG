@@ -23,6 +23,8 @@ namespace Wiwa
         void SetMaxSpeed(float maxSpeed);
         void SetMaxAcceleration(float maxAcceleration);
 
+        void StopAgent();
+
         const glm::vec3& GetCurrentPosition() const;
         //const glm::vec3& GetCurrentVelocity() const;
         const glm::vec3 GetCurrrentRotation(const glm::vec3& current_transform_rotation) const;
