@@ -1,12 +1,12 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/BossUltronSpawn.h";
-#include "StateMachine/BossUltronIdle.h";
-#include "StateMachine/BossUltronMovement.h";
-#include "StateMachine/BossUltronClusterShotsAttack.h";
-#include "StateMachine/BossUltronLaserBeamAttack.h";
-#include "StateMachine/BossUltronBulletStormAttack.h";
-#include "StateMachine/BossUltronDeath.h";
+#include "StateMachine/BossUltronSpawn.h"
+#include "StateMachine/BossUltronIdle.h"
+#include "StateMachine/BossUltronMovement.h"
+#include "StateMachine/BossUltronClusterShotsAttack.h"
+#include "StateMachine/BossUltronLaserBeamAttack.h"
+#include "StateMachine/BossUltronBulletStormAttack.h"
+#include "StateMachine/BossUltronDeath.h"
 #include "StateMachine/BossUltronDash.h"
 
 namespace Wiwa {
