@@ -180,11 +180,6 @@ namespace Wiwa {
 
 					glm::vec4 color = particle.color = ColorInterpolation(emitter->m_p_colorsOverLifetime[0].color, emitter->m_p_colorsOverLifetime[1].color, particle.life_percentage);
 
-		/*			Shader* shader = m_Material->getShader();
-
-					shader->setUniformFloat(shader->getUniformLocation("u_LifeTime"), particle.life_percentage);
-					shader->setUniformVec4(shader->getUniformLocation("u_Color"), particle.color);*/
-
 					Uniform* u_color = m_Material->getUniform("u_Color");
 					if (u_color != nullptr)
 						u_color->setData(color, UniformType::fVec4);
@@ -192,6 +187,8 @@ namespace Wiwa {
 					Uniform* u_life = m_Material->getUniform("u_LifeTime");
 					if (u_life != nullptr)
 						u_life->setData(particle.life_percentage, UniformType::Float);
+					
+					
 					//calculate everything
 
 					if (emitter->m_p_positionTowardsPoint)
@@ -410,7 +407,7 @@ namespace Wiwa {
 			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.y, emitter->m_p_maxInitialRotation.y);
 			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.z, emitter->m_p_maxInitialRotation.z);
 
-			initPosition = emitter->m_p_initialRotation + t3d->localRotation + glm::vec3(x, y, z);
+			initRotation = emitter->m_p_initialRotation + t3d->localRotation + glm::vec3(x, y, z);
 		}
 		else
 		{
