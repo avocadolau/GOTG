@@ -12,7 +12,7 @@ Wiwa::PlayerMove::~PlayerMove()
 
 void Wiwa::PlayerMove::EnterState()
 {
-	GetAnimator()->Blend("running", true, 0.2f);
+	m_StateMachine->GetAnimator()->Blend("running", true, 0.2f);
 }
 
 void Wiwa::PlayerMove::UpdateState()
@@ -38,7 +38,7 @@ void Wiwa::PlayerMove::UpdateState()
 
 void Wiwa::PlayerMove::ExitState()
 {
-	GetAnimator()->Restart();
+	m_StateMachine->GetAnimator()->Restart();
 }
 
 void Wiwa::PlayerMove::OnCollisionEnter(Object* object1, Object* object2)

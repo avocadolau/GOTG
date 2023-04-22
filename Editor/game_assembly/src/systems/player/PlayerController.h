@@ -1,13 +1,14 @@
 #pragma once
-#include "../../System.h"
-
+#include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/utilities/Reflection.h>
+#include <Wiwa\ecs\systems\PhysicsSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
 
 namespace Wiwa {
 	struct StarLordShooter;
 	struct RocketShooter;
 
-	class WI_API PlayerController : public System {
+	class PlayerController : public System {
 		bool m_PlayerSet = false;
 		EntityId playerId = -1;
 	public:
@@ -18,20 +19,22 @@ namespace Wiwa {
 		void OnInit() override;
 
 		void OnUpdate() override;
-		
-		WI_HARD_INL Character* GetCharacter();
-		WI_HARD_INL Transform3D* GetTransform();
-		WI_HARD_INL CollisionBody* GetRigidBody();
+		StarLordShooter* GetStarLord();
+		RocketShooter* GetRocket();
+		Character* GetCharacter();
+		Transform3D* GetTransform();
+		CollisionBody* GetRigidBody();
 		WI_HARD_INL EntityId GetEntity() { return m_EntityId; }
 		WI_HARD_INL glm::vec3 GetDirection() { return m_Direction; }
 		WI_HARD_INL glm::vec3 GetInput() { return m_MovementInput; }
 		WI_HARD_INL glm::vec3 GetShootInput() { return m_ShootInput; }
-		WI_HARD_INL glm::vec3 GetVelocity() { return m_Velocity; }
-		WI_HARD_INL bool IsDashEnable() { return m_DashEnable; }
-		WI_HARD_INL void SetDashEnable(bool value) { m_DashEnable = value; }
-		WI_HARD_INL void SetDirection(const glm::vec3& value) { m_Direction = value; }
-		WI_HARD_INL void SetVelocity(const glm::vec3& velocity) { m_Velocity = velocity; }
-
+		glm::vec3 GetVelocity() { return m_Velocity; }
+		bool IsDashEnable() { return m_DashEnable; }
+		void SetDashEnable(bool value) { m_DashEnable = value; }
+		void SetDirection(const glm::vec3& value) { m_Direction = value; }
+		void SetVelocity(const glm::vec3& velocity) { m_Velocity = velocity; }
+		AnimatorSystem* GetAnimator();
+		PhysicsSystem* GetPhysics();
 		Transform3D* GetFirePosition(const char* name);
 		void TakeDamage(uint32_t damage);
 
@@ -47,6 +50,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_StatsIt;
 		EntityManager::ComponentIterator m_RigidbodyIt;
 		EntityManager::ComponentIterator m_ShooterIt;
+		EntityManager::ComponentIterator m_RocketIt;
 		
 		glm::vec3 m_ShootInput;
 		glm::vec3 m_MovementInput;
@@ -55,6 +59,7 @@ namespace Wiwa {
 
 		bool m_DashEnable;
 		float m_CooldownTimer;
+		
 	};
 }
 

@@ -1,6 +1,5 @@
 #pragma once
-#include <Wiwa/ecs/systems/game/player/PlayerController.h>
-
+#include "../PlayerController.h"
 
 
 namespace Wiwa
@@ -40,3 +39,5 @@ namespace Wiwa
 		PlayerBaseState* m_CurrentState;
 	};
 }
+
+REGISTER_SYSTEM(Wiwa::PlayerStateMachine)

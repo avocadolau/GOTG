@@ -19,8 +19,7 @@ namespace Wiwa
 		virtual void ExitState() = 0;
 		virtual void OnCollisionEnter(Object* object1, Object* object2) = 0;
 
-		AnimatorSystem* GetAnimator();
-		PhysicsSystem* GetPhysics();
+	
 	protected:
 		EntityId m_Id;
 		PlayerStateMachine* m_StateMachine;

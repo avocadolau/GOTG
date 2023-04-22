@@ -6,6 +6,9 @@
 
 #include <Wiwa/utilities/math/Math.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/ecs/EntityManager.h>
+
+#include "../../Components.h"
 
 Wiwa::PlayerController::PlayerController()
 {
@@ -31,11 +34,26 @@ void Wiwa::PlayerController::OnInit()
 	m_TransformIt = GetComponentIterator<Transform3D>();
 	m_RigidbodyIt = GetComponentIterator<CollisionBody>();
 	m_ShooterIt = GetComponentIterator<StarLordShooter>();
+	m_RocketIt = GetComponentIterator<RocketShooter>();
 	GameStateManager::LoadProgression();
+
+	m_DashEnable = true;
 }
 
 void Wiwa::PlayerController::OnUpdate()
 {
+	m_MovementInput = GetMovementInput();
+	m_ShootInput = GetShootingInput();
+}
+
+Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()
+{
+	return (StarLordShooter*)m_Scene->GetEntityManager().GetComponentByIterator(m_ShooterIt);
+}
+
+Wiwa::RocketShooter* Wiwa::PlayerController::GetRocket()
+{
+	return (RocketShooter*)m_Scene->GetEntityManager().GetComponentByIterator(m_StatsIt);
 }
 
 Wiwa::Character* Wiwa::PlayerController::GetCharacter()
@@ -54,6 +72,16 @@ Wiwa::CollisionBody* Wiwa::PlayerController::GetRigidBody()
 }
 
 
+
+Wiwa::AnimatorSystem* Wiwa::PlayerController::GetAnimator()
+{
+	return m_Scene->GetEntityManager().GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
+}
+
+Wiwa::PhysicsSystem* Wiwa::PlayerController::GetPhysics()
+{
+	return m_Scene->GetEntityManager().GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+}
 
 Wiwa::Transform3D* Wiwa::PlayerController::GetFirePosition(const char* name)
 {
@@ -124,8 +152,8 @@ glm::vec3 Wiwa::PlayerController::GetShootingInput()
 	if (Input::IsKeyPressed(Key::Down))
 		input.z -= 1;
 
-	input.x -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftX, GameStateManager::GetControllerDeadZone());
-	input.z -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftY, GameStateManager::GetControllerDeadZone());
+	input.x -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightX, GameStateManager::GetControllerDeadZone());
+	input.z -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightY, GameStateManager::GetControllerDeadZone());
 
 	return input;
 }

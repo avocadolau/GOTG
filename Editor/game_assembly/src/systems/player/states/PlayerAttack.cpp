@@ -1,5 +1,6 @@
 #include <wipch.h>
 #include "PlayerAttack.h"
+#include "../../../components/player/StarLordShooter.h"
 
 Wiwa::PlayerAttack::PlayerAttack(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id) {}
@@ -9,7 +10,7 @@ Wiwa::PlayerAttack::~PlayerAttack() {}
 void Wiwa::PlayerAttack::EnterState()
 {
 	WI_CORE_WARN("Player attack");
-	GetAnimator()->PlayAnimation("aiming", true);
+	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
 }
 
 void Wiwa::PlayerAttack::UpdateState()
@@ -45,22 +46,23 @@ void Wiwa::PlayerAttack::UpdateState()
 
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetTransform()->localRotation, m_StateMachine->GetDirection(), 1.0f);
 	m_StateMachine->SetVelocity(m_StateMachine->GetInput() * m_StateMachine->GetCharacter()->Speed);
-	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
+	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
 	m_ShootTimer += Time::GetDeltaTimeSeconds();
 
 	if (m_StateMachine->CanAttack())
 	{
-
+		Fire(m_StateMachine->GetShootInput());
 	}
 	if (m_StateMachine->GetVelocity() != glm::vec3(0.f))
 	{
-		GetAnimator()->PlayAnimation("running", true);
+		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
 	}
 
 }
 
 void Wiwa::PlayerAttack::ExitState()
 {
+	m_StateMachine->GetAnimator()->Restart();
 }
 
 void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
@@ -69,23 +71,23 @@ void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
 
 void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
 {
-//	StarlordShooter* shooter = 
-//	Transform3D spawnPoint;
-//	//Decide wich hand is going next
-//	if (shootTimer >= stateMachine.GetCharacter().RateOfFire)
-//	{
-//		shootTimer = 0;
-//		if (shooter.ShootRight)
-//		{
-//			spawnPoint = stateMachine.GetFirePosition("RightPos");
-//			Animator.PlayAnimationName("shootright", false, stateMachine.GetEntity());
-//		}
-//		else
-//		{
-//			spawnPoint = stateMachine.GetFirePosition("LeftPos"); ;
-//			Animator.PlayAnimationName("shootleft", false, stateMachine.GetEntity());
-//		}
-//		shooter.ShootRight = !shooter.ShootRight;
-//		stateMachine.SpawnBullet(ref spawnPoint, ref shooter, ref stateMachine.GetCharacter(), Mathf.CalculateForward(ref spawnPoint));
-//	}
+	StarLordShooter* shooter = m_StateMachine->GetStarLord();
+	Transform3D* spawnPoint;
+	//Decide wich hand is going next
+	if (m_ShootTimer >= m_StateMachine->GetCharacter()->RateOfFire)
+	{
+		m_ShootTimer = 0;
+		if (shooter->ShootRight)
+		{
+			spawnPoint = m_StateMachine->GetFirePosition("RightPos");
+			m_StateMachine->GetAnimator()->PlayAnimation("shootright", false);
+		}
+		else
+		{
+			spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
+			m_StateMachine->GetAnimator()->PlayAnimation("shootleft", false);
+		}
+		shooter->ShootRight = !shooter->ShootRight;
+		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *m_StateMachine->GetCharacter(), Math::CalculateForward(spawnPoint));
+	}
 }

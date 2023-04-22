@@ -12,15 +12,15 @@ Wiwa::PlayerDeath::~PlayerDeath()
 
 void Wiwa::PlayerDeath::EnterState()
 {
-	GetAnimator()->PlayAnimation("death", false);
+	m_StateMachine->GetAnimator()->PlayAnimation("death", false);
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetTransform()->localRotation, m_StateMachine->GetDirection(), 1.f);
-	GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
+	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 	// TODO: Particles and audio
 }
 
 void Wiwa::PlayerDeath::UpdateState()
 {
-	if (GetAnimator()->HasFinished())
+	if (m_StateMachine->GetAnimator()->HasFinished())
 	{
 		GameStateManager::Die();
 		return;
