@@ -23,16 +23,17 @@ namespace Wiwa
 
 	void SentinelExplosionSystem::OnInit()
 	{
+		InitExplosion();
+	}
+
+	void SentinelExplosionSystem::InitExplosion()
+	{
 		SentinelExplosion* explosion = GetComponentByIterator<SentinelExplosion>(m_ExplosionIt);
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
-
-		/*physicsManager.SetVelocity(obj, glm::normalize(explosion->direction) * bullet->velocity);*/
-
-		//physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 	}
 
 	void SentinelExplosionSystem::OnUpdate()
@@ -74,6 +75,32 @@ namespace Wiwa
 			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			em.DestroyEntity(m_EntityId);
 		}
+	}
+
+	bool SentinelExplosionSystem::OnEnabledFromPool()
+	{
+		SentinelExplosion* explosion = GetComponent<SentinelExplosion>();
+		if (explosion)
+		{
+			InitExplosion();
+		}
+
+		return true;
+	}
+
+	bool SentinelExplosionSystem::OnDisabledFromPool()
+	{
+		Transform3D* transform = GetComponent<Transform3D>();
+		if (transform)
+		{
+			transform->localPosition.y = 20000.0f;
+		}
+
+		SentinelExplosion* explosion = GetComponent<SentinelExplosion>();
+
+		m_Timer = 0.0f;
+
+		return true;
 	}
 
 }

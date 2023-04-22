@@ -23,6 +23,11 @@ void Wiwa::ClusterBulletSystem::OnAwake()
 
 void Wiwa::ClusterBulletSystem::OnInit()
 {
+	InitClusterBullet();
+}
+
+void Wiwa::ClusterBulletSystem::InitClusterBullet()
+{
 	ClusterBullet* bullet = GetComponentByIterator<ClusterBullet>(m_BulletIt);
 
 	//bullet->damage = CLUSTER_BULLET_DAMAGE;
@@ -167,4 +172,30 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 			SpawnBullet(direction, bulletId);
 		}
 	}
+}
+
+bool Wiwa::ClusterBulletSystem::OnEnabledFromPool()
+{
+	ClusterBullet* clusterBullet = GetComponent<ClusterBullet>();
+	if (clusterBullet)
+	{
+		InitClusterBullet();
+	}
+
+	return true;
+}
+
+bool Wiwa::ClusterBulletSystem::OnDisabledFromPool()
+{
+	Transform3D* transform = GetComponent<Transform3D>();
+	if (transform)
+	{
+		transform->localPosition.y = 20000.0f;
+	}
+
+	ClusterBullet* clusterBullet = GetComponent<ClusterBullet>();
+
+	m_Timer = 0.0f;
+
+	return true;
 }

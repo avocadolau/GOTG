@@ -22,6 +22,7 @@ void Wiwa::UltronLaserBeamSystem::OnAwake()
 
 void Wiwa::UltronLaserBeamSystem::OnInit()
 {
+
 }
 
 void Wiwa::UltronLaserBeamSystem::OnUpdate()
@@ -55,4 +56,30 @@ void Wiwa::UltronLaserBeamSystem::OnCollisionEnter(Object* body1, Object* body2)
 		UltronLaserBeam* bullet = GetComponentByIterator<UltronLaserBeam>(m_LaserIt);
 		GameStateManager::DamagePlayer(bullet->damagePerSecond * Time::GetDeltaTime());
 	}
+}
+
+bool Wiwa::UltronLaserBeamSystem::OnEnabledFromPool()
+{
+	UltronLaserBeam* laserBeam = GetComponent<UltronLaserBeam>();
+	if (laserBeam)
+	{
+		
+	}
+
+	return true;
+}
+
+bool Wiwa::UltronLaserBeamSystem::OnDisabledFromPool()
+{
+	Transform3D* transform = GetComponent<Transform3D>();
+	if (transform)
+	{
+		transform->localPosition.y = 20000.0f;
+	}
+
+	UltronLaserBeam* laserBeam = GetComponent<UltronLaserBeam>();
+
+	m_Timer = 0.0f;
+
+	return true;
 }

@@ -21,6 +21,8 @@ namespace Wiwa {
 
 		void OnInit() override;
 
+		void InitClusterBullet();
+
 		void OnUpdate() override;
 
 		void OnDestroy() override;
@@ -30,6 +32,9 @@ namespace Wiwa {
 		void SpawnBullet(const glm::vec3& bull_dir, EntityId clusterBullet);
 		void BlowClusterBullet01(EntityId bulletId);
 		void BlowClusterBullet02(EntityId bulletId);
+
+		bool OnEnabledFromPool();
+		bool OnDisabledFromPool();
 	};
 }
 
