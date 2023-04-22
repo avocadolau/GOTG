@@ -30,7 +30,6 @@ namespace Wiwa {
 		{
 			float m_percentage;
 			glm::vec4 color;
-
 			ColorNode()
 			{
 				m_percentage = 0.f;
@@ -106,6 +105,7 @@ namespace Wiwa {
 		glm::vec3	m_p_initialPositionBoxB;
 		bool		m_p_positionTowardsPoint;
 		glm::vec3	m_p_positionTowardsPointPos;
+		float		m_p_translationTime;
 
 		glm::vec3	m_p_initialVelocity;
 		bool		m_p_rangedVelocity;
@@ -128,6 +128,7 @@ namespace Wiwa {
 		bool		m_p_rangedAngularVelocity;
 		glm::vec3	m_p_minInitialAngularVelocity;
 		glm::vec3	m_p_maxInitialAngularVelocity;
+		float		m_p_rotateTime;
 
 		bool		m_p_rotationOverTime;
 		glm::vec3	m_p_rotationOverTimeStart;
@@ -148,6 +149,7 @@ namespace Wiwa {
 		bool		m_p_rangedGrowthVelocity;
 		glm::vec3	m_p_minInitialGrowthVelocity;
 		glm::vec3	m_p_maxInitialGrowthVelocity;
+		float		m_p_growTime;
 
 
 		ColorNode m_p_colorsOverLifetime[128] = {ColorNode()};

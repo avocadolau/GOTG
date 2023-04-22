@@ -154,11 +154,9 @@ namespace Wiwa
 
 		shieldShader->addUniform("u_LifeTime", UniformType::Float);
 		shieldShader->addUniform("u_Color", UniformType::fVec4);
-		shieldShader->addUniform("u_ColorTex2", UniformType::fVec4);
 		shieldShader->addUniform("u_FresnelColor", UniformType::fVec4);
 		shieldShader->addUniform("u_FresnelRange", UniformType::fVec2);
 		shieldShader->addUniform("u_Texture", UniformType::Sampler2D);
-		shieldShader->addUniform("u_Texture2", UniformType::Sampler2D);
 		shieldShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);

@@ -823,6 +823,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::EndDragDropTarget();
 	}
 
+	ImGui::Separator();
+
 	ImGui::Dummy(ImVec2(0, 4));
 
 	std::string activeParticles = "Active Particles: " + std::to_string(emitter->m_activeParticles);
@@ -889,12 +891,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 	}
 
-	
-
-
 	ImGui::Dummy(ImVec2(0, 4));
-
-
 
 	ImGui::Text("Max Particles");
 	ImGui::PushItemWidth(100.0f);
@@ -903,14 +900,11 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	ImGui::PopItemWidth();
 
-
-
 	ImGui::Dummy(ImVec2(0, 4));
 
 	ImGui::Checkbox("##m_loopSpawning", &emitter->m_loopSpawning);
 	ImGui::SameLine();
 	ImGui::Text("Loop Spawning");
-
 
 	if (emitter->m_loopSpawning)
 	{
@@ -942,8 +936,6 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	ImGui::Dummy(ImVec2(0, 4));
 
-
-
 	if (emitter->m_loopSpawning)
 	{
 
@@ -971,10 +963,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::PopItemWidth();
 		}
 	}
-
-
-
-
+	
 	ImGui::Dummy(ImVec2(0, 4));
 
 	ImGui::Separator();
@@ -1089,9 +1078,6 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		ImGui::PopItemWidth();
 
-		
-
-
 		switch (emitter->m_spawnVolume)
 		{
 		case Wiwa::ParticleSpawnVolume::NONE:
@@ -1100,13 +1086,11 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			{
 				ImGui::Text("Initial Position");
 				ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-			}
-			
+			}			
 		}
 		break;
 		case Wiwa::ParticleSpawnVolume::CUBE:
 		{
-
 			ImGui::Text("Spawn Area:");
 
 			ImGui::Text("Corner A");
@@ -1126,10 +1110,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::DragFloat("##m_p_initialPositionSphRadius", &emitter->m_p_initialPositionSphRadius, 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		break;
-
 		default:
 		{
-
 			ImGui::Text("Initial Position");
 			ImGui::DragFloat3("##m_p_initialPosition", &(emitter->m_p_initialPosition)[0], 0.05f, 0.0f, 0.0f, "%.2f");
 		}
@@ -1154,11 +1136,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Text("Initial Velocity");
 
-
 		if (emitter->m_p_rangedVelocity)
 		{
-
-
 			ImGui::Text("Min");
 			ImGui::SameLine();
 			ImGui::DragFloat3("##m_p_minVelocity", &(emitter->m_p_minVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
@@ -1168,10 +1147,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		else
 		{
-
 			ImGui::DragFloat3("##m_p_initialVelocity", &(emitter->m_p_initialVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
 		}
 
 		ImGui::Dummy(ImVec2(0, 8));
@@ -1208,10 +1184,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		else
 		{
-
 			ImGui::DragFloat3("##m_p_initialRotation", &(emitter->m_p_initialRotation)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
 		}
 
 		ImGui::Dummy(ImVec2(0, 8));
@@ -1232,13 +1205,14 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::Text("End  ");
 			ImGui::SameLine();
 			ImGui::DragFloat3("##m_p_rotationOverTimeEnd", &(emitter->m_p_rotationOverTimeEnd)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Multiplier");
+			ImGui::SameLine();
+			ImGui::DragFloat("##m_p_rotateMultiplierTime", &(emitter->m_p_rotateTime), 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		else
 		{
 			if (emitter->m_p_rangedAngularVelocity)
 			{
-
-
 				ImGui::Text("Min");
 				ImGui::SameLine();
 				ImGui::DragFloat3("##m_p_minInitialAngularVelocity", &(emitter->m_p_minInitialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
@@ -1248,10 +1222,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 			else
 			{
-
 				ImGui::DragFloat3("##m_p_initialAngularVelocity", &(emitter->m_p_initialAngularVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
 			}
 		}
 
@@ -1276,10 +1247,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		else
 		{
-
 			ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
 		}
 
 		ImGui::Dummy(ImVec2(0, 8));
@@ -1301,13 +1269,14 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::Text("End  ");
 			ImGui::SameLine();
 			ImGui::DragFloat3("##m_p_scaleOverTimeEnd", &(emitter->m_p_scaleOverTimeEnd)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::Text("Multiplier ");
+			ImGui::SameLine();
+			ImGui::DragFloat("##m_p_growthMultiplierTime", &(emitter->m_p_growTime), 0.05f, 0.0f, 0.0f, "%.2f");
 		}
 		else
 		{
 			if (emitter->m_p_rangedGrowthVelocity)
 			{
-
-
 				ImGui::Text("Min");
 				ImGui::SameLine();
 				ImGui::DragFloat3("##m_p_minInitialGrowthVelocity", &(emitter->m_p_minInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
@@ -1317,27 +1286,19 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 			else
 			{
-
 				ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-
-
 			}
 		}
-
 		ImGui::TreePop();
 		ImGui::Dummy(ImVec2(0, 8));
 	}
-
+	ImGui::Separator();
 	if (ImGui::TreeNode("Color"))
 	{
-
-
-
 		if (emitter->m_colorsUsed < 1)
 		{
 			emitter->m_colorsUsed = 1;
 		}
-
 		if (ImGui::Button("Sort Colors by Percentage"))
 		{
 			for (int i = 0; i < emitter->m_colorsUsed; i++) {
@@ -1461,9 +1422,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 				emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].m_percentage = 0;
 				emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].color = glm::vec4(0, 0, 0, 1);
 				emitter->m_colorsUsed--;
-
 			}
-
 		}
 		ImGui::TreePop();
 	}
