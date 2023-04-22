@@ -479,7 +479,6 @@ void DialogPanel::Draw()
 				ImGui::NewLine();
 
 				ImGui::TextWrapped("DONR FORGET SAVING!");
-				ImGui::TextWrapped("WARNING: This will overwite all previous versions.");
 				ImGui::PushID(i);
 				if (ImGui::Button(" ~ Save Conversation ~ "))
 				{
