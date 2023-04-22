@@ -192,7 +192,7 @@ namespace Wiwa
 
 
 			// Update renderers
-			
+
 			m_Renderer2D->Update();
 			
 			m_Renderer3D->Update();
