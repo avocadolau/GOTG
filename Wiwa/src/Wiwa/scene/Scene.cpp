@@ -50,7 +50,7 @@ namespace Wiwa
 		delete m_DialogManager;
 
 		// Clear entity manager
-		m_EntityManager.Clear();
+		//m_EntityManager.Clear();
 
 		// Clear physics world
 		m_PhysicsManager->CleanWorld();
@@ -152,8 +152,6 @@ namespace Wiwa
 		m_PhysicsManager->DebugDrawWorld();
 		// m_PhysicsManager->LogBodies();
 
-		Wiwa::AIMapGeneration::DrawRect();
-		Wiwa::AIMapGeneration::DrawMinMaxRect();
 
 		if (!SceneManager::IsPlaying())
 		{
@@ -173,9 +171,10 @@ namespace Wiwa
 	{
 		GameStateManager::s_PoolManager->UnloadAllPools();
 
-		Audio::StopAllEvents();
+		//Audio::StopAllEvents();
+		m_EntityManager.Clear();
 		
-		// Sleep to wait till Audio thread stops all events
+		// Sleep to wait till Audio thread stops entity events
 		Sleep(10);
 
 		if (unload_resources)
@@ -212,6 +211,7 @@ namespace Wiwa
 
 	void Scene::UpdateEnter()
 	{
+		
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		r2d.EnableInstance(this, m_TransitionInstance);

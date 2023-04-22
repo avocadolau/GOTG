@@ -20,7 +20,7 @@ std::vector<std::function<void()>> AssetsPanel::m_AssetsThreadQueue;
 std::mutex AssetsPanel::m_AssetsThreadQueueMutex;
 
 AssetsPanel::AssetsPanel(EditorLayer* instance)
-	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("assets")
+	: Panel("Assets", ICON_FK_FILES_O, instance), m_CurrentPath("assets"), m_AssemblyWatcher("game_assembly/build", OnAssemblyChange)
 {
 	ResourceId folderId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/folder_icon.png");
 	ResourceId fileId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/file_icon.png");
@@ -48,7 +48,6 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	}
 
 	watcher = std::make_unique<filewatch::FileWatch<std::filesystem::path>>(s_AssetsPath, OnFolderEvent);
-
 
 	InitImports(s_AssetsPath);
 }
@@ -138,6 +137,39 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 	});
 }
 
+void AssetsPanel::OnAssemblyChange(const std::filesystem::path& path, const filewatch::Event change_type)
+{
+	using namespace std::chrono_literals;
+	std::this_thread::sleep_for(500ms);
+	Wiwa::Application::Get().SubmitToMainThread([path, change_type]()
+	{
+		switch (change_type)
+		{
+			case filewatch::Event::added:
+				break;
+			case filewatch::Event::modified:
+				if (path.filename() == "WiwaGameAssembly.dll") {
+					WI_INFO("Reloading game assembly...");
+
+					Wiwa::Application& app = Wiwa::Application::Get();
+
+					app.UnloadGameAssembly();
+
+					Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
+
+					app.LoadGameAssembly();
+				}
+				break;
+			case filewatch::Event::removed:
+				break;
+			case filewatch::Event::renamed_old:
+				break;
+			case filewatch::Event::renamed_new:
+				break;
+		}
+	});
+}
+
 void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 {
 	//Remove the meta file
@@ -166,6 +198,12 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 		extension = ".wiprefab";
 	else if (assetsPath.extension() == ".wiGUI")
 		extension = ".wiGUI";
+	else if (assetsPath.extension() == ".obj")
+		extension = ".obj";
+	else if (assetsPath.extension() == ".winavmesh")
+		extension = ".winavmesh";
+	else if (assetsPath.extension() == ".winavmesh")
+		extension = ".gset";
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -249,6 +287,24 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
 	else if (path.extension() == ".wianim") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".obj") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".winavmesh") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".gset") {
 		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
 		std::filesystem::path rp = rpath.remove_filename();
 		std::filesystem::create_directories(rp);

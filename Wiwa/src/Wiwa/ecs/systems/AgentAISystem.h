@@ -59,4 +59,4 @@ namespace Wiwa {
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::AgentAISystem);
+WI_REGISTER_SYSTEM(Wiwa::AgentAISystem);

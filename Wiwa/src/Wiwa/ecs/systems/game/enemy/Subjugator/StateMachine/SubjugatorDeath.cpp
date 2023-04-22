@@ -19,6 +19,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		//SubjugatorAudio - Death audio for the Subjugator
 		animator->PlayAnimation("death", false);
 	}
 

@@ -57,7 +57,18 @@ namespace Wiwa {
 	}
 
 	void FileSystem::Copy(const char* origin, const char* destination) {
-		std::filesystem::copy(origin, destination, std::filesystem::copy_options::overwrite_existing);
+		try {
+			std::filesystem::copy(origin, destination, std::filesystem::copy_options::overwrite_existing);
+		}
+		catch (std::filesystem::filesystem_error const& ex) {
+			std::cout
+				<< "what():  " << ex.what() << '\n'
+				<< "path1(): " << ex.path1() << '\n'
+				<< "path2(): " << ex.path2() << '\n'
+				<< "code().value():    " << ex.code().value() << '\n'
+				<< "code().message():  " << ex.code().message() << '\n'
+				<< "code().category(): " << ex.code().category().name() << '\n';
+		}
 	}
 
 	void FileSystem::CopyDirectory(const char* origin, const char* destination)

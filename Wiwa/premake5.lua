@@ -38,7 +38,9 @@ project "Wiwa"
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.IconFontCppHeaders}",
-		"%{IncludeDirs.bullet}"
+		"%{IncludeDirs.bullet}",
+		"%{IncludeDirs.recastnavigation}",
+		"%{IncludeDirs.OpenCV}"
 	}
 
 	links
@@ -57,6 +59,12 @@ project "Wiwa"
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
 		"%{Library.Wwise_SA}",
+		"%{Library.opencv_core}",
+		"%{Library.opencv_video}",
+		"%{Library.opencv_videoio}",
+		"%{Library.opencv_highgui}",
+		"%{Library.opencv_imgproc}",
+		"%{Library.opencv_imgcodecs}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
@@ -78,7 +86,8 @@ project "Wiwa"
 		postbuildcommands
 		{
 			"{COPY} \"%{cfg.buildtarget.relpath}\" \"%{wks.location}Editor\"",
-			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game\\Wiwa.lib\""
+			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game\\Wiwa.lib\"",
+			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game_assembly\\Wiwa.lib\""
 		}
 		links
 		{
@@ -102,7 +111,12 @@ project "Wiwa"
 		{
 			"%{Library.bullet_dynamics_debug}",
 			"%{Library.bullet_collision_debug}",
-			"%{Library.bullet_linear_math_debug}"
+			"%{Library.bullet_linear_math_debug}",
+			"%{Library.DebugUtils_debug}",
+			"%{Library.Detour_debug}",
+			"%{Library.DetourCrowd_debug}",
+			"%{Library.DetourTileCache_debug}",
+			"%{Library.Recast_debug}"
 		}
 
 
@@ -115,7 +129,13 @@ project "Wiwa"
 		{
 			"%{Library.bullet_dynamics_release}",
 			"%{Library.bullet_collision_release}",
-			"%{Library.bullet_linear_math_release}"
+			"%{Library.bullet_linear_math_release}",
+			"%{Library.DebugUtils_release}",
+			"%{Library.Detour_release}",
+			"%{Library.DetourCrowd_release}",
+			"%{Library.DetourTileCache_release}",
+			"%{Library.Recast_release}"
+			
 		}
 
 	filter "configurations:Dist"

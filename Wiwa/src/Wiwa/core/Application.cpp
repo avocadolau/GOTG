@@ -39,6 +39,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <Wiwa/utilities/functions/Function.h>
+
 USE_REFLECTION;
 
 namespace Wiwa
@@ -63,6 +65,8 @@ namespace Wiwa
 		{
 			m_Argv.push_back(argv[i]);
 		}
+
+		m_GameAssemblyHandle = NULL;
 
 		s_Instance = this;
 
@@ -99,6 +103,8 @@ namespace Wiwa
 			WI_CORE_ERROR("Audio engine error: [{}]", Audio::GetLastError());
 		}
 		ScriptEngine::Init();
+
+		LoadGameAssembly();
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
@@ -173,21 +179,27 @@ namespace Wiwa
 			SceneManager::ModuleUpdate();
 
 			// Update audio
+			
 			Audio::Update();
 
 			// Execute main thread queue
+
 			ExecuteMainThreadQueue();
 
 			// Update inputs
+			OPTICK_EVENT("Input update");
 			Input::Update();
 
 
 			// Update renderers
+
 			m_Renderer2D->Update();
+			
 			m_Renderer3D->Update();
 			//render post processing
 			m_Renderer3D->PostUpdate();
 
+			
 			RenderManager::Update();
 
 			// Update layers
@@ -195,6 +207,7 @@ namespace Wiwa
 				layer->OnUpdate();
 
 			// Render layers
+
 			m_ImGuiLayer->Begin();
 			{
 				// TODO: Optick On ImGuiRender call
@@ -202,7 +215,7 @@ namespace Wiwa
 					layer->OnImGuiRender();
 			}
 			m_ImGuiLayer->End();
-
+			
 			GameStateManager::Update();
 			
 			// Update main window
@@ -272,15 +285,16 @@ namespace Wiwa
 
 	void Application::DeleteComponentType(const Type *component)
 	{
-		const Type *type = GetSystemTypeH(component->hash);
+		const Type *type = GetComponentTypeH(component->hash);
 
-		for (size_t i = 0; i < m_ComponentTypes.size(); i++)
-		{
-			if (m_ComponentTypes[i] == type)
+		if (type) {
+			for (size_t i = 0; i < m_ComponentTypes.size(); i++)
 			{
-				m_ComponentTypes.erase(m_ComponentTypes.begin() + i);
-				i--;
-				break;
+				if (m_ComponentTypes[i] == type)
+				{
+					m_ComponentTypes.erase(m_ComponentTypes.begin() + i);
+					break;
+				}
 			}
 		}
 	}
@@ -354,13 +368,14 @@ namespace Wiwa
 	{
 		const Type *type = GetSystemTypeH(system->hash);
 
-		for (size_t i = 0; i < m_SystemTypes.size(); i++)
-		{
-			if (m_SystemTypes[i] == type)
+		if (type) {
+			for (size_t i = 0; i < m_SystemTypes.size(); i++)
 			{
-				m_SystemTypes.erase(m_SystemTypes.begin() + i);
-				i--;
-				break;
+				if (m_SystemTypes[i] == type)
+				{
+					m_SystemTypes.erase(m_SystemTypes.begin() + i);
+					break;
+				}
 			}
 		}
 	}
@@ -382,6 +397,84 @@ namespace Wiwa
 		std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
 
 		m_MainThreadQueue.emplace_back(func);
+	}
+
+	void Application::UnloadGameAssembly()
+	{
+		if (m_GameAssemblyHandle != NULL) {
+			size_t s = m_GameAssemblyHandle->types.size();
+
+			for (size_t i = 0; i < s; i++) {
+				const Type* t = m_GameAssemblyHandle->types[i];
+
+				if (t->is_function) {
+					// Unregister callback
+				}
+				else {
+					if (t->custom_id == 0) {
+						DeleteComponentType(t);
+					}
+					else {
+						DeleteSystemType(t);
+					}
+				}
+			}
+
+			m_GameAssemblyHandle = NULL;
+
+			if (m_GameAssembly) {
+				FreeLibrary(m_GameAssembly);
+				m_GameAssembly = NULL;
+			}
+		}
+	}
+
+	void Application::LoadGameAssembly()
+	{
+		UnloadGameAssembly();
+
+		m_GameAssembly = LoadLibraryA("resources/WiwaGameAssembly.dll");
+
+		if (m_GameAssembly) {
+			void* _assemblyFunc = GetProcAddress(m_GameAssembly, "getAssemblyHandle");
+
+			if (_assemblyFunc) {
+				Fn::Function<GameAssemblyHandle*> getHandleFunc = _assemblyFunc;
+
+				m_GameAssemblyHandle = getHandleFunc();
+
+				size_t s = m_GameAssemblyHandle->types.size();
+
+				WI_CORE_INFO("==== Loaded assembly types ====");
+				for (size_t i = 0; i < s; i++) {
+					const Type* t = m_GameAssemblyHandle->types[i];
+
+					if (t->is_function) {
+						// Register as callback
+					}
+					else {
+						if (t->custom_id == 0) {
+							RegisterComponentType(t);
+						}
+						else {
+							RegisterSystemType(t);
+						}
+					}
+
+					WI_CORE_INFO("Name: {0} Type: {1}", t->name.c_str(), t->is_function ? "Function" : t->custom_id == 0 ? "Component" : "System");
+				}
+				WI_CORE_INFO("==== End assembly types ====");
+			}
+			else {
+				WI_CORE_ERROR("Couldn't find wrapper function in game assembly.");
+
+				FreeLibrary(m_GameAssembly);
+				m_GameAssembly = NULL;
+			}
+		}
+		else {
+			WI_CORE_ERROR("Couldn't load game assembly.");
+		}
 	}
 
 	void Application::ExecuteMainThreadQueue()

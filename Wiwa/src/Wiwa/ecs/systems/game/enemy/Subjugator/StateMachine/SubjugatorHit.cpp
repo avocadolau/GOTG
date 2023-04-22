@@ -16,6 +16,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		//SubjugatorParticles - Damage particles for the Subjugator
 		animator->PlayAnimation("damage", false);
 	}
 

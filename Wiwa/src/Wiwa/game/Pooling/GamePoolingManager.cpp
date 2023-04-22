@@ -9,14 +9,14 @@ namespace Wiwa
 	GamePoolingManager::GamePoolingManager()
 	{
 		s_PhalanxMeleePool = new EntityPool(1, 13, "assets\\Enemy\\Prefabs\\MeleePhalanx_01.wiprefab");
-		s_PhalanxRangedPool = new EntityPool(2, 13, "assets\\Enemy\\Prefabs\\RangedPhalanx_01.wiprefab");
+		s_PhalanxRangedPool = new EntityPool(2, 3, "assets\\Enemy\\Prefabs\\RangedPhalanx_01.wiprefab");
 		s_SentinelPool = new EntityPool(3, 3, "assets\\Enemy\\Prefabs\\TestSentinel_01.wiprefab");
-		s_SimpleBulletsPool = new EntityPool(4, 1, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefabSimpleBullet_01.wiprefab");
+		s_SimpleBulletsPool = new EntityPool(4, 1, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		s_SentinelExplosion = new EntityPool(5, 3, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 		s_BossUltron = new EntityPool(6, 1, "assets\\Enemy\\Prefabs\\melee_phalanx.wiprefab");
 		s_ClusterBulletsPool = new EntityPool(7,3, "assets\\Enemy\\cluster_bullet\\cluster_bullet.wiprefab"); 
 		s_UltronLaserBeamPool = new EntityPool(8, 1, "assets\\Enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
-		s_Subjugator = new EntityPool(9, 3, "assets\\Enemy\\Prefabs\\RangedPhalanx_01.wiprefab");
+		s_Subjugator = new EntityPool(9, 3, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
 	}
 
 	GamePoolingManager::~GamePoolingManager()

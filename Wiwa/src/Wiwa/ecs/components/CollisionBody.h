@@ -21,12 +21,12 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::CollisionBody)
-	REFLECT_MEMBER(positionOffset)
-	REFLECT_MEMBER(scalingOffset)
-	REFLECT_MEMBER(isTrigger)
-	REFLECT_MEMBER(isStatic)
-	REFLECT_MEMBER(doContinuousCollision)
-	REFLECT_MEMBER(selfTag)
-	REFLECT_MEMBER(filterBits)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::CollisionBody)
+	WI_REFLECT_MEMBER(positionOffset)
+	WI_REFLECT_MEMBER(scalingOffset)
+	WI_REFLECT_MEMBER(isTrigger)
+	WI_REFLECT_MEMBER(isStatic)
+	WI_REFLECT_MEMBER(doContinuousCollision)
+	WI_REFLECT_MEMBER(selfTag)
+	WI_REFLECT_MEMBER(filterBits)
+WI_REFLECTION_END;

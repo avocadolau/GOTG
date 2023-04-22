@@ -5,10 +5,11 @@
 #include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
+
 #include "Wiwa/scripting/embed_functions/embed_audio_functions.h"
 #include "Wiwa/scripting/ScriptEngine.h"
-#include "Wiwa/AI/AIMapGeneration.h"
 
 namespace Wiwa {
 	class WI_API EnemySystem : public System {
@@ -53,7 +54,6 @@ namespace Wiwa {
 		bool GoToPosition(glm::vec3 targetedPosition);
 
 		void RotateTo(const glm::vec3& target);
-		//void OnDestroy() override;
 	};
 }
 

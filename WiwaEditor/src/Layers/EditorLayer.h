@@ -38,6 +38,7 @@
 #include "Panels/GameLogPanel.h"
 #include "Panels/InventoryPanel.h"
 #include "Panels/AchievementsPanel.h"
+#include "Panels/AIPanel.h"
 
 
 #include <Wiwa/scene/SceneManager.h>
@@ -141,6 +142,7 @@ private:
 	std::unique_ptr<Panel> m_GameLogPanel;
 	std::unique_ptr<Panel> m_InventoryPanel;
 	std::unique_ptr<Panel> m_AchievementsPanel;
+	std::unique_ptr<Panel> m_AiPanel;
 
 
 	std::vector<Panel *> m_Panels;

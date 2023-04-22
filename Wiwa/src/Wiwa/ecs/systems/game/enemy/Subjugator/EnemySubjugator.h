@@ -17,7 +17,7 @@ namespace Wiwa {
 		SubjugatorAttackState* m_AttackingState;
 		SubjugatorDeathState* m_DeathState;
 		SubjugatorHitState* m_HitState;
-		EntityManager::ComponentIterator m_GunTransformIt;
+		/*EntityManager::ComponentIterator m_GunTransformIt;*/
 
 		float m_Timer;
 		float m_RangeOfAttack = 0.0f;

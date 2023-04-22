@@ -16,6 +16,8 @@
 #include <Wiwa/utilities/time/Time.h>
 #include <Wiwa/utilities/functions/Callback.h>
 
+#include "GameAssemblyHandle.h"
+
 namespace Wiwa
 {
 	class SceneManager;
@@ -123,11 +125,16 @@ namespace Wiwa
 
 		void SubmitToMainThread(const std::function<void()> func);
 
+		void UnloadGameAssembly();
+		void LoadGameAssembly();
 	private:
 		void ExecuteMainThreadQueue();
 	private:
 		int m_ArgC;
 		std::vector<std::string> m_Argv;
+
+		HMODULE m_GameAssembly;
+		GameAssemblyHandle* m_GameAssemblyHandle;
 
 		std::vector<const Type*> m_ComponentTypes;
 		std::vector<const Type*> m_SystemTypes;

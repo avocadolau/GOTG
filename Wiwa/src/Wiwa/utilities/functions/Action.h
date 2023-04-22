@@ -1,21 +1,29 @@
 #pragma once
+
 class Callable {};
 
 template<class... _params>
-
 class Action {
 private:
 	void (Callable::* action)(_params...);
 	Callable* obj;
-public:
-	Action() { obj = NULL; };
+	void* func;
+public:	
+	template<class T>
+	Action() {
+		obj = NULL;
+	}
 
-	/**
-	 * \brief 
-	 * \tparam T Type of the action
-	 * \param _action Pointer to the dispatcher function
-	 * \param _obj Pointer to the object that has the dispatcher function
-	 */
+	Action() {
+		obj = NULL;
+		func = NULL;
+	}
+
+	Action(void* _func) {
+		obj = NULL;
+		func = _func;
+	}
+
 	template<class T>
 	Action(void (T::* _action)(_params...), void* _obj) {
 		action = (void (Callable::*)(_params...))_action;
@@ -23,15 +31,20 @@ public:
 	}
 
 	void execute(_params... params) {
-		(obj->*action)(params...);
+		if (obj) {
+			(obj->*action)(params...);
+		}
+		else {
+			void (*f)(_params...) = (void(*)(_params...))func;
+
+			f(params...);
+		}
 	}
 
 	void operator()(_params... params) {
 		execute(params...);
 	}
 
-	bool HasAction() { return obj != NULL; }
-
 	void* getObj() { return obj; }
-	void* getActionPtr() { return (void*&)action; }
+	void* getActionPtr() { return obj == NULL ? func : (void*&)action; }
 };

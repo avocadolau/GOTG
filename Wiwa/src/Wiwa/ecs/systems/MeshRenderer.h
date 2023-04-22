@@ -25,4 +25,4 @@ namespace Wiwa {
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::MeshRenderer);
+WI_REGISTER_SYSTEM(Wiwa::MeshRenderer);

@@ -32,7 +32,7 @@ private:
 	void DrawAiAgentComponent(byte* data);
 	void DrawParticleSystemComponent(byte* data);
 	void DrawItemComponent(byte* data);
-
+	void DrawNavMeshComponent(byte* data);
 public:
 
 	InspectorPanel(EditorLayer* instance);

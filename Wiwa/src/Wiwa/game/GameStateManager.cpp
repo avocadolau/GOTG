@@ -262,6 +262,7 @@ namespace Wiwa
 
 	void GameStateManager::Update()
 	{
+		OPTICK_EVENT("Game state manager update");
 		s_PlayerInventory->Update();
 	}
 

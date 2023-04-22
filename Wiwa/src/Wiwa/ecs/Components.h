@@ -48,3 +48,5 @@
 // Ai components
 #include "components/AgentAI.h"
 #include "components/MapAI.h"
+#include "components/ai/NavMesh.h"
+#include "components/ai/NavAgent.h"

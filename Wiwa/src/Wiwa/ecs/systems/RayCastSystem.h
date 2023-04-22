@@ -17,4 +17,4 @@ namespace Wiwa {
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::RayCastSystem);
+WI_REGISTER_SYSTEM(Wiwa::RayCastSystem);
