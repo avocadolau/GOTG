@@ -42,6 +42,7 @@ void ShaderPanel::Draw()
 					size_t id = Wiwa::Resources::Load<Wiwa::Shader>(shaders[i]->filePath.c_str());
 					m_Shader = Wiwa::Resources::GetResourceById<Wiwa::Shader>(id);
 					m_ShaderPath = std::filesystem::path(shaders[i]->filePath).filename().string();
+					m_Path = shaders[i]->filePath;
 					ImGui::CloseCurrentPopup();
 				}
 			}
@@ -132,7 +133,7 @@ void ShaderPanel::Draw()
 		if (ImGui::Button("Compile"))
 		{
 			m_Shader->Save();
-			m_Shader->CompileWishader(m_ShaderPath.c_str());
+			m_Shader->CompileWishader(m_Path.c_str());
 		}
 
 		if (nameToDelete)

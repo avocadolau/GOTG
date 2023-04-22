@@ -146,7 +146,19 @@ namespace Wiwa
 		dissolveShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/dissolve", dissolveShader);
+		
+		ResourceId smokeShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/smoke");
 
+		Shader* smokeShader = Wiwa::Resources::GetResourceById<Shader>(smokeShaderId);
+		smokeShader->Compile("resources/shaders/vfx/smoke");
+
+		smokeShader->addUniform("u_LifeTime", UniformType::Float);
+		smokeShader->addUniform("u_Color", UniformType::fVec4);
+		smokeShader->addUniform("u_Texture", UniformType::Sampler2D);
+		smokeShader->addUniform("u_DissolveAmount", UniformType::Float);
+		smokeShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/smoke", smokeShader);
 
 		ResourceId shieldShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/shield");
 		Shader* shieldShader = Wiwa::Resources::GetResourceById<Shader>(shieldShaderId);
