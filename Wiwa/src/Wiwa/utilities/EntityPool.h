@@ -8,6 +8,20 @@ typedef size_t EntityId;
 
 namespace Wiwa
 {
+    enum class Pool_Type
+    {
+        PHALANX_MELEE,
+        PHALAN_RANGED,
+        SENTINEL,
+        SUBJUGATOR,
+        BOSS_ULTRON,
+
+        SIMPLE_BULLET,
+        SENTINEL_EXPLOSION,
+        CLUSTER_BULLET,
+        ULTRON_LASER_BEAM,
+    };
+
     class Scene;
     class WI_API EntityPool {
     private:
@@ -16,9 +30,9 @@ namespace Wiwa
         Scene* m_Scene;
         std::string m_Path;
         int m_MaxSize;
-        int m_Type;
+        Pool_Type m_Type;
     public:
-        EntityPool(int type, int max_size, const char* path) : m_Type(type), m_MaxSize(max_size), m_Path(path), m_Loaded(false) {};
+        EntityPool(Pool_Type type, int max_size, const char* path) : m_Type(type), m_MaxSize(max_size), m_Path(path), m_Loaded(false) {};
         ~EntityPool();
 
         EntityId GetFromPool();
@@ -35,7 +49,7 @@ namespace Wiwa
 
         inline int getMaxSize() { return m_MaxSize; };
 
-        inline int getType() { return m_Type; };
+        inline Pool_Type getType() { return m_Type; };
 
         bool m_Loaded = false;
     };

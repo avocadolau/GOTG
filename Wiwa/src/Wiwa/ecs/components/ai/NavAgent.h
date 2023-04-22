@@ -13,6 +13,7 @@ namespace Wiwa {
 		float maxSpeed;						///< Maximum allowed speed. [Limit: >= 0]
 		float separationWeight; /// How aggresive the agent manager should be at avoiding collisions with this agent. [Limit: >= 0]
 		float stoppingDistance;
+		bool autoRotate;
 	};
 }
 
@@ -23,4 +24,5 @@ REFLECT_MEMBER(maxAcceleration)
 REFLECT_MEMBER(maxSpeed)
 REFLECT_MEMBER(separationWeight)
 REFLECT_MEMBER(stoppingDistance)
+REFLECT_MEMBER(autoRotate)
 REFLECTION_END;

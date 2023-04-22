@@ -3,6 +3,7 @@
 #include "Wiwa/ecs/components/ai/NavAgent.h"
 #include <glew.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <glm/gtx/vector_angle.hpp> // for glm::angle()
 
 namespace Wiwa
 {
@@ -69,10 +70,6 @@ namespace Wiwa
                 m_CurrentPos.y = crowdAgent->npos[1];
                 m_CurrentPos.z = crowdAgent->npos[2];
 
-            /*    if (glm::distance(m_CurrentPos, glm::vec3(crowdAgent->targetPos[0], crowdAgent->targetPos[1], crowdAgent->targetPos[2])) <= navAgent->stoppingDistance)
-                {
-                    crowd.getCrowd().resetMoveTarget(m_AgentIndex);
-                }*/
                 // Calculate distance to target
                 float distanceToTarget = glm::distance(m_CurrentPos, glm::vec3(crowdAgent->targetPos[0], crowdAgent->targetPos[1], crowdAgent->targetPos[2]));
 
@@ -92,16 +89,21 @@ namespace Wiwa
                 }
             }
 
-            //crowd.SetAgentMaxSpeed(m_AgentIndex, m_AgentParams.maxSpeed);
-            //crowd.SetAgentParameters(m_AgentIndex, m_AgentParams);
-
             Render();
 
+            // Move the target
             Wiwa::EntityManager& em = m_Scene->GetEntityManager();
             Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
 
             Transform3D* tr = GetComponent<Transform3D>();
             tr->localPosition = m_CurrentPos;
+
+            // Rotate the target
+            if (navAgent->autoRotate)
+            {
+                glm::vec3 rotation = GetCurrrentRotation(tr->localRotation);
+                tr->localRotation = rotation;
+            }
         }
     }
 
@@ -145,6 +147,61 @@ namespace Wiwa
     {
         return m_CurrentVel;
     }*/
+
+    const glm::vec3 NavAgentSystem::GetCurrrentRotation(const glm::vec3& current_transform_rotation) const
+    {
+        if (m_AgentIndex != -1) {
+            Crowd& crowd = Crowd::getInstance();
+            const dtCrowdAgent* crowdAgent = crowd.getCrowd().getAgent(m_AgentIndex);
+
+            //glm::vec3 velocity(crowdAgent->vel[0], crowdAgent->vel[1], crowdAgent->vel[2]);
+            glm::vec3 nextPos(crowdAgent->cornerVerts[0], crowdAgent->cornerVerts[1], crowdAgent->cornerVerts[2]);
+
+            //if (glm::length(velocity) == 0.0f)
+            //    return glm::vec3(0.0f);
+
+            //// Construct a look-at matrix from the agent's velocity vector
+            //glm::vec3 pos(crowdAgent->npos[0], crowdAgent->npos[1], crowdAgent->npos[2]);
+            //glm::vec3 target = pos + glm::normalize(velocity);
+            //glm::vec3 up(0.0f, 1.0f, 0.0f);
+            //glm::mat4 lookAtMatrix = glm::lookAt(pos, target, up);
+
+            //// Extract Euler angles from the look-at matrix
+            //glm::vec3 eulerAngles = glm::eulerAngles(glm::quat_cast(lookAtMatrix));
+            //eulerAngles = glm::degrees(eulerAngles);
+            //return eulerAngles;
+            float distance = glm::distance(m_CurrentPos, nextPos);
+
+            float timeToRotate = distance / 4.0f;
+            float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
+            // Calculate the forward vector from the current position to the target position
+            glm::vec2 forward = glm::normalize(nextPos - m_CurrentPos);
+            // Calculate the angle between the current forward vector and the target forward vector
+            float angle = glm::angle(forward, { 0.0f, 1.0f });
+            if (forward.x < 0.0f) {
+                angle = (-angle);
+            }
+
+            float targetRotation = angle * 180 / glm::pi<float>();
+
+            // Calculate the difference between the current rotation and target rotation
+            float rotationDifference = targetRotation - current_transform_rotation.y;
+
+            // Adjust the rotation difference to be within the range of -180 to 180 degrees
+            while (rotationDifference > 180.0f) {
+                rotationDifference -= 360.0f;
+            }
+            while (rotationDifference < -180.0f) {
+                rotationDifference += 360.0f;
+            }
+
+            // Calculate the new interpolated rotation
+            float interpolatedRotation = current_transform_rotation.y + rotationDifference * tRot;
+
+            /*transform->localRotation.y = interpolatedRotation;*/
+            return glm::vec3(current_transform_rotation.x, interpolatedRotation, current_transform_rotation.z);
+        }
+    }
 
     float NavAgentSystem::GetMaxSpeed() const
     {

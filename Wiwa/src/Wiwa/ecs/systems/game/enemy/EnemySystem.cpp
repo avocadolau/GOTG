@@ -28,6 +28,7 @@ namespace Wiwa
 		m_StatsIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_ColliderIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_AgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_NavAgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
 		m_PlayerTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -51,6 +52,7 @@ namespace Wiwa
 		m_StatsIt = GetComponentIterator<Character>();
 		m_ColliderIt = GetComponentIterator<CollisionBody>();
 		m_AgentIt = GetComponentIterator<AgentAI>();
+		m_NavAgentIt = GetComponentIterator<NavAgent>();
 		m_TransformIt = GetComponentIterator<Transform3D>();
 		m_PlayerId = Wiwa::GameStateManager::s_PlayerId;
 		m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);

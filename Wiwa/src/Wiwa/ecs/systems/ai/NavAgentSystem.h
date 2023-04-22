@@ -3,6 +3,7 @@
 #include "Wiwa/AI/AI_Crowd.h"
 #include <glm/glm.hpp>
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/ecs/components/ai/NavAgent.h>
 
 namespace Wiwa
 {
@@ -24,7 +25,7 @@ namespace Wiwa
 
         const glm::vec3& GetCurrentPosition() const;
         //const glm::vec3& GetCurrentVelocity() const;
-
+        const glm::vec3 GetCurrrentRotation(const glm::vec3& current_transform_rotation) const;
         float GetMaxSpeed() const;
         float GetMaxAcceleration() const;
 
