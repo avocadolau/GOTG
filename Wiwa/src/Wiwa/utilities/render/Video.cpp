@@ -80,7 +80,6 @@ namespace Wiwa {
 			return false;
 		m_CurrentTime = glfwGetTime(); 
 		m_ElapsedTime = (m_CurrentTime - m_LastTime) * 1000; 
-		WI_CORE_INFO(m_ElapsedTime);
 		if (m_ElapsedTime >= m_FrameTime) {
 
 			m_Cap >> m_Frame;
