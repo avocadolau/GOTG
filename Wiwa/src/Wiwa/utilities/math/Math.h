@@ -17,6 +17,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp> // for glm::angle()
 
 namespace Wiwa {
 	namespace Math {
@@ -342,5 +343,17 @@ namespace Wiwa {
 			left = glm::rotate(forward, radiansAngleLeft, up);
 		}
 
+		inline bool IsPointNear(const glm::vec3& point_1, const glm::vec3& point_2, float threshold)
+		{
+			return glm::distance2(point_1, point_2) < threshold * threshold;
+		}
+
+		inline glm::vec3 GetRoationBetweenTwoPoints(const glm::vec3& point_1, const glm::vec3& point_2)
+		{
+			glm::vec3 p1Forward = glm::normalize(point_1);
+			glm::vec3 p2Forward = glm::normalize(point_2);
+			glm::quat rotation = glm::rotation(p1Forward, p2Forward);
+			return glm::degrees(glm::eulerAngles(rotation));
+		}
 	}
 }

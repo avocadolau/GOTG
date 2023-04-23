@@ -232,6 +232,34 @@ namespace Wiwa
         }
     }
 
+    glm::vec3 NavAgentSystem::GetRandPointOutsideCircle(const glm::vec3& circle_position, float radius)
+    {
+        Crowd& crowd = Crowd::getInstance();
+        dtCrowd& dtCrowd = crowd.getCrowd();
+        const dtNavMeshQuery* navMeshQuery = dtCrowd.getNavMeshQuery();
+
+        dtPolyRef targetRef;
+        float targetPos[3];
+        const dtQueryFilter* filter = dtCrowd.getFilter(m_AgentIndex);
+        const float* extents = dtCrowd.getQueryExtents();
+        navMeshQuery->findNearestPoly(&circle_position[0], extents, filter, &targetRef, targetPos);
+
+        glm::vec3 pt(0.0f);
+        dtPolyRef ref;
+        float distance = 0.0f;
+
+        do
+        {
+            dtStatus status = navMeshQuery->findRandomPointAroundCircle(targetRef, &circle_position[0], radius, filter, frand, &ref, &pt[0]);
+            if (dtStatusSucceed(status))
+            {
+                float distance = glm::distance(circle_position, pt);
+            }
+        } while (distance > radius);
+
+        return pt;
+    }
+
     void NavAgentSystem::Render()
     {
         Wiwa::Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;

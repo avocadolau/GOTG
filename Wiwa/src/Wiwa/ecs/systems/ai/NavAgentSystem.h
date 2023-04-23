@@ -33,6 +33,8 @@ namespace Wiwa
 
         void RegisterWithCrowd();
         void RefreshParamters();
+
+        glm::vec3 GetRandPointOutsideCircle(const glm::vec3& circle_position, float radius);
     private:
         void Render();
         void DrawAgent();
