@@ -44,5 +44,7 @@ namespace Wiwa {
 
 		double GetFrameRate() { return m_Cap.get(cv::CAP_PROP_FPS); }
 		unsigned char* cvMat2TexInput(cv::Mat& img);
+
+		static void WriteVideo(const char* destination, Video* video);
 	};
 }

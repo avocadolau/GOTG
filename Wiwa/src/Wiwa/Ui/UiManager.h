@@ -5,6 +5,7 @@
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
 #include <Wiwa/utilities/render/Text.h>
+#include <Wiwa/utilities/render/Video.h>
 #include <vector>
 #include <string>
 #include <Wiwa/core/Input.h>
@@ -47,6 +48,8 @@ namespace Wiwa
 		GuiControl* CreateGuiControl_Text(GuiControlType type, unsigned int id, Rect2i bounds, const char* string_text, unsigned int canvas_id, bool active,float rotation);
 		//Method for abilities
 		GuiControl* CreateGuiControl_Ability(GuiControlType type, unsigned int id,unsigned int canvas_id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active,bool animated, std::vector<Rect2i> animationRects,float rotation);
+		//Method for videos
+		GuiControl* CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active);
 
 		void SwapSelectedCanvas(GuiCanvas* canvasToSelect);
 		void DestroyGuiControl(GuiControl* control, GuiCanvas* canvas);
@@ -58,6 +61,8 @@ namespace Wiwa
 		Text* InitFontForDialog(const char* path, char* word);
 
 		
+		Video* InitVideo(std::string path);
+
 		std::vector<GuiCanvas*>& ReturnCanvas() { return canvas; }
 
 		bool _saveGUIImpl(File& file);

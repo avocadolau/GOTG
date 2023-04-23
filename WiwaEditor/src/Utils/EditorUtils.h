@@ -69,6 +69,7 @@ bool ImageExtensionComp(const std::filesystem::path file);
 bool ModelExtensionComp(const std::filesystem::path file);
 bool ShaderExtensionComp(const std::filesystem::path file);
 bool MaterialExtensionComp(const std::filesystem::path file);
+bool VideoExtensionComp(const std::filesystem::path file);
 
 void CreateScriptFile(const char* filePath, const char* name);
 
