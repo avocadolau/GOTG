@@ -41,15 +41,14 @@ namespace Wiwa
 	};
 	enum class GuiControlType
 	{
-		BUTTON,
-		TEXT,
-		TOGGLE,
-		CHECKBOX,
-		SLIDER,
-		INPUTBOX,
-		IMAGE,
-		BAR,
-		ABILITY,
+		BUTTON = 0,
+		TEXT = 1,
+		CHECKBOX = 3,
+		SLIDER = 4,
+		IMAGE = 6,
+		BAR = 7,
+		ABILITY = 8,
+		VIDEO = 9,
 	};
 
 	enum class GuiControlState

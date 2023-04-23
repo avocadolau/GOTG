@@ -314,7 +314,8 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 		extraOriginSize[0] = control->extraTexturePosition.width;
 		extraOriginSize[1] = control->extraTexturePosition.height;
 	}
-	pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+	if(control->type != Wiwa::GuiControlType::VIDEO) pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+	if(control->type == Wiwa::GuiControlType::VIDEO)  pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
 	pathForExtraAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 }
 void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
@@ -395,6 +396,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			break;
 		case Wiwa::GuiControlType::TEXT:
 			ImGui::InputText("text", &pathForAsset);
+			break;
+		case Wiwa::GuiControlType::VIDEO:
+			AssetContainerPath();
 			break;
 		default:
 			break;
@@ -529,6 +533,11 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 
 	}
 	break;
+	case Wiwa::GuiControlType::VIDEO:
+	{
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+	}
+	break;
 	case Wiwa::GuiControlType::ABILITY:
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
@@ -629,7 +638,7 @@ void UIEditorPanel::AssetContainerPath()
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".png")
+			if (p.extension() == ".png" || p.extension() == ".mp4")
 			{
 				pathForAsset = pathS;
 			}

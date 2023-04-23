@@ -8,3 +8,4 @@
 #include "resources/material_impl_inl.h"
 #include "resources/image_impl_inl.h"
 #include "resources/shader_impl_inl.h"
+#include "resources/video_impl_in.h"

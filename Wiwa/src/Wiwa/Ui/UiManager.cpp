@@ -9,6 +9,7 @@
 #include "UiImage.h"
 #include "UiBar.h"
 #include "UiAbility.h"
+#include "UiVideo.h"
 #include <Wiwa/core/Application.h>
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/scene/Scene.h>
@@ -121,6 +122,15 @@ namespace Wiwa
 		GuiControl* control = nullptr;
 
 		control = new GuiAbility(m_Scene, id, bounds, path, callbackID, boundsOriginTex, active,animated, animationRects,rotation);
+		canvas.at(canvas_id)->controls.push_back(control);
+		return control;
+	}
+
+	GuiControl* GuiManager::CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active)
+	{
+		GuiControl* control = nullptr;
+
+		control = new GuiVideo(m_Scene, id, bounds, path, active);
 		canvas.at(canvas_id)->controls.push_back(control);
 		return control;
 	}
@@ -465,6 +475,13 @@ namespace Wiwa
 		return text;
 	}
 
+	Video* GuiManager::InitVideo(std::string path)
+	{
+		Video* video = new Video();
+		video->Init(path, nullptr);
+		return video;
+	}
+
 	void GuiManager::SwapSelectedCanvas(GuiCanvas* canvasToSelect)
 	{
 		for (size_t i = 0; i < canvas.size(); i++)
@@ -611,6 +628,9 @@ namespace Wiwa
 				case Wiwa::GuiControlType::ABILITY:
 					control = CreateGuiControl_Ability(guiType, id,canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
 					break;
+				case Wiwa::GuiControlType::VIDEO:
+					control = CreateGuiControl_Video(guiType, id, canvas.at(i)->id,position, textureGui.c_str(), active);
+					break;
 				default:
 					break;
 				}
@@ -663,7 +683,9 @@ namespace Wiwa
 				Rect2i texturePosition = control->texturePosition;
 				Rect2i extraTexturePosition = control->extraTexturePosition;
 
-				const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+				const char* textureGui;
+				if (guiType != GuiControlType::VIDEO) textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+				if (guiType == GuiControlType::VIDEO) textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
 				const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 
 				size_t textureGui_len = strlen(textureGui) + 1;

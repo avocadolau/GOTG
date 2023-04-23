@@ -231,6 +231,14 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		Wiwa::Resources::CreateMeta<Wiwa::Model>(p.c_str(), &settings);
 		Wiwa::Resources::Import<Wiwa::Model>(p.c_str(), &settings);
 	}
+	else if (VideoExtensionComp(path)
+		&& (!Wiwa::Resources::CheckImport<Wiwa::Video>(p.c_str())
+			|| Wiwa::Resources::CheckMeta(p.c_str()) != Wiwa::Resources::UPDATED))
+	{
+		Wiwa::Resources::LoadMeta<Wiwa::Video>(p.c_str());
+		Wiwa::Resources::CreateMeta<Wiwa::Video>(p.c_str());
+		Wiwa::Resources::Import<Wiwa::Video>(p.c_str());
+	}
 	else if (ShaderExtensionComp(path) 
 		&& (!Wiwa::Resources::CheckImport<Wiwa::Shader>(p.c_str())
 		|| Wiwa::Resources::CheckMeta(p.c_str()) != Wiwa::Resources::UPDATED))
