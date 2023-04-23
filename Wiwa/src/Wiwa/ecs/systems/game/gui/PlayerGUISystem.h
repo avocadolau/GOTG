@@ -10,7 +10,7 @@ namespace Wiwa
     private:
         int CanvasHUD = 0;
         int PauseHUD = 1;
-        int DeathHUD = 4;
+        int DeathHUD = 3;
         bool deathHud = false;
         Ability** abilitiesList;
         Buff** buffsList;

@@ -12,7 +12,12 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 
 	PlayerElements(gm, character);
 
-	if (character->Health <= 0) DeathHud(gm);
+	if (character->Health <= 0 && !deathHud)
+	{
+		DeathHud(gm);
+		deathHud = true;
+	}
+
 
 	
 }
@@ -21,7 +26,6 @@ void Wiwa::PlayerGUISystem::DeathHud(Wiwa::GuiManager& gm)
 {
 	Wiwa::SceneManager::PauseCurrentScene();
 	gm.canvas.at(CanvasHUD)->SwapActive();
-	//TODO: IMPLEMENT IT ONCE WE HAVE THE ARTgm.canvas.at(DeathHUD)->SwapActive();
 }
 
 void Wiwa::PlayerGUISystem::CooldownState(Ability** ability,Wiwa::GuiManager& gm)
@@ -48,7 +52,10 @@ void Wiwa::PlayerGUISystem::CooldownState(Ability** ability,Wiwa::GuiManager& gm
 				ability[i]->CooldownState = CooldownState::NO_CHARGED;
 			}
 			int index = i + 15;
+			int index_death = i + 5;
 			gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)ability[i]->CooldownState, &r2d);
+			gm.canvas.at(deathHud)->controls.at(index_death)->SetNextFrame((int)ability[i]->CooldownState, &r2d);
+
 		}
 		
 	}
@@ -83,8 +90,9 @@ void Wiwa::PlayerGUISystem::CooldownState(Buff** buff, Wiwa::GuiManager& gm)
 					buff[i]->CooldownState = CooldownState::NO_CHARGED;
 				}
 				int index = i + 13;
+				int index_death = i + 3;
 				gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
-				
+				gm.canvas.at(deathHud)->controls.at(index_death)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
 					
 			}
 		}
