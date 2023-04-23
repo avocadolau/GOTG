@@ -561,11 +561,11 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 		size_t cbcount = app.GetCallbacksCount();
 
 		if (cbcount > 0) {
-			Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
+			const Func* current_cb = app.getCallbackAt(callbackID);
 
 			ImGui::Text("Callback type:");
 
-			if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+			if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 			{
 				for (size_t n = 0; n < cbcount; n++)
 				{
@@ -574,8 +574,8 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 					switch (control->type)
 					{
 					case Wiwa::GuiControlType::BUTTON:
-						if (current_cb->getParamCount() == 0) {
-							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 0) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 							{
 								callbackID = n;
 								if (is_selected)
@@ -584,9 +584,9 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 						break;
 					case Wiwa::GuiControlType::CHECKBOX:
-						if (current_cb->getParamCount() == 1) {
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 1) {
+							if (current_cb->params.at(0).hash == (size_t)TypeHash::Bool) {
+								if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 								{
 									callbackID = n;
 									if (is_selected)
@@ -596,9 +596,9 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 						break;
 					case Wiwa::GuiControlType::SLIDER:
-						if (current_cb->getParamCount() == 1) {
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 1) {
+							if (current_cb->params.at(0).hash == (size_t)TypeHash::Float) {
+								if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 								{
 									callbackID = n;
 									if (is_selected)
@@ -608,8 +608,8 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 						break;
 					case Wiwa::GuiControlType::IMAGE:
-						if (current_cb->getParamCount() == 0) {
-							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 0) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 							{
 								callbackID = n;
 								if (is_selected)

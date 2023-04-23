@@ -103,7 +103,10 @@ namespace Wiwa
 					Audio::PostEvent(audioEventForButton.c_str());
 				}
 				if (callback)
-					callback->Execute();
+				{
+					Action<>function_name = callback->func;
+					function_name.execute();
+				}
 			}
 		}
 		return false;

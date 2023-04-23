@@ -221,12 +221,12 @@ namespace Wiwa {
 				Application::Get().RegisterComponentType(type);
 			}
 
-			mono_bool isCallback = mono_custom_attrs_has_attr(attributes, callbackClass);
+			/*mono_bool isCallback = mono_custom_attrs_has_attr(attributes, callbackClass);
 			if (isCallback == 1) {
 				Callback* cb = new CSCallback(assembly, nameSpace, name);
 				
 				Application::Get().RegisterCallback(cb);
-			}
+			}*/
 		}
 	}
 	void ScriptEngine::ClearAssemblyTypes()

@@ -2,7 +2,8 @@
 
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-#include <Wiwa/utilities/functions/Callback.h>
+#include <Wiwa/utilities/functions/Function.h>
+#include <Wiwa/utilities/functions/Action.h>
 #include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
@@ -788,7 +789,7 @@ namespace Wiwa
 		size_t callbackID;
 
 		std::string name;
-		Callback* callback;
+		const Func* callback;
 
 		//THINGS FOR ANIMATIONS
 		std::vector<Rect2i> positionsForAnimations;
