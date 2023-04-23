@@ -413,6 +413,7 @@ namespace Wiwa
 
 				if (t->is_function) {
 					// Unregister callback
+
 				}
 				else {
 					if (t->custom_id == 0) {
@@ -455,6 +456,7 @@ namespace Wiwa
 
 					if (t->is_function) {
 						// Register as callback
+						
 					}
 					else {
 						if (t->custom_id == 0) {

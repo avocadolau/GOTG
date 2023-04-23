@@ -1,5 +1,7 @@
 #include <Wiwa/utilities/Reflection.h>
 
-void MusicSliderCallback(float perc);
+// Declare
+void GoToMilanoHub();
 
-REGISTER_FUNCTION(MusicSliderCallback);
+// Register
+REGISTER_FUNCTION(GoToMilanoHub);

@@ -1,7 +1,9 @@
 #include "UICallbacks.h"
+#include <Wiwa/scene/SceneManager.h>
 #include <iostream>
 
-void MusicSliderCallback(float perc)
+void GoToMilanoHub()
 {
-	std::cout << "Music slider callback: " << perc << std::endl;
+	std::cout << "Funsiona el milano hub" << std::endl;
+	//Wiwa::SceneManager::ChangeSceneByIndex(1);
 }
