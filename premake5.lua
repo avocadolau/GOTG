@@ -34,11 +34,13 @@ IncludeDirs["GLI"] = "%{wks.location}/Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
 IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
 IncludeDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/include"
+IncludeDirs["ozz"] = "%{wks.location}/Wiwa/vendor/ozz-animation/include"
 
 LibraryDirs = {}
 LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"
 LibraryDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/lib/x64_vc170/Debug(StaticCRT)/lib/"
 LibraryDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/lib/"
+
 
 Library = {}
 Library["mono"] = "%{LibraryDirs.mono}/libmono-static-sgen.lib"
@@ -55,7 +57,6 @@ Library["bullet_collision_debug"] = "%{LibraryDirs.bullet}/BulletCollision_vs201
 Library["bullet_dynamics_debug"] = "%{LibraryDirs.bullet}/BulletDynamics_vs2010_x64_debug.lib"
 Library["bullet_linear_math_debug"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_debug.lib"
 
-
 Library["WinSock"] = "Ws2_32.lib"
 Library["WinMM"] = "Winmm.lib"
 Library["Version"] = "Version.lib"
@@ -67,6 +68,7 @@ group "Dependencies"
 	include "Wiwa/vendor/imgui"
 	include "Wiwa/vendor/Optick"
 	include "Wiwa/vendor/imguizmo"
+	include "Wiwa/vendor/ozz"
 group ""
 
 group "Core"

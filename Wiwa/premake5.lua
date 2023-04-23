@@ -38,7 +38,8 @@ project "Wiwa"
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.IconFontCppHeaders}",
-		"%{IncludeDirs.bullet}"
+		"%{IncludeDirs.bullet}",
+		"%{IncludeDirs.ozz}"
 	}
 
 	links
@@ -50,13 +51,14 @@ project "Wiwa"
 		"%{wks.location}/Wiwa/vendor/Glew/lib/glew32.lib",
 		"Optick",
 		"ImGuizmo",
+		"ozz",
 		"%{Library.mono}",
 		"%{wks.location}/Wiwa/vendor/assimp/lib/x64/release/assimp-vc143-mt.lib",
 		"%{Library.Wwise_SE}",
 		"%{Library.Wwise_MMgr}",
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
-		"%{Library.Wwise_SA}",
+		"%{Library.Wwise_SA}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
@@ -102,7 +104,7 @@ project "Wiwa"
 		{
 			"%{Library.bullet_dynamics_debug}",
 			"%{Library.bullet_collision_debug}",
-			"%{Library.bullet_linear_math_debug}"
+			"%{Library.bullet_linear_math_debug}",
 		}
 
 
@@ -115,7 +117,7 @@ project "Wiwa"
 		{
 			"%{Library.bullet_dynamics_release}",
 			"%{Library.bullet_collision_release}",
-			"%{Library.bullet_linear_math_release}"
+			"%{Library.bullet_linear_math_release}",
 		}
 
 	filter "configurations:Dist"
