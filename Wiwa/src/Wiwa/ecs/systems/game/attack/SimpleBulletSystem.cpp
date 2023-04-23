@@ -29,6 +29,9 @@ namespace Wiwa
 
 	void SimpleBulletSystem::InitBullet()
 	{
+		GameStateManager::s_PoolManager->SetScene(m_Scene);
+		GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
+
 		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
@@ -43,7 +46,7 @@ namespace Wiwa
 			System::Awake();
 		if (!getInit())
 			System::Init();
-
+		
 		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
@@ -52,6 +55,7 @@ namespace Wiwa
 		{
 			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			em.DestroyEntity(m_EntityId);*/
+			
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 		}	
 	}
@@ -74,6 +78,7 @@ namespace Wiwa
 	
 			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			em.DestroyEntity(m_EntityId);*/
+		
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 		}
 	}
@@ -83,7 +88,7 @@ namespace Wiwa
 		SimpleBullet* bullet = GetComponent<SimpleBullet>();
 		if (bullet)
 		{
-			InitBullet();
+			/*InitBullet();*/
 		}
 
 		return true;

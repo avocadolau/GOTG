@@ -63,6 +63,14 @@ namespace Wiwa
 
 			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
 
+			//Working one Pooling for Bullets
+			/*if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getMaxSize() >= GameStateManager::s_PoolManager->s_SimpleBulletsPool->getDisabledEntities().size())
+			{
+				SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
+				SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
+				SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
+			}*/
+
 			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
 			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
@@ -90,7 +98,7 @@ namespace Wiwa
 	void SubjugatorAttackState::SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
+		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions

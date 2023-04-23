@@ -127,7 +127,7 @@ namespace Wiwa
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
 		}
-		case 9:
+		case Pool_Type::SUBJUGATOR:
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
@@ -197,7 +197,7 @@ namespace Wiwa
 		case Pool_Type::SENTINEL:
 			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
 			break;
-		case 9:
+		case Pool_Type::SUBJUGATOR:
 			GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
 			break;
 		default:

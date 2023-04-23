@@ -51,6 +51,8 @@ namespace Wiwa
 
         inline Pool_Type getType() { return m_Type; };
 
+        inline  std::queue<EntityId> getDisabledEntities() { return m_DisabledEntities; };
+
         bool m_Loaded = false;
     };
 }

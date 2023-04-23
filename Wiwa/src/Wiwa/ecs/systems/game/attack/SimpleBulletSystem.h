@@ -26,9 +26,9 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
-		bool OnEnabledFromPool();
+		bool OnEnabledFromPool() override;
 
-		bool OnDisabledFromPool();
+		bool OnDisabledFromPool() override;
 
 	};
 }
