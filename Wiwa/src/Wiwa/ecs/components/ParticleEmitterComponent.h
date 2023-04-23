@@ -159,7 +159,7 @@ namespace Wiwa {
 		glm::vec3	m_p_maxInitialGrowthVelocity;
 
 
-		ColorNode m_p_colorsOverLifetime[128] = {ColorNode()};
+		ColorNode m_p_colorsOverLifetime[6] = {ColorNode()};
 		int m_colorsUsed;
 
 		
