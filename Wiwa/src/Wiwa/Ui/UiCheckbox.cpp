@@ -90,9 +90,12 @@ namespace Wiwa
 					{
 						Audio::PostEvent(audioEventForButton.c_str());
 					}
-					void* params[] = { &checked };
+					bool params = checked;
 					if (callback)
-						callback->Execute(params);
+					{
+						Action<bool>function_name = callback->func;
+						function_name.execute(params);
+					}
 				}
 				
 				

@@ -112,14 +112,17 @@ namespace Wiwa
 					{
 						clicked = false;
 						value = (((float)extraPosition.width / (float)position.width) * 100);
-						void* params[] = { &value };
+						float params = value;
 						WI_INFO(value);
 						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 						{
 							Audio::PostEvent(audioEventForButton.c_str());
 						}
-						if(callback)
-							callback->Execute(params);
+						if (callback)
+						{
+							Action<float>function_name = callback->func;
+							function_name.execute(params);
+						}
 					}
 				}
 			}
