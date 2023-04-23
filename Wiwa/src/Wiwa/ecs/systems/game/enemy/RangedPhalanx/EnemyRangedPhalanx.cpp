@@ -11,6 +11,7 @@ namespace Wiwa
 		m_ChasingState = nullptr;
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
+		m_HitState = nullptr;
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_RangeOfAttack = 20.0f;
 		m_MinimumPath = 5;
@@ -39,6 +40,12 @@ namespace Wiwa
 	void EnemyRangedPhalanx::OnInit()
 	{
 		EnemySystem::OnInit();
+
+		NavAgent* navAgent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = true;
+		}
+
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
 	}
