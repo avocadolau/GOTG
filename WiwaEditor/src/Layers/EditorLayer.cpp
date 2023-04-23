@@ -534,8 +534,16 @@ void EditorLayer::MainMenuBar()
 		}
 		if (ImGui::BeginMenu("Script"))
 		{
-			if (ImGui::MenuItem("Reload assembly", "ALT + R"))
+			if (ImGui::MenuItem("Reload assembly", "ALT + R")) {
 				Wiwa::ScriptEngine::ReloadAssembly();
+
+				// Reload app assembly
+				Wiwa::Application::Get().UnloadGameAssembly();
+
+				Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
+
+				Wiwa::Application::Get().LoadGameAssembly();
+			}
 			if (ImGui::MenuItem("Open Solution"))
 				system("call tools/opensln.bat AppAssembly.sln");
 			ImGui::Checkbox("Build automatic", &s_BuildAutomatic);
