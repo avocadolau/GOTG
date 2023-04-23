@@ -99,6 +99,7 @@ namespace Wiwa {
 		//position & translation
 		//bool m_p_followEmitterPosOnlyOnSpawn;
 		bool		m_p_followEmitterPosition;
+		bool		m_p_followEmitterPositionSpawn;
 		glm::vec3	m_p_initialPosition;
 		glm::vec3	m_p_initialPositionSphCenter;
 		float		m_p_initialPositionSphRadius;
@@ -121,6 +122,7 @@ namespace Wiwa {
 		//rotation
 		//bool m_p_followEmitterRotOnlyOnSpawn;
 		bool		m_p_followEmitterRotation;
+		bool		m_p_followEmitterRotationSpawn;
 		glm::vec3	m_p_initialRotation;
 		bool		m_p_rangedInitialRotation;
 		glm::vec3	m_p_minInitialRotation;

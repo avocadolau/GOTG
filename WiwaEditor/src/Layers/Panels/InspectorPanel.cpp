@@ -1001,9 +1001,21 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	if (ImGui::TreeNode("Position & Translation"))
 	{
-		ImGui::Checkbox("##m_p_followEmitterPosition", &emitter->m_p_followEmitterPosition);
-		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Position");
+		if (!emitter->m_p_followEmitterPositionSpawn)
+		{
+			ImGui::Checkbox("##m_p_followEmitterPosition", &emitter->m_p_followEmitterPosition);
+			ImGui::SameLine();
+			ImGui::Text("Follow Emitter Position");
+		}
+
+		if (!emitter->m_p_followEmitterPosition)
+		{
+			ImGui::Checkbox("##m_p_followEmitterPositionSpawn", &emitter->m_p_followEmitterPositionSpawn);
+			ImGui::SameLine();
+			ImGui::Text("Follow Emitter Position Only on Spawn");
+		}
+
+		
 
 		ImGui::Text("Use Volume:");
 		ImGui::SameLine();
@@ -1175,6 +1187,10 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::Checkbox("##m_p_followEmitterRotation", &emitter->m_p_followEmitterRotation);
 		ImGui::SameLine();
 		ImGui::Text("Follow Emitter Rotation");
+
+		ImGui::Checkbox("##m_p_followEmitterRotationSpawn", &emitter->m_p_followEmitterRotationSpawn);
+		ImGui::SameLine();
+		ImGui::Text("Follow Emitter Rotation Only on Spawn");
 
 		ImGui::Checkbox("##m_p_initialRotation", &emitter->m_p_rangedInitialRotation);
 		ImGui::SameLine();

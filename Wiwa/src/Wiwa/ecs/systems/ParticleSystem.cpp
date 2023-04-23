@@ -535,11 +535,19 @@ namespace Wiwa {
 
 		//initial position
 
+
+		glm::vec3 followSpawnPos(0);
+		glm::vec3 followSpawnRot(0);
+
+		if (emitter->m_p_followEmitterPositionSpawn) followSpawnPos = t3d->position;
+		if (emitter->m_p_followEmitterRotationSpawn) followSpawnRot = t3d->rotation;
+
+
 		switch (emitter->m_spawnVolume)
 		{
 			case Wiwa::ParticleSpawnVolume::NONE:
 			{
-				initPosition = emitter->m_p_initialPosition /*+ t3d->position*/;
+				initPosition = emitter->m_p_initialPosition + followSpawnPos/*+ t3d->position*/;
 			}
 			break;
 			case Wiwa::ParticleSpawnVolume::CUBE:
@@ -548,7 +556,7 @@ namespace Wiwa {
 				float y = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.y, emitter->m_p_initialPositionBoxB.y);
 				float z = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.z, emitter->m_p_initialPositionBoxB.z);
 
-				initPosition = emitter->m_p_initialPosition /*+ t3d->position*/ + glm::vec3(x, y, z);
+				initPosition = emitter->m_p_initialPosition + followSpawnPos /*+ t3d->position*/ + glm::vec3(x, y, z);
 			}
 			break;
 			case Wiwa::ParticleSpawnVolume::SPHERE:
@@ -560,13 +568,13 @@ namespace Wiwa {
 				float z = Wiwa::Math::RandomRange(1.0f,-1.0f);
 
 
-				initPosition = emitter->m_p_initialPosition + /*t3d->position*/ + emitter->m_p_initialPositionSphCenter + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
+				initPosition = emitter->m_p_initialPosition + followSpawnPos /*t3d->position*/ + emitter->m_p_initialPositionSphCenter + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
 
 			}
 			break;
 			default:
 			{
-				initPosition = emitter->m_p_initialPosition /*+ t3d->position*/;
+				initPosition = emitter->m_p_initialPosition + followSpawnPos/*+ t3d->position*/;
 
 			}
 			break;
@@ -578,11 +586,11 @@ namespace Wiwa {
 			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.y, emitter->m_p_maxInitialRotation.y);
 			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.z, emitter->m_p_maxInitialRotation.z);
 
-			initRotation = emitter->m_p_initialRotation /*+ t3d->localRotation*/ + glm::vec3(x, y, z);
+			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/ + glm::vec3(x, y, z);
 		}
 		else
 		{
-			initRotation = emitter->m_p_initialRotation /*+ t3d->localRotation*/;
+			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
 		}
 
 		//initial scale
