@@ -17,6 +17,7 @@ enum class GuiType
 		IMAGE,
 		BAR,
 		ABILITY,
+		VIDEO
 };
 class UIPanel : public Panel
 {
@@ -44,6 +45,7 @@ public:
 	void DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 	void DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
+	void DrawVideoCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager);
 
 	void VectorEdit(std::vector<Wiwa::Rect2i> list);
 

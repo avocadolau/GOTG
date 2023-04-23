@@ -9,7 +9,7 @@
 
 #include "DialogNode.h"
 
-#define MAX_CONVERSATIONS 50
+#define MAX_CONVERSATIONS 25
 #define MAX_CONVERSATION_NODES 25
 
 namespace Wiwa
@@ -75,6 +75,7 @@ namespace Wiwa
 
 		std::string conversationToPlayName;
 		Conversation conversations[MAX_CONVERSATIONS];
+		Conversation editorConversations[MAX_CONVERSATIONS];
 
 		int actualConversationState = 0; // 0: Not conversating; 1: Is conversating; 2: Has just finished conversating;
 		int currentNode = 0;
@@ -87,5 +88,7 @@ namespace Wiwa
 		std::string NpcConversationTag;
 
 		Wiwa::Renderer2D::InstanceData continueImgID;
+
+		Color4f	BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
 	};
 }

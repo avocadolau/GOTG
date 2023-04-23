@@ -94,38 +94,40 @@ namespace Wiwa
 		// Create an enemy from prefab
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
 
-		/*int numbers[] = { 1, 2, 4 };
-		std::srand(std::time(nullptr));
-		int selection_index = std::rand() % 3;
-		int selection = numbers[selection_index];*/
+		// Random enemy
+		std::srand(static_cast<unsigned int>(std::time(nullptr)));
+		Pool_Type values[] = { Pool_Type::PHALANX_MELEE, Pool_Type::PHALAN_RANGED, Pool_Type::SENTINEL };
+		size_t size = sizeof(values) / sizeof(values[0]);
+		size_t randomIndex = std::rand() % size;
+		Pool_Type selection = values[randomIndex];
 
-		int selection = RAND(1, 2, 3);
+		//int selection = 3;
 
 		EntityId newEnemyId = -1;
 
 		switch (selection)
 		{
-		case 1:
+		case Pool_Type::PHALANX_MELEE:
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
 		}
 		break;
-		case 2:
+		case Pool_Type::PHALAN_RANGED:
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
 		}
 		break;
-		case 3:
+		case Pool_Type::SENTINEL:
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
 		}
-		case 9:
+		case Pool_Type::SUBJUGATOR:
 		{
 			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
@@ -171,13 +173,13 @@ namespace Wiwa
 		m_EnemiesId.emplace_back(newEnemyId);*/
 		Enemy* enemy = (Enemy*)entityManager.GetComponentByIterator(enemyIt);
 		enemy->hasFinished = false;
-		enemy->enemyType = selection;
+		enemy->enemyType = (int)selection;
 		enemy->waveId = m_EntityId;
 
 		physSys->CreateBody();
 	}
 
-	void WaveSystem::DestroyEnemy(size_t id, int enemy_type)
+	void WaveSystem::DestroyEnemy(size_t id, Pool_Type enemy_type)
 	{
 		//EntityId id = m_EnemiesId[index];
 
@@ -186,16 +188,16 @@ namespace Wiwa
 
 		switch (enemy_type)
 		{
-		case 1:
+		case Pool_Type::PHALANX_MELEE:
 			GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
 			break;
-		case 2:
+		case Pool_Type::PHALAN_RANGED:
 			GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
 			break;
-		case 3:
+		case Pool_Type::SENTINEL:
 			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
 			break;
-		case 9:
+		case Pool_Type::SUBJUGATOR:
 			GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
 			break;
 		default:

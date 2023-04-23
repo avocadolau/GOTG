@@ -21,8 +21,8 @@ namespace Wiwa
 		audioEventForButton = audioEventName;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;
-		if (callbackID != WI_INVALID_INDEX)
-			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+		/*if (callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);*/
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 
@@ -112,14 +112,17 @@ namespace Wiwa
 					{
 						clicked = false;
 						value = (((float)extraPosition.width / (float)position.width) * 100);
-						void* params[] = { &value };
+						float params = value;
 						WI_INFO(value);
 						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 						{
 							Audio::PostEvent(audioEventForButton.c_str());
 						}
-						if(callback)
-							callback->Execute(params);
+						if (callback)
+						{
+							Action<float>function_name = callback->func;
+							function_name.execute(params);
+						}
 					}
 				}
 			}

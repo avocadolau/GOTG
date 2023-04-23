@@ -987,6 +987,18 @@ namespace Wiwa {
 		f.Close();
 	}
 
+	static void CheckImportObj(const std::filesystem::path& path)
+	{
+		std::string p = path.string();
+		Wiwa::Resources::standarizePath(p);
+		if (path.extension() == ".obj") {
+			std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+			std::filesystem::path rp = rpath.remove_filename();
+			std::filesystem::create_directories(rp);
+			Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+		}
+	}
+
 	void Model::SaveModelAsOBJ(Model* model, const char* file)
 	{
 		unsigned int flags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals;//aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs;//aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipUVs;
@@ -1035,5 +1047,6 @@ namespace Wiwa {
 			return;
 		}*/
 		aiReleaseImport(scene);
+		CheckImportObj(assets_output.c_str());
 	}
 }

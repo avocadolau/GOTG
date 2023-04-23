@@ -3,6 +3,7 @@
 #include "Wiwa/ecs/components/ai/NavAgent.h"
 #include <glew.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <glm/gtx/vector_angle.hpp> // for glm::angle()
 
 namespace Wiwa
 {
@@ -69,10 +70,6 @@ namespace Wiwa
                 m_CurrentPos.y = crowdAgent->npos[1];
                 m_CurrentPos.z = crowdAgent->npos[2];
 
-            /*    if (glm::distance(m_CurrentPos, glm::vec3(crowdAgent->targetPos[0], crowdAgent->targetPos[1], crowdAgent->targetPos[2])) <= navAgent->stoppingDistance)
-                {
-                    crowd.getCrowd().resetMoveTarget(m_AgentIndex);
-                }*/
                 // Calculate distance to target
                 float distanceToTarget = glm::distance(m_CurrentPos, glm::vec3(crowdAgent->targetPos[0], crowdAgent->targetPos[1], crowdAgent->targetPos[2]));
 
@@ -92,16 +89,21 @@ namespace Wiwa
                 }
             }
 
-            //crowd.SetAgentMaxSpeed(m_AgentIndex, m_AgentParams.maxSpeed);
-            //crowd.SetAgentParameters(m_AgentIndex, m_AgentParams);
-
             Render();
 
+            // Move the target
             Wiwa::EntityManager& em = m_Scene->GetEntityManager();
             Wiwa::PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(m_EntityId);
 
             Transform3D* tr = GetComponent<Transform3D>();
             tr->localPosition = m_CurrentPos;
+
+            // Rotate the target
+            if (navAgent->autoRotate)
+            {
+                glm::vec3 rotation = GetCurrrentRotation(tr->localRotation);
+                tr->localRotation = rotation;
+            }
         }
     }
 
@@ -136,6 +138,13 @@ namespace Wiwa
         m_AgentParams.maxAcceleration = maxAcceleration;
     }
 
+    void NavAgentSystem::StopAgent()
+    {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
+        }
+    }
+
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const
     {
         return m_CurrentPos;
@@ -145,6 +154,49 @@ namespace Wiwa
     {
         return m_CurrentVel;
     }*/
+
+    const glm::vec3 NavAgentSystem::GetCurrrentRotation(const glm::vec3& current_transform_rotation) const
+    {
+        if (m_AgentIndex != -1) {
+            Crowd& crowd = Crowd::getInstance();
+            const dtCrowdAgent* crowdAgent = crowd.getCrowd().getAgent(m_AgentIndex);
+
+            glm::vec3 nextPos(crowdAgent->cornerVerts[0], crowdAgent->cornerVerts[1], crowdAgent->cornerVerts[2]);
+
+            float distance = glm::distance(m_CurrentPos, nextPos);
+
+            float timeToRotate = distance / 30.0f;
+            float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
+
+            // Calculate the forward vector from the current position to the target position
+            glm::vec3 forward = glm::normalize(nextPos - m_CurrentPos);
+
+            // Calculate the angle between the current forward vector and the target forward vector
+            float angle = glm::angle(forward, { 0.0f, 1.0f, 0.0f });
+            if (forward.x < 0.0f) {
+                angle = (-angle);
+            }
+
+            float targetRotation = angle * 180 / glm::pi<float>();
+
+            // Calculate the difference between the current rotation and target rotation
+            float rotationDifference = targetRotation - current_transform_rotation.y;
+
+            // Adjust the rotation difference to be within the range of -180 to 180 degrees
+            while (rotationDifference > 180.0f) {
+                rotationDifference -= 360.0f;
+            }
+            while (rotationDifference < -180.0f) {
+                rotationDifference += 360.0f;
+            }
+
+            // Calculate the new interpolated rotation
+            float interpolatedRotation = current_transform_rotation.y + rotationDifference * tRot;
+
+            /*transform->localRotation.y = interpolatedRotation;*/
+            return glm::vec3(current_transform_rotation.x, interpolatedRotation, current_transform_rotation.z);
+        }
+    }
 
     float NavAgentSystem::GetMaxSpeed() const
     {
@@ -178,6 +230,34 @@ namespace Wiwa
             m_AgentParams.queryFilterType = 0;
             m_AgentParams.separationWeight = 1;
         }
+    }
+
+    glm::vec3 NavAgentSystem::GetRandPointOutsideCircle(const glm::vec3& circle_position, float radius)
+    {
+        Crowd& crowd = Crowd::getInstance();
+        dtCrowd& dtCrowd = crowd.getCrowd();
+        const dtNavMeshQuery* navMeshQuery = dtCrowd.getNavMeshQuery();
+
+        dtPolyRef targetRef;
+        float targetPos[3];
+        const dtQueryFilter* filter = dtCrowd.getFilter(m_AgentIndex);
+        const float* extents = dtCrowd.getQueryExtents();
+        navMeshQuery->findNearestPoly(&circle_position[0], extents, filter, &targetRef, targetPos);
+
+        glm::vec3 pt(0.0f);
+        dtPolyRef ref;
+        float distance = 0.0f;
+
+        do
+        {
+            dtStatus status = navMeshQuery->findRandomPointAroundCircle(targetRef, &circle_position[0], radius, filter, frand, &ref, &pt[0]);
+            if (dtStatusSucceed(status))
+            {
+                float distance = glm::distance(circle_position, pt);
+            }
+        } while (distance > radius);
+
+        return pt;
     }
 
     void NavAgentSystem::Render()

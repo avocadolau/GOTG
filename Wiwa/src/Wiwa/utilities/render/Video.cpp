@@ -19,7 +19,8 @@ namespace Wiwa {
 
 	bool Video::Init(std::string videoPath, byte* data)
 	{
-		m_Cap = cv::VideoCapture(videoPath);
+		cv::VideoCapture cap(videoPath);
+		m_Cap = cap;
 		if (!m_Cap.isOpened())
 		{
 
@@ -79,7 +80,6 @@ namespace Wiwa {
 			return false;
 		m_CurrentTime = glfwGetTime(); 
 		m_ElapsedTime = (m_CurrentTime - m_LastTime) * 1000; 
-		WI_CORE_INFO(m_ElapsedTime);
 		if (m_ElapsedTime >= m_FrameTime) {
 
 			m_Cap >> m_Frame;
@@ -117,5 +117,24 @@ namespace Wiwa {
 		transpose(img, img);
 		flip(img, img, 0);
 		return img.data;
+	}
+	void Video::WriteVideo(const char* destination, Video* video)
+	{
+		int fourcc = static_cast<int>(video->m_Cap.get(cv::CAP_PROP_FOURCC));
+		cv::VideoWriter oVideoWriter(destination,fourcc,
+			(int)video->GetFrameRate(), cv::Size(video->GetSize().w,video->GetSize().h), true);
+
+		//If the VideoWriter object is not initialized successfully, exit the program
+		if (oVideoWriter.isOpened() == false)
+		{
+			WI_CORE_ERROR("Cannot save the video to a file");
+		}
+
+		cv::Mat frame;
+		for (int i = 0; i < video->m_Cap.get(cv::CAP_PROP_FRAME_COUNT); i ++)
+		{
+			video->m_Cap >> frame;
+			oVideoWriter.write(frame);
+		}
 	}
 }

@@ -21,25 +21,28 @@ namespace Wiwa
 			life_time(0.0f),
 			life_time_start(0.0f),
 			life_percentage(0.0f),
-			position(0.0f),
+			//position(0.0f),
 			startPosition(0.0f),
-			rotation(0.0f),
+			//rotation(0.0f),
 			angularVelocity(0.0f),
-			scale(0.0f),
+			//scale(0.0f),
 			growthVelocity(0.0f),
 			velocity(0.0f),
 			color(0.0f) {};
 
 		Particle(float _life, glm::vec3 _startPosition, glm::vec3 _rotation, glm::vec3 _angularVelocity, glm::vec3 _scale, glm::vec3 _growthVelocity, glm::vec3 _velocity, glm::vec4 _color)
 		{
+			transform.localPosition= _startPosition;
+			transform.localRotation = _rotation;
+			transform.localScale = _scale;
 			life_time = _life;
 			life_time_start = _life;
 			life_percentage = 0.0f;
 			startPosition = _startPosition;
-			position = startPosition;
-			rotation = _rotation;
+			//position = startPosition;
+			//rotation = _rotation;
 			angularVelocity = _angularVelocity;
-			scale = _scale;
+			//scale = _scale;
 			growthVelocity = _growthVelocity;
 			velocity = _velocity;
 			color = _color;		
@@ -48,15 +51,16 @@ namespace Wiwa
 		float life_time = 0;
 		float life_time_start = 0;
 		float life_percentage = 0;
-		glm::vec3 position;
+		Transform3D transform;
+		//glm::vec3 position;
 		glm::vec3 startPosition;
 		glm::vec3 velocity;
-		glm::vec3 rotation;
+		//glm::vec3 rotation;
 		glm::vec3 angularVelocity;
-		glm::vec3 scale;
+		//glm::vec3 scale;
 		glm::vec3 growthVelocity;
 		glm::vec4 color;
-		glm::mat4 transform;
+		//glm::mat4 transform;
 	};
 
 	class WI_API ParticleSystem : public System
@@ -75,7 +79,7 @@ namespace Wiwa
 
 		void OnDestroy() override;
 
-		void Render();
+		void Render(Particle& particle);
 
 		void SetValues(ParticleEmitterComponent settings);
 
@@ -94,8 +98,9 @@ namespace Wiwa
 
 		float m_Duration = 0.0f;
 
-		glm::vec4 ColorInterpolation(glm::vec4 col1, glm::vec4 col2, float percentage);
-
+		glm::vec4 InterpolateVec4(glm::vec4 valStart, glm::vec4 valEnd, float currentPercentage, float targetPercentage);
+		float InterpolateFloat(float valStart, float valEnd, float currentPercentage, float targetPercentage);
+		glm::vec3 InterpolateVec3(glm::vec3 valStart, glm::vec3 valEnd, float currentPercentage, float targetPercentage);
 	private:
 		unsigned int m_VAO;
 

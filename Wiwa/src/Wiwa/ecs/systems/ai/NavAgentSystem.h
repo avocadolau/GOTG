@@ -3,6 +3,7 @@
 #include "Wiwa/AI/AI_Crowd.h"
 #include <glm/glm.hpp>
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/ecs/components/ai/NavAgent.h>
 
 namespace Wiwa
 {
@@ -22,14 +23,18 @@ namespace Wiwa
         void SetMaxSpeed(float maxSpeed);
         void SetMaxAcceleration(float maxAcceleration);
 
+        void StopAgent();
+
         const glm::vec3& GetCurrentPosition() const;
         //const glm::vec3& GetCurrentVelocity() const;
-
+        const glm::vec3 GetCurrrentRotation(const glm::vec3& current_transform_rotation) const;
         float GetMaxSpeed() const;
         float GetMaxAcceleration() const;
 
         void RegisterWithCrowd();
         void RefreshParamters();
+
+        glm::vec3 GetRandPointOutsideCircle(const glm::vec3& circle_position, float radius);
     private:
         void Render();
         void DrawAgent();

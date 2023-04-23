@@ -314,7 +314,8 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 		extraOriginSize[0] = control->extraTexturePosition.width;
 		extraOriginSize[1] = control->extraTexturePosition.height;
 	}
-	pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+	if(control->type != Wiwa::GuiControlType::VIDEO) pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+	if(control->type == Wiwa::GuiControlType::VIDEO)  pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
 	pathForExtraAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 }
 void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
@@ -395,6 +396,9 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			break;
 		case Wiwa::GuiControlType::TEXT:
 			ImGui::InputText("text", &pathForAsset);
+			break;
+		case Wiwa::GuiControlType::VIDEO:
+			AssetContainerPath();
 			break;
 		default:
 			break;
@@ -529,6 +533,11 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 
 	}
 	break;
+	case Wiwa::GuiControlType::VIDEO:
+	{
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+	}
+	break;
 	case Wiwa::GuiControlType::ABILITY:
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
@@ -552,11 +561,11 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 		size_t cbcount = app.GetCallbacksCount();
 
 		if (cbcount > 0) {
-			Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
+			const Func* current_cb = app.getCallbackAt(callbackID);
 
 			ImGui::Text("Callback type:");
 
-			if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+			if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 			{
 				for (size_t n = 0; n < cbcount; n++)
 				{
@@ -565,8 +574,8 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 					switch (control->type)
 					{
 					case Wiwa::GuiControlType::BUTTON:
-						if (current_cb->getParamCount() == 0) {
-							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 0) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 							{
 								callbackID = n;
 								if (is_selected)
@@ -575,9 +584,9 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 						break;
 					case Wiwa::GuiControlType::CHECKBOX:
-						if (current_cb->getParamCount() == 1) {
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 1) {
+							if (current_cb->params.at(0).hash == (size_t)TypeHash::Bool) {
+								if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 								{
 									callbackID = n;
 									if (is_selected)
@@ -587,9 +596,9 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 						break;
 					case Wiwa::GuiControlType::SLIDER:
-						if (current_cb->getParamCount() == 1) {
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 1) {
+							if (current_cb->params.at(0).hash == (size_t)TypeHash::Float) {
+								if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 								{
 									callbackID = n;
 									if (is_selected)
@@ -599,8 +608,8 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 						break;
 					case Wiwa::GuiControlType::IMAGE:
-						if (current_cb->getParamCount() == 0) {
-							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+						if (current_cb->params.size() == 0) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 							{
 								callbackID = n;
 								if (is_selected)
@@ -629,7 +638,7 @@ void UIEditorPanel::AssetContainerPath()
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".png")
+			if (p.extension() == ".png" || p.extension() == ".mp4")
 			{
 				pathForAsset = pathS;
 			}

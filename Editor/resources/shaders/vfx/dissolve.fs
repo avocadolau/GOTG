@@ -20,16 +20,22 @@ uniform float u_DissolveAmount;
 uniform sampler2D u_Texture;
 uniform sampler2D u_DiscardTex;
 
+
 void main()
 {
     //calculate dissolve
-    float dissolve = texture2D(u_DiscardTex, TexCoord).r;
-    dissolve = dissolve *  0.999;
+    if(u_LifeTime > 0.9)
+    {
+        float dissolveAmount = (u_LifeTime - 0.9) * 10.0;
 
-    float visible = dissolve - u_DissolveAmount;
+        float dissolve = texture2D(u_DiscardTex, TexCoord).r;
+        dissolve = dissolve *  0.999;
 
-    if(visible < 0)
-        discard;
+        float visible = dissolve - dissolveAmount;
+
+        if(visible < 0)
+            discard;
+    }
 
     vec4 finalColor = texture2D(u_Texture, TexCoord) * u_Color;
 

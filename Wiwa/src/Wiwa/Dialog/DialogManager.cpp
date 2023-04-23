@@ -20,7 +20,7 @@ namespace Wiwa
 {
 	DialogManager::DialogManager()
 	{
-
+		
 	}
 
 	DialogManager::~DialogManager()
@@ -102,6 +102,25 @@ namespace Wiwa
 
 		//newConversation = nullptr;
 
+		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
+		{
+			editorConversations[e].bubbleImagePath = conversations[e].bubbleImagePath;
+			editorConversations[e].characterImagePath = conversations[e].characterImagePath;
+			editorConversations[e].conversationName = conversations[e].conversationName;
+			editorConversations[e].occupied = conversations[e].occupied;
+
+			for (int f = 0; f < MAX_CONVERSATION_NODES && conversations[e].nodes[f].occupied == true; f++)
+			{
+				editorConversations[e].nodes[f].text1 = conversations[e].nodes[f].text1;
+				editorConversations[e].nodes[f].text2 = conversations[e].nodes[f].text2;
+				editorConversations[e].nodes[f].text3 = conversations[e].nodes[f].text3;
+				editorConversations[e].nodes[f].occupied = conversations[e].nodes[f].occupied;
+
+			}
+
+
+		}
+
 		return true;
 	}
 
@@ -159,6 +178,13 @@ namespace Wiwa
 		{
 			render->EnableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+
+			InstanceRenderer& instanceRenderer = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.renderer_id);
+			instanceRenderer.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.instance_id, BLACK);
+			InstanceRenderer& instanceRenderer2 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text2_imgModeID.renderer_id);
+			instanceRenderer2.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text2_imgModeID.instance_id, BLACK);
+			InstanceRenderer& instanceRenderer3 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.renderer_id);
+			instanceRenderer3.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.instance_id, BLACK);
 
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);

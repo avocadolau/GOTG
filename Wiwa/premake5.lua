@@ -59,12 +59,6 @@ project "Wiwa"
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
 		"%{Library.Wwise_SA}",
-		"%{Library.opencv_core}",
-		"%{Library.opencv_video}",
-		"%{Library.opencv_videoio}",
-		"%{Library.opencv_highgui}",
-		"%{Library.opencv_imgproc}",
-		"%{Library.opencv_imgcodecs}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
@@ -116,7 +110,13 @@ project "Wiwa"
 			"%{Library.Detour_debug}",
 			"%{Library.DetourCrowd_debug}",
 			"%{Library.DetourTileCache_debug}",
-			"%{Library.Recast_debug}"
+			"%{Library.Recast_debug}",
+			"%{Library.opencv_core_debug}",
+			"%{Library.opencv_video_debug}",
+			"%{Library.opencv_videoio_debug}",
+			"%{Library.opencv_highgui_debug}",
+			"%{Library.opencv_imgproc_debug}",
+			"%{Library.opencv_imgcodecs_debug}"
 		}
 
 
@@ -134,7 +134,13 @@ project "Wiwa"
 			"%{Library.Detour_release}",
 			"%{Library.DetourCrowd_release}",
 			"%{Library.DetourTileCache_release}",
-			"%{Library.Recast_release}"
+			"%{Library.Recast_release}",
+			"%{Library.opencv_core}",
+			"%{Library.opencv_video}",
+			"%{Library.opencv_videoio}",
+			"%{Library.opencv_highgui}",
+			"%{Library.opencv_imgproc}",
+			"%{Library.opencv_imgcodecs}"
 			
 		}
 

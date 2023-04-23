@@ -16,4 +16,5 @@ public:
 private:
 	Wiwa::Shader* m_Shader = nullptr;
 	std::string m_ShaderPath;
+	std::string m_Path;
 };

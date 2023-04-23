@@ -14,8 +14,8 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa/utilities/math/Vector4f.h>
 #include <Wiwa/utilities/time/Time.h>
-#include <Wiwa/utilities/functions/Callback.h>
-
+#include <Wiwa/utilities/functions/Function.h>
+#include <Wiwa/utilities/functions/Action.h>
 #include "GameAssemblyHandle.h"
 
 namespace Wiwa
@@ -109,9 +109,9 @@ namespace Wiwa
 		bool HasSystemH(size_t hash) const;
 		// Reflect callbacks
 		size_t GetCallbacksCount() const { return m_Callbacks.size(); }
-		Callback* getCallback(size_t hash) const;
-		Callback* getCallbackAt(size_t index) const { return m_Callbacks[index]; };
-		void RegisterCallback(Callback* callback) { m_Callbacks.push_back(callback); }
+		const Func* getCallback(size_t hash) const;
+		const Func* getCallbackAt(size_t index) const { return m_Callbacks[index]; };
+		void RegisterCallback(const Func* callback) { m_Callbacks.push_back(callback); }
 		void ClearCallbacks();
 
 		void RegisterSystemType(const Type* system);
@@ -138,7 +138,7 @@ namespace Wiwa
 
 		std::vector<const Type*> m_ComponentTypes;
 		std::vector<const Type*> m_SystemTypes;
-		std::vector<Callback*> m_Callbacks;
+		std::vector<const Func*> m_Callbacks;
 
 		Size2i m_TargetResolution;
 

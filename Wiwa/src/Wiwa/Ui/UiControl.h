@@ -2,7 +2,8 @@
 
 #include <Wiwa/core/Core.h>
 #include <Wiwa/core/Renderer2D.h>
-#include <Wiwa/utilities/functions/Callback.h>
+#include <Wiwa/utilities/functions/Function.h>
+#include <Wiwa/utilities/functions/Action.h>
 #include <Wiwa/utilities/render/Text.h>
 #include <vector>
 #include <string>
@@ -41,15 +42,14 @@ namespace Wiwa
 	};
 	enum class GuiControlType
 	{
-		BUTTON,
-		TEXT,
-		TOGGLE,
-		CHECKBOX,
-		SLIDER,
-		INPUTBOX,
-		IMAGE,
-		BAR,
-		ABILITY,
+		BUTTON = 0,
+		TEXT = 1,
+		CHECKBOX = 3,
+		SLIDER = 4,
+		IMAGE = 6,
+		BAR = 7,
+		ABILITY = 8,
+		VIDEO = 9,
 	};
 
 	enum class GuiControlState
@@ -789,7 +789,7 @@ namespace Wiwa
 		size_t callbackID;
 
 		std::string name;
-		Callback* callback;
+		const Func* callback;
 
 		//THINGS FOR ANIMATIONS
 		std::vector<Rect2i> positionsForAnimations;

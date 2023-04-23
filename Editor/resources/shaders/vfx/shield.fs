@@ -7,28 +7,32 @@ layout (location = 1) out vec4 BrightColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 LocalPos;
+in mat4 View;
 
 //====================================
 // all vfx must have this unifroms
 //lifetime form 1 to 0,  100% normalized
 uniform float u_LifeTime;
 uniform vec4 u_Color;
-uniform vec4 u_ColorTex2;
 //=====================
 uniform vec3 u_CameraPosition;
 uniform sampler2D u_Texture;
-uniform sampler2D u_Texture2;
+uniform sampler2D u_HologramTexture;
 uniform sampler2D u_DiscardTex;
+uniform vec4 u_HologramColor;
 uniform vec2 u_FresnelRange;
 uniform vec4 u_FresnelColor;
+uniform float u_Amplitude; // controls the height of the displacement
+uniform float u_Frequency; // controls the frequency of the sine wave
+uniform float u_StartDissolve;
 
 void main()
 {
     //calculate dissolve
 
-    if(u_LifeTime > 0.9)
+    if(u_LifeTime > u_StartDissolve)
     {
-        float dissolveAmount = (u_LifeTime - 0.9) * 10.0;
+        float dissolveAmount = (u_LifeTime - u_StartDissolve) * 10.0;
 
         float dissolve = texture2D(u_DiscardTex, TexCoord).r;
         dissolve = dissolve *  0.999;
@@ -38,47 +42,27 @@ void main()
         if(visible < 0)
             discard;
     }
-    // Calculate the center of the texture
-    vec2 center = vec2(0.5, 0.5);
 
-    // Calculate the rotation matrix
-    float s = 0;
-    float c = cos(u_LifeTime);
-    mat2 rotationMatrix = mat2(c, -s, s, c);
-
-    // Apply the rotation to the texture coordinate
-    vec2 rotatedCoord = rotationMatrix * (TexCoord - center) + center;
-
-
-    //color tex 1
-    vec4 color1 = texture2D(u_Texture, TexCoord) * u_Color;
-    //get the second texture white part
-    vec4 color2 = texture2D(u_Texture2, rotatedCoord) * u_ColorTex2;
-
-    // Check if texture color is black
-    bool isBlack = color1.r == 0.0 && color1.g == 0.0 && color1.b == 0.0;
-
-    if(isBlack) 
-        color1 = vec4(1,1,1,0);
-
-
-    //ignore the black pixels
-    isBlack = color2.r <= 0.5 && color2.g <= 0.5  && color2.b <= 0.5 ;
-
-    if(isBlack)
-        color2 = vec4(1,1,1,0);  
-
-    //alpha blend
-    vec4 combinedColor = mix(color1, color2, color2.a);
-
-    //calculate fresnel
     vec3 dir = u_CameraPosition - LocalPos;
+
     float dotEyeNormal = dot(normalize(dir),normalize(Normal));
-    dotEyeNormal = abs(dotEyeNormal);
+    dotEyeNormal =abs(dotEyeNormal);
 
-    vec4 finalColor = mix( u_FresnelColor, combinedColor  ,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
+    vec4 colorTex  =  texture(u_Texture,TexCoord) * u_Color;   
 
-    FragColor = finalColor;
+    vec4 finalColor = mix(u_FresnelColor,colorTex,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
+
+    vec2 hologramTexCoords = TexCoord;
+
+    float displacement = u_Amplitude * sin(TexCoord.y * u_Frequency * u_LifeTime);
+    hologramTexCoords.y -= displacement;
+
+    vec4 hologramColor = texture(u_HologramTexture,hologramTexCoords)* u_HologramColor;
+
+    if(hologramColor.r == 0 && hologramColor.g == 0 && hologramColor.b ==  0)
+        hologramColor = vec4(1.0,1.0,1.0,1.0);
+
+    FragColor = mix(finalColor ,hologramColor ,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
 
     // check whether result is higher than some threshold, if so, output as bloom threshold color
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

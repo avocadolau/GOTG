@@ -103,7 +103,11 @@ namespace Wiwa
 			WI_CORE_ERROR("Audio engine error: [{}]", Audio::GetLastError());
 		}
 		ScriptEngine::Init();
+		
+		// Copy assembly before loading
+		Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
 
+		// Load assembly
 		LoadGameAssembly();
 
 		WI_CORE_WARN("=======Systems initialized=======");
@@ -329,14 +333,14 @@ namespace Wiwa
 		return stype != NULL;
 	}
 
-	Callback* Application::getCallback(size_t hash) const
+	const Func* Application::getCallback(size_t hash) const
 	{
-		Callback* cb = NULL;
+		const Func* cb = NULL;
 
 		size_t s = m_Callbacks.size();
 
 		for (size_t i = 0; i < s; i++) {
-			if (m_Callbacks[i]->getHash() == hash) {
+			if (m_Callbacks[i]->hash == hash) {
 				cb = m_Callbacks[i];
 				break;
 			}
@@ -409,6 +413,7 @@ namespace Wiwa
 
 				if (t->is_function) {
 					// Unregister callback
+					m_Callbacks.clear();
 				}
 				else {
 					if (t->custom_id == 0) {
@@ -451,6 +456,8 @@ namespace Wiwa
 
 					if (t->is_function) {
 						// Register as callback
+						const Func* func = (const Func*)t;
+						RegisterCallback(func);
 					}
 					else {
 						if (t->custom_id == 0) {
