@@ -88,5 +88,7 @@ namespace Wiwa
 		std::string NpcConversationTag;
 
 		Wiwa::Renderer2D::InstanceData continueImgID;
+
+		Color4f	BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
 	};
 }

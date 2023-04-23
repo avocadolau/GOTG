@@ -179,6 +179,13 @@ namespace Wiwa
 			render->EnableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 
+			InstanceRenderer& instanceRenderer = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.renderer_id);
+			instanceRenderer.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.instance_id, BLACK);
+			InstanceRenderer& instanceRenderer2 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text2_imgModeID.renderer_id);
+			instanceRenderer2.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text2_imgModeID.instance_id, BLACK);
+			InstanceRenderer& instanceRenderer3 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.renderer_id);
+			instanceRenderer3.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.instance_id, BLACK);
+
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
