@@ -135,6 +135,10 @@ inline ParamData FindTypes(std::string signature, std::vector<ParamData>& params
 
 	if (ind == signature.npos) {
 		ind = signature.find(')');
+
+		if (ind == 0) {
+			ind = signature.npos;
+		}
 	}
 
 	while (ind != signature.npos) {
