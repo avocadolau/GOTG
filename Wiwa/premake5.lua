@@ -110,7 +110,7 @@ project "Wiwa"
 			"%{Library.Detour_debug}",
 			"%{Library.DetourCrowd_debug}",
 			"%{Library.DetourTileCache_debug}",
-			"%{Library.Recast_debug}"
+			"%{Library.Recast_debug}",
 			"%{Library.opencv_core_debug}",
 			"%{Library.opencv_video_debug}",
 			"%{Library.opencv_videoio_debug}",
