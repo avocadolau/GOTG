@@ -64,17 +64,18 @@ namespace Wiwa
 			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
 
 			//Working one Pooling for Bullets
-			/*if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getMaxSize() >= GameStateManager::s_PoolManager->s_SimpleBulletsPool->getDisabledEntities().size())
+			/*
+			if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getMaxSize() >= GameStateManager::s_PoolManager->s_SimpleBulletsPool->getDisabledEntities().size())
 			{
 				SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 				SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
 				SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
-			}*/
-
+			}
+			*/
 			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
 			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
-
+			
 			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("shot", false);
 		}

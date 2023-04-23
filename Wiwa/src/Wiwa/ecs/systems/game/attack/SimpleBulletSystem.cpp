@@ -38,6 +38,15 @@ namespace Wiwa
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
+
+		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+		//if (physSystem)
+		//{
+		//	physSystem->DeactivateBody();
+		//}
 	}
 
 	void SimpleBulletSystem::OnUpdate()
@@ -102,7 +111,25 @@ namespace Wiwa
 			transform->localPosition.y = 20000.0f;
 		}
 
-		SimpleBullet* bullet = GetComponent<SimpleBullet>();
+		//SimpleBullet* bullet = GetComponent<SimpleBullet>();
+		//
+		//if (bullet)
+		//{
+		//	bullet->direction = glm::vec3(0.0f);
+		//	bullet->lifeTime = 0.0f;
+		//	bullet->velocity = 0.0f;
+		//}
+
+		//CollisionBody* collisionBody = GetComponent<CollisionBody>();
+
+		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+		//if (physSystem)
+		//{
+		//	physSystem->DeactivateBody();
+		//}
 
 		m_Timer = 0.0f;
 
