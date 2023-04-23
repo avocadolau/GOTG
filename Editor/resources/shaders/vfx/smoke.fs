@@ -34,6 +34,8 @@ uniform float u_LifeTime;
 uniform vec4 u_Color;
 //=====================
 uniform float u_DissolveAmount;
+uniform float u_OutDissolve;
+uniform float u_EnterDissolve;
 
 uniform sampler2D u_Texture;
 uniform sampler2D u_DiscardTex;
@@ -45,9 +47,9 @@ void main()
 {
   
     //calculate dissolve
-    if(u_LifeTime > 0.50)
+    if(u_LifeTime > u_OutDissolve)
     {
-        float dissolveAmount = (u_LifeTime - 0.5) * 10.0;
+        float dissolveAmount = (u_LifeTime - u_OutDissolve) * 10.0;
 
         vec4 displacement = texture2D(u_DiscardTex, TexCoord);
 
@@ -64,7 +66,7 @@ void main()
         if(visible < 0)
             discard;
     }
-    if(u_LifeTime < 0.1)
+    if(u_LifeTime < u_EnterDissolve)
     {
         float dissolveAmount = u_LifeTime * 10.0;
 

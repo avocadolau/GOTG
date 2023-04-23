@@ -156,6 +156,8 @@ namespace Wiwa
 		smokeShader->addUniform("u_Color", UniformType::fVec4);
 		smokeShader->addUniform("u_Texture", UniformType::Sampler2D);
 		smokeShader->addUniform("u_DissolveAmount", UniformType::Float);
+		smokeShader->addUniform("u_EnterDissolve", UniformType::Float);
+		smokeShader->addUniform("u_OutDissolve", UniformType::Float);
 		smokeShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/smoke", smokeShader);
@@ -174,6 +176,7 @@ namespace Wiwa
 		shieldShader->addUniform("u_HologramColor", UniformType::fVec4);
 		shieldShader->addUniform("u_Amplitude", UniformType::Float);
 		shieldShader->addUniform("u_Frequency", UniformType::Float);
+		shieldShader->addUniform("u_StartDissolve", UniformType::Float);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
 
@@ -195,7 +198,25 @@ namespace Wiwa
 		impactShader->addUniform("u_Color", UniformType::fVec4);
 		impactShader->addUniform("u_Texture", UniformType::Sampler2D);
 
-		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shot_impact", impactShader);
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/barrel_explosion/explosion", impactShader);
+
+		ResourceId explosionShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/barrel_explosion/explosion");
+		Shader* explosionShader = Wiwa::Resources::GetResourceById<Shader>(explosionShaderId);
+		explosionShader->Compile("resources/shaders/vfx/barrel_explosion/explosion");
+
+		explosionShader->addUniform("u_LifeTime", UniformType::Float);
+		explosionShader->addUniform("u_Color", UniformType::fVec4);
+		explosionShader->addUniform("u_FresnelColor", UniformType::fVec4);
+		explosionShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		explosionShader->addUniform("u_Texture", UniformType::Sampler2D);
+		explosionShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+		explosionShader->addUniform("u_HologramTexture", UniformType::Sampler2D);
+		explosionShader->addUniform("u_HologramColor", UniformType::fVec4);
+		explosionShader->addUniform("u_Amplitude", UniformType::Float);
+		explosionShader->addUniform("u_Frequency", UniformType::Float);
+		explosionShader->addUniform("u_StartDissolve", UniformType::Float);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/barrel_explosion/explosion", impactShader);
 
 		//===========================================================================================================
 
