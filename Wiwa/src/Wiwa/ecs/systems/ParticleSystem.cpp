@@ -263,7 +263,7 @@ namespace Wiwa {
 					}
 					else
 					{
-						// Convert rotation angles from degrees to radians
+						// Convert rotation angles from degrees to radians because glm works with radians
 						glm::vec3 rotationRad = glm::radians(particle.rotation);
 
 						transform = glm::translate(transform, particle.position);
