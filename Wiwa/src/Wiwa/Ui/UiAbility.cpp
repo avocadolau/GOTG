@@ -18,8 +18,8 @@ namespace Wiwa
 		text = "none";
 		audioEventForButton = "none";
 		this->callbackID = callbackID;
-		if (callbackID != WI_INVALID_INDEX)
-			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+	/*	if (callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);*/
 
 		if (path != "") {
 			textId1 = Wiwa::Resources::Load<Wiwa::Image>(path);

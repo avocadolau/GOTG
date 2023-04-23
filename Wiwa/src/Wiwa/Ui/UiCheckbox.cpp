@@ -23,8 +23,8 @@ namespace Wiwa
 		}
 
 		this->callbackID = callbackID;
-		if (callbackID != WI_INVALID_INDEX)
-			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
+		/*if (callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);*/
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		id_quad_normal = r2d.CreateInstancedQuadTex(m_Scene, texture->GetTextureId(), texture->GetSize(), { position.x,position.y }, { position.width,position.height }, texturePosition, Wiwa::Renderer2D::Pivot::CENTER);
