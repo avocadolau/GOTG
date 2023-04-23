@@ -20,6 +20,7 @@ uniform float u_DissolveAmount;
 uniform sampler2D u_Texture;
 uniform sampler2D u_DiscardTex;
 
+
 void main()
 {
     //calculate dissolve

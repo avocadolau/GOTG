@@ -24,14 +24,15 @@ uniform vec2 u_FresnelRange;
 uniform vec4 u_FresnelColor;
 uniform float u_Amplitude; // controls the height of the displacement
 uniform float u_Frequency; // controls the frequency of the sine wave
+uniform float u_StartDissolve;
 
 void main()
 {
     //calculate dissolve
 
-    if(u_LifeTime > 0.9)
+    if(u_LifeTime > u_StartDissolve)
     {
-        float dissolveAmount = (u_LifeTime - 0.9) * 10.0;
+        float dissolveAmount = (u_LifeTime - u_StartDissolve) * 10.0;
 
         float dissolve = texture2D(u_DiscardTex, TexCoord).r;
         dissolve = dissolve *  0.999;
