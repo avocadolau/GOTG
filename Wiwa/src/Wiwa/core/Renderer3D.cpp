@@ -170,6 +170,10 @@ namespace Wiwa
 		shieldShader->addUniform("u_FresnelRange", UniformType::fVec2);
 		shieldShader->addUniform("u_Texture", UniformType::Sampler2D);
 		shieldShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+		shieldShader->addUniform("u_HologramTexture", UniformType::Sampler2D);
+		shieldShader->addUniform("u_HologramColor", UniformType::fVec4);
+		shieldShader->addUniform("u_Amplitude", UniformType::Float);
+		shieldShader->addUniform("u_Frequency", UniformType::Float);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
 

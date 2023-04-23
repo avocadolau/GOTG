@@ -264,7 +264,7 @@ namespace Wiwa {
 					else
 					{
 						// Convert rotation angles from degrees to radians
-						glm::vec3 rotationRad = particle.rotation;
+						glm::vec3 rotationRad = glm::radians(particle.rotation);
 
 						transform = glm::translate(transform, particle.position);
 						transform = glm::rotate(transform, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
