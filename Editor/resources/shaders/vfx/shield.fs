@@ -17,9 +17,13 @@ uniform vec4 u_Color;
 //=====================
 uniform vec3 u_CameraPosition;
 uniform sampler2D u_Texture;
+uniform sampler2D u_HologramTexture;
 uniform sampler2D u_DiscardTex;
+uniform vec4 u_HologramColor;
 uniform vec2 u_FresnelRange;
 uniform vec4 u_FresnelColor;
+uniform float u_Amplitude; // controls the height of the displacement
+uniform float u_Frequency; // controls the frequency of the sine wave
 
 void main()
 {
@@ -47,7 +51,17 @@ void main()
 
     vec4 finalColor = mix(u_FresnelColor,colorTex,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
 
-    FragColor = finalColor;
+    vec2 hologramTexCoords = TexCoord;
+
+    float displacement = u_Amplitude * sin(TexCoord.y * u_Frequency * u_LifeTime);
+    hologramTexCoords.y -= displacement;
+
+    vec4 hologramColor = texture(u_HologramTexture,hologramTexCoords)* u_HologramColor;
+
+    if(hologramColor.r == 0 && hologramColor.g == 0 && hologramColor.b ==  0)
+        hologramColor = vec4(1.0,1.0,1.0,1.0);
+
+    FragColor = mix(finalColor ,hologramColor ,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
 
     // check whether result is higher than some threshold, if so, output as bloom threshold color
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

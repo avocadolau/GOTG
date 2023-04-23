@@ -82,7 +82,7 @@ void UIPanel::Draw()
 
 void UIPanel::DrawGuiElementSelection()
 {
-	const char* items[] = {"Button", "Slider", "CheckBox", "Image","Text","Bar","Ability"};
+	const char* items[] = {"Button", "Slider", "CheckBox", "Image","Text","Bar","Ability","Video"};
 	static const char* current_item = NULL;
 	if (ImGui::CollapsingHeader("Create UI element"))
 	{
@@ -145,6 +145,9 @@ void UIPanel::DrawGuiElementCreation(const char* current_item)
 	case GuiType::ABILITY:
 		DrawAbilityCreation(canvasSelected, Wiwa::SceneManager::getActiveScene()->GetGuiManager());
 		break;
+	case GuiType::VIDEO:
+		DrawVideoCreation(canvasSelected, Wiwa::SceneManager::getActiveScene()->GetGuiManager());
+		break;
 	default:
 		break;
 	}
@@ -179,6 +182,10 @@ GuiType UIPanel::GetSelectedElementType(const char* current_item)
 	if (current_item == "Ability")
 	{
 		return GuiType::ABILITY;
+	}
+	if (current_item == "Video")
+	{
+		return GuiType::VIDEO;
 	}
 
 	return GuiType::TEXT;
@@ -670,6 +677,45 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		rect.height = size[1];
 		if (canvas_id > -1)
 			m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id, true, rotation);
+	}
+	ImGui::PopID();
+}
+void UIPanel::DrawVideoCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
+{
+	ImGui::PushID("CreateVideo");
+	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
+	if (canvas_id < 0)ImGui::Text("Please select a canvas");
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
+
+	AssetContainer(pathForAsset.c_str());
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".mp4")
+			{
+				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	if (ImGui::Button("Create Text"))
+	{
+		Wiwa::Rect2i rect;
+		rect.x = position[0];
+		rect.y = position[1];
+		rect.width = size[0];
+		rect.height = size[1];
+		if (canvas_id > -1)
+			m_GuiManager.CreateGuiControl_Video(GuiControlType::VIDEO, m_GuiManager.canvas.at(canvas_id)->controls.size(), canvas_id, rect, pathForAsset.c_str(),true);
 	}
 	ImGui::PopID();
 }
