@@ -20,11 +20,6 @@ struct DirectionalLight
     vec3 Direction;
 };
 
-
-
-layout (location = 0) out vec4 FragColor;
-layout (location = 1) out vec4 BrightColor;
-
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 LocalPos;
