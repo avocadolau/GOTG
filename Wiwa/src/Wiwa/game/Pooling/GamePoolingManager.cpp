@@ -8,10 +8,10 @@ namespace Wiwa
 {
 	GamePoolingManager::GamePoolingManager()
 	{
-		s_PhalanxMeleePool = new EntityPool(Pool_Type::PHALANX_MELEE, 13, "assets\\Enemy\\Prefabs\\MeleePhalanx_01.wiprefab");
-		s_PhalanxRangedPool = new EntityPool(Pool_Type::PHALAN_RANGED, 13, "assets\\Enemy\\Prefabs\\RangedPhalanx_01.wiprefab");
+		s_PhalanxMeleePool = new EntityPool(Pool_Type::PHALANX_MELEE, 4, "assets\\Enemy\\PhalanxMelee\\MeleePhalanx_01.wiprefab");
+		s_PhalanxRangedPool = new EntityPool(Pool_Type::PHALAN_RANGED, 4, "assets\\Enemy\\PhalanxRanged\\RangedPhalanx_01.wiprefab");
 		s_SentinelPool = new EntityPool(Pool_Type::SENTINEL, 3, "assets\\Enemy\\Prefabs\\TestSentinel_01.wiprefab");
-		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 20, "assets\\enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
+		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 5, "assets\\enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		s_SentinelExplosion = new EntityPool(Pool_Type::SENTINEL_EXPLOSION, 3, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 		s_BossUltron = new EntityPool(Pool_Type::BOSS_ULTRON, 1, "assets\\Enemy\\Prefabs\\melee_phalanx.wiprefab");
 		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,3, "assets\\Enemy\\cluster_bullet\\cluster_bullet.wiprefab");

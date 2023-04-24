@@ -96,7 +96,7 @@ namespace Wiwa
 
 		// Random enemy
 		std::srand(static_cast<unsigned int>(std::time(nullptr)));
-		Pool_Type values[] = { Pool_Type::PHALANX_MELEE, Pool_Type::PHALAN_RANGED, Pool_Type::SENTINEL };
+		Pool_Type values[] = { Pool_Type::PHALANX_MELEE, Pool_Type::PHALAN_RANGED };
 		size_t size = sizeof(values) / sizeof(values[0]);
 		size_t randomIndex = std::rand() % size;
 		Pool_Type selection = values[randomIndex];
@@ -121,19 +121,19 @@ namespace Wiwa
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
 		}
 		break;
-		case Pool_Type::SENTINEL:
-		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
-		}
-		case Pool_Type::SUBJUGATOR:
-		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_Subjugator->GetFromPool();
-		}
-		break;
+		//case Pool_Type::SENTINEL:
+		//{
+		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
+		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
+		//	newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
+		//}
+		//case Pool_Type::SUBJUGATOR:
+		//{
+		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
+		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
+		//	newEnemyId = GameStateManager::s_PoolManager->s_Subjugator->GetFromPool();
+		//}
+		//break;
 		default:
 			WI_INFO(":(");
 			break;
@@ -194,12 +194,12 @@ namespace Wiwa
 		case Pool_Type::PHALAN_RANGED:
 			GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
 			break;
-		case Pool_Type::SENTINEL:
+	/*	case Pool_Type::SENTINEL:
 			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
 			break;
 		case Pool_Type::SUBJUGATOR:
 			GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
-			break;
+			break;*/
 		default:
 			break;
 		}

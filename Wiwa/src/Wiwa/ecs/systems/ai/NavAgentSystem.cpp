@@ -48,6 +48,9 @@ namespace Wiwa
 
     void NavAgentSystem::OnUpdate()
     {
+        if (m_AgentIndex != -1)
+            return;
+
         RefreshParamters();
         Crowd& crowd = Crowd::getInstance();
        /* const dtQueryFilter* filter= Crowd::getInstance().getCrowd().getFilter(m_AgentIndex);
@@ -263,6 +266,21 @@ namespace Wiwa
         } while (distance > radius);
 
         return pt;
+    }
+
+    bool NavAgentSystem::OnEnabledFromPool()
+    {
+        this->OnInit();
+        return true;
+    }
+
+    bool NavAgentSystem::OnDisabledFromPool()
+    {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().RemoveAgent(m_AgentIndex);
+        }
+        m_AgentIndex = -1;
+        return true;
     }
 
     void NavAgentSystem::Render()
