@@ -24,7 +24,7 @@
 #include <RecastDump.h>
 
 /// Recast build context.
-class WI_API BuildContext : public rcContext
+class BuildContext : public rcContext
 {
 	TimeVal m_startTime[RC_MAX_TIMERS];
 	TimeVal m_accTime[RC_MAX_TIMERS];

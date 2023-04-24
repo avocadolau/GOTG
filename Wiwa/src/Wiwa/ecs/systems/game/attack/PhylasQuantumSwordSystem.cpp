@@ -99,7 +99,6 @@ namespace Wiwa
 
 	glm::vec3 PhylasQuantumSwordSystem::CalculateForward(const Transform3D& t3d)
 	{
-		
 		glm::vec3 rotrad = glm::radians(t3d.rotation);
 
 		glm::vec3 forward;
