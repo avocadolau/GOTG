@@ -35,7 +35,10 @@ namespace Wiwa
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
 				waveSys->DestroyEnemy(enemy->GetEntity(), static_cast<Pool_Type>(self->enemyType));
 			}
-			
+			else
+			{
+				em.DestroyEntity(enemy->GetEntity());
+			}
 		}
 	}
 

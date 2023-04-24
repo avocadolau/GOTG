@@ -3,7 +3,6 @@
 #include "Layers/EditorLayer.h"
 
 #include <Wiwa/ecs/systems/System.h>
-#include <Wiwa/scripting/ScriptEngine.h>
 
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/core/Renderer2D.h>

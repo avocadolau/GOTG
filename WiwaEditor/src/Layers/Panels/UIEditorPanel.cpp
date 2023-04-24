@@ -2,7 +2,6 @@
 #include "UIEditorPanel.h"
 #include <unordered_map>
 #include <Wiwa/utilities/Reflection.h>
-#include <Wiwa/scripting/ScriptEngine.h>
 #include <Wiwa/core/Application.h>
 #include <Wiwa/utilities/render/Text.h>
 #include <ImGuizmo.h>
