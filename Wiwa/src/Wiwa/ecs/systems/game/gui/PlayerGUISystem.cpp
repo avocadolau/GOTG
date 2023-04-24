@@ -9,43 +9,59 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 	Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
-	PlayerElements(gm, character);
-
-	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+	if (gm.canvas.size() > 1)
 	{
-		pauseGame = true;
-	}
-	if (pauseGame && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart))
-	{
-		gm.canvas.at(CanvasHUD)->SwapActive();
-		Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
-		gm.canvas.at(PauseHUD)->SwapActive();
-		pauseGame = false;
-	}
-
-	if (Wiwa::SceneManager::getActiveScene()->IsScenePaused())
-	{
-		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::B))
+		PlayerElements(gm, character);
+		CurrentHUD = gm.getCurrentCanvas();
+		if (CurrentHUD == CanvasHUD)
 		{
-			returnToHUD = true;
+			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+			{
+				pauseGame = true;
+			}
+			if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart) && pauseGame)
+			{
+				gm.canvas.at(CanvasHUD)->SwapActive();
+				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
+				gm.canvas.at(PauseHUD)->SwapActive();
+				pauseGame = false;
+			}
 		}
-		if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::B))
+		if (CurrentHUD == PauseHUD)
 		{
-			gm.canvas.at(PauseHUD)->SwapActive();
-			Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
-			gm.canvas.at(CanvasHUD)->SwapActive();
-			returnToHUD = false;
+			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+			{
+				returnToHUD = true;
+			}
+			if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart))
+			{
+				gm.canvas.at(CanvasHUD)->SwapActive();
+				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
+				gm.canvas.at(PauseHUD)->SwapActive();
+				returnToHUD = false;
+			}
+		}
+		if (CurrentHUD == OptionsHUD)
+		{
+			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+			{
+				returnToPauseHUD = true;
+			}
+			if (returnToPauseHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart))
+			{
+				gm.canvas.at(OptionsHUD)->SwapActive();
+				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
+				gm.canvas.at(PauseHUD)->SwapActive();
+				returnToPauseHUD = false;
+			}
+		}
+		if (character->Health <= 0 && !deathHud)
+		{
+			DeathHud(gm);
+			deathHud = true;
 		}
 	}
-	if (character->Health <= 0 && !deathHud)
-	{
-		DeathHud(gm);
-		deathHud = true;
-	}
 
-
-	
 }
 
 void Wiwa::PlayerGUISystem::DeathHud(Wiwa::GuiManager& gm)

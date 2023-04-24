@@ -21,8 +21,8 @@ namespace Wiwa
 		audioEventForButton = audioEventName;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		this->callbackID = callbackID;
-		/*if (callbackID != WI_INVALID_INDEX)
-			callback = Wiwa::Application::Get().getCallbackAt(callbackID);*/
+		if (callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 		textId2 = Wiwa::Resources::Load<Wiwa::Image>(slider_path);
 		extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 

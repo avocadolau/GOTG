@@ -72,6 +72,8 @@ namespace Wiwa
 
 		void LoadWiUI(const char* path);
 
+		int getCurrentCanvas();
+
 	public:
 		std::vector<GuiCanvas*> canvas;
 		std::vector<GuiCanvas*> canvasToDestroy;

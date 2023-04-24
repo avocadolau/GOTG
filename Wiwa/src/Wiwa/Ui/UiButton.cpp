@@ -26,8 +26,8 @@ namespace Wiwa
 		//extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 		this->callbackID = callbackID;
 
-	/*	if(callbackID != WI_INVALID_INDEX)
-			callback = Wiwa::Application::Get().getCallbackAt(callbackID);*/
+		if(callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		

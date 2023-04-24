@@ -561,75 +561,105 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 {
 	Wiwa::Application& app = Wiwa::Application::Get();
-	if (callbackID != WI_INVALID_INDEX)
-	{
-		size_t cbcount = app.GetCallbacksCount();
-
-		if (cbcount > 0) {
-			const Func* current_cb = app.getCallbackAt(callbackID);
-
-			ImGui::Text("Callback type:");
-
-			if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
+	size_t cbcount = app.GetCallbacksCount();
+	if (callbackID == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			const Func* cb = app.getCallbackAt(i);
+			switch (control->type)
 			{
-				for (size_t n = 0; n < cbcount; n++)
-				{
-					bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
-					current_cb = app.getCallbackAt(n);
-					switch (control->type)
-					{
-					case Wiwa::GuiControlType::BUTTON:
-						if (current_cb->params.size() == 0) {
-							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-							{
-								callbackID = n;
-								if (is_selected)
-									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-							}
-						}
-						break;
-					case Wiwa::GuiControlType::CHECKBOX:
-						if (current_cb->params.size() == 1) {
-							if (current_cb->params.at(0).hash == (size_t)TypeHash::Bool) {
-								if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-								}
-							}
-						}
-						break;
-					case Wiwa::GuiControlType::SLIDER:
-						if (current_cb->params.size() == 1) {
-							if (current_cb->params.at(0).hash == (size_t)TypeHash::Float) {
-								if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-								}
-							}
-						}
-						break;
-					case Wiwa::GuiControlType::IMAGE:
-						if (current_cb->params.size() == 0) {
-							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-							{
-								callbackID = n;
-								if (is_selected)
-									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-							}
-						}
-						break;
-					default:
-						break;
-					}
+			case Wiwa::GuiControlType::BUTTON:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("void")) {
+
+					callbackID = i;
+
 				}
-				ImGui::EndCombo();
+				break;
+			case Wiwa::GuiControlType::CHECKBOX:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("bool")) {
+
+					callbackID = i;
+
+				}
+				break;
+			case Wiwa::GuiControlType::SLIDER:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("float")) {
+
+					callbackID = i;
+
+				}
+				break;
+			default:
+				break;
 			}
+			
 		}
 	}
+
+	if (cbcount > 0) {
+		const Func* current_cb = app.getCallbackAt(callbackID);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
+		{
+			for (size_t n = 0; n < cbcount; n++)
+			{
+				bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
+				current_cb = app.getCallbackAt(n);
+				switch (control->type)
+				{
+				case Wiwa::GuiControlType::BUTTON:
+					if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
+						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+						{
+							callbackID = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::CHECKBOX:
+					if (current_cb->params.size() == 1) {
+						if (current_cb->params.at(0).hash == FNV1A_HASH("bool")) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::SLIDER:
+					if (current_cb->params.size() == 1) {
+						if (current_cb->params.at(0).hash == FNV1A_HASH("float")) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::IMAGE:
+					if (current_cb->params.size() == 0 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
+						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+						{
+							callbackID = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			ImGui::EndCombo();
+		}
+	}
+	
 }
 
 void UIEditorPanel::AssetContainerPath()

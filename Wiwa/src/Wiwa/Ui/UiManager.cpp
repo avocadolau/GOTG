@@ -504,6 +504,18 @@ namespace Wiwa
 		file.Close();
 
 	}
+	int GuiManager::getCurrentCanvas()
+	{
+		int canvaSelected = 0;
+		for (size_t i = 0; i < canvas.size(); i++)
+		{
+			if (canvas.at(i)->active)
+			{
+				canvaSelected = i;
+			}
+		}
+		return canvaSelected;
+	}
 	bool GuiManager::_loadGUIImpl(Wiwa::File& File)
 	{
 		std::vector<GuiCanvas*>& canvas = ReturnCanvas();

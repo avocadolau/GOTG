@@ -8,11 +8,14 @@ namespace Wiwa
     class WI_API PlayerGUISystem : public System
     {
     private:
+        int CurrentHUD = 0;
         int CanvasHUD = 0;
         int PauseHUD = 1;
+        int OptionsHUD = 2;
         int DeathHUD = 3;
         bool deathHud = false;
         bool returnToHUD = false;
+        bool returnToPauseHUD = false;
         bool pauseGame = false;
         size_t lastCoins = -1;
         Ability** abilitiesList;

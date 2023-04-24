@@ -2,80 +2,95 @@
 #include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/core/Application.h>
+#include <Wiwa/core/Window.h>
+#include <Wiwa/audio/Audio.h>
 #include <iostream>
 
-void GoToMilanoHub()
+GoToMilanoHub_ GoToMilanoHub()
 {
-	std::cout << "Funsiona el milano hub" << std::endl;
-	//Wiwa::SceneManager::ChangeSceneByIndex(1);
+	Wiwa::SceneManager::ChangeSceneByIndex(2);
+	return GoToMilanoHub_::hola;
 }
 
-//void GoMainMenu()
-//{
-//	std::cout << "Go Main Menu" << std::endl;
-//}
-//
-//void Quit()
-//{
-//	std::cout << "Quit" << std::endl;
-//}
-//
-//void Resume_PauseGame()
-//{
-//	std::cout << "Resume/Pause game" << std::endl;
-//
-//}
-//
-//void ActivateOptionsCanvas()
-//{
-//	std::cout << "Activate Option canvas" << std::endl;
-//
-//}
-//
-//void DeActivateOptionsCanvas()
-//{
-//	std::cout << "DeActivate Option canvas" << std::endl;
-//
-//}
-//
-//void SetFullScreen(bool ret)
-//{
-//	std::cout << "Set fullscreen" << std::endl;
-//
-//}
-//
-//void SetVsync(bool ret)
-//{
-//	std::cout << "Set vsync" << std::endl;
-//
-//}
-//
-//void SetVolumeMusic(float level)
-//{
-//	std::cout << "set music" << std::endl;
-//
-//}
-//
-//void SetVolumeFX(float level)
-//{
-//	std::cout << "set volume fx" << std::endl;
-//
-//}
-//
-//void PlaceHolderButton()
-//{
-//	std::cout << "place holder" << std::endl;
-//
-//}
-//
-//void ActivateOptionsMenu()
-//{
-//	std::cout << "Activate options menu" << std::endl;
-//
-//}
-//
-//void DeActivateOptionsMenu()
-//{
-//	std::cout << "Deactivate options menu" << std::endl;
-//
-//}
+GoMainMenu_ GoMainMenu()
+{
+	Wiwa::SceneManager::ChangeSceneByIndex(1);
+	return GoMainMenu_::hola;
+}
+
+Quit_ Quit()
+{
+	Wiwa::Application::Get().Quit();
+	return Quit_();
+}
+
+Resume_PauseGame_ Resume_PauseGame()
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	gm.canvas.at(1)->SwapActive();
+	Wiwa::SceneManager::PauseCurrentScene();
+	gm.canvas.at(0)->SwapActive();
+	return Resume_PauseGame_();
+}
+
+ActivateOptionsCanvas_ ActivateOptionsCanvas()
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	gm.canvas.at(1)->SwapActive();
+	gm.canvas.at(2)->SwapActive();
+	return ActivateOptionsCanvas_();
+}
+
+DeActivateOptionsCanvas_ DeActivateOptionsCanvas()
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	gm.canvas.at(2)->SwapActive();
+	gm.canvas.at(1)->SwapActive();
+	return DeActivateOptionsCanvas_();
+}
+
+SetFullScreen_ SetFullScreen(bool ret)
+{
+	Wiwa::Application::Get().GetWindow().SetFullScreen(ret);
+	return SetFullScreen_();
+}
+
+SetVsync_ SetVsync(bool ret)
+{
+	Wiwa::Application::Get().GetWindow().SetVSync(ret);
+	return SetVsync_();
+}
+
+SetVolumeMusic_ SetVolumeMusic(float level)
+{
+	Audio::ChangeMasterVolume((int)level);
+	return SetVolumeMusic_();
+}
+
+SetVolumeFX_ SetVolumeFX(float level)
+{
+	Audio::ChangeMasterVolume((int)level);
+	return SetVolumeFX_();
+}
+
+PlaceHolderButton_ PlaceHolderButton()
+{
+	return PlaceHolderButton_();
+}
+
+ActivateOptionsMenu_ ActivateOptionsMenu()
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	gm.canvas.at(0)->SwapActive();
+	gm.canvas.at(1)->SwapActive();
+	return ActivateOptionsMenu_();
+}
+
+DeActivateOptionsMenu_ DeActivateOptionsMenu()
+{
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	gm.canvas.at(1)->SwapActive();
+	gm.canvas.at(0)->SwapActive();
+	return DeActivateOptionsMenu_();
+}
+

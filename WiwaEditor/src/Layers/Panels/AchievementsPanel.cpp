@@ -86,6 +86,7 @@ void AchievementsPanel::Draw()
             Wiwa::AchievementsManager::DefineProperty("new property","description",0,Wiwa::ActivationRules::NONE,0);
         }
 
+        ShowPropertiesTable(Wiwa::AchievementsManager::GetProperties());
        
 		ImGui::Separator();
 		if (ImGui::Button("Save"))
@@ -99,7 +100,7 @@ void AchievementsPanel::Draw()
 
 		if (ImGui::Button("add"))
 		{
-
+            //Wiwa::AchievementsManager::AddAchievement()
 		}
 
 

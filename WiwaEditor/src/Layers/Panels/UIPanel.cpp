@@ -250,7 +250,7 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
-				if (current_cb->params.size() == 0) {
+				if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
 					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 					{
 						current_item = n;
@@ -347,10 +347,9 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		for (size_t i = 0; i < cbcount; i++) {
 			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->params.size() == 1) {
-				if (cb->params.at(0).hash == (size_t)TypeHash::Float) {
-					current_item = i;
-				}
+			if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("float")) {
+				current_item = i;
+				
 			}
 		}
 	}
@@ -366,14 +365,12 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
-				if (current_cb->params.size() == 1) {
-					if (current_cb->params.at(0).hash == (size_t)TypeHash::Float) {
-						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-						{
-							current_item = n;
-							if (is_selected)
-								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-						}
+				if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("float")) {
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 					}
 				}
 			}
@@ -758,10 +755,10 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 		for (size_t i = 0; i < cbcount; i++) {
 			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->params.size() == 1) {
-				if (cb->params.at(0).hash == (size_t)TypeHash::Bool) {
-					current_item = i;
-				}
+			if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("bool")) {
+				
+				current_item = i;
+				
 			}
 		}
 	}
@@ -777,15 +774,15 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
-				if (current_cb->params.size() == 1) {
-					if (current_cb->params.at(0).hash == (size_t)TypeHash::Bool) {
-						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-						{
-							current_item = n;
-							if (is_selected)
-								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-						}
+				if (current_cb->params.size() == 1 &&  current_cb->params.at(0).hash == FNV1A_HASH("bool")) {
+					
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 					}
+					
 				}
 			}
 			ImGui::EndCombo();
