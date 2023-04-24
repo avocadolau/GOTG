@@ -1,1 +1,0 @@
-{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.034563541412353516,"u_Color":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"u_Texture":"assets/textures/t_perlin_noise3.png"}}
