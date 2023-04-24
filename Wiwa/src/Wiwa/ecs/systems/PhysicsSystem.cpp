@@ -86,7 +86,8 @@ namespace Wiwa {
 
 	bool PhysicsSystem::OnDisabledFromPool()
 	{
-		obj->velocity = { 0,0,0 };
+		if (obj != nullptr)
+			obj->velocity = { 0,0,0 };
 		return false;
 	}
 
