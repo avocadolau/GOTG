@@ -171,10 +171,13 @@ namespace Wiwa
             // Calculate the forward vector from the current position to the target position
             glm::vec3 forward = glm::normalize(nextPos - m_CurrentPos);
 
-            // Calculate the angle between the current forward vector and the target forward vector
-            float angle = glm::angle(forward, { 0.0f, 1.0f, 0.0f });
-            if (forward.x < 0.0f) {
-                angle = (-angle);
+            // Calculate the angle between the forward vector and the world forward vector (0, 0, 1)
+            float angle = glm::angle(forward, glm::vec3(0.0f, 0.0f, 1.0f));
+
+            // Determine the sign of the angle based on the cross product between the forward vector and the world forward vector (0, 0, 1)
+            glm::vec3 crossProduct = glm::cross(forward, glm::vec3(0.0f, 0.0f, 1.0f));
+            if (crossProduct.y > 0.0f) {
+                angle = -angle;
             }
 
             float targetRotation = angle * 180 / glm::pi<float>();
@@ -193,10 +196,12 @@ namespace Wiwa
             // Calculate the new interpolated rotation
             float interpolatedRotation = current_transform_rotation.y + rotationDifference * tRot;
 
-            /*transform->localRotation.y = interpolatedRotation;*/
             return glm::vec3(current_transform_rotation.x, interpolatedRotation, current_transform_rotation.z);
         }
     }
+
+
+
 
     float NavAgentSystem::GetMaxSpeed() const
     {
