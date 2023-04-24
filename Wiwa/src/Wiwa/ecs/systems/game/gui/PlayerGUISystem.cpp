@@ -258,7 +258,11 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	
 	abilitiesList = Wiwa::GameStateManager::GetPlayerInventory().GetAbilities();
 	buffsList = Wiwa::GameStateManager::GetPlayerInventory().GetBuffs();
-	Tokens(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
+	
+	if (lastCoins != Wiwa::GameStateManager::GetPlayerInventory().GetTokens())
+	{
+		//Coins(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
+	}
 
 	CooldownState(abilitiesList, gm);
 	CooldownState(buffsList, gm);
@@ -267,6 +271,8 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 
 
 	PauseElementsUpdate(abilitiesList, buffsList, gm);
+
+	lastCoins = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
 
 	if (leftTrigger >= 0.f)
 	{
@@ -421,16 +427,16 @@ void Wiwa::PlayerGUISystem::PauseElementsUpdate(Ability** ability, Buff** buff, 
 	
 }
 
-void Wiwa::PlayerGUISystem::Tokens(uint32_t tokens, Wiwa::GuiManager& gm)
+void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)
 {
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-	std::string my_string = std::to_string(tokens);
+	std::string my_string = std::to_string(coins);
 
 	Wiwa::Text* newText = new Wiwa::Text;
 	const char* newWord = my_string.c_str();
-
-	gm.canvas.at(CanvasHUD)->controls.at(5)->SwapText(newWord, r2d, newText);
-
-
+	gm.canvas.at(CanvasHUD)->controls.at(5)->text = newWord;
+	newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", newWord);
+	r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
+	r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
 }
 

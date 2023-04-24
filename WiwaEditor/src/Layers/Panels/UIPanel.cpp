@@ -667,7 +667,7 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
 	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
-	ImGui::InputText("String", (char*)pathForAsset.c_str(),64);
+	ImGui::InputText("String",&pathForAsset);
 
 	if (ImGui::Button("Create Text"))
 	{
