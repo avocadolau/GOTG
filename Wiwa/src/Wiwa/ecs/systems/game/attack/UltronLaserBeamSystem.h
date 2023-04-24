@@ -27,8 +27,9 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
-		bool OnEnabledFromPool();
-
+		void InitLaserBeam();
+		//bool OnEnabledFromPool();
+		bool EnableLaser();
 		bool OnDisabledFromPool();
 
 	};

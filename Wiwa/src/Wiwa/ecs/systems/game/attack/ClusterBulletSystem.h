@@ -33,7 +33,8 @@ namespace Wiwa {
 		void BlowClusterBullet01(EntityId bulletId);
 		void BlowClusterBullet02(EntityId bulletId);
 
-		bool OnEnabledFromPool();
+		//bool OnEnabledFromPool();
+		bool EnableBullet();
 		bool OnDisabledFromPool();
 	};
 }

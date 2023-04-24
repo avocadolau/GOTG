@@ -2,6 +2,8 @@
 #include "BossUltronClusterShotsAttack.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
+#include "Wiwa/ecs/systems/game/attack/ClusterBulletSystem.h"
+#include "Wiwa/ecs/systems/PhysicsSystem.h"
 
 namespace Wiwa
 {
@@ -66,7 +68,7 @@ namespace Wiwa
 	EntityId* BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\cluster_bullet\\cluster_bullet.wiprefab"); 
+		EntityId newBulletId = GameStateManager::s_PoolManager->s_ClusterBulletsPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions
@@ -81,6 +83,13 @@ namespace Wiwa
 		//bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
+
+		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
+		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+		physSys->CreateBody();
+
+		clusterSystem->EnableBullet();
 		
 		return &newBulletId;
 	}

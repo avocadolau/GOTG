@@ -4,6 +4,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
+#include "Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h"
 
 Wiwa::ClusterBulletSystem::ClusterBulletSystem()
 {
@@ -23,11 +24,14 @@ void Wiwa::ClusterBulletSystem::OnAwake()
 
 void Wiwa::ClusterBulletSystem::OnInit()
 {
-	InitClusterBullet();
+	
 }
 
 void Wiwa::ClusterBulletSystem::InitClusterBullet()
 {
+	if (!getAwake())
+		System::Awake();
+
 	ClusterBullet* bullet = GetComponentByIterator<ClusterBullet>(m_BulletIt);
 
 	//bullet->damage = CLUSTER_BULLET_DAMAGE;
@@ -111,7 +115,7 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId simpleBullet)
 {
 	Wiwa::EntityManager& entityManager = this->getScene().GetEntityManager();
-	EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
+	EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 	//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 	// Set intial positions
@@ -128,6 +132,13 @@ void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId 
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bull_dir;
 	bullet->damage = 10;
+
+	Wiwa::SimpleBulletSystem* simpleBulletSystem = entityManager.GetSystem<Wiwa::SimpleBulletSystem>(newBulletId);
+	Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+	physSys->CreateBody();
+
+	simpleBulletSystem->EnableBullet();
 }
 
 void Wiwa::ClusterBulletSystem::BlowClusterBullet01(EntityId bulletId)
@@ -174,7 +185,7 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 	}
 }
 
-bool Wiwa::ClusterBulletSystem::OnEnabledFromPool()
+bool Wiwa::ClusterBulletSystem::EnableBullet()
 {
 	ClusterBullet* clusterBullet = GetComponent<ClusterBullet>();
 	if (clusterBullet)
