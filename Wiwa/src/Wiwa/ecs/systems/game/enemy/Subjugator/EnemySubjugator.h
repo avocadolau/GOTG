@@ -1,10 +1,10 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/SubjugatorAttack.h";
-#include "StateMachine/SubjugatorChasing.h";
-#include "StateMachine/SubjugatorIdle.h";
-#include "StateMachine/SubjugatorSpawn.h";
-#include "StateMachine/SubjugatorDeath.h";
+#include "StateMachine/SubjugatorAttack.h"
+#include "StateMachine/SubjugatorChasing.h"
+#include "StateMachine/SubjugatorIdle.h"
+#include "StateMachine/SubjugatorSpawn.h"
+#include "StateMachine/SubjugatorDeath.h"
 #include "StateMachine/SubjugatorHit.h"
 
 namespace Wiwa {

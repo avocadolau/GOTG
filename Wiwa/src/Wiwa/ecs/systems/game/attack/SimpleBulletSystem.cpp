@@ -24,7 +24,7 @@ namespace Wiwa
 
 	void SimpleBulletSystem::OnInit()
 	{
-		InitBullet();
+	
 	}
 
 	void SimpleBulletSystem::InitBullet()
@@ -40,7 +40,6 @@ namespace Wiwa
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
-
 		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
 		//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
@@ -66,9 +65,8 @@ namespace Wiwa
 		{
 			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			em.DestroyEntity(m_EntityId);*/
-			
-			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 			WI_INFO("Returning bullet to pool id: {}", m_EntityId);
+			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
 		}	
 	}
 
@@ -96,14 +94,14 @@ namespace Wiwa
 		}
 	}
 
-	bool SimpleBulletSystem::OnEnabledFromPool()
+	bool SimpleBulletSystem::EnableBullet()
 	{
 		SimpleBullet* bullet = GetComponent<SimpleBullet>();
 		if (bullet)
 		{
 			InitBullet();
 		}
-
+		m_Timer = 0.0f;
 		return true;
 	}
 
@@ -112,7 +110,7 @@ namespace Wiwa
 		Transform3D* transform = GetComponent<Transform3D>();
 		if (transform)
 		{
-			transform->localPosition.y = 20000.0f;
+			transform->localPosition.y = 3000.0f;
 		}
 
 		//SimpleBullet* bullet = GetComponent<SimpleBullet>();
@@ -126,14 +124,11 @@ namespace Wiwa
 
 		//CollisionBody* collisionBody = GetComponent<CollisionBody>();
 
-		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
-		//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+		PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
 
-		//if (physSystem)
-		//{
-		//	physSystem->DeactivateBody();
-		//}
+		physSystem->DeleteBody();
 
 		m_Timer = 0.0f;
 

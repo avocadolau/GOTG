@@ -278,12 +278,33 @@ void DialogPanel::Draw()
 			if (currentCreationStep == 5)
 			{
 				ImGui::InputText("Conversation name", &dm.conversations[currentConversation].conversationName);
+				ImGui::TextWrapped("Note: 'Conversation name' must match with the entity tag name asigned to the NPC object.");
+
+				ImGui::NewLine();
 
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
 					dm.conversations[currentConversation].occupied = true;
 					dm.SaveAllDialogs();
+
+					for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
+					{
+						currentCreatingNodeIsSaved[m] = false;
+						dm.editorConversations[currentConversation].nodes[m].occupied = dm.conversations[currentConversation].nodes[m].occupied;
+						dm.editorConversations[currentConversation].nodes[m].text1 = dm.conversations[currentConversation].nodes[m].text1;
+						dm.editorConversations[currentConversation].nodes[m].text2 = dm.conversations[currentConversation].nodes[m].text2;
+						dm.editorConversations[currentConversation].nodes[m].text3 = dm.conversations[currentConversation].nodes[m].text3;
+
+					}
+
+					dm.editorConversations[currentConversation].bubbleImagePath = dm.conversations[currentConversation].bubbleImagePath;
+					dm.editorConversations[currentConversation].characterImagePath = dm.conversations[currentConversation].characterImagePath;
+					dm.editorConversations[currentConversation].conversationName = dm.conversations[currentConversation].conversationName;
+					dm.editorConversations[currentConversation].nodes[0].occupied = dm.conversations[currentConversation].nodes[0].occupied;
+
+					currentEditingConversationName[currentConversation] = dm.conversations[currentConversation].conversationName;
+
 					currentConversation++;
 
 					currentCreationStep = 6;
@@ -433,6 +454,7 @@ void DialogPanel::Draw()
 
 				ImGui::TextWrapped("Character image:");
 				ImGui::SameLine();
+				ImGui::PushID(i);
 				AssetContainer(dm.editorConversations[i].characterImagePath.c_str());
 				if (ImGui::BeginDragDropTarget())
 				{
@@ -450,10 +472,12 @@ void DialogPanel::Draw()
 					}
 					ImGui::EndDragDropTarget();
 				}
+				ImGui::PopID();
 				ImGui::NewLine();
 
 				ImGui::TextWrapped("Bubble image:");
 				ImGui::SameLine();
+				ImGui::PushID(i);
 				AssetContainer(dm.editorConversations[i].bubbleImagePath.c_str());
 				if (ImGui::BeginDragDropTarget())
 				{
@@ -461,20 +485,23 @@ void DialogPanel::Draw()
 					{
 						const wchar_t* path = (const wchar_t*)payload->Data;
 						std::wstring ws(path);
-						std::string pathS(ws.begin(), ws.end());
-						std::filesystem::path p = pathS.c_str();
+						std::string pathS2(ws.begin(), ws.end());
+						std::filesystem::path p = pathS2.c_str();
 						if (p.extension() == ".png")
 						{
-							dm.editorConversations[i].bubbleImagePath = pathS;
+							dm.editorConversations[i].bubbleImagePath = pathS2;
 							
 						}
 					}
 					ImGui::EndDragDropTarget();
 				}
-
+				ImGui::PopID();
 				ImGui::NewLine();
 
+				ImGui::PushID(i);
 				ImGui::InputText("Conversation Name", &dm.editorConversations[i].conversationName);
+				ImGui::PopID();
+				ImGui::TextWrapped("Note: 'Conversation name' must match with the entity tag name asigned to the NPC object.");
 
 				ImGui::NewLine();
 

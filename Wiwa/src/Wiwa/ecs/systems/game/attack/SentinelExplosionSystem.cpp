@@ -23,7 +23,7 @@ namespace Wiwa
 
 	void SentinelExplosionSystem::OnInit()
 	{
-		InitExplosion();
+		//InitExplosion();
 	}
 
 	void SentinelExplosionSystem::InitExplosion()
@@ -49,8 +49,9 @@ namespace Wiwa
 
 		if (m_Timer >= explosion->lifeTime)
 		{
-			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);
+			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			em.DestroyEntity(m_EntityId);*/
+			GameStateManager::s_PoolManager->s_SentinelExplosion->ReturnToPool(m_EntityId);
 		}
 
 	}
@@ -72,20 +73,14 @@ namespace Wiwa
 				GameStateManager::DamagePlayer(explosion->damage);
 			}
 
-			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);
+	/*		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			em.DestroyEntity(m_EntityId);*/
 		}
 	}
 
-	bool SentinelExplosionSystem::OnEnabledFromPool()
+	void SentinelExplosionSystem::EnableExplosion()
 	{
-		SentinelExplosion* explosion = GetComponent<SentinelExplosion>();
-		if (explosion)
-		{
-			InitExplosion();
-		}
-
-		return true;
+		InitExplosion();
 	}
 
 	bool SentinelExplosionSystem::OnDisabledFromPool()
@@ -96,10 +91,11 @@ namespace Wiwa
 			transform->localPosition.y = 20000.0f;
 		}
 
-		SentinelExplosion* explosion = GetComponent<SentinelExplosion>();
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+		physSystem->DeleteBody();
 
 		m_Timer = 0.0f;
-
 		return true;
 	}
 

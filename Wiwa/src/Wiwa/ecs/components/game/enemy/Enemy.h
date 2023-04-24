@@ -10,7 +10,7 @@ namespace Wiwa {
 	struct WI_API Enemy {
 		int enemyType;
 		bool hasFinished;
-		size_t waveId;
+		int waveId;
 		glm::vec3 currentRotation;
 	};
 }

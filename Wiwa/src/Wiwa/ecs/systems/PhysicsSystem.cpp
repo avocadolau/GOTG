@@ -86,11 +86,10 @@ namespace Wiwa {
 
 	bool PhysicsSystem::OnDisabledFromPool()
 	{
-		obj->velocity = { 0,0,0 };
+		if (obj != nullptr)
+			obj->velocity = { 0,0,0 };
 		return false;
 	}
-
-
 
 	void PhysicsSystem::DeleteBody()
 	{
@@ -107,7 +106,6 @@ namespace Wiwa {
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 	
-
 		CollisionBody* rb = GetComponent<CollisionBody>();
 		Transform3D* transform = GetComponent<Transform3D>();
 

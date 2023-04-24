@@ -20,6 +20,8 @@ namespace Wiwa {
 
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_PlayerStatsIt;
+		SystemHash m_PhysicsSystemHash;
+
 		EntityId m_PlayerId;
 		EntityId m_WaveId = -1;
 		bool m_WasSpawnedBySpawner = false;
@@ -46,6 +48,8 @@ namespace Wiwa {
 		bool OnEnabledFromPool() override;
 
 		bool OnDisabledFromPool() override;
+
+		void LookAt(const glm::vec3& target_look);
 
 		void ChasePlayer();
 

@@ -374,7 +374,7 @@ namespace Wiwa
 			return a + delta * std::clamp(t, 0.0f, 1.0f);
 		}
 
-		inline glm::vec3 GetWorldPosition(glm::mat4 &mat)
+		inline glm::vec3 GetWorldPosition(const glm::mat4 &mat)
 		{
 			return glm::vec3(mat[3]);
 		}

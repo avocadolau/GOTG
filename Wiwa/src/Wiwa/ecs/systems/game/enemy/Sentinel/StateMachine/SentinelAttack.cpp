@@ -30,27 +30,24 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
-		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-
-		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
-		int distPath = aiSystem->GetPathSize();
+		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		
-		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
-		
-		if (dist2Player >= enemy->m_RangeOfExplosion)
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > enemy->m_RangeOfExplosion)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
 
-		if (dist2Player < enemy->m_RangeOfExplosion)
+		if (prepareAttack == false)
 		{
-			stats->Speed = stats->Speed * 0.5f;
-			prepareAttack = true;
+			if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
+			{
+				prepareAttack = true;
+			}
 		}
-
+		
 		if (prepareAttack)
 		{
 		
@@ -58,7 +55,7 @@ namespace Wiwa
 
 			m_TimerExplosion += dt;
 
-			if (m_TimerExplosion >= 4.0f)
+			if (m_TimerExplosion >= 3.0f)
 			{
 				enemy->SwitchState(enemy->m_DeathState);
 			}
