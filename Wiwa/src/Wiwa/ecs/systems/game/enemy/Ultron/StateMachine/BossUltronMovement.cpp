@@ -91,10 +91,10 @@ namespace Wiwa
 					enemy->SwitchState(enemy->m_LaserBeamAttackState);
 				}
 				break;
-				case 3:
+				/*case 3:
 				{
 					enemy->SwitchState(enemy->m_DashState);
-				}
+				}*/
 				}
 			}
 		}		

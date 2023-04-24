@@ -57,6 +57,7 @@ namespace Wiwa
 			explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 			explosionTr->localScale = selfTr->localScale;
 
+
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
 			if (self->waveId != -1)
@@ -78,29 +79,4 @@ namespace Wiwa
 	void SentinelDeathState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)
 	{
 	}
-
-	//void SentinelDeathState::SpawnExplosion(EnemySentinel* enemy, Wiwa::Transform3D* transform)
-	//{
-	//	Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-	//	EntityId newExplosionId = entityManager.LoadPrefab("assets\\enemy\\explosions\\test_explosion_3.wiprefab");
-
-	//	// Set intial positions
-	//	Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
-	//	Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
-
-	//	ParticleManager& pman = enemy->getScene().GetParticleManager();
-
-	//	pman.EmitBatch(newExplosionId);
-
-	//	if (!explosionTr || !playerTr)
-	//	{
-	//		return;
-	//	}
-
-	//	explosionTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
-	//	explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
-	//	explosionTr->localScale = transform->localScale;
-	//	/*SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
-	//	bullet->direction = bull_dir; */
-	//}
 }
