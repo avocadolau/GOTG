@@ -46,7 +46,8 @@ namespace Wiwa
 
 		if (animator->HasFinished())//&& !IsPlaying(enemy->GetEntity())
 		{
-			PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);
+			//SentinelAudio
+			/*PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);*/
 		}
 
 

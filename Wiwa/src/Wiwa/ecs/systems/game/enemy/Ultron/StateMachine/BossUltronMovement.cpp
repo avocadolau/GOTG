@@ -81,7 +81,7 @@ namespace Wiwa
 					enemy->SwitchState(enemy->m_BulletStormAttackState);
 				}
 				break;
-				case 1:
+				/*case 1:
 				{
 					enemy->SwitchState(enemy->m_ClusterShotsAttackState);
 				}
@@ -90,7 +90,7 @@ namespace Wiwa
 				{
 					enemy->SwitchState(enemy->m_LaserBeamAttackState);
 				}
-				break;
+				break;*/
 				/*case 3:
 				{
 					enemy->SwitchState(enemy->m_DashState);
