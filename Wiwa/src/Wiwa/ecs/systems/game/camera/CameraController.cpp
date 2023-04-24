@@ -11,7 +11,6 @@ namespace Wiwa
 
 	CameraController::~CameraController()
 	{
-		m_Camera = nullptr;
 	}
 
 	void CameraController::OnAwake()

@@ -11,35 +11,34 @@ namespace Wiwa
 
 	MeleePhalanxAttackState::~MeleePhalanxAttackState()
 	{
-
 	}
 
-	void MeleePhalanxAttackState::EnterState(EnemyMeleePhalanx* enemy)
+	void MeleePhalanxAttackState::EnterState(EnemyMeleePhalanx *enemy)
 	{
 		enemy->m_Timer = 0;
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		m_TimerAttackCooldown = 0.0f;
 
 		animator->Blend("atack", false, 0.2f);
-		PlaySound(ScriptEngine::CreateString("melee_attack"), enemy->m_PlayerId);
 
-		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		if (navAgent) {
+		NavAgent *navAgent = (NavAgent *)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent)
+		{
 			navAgent->autoRotate = false;
 		}
 
 		GenerateAttack(enemy);
 	}
-	
-	void MeleePhalanxAttackState::UpdateState(EnemyMeleePhalanx* enemy)
-	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		
+	void MeleePhalanxAttackState::UpdateState(EnemyMeleePhalanx *enemy)
+	{
+		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
+
 		enemy->LookAt(playerTr->localPosition);
 
 		m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
@@ -50,39 +49,39 @@ namespace Wiwa
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
 		else if (m_TimerAttackCooldown > 2000.0f)
-		{					
+		{
 			animator->Blend("atack", false, 0.2f);
-			PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+
 			GenerateAttack(enemy);
 
 			// Reset the timer after generating the attack
 			m_TimerAttackCooldown = 0.0f;
-
 		}
 	}
-	
-	void MeleePhalanxAttackState::ExitState(EnemyMeleePhalanx* enemy)
+
+	void MeleePhalanxAttackState::ExitState(EnemyMeleePhalanx *enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		if (navAgent) {
+		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
+		NavAgent *navAgent = (NavAgent *)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent)
+		{
 			navAgent->autoRotate = true;
 		}
 	}
-	
-	void MeleePhalanxAttackState::OnCollisionEnter(EnemyMeleePhalanx* enemy, const Object* body1, const Object* body2)
+
+	void MeleePhalanxAttackState::OnCollisionEnter(EnemyMeleePhalanx *enemy, const Object *body1, const Object *body2)
 	{
 	}
 
-	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx* enemy)
+	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx *enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+		Character *selfStats = (Character *)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 		if (selfStats != nullptr)
@@ -90,7 +89,7 @@ namespace Wiwa
 			if (distance <= 3.0f)
 			{
 				GameStateManager::DamagePlayer(selfStats->Damage);
-				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId,"PE_Hurt");
+				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
 			}
 		}
 	}
