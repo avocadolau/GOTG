@@ -8,9 +8,6 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
 
-#include "Wiwa/scripting/embed_functions/embed_audio_functions.h"
-#include "Wiwa/scripting/ScriptEngine.h"
-
 namespace Wiwa {
 	class WI_API EnemySystem : public System {
 	public:

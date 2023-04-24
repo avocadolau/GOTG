@@ -158,13 +158,14 @@ glm::vec3 Wiwa::PlayerController::GetShootingInput()
 	return input;
 }
 
-void Wiwa::PlayerController::SetPlayerRotation(glm::vec3 currentRotation, const glm::vec3& input, const float rotationSpeed)
+void Wiwa::PlayerController::SetPlayerRotation(glm::vec3& currentRotation, const glm::vec3& input, const float rotationSpeed)
 {
 	float angle = AngleFromVec2(input);
 
 	currentRotation.y = Math::LerpAngle(currentRotation.y, angle, rotationSpeed);
 
-	if (currentRotation.y >= 360.f)
+	WI_INFO("current rotation {}", currentRotation.y);
+	if (currentRotation.y <= 360.f)
 		currentRotation.y = 0.f;
 }
 

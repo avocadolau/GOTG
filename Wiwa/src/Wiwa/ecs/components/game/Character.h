@@ -7,20 +7,35 @@
 namespace Wiwa {
 	struct WI_API Character {
 		int MaxHealth;
+		int HealthMultiplier;
 		int Health;
+
 		int MaxShield;
+		int ShieldMultiplier;
 		int Shield;
+		int ShieldRegeration;
+		int ShieldRegenerationMult;
+
 		int Damage;
-		
+		int DamageMultiplier;
+
 		float RateOfFire;
+		float RateOfFireMultiplier;
+
 		float Speed;
+		float SpeedMultiplier;
+
 		float DashDistance;
 		float DashSpeed;
+
 		float DashCooldown;
+
 		float WalkTreshold;
 
 		bool Slowed;
 		float CounterSlowed;
+
+	
 	};
 }
 

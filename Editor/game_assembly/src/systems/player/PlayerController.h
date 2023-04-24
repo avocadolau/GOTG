@@ -40,7 +40,7 @@ namespace Wiwa {
 
 		void SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir);
 
-		void SetPlayerRotation(glm::vec3 currentRotation, const glm::vec3& input, const float rotationSpeed);
+		void SetPlayerRotation(glm::vec3& currentRotation, const glm::vec3& input, const float rotationSpeed);
 		float AngleFromVec2(const glm::vec2& vector);
 	private:
 		glm::vec3 GetMovementInput();

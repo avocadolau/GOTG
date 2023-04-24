@@ -22,7 +22,7 @@ namespace Wiwa
 		m_TimerAttackCooldown = 0.0f;
 
 		animator->Blend("atack", false, 0.2f);
-		PlaySound(ScriptEngine::CreateString("melee_attack"), enemy->m_PlayerId);
+		
 	
 		GenerateAttack(enemy);
 	}
@@ -45,7 +45,7 @@ namespace Wiwa
 		else if (m_TimerAttackCooldown > 2000.0f)
 		{					
 			animator->Blend("atack", false, 0.2f);
-			PlaySound(ScriptEngine::CreateString("melee_heavy_attack"), enemy->m_PlayerId);
+			
 			GenerateAttack(enemy);
 
 			// Reset the timer after generating the attack

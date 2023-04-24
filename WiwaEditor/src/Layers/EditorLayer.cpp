@@ -19,7 +19,6 @@
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/components/Sprite.h>
-#include <Wiwa/scripting/ScriptEngine.h>
 
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 
@@ -535,7 +534,7 @@ void EditorLayer::MainMenuBar()
 		if (ImGui::BeginMenu("Script"))
 		{
 			if (ImGui::MenuItem("Reload assembly", "ALT + R")) {
-				Wiwa::ScriptEngine::ReloadAssembly();
+				
 
 				// Reload app assembly
 				Wiwa::Application::Get().UnloadGameAssembly();
@@ -606,8 +605,7 @@ void EditorLayer::MainMenuBar()
 			{
 				if (!is_playing)
 				{
-					if (Wiwa::ScriptEngine::isAssemblyLoaded)
-					{
+					
 						SaveScene();
 
 						if (m_OpenedScenePath != "")
@@ -626,12 +624,6 @@ void EditorLayer::MainMenuBar()
 
 							Wiwa::SceneManager::PlayScene();
 						}
-					}
-					else
-					{
-						WI_ERROR("Fix the errors on the scripts before playing!");
-
-					}
 				}
 				else
 				{

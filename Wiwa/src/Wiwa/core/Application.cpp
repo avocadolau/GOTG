@@ -29,7 +29,6 @@
 
 #include <Wiwa/utilities/AllocationMetrics.h>
 
-#include <Wiwa/scripting/ScriptEngine.h>
 #include <Wiwa/core/Resources.h>
 #include <Wiwa/audio/Audio.h>
 
@@ -102,7 +101,7 @@ namespace Wiwa
 		{
 			WI_CORE_ERROR("Audio engine error: [{}]", Audio::GetLastError());
 		}
-		ScriptEngine::Init();
+		
 		
 		// Copy assembly before loading
 		Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
@@ -145,7 +144,7 @@ namespace Wiwa
 	{
 		SceneManager::CleanUp();
 		RenderManager::Destroy();
-		ScriptEngine::ShutDown();
+	
 		Audio::Terminate();
 		GameStateManager::CleanUp();
 	}
