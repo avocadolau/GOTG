@@ -49,6 +49,10 @@ namespace Wiwa
 
         inline int getMaxSize() { return m_MaxSize; };
 
+        inline int getCountActive() { return m_ActiveEntities.size(); };
+
+        inline int getCountDisabled() { return m_DisabledEntities.size(); };
+
         inline Pool_Type getType() { return m_Type; };
 
         inline  std::queue<EntityId> getDisabledEntities() { return m_DisabledEntities; };

@@ -23,7 +23,12 @@ namespace Wiwa
 
 		animator->Blend("atack", false, 0.2f);
 		PlaySound(ScriptEngine::CreateString("melee_attack"), enemy->m_PlayerId);
-	
+
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = false;
+		}
+
 		GenerateAttack(enemy);
 	}
 	
@@ -34,6 +39,8 @@ namespace Wiwa
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+		
+		enemy->LookAt(playerTr->localPosition);
 
 		m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
 
@@ -56,6 +63,11 @@ namespace Wiwa
 	
 	void MeleePhalanxAttackState::ExitState(EnemyMeleePhalanx* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = true;
+		}
 	}
 	
 	void MeleePhalanxAttackState::OnCollisionEnter(EnemyMeleePhalanx* enemy, const Object* body1, const Object* body2)
