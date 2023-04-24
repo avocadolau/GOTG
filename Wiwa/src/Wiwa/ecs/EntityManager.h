@@ -87,9 +87,15 @@ namespace Wiwa
 		void UpdateChildTransforms(EntityId eid, Transform3D *t3dparent);
 		void UpdateTransforms();
 
+		void SortParticleSystems();
+
+
+
 		// System management
 		std::map<SystemHash, std::vector<System *>,std::greater<SystemHash>> m_SystemsByHash;
 		std::vector<SystemHash> m_SystemWhiteList;
+
+		std::map<float, System*, std::greater<float>> m_SortedParticles;
 
 		size_t getSystemIndex(EntityId entityId, SystemHash system_hash);
 
@@ -100,6 +106,8 @@ namespace Wiwa
 
 		void _saveEntityImpl(File& file, EntityId eid);
 		EntityId _loadEntityImpl(File& file, EntityId parent, bool is_parent);
+
+	
 	public:
 		EntityManager();
 		~EntityManager();
