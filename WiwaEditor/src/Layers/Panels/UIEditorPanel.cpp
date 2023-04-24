@@ -233,7 +233,7 @@ void UIEditorPanel::DrawCanvasItems()
 	{
 		ImGui::Text(canvas->controls.at(i)->name.c_str());
 		ImGui::SameLine();
-		ImGui::Text("%i", canvas->controls.at(i)->id);
+		ImGui::Text("%i", i);
 		ImGui::SameLine();
 		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))

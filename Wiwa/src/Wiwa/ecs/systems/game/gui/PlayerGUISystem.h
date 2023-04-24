@@ -12,6 +12,8 @@ namespace Wiwa
         int PauseHUD = 1;
         int DeathHUD = 3;
         bool deathHud = false;
+        bool returnToHUD = false;
+        bool pauseGame = false;
         size_t lastCoins = -1;
         Ability** abilitiesList;
         Buff** buffsList;

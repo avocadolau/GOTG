@@ -46,6 +46,8 @@ namespace Wiwa {
 
 		void SwapPauseActive() { pausedGame = !pausedGame; }
 
+		bool IsScenePaused() { return pausedGame; }
+
 		uint32_t CreateInstanceRenderer();
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }

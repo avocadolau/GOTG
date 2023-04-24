@@ -11,7 +11,7 @@
 #include <Wiwa/Dialog/DialogManager.h>
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/AI/AIMapGeneration.h>
-
+#include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
 namespace Wiwa
 {
 	Scene::Scene()
@@ -74,6 +74,8 @@ namespace Wiwa
 
 	void Scene::Update()
 	{
+		PlayerGUISystem* pgs;
+
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
@@ -97,6 +99,8 @@ namespace Wiwa
 		case Scene::SCENE_LOOP:
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
+			pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
+			pgs->Update();
 			m_GuiManager->Update();
 			m_DialogManager->Update();
 			ProcessInput();
