@@ -3,6 +3,7 @@
 #include <Wiwa/ecs/systems/game/enemy/Subjugator/EnemySubjugator.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
+#include <Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h>
 
 namespace Wiwa
 {
@@ -31,6 +32,11 @@ namespace Wiwa
 
 			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 		}
+
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = false;
+		}
 	}
 
 	void SubjugatorAttackState::UpdateState(EnemySubjugator* enemy)
@@ -43,12 +49,9 @@ namespace Wiwa
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
-		int distPath = aiSystem->GetPathSize();
-		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
-		//}
 
-		//if (animator->HasFinished())
-		//{
+		enemy->LookAt(playerTr->localPosition);
+
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 
 		//WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
@@ -63,15 +66,6 @@ namespace Wiwa
 
 			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
 
-			//Working one Pooling for Bullets
-			/*
-			if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getMaxSize() >= GameStateManager::s_PoolManager->s_SimpleBulletsPool->getDisabledEntities().size())
-			{
-				SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
-				SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
-				SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
-			}
-			*/
 			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
 			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
 			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
@@ -89,6 +83,11 @@ namespace Wiwa
 
 	void SubjugatorAttackState::ExitState(EnemySubjugator* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = true;
+		}
 	}
 
 	void SubjugatorAttackState::OnCollisionEnter(EnemySubjugator* enemy, const Object* body1, const Object* body2)
@@ -98,14 +97,21 @@ namespace Wiwa
 
 	void SubjugatorAttackState::SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
 	{
+		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountActive());
+		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled());
+
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
-		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
+		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
+
+		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
 
 		// Set intial positions
 		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
-
 
 		if (!bulletTr || !playerTr)
 			return;
@@ -115,6 +121,10 @@ namespace Wiwa
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
+
+		physSys->CreateBody();
+
+		bulletSys->EnableBullet();
 	}
 
 }

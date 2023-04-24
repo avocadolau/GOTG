@@ -39,6 +39,12 @@ namespace Wiwa
 	void EnemySubjugator::OnInit()
 	{
 		EnemySystem::OnInit();
+
+		NavAgent* navAgent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = true;
+		}
+
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
 	}

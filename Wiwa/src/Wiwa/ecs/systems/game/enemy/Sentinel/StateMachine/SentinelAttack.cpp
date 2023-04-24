@@ -40,11 +40,14 @@ namespace Wiwa
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
+		if (prepareAttack == false)
 		{
-			prepareAttack = true;
+			if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
+			{
+				prepareAttack = true;
+			}
 		}
-
+		
 		if (prepareAttack)
 		{
 		
