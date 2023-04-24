@@ -90,8 +90,6 @@ namespace Wiwa {
 		return false;
 	}
 
-
-
 	void PhysicsSystem::DeleteBody()
 	{
 		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
@@ -107,7 +105,6 @@ namespace Wiwa {
 		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		const char* e_name = entityManager.GetEntityName(m_EntityId);
 	
-
 		CollisionBody* rb = GetComponent<CollisionBody>();
 		Transform3D* transform = GetComponent<Transform3D>();
 
