@@ -100,7 +100,8 @@ namespace Wiwa
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
 			pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
-			pgs->Update();
+			if(pgs != nullptr)
+				pgs->Update();
 			m_GuiManager->Update();
 			m_DialogManager->Update();
 			ProcessInput();
