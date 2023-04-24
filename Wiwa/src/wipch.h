@@ -17,6 +17,7 @@
 #include <fstream>
 
 #include <filesystem>
+#include <glm/glm.hpp>
 
 #include "Wiwa/utilities/Log.h"
 

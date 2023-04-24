@@ -31,7 +31,6 @@ project "Wiwa"
 		"%{IncludeDirs.Glew}",
 		"%{IncludeDirs.PCG}",
 		"%{IncludeDirs.JSON}",
-		"%{IncludeDirs.mono}",
 		"%{IncludeDirs.XML}",
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.assimp}",
@@ -52,7 +51,6 @@ project "Wiwa"
 		"%{wks.location}/Wiwa/vendor/Glew/lib/glew32.lib",
 		"Optick",
 		"ImGuizmo",
-		"%{Library.mono}",
 		"%{wks.location}/Wiwa/vendor/assimp/lib/x64/release/assimp-vc143-mt.lib",
 		"%{Library.Wwise_SE}",
 		"%{Library.Wwise_MMgr}",
@@ -82,13 +80,6 @@ project "Wiwa"
 			"{COPY} \"%{cfg.buildtarget.relpath}\" \"%{wks.location}Editor\"",
 			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game\\Wiwa.lib\"",
 			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game_assembly\\Wiwa.lib\""
-		}
-		links
-		{
-			"%{Library.WinSock}",
-			"%{Library.WinMM}",
-			"%{Library.Version}",
-			"%{Library.BCrypt}"
 		}
 
 	debugdir "%{wks.location}/Editor"

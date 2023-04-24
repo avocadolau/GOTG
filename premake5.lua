@@ -39,7 +39,6 @@ IncludeDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/include"
 
 
 LibraryDirs = {}
-LibraryDirs["mono"] = "%{wks.location}/Wiwa/vendor/mono/lib/%{cfg.buildcfg}"
 LibraryDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/lib/x64_vc170/Debug(StaticCRT)/lib/"
 LibraryDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/lib/"
 LibraryDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/lib"
@@ -47,8 +46,6 @@ LibraryDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/lib/"
 
 
 Library = {}
-Library["mono"] = "%{LibraryDirs.mono}/libmono-static-sgen.lib"
-
 Library["Wwise_SE"] = "%{LibraryDirs.Wwise}/AkSoundEngine.lib"
 Library["Wwise_MMgr"] = "%{LibraryDirs.Wwise}/AkMemoryMgr.lib"
 Library["Wwise_SMgr"] = "%{LibraryDirs.Wwise}/AkStreamMgr.lib"
@@ -101,11 +98,6 @@ Library["opencv_stitching_debug"] = "%{LibraryDirs.OpenCV}/opencv_stitching470d.
 Library["opencv_video_debug"] = "%{LibraryDirs.OpenCV}/opencv_video470d.lib"
 Library["opencv_videoio_debug"] = "%{LibraryDirs.OpenCV}/opencv_videoio470d.lib"
 Library["opencv_ts470_debug"] = "%{LibraryDirs.OpenCV}/opencv_ts470d.lib"
-
-Library["WinSock"] = "Ws2_32.lib"
-Library["WinMM"] = "Winmm.lib"
-Library["Version"] = "Version.lib"
-Library["BCrypt"] = "Bcrypt.lib"
 
 
 group "Dependencies"

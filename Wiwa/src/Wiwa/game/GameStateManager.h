@@ -153,6 +153,7 @@ namespace Wiwa {
 		WI_HARD_INL static Inventory& GetPlayerInventory() { return *s_PlayerInventory; }
 		WI_HARD_INL static Scene* GetCurrentScene() { return s_CurrentScene; }
 		WI_HARD_INL static EntityId GetPlayerId() { return s_PlayerId; }
+		WI_HARD_INL static float GetControllerDeadZone() { return s_GamepadDeadzone; }
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
