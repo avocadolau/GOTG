@@ -42,9 +42,6 @@ namespace Wiwa
 
 		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
 		{
-			NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-			navAgent->stoppingDistance = 0.0f;
-
 			prepareAttack = true;
 		}
 

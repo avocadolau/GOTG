@@ -4,6 +4,7 @@
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SentinelExplosion.h"
+#include <Wiwa/ecs/systems/game/attack/SentinelExplosionSystem.h>
 
 namespace Wiwa
 {
@@ -36,28 +37,30 @@ namespace Wiwa
 
 		if (animator->HasFinished())
 		{	
-			/*SpawnExplosion(enemy, selfTr, stats);*/
-
 			//Sentinel Explosion
 			Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-			EntityId newExplosionId = entityManager.LoadPrefab("assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
+			GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+			EntityId newExplosionId = GameStateManager::s_PoolManager->s_SentinelExplosion->GetFromPool();
+			SentinelExplosionSystem* explosionSys = entityManager.GetSystem<SentinelExplosionSystem>(newExplosionId);
+
+			PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newExplosionId);
+			physSys->DeleteBody();
 
 			// Set intial positions
 			Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
 
-			//SentinelParticles - Sentinel Death Explosion Particle
-
 			if (!explosionTr || !playerTr)
-			{
 				return;
-			}
 
 			explosionTr->localPosition = Math::GetWorldPosition(selfTr->worldMatrix);
 			explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 			explosionTr->localScale = selfTr->localScale;
 
+			physSys->CreateBody();
+			explosionSys->EnableExplosion();
 
+			// Destroy enemy
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
 			if (self->waveId != -1)
