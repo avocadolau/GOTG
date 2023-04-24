@@ -544,7 +544,7 @@ void EditorLayer::MainMenuBar()
 				Wiwa::Application::Get().LoadGameAssembly();
 			}
 			if (ImGui::MenuItem("Open Solution"))
-				system("call tools/opensln.bat AppAssembly.sln");
+				system("call tools/opensln.bat game_assembly/WiwaGameAssembly.sln");
 			ImGui::Checkbox("Build automatic", &s_BuildAutomatic);
 			ImGui::SameLine();
 
