@@ -159,7 +159,7 @@ void AIPanel::HandleSave()
 
 void AIPanel::HandleLoad()
 {
-	Wiwa::RecastManager::Load();
+	Wiwa::RecastManager::Load(Wiwa::SceneManager::getActiveScene());
 }
 
 void AIPanel::RefreshManager()

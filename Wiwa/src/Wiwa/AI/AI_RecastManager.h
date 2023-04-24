@@ -24,7 +24,7 @@ namespace Wiwa
 		static bool Build();
 
 		static bool Save();
-		static bool Load();
+		static bool Load(Scene* scene);
 
 		static void Cleanup();
 

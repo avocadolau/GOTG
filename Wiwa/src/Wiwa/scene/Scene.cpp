@@ -12,6 +12,8 @@
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/AI/AIMapGeneration.h>
 #include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
+#include <Wiwa/AI/AI_Crowd.h>
+
 namespace Wiwa
 {
 	Scene::Scene()
@@ -40,6 +42,7 @@ namespace Wiwa
 		r2d.DisableInstance(this, m_TransitionInstance);
 
 		m_PhysicsManager->InitWorld();
+
 	}
 
 	Scene::~Scene()
@@ -64,6 +67,11 @@ namespace Wiwa
 
 	void Scene::Awake()
 	{
+		RecastManager::Load(this);
+
+		Crowd& crowd = Crowd::getInstance();
+		crowd.Init();
+
 		m_EntityManager.SystemsAwake();
 	}
 
@@ -152,6 +160,8 @@ namespace Wiwa
 			m_PhysicsManager->StepSimulation();
 			m_PhysicsManager->UpdatePhysicsToEngine();
 
+			Crowd& crowd = Crowd::getInstance();
+			crowd.Update(Wiwa::Time::GetDeltaTimeSeconds());
 			// m_PhysicsManager->LogBodies();
 		}
 		m_PhysicsManager->DebugDrawWorld();
