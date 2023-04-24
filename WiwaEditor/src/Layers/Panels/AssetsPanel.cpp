@@ -202,7 +202,7 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 		extension = ".obj";
 	else if (assetsPath.extension() == ".winavmesh")
 		extension = ".winavmesh";
-	else if (assetsPath.extension() == ".winavmesh")
+	else if (assetsPath.extension() == ".gset")
 		extension = ".gset";
 
 	libraryPath.replace_extension(extension);
