@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/smoke","uniforms":{"u_LifeTime":1.0151515007019043,"u_Color":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"u_Texture":"assets/textures/t_default_texture.png","u_DissolveAmount":1.0,"u_EnterDissolve":0.10000000149011612,"u_OutDissolve":0.5,"u_DiscardTex":"assets/textures/t_perlin_noise2.jpg"}}

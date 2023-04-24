@@ -58,6 +58,17 @@ namespace Wiwa {
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 
+		if (m_Model == nullptr)
+		{
+			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
+			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+		}
+		if (m_Material == nullptr)
+		{
+			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+		}
+
 
 		if (emitter->m_activeOverTime)
 		{
@@ -81,6 +92,19 @@ namespace Wiwa {
 	}
 	void ParticleSystem::OnUpdate()
 	{
+
+		if (m_Material == nullptr)
+		{
+			WI_ERROR("particle System rquieres a material...");
+			return;
+		}
+		if (m_Model == nullptr)
+		{
+			WI_ERROR("particle System rquieres a mesh...");
+			return;
+		}
+
+
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 
 		if (emitter->m_meshChanged)
