@@ -48,7 +48,7 @@ namespace Wiwa
 
     void NavAgentSystem::OnUpdate()
     {
-        if (m_AgentIndex != -1)
+        if (m_AgentIndex == -1)
             return;
 
         RefreshParamters();
