@@ -13,6 +13,8 @@ namespace Wiwa {
 
 		void OnSystemAdded() override;
 
+		void OnSystemRemoved() override;
+
 		void OnUpdate() override;
 	};
 }

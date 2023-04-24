@@ -31,6 +31,7 @@ void Crowd::Init()
 void Crowd::CleanUp()
 {
     dtFreeCrowd(m_Crowd);
+    m_Crowd = 0;
 }
 
 

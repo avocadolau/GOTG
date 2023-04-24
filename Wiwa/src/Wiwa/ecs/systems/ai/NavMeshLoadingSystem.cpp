@@ -12,12 +12,19 @@ namespace Wiwa
 
 	NavMeshLoadingSystem::~NavMeshLoadingSystem()
 	{
+	
 	}
 
 	void NavMeshLoadingSystem::OnSystemAdded()
 	{		
 		Crowd& crowd = Crowd::getInstance();
 		crowd.Init();
+	}
+
+	void NavMeshLoadingSystem::OnSystemRemoved()
+	{
+		Crowd& crowd = Crowd::getInstance();
+		crowd.CleanUp();
 	}
 
 	void NavMeshLoadingSystem::OnUpdate()

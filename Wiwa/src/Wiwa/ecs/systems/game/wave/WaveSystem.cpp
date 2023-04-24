@@ -99,7 +99,8 @@ namespace Wiwa
 		Pool_Type values[] = { Pool_Type::PHALANX_MELEE, Pool_Type::PHALAN_RANGED };
 		size_t size = sizeof(values) / sizeof(values[0]);
 		size_t randomIndex = std::rand() % size;
-		Pool_Type selection = values[randomIndex];
+		//Pool_Type selection = values[randomIndex];
+		Pool_Type selection = Pool_Type::PHALANX_MELEE;
 
 		//int selection = 3;
 
