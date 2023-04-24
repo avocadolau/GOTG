@@ -348,6 +348,11 @@ namespace Wiwa {
 			return glm::distance2(point_1, point_2) < threshold * threshold;
 		}
 
+		inline float DistanceV3(const glm::vec3& point_1, const glm::vec3& point_2)
+		{
+			return glm::distance2(point_1, point_2);
+		}
+
 		inline glm::vec3 GetRoationBetweenTwoPoints(const glm::vec3& point_1, const glm::vec3& point_2)
 		{
 			glm::vec3 p1Forward = glm::normalize(point_1);
