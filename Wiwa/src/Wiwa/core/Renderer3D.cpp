@@ -218,6 +218,17 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/barrel_explosion/explosion", impactShader);
 
+		ResourceId bulletShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/bullet");
+		Shader* bulletShader = Wiwa::Resources::GetResourceById<Shader>(bulletShaderId);
+		bulletShader->Compile("resources/shaders/vfx/bullet");
+
+		bulletShader->addUniform("u_LifeTime", UniformType::Float);
+		bulletShader->addUniform("u_Color", UniformType::fVec4);
+		bulletShader->addUniform("u_Texture", UniformType::Sampler2D);
+		bulletShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet", impactShader);
+
 		//===========================================================================================================
 
 		// Normal Display Shader
