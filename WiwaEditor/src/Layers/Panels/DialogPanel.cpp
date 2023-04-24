@@ -278,6 +278,9 @@ void DialogPanel::Draw()
 			if (currentCreationStep == 5)
 			{
 				ImGui::InputText("Conversation name", &dm.conversations[currentConversation].conversationName);
+				ImGui::TextWrapped("Note: 'Conversation name' must match with the entity tag name asigned to the NPC object.");
+
+				ImGui::NewLine();
 
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
 				if (ImGui::Button("Finish And Save Conversation"))
@@ -498,6 +501,7 @@ void DialogPanel::Draw()
 				ImGui::PushID(i);
 				ImGui::InputText("Conversation Name", &dm.editorConversations[i].conversationName);
 				ImGui::PopID();
+				ImGui::TextWrapped("Note: 'Conversation name' must match with the entity tag name asigned to the NPC object.");
 
 				ImGui::NewLine();
 
