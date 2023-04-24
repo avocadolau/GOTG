@@ -116,7 +116,7 @@ namespace Wiwa
 		if (!bulletTr || !playerTr)
 			return;
 
-		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
+		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix) + glm::vec3(0.0, 2.0f, 0.0f);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
