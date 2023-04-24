@@ -35,6 +35,10 @@ namespace Wiwa
         void RefreshParamters();
 
         glm::vec3 GetRandPointOutsideCircle(const glm::vec3& circle_position, float radius);
+
+        bool OnEnabledFromPool() override;
+
+        bool OnDisabledFromPool() override;
     private:
         void Render();
         void DrawAgent();
@@ -46,6 +50,8 @@ namespace Wiwa
         dtCrowdAgentParams m_AgentParams;
 
         EntityManager::ComponentIterator m_NavAgentIt;
+
+        bool isPoolActive = true;
         //EntityManager::ComponentIterator m_Transform;
     };
 

@@ -4,6 +4,8 @@
 #include <glew.h>
 #include "Wiwa/ecs/components/ai/NavMesh.h"
 #include <Wiwa/ecs/systems/ai/NavMeshLoadingSystem.h>
+#include <Wiwa/AI/AI_Crowd.h>
+
 namespace Wiwa
 {
 	EntityId RecastManager::m_Id = -1;
@@ -145,47 +147,58 @@ namespace Wiwa
 
 		m_RecastMesh->Save(path.c_str());
 	
-		// Create an entity and store the path to the file
-		EntityId id = WI_INVALID_INDEX;
-		id = em.GetEntityByName("NavMesh_Data");
+		//// Create an entity and store the path to the file
+		//EntityId id = WI_INVALID_INDEX;
+		//id = em.GetEntityByName("NavMesh_Data");
 
-		if (id != WI_INVALID_INDEX)
-			em.DestroyEntity(id);
+		//if (id != WI_INVALID_INDEX)
+		//	em.DestroyEntity(id);
 
-		id = em.CreateEntity("NavMesh_Data");
-		Wiwa::NavMesh navMesh;
-		strcpy(navMesh.filePath, path.c_str());
-		em.AddComponent<Wiwa::NavMesh>(id, navMesh);
-		em.ApplySystem<Wiwa::NavMeshLoadingSystem>(id);
-
+		//id = em.CreateEntity("NavMesh_Data");
+		//Wiwa::NavMesh navMesh;
+		//strcpy(navMesh.filePath, path.c_str());
+		//em.AddComponent<Wiwa::NavMesh>(id, navMesh);
+		//em.ApplySystem<Wiwa::NavMeshLoadingSystem>(id);
 		
 		return true;
 	}
 
-	bool RecastManager::Load()
+	bool RecastManager::Load(Scene* scene)
 	{
-		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		EntityId id = em.GetEntityByName("NavMesh_Data");
+		Wiwa::EntityManager& em = scene->GetEntityManager();
+		//EntityId id = em.GetEntityByName("NavMesh_Data");
 		
-		if (id == WI_INVALID_INDEX)
+	/*	if (id == WI_INVALID_INDEX)
 		{
 			WI_INFO("Coulnd't load navmesh, as there is no entity NavMesh_Data");
 			return false;
-		}
+		}*/
 
-		Wiwa::NavMesh* navMesh = em.GetComponent<Wiwa::NavMesh>(id);
+	/*	Wiwa::NavMesh* navMesh = em.GetComponent<Wiwa::NavMesh>(id);
 		if (!navMesh)
 		{
 			WI_INFO("Coulnd't load navmesh, as there is no component navMesh");
 			return false;
-		}
+		}*/
+		std::string path = "assets\\navmesh\\";
+		path += Wiwa::SceneManager::getActiveScene()->getName();
+		path += ".winavmesh";
+
 
 		if (!m_RecastMesh)
 		{
 			m_RecastMesh = new RecastSoloMesh();
 		}
+		else
+		{
+			delete m_RecastMesh;
+			m_RecastMesh = nullptr;
+			m_RecastMesh = new RecastSoloMesh();
+		}
 
-		std::string path = navMesh->filePath;
+		//m_RecastMesh->Save(path.c_str());
+
+		//std::string path = navMesh->filePath;
 		path = Wiwa::Resources::_assetToLibPath(path);
 		std::string gsetPath = path;
 		gsetPath = gsetPath.substr(0, gsetPath.find_last_of('.')) + ".gset";
@@ -231,6 +244,7 @@ namespace Wiwa
 		{
 			WI_INFO("AI PANEL: Couldn't load the navmesh at path {}", path.c_str());
 		}
+
 		return true;
 	}
 
@@ -261,6 +275,23 @@ namespace Wiwa
 			delete m_Geom;
 			m_Geom = nullptr;
 		}
+
+		std::string path = "assets/navmesh/";
+		path += Wiwa::SceneManager::getActiveScene()->getName();
+		path += ".winavmesh";
+
+		std::string gsetPath = path;
+		gsetPath = gsetPath.substr(0, gsetPath.find_last_of('.')) + ".gset";
+
+		std::filesystem::path p = path;
+
+		FileSystem::Remove(path.c_str());
+		FileSystem::RemoveAll(gsetPath.c_str());
+
+		path = Wiwa::Resources::_assetToLibPath(path);
+		gsetPath = Wiwa::Resources::_assetToLibPath(gsetPath);
+		FileSystem::RemoveAll(path.c_str());
+		FileSystem::RemoveAll(gsetPath.c_str());
 	}
 
 }

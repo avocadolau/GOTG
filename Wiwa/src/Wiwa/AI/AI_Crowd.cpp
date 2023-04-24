@@ -26,16 +26,19 @@ void Crowd::Init()
     m_AgentParams.collisionQueryRange = m_AgentParams.radius * 12.0f;
     m_AgentParams.pathOptimizationRange = m_AgentParams.radius * 30.0f;
     m_AgentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_SEPARATION;
+    m_AgentParams.separationWeight = 2;
 }
 
 void Crowd::CleanUp()
 {
     dtFreeCrowd(m_Crowd);
+    m_Crowd = 0;
 }
 
 
 void Crowd::Update(float deltaTime)
 {
+    OPTICK_EVENT("Crowd Update")
     m_Crowd->update(deltaTime, nullptr);
 }
 

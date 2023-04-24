@@ -10,8 +10,11 @@ namespace Wiwa
     private:
         int CanvasHUD = 0;
         int PauseHUD = 1;
-        int DeathHUD = 4;
+        int DeathHUD = 3;
         bool deathHud = false;
+        bool returnToHUD = false;
+        bool pauseGame = false;
+        size_t lastCoins = -1;
         Ability** abilitiesList;
         Buff** buffsList;
     public:
@@ -31,7 +34,7 @@ namespace Wiwa
 
         void PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm);
 
-        void Tokens(uint32_t tokens, Wiwa::GuiManager& gm);
+        void Coins(uint32_t coins, Wiwa::GuiManager& gm);
 
     };
 }

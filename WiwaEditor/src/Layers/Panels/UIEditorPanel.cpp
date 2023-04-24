@@ -232,7 +232,7 @@ void UIEditorPanel::DrawCanvasItems()
 	{
 		ImGui::Text(canvas->controls.at(i)->name.c_str());
 		ImGui::SameLine();
-		ImGui::Text("%i", canvas->controls.at(i)->id);
+		ImGui::Text("%i", i);
 		ImGui::SameLine();
 		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))
@@ -395,6 +395,8 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			break;
 		case Wiwa::GuiControlType::TEXT:
 			ImGui::InputText("text", &pathForAsset);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
 			break;
 		case Wiwa::GuiControlType::VIDEO:
 			AssetContainerPath();
@@ -478,6 +480,10 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		Wiwa::Text* newText = new Wiwa::Text;
 		newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)pathForAsset.c_str());
+		originPos[0] = 0;
+		originPos[1] = 0;
+		originSize[0] = 512;
+		originSize[1] = 512;
 		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::CENTER);
 		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetSize(), originTexRect);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());

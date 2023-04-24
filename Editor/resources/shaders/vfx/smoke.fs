@@ -1,6 +1,9 @@
 #version 330
  #extension GL_ARB_explicit_uniform_location : enable
 
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
+
 const int MAX_POINT_LIGHTS = 32;
 const int MAX_SPOT_LIGHTS = 32;
 
@@ -16,11 +19,6 @@ struct DirectionalLight
     BaseLight Base;
     vec3 Direction;
 };
-
-
-
-layout (location = 0) out vec4 FragColor;
-layout (location = 1) out vec4 BrightColor;
 
 in vec2 TexCoord;
 in vec3 Normal;

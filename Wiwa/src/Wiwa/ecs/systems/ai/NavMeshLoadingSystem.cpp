@@ -7,23 +7,30 @@ namespace Wiwa
 {
 	NavMeshLoadingSystem::NavMeshLoadingSystem()
 	{
-		RecastManager::Load();
+		/*RecastManager::Load();*/
 	}
 
 	NavMeshLoadingSystem::~NavMeshLoadingSystem()
 	{
+	
 	}
 
 	void NavMeshLoadingSystem::OnSystemAdded()
 	{		
-		Crowd& crowd = Crowd::getInstance();
-		crowd.Init();
+		//Crowd& crowd = Crowd::getInstance();
+		//crowd.Init();
+	}
+
+	void NavMeshLoadingSystem::OnSystemRemoved()
+	{
+		/*Crowd& crowd = Crowd::getInstance();
+		crowd.CleanUp();*/
 	}
 
 	void NavMeshLoadingSystem::OnUpdate()
 	{
-		OPTICK_EVENT("Crowd Update")
+		/*OPTICK_EVENT("Crowd Update")
 		Crowd& crowd = Crowd::getInstance();
-		crowd.Update(Wiwa::Time::GetDeltaTimeSeconds());
+		crowd.Update(Wiwa::Time::GetDeltaTimeSeconds());*/
 	}
 }

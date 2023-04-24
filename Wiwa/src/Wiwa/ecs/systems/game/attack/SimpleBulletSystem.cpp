@@ -29,8 +29,10 @@ namespace Wiwa
 
 	void SimpleBulletSystem::InitBullet()
 	{
-		GameStateManager::s_PoolManager->SetScene(m_Scene);
-		GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
+		if (!getAwake())
+			System::Awake();
+		/*GameStateManager::s_PoolManager->SetScene(m_Scene);
+		GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();*/
 
 		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
@@ -66,6 +68,7 @@ namespace Wiwa
 			em.DestroyEntity(m_EntityId);*/
 			
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
+			WI_INFO("Returning bullet to pool id: {}", m_EntityId);
 		}	
 	}
 
@@ -89,6 +92,7 @@ namespace Wiwa
 			em.DestroyEntity(m_EntityId);*/
 		
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
+			WI_INFO("Returning bullet to pool id: {}", m_EntityId);
 		}
 	}
 
@@ -97,7 +101,7 @@ namespace Wiwa
 		SimpleBullet* bullet = GetComponent<SimpleBullet>();
 		if (bullet)
 		{
-			/*InitBullet();*/
+			InitBullet();
 		}
 
 		return true;

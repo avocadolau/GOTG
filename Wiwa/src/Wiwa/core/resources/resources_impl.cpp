@@ -179,7 +179,8 @@ namespace Wiwa {
 		Video* video = new Video();
 		video->Init(origin, nullptr);
 
-		Video::WriteVideo(destination, video);
+		Wiwa::FileSystem::Copy(origin, destination);
+		//Video::WriteVideo(destination, video);
 
 		delete video;
 	}

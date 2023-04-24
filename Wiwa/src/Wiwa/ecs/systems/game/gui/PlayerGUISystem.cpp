@@ -12,7 +12,38 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 
 	PlayerElements(gm, character);
 
-	if (character->Health <= 0) DeathHud(gm);
+	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+	{
+		pauseGame = true;
+	}
+	if (pauseGame && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart))
+	{
+		gm.canvas.at(CanvasHUD)->SwapActive();
+		Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
+		gm.canvas.at(PauseHUD)->SwapActive();
+		pauseGame = false;
+	}
+
+	if (Wiwa::SceneManager::getActiveScene()->IsScenePaused())
+	{
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::B))
+		{
+			returnToHUD = true;
+		}
+		if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::B))
+		{
+			gm.canvas.at(PauseHUD)->SwapActive();
+			Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
+			returnToHUD = false;
+		}
+	}
+	if (character->Health <= 0 && !deathHud)
+	{
+		DeathHud(gm);
+		deathHud = true;
+	}
+
 
 	
 }
@@ -21,7 +52,6 @@ void Wiwa::PlayerGUISystem::DeathHud(Wiwa::GuiManager& gm)
 {
 	Wiwa::SceneManager::PauseCurrentScene();
 	gm.canvas.at(CanvasHUD)->SwapActive();
-	//TODO: IMPLEMENT IT ONCE WE HAVE THE ARTgm.canvas.at(DeathHUD)->SwapActive();
 }
 
 void Wiwa::PlayerGUISystem::CooldownState(Ability** ability,Wiwa::GuiManager& gm)
@@ -83,9 +113,7 @@ void Wiwa::PlayerGUISystem::CooldownState(Buff** buff, Wiwa::GuiManager& gm)
 					buff[i]->CooldownState = CooldownState::NO_CHARGED;
 				}
 				int index = i + 13;
-				gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
-				
-					
+				gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);					
 			}
 		}
 	}
@@ -99,6 +127,8 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 		for (int i = 0; i < 2; i++)
 		{
 			int index = i + 11;
+			int index_pause = i + 7;
+			int index_death = i + 4;
 			if (ability[i] != nullptr)
 			{
 				switch (ability[i]->AbilityType)
@@ -107,40 +137,56 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 					if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(3, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(3, &r2d);
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(4, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(4, &r2d);
 					}
 					break;
 				case AbilityType::GROOTS_SEEDS:
 					if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(5, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(5, &r2d);
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(6, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(6, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(6, &r2d);
 					}
 					break;
 				case AbilityType::PHYLAS_QUANTUM_SWORD:
 					if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(7, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(7, &r2d);
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(8, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(8, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(8, &r2d);
 					}
 					break;
 				case AbilityType::STARHAWKS_BLAST:
 					if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(1, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(1, &r2d);
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
+						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(2, &r2d);
+						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(2, &r2d);
 					}
 					break;
 				default:
@@ -150,6 +196,8 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 			else
 			{
 				gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
+				gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(0, &r2d);
+				gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
 			}
 		}
 	
@@ -163,6 +211,8 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 	for (int i = 0; i < 2; i++)
 	{
 		int index = i + 9;
+		int index_pause = i + 5;
+		int index_death = i + 2;
 		if (buff[i] != nullptr)
 		{
 			switch (buff[i]->buffType)
@@ -171,60 +221,84 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(1, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(1, &r2d);
 				}
 				else
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(2, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(2, &r2d);
 				}
 				break;
 			case BuffType::MARTINEX_THERMOKINESIS:
 				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(3, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(3, &r2d);
 				}
 				else
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(4, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(4, &r2d);
 				}
 				break;
 			case BuffType::MAJOR_VICTORY_SHIELD:
 				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(5, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(5, &r2d);
 				}
 				else
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(6, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(6, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(6, &r2d);
 				}
 				break;
 			case BuffType::CHARLIE27_FIST:
 				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(7, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(7, &r2d);
 				}
 				else
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(8, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(8, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(8, &r2d);
 				}
 				break;
 			case BuffType::COSMOS_PAW:
 				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(9, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(9, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(9, &r2d);
 				}
 				else
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(10, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(10, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(10, &r2d);
 				}
 				break;
 			case BuffType::BUGS_LEGS:
 				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(11, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(11, &r2d);
 				}
 				else
 				{
 					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
+					gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(12, &r2d);
+					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(12, &r2d);
 				}
 				break;
 			default:
@@ -235,6 +309,8 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 		else
 		{
 			gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
+			gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(0, &r2d);
+			gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
 		}
 	}
 }
@@ -250,7 +326,11 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	
 	abilitiesList = Wiwa::GameStateManager::GetPlayerInventory().GetAbilities();
 	buffsList = Wiwa::GameStateManager::GetPlayerInventory().GetBuffs();
-	Tokens(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
+	
+	if (lastCoins != Wiwa::GameStateManager::GetPlayerInventory().GetTokens())
+	{
+		//Coins(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
+	}
 
 	CooldownState(abilitiesList, gm);
 	CooldownState(buffsList, gm);
@@ -258,7 +338,9 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	HandleActiveBuffs(buffsList, gm);
 
 
-	PauseElementsUpdate(abilitiesList, buffsList, gm);
+	//PauseElementsUpdate(abilitiesList, buffsList, gm);
+
+	lastCoins = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
 
 	if (leftTrigger >= 0.f)
 	{
@@ -413,16 +495,16 @@ void Wiwa::PlayerGUISystem::PauseElementsUpdate(Ability** ability, Buff** buff, 
 	
 }
 
-void Wiwa::PlayerGUISystem::Tokens(uint32_t tokens, Wiwa::GuiManager& gm)
+void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)
 {
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-	std::string my_string = std::to_string(tokens);
+	std::string my_string = std::to_string(coins);
 
 	Wiwa::Text* newText = new Wiwa::Text;
 	const char* newWord = my_string.c_str();
-
-	gm.canvas.at(CanvasHUD)->controls.at(5)->SwapText(newWord, r2d, newText);
-
-
+	gm.canvas.at(CanvasHUD)->controls.at(5)->text = newWord;
+	newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", newWord);
+	r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
+	r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
 }
 

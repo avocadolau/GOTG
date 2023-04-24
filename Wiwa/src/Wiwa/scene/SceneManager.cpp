@@ -9,6 +9,7 @@
 #include <Wiwa/utilities/render/LightManager.h>
 #include <Wiwa/core/ProjectManager.h>
 #include <Wiwa/AI/AIMapGeneration.h>
+#include <Wiwa/AI/AI_Crowd.h>
 
 namespace Wiwa
 {
@@ -825,8 +826,6 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			AIMapGeneration::ClearMap();
-			AIMapGeneration::OnLoad();
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else

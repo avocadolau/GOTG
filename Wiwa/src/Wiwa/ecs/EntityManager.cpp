@@ -253,9 +253,9 @@ namespace Wiwa {
 			for (size_t i = 0; i < system_size; i++)
 			{
 				System* s = it->second[i];
-
+				
 				if (!s) continue;
-
+				
 				s->Update();
 			}
 		}

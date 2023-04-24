@@ -327,7 +327,7 @@ bool InputGeom::saveGeomSet(const BuildSettings* settings, const std::string& fi
 
 	filepath += ".gset";
 
-	FILE* fp = fopen(filepath.c_str(), "w");
+	FILE* fp = fopen(filepath.c_str(), "wb");
 	if (!fp) return false;
 	
 	// Store mesh filename.
