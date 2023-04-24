@@ -4,6 +4,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include <glm/gtx/quaternion.hpp>
+#include <Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h>
 
 namespace Wiwa
 {
@@ -47,7 +48,7 @@ namespace Wiwa
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
-		selfTr->localRotation = Math::GetRoationBetweenTwoPoints(glm::vec3(selfTr->worldMatrix[2]), glm::vec3(playerTr->worldMatrix[2]));
+		enemy->LookAt(playerTr->localPosition);
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 
@@ -83,18 +84,21 @@ namespace Wiwa
 
 	void RangedPhalanxAttackState::SpawnBullet(EnemyRangedPhalanx* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
 	{
+		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountActive());
+		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled());
+
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		//EntityId newBulletId = entityManager.LoadPrefab("assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
-		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
 
-		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
 
 		// Set intial positions
 		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
-
 
 		if (!bulletTr || !playerTr)
 			return;
@@ -104,19 +108,10 @@ namespace Wiwa
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
-		
-		/*WI_CORE_INFO("Spawned enemy at {}x {}y {}z", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
-		WI_CORE_INFO("Spawn transform at {}x {}y {}z", spawnTransform->localPosition.x, spawnTransform->localPosition.y, spawnTransform->localPosition.z);*/
-		// Set the correspondent tag
-	/*	CollisionBody* collBodyPtr = entityManager.GetComponent<CollisionBody>(newBulletId);
-		Wiwa::PhysicsManager& physicsManager = enemy->getScene().GetPhysicsManager();
 
-		collBodyPtr->selfTag = physicsManager.GetFilterTag("ENEMY_BULLET");
-		collBodyPtr->filterBits |= 1 << physicsManager.GetFilterTag("WALL");
-		collBodyPtr->filterBits |= 1 << physicsManager.GetFilterTag("COLUMN");
-		collBodyPtr->filterBits |= 1 << physicsManager.GetFilterTag("PLAYER");*/
+		physSys->CreateBody();
 
-		//entityManager.ApplySystem<Wiwa::PhysicsSystem>(newBulletId);
+		bulletSys->EnableBullet();
 	}
 
 	glm::vec3 RangedPhalanxAttackState::CalculateForward(const Transform3D& t3d)

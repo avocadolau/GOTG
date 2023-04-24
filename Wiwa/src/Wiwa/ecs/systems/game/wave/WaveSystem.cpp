@@ -115,13 +115,13 @@ namespace Wiwa
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
 		}
 		break;
-		case Pool_Type::PHALAN_RANGED:
-		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
-		}
-		break;
+		//case Pool_Type::PHALAN_RANGED:
+		//{
+		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
+		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
+		//	newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
+		//}
+		//break;
 		//case Pool_Type::SENTINEL:
 		//{
 		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
@@ -192,9 +192,9 @@ namespace Wiwa
 		case Pool_Type::PHALANX_MELEE:
 			GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
 			break;
-		case Pool_Type::PHALAN_RANGED:
+		/*case Pool_Type::PHALAN_RANGED:
 			GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
-			break;
+			break;*/
 	/*	case Pool_Type::SENTINEL:
 			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
 			break;

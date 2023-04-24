@@ -146,6 +146,8 @@ namespace Wiwa
 		path += ".winavmesh";
 
 		m_RecastMesh->Save(path.c_str());
+		path = Wiwa::Resources::_assetToLibPath(path);
+		m_RecastMesh->Save(path.c_str());
 	
 		//// Create an entity and store the path to the file
 		//EntityId id = WI_INVALID_INDEX;
