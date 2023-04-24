@@ -97,13 +97,13 @@ void Wiwa::PlayerController::TakeDamage(uint32_t damage)
 
 void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir)
 {
-	EntityId bullet = GetEntityManager().LoadPrefab("Prefabs/StarLordBullet.wiprefab");
+	/*EntityId bullet = GetEntityManager().LoadPrefab("Prefabs/StarLordBullet.wiprefab");
 	Transform3D* bulletTransform = GetEntityManager().GetComponent<Transform3D>(bullet);
 	Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_TransformIt);
 
 	bulletTransform->localPosition = Math::GetWorldPosition(transform.worldMatrix);
-	bulletTransform->localRotation = glm::vec3(-90.f, playerTransform->localRotation.y - 90.f, 0.f);
-	
+	bulletTransform->localRotation = glm::vec3(-90.f, playerTransform->localRotation.y - 90.f, 0.f);*/
+	WI_WARN("Firing");
 	// TODO: Play bullet sound here
 }
 
@@ -119,9 +119,9 @@ glm::vec3 Wiwa::PlayerController::GetMovementInput()
 	glm::vec3 input = glm::vec3(0.f);
 
 	if (Input::IsKeyPressed(Key::A))
-		input.x += 1;
-	if (Input::IsKeyPressed(Key::D))
 		input.x -= 1;
+	if (Input::IsKeyPressed(Key::D))
+		input.x += 1;
 	if (Input::IsKeyPressed(Key::W))
 		input.z += 1;
 	if (Input::IsKeyPressed(Key::S))
@@ -144,9 +144,9 @@ glm::vec3 Wiwa::PlayerController::GetShootingInput()
 	glm::vec3 input = glm::vec3(0.f);
 
 	if (Input::IsKeyPressed(Key::Left))
-		input.x += 1;
-	if (Input::IsKeyPressed(Key::Right))
 		input.x -= 1;
+	if (Input::IsKeyPressed(Key::Right))
+		input.x += 1;
 	if (Input::IsKeyPressed(Key::Up))
 		input.z += 1;
 	if (Input::IsKeyPressed(Key::Down))
@@ -158,15 +158,15 @@ glm::vec3 Wiwa::PlayerController::GetShootingInput()
 	return input;
 }
 
-void Wiwa::PlayerController::SetPlayerRotation(glm::vec3& currentRotation, const glm::vec3& input, const float rotationSpeed)
+void Wiwa::PlayerController::SetPlayerRotation(const glm::vec3& input, const float rotationSpeed)
 {
-	float angle = AngleFromVec2(input);
+	Transform3D* transform = GetTransform();
+	float angle = AngleFromVec2(glm::vec2(input.z, input.x));
+	
+	transform->localRotation.y = Math::LerpAngle(transform->localRotation.y, angle, rotationSpeed);
 
-	currentRotation.y = Math::LerpAngle(currentRotation.y, angle, rotationSpeed);
-
-	WI_INFO("current rotation {}", currentRotation.y);
-	if (currentRotation.y <= 360.f)
-		currentRotation.y = 0.f;
+	if (transform->localRotation.y >= 360.f)
+		transform->localRotation.y = 0.f;
 }
 
 float Wiwa::PlayerController::AngleFromVec2(const glm::vec2& vector)

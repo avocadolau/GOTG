@@ -9,18 +9,18 @@ Wiwa::PlayerAttack::~PlayerAttack() {}
 
 void Wiwa::PlayerAttack::EnterState()
 {
-	WI_CORE_WARN("Player attack");
+	WI_WARN("Player attack");
 	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
 }
 
 void Wiwa::PlayerAttack::UpdateState()
 {
-	if (!m_StateMachine->CanAttack() && !m_StateMachine->CanMove())
+	if (!m_StateMachine->CanAttack() && !m_StateMachine->IsAiming() && !m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
-	if (!m_StateMachine->CanAttack() && m_StateMachine->CanMove())
+	if (!m_StateMachine->CanAttack() && !m_StateMachine->IsAiming() && m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
 		return;
@@ -44,7 +44,7 @@ void Wiwa::PlayerAttack::UpdateState()
 		m_StateMachine->SetDirection(m_StateMachine->GetShootInput());
 	}
 
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetTransform()->localRotation, m_StateMachine->GetDirection(), 1.0f);
+	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.0f);
 	m_StateMachine->SetVelocity(m_StateMachine->GetInput() * m_StateMachine->GetCharacter()->Speed);
 	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
 	m_ShootTimer += Time::GetDeltaTimeSeconds();
@@ -80,12 +80,12 @@ void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
 		if (shooter->ShootRight)
 		{
 			spawnPoint = m_StateMachine->GetFirePosition("RightPos");
-			m_StateMachine->GetAnimator()->PlayAnimation("shootright", false);
+			m_StateMachine->GetAnimator()->PlayAnimation("shoot_right", false);
 		}
 		else
 		{
 			spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
-			m_StateMachine->GetAnimator()->PlayAnimation("shootleft", false);
+			m_StateMachine->GetAnimator()->PlayAnimation("shoot_left", false);
 		}
 		shooter->ShootRight = !shooter->ShootRight;
 		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *m_StateMachine->GetCharacter(), Math::CalculateForward(spawnPoint));

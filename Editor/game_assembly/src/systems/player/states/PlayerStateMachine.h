@@ -20,8 +20,8 @@ namespace Wiwa
 
 		WI_HARD_INL bool CanDash() { return (Input::IsKeyPressed(Key::LeftShift) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadLeftBumper)) && IsDashEnable(); }
 		WI_HARD_INL bool CanMove() { return  GetInput() != glm::vec3(0.f); }
-		WI_HARD_INL bool CanAttack() { return GetShootInput() != glm::vec3(0.f) || Input::IsMouseButtonPressed(0); }
-
+		WI_HARD_INL bool IsAiming() { return GetShootInput() != glm::vec3(0.f) || Input::IsMouseButtonPressed(1); }
+		WI_HARD_INL bool CanAttack() { return Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadRigthBumper) || Input::IsMouseButtonPressed(0); }
 		void UpdateMovement();
 
 		void SwitchState(PlayerBaseState* state);

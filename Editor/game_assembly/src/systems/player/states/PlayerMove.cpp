@@ -12,6 +12,7 @@ Wiwa::PlayerMove::~PlayerMove()
 
 void Wiwa::PlayerMove::EnterState()
 {
+	WI_INFO("Player move");
 	m_StateMachine->GetAnimator()->Blend("running", true, 0.2f);
 }
 
@@ -22,7 +23,7 @@ void Wiwa::PlayerMove::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
-	if (m_StateMachine->CanAttack())
+	if (m_StateMachine->IsAiming() || m_StateMachine->CanAttack())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_AttackState);
 		return;

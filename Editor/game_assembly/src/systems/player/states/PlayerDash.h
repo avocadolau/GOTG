@@ -17,6 +17,6 @@ namespace Wiwa
 		float m_DashTimer = 0.f;
 		glm::vec3 m_TargetPoint;
 		glm::vec3 m_DashDirection;
-		float m_DashTime = 1.5f;
+		float m_MaxDashTime = 1.5f;
 	};
 }

@@ -15,11 +15,11 @@ Wiwa::PlayerIdle::~PlayerIdle()
 
 void Wiwa::PlayerIdle::EnterState()
 {
-	WI_CORE_INFO("Player idle");
+	WI_INFO("Player idle");
 
 	m_StateMachine->GetAnimator()->Blend("idle", true, 0.3f);
 
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetTransform()->localRotation, m_StateMachine->GetDirection(), 1.f);
+	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.f);
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 }
 
@@ -30,7 +30,7 @@ void Wiwa::PlayerIdle::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
 		return;
 	}
-	if (m_StateMachine->CanAttack())
+	if (m_StateMachine->IsAiming() || m_StateMachine->CanAttack())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_AttackState);
 		return;

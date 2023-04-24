@@ -56,8 +56,8 @@ void Wiwa::PlayerStateMachine::UpdateMovement()
 {
 	this->m_Direction = this->m_MovementInput;
 	this->m_Velocity = this->m_MovementInput * GetCharacter()->Speed;
-
-	SetPlayerRotation(GetTransform()->localRotation, m_MovementInput, 1.f);
+	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_Velocity);
+	SetPlayerRotation(m_MovementInput, 1.f);
 }
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
@@ -82,7 +82,10 @@ void Wiwa::PlayerStateMachine::DashCooldown()
 		//count cooldown
 		m_CooldownTimer -= Time::GetDeltaTimeSeconds();
 		if (m_CooldownTimer <= 0)
+		{
 			SetDashEnable(true);
+			WI_INFO("Dash enabled");
+		}
 	}
 }
 
