@@ -490,7 +490,12 @@ namespace Wiwa {
 	{
 		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
 
-		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+		std::filesystem::path assetspath = path;
+		std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path);
+
+		if(!Wiwa::FileSystem::Exists(libpath.string().c_str())) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(libpath.string().c_str(), FileSystem::OM_IN | FileSystem::OM_BINARY);
 
 		EntityId eid = WI_INVALID_INDEX;
 
