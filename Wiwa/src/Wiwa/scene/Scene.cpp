@@ -59,6 +59,8 @@ namespace Wiwa
 		m_PhysicsManager->CleanWorld();
 		delete m_PhysicsManager;
 		m_PhysicsManager = nullptr;
+
+		RecastManager::DeAllocate();
 	}
 
 	void Scene::Start()

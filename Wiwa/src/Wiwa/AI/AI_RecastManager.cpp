@@ -296,6 +296,21 @@ namespace Wiwa
 		FileSystem::RemoveAll(gsetPath.c_str());
 	}
 
+	void RecastManager::DeAllocate()
+	{
+		if (m_RecastMesh)
+		{
+			delete m_RecastMesh;
+			m_RecastMesh = nullptr;
+		}
+
+		if (m_Geom)
+		{
+			delete m_Geom;
+			m_Geom = nullptr;
+		}
+	}
+
 }
 
 
