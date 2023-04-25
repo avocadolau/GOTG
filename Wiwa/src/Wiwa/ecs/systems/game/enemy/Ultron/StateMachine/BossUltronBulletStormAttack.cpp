@@ -100,7 +100,10 @@ namespace Wiwa
 
 		WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		physSys->DeleteBody();
+		if (physSys != nullptr)
+		{
+			physSys->DeleteBody();
+		}	
 
 		// Set intial positions
 		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
