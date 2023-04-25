@@ -357,7 +357,7 @@ namespace Wiwa
 		"resources/images/skybox/main_menu/UI_BottomSkyBox_01.png",
 		"resources/images/skybox/main_menu/UI_FrontSkyBox_01.png",
 		"resources/images/skybox/main_menu/UI_BackSkyBox_01.png" };
-		m_DefaultSkybox.LoadCubemap(dooms_day);
+		m_DefaultSkybox.LoadCubemap(main_menu);
 
 
 

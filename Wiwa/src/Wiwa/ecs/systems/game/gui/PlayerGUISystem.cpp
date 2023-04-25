@@ -29,11 +29,11 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 		}
 		if (CurrentHUD == PauseHUD)
 		{
-			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
 			{
 				returnToHUD = true;
 			}
-			if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart))
+			if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
 			{
 				gm.canvas.at(CanvasHUD)->SwapActive();
 				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
@@ -43,11 +43,11 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 		}
 		if (CurrentHUD == OptionsHUD)
 		{
-			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
 			{
 				returnToPauseHUD = true;
 			}
-			if (returnToPauseHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart))
+			if (returnToPauseHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
 			{
 				gm.canvas.at(OptionsHUD)->SwapActive();
 				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
