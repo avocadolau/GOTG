@@ -28,9 +28,19 @@ namespace Wiwa
 	void BossUltron::OnAwake()
 	{
 		EnemySystem::OnAwake();
-		//m_SpawnState = new RangedPhalanxSpawnState();
+
+		m_SpawnState = new BossUltronSpawnState();
+		m_IdleState = new BossUltronIdleState();
+		m_MovementState = new BossUltronMovementState();
+		m_ClusterShotsAttackState = new BossUltronClusterShotsAttackState();
+		m_LaserBeamAttackState = new BossUltronLaserBeamAttackState();
+		m_BulletStormAttackState = new BossUltronBulletStormAttackState();
+		m_DeathState = new BossUltronDeathState();
+		m_DashState = new BossUltronDashState();
 		
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		
 		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
 		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);
 	}
@@ -38,6 +48,12 @@ namespace Wiwa
 	void BossUltron::OnInit()
 	{
 		EnemySystem::OnInit();
+
+		NavAgent* navAgent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = true;
+		}
+
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
 	}

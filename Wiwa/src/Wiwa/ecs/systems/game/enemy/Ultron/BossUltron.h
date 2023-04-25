@@ -23,7 +23,6 @@ namespace Wiwa {
 		BossUltronDeathState* m_DeathState;
 		BossUltronDashState* m_DashState;
 
-		
 		EntityManager::ComponentIterator m_GunTransformIt;
 
 		float m_Timer;
