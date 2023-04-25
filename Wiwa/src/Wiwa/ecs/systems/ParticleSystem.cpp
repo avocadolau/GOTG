@@ -336,17 +336,6 @@ namespace Wiwa {
 
 
 					//update world space values
-					if (emitter->m_p_followEmitterPosition)
-					{
-						particle.transform.position = t3d->position + particle.transform.localPosition;
-
-					}
-					else
-					{
-						particle.transform.position = particle.transform.localPosition;
-
-					}
-
 					if (emitter->m_p_followEmitterRotation)
 					{
 						particle.transform.rotation = t3d->rotation + particle.transform.localRotation;
@@ -357,6 +346,29 @@ namespace Wiwa {
 						particle.transform.rotation = particle.transform.localRotation;
 
 					}
+					
+					glm::mat4 rotMat(1);
+					glm::vec3 rotationRad = glm::radians(particle.transform.rotation);
+					glm::vec3 orginalPos(0); 
+
+					
+
+
+					if (emitter->m_p_followEmitterPosition)
+					{
+						orginalPos = (t3d->position + particle.transform.localPosition);
+						
+
+					}
+					else
+					{
+						orginalPos = particle.transform.localPosition;
+
+					}
+					orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+					orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+					orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+					particle.transform.position = orginalPos;
 
 					particle.transform.scale = particle.transform.localScale;
 
