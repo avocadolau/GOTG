@@ -426,6 +426,18 @@ bool MaterialExtensionComp(const std::filesystem::path file)
 	return false;
 }
 
+bool VideoExtensionComp(const std::filesystem::path file)
+{
+	std::string path = file.string();
+	Wiwa::Resources::_toLower(path);
+	std::filesystem::path formatedFile = path.c_str();
+
+	if (formatedFile.extension() == ".mp4")
+		return true;
+
+	return false;
+}
+
 void CreateScriptFile(const char* filePath, const char* name)
 {
 	std::string file = filePath;

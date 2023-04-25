@@ -19,7 +19,6 @@
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/components/Sprite.h>
-#include <Wiwa/scripting/ScriptEngine.h>
 
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 
@@ -61,7 +60,7 @@ void EditorLayer::OnAttach()
 
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 	m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
-	m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+	m_EditorScene->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
 	
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
@@ -95,6 +94,7 @@ void EditorLayer::OnAttach()
 	m_GameLogPanel = std::make_unique<GameLogPanel>(this);
 	m_InventoryPanel = std::make_unique<InventoryPanel>(this);
 	m_AchievementsPanel = std::make_unique<AchievementsPanel>(this);
+	m_AiPanel = std::make_unique<AIPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
 	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
@@ -129,6 +129,7 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_GameLogPanel.get());
 	m_Panels.push_back(m_InventoryPanel.get());
 	m_Panels.push_back(m_AchievementsPanel.get());
+	m_Panels.push_back(m_AiPanel.get());
 
 	
 	m_Settings.push_back(m_ProjectPanel.get());
@@ -211,7 +212,7 @@ SceneId EditorLayer::LoadScene(const std::string &m_Path)
 	// Load scene and prepare it
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str(), Wiwa::SceneManager::LoadFlags::LOAD_DEFAULT | Wiwa::SceneManager::LoadFlags::LOAD_NO_INIT);
 	Wiwa::Scene *scene = Wiwa::SceneManager::getScene(id);
-	scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+	scene->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
 
 	// Update editor scene references
 	m_OpenedScenePath = m_Path;
@@ -356,7 +357,7 @@ void EditorLayer::MainMenuBar()
 				m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 				m_OpenedScenePath = "";
 
-				m_EditorScene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+				m_EditorScene->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
 				m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
 
 				Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
@@ -532,10 +533,18 @@ void EditorLayer::MainMenuBar()
 		}
 		if (ImGui::BeginMenu("Script"))
 		{
-			if (ImGui::MenuItem("Reload assembly", "ALT + R"))
-				Wiwa::ScriptEngine::ReloadAssembly();
+			if (ImGui::MenuItem("Reload assembly", "ALT + R")) {
+				
+
+				// Reload app assembly
+				Wiwa::Application::Get().UnloadGameAssembly();
+
+				Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
+
+				Wiwa::Application::Get().LoadGameAssembly();
+			}
 			if (ImGui::MenuItem("Open Solution"))
-				system("call tools/opensln.bat AppAssembly.sln");
+				system("call tools/opensln.bat game_assembly/WiwaGameAssembly.sln");
 			ImGui::Checkbox("Build automatic", &s_BuildAutomatic);
 			ImGui::SameLine();
 
@@ -596,8 +605,7 @@ void EditorLayer::MainMenuBar()
 			{
 				if (!is_playing)
 				{
-					if (Wiwa::ScriptEngine::isAssemblyLoaded)
-					{
+					
 						SaveScene();
 
 						if (m_OpenedScenePath != "")
@@ -607,7 +615,7 @@ void EditorLayer::MainMenuBar()
 
 							m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
 							Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
-							sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+							sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
 
 							// For debug purposes
 							std::string ex = sc->getName();
@@ -616,12 +624,6 @@ void EditorLayer::MainMenuBar()
 
 							Wiwa::SceneManager::PlayScene();
 						}
-					}
-					else
-					{
-						WI_ERROR("Fix the errors on the scripts before playing!");
-
-					}
 				}
 				else
 				{
@@ -714,6 +716,11 @@ void EditorLayer::MainMenuBar()
 void EditorLayer::StopScene()
 {
 	Wiwa::Time::Stop();
+
+	Audio::StopAllEvents();
+
+	// Wait until all events are stopped
+	Sleep(10);
 
 	// Unload simulated scene but keep resources for the editor
 	Wiwa::SceneManager::UnloadScene(m_SimulationSceneId, false);

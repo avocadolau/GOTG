@@ -5,6 +5,7 @@
 #include "Wiwa/scene/Scene.h"
 #include <Wiwa/core/Application.h>
 #include "../../Utils/EditorUtils.h"
+
 using namespace Wiwa;
 
 UIPanel::UIPanel(EditorLayer* instance)
@@ -82,7 +83,7 @@ void UIPanel::Draw()
 
 void UIPanel::DrawGuiElementSelection()
 {
-	const char* items[] = {"Button", "Slider", "CheckBox", "Image","Text","Bar","Ability"};
+	const char* items[] = {"Button", "Slider", "CheckBox", "Image","Text","Bar","Ability","Video"};
 	static const char* current_item = NULL;
 	if (ImGui::CollapsingHeader("Create UI element"))
 	{
@@ -145,6 +146,9 @@ void UIPanel::DrawGuiElementCreation(const char* current_item)
 	case GuiType::ABILITY:
 		DrawAbilityCreation(canvasSelected, Wiwa::SceneManager::getActiveScene()->GetGuiManager());
 		break;
+	case GuiType::VIDEO:
+		DrawVideoCreation(canvasSelected, Wiwa::SceneManager::getActiveScene()->GetGuiManager());
+		break;
 	default:
 		break;
 	}
@@ -179,6 +183,10 @@ GuiType UIPanel::GetSelectedElementType(const char* current_item)
 	if (current_item == "Ability")
 	{
 		return GuiType::ABILITY;
+	}
+	if (current_item == "Video")
+	{
+		return GuiType::VIDEO;
 	}
 
 	return GuiType::TEXT;
@@ -223,27 +231,27 @@ void UIPanel::DrawButtonCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	if (current_item == WI_INVALID_INDEX) {
 		for (size_t i = 0; i < cbcount; i++) {
-			Wiwa::Callback* cb = app.getCallbackAt(i);
+			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->getParamCount() == 0) {
+			if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("void")) {
 				current_item = i;
 			}
 		}
 	}
 
 	if (cbcount > 0) {
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		const Func* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
-		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 		{
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
-				if (current_cb->getParamCount() == 0) {
-					if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+				if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 					{
 						current_item = n;
 						if (is_selected)
@@ -337,35 +345,32 @@ void UIPanel::DrawSliderCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	if (current_item == WI_INVALID_INDEX) {
 		for (size_t i = 0; i < cbcount; i++) {
-			Wiwa::Callback* cb = app.getCallbackAt(i);
+			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->getParamCount() == 1) {
-				if (cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-					current_item = i;
-				}
+			if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("float")) {
+				current_item = i;
+				
 			}
 		}
 	}
 
 	if (cbcount > 0) {
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		const Func* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
-		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 		{
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
-				if (current_cb->getParamCount() == 1) {
-					if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-						if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-						{
-							current_item = n;
-							if (is_selected)
-								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-						}
+				if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("float")) {
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 					}
 				}
 			}
@@ -498,28 +503,28 @@ void UIPanel::DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	if (current_item == WI_INVALID_INDEX) {
 		for (size_t i = 0; i < cbcount; i++) {
-			Wiwa::Callback* cb = app.getCallbackAt(i);
+			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->getParamCount() == 0) {
+			if (cb->params.size() == 0) {
 				current_item = i;
 			}
 		}
 	}
 
 	if (cbcount > 0) {
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		const Func* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
-		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 		{
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
 
-				if (current_cb->getParamCount() == 0) {
-					if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+				if (current_cb->params.size() == 0) {
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 					{
 						current_item = n;
 						if (is_selected)
@@ -592,28 +597,28 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 
 	if (current_item == WI_INVALID_INDEX) {
 		for (size_t i = 0; i < cbcount; i++) {
-			Wiwa::Callback* cb = app.getCallbackAt(i);
+			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->getParamCount() == 0) {
+			if (cb->params.size() == 0) {
 				current_item = i;
 			}
 		}
 	}
 
 	if (cbcount > 0) {
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		const Func* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
-		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 		{
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
 				
-				if (current_cb->getParamCount() == 0) {
-					if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
+				if (current_cb->params.size() == 0) {
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 					{
 						current_item = n;
 						if (is_selected)
@@ -659,7 +664,7 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 	ImGui::DragInt2("Position", glm::value_ptr(position));
 	ImGui::DragInt2("Size", glm::value_ptr(size));
 	ImGui::SliderFloat("Rotation", &rotation, 0.0f, 360.f, "%.1f");
-	ImGui::InputText("String", (char*)pathForAsset.c_str(),64);
+	ImGui::InputText("String",&pathForAsset);
 
 	if (ImGui::Button("Create Text"))
 	{
@@ -670,6 +675,45 @@ void UIPanel::DrawTextCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		rect.height = size[1];
 		if (canvas_id > -1)
 			m_GuiManager.CreateGuiControl_Text(GuiControlType::TEXT, m_GuiManager.canvas.at(canvas_id)->controls.size(), rect, pathForAsset.c_str(),canvas_id, true, rotation);
+	}
+	ImGui::PopID();
+}
+void UIPanel::DrawVideoCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
+{
+	ImGui::PushID("CreateVideo");
+	if (canvas_id > -1)ImGui::Text("Canvas: %i", canvas_id);
+	if (canvas_id < 0)ImGui::Text("Please select a canvas");
+	ImGui::DragInt2("Position", glm::value_ptr(position));
+	ImGui::DragInt2("Size", glm::value_ptr(size));
+
+	AssetContainer(pathForAsset.c_str());
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".mp4")
+			{
+				pathForAsset = pathS;
+				SetSizeByTexture(pathS.c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	if (ImGui::Button("Create Text"))
+	{
+		Wiwa::Rect2i rect;
+		rect.x = position[0];
+		rect.y = position[1];
+		rect.width = size[0];
+		rect.height = size[1];
+		if (canvas_id > -1)
+			m_GuiManager.CreateGuiControl_Video(GuiControlType::VIDEO, m_GuiManager.canvas.at(canvas_id)->controls.size(), canvas_id, rect, pathForAsset.c_str(),true);
 	}
 	ImGui::PopID();
 }
@@ -709,38 +753,36 @@ void UIPanel::DrawCheckboxCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager
 
 	if (current_item == WI_INVALID_INDEX) {
 		for (size_t i = 0; i < cbcount; i++) {
-			Wiwa::Callback* cb = app.getCallbackAt(i);
+			const Func* cb = app.getCallbackAt(i);
 
-			if (cb->getParamCount() == 1) {
-				if (cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-					current_item = i;
-				}
+			if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("bool")) {
+				
+				current_item = i;
+				
 			}
 		}
 	}
 
 	if (cbcount > 0) {
-		Wiwa::Callback* current_cb = app.getCallbackAt(current_item);
+		const Func* current_cb = app.getCallbackAt(current_item);
 
 		ImGui::Text("Callback type:");
 
-		if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
 		{
 			for (size_t n = 0; n < cbcount; n++)
 			{
 				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
 				current_cb = app.getCallbackAt(n);
-				if (current_cb->getParamCount() == 1) {
-					const Type* param = current_cb->getParamAt(0);
-
-					if (param->hash == (size_t)TypeHash::Bool) {
-						if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-						{
-							current_item = n;
-							if (is_selected)
-								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-						}
+				if (current_cb->params.size() == 1 &&  current_cb->params.at(0).hash == FNV1A_HASH("bool")) {
+					
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
 					}
+					
 				}
 			}
 			ImGui::EndCombo();

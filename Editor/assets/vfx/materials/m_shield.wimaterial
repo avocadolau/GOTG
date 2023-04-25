@@ -1,1 +1,0 @@
-{"shader":"library/resources/shaders/vfx/shield","uniforms":{"u_LifeTime":0.9220031499862671,"u_Color":{"r":0.35807859897613525,"g":0.7393069863319397,"b":1.0,"a":1.0},"u_Texture":"assets/textures/t_hexagon_inverted.png","u_DiscardTex":"assets/textures/t_perlin_noise.png"}}

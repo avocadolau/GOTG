@@ -12,6 +12,7 @@
 #include <Wiwa/ecs/components/Mesh.h>
 
 #define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 namespace Wiwa {
@@ -194,6 +195,41 @@ namespace Wiwa {
 		}
 	}
 
+
+
+	void EntityManager::SortParticleSystems()
+	{
+		std::map<SystemHash, std::vector<System*>>::iterator it = m_SystemsByHash.find(FNV1A_HASH("ParticleSystem"));
+
+		//if no systems quit
+		if (it == m_SystemsByHash.end())
+			return;
+
+		//get camera
+		CameraManager& man = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
+		Camera* cam = man.getActiveCamera();
+		
+		if (cam == nullptr)
+			return;
+
+		// Sort from far to close
+		std::sort(it->second.begin(), it->second.end(), [&](System* s1, System* s2) {
+			Transform3D* t1 = GetComponent<Transform3D>(s1->GetEntity());
+			Transform3D* t2 = GetComponent<Transform3D>(s2->GetEntity());
+
+			float dist1 = Wiwa::Math::DistanceV3(t1->position, cam->getPosition());
+			float dist2 = Wiwa::Math::DistanceV3(t2->position, cam->getPosition());
+
+			return dist1 > dist2;
+			});
+
+		// Remove any null pointers from the vector
+		it->second.erase(std::remove(it->second.begin(), it->second.end(), nullptr), it->second.end());
+	}
+
+
+
+
 	void EntityManager::SystemsAwake()
 	{
 		// Awake entity systems
@@ -243,6 +279,8 @@ namespace Wiwa {
 		//	}
 		//}
 
+
+		SortParticleSystems();
 		//update by systems
 
 		std::map<SystemHash, std::vector<System*>>::iterator it;
@@ -253,7 +291,7 @@ namespace Wiwa {
 			for (size_t i = 0; i < system_size; i++)
 			{
 				System* s = it->second[i];
-
+				
 				if (!s) continue;
 
 				s->Update();
@@ -452,7 +490,12 @@ namespace Wiwa {
 	{
 		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
 
-		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+		std::filesystem::path assetspath = path;
+		std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path);
+
+		if(!Wiwa::FileSystem::Exists(libpath.string().c_str())) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(libpath.string().c_str(), FileSystem::OM_IN | FileSystem::OM_BINARY);
 
 		EntityId eid = WI_INVALID_INDEX;
 
@@ -467,9 +510,11 @@ namespace Wiwa {
 
 	EntityId EntityManager::LoadPrefab(const char* path, EntityId parent)
 	{
-		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
+		std::string filePath = Resources::_assetToLibPath(path);
 
-		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+		if (!Wiwa::FileSystem::Exists(filePath.c_str())) return WI_INVALID_INDEX;
+
+		File file = Wiwa::FileSystem::Open(filePath.c_str(), FileSystem::OM_IN | FileSystem::OM_BINARY);
 
 		EntityId eid = WI_INVALID_INDEX;
 

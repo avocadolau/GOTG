@@ -3,8 +3,6 @@
 
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
-#include "Wiwa/scripting/embed_functions/embed_audio_functions.h"
-#include "Wiwa/scripting/ScriptEngine.h"
 #include "Wiwa/AI/AIMapGeneration.h"
 
 namespace Wiwa {

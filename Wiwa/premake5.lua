@@ -31,7 +31,6 @@ project "Wiwa"
 		"%{IncludeDirs.Glew}",
 		"%{IncludeDirs.PCG}",
 		"%{IncludeDirs.JSON}",
-		"%{IncludeDirs.mono}",
 		"%{IncludeDirs.XML}",
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.assimp}",
@@ -40,6 +39,8 @@ project "Wiwa"
 		"%{IncludeDirs.IconFontCppHeaders}",
 		"%{IncludeDirs.bullet}",
 		"%{IncludeDirs.ozz}"
+		"%{IncludeDirs.recastnavigation}",
+		"%{IncludeDirs.OpenCV}"
 	}
 
 	links
@@ -80,14 +81,8 @@ project "Wiwa"
 		postbuildcommands
 		{
 			"{COPY} \"%{cfg.buildtarget.relpath}\" \"%{wks.location}Editor\"",
-			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game\\Wiwa.lib\""
-		}
-		links
-		{
-			"%{Library.WinSock}",
-			"%{Library.WinMM}",
-			"%{Library.Version}",
-			"%{Library.BCrypt}"
+			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game\\Wiwa.lib\"",
+			"copy \"..\\bin\\%{outputdir}\\Wiwa\\Wiwa.lib\" \"%{wks.location}Editor\\game_assembly\\Wiwa.lib\""
 		}
 
 	debugdir "%{wks.location}/Editor"
@@ -105,6 +100,17 @@ project "Wiwa"
 			"%{Library.bullet_dynamics_debug}",
 			"%{Library.bullet_collision_debug}",
 			"%{Library.bullet_linear_math_debug}",
+			"%{Library.DebugUtils_debug}",
+			"%{Library.Detour_debug}",
+			"%{Library.DetourCrowd_debug}",
+			"%{Library.DetourTileCache_debug}",
+			"%{Library.Recast_debug}",
+			"%{Library.opencv_core_debug}",
+			"%{Library.opencv_video_debug}",
+			"%{Library.opencv_videoio_debug}",
+			"%{Library.opencv_highgui_debug}",
+			"%{Library.opencv_imgproc_debug}",
+			"%{Library.opencv_imgcodecs_debug}"
 		}
 
 
@@ -118,6 +124,17 @@ project "Wiwa"
 			"%{Library.bullet_dynamics_release}",
 			"%{Library.bullet_collision_release}",
 			"%{Library.bullet_linear_math_release}",
+			"%{Library.DebugUtils_release}",
+			"%{Library.Detour_release}",
+			"%{Library.DetourCrowd_release}",
+			"%{Library.DetourTileCache_release}",
+			"%{Library.Recast_release}",
+			"%{Library.opencv_core}",
+			"%{Library.opencv_video}",
+			"%{Library.opencv_videoio}",
+			"%{Library.opencv_highgui}",
+			"%{Library.opencv_imgproc}",
+			"%{Library.opencv_imgcodecs}"
 		}
 
 	filter "configurations:Dist"

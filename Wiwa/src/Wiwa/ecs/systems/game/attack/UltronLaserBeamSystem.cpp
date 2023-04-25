@@ -22,6 +22,7 @@ void Wiwa::UltronLaserBeamSystem::OnAwake()
 
 void Wiwa::UltronLaserBeamSystem::OnInit()
 {
+
 }
 
 void Wiwa::UltronLaserBeamSystem::OnUpdate()
@@ -55,4 +56,60 @@ void Wiwa::UltronLaserBeamSystem::OnCollisionEnter(Object* body1, Object* body2)
 		UltronLaserBeam* bullet = GetComponentByIterator<UltronLaserBeam>(m_LaserIt);
 		GameStateManager::DamagePlayer(bullet->damagePerSecond * Time::GetDeltaTime());
 	}
+}
+
+void Wiwa::UltronLaserBeamSystem::InitLaserBeam()
+{
+	if (!getAwake())
+		System::Awake();
+	/*GameStateManager::s_PoolManager->SetScene(m_Scene);
+	GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();*/
+
+	//UltronLaserBeamSystem* bullet = GetComponentByIterator<UltronLaserBeamSystem>(m_LaserIt);
+	//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+	//Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
+	//Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+
+	//physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
+	//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+	//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+	//if (physSystem)
+	//{
+	//	physSystem->DeactivateBody();
+	//}
+}
+
+
+bool Wiwa::UltronLaserBeamSystem::EnableLaser()
+{
+	UltronLaserBeamSystem* bullet = GetComponent<UltronLaserBeamSystem>();
+	if (bullet)
+	{
+		bullet->InitLaserBeam();
+	}
+	m_Timer = 0.0f;
+	return true;
+}
+
+bool Wiwa::UltronLaserBeamSystem::OnDisabledFromPool()
+{
+	Transform3D* transform = GetComponent<Transform3D>();
+	if (transform)
+	{
+		transform->localPosition.y = 20000.0f;
+	}
+
+	//UltronLaserBeam* laserBeam = GetComponent<UltronLaserBeam>();
+
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+	PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+	physSystem->DeleteBody();
+
+	m_Timer = 0.0f;
+
+	return true;
 }

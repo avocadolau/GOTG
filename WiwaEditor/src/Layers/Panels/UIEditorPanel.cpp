@@ -2,7 +2,6 @@
 #include "UIEditorPanel.h"
 #include <unordered_map>
 #include <Wiwa/utilities/Reflection.h>
-#include <Wiwa/scripting/ScriptEngine.h>
 #include <Wiwa/core/Application.h>
 #include <Wiwa/utilities/render/Text.h>
 #include <ImGuizmo.h>
@@ -233,7 +232,7 @@ void UIEditorPanel::DrawCanvasItems()
 	{
 		ImGui::Text(canvas->controls.at(i)->name.c_str());
 		ImGui::SameLine();
-		ImGui::Text("%i", canvas->controls.at(i)->id);
+		ImGui::Text("%i", i);
 		ImGui::SameLine();
 		ImGui::PushID(i);
 		if (ImGui::Button("Edit"))
@@ -314,7 +313,8 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 		extraOriginSize[0] = control->extraTexturePosition.width;
 		extraOriginSize[1] = control->extraTexturePosition.height;
 	}
-	pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+	if(control->type != Wiwa::GuiControlType::VIDEO) pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+	if(control->type == Wiwa::GuiControlType::VIDEO)  pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
 	pathForExtraAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 }
 void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
@@ -395,6 +395,11 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			break;
 		case Wiwa::GuiControlType::TEXT:
 			ImGui::InputText("text", &pathForAsset);
+			ImGui::DragInt2("origin position", originPos);
+			ImGui::DragInt2("origin size", originSize);
+			break;
+		case Wiwa::GuiControlType::VIDEO:
+			AssetContainerPath();
 			break;
 		default:
 			break;
@@ -475,6 +480,10 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		Wiwa::Text* newText = new Wiwa::Text;
 		newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)pathForAsset.c_str());
+		originPos[0] = 0;
+		originPos[1] = 0;
+		originSize[0] = 512;
+		originSize[1] = 512;
 		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::CENTER);
 		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetSize(), originTexRect);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());
@@ -529,6 +538,11 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 
 	}
 	break;
+	case Wiwa::GuiControlType::VIDEO:
+	{
+		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::UPLEFT);
+	}
+	break;
 	case Wiwa::GuiControlType::ABILITY:
 	{
 		control->textId1 = Wiwa::Resources::Load<Wiwa::Image>(pathForAsset.c_str());
@@ -547,75 +561,105 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 {
 	Wiwa::Application& app = Wiwa::Application::Get();
-	if (callbackID != WI_INVALID_INDEX)
-	{
-		size_t cbcount = app.GetCallbacksCount();
-
-		if (cbcount > 0) {
-			Wiwa::Callback* current_cb = app.getCallbackAt(callbackID);
-
-			ImGui::Text("Callback type:");
-
-			if (ImGui::BeginCombo("##combo", current_cb->getName().c_str())) // The second parameter is the label previewed before opening the combo.
+	size_t cbcount = app.GetCallbacksCount();
+	if (callbackID == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			const Func* cb = app.getCallbackAt(i);
+			switch (control->type)
 			{
-				for (size_t n = 0; n < cbcount; n++)
-				{
-					bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
-					current_cb = app.getCallbackAt(n);
-					switch (control->type)
-					{
-					case Wiwa::GuiControlType::BUTTON:
-						if (current_cb->getParamCount() == 0) {
-							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-							{
-								callbackID = n;
-								if (is_selected)
-									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-							}
-						}
-						break;
-					case Wiwa::GuiControlType::CHECKBOX:
-						if (current_cb->getParamCount() == 1) {
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Bool) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-								}
-							}
-						}
-						break;
-					case Wiwa::GuiControlType::SLIDER:
-						if (current_cb->getParamCount() == 1) {
-							if (current_cb->getParamAt(0)->hash == (size_t)TypeHash::Float) {
-								if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-								{
-									callbackID = n;
-									if (is_selected)
-										ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-								}
-							}
-						}
-						break;
-					case Wiwa::GuiControlType::IMAGE:
-						if (current_cb->getParamCount() == 0) {
-							if (ImGui::Selectable(current_cb->getName().c_str(), is_selected))
-							{
-								callbackID = n;
-								if (is_selected)
-									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-							}
-						}
-						break;
-					default:
-						break;
-					}
+			case Wiwa::GuiControlType::BUTTON:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("void")) {
+
+					callbackID = i;
+
 				}
-				ImGui::EndCombo();
+				break;
+			case Wiwa::GuiControlType::CHECKBOX:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("bool")) {
+
+					callbackID = i;
+
+				}
+				break;
+			case Wiwa::GuiControlType::SLIDER:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("float")) {
+
+					callbackID = i;
+
+				}
+				break;
+			default:
+				break;
 			}
+			
 		}
 	}
+
+	if (cbcount > 0) {
+		const Func* current_cb = app.getCallbackAt(callbackID);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
+		{
+			for (size_t n = 0; n < cbcount; n++)
+			{
+				bool is_selected = n == callbackID; // You can store your selection however you want, outside or inside your objects
+				current_cb = app.getCallbackAt(n);
+				switch (control->type)
+				{
+				case Wiwa::GuiControlType::BUTTON:
+					if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
+						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+						{
+							callbackID = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::CHECKBOX:
+					if (current_cb->params.size() == 1) {
+						if (current_cb->params.at(0).hash == FNV1A_HASH("bool")) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::SLIDER:
+					if (current_cb->params.size() == 1) {
+						if (current_cb->params.at(0).hash == FNV1A_HASH("float")) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::IMAGE:
+					if (current_cb->params.size() == 0 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
+						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+						{
+							callbackID = n;
+							if (is_selected)
+								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+						}
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			ImGui::EndCombo();
+		}
+	}
+	
 }
 
 void UIEditorPanel::AssetContainerPath()
@@ -629,7 +673,7 @@ void UIEditorPanel::AssetContainerPath()
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".png")
+			if (p.extension() == ".png" || p.extension() == ".mp4")
 			{
 				pathForAsset = pathS;
 			}

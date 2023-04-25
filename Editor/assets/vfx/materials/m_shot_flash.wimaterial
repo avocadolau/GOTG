@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/shot_impact","uniforms":{"u_LifeTime":0.6609495878219604,"u_Color":{"r":0.29694318771362305,"g":1.0,"b":0.0,"a":1.0},"u_Texture":"assets/textures/t_impact.png"}}

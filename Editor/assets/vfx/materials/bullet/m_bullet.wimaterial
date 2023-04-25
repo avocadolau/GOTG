@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/bullet/bullet","uniforms":{"u_LifeTime":0.8241245746612549,"u_Color":{"r":0.567685604095459,"g":1.0,"b":0.9943364262580872,"a":1.0},"u_Texture":"assets/textures/t_bullet_texture_fade.png","u_TransparencyTexture":"assets/textures/t_bullet_texture_fade.png"}}

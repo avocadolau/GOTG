@@ -6,10 +6,12 @@ namespace Wiwa
 {
 	RangedPhalanxHitState::RangedPhalanxHitState()
 	{
+
 	}
 
 	RangedPhalanxHitState::~RangedPhalanxHitState()
 	{
+
 	}
 
 	void RangedPhalanxHitState::EnterState(EnemyRangedPhalanx* enemy)

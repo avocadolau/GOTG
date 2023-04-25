@@ -1,8 +1,8 @@
 #pragma once
+#include <Wiwa/utilities/EntityPool.h>
 
 namespace Wiwa
 {
-    class EntityPool;
     class Scene;
     class WI_API GamePoolingManager {
     public:
@@ -18,11 +18,10 @@ namespace Wiwa
         EntityPool* s_UltronLaserBeamPool;
         EntityPool* s_Subjugator;
         
-        
         void SetScene(Scene* scene);
 
-        void LoadPool(int type, Scene* scene);
-        void UnloadPool(int type);
+        void LoadPool(Pool_Type type, Scene* scene);
+        void UnloadPool(Pool_Type type);
 
         void LoadAllPools(Scene* scene);
         void UnloadAllPools();

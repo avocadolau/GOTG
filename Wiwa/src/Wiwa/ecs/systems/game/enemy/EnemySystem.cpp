@@ -28,6 +28,7 @@ namespace Wiwa
 		m_StatsIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_ColliderIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_AgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_NavAgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
 		m_PlayerTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -35,6 +36,8 @@ namespace Wiwa
 		m_PlayerId = -1;
 		m_WaveId = -1;
 		m_WasSpawnedBySpawner = false;
+
+		m_PhysicsSystemHash = FNV1A_HASH("PhysicsSystem");
 	}
 
 	EnemySystem::~EnemySystem()
@@ -51,6 +54,7 @@ namespace Wiwa
 		m_StatsIt = GetComponentIterator<Character>();
 		m_ColliderIt = GetComponentIterator<CollisionBody>();
 		m_AgentIt = GetComponentIterator<AgentAI>();
+		m_NavAgentIt = GetComponentIterator<NavAgent>();
 		m_TransformIt = GetComponentIterator<Transform3D>();
 		m_PlayerId = Wiwa::GameStateManager::s_PlayerId;
 		m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);
@@ -249,6 +253,46 @@ namespace Wiwa
 			self->hasFinished = true;
 		}
 		return true;
+	}
+
+	void EnemySystem::LookAt(const glm::vec3& target_look)
+	{
+		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+
+		float distance = glm::distance(transform->localPosition, target_look);
+
+		float timeToRotate = distance / 30.0f;
+		float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
+
+		// Calculate the forward vector from the current position to the target position
+		glm::vec3 forward = glm::normalize(target_look - transform->localPosition);
+
+		// Calculate the angle between the forward vector and the world forward vector (0, 0, 1)
+		float angle = glm::angle(forward, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		// Determine the sign of the angle based on the cross product between the forward vector and the world forward vector (0, 0, 1)
+		glm::vec3 crossProduct = glm::cross(forward, glm::vec3(0.0f, 0.0f, 1.0f));
+		if (crossProduct.y > 0.0f) {
+			angle = -angle;
+		}
+
+		float targetRotation = angle * 180 / glm::pi<float>();
+
+		// Calculate the difference between the current rotation and target rotation
+		float rotationDifference = targetRotation - transform->localRotation.y;
+
+		// Adjust the rotation difference to be within the range of -180 to 180 degrees
+		while (rotationDifference > 180.0f) {
+			rotationDifference -= 360.0f;
+		}
+		while (rotationDifference < -180.0f) {
+			rotationDifference += 360.0f;
+		}
+
+		// Calculate the new interpolated rotation
+		float interpolatedRotation = transform->localRotation.y + rotationDifference * tRot;
+
+		transform->localRotation.y = interpolatedRotation;
 	}
 
 	void EnemySystem::ChasePlayer()

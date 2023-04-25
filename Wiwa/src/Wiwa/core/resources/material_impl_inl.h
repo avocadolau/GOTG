@@ -67,7 +67,8 @@ namespace Wiwa {
 	template<>
 	inline bool Resources::Import<Material>(const char* file)
 	{
-		if (!_file_exists(file)) return false;
+		if (!_file_exists(file))
+			return false;
 
 		std::filesystem::path import_file = file;
 		std::filesystem::path export_file = _assetToLibPath(file);
@@ -75,7 +76,8 @@ namespace Wiwa {
 
 		std::filesystem::path export_path = export_file.parent_path();
 
-		if (!_preparePath(export_path.string())) return false;
+		if (!_preparePath(export_path.string()))
+			return false;
 
 		Material* mat = Material::LoadMaterialData(file);
 		std::vector<Uniform>& uniforms = mat->getUniforms();

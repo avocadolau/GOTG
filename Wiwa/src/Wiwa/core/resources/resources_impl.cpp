@@ -9,6 +9,7 @@
 #include "model_impl_inl.h"
 #include "shader_impl_inl.h"
 #include "animation_impl_in.h"
+#include "video_impl_in.h"
 
 namespace Wiwa {
 	std::vector<Resources::Resource*> Resources::m_Resources[Resources::WRT_LAST];
@@ -103,6 +104,7 @@ namespace Wiwa {
 		//UnloadResourcesOf<Shader>();
 		UnloadResourcesOf<Model>();
 		UnloadResourcesOf<Animation>();
+		UnloadResourcesOf<Video>();
 	}
 	
 	Resources::MetaResult Resources::CheckMeta(const char* filename)
@@ -171,6 +173,18 @@ namespace Wiwa {
 
 		stbi_image_free(image);
 	}
+
+	void Resources::_import_video_impl(const char* origin, const char* destination)
+	{
+		Video* video = new Video();
+		video->Init(origin, nullptr);
+
+		Wiwa::FileSystem::Copy(origin, destination);
+		//Video::WriteVideo(destination, video);
+
+		delete video;
+	}
+
 
 	void Resources::_import_model_impl(const char* origin, const char* destination, ModelSettings* settings)
 	{

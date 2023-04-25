@@ -28,4 +28,4 @@ namespace Wiwa {
 	};
 }
 
-REGISTER_SYSTEM(Wiwa::AudioSystem);
+WI_REGISTER_SYSTEM(Wiwa::AudioSystem);

@@ -1,5 +1,4 @@
 #version 330
- #extension GL_ARB_explicit_uniform_location : enable
 
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
@@ -7,6 +6,7 @@ layout (location = 1) out vec4 BrightColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 LocalPos;
+in mat4 View;
 
 //====================================
 // all vfx must have this unifroms
@@ -16,15 +16,22 @@ uniform vec4 u_Color;
 //=====================
 uniform vec3 u_CameraPosition;
 uniform sampler2D u_Texture;
+uniform sampler2D u_HologramTexture;
 uniform sampler2D u_DiscardTex;
+uniform vec4 u_HologramColor;
+uniform vec2 u_FresnelRange;
+uniform vec4 u_FresnelColor;
+uniform float u_Amplitude; // controls the height of the displacement
+uniform float u_Frequency; // controls the frequency of the sine wave
+uniform float u_StartDissolve;
 
 void main()
 {
     //calculate dissolve
 
-    if(u_LifeTime > 0.9)
+    if(u_LifeTime > u_StartDissolve)
     {
-        float dissolveAmount = (u_LifeTime - 0.9) * 10.0;
+        float dissolveAmount = (u_LifeTime - u_StartDissolve) * 10.0;
 
         float dissolve = texture2D(u_DiscardTex, TexCoord).r;
         dissolve = dissolve *  0.999;
@@ -35,24 +42,26 @@ void main()
             discard;
     }
 
-    //calculate fresnel
     vec3 dir = u_CameraPosition - LocalPos;
 
     float dotEyeNormal = dot(normalize(dir),normalize(Normal));
     dotEyeNormal =abs(dotEyeNormal);
 
+    vec4 colorTex  =  texture(u_Texture,TexCoord) * u_Color;   
 
-    vec4 color = texture2D(u_Texture, TexCoord) * u_Color;
+    vec4 finalColor = mix(u_FresnelColor,colorTex,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
 
-     // Check if texture color is black
-    bool isBlack = color.r == 0.0 && color.g == 0.0 && color.b == 0.0;
+    vec2 hologramTexCoords = TexCoord;
 
-    if(isBlack) 
-        discard;
+    float displacement = u_Amplitude * sin(TexCoord.y * u_Frequency * u_LifeTime);
+    hologramTexCoords.y -= displacement;
 
-    vec4 finalColor = mix( vec4(1,1,1,1) , color,smoothstep(0.2,0.5,dotEyeNormal));
+    vec4 hologramColor = texture(u_HologramTexture,hologramTexCoords)* u_HologramColor;
 
-    FragColor = finalColor;
+    if(hologramColor.r == 0 && hologramColor.g == 0 && hologramColor.b ==  0)
+        hologramColor = vec4(1.0,1.0,1.0,1.0);
+
+    FragColor = mix(finalColor ,hologramColor ,smoothstep(u_FresnelRange.x,u_FresnelRange.y,dotEyeNormal));
 
     // check whether result is higher than some threshold, if so, output as bloom threshold color
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

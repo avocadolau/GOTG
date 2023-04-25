@@ -30,7 +30,6 @@ namespace Wiwa {
 		{
 			float m_percentage;
 			glm::vec4 color;
-
 			ColorNode()
 			{
 				m_percentage = 0.f;
@@ -99,6 +98,8 @@ namespace Wiwa {
 
 		//position & translation
 		//bool m_p_followEmitterPosOnlyOnSpawn;
+		bool		m_p_followEmitterPosition;
+		bool		m_p_followEmitterPositionSpawn;
 		glm::vec3	m_p_initialPosition;
 		glm::vec3	m_p_initialPositionSphCenter;
 		float		m_p_initialPositionSphRadius;
@@ -106,6 +107,7 @@ namespace Wiwa {
 		glm::vec3	m_p_initialPositionBoxB;
 		bool		m_p_positionTowardsPoint;
 		glm::vec3	m_p_positionTowardsPointPos;
+		float		m_p_translationTime;
 
 		glm::vec3	m_p_initialVelocity;
 		bool		m_p_rangedVelocity;
@@ -119,6 +121,8 @@ namespace Wiwa {
 
 		//rotation
 		//bool m_p_followEmitterRotOnlyOnSpawn;
+		bool		m_p_followEmitterRotation;
+		bool		m_p_followEmitterRotationSpawn;
 		glm::vec3	m_p_initialRotation;
 		bool		m_p_rangedInitialRotation;
 		glm::vec3	m_p_minInitialRotation;
@@ -128,8 +132,11 @@ namespace Wiwa {
 		bool		m_p_rangedAngularVelocity;
 		glm::vec3	m_p_minInitialAngularVelocity;
 		glm::vec3	m_p_maxInitialAngularVelocity;
+		float		m_p_rotateTime;
 
 		bool		m_p_rotationOverTime;
+		float		m_p_rotationOverTimePerStart;
+		float		m_p_rotationOverTimePerEnd;
 		glm::vec3	m_p_rotationOverTimeStart;
 		glm::vec3	m_p_rotationOverTimeEnd;
 		
@@ -141,6 +148,8 @@ namespace Wiwa {
 		glm::vec3	m_p_maxInitialScale;
 
 		bool		m_p_scaleOverTime;
+		float		m_p_scaleOverTimePerStart;
+		float		m_p_scaleOverTimePerEnd;
 		glm::vec3	m_p_scaleOverTimeStart;
 		glm::vec3	m_p_scaleOverTimeEnd;
 
@@ -150,9 +159,10 @@ namespace Wiwa {
 		glm::vec3	m_p_maxInitialGrowthVelocity;
 
 
-		ColorNode m_p_colorsOverLifetime[128] = {ColorNode()};
+		ColorNode m_p_colorsOverLifetime[6] = {ColorNode()};
 		int m_colorsUsed;
 
+		bool useAdditiveBlending;
 		
 
 		// todo					----------------------------------------

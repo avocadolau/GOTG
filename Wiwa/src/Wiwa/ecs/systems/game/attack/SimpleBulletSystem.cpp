@@ -24,16 +24,30 @@ namespace Wiwa
 
 	void SimpleBulletSystem::OnInit()
 	{
-		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 	
+	}
+
+	void SimpleBulletSystem::InitBullet()
+	{
+		if (!getAwake())
+			System::Awake();
+		/*GameStateManager::s_PoolManager->SetScene(m_Scene);
+		GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();*/
+
+		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
-		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
-	
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
-		
-		//physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
+		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+		//if (physSystem)
+		//{
+		//	physSystem->DeactivateBody();
+		//}
 	}
 
 	void SimpleBulletSystem::OnUpdate()
@@ -42,20 +56,19 @@ namespace Wiwa
 			System::Awake();
 		if (!getInit())
 			System::Init();
-
+		
 		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
 		if (m_Timer >= bullet->lifeTime)
 		{
-			//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			//em.DestroyEntity(m_EntityId);
+			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			em.DestroyEntity(m_EntityId);*/
+			WI_INFO("Returning bullet to pool id: {}", m_EntityId);
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
-		}
-		
+		}	
 	}
-
 
 	void SimpleBulletSystem::OnDestroy()
 	{
@@ -73,10 +86,52 @@ namespace Wiwa
 				GameStateManager::DamagePlayer(bullet->damage);
 			}
 	
-			//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			//em.DestroyEntity(m_EntityId);
+			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			em.DestroyEntity(m_EntityId);*/
+		
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
+			WI_INFO("Returning bullet to pool id: {}", m_EntityId);
 		}
 	}
 
+	bool SimpleBulletSystem::EnableBullet()
+	{
+		SimpleBullet* bullet = GetComponent<SimpleBullet>();
+		if (bullet)
+		{
+			InitBullet();
+		}
+		m_Timer = 0.0f;
+		return true;
+	}
+
+	bool SimpleBulletSystem::OnDisabledFromPool()
+	{
+		Transform3D* transform = GetComponent<Transform3D>();
+		if (transform)
+		{
+			transform->localPosition.y = 3000.0f;
+		}
+
+		//SimpleBullet* bullet = GetComponent<SimpleBullet>();
+		//
+		//if (bullet)
+		//{
+		//	bullet->direction = glm::vec3(0.0f);
+		//	bullet->lifeTime = 0.0f;
+		//	bullet->velocity = 0.0f;
+		//}
+
+		//CollisionBody* collisionBody = GetComponent<CollisionBody>();
+
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+		physSystem->DeleteBody();
+
+		m_Timer = 0.0f;
+
+		return true;
+	}
 }

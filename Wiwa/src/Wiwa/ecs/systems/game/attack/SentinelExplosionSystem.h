@@ -18,11 +18,19 @@ namespace Wiwa {
 
 		void OnInit() override;
 
+		void InitExplosion();
+
 		void OnUpdate() override;
 
 		void OnDestroy() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
+
+		void EnableExplosion();
+
+		//bool OnEnabledFromPool();
+
+		bool OnDisabledFromPool();
 	};
 }
 

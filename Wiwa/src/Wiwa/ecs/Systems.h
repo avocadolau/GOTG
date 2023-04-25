@@ -11,11 +11,10 @@
 #include "systems/PhysicsSystem.h"
 #include "systems/RayCastSystem.h"
 
-// Game systems
 #include "systems/AgentAISystem.h"
+#include "systems/ai/NavMeshLoadingSystem.h"
 
-//#include "systems/game/enemy/WaveSystem.h"
-
+// Game systems
 #include "systems/game/enemy/EnemySystem.h"
 #include "systems/game/wave/WaveSystem.h"
 #include "systems/game/wave/WaveSpawnerSystem.h"
@@ -28,8 +27,6 @@
 
 #include "systems/game/attack/SimpleBulletSystem.h"
 #include "systems/game/attack/SentinelExplosionSystem.h"
-#include "systems/game/player/PlayerSpawner.h"
-
 #include "systems/game/attack/VictoryShieldSystem.h"
 
 #include "systems/game/attack/PhylasQuantumSwordSystem.h"
@@ -48,4 +45,4 @@
 
 #include "systems/game/attack/ClusterBulletSystem.h"
 
-#include "systems/game/attack/UltronLaserBeamSystem.h";
+#include "systems/game/attack/UltronLaserBeamSystem.h"

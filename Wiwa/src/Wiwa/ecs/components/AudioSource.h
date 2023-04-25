@@ -14,9 +14,9 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::AudioSource)
-	REFLECT_MEMBER(isDefaultListener)
-	REFLECT_MEMBER(eventName)
-	REFLECT_MEMBER(playOnAwake)
-	REFLECT_MEMBER(isPlaying)
-REFLECTION_END;
+WI_REFLECTION_BEGIN(Wiwa::AudioSource)
+	WI_REFLECT_MEMBER(isDefaultListener)
+	WI_REFLECT_MEMBER(eventName)
+	WI_REFLECT_MEMBER(playOnAwake)
+	WI_REFLECT_MEMBER(isPlaying)
+WI_REFLECTION_END;

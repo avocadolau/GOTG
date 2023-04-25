@@ -31,9 +31,11 @@ namespace Wiwa
         Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
         Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-        offsetPosition = CalculateOffsetPositionSubjugator(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
+        //offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
         animator->PlayAnimation("walk", true);
-        enemy->ChasePlayer();
+
+        m_HasTargetPoint = false;
+        m_TargetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
     }
 
@@ -47,46 +49,29 @@ namespace Wiwa
         Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
         Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-        Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
-        //if (Wiwa::AIPathFindingManager::CheckBoundaries(Wiwa::AIMapGeneration::WorldToMap(offsetPosition.x, offsetPosition.z)) == false)
-        //{
-        //    offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
-        //}
+        float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
+        Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-
-        float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-
-        if (m_ChasingTimer > 1000.0f && distance <= 50.0f)
+        if (agent && !m_HasTargetPoint && distanceToPlayer > enemy->m_RangeOfAttack)
         {
-            m_ChasingTimer = 0.0f;
-            //enemy->ChasePlayer();
+            Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+            m_TargetPoint = agent->GetRandPointOutsideCircle(playerTr->localPosition, enemy->m_RangeOfAttack);
+            agent->SetDestination(m_TargetPoint);
 
-            remakeOffsetPosition = enemy->GoToPosition(offsetPosition);
-            //WI_INFO(" Player position: {},{},{}", playerTr->localPosition.x, playerTr->localPosition.y, playerTr->localPosition.z);
-            //WI_INFO(" Offset position: {},{},{}", offsetPosition.x, offsetPosition.y, offsetPosition.z);
-            //WI_INFO(" Distance: {},", glm::distance(selfTr->localPosition, offsetPosition));
-                //offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
-
-            if (remakeOffsetPosition == false)
-            {
-                offsetPosition = CalculateOffsetPositionSubjugator(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.75f);
-            }
+            m_HasTargetPoint = true;
         }
 
-        if (agentPtr)
-        {
-            agentPtr->AllowRotationByTile();
+        bool isNearTargetPoint = Math::IsPointNear(selfTr->localPosition, m_TargetPoint, 2.0f);
 
-            if (glm::distance(selfTr->localPosition, offsetPosition) < enemy->m_RangeOfAttack)
-            {
-                agentPtr->StopMoving();
-                agentPtr->DisableRotationByTile();
-                agentPtr->LookAtPosition(playerTr->localPosition);
-                //WI_INFO(" Distance: {},", glm::distance(selfTr->localPosition, offsetPosition));
-                enemy->SwitchState(enemy->m_AttackingState);
-            }
+        if (isNearTargetPoint)
+            m_HasTargetPoint = false;
+
+        if (distanceToPlayer < enemy->m_RangeOfAttack)
+        {
+            agent->StopAgent();
+            enemy->SwitchState(enemy->m_AttackingState);
         }
     }
 

@@ -24,6 +24,16 @@ public:
 	int currentConversation = 0;
 	int currentNode = 0;
 
-	std::string pathForAsset;
-	std::string pathForAsset2;
+	bool currentCreatingNodeIsSaved[MAX_CONVERSATION_NODES] = { false };
+
+	int currentEditingNode[MAX_CONVERSATION_NODES] = { 0 };
+	bool currentEditingNodeIsSaved[MAX_CONVERSATIONS][MAX_CONVERSATION_NODES] =
+	{
+		{true, true}
+	};
+
+	std::string currentEditingConversationName[MAX_CONVERSATIONS] = { "" };
+
+	int saved = 0;
+	int savedID = -1;
 };

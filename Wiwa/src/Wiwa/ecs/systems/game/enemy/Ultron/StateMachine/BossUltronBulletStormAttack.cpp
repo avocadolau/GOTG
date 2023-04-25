@@ -3,6 +3,7 @@
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
+#include "Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h"
 
 namespace Wiwa
 {
@@ -81,7 +82,7 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::SpawnBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\simple_bullet\\simple_bullet.wiprefab");
+		EntityId newBulletId =  GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions
@@ -98,6 +99,12 @@ namespace Wiwa
 		bullet->direction = bull_dir;
 		bullet->damage = 10;
 
+		Wiwa::SimpleBulletSystem* simpleBulletSystem = entityManager.GetSystem<Wiwa::SimpleBulletSystem>(newBulletId);
+		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+		physSys->CreateBody();
+
+		simpleBulletSystem->EnableBullet();
 	}
 
 	void BossUltronBulletStormAttackState::SpawnFirstPattern(BossUltron* enemy)

@@ -16,7 +16,7 @@ namespace Wiwa {
 
 		static glm::vec2 RandomPremadePosition()
 		{
-			return m_PremadePositions[Math::RandomRange(0, m_PremadePositions.size())];			
+			return m_PremadePositions[Math::RandomRange(0, (int)m_PremadePositions.size())];			
 		}
 	
 	private:

@@ -2,6 +2,8 @@
 #include "BossUltronLaserBeamAttack.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
 #include "Wiwa/ecs/components/game/attack/UltronLaserBeam.h"
+#include "Wiwa/ecs/systems/game/attack/UltronLaserBeamSystem.h"
+#include "Wiwa/ecs/systems/PhysicsSystem.h"
 
 namespace Wiwa
 {
@@ -52,7 +54,7 @@ namespace Wiwa
 	EntityId* BossUltronLaserBeamAttackState::SpawnLaserBeam(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-		EntityId newBulletId = entityManager.LoadPrefab("assets\\enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
+		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
 		// Set intial positions
@@ -68,6 +70,11 @@ namespace Wiwa
 		//bulletTr->localScale = transform->localScale;
 		UltronLaserBeam* bullet = (UltronLaserBeam*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<UltronLaserBeam>(newBulletId));
 		bullet->direction = bull_dir;
+		Wiwa::UltronLaserBeamSystem* laserSystem = entityManager.GetSystem<Wiwa::UltronLaserBeamSystem>(newBulletId);
+		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+		physSys->CreateBody();
+		laserSystem->EnableLaser();
 
 		return &newBulletId;
 	}

@@ -28,7 +28,6 @@
 
 // Game components
 #include "components/game/Character.h"
-
 #include "components/game/wave/Wave.h"
 #include "components/game/wave/WaveSpawner.h"
 #include "components/game/enemy/Enemy.h"
@@ -40,9 +39,11 @@
 #include "components/game/attack/GrootSeeds.h"
 #include "components/game/attack/VictoryShield.h"
 #include "components/game/items/Item.h"
-#include "components/game/attack/ClusterBullet.h";
-#include "components/game/attack/UltronLaserBeam.h";
+#include "components/game/attack/ClusterBullet.h"
+#include "components/game/attack/UltronLaserBeam.h"
 
 // Ai components
 #include "components/AgentAI.h"
 #include "components/MapAI.h"
+#include "components/ai/NavMesh.h"
+#include "components/ai/NavAgent.h"

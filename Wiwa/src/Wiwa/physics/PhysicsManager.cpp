@@ -187,12 +187,12 @@ namespace Wiwa {
 	{
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
-			if ((*item)->velocity.isZero())
-				continue;
-
-			btVector3 position = (*item)->collisionObject->getWorldTransform().getOrigin();
-			position += (*item)->velocity * dt;
-			(*item)->collisionObject->getWorldTransform().setOrigin(position);
+			if (!(*item)->velocity.isZero())
+			{
+				btVector3 position = (*item)->collisionObject->getWorldTransform().getOrigin();
+				position += (*item)->velocity * dt;
+				(*item)->collisionObject->getWorldTransform().setOrigin(position);
+			}			
 		}
 		return true;
 	}
@@ -205,27 +205,14 @@ namespace Wiwa {
 
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
+			/*Transform3D* transform3d = (Transform3D*)entityManager.GetComponentByIterator((*item)->transformIt);
+			CollisionBody* rigidBody = (CollisionBody*)entityManager.GetComponentByIterator((*item)->collisionBodyIt);*/
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
 			// Get the position from the engine
 			glm::vec3 posEngine = glm::vec3(transform3d->worldMatrix[3].x, transform3d->worldMatrix[3].y, transform3d->worldMatrix[3].z);
-			//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
-			glm::quat rotEngine = glm::quat(glm::radians(transform3d->rotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
-			//glm::quat rotEngine = entityData->transform3d->rotation; old
-
-			// Get the offset
-			glm::vec3 finalOffset = rotEngine * rigidBody->positionOffset;
-			glm::vec3 finalPosBullet = posEngine + finalOffset;
-
-			// Apply the offset because offset, it is internal only(collider wise)
-			btTransform offsettedCollider;
-			offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d->worldMatrix));
-			offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
-			offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
-
-			(*item)->collisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
-			(*item)->collisionObject->setWorldTransform(offsettedCollider);
+			UpdateSingleEngineToPhys(posEngine, *transform3d, *rigidBody, *item);
 		}
 		return true;
 	}
@@ -235,49 +222,75 @@ namespace Wiwa {
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		// Physics to Engine
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
-		{
+		{/*
+			EntityId parent = entityManager.GetEntityParent((*item)->id);
+			Transform3D* parentT3d = entityManager.GetComponent<Wiwa::Transform3D>(parent);
+			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
+			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);*/
 			EntityId parent = entityManager.GetEntityParent((*item)->id);
 			Transform3D* parentT3d = entityManager.GetComponent<Wiwa::Transform3D>(parent);
 			Transform3D* transform3d = entityManager.GetComponent<Wiwa::Transform3D>((*item)->id);
 			CollisionBody* rigidBody = entityManager.GetComponent<Wiwa::CollisionBody>((*item)->id);
 
-			btTransform bulletTransform((*item)->collisionObject->getWorldTransform());
-			
-			// Get the transform from physics world
-			btVector3 posBullet = bulletTransform.getOrigin();
-			btQuaternion rotationBullet = bulletTransform.getRotation();
-
-			glm::quat rotationEngine = glm::quat(rotationBullet.w(), rotationBullet.x(), rotationBullet.y(), rotationBullet.z());
-			glm::vec3 finalOffset = rotationEngine * rigidBody->positionOffset;
-			// Remove the offset because offset is internal only(collider wise)
-			glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
-
-			// We only apply the transformation if there's a parent
-			if (parent != (*item)->id)
-			{
-				glm::mat4x4 worldMat;
-				bulletTransform.getOpenGLMatrix(&worldMat[0][0]);
-				glm::mat4x4 localMat = glm::inverse(parentT3d->worldMatrix) * worldMat;
-				transform3d->localPosition = glm::vec3(localMat[3].x, localMat[3].y, localMat[3].z);
-			}
-			else
-			{
-				transform3d->localPosition = posEngine;
-			}
-			bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
-			//bulletTransform.setRotation(rotationBullet);
-
-			glm::vec3 eulerAngles;
-			bulletTransform.getRotation().normalized().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
-			//WI_INFO("Y Axis : {}", glm::degrees(eulerAngles.y));
-			//transform3d->localRotation = glm::degrees(eulerAngles);
-			/*bulletTransform.getOpenGLMatrix(glm::value_ptr(entityData->transform3d->localMatrix));*/
-
-			(*item)->collisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody->scalingOffset.x, rigidBody->scalingOffset.y, rigidBody->scalingOffset.z)));
-			m_World->updateSingleAabb((*item)->collisionObject);
+			UpdateSinglePhysToEngine(parent, *transform3d, *parentT3d, *rigidBody, *item);
 		}
 
 		return true;
+	}
+
+	void PhysicsManager::UpdateSingleEngineToPhys(const glm::vec3& new_pos, const Transform3D& transform3d, const CollisionBody& rigidBody, Object* obj)
+	{
+		//glm::quat rotEngine = glm::quat(transform3d->localMatrix); // Old version where you cannot rotate on more than one axis at a time
+		glm::quat rotEngine = glm::quat(glm::radians(transform3d.rotation)); // Newer version where you can do that but still have gimble lock in Y Axis 
+		//glm::quat rotEngine = entityData->transform3d->rotation; old
+
+		// Get the offset
+		glm::vec3 finalOffset = rotEngine * rigidBody.positionOffset;
+		glm::vec3 finalPosBullet = new_pos + finalOffset;
+
+		// Apply the offset because offset, it is internal only(collider wise)
+		btTransform offsettedCollider;
+		offsettedCollider.setFromOpenGLMatrix(glm::value_ptr(transform3d.worldMatrix));
+		offsettedCollider.setOrigin(btVector3(finalPosBullet.x, finalPosBullet.y, finalPosBullet.z));
+		offsettedCollider.setRotation(btQuaternion(rotEngine.x, rotEngine.y, rotEngine.z, rotEngine.w));
+
+		obj->collisionObject->getCollisionShape()->setLocalScaling((btVector3(rigidBody.scalingOffset.x, rigidBody.scalingOffset.y, rigidBody.scalingOffset.z)));
+		obj->collisionObject->setWorldTransform(offsettedCollider);
+	}
+
+	void PhysicsManager::UpdateSinglePhysToEngine(EntityId parent, Transform3D& transform3d, const Transform3D& parent_transform, const CollisionBody& coll_body, Object* obj)
+	{
+		btTransform bulletTransform(obj->collisionObject->getWorldTransform());
+
+		// Get the transform from physics world
+		btVector3 posBullet = bulletTransform.getOrigin();
+		btQuaternion rotationBullet = bulletTransform.getRotation();
+
+		glm::quat rotationEngine = glm::quat(rotationBullet.w(), rotationBullet.x(), rotationBullet.y(), rotationBullet.z());
+		glm::vec3 finalOffset = rotationEngine * coll_body.positionOffset;
+		// Remove the offset because offset is internal only(collider wise)
+		glm::vec3 posEngine = glm::vec3(posBullet.x() - finalOffset.x, posBullet.y() - finalOffset.y, posBullet.z() - finalOffset.z);
+
+		// We only apply the transformation if there's a parent
+		if (parent != obj->id)
+		{
+			glm::mat4x4 worldMat;
+			bulletTransform.getOpenGLMatrix(&worldMat[0][0]);
+			glm::mat4x4 localMat = glm::inverse(parent_transform.worldMatrix) * worldMat;
+			transform3d.localPosition = glm::vec3(localMat[3].x, localMat[3].y, localMat[3].z);
+		}
+		else
+		{
+			transform3d.localPosition = posEngine;
+		}
+
+		bulletTransform.setOrigin(btVector3(posEngine.x, posEngine.y, posEngine.z));
+
+		glm::vec3 eulerAngles;
+		bulletTransform.getRotation().normalized().getEulerZYX(eulerAngles.z, eulerAngles.y, eulerAngles.x);
+
+		obj->collisionObject->getCollisionShape()->setLocalScaling((btVector3(coll_body.scalingOffset.x, coll_body.scalingOffset.y, coll_body.scalingOffset.z)));
+		m_World->updateSingleAabb(obj->collisionObject);
 	}
 
 	bool PhysicsManager::CleanWorld()
@@ -327,7 +340,7 @@ namespace Wiwa {
 		m_CollObjects.remove(body);
 		m_BodiesToLog.remove(body);
 		m_World->removeCollisionObject(body->collisionObject);
-		//delete (ObjectData*)(body)->getUserPointer();
+
 		delete body->collisionObject;
 		delete body;
 		return true;
@@ -416,7 +429,6 @@ namespace Wiwa {
 		Object* myObjData = new Object(*collision_object, id, rigid_body.selfTag, GetFilterTag(rigid_body.selfTag), rigid_body.doContinuousCollision);
 		collision_object->setUserPointer((Object*)myObjData);
 		collision_object->setUserIndex2(1);
-		//collision_object->setCollisionFlags(rigid_body.)
 
 		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 		myObjData->parentId = entityManager.GetEntityParent(id);
@@ -424,7 +436,6 @@ namespace Wiwa {
 		myObjData->transformIt = entityManager.GetComponentIterator<Wiwa::Transform3D>(id);
 		myObjData->collisionBodyIt = entityManager.GetComponentIterator<Wiwa::CollisionBody>(id);
 
-		//m_World->addCollisionObject(collision_object, rigid_body.selfTag, rigid_body.filterBits);
 		int bits = 0;
 		bits |= (1 << rigid_body.selfTag);
 		m_World->addCollisionObject(collision_object, bits, rigid_body.filterBits);
@@ -587,25 +598,10 @@ namespace Wiwa {
 	const char* PhysicsManager::GetFilterTag(int index)
 	{
 		return filterMapIntKey[index].c_str();
-		//return filterStrings[index].c_str();
-		/*for (const auto& [key, value] : filterMapStringKey)
-		{
-			if (value == index)
-				return key.c_str();
-		}
-		return "NONE";*/
 	}
 
 	int PhysicsManager::GetFilterTag(const char* str)
 	{
-		/*int count = filterStrings.size();
-		std::string strcmp = str;
-		for (int i = 0; i < count; i++)
-		{
-			if (filterStrings[i] == strcmp)
-				return i;
-		}
-		return 0;*/
 		if (!(filterMapStringKey.find(str) != filterMapStringKey.end()))
 			return -1;
 
@@ -821,26 +817,16 @@ int DebugDrawer::getDebugMode() const
 
 bool CustomFilterCallBack::needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
 {
-	/*Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterMask, "A filter mask");
-	Wiwa::PhysicsManager::bin(proxy1->m_collisionFilterMask, "B filter mask");
-	Wiwa::PhysicsManager::bin(proxy0->m_collisionFilterGroup, "A tag");
-	Wiwa::PhysicsManager::bin(proxy1->m_collisionFilterGroup, "B tag");
-	std::cout << std::endl;*/
-
 	// Check if A group is inside B mask
 	bool aCanCollide = (proxy0->m_collisionFilterMask & proxy1->m_collisionFilterGroup);
-	//WI_INFO("A Can Collide {}", aCanCollide);
 	// Check if B group is inside A mask
 	bool bCanCollide = (proxy1->m_collisionFilterMask & proxy0->m_collisionFilterGroup);
-	//WI_INFO("B Can Collide {}", bCanCollide);
 
 	if (aCanCollide && bCanCollide)
 		return true;
 
 	bool everyThingA = ((proxy0->m_collisionFilterMask >> 0) & 1); // Check if collider 0 has EVERYTHING_FLAG in filter mask
 	bool everyThingB = ((proxy1->m_collisionFilterMask >> 0) & 1); // Check if collider 1 has EVERYTHING_FLAG in filter mask
-	/*WI_INFO("A Everything {}", aCanCollide);
-	WI_INFO("B Everything {}", aCanCollide);*/
 
 	if (everyThingA && everyThingB)
 		return true;

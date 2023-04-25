@@ -9,6 +9,7 @@
 #include <Wiwa/utilities/render/LightManager.h>
 #include <Wiwa/core/ProjectManager.h>
 #include <Wiwa/AI/AIMapGeneration.h>
+#include <Wiwa/AI/AI_Crowd.h>
 
 namespace Wiwa
 {
@@ -365,9 +366,12 @@ namespace Wiwa
 				case Wiwa::GuiControlType::IMAGE:
 					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects, rotation);
 					break;
-			case Wiwa::GuiControlType::ABILITY:
+				case Wiwa::GuiControlType::ABILITY:
 					control = gm.CreateGuiControl_Ability(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
 				break;
+				case Wiwa::GuiControlType::VIDEO:
+					control = gm.CreateGuiControl_Video(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), active);
+					break;
 				default:
 					break;
 				}
@@ -577,8 +581,10 @@ namespace Wiwa
 					int callbackID = control->callbackID;
 					Rect2i texturePosition = control->texturePosition;
 					Rect2i extraTexturePosition = control->extraTexturePosition;
-					
-					const char* textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+
+					const char* textureGui;
+					if(guiType != GuiControlType::VIDEO) textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
+					if(guiType == GuiControlType::VIDEO) textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
 					const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
 
 					size_t textureGui_len = strlen(textureGui) + 1;
@@ -820,8 +826,6 @@ namespace Wiwa
 				SetScene(sceneid, !(flags & LOAD_NO_INIT));
 			}
 
-			AIMapGeneration::ClearMap();
-			AIMapGeneration::OnLoad();
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
 		}
 		else

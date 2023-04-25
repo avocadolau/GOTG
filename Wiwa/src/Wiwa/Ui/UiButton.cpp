@@ -25,6 +25,7 @@ namespace Wiwa
 		//textId2 = Wiwa::Resources::Load<Wiwa::Image>(extraPath);
 		//extraTexture = Wiwa::Resources::GetResourceById<Wiwa::Image>(textId2);
 		this->callbackID = callbackID;
+
 		if(callbackID != WI_INVALID_INDEX)
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 
@@ -103,7 +104,10 @@ namespace Wiwa
 					Audio::PostEvent(audioEventForButton.c_str());
 				}
 				if (callback)
-					callback->Execute();
+				{
+					Action<>function_name = callback->func;
+					function_name.execute();
+				}
 			}
 		}
 		return false;

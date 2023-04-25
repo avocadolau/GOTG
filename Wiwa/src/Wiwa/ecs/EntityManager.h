@@ -87,9 +87,15 @@ namespace Wiwa
 		void UpdateChildTransforms(EntityId eid, Transform3D *t3dparent);
 		void UpdateTransforms();
 
+		void SortParticleSystems();
+
+
+
 		// System management
 		std::map<SystemHash, std::vector<System *>,std::greater<SystemHash>> m_SystemsByHash;
 		std::vector<SystemHash> m_SystemWhiteList;
+
+		std::map<float, System*, std::greater<float>> m_SortedParticles;
 
 		size_t getSystemIndex(EntityId entityId, SystemHash system_hash);
 
@@ -100,6 +106,8 @@ namespace Wiwa
 
 		void _saveEntityImpl(File& file, EntityId eid);
 		EntityId _loadEntityImpl(File& file, EntityId parent, bool is_parent);
+
+	
 	public:
 		EntityManager();
 		~EntityManager();
@@ -296,7 +304,7 @@ namespace Wiwa
 	{
 		const Type *ctype = GetType<T>();
 
-		return GetComponentId(ctype);
+		return GetComponentId(ctype->hash);
 	}
 
 	template<class T>
@@ -314,7 +322,7 @@ namespace Wiwa
 
 		byte *data = (byte *)&value;
 
-		T *component = (T *)AddComponent(entity, type, data);
+		T *component = (T *)AddComponent(entity, type->hash, data);
 
 		return component;
 	}
@@ -491,7 +499,9 @@ namespace Wiwa
 			return false;
 		}
 
-		ComponentId cid = GetComponentId<T>();
+		const Type* ctype = GetType<T>();
+
+		ComponentId cid = GetComponentId(ctype->hash);
 
 		std::map<ComponentId, size_t> *emap = &m_EntityComponents[entityId];
 
@@ -526,8 +536,6 @@ namespace Wiwa
 	inline void EntityManager::ApplySystem(EntityId eid)
 	{
 		const Type *stype = GetType<T>();
-
-		assert(stype->custom_id == 1);
 
 		ApplySystem(eid, stype->hash);
 	}

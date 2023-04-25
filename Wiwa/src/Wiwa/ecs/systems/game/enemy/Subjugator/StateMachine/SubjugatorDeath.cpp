@@ -19,6 +19,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		//SubjugatorAudio - Death audio for the Subjugator
 		animator->PlayAnimation("death", false);
 	}
 
@@ -33,7 +35,11 @@ namespace Wiwa
 			if (self->waveId != -1)
 			{
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-				waveSys->DestroyEnemy(enemy->GetEntity(), self->enemyType);
+				waveSys->DestroyEnemy(enemy->GetEntity(), static_cast<Pool_Type>(self->enemyType));
+			}
+			else
+			{
+				em.DestroyEntity(enemy->GetEntity());
 			}
 		}
 	}

@@ -37,6 +37,8 @@ namespace Wiwa {
 
 	void System::Update()
 	{
+		if (!m_Scene->GetEntityManager().IsActive(m_EntityId)) return;
+
 		OnUpdate();
 	}
 

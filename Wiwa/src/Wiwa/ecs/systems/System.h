@@ -40,6 +40,8 @@ namespace Wiwa
 
 		virtual void OnSceneSet() {}
 
+		inline EntityManager& GetEntityManager() { return m_Scene->GetEntityManager(); }
+
 	public:
 		System();
 		virtual ~System(); // Virtual destructor, so that child destructor is called

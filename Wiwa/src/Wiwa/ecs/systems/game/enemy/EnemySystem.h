@@ -5,10 +5,8 @@
 #include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AgentAISystem.h>
-#include "Wiwa/scripting/embed_functions/embed_audio_functions.h"
-#include "Wiwa/scripting/ScriptEngine.h"
-#include "Wiwa/AI/AIMapGeneration.h"
 
 namespace Wiwa {
 	class WI_API EnemySystem : public System {
@@ -17,10 +15,13 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_StatsIt;
 		EntityManager::ComponentIterator m_ColliderIt;
 		EntityManager::ComponentIterator m_AgentIt;
+		EntityManager::ComponentIterator m_NavAgentIt;
 		EntityManager::ComponentIterator m_TransformIt;
 
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_PlayerStatsIt;
+		SystemHash m_PhysicsSystemHash;
+
 		EntityId m_PlayerId;
 		EntityId m_WaveId = -1;
 		bool m_WasSpawnedBySpawner = false;
@@ -48,12 +49,13 @@ namespace Wiwa {
 
 		bool OnDisabledFromPool() override;
 
+		void LookAt(const glm::vec3& target_look);
+
 		void ChasePlayer();
 
 		bool GoToPosition(glm::vec3 targetedPosition);
 
 		void RotateTo(const glm::vec3& target);
-		//void OnDestroy() override;
 	};
 }
 
