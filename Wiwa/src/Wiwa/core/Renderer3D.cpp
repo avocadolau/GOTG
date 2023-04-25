@@ -218,16 +218,50 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/barrel_explosion/explosion", impactShader);
 
-		ResourceId bulletShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/bullet");
+		ResourceId bulletShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/bullet/bullet");
 		Shader* bulletShader = Wiwa::Resources::GetResourceById<Shader>(bulletShaderId);
-		bulletShader->Compile("resources/shaders/vfx/bullet");
+		bulletShader->Compile("resources/shaders/vfx/bullet/bullet");
 
 		bulletShader->addUniform("u_LifeTime", UniformType::Float);
+		bulletShader->addUniform("u_Time", UniformType::Float);
 		bulletShader->addUniform("u_Color", UniformType::fVec4);
 		bulletShader->addUniform("u_Texture", UniformType::Sampler2D);
 		bulletShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
 
-		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet", impactShader);
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet/bullet", impactShader);
+
+		ResourceId bulletTrailShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/bullet/bullet_trail");
+		Shader* bulletTrailShader = Wiwa::Resources::GetResourceById<Shader>(bulletTrailShaderId);
+		bulletTrailShader->Compile("resources/shaders/vfx/bullet/bullet_trail");
+
+		bulletTrailShader->addUniform("u_LifeTime", UniformType::Float);
+		bulletTrailShader->addUniform("u_Time", UniformType::Float);
+		bulletTrailShader->addUniform("u_Color", UniformType::fVec4);
+		bulletTrailShader->addUniform("u_Texture", UniformType::Sampler2D);
+		bulletTrailShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		bulletTrailShader->addUniform("u_Offset", UniformType::fVec2);
+		bulletTrailShader->addUniform("u_OffsetMultiplier", UniformType::fVec2);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet/bullet_trail", bulletTrailShader);
+
+		ResourceId bulletPlasmaShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/bullet/bullet_plasma");
+		Shader* bulletPlasmaShader = Wiwa::Resources::GetResourceById<Shader>(bulletPlasmaShaderId);
+		bulletPlasmaShader->Compile("resources/shaders/vfx/bullet/bullet_plasma");
+
+		bulletPlasmaShader->addUniform("u_LifeTime", UniformType::Float);
+		bulletPlasmaShader->addUniform("u_Time", UniformType::Float);
+		bulletPlasmaShader->addUniform("u_Color", UniformType::fVec4);
+		bulletPlasmaShader->addUniform("u_FresnelColor", UniformType::fVec4);
+		bulletPlasmaShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		bulletPlasmaShader->addUniform("u_Texture", UniformType::Sampler2D);
+		bulletPlasmaShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		bulletPlasmaShader->addUniform("u_HologramTexture", UniformType::Sampler2D);
+		bulletPlasmaShader->addUniform("u_HologramColor", UniformType::fVec4);
+		bulletPlasmaShader->addUniform("u_Amplitude", UniformType::Float);
+		bulletPlasmaShader->addUniform("u_Frequency", UniformType::Float);
+		bulletPlasmaShader->addUniform("u_OffsetMultiplier", UniformType::fVec2);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet/bullet_plasma", bulletPlasmaShader);
 
 		//===========================================================================================================
 

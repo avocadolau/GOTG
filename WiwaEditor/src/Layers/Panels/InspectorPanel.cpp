@@ -1349,6 +1349,10 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::Separator();
 	if (ImGui::TreeNode("Color"))
 	{
+		ImGui::Checkbox("##useAdditiveBlending", &emitter->useAdditiveBlending);
+		ImGui::SameLine();
+		ImGui::Text("Use Additive Blending");
+
 		if (emitter->m_colorsUsed < 1)
 		{
 			emitter->m_colorsUsed = 1;

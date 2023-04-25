@@ -243,6 +243,10 @@ namespace Wiwa {
 					Uniform* u_life = m_Material->getUniform("u_LifeTime");
 					if (u_life != nullptr)
 						u_life->setData(particle.life_percentage, UniformType::Float);
+
+					Uniform* u_Time = m_Material->getUniform("u_Time");
+					if (u_Time != nullptr)
+						u_Time->setData(Wiwa::Time::GetRealTimeSinceStartup(), UniformType::Float);
 					
 					
 					//calculate everything
@@ -498,6 +502,7 @@ namespace Wiwa {
 	}
 	void ParticleSystem::Render(Particle& particle)
 	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		Renderer3D& r3d = Application::Get().GetRenderer3D();
@@ -510,7 +515,13 @@ namespace Wiwa {
 
 		glEnable(GL_BLEND);
 		glDepthMask(GL_FALSE);
+		
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (emitter->useAdditiveBlending)
+		{
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		}
+
 		glBlendEquation(GL_FUNC_ADD);
 		for (size_t i = 0; i < cameraCount; i++)
 		{
@@ -543,6 +554,7 @@ namespace Wiwa {
 	}
 	void ParticleSystem::UpdateParticleLife(Particle& particle, float deltaTime)
 	{
+		particle.timeAlive += deltaTime;
 		particle.life_time -= deltaTime;
 		particle.life_percentage = 1 - particle.life_time / particle.life_time_start;
 	}
