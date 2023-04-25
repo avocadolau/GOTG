@@ -9,7 +9,10 @@ namespace Wiwa
 
 	BossUltronMovementState::BossUltronMovementState()
 	{
-		//m_PremadePositions.push_back({ 0,0,0 });
+		m_PremadePositions.push_back({ 0,0});
+		m_PremadePositions.push_back({ 2,2 });
+		m_PremadePositions.push_back({ 3,1 });
+		m_PremadePositions.push_back({ -2,-2 });
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -41,6 +44,7 @@ namespace Wiwa
 		if (navAgentPtr != nullptr)
 		{
 			navAgentPtr->SetDestination(destination3D);
+			currentDestination = destination3D;
 		}
 
 		if (agentPtr != nullptr)
@@ -61,47 +65,45 @@ namespace Wiwa
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
 		
-		if (agentPtr != nullptr)
-		{
-			agentPtr->DisableRotationByTile();
-			agentPtr->LookAtPosition(playerTr->position);
 
-			if (agentPtr->HasArrived()) // change it for a timer?
+			if (Math::IsPointNear(navAgentPtr->GetCurrentPosition(), currentDestination, 2.0f)) // change it for a timer?
 			{
 				navAgentPtr->StopAgent();
 				//agentPtr->StopMoving();
 				std::srand(std::time(0));
 
-				int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
+				enemy->SwitchState(enemy->m_BulletStormAttackState);
 
-				switch (randomAction)
-				{
-				case 0:
-				{
-					enemy->SwitchState(enemy->m_BulletStormAttackState);
-				}
-				break;
-				/*case 1:
-				{
-					enemy->SwitchState(enemy->m_ClusterShotsAttackState);
-				}
-				break;
-				case 2:
-				{
-					enemy->SwitchState(enemy->m_LaserBeamAttackState);
-				}
-				break;*/
-				/*case 3:
-				{
-					enemy->SwitchState(enemy->m_DashState);
-				}*/
-				}
+				//int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
+				//switch (randomAction)
+				//{
+				//case 0:
+				//{
+				//	enemy->SwitchState(enemy->m_BulletStormAttackState);
+				//}
+				//break;
+				//case 1:
+				//{
+				//	enemy->SwitchState(enemy->m_ClusterShotsAttackState);
+				//}
+				//break;
+				//case 2:
+				//{
+				//	enemy->SwitchState(enemy->m_LaserBeamAttackState);
+				//}
+				//break;
+				///*case 3:
+				//{
+				//	enemy->SwitchState(enemy->m_DashState);
+				//}*/
+				//}
 			}
-		}		
+				
 	}
 
 	void BossUltronMovementState::ExitState(BossUltron* enemy)
 	{
+
 	}
 
 	void BossUltronMovementState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)

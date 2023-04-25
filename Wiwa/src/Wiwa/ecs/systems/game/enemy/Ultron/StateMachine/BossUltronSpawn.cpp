@@ -33,8 +33,8 @@ namespace Wiwa
 		
 		// when animation finishes, pass to the movement state
 		
-		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_MovementSatte);
+		/*if (animator->HasFinished())*/
+		enemy->SwitchState(enemy->m_MovementState);
 	}
 
 	void BossUltronSpawnState::ExitState(BossUltron* enemy)

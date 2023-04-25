@@ -17,7 +17,7 @@ namespace Wiwa {
 		//glm::vec3 CalculateForward(const Transform3D& t3d);
 	private:
 
-		void SpawnBullet(BossUltron* enemy, const glm::vec3& bull_dir);
+		void SpawnBullet(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
 
 		void SpawnFirstPattern(BossUltron* enemy);
 		void SpawnSecondPattern(BossUltron* enemy);
@@ -25,5 +25,8 @@ namespace Wiwa {
 
 		float m_TimerRoundCooldown = 0.0f;
 		int m_RoundCounter = 0;
+		float m_SecondPatternAttackTimer = 0.0f;
+		bool m_SecondPatternEnabled = false;
+		float m_SecondPatternBulletcounter = 0.0f;
 	};
 }

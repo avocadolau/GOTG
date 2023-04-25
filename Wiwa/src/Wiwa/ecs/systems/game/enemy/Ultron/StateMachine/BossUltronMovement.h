@@ -21,5 +21,6 @@ namespace Wiwa {
 	
 	private:
 		static std::vector<glm::vec2> m_PremadePositions;
+		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
 	};
 }
