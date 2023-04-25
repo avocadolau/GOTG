@@ -32,6 +32,12 @@ namespace Wiwa
 
     void NavAgentSystem::OnInit()
     {
+        if (GetEntityManager().IsActive(m_EntityId) == false)
+        {
+            m_AgentIndex = -1;
+            return;
+        }
+
         Transform3D* tr = GetComponent<Transform3D>();
         m_CurrentPos = tr->localPosition;
         m_NavAgentIt = GetComponentIterator<Wiwa::NavAgent>();
@@ -121,13 +127,15 @@ namespace Wiwa
     {
         if (m_AgentIndex != -1) {
             dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_AgentIndex);
-
+            Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
             if (agent)
             {
                 agent->npos[0] = position.x;
                 agent->npos[1] = position.y;
                 agent->npos[2] = position.z;
             }
+
+            m_CurrentPos = position;
         }
     }
 
@@ -218,6 +226,10 @@ namespace Wiwa
 
     void NavAgentSystem::RegisterWithCrowd()
     {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().RemoveAgent(m_AgentIndex);
+        }
+
         m_AgentIndex = Crowd::getInstance().AddAgent(&m_CurrentPos[0], &m_AgentParams);
         Crowd::getInstance().SetAgentParameters(m_AgentIndex, m_AgentParams);
     }
@@ -270,7 +282,7 @@ namespace Wiwa
 
     bool NavAgentSystem::OnEnabledFromPool()
     {
-        this->OnInit();
+        OnInit();
         return true;
     }
 

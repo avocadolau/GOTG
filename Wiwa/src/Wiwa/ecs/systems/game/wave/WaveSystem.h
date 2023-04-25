@@ -28,9 +28,7 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void QueryEnemies(const EntityManager::ComponentIterator& wave);
-
-		void SpawnEnemy(int index);
+		bool SpawnEnemy(int index);
 
 		void DestroyEnemy(size_t id, Pool_Type enemy_type);
 

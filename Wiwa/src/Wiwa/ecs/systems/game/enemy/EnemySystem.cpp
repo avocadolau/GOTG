@@ -230,6 +230,12 @@ namespace Wiwa
 		{
 			self->hasFinished = false;
 		}
+
+		Transform3D* transform = GetComponent<Transform3D>();
+		if (transform)
+		{
+			transform->localPosition.y = 0.0f;
+		}
 		return true;
 	}
 
@@ -238,7 +244,7 @@ namespace Wiwa
 		Transform3D* transform = GetComponent<Transform3D>();
 		if (transform)
 		{
-			transform->localPosition.y = 10000.0f;
+			transform->localPosition.y = 1000.0f;
 		}
 
 		Character* stats = GetComponent<Character>();

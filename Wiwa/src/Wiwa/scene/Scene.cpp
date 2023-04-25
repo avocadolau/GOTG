@@ -150,7 +150,6 @@ namespace Wiwa
 
 		m_GuiManager->Draw();
 		
-
 		m_EntityManager.Update();
 
 		m_PhysicsManager->UpdateEngineToPhysics();
@@ -162,11 +161,8 @@ namespace Wiwa
 
 			Crowd& crowd = Crowd::getInstance();
 			crowd.Update(Wiwa::Time::GetDeltaTimeSeconds());
-			// m_PhysicsManager->LogBodies();
 		}
 		m_PhysicsManager->DebugDrawWorld();
-		// m_PhysicsManager->LogBodies();
-
 
 		if (!SceneManager::IsPlaying())
 		{

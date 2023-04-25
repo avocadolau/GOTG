@@ -17,7 +17,7 @@ namespace Wiwa
         EntityPool* s_ClusterBulletsPool;
         EntityPool* s_UltronLaserBeamPool;
         EntityPool* s_Subjugator;
-        
+        bool m_HasLoadedAll = false;
         void SetScene(Scene* scene);
 
         void LoadPool(Pool_Type type, Scene* scene);

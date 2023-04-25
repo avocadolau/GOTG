@@ -12,11 +12,12 @@ namespace Wiwa
 
     EntityId EntityPool::GetFromPool()
     {
-        if (!m_Loaded)
-            GameStateManager::s_PoolManager->LoadPool(m_Type, m_Scene);
+       /* if (!m_Loaded)
+            GameStateManager::s_PoolManager->LoadPool(m_Type, m_Scene);*/
 
         // The pool type doesn't exist, create it callin from IncreasePoolSize();
         if (m_DisabledEntities.empty()) {
+            WI_INFO("Pool {} is empty", (int)getType());
             return EntityManager::INVALID_INDEX;
         }
 

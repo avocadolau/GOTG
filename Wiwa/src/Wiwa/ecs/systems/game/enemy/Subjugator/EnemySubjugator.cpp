@@ -39,6 +39,9 @@ namespace Wiwa
 
 	void EnemySubjugator::OnInit()
 	{
+		if (!getAwake())
+			System::Awake();
+
 		EnemySystem::OnInit();
 
 		NavAgent* navAgent = GetComponentByIterator<NavAgent>(m_NavAgentIt);

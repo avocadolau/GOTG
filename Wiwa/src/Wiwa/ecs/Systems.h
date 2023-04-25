@@ -46,3 +46,5 @@
 #include "systems/game/attack/ClusterBulletSystem.h"
 
 #include "systems/game/attack/UltronLaserBeamSystem.h"
+
+#include "systems/game/InitPool.h"

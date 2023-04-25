@@ -53,6 +53,8 @@ namespace Wiwa
 
         inline int getCountDisabled() { return (int)m_DisabledEntities.size(); };
 
+        inline bool hasDisabled() { if (getCountDisabled() > 0) return true; else return false; }
+
         inline Pool_Type getType() { return m_Type; };
 
         inline  std::queue<EntityId> getDisabledEntities() { return m_DisabledEntities; };
