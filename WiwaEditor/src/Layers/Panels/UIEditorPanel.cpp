@@ -400,6 +400,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			break;
 		case Wiwa::GuiControlType::VIDEO:
 			AssetContainerPath();
+			CallbackElements(control);
 			break;
 		default:
 			break;
@@ -574,6 +575,13 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 
 				}
 				break;
+			case Wiwa::GuiControlType::VIDEO:
+				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("void")) {
+
+					callbackID = i;
+
+				}
+				break;
 			case Wiwa::GuiControlType::CHECKBOX:
 				if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("bool")) {
 
@@ -633,6 +641,18 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 				case Wiwa::GuiControlType::SLIDER:
 					if (current_cb->params.size() == 1) {
 						if (current_cb->params.at(0).hash == FNV1A_HASH("float")) {
+							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+							{
+								callbackID = n;
+								if (is_selected)
+									ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+							}
+						}
+					}
+					break;
+				case Wiwa::GuiControlType::VIDEO:
+					if (current_cb->params.size() == 1) {
+						if (current_cb->params.at(0).hash == FNV1A_HASH("void")) {
 							if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
 							{
 								callbackID = n;

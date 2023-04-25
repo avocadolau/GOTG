@@ -370,7 +370,7 @@ namespace Wiwa
 					control = gm.CreateGuiControl_Ability(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
 				break;
 				case Wiwa::GuiControlType::VIDEO:
-					control = gm.CreateGuiControl_Video(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), active);
+					control = gm.CreateGuiControl_Video(guiType, id, canvas.at(i)->id, position, textureGui.c_str(), active,callbackID);
 					break;
 				default:
 					break;

@@ -126,11 +126,11 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active)
+	GuiControl* GuiManager::CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active, size_t callbackID)
 	{
 		GuiControl* control = nullptr;
 
-		control = new GuiVideo(m_Scene, id, bounds, path, active);
+		control = new GuiVideo(m_Scene, id, bounds, path, active,callbackID);
 		canvas.at(canvas_id)->controls.push_back(control);
 		return control;
 	}
@@ -641,7 +641,7 @@ namespace Wiwa
 					control = CreateGuiControl_Ability(guiType, id,canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::VIDEO:
-					control = CreateGuiControl_Video(guiType, id, canvas.at(i)->id,position, textureGui.c_str(), active);
+					control = CreateGuiControl_Video(guiType, id, canvas.at(i)->id,position, textureGui.c_str(), active,callbackID);
 					break;
 				default:
 					break;

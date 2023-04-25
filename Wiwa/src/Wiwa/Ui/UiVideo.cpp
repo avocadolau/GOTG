@@ -7,14 +7,17 @@
 //#include <Wiwa/core/Resources.h>
 namespace Wiwa
 {
-	GuiVideo::GuiVideo(Scene* scene, unsigned int id, Rect2i bounds, const char* pathVideo, bool active) : GuiControl(scene, GuiControlType::VIDEO, id)
+	GuiVideo::GuiVideo(Scene* scene, unsigned int id, Rect2i bounds, const char* pathVideo, bool active, size_t callbackID) : GuiControl(scene, GuiControlType::VIDEO, id)
 	{
 		this->position = bounds;
 		name = "Video";
 		text = "none";
 		this->active = active;
 		audioEventForButton = "none";
-		callbackID = WI_INVALID_INDEX;
+		this->callbackID = callbackID;
+
+		if (callbackID != WI_INVALID_INDEX)
+			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 		textId1 = Wiwa::Resources::Load<Wiwa::Video>(pathVideo);
@@ -44,6 +47,15 @@ namespace Wiwa
 	bool GuiVideo::Update()
 	{
 		video_res->Update();
+		if (!video_finished && video_res->HasFinished())
+		{
+			if (callback)
+			{
+				Action<>function_name = callback->func;
+				function_name.execute();
+			}
+			video_finished = true;
+		}
 		return true;
 	}
 
