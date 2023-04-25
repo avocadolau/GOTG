@@ -16,6 +16,8 @@
 
 #include <Wiwa/utilities/json/JSONDocument.h>
 
+#include <Wiwa/utilities/easings.h>
+
 namespace Wiwa
 {
 	DialogManager::DialogManager()
@@ -189,6 +191,9 @@ namespace Wiwa
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
+
+			//render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::DOWNLEFT);
+			//render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::DOWNLEFT);
 
 			if (((keyPressRefreshTimer / 45) % 2) == 0)
 			{

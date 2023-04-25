@@ -90,5 +90,9 @@ namespace Wiwa
 		Wiwa::Renderer2D::InstanceData continueImgID;
 
 		Color4f	BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+		Vector2i characterImgPos = { 0 }; //Will be controlled with the easings
+		Vector2i bubbleImgPos = { 0 }; //Will be controlled with the easings
+
 	};
 }
