@@ -40,17 +40,18 @@ namespace Wiwa
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 
-		if (m_SecondPatternBulletcounter > 8.0f)
-		{
-			m_SecondPatternEnabled = false;
-		}
+		
 		if ((m_SecondPatternEnabled == true) && (m_SecondPatternBulletcounter <= 8.0f))
 		{
 			SpawnSecondPattern(enemy);
 		}
-		else
+		if (m_SecondPatternBulletcounter > 8.0f)
 		{
-			if (m_TimerRoundCooldown >= 8.f)
+			m_SecondPatternEnabled = false;
+		}
+		if(m_SecondPatternEnabled == false)
+		{
+			if (m_TimerRoundCooldown >= 6.0f)
 			{
 				int randomValue = Math::RandomRange(1, 3);
 
@@ -155,13 +156,13 @@ namespace Wiwa
 
 		WI_INFO(m_SecondPatternAttackTimer);
 
-		if (m_SecondPatternBulletcounter < numBullets)
+		if (m_SecondPatternBulletcounter <= numBullets)
 		{
 			if (m_SecondPatternAttackTimer > 0.5f)
 			{
 
 				float directionAngle1 = m_SecondPatternBulletcounter * degreeStep;
-				float directionAngle2 = m_SecondPatternBulletcounter * degreeStep + halfDegreeStep;
+				float directionAngle2 = m_SecondPatternBulletcounter * degreeStep - 180; //To get the symmetry attack
 
 				WI_INFO(directionAngle1);
 
