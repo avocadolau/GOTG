@@ -517,12 +517,14 @@ namespace Wiwa {
 		glDepthMask(GL_FALSE);
 		
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		if (emitter->useAdditiveBlending)
 		{
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		}
 
 		glBlendEquation(GL_FUNC_ADD);
+
 		for (size_t i = 0; i < cameraCount; i++)
 		{
 			CameraId cam_id = cameras[i];
@@ -537,6 +539,8 @@ namespace Wiwa {
 		{
 			r3d.RenderMesh(m_Model, particle.transform.worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 		}
+
+		glActiveTexture(GL_TEXTURE0);
 		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
 	}
