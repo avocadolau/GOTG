@@ -18,9 +18,6 @@ namespace Wiwa {
 		glm::vec3 CalculateForward(const Wiwa::Transform3D& t3d);
 
 		float m_TimerAttackCooldown = 0.0f;
-
-		bool hello();
-
 	};
 }
 
