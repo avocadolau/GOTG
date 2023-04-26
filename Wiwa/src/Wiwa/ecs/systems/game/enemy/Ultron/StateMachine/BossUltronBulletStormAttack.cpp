@@ -124,6 +124,7 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::SpawnFirstPattern(BossUltron* enemy)
 	{
 		m_SecondPatternBulletcounter = 0.0f;
+		m_SecondPatternCounter = 0;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
@@ -153,11 +154,11 @@ namespace Wiwa
 
 		if (m_SecondPatternBulletcounter <= numBullets)
 		{
-			if (m_SecondPatternAttackTimer > 0.5f)
+			if (m_SecondPatternAttackTimer > 0.2f)
 			{
 
 				float directionAngle1 = m_SecondPatternBulletcounter * degreeStep;
-				float directionAngle2 = m_SecondPatternBulletcounter * degreeStep - 180; //To get the symmetry attack
+				float directionAngle2 = m_SecondPatternBulletcounter * degreeStep - halfDegreeStep; //To get the symmetry attack
 
 				WI_INFO(directionAngle1);
 
@@ -176,6 +177,11 @@ namespace Wiwa
 
 				m_SecondPatternBulletcounter = m_SecondPatternBulletcounter + 1.0f;
 				m_SecondPatternAttackTimer = 0.0f;
+				if (m_SecondPatternBulletcounter == 8.0f)
+				{
+					m_SecondPatternCounter++;
+					m_SecondPatternBulletcounter = 0;
+				}
 			}
 		}
 
@@ -205,6 +211,7 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::SpawnThirdPattern(BossUltron* enemy)
 	{
 		m_SecondPatternBulletcounter = 0.0f;
+		m_SecondPatternCounter = 0;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
@@ -228,11 +235,11 @@ namespace Wiwa
 
 	bool BossUltronBulletStormAttackState::IsSecondPatternFinished()
 	{
-		if ((m_SecondPatternEnabled == true) && (m_SecondPatternBulletcounter <= 8.0f))
+		if ((m_SecondPatternEnabled == true) && (m_SecondPatternBulletcounter <= 24.0f) && (m_SecondPatternCounter < 3))
 		{
 			return false;
 		}
-		if (m_SecondPatternBulletcounter > 8.0f)
+		if (m_SecondPatternCounter == 3)
 		{
 			m_SecondPatternEnabled = false;
 		}
