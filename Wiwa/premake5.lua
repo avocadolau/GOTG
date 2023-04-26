@@ -38,7 +38,7 @@ project "Wiwa"
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.IconFontCppHeaders}",
 		"%{IncludeDirs.bullet}",
-		"%{IncludeDirs.ozz}"
+		"%{IncludeDirs.ozz}",
 		"%{IncludeDirs.recastnavigation}",
 		"%{IncludeDirs.OpenCV}"
 	}
@@ -53,7 +53,6 @@ project "Wiwa"
 		"Optick",
 		"ImGuizmo",
 		"ozz",
-		"%{Library.mono}",
 		"%{wks.location}/Wiwa/vendor/assimp/lib/x64/release/assimp-vc143-mt.lib",
 		"%{Library.Wwise_SE}",
 		"%{Library.Wwise_MMgr}",
