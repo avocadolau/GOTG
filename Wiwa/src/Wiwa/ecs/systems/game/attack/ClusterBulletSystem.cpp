@@ -208,7 +208,7 @@ bool Wiwa::ClusterBulletSystem::EnableBullet()
 
 bool Wiwa::ClusterBulletSystem::OnDisabledFromPool()
 {
-	if (m_HasBlown == true)
+	if (m_HasBlown == false)
 	{
 		int pattern = RAND(1, 2);
 
@@ -221,7 +221,7 @@ bool Wiwa::ClusterBulletSystem::OnDisabledFromPool()
 			BlowClusterBullet02(m_EntityId);
 		}
 		
-		m_HasBlown = false;
+		m_HasBlown = true;
 	}
 
 	Transform3D* transform = GetComponent<Transform3D>();
