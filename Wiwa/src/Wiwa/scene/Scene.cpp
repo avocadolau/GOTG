@@ -85,7 +85,6 @@ namespace Wiwa
 	void Scene::Update()
 	{
 		PlayerGUISystem* pgs;
-
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
@@ -109,9 +108,11 @@ namespace Wiwa
 		case Scene::SCENE_LOOP:
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
-			pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
-			if(pgs != nullptr)
+			if (m_EntityManager.GetEntityCount() != 0)
+			{
+				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
 				pgs->Update();
+			}
 			m_GuiManager->Update();
 			m_DialogManager->Update();
 			ProcessInput();
