@@ -23,11 +23,15 @@ namespace Wiwa {
 		void SpawnSecondPattern(BossUltron* enemy);
 		void SpawnThirdPattern(BossUltron* enemy);	
 
+		void SelectRandomAttack(BossUltron* enemy);
+
 		bool IsSecondPatternFinished();
 		bool IsThirdPatternFinished();
 
 		float m_TimerRoundCooldown = 0.0f;
 		int m_RoundCounter = 0;
+		int m_SelectRandomAttack = 0;
+		bool m_IsAttackSelected = false;
 
 		//Second Pattern Attack
 		float m_SecondPatternAttackTimer = 0.0f;

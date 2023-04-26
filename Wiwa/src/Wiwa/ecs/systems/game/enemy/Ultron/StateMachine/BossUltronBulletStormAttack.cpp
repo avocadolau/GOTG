@@ -57,20 +57,7 @@ namespace Wiwa
 		{
 			if (m_TimerRoundCooldown >= 6.0f)
 			{
-				int randomValue = RAND(1, 3);
-
-				if (randomValue == 1)
-				{
-					SpawnFirstPattern(enemy);
-				}
-				if (randomValue == 2)
-				{
-					SpawnSecondPattern(enemy);
-				}
-				if (randomValue == 3)
-				{
-					SpawnThirdPattern(enemy);
-				}
+				SelectRandomAttack(enemy);
 			
 				m_TimerRoundCooldown = 0.0f;
 				m_RoundCounter++;
@@ -127,7 +114,7 @@ namespace Wiwa
 
 	void BossUltronBulletStormAttackState::SpawnFirstPattern(BossUltron* enemy)
 	{
-		
+		m_IsAttackSelected = false;
 		//-------------------------------
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -158,7 +145,8 @@ namespace Wiwa
 	{
 		m_ThirdPatternBulletcounter = 0.0f;
 		m_ThirdPatternCounter = 0;
-
+		m_IsAttackSelected = false;
+		//---------------------------------
 		m_SecondPatternEnabled = true;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -205,6 +193,7 @@ namespace Wiwa
 	{
 		m_SecondPatternBulletcounter = 0.0f;
 		m_SecondPatternCounter = 0;
+		m_IsAttackSelected = false;
 		//-----------------------------------------
 
 		m_ThirdPatternEnabled = true;
@@ -246,6 +235,49 @@ namespace Wiwa
 					m_ThirdPatternBulletcounter = 0;
 				}
 			}
+		}
+	}
+
+	void BossUltronBulletStormAttackState::SelectRandomAttack(BossUltron* enemy)
+	{
+		if (m_SelectRandomAttack == 0)
+		{
+			m_IsAttackSelected = true;
+			m_SelectRandomAttack = RAND(1, 3);
+		}
+
+		if (m_SelectRandomAttack == 1 && m_IsAttackSelected == false)
+		{
+			int randomNumber23 = rand() % 2;
+			m_SelectRandomAttack = (randomNumber23 == 0) ? 2 : 3;
+			m_IsAttackSelected = true;
+		}
+
+		if (m_SelectRandomAttack == 2 && m_IsAttackSelected == false)
+		{
+			int randomNumber13 = rand() % 2;
+			m_SelectRandomAttack = (randomNumber13 == 0) ? 1 : 3;
+			m_IsAttackSelected = true;
+		}
+
+		if (m_SelectRandomAttack == 3 && m_IsAttackSelected == false)
+		{
+			int randomNumber12 = rand() % 2;
+			m_SelectRandomAttack = (randomNumber12 == 0) ? 1 : 2;
+			m_IsAttackSelected = true;
+		}
+
+		if (m_SelectRandomAttack == 1)
+		{
+			SpawnFirstPattern(enemy);
+		}
+		if (m_SelectRandomAttack == 2)
+		{
+			SpawnSecondPattern(enemy);
+		}
+		if (m_SelectRandomAttack == 3)
+		{
+			SpawnThirdPattern(enemy);
 		}
 	}
 
