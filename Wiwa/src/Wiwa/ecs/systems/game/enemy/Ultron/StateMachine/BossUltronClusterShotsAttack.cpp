@@ -24,6 +24,11 @@ namespace Wiwa
 		m_RoundOne = true;
 		m_RoundTwo = true;
 		m_RoundThree = true;
+
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+
+		navAgentPtr->StopAgent();
 	}
 
 	void BossUltronClusterShotsAttackState::UpdateState(BossUltron* enemy)
@@ -31,21 +36,24 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
+		//enemy->LookAt(playerTr->localPosition);
+		//enemy->RotateTo(playerTr->localPosition);
+
 		if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
 		{
-			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-			SpawnClusterBullet(enemy, CalculateForward(*playerTr));
+			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			SpawnClusterBullet(enemy, playerTr->localPosition);
 
 			m_RoundOne = false;
 		}
 		else if (m_TimerBetweenBullet >= 2.0f && m_RoundTwo == true)
 		{
-			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-			SpawnClusterBullet(enemy, CalculateForward(*playerTr));
+			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			SpawnClusterBullet(enemy, playerTr->localPosition);
 
 			m_RoundTwo = false;
 		}
-		else if (m_TimerBetweenBullet >= 4.0f && m_RoundThree == true)
+		else if (m_TimerBetweenBullet >= 5.0f && m_RoundThree == true)
 		{
 			enemy->SwitchState(enemy->m_MovementState);
 
