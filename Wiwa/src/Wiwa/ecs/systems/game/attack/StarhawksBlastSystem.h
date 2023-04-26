@@ -12,7 +12,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_StarHawksIt;
 		EntityManager::ComponentIterator m_StarHawksTransfromIt;
 		EntityManager::ComponentIterator m_PlayerTransformIt;
-		EntityManager::ComponentIterator m_ColliderTransformIt;
+		std::vector<EntityManager::ComponentIterator> m_ColliderTransformIt;
 
 	public:
 		StarhawksBlastSystem();

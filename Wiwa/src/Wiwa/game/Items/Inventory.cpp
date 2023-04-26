@@ -286,8 +286,8 @@ void Wiwa::Inventory::UseAbility(size_t index) const
 
 		if (player)
 		{
-			EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
-			EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
+			//EntityId pe_spark = em.GetChildByName(player, "PE_Use_Ability_Spark");
+			//EntityId pe_line = em.GetChildByName(player, "PE_Use_Ability_Line");
 
 		}
 

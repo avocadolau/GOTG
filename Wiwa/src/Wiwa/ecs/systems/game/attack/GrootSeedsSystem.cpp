@@ -36,16 +36,15 @@ namespace Wiwa
 
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
 		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-		Transform3D* childTransform = GetComponentByIterator<Transform3D>(m_GrootSeedsTransformIt);
 
-		childTransform->localRotation = playerTransform->localRotation;
+		grootSeedsTransform->localRotation = playerTransform->localRotation;
 
-		grootSeedsTransform->localPosition.x = playerTransform->localPosition.x;
-		grootSeedsTransform->localPosition.z = playerTransform->localPosition.z;
-		grootSeedsTransform->localPosition.y = playerTransform->localPosition.y;
+		grootSeedsTransform->position.x = playerTransform->position.x;
+		grootSeedsTransform->position.z = playerTransform->position.z;
+		grootSeedsTransform->position.y = playerTransform->position.y;
 
-		grootSeedsTransform->localScale.x = 10.0f;
-		grootSeedsTransform->localScale.z = 10.0f;
+		//grootSeedsTransform->localScale.x = 10.0f;
+		//grootSeedsTransform->localScale.z = 10.0f;
 
 
 	}
@@ -58,7 +57,9 @@ namespace Wiwa
 			System::Init();
 
 		GrootSeeds* grootSeeds = GetComponentByIterator<GrootSeeds>(m_GrootSeedsIt);
-		Transform3D* PhylasSwordTransform = GetComponentByIterator<Transform3D>(m_GrootSeedsTransformIt);
+
+		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
+		Transform3D* grootSeedsTransform = GetComponentByIterator<Transform3D>(m_GrootSeedsTransformIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 

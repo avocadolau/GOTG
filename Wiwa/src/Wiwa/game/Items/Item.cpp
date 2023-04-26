@@ -49,7 +49,7 @@ namespace Wiwa
     void Ability::GrootsSeeds()
     {
         Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-        EntityId grootSeeds = em.LoadPrefab("assets/Prefabs/GrootSeeds.wiprefab");
+        EntityId grootSeeds = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/p_shield.wiprefab");
     }
 
     void Ability::PhylasQuantumSword()
@@ -60,6 +60,8 @@ namespace Wiwa
 
     void Ability::StarhawksBlast()
     {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId starHawksBlast = em.LoadPrefab("assets/Prefabs/StarHawksBlast.wiprefab");
     }
 
     void PassiveSkill::Use()

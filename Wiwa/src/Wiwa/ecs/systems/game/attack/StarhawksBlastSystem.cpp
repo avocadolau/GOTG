@@ -33,13 +33,17 @@ namespace Wiwa
 		EntityId player = GameStateManager::GetPlayerId();
 
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
-		EntityId child = em.GetChildByName(m_EntityId, "Colider");
-		m_ColliderTransformIt = em.GetComponentIterator<Transform3D>(child);
-		Mesh* mesh = em.AddComponent<Mesh>(child);
+		std::vector<EntityId>* children = em.GetEntityChildren(m_EntityId);
 
-		mesh->meshId = Resources::Load<Model>("assets/prefabs/victoryshield/planebullet.fbx");
-		mesh->materialId = Resources::Load<Material>("assets/prefabs/victoryshield/defaultmaterial.wimaterial");
-		em.ApplySystem<MeshRenderer>(child);
+		for (size_t i = 0; i < children->size(); i++)
+		{
+			m_ColliderTransformIt.push_back(em.GetComponentIterator<Transform3D>(children->at(i)));
+			//Mesh * mesh = em.AddComponent<Mesh>(children->at(i));
+
+			//mesh->meshId = Resources::Load<Model>("assets/prefabs/victoryshield/planebullet.fbx");
+			//mesh->materialId = Resources::Load<Material>("assets/prefabs/victoryshield/defaultmaterial.wimaterial");
+			//em.ApplySystem<MeshRenderer>(children->at(i));
+		}
 	}
 
 	void StarhawksBlastSystem::OnUpdate()
@@ -53,12 +57,16 @@ namespace Wiwa
 
 		Wiwa::Transform3D* transfromStarhawksBlast = GetComponentByIterator<Transform3D>(m_StarHawksTransfromIt);
 		Wiwa::Transform3D* transformPlayer = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-		Wiwa::Transform3D* transformCol = GetComponentByIterator<Transform3D>(m_ColliderTransformIt);
+		for (size_t i = 0; i < m_ColliderTransformIt.size(); i++)
+		{
+			Wiwa::Transform3D* transformCol = GetComponentByIterator<Transform3D>(m_ColliderTransformIt.at(i));
+			transformCol->localPosition.y = 0.f;
+		}
 
 		transfromStarhawksBlast->localPosition.x = transformPlayer->localPosition.x;
 		transfromStarhawksBlast->localPosition.z = transformPlayer->localPosition.z;
 		transfromStarhawksBlast->localRotation.y += starhawksBlast->velocity * Time::GetDeltaTimeSeconds();
-		transformCol->localPosition.y = 0.f;
+		
 		m_Timer += Time::GetDeltaTimeSeconds();
 		if (m_Timer >= starhawksBlast->lifeTime)
 		{
