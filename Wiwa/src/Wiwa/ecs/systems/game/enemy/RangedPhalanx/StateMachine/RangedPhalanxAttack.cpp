@@ -137,6 +137,11 @@ namespace Wiwa
 		return glm::normalize(forward);
 	}
 
+	bool RangedPhalanxAttackState::hello()
+	{
+		return false;
+	}
+
 
 	
 }

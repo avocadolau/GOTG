@@ -1,4 +1,12 @@
 #include <wipch.h>
+#include "StateMachine/BossUltronSpawn.h"
+#include "StateMachine/BossUltronIdle.h"
+#include "StateMachine/BossUltronMovement.h"
+#include "StateMachine/BossUltronClusterShotsAttack.h"
+#include "StateMachine/BossUltronLaserBeamAttack.h"
+#include "StateMachine/BossUltronBulletStormAttack.h"
+#include "StateMachine/BossUltronDeath.h"
+#include "StateMachine/BossUltronDash.h"
 #include "BossUltron.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>

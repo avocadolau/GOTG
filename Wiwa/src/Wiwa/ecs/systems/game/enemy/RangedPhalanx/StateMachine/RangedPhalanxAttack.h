@@ -19,6 +19,8 @@ namespace Wiwa {
 
 		float m_TimerAttackCooldown = 0.0f;
 
+		bool hello();
+
 	};
 }
 

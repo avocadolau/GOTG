@@ -1,23 +1,17 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/SentinelAttack.h"
-#include "StateMachine/SentinelChasing.h"
-#include "StateMachine/SentinelIdle.h"
-#include "StateMachine/SentinelSpawn.h"
-#include "StateMachine/SentinelDeath.h"
-#include "StateMachine/SentinelHit.h"
 
 namespace Wiwa 
 {
 	class WI_API EnemySentinel : public EnemySystem {
 	public:
-		SentinelBaseState* m_CurrentState;
-		SentinelIdleState* m_IdleState;
-		SentinelSpawnState* m_SpawnState;
-		SentinelChasingState* m_ChasingState;
-		SentinelAttackState* m_AttackingState;
-		SentinelDeathState* m_DeathState;
-		SentinelHitState* m_HitState; 
+		class SentinelBaseState* m_CurrentState;
+		class SentinelBaseState* m_IdleState;
+		class SentinelBaseState* m_SpawnState;
+		class SentinelBaseState* m_ChasingState;
+		class SentinelBaseState* m_AttackingState;
+		class SentinelBaseState* m_DeathState;
+		class SentinelBaseState* m_HitState;
 
 		float m_TimerSentinel; 
 		float m_RangeOfExplosion = 4.0f;

@@ -1,22 +1,16 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/RangedPhalanxAttack.h"
-#include "StateMachine/RangedPhalanxChasing.h"
-#include "StateMachine/RangedPhalanxIdle.h"
-#include "StateMachine/RangedPhalanxSpawn.h"
-#include "StateMachine/RangedPhalanxDeath.h"
-#include "StateMachine/RangedPhalanxHit.h"
 
 namespace Wiwa {
 	class WI_API EnemyRangedPhalanx : public EnemySystem {
 	public:
-		RangedPhalanxBaseState* m_CurrentState;
-		RangedPhalanxSpawnState* m_SpawnState;
-		RangedPhalanxIdleState* m_IdleState;
-		RangedPhalanxChasingState* m_ChasingState;
-		RangedPhalanxAttackState* m_AttackingState;
-		RangedPhalanxDeathState* m_DeathState;
-		RangedPhalanxHitState* m_HitState;
+		class RangedPhalanxBaseState* m_CurrentState;
+		class RangedPhalanxBaseState* m_SpawnState;
+		class RangedPhalanxBaseState* m_IdleState;
+		class RangedPhalanxBaseState* m_ChasingState;
+		class RangedPhalanxBaseState* m_AttackingState;
+		class RangedPhalanxBaseState* m_DeathState;
+		class RangedPhalanxBaseState* m_HitState;
 		EntityManager::ComponentIterator m_GunTransformIt;
 
 		float m_Timer;

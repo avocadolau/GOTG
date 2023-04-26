@@ -1,4 +1,10 @@
 #include <wipch.h>
+#include "StateMachine/MeleePhalanxAttack.h"
+#include "StateMachine/MeleePhalanxChasing.h"
+#include "StateMachine/MeleePhalanxIdle.h"
+#include "StateMachine/MeleePhalanxSpawn.h"
+#include "StateMachine/MeleePhalanxDeath.h"
+#include "StateMachine/MeleePhalanxHit.h"
 #include "EnemyMeleePhalanx.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 

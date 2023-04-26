@@ -1,4 +1,10 @@
 #include <wipch.h>
+#include "StateMachine/SentinelAttack.h"
+#include "StateMachine/SentinelChasing.h"
+#include "StateMachine/SentinelIdle.h"
+#include "StateMachine/SentinelSpawn.h"
+#include "StateMachine/SentinelDeath.h"
+#include "StateMachine/SentinelHit.h"
 #include "EnemySentinel.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
