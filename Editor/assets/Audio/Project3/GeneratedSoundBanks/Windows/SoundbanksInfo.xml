@@ -9,59 +9,25 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="69331918" Type="User" Language="SFX" Hash="{FAA1699F-5435-2ED2-0623-9DCFCE6D1205}">
-			<ShortName>sentinel_dead</ShortName>
-			<Path>sentinel_dead.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="169915878" Type="User" Language="SFX" Hash="{14F2FD1C-BC23-BD5B-0B71-E874BD73D581}">
-			<ShortName>ranged_hit</ShortName>
-			<Path>ranged_hit.bnk</Path>
+		<SoundBank Id="232625244" Type="User" Language="SFX">
+			<ShortName>phalanx_melee</ShortName>
+			<Path>phalanx_melee.bnk</Path>
 			<Media>
-				<File Id="744035345" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>phalanx_ranged_hit.wav</ShortName>
-					<CachePath>SFX/phalanx_ranged_hit_10C4C929.wem</CachePath>
+				<File Id="146913874" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_hit.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_hit_10C4C929.wem</CachePath>
 				</File>
-			</Media>
-			<Events>
-				<Event Id="169915878" Name="ranged_hit">
-					<MediaRefs>
-						<MediaRef Id="744035345"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="216679958" Type="User" Language="SFX" Hash="{5A1401F6-154E-B0BE-2D1C-C4AB8B146C54}">
-			<ShortName>GOTG_Project</ShortName>
-			<Path>GOTG_Project.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="412874053" Type="User" Language="SFX" Hash="{AE4589CA-9629-2A19-8D2A-3E2CC1D7E7BE}">
-			<ShortName>on_hover</ShortName>
-			<Path>on_hover.bnk</Path>
-			<Media>
-				<File Id="917540936" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>s_button_hover.wav</ShortName>
-					<CachePath>SFX/s_button_hover_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="412874053" Name="on_hover">
-					<MediaRefs>
-						<MediaRef Id="917540936"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="453607781" Type="User" Language="SFX" Hash="{48E0A034-ABAE-9BD1-944D-BEC97C961909}">
-			<ShortName>ranged_moving</ShortName>
-			<Path>ranged_moving.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="827139402" Type="User" Language="SFX" Hash="{EAD51AF9-67F4-0C6E-78C9-406F8858872C}">
-			<ShortName>melee_heavy_attack</ShortName>
-			<Path>melee_heavy_attack.bnk</Path>
-			<Media>
 				<File Id="254107624" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_attack.wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_attack_10C4C929.wem</CachePath>
+				</File>
+				<File Id="346607997" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_spawn.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_spawn_10C4C929.wem</CachePath>
+				</File>
+				<File Id="395295600" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -70,51 +36,78 @@
 						<MediaRef Id="254107624"/>
 					</MediaRefs>
 				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="871813740" Type="User" Language="SFX" Hash="{81D52C8F-A105-ED42-F7D9-1A778C136369}">
-			<ShortName>player_hit</ShortName>
-			<Path>player_hit.bnk</Path>
-			<Media>
-				<File Id="258955352" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>palyer_hit.wav</ShortName>
-					<CachePath>SFX/palyer_hit_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="871813740" Name="player_hit">
+				<Event Id="3947834608" Name="melee_dead">
 					<MediaRefs>
-						<MediaRef Id="258955352"/>
+						<MediaRef Id="395295600"/>
 					</MediaRefs>
 				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="953720134" Type="User" Language="SFX" Hash="{18497CD6-13CB-F387-3C6A-6125FFF0FDED}">
-			<ShortName>sentinel_moving</ShortName>
-			<Path>sentinel_moving.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="1037358615" Type="User" Language="SFX" Hash="{AA31CC69-759F-D44F-593D-788DF2B7E1C1}">
-			<ShortName>subjugator_hit</ShortName>
-			<Path>subjugator_hit.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="1255748329" Type="User" Language="SFX" Hash="{A778013E-382B-62E2-21F4-8D55B4BFB195}">
-			<ShortName>melee_hit</ShortName>
-			<Path>melee_hit.bnk</Path>
-			<Media>
-				<File Id="146913874" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_hit_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
 				<Event Id="1255748329" Name="melee_hit">
 					<MediaRefs>
 						<MediaRef Id="146913874"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="71202558" Name="spawn">
+					<MediaRefs>
+						<MediaRef Id="346607997"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{06A916D2-9CAE-44F3-0F4C-967E78967209}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{E7442BDA-A405-10BD-6BD6-29C20BEE1A07}">
+			<ShortName>game_music</ShortName>
+			<Path>game_music.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="968010305" Type="User" Language="SFX">
+			<ShortName>props</ShortName>
+			<Path>props.bnk</Path>
+			<Media>
+				<File Id="371855118" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\props\barrel_explosion.wav</ShortName>
+					<CachePath>SFX/project III sounds/props/barrel_explosion_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+		</SoundBank>
+		<SoundBank Id="1069431850" Type="User" Language="SFX">
+			<ShortName>Player</ShortName>
+			<Path>Player.bnk</Path>
+			<Media>
+				<File Id="385111800" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\player\bullet_hit_wall.wav</ShortName>
+					<CachePath>SFX/project III sounds/player/bullet_hit_wall_10C4C929.wem</CachePath>
+				</File>
+				<File Id="712169024" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\player\palyer_hit.wav</ShortName>
+					<CachePath>SFX/project III sounds/player/palyer_hit_10C4C929.wem</CachePath>
+				</File>
+				<File Id="781033451" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\player\player_shoot.wav</ShortName>
+					<CachePath>SFX/project III sounds/player/player_shoot_10C4C929.wem</CachePath>
+				</File>
+				<File Id="944440038" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\player\bullet_hit.wav</ShortName>
+					<CachePath>SFX/project III sounds/player/bullet_hit_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+		</SoundBank>
+		<SoundBank Id="1309352537" Type="User" Language="SFX">
+			<ShortName>phalanx_ranged</ShortName>
+			<Path>phalanx_ranged.bnk</Path>
+			<Media>
+				<File Id="480958233" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_attack.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_attack_10C4C929.wem</CachePath>
+				</File>
+				<File Id="606851917" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos).wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_death(No sabemos)_10C4C929.wem</CachePath>
+				</File>
+				<File Id="669719075" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+		</SoundBank>
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{39F572FF-9FA5-1C7C-25DC-84BFF4E2C192}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -124,12 +117,16 @@
 				</AudioDevices>
 			</Plugins>
 			<Busses>
+				<Bus Id="1669749310" Name="Dialogues"/>
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
+				<Bus Id="3922907557" Name="Enviromental"/>
+				<Bus Id="3991942870" Name="Music"/>
 			</Busses>
 			<GameParameters>
 				<GameParameter Id="822163944" Name="SS_Air_RPM"/>
 				<GameParameter Id="988953028" Name="SFXVolume"/>
 				<GameParameter Id="1029930033" Name="SS_Air_Fury"/>
+				<GameParameter Id="1039994295" Name="DialogVolume"/>
 				<GameParameter Id="1351367891" Name="SS_Air_Fear"/>
 				<GameParameter Id="2346531308" Name="MusicVolume"/>
 				<GameParameter Id="2648548617" Name="SS_Air_Month"/>
@@ -141,6 +138,18 @@
 				<GameParameter Id="3847924954" Name="SS_Air_Presence"/>
 				<GameParameter Id="4160247818" Name="SS_Air_Turbulence"/>
 			</GameParameters>
+			<StateGroups>
+				<StateGroup Id="514064485" Name="fight">
+					<States>
+						<State Id="748895195" Name="None"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="3753286132" Name="calm">
+					<States>
+						<State Id="748895195" Name="None"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
 			<AcousticTextures>
 				<AcousticTexture Id="504532776" Name="Brick">
 					<Properties>
@@ -256,124 +265,21 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1557725171" Type="User" Language="SFX" Hash="{34D61980-279A-BE9E-8DF4-633AB9317CC9}">
-			<ShortName>sentinel_hit</ShortName>
-			<Path>sentinel_hit.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="1707297693" Type="User" Language="SFX" Hash="{02E98F61-4A42-5F4E-6F8C-C65D442A1C06}">
-			<ShortName>level_music_01</ShortName>
-			<Path>level_music_01.bnk</Path>
+		<SoundBank Id="1407938113" Type="User" Language="SFX">
+			<ShortName>scene_events</ShortName>
+			<Path>scene_events.bnk</Path>
 			<Media>
-				<File Id="57065480" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>track_levelmusic_1.wav</ShortName>
-					<CachePath>SFX/track_levelmusic_1_10C4C929.wem</CachePath>
+				<File Id="51048589" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\scene_events\sound_dialog_start.wav</ShortName>
+					<CachePath>SFX/project III sounds/scene_events/sound_dialog_start_65BB790B.wem</CachePath>
 				</File>
-			</Media>
-			<Events>
-				<Event Id="1707297693" Name="level_music_01">
-					<MediaRefs>
-						<MediaRef Id="57065480"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="1707297694" Type="User" Language="SFX" Hash="{6BB7B162-8667-C707-5942-FC1637320FF5}">
-			<ShortName>level_music_02</ShortName>
-			<Path>level_music_02.bnk</Path>
-			<Media>
-				<File Id="212473418" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>track_levelmusic_2.wav</ShortName>
-					<CachePath>SFX/track_levelmusic_2_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="1707297694" Name="level_music_02">
-					<MediaRefs>
-						<MediaRef Id="212473418"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="1707297695" Type="User" Language="SFX" Hash="{963A082C-5204-BF0B-EC34-DAEAC0DB5A82}">
-			<ShortName>level_music_03</ShortName>
-			<Path>level_music_03.bnk</Path>
-			<Media>
-				<File Id="489304910" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>track_levelmusic_3.wav</ShortName>
-					<CachePath>SFX/track_levelmusic_3_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="1707297695" Name="level_music_03">
-					<MediaRefs>
-						<MediaRef Id="489304910"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="1736784962" Type="User" Language="SFX" Hash="{B8BC899E-AA60-5E0B-25B4-54700A8C351D}">
-			<ShortName>subjugator_moving</ShortName>
-			<Path>subjugator_moving.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="2308042502" Type="User" Language="SFX" Hash="{DB3CB01B-FCCF-8E76-430E-48147646A992}">
-			<ShortName>player_walking</ShortName>
-			<Path>player_walking.bnk</Path>
-			<Media>
-				<File Id="418562462" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal02.wav</ShortName>
-					<CachePath>SFX/FootstepMetal02_10C4C929.wem</CachePath>
-				</File>
-				<File Id="524945233" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal04.wav</ShortName>
-					<CachePath>SFX/FootstepMetal04_10C4C929.wem</CachePath>
-				</File>
-				<File Id="537205970" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal01.wav</ShortName>
-					<CachePath>SFX/FootstepMetal01_10C4C929.wem</CachePath>
-				</File>
-				<File Id="557765093" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal08.wav</ShortName>
-					<CachePath>SFX/FootstepMetal08_10C4C929.wem</CachePath>
-				</File>
-				<File Id="604386515" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal03.wav</ShortName>
-					<CachePath>SFX/FootstepMetal03_10C4C929.wem</CachePath>
-				</File>
-				<File Id="645811211" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal05.wav</ShortName>
-					<CachePath>SFX/FootstepMetal05_10C4C929.wem</CachePath>
-				</File>
-				<File Id="883523052" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal07.wav</ShortName>
-					<CachePath>SFX/FootstepMetal07_10C4C929.wem</CachePath>
-				</File>
-				<File Id="1046599716" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>FootstepMetal06.wav</ShortName>
-					<CachePath>SFX/FootstepMetal06_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="2147561130" Name="player_walk">
-					<MediaRefs>
-						<MediaRef Id="418562462"/>
-						<MediaRef Id="524945233"/>
-						<MediaRef Id="537205970"/>
-						<MediaRef Id="557765093"/>
-						<MediaRef Id="604386515"/>
-						<MediaRef Id="645811211"/>
-						<MediaRef Id="883523052"/>
-						<MediaRef Id="1046599716"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="2715313045" Type="User" Language="SFX" Hash="{65E8ADE5-4424-9398-829D-3F4AC467ABAA}">
-			<ShortName>pause_sound</ShortName>
-			<Path>pause_sound.bnk</Path>
-			<Media>
 				<File Id="444663328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>s_game_pause.wav</ShortName>
 					<CachePath>SFX/s_game_pause_10C4C929.wem</CachePath>
+				</File>
+				<File Id="683768978" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\scene_events\wave_start.wav</ShortName>
+					<CachePath>SFX/project III sounds/scene_events/wave_start_9F4B9AA2.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -384,13 +290,25 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3112424181" Type="User" Language="SFX" Hash="{FA2B432A-FC48-603D-9821-57E5BFA5D1A4}">
-			<ShortName>character_selection</ShortName>
-			<Path>character_selection.bnk</Path>
+		<SoundBank Id="1551306167" Type="User" Language="SFX">
+			<ShortName>ui</ShortName>
+			<Path>ui.bnk</Path>
 			<Media>
 				<File Id="256689755" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>s_character_selected.wav</ShortName>
 					<CachePath>SFX/s_character_selected_10C4C929.wem</CachePath>
+				</File>
+				<File Id="876988813" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\ui\ui_action_accepted.wav</ShortName>
+					<CachePath>SFX/project III sounds/ui/ui_action_accepted_D5394968.wem</CachePath>
+				</File>
+				<File Id="917540936" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>s_button_hover.wav</ShortName>
+					<CachePath>SFX/s_button_hover_10C4C929.wem</CachePath>
+				</File>
+				<File Id="972415047" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\ui\ui_action_denied.wav</ShortName>
+					<CachePath>SFX/project III sounds/ui/ui_action_denied_D0D27720.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -399,78 +317,17 @@
 						<MediaRef Id="256689755"/>
 					</MediaRefs>
 				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="3261905107" Type="User" Language="SFX" Hash="{82E2258B-838D-960A-4DB9-161E0EB7703E}">
-			<ShortName>menu_intro</ShortName>
-			<Path>menu_intro.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="3315939568" Type="User" Language="SFX" Hash="{B4753D83-1A0F-9631-84F6-C25CF785948E}">
-			<ShortName>melee_moving</ShortName>
-			<Path>melee_moving.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="3332217831" Type="User" Language="SFX" Hash="{2FBF2363-3862-BED6-86B9-50D5BED83508}">
-			<ShortName>background_song</ShortName>
-			<Path>background_song.bnk</Path>
-		</SoundBank>
-		<SoundBank Id="3501630426" Type="User" Language="SFX" Hash="{56D8F007-62AD-8F4E-5526-6153E25E9989}">
-			<ShortName>Set_Bus_Master_Volume</ShortName>
-			<Path>Set_Bus_Master_Volume.bnk</Path>
-			<Events>
-				<Event Id="3501630426" Name="Set_Bus_Master_Volume"/>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="3785327939" Type="User" Language="SFX" Hash="{91763697-521B-8447-9B3A-308DCF0D36A6}">
-			<ShortName>logo_intro</ShortName>
-			<Path>logo_intro.bnk</Path>
-			<Media>
-				<File Id="734765540" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\scene_events\game_intro.wav</ShortName>
-					<CachePath>SFX/project III sounds/scene_events/game_intro_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="3785327939" Name="logo_intro">
+				<Event Id="412874053" Name="on_hover">
 					<MediaRefs>
-						<MediaRef Id="734765540"/>
+						<MediaRef Id="917540936"/>
 					</MediaRefs>
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3947834608" Type="User" Language="SFX" Hash="{18BABB1F-6E34-AF69-E5D3-958BEA660AD9}">
-			<ShortName>melee_dead</ShortName>
-			<Path>melee_dead.bnk</Path>
-			<Media>
-				<File Id="395295600" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="3947834608" Name="melee_dead">
-					<MediaRefs>
-						<MediaRef Id="395295600"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
-		<SoundBank Id="4004702906" Type="User" Language="SFX" Hash="{347A7A80-3254-F93F-566D-DC2D63C858C7}">
-			<ShortName>player_shoot</ShortName>
-			<Path>player_shoot.bnk</Path>
-			<Media>
-				<File Id="355932145" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>player_shoot.wav</ShortName>
-					<CachePath>SFX/player_shoot_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="4004702906" Name="player_shoot">
-					<MediaRefs>
-						<MediaRef Id="355932145"/>
-					</MediaRefs>
-				</Event>
-			</Events>
+		<SoundBank Id="4055567060" Type="User" Language="SFX">
+			<ShortName>menu_music</ShortName>
+			<Path>menu_music.bnk</Path>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{63B2B1F7-DC53-F75A-D86E-33FD11BB34AC}</FileHash>
+	<FileHash>{FADC0B75-58CD-DD08-537F-DF5F8EA25324}</FileHash>
 </SoundBanksInfo>

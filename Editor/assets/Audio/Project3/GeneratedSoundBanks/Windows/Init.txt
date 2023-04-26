@@ -1,11 +1,22 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	514064485	fight			\Default Work Unit\fight	
+	3753286132	calm			\Default Work Unit\calm	
+
+State	ID	Name	State Group			Notes
+	748895195	None	fight			
+	748895195	None	calm			
+
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	504532776	Brick			\Factory Acoustic Textures\Textures\Brick	
 	513139656	Mountain			\Factory Acoustic Textures\Textures\Mountain	
 	841620460	Concrete			\Factory Acoustic Textures\Textures\Concrete	
+	988953028	SFXVolume			\Default Work Unit\Volume\SFXVolume	
+	1039994295	DialogVolume			\Default Work Unit\Volume\DialogVolume	
 	1755085759	Wood_Deep			\Factory Acoustic Textures\Textures\Wood_Deep	
 	1873957695	Anechoic			\Factory Acoustic Textures\Textures\Anechoic	
 	1970351858	Fabric			\Factory Acoustic Textures\Textures\Fabric	
 	2058049674	Wood			\Factory Acoustic Textures\Textures\Wood	
+	2346531308	MusicVolume			\Default Work Unit\Volume\MusicVolume	
 	2412606308	Carpet			\Factory Acoustic Textures\Textures\Carpet	
 	2637588553	Tile			\Factory Acoustic Textures\Textures\Tile	
 	2918011349	MasterVolume			\Default Work Unit\Volume\MasterVolume	
@@ -16,7 +27,10 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 	4262522749	Wood_Bright			\Factory Acoustic Textures\Textures\Wood_Bright	
 
 Audio Bus	ID	Name			Wwise Object Path	Notes
+	1669749310	Dialogues			\Default Work Unit\Master Audio Bus\Dialogues	
 	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
+	3922907557	Enviromental			\Default Work Unit\Master Audio Bus\Enviromental	
+	3991942870	Music			\Default Work Unit\Master Audio Bus\Music	
 
 Audio Devices	ID	Name	Type				Notes
 	2317455096	No_Output	No Output			

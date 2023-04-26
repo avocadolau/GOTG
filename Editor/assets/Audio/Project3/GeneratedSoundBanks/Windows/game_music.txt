@@ -1,0 +1,8 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	514064485	fight			\Default Work Unit\fight	
+	3753286132	calm			\Default Work Unit\calm	
+
+State	ID	Name	State Group			Notes
+	748895195	None	fight			
+	748895195	None	calm			
+

@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	871813740	player_hit			\Default Work Unit\player\player_hit	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	258955352	palyer_hit	C:\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\palyer_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Factory Synth One\SFX\Misc\palyer_hit		159608
-
