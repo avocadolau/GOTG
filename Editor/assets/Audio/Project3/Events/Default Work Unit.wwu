@@ -212,34 +212,14 @@
 				</Folder>
 				<Folder Name="volume" ID="{584D449A-094E-4BE8-BF76-7144992B0248}" ShortID="715528837">
 					<ChildrenList>
-						<Event Name="Set_Bus_Volume_Master_Audio_Bus_01" ID="{03903AD0-6338-4E2F-9E48-AF41550E07C7}">
+						<Event Name="Set_Music_Volume" ID="{F4D8491C-BD25-49D9-BCB1-630793B3504E}"/>
+						<Event Name="Set_Bus_Master_Volume" ID="{C1D7A53F-D923-4A6E-959A-D98F6CD237B1}">
 							<ChildrenList>
-								<Action Name="" ID="{2CA7BE9A-BEFF-43BC-BF12-74A6572FF198}" ShortID="1000534739">
+								<Action Name="" ID="{702B1937-29CE-491D-BC8F-AA2A65F99709}" ShortID="967513861">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="11"/>
-										<Property Name="Scope" Type="int16" Value="1"/>
 									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="Set_Bus_Master_Volume" ID="{2415426F-76FB-434F-95E7-43CBA4A2AB06}">
-							<ChildrenList>
-								<Action Name="" ID="{B1289A08-05F6-408E-9F80-CA8173CB4C3D}" ShortID="205418363">
-									<PropertyList>
-										<Property Name="ActionType" Type="int16" Value="38"/>
-										<Property Name="GameParameterValue" Type="Real64" Value="76"/>
-										<Property Name="Scope" Type="int16" Value="1"/>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="MasterVolume" ID="{37155977-97CE-402C-89A9-1AE619F18259}" WorkUnitID="{02E271C5-C17C-4AA5-B1B0-C26312712607}"/>
-										</Reference>
-									</ReferenceList>
+									<ReferenceList/>
 								</Action>
 							</ChildrenList>
 						</Event>
@@ -282,6 +262,20 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
+				<Event Name="Set_Game_Parameter_MasterVolume" ID="{A995B702-D3A9-4F44-BF33-0ACAF6A677F0}">
+					<ChildrenList>
+						<Action Name="" ID="{0C0116EB-8D85-47F7-8F3A-119D9A30653E}" ShortID="927498933">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="38"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="MasterVolume" ID="{37155977-97CE-402C-89A9-1AE619F18259}" WorkUnitID="{02E271C5-C17C-4AA5-B1B0-C26312712607}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

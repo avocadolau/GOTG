@@ -1,0 +1,3 @@
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	371855118	barrel_explosion	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\props\barrel_explosion_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\barrel_explosion		426048
+

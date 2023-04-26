@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	2715313045	pause_sound			\Default Work Unit\hud\pause_sound	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	444663328	s_game_pause	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\s_game_pause_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\scene_events\s_game_pause		227464
-

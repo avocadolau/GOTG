@@ -766,4 +766,19 @@ void Audio::ChangeMasterVolume(int value)
     AK::SoundEngine::SetRTPCValue("MasterVolume", value);
 }
 
+void Audio::ChangeMusicVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("MusicVolume", value);
+}
+
+void Audio::ChangeSFXVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("SFXVolume", value);
+}
+
+void Audio::ChangeDialogVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("DialogVolume", value);
+}
+
 

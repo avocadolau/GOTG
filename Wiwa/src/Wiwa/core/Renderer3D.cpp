@@ -281,6 +281,21 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/texture_animated", textureAnimatedShader);
 
+		ResourceId bulletPhalanxRangedCoreId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/enemy_bullet/enemy_bullet");
+		Shader* bulletPhalanxRangedCore = Wiwa::Resources::GetResourceById<Shader>(bulletPhalanxRangedCoreId);
+		bulletPhalanxRangedCore->Compile("resources/shaders/vfx/enemy_bullet/enemy_bullet");
+
+		bulletPhalanxRangedCore->addUniform("u_LifeTime", UniformType::Float);
+		bulletPhalanxRangedCore->addUniform("u_Time", UniformType::Float);
+		bulletPhalanxRangedCore->addUniform("u_Color", UniformType::fVec4);
+		bulletPhalanxRangedCore->addUniform("u_FresnelColor", UniformType::fVec4);
+		bulletPhalanxRangedCore->addUniform("u_FresnelRange", UniformType::fVec2);
+		bulletPhalanxRangedCore->addUniform("u_Texture", UniformType::Sampler2D);
+		bulletPhalanxRangedCore->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		bulletPhalanxRangedCore->addUniform("u_OffsetMultiplier", UniformType::fVec2);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/enemy_bullet/enemy_bullet", bulletPhalanxRangedCore);
+
 		//===========================================================================================================
 
 		// Normal Display Shader

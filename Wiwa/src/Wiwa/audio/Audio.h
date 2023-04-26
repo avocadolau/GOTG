@@ -145,6 +145,9 @@ public:
 	static bool UnloadAllBanks();
 
 	static void ChangeMasterVolume(int value);
+	static void ChangeMusicVolume(int value);
+	static void ChangeSFXVolume(int value);
+	static void ChangeDialogVolume(int value);
 
 	// Returns last error
 	static const char* GetLastError() { return m_LastErrorMsg.c_str(); }
