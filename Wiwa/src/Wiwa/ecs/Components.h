@@ -38,6 +38,8 @@
 #include "components/game/attack/PhylasQuantumSword.h"
 #include "components/game/attack/GrootSeeds.h"
 #include "components/game/attack/VictoryShield.h"
+#include "components/game/attack/StarhawkBlast.h"
+
 #include "components/game/items/Item.h"
 #include "components/game/attack/ClusterBullet.h"
 #include "components/game/attack/UltronLaserBeam.h"
