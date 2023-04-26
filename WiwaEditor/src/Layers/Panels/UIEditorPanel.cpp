@@ -662,16 +662,6 @@ void UIEditorPanel::CallbackElements(Wiwa::GuiControl* control)
 						}
 					}
 					break;
-				case Wiwa::GuiControlType::IMAGE:
-					if (current_cb->params.size() == 0 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
-						if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-						{
-							callbackID = n;
-							if (is_selected)
-								ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-						}
-					}
-					break;
 				default:
 					break;
 				}

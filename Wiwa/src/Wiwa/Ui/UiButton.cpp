@@ -93,11 +93,12 @@ namespace Wiwa
 			if (Wiwa::Input::IsButtonPressed(0, 0))
 			{
 				state = GuiControlState::PRESSED;
+				SetNextFrame(2, &r2d_1);
 				clicked = true;
 			}
 			if (clicked && Wiwa::Input::IsButtonReleased(0, 0))
 			{
-				SetNextFrame(2, &r2d_1);
+				
 				clicked = false;
 				if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 				{
