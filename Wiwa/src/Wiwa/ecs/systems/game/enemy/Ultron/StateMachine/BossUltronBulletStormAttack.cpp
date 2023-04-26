@@ -40,16 +40,13 @@ namespace Wiwa
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 
-		
-		if ((m_SecondPatternEnabled == true) && (m_SecondPatternBulletcounter <= 8.0f))
+		if (IsSecondPatternFinished() == false)
 		{
 			SpawnSecondPattern(enemy);
+			m_TimerRoundCooldown = 0.0f;
 		}
-		if (m_SecondPatternBulletcounter > 8.0f)
-		{
-			m_SecondPatternEnabled = false;
-		}
-		if(m_SecondPatternEnabled == false)
+
+		if(IsSecondPatternFinished() == true)
 		{
 			if (m_TimerRoundCooldown >= 6.0f)
 			{
@@ -71,7 +68,7 @@ namespace Wiwa
 				}break;
 				}
 
-				m_TimerRoundCooldown = 0.f;
+				m_TimerRoundCooldown = 0.0f;
 				m_RoundCounter++;
 			}
 
@@ -154,8 +151,6 @@ namespace Wiwa
 		float degreeStep = 360.0f / numBullets;
 		float halfDegreeStep = degreeStep / 2;
 
-		WI_INFO(m_SecondPatternAttackTimer);
-
 		if (m_SecondPatternBulletcounter <= numBullets)
 		{
 			if (m_SecondPatternAttackTimer > 0.5f)
@@ -231,4 +226,19 @@ namespace Wiwa
 		}
 	}
 
+	bool BossUltronBulletStormAttackState::IsSecondPatternFinished()
+	{
+		if ((m_SecondPatternEnabled == true) && (m_SecondPatternBulletcounter <= 8.0f))
+		{
+			return false;
+		}
+		if (m_SecondPatternBulletcounter > 8.0f)
+		{
+			m_SecondPatternEnabled = false;
+		}
+		if (m_SecondPatternEnabled == false)
+		{
+			return true;
+		}
+	}
 }
