@@ -97,12 +97,12 @@ void Wiwa::PlayerController::TakeDamage(uint32_t damage)
 
 void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir)
 {
-	/*EntityId bullet = GetEntityManager().LoadPrefab("Prefabs/StarLordBullet.wiprefab");
+	EntityId bullet = GetEntityManager().LoadPrefab("Assets/Prefabs/Bullet/P_StarLordBullet.wiprefab");
 	Transform3D* bulletTransform = GetEntityManager().GetComponent<Transform3D>(bullet);
 	Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_TransformIt);
 
 	bulletTransform->localPosition = Math::GetWorldPosition(transform.worldMatrix);
-	bulletTransform->localRotation = glm::vec3(-90.f, playerTransform->localRotation.y - 90.f, 0.f);*/
+	bulletTransform->localRotation = glm::vec3(0.f, playerTransform->localRotation.y, 0.f);
 	WI_WARN("Firing");
 	// TODO: Play bullet sound here
 }
@@ -119,9 +119,9 @@ glm::vec3 Wiwa::PlayerController::GetMovementInput()
 	glm::vec3 input = glm::vec3(0.f);
 
 	if (Input::IsKeyPressed(Key::A))
-		input.x -= 1;
-	if (Input::IsKeyPressed(Key::D))
 		input.x += 1;
+	if (Input::IsKeyPressed(Key::D))
+		input.x -= 1;
 	if (Input::IsKeyPressed(Key::W))
 		input.z += 1;
 	if (Input::IsKeyPressed(Key::S))
