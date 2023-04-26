@@ -95,17 +95,17 @@ void DialogPanel::Draw()
 				if (currentCreatingNodeIsSaved[currentNode] == true) ImGui::TextWrapped("Currently Editing Node # %i", currentNode);
 				ImGui::NewLine();
 
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::Text("|<------------- Max Length ------------->|");
 				if (ImGui::InputText("Line 1 text", &dm.conversations[currentConversation].nodes[currentNode].text1))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::Text("|<------------- Max Length ------------->|");
 				if (ImGui::InputText("Line 2 text", &dm.conversations[currentConversation].nodes[currentNode].text2))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::Text("|<------------- Max Length ------------->|");
 				if (ImGui::InputText("Line 3 text", &dm.conversations[currentConversation].nodes[currentNode].text3))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
@@ -333,21 +333,21 @@ void DialogPanel::Draw()
 				else if (currentEditingNodeIsSaved[currentEditingNode[i]][i] == false) ImGui::TextWrapped("Node %i (unsaved*):", currentEditingNode[i]);
 				ImGui::NewLine();
 
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::Text("|<------------- Max Length ------------->|");
 				ImGui::PushID(currentEditingNode[i]);
 				if (ImGui::InputText("Line 1 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::Text("|<------------- Max Length ------------->|");
 				ImGui::PushID(currentEditingNode[i]);
 				if (ImGui::InputText("Line 2 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text2))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::Text("|<------------- Max Length ------------->|");
 				ImGui::PushID(currentEditingNode[i]);
 				if (ImGui::InputText("Line 3 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text3))
 				{

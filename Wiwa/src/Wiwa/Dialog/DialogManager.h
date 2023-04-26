@@ -94,5 +94,7 @@ namespace Wiwa
 		Vector2i characterImgPos = { 0 }; //Will be controlled with the easings
 		Vector2i bubbleImgPos = { 0 }; //Will be controlled with the easings
 
+		bool firstTime = false;
+		int timer = 0;
 	};
 }
