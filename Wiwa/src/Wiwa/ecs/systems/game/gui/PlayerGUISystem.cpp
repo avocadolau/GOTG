@@ -9,8 +9,7 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 	Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-	if (gm.canvas.size() > 1)
-	{
+	
 		PlayerElements(gm, character);
 		CurrentHUD = gm.getCurrentCanvas();
 		if (CurrentHUD == CanvasHUD)
@@ -60,7 +59,7 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 			DeathHud(gm);
 			deathHud = true;
 		}
-	}
+	
 
 }
 
