@@ -231,7 +231,7 @@ void EditorLayer::RegenSolutionThread()
 		return;
 	std::string call = "call tools\\generatesol.bat ";
 	call += s_SolVersion;
-	call += " AppAssembly.sln ";
+	call += " game_assembly/WiwaGameAssembly.sln ";
 	call += s_BuildConf;
 	system(call.c_str());
 	mutex.lock();

@@ -15,6 +15,7 @@ namespace Wiwa
 	protected:
 		EntityId m_EntityId;
 		Scene *m_Scene;
+		EntityManager::ComponentIterator m_TransformIt;
 
 		template <class T>
 		T* GetComponent();
@@ -56,7 +57,11 @@ namespace Wiwa
 			m_Scene = scene;
 			OnSceneSet();
 		}
-
+		void SetTransform()
+		{
+			m_TransformIt = m_Scene->GetEntityManager().GetComponentIterator<Transform3D>(m_EntityId);
+		}
+		Transform3D* GetTransform() { return (Transform3D*)GetEntityManager().GetComponentByIterator(m_TransformIt); }
 		EntityId GetEntity() { return m_EntityId; }
 
 		void Awake();

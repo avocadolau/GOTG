@@ -109,7 +109,6 @@ group ""
 
 group "Core"
 	include "Wiwa"
-	include "Wiwa-ScriptCore"
 group ""
 
 include "WiwaEditor"

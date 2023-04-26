@@ -30,5 +30,6 @@ namespace Wiwa {
 		float m_SecondPatternAttackTimer = 0.0f;
 		bool m_SecondPatternEnabled = false;
 		float m_SecondPatternBulletcounter = 0.0f;
+		int m_SecondPatternCounter = 0;
 	};
 }
