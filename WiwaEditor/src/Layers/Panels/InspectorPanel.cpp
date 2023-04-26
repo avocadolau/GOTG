@@ -17,7 +17,6 @@
 #include <Wiwa/ecs/components/DirectionalLight.h>
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/CollisionBody.h>
-#include <Wiwa/ecs/systems/AgentAISystem.h>
 #include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/ai/NavMesh.h>
@@ -59,7 +58,6 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
-		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleSystemComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Item) { DrawItemComponent(data); }else
 		if (type->hash == (size_t)TypeHash::NavMesh) { DrawNavMeshComponent(data); }else
@@ -115,10 +113,6 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		else if (type->hash == (size_t)TypeHash::RayCast)
 		{
 			DrawRayCastComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::AgentAI)
-		{
-			DrawAiAgentComponent(data);
 		}
 		else if (type->hash == (size_t)TypeHash::ParticleEmitter)
 		{
@@ -732,31 +726,6 @@ void InspectorPanel::DrawRayCastComponent(byte *data)
 	DrawVec3Control("Ray To", &rayCast->rayToWorld, 0.0f, 100.0f);
 	ImGui::Checkbox("Enabled", &rayCast->doRayCasting);
 }
-
-void InspectorPanel::DrawAiAgentComponent(byte* data)
-{
-	Wiwa::AgentAI* agent = (Wiwa::AgentAI*)data;
-	DrawVec3Control("Target", &agent->target, 0.0f, 100.0f);
-	ImGui::InputFloat("Speed", &agent->speed);
-	ImGui::InputFloat("Angular Speed", &agent->angularSpeed);
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	Wiwa::AgentAISystem* agentSys = em.GetSystem<Wiwa::AgentAISystem>(m_CurrentID);
-
-	if (agent)
-	{
-		if (ImGui::Button("Create path to") && Wiwa::SceneManager::IsPlaying())
-		{
-			agentSys->CreatePath(agent->target);
-		}
-
-		//if (ImGui::Button("Go to next position"))
-		//{
-		//	agentSys->GoToNextPosition();
-		//}
-	}
-}
-
-
 
 void ParticleTab()
 {

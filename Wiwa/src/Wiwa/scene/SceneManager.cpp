@@ -8,7 +8,6 @@
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/utilities/render/LightManager.h>
 #include <Wiwa/core/ProjectManager.h>
-#include <Wiwa/AI/AIMapGeneration.h>
 #include <Wiwa/AI/AI_Crowd.h>
 
 namespace Wiwa
@@ -771,8 +770,6 @@ namespace Wiwa
 				SaveEntity(scene_file, eid, em);
 			}
 
-			
-			AIMapGeneration::OnSave();
 			WI_CORE_INFO("Saved scene in file \"{0}\" successfully!", scene_path);
 		}
 		else

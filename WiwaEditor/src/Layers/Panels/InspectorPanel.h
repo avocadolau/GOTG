@@ -29,7 +29,6 @@ private:
 	void DrawColliderSpehereComponent(byte* data);
 	void DrawColliderCylinderComponent(byte* data);
 	void DrawRayCastComponent(byte* data);
-	void DrawAiAgentComponent(byte* data);
 	void DrawParticleSystemComponent(byte* data);
 	void DrawItemComponent(byte* data);
 	void DrawNavMeshComponent(byte* data);

@@ -11,7 +11,6 @@
 #include "systems/PhysicsSystem.h"
 #include "systems/RayCastSystem.h"
 
-#include "systems/AgentAISystem.h"
 #include "systems/ai/NavMeshLoadingSystem.h"
 
 // Game systems

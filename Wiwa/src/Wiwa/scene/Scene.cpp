@@ -10,7 +10,6 @@
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/Dialog/DialogManager.h>
 #include <Wiwa/audio/Audio.h>
-#include <Wiwa/AI/AIMapGeneration.h>
 #include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
 #include <Wiwa/AI/AI_Crowd.h>
 
@@ -111,7 +110,8 @@ namespace Wiwa
 			if (m_EntityManager.GetEntityCount() != 0)
 			{
 				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
-				pgs->Update();
+				if (pgs)
+					pgs->Update();
 			}
 			m_GuiManager->Update();
 			m_DialogManager->Update();

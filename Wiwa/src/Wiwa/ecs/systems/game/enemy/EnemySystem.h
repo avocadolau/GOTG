@@ -6,7 +6,6 @@
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/systems/AgentAISystem.h>
 
 namespace Wiwa {
 	class WI_API EnemySystem : public System {
@@ -50,10 +49,6 @@ namespace Wiwa {
 		bool OnDisabledFromPool() override;
 
 		void LookAt(const glm::vec3& target_look);
-
-		void ChasePlayer();
-
-		bool GoToPosition(glm::vec3 targetedPosition);
 
 		void RotateTo(const glm::vec3& target);
 	};
