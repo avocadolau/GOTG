@@ -26,7 +26,6 @@ namespace Wiwa
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
 		//EntityId currentEnemy = enemy->GetEntity();
 
@@ -39,26 +38,17 @@ namespace Wiwa
 
 		glm::vec3 destination3D = {destination2D.x,0.0f,destination2D.y};
 
-		enemy->GoToPosition(destination3D);
-
 		if (navAgentPtr != nullptr)
 		{
 			navAgentPtr->SetDestination(destination3D);
 			currentDestination = destination3D;
 		}
-
-		if (agentPtr != nullptr)
-		{
-			agentPtr->AllowRotationByTile();
-		}
-
 	}
 
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 

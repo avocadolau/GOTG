@@ -1,7 +1,6 @@
 #include <wipch.h>
 #include "WaveSystem.h"
 #include "../../PhysicsSystem.h"
-#include "../../AgentAISystem.h"
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
 #include <Wiwa/utilities/EntityPool.h>

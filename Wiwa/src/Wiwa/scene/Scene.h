@@ -5,7 +5,6 @@
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/physics/PhysicsManager.h>
-#include <Wiwa/AI/AIPathFindingManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
