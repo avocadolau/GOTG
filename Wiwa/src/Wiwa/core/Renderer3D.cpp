@@ -263,6 +263,24 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet/bullet_plasma", bulletPlasmaShader);
 
+		ResourceId textureAnimatedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/texture_animated");
+		Shader* textureAnimatedShader = Wiwa::Resources::GetResourceById<Shader>(textureAnimatedShaderId);
+		textureAnimatedShader->Compile("resources/shaders/vfx/texture_animated");
+
+		textureAnimatedShader->addUniform("u_LifeTime", UniformType::Float);
+		textureAnimatedShader->addUniform("u_Time", UniformType::Float);
+		textureAnimatedShader->addUniform("u_Color", UniformType::fVec4);
+		textureAnimatedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		textureAnimatedShader->addUniform("u_SpriteSize", UniformType::fVec2);
+		textureAnimatedShader->addUniform("u_NumColumns", UniformType::Int);
+		textureAnimatedShader->addUniform("u_NumRows", UniformType::Int);
+		textureAnimatedShader->addUniform("u_NumFrames", UniformType::Int);
+		textureAnimatedShader->addUniform("u_AnimationSpeed", UniformType::Float);
+		textureAnimatedShader->addUniform("u_LoopAnimation", UniformType::Bool);
+		textureAnimatedShader->addUniform("u_PingPong", UniformType::Bool);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/texture_animated", textureAnimatedShader);
+
 		//===========================================================================================================
 
 		// Normal Display Shader
