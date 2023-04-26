@@ -197,9 +197,9 @@ struct CustomFilterCallBack : public btOverlapFilterCallback
 class DebugDrawer : public btIDebugDraw
 {
 public:
-	DebugDrawer()
+	DebugDrawer() : m_Vbo(0), m_Vao(0), m_Ebo(0), m_NumLines(0), m_Initialized(false), m_Dirty(false)
 	{}
-
+	~DebugDrawer();
 	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color);
 	void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color);
 	void reportErrorWarning(const char* warningString);
@@ -207,8 +207,19 @@ public:
 	void setDebugMode(int debugMode);
 	int	 getDebugMode() const;
 
-	DebugDrawModes mode;
+	void Render();
 
+	std::vector<float> m_LineVertices;
+	std::vector<uint> m_LineIndices;
+	uint m_Vbo;
+	uint m_Vao;
+	uint m_Ebo;
+	int m_NumLines;
+	int m_NumIndices;
+	bool m_Initialized;
+	bool m_Dirty;
+
+	DebugDrawModes mode;
 	ResourceId lineDisplayShaderId;
 	Wiwa::Shader* lineDisplayShader;
 	DefaultUnlitUniforms lineDisplayShaderUniforms;

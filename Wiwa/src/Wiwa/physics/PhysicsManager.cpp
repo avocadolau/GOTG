@@ -568,7 +568,7 @@ namespace Wiwa {
 			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
 			m_World->debugDrawWorld();
-			
+			m_Debug_draw->Render();
 			m_Debug_draw->lineDisplayShader->UnBind();
 			camera->frameBuffer->Unbind();
 		}
@@ -717,82 +717,34 @@ namespace Wiwa {
 	}
 }
 
-void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+DebugDrawer::~DebugDrawer()
 {
-	//WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-
-	// Create Vertex Array Object
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	// Create a Vertex Buffer Object and copy the vertex data to it
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	GLfloat lineVertices[] = {
-		from.x(), from.y(), from.z(),
-		to.x(), to.y(), to.z()
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), lineVertices, GL_STATIC_DRAW);
-
-	// Create an element array
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-	GLuint elements[] = {
-		0, 1,
-	};
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * sizeof(GLuint), elements, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-
-	glBindVertexArray(vao);
-	glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
-	glDeleteBuffers(1, &ebo);
+	glDeleteVertexArrays(1, &m_Vao);
+	glDeleteBuffers(1, &m_Vbo);
+	glDeleteBuffers(1, &m_Ebo);
 }
 
-//void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
-//{
-//	WI_INFO("Line from {} {} {} to {} {} {}", from.x(), from.y(), from.z(), to.x(), to.y(), to.z());
-//	GLfloat lineVertices[] = {
-//		from.x(), from.y(), from.z(),
-//		to.x(), to.y(), to.z()
-//	};
-//	glEnableClientState(GL_VERTEX_ARRAY);
-//	glVertexPointer
-//	glUseProgram(0);
-//	glColor3f(255, 0, 0);
-//	glLineWidth(3.0f);
-//	glBegin(GL_LINES);
-//	glVertex3f(from.getX(), from.getY(), from.getZ());
-//	glVertex3f(to.getX(), to.getY(), to.getZ());
-//	glEnd();
-//	glLineWidth(1.0f);
-//
-//}
+void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+{
+	m_LineVertices.push_back(from.x());
+	m_LineVertices.push_back(from.y());
+	m_LineVertices.push_back(from.z());
+	m_LineVertices.push_back(to.x());
+	m_LineVertices.push_back(to.y());
+	m_LineVertices.push_back(to.z());
+
+	GLuint indexOffset = m_LineVertices.size() / 3 - 2; // offset for indices of new line
+	m_LineIndices.push_back(indexOffset);
+	m_LineIndices.push_back(indexOffset + 1);
+
+	m_Dirty = true;
+	m_NumLines++;
+}
 
 void DebugDrawer::drawContactPoint(const btVector3& point_onB, const btVector3& normal_onB, btScalar distance, int life_time, const btVector3& color)
 {
 	drawSphere(point_onB, 0.1f, btVector4(0.f, 1.f, 1.f, 1.f));
 	drawLine(point_onB, point_onB + normal_onB, btVector4(0.f, 1.f, 1.f, 1.f));
-	/*glUseProgram(0);
-	glColor3f(0, 0, 255);
-	glPointSize(8.0f);
-	glBegin(GL_POINT);
-	glVertex3f(point_onB.getX(), point_onB.getY(), point_onB.getZ());
-	glEnd();
-	glPointSize(1.0f);*/
-	//point.transform.translate(PointOnB.getX(), PointOnB.getY(), PointOnB.getZ());
-	//point.color.Set(color.getX(), color.getY(), color.getZ());
-	//point.Render();
-
 }
 
 void DebugDrawer::reportErrorWarning(const char* warning_string)
@@ -814,6 +766,43 @@ int DebugDrawer::getDebugMode() const
 {
 	return mode;
 }
+
+void DebugDrawer::Render()
+{
+	if (!m_Initialized) {
+		glGenBuffers(1, &m_Vbo);
+		glGenBuffers(1, &m_Ebo);
+		glGenVertexArrays(1, &m_Vao);
+		glBindVertexArray(m_Vao);
+		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
+		glBindVertexArray(0);
+		m_Initialized = true;
+		m_Dirty = true;
+	}
+
+
+	if (m_Dirty) {
+		glBindVertexArray(m_Vao);
+		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
+		glBufferData(GL_ARRAY_BUFFER, m_LineVertices.size() * sizeof(GLfloat), m_LineVertices.data(), GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_LineIndices.size() * sizeof(GLuint), m_LineIndices.data(), GL_DYNAMIC_DRAW);
+		m_NumIndices = m_LineIndices.size();
+		m_LineVertices.clear();
+		m_LineIndices.clear();
+		m_Dirty = false;
+	}
+
+	glBindVertexArray(m_Vao);
+	glEnableVertexAttribArray(0);
+	glDrawElements(GL_LINES, m_NumIndices, GL_UNSIGNED_INT, 0);
+	glDisableVertexAttribArray(0);
+	glBindVertexArray(0);
+}
+
 
 bool CustomFilterCallBack::needBroadphaseCollision(btBroadphaseProxy* proxy0, btBroadphaseProxy* proxy1) const
 {
