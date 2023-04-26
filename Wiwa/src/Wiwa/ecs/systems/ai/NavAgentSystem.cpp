@@ -149,6 +149,13 @@ namespace Wiwa
         m_AgentParams.maxAcceleration = maxAcceleration;
     }
 
+    void NavAgentSystem::RequestMoveVelocity(const glm::vec3 velocity)
+    {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().requestMoveVelocity(m_AgentIndex, &velocity[0]);
+        }
+    }
+
     void NavAgentSystem::StopAgent()
     {
         if (m_AgentIndex != -1) {
