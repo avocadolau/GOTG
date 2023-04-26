@@ -351,7 +351,7 @@ namespace Wiwa
 					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(),canvas.at(i)->id, callbackID,texturePosition,audioEvent.c_str(),active, animated, animSpeed, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::TEXT:
-					control = gm.CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active, rotation);
+					control = gm.CreateGuiControl_Text(guiType, id, position,text.c_str(), canvas.at(i)->id, active, rotation);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
 					control = gm.CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects, rotation);

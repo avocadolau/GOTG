@@ -1,66 +1,72 @@
 #include "wipch.h"
 #include "PlayerGUISystem.h"
-#include "Wiwa/ecs/components/game/items/Item.h"
+#include "Wiwa/game/Items/ItemManager.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Input.h"
 
 void Wiwa::PlayerGUISystem::OnUpdate()
 {
-	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 	Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-	
-		PlayerElements(gm, character);
-		CurrentHUD = gm.getCurrentCanvas();
-		if (CurrentHUD == CanvasHUD)
-		{
-			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
-			{
-				pauseGame = true;
-			}
-			if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart) && pauseGame)
-			{
-				gm.canvas.at(CanvasHUD)->SwapActive();
-				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
-				gm.canvas.at(PauseHUD)->SwapActive();
-				pauseGame = false;
-			}
-		}
-		if (CurrentHUD == PauseHUD)
-		{
-			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
-			{
-				returnToHUD = true;
-			}
-			if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
-			{
-				gm.canvas.at(CanvasHUD)->SwapActive();
-				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
-				gm.canvas.at(PauseHUD)->SwapActive();
-				returnToHUD = false;
-			}
-		}
-		if (CurrentHUD == OptionsHUD)
-		{
-			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
-			{
-				returnToPauseHUD = true;
-			}
-			if (returnToPauseHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
-			{
-				gm.canvas.at(OptionsHUD)->SwapActive();
-				Wiwa::SceneManager::getActiveScene()->SwapPauseActive();
-				gm.canvas.at(PauseHUD)->SwapActive();
-				returnToPauseHUD = false;
-			}
-		}
-		if (character->Health <= 0 && !deathHud)
-		{
-			DeathHud(gm);
-			deathHud = true;
-		}
-	
+	CharacterInventory* characterInventory = m_Scene->GetEntityManager().GetSystem<CharacterInventory>(m_EntityId);
 
+	PlayerElements(gm, character);
+	CurrentHUD = gm.getCurrentCanvas();
+	if (CurrentHUD == CanvasHUD)
+	{
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+		{
+			pauseGame = true;
+		}
+		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart) && pauseGame)
+		{
+			gm.canvas.at(CanvasHUD)->SwapActive();
+			m_Scene->SwapPauseActive();
+			gm.canvas.at(PauseHUD)->SwapActive();
+			pauseGame = false;
+		}
+	}
+	if (CurrentHUD == PauseHUD)
+	{
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
+		{
+			returnToHUD = true;
+		}
+		if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
+		{
+			gm.canvas.at(CanvasHUD)->SwapActive();
+			m_Scene->SwapPauseActive();
+			gm.canvas.at(PauseHUD)->SwapActive();
+			returnToHUD = false;
+		}
+	}
+	if (CurrentHUD == OptionsHUD)
+	{
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
+		{
+			returnToPauseHUD = true;
+		}
+		if (returnToPauseHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
+		{
+			gm.canvas.at(OptionsHUD)->SwapActive();
+			m_Scene->SwapPauseActive();
+			gm.canvas.at(PauseHUD)->SwapActive();
+			returnToPauseHUD = false;
+		}
+	}
+	if (character->Health <= 0 && !deathHud)
+	{
+		DeathHud(gm);
+		deathHud = true;
+	}
+	if (characterInventory != NULL)
+	{
+		if (characterInventory->GetShopActive())
+		{
+			ShopElementsHUD(characterInventory->GetCurrentShopItem());
+		}
+	}
 }
 
 void Wiwa::PlayerGUISystem::DeathHud(Wiwa::GuiManager& gm)
@@ -344,7 +350,7 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	
 	if (lastCoins != Wiwa::GameStateManager::GetPlayerInventory().GetTokens())
 	{
-		//Coins(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
+		Coins(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
 	}
 
 	CooldownState(abilitiesList, gm);
@@ -352,19 +358,8 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	HandleActiveAbilities(abilitiesList, gm);
 	HandleActiveBuffs(buffsList, gm);
 
-
-	//PauseElementsUpdate(abilitiesList, buffsList, gm);
-
 	lastCoins = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
 
-	if (leftTrigger >= 0.f)
-	{
-		
-	}
-	if (rightTrigger >= 0.f)
-	{
-
-	}
 }
 
 void Wiwa::PlayerGUISystem::PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm)
@@ -515,11 +510,20 @@ void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 	std::string my_string = std::to_string(coins);
 
-	Wiwa::Text* newText = new Wiwa::Text;
-	const char* newWord = my_string.c_str();
-	gm.canvas.at(CanvasHUD)->controls.at(5)->text = newWord;
-	newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", newWord);
-	r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
-	r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
+	gm.canvas.at(CanvasHUD)->controls.at(5)->text = my_string.c_str();
+	Text* newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", my_string.c_str());
+	//r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
+	//r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
 }
 
+void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem)
+{
+	if (currentItem->item_type == 0) //Ability
+	{
+		Ability* ability = Wiwa::ItemManager::GetAbility(currentItem->Name);
+	}
+	else if (currentItem->item_type == 2) //Buff
+	{
+		Buff* ability = Wiwa::ItemManager::GetBuff(currentItem->Name);
+	}
+}

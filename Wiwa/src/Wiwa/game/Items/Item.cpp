@@ -151,6 +151,10 @@ namespace Wiwa
             break;
         case Wiwa::BuffType::COSMOS_PAW:
             {
+                Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+                EntityId shieldId = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/p_shield.wiprefab");
+                em.SetParent(shieldId, Wiwa::GameStateManager::GetPlayerId());
+
                 // TODO: Spawn some kind of feedback
                 const float buffPercent = ((float)BuffPercent / 100.f);
                 MaxHealthInc = (int)((float)player->MaxHealth * buffPercent);

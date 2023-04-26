@@ -285,6 +285,7 @@ void UIEditorPanel::CleanInitialValues()
 
 	pathForAsset = "";
 	pathForExtraAsset = "";
+	text = "";
 }
 
 void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
@@ -313,6 +314,7 @@ void UIEditorPanel::SetInitialValues(Wiwa::GuiControl* control)
 		extraOriginSize[0] = control->extraTexturePosition.width;
 		extraOriginSize[1] = control->extraTexturePosition.height;
 	}
+	text = control->text;
 	if(control->type != Wiwa::GuiControlType::VIDEO) pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
 	if(control->type == Wiwa::GuiControlType::VIDEO)  pathForAsset = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
 	pathForExtraAsset = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
@@ -394,7 +396,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			AssetContainerExtraPath();
 			break;
 		case Wiwa::GuiControlType::TEXT:
-			ImGui::InputText("text", &pathForAsset);
+			ImGui::InputText("text", &text);
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
 			break;
@@ -477,17 +479,20 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 	break;
 	case Wiwa::GuiControlType::TEXT:
 	{
-		control->text = pathForAsset.c_str();
-		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		Wiwa::Text* newText = new Wiwa::Text;
-		newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)pathForAsset.c_str());
+		if (text != control->text)
+		{
+			control->text = text.c_str();
+			Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+			Wiwa::Text* newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)text.c_str());
+			r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetSize(), originTexRect);
+			r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());
+		}
 		originPos[0] = 0;
 		originPos[1] = 0;
 		originSize[0] = 512;
 		originSize[1] = 512;
+		r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0],pos[1] });
 		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::CENTER);
-		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetSize(), originTexRect);
-		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());
 		r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, rotation);
 	}
 	break;

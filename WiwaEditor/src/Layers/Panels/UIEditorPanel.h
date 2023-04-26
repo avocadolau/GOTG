@@ -58,6 +58,7 @@ public:
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 	std::string audioEventForButton;
+	std::string text;
 
 	bool animated;
 	float animSpeed = 0.0f;

@@ -29,7 +29,6 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		StarhawksBlast* starhawksBlast = GetComponentByIterator<StarhawksBlast>(m_StarHawksIt);
 		starhawksBlast->velocity = 200.f;
-		starhawksBlast->lifeTime = Wiwa::ItemManager::GetBuff("Starhawk's Time Blast")->Duration;
 		EntityId player = GameStateManager::GetPlayerId();
 
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
@@ -38,11 +37,11 @@ namespace Wiwa
 		for (size_t i = 0; i < children->size(); i++)
 		{
 			m_ColliderTransformIt.push_back(em.GetComponentIterator<Transform3D>(children->at(i)));
-			//Mesh * mesh = em.AddComponent<Mesh>(children->at(i));
+			/*Mesh * mesh = em.AddComponent<Mesh>(children->at(i));
 
-			//mesh->meshId = Resources::Load<Model>("assets/prefabs/victoryshield/planebullet.fbx");
-			//mesh->materialId = Resources::Load<Material>("assets/prefabs/victoryshield/defaultmaterial.wimaterial");
-			//em.ApplySystem<MeshRenderer>(children->at(i));
+			mesh->meshId = Resources::Load<Model>("assets/prefabs/victoryshield/planebullet.fbx");
+			mesh->materialId = Resources::Load<Material>("assets/prefabs/victoryshield/defaultmaterial.wimaterial");
+			em.ApplySystem<MeshRenderer>(children->at(i));*/
 		}
 	}
 
@@ -60,6 +59,8 @@ namespace Wiwa
 		for (size_t i = 0; i < m_ColliderTransformIt.size(); i++)
 		{
 			Wiwa::Transform3D* transformCol = GetComponentByIterator<Transform3D>(m_ColliderTransformIt.at(i));
+			transformCol->localPosition.x = 0.f;
+			transformCol->localPosition.z = 0.f;
 			transformCol->localPosition.y = 0.f;
 		}
 

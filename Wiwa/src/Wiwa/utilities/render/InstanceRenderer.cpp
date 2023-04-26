@@ -259,8 +259,8 @@ namespace Wiwa {
 
 		if (index == texSize) {
 			if (texSize >= MAX_INSTANCE_TEXTURES) {
+				WI_ERROR("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
 				return -1;
-				//WI_ASSERT_MSG("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
 			}
 			else
 			{

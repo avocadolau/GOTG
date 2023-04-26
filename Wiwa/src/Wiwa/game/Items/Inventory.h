@@ -33,6 +33,7 @@ namespace Wiwa
 		void Clear();
 
 		WI_HARD_INL void AddTokens(uint32_t tokens) { m_Tokens += tokens; }
+		WI_HARD_INL void SubstractTokens(uint32_t tokens) { m_Tokens -= tokens; }
 
 		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }
 		WI_HARD_INL Buff**& GetBuffs() { return m_Buffs; }

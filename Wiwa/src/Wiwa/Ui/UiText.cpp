@@ -19,7 +19,6 @@ namespace Wiwa
 		texturePosition.width = 512;
 		texturePosition.height = 512;
 		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
-		text_res = new Text();
 		text_res = gm.InitFont("assets/Fonts/Jade_Smile.ttf", (char*)string_text);
 		m_Scene = scene;
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();

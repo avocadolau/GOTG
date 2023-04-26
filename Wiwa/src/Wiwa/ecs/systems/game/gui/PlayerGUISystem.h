@@ -1,10 +1,10 @@
 #pragma once
 #include <Wiwa/core/Core.h>
 #include <Wiwa/ecs/Systems.h>
+#include "Wiwa/ecs/components/game/items/Item.h"
 
 namespace Wiwa
 {
-    // This system only takes care of the pickup system
     class WI_API PlayerGUISystem : public System
     {
     private:
@@ -13,10 +13,14 @@ namespace Wiwa
         int PauseHUD = 1;
         int OptionsHUD = 2;
         int DeathHUD = 3;
+        int ShopHUD = 4;
+
         bool deathHud = false;
         bool returnToHUD = false;
         bool returnToPauseHUD = false;
         bool pauseGame = false;
+        bool shopHUD = false;
+
         size_t lastCoins = -1;
         Ability** abilitiesList;
         Buff** buffsList;
@@ -39,6 +43,7 @@ namespace Wiwa
 
         void Coins(uint32_t coins, Wiwa::GuiManager& gm);
 
+        void ShopElementsHUD(Item* currentItem);
     };
 }
 

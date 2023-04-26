@@ -233,21 +233,21 @@ namespace Wiwa
 
 	void Renderer2D::UpdateInstancedQuadTexTexture(Scene* scene, InstanceData& id, uint32_t tex_id)
 	{
-		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		InstanceRenderer* instanceRenderer = &scene->GetInstanceRenderer(id.renderer_id);
 
-		int addTexture = instanceRenderer.AddTexture(tex_id);
+		int addTexture = instanceRenderer->AddTexture(tex_id);
 
 		if (addTexture == -1) {
-			VertexInstanceTexture& vtex = instanceRenderer.getInstanceData(id.instance_id);
-			instanceRenderer.RemoveInstance(id.instance_id);
+			VertexInstanceTexture vtex = instanceRenderer->getInstanceData(id.instance_id);
+			instanceRenderer->RemoveInstance(id.instance_id);
 
 			id.renderer_id = getInstanceRenderer(scene, tex_id);
-			instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+			instanceRenderer = &scene->GetInstanceRenderer(id.renderer_id);
 
-			id.instance_id = instanceRenderer.AddInstance(vtex);
+			id.instance_id = instanceRenderer->AddInstance(vtex);
 		}
 
-		instanceRenderer.UpdateInstanceTexture(id.instance_id, tex_id);
+		instanceRenderer->UpdateInstanceTexture(id.instance_id, tex_id);
 	}
 
 	void Renderer2D::UpdateInstancedQuadTexColor(Scene* scene, InstanceData id, const Color4f& color)
