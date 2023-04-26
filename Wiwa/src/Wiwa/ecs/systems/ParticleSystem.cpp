@@ -365,9 +365,9 @@ namespace Wiwa {
 						orginalPos = particle.transform.localPosition;
 
 					}
-					orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+					/*orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
 					orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-					orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+					orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));*/
 					particle.transform.position = orginalPos;
 
 					particle.transform.scale = particle.transform.localScale;
