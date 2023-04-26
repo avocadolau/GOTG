@@ -44,7 +44,6 @@ project "Wiwa"
 
 	links
 	{
-		"Wiwa-ScriptCore",
 		"GLFW",
 		"ImGui",
 		"opengl32.lib",
@@ -56,7 +55,7 @@ project "Wiwa"
 		"%{Library.Wwise_MMgr}",
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
-		"%{Library.Wwise_SA}",
+		"%{Library.Wwise_SA}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"

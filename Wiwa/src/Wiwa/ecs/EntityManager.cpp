@@ -1026,6 +1026,7 @@ namespace Wiwa {
 			system = (System*)stype->New();
 			system->SetEntity(entityId);
 			system->SetScene(m_Scene);
+			system->SetTransform();
 			system->OnSystemAdded();
 
 			m_EntitySystems[entityId].push_back(system);
