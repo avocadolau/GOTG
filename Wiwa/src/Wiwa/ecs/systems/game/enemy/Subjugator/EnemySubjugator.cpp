@@ -1,5 +1,12 @@
 #include <wipch.h>
+#include "StateMachine/SubjugatorAttack.h"
+#include "StateMachine/SubjugatorChasing.h"
+#include "StateMachine/SubjugatorIdle.h"
+#include "StateMachine/SubjugatorSpawn.h"
+#include "StateMachine/SubjugatorDeath.h"
+#include "StateMachine/SubjugatorHit.h"
 #include "EnemySubjugator.h"
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

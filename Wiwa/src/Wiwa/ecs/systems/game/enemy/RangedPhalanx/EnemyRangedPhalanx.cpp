@@ -1,5 +1,12 @@
 #include <wipch.h>
+#include "StateMachine/RangedPhalanxAttack.h"
+#include "StateMachine/RangedPhalanxChasing.h"
+#include "StateMachine/RangedPhalanxIdle.h"
+#include "StateMachine/RangedPhalanxSpawn.h"
+#include "StateMachine/RangedPhalanxDeath.h"
+#include "StateMachine/RangedPhalanxHit.h"
 #include "EnemyRangedPhalanx.h"
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

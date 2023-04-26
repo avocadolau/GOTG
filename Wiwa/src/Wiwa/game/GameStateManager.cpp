@@ -425,7 +425,7 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_REWARD");
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			int nextRoom = s_LastRewardRoom;
+			int nextRoom = (int)s_LastRewardRoom;
 			/*while (nextRoom == s_LastRewardRoom)
 			{
 			}*/
@@ -441,7 +441,7 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			int nextRoom = s_LastCombatRoom;
+			int nextRoom = (int)s_LastCombatRoom;
 			/*while (nextRoom == s_LastCombatRoom)
 			{
 				

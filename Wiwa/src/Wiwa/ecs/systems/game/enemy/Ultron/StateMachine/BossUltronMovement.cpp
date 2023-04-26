@@ -1,7 +1,8 @@
 #include <wipch.h>
 #include "BossUltronMovement.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
-
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -26,7 +27,6 @@ namespace Wiwa
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
 		//EntityId currentEnemy = enemy->GetEntity();
 
@@ -39,26 +39,17 @@ namespace Wiwa
 
 		glm::vec3 destination3D = {destination2D.x,0.0f,destination2D.y};
 
-		enemy->GoToPosition(destination3D);
-
 		if (navAgentPtr != nullptr)
 		{
 			navAgentPtr->SetDestination(destination3D);
 			currentDestination = destination3D;
 		}
-
-		if (agentPtr != nullptr)
-		{
-			agentPtr->AllowRotationByTile();
-		}
-
 	}
 
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
@@ -72,7 +63,7 @@ namespace Wiwa
 				//agentPtr->StopMoving();
 				std::srand(std::time(0));
 
-				enemy->SwitchState(enemy->m_BulletStormAttackState);
+				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
 
 				//int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
 				//switch (randomAction)

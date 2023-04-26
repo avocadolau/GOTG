@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "BossUltronDash.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -21,19 +23,13 @@ namespace Wiwa
 		m_FinalPosition = { 0.0f, 0.0f };
 
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 
 		m_FinalPosition = Wiwa::BossUltronMovementState::RandomPremadePosition();
-
-		aiSystem->LookAtPosition(m_FinalPosition);
 	}
 
 	void BossUltronDashState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
-		AgentAI* selfTr = (AgentAI*)em.GetComponentByIterator(enemy->m_AgentIt);
-
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 	}

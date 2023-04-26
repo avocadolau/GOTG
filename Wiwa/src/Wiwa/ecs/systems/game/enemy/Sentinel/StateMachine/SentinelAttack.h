@@ -1,6 +1,5 @@
 #pragma once
 #include "SentinelBase.h"
-#include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/components/Transform3D.h>
 #include <Wiwa/utilities/Reflection.h>
 

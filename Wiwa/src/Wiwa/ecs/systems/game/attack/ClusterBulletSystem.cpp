@@ -43,6 +43,8 @@ void Wiwa::ClusterBulletSystem::InitClusterBullet()
 	Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 
 	physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
+
+	m_HasBlown = false;
 }
 
 void Wiwa::ClusterBulletSystem::OnUpdate()
@@ -58,8 +60,7 @@ void Wiwa::ClusterBulletSystem::OnUpdate()
 
 	if (m_Timer >= bullet->lifeTime)
 	{
-		Math::RandomRange(0, 1);
-
+		
 		int randomValue = Math::RandomRange(0, 1);
 
 		if (randomValue == 0)
@@ -91,50 +92,53 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 
 			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 		}
-
-		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		//em.DestroyEntity(m_EntityId);
-
-		//Math::RandomRange(0,1);
-		//
-		//int randomValue = Math::RandomRange(0, 1);
-		//
-		//if (randomValue == 0)
-		//{
-		//	BlowClusterBullet01(m_EntityId);
-		//}
-		//else
-		//{
-		//	BlowClusterBullet02(m_EntityId);
-		//}
-
-		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+		else
+		{
+			int pattern = Math::RandomRange(0, 1);
+			if (pattern == 0)
+			{
+				BlowClusterBullet01(m_EntityId);
+			}
+			else
+			{
+				BlowClusterBullet02(m_EntityId);
+			}
+			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+		}		
 	}
 }
 
 void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId simpleBullet)
 {
+	if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0)
+		return;
+
 	Wiwa::EntityManager& entityManager = this->getScene().GetEntityManager();
 	EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 	//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+	if (physSys != nullptr)
+	{
+		physSys->DeleteBody();
+	}
 
 	// Set intial positions
-	//Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
 	Transform3D* clusterBulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(simpleBullet));
 
 
-	if (!clusterBulletTr)
+	if (!clusterBulletTr || !bulletTr)
 		return;
 
-	clusterBulletTr->localPosition = glm::normalize(clusterBulletTr->localPosition);
-	clusterBulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
-	//bulletTr->localScale = transform->localScale;
+	bulletTr->localPosition = clusterBulletTr->localPosition;
+	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
+	bulletTr->localScale = {1.0f,1.0f,1.0f};
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bull_dir;
-	bullet->damage = 10;
+	//bullet->damage = 10;
 
 	Wiwa::SimpleBulletSystem* simpleBulletSystem = entityManager.GetSystem<Wiwa::SimpleBulletSystem>(newBulletId);
-	Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 
 	physSys->CreateBody();
 
@@ -143,6 +147,7 @@ void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId 
 
 void Wiwa::ClusterBulletSystem::BlowClusterBullet01(EntityId bulletId)
 {
+
 	Wiwa::EntityManager& entityManager = this->getScene().GetEntityManager();
 
 	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(bulletId));
@@ -159,10 +164,13 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet01(EntityId bulletId)
 		glm::vec3 direction(xDir, 0.0f, yDir);
 		this->SpawnBullet(direction, bulletId);
 	}
+
+	m_HasBlown = true;
 }
 
 void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 {
+
 	Wiwa::EntityManager& entityManager = this->getScene().GetEntityManager();
 
 	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(bulletId));
@@ -179,10 +187,12 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 			float xDir = cos(radian);
 			float yDir = sin(radian);
 
-			glm::vec3 direction(xDir, yDir, 0.0f);
+			glm::vec3 direction(xDir, 0.0f, yDir);
 			SpawnBullet(direction, bulletId);
 		}
 	}
+
+	m_HasBlown = true;
 }
 
 bool Wiwa::ClusterBulletSystem::EnableBullet()
@@ -198,13 +208,33 @@ bool Wiwa::ClusterBulletSystem::EnableBullet()
 
 bool Wiwa::ClusterBulletSystem::OnDisabledFromPool()
 {
+	if (m_HasBlown == true)
+	{
+		int pattern = RAND(1, 2);
+
+		if (pattern == 1)
+		{
+			BlowClusterBullet01(m_EntityId);
+		}
+		else
+		{
+			BlowClusterBullet02(m_EntityId);
+		}
+		
+		m_HasBlown = false;
+	}
+
 	Transform3D* transform = GetComponent<Transform3D>();
 	if (transform)
 	{
-		transform->localPosition.y = 20000.0f;
+		transform->localPosition.y = 4000.0f;
 	}
 
-	ClusterBullet* clusterBullet = GetComponent<ClusterBullet>();
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+	PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
+	physSystem->DeleteBody();
 
 	m_Timer = 0.0f;
 

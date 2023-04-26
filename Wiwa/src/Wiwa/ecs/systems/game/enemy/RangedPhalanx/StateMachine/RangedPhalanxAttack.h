@@ -1,9 +1,9 @@
 #pragma once
 #include "RangedPhalanxBase.h"
-#include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/components/Transform3D.h>
 #include <Wiwa/utilities/Reflection.h>
 namespace Wiwa {
+	struct Character;
 	class RangedPhalanxAttackState : public RangedPhalanxBaseState {
 	public:
 		RangedPhalanxAttackState();
@@ -18,7 +18,6 @@ namespace Wiwa {
 		glm::vec3 CalculateForward(const Wiwa::Transform3D& t3d);
 
 		float m_TimerAttackCooldown = 0.0f;
-
 	};
 }
 

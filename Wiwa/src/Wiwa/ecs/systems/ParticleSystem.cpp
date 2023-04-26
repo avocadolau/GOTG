@@ -44,7 +44,7 @@ namespace Wiwa {
 
 		// init particle struct
 		m_Particles.resize(m_MaxParticles);
-		for (int i = 0; i < m_MaxParticles; i++)
+		for (uint i = 0; i < m_MaxParticles; i++)
 		{
 			m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
@@ -148,7 +148,7 @@ namespace Wiwa {
 			
 			m_Particles.resize(m_MaxParticles);
 			
-			for (int i = 0; i < m_MaxParticles; i++)
+			for (uint i = 0; i < m_MaxParticles; i++)
 			{
 				m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
@@ -173,7 +173,7 @@ namespace Wiwa {
 
 			if ((m_SpawnTimer < 0 && emitter->m_loopSpawning) || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
 			{
-				for (unsigned int i = 0; i < emitter->m_spawnAmount; ++i)
+				for (unsigned int i = 0; i < (uint)emitter->m_spawnAmount; ++i)
 				{
 					if (m_AvailableParticles > 0)
 					{
@@ -365,9 +365,9 @@ namespace Wiwa {
 						orginalPos = particle.transform.localPosition;
 
 					}
-					orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+					/*orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
 					orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-					orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+					orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));*/
 					particle.transform.position = orginalPos;
 
 					particle.transform.scale = particle.transform.localScale;

@@ -17,7 +17,7 @@ namespace Wiwa {
 
 	private:
 
-		EntityId* SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir);
+		bool SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir);
 
 		glm::vec3 CalculateForward(const Transform3D& t3d);
 

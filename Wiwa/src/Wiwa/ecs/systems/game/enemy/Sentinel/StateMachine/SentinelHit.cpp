@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "SentinelHit.h"
 #include <Wiwa/ecs/systems/game/enemy/Sentinel/EnemySentinel.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

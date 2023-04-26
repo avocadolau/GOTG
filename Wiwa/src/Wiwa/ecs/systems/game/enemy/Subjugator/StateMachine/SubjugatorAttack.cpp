@@ -4,6 +4,8 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include <Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -43,7 +45,6 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);

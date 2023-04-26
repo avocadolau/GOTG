@@ -87,6 +87,8 @@ namespace Wiwa
 		{
 			m_RecastMesh->handleMeshChanged(m_Geom);
 		}
+
+		return true;
 	}
 
 	bool RecastManager::Render()

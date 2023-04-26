@@ -1,10 +1,10 @@
 #include <wipch.h>
 #include "WaveSystem.h"
 #include "../../PhysicsSystem.h"
-#include "../../AgentAISystem.h"
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
 #include <Wiwa/utilities/EntityPool.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 #include <random>
 namespace Wiwa
@@ -163,7 +163,7 @@ namespace Wiwa
 		Enemy* enemy = (Enemy*)entityManager.GetComponentByIterator(enemyIt);
 		enemy->hasFinished = false;
 		enemy->enemyType = (int)selection;
-		enemy->waveId = m_EntityId;
+		enemy->waveId = (int)m_EntityId;
 
 		physSys->CreateBody();
 		return true;

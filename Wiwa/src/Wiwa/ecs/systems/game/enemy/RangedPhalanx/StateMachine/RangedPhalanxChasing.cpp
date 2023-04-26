@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "RangedPhalanxChasing.h"
 #include <Wiwa/ecs/systems/game/enemy/RangedPhalanx/EnemyRangedPhalanx.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 glm::vec3 CalculateOffsetPosition(const glm::vec3& playerPosition, int totalEnemies, float radius)
 {

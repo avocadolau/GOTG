@@ -1,22 +1,16 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/MeleePhalanxAttack.h"
-#include "StateMachine/MeleePhalanxChasing.h"
-#include "StateMachine/MeleePhalanxIdle.h"
-#include "StateMachine/MeleePhalanxSpawn.h"
-#include "StateMachine/MeleePhalanxDeath.h"
-#include "StateMachine/MeleePhalanxHit.h"
 
 namespace Wiwa {
 	class WI_API EnemyMeleePhalanx : public EnemySystem {
 	public:
-		MeleePhalanxBaseState* m_CurrentState;
-		MeleePhalanxIdleState* m_IdleState;
-		MeleePhalanxSpawnState* m_SpawnState;
-		MeleePhalanxChasingState* m_ChasingState;
-		MeleePhalanxAttackState* m_AttackingState;
-		MeleePhalanxDeathState* m_DeathState;
-		MeleePhalanxHitState* m_HitState;
+		class MeleePhalanxBaseState* m_CurrentState;
+		class MeleePhalanxBaseState* m_IdleState;
+		class MeleePhalanxBaseState* m_SpawnState;
+		class MeleePhalanxBaseState* m_ChasingState;
+		class MeleePhalanxBaseState* m_AttackingState;
+		class MeleePhalanxBaseState* m_DeathState;
+		class MeleePhalanxBaseState* m_HitState;
 
 		float m_Timer;
 	public:

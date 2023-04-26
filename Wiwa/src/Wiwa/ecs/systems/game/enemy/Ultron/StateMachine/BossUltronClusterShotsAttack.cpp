@@ -1,9 +1,11 @@
 #include <wipch.h>
 #include "BossUltronClusterShotsAttack.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
-#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
+#include "Wiwa/ecs/components/game/attack/ClusterBullet.h"
 #include "Wiwa/ecs/systems/game/attack/ClusterBulletSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -27,10 +29,7 @@ namespace Wiwa
 	void BossUltronClusterShotsAttackState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AgentAISystem* aiSystem = em.GetSystem<Wiwa::AgentAISystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-
-		aiSystem->LookAtPosition(glm::vec2{ playerTr->localPosition.x,playerTr->localPosition.z });
 
 		if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
 		{
@@ -65,33 +64,42 @@ namespace Wiwa
 	{
 	}	
 
-	EntityId* BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
+	bool BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
+		if (GameStateManager::s_PoolManager->s_ClusterBulletsPool->getCountDisabled() <= 0)
+			return false;
+
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ClusterBulletsPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
+		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+		if (physSys != nullptr)
+		{
+			physSys->DeleteBody();
+		}
 
 		// Set intial positions
 		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
 		Transform3D* enemyTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(enemy->GetEntity()));
 
 		if (!bulletTr || !enemyTr)
-			return &newBulletId;
+			return false;
 
 		bulletTr->localPosition = glm::normalize(enemyTr->localPosition);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
 		//bulletTr->localScale = transform->localScale;
-		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+		ClusterBullet* bullet = (ClusterBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ClusterBullet>(newBulletId));
 		bullet->direction = bull_dir;
 
-		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
-		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-
+		
 		physSys->CreateBody();
 
 		clusterSystem->EnableBullet();
 		
-		return &newBulletId;
+		return true;
 	}
 
 	glm::vec3 BossUltronClusterShotsAttackState::CalculateForward(const Transform3D& t3d)

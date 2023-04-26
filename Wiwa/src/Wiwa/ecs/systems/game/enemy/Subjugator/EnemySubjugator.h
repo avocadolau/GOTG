@@ -1,22 +1,16 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/SubjugatorAttack.h"
-#include "StateMachine/SubjugatorChasing.h"
-#include "StateMachine/SubjugatorIdle.h"
-#include "StateMachine/SubjugatorSpawn.h"
-#include "StateMachine/SubjugatorDeath.h"
-#include "StateMachine/SubjugatorHit.h"
 
 namespace Wiwa {
 	class WI_API EnemySubjugator : public EnemySystem {
 	public:
-		SubjugatorBaseState* m_CurrentState;
-		SubjugatorSpawnState* m_SpawnState;
-		SubjugatorIdleState* m_IdleState;
-		SubjugatorChasingState* m_ChasingState;
-		SubjugatorAttackState* m_AttackingState;
-		SubjugatorDeathState* m_DeathState;
-		SubjugatorHitState* m_HitState;
+		class SubjugatorBaseState* m_CurrentState;
+		class SubjugatorBaseState* m_SpawnState;
+		class SubjugatorBaseState* m_IdleState;
+		class SubjugatorBaseState* m_ChasingState;
+		class SubjugatorBaseState* m_AttackingState;
+		class SubjugatorBaseState* m_DeathState;
+		class SubjugatorBaseState* m_HitState;
 		/*EntityManager::ComponentIterator m_GunTransformIt;*/
 
 		float m_Timer;

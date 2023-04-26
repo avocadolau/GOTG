@@ -3,7 +3,6 @@
 
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
-#include "Wiwa/AI/AIMapGeneration.h"
 
 namespace Wiwa {
 	class WI_API NpcSystem : public System {

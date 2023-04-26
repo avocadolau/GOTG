@@ -1,27 +1,15 @@
 #include <wipch.h>
 #include "EnemySystem.h"
 #include <Wiwa/game/GameStateManager.h>
-#include <Wiwa/ecs/systems/AgentAISystem.h>
 #include <Wiwa/ecs/components/game/attack/PhylasQuantumSword.h>
 #include <Wiwa/ecs/components/game/attack/GrootSeeds.h>
+#include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+
 namespace Wiwa
 {
-	struct BulletComponent
-	{
-		float Velocity;
-		float LifeTime;
-		int Damage;
-		glm::vec3 Direction;
-	};
-
-	/*struct PhylasQuantumSword
-	{
-		float velocity;
-		float lifeTime;
-		int damage;
-		glm::vec3 direction;
-	};*/
-
 	Wiwa::EnemySystem::EnemySystem()
 	{
 		m_EnemyIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -53,7 +41,6 @@ namespace Wiwa
 		m_EnemyIt = GetComponentIterator<Enemy>();
 		m_StatsIt = GetComponentIterator<Character>();
 		m_ColliderIt = GetComponentIterator<CollisionBody>();
-		m_AgentIt = GetComponentIterator<AgentAI>();
 		m_NavAgentIt = GetComponentIterator<NavAgent>();
 		m_TransformIt = GetComponentIterator<Transform3D>();
 		m_PlayerId = Wiwa::GameStateManager::s_PlayerId;
@@ -89,8 +76,8 @@ namespace Wiwa
 		{
 			stats->Slowed = false;
 			stats->CounterSlowed = 0.0f;
-			AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
-			statsSelf->speed = previousSpeed;
+			/*AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
+			statsSelf->speed = previousSpeed;*/
 		}
 	}
 
@@ -105,7 +92,7 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
+			//BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
 
 			//MARTINEX THERMOKINESIS
 			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
@@ -117,18 +104,18 @@ namespace Wiwa
 				{
 					if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive && !stats->Slowed)
 					{
-						AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
+						/*AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
 						const float buffPercent = ((float)listBuffs[i]->BuffPercent / 100.f);
 						previousSpeed = statsSelf->speed;
 						timerSlow = listBuffs[i]->Duration;
 						statsSelf->speed = statsSelf->speed * buffPercent;
-						stats->Slowed = true;
+						stats->Slowed = true;*/
 						break;
 					}
 				}
 			}
 		
-			ReceiveDamage(bullet->Damage);
+			//ReceiveDamage(bullet->Damage);
 		}
 
 		std::string phylasSword = "PHYLAS_QUANTUM_SWORD";
@@ -163,11 +150,11 @@ namespace Wiwa
 		{
 			// Notify the player and spawn an item
 			// TODO: Modify depending on the enemy
-			switch (self->enemyType)
+			/*switch (self->enemyType)
 			{
 			default:
 				break;
-			}
+			}*/
 			GameStateManager::GetPlayerInventory().AddTokens(15);
 			Character* player = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Character>(GameStateManager::GetPlayerId());
 			// As in the GDD for each enemy the player kills the shield regenerates
@@ -181,7 +168,7 @@ namespace Wiwa
 			// Spawn an item
 			uint32_t chances = RAND(0, 100);
 			
-			if (chances <= GameStateManager::s_EnemyDropChances)
+			if (chances <= (uint)GameStateManager::s_EnemyDropChances)
 			{
 				// Chances 09/04/2023 (all inclusive)
 				// Healing pills 50% = 1 - 50
@@ -299,47 +286,6 @@ namespace Wiwa
 		float interpolatedRotation = transform->localRotation.y + rotationDifference * tRot;
 
 		transform->localRotation.y = interpolatedRotation;
-	}
-
-	void EnemySystem::ChasePlayer()
-	{
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-
-		Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
-
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(m_EntityId);
-
-		if (agentPtr)
-		{
-			agentPtr->CreatePath(playerTr->localPosition);
-
-			/*float dist = glm::distance(playerTr->localPosition, transform->localPosition);
-			WI_INFO("Distance to player is {}", dist);
-			if (dist < 60 || !agentPtr->HasPath())
-			{
-				agentPtr->CreatePath(playerTr->localPosition);
-			}*/
-		}
-		//RotateTo(playerTr.Position,  enemy, entityId);                   
-	}
-
-	bool EnemySystem::GoToPosition(glm::vec3 targetedPosition)
-	{
-		bool ret = false;
-
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-
-		//Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-		Wiwa::AgentAISystem* agentPtr = em.GetSystem<Wiwa::AgentAISystem>(m_EntityId);
-
-		if (agentPtr)
-		{
-			ret = agentPtr->CreatePath(targetedPosition);
-		}
-		//RotateTo(playerTr.Position,  enemy, entityId);        
-
-		return ret;
 	}
 
 	void EnemySystem::RotateTo(const glm::vec3& target)

@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "MeleePhalanxChasing.h"
 #include <Wiwa/ecs/systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa

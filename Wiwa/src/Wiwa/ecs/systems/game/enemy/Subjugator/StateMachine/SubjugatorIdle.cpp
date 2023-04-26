@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "SubjugatorIdle.h"
 #include <Wiwa/ecs/systems/game/enemy/Subjugator/EnemySubjugator.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

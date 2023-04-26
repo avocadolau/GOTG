@@ -1,27 +1,18 @@
 #pragma once
 #include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
-#include "StateMachine/BossUltronSpawn.h"
-#include "StateMachine/BossUltronIdle.h"
-#include "StateMachine/BossUltronMovement.h"
-#include "StateMachine/BossUltronClusterShotsAttack.h"
-#include "StateMachine/BossUltronLaserBeamAttack.h"
-#include "StateMachine/BossUltronBulletStormAttack.h"
-#include "StateMachine/BossUltronDeath.h"
-#include "StateMachine/BossUltronDash.h"
 
 namespace Wiwa {
 	class WI_API BossUltron : public EnemySystem {
 	public:
-
-		BossUltronBaseState* m_CurrentState;
-		BossUltronSpawnState* m_SpawnState;
-		BossUltronIdleState* m_IdleState;
-		BossUltronMovementState* m_MovementState;
-		BossUltronClusterShotsAttackState* m_ClusterShotsAttackState;
-		BossUltronLaserBeamAttackState* m_LaserBeamAttackState;
-		BossUltronBulletStormAttackState* m_BulletStormAttackState;
-		BossUltronDeathState* m_DeathState;
-		BossUltronDashState* m_DashState;
+		class BossUltronBaseState* m_CurrentState;
+		class BossUltronBaseState* m_SpawnState;
+		class BossUltronBaseState* m_IdleState;
+		class BossUltronBaseState* m_MovementState;
+		class BossUltronBaseState* m_ClusterShotsAttackState;
+		class BossUltronBaseState* m_LaserBeamAttackState;
+		class BossUltronBaseState* m_BulletStormAttackState;
+		class BossUltronBaseState* m_DeathState;
+		class BossUltronBaseState* m_DashState;
 
 		EntityManager::ComponentIterator m_GunTransformIt;
 

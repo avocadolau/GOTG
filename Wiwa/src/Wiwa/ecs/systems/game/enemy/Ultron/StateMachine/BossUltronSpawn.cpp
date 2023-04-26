@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "BossUltronSpawn.h"
 #include <Wiwa/ecs/systems/game/enemy/Ultron/BossUltron.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

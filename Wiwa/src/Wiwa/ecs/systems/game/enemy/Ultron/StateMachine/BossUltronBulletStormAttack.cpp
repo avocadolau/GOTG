@@ -4,6 +4,8 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h"
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -39,6 +41,7 @@ namespace Wiwa
 		/*m_SecondPatternBulletcounter = 0.0f;*/
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
+		m_ThirdPatternAttackTimer += Time::GetDeltaTimeSeconds();
 
 		if (IsSecondPatternFinished() == false)
 		{
@@ -46,28 +49,18 @@ namespace Wiwa
 			m_TimerRoundCooldown = 0.0f;
 		}
 
-		if(IsSecondPatternFinished() == true)
+		if (IsThirdPatternFinished() == false)
+		{
+			SpawnThirdPattern(enemy);
+			m_TimerRoundCooldown = 0.0f;
+		}
+
+		if(IsSecondPatternFinished() == true || IsThirdPatternFinished() == true)
 		{
 			if (m_TimerRoundCooldown >= 6.0f)
 			{
-				int randomValue = Math::RandomRange(1, 3);
-
-				switch (randomValue)
-				{
-				case 1:
-				{
-					SpawnFirstPattern(enemy);
-				}break;
-				case 2:
-				{
-					SpawnSecondPattern(enemy);
-				}break;
-				case 3:
-				{
-					SpawnThirdPattern(enemy);
-				}break;
-				}
-
+				SelectRandomAttack(enemy);
+			
 				m_TimerRoundCooldown = 0.0f;
 				m_RoundCounter++;
 			}
@@ -96,7 +89,7 @@ namespace Wiwa
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
 
-		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		//WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 		if (physSys != nullptr)
 		{
@@ -123,27 +116,39 @@ namespace Wiwa
 
 	void BossUltronBulletStormAttackState::SpawnFirstPattern(BossUltron* enemy)
 	{
-		m_SecondPatternBulletcounter = 0.0f;
-		m_SecondPatternCounter = 0;
+		m_IsAttackSelected = false;
+		//-------------------------------
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		int numBullets = 8;
-		float degreeStep = 360.0f / numBullets;
+		int numGroups = 8;
+		int numBulletsPerGroup = 3;
+		float degreeStep = 360.0f / numGroups;
+		float groupDegreeStep = 10.0f; // The angle between bullets in a group
 
-		for (int i = 0; i < numBullets; ++i) {
-			float directionAngle = i * degreeStep;
-			float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
-			float xDir = cos(radian);
-			float yDir = sin(radian);
+		for (int i = 0; i < numGroups; ++i) {
+			for (int j = 0; j < numBulletsPerGroup; ++j) {
+				float directionAngle = i * degreeStep + j * groupDegreeStep;
+				float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+				float xDir = cos(radian);
+				float yDir = sin(radian);
 
-			glm::vec3 direction(xDir, 0.0f, yDir);
-			SpawnBullet(enemy, selfTr, direction);
+				glm::vec3 direction(xDir, 0.0f, yDir);
+				SpawnBullet(enemy, selfTr, direction);
+			}
 		}
+		m_SecondPatternBulletcounter = 0.0f;
+		m_SecondPatternCounter = 0;
+		m_ThirdPatternBulletcounter = 0.0f;
+		m_ThirdPatternCounter = 0;
 	}
 
 	void BossUltronBulletStormAttackState::SpawnSecondPattern(BossUltron* enemy)
 	{
+		m_ThirdPatternBulletcounter = 0.0f;
+		m_ThirdPatternCounter = 0;
+		m_IsAttackSelected = false;
+		//---------------------------------
 		m_SecondPatternEnabled = true;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -184,52 +189,97 @@ namespace Wiwa
 				}
 			}
 		}
-
-		//-------------------------------------------------------
-
-		//for (int i = 0; i < numBullets; ++i) 
-		//{
-
-		//	float directionAngle1 = i * degreeStep;
-		//	float directionAngle2 = i * degreeStep + halfDegreeStep;
-
-		//	float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
-		//	float xDir1 = cos(radian1);
-		//	float yDir1 = sin(radian1);
-
-		//	float radian2 = directionAngle2 * (PI / 180.0f); // Convert degree to radian
-		//	float xDir2 = cos(radian2);
-		//	float yDir2 = sin(radian2);
-
-		//	glm::vec3 direction1(xDir1, 0.0f, yDir1);
-		//	glm::vec3 direction2(xDir2, 0.0f, yDir2);
-		//	SpawnBullet(enemy,selfTr, direction1);
-		//	SpawnBullet(enemy,selfTr, direction2);
-		//}
 	}
 
 	void BossUltronBulletStormAttackState::SpawnThirdPattern(BossUltron* enemy)
 	{
 		m_SecondPatternBulletcounter = 0.0f;
 		m_SecondPatternCounter = 0;
+		m_IsAttackSelected = false;
+		//-----------------------------------------
+
+		m_ThirdPatternEnabled = true;
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		int numGroups = 8;
-		int numBulletsPerGroup = 3;
-		float degreeStep = 360.0f / numGroups;
-		float groupDegreeStep = 10.0f; // The angle between bullets in a group
+		float numBullets = 8.0f;
+		float degreeStep = 360.0f / numBullets;
+		float halfDegreeStep = degreeStep / 2;
 
-		for (int i = 0; i < numGroups; ++i) {
-			for (int j = 0; j < numBulletsPerGroup; ++j) {
-				float directionAngle = i * degreeStep + j * groupDegreeStep;
-				float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
-				float xDir = cos(radian);
-				float yDir = sin(radian);
+		if (m_ThirdPatternBulletcounter <= numBullets)
+		{
+			if (m_ThirdPatternAttackTimer > 0.2f)
+			{
 
-				glm::vec3 direction(xDir, 0.0f, yDir);
-				SpawnBullet(enemy,selfTr, direction);
+				float directionAngle1 = m_ThirdPatternBulletcounter * degreeStep;
+				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 180; //To get the symmetry attack
+
+				WI_INFO(directionAngle1);
+
+				float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
+				float xDir1 = cos(radian1);
+				float yDir1 = sin(radian1);
+
+				float radian2 = directionAngle2 * (PI / 180.0f); // Convert degree to radian
+				float xDir2 = cos(radian2);
+				float yDir2 = sin(radian2);
+
+				glm::vec3 direction1(xDir1, 0.0f, yDir1);
+				glm::vec3 direction2(xDir2, 0.0f, yDir2);
+				SpawnBullet(enemy, selfTr, direction1);
+				SpawnBullet(enemy, selfTr, direction2);
+
+				m_ThirdPatternBulletcounter = m_ThirdPatternBulletcounter + 1.0f;
+				m_ThirdPatternAttackTimer = 0.0f;
+				if (m_ThirdPatternBulletcounter == 8.0f)
+				{
+					m_ThirdPatternCounter++;
+					m_ThirdPatternBulletcounter = 0;
+				}
 			}
+		}
+	}
+
+	void BossUltronBulletStormAttackState::SelectRandomAttack(BossUltron* enemy)
+	{
+		if (m_SelectRandomAttack == 0)
+		{
+			m_IsAttackSelected = true;
+			m_SelectRandomAttack = RAND(1, 3);
+		}
+
+		if (m_SelectRandomAttack == 1 && m_IsAttackSelected == false)
+		{
+			int randomNumber23 = rand() % 2;
+			m_SelectRandomAttack = (randomNumber23 == 0) ? 2 : 3;
+			m_IsAttackSelected = true;
+		}
+
+		if (m_SelectRandomAttack == 2 && m_IsAttackSelected == false)
+		{
+			int randomNumber13 = rand() % 2;
+			m_SelectRandomAttack = (randomNumber13 == 0) ? 1 : 3;
+			m_IsAttackSelected = true;
+		}
+
+		if (m_SelectRandomAttack == 3 && m_IsAttackSelected == false)
+		{
+			int randomNumber12 = rand() % 2;
+			m_SelectRandomAttack = (randomNumber12 == 0) ? 1 : 2;
+			m_IsAttackSelected = true;
+		}
+
+		if (m_SelectRandomAttack == 1)
+		{
+			SpawnFirstPattern(enemy);
+		}
+		if (m_SelectRandomAttack == 2)
+		{
+			SpawnSecondPattern(enemy);
+		}
+		if (m_SelectRandomAttack == 3)
+		{
+			SpawnThirdPattern(enemy);
 		}
 	}
 
@@ -247,5 +297,23 @@ namespace Wiwa
 		{
 			return true;
 		}
+		return false;
+	}
+
+	bool BossUltronBulletStormAttackState::IsThirdPatternFinished()
+	{
+		if ((m_ThirdPatternEnabled == true) && (m_ThirdPatternBulletcounter <= 24.0f) && (m_ThirdPatternCounter < 3))
+		{
+			return false;
+		}
+		if (m_ThirdPatternCounter == 3)
+		{
+			m_ThirdPatternEnabled = false;
+		}
+		if (m_ThirdPatternEnabled == false)
+		{
+			return true;
+		}
+		return false;
 	}
 }
