@@ -1,11 +1,6 @@
 #pragma once
 #include "../../System.h"
-
 #include <Wiwa/utilities/Reflection.h>
-#include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
-#include <Wiwa/ecs/components/game/enemy/Enemy.h>
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
-#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa {
 	class WI_API EnemySystem : public System {

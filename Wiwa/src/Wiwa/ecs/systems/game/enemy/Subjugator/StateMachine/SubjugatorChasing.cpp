@@ -1,6 +1,8 @@
 #include <wipch.h>
 #include "SubjugatorChasing.h"
 #include <Wiwa/ecs/systems/game/enemy/Subjugator/EnemySubjugator.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 glm::vec3 CalculateOffsetPositionSubjugator(const glm::vec3& playerPosition, int totalEnemies, float radius)
 {

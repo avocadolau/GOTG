@@ -3,24 +3,13 @@
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/ecs/components/game/attack/PhylasQuantumSword.h>
 #include <Wiwa/ecs/components/game/attack/GrootSeeds.h>
+#include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+
 namespace Wiwa
 {
-	struct BulletComponent
-	{
-		float Velocity;
-		float LifeTime;
-		int Damage;
-		glm::vec3 Direction;
-	};
-
-	/*struct PhylasQuantumSword
-	{
-		float velocity;
-		float lifeTime;
-		int damage;
-		glm::vec3 direction;
-	};*/
-
 	Wiwa::EnemySystem::EnemySystem()
 	{
 		m_EnemyIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -103,7 +92,7 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
+			//BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
 
 			//MARTINEX THERMOKINESIS
 			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
@@ -126,7 +115,7 @@ namespace Wiwa
 				}
 			}
 		
-			ReceiveDamage(bullet->Damage);
+			//ReceiveDamage(bullet->Damage);
 		}
 
 		std::string phylasSword = "PHYLAS_QUANTUM_SWORD";
@@ -161,11 +150,11 @@ namespace Wiwa
 		{
 			// Notify the player and spawn an item
 			// TODO: Modify depending on the enemy
-			switch (self->enemyType)
+			/*switch (self->enemyType)
 			{
 			default:
 				break;
-			}
+			}*/
 			GameStateManager::GetPlayerInventory().AddTokens(15);
 			Character* player = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Character>(GameStateManager::GetPlayerId());
 			// As in the GDD for each enemy the player kills the shield regenerates
@@ -179,7 +168,7 @@ namespace Wiwa
 			// Spawn an item
 			uint32_t chances = RAND(0, 100);
 			
-			if (chances <= GameStateManager::s_EnemyDropChances)
+			if (chances <= (uint)GameStateManager::s_EnemyDropChances)
 			{
 				// Chances 09/04/2023 (all inclusive)
 				// Healing pills 50% = 1 - 50

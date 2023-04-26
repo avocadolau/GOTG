@@ -1,9 +1,9 @@
 #pragma once
 #include "RangedPhalanxBase.h"
-#include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/components/Transform3D.h>
 #include <Wiwa/utilities/Reflection.h>
 namespace Wiwa {
+	struct Character;
 	class RangedPhalanxAttackState : public RangedPhalanxBaseState {
 	public:
 		RangedPhalanxAttackState();

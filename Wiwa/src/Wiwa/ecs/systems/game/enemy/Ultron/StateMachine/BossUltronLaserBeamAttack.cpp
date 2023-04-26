@@ -4,6 +4,8 @@
 #include "Wiwa/ecs/components/game/attack/UltronLaserBeam.h"
 #include "Wiwa/ecs/systems/game/attack/UltronLaserBeamSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -51,7 +53,7 @@ namespace Wiwa
 	{
 	}
 
-	EntityId* BossUltronLaserBeamAttackState::SpawnLaserBeam(BossUltron* enemy, const glm::vec3& bull_dir)
+	EntityId BossUltronLaserBeamAttackState::SpawnLaserBeam(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
@@ -63,7 +65,7 @@ namespace Wiwa
 
 
 		if (!bulletTr || !enemyTr)
-			return &newBulletId;
+			return newBulletId;
 
 		bulletTr->localPosition = glm::normalize(enemyTr->localPosition);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
@@ -76,7 +78,7 @@ namespace Wiwa
 		physSys->CreateBody();
 		laserSystem->EnableLaser();
 
-		return &newBulletId;
+		return newBulletId;
 	}
 
 	glm::vec3 BossUltronLaserBeamAttackState::CalculateForward(const Transform3D& t3d)

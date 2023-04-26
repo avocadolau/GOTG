@@ -506,7 +506,7 @@ namespace Wiwa {
 	bool PhysicsManager::OnSave()
 	{
 		JSONDocument physics;
-		int count = filterMapStringKey.size();
+		int count = (int)filterMapStringKey.size();
 
 		physics.AddMember("tags_count", count);
 		std::string tag = "tag_";
@@ -576,7 +576,7 @@ namespace Wiwa {
 
 	bool PhysicsManager::AddFilterTag(const char* str)
 	{
-		int size = filterMapStringKey.size();
+		int size = (int)filterMapStringKey.size();
 		if (filterMapStringKey.size() == 32)
 			return false;
 		filterMapStringKey.emplace(str, size);
@@ -733,7 +733,7 @@ void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btV
 	m_LineVertices.push_back(to.y());
 	m_LineVertices.push_back(to.z());
 
-	GLuint indexOffset = m_LineVertices.size() / 3 - 2; // offset for indices of new line
+	uint indexOffset = (uint)m_LineVertices.size() / 3 - 2; // offset for indices of new line
 	m_LineIndices.push_back(indexOffset);
 	m_LineIndices.push_back(indexOffset + 1);
 

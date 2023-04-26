@@ -1,5 +1,6 @@
 #include <wipch.h>
 #include "EnemyMeleePhalanx.h"
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

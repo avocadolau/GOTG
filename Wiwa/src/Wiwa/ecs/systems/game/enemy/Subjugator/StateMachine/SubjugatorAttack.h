@@ -1,10 +1,10 @@
 #pragma once
 #include "SubjugatorBase.h"
-#include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/components/Transform3D.h>
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
+	struct Character;
 	class SubjugatorAttackState : public SubjugatorBaseState {
 	public:
 		SubjugatorAttackState();

@@ -5,6 +5,9 @@
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include <glm/gtx/quaternion.hpp>
 #include <Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/components/game/Character.h>
 
 namespace Wiwa
 {
@@ -86,15 +89,15 @@ namespace Wiwa
 		if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0)
 			return;
 
-		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountActive());
-		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled());
-
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
-		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
-		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
+		EntityId newBulletId = EntityManager::INVALID_INDEX;
+		newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 
-		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		if (newBulletId == EntityManager::INVALID_INDEX)
+			return;
+
+		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 		physSys->DeleteBody();
 

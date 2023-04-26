@@ -209,6 +209,7 @@ namespace Wiwa
 
             return glm::vec3(current_transform_rotation.x, interpolatedRotation, current_transform_rotation.z);
         }
+        return current_transform_rotation;
     }
 
 

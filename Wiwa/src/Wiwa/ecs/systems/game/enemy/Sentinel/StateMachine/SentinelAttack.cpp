@@ -3,6 +3,8 @@
 #include <Wiwa/ecs/systems/game/enemy/Sentinel/EnemySentinel.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SentinelExplosion.h"
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {

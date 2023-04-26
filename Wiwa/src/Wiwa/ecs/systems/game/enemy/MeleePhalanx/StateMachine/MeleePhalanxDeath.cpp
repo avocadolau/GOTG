@@ -2,6 +2,9 @@
 #include "MeleePhalanxDeath.h"
 #include <Wiwa/ecs/systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
 
 namespace Wiwa
 {

@@ -5,6 +5,9 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/components/game/attack/SentinelExplosion.h"
 #include <Wiwa/ecs/systems/game/attack/SentinelExplosionSystem.h>
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
 
 namespace Wiwa
 {

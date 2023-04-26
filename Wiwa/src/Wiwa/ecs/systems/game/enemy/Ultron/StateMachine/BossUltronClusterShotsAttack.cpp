@@ -4,6 +4,8 @@
 #include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/game/attack/ClusterBulletSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -62,7 +64,7 @@ namespace Wiwa
 	{
 	}	
 
-	EntityId* BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
+	EntityId BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ClusterBulletsPool->GetFromPool();
@@ -73,7 +75,7 @@ namespace Wiwa
 		Transform3D* enemyTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(enemy->GetEntity()));
 
 		if (!bulletTr || !enemyTr)
-			return &newBulletId;
+			return newBulletId;
 
 		bulletTr->localPosition = glm::normalize(enemyTr->localPosition);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
@@ -88,7 +90,7 @@ namespace Wiwa
 
 		clusterSystem->EnableBullet();
 		
-		return &newBulletId;
+		return newBulletId;
 	}
 
 	glm::vec3 BossUltronClusterShotsAttackState::CalculateForward(const Transform3D& t3d)
