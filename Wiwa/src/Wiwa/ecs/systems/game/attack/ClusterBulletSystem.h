@@ -13,6 +13,8 @@ namespace Wiwa {
 	private:
 		float m_Timer = 0;
 		EntityManager::ComponentIterator m_BulletIt;
+
+		bool m_HasBlown = false;
 	public:
 		ClusterBulletSystem();
 		~ClusterBulletSystem();

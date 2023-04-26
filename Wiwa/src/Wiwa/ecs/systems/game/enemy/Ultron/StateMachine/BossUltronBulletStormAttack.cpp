@@ -89,7 +89,7 @@ namespace Wiwa
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
 
-		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		//WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 		if (physSys != nullptr)
 		{

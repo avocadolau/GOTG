@@ -11,10 +11,10 @@ namespace Wiwa
 		s_PhalanxMeleePool = new EntityPool(Pool_Type::PHALANX_MELEE, 3, "assets\\Enemy\\PhalanxMelee\\MeleePhalanx_01.wiprefab");
 		s_PhalanxRangedPool = new EntityPool(Pool_Type::PHALAN_RANGED, 3, "assets\\Enemy\\PhalanxRanged\\RangedPhalanx_01.wiprefab");
 		s_SentinelPool = new EntityPool(Pool_Type::SENTINEL, 3, "assets\\Enemy\\Sentinel\\Sentinel_01.wiprefab");
-		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 60, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
+		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 100, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		s_SentinelExplosion = new EntityPool(Pool_Type::SENTINEL_EXPLOSION, 3, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 		s_BossUltron = new EntityPool(Pool_Type::BOSS_ULTRON, 1, "assets\\Enemy\\Prefabs\\melee_phalanx.wiprefab");
-		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,3, "assets\\Enemy\\cluster_bullet\\cluster_bullet.wiprefab");
+		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
 		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
 
@@ -248,7 +248,7 @@ namespace Wiwa
 		LoadSimpleBulletPool(scene);
 		LoadSentinelExplosionPool(scene);
 		//LoadBossUltronPool(scene);
-		//LoadClusterBulletPool(scene);
+		LoadClusterBulletPool(scene);
 		//LoadUltronLaserBeamPool(scene);
 		//LoadSubjugatorPool(scene);
 
