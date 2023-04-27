@@ -984,7 +984,13 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::Text("Follow Emitter Position Only on Spawn");
 		}
 
-		
+
+		if ((int)emitter->m_p_positionFollowsRotation > 1 || (int)emitter->m_p_positionFollowsRotation < 0)
+			emitter->m_p_positionFollowsRotation = false;
+
+		ImGui::Checkbox("##m_p_positionFollowsRotation", &emitter->m_p_positionFollowsRotation);
+		ImGui::SameLine();
+		ImGui::Text("Position Depends on Rotation");
 
 		ImGui::Text("Use Volume:");
 		ImGui::SameLine();
@@ -1318,7 +1324,10 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::Separator();
 	if (ImGui::TreeNode("Color"))
 	{
-		ImGui::Checkbox("##useAdditiveBlending", &emitter->useAdditiveBlending);
+		if ((int)emitter->m_useAdditiveBlending > 1 || (int)emitter->m_useAdditiveBlending < 0)
+			emitter->m_useAdditiveBlending = false;
+
+		ImGui::Checkbox("##m_useAdditiveBlending", &emitter->m_useAdditiveBlending);
 		ImGui::SameLine();
 		ImGui::Text("Use Additive Blending");
 

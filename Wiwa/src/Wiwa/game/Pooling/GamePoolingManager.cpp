@@ -15,7 +15,7 @@ namespace Wiwa
 		s_SentinelExplosion = new EntityPool(Pool_Type::SENTINEL_EXPLOSION, 3, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 		s_BossUltron = new EntityPool(Pool_Type::BOSS_ULTRON, 1, "assets\\Enemy\\Prefabs\\melee_phalanx.wiprefab");
 		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
-		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
+		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\UltronLaserBeam\\UltronLaserBeam_01.wiprefab");
 		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 
@@ -275,7 +275,7 @@ namespace Wiwa
 		LoadSentinelExplosionPool(scene);
 		//LoadBossUltronPool(scene);
 		LoadClusterBulletPool(scene);
-		//LoadUltronLaserBeamPool(scene);
+		LoadUltronLaserBeamPool(scene);
 		//LoadSubjugatorPool(scene);
 		LoadExplosiveBarrelPool(scene);
 

@@ -70,7 +70,7 @@ namespace Wiwa
         if (isNearTargetPoint)
             m_HasTargetPoint = false;
 
-        if (distanceToPlayer < enemy->m_RangeOfAttack)
+        if (distanceToPlayer < enemy->m_RangeOfAttack && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
         {
             agent->StopAgent();
             enemy->SwitchState(enemy->m_AttackingState);

@@ -162,8 +162,8 @@ namespace Wiwa {
 		ColorNode m_p_colorsOverLifetime[6] = {ColorNode()};
 		int m_colorsUsed;
 
-		bool useAdditiveBlending;
-		
+		bool m_useAdditiveBlending;
+		bool m_p_positionFollowsRotation;
 
 		// todo					----------------------------------------
 		// 

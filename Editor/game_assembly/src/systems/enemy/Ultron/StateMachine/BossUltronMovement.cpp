@@ -10,10 +10,10 @@ namespace Wiwa
 
 	BossUltronMovementState::BossUltronMovementState()
 	{
-		m_PremadePositions.push_back({ 0,0});
-		m_PremadePositions.push_back({ 2,2 });
-		m_PremadePositions.push_back({ 3,1 });
-		m_PremadePositions.push_back({ -2,-2 });
+		m_PremadePositions.push_back({ 20,3});
+		m_PremadePositions.push_back({ 3,20 });
+		m_PremadePositions.push_back({ 25,1 });
+		m_PremadePositions.push_back({ -15,-7 });
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -44,6 +44,11 @@ namespace Wiwa
 			navAgentPtr->SetDestination(destination3D);
 			currentDestination = destination3D;
 		}
+
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent) {
+			navAgent->autoRotate = true;
+		}
 	}
 
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
@@ -56,7 +61,7 @@ namespace Wiwa
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
 		
-		enemy->SwitchState(enemy->m_DashState);
+		enemy->SwitchState(enemy->m_LaserBeamAttackState);
 
 			//if (Math::IsPointNear(navAgentPtr->GetCurrentPosition(), currentDestination, 1.0f)) // change it for a timer?
 			//{
