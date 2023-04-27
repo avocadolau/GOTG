@@ -63,7 +63,7 @@ namespace Wiwa
 				//agentPtr->StopMoving();
 				std::srand(std::time(0));
 
-				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
+				enemy->SwitchState(enemy->m_DashState);
 
 				//int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
 				//switch (randomAction)
