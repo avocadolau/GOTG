@@ -68,6 +68,15 @@ namespace Wiwa
 		//	enemy->SwitchState(enemy->m_AttackingState);
 		//}
 		//*/
+		/*Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());*/
+
+		/*directionDash = Math::PointAlongDirection(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation, dashDistance);*/
+
+		/*directionDash = glm::vec3(-2.0f, 0.0f, -33.0f);
+
+		agent->SetDestination(directionDash);*/
 
 		
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
@@ -87,8 +96,14 @@ namespace Wiwa
 			/*directionDash = Math::PointAlongDirection(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation, dashDistance);*/
 			directionDash = Math::GetRoationBetweenTwoPoints(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation);
 			float dashVelocity = dashDistance / lifetimeDash;
-			agent->RequestMoveVelocity(directionDash * dashVelocity);
+			/*agent->RequestMoveVelocity(directionDash * dashVelocity);*/
+			//directionDash = glm::vec3(-2.0f, 0.0f, -33.0f);
 
+
+			//TODO: Fer Funcio per calcular la posicio be (x = v * t)
+			/*enemy->GetTransform()->localPosition
+			agent->SetPosition(directionDash);*/
+		
 			m_State = DashState::DASH_PLAYING;
 		}
 			break;
@@ -106,6 +121,8 @@ namespace Wiwa
 		case Wiwa::BossUltronDashState::DashState::DASH_STOP:
 		{
 			agent->StopAgent();
+			agent->SetPreviousMaxSpeed();
+			agent->SetPreviousMaxAcceleration();
 
 			m_State = DashState::DASH_COOLDOWN;
 		}

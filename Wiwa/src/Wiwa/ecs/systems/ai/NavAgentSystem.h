@@ -23,6 +23,9 @@ namespace Wiwa
         void SetMaxSpeed(float maxSpeed);
         void SetMaxAcceleration(float maxAcceleration);
 
+        void SetPreviousMaxSpeed();
+        void SetPreviousMaxAcceleration();
+
         void RequestMoveVelocity(const glm::vec3 velocity);
         void StopAgent();
 
@@ -47,9 +50,11 @@ namespace Wiwa
 
         int m_AgentIndex;
         glm::vec3 m_CurrentPos;
+        float m_PreviousVelocity;
+        float m_PreviousAcceleration;
+
         //glm::vec3 m_CurrentVel;
         dtCrowdAgentParams m_AgentParams;
-
         EntityManager::ComponentIterator m_NavAgentIt;
 
         bool isPoolActive = true;

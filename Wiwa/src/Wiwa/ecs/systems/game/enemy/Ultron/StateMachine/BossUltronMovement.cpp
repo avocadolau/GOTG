@@ -56,39 +56,40 @@ namespace Wiwa
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
 		
+		enemy->SwitchState(enemy->m_DashState);
 
-			if (Math::IsPointNear(navAgentPtr->GetCurrentPosition(), currentDestination, 2.0f)) // change it for a timer?
-			{
-				navAgentPtr->StopAgent();
-				//agentPtr->StopMoving();
-				std::srand(std::time(0));
+			//if (Math::IsPointNear(navAgentPtr->GetCurrentPosition(), currentDestination, 1.0f)) // change it for a timer?
+			//{
+			//	navAgentPtr->StopAgent();
+			//	//agentPtr->StopMoving();
+			//	std::srand(std::time(0));
 
-				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
+			//	enemy->SwitchState(enemy->m_DashState);
 
-				//int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
-				//switch (randomAction)
-				//{
-				//case 0:
-				//{
-				//	enemy->SwitchState(enemy->m_BulletStormAttackState);
-				//}
-				//break;
-				//case 1:
-				//{
-				//	enemy->SwitchState(enemy->m_ClusterShotsAttackState);
-				//}
-				//break;
-				//case 2:
-				//{
-				//	enemy->SwitchState(enemy->m_LaserBeamAttackState);
-				//}
-				//break;
-				///*case 3:
-				//{
-				//	enemy->SwitchState(enemy->m_DashState);
-				//}*/
-				//}
-			}
+			//	//int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
+			//	//switch (randomAction)
+			//	//{
+			//	//case 0:
+			//	//{
+			//	//	enemy->SwitchState(enemy->m_BulletStormAttackState);
+			//	//}
+			//	//break;
+			//	//case 1:
+			//	//{
+			//	//	enemy->SwitchState(enemy->m_ClusterShotsAttackState);
+			//	//}
+			//	//break;
+			//	//case 2:
+			//	//{
+			//	//	enemy->SwitchState(enemy->m_LaserBeamAttackState);
+			//	//}
+			//	//break;
+			//	///*case 3:
+			//	//{
+			//	//	enemy->SwitchState(enemy->m_DashState);
+			//	//}*/
+			//	//}
+			//}
 				
 	}
 
