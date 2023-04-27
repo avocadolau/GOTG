@@ -36,14 +36,19 @@ namespace Wiwa
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
+		float distance = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		if (agent)
 		{
 			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-			agent->SetDestination(playerTr->localPosition);
+
+			glm::vec3 offset = { 1.0f,0.0f,1.0f };
+			offset.x = playerTr->localPosition.x + 1.1f;
+			offset.z = playerTr->localPosition.z + 1.1f;
+
+			agent->SetDestination(offset);
 		}
 		
 		if (animator->HasFinished() )//&& !IsPlaying(enemy->GetEntity())
@@ -51,8 +56,8 @@ namespace Wiwa
 			
 		}
 
-
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 4.0f)
+		
+		if (distance < 4.0f && distance > 1.0f)
 		{
 			enemy->SwitchState(enemy->m_AttackingState);
 		}

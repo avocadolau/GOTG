@@ -28,6 +28,12 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent)
+		{
+			navAgent->autoRotate = false;
+		}
+
 		navAgentPtr->StopAgent();
 	}
 
@@ -56,6 +62,12 @@ namespace Wiwa
 		else if (m_TimerBetweenBullet >= 5.0f && m_RoundThree == true)
 		{
 			enemy->SwitchState(enemy->m_MovementState);
+
+			NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+			if (navAgent)
+			{
+				navAgent->autoRotate = true;
+			}
 
 			m_RoundThree = false;
 		}

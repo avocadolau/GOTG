@@ -21,9 +21,15 @@ namespace Wiwa
 
 	void BossUltronBulletStormAttackState::EnterState(BossUltron* enemy)
 	{
-		//Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
+
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent)
+		{
+			navAgent->autoRotate = false;
+		}
 
 		//EntityId currentEnemy = enemy->GetEntity();
 
@@ -67,6 +73,12 @@ namespace Wiwa
 
 			if (m_RoundCounter >= NUMBER_OF_ROUNDS)
 			{
+				NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+				if (navAgent)
+				{
+					navAgent->autoRotate = true;
+				}
+
 				m_RoundCounter = 0;
 				enemy->SwitchState(enemy->m_MovementState);
 			}
