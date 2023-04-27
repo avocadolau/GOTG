@@ -49,6 +49,11 @@ namespace Wiwa {
 			m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 
+		if ((int)emitter->m_p_positionFollowsRotation > 1 || (int)emitter->m_p_positionFollowsRotation < 0)
+			emitter->m_p_positionFollowsRotation = false;
+
+		if ((int)emitter->m_useAdditiveBlending > 1 || (int)emitter->m_useAdditiveBlending < 0)
+			emitter->m_useAdditiveBlending = false;
 
 	}
 	void ParticleSystem::OnAwake()
@@ -366,6 +371,15 @@ namespace Wiwa {
 
 					}
 					
+
+					if (emitter->m_p_positionFollowsRotation)
+					{
+						orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+						orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+						orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+					}
+					
+
 					particle.transform.position = orginalPos;
 
 					particle.transform.scale = particle.transform.localScale;
@@ -528,7 +542,7 @@ namespace Wiwa {
 		
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		if (emitter->useAdditiveBlending)
+		if (emitter->m_useAdditiveBlending)
 		{
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		}
@@ -592,21 +606,6 @@ namespace Wiwa {
 		if (emitter->m_p_followEmitterPositionSpawn) followSpawnPos = t3d->position;
 		if (emitter->m_p_followEmitterRotationSpawn) followSpawnRot = t3d->rotation;
 
-		//initial rotation
-		if (emitter->m_p_rangedInitialRotation)
-		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.x, emitter->m_p_maxInitialRotation.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.y, emitter->m_p_maxInitialRotation.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.z, emitter->m_p_maxInitialRotation.z);
-
-			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/ + glm::vec3(x, y, z);
-		}
-		else
-		{
-			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
-		}
-		glm::vec3 rotationRad = glm::radians(initRotation);
-
 		switch (emitter->m_spawnVolume)
 		{
 			case Wiwa::ParticleSpawnVolume::NONE:
@@ -643,12 +642,21 @@ namespace Wiwa {
 			}
 			break;
 		}
-		glm::vec3 tempInitPos(0);
-		tempInitPos = glm::rotate(initPosition, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		tempInitPos = glm::rotate(initPosition, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		tempInitPos = glm::rotate(initPosition, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		initPosition = tempInitPos;
+		//initial rotation
+		if (emitter->m_p_rangedInitialRotation)
+		{
+			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.x, emitter->m_p_maxInitialRotation.x);
+			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.y, emitter->m_p_maxInitialRotation.y);
+			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.z, emitter->m_p_maxInitialRotation.z);
+
+			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/ + glm::vec3(x, y, z);
+		}
+		else
+		{
+			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
+		}
+		
 
 		//initial scale
 		if (emitter->m_p_rangedInitialScale)
@@ -666,7 +674,8 @@ namespace Wiwa {
 
 		particle.startPosition = initPosition;
 		particle.transform.localPosition = initPosition;
-		particle.transform.localRotation= initRotation;
+		particle.transform.localRotation = initRotation;
+		particle.startRotation = t3d->rotation;
 		particle.transform.localScale = initScale;
 
 
