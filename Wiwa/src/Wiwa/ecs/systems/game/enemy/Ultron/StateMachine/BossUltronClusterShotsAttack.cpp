@@ -37,7 +37,7 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
 		//enemy->LookAt(playerTr->localPosition);
-		//enemy->RotateTo(playerTr->localPosition);
+		enemy->RotateTo(playerTr->localPosition);
 
 		if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
 		{

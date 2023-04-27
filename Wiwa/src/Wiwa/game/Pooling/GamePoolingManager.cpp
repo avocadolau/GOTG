@@ -200,7 +200,10 @@ namespace Wiwa
 		s_ClusterBulletsPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_ClusterBulletsPool->getMaxSize());
 		for (int i = 0; i < s_ClusterBulletsPool->getMaxSize(); i++)
+		{
 			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_ClusterBulletsPool->getPath());
+		}
+			
 		s_ClusterBulletsPool->IncreasePoolSize(meleeEnemyIds);
 	}
 
