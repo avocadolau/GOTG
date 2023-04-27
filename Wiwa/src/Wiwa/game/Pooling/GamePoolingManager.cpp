@@ -17,6 +17,7 @@ namespace Wiwa
 		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\ultron_laser_beam\\ultron_laser_beam.wiprefab");
 		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
+		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
 
 		m_HasLoadedAll = false;
 	}
@@ -32,6 +33,7 @@ namespace Wiwa
 		delete s_ClusterBulletsPool;
 		delete s_UltronLaserBeamPool;
 		delete s_Subjugator;
+		delete s_ExplosiveBarrel;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -45,6 +47,7 @@ namespace Wiwa
 		s_ClusterBulletsPool->SetScene(scene);
 		s_UltronLaserBeamPool->SetScene(scene);
 		s_Subjugator->SetScene(scene);
+		s_ExplosiveBarrel->SetScene(scene);
 	}
 
 
@@ -78,6 +81,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::SUBJUGATOR:
 			LoadSubjugatorPool(scene);
+			break;
+		case Pool_Type::EXPLOSIVE_BARREL:
+			LoadExplosiveBarrelPool(scene);
 			break;
 		default:
 			break;
@@ -113,6 +119,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::SUBJUGATOR:
 			UnloadSubjugatorPool();
+			break;
+		case Pool_Type::EXPLOSIVE_BARREL:
+			UnloadExplosiveBarrelPool();
 			break;
 		default:
 			break;
@@ -200,7 +209,10 @@ namespace Wiwa
 		s_ClusterBulletsPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_ClusterBulletsPool->getMaxSize());
 		for (int i = 0; i < s_ClusterBulletsPool->getMaxSize(); i++)
+		{
 			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_ClusterBulletsPool->getPath());
+		}
+			
 		s_ClusterBulletsPool->IncreasePoolSize(meleeEnemyIds);
 	}
 
@@ -237,6 +249,20 @@ namespace Wiwa
 		s_Subjugator->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadExplosiveBarrelPool(Scene* scene)
+	{
+		s_ExplosiveBarrel->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_ExplosiveBarrel->getMaxSize());
+		for (int i = 0; i < s_ExplosiveBarrel->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_ExplosiveBarrel->getPath());
+		s_ExplosiveBarrel->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadExplosiveBarrelPool()
+	{
+		s_ExplosiveBarrel->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		if (m_HasLoadedAll)
@@ -251,6 +277,7 @@ namespace Wiwa
 		LoadClusterBulletPool(scene);
 		//LoadUltronLaserBeamPool(scene);
 		//LoadSubjugatorPool(scene);
+		LoadExplosiveBarrelPool(scene);
 
 		m_HasLoadedAll = true;
 	}
@@ -267,5 +294,6 @@ namespace Wiwa
 		UnloadClusterBulletPool();
 		UnloadUltronLaserBeamPool();
 		UnloadSubjugatorPool();
+		UnloadExplosiveBarrelPool();
 	}
 }

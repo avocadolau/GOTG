@@ -48,6 +48,14 @@ namespace Wiwa
 		
 	};
 
+	enum class ItemTags
+	{
+		ATTACK,
+		PROJECTILE,
+		AOE,
+		DEBUFF,
+		HOMING,
+	};
 	struct Ability
 	{
 		std::string Name;

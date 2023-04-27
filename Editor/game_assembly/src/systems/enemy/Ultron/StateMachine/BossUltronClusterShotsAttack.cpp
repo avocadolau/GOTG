@@ -28,6 +28,12 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent)
+		{
+			navAgent->autoRotate = false;
+		}
+
 		navAgentPtr->StopAgent();
 	}
 
@@ -37,7 +43,7 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
 		//enemy->LookAt(playerTr->localPosition);
-		//enemy->RotateTo(playerTr->localPosition);
+		enemy->RotateTo(playerTr->localPosition);
 
 		if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
 		{
@@ -56,6 +62,12 @@ namespace Wiwa
 		else if (m_TimerBetweenBullet >= 5.0f && m_RoundThree == true)
 		{
 			enemy->SwitchState(enemy->m_MovementState);
+
+			NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+			if (navAgent)
+			{
+				navAgent->autoRotate = true;
+			}
 
 			m_RoundThree = false;
 		}
@@ -95,8 +107,10 @@ namespace Wiwa
 
 		if (!bulletTr || !enemyTr)
 			return false;
+		glm::vec3 spawnPosition = enemyTr->localPosition;
+		spawnPosition.y += 3.0f;
 
-		bulletTr->localPosition = glm::normalize(enemyTr->localPosition);
+		bulletTr->localPosition = spawnPosition;
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
 		//bulletTr->localScale = transform->localScale;
 		ClusterBullet* bullet = (ClusterBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ClusterBullet>(newBulletId));

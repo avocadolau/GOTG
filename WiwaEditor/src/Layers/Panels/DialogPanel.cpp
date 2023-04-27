@@ -211,7 +211,6 @@ void DialogPanel::Draw()
 				}
 				ImGui::PopID();
 			}
-			//ImGui::SameLine();
 
 			if (currentCreationStep == 2)
 			{
@@ -552,18 +551,13 @@ void DialogPanel::Draw()
 						{
 							dm.conversations[l].bubbleImagePath = dm.conversations[l + 1].bubbleImagePath;
 							dm.conversations[l].characterImagePath = dm.conversations[l + 1].characterImagePath;
-							//dm.conversations[l].characterImgID = dm.conversations[l + 1].characterImgID;
 							dm.conversations[l].conversationName = dm.conversations[l + 1].conversationName;
-							//dm.conversations[l].dialogImgID = dm.conversations[l + 1].dialogImgID;
 							
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
 								dm.conversations[l].nodes[m].text1 = dm.conversations[l + 1].nodes[m].text1;
-								//dm.conversations[l].nodes[m].text1_imgModeID = dm.conversations[l + 1].nodes[m].text1_imgModeID;
 								dm.conversations[l].nodes[m].text2 = dm.conversations[l + 1].nodes[m].text2;
-								//dm.conversations[l].nodes[m].text2_imgModeID = dm.conversations[l + 1].nodes[m].text2_imgModeID;
 								dm.conversations[l].nodes[m].text3 = dm.conversations[l + 1].nodes[m].text3;
-								//dm.conversations[l].nodes[m].text3_imgModeID = dm.conversations[l + 1].nodes[m].text3_imgModeID;
 								dm.conversations[l].nodes[m].occupied = dm.conversations[l + 1].nodes[m].occupied;
 
 								currentEditingNodeIsSaved[currentEditingNode[i]][m] = true;

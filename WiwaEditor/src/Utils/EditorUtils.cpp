@@ -461,8 +461,12 @@ void CreateScriptFile(const char* filePath, const char* name)
 	scriptFile << "		virtual void OnInit() override;\n";
 	scriptFile << "		//Called every frame\n";
 	scriptFile << "		virtual void OnUpdate() override;\n";
-	scriptFile << "	}\n";
+	scriptFile << "     virtual void OnCollisionEnter(Object* obj1, Object* obj2) override;\n";
+	scriptFile << "	};\n";
 	scriptFile << "}\n";
+	scriptFile << "REGISTER_SYSTEM(Wiwa::";
+	scriptFile << name;
+	scriptFile << ")\n";
 	scriptFile.close();
 
 	std::string cppFile = "game_assembly\\src\\systems\\";

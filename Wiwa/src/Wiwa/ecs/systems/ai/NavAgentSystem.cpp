@@ -21,6 +21,8 @@ namespace Wiwa
         //m_AgentParams.obstacleAvoidanceType = 3;
         //m_AgentParams.queryFilterType = 0;
         //m_AgentParams.separationWeight = 1;
+        m_PreviousVelocity = 0.0f;
+        m_PreviousAcceleration = 0.0f;
     }
 
     NavAgentSystem::~NavAgentSystem()
@@ -141,12 +143,30 @@ namespace Wiwa
 
     void NavAgentSystem::SetMaxSpeed(float maxSpeed)
     {
+        m_PreviousVelocity = m_AgentParams.maxSpeed;
         m_AgentParams.maxSpeed = maxSpeed;
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().updateAgentParameters(m_AgentIndex, &m_AgentParams);
+        }
     }
 
     void NavAgentSystem::SetMaxAcceleration(float maxAcceleration)
     {
+        m_PreviousAcceleration = m_AgentParams.maxAcceleration;
         m_AgentParams.maxAcceleration = maxAcceleration;
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().updateAgentParameters(m_AgentIndex, &m_AgentParams);
+        }
+    }
+
+    void NavAgentSystem::SetPreviousMaxSpeed()
+    {
+        m_AgentParams.maxSpeed = m_PreviousVelocity;
+    }
+
+    void NavAgentSystem::SetPreviousMaxAcceleration()
+    {
+        m_AgentParams.maxAcceleration = m_PreviousAcceleration;
     }
 
     void NavAgentSystem::RequestMoveVelocity(const glm::vec3 velocity)
