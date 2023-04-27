@@ -1,7 +1,8 @@
 #pragma once
 #include <Wiwa/core/Core.h>
 #include <Wiwa/ecs/Systems.h>
-#include "Wiwa/ecs/components/game/items/Item.h"
+#include <Wiwa/ecs/components/game/items/Item.h>
+#include <Wiwa/ecs/components/game/Character.h>
 
 namespace Wiwa
 {

@@ -9,6 +9,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 
 #include "../../Components.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 Wiwa::PlayerController::PlayerController()
 {

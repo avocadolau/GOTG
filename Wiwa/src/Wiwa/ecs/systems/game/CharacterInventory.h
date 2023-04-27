@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include <Wiwa/core/Core.h>
 #include <Wiwa/ecs/Systems.h>
-#include "Wiwa/ecs/components/game/items/Item.h"
 
 namespace Wiwa
 {
     // This system only takes care of the pickup system
+    struct Item;
     class WI_API CharacterInventory : public System
     {
     private:

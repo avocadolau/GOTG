@@ -3,6 +3,7 @@
 #include "Wiwa/game/Items/ItemManager.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Input.h"
+#include "../CharacterInventory.h"
 
 void Wiwa::PlayerGUISystem::OnUpdate()
 {
