@@ -286,7 +286,39 @@
 				</Event>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
 					<ChildrenList>
-						<Event Name="music_hub" ID="{AB655294-2E7A-470C-93ED-AAC8204FACF3}"/>
+						<Event Name="music_hub" ID="{AB655294-2E7A-470C-93ED-AAC8204FACF3}">
+							<ChildrenList>
+								<Action Name="" ID="{05CAE60C-75E5-4730-A7D6-ADDCA5C8DA01}" ShortID="303731342">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Norman Greenbaum Spirit In The Sky" ID="{DCC91733-0E22-42CC-A9A6-2D00CD54D47B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="music_main_menu" ID="{203ACB29-5579-4399-A069-88C24B04CBC6}">
+							<ChildrenList>
+								<Action Name="" ID="{832B8346-5478-4DB7-8073-E8BE53E713DF}" ShortID="536141635">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="07 Whispers Of The Dead" ID="{480C08DF-0007-47BF-89A8-BE0EA6507F7E}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="music_combat_01" ID="{F3DC5FC5-220F-40CE-9456-D114AD096CB5}">
+							<ChildrenList>
+								<Action Name="" ID="{E7AB4F21-262F-4774-B135-654D046D5BEE}" ShortID="269947806">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="10 The Weirdboy" ID="{CB5A7877-8980-495B-AFA4-6B4BF8AEFF98}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

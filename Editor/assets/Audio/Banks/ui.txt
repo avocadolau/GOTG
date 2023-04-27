@@ -1,0 +1,10 @@
+Event	ID	Name			Wwise Object Path	Notes
+	412874053	on_hover			\Default Work Unit\hud\on_hover	
+	3112424181	character_selection			\Default Work Unit\hud\character_selection	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	256689755	s_character_selected	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\s_character_selected_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\ui\s_character_selected		154256
+	876988813	ui_action_accepted	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\ui\ui_action_accepted_D5394968.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\ui\ui_action_accepted		89348
+	917540936	s_button_hover	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\s_button_hover_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\ui\s_button_hover		23076
+	972415047	ui_action_denied	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\ui\ui_action_denied_D0D27720.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\ui\ui_action_denied		51560
+

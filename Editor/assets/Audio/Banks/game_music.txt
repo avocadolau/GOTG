@@ -1,0 +1,10 @@
+Event	ID	Name			Wwise Object Path	Notes
+	888826129	music_combat_01			\Default Work Unit\music\music_combat_01	
+	1840167780	music_main_menu			\Default Work Unit\music\music_main_menu	
+	2615423034	music_hub			\Default Work Unit\music\music_hub	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	126765455	10 The Weirdboy	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\10 The Weirdboy_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\10 The Weirdboy		20815296
+	349817337	Norman Greenbaum Spirit In The Sky	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Norman Greenbaum Spirit In The Sky_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\Norman Greenbaum Spirit In The Sky		45598888
+	1059857239	07 Whispers Of The Dead	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\07 Whispers Of The Dead_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\07 Whispers Of The Dead		15993696
+

@@ -1,0 +1,40 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	3991942870	music			\Default Work Unit\music	
+
+State	ID	Name	State Group			Notes
+	646625282	hub	music			
+	748895195	None	music			
+	2607556080	menu	music			
+	2764240573	combat	music			
+	3767268120	no_music	music			
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	504532776	Brick			\Factory Acoustic Textures\Textures\Brick	
+	513139656	Mountain			\Factory Acoustic Textures\Textures\Mountain	
+	841620460	Concrete			\Factory Acoustic Textures\Textures\Concrete	
+	988953028	SFXVolume			\Default Work Unit\Volume\SFXVolume	
+	1039994295	DialogVolume			\Default Work Unit\Volume\DialogVolume	
+	1755085759	Wood_Deep			\Factory Acoustic Textures\Textures\Wood_Deep	
+	1873957695	Anechoic			\Factory Acoustic Textures\Textures\Anechoic	
+	1970351858	Fabric			\Factory Acoustic Textures\Textures\Fabric	
+	2058049674	Wood			\Factory Acoustic Textures\Textures\Wood	
+	2346531308	MusicVolume			\Default Work Unit\Volume\MusicVolume	
+	2412606308	Carpet			\Factory Acoustic Textures\Textures\Carpet	
+	2637588553	Tile			\Factory Acoustic Textures\Textures\Tile	
+	2918011349	MasterVolume			\Default Work Unit\Volume\MasterVolume	
+	2928161104	Curtains			\Factory Acoustic Textures\Textures\Curtains	
+	3195498748	Cork_Tiles			\Factory Acoustic Textures\Textures\Cork_Tiles	
+	3670307564	Drywall			\Factory Acoustic Textures\Textures\Drywall	
+	4168643977	Acoustic_Banner			\Factory Acoustic Textures\Textures\Acoustic_Banner	
+	4262522749	Wood_Bright			\Factory Acoustic Textures\Textures\Wood_Bright	
+
+Audio Bus	ID	Name			Wwise Object Path	Notes
+	1669749310	Dialogues			\Default Work Unit\Master Audio Bus\Dialogues	
+	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
+	3922907557	Enviromental			\Default Work Unit\Master Audio Bus\Enviromental	
+	3991942870	Music			\Default Work Unit\Master Audio Bus\Music	
+
+Audio Devices	ID	Name	Type				Notes
+	2317455096	No_Output	No Output			
+	3859886410	System	System			
+

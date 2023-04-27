@@ -15,11 +15,15 @@
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 #include <AK/SpatialAudio/Common/AkSpatialAudio.h>
 
-#include <AK/SoundEngine/Common/AkTypes.h>
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
+#include <AK/SoundEngine/Common/AkStreamMgrModule.h>
+#include <AK/SoundEngine/Common/AkTypes.h>
+#include <AK/SoundEngine/Common/AkCallback.h>
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
+#include <AK/SoundEngine/Common/AkQueryParameters.h>
 
+#include <Wiwa/utilities/json/JSONDocument.h>
 
 #include <AK/SoundEngine/Common/AkTypes.h>
 
@@ -374,8 +378,6 @@ bool Audio::Init()
     if (gres != AK_Success) {
         setLastError(gres);
     }
-
-
     
     AkSoundPosition position;
     position.SetPosition(0.0f, 300.0f, 0.0f);
@@ -515,6 +517,25 @@ bool Audio::LoadBank(const char* bank)
     WI_CORE_INFO("Loaded audio bank: {}", bank);
 
     return true;
+}
+
+bool Audio::LoadAllEvents()
+{
+    //// Get a list of all events in the bank
+    //AK::SoundEngine::Query::
+    //AK::SoundEngine::Query::GetList(AK::SoundEngine::Query::ObjectType::Event, eventList);
+
+    //// Loop through the list of events and process each event as desired
+    //for (auto event : eventList)
+    //{
+    //    const char* eventName = event.GetName();
+    //    uint32_t eventID = event.GetID();
+    //    m_LoadedEvents.emplace_back(EventData{ eventName, eventID });
+    //}
+
+    //// Unload the init.bnk file
+    //AK::SoundEngine::UnloadBank("Init.bnk", nullptr)
+    return false;
 }
 
 bool Audio::UnloadBank(const char* bank)
@@ -815,6 +836,25 @@ void Audio::ChangeSFXVolume(int value)
 void Audio::ChangeDialogVolume(int value)
 {
     AK::SoundEngine::SetRTPCValue("DialogVolume", value);
+}
+
+void Audio::Serialize()
+{
+    Wiwa::JSONDocument doc;
+
+    if (LoadedProject())
+    {
+        doc.AddMember("init_bank", GetProjectPath());
+        for (int i = 0; i < Audio::m_LoadedBanks.size(); i++)
+        {
+
+        }
+    }
+
+}
+
+void Audio::Deserialize()
+{
 }
 
 

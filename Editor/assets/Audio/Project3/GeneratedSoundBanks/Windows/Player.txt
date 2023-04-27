@@ -1,6 +1,0 @@
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	385111800	bullet_hit_wall	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\bullet_hit_wall_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\bullet_hit_wall		272928
-	712169024	palyer_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\palyer_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\palyer_hit		159608
-	781033451	player_shoot	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\player_shoot_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot		264696
-	944440038	bullet_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\bullet_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\bullet_hit		22624
-

@@ -47,7 +47,9 @@
 				</SoundBank>
 				<SoundBank Name="game_music" ID="{F501B01C-17C6-42B0-97A0-A1D03FBA0FED}">
 					<ObjectInclusionList>
-						<ObjectRef Name="play_music" ID="{7D0C2A90-2B7E-42C6-9309-4142F18244B5}" WorkUnitID="{1FD3319F-9969-4C78-95E7-4D245E8C56EF}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="music_combat_01" ID="{F3DC5FC5-220F-40CE-9456-D114AD096CB5}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="music_main_menu" ID="{203ACB29-5579-4399-A069-88C24B04CBC6}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="music_hub" ID="{AB655294-2E7A-470C-93ED-AAC8204FACF3}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

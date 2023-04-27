@@ -8,14 +8,11 @@ namespace Wiwa
 {
 	void GameMusicManager::Update()
 	{
-	/*	if (Input::IsKeyPressed(Key::A))
-		{
-			Audio::PostEvent("");
-		}*/
 
 	}
 	void GameMusicManager::PlayMusic(const char* music_name)
 	{
+
 	}
 }
 

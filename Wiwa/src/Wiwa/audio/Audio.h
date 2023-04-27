@@ -83,6 +83,9 @@ public:
 	// Load bank into audio engine with name
 	static bool LoadBank(const char* bank);
 
+	// Load bank into audio engine with name
+	static bool LoadAllEvents();
+
 	// Unload bank
 	static bool UnloadBank(const char* bank);
 
@@ -153,6 +156,9 @@ public:
 	static void ChangeMusicVolume(int value);
 	static void ChangeSFXVolume(int value);
 	static void ChangeDialogVolume(int value);
+
+	static void Serialize();
+	static void Deserialize();
 
 	// Returns last error
 	static const char* GetLastError() { return m_LastErrorMsg.c_str(); }
