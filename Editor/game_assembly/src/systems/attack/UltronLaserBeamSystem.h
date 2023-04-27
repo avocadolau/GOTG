@@ -5,14 +5,17 @@
 
 //#include "Wiwa/ecs/components/game/wave/Wave.h"
 
-//#define ULTRON_LASER_LIFETIME 3.0f
+//#define ULTRON_LASER_LIFETIME 6.0f
 //#define ULTRON_LASER_DAMAGE 30 // per second
 
 namespace Wiwa {
 	class  UltronLaserBeamSystem : public System {
 	private:
+
 		float m_Timer = 0;
 		EntityManager::ComponentIterator m_LaserIt;
+
+
 	public:
 		UltronLaserBeamSystem();
 		~UltronLaserBeamSystem();

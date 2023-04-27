@@ -98,7 +98,7 @@ bool Wiwa::UltronLaserBeamSystem::OnDisabledFromPool()
 	Transform3D* transform = GetComponent<Transform3D>();
 	if (transform)
 	{
-		transform->localPosition.y = 20000.0f;
+		transform->localPosition.y = 5000.0f;
 	}
 
 	//UltronLaserBeam* laserBeam = GetComponent<UltronLaserBeam>();

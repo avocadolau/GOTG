@@ -20,5 +20,7 @@ namespace Wiwa {
 
 		float m_Timer;
 		bool shootLaser;
+
+		glm::vec3 m_LaserAttackPosition = { 0.f,0.f,0.f };
 	};
 }
