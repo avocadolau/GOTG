@@ -93,8 +93,6 @@ namespace Wiwa
 		bubbleImgPos.x = 640; // <--
 		bubbleImgPos.y = 100;
 
-		//newConversation = nullptr;
-
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
 			editorConversations[e].bubbleImagePath = conversations[e].bubbleImagePath;
@@ -209,13 +207,13 @@ namespace Wiwa
 			{
 				firstTimeTimer += Time::GetDeltaTime();
 
-				characterImgPos.x = EaseBackOut(firstTimeTimer, -1500, -50 + 1500, 850);
-				bubbleImgPos.y = EaseBackOut(firstTimeTimer, 1080, 100 - 1080, 850);
+				characterImgPos.x = EaseBackOut(firstTimeTimer, -1500, -50 + 1500, 450);
+				bubbleImgPos.y = EaseExpoOut(firstTimeTimer, 1080, 100 - 1080, 450);
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-				if (firstTimeTimer >= 850)
+				if (firstTimeTimer >= 450)
 				{
 					firstTime = false;
 
@@ -238,13 +236,13 @@ namespace Wiwa
 				currentTime++;
 				*/
 
-				characterImgPos.x = EaseBackIn(endTimeTimer, -50, -1500 + 50, 850);
-				bubbleImgPos.y = EaseBackIn(endTimeTimer, 100, 1080 - 100, 850);
+				characterImgPos.x = EaseBackIn(endTimeTimer, -50, -1500 + 50, 450);
+				bubbleImgPos.y = EaseExpoIn(endTimeTimer, 100, 1080 - 100, 450);
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-				if (endTimeTimer >= 850)
+				if (endTimeTimer >= 450)
 				{
 					render->DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 					render->DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
