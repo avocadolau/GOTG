@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "EnemySystem.h"
 #include <Wiwa/game/GameStateManager.h>
+#include <Wiwa/ecs/components/game/attack/ExplosiveBarrel.h>
 #include <Wiwa/ecs/components/game/attack/PhylasQuantumSword.h>
 #include <Wiwa/ecs/components/game/attack/GrootSeeds.h>
 #include <Wiwa/ecs/components/game/attack/StarhawkBlast.h>
@@ -117,6 +118,15 @@ namespace Wiwa
 			}
 		
 			//ReceiveDamage(bullet->Damage);
+		}
+
+		std::string explosiveBarrelStr = "EXPLOSIVE_BARREL";
+		if (body1->id == m_EntityId && explosiveBarrelStr == body2->selfTagStr)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Wiwa::ExplosiveBarrel* explosiveBarrel = em.GetComponent<Wiwa::ExplosiveBarrel>(body2->id);
+			ReceiveDamage(explosiveBarrel->damage);
 		}
 
 		std::string phylasSword = "PHYLAS_QUANTUM_SWORD";
