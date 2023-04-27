@@ -279,7 +279,7 @@ namespace Wiwa
 		framebuffer.Bind();
 		glEnable(GL_BLEND);
 		//glBlendEquation(GL_ADD);
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
@@ -287,7 +287,7 @@ namespace Wiwa
 			instanceRenderers[i].Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
 		}
 		//glDepthMask(true);
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 		framebuffer.Unbind();
 
