@@ -20,6 +20,7 @@ namespace Wiwa
         SENTINEL_EXPLOSION,
         CLUSTER_BULLET,
         ULTRON_LASER_BEAM,
+        EXPLOSIVE_BARREL,
     };
 
     class Scene;
