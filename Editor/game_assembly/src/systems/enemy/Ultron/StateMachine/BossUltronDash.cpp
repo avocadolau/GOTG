@@ -87,7 +87,7 @@ namespace Wiwa
 			/*directionDash = Math::PointAlongDirection(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation, dashDistance);*/
 			directionDash = Math::GetRoationBetweenTwoPoints(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation);
 			float dashVelocity = dashDistance / lifetimeDash;
-			agent->RequestMoveVelocity(directionDash * dashVelocity);
+			//agent->RequestMoveVelocity(directionDash * dashVelocity);
 
 			m_State = DashState::DASH_PLAYING;
 		}

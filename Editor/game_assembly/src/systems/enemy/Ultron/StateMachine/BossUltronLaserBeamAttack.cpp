@@ -1,8 +1,8 @@
 #include <wipch.h>
 #include "BossUltronLaserBeamAttack.h"
 #include "../BossUltron.h"
-#include "Wiwa/ecs/components/game/attack/UltronLaserBeam.h"
-#include "Wiwa/ecs/systems/game/attack/UltronLaserBeamSystem.h"
+#include "../../../../components/attack/UltronLaserBeam.h"
+#include "../../../attack/UltronLaserBeamSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>

@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 namespace Wiwa {
-	struct  Enemy {
+	struct WI_API Enemy {
 		int enemyType;
 		bool hasFinished;
 		int waveId;

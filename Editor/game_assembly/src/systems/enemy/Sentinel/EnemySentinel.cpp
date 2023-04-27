@@ -7,7 +7,7 @@
 #include "StateMachine/SentinelHit.h"
 #include "EnemySentinel.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include "../../../components/Character.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 namespace Wiwa
 {

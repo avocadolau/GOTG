@@ -3,7 +3,7 @@
 #include <Wiwa/ecs/systems/System.h>
 namespace Wiwa
 {
-	class  RewardRoom : public System
+	class WI_API RewardRoom : public System
 	{
 	public:
 		RewardRoom() = default;

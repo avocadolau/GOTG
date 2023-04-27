@@ -1,8 +1,8 @@
 #include <wipch.h>
 #include "BossUltronClusterShotsAttack.h"
 #include "../BossUltron.h"
-#include "Wiwa/ecs/components/game/attack/ClusterBullet.h"
-#include "Wiwa/ecs/systems/game/attack/ClusterBulletSystem.h"
+#include "../../../../components/attack/ClusterBullet.h"
+#include "../../../attack/ClusterBulletSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>

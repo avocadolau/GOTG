@@ -6,7 +6,7 @@
 
 namespace Wiwa
 {
-    struct  Item
+    struct WI_API Item
     {
         char Name[128];
         uint8_t item_type;

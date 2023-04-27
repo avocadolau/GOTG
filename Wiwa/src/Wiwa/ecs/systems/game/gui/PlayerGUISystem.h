@@ -1,12 +1,12 @@
 #pragma once
 #include <Wiwa/core/Core.h>
 #include <Wiwa/ecs/Systems.h>
-#include "../../components/items/Item.h"
-#include "../../components/Character.h"
+#include <Wiwa/ecs/components/game/items/Item.h>
+#include <Wiwa/ecs/components/game/Character.h>
 
 namespace Wiwa
 {
-    class  PlayerGUISystem : public System
+    class WI_API PlayerGUISystem : public System
     {
     private:
         int CurrentHUD = 0;

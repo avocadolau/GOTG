@@ -2,8 +2,7 @@
 #include "CharacterInventory.h"
 #include "Wiwa/game/Items/ItemManager.h"
 #include "Wiwa/core/Input.h"
-#include "../Components.h"
-#include "../components/items/Item.h"
+#include "Wiwa/ecs/components/game/items/Item.h"
 
 void Wiwa::CharacterInventory::OnUpdate()
 {

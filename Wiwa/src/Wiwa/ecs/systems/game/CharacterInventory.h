@@ -6,7 +6,7 @@ namespace Wiwa
 {
     // This system only takes care of the pickup system
     struct Item;
-    class  CharacterInventory : public System
+    class WI_API CharacterInventory : public System
     {
     private:
         bool buyItem = false;

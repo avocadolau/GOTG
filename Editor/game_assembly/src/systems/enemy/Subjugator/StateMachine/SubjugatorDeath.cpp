@@ -3,8 +3,8 @@
 #include "../EnemySubjugator.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include "../../../wave/WaveSystem.h"
-#include "../../../../components/enemy/Enemy.h"
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
 
 namespace Wiwa
 {

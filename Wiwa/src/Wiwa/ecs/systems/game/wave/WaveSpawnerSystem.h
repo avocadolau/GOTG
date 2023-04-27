@@ -2,9 +2,10 @@
 #include <Wiwa/ecs/systems/System.h>
 
 #include <Wiwa/utilities/Reflection.h>
+#include <Wiwa/ecs/components/game/wave/Wave.h>
 
 namespace Wiwa {
-	class  WaveSpawnerSystem : public System {
+	class WI_API WaveSpawnerSystem : public System {
 	private:
 		EntityManager::ComponentIterator m_EnemySpawnerIt;
 		EntityManager::ComponentIterator m_CurrentWaveIt;

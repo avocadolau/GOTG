@@ -5,7 +5,7 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	struct  Character {
+	struct WI_API Character {
 		int MaxHealth;
 		int HealthMultiplier;
 		int Health;

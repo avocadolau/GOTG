@@ -6,7 +6,7 @@
 #include <Wiwa/utilities/EntityPool.h>
 
 namespace Wiwa {
-	class  WaveSystem : public System {
+	class WI_API WaveSystem : public System {
 	private:
 		EntityManager::ComponentIterator m_SpawnerIt;
 		EntityManager::ComponentIterator m_WaveIt;

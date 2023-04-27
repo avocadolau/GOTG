@@ -2,10 +2,10 @@
 #include "BossUltronBulletStormAttack.h"
 #include "../BossUltron.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
-#include "Wiwa/ecs/systems/game/attack/SimpleBulletSystem.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include "../../../../components/attack/SimpleBullet.h"
+#include "../../../attack/SimpleBulletSystem.h"
 
 namespace Wiwa
 {

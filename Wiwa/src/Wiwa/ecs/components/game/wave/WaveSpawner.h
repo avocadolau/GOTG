@@ -5,7 +5,7 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	struct  WaveSpawner {
+	struct WI_API WaveSpawner {
 		int maxEnemiesPerWave;
 		int maxWaveCount;
 		int currentWaveCount;

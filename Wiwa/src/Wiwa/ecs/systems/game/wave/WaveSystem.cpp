@@ -1,14 +1,13 @@
 #include <wipch.h>
 #include "WaveSystem.h"
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
-#include "../../components/enemy/Enemy.h"
-#include "../../systems/enemy/EnemySystem.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/utilities/EntityPool.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 #include <random>
-#include "../../components/wave/Wave.h"
-#include "../../components/wave/WaveSpawner.h"
+#include <Wiwa/ecs/components/game/wave/Wave.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 namespace Wiwa
 {
 	WaveSystem::WaveSystem()

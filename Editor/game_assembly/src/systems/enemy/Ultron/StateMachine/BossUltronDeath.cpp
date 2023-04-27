@@ -1,10 +1,10 @@
 #include <wipch.h>
 #include "BossUltronDeath.h"
 #include "../BossUltron.h"
-#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {

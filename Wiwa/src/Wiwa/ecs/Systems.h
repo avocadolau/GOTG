@@ -15,36 +15,10 @@
 #include "systems/ai/NavAgentSystem.h"
 
 // Game systems
-//#include "systems/game/enemy/EnemySystem.h"
-//#include "systems/game/wave/WaveSystem.h"
-//#include "systems/game/wave/WaveSpawnerSystem.h"
-//
-//#include "systems/game/enemy/MeleePhalanx/EnemyMeleePhalanx.h"
-//#include "systems/game/enemy/RangedPhalanx/EnemyRangedPhalanx.h"
-//#include "systems/game/enemy/Sentinel/EnemySentinel.h"
-//#include "systems/game/enemy/Ultron/BossUltron.h"
-//#include "systems/game/enemy/Subjugator/EnemySubjugator.h"
-//
-//#include "systems/game/attack/SimpleBulletSystem.h"
-//#include "systems/game/attack/SentinelExplosionSystem.h"
-//
-//#include "systems/game/attack/VictoryShieldSystem.h"
-//#include "systems/game/attack/StarhawksBlastSystem.h"
-//#include "systems/game/attack/PhylasQuantumSwordSystem.h"
-//#include "systems/game/attack/GrootSeedsSystem.h"
-//
-//#include "systems/game/CharacterInventory.h"
-//
-//#include "systems/game/items/RewardRoom.h"
-//
-//#include "systems/game/gui/PlayerGUISystem.h"
-//
-//#include "systems/game/camera/CameraController.h"
-//
-//#include "systems/game/NpcSystem.h"
-//
-//#include "systems/game/attack/ClusterBulletSystem.h"
-//
-//#include "systems/game/attack/UltronLaserBeamSystem.h"
-//
-//#include "systems/game/InitPool.h"
+#include "systems/game/wave/WaveSystem.h"
+#include "systems/game/wave/WaveSpawnerSystem.h"
+#include "systems/game/CharacterInventory.h"
+
+#include "systems/game/items/RewardRoom.h"
+
+#include "systems/game/gui/PlayerGUISystem.h"

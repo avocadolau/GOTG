@@ -1,14 +1,14 @@
 #include <wipch.h>
 #include "SentinelDeath.h"
 #include "../EnemySentinel.h"
-#include "../../../../components/wave/Wave.h"
+#include <Wiwa/ecs/components/game/wave/Wave.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include "../../../../components/enemy/Enemy.h"
-#include "../../../../components/Character.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
+#include <Wiwa/ecs/components/game/Character.h>
 #include "../../../attack/SentinelExplosionSystem.h"
-#include "../../../wave/WaveSystem.h"
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {

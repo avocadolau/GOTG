@@ -1,9 +1,9 @@
 #include <wipch.h>
 #include "EnemySystem.h"
 #include <Wiwa/game/GameStateManager.h>
-#include "../../components/enemy/Enemy.h"
-#include "../../components/Character.h"
-#include "../../components/wave/WaveSpawner.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
+#include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include "../../components/attack/PhylasQuantumSword.h"
 #include "../../components/attack/GrootSeeds.h"
 #include "../../components/attack/StarhawkBlast.h"

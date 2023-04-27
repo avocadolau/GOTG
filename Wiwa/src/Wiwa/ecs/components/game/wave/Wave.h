@@ -5,7 +5,7 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	struct  Wave {
+	struct WI_API Wave {
 		int maxEnemies;
 		int currentEnemiesAlive;
 		bool hasFinished;
