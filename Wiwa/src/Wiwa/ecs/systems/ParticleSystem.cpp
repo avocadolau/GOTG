@@ -365,9 +365,7 @@ namespace Wiwa {
 						orginalPos = particle.transform.localPosition;
 
 					}
-					/*orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
-					orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-					orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));*/
+					
 					particle.transform.position = orginalPos;
 
 					particle.transform.scale = particle.transform.localScale;
@@ -594,6 +592,20 @@ namespace Wiwa {
 		if (emitter->m_p_followEmitterPositionSpawn) followSpawnPos = t3d->position;
 		if (emitter->m_p_followEmitterRotationSpawn) followSpawnRot = t3d->rotation;
 
+		//initial rotation
+		if (emitter->m_p_rangedInitialRotation)
+		{
+			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.x, emitter->m_p_maxInitialRotation.x);
+			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.y, emitter->m_p_maxInitialRotation.y);
+			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.z, emitter->m_p_maxInitialRotation.z);
+
+			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/ + glm::vec3(x, y, z);
+		}
+		else
+		{
+			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
+		}
+		glm::vec3 rotationRad = glm::radians(initRotation);
 
 		switch (emitter->m_spawnVolume)
 		{
@@ -631,19 +643,12 @@ namespace Wiwa {
 			}
 			break;
 		}
-		//initial rotation
-		if (emitter->m_p_rangedInitialRotation)
-		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.x, emitter->m_p_maxInitialRotation.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.y, emitter->m_p_maxInitialRotation.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialRotation.z, emitter->m_p_maxInitialRotation.z);
+		glm::vec3 tempInitPos(0);
+		tempInitPos = glm::rotate(initPosition, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		tempInitPos = glm::rotate(initPosition, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		tempInitPos = glm::rotate(initPosition, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/ + glm::vec3(x, y, z);
-		}
-		else
-		{
-			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
-		}
+		initPosition = tempInitPos;
 
 		//initial scale
 		if (emitter->m_p_rangedInitialScale)

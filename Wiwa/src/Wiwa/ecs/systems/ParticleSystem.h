@@ -23,7 +23,7 @@ namespace Wiwa
 			life_percentage(0.0f),
 			//position(0.0f),
 			startPosition(0.0f),
-			//rotation(0.0f),
+			startRotation(0.0f),
 			angularVelocity(0.0f),
 			//scale(0.0f),
 			growthVelocity(0.0f),
@@ -40,6 +40,7 @@ namespace Wiwa
 			life_time_start = _life;
 			life_percentage = 0.0f;
 			startPosition = _startPosition;
+			startRotation = _rotation;
 			//position = startPosition;
 			//rotation = _rotation;
 			angularVelocity = _angularVelocity;
@@ -58,7 +59,7 @@ namespace Wiwa
 		//glm::vec3 position;
 		glm::vec3 startPosition;
 		glm::vec3 velocity;
-		//glm::vec3 rotation;
+		glm::vec3 startRotation;
 		glm::vec3 angularVelocity;
 		//glm::vec3 scale;
 		glm::vec3 growthVelocity;
