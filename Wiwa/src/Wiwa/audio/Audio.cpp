@@ -16,6 +16,12 @@
 #include <AK/SpatialAudio/Common/AkSpatialAudio.h>
 
 #include <AK/SoundEngine/Common/AkTypes.h>
+#include <AK/SoundEngine/Common/AkMemoryMgr.h>
+#include <AK/SoundEngine/Common/AkModule.h>
+#include <AK/SoundEngine/Common/AkSoundEngine.h>
+
+
+#include <AK/SoundEngine/Common/AkTypes.h>
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
@@ -596,7 +602,8 @@ bool Audio::UnloadEvent(const char* event_name)
 
 bool Audio::PostEvent(const char* event_name, uint64_t game_object)
 {
-    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object);
+     AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object);
+   
 
     if (play_id == AK_INVALID_PLAYING_ID) {
         m_LastErrorMsg = "Couldn't post event [";
@@ -607,6 +614,22 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object)
 
     return true;
 }
+
+bool Audio::PostNonSpatialEvent(const char* event_name)
+{
+    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, AK_INVALID_GAME_OBJECT);
+
+
+    if (play_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't post event [";
+        m_LastErrorMsg += event_name;
+        m_LastErrorMsg += "]";
+        return false;
+    }
+
+    return true;
+}
+
 
 struct AkCallbackCookie {
     std::string ev_name;
@@ -641,6 +664,19 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const
         return false;
     }
 
+    return true;
+}
+
+bool Audio::SetMusicState(const char* music_container, const char* music_track)
+{
+    // Set the state of a state group to "music_container"
+    AkPlayingID play_id = AK::SoundEngine::SetState(music_container, music_track);
+    if (play_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't play track[";
+        m_LastErrorMsg += music_track;
+        m_LastErrorMsg += "]";
+        return false;
+    }
     return true;
 }
 

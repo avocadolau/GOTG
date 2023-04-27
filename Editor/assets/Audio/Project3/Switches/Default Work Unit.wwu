@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{8B776CA6-7F1B-44DE-AC39-C708D78D6476}" SchemaVersion="110">
 	<Switches>
-		<WorkUnit Name="Default Work Unit" ID="{8B776CA6-7F1B-44DE-AC39-C708D78D6476}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{8B776CA6-7F1B-44DE-AC39-C708D78D6476}" PersistMode="Standalone">
+			<ChildrenList>
+				<SwitchGroup Name="game" ID="{98B6CCD5-2349-4CBA-ABC5-D800E64BFFD6}"/>
+			</ChildrenList>
+		</WorkUnit>
 	</Switches>
 </WwiseDocument>

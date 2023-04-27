@@ -1,8 +1,21 @@
+Event	ID	Name			Wwise Object Path	Notes
+	2932040671	play_music			\Music\play_music	
+
 State Group	ID	Name			Wwise Object Path	Notes
-	514064485	fight			\Default Work Unit\fight	
-	3753286132	calm			\Default Work Unit\calm	
+	3991942870	music			\Default Work Unit\music	
 
 State	ID	Name	State Group			Notes
-	748895195	None	fight			
-	748895195	None	calm			
+	77978275	ambient	music			
+	646625282	hub	music			
+	748895195	None	music			
+	1125500713	intro	music			
+	2607556080	menu	music			
+	2764240573	combat	music			
+	2837384057	stop_music	music			
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	1033335	13 The Meat Grinder	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\13 The Meat Grinder_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\In-Game Music\combat\13 The Meat Grinder\13 The Meat Grinder		32702304
+	158639137	10 The Weirdboy	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\10 The Weirdboy_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\In-Game Music\combat\10 The Weirdboy\10 The Weirdboy		20815296
+	687512094	17 Legions Of Chaos	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\17 Legions Of Chaos_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\In-Game Music\combat\17 Legions Of Chaos\17 Legions Of Chaos		19756896
+	699656590	07 Whispers Of The Dead	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\07 Whispers Of The Dead_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\In-Game Music\ambience\07 Whispers Of The Dead\07 Whispers Of The Dead		15993696
 

@@ -1,1 +1,1 @@
-{"name":"GuardiansOfTheGalaxy","version":"0.2","company":"PixelPlayground","target":0,"scene_list":[{"name":"particles_playground","path":"library/scenes/debugrooms/particles_playground.wiscene"},{"name":"q","path":"library/../../../q.wiscene"}]}
+{"name":"GuardiansOfTheGalaxy","version":"0.2","company":"PixelPlayground","target":0,"scene_list":[{"name":"particles_playground","path":"library/scenes/debugrooms/particles_playground.wiscene"}]}

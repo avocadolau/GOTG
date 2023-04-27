@@ -173,53 +173,61 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
-				<Folder Name="music" ID="{8FFD6009-9EDA-4DA6-9A5D-690B789291CC}" ShortID="588284070">
-					<ChildrenList>
-						<Event Name="level_music_01" ID="{ECC5C8DA-5777-4390-9FC3-FD897B6E0DD0}">
-							<ChildrenList>
-								<Action Name="" ID="{12E181C1-08D5-4C1C-A4A5-01F38E2B3CAF}" ShortID="488524899">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="track_levelmusic_1" ID="{22460A46-7527-4910-9D79-4B234AD63B73}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="level_music_02" ID="{E4B0AACA-AD76-40C1-8644-9F8B6145778B}">
-							<ChildrenList>
-								<Action Name="" ID="{2C9166AB-C6A3-4C89-9E2E-83E2A8943071}" ShortID="393177643">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="track_levelmusic_2" ID="{6774A7D4-591D-4BB7-961C-5451C483AC89}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="level_music_03" ID="{C7D8A2A5-B759-4FC7-A09A-3A78B03968A1}">
-							<ChildrenList>
-								<Action Name="" ID="{A1B3B943-1CB6-4C64-ADC4-56967C981FDA}" ShortID="305946202">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="track_levelmusic_3" ID="{B15EECF8-4755-4A27-8901-A1AC7B729814}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-					</ChildrenList>
-				</Folder>
 				<Folder Name="volume" ID="{584D449A-094E-4BE8-BF76-7144992B0248}" ShortID="715528837">
 					<ChildrenList>
-						<Event Name="Set_Music_Volume" ID="{F4D8491C-BD25-49D9-BCB1-630793B3504E}"/>
-						<Event Name="Set_Bus_Master_Volume" ID="{C1D7A53F-D923-4A6E-959A-D98F6CD237B1}">
+						<Event Name="set_music_volume" ID="{F4D8491C-BD25-49D9-BCB1-630793B3504E}">
+							<ChildrenList>
+								<Action Name="" ID="{E96FC8D6-C539-45DD-9E4D-99141DA75D4B}" ShortID="949216688">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="11"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Music" ID="{6D1D5E5C-4246-4842-987F-B669854424D1}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="set_master_volume" ID="{C1D7A53F-D923-4A6E-959A-D98F6CD237B1}">
 							<ChildrenList>
 								<Action Name="" ID="{702B1937-29CE-491D-BC8F-AA2A65F99709}" ShortID="967513861">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="11"/>
 									</PropertyList>
-									<ReferenceList/>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="set_sfx_volume" ID="{6834BC3D-FC75-4BA2-8703-ED93F85E910D}">
+							<ChildrenList>
+								<Action Name="" ID="{5CD31E3D-22E4-43F1-ACC3-E02264D4466F}" ShortID="865345928">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="11"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="set_dialog_volume" ID="{C3AAFC03-F0E8-4701-9F1C-1DE616D2811F}">
+							<ChildrenList>
+								<Action Name="" ID="{EDC31FD1-8F65-4790-8F76-B6426075F686}" ShortID="124500203">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="11"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Dialogues" ID="{B6922278-6C70-4AAF-B982-6B1B05E3C486}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
 								</Action>
 							</ChildrenList>
 						</Event>
@@ -276,6 +284,11 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
+					<ChildrenList>
+						<Event Name="music_hub" ID="{AB655294-2E7A-470C-93ED-AAC8204FACF3}"/>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

@@ -13,7 +13,8 @@ namespace Wiwa {
 
 	class GameMusicManager
 	{
-
+	public:
+		void static Update();
 		void static PlayMusic(const char* music_name);
 	};
 

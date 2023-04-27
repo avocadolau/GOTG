@@ -9,6 +9,7 @@
 #include <Wiwa/utilities/render/LightManager.h>
 #include <Wiwa/core/ProjectManager.h>
 #include <Wiwa/AI/AI_Crowd.h>
+#include <Wiwa/game/GameMusicManager.h>
 
 namespace Wiwa
 {
@@ -55,6 +56,7 @@ namespace Wiwa
 			Update();
 			GameStateManager::UpdateRoomState();
 		}
+		GameMusicManager::Update();
 	}
 
 	void SceneManager::CleanUp()

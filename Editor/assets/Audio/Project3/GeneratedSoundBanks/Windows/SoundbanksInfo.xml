@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="232625244" Type="User" Language="SFX">
+		<SoundBank Id="232625244" Type="User" Language="SFX" Hash="{BE8E2A93-D7F0-38B7-AF18-5FD4709A3086}">
 			<ShortName>phalanx_melee</ShortName>
 			<Path>phalanx_melee.bnk</Path>
 			<Media>
@@ -53,11 +53,62 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{E7442BDA-A405-10BD-6BD6-29C20BEE1A07}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{E5FBDCAC-DB60-E8AB-9548-030FDEBD76EA}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
+			<Media>
+				<File Id="1033335" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>13 The Meat Grinder.wav</ShortName>
+					<CachePath>SFX/13 The Meat Grinder_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="158639137" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>10 The Weirdboy.wav</ShortName>
+					<CachePath>SFX/10 The Weirdboy_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="687512094" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>17 Legions Of Chaos.wav</ShortName>
+					<CachePath>SFX/17 Legions Of Chaos_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="699656590" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>07 Whispers Of The Dead.wav</ShortName>
+					<CachePath>SFX/07 Whispers Of The Dead_D79FB2B7.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2932040671" Name="play_music">
+					<SwitchContainers>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="3991942870" Id="77978275"/>
+							<MediaRefs>
+								<MediaRef Id="699656590"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="3991942870" Id="2764240573"/>
+							<MediaRefs>
+								<MediaRef Id="1033335"/>
+								<MediaRef Id="158639137"/>
+								<MediaRef Id="687512094"/>
+							</MediaRefs>
+						</SwitchContainer>
+					</SwitchContainers>
+				</Event>
+			</Events>
+			<StateGroups>
+				<StateGroup Id="3991942870" Name="music">
+					<States>
+						<State Id="77978275" Name="ambient"/>
+						<State Id="646625282" Name="hub"/>
+						<State Id="748895195" Name="None"/>
+						<State Id="1125500713" Name="intro"/>
+						<State Id="2607556080" Name="menu"/>
+						<State Id="2764240573" Name="combat"/>
+						<State Id="2837384057" Name="stop_music"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="968010305" Type="User" Language="SFX">
+		<SoundBank Id="968010305" Type="User" Language="SFX" Hash="{765621D9-7069-4A40-D1F6-9B0D38DC408E}">
 			<ShortName>props</ShortName>
 			<Path>props.bnk</Path>
 			<Media>
@@ -67,9 +118,9 @@
 				</File>
 			</Media>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX">
-			<ShortName>Player</ShortName>
-			<Path>Player.bnk</Path>
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{5BB77BFA-464B-FA53-2FD3-BC9F3A062A2D}">
+			<ShortName>player</ShortName>
+			<Path>player.bnk</Path>
 			<Media>
 				<File Id="385111800" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\player\bullet_hit_wall.wav</ShortName>
@@ -89,7 +140,7 @@
 				</File>
 			</Media>
 		</SoundBank>
-		<SoundBank Id="1309352537" Type="User" Language="SFX">
+		<SoundBank Id="1309352537" Type="User" Language="SFX" Hash="{F7C4F03E-054E-E47E-B500-1B81D00ED2F2}">
 			<ShortName>phalanx_ranged</ShortName>
 			<Path>phalanx_ranged.bnk</Path>
 			<Media>
@@ -107,7 +158,7 @@
 				</File>
 			</Media>
 		</SoundBank>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{39F572FF-9FA5-1C7C-25DC-84BFF4E2C192}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{B8D96DBC-A2AB-F840-43AB-512309379B9A}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -139,14 +190,15 @@
 				<GameParameter Id="4160247818" Name="SS_Air_Turbulence"/>
 			</GameParameters>
 			<StateGroups>
-				<StateGroup Id="514064485" Name="fight">
+				<StateGroup Id="3991942870" Name="music">
 					<States>
+						<State Id="77978275" Name="ambient"/>
+						<State Id="646625282" Name="hub"/>
 						<State Id="748895195" Name="None"/>
-					</States>
-				</StateGroup>
-				<StateGroup Id="3753286132" Name="calm">
-					<States>
-						<State Id="748895195" Name="None"/>
+						<State Id="1125500713" Name="intro"/>
+						<State Id="2607556080" Name="menu"/>
+						<State Id="2764240573" Name="combat"/>
+						<State Id="2837384057" Name="stop_music"/>
 					</States>
 				</StateGroup>
 			</StateGroups>
@@ -265,7 +317,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{3E59DF20-FBCB-09C5-CF3E-7B184F37082D}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -290,7 +342,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX">
+		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{6F198CF9-559C-2435-1179-BB8492D01FA0}">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -324,10 +376,6 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="4055567060" Type="User" Language="SFX">
-			<ShortName>menu_music</ShortName>
-			<Path>menu_music.bnk</Path>
-		</SoundBank>
 	</SoundBanks>
-	<FileHash>{FADC0B75-58CD-DD08-537F-DF5F8EA25324}</FileHash>
+	<FileHash>{489981F6-5A0E-1B67-2A58-B60FF4A3B596}</FileHash>
 </SoundBanksInfo>

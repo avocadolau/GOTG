@@ -3,14 +3,13 @@
 	<States>
 		<WorkUnit Name="Default Work Unit" ID="{4A056DB4-08A4-4B00-8606-B945ED9E21A4}" PersistMode="Standalone">
 			<ChildrenList>
-				<StateGroup Name="calm" ID="{0C15ECA8-5FB3-4BA9-8893-25E54C948F21}">
+				<StateGroup Name="music" ID="{6E11A566-4D8E-414B-9FC7-D1497B3332CA}">
 					<ChildrenList>
-						<State Name="None" ID="{E933E583-2307-401A-8CEA-186D36B9BABA}"/>
-					</ChildrenList>
-				</StateGroup>
-				<StateGroup Name="fight" ID="{1A62E745-3D3E-41E4-AA15-55B86AC00177}">
-					<ChildrenList>
-						<State Name="None" ID="{078B5F85-544F-4246-A442-B1684121B37F}"/>
+						<State Name="None" ID="{E01D6655-02A8-49FB-A119-AE166D7D8DB3}"/>
+						<State Name="combat" ID="{862198BF-9E05-4FC9-9BCE-4996694AC02F}"/>
+						<State Name="hub" ID="{7418D457-6714-4599-B293-FB920EF9E50B}"/>
+						<State Name="menu" ID="{D4085FD8-710C-44C9-9BAE-6A08C2C69412}"/>
+						<State Name="no_music" ID="{B2314841-D738-4FC2-934F-61976DF32CDD}"/>
 					</ChildrenList>
 				</StateGroup>
 			</ChildrenList>

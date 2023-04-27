@@ -1,10 +1,14 @@
 State Group	ID	Name			Wwise Object Path	Notes
-	514064485	fight			\Default Work Unit\fight	
-	3753286132	calm			\Default Work Unit\calm	
+	3991942870	music			\Default Work Unit\music	
 
 State	ID	Name	State Group			Notes
-	748895195	None	fight			
-	748895195	None	calm			
+	77978275	ambient	music			
+	646625282	hub	music			
+	748895195	None	music			
+	1125500713	intro	music			
+	2607556080	menu	music			
+	2764240573	combat	music			
+	2837384057	stop_music	music			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	504532776	Brick			\Factory Acoustic Textures\Textures\Brick	
