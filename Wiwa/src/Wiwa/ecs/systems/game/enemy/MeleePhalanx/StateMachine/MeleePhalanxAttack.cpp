@@ -30,6 +30,10 @@ namespace Wiwa
 			navAgent->autoRotate = false;
 		}
 
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+
+		navAgentPtr->StopAgent();
+
 		GenerateAttack(enemy);
 	}
 
