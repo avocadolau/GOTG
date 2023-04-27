@@ -57,7 +57,7 @@ namespace Wiwa
 
         if (agent && !m_HasTargetPoint && distanceToPlayer > enemy->m_RangeOfAttack)
         {
-            Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+            //Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
            /* offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.75f);*/
             m_TargetPoint = agent->GetRandPointOutsideCircle(playerTr->localPosition, enemy->m_RangeOfAttack);
             agent->SetDestination(m_TargetPoint);
@@ -70,7 +70,10 @@ namespace Wiwa
         if (isNearTargetPoint)
             m_HasTargetPoint = false;
 
-        if (distanceToPlayer < enemy->m_RangeOfAttack)
+        bool messi = agent->Raycast(selfTr->localPosition, playerTr->localPosition);
+        WI_INFO(" Raycast, something in betwee: {}", messi);
+
+        if (distanceToPlayer < enemy->m_RangeOfAttack && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
         {
             agent->StopAgent();
             enemy->SwitchState(enemy->m_AttackingState);
