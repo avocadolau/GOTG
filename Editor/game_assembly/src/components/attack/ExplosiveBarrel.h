@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 namespace Wiwa {
-	struct WI_API ExplosiveBarrel {
+	struct ExplosiveBarrel {
 		float lifeTime;
 		int damage;
 	};

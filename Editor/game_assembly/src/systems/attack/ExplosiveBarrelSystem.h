@@ -1,10 +1,9 @@
 #pragma once
-#include "../../System.h"
-
+#include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	class WI_API ExplosiveBarrelSystem : public System {
+	class ExplosiveBarrelSystem : public System {
 	private:
 		float m_Timer = 0;
 		EntityManager::ComponentIterator m_BarrelExplosionIt;

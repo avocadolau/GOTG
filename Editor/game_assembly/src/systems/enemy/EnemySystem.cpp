@@ -10,6 +10,7 @@
 
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include "../../components/attack/ExplosiveBarrel.h"
 
 namespace Wiwa
 {

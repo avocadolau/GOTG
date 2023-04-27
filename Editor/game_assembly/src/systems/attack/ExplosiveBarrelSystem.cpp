@@ -1,8 +1,7 @@
 #include <wipch.h>
 #include "ExplosiveBarrelSystem.h"
-#include "Wiwa/ecs/components/game/attack/ExplosiveBarrel.h"
+#include "../../components/attack/ExplosiveBarrel.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include "Wiwa/ecs/systems/game/enemy/EnemySystem.h"
 
 namespace Wiwa
 {

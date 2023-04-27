@@ -121,8 +121,8 @@ namespace Wiwa
 		case Wiwa::BossUltronDashState::DashState::DASH_STOP:
 		{
 			agent->StopAgent();
-			agent->SetPreviousMaxSpeed();
-			agent->SetPreviousMaxAcceleration();
+			/*agent->SetPreviousMaxSpeed();
+			agent->SetPreviousMaxAcceleration();*/
 
 			m_State = DashState::DASH_COOLDOWN;
 		}
