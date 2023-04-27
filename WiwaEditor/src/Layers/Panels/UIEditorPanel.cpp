@@ -269,6 +269,7 @@ void UIEditorPanel::CleanInitialValues()
 	originPos[1] = 0;
 	originSize[0] = 0;
 	originSize[1] = 0;
+	priority = 0;
 	callbackID = WI_INVALID_INDEX;
 	audioEventForButton = "";
 	animated = false;
@@ -330,6 +331,10 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		if(ImGui::DragInt2("position", pos))
 		{
 			UpdateElements(control,control->type);
+		}
+		if (ImGui::DragInt("priority", &priority))
+		{
+			UpdateElements(control, control->type);
 		}
 		if(ImGui::DragInt2("size", size))
 		{
@@ -463,6 +468,9 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 		control->callbackID = callbackID;
 		control->callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 	}
+
+	r2d.UpdateInstancedQuadTexPriority(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, priority);
+
 
 	switch (type)
 	{

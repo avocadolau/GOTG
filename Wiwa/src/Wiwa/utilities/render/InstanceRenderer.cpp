@@ -110,8 +110,11 @@ namespace Wiwa {
 
 		glEnableVertexAttribArray(11);
 		glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(18 * sizeof(float)));
+		glVertexAttribDivisor(11, 1);
 
-
+		glEnableVertexAttribArray(12);
+		glVertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(19 * sizeof(float)));
+		glVertexAttribDivisor(12, 1);
 
 		m_InstanceVertex = new VertexInstanceTexture[m_MaxInstances];
 
@@ -177,6 +180,8 @@ namespace Wiwa {
 		m_InstanceVertex[instance_id].textureClip = clip;
 
 		m_InstanceVertex[instance_id].active = 1.0f;
+
+		m_InstanceVertex[instance_id].priority = 0.0f;
 
 		return instance_id;
 	}
@@ -259,7 +264,6 @@ namespace Wiwa {
 
 		if (index == texSize) {
 			if (texSize >= MAX_INSTANCE_TEXTURES) {
-				WI_ERROR("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
 				return -1;
 			}
 			else
@@ -291,5 +295,9 @@ namespace Wiwa {
 		m_InstanceVertex[instance].active = 0.0f;
 
 		m_RemovedInstances.push_back(instance);
+	}
+	void InstanceRenderer::SetPriority(uint32_t instance, int priority)
+	{
+		m_InstanceVertex[instance].priority = priority;
 	}
 }

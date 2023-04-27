@@ -512,8 +512,8 @@ void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)
 
 	gm.canvas.at(CanvasHUD)->controls.at(5)->text = my_string.c_str();
 	Text* newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", my_string.c_str());
-	//r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
-	//r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
+	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
+	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
 }
 
 void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem)

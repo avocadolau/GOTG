@@ -11,7 +11,6 @@ out vec4 out_color;
 
 void main() {
 	if(f_Active < 0.5) discard;
-
 	vec2 texCoordFlip = f_TexCoord;
 	int index = int(f_TexID);
 	
