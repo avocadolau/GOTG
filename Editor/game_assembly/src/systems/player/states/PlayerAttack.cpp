@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "PlayerAttack.h"
 #include "../../../components/player/StarLordShooter.h"
+#include "../../../components/Character.h"
 
 Wiwa::PlayerAttack::PlayerAttack(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id) {}

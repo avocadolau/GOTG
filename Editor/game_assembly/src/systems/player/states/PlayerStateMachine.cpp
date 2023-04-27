@@ -6,6 +6,7 @@
 #include "PlayerMove.h"
 #include "PlayerDash.h"
 #include "PlayerDeath.h"
+#include "../../../components/Character.h"
 
 Wiwa::PlayerStateMachine::PlayerStateMachine()
 {

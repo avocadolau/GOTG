@@ -1,5 +1,6 @@
 #include "wipch.h"
 #include "PlayerDash.h"
+#include "../../../components/Character.h"
 
 Wiwa::PlayerDash::PlayerDash(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id)
