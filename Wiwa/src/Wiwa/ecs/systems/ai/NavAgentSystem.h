@@ -26,8 +26,10 @@ namespace Wiwa
         void SetPreviousMaxSpeed();
         void SetPreviousMaxAcceleration();
 
-        void RequestMoveVelocity(const glm::vec3 velocity);
+        void RequestMoveVelocity(const glm::vec3& velocity);
         void StopAgent();
+
+        bool Raycast(const glm::vec3& start_point, const glm::vec3& start_end);
 
         const glm::vec3& GetCurrentPosition() const;
         //const glm::vec3& GetCurrentVelocity() const;

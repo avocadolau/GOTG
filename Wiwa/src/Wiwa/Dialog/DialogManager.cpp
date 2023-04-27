@@ -67,20 +67,6 @@ namespace Wiwa
 		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, continueImgID);
 
-		/*Conversation* newConversation = new Conversation();
-
-		newConversation->conversationName = "Test conversation";
-		
-		SetDialogText("This is a test dialog in line 1", "We are on node... 1", "agniag", "assets/Fonts/Jade_Smile.ttf", *newConversation);
-		SetDialogText("Aaaaaaaa in line 1", "We are on node... 2", "agbQAGIU", "assets/Fonts/Jade_Smile.ttf", *newConversation);
-		SetDialogText("Is this a test dialog in line 1?", "We are on node... 3", "dfgnhNIUFniiauergnb", "assets/Fonts/Jade_Smile.ttf", *newConversation);
-
-		SetContinueIndicatorImage("assets/HUD_Images/dialog_images/dialog_test_placeholder3.png", *newConversation);
-		SetDialogBubbleImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", *newConversation);
-		SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", *newConversation);
-
-		conversations.push_back(newConversation);*/
-
 		//conversations[0].conversationName = "NPC_1";
 
 		//SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
@@ -101,16 +87,11 @@ namespace Wiwa
 		keyPressRefreshTimer = 0;
 
 		collidingWithNpc = false;
-
-		timer = 0;
-
 		
 		characterImgPos.x = -50;
 		characterImgPos.y = 100; // <--
 		bubbleImgPos.x = 640; // <--
 		bubbleImgPos.y = 100;
-
-		//newConversation = nullptr;
 
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
@@ -135,7 +116,7 @@ namespace Wiwa
 	}
 
 
-	bool DialogManager::Update()  // Continue: mando Y, teclado Space - In total, two custom images: character and bubble - one fix image: continue sign
+	bool DialogManager::Update()
 	{
 		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 		{
@@ -186,7 +167,9 @@ namespace Wiwa
 		{
 			actualConversationState = 1;
 			firstTime = true;
-			timer = 0;
+			endTime = false;
+			firstTimeTimer = 0;
+			endTimeTimer = 0;
 
 			characterImgPos.x = -150;
 			characterImgPos.y = 100; // <--
@@ -196,8 +179,6 @@ namespace Wiwa
 			render->EnableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 			render->EnableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 		}
-
-		timer += Time::GetDeltaTime();
 
 		if (actualConversationState == 1)
 		{
@@ -209,13 +190,13 @@ namespace Wiwa
 			InstanceRenderer& instanceRenderer3 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.renderer_id);
 			instanceRenderer3.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.instance_id, BLACK);
 
-			if (firstTime == false)
+			if (firstTime == false && endTime == false)
 			{
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
 			}
-			else if (firstTime == true && timer > 850)
+			else if (firstTime == true && firstTimeTimer > 850 && endTime == false)
 			{
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
@@ -224,29 +205,15 @@ namespace Wiwa
 
 			if (firstTime == true)
 			{
-				/*
-				Example:
-				
-				int currentTime = 0;
-				int duration = 100;
-				float startPositionX = 0.0f;
-				float finalPositionX = 30.0f;
-				float currentPositionX = startPositionX;
-				
-				while (currentPositionX < finalPositionX)
-				{
-				    currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
-				    currentTime++;
-				}
-				*/
+				firstTimeTimer += Time::GetDeltaTime();
 
-				characterImgPos.x = EaseBackOut(timer, -1500, -50 + 1500, 850);
-				bubbleImgPos.y = EaseBackOut(timer, 1080, 100 - 1080, 850);
+				characterImgPos.x = EaseBackOut(firstTimeTimer, -1500, -50 + 1500, 450);
+				bubbleImgPos.y = EaseExpoOut(firstTimeTimer, 1080, 100 - 1080, 450);
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 
-				if (timer >= 850)
+				if (firstTimeTimer >= 450)
 				{
 					firstTime = false;
 
@@ -259,27 +226,48 @@ namespace Wiwa
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				}
 			}
-			//else
-			//{
-			//	characterImgPos.x = -50;
-			//	characterImgPos.y = 100; // <--
-			//	bubbleImgPos.x = 640; // <--
-			//	bubbleImgPos.y = 100;
-			//
-			//	render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
-			//	render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
-			//}
+			else if (endTime == true)
+			{
+				endTimeTimer += Time::GetDeltaTime();
+				/*
+				Example:
+
+				currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
+				currentTime++;
+				*/
+
+				characterImgPos.x = EaseBackIn(endTimeTimer, -50, -1500 + 50, 450);
+				bubbleImgPos.y = EaseExpoIn(endTimeTimer, 100, 1080 - 100, 450);
+
+				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
+				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
+
+				if (endTimeTimer >= 450)
+				{
+					render->DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+					render->DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+
+					endTime = false;
+
+					characterImgPos.x = -150;
+					characterImgPos.y = 100; // <--
+					bubbleImgPos.x = 640; // <--
+					bubbleImgPos.y = 0;
+
+					actualConversationState = 2;
+				}
+			}
 
 			if (((keyPressRefreshTimer / 450) % 2) == 0)
 			{
-				render->EnableInstance(m_Scene, continueImgID);
+				if(firstTime == false && endTime == false) render->EnableInstance(m_Scene, continueImgID);
 			}
 			else
 			{
 				render->DisableInstance(m_Scene, continueImgID);
 			}
 
-			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressRefreshTimer > 850)
+			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && (keyPressRefreshTimer > 850 && firstTime == false && endTime == false))
 			{
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
@@ -292,12 +280,9 @@ namespace Wiwa
 				currentNode++;
 				if (currentNode >= MAX_CONVERSATION_NODES || conversations[conversationNumber].nodes[currentNode].occupied == false)
 				{
-					render->DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
-					render->DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
-
 					currentNode = 0;
-					actualConversationState = 2;
 					firstTime = false;
+					endTime = true;
 				}
 			}
 		}
@@ -350,8 +335,6 @@ namespace Wiwa
 
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 		Image* characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
-
-		//conversations[conversationNumber].characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
@@ -467,16 +450,5 @@ namespace Wiwa
 
 		doc.save_file("config/conversations.wiconversation");
 	}
-
-	/*void DialogManager::SetContinueIndicatorImage(const char* path, int conversationNumber)
-	{
-		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
-
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
-
-		conversations[conversationNumber].continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render.DisableInstance(m_Scene, conversations[conversationNumber].continueImgID);
-	}*/
 	
 }

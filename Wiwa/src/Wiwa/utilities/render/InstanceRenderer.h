@@ -60,5 +60,7 @@ namespace Wiwa {
 		void SetEnabled(uint32_t instance, bool enabled);
 
 		void RemoveInstance(uint32_t instance);
+
+		void SetPriority(uint32_t instance, int priority);
 	};
 }

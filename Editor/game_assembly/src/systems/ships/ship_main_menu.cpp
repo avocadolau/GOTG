@@ -20,7 +20,8 @@ void Wiwa::ShipMainMenu::OnAwake()
 
 void Wiwa::ShipMainMenu::OnInit()
 {
-
+	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
+	data->PanToCamera = false;
 }
 
 void Wiwa::ShipMainMenu::OnUpdate()
@@ -32,5 +33,10 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	float rot = cos(m_Time) * data->VelocityRot * Time::GetDeltaTimeSeconds();
 	GetTransform()->localPosition.y += move;
 	GetTransform()->localRotation.x += rot;
+
+}
+
+void Wiwa::ShipMainMenu::PanToCamera()
+{
 
 }

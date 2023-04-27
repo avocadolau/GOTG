@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "WaveSpawnerSystem.h"
 #include "WaveSystem.h"
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 
 namespace Wiwa
 {

@@ -256,6 +256,12 @@ namespace Wiwa
 		instanceRenderer.UpdateInstanceColor(id.instance_id, color);
 	}
 
+	void Renderer2D::UpdateInstancedQuadTexPriority(Scene* scene, InstanceData id, int priority)
+	{
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.SetPriority(id.instance_id, priority);
+	}
+
 	void Renderer2D::UpdateInstancedQuad(Scene* scene, InstanceData id, const Vector2i &position, const Size2i &size, const Color4f &color)
 	{
 		InstanceRenderer &instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
@@ -273,6 +279,7 @@ namespace Wiwa
 		framebuffer.Bind();
 		glEnable(GL_BLEND);
 		//glBlendEquation(GL_ADD);
+		//glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
@@ -280,6 +287,7 @@ namespace Wiwa
 			instanceRenderers[i].Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
 		}
 		//glDepthMask(true);
+		//glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 		framebuffer.Unbind();
 

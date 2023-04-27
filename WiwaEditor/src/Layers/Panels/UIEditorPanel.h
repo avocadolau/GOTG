@@ -52,6 +52,7 @@ public:
 	int originSize[2];
 	int extraOriginPos[2];
 	int extraOriginSize[2];
+	int priority;
 
 	float rotation;
 	size_t callbackID;

@@ -15,6 +15,8 @@ namespace Wiwa {
 		virtual void OnInit() override;
 		virtual void OnUpdate() override;
 
+		void PanToCamera();
+
 	private:
 		EntityManager::ComponentIterator m_ShipDataIt;
 		glm::vec3 m_StartPos;

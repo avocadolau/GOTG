@@ -1,9 +1,8 @@
 #pragma once
-#include "../../System.h"
+#include <Wiwa/ecs/systems/System.h>
 
 #include <Wiwa/utilities/Reflection.h>
 
-#include "Wiwa/ecs/components/game/wave/Wave.h"
 #include <Wiwa/utilities/EntityPool.h>
 
 namespace Wiwa {

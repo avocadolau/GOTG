@@ -6,9 +6,9 @@
 #include <vector>
 #include "Items/Inventory.h"
 
-#include <Wiwa/ecs/components/game/Character.h>
-#include <Wiwa/ecs/components/game/wave/Wave.h>
-#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+//#include <Wiwa/ecs/components/game/Character.h>
+//#include <Wiwa/ecs/components/game/wave/Wave.h>
+//#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include <Wiwa/game/Pooling/GamePoolingManager.h>
 
 typedef size_t SceneId;

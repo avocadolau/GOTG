@@ -1,8 +1,8 @@
 #pragma once
-#include "../../System.h"
+#include <Wiwa/ecs/systems/System.h>
 
 #include <Wiwa/utilities/Reflection.h>
-#include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
+#include <Wiwa/ecs/components/game/wave/Wave.h>
 
 namespace Wiwa {
 	class WI_API WaveSpawnerSystem : public System {

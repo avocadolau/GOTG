@@ -169,7 +169,7 @@ namespace Wiwa
         m_AgentParams.maxAcceleration = m_PreviousAcceleration;
     }
 
-    void NavAgentSystem::RequestMoveVelocity(const glm::vec3 velocity)
+    void NavAgentSystem::RequestMoveVelocity(const glm::vec3& velocity)
     {
         if (m_AgentIndex != -1) {
             Crowd::getInstance().getCrowd().requestMoveVelocity(m_AgentIndex, &velocity[0]);
@@ -181,6 +181,33 @@ namespace Wiwa
         if (m_AgentIndex != -1) {
             Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
         }
+    }
+
+    bool NavAgentSystem::Raycast(const glm::vec3& start_point, const glm::vec3& end_point)
+    {
+        Crowd& crowd = Crowd::getInstance();
+        dtCrowd& dtCrowd = crowd.getCrowd();
+        const dtNavMeshQuery* navMeshQuery = dtCrowd.getNavMeshQuery();
+
+        dtPolyRef startRef;
+        float targetPos[3];
+        const dtQueryFilter* filter = dtCrowd.getFilter(m_AgentIndex);
+        const float* extents = dtCrowd.getQueryExtents();
+        navMeshQuery->findNearestPoly(&start_point[0], extents, filter, &startRef, targetPos);
+
+        glm::vec3 pt(0.0f);
+        dtPolyRef ref;
+        float distance = 0.0f;
+        dtRaycastHit hit;
+        dtStatus status = navMeshQuery->raycast(startRef, &start_point[0], &end_point[0], filter, 0, &hit);
+        if (dtStatusSucceed(status))
+        {
+            if (hit.t == FLT_MAX)
+                return false;
+
+            return true;
+        }
+        return false;
     }
 
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const
