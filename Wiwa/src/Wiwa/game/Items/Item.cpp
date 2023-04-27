@@ -109,17 +109,17 @@ namespace Wiwa
             break;
         case PassiveType::SHIELD_CHARGE:
             {
-                
+                 player->ShieldMultiplier += (int)((float)player->ShieldMultiplier * buffPercent);
             }
             break;
         case PassiveType::PROJECTILE:
             {
-                
+                // TODO: ADD ABILITIES TAG
             }
             break;
         case PassiveType::RANGE:
             {
-                
+                //
             }
             break;
         }

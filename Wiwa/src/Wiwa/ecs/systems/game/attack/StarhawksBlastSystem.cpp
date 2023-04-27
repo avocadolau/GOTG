@@ -29,6 +29,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		StarhawksBlast* starhawksBlast = GetComponentByIterator<StarhawksBlast>(m_StarHawksIt);
 		starhawksBlast->velocity = 200.f;
+		starhawksBlast->damage = 5;
 		EntityId player = GameStateManager::GetPlayerId();
 
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);

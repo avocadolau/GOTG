@@ -3,6 +3,7 @@
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/ecs/components/game/attack/PhylasQuantumSword.h>
 #include <Wiwa/ecs/components/game/attack/GrootSeeds.h>
+#include <Wiwa/ecs/components/game/attack/StarhawkBlast.h>
 #include "Wiwa/ecs/components/game/wave/WaveSpawner.h"
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
@@ -136,6 +137,16 @@ namespace Wiwa
 			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
 			statsSelf->Speed -= 2.0f;
 			ReceiveDamage(grootSeeds->damage);
+		}
+
+		std::string starhawks_blast = "STARHAWKS_BLAST";
+		if (body1->id == m_EntityId && starhawks_blast == body2->selfTagStr)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Wiwa::StarhawksBlast* starhawks = em.GetComponent<Wiwa::StarhawksBlast>(body2->id);
+			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
+			ReceiveDamage(starhawks->damage);
 		}
 	}
 

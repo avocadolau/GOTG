@@ -10,10 +10,12 @@ namespace Wiwa {
 	struct WI_API StarhawksBlast {
 		float velocity;
 		float lifeTime;
+		int damage;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::StarhawksBlast)
 REFLECT_MEMBER(velocity)
 REFLECT_MEMBER(lifeTime)
+REFLECT_MEMBER(damage)
 REFLECTION_END;
