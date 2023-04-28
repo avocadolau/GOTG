@@ -840,7 +840,7 @@ void Audio::ChangeDialogVolume(int value)
 
 void Audio::Serialize()
 {
-    Wiwa::JSONDocument doc;
+   /* Wiwa::JSONDocument doc;
 
     if (LoadedProject())
     {
@@ -849,7 +849,7 @@ void Audio::Serialize()
         {
 
         }
-    }
+    }*/
 
 }
 
