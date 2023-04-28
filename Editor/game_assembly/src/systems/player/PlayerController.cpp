@@ -120,9 +120,9 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	if (!bulletTr || !playerTr)
 		return;
 
-	bulletTr->localPosition = Math::GetWorldPosition(playerTr->worldMatrix);
-	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
-	bulletTr->localScale = playerTr->localScale;
+	bulletTr->localPosition = Math::GetWorldPosition(transform.worldMatrix);
+	bulletTr->localRotation = glm::vec3(0.f, playerTr->localRotation.y + 90.0f, 0.f);
+	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bullDir;
 	WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
