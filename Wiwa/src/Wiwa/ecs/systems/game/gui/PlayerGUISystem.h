@@ -22,6 +22,8 @@ namespace Wiwa
         bool pauseGame = false;
         bool shopHUD = false;
 
+        bool shopActive = false;
+        bool buyItem = false;
         size_t lastCoins = -1;
         Ability** abilitiesList;
         Buff** buffsList;
@@ -44,7 +46,12 @@ namespace Wiwa
 
         void Coins(uint32_t coins, Wiwa::GuiManager& gm);
 
-        void ShopElementsHUD(Item* currentItem);
+        void HandlePlayerStatistics(int max_Health, int max_Shield, float range, int attack, float speed, float rateOfFire, Wiwa::GuiManager& gm);
+
+        void ShopElementsHUD(Item* currentItem , Wiwa::GuiManager& gm);
+
+        void OnCollisionEnter(Object* body1, Object* body2) override;
+
     };
 }
 

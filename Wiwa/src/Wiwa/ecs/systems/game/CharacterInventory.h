@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <Wiwa/core/Core.h>
 #include <Wiwa/ecs/Systems.h>
+#include <Wiwa/ecs/components/game/Character.h>
 
 namespace Wiwa
 {
@@ -12,10 +13,13 @@ namespace Wiwa
         bool buyItem = false;
         bool shopActive = false;
         bool releasingShop = false;
+        Character lastCharacter;
         Item* currentItem;
     public:
         CharacterInventory() = default;
         virtual ~CharacterInventory() = default;
+
+        void OnInit() override;
 
         void OnUpdate() override;
 
@@ -26,6 +30,8 @@ namespace Wiwa
         bool GetShopActive() { return shopActive; }
 
         Item* GetCurrentShopItem() { return currentItem; }
+
+        bool PlayerUpdated();
     };
 }
 REGISTER_SYSTEM(Wiwa::CharacterInventory);

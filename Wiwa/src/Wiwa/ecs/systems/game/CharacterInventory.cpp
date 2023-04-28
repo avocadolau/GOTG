@@ -4,20 +4,22 @@
 #include "Wiwa/core/Input.h"
 #include "Wiwa/ecs/components/game/items/Item.h"
 
+void Wiwa::CharacterInventory::OnInit()
+{
+	shopActive = false;
+	Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
+	lastCharacter.Damage = 0;
+	lastCharacter.MaxHealth = 0;
+	lastCharacter.MaxShield = 0;
+	lastCharacter.Speed = 0.0f;
+	lastCharacter.RateOfFire = 0.0f;
+}
+
 void Wiwa::CharacterInventory::OnUpdate()
 {
 	if (shopActive)
 	{
 		ShopElement(currentItem);
-	}
-
-	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
-	{
-		releasingShop = true;
-	}
-	if (releasingShop && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
-	{
-		releasingShop = false;
 		shopActive = false;
 	}
 }
@@ -25,38 +27,27 @@ void Wiwa::CharacterInventory::OnUpdate()
 void Wiwa::CharacterInventory::ShopElement(Item* item)
 {
 	size_t currentTokens = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
-
-	//ADD ITEM IF TOKENS ARE ENOUGH
-	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+	if (item->item_type == 0)
 	{
-		buyItem = true;
+		//Abilities
+		Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
+		if (ability->Price <= currentTokens)
+		{
+			Wiwa::GameStateManager::GetPlayerInventory().SubstractTokens(ability->Price);
+			Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
+		}
 	}
-	if (buyItem && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA))
+	if (item->item_type == 2)
 	{
-		if (item->item_type == 0)
+		//Buffs
+		Buff* buff = Wiwa::ItemManager::GetBuff(item->Name);
+		if (buff->Price <= currentTokens)
 		{
-			//Abilities
-			Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
-			if (ability->Price <= currentTokens)
-			{
-				Wiwa::GameStateManager::GetPlayerInventory().SubstractTokens(ability->Price);
-				Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
-			}
+			Wiwa::GameStateManager::GetPlayerInventory().SubstractTokens(buff->Price);
+			Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);
 		}
-		if (item->item_type == 2)
-		{
-			//Buffs
-			Buff* buff = Wiwa::ItemManager::GetBuff(item->Name);
-			if (buff->Price <= currentTokens)
-			{
-				Wiwa::GameStateManager::GetPlayerInventory().SubstractTokens(buff->Price);
-				Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);
-			}
-		}
-		
-
-		buyItem = false;
 	}
+
 }
 
 void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
@@ -77,7 +68,6 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		if (item->item_type == 0)//ABILITY
 		{
 			currentItem = item;
-			shopActive = true;
 		}
 		else if (item->item_type == 1)//PASSIVE
 		{
@@ -89,7 +79,6 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		else if (item->item_type == 2)//BUFF
 		{
 			currentItem = item;
-			shopActive = true;
 		}
 		else if (item->item_type == 3)//CONSUMABLE
 		{
@@ -97,5 +86,40 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			Wiwa::GameStateManager::s_PlayerInventory->AddConsumable(*consumable);
 			em.DestroyEntity(body2->id);
 		}
+	}
+}
+
+bool Wiwa::CharacterInventory::PlayerUpdated()
+{
+	Character* current_character = Wiwa::GameStateManager::GetPlayerCharacterComp();
+
+	if (lastCharacter.Damage != current_character->Damage)
+	{
+		lastCharacter.Damage = current_character->Damage;
+		return true;
+	}
+	else if (lastCharacter.MaxHealth != current_character->MaxHealth)
+	{
+		lastCharacter.MaxHealth = current_character->MaxHealth;
+		return true;
+	}
+	else if (lastCharacter.MaxShield != current_character->MaxShield)
+	{
+		lastCharacter.MaxShield = current_character->MaxShield;
+		return true;
+	}
+	else if (lastCharacter.Speed != current_character->Speed)
+	{
+		lastCharacter.Speed = current_character->Speed;
+		return true;
+	}
+	else if (lastCharacter.RateOfFire != current_character->RateOfFire)
+	{
+		lastCharacter.RateOfFire = current_character->RateOfFire;
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
