@@ -17,7 +17,7 @@ namespace Wiwa
 		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\UltronLaserBeam\\UltronLaserBeam_01.wiprefab");
 		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
-		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\TestExplosion_01.wiprefab");
+		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
 
 		m_HasLoadedAll = false;
 	}

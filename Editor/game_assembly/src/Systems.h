@@ -31,4 +31,7 @@
 
 #include "systems/attack/UltronLaserBeamSystem.h"
 
+#include "systems/attack/ExplosiveBarrelSystem.h"
+#include "systems/props/ExplosiveBarrelProp.h"
+
 #include "systems/InitPool.h"

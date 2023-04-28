@@ -2,12 +2,13 @@
 #include "ExplosiveBarrelSystem.h"
 #include "../../components/attack/ExplosiveBarrel.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/utilities/EntityPool.h>
 
 namespace Wiwa
 {
 	ExplosiveBarrelSystem::ExplosiveBarrelSystem()
 	{
-		m_BarrelExplosionIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_ExplosiveBarrelIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
 	}
 
@@ -18,22 +19,23 @@ namespace Wiwa
 
 	void ExplosiveBarrelSystem::OnAwake()
 	{
-		m_BarrelExplosionIt = GetComponentIterator<ExplosiveBarrel>();
+		m_ExplosiveBarrelIt = GetComponentIterator<ExplosiveBarrel>();
 	}
 
 	void ExplosiveBarrelSystem::OnInit()
 	{
-		InitExplosion();
+
 	}
 
 	void ExplosiveBarrelSystem::InitExplosion()
 	{
-		ExplosiveBarrel* explosion = GetComponentByIterator<ExplosiveBarrel>(m_BarrelExplosionIt);
+		if (!getAwake())
+			System::Awake();
 
+		ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
-
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
+		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 	}
 
 	void ExplosiveBarrelSystem::OnUpdate()
@@ -43,19 +45,15 @@ namespace Wiwa
 		if (!getInit())
 			System::Init();
 
-		ExplosiveBarrel* explosion = GetComponentByIterator<ExplosiveBarrel>(m_BarrelExplosionIt);
+		ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		if (m_Timer >= explosion->lifeTime)
+		if (m_Timer >= explosiveBarrel->lifeTime)
 		{
-			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);*/
-			GameStateManager::s_PoolManager->s_ExplosiveBarrel->ReturnToPool(m_EntityId); // meter nueva pool
+			GameStateManager::s_PoolManager->s_ExplosiveBarrel->ReturnToPool(m_EntityId);
 		}
-
 	}
-
 
 	void ExplosiveBarrelSystem::OnDestroy()
 	{
@@ -69,26 +67,33 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
-				ExplosiveBarrel* explosionPlayer = GetComponentByIterator<ExplosiveBarrel>(m_BarrelExplosionIt);
-				GameStateManager::DamagePlayer(explosionPlayer->damage);
-				//Spawn explosion
+				ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
+				GameStateManager::DamagePlayer(explosiveBarrel->damage);
 			}
-
-			/*std::string enemyStr = "ENEMY_MELEE";
-			if (enemyStr == body2->selfTagStr)
+		}
+	}
+	void ExplosiveBarrelSystem::OnCollision(Object* body1, Object* body2)
+	{
+		if (body1->id == m_EntityId)
+		{
+			std::string playerStr = "PLAYER";
+			if (playerStr == body2->selfTagStr)
 			{
-				ExplosiveBarrel* explosionEnemy = GetComponentByIterator<ExplosiveBarrel>(m_BarrelExplosionIt);
-				EnemySystem::ReceiveDamage(explosionEnemy->damage);
-			}*/
-
-			/*		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-					em.DestroyEntity(m_EntityId);*/
+				ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
+				GameStateManager::DamagePlayer(explosiveBarrel->damage);
+			}
 		}
 	}
 
-	/*void ExplosiveBarrelSystem::EnableExplosion()
+	bool ExplosiveBarrelSystem::EnableExplosion()
 	{
-		InitExplosion();
+		ExplosiveBarrel* explosiveBarrel = GetComponent<ExplosiveBarrel>();
+		if (explosiveBarrel)
+		{
+			InitExplosion();
+		}
+		m_Timer = 0.0f;
+		return true;
 	}
 
 	bool ExplosiveBarrelSystem::OnDisabledFromPool()
@@ -96,15 +101,17 @@ namespace Wiwa
 		Transform3D* transform = GetComponent<Transform3D>();
 		if (transform)
 		{
-			transform->localPosition.y = 20000.0f;
+			transform->localPosition.y = 2000.0f;
 		}
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
 		PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
+
 		physSystem->DeleteBody();
 
 		m_Timer = 0.0f;
-		return true;
-	}*/
 
+		return true;
+	}
 }

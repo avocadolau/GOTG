@@ -1,12 +1,14 @@
 #pragma once
+
 #include <Wiwa/ecs/systems/System.h>
+
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
 	class ExplosiveBarrelSystem : public System {
 	private:
 		float m_Timer = 0;
-		EntityManager::ComponentIterator m_BarrelExplosionIt;
+		EntityManager::ComponentIterator m_ExplosiveBarrelIt;
 	public:
 		ExplosiveBarrelSystem();
 		~ExplosiveBarrelSystem();
@@ -22,6 +24,12 @@ namespace Wiwa {
 		void OnDestroy() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
+
+		bool EnableExplosion();
+
+		bool OnDisabledFromPool() override;
+
+		void OnCollision(Object* body1, Object* body2) override;
 	};
 }
 

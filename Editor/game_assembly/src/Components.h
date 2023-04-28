@@ -13,3 +13,5 @@
 
 #include "components/attack/ClusterBullet.h"
 #include "components/attack/UltronLaserBeam.h"
+
+#include "components/attack/ExplosiveBarrel.h"
