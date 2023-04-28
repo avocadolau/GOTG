@@ -28,6 +28,7 @@ namespace Wiwa {
 		WI_HARD_INL glm::vec3 GetDirection() { return m_Direction; }
 		WI_HARD_INL glm::vec3 GetInput() { return m_MovementInput; }
 		WI_HARD_INL glm::vec3 GetShootInput() { return m_ShootInput; }
+		WI_HARD_INL EntityManager& GetEntityManager() { return m_Scene->GetEntityManager(); }
 		glm::vec3 GetVelocity() { return m_Velocity; }
 		bool IsDashEnable() { return m_DashEnable; }
 		void SetDashEnable(bool value) { m_DashEnable = value; }
