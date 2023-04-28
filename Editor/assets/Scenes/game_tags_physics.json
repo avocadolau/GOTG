@@ -1,1 +1,18 @@
-{"tags_count":20,"tag_0":"COLLISION_EVERYTHING","tag_1":"WALL","tag_2":"COLUMN","tag_3":"ENEMY_MELEE","tag_4":"ENEMY_SPAWNER","tag_5":"ITEM","tag_6":"ENEMY_BULLET","tag_7":"MAJOR_VICTORY_SHIELD","tag_8":"PLAYER","tag_9":"ENEMY_RANGED","tag_10":"PLAYER_BULLET","tag_11":"END_ROOM_TRIGGER","tag_12":"START_RUN_TRIGGER","tag_13":"PHYLAS_QUANTUM_SWORD","tag_14":"GROOTS_SEEDS","tag_15":"NPC","tag_16":"SENTINEL_EXPLOSION","tag_17":"STARHAWKS_BLAST","tag_18":"EXPLOSIVE_BARREL","tag_19":"EXPLOSIVE_BARREL_PROP"}
+{
+	"tags_count": 15,
+	"tag_0": "COLLISION_EVERYTHING",
+	"tag_1": "WALL",
+	"tag_2": "COLUMN",
+	"tag_3": "ENEMY",
+	"tag_4": "ITEM",
+	"tag_5": "ENEMY_ATTACK",
+	"tag_6": "MAJOR_VICTORY_SHIELD",
+	"tag_7": "PLAYER",
+	"tag_8": "PLAYER_ATTACK",
+	"tag_9": "PHYLAS_QUANTUM_SWORD",
+	"tag_10": "GROOTS_SEEDS",
+	"tag_11": "NPC",
+	"tag_12": "SENTINEL_EXPLOSION",
+	"tag_13": "STARHAWKS_BLAST",
+	"tag_14": "DESTROYABLE_PROP"
+}
