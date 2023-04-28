@@ -29,7 +29,7 @@ namespace Wiwa {
 
 		bool OnDisabledFromPool() override;
 
-		void OnCollision(Object* body1, Object* body2) override;
+		//void OnCollision(Object* body1, Object* body2) override;
 	};
 }
 

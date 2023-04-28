@@ -71,7 +71,7 @@ namespace Wiwa
 			}
 		}
 	}
-	void ExplosiveBarrelSystem::OnCollision(Object* body1, Object* body2)
+	/*void ExplosiveBarrelSystem::OnCollision(Object* body1, Object* body2)
 	{
 		if (body1->id == m_EntityId)
 		{
@@ -82,7 +82,7 @@ namespace Wiwa
 				GameStateManager::DamagePlayer(explosiveBarrel->damage);
 			}
 		}
-	}
+	}*/
 
 	bool ExplosiveBarrelSystem::EnableExplosion()
 	{
