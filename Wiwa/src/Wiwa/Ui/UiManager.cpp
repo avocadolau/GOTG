@@ -514,6 +514,7 @@ namespace Wiwa
 				canvaSelected = i;
 			}
 		}
+		if (canvaSelected >= 5) canvaSelected = 0;
 		return canvaSelected;
 	}
 	bool GuiManager::_loadGUIImpl(Wiwa::File& File)
