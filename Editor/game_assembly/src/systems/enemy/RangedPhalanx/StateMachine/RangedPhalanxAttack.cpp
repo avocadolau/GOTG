@@ -47,6 +47,7 @@ namespace Wiwa
 		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
@@ -64,7 +65,7 @@ namespace Wiwa
 			animator->PlayAnimation("shot", false);
 		}
 
-		if (dist2Player > enemy->m_RangeOfAttack)
+		if (dist2Player > enemy->m_RangeOfAttack || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
