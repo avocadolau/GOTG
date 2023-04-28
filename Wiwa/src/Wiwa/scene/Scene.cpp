@@ -11,6 +11,7 @@
 #include <Wiwa/Dialog/DialogManager.h>
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
+#include <Wiwa/ecs/systems/game/gui/UltronGUISystem.h>
 #include <Wiwa/AI/AI_Crowd.h>
 
 namespace Wiwa
@@ -84,6 +85,8 @@ namespace Wiwa
 	void Scene::Update()
 	{
 		PlayerGUISystem* pgs;
+		UltronGUISystem* ugs;
+
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
@@ -112,6 +115,9 @@ namespace Wiwa
 				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
 				if (pgs)
 					pgs->Update();
+				ugs = m_EntityManager.GetSystem<UltronGUISystem>(m_EntityManager.GetEntityByName("Ultron_01"));
+				if (ugs)
+					ugs->Update();
 			}
 			m_GuiManager->Update();
 			m_DialogManager->Update();

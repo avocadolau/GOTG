@@ -384,12 +384,12 @@ namespace Wiwa
 		"resources/images/skybox/urban_light/front.png",
 		"resources/images/skybox/urban_light/back.png" };
 		std::vector<const char*> main_menu = {
-		"resources/images/skybox/main_menu/UI_RightSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_BottomSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_FrontSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_BackSkyBox_01.png" };
+		"resources/images/skybox/main_menu/right.png",
+		"resources/images/skybox/main_menu/left.png",
+		"resources/images/skybox/main_menu/top.png",
+		"resources/images/skybox/main_menu/bottom.png",
+		"resources/images/skybox/main_menu/front.png",
+		"resources/images/skybox/main_menu/back.png" };
 		m_DefaultSkybox.LoadCubemap(main_menu);
 
 

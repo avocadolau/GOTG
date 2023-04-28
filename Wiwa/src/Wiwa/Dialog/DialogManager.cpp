@@ -64,7 +64,7 @@ namespace Wiwa
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/dialog_test_placeholder3.png");
 		Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,800 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,1000 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, continueImgID);
 
 		//conversations[0].conversationName = "NPC_1";
@@ -118,9 +118,9 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 /*&& collidingWithNpc == true*/)
 		{
- 			conversationToPlayName = NpcConversationTag.c_str();
+ 			conversationToPlayName = "Watcher"/*NpcConversationTag.c_str()*/;
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
@@ -208,7 +208,7 @@ namespace Wiwa
 				firstTimeTimer += Time::GetDeltaTime();
 
 				characterImgPos.x = EaseBackOut(firstTimeTimer, -1500, -50 + 1500, 450);
-				bubbleImgPos.y = EaseExpoOut(firstTimeTimer, 1080, 100 - 1080, 450);
+				bubbleImgPos.y = EaseExpoOut(firstTimeTimer, 1080, 300 - 1080, 450);
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -220,7 +220,7 @@ namespace Wiwa
 					characterImgPos.x = -50;
 					characterImgPos.y = 100; // <--
 					bubbleImgPos.x = 640; // <--
-					bubbleImgPos.y = 100;
+					bubbleImgPos.y = 300;
 
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -237,7 +237,7 @@ namespace Wiwa
 				*/
 
 				characterImgPos.x = EaseBackIn(endTimeTimer, -50, -1500 + 50, 450);
-				bubbleImgPos.y = EaseExpoIn(endTimeTimer, 100, 1080 - 100, 450);
+				bubbleImgPos.y = EaseExpoIn(endTimeTimer, 300, 1080 - 300, 450);
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -302,13 +302,13 @@ namespace Wiwa
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text1_imgMode->GetTextureId(), text1_imgMode->GetSize(), {730,640}, {1000,650}, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text1_imgMode->GetTextureId(), text1_imgMode->GetSize(), {730,840}, {1000,650}, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID);
 		
-		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text2_imgMode->GetTextureId(), text2_imgMode->GetSize(), { 730,690 }, { 1000,650 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text2_imgMode->GetTextureId(), text2_imgMode->GetSize(), { 730,890 }, { 1000,650 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID);
 		
-		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text3_imgMode->GetTextureId(), text3_imgMode->GetSize(), { 730,740 }, { 1000,650 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text3_imgMode->GetTextureId(), text3_imgMode->GetSize(), { 730,940 }, { 1000,650 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID);
 
 		conversations[conversationNumber].nodes[nodeNumber].occupied = true;

@@ -88,7 +88,7 @@ namespace Wiwa
 		// Draw the right button depending on state
 		
 		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
-		render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), texturePosition);
+		//render->UpdateInstancedQuadTexClip(m_Scene, id_quad_normal, texture->GetSize(), texturePosition);
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);
 

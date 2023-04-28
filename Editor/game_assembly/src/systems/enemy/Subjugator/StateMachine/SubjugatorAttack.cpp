@@ -34,7 +34,14 @@ namespace Wiwa
 			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("shot", false);
 
+			glm::vec3 rotateBulledLeft = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRight = glm::vec3(0.0f, 0.0f, 0.0f);
+
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
+
 			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
+			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
+			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
 		}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -50,6 +57,7 @@ namespace Wiwa
 		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
@@ -78,7 +86,7 @@ namespace Wiwa
 		}
 		
 
-		if (dist2Player > enemy->m_RangeOfAttack)
+		if (dist2Player > enemy->m_RangeOfAttack || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}

@@ -115,6 +115,7 @@ namespace Wiwa {
 		WI_HARD_INL static void SetRoomType(RoomType type) { s_RoomType = type; }
 		WI_HARD_INL static void SetRoomState(RoomState type) { s_RoomState = type; }
 		WI_HARD_INL static RoomType GetType() { return s_RoomType; }
+		WI_HARD_INL static RoomState GetState() { return s_RoomState; }
 
 		static void LogRoomState();
 		static const char* GetRoomState();

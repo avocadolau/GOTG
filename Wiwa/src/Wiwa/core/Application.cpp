@@ -107,7 +107,7 @@ namespace Wiwa
 		Wiwa::FileSystem::Copy("game_assembly/build/WiwaGameAssembly.dll", "resources/WiwaGameAssembly.dll");
 
 		// Load assembly
-		LoadGameAssembly();
+		//LoadGameAssembly();
 
 		WI_CORE_WARN("=======Systems initialized=======");
 
