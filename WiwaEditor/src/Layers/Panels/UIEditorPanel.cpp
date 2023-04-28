@@ -342,7 +342,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		}
 		if (ImGui::SliderFloat("rotation", &rotation, 0.0f, 360.f, "%.1f"))
 		{
-			UpdateRotation(control);
+			UpdateElements(control,control->type);
 		}
 
 		switch (control->type)
@@ -499,9 +499,9 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 		originPos[1] = 0;
 		originSize[0] = 512;
 		originSize[1] = 512;
+		r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, rotation);
 		r2d.UpdateInstancedQuadTexPosition(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0],pos[1] });
 		r2d.UpdateInstancedQuadTexSize(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, { pos[0], pos[1] }, { size[0],size[1] }, Wiwa::Renderer2D::Pivot::CENTER);
-		r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, rotation);
 	}
 	break;
 	case Wiwa::GuiControlType::CHECKBOX:
