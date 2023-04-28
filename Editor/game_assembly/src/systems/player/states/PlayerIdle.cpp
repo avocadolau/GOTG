@@ -20,6 +20,9 @@ void Wiwa::PlayerIdle::EnterState()
 
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.f);
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
+
+	EntityId dash = m_StateMachine->GetEntityManager().GetChildByName(m_StateMachine->GetEntity(), "p_dash");
+	m_StateMachine->GetEntityManager().SetActive(dash, false);
 }
 
 void Wiwa::PlayerIdle::UpdateState()

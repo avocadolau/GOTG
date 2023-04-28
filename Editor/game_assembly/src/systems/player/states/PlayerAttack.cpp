@@ -31,17 +31,13 @@ void Wiwa::PlayerAttack::UpdateState()
 		return;
 	}
 
-	m_StateMachine->SetDirection(m_StateMachine->GetShootInput());
-
-
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.0f);
 	m_StateMachine->SetVelocity(m_StateMachine->GetInput() * m_StateMachine->GetCharacter()->Speed);
 	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
 	m_ShootTimer += Time::GetDeltaTimeSeconds();
 
 	if (m_StateMachine->CanAttack())
 	{
-		Fire(m_StateMachine->GetShootInput());
+		Fire(Math::CalculateForward(m_StateMachine->GetTransform()));
 	}
 	if (m_StateMachine->GetVelocity() != glm::vec3(0.f))
 	{

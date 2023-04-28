@@ -101,16 +101,6 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 
 		if (assetsPath.extension() == ".meta")
 			return;
-
-		if (assetsPath.extension() == ".cs")
-		{
-			if (Wiwa::Time::IsPlaying())
-			{
-				WI_WARN("Scene paused due to script reload!");
-				EditorLayer::Get().StopScene();
-			}
-			EditorLayer::Get().RegenSol();
-		}
 		switch (change_type)
 		{
 		case filewatch::Event::added:

@@ -8,6 +8,9 @@ Wiwa::PlayerDash::PlayerDash(PlayerStateMachine* stateMachine, EntityId id)
 	m_TargetPoint = glm::vec3(0.f);
 	m_DashDirection = glm::vec3(0.f);
 	m_MaxDashTime = 1.5f;
+
+
+	
 }
 
 Wiwa::PlayerDash::~PlayerDash()
@@ -16,6 +19,9 @@ Wiwa::PlayerDash::~PlayerDash()
 
 void Wiwa::PlayerDash::EnterState()
 {
+	m_DashVFX = m_StateMachine->GetEntityManager().GetChildByName(m_StateMachine->GetEntity(), "p_dash");
+	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, true);
+
 	m_DashTimer = m_StateMachine->GetCharacter()->DashCooldown;
 	if (m_StateMachine->CanMove())
 	{
@@ -66,6 +72,8 @@ void Wiwa::PlayerDash::ExitState()
 
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 	m_StateMachine->GetAnimator()->Restart();
+
+	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, false);
 }
 
 void Wiwa::PlayerDash::OnCollisionEnter(Object* object1, Object* object2)
