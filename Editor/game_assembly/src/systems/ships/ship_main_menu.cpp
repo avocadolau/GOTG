@@ -2,6 +2,8 @@
 #include "../../components/ship/ship_main_menu_data.h"
 #include <Wiwa/utilities/easings.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/utilities/render/Camera.h>
 
 Wiwa::ShipMainMenu::ShipMainMenu()
 {
@@ -22,7 +24,7 @@ void Wiwa::ShipMainMenu::OnAwake()
 void Wiwa::ShipMainMenu::OnInit()
 {
 	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
-	m_PanToCamera = false;
+	data->PanToCamera = false;
 }
 
 void Wiwa::ShipMainMenu::OnUpdate()
@@ -32,9 +34,9 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	
 	
 	if (Wiwa::Input::IsKeyPressed(Key::Space))
-		m_PanToCamera = true;
+		data->PanToCamera = true;
 
-	if (m_PanToCamera)
+	if (data->PanToCamera)
 	{
 		PanToCamera();
 	}
@@ -49,13 +51,15 @@ void Wiwa::ShipMainMenu::OnUpdate()
 void Wiwa::ShipMainMenu::PanToCamera()
 {
 	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
-
-
-	if (glm::distance(GetTransform()->position, m_EndPanPos) <= 1.f)
-	{
-		m_PanToCamera = false;
-	}
-
 	PhysicsSystem* physics = m_Scene->GetEntityManager().GetSystem<PhysicsSystem>(m_EntityId);
 	physics->getBody()->velocity = Math::ToBulletVector3(Math::CalculateForward(GetTransform()) * data->PanVelocity);
+
+	Camera* camera = m_Scene->GetCameraManager().getActiveCamera();
+	glm::vec3 rot =
+	{	
+		camera->getRotation().x + data->PanRotationVelocity * Time::GetDeltaTimeSeconds(),
+		camera->getRotation().y,
+		camera->getRotation().z
+	};
+	camera->setRotation(rot);
 }

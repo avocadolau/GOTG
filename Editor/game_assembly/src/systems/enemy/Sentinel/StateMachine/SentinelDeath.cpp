@@ -28,7 +28,7 @@ namespace Wiwa
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
 		//SentinelAudio - Dead Audio (explosion audio)
-		animator->PlayAnimation("dead", false);
+		animator->PlayAnimation("atackdeath", false); //AnimacionSentinel
 	}
 
 	void SentinelDeathState::UpdateState(EnemySentinel* enemy)

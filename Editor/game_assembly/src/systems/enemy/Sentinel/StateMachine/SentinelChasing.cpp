@@ -22,7 +22,7 @@ namespace Wiwa
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		animator->Blend("walk", true, 0.2f);
+		animator->Blend("walk", true, 0.2f); //AnimacionSentinel
 
 		enemy->m_TimerSentinel = 0;
 	}
@@ -53,7 +53,7 @@ namespace Wiwa
 		}
 
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 4.0f)
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 6.0f)
 		{
 			enemy->SwitchState(enemy->m_AttackingState);
 		}

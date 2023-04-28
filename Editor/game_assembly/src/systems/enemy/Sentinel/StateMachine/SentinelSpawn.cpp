@@ -25,7 +25,7 @@ namespace Wiwa
 		//SentinelParticles - Spawn Particles
 		//SentinelAudio - Spawn Audio
 
-		animator->PlayAnimation("spawn", false);
+		animator->PlayAnimation("spawn", false); //AnimacionSentinel
 	}
 
 	void SentinelSpawnState::UpdateState(EnemySentinel* enemy)

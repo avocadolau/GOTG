@@ -27,7 +27,7 @@ namespace Wiwa
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("idle", true);
+		/*animator->PlayAnimation("idle", true);*/ //AnimacionSentinel
 
 		if (enemy->m_TimerSentinel > 2)
 		{
