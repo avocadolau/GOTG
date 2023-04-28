@@ -38,6 +38,14 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 2.0f)
+		{
+			navAgent->stoppingDistance = 1.0f;
+			navAgentPtr->StopAgent();
+		}
 		
 		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > enemy->m_RangeOfExplosion)
 		{
@@ -55,15 +63,28 @@ namespace Wiwa
 		if (prepareAttack)
 		{
 		
-			float dt = Time::GetDeltaTime() * 0.001;
+			float dt = Time::GetDeltaTimeSeconds();
 
 			m_TimerExplosion += dt;
 
-			if (m_TimerExplosion >= 3.0f)
+			if (m_TimerExplosion >= 2.0f)
 			{
 				enemy->SwitchState(enemy->m_DeathState);
 			}
 		}
+
+		//if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
+		//{
+		//	/*navAgentPtr->StopAgent();*/
+
+		//	animator->PlayAnimation("atackdeath", false);
+
+		//	if (animator->HasFinished())
+		//	{
+		//		enemy->SwitchState(enemy->m_DeathState);
+		//	}
+		//}
+
 	}
 
 	void SentinelAttackState::ExitState(EnemySentinel* enemy)

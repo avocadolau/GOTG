@@ -20,7 +20,7 @@ namespace Wiwa
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
 		//SentinelParticles - Hit Particles
-		animator->PlayAnimation("hit", false);
+		animator->PlayAnimation("hit", false); //AnimacionSentinel
 	}
 
 	void SentinelHitState::UpdateState(EnemySentinel* enemy)
