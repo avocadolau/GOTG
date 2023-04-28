@@ -106,12 +106,11 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	GameStateManager::s_PoolManager->SetScene(m_Scene);
 	EntityId newBulletId = EntityManager::INVALID_INDEX;
 	newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
-	EntityId bulletCollider = entityManager.GetChildByName(newBulletId, "Collider");
 	if (newBulletId == EntityManager::INVALID_INDEX)
 		return;
 
-	StarLordBulletSystem* bulletSys = entityManager.GetSystem<StarLordBulletSystem>(bulletCollider);
-	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(bulletCollider);
+	StarLordBulletSystem* bulletSys = entityManager.GetSystem<StarLordBulletSystem>(newBulletId);
+	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 	physSys->DeleteBody();
 
 	// Set intial positions
@@ -124,9 +123,9 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	bulletTr->localPosition = Math::GetWorldPosition(playerTr->worldMatrix);
 	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 	bulletTr->localScale = playerTr->localScale;
-	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(bulletCollider));
+	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bullDir;
-
+	WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
 	physSys->CreateBody();
 	bulletSys->EnableBullet();
 }

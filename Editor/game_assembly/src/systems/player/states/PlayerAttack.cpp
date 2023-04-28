@@ -79,6 +79,6 @@ void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
 			m_StateMachine->GetAnimator()->PlayAnimation("shoot_left", false);
 		}
 		shooter->ShootRight = !shooter->ShootRight;
-		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *rocket,*m_StateMachine->GetCharacter(), m_StateMachine->GetTransform()->rotation);
+		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *rocket,*m_StateMachine->GetCharacter(), shootInput);
 	}
 }
