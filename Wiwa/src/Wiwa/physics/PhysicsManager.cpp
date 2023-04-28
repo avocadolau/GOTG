@@ -72,7 +72,7 @@ namespace Wiwa {
 		//Step simulation
 		float dt = 1.0f / 60.0f;
 		//m_World->stepSimulation(Wiwa::Time::GetDeltaTimeSeconds(), 6);
-		UpdateObjects(dt);
+		UpdateObjects(Wiwa::Time::GetDeltaTimeSeconds());
 		m_World->performDiscreteCollisionDetection();
 		ResolveContacts();
 

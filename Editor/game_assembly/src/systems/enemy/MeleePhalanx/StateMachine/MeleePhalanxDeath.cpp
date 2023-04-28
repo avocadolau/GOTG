@@ -38,7 +38,8 @@ namespace Wiwa
 			if (self->waveId != -1)
 			{
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-				waveSys->DestroyEnemy(enemy->GetEntity(), static_cast<Pool_Type>(self->enemyType));
+				waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::PHALANX_MELEE);
+				GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(enemy->GetEntity());
 			}
 			else
 			{

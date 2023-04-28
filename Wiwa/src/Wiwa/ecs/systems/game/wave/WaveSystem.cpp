@@ -219,23 +219,23 @@ namespace Wiwa
 		// Delete the enemy entity entirely
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
 
-		switch (enemy_type)
-		{
-		case Pool_Type::PHALANX_MELEE:
-			GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
-			break;
-		case Pool_Type::PHALAN_RANGED:
-			GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
-			break;
-		//case Pool_Type::SENTINEL:
-		//	GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
+		//switch (enemy_type)
+		//{
+		//case Pool_Type::PHALANX_MELEE:
+		//	GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
 		//	break;
-		//case Pool_Type::SUBJUGATOR:
-		//	GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
+		//case Pool_Type::PHALAN_RANGED:
+		//	GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
 		//	break;
-		default:
-			break;
-		}
+		////case Pool_Type::SENTINEL:
+		////	GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
+		////	break;
+		////case Pool_Type::SUBJUGATOR:
+		////	GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
+		////	break;
+		//default:
+		//	break;
+		//}
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		wave->currentEnemiesAlive--;
 		m_CurrentEnemiesDead++;

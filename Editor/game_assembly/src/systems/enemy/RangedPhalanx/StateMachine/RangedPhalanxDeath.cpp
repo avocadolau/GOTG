@@ -37,6 +37,7 @@ namespace Wiwa
 			{
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
 				waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::PHALAN_RANGED);
+				GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(enemy->GetEntity());
 			}
 			else
 			{
