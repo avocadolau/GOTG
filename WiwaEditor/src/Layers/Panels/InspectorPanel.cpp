@@ -1508,8 +1508,13 @@ void InspectorPanel::Draw()
 		ImGui::InputText("Name", &em.GetEntityString(m_CurrentID));
 		ImGui::SameLine();
 		ImGui::Text("(%i)", m_CurrentID);
+		
 
 		DrawCollisionTags();
+		ImGui::SameLine();
+		bool active = em.IsActive(m_CurrentID);
+		if (ImGui::Checkbox("Active", &active))
+			em.SetActive(m_CurrentID, active);
 
 		if (ImGui::Button("Delete##entity"))
 		{

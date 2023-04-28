@@ -39,7 +39,7 @@ void Wiwa::PlayerController::OnInit()
 	GameStateManager::LoadProgression();
 
 	m_DashEnable = true;
-
+	IsDashing = false;
 	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARLORD_BULLET, m_Scene);
 }
 
@@ -47,9 +47,12 @@ void Wiwa::PlayerController::OnUpdate()
 {
 	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();
-
-	SetDirection(GetShootInput());
-	SetPlayerRotation(GetDirection(), 1.0f);
+	if(m_MovementInput != glm::vec3(0.f))
+		SetDirection(m_MovementInput);
+	if(m_ShootInput != glm::vec3(0.f))
+		SetDirection(m_ShootInput);
+	if(!IsDashing)
+		SetPlayerRotation(GetDirection(), 1.0f);
 }
 
 Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()

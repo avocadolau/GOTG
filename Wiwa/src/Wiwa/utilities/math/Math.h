@@ -31,6 +31,12 @@ namespace Wiwa
 			return btVector3(vector.x, vector.y, vector.z);
 		}
 
+		inline glm::vec3 Forward(const glm::mat4& transform)
+		{
+			const glm::mat4 inverted = glm::inverse(transform);
+			return normalize(glm::vec3(inverted[2]));;
+		}
+
 		inline float Distance(const glm::vec3 &a, const glm::vec3 &b)
 		{
 			float diff_x = a.x - b.x;

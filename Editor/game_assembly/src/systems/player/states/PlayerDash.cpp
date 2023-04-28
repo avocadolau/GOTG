@@ -21,7 +21,7 @@ void Wiwa::PlayerDash::EnterState()
 {
 	m_DashVFX = m_StateMachine->GetEntityManager().GetChildByName(m_StateMachine->GetEntity(), "p_dash");
 	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, true);
-
+	m_StateMachine->IsDashing = true;
 	m_DashTimer = m_StateMachine->GetCharacter()->DashCooldown;
 	if (m_StateMachine->CanMove())
 	{
@@ -72,7 +72,7 @@ void Wiwa::PlayerDash::ExitState()
 
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 	m_StateMachine->GetAnimator()->Restart();
-
+	m_StateMachine->IsDashing = false;
 	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, false);
 }
 

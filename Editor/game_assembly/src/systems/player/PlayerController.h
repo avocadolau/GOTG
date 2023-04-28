@@ -43,6 +43,8 @@ namespace Wiwa {
 
 		void SetPlayerRotation(const glm::vec3& input, const float rotationSpeed);
 		float AngleFromVec2(const glm::vec2& vector);
+	public:
+		bool IsDashing;
 	private:
 		glm::vec3 GetMovementInput();
 		glm::vec3 GetShootingInput();
@@ -60,7 +62,6 @@ namespace Wiwa {
 
 		bool m_DashEnable;
 		float m_CooldownTimer;
-		
 	};
 }
 

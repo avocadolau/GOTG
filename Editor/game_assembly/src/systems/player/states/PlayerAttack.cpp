@@ -37,7 +37,7 @@ void Wiwa::PlayerAttack::UpdateState()
 
 	if (m_StateMachine->CanAttack())
 	{
-		Fire(Math::CalculateForward(m_StateMachine->GetTransform()));
+		Fire(m_StateMachine->GetDirection());
 	}
 	if (m_StateMachine->GetVelocity() != glm::vec3(0.f))
 	{
