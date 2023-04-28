@@ -17,6 +17,7 @@
 // Game systems
 #include "systems/game/wave/WaveSystem.h"
 #include "systems/game/wave/WaveSpawnerSystem.h"
+#include "systems/game/wave/WaveSpawnPointSystem.h"
 #include "systems/game/CharacterInventory.h"
 
 #include "systems/game/items/RewardRoom.h"

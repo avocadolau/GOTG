@@ -39,6 +39,7 @@
 #include <time.h>
 
 #include <Wiwa/utilities/functions/Function.h>
+#include <random>
 
 USE_REFLECTION;
 
@@ -52,7 +53,6 @@ namespace Wiwa
 		struct timespec ts;
 		timespec_get(&ts, TIME_UTC);
 		srand(((unsigned int)ts.tv_nsec));
-
 
 		WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 

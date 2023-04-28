@@ -9,7 +9,7 @@ namespace Wiwa
 	{
 		m_EnemySpawnerIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_CurrentWaveIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		//m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_CurrentWaveEntityId = 0;
 		m_HasWave = false;
 		m_Timer = 0.0f;
@@ -27,7 +27,7 @@ namespace Wiwa
 	void WaveSpawnerSystem::OnInit()
 	{
 		m_EnemySpawnerIt = GetComponentIterator<WaveSpawner>();
-		m_TransformIt = GetComponentIterator<Transform3D>();
+		//m_TransformIt = GetComponentIterator<Transform3D>();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		m_Timer = enemySpawner->timeBetweenWaves;
 		enemySpawner->hasTriggered = true;
@@ -104,9 +104,9 @@ namespace Wiwa
 		waveName += "_wave_" + std::to_string(enemySpawner->currentWaveCount);
 		m_CurrentWaveEntityId = em.CreateEntity(waveName.c_str());
 
-		Transform3D* waveTransform = em.AddComponent<Transform3D>(m_CurrentWaveEntityId);
-		Transform3D* parent = GetComponentByIterator<Transform3D>(m_TransformIt);
-		waveTransform->localPosition = parent->localPosition;
+		//Transform3D* waveTransform = em.AddComponent<Transform3D>(m_CurrentWaveEntityId);
+		//Transform3D* parent = GetComponentByIterator<Transform3D>(m_TransformIt);
+		//waveTransform->localPosition = parent->localPosition;
 		
 		// Create a wave component and wave system
 		Wave* wave = em.AddComponent<Wave>(m_CurrentWaveEntityId);

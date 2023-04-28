@@ -9,7 +9,7 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_EnemySpawnerIt;
 		EntityManager::ComponentIterator m_CurrentWaveIt;
-		EntityManager::ComponentIterator m_TransformIt;
+		//EntityManager::ComponentIterator m_TransformIt;
 		EntityId m_CurrentWaveEntityId;
 
 		float m_Timer = 0.0f;

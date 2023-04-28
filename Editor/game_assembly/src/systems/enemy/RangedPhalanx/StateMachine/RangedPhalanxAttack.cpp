@@ -121,9 +121,6 @@ namespace Wiwa
 
 	glm::vec3 RangedPhalanxAttackState::CalculateForward(const Transform3D& t3d)
 	{
-		/*glm::vec4 forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-		glm::vec4 transformed = t3d.worldMatrix * forward;
-		return glm::normalize(glm::vec3(transformed));*/
 		glm::vec3 rotrad = glm::radians(t3d.rotation);
 
 		glm::vec3 forward;

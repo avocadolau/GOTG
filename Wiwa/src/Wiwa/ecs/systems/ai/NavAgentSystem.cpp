@@ -199,15 +199,28 @@ namespace Wiwa
         dtPolyRef ref;
         float distance = 0.0f;
         dtRaycastHit hit;
-        dtStatus status = navMeshQuery->raycast(startRef, &start_point[0], &end_point[0], filter, 0, &hit);
-        if (dtStatusSucceed(status))
+        navMeshQuery->raycast(startRef, &start_point[0], &end_point[0], filter, 0, &hit);
+        if (hit.t > 1)
+        {
+            // Hit
+            WI_INFO("HITTTTT");
+            return true;
+        }
+        else
+        {
+            // No hit
+            WI_INFO("NO HIT");
+            return false;
+        }
+        return false;
+       /* if (dtStatusSucceed(status))
         {
             if (hit.t == FLT_MAX)
                 return false;
 
             return true;
         }
-        return false;
+        return false;*/
     }
 
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const

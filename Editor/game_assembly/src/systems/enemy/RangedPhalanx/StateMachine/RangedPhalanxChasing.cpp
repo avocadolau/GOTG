@@ -71,7 +71,7 @@ namespace Wiwa
             m_HasTargetPoint = false;
 
         bool messi = agent->Raycast(selfTr->localPosition, playerTr->localPosition);
-        WI_INFO(" Raycast, something in betwee: {}", messi);
+        //WI_INFO(" Raycast, something in betwee: {}", messi);
 
         if (distanceToPlayer < enemy->m_RangeOfAttack && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
         {

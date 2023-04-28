@@ -27,7 +27,7 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		bool SpawnEnemy(int index);
+		bool SpawnEnemy(int index, const glm::vec3& spawn_point, int rand_x, int rand_z);
 
 		void DestroyEnemy(size_t id, Pool_Type enemy_type);
 
