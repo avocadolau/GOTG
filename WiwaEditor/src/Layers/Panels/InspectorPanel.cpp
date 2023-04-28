@@ -177,7 +177,12 @@ void InspectorPanel::DrawField(unsigned char *data, const Field &field)
 		ImGui::PopID();
 		return;
 	}
-
+	if (field.type->hash == (size_t)TypeHash::Bool)
+	{
+		ImGui::PushID(field.name.c_str());
+		ImGui::Checkbox(field.name.c_str(), (bool*)(data + field.offset));
+		ImGui::PopID();
+	}
 	// Draw basic fields
 	if (field.type->hash == (size_t)TypeHash::Vector2i)
 	{

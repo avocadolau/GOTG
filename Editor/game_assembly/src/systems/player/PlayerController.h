@@ -38,7 +38,7 @@ namespace Wiwa {
 		Transform3D* GetFirePosition(const char* name);
 		void TakeDamage(uint32_t damage);
 
-		void SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir);
+		void SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const RocketShooter& rocket, const Character& character, glm::vec3 bullDir);
 
 		void SetPlayerRotation(const glm::vec3& input, const float rotationSpeed);
 		float AngleFromVec2(const glm::vec2& vector);

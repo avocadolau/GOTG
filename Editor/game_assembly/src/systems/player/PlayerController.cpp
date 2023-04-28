@@ -10,6 +10,7 @@
 
 #include "../../Components.h"
 #include <Wiwa/ecs/components/game/Character.h>
+#include "../../Systems.h"
 
 Wiwa::PlayerController::PlayerController()
 {
@@ -96,16 +97,39 @@ void Wiwa::PlayerController::TakeDamage(uint32_t damage)
 
 }
 
-void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir)
+void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const RocketShooter& rocket, const Character& character, glm::vec3 bullDir)
 {
-	EntityId bullet = GetEntityManager().LoadPrefab("Assets/Prefabs/Bullet/P_StarLordBullet.wiprefab");
-	Transform3D* bulletTransform = GetEntityManager().GetComponent<Transform3D>(bullet);
-	Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_TransformIt);
+	if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0)
+		return;
 
-	bulletTransform->localPosition = Math::GetWorldPosition(transform.worldMatrix);
-	bulletTransform->localRotation = glm::vec3(0.f, playerTransform->localRotation.y, 0.f);
-	WI_WARN("Firing");
-	// TODO: Play bullet sound here
+	EntityManager& entityManager = m_Scene->GetEntityManager();
+
+	GameStateManager::s_PoolManager->SetScene(m_Scene);
+	EntityId newBulletId = EntityManager::INVALID_INDEX;
+	newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
+
+	if (newBulletId == EntityManager::INVALID_INDEX)
+		return;
+
+	SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
+	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+	physSys->DeleteBody();
+
+	// Set intial positions
+	Transform3D* playerTr = GetTransform();
+	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+	if (!bulletTr || !playerTr)
+		return;
+
+	bulletTr->localPosition = Math::GetWorldPosition(playerTr->worldMatrix);
+	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
+	bulletTr->localScale = playerTr->localScale;
+	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+	bullet->direction = bullDir;
+
+	physSys->CreateBody();
+	bulletSys->EnableBullet();
 }
 
 glm::vec3 Wiwa::PlayerController::GetMovementInput()

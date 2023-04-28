@@ -27,23 +27,9 @@ void Wiwa::PlayerAttack::UpdateState()
 		return;
 	}
 
-	m_MousePos.x = Input::GetMouseX();
-	m_MousePos.y = Input::GetMouseY();
 
-	if (m_StateMachine->GetShootInput() == glm::vec3(0.f))
-	{
-		Camera* cam = Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
-		glm::vec3 worldPos = cam->ScreenToWorlPosition(m_MousePos, m_StateMachine->GetTransform()->position.y);
-		m_StateMachine->SetDirection(glm::vec3(
-			-worldPos.x,
-			worldPos.y,
-			worldPos.z
-		));
-	}
-	else
-	{
-		m_StateMachine->SetDirection(m_StateMachine->GetShootInput());
-	}
+	m_StateMachine->SetDirection(m_StateMachine->GetShootInput());
+
 
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.0f);
 	m_StateMachine->SetVelocity(m_StateMachine->GetInput() * m_StateMachine->GetCharacter()->Speed);
@@ -73,6 +59,7 @@ void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
 void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
 {
 	StarLordShooter* shooter = m_StateMachine->GetStarLord();
+	RocketShooter* rocket = m_StateMachine->GetRocket();
 	Transform3D* spawnPoint;
 	//Decide wich hand is going next
 	if (m_ShootTimer >= m_StateMachine->GetCharacter()->RateOfFire)
@@ -89,6 +76,6 @@ void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
 			m_StateMachine->GetAnimator()->PlayAnimation("shoot_left", false);
 		}
 		shooter->ShootRight = !shooter->ShootRight;
-		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *m_StateMachine->GetCharacter(), Math::CalculateForward(spawnPoint));
+		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *rocket,*m_StateMachine->GetCharacter(), m_StateMachine->GetTransform()->rotation);
 	}
 }

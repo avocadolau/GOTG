@@ -6,7 +6,7 @@ namespace Wiwa
 	class BulletVelocity : public System
 	{
 	public:
-		BulletVelocity() = default;
+		BulletVelocity();
 		virtual ~BulletVelocity();
 
 		//Called the first frame
@@ -15,8 +15,14 @@ namespace Wiwa
 		virtual void OnInit() override;
 		//Called every frame
 		virtual void OnUpdate() override;
+		virtual void OnDestroy() override;
+		bool EnableBullet();
+		bool OnDisabledFromPool();
+		void InitBullet();
+
+		virtual void OnCollisionEnter(Object* obj1, Object* obj2) override;
 	private:
-		EntityManager::ComponentIterator m_BulletDataIt;
+		EntityManager::ComponentIterator m_BulletIt;
 		float m_Timer;
 	};
 }
