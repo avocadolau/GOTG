@@ -16,7 +16,7 @@ namespace Wiwa
 		s_BossUltron = new EntityPool(Pool_Type::BOSS_ULTRON, 1, "assets\\Enemy\\Prefabs\\melee_phalanx.wiprefab");
 		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\UltronLaserBeam\\UltronLaserBeam_01.wiprefab");
-		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
+		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Subjugator\\Subjugator_01.wiprefab");
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
 		s_StarLordBullets = new EntityPool(Pool_Type::STARLORD_BULLET, 10, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
 		s_RocketBullets = new EntityPool(Pool_Type::ROCKET_BULLET, 2, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
@@ -310,15 +310,15 @@ namespace Wiwa
 		if (m_HasLoadedAll)
 			return;
 
-		//LoadPhalanxMeleePool(scene);
-		//LoadPhalanxRangedPool(scene);
-		//LoadSentinelPool(scene);
-		//LoadSimpleBulletPool(scene);
-		//LoadSentinelExplosionPool(scene);
+		LoadPhalanxMeleePool(scene);
+		LoadPhalanxRangedPool(scene);
+		LoadSentinelPool(scene);
+		LoadSimpleBulletPool(scene);
+		LoadSentinelExplosionPool(scene);
 		//LoadBossUltronPool(scene);
-		//LoadClusterBulletPool(scene);
-		//LoadUltronLaserBeamPool(scene);
-		//LoadSubjugatorPool(scene);
+		LoadClusterBulletPool(scene);
+		LoadUltronLaserBeamPool(scene);
+		LoadSubjugatorPool(scene);
 		LoadExplosiveBarrelPool(scene);
 		LoadStarLordBulletsPool(scene);
 		LoadRocketBulletsPool(scene);
@@ -329,16 +329,16 @@ namespace Wiwa
 	{
 		m_HasLoadedAll = false;
 
-		//UnloadPhalanxMeleePool();
-		//UnloadPhalanxRangedPool();
-		//UnloadSentinelPool();
-		//UnloadSimpleBulletPool();
-		//UnloadSentinelExplosionPool();
+		UnloadPhalanxMeleePool();
+		UnloadPhalanxRangedPool();
+		UnloadSentinelPool();
+		UnloadSimpleBulletPool();
+		UnloadSentinelExplosionPool();
 		//UnloadBossUltronPool();
-		//UnloadClusterBulletPool();
-		//UnloadUltronLaserBeamPool();
-		//UnloadSubjugatorPool();
-		//UnloadExplosiveBarrelPool();
+		UnloadClusterBulletPool();
+		UnloadUltronLaserBeamPool();
+		UnloadSubjugatorPool();
+		UnloadExplosiveBarrelPool();
 		UnloadStarLordBulletsPool();
 		UnloadRocketBulletsPool();
 	}

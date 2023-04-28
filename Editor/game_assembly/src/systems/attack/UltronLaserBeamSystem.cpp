@@ -20,8 +20,13 @@ void Wiwa::UltronLaserBeamSystem::OnAwake()
 	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
 	m_LaserIt = GetComponentIterator<UltronLaserBeam>();
-	EntityId boss = em.GetEntityByName("Ultron_01");
-	m_BossTransformIt = em.GetComponentIterator<Transform3D>(boss);
+	EntityId boss = em.GetEntityByName("Ultron_01"); // TODO: Change this to get the boss entity ID from the GameStatemanager
+
+	if (boss != WI_INVALID_INDEX)
+	{
+		m_BossTransformIt = em.GetComponentIterator<Transform3D>(boss);
+	}
+	
 	EntityId player = GameStateManager::GetPlayerId();
 	m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
 }
