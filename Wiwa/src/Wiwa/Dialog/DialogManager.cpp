@@ -61,11 +61,20 @@ namespace Wiwa
 		
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/dialog_test_placeholder3.png");
+
+
+		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png");
 		Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1600,1000 }, { 50,50 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, continueImgID);
+
+
+		ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png");
+		Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
+
+		continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, continueImgID2);
 
 		//conversations[0].conversationName = "NPC_1";
 
@@ -91,7 +100,7 @@ namespace Wiwa
 		characterImgPos.x = -50;
 		characterImgPos.y = 100; // <--
 		bubbleImgPos.x = 640; // <--
-		bubbleImgPos.y = 100;
+		bubbleImgPos.y = 300;
 
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
@@ -118,9 +127,9 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 /*&& collidingWithNpc == true*/)
 		{
- 			conversationToPlayName = NpcConversationTag.c_str();
+ 			conversationToPlayName = "Watcher"/*NpcConversationTag.c_str()*/;
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
@@ -190,6 +199,24 @@ namespace Wiwa
 			InstanceRenderer& instanceRenderer3 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.renderer_id);
 			instanceRenderer3.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.instance_id, BLACK);
 
+			if (((keyPressRefreshTimer / 450) % 2) == 0)
+			{
+				if (firstTime == false && endTime == false)
+				{
+					render->EnableInstance(m_Scene, continueImgID2);
+					render->DisableInstance(m_Scene, continueImgID);
+				}
+			}
+			else
+			{
+				if (firstTime == false && endTime == false)
+				{
+					render->DisableInstance(m_Scene, continueImgID2);
+					render->EnableInstance(m_Scene, continueImgID);
+				}
+
+			}
+
 			if (firstTime == false && endTime == false)
 			{
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
@@ -241,11 +268,8 @@ namespace Wiwa
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
-
 				if (endTimeTimer >= 450)
 				{
-					render->DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
-					render->DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 
 					endTime = false;
 
@@ -258,28 +282,20 @@ namespace Wiwa
 				}
 			}
 
-			if (((keyPressRefreshTimer / 450) % 2) == 0)
-			{
-				if(firstTime == false && endTime == false) render->EnableInstance(m_Scene, continueImgID);
-			}
-			else
-			{
-				render->DisableInstance(m_Scene, continueImgID);
-			}
-
 			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && (keyPressRefreshTimer > 850 && firstTime == false && endTime == false))
 			{
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
 
-				render->DisableInstance(m_Scene, continueImgID);
-
 				keyPressRefreshTimer = 0;
 
 				currentNode++;
 				if (currentNode >= MAX_CONVERSATION_NODES || conversations[conversationNumber].nodes[currentNode].occupied == false)
 				{
+					render->DisableInstance(m_Scene, continueImgID);
+					render->DisableInstance(m_Scene, continueImgID2);
+
 					currentNode = 0;
 					firstTime = false;
 					endTime = true;
