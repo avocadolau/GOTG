@@ -15,7 +15,7 @@ namespace Wiwa
         bool introBossFight = true;
         bool activeIntroCanvas = false;
         float counterIntroAnim = 0.0f;
-        float timeIntroAnim = 10.0f;
+        float timeIntroAnim = 4.0f;
     public:
         UltronGUISystem() = default;
         virtual ~UltronGUISystem() = default;
