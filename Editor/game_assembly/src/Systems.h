@@ -2,7 +2,7 @@
 #include "systems/player/PlayerSpawner.h"
 #include "systems/camera/CameraController.h"
 #include "systems/ships/ship_main_menu.h"
-
+#include "systems/ships/ShipRotator.h"
 
 #include "systems/enemy/EnemySystem.h"
 
