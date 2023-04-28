@@ -3,7 +3,6 @@
 #include "Wiwa/game/Items/ItemManager.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Input.h"
-#include "../CharacterInventory.h"
 
 void Wiwa::PlayerGUISystem::OnUpdate()
 {
@@ -13,6 +12,30 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 	CharacterInventory* characterInventory = m_Scene->GetEntityManager().GetSystem<CharacterInventory>(m_EntityId);
 
 	PlayerElements(gm, character);
+	HandleCurrentCanvas(gm);
+
+	if (character->Health <= 0 && !deathHud)
+	{
+		DeathHud(gm);
+		deathHud = true;
+	}
+	if (characterInventory != NULL)
+	{
+		if (shopActive)
+		{
+			ShopElementsHUD(characterInventory->GetCurrentShopItem(),gm);
+			shopActive = false;
+		}
+		if (characterInventory->PlayerUpdated())
+		{
+			HandlePlayerStatistics(character->MaxHealth, character->MaxShield, 10.0f, character->Damage, character->Speed, character->RateOfFire, gm);
+		}
+	}
+}
+
+void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
+{
+	CharacterInventory* characterInventory = m_Scene->GetEntityManager().GetSystem<CharacterInventory>(m_EntityId);
 	CurrentHUD = gm.getCurrentCanvas();
 	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY))
 	{
@@ -25,6 +48,18 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 			pauseGame = true;
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart) && pauseGame)
+		{
+			gm.canvas.at(CanvasHUD)->SwapActive();
+			gm.canvas.at(PauseHUD)->SwapActive();
+			pauseGame = false;
+			m_Scene->SwapPauseActive();
+		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::B))
+		{
+			pauseGame = true;
+		}
+		if (Wiwa::Input::IsKeyReleased(Key::B) && pauseGame)
 		{
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
@@ -80,23 +115,6 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 			gm.canvas.at(ShopHUD)->SwapActive();
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			shopHUD = false;
-		}
-	}
-	if (character->Health <= 0 && !deathHud)
-	{
-		DeathHud(gm);
-		deathHud = true;
-	}
-	if (characterInventory != NULL)
-	{
-		if (shopActive)
-		{
-			ShopElementsHUD(characterInventory->GetCurrentShopItem(),gm);
-			shopActive = false;
-		}
-		if (characterInventory->PlayerUpdated())
-		{
-			HandlePlayerStatistics(character->MaxHealth, character->MaxShield, 10.0f, character->Damage, character->Speed, character->RateOfFire, gm);
 		}
 	}
 }
@@ -559,79 +577,50 @@ void Wiwa::PlayerGUISystem::HandlePlayerStatistics(int max_Health, int max_Shiel
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 	std::string maxHealthString = std::to_string(max_Health);
-	gm.canvas.at(PauseHUD)->controls.at(5)->text = maxHealthString.c_str();
+	gm.canvas.at(DeathHUD)->controls.at(6)->text = maxHealthString.c_str();
+	gm.canvas.at(PauseHUD)->controls.at(9)->text = maxHealthString.c_str();
 
 	std::string maxShieldString = std::to_string(max_Shield);
-	gm.canvas.at(PauseHUD)->controls.at(5)->text = maxShieldString.c_str();
+	gm.canvas.at(DeathHUD)->controls.at(7)->text = maxShieldString.c_str();
+	gm.canvas.at(PauseHUD)->controls.at(10)->text = maxShieldString.c_str();
 
 	std::string rangeString = std::to_string(range);
-	gm.canvas.at(PauseHUD)->controls.at(5)->text = rangeString.c_str();
+	gm.canvas.at(DeathHUD)->controls.at(8)->text = rangeString.c_str();
+	gm.canvas.at(PauseHUD)->controls.at(11)->text = rangeString.c_str();
 
 	std::string attackString = std::to_string(attack);
-	gm.canvas.at(PauseHUD)->controls.at(5)->text = attackString.c_str();
+	gm.canvas.at(DeathHUD)->controls.at(9)->text = attackString.c_str();
+	gm.canvas.at(PauseHUD)->controls.at(12)->text = attackString.c_str();
 
 	std::string speedString = std::to_string(speed);
-	gm.canvas.at(PauseHUD)->controls.at(5)->text = speedString.c_str();
+	gm.canvas.at(DeathHUD)->controls.at(10)->text = speedString.c_str();
+	gm.canvas.at(PauseHUD)->controls.at(13)->text = speedString.c_str();
 
 	std::string rateOfFireString = std::to_string(rateOfFire);
-	gm.canvas.at(PauseHUD)->controls.at(5)->text = rateOfFireString.c_str();
+	gm.canvas.at(DeathHUD)->controls.at(11)->text = rateOfFireString.c_str();
+	gm.canvas.at(PauseHUD)->controls.at(14)->text = rateOfFireString.c_str();
 
-	Text* maxHealthText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", maxHealthString.c_str());
-	Text* maxShieldText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", maxShieldString.c_str());
-	Text* rangeText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", rangeString.c_str());
-	Text* attackText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", attackString.c_str());
-	Text* speedText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", speedString.c_str());
-	Text* rateOfFireText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", rateOfFireString.c_str());
+	std::vector<Text*> TextsForSwap;
+	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", maxHealthString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", maxShieldString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", rangeString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", attackString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", speedString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", rateOfFireString.c_str()));
 
-	//PAUSE CANVAS
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(9)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(9)->id_quad_normal, maxHealthText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(9)->id_quad_normal, maxHealthText->GetSize(), { 0,0,512,512 });
+	//Updating Canvas Textures
+	for (int i = 0; i < 6; i++)
+	{
+		int index_pause = 9 + i;
+		int index_death = 6 + i;
+		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(index_pause)->id_quad_normal, 1);
+		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(index_pause)->id_quad_normal, TextsForSwap.at(i)->GetTextureId());
+		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(index_pause)->id_quad_normal, TextsForSwap.at(i)->GetSize(), { 0,0,512,512 });
 
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(10)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(10)->id_quad_normal, maxShieldText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(10)->id_quad_normal, maxShieldText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(11)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(11)->id_quad_normal, rangeText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(11)->id_quad_normal, rangeText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(12)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(12)->id_quad_normal, attackText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(12)->id_quad_normal, attackText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(13)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(13)->id_quad_normal, speedText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(13)->id_quad_normal, speedText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(PauseHUD)->controls.at(14)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(PauseHUD)->controls.at(14)->id_quad_normal, rateOfFireText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(PauseHUD)->controls.at(14)->id_quad_normal, rateOfFireText->GetSize(), { 0,0,512,512 });
-
-	// DEATH CANVAS
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(6)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(6)->id_quad_normal, maxHealthText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(6)->id_quad_normal, maxHealthText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(7)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(7)->id_quad_normal, maxShieldText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(7)->id_quad_normal, maxShieldText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(8)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(8)->id_quad_normal, rangeText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(8)->id_quad_normal, rangeText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(9)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(9)->id_quad_normal, attackText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(9)->id_quad_normal, attackText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(10)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(10)->id_quad_normal, speedText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(10)->id_quad_normal, speedText->GetSize(), { 0,0,512,512 });
-
-	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(11)->id_quad_normal, 1);
-	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(11)->id_quad_normal, rateOfFireText->GetTextureId());
-	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(11)->id_quad_normal, rateOfFireText->GetSize(), { 0,0,512,512 });
+		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(index_death)->id_quad_normal, 1);
+		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(DeathHUD)->controls.at(index_death)->id_quad_normal, TextsForSwap.at(i)->GetTextureId());
+		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(DeathHUD)->controls.at(index_death)->id_quad_normal, TextsForSwap.at(i)->GetSize(), { 0,0,512,512 });
+	}
 }
 
 void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager& gm)
