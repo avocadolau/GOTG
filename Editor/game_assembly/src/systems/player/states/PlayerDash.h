@@ -18,5 +18,7 @@ namespace Wiwa
 		glm::vec3 m_TargetPoint;
 		glm::vec3 m_DashDirection;
 		float m_MaxDashTime = 1.5f;
+
+		EntityId m_DashVFX;
 	};
 }

@@ -39,12 +39,17 @@ void Wiwa::PlayerController::OnInit()
 	GameStateManager::LoadProgression();
 
 	m_DashEnable = true;
+
+	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARLORD_BULLET, m_Scene);
 }
 
 void Wiwa::PlayerController::OnUpdate()
 {
 	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();
+
+	SetDirection(GetShootInput());
+	SetPlayerRotation(GetDirection(), 1.0f);
 }
 
 Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()
@@ -128,6 +133,11 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
 	physSys->CreateBody();
 	bulletSys->EnableBullet();
+
+	EntityId muzzleFlash = entityManager.GetChildByName(m_EntityId, "p_muzzle");
+	entityManager.SetActive(muzzleFlash, true);
+	Transform3D* muzzleTransform = entityManager.GetComponent<Transform3D>(muzzleFlash);
+	muzzleTransform->localPosition = Math::GetWorldPosition(transform.localMatrix);
 }
 
 glm::vec3 Wiwa::PlayerController::GetMovementInput()
