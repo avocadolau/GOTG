@@ -36,7 +36,7 @@ namespace Wiwa
         //offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
         animator->PlayAnimation("walk", true);
 
-        m_HasTargetPoint = false;
+        //m_HasTargetPoint = false;
         m_TargetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 
     }
@@ -56,19 +56,20 @@ namespace Wiwa
         float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
         Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-        if (agent && !m_HasTargetPoint && distanceToPlayer > enemy->m_RangeOfAttack)
+        if (agent)
         {
-            Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-            m_TargetPoint = agent->GetRandPointOutsideCircle(playerTr->localPosition, enemy->m_RangeOfAttack);
+            //Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+            //m_TargetPoint = agent->GetRandPointOutsideCircle(playerTr->localPosition, enemy->m_RangeOfAttack);
+            m_TargetPoint = playerTr->localPosition;
             agent->SetDestination(m_TargetPoint);
 
-            m_HasTargetPoint = true;
+            //m_HasTargetPoint = true;
         }
 
-        bool isNearTargetPoint = Math::IsPointNear(selfTr->localPosition, m_TargetPoint, 2.0f);
-
-        if (isNearTargetPoint)
-            m_HasTargetPoint = false;
+        //bool isNearTargetPoint = Math::IsPointNear(selfTr->localPosition, m_TargetPoint, 2.0f);
+        //
+        //if (isNearTargetPoint)
+        //    m_HasTargetPoint = false;
 
         if (distanceToPlayer < enemy->m_RangeOfAttack && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
         {
