@@ -38,14 +38,12 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	{
 		PanToCamera();
 	}
-	else
-	{
-		float posY = GetTransform()->position.y;
-		float move = sin(m_Time) * data->VelocityMove * Time::GetDeltaTimeSeconds();
-		float rot = cos(m_Time) * data->VelocityRot * Time::GetDeltaTimeSeconds();
-		GetTransform()->localPosition.y += move;
-		GetTransform()->localRotation.x += rot;
-	}
+
+	float posY = GetTransform()->position.y;
+	float move = sin(m_Time) * data->VelocityMove * Time::GetDeltaTimeSeconds();
+	float rot = cos(m_Time) * data->VelocityRot * Time::GetDeltaTimeSeconds();
+	GetTransform()->localPosition.y += move;
+	GetTransform()->localRotation.x += rot;
 }
 
 void Wiwa::ShipMainMenu::PanToCamera()
@@ -59,7 +57,5 @@ void Wiwa::ShipMainMenu::PanToCamera()
 	}
 
 	PhysicsSystem* physics = m_Scene->GetEntityManager().GetSystem<PhysicsSystem>(m_EntityId);
-	glm::vec3 forward = Math::CalculateForward(GetTransform()->position);
-	btVector3 vel = Math::ToBulletVector3(Math::CalculateForward(GetTransform()->position) * data->PanVelocity);
-	physics->getBody()->velocity = Math::ToBulletVector3(Math::CalculateForward(GetTransform()->position) * data->PanVelocity);
+	physics->getBody()->velocity = Math::ToBulletVector3(Math::CalculateForward(GetTransform()) * data->PanVelocity);
 }

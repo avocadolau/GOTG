@@ -52,21 +52,17 @@ namespace Wiwa
 		{
 			return deg * PI_F / 180.0f;
 		}
-		inline glm::vec3 CalculateForward(Transform3D *t3d)
+		inline glm::vec3 CalculateForward(const Transform3D* t3d)
 		{
-			glm::vec3 rotrad;
-			rotrad.x = DegToRad(t3d->rotation.x);
-			rotrad.y = DegToRad(t3d->rotation.y);
-			rotrad.z = DegToRad(t3d->rotation.z);
+			glm::vec3 rotrad = glm::radians(t3d->rotation);
 
 			glm::vec3 forward;
+
 			forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
 			forward.y = -glm::sin(rotrad.x);
 			forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
 
-			forward.x = RadToDeg(forward.x);
-			forward.y = RadToDeg(forward.y);
-			forward.z = RadToDeg(forward.z);
+			forward = glm::degrees(forward);
 
 			return glm::normalize(forward);
 		}

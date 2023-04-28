@@ -294,7 +294,7 @@ namespace Wiwa {
 				
 				if (!s) continue;
 
-				s->Update();
+					s->Update();
 			}
 		}
 	}
