@@ -142,6 +142,14 @@ void AudioPanel::Draw()
 		}
 	}
 
+	if (ImGui::Button("Save ##audio")) {
+		ret = Audio::Serialize();
+
+		if (!ret) {
+			WI_ERROR("Error saving audio project no audio project is loaded");
+		}
+	}
+
 	ImGui::End();
 }
 

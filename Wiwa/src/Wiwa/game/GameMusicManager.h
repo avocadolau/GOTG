@@ -7,7 +7,7 @@
 namespace Wiwa {
 
 	struct SceneMusic {
-		const char* m_SongName;
+		const char* m_MusicEventName;
 		uint32_t scene;
 	};
 
@@ -15,7 +15,7 @@ namespace Wiwa {
 	{
 	public:
 		void static Update();
-		void static PlayMusic(const char* music_name);
+		void static PlayMusic(const char* music_event_name);
 	};
 
 }

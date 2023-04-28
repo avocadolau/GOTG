@@ -8,11 +8,11 @@ namespace Wiwa
 {
 	void GameMusicManager::Update()
 	{
-
 	}
-	void GameMusicManager::PlayMusic(const char* music_name)
+	void GameMusicManager::PlayMusic(const char* music_event_name)
 	{
-
+		Audio::StopAllEvents();
+		Audio::PostEvent(music_event_name);
 	}
 }
 

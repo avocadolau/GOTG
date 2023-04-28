@@ -157,7 +157,7 @@ public:
 	static void ChangeSFXVolume(int value);
 	static void ChangeDialogVolume(int value);
 
-	static void Serialize();
+	static bool Serialize();
 	static void Deserialize();
 
 	// Returns last error

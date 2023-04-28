@@ -29,6 +29,8 @@
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
+
+
 uint32_t Audio::m_InitBank = 0;
 std::vector<Audio::BankData> Audio::m_LoadedBanks;
 std::vector<Audio::EventData> Audio::m_LoadedEvents;
@@ -389,6 +391,8 @@ bool Audio::Init()
         setLastError(gres);
     }
 
+    Deserialize();
+
     return true;
 }
 
@@ -522,7 +526,8 @@ bool Audio::LoadBank(const char* bank)
 bool Audio::LoadAllEvents()
 {
     //// Get a list of all events in the bank
-    //AK::SoundEngine::Query::
+    //AK::SoundEngine::Query::?????
+    // 
     //AK::SoundEngine::Query::GetList(AK::SoundEngine::Query::ObjectType::Event, eventList);
 
     //// Loop through the list of events and process each event as desired
@@ -716,7 +721,6 @@ bool Audio::StopEvent(const char* event_name, uint64_t game_object)
 bool Audio::StopAllEvents()
 {
     AK::SoundEngine::StopAll();
-
     // Instantly stop them
     AK::SoundEngine::RenderAudio(true);
 
@@ -838,23 +842,66 @@ void Audio::ChangeDialogVolume(int value)
     AK::SoundEngine::SetRTPCValue("DialogVolume", value);
 }
 
-void Audio::Serialize()
+bool Audio::Serialize()
 {
-   /* Wiwa::JSONDocument doc;
-
     if (LoadedProject())
     {
-        doc.AddMember("init_bank", GetProjectPath());
-        for (int i = 0; i < Audio::m_LoadedBanks.size(); i++)
+       Wiwa::JSONDocument doc;
+       doc.AddMember("init_path", m_InitBankPath.c_str());
+
+        Wiwa::JSONValue banks = doc.AddMemberArray("banks");
+
+        for (auto& bank : GetLoadedBankList())
         {
-
+            banks.PushBack(bank.path.c_str());
         }
-    }*/
 
+        Wiwa::JSONValue events = doc.AddMemberArray("events");
+
+        for (auto& event : GetLoadedEventList())
+        {
+            events.PushBack(event.name.c_str());
+        }
+
+        doc.save_file("config/sound_banks.json");
+
+        return true;
+    }
+    return false;
 }
 
 void Audio::Deserialize()
 {
+    Wiwa::JSONDocument doc("config/sound_banks.json");
+
+    if (doc.IsObject())
+    {
+        if (doc.HasMember("init_path"))
+            LoadProject(doc["init_path"].as_string());
+        if (doc.HasMember("banks"))
+        {
+            Wiwa::JSONValue banks = doc["banks"];
+            if (banks.IsArray())
+            {
+                for (uint32_t i = 0; i < banks.Size(); i++)
+                {
+                    LoadBank(banks[i].as_string());
+                }
+            }
+        }
+        if (doc.HasMember("events"))
+        {
+            Wiwa::JSONValue events = doc["events"];
+            if (events.IsArray())
+            {
+                for (uint32_t i = 0; i < events.Size(); i++)
+                {
+                    LoadEvent(events["events"].as_string());
+                }
+            }
+        }
+
+    }
 }
 
 
