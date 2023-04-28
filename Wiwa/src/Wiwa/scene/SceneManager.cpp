@@ -46,6 +46,7 @@ namespace Wiwa
 
 		if (m_LoadScene) {
 			LoadScene(m_LoadPath.c_str(), m_LoadFlags);
+			GameMusicManager::OnSceneChage(m_ActiveScene);
 			m_LoadScene = false;
 		}
 

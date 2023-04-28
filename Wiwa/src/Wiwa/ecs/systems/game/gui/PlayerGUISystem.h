@@ -3,6 +3,7 @@
 #include <Wiwa/ecs/Systems.h>
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/game/Character.h>
+#include "../CharacterInventory.h"
 
 namespace Wiwa
 {
@@ -32,6 +33,8 @@ namespace Wiwa
         virtual ~PlayerGUISystem() = default;
 
         void OnUpdate() override;
+
+        void HandleCurrentCanvas(Wiwa::GuiManager& gm);
 
         void DeathHud(Wiwa::GuiManager& gm);
 
