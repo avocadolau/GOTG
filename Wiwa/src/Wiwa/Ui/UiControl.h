@@ -236,8 +236,8 @@ namespace Wiwa
 		{
 			if (animatedControl)
 			{
-				timeForAnim += 1.0f;
-				if (timeForAnim >= animSpeed)
+				timeForAnim += Wiwa::Time::GetDeltaTime();
+				if (timeForAnim >= 1000/animSpeed)
 				{
 					if (framesAnimation < positionsForAnimations.size() - 1)
 					{
