@@ -74,6 +74,7 @@ namespace Wiwa
 
 		CooldownState CooldownState;
 
+		ItemTags itemTag[2];
 		Ability() = default;
 		Ability(const Ability& ability)
 		{
@@ -88,20 +89,23 @@ namespace Wiwa
 			this->Price = ability.Price;
 			this->AbilityType = ability.AbilityType;
 			this->CooldownState = ability.CooldownState;
+			this->itemTag[0] = ability.itemTag[0];
+			this->itemTag[1] = ability.itemTag[1];
 		}
 		
 		Ability(const char* name)
 			: Name(name),
-			  Description(""),
-			  Icon(0),
-			  Damage(0),
-			  Range(0.f),
-			  Area(0.f),
-			  Cooldown(0.f),
-			  CurrentTime(0.f),
-			  Price(0),
-			  AbilityType(AbilityType::YONDUS_FIN),
-			  CooldownState(CooldownState::NO_CHARGED)
+			Description(""),
+			Icon(0),
+			Damage(0),
+			Range(0.f),
+			Area(0.f),
+			Cooldown(0.f),
+			CurrentTime(0.f),
+			Price(0),
+			AbilityType(AbilityType::YONDUS_FIN),
+			CooldownState(CooldownState::NO_CHARGED),
+			itemTag{ItemTags::AOE,ItemTags::ATTACK}
 
 		{}
 

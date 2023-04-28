@@ -639,6 +639,14 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 	gm.canvas.at(CanvasHUD)->SwapActive();
 	gm.canvas.at(ShopHUD)->SwapActive();
+	const char* tags[] =
+	{
+		"Attack",
+		"Projectile",
+		"Aoe",
+		"Debuff",
+		"Homing",
+	};
 	if (currentItem->item_type == 0) //Ability
 	{
 		Ability* ability = Wiwa::ItemManager::GetAbility(currentItem->Name);
@@ -649,11 +657,11 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 		std::string ability_price = std::to_string(ability->Price);
 		gm.canvas.at(ShopHUD)->controls.at(1)->text = ability_price.c_str();
 		//TODO: tags
-		/*std::string ability_tag_1 = std::to_string(ability->tag);
-		gm.canvas.at(ShopHUD)->controls.at(3)->text = ability_price.c_str();
+		std::string ability_tag_1 = tags[(int)ability->itemTag[0]];
+		gm.canvas.at(ShopHUD)->controls.at(3)->text = ability_tag_1.c_str();
 
-		std::string ability_tag_1 = std::to_string(ability->tag);
-		gm.canvas.at(ShopHUD)->controls.at(4)->text = ability_price.c_str();*/
+		std::string ability_tag_2 = tags[(int)ability->itemTag[1]];
+		gm.canvas.at(ShopHUD)->controls.at(4)->text = ability_tag_1.c_str();
 
 		std::string ability_damage = std::to_string(ability->Damage);
 		gm.canvas.at(ShopHUD)->controls.at(5)->text = ability_damage.c_str();
@@ -670,6 +678,8 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 		//TODO: Do description with wrappedText
 		Text* abilityNameText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_name.c_str());
 		Text* abilityPriceText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_price.c_str());
+		Text* abilityTag1 = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_tag_1.c_str());
+		Text* abilityTag2 = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_tag_2.c_str());
 		Text* abilityDamageText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_damage.c_str());
 		Text* abilityRangeText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_Range.c_str());
 		Text* abilityCDText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_CD.c_str());
@@ -682,6 +692,14 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(1)->id_quad_normal, 1);
 		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(1)->id_quad_normal, abilityPriceText->GetTextureId());
 		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(ShopHUD)->controls.at(1)->id_quad_normal, abilityPriceText->GetSize(), { 0,0,512,512 });
+
+		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(3)->id_quad_normal, 1);
+		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(3)->id_quad_normal, abilityTag1->GetTextureId());
+		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(ShopHUD)->controls.at(3)->id_quad_normal, abilityTag1->GetSize(), { 0,0,512,512 });
+
+		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(4)->id_quad_normal, 1);
+		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(4)->id_quad_normal, abilityTag2->GetTextureId());
+		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(ShopHUD)->controls.at(4)->id_quad_normal, abilityTag2->GetSize(), { 0,0,512,512 });
 
 		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(5)->id_quad_normal, 1);
 		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(5)->id_quad_normal, abilityDamageText->GetTextureId());
@@ -708,12 +726,6 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 
 		std::string buff_price = std::to_string(buff->Price);
 		gm.canvas.at(ShopHUD)->controls.at(1)->text = buff_price.c_str();
-		//TODO: tags
-		/*std::string ability_tag_1 = std::to_string(ability->tag);
-		gm.canvas.at(ShopHUD)->controls.at(3)->text = ability_price.c_str();
-
-		std::string ability_tag_1 = std::to_string(ability->tag);
-		gm.canvas.at(ShopHUD)->controls.at(4)->text = ability_price.c_str();*/
 
 		std::string buff_damage = std::to_string(buff->AttackDmgInc);
 		gm.canvas.at(ShopHUD)->controls.at(5)->text = buff_damage.c_str();

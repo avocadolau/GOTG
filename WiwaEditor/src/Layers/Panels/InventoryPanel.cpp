@@ -511,7 +511,15 @@ void InventoryPanel::DrawAbilityPool(int& id)
 			"Phylas Quantum Sword",
 			"StarHawks blast",
 		};
-		if (ImGui::BeginTable("actives", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* tags[] =
+		{
+			"Attack",
+			"Projectile",
+			"Aoe",
+			"Debuff",
+			"Homing",
+		};
+		if (ImGui::BeginTable("actives", 10, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
@@ -522,6 +530,7 @@ void InventoryPanel::DrawAbilityPool(int& id)
 			ImGui::TableSetupColumn("Area");
 			ImGui::TableSetupColumn("Cooldown");
 			ImGui::TableSetupColumn("Price");
+			ImGui::TableSetupColumn("Tags");
 			ImGui::TableHeadersRow();
 			for (auto& it : abilities)
 			{
@@ -601,6 +610,41 @@ void InventoryPanel::DrawAbilityPool(int& id)
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##price", &ability->Price);
 
+				ImGui::TableNextColumn();
+				const char* currentItem_1 = tags[(int)ability->itemTag[0]];
+				if (ImGui::BeginCombo("##tag_1", currentItem_1))
+				{
+					for (int i = 0; i < sizeof(tags) / sizeof(char*); i++)
+					{
+						bool isSelected = (currentItem_1 == tags[i]);
+						if (ImGui::Selectable(tags[i], isSelected))
+						{
+							currentItem_1 = tags[i];
+							ability->itemTag[0] = (Wiwa::ItemTags)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+				const char* currentItem_2 = tags[(int)ability->itemTag[1]];
+				if (ImGui::BeginCombo("##tag_2", currentItem_2))
+				{
+					for (int i = 0; i < sizeof(tags) / sizeof(char*); i++)
+					{
+						bool isSelected = (currentItem_2 == tags[i]);
+						if (ImGui::Selectable(tags[i], isSelected))
+						{
+							currentItem_2 = tags[i];
+							ability->itemTag[1] = (Wiwa::ItemTags)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
 				ImGui::PopID();
 			}
 			ImGui::EndTable();

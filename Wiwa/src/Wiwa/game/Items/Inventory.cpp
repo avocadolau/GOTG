@@ -36,7 +36,8 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			ability.AddMember("current_time", m_Abilities[i]->CurrentTime);
 			ability.AddMember("price", m_Abilities[i]->Price);
 			ability.AddMember("type", (int)m_Abilities[i]->AbilityType);
-			
+			ability.AddMember("tag_1", (int)m_Abilities[i]->itemTag[0]);
+			ability.AddMember("tag_2", (int)m_Abilities[i]->itemTag[1]);
 		}
 	}
 	JSONValue Buffs = doc->AddMemberArray("buffs");
@@ -97,6 +98,8 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				ability.CurrentTime = abilities[i]["current_time"].as_float();
 				ability.Price = abilities[i]["price"].as_int();
 				ability.AbilityType = (AbilityType)abilities[i]["type"].as_int();
+				ability.itemTag[0] = (ItemTags)abilities[i]["tag_1"].as_int();
+				ability.itemTag[1] = (ItemTags)abilities[i]["tag_2"].as_int();
 				AddAbility(&ability);
 			}
 		}

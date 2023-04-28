@@ -63,6 +63,9 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		activeObj.AddMember("cooldown", active.second.Cooldown);
 		activeObj.AddMember("price", active.second.Price);
 		activeObj.AddMember("type", (int)active.second.AbilityType);
+		activeObj.AddMember("tag_1", (int)active.second.itemTag[0]);
+		activeObj.AddMember("tag_2", (int)active.second.itemTag[1]);
+
 	}
 
 	JSONValue passives = doc->AddMemberArray("passives");
@@ -122,6 +125,8 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Cooldown = actives[i]["cooldown"].as_float();
 				ability.Price = actives[i]["price"].as_int();
 				ability.AbilityType = (AbilityType)actives[i]["type"].as_int();
+				ability.itemTag[0] = (ItemTags)actives[i]["tag_1"].as_int();
+				ability.itemTag[1] = (ItemTags)actives[i]["tag_2"].as_int();
 				AddAbility(ability);
 			}
 		}
