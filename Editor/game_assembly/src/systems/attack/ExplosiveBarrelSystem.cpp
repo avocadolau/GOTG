@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "ExplosiveBarrelSystem.h"
 #include "../../components/attack/ExplosiveBarrel.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

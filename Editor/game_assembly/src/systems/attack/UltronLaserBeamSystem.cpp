@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "UltronLaserBeamSystem.h"
 #include "../../components/attack/UltronLaserBeam.h"
 #include "../../systems/enemy/Ultron/StateMachine/BossUltronLaserBeamAttack.h"

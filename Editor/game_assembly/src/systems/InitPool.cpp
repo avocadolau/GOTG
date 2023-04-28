@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "InitPool.h"
 
 Wiwa::InitPool::InitPool()

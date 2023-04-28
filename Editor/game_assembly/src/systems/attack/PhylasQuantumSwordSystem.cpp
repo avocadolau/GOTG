@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PhylasQuantumSwordSystem.h"
 #include "../../components/attack/PhylasQuantumSword.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

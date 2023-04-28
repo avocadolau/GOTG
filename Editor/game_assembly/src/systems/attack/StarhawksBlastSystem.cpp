@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "StarhawksBlastSystem.h"
 #include "../../components/attack/StarhawkBlast.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

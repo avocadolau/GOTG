@@ -18,6 +18,9 @@ namespace Wiwa
         EntityPool* s_UltronLaserBeamPool;
         EntityPool* s_Subjugator;
         EntityPool* s_ExplosiveBarrel;
+        EntityPool* s_StarLordBullets;
+        EntityPool* s_RocketBullets;
+
         bool m_HasLoadedAll = false;
         void SetScene(Scene* scene);
 
@@ -57,5 +60,11 @@ namespace Wiwa
 
         void LoadExplosiveBarrelPool(Scene* scene);
         void UnloadExplosiveBarrelPool();
+
+        void LoadStarLordBulletsPool(Scene* scene);
+        void UnloadStarLordBulletsPool();
+
+        void LoadRocketBulletsPool(Scene* scene);
+        void UnloadRocketBulletsPool();
     };
 }

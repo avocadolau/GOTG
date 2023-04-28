@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "NpcSystem.h"
 #include <Wiwa/game/GameStateManager.h>
 

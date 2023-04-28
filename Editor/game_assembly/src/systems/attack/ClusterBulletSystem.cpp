@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "ClusterBulletSystem.h"
 #include "../../components/attack/ClusterBullet.h"
 #include "../../systems/attack/SimpleBulletSystem.h"

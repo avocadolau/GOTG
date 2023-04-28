@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "VictoryShieldSystem.h"
 #include "../../components/attack/VictoryShield.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

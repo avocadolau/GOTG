@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerIdle.h"
 #include "PlayerMove.h"
 #include "PlayerAttack.h"

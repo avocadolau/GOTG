@@ -18,6 +18,8 @@ namespace Wiwa
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\UltronLaserBeam\\UltronLaserBeam_01.wiprefab");
 		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Prefabs\\Subjugator_01.wiprefab");
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
+		s_StarLordBullets = new EntityPool(Pool_Type::STARLORD_BULLET, 2, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
+		s_RocketBullets = new EntityPool(Pool_Type::ROCKET_BULLET, 2, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
 
 		m_HasLoadedAll = false;
 	}
@@ -85,6 +87,12 @@ namespace Wiwa
 		case Pool_Type::EXPLOSIVE_BARREL:
 			LoadExplosiveBarrelPool(scene);
 			break;
+		case Pool_Type::STARLORD_BULLET:
+			LoadStarLordBulletsPool(scene);
+			break;
+		case Pool_Type::ROCKET_BULLET:
+			LoadRocketBulletsPool(scene);
+			break;
 		default:
 			break;
 		}
@@ -122,6 +130,12 @@ namespace Wiwa
 			break;
 		case Pool_Type::EXPLOSIVE_BARREL:
 			UnloadExplosiveBarrelPool();
+			break;
+		case Pool_Type::STARLORD_BULLET:
+			UnloadStarLordBulletsPool();
+			break;
+		case Pool_Type::ROCKET_BULLET:
+			UnloadRocketBulletsPool();
 			break;
 		default:
 			break;
@@ -263,21 +277,51 @@ namespace Wiwa
 		s_ExplosiveBarrel->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadStarLordBulletsPool(Scene* scene)
+	{
+		s_StarLordBullets->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_StarLordBullets->getMaxSize());
+		for (int i = 0; i < s_StarLordBullets->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_StarLordBullets->getPath());
+		s_StarLordBullets->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadStarLordBulletsPool()
+	{
+		s_StarLordBullets->ReleaseAllPools();
+	}
+
+	void GamePoolingManager::LoadRocketBulletsPool(Scene* scene)
+	{
+		s_RocketBullets->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_RocketBullets->getMaxSize());
+		for (int i = 0; i < s_RocketBullets->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_RocketBullets->getPath());
+		s_RocketBullets->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadRocketBulletsPool()
+	{
+		s_RocketBullets->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		if (m_HasLoadedAll)
 			return;
 
-		LoadPhalanxMeleePool(scene);
-		LoadPhalanxRangedPool(scene);
-		LoadSentinelPool(scene);
-		LoadSimpleBulletPool(scene);
-		LoadSentinelExplosionPool(scene);
+		//LoadPhalanxMeleePool(scene);
+		//LoadPhalanxRangedPool(scene);
+		//LoadSentinelPool(scene);
+		//LoadSimpleBulletPool(scene);
+		//LoadSentinelExplosionPool(scene);
 		//LoadBossUltronPool(scene);
-		LoadClusterBulletPool(scene);
-		LoadUltronLaserBeamPool(scene);
+		//LoadClusterBulletPool(scene);
+		//LoadUltronLaserBeamPool(scene);
 		//LoadSubjugatorPool(scene);
 		LoadExplosiveBarrelPool(scene);
+		LoadStarLordBulletsPool(scene);
+		LoadRocketBulletsPool(scene);
 
 		m_HasLoadedAll = true;
 	}
@@ -285,15 +329,17 @@ namespace Wiwa
 	{
 		m_HasLoadedAll = false;
 
-		UnloadPhalanxMeleePool();
-		UnloadPhalanxRangedPool();
-		UnloadSentinelPool();
-		UnloadSimpleBulletPool();
-		UnloadSentinelExplosionPool();
-		UnloadBossUltronPool();
-		UnloadClusterBulletPool();
-		UnloadUltronLaserBeamPool();
-		UnloadSubjugatorPool();
-		UnloadExplosiveBarrelPool();
+		//UnloadPhalanxMeleePool();
+		//UnloadPhalanxRangedPool();
+		//UnloadSentinelPool();
+		//UnloadSimpleBulletPool();
+		//UnloadSentinelExplosionPool();
+		//UnloadBossUltronPool();
+		//UnloadClusterBulletPool();
+		//UnloadUltronLaserBeamPool();
+		//UnloadSubjugatorPool();
+		//UnloadExplosiveBarrelPool();
+		UnloadStarLordBulletsPool();
+		UnloadRocketBulletsPool();
 	}
 }

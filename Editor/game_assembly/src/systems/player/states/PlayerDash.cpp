@@ -1,4 +1,3 @@
-#include "wipch.h"
 #include "PlayerDash.h"
 #include <Wiwa/ecs/components/game/Character.h>
 

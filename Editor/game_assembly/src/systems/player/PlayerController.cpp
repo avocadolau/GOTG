@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerController.h"
 
 #include <Wiwa/game/GameStateManager.h>
@@ -99,20 +98,20 @@ void Wiwa::PlayerController::TakeDamage(uint32_t damage)
 
 void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const RocketShooter& rocket, const Character& character, glm::vec3 bullDir)
 {
-	if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0)
+	if (GameStateManager::s_PoolManager->s_StarLordBullets->getCountDisabled() <= 0)
 		return;
 
 	EntityManager& entityManager = m_Scene->GetEntityManager();
 
 	GameStateManager::s_PoolManager->SetScene(m_Scene);
 	EntityId newBulletId = EntityManager::INVALID_INDEX;
-	newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
-
+	newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
+	EntityId bulletCollider = entityManager.GetChildByName(newBulletId, "Collider");
 	if (newBulletId == EntityManager::INVALID_INDEX)
 		return;
 
-	SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
-	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+	SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(bulletCollider);
+	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(bulletCollider);
 	physSys->DeleteBody();
 
 	// Set intial positions
@@ -125,7 +124,7 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	bulletTr->localPosition = Math::GetWorldPosition(playerTr->worldMatrix);
 	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 	bulletTr->localScale = playerTr->localScale;
-	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(bulletCollider));
 	bullet->direction = bullDir;
 
 	physSys->CreateBody();

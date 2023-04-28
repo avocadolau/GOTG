@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "ExplosiveBarrelProp.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <glm/gtx/quaternion.hpp>

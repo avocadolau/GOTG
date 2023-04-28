@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerMove.h"
 
 Wiwa::PlayerMove::PlayerMove(PlayerStateMachine* stateMachine, EntityId id)

@@ -1,4 +1,3 @@
-#include "wipch.h"
 #include "CameraController.h"
 #include <math.h>
 #include <cmath>

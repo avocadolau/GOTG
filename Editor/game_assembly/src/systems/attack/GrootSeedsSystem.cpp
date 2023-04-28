@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "GrootSeedsSystem.h"
 #include "../../components/attack/GrootSeeds.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

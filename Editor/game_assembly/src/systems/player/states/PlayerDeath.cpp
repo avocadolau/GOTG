@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerDeath.h"
 
 Wiwa::PlayerDeath::PlayerDeath(PlayerStateMachine* stateMachine, EntityId id)

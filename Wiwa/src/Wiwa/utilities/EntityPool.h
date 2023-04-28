@@ -38,7 +38,8 @@ namespace Wiwa
         int m_MaxSize;
         Pool_Type m_Type;
     public:
-        EntityPool(Pool_Type type, int max_size, const char* path) : m_Type(type), m_MaxSize(max_size), m_Path(path), m_Loaded(false) {};
+        EntityPool(Pool_Type type, int max_size, const char* path)
+            : m_Type(type), m_MaxSize(max_size), m_Path(path), Loaded(false) {};
         ~EntityPool();
 
         EntityId GetFromPool();
@@ -65,7 +66,7 @@ namespace Wiwa
 
         inline  std::queue<EntityId> getDisabledEntities() { return m_DisabledEntities; };
 
-        bool m_Loaded = false;
+        bool Loaded = false;
     };
 }
 

@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "SimpleBulletSystem.h"
 #include "../../components/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

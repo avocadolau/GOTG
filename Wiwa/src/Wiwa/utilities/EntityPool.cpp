@@ -64,6 +64,9 @@ namespace Wiwa
 
     void EntityPool::IncreasePoolSize(const std::vector<EntityId>& new_entities, bool disable)
     {
+        if (Loaded)
+            return;
+
         EntityManager& em = m_Scene->GetEntityManager();
 
         size_t size = new_entities.size();
@@ -88,11 +91,14 @@ namespace Wiwa
             }
         }
 
-        m_Loaded = true;
+        Loaded = true;
     }
 
     void EntityPool::ReleaseAllPools()
     {
+        if (!Loaded)
+            return;
+
         EntityManager& em = m_Scene->GetEntityManager();
         size_t size = m_DisabledEntities.size();
         for (size_t i = 0; i < size; i++)
@@ -100,7 +106,7 @@ namespace Wiwa
             m_DisabledEntities.pop();
         }
 
-        m_Loaded = false;
+        Loaded = false;
     }
 
     void EntityPool::SetScene(Scene* scene)

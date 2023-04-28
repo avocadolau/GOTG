@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "SentinelExplosionSystem.h"
 #include "../../components/attack/SentinelExplosion.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"

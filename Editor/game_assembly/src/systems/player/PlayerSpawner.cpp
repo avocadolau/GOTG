@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerSpawner.h"
 
 namespace Wiwa

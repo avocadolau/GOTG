@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerStateMachine.h"
 #include "PlayerBaseState.h"
 #include "PlayerIdle.h"
