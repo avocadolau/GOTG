@@ -8,9 +8,9 @@ typedef size_t EntityId;
 
 namespace Wiwa
 {
-    enum class Pool_Type
+    enum Pool_Type
     {
-        PHALANX_MELEE,
+        PHALANX_MELEE = 0,
         PHALAN_RANGED,
         SENTINEL,
         SUBJUGATOR,
@@ -21,6 +21,11 @@ namespace Wiwa
         CLUSTER_BULLET,
         ULTRON_LASER_BEAM,
         EXPLOSIVE_BARREL,
+
+        STARLORD_BULLET,
+        ROCKET_BULLET,
+
+        MAX_POOL
     };
 
     class Scene;

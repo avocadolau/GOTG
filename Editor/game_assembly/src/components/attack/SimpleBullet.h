@@ -6,8 +6,10 @@
 #include <Wiwa/utilities/math/Vector3f.h>
 
 #include <glm/glm.hpp>
-namespace Wiwa {
-	struct  SimpleBullet {
+namespace Wiwa 
+{
+	struct  SimpleBullet
+	{
 		float velocity;
 		float lifeTime;
 		int damage;
