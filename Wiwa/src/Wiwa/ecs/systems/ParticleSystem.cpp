@@ -359,7 +359,7 @@ namespace Wiwa {
 					
 
 
-					if (emitter->m_p_followEmitterPosition)
+					/*if (emitter->m_p_followEmitterPosition)
 					{
 						orginalPos = (t3d->position + particle.transform.localPosition);
 						
@@ -369,15 +369,19 @@ namespace Wiwa {
 					{
 						orginalPos = particle.transform.localPosition;
 
-					}
-					
+					}*/
+					orginalPos = particle.transform.localPosition;
 
 					if (emitter->m_p_positionFollowsRotation)
 					{
 						orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
 						orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
 						orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
 					}
+
+					if (emitter->m_p_followEmitterPosition) 
+						orginalPos += t3d->position;
 					
 
 					particle.transform.position = orginalPos;
