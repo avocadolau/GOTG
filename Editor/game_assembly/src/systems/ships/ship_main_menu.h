@@ -20,10 +20,8 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_ShipDataIt;
 
-
 		glm::vec3 m_StartPos;
 		float m_Time;
-		bool m_PanToCamera;
 		glm::vec3 m_EndPanPos;
 	};
 }
