@@ -95,7 +95,12 @@ namespace Wiwa
 		if (!bulletTr || !enemyTr)
 			return newBulletId;
 
-		bulletTr->localPosition = enemyTr->localPosition;
+		//Math::CalculateForward(enemyTr);
+
+		glm::vec3 spawnPosition = enemyTr->localPosition;
+		spawnPosition.y += 3.0f;
+
+		bulletTr->localPosition = spawnPosition;
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
 		//bulletTr->localScale = transform->localScale;
 		UltronLaserBeam* bullet = (UltronLaserBeam*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<UltronLaserBeam>(newBulletId));

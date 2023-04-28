@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "UltronLaserBeamSystem.h"
 #include "../../components/attack/UltronLaserBeam.h"
+#include "../../systems/enemy/Ultron/StateMachine/BossUltronLaserBeamAttack.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 //#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
@@ -17,7 +18,13 @@ Wiwa::UltronLaserBeamSystem::~UltronLaserBeamSystem()
 
 void Wiwa::UltronLaserBeamSystem::OnAwake()
 {
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
 	m_LaserIt = GetComponentIterator<UltronLaserBeam>();
+	EntityId boss = em.GetEntityByName("Ultron_01");
+	m_BossTransformIt = em.GetComponentIterator<Transform3D>(boss);
+	EntityId player = GameStateManager::GetPlayerId();
+	m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
 }
 
 void Wiwa::UltronLaserBeamSystem::OnInit()
@@ -33,12 +40,49 @@ void Wiwa::UltronLaserBeamSystem::OnUpdate()
 		System::Init();
 
 	UltronLaserBeam* bullet = GetComponentByIterator<UltronLaserBeam>(m_LaserIt);
-	
+	Transform3D* laserTr = GetComponent<Transform3D>();
+	Transform3D* enemyTr = GetComponentByIterator<Transform3D>(m_BossTransformIt);
+	Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 
 	if (m_Timer >= bullet->lifeTime)
 	{
 		GameStateManager::s_PoolManager->s_UltronLaserBeamPool->ReturnToPool(m_EntityId);
 	}
+
+	// Update the laser's position to be in front of the boss
+	float distanceInFront = 3.0f;
+	float laserHalfLength = 2.5f; // Adjust this value based on the actual half length of the laser
+	glm::vec3 bossForward = Math::CalculateForward(enemyTr);
+	laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
+	
+	// Update the boss's rotation to face the player
+	glm::vec3 directionToPlayer = glm::normalize(playerTr->localPosition - enemyTr->localPosition);
+	float angleToPlayer = glm::degrees(atan2(directionToPlayer.x, directionToPlayer.z));
+	enemyTr->localRotation.y = angleToPlayer;
+	
+	// Update the laser's rotation to match the boss's rotation
+	laserTr->localRotation = glm::vec3(-90.0f, angleToPlayer, 0.0f);
+
+	///////////////////////////////////////////
+
+	//// Update the laser's position to be in front of the boss
+	//float distanceInFront = 3.0f;
+	//float laserHalfLength = 2.5f; // Adjust this value based on the actual half length of the laser
+	//glm::vec3 bossForward = Math::CalculateForward(enemyTr);
+	//laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
+	//
+	//// Calculate the target rotation for the boss to face the player
+	//glm::vec3 directionToPlayer = glm::normalize(playerTr->localPosition - enemyTr->localPosition);
+	//float targetAngle = glm::degrees(atan2(directionToPlayer.x, directionToPlayer.z));
+	//
+	//// Interpolate the boss's rotation towards the target rotation based on rotation speed and delta time
+	//float currentAngle = enemyTr->localRotation.y;
+	//float newAngle = glm::mix(currentAngle, targetAngle, 0.5f);
+	//enemyTr->localRotation.y = newAngle;
+	//
+	//// Update the laser's rotation to match the boss's rotation
+	//laserTr->localRotation = glm::vec3(-90.0f, newAngle, 0.0f);
+
 
 	m_Timer += Time::GetDeltaTimeSeconds();
 }

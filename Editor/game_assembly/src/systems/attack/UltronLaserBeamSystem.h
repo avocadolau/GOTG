@@ -14,6 +14,8 @@ namespace Wiwa {
 
 		float m_Timer = 0;
 		EntityManager::ComponentIterator m_LaserIt;
+		EntityManager::ComponentIterator m_PlayerTransformIt;
+		EntityManager::ComponentIterator m_BossTransformIt;
 
 
 	public:
