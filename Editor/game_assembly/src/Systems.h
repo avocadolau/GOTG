@@ -1,10 +1,8 @@
 #include "systems/player/states/PlayerStateMachine.h"
 #include "systems/player/PlayerSpawner.h"
 #include "systems/camera/CameraController.h"
-#include "systems/player/BulletVelocity.h"
-#include "systems/player/BulletCollider.h"
 #include "systems/ships/ship_main_menu.h"
-#include "systems/player/BulletCollider.h"
+
 
 #include "systems/enemy/EnemySystem.h"
 
@@ -35,3 +33,5 @@
 #include "systems/props/ExplosiveBarrelProp.h"
 
 #include "systems/InitPool.h"
+
+#include "systems/player/StarLordBullet.h"

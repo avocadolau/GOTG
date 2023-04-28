@@ -25,7 +25,11 @@ void Wiwa::PlayerAttack::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
 		return;
 	}
-
+	if (m_StateMachine->CanDash())
+	{
+		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
+		return;
+	}
 
 	m_StateMachine->SetDirection(m_StateMachine->GetShootInput());
 

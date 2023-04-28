@@ -110,7 +110,7 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	if (newBulletId == EntityManager::INVALID_INDEX)
 		return;
 
-	SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(bulletCollider);
+	StarLordBulletSystem* bulletSys = entityManager.GetSystem<StarLordBulletSystem>(bulletCollider);
 	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(bulletCollider);
 	physSys->DeleteBody();
 
