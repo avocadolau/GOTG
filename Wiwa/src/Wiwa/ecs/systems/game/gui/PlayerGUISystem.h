@@ -28,10 +28,12 @@ namespace Wiwa
         size_t lastCoins = -1;
         Ability** abilitiesList;
         Buff** buffsList;
+        std::vector<PassiveSkill> passives;
     public:
         PlayerGUISystem() = default;
         virtual ~PlayerGUISystem() = default;
 
+        void OnInit() override;
         void OnUpdate() override;
 
         void HandleCurrentCanvas(Wiwa::GuiManager& gm);
@@ -43,6 +45,7 @@ namespace Wiwa
 
         void HandleActiveAbilities(Ability** ability, Wiwa::GuiManager& gm);
         void HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm);
+        void HandleActivePassives(std::vector<PassiveSkill> PassiveSkills, Wiwa::GuiManager& gm);
         void PlayerElements(Wiwa::GuiManager& gm, Character* character);
 
         void PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm);
