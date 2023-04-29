@@ -10,7 +10,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_YondusFinIt;
 		EntityManager::ComponentIterator m_YondusFinTransformIt;
 		EntityManager::ComponentIterator m_PlayerTransformIt;
-		std::vector<EntityManager::ComponentIterator> m_EnemiesTransformIt;
+		EntityManager::ComponentIterator m_WaveEnemiesIt;
 	public:
 		YondusFinSystem();
 		~YondusFinSystem();
