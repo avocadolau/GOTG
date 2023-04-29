@@ -8,11 +8,13 @@ namespace Wiwa
 	WaveSpawnerSystem::WaveSpawnerSystem()
 	{
 		m_EnemySpawnerIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_CurrentWaveIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_LastWave = WI_INVALID_INDEX;
+		//m_ActiveWavesIts = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		//m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_CurrentWaveEntityId = 0;
+		//m_ActiveWavesIds = 0;
 		m_HasWave = false;
-		m_Timer = 0.0f;
+		m_TimerBetweenWaves = 0.0f;
+		m_TimerForNextWave = 0.0f;
 	}
 
 	WaveSpawnerSystem::~WaveSpawnerSystem()
@@ -29,64 +31,90 @@ namespace Wiwa
 		m_EnemySpawnerIt = GetComponentIterator<WaveSpawner>();
 		//m_TransformIt = GetComponentIterator<Transform3D>();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
-		m_Timer = enemySpawner->timeBetweenWaves;
+		m_TimerBetweenWaves = enemySpawner->timeBetweenWaves;
 		enemySpawner->hasTriggered = true;
-		maxWavesCounter = enemySpawner->maxWaveCount;
-		currentWavesCounter = 0;
+		enemySpawner->hasFinished = false;
+	/*	maxWavesCounter = enemySpawner->maxWaveCount;
+		currentWavesCounter = 0;*/
 		SpawnWave();
 	}
 
 	void WaveSpawnerSystem::OnUpdate()
 	{
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		Wave* currentWave = nullptr;
 
-		currentWave = em.GetComponent<Wave>(m_CurrentWaveEntityId);
+		bool allWavesFinished = QueryActiveWaves();
 
-		// Check current wave
-		if (currentWave && currentWavesCounter > 0)
-		{
-			m_HasWave = IsWaveFinished(*currentWave);
-		}
-
-		if (enemySpawner == nullptr)
-			return;
-
-		// Finish the spawner
-		if (currentWavesCounter > maxWavesCounter)
+		if (allWavesFinished && HasHadAllWaves(*enemySpawner))
 		{
 			enemySpawner->hasFinished = true;
 		}
 
-		// Timer before deploying next wave
-		if (!m_HasWave && !enemySpawner->hasFinished)
+		if (m_TimerForNextWave >= enemySpawner->waveChangeRate)
 		{
-			SpawnWave();
-			/*m_Timer -= Time::GetDeltaTimeSeconds();
-			if (m_Timer < 0)
-			{
-				
-				m_Timer = enemySpawner->timeBetweenWaves;
-			}*/
+
 		}
+
+		m_TimerBetweenWaves += Time::GetRealDeltaTimeSeconds();
+		m_TimerForNextWave += Time::GetRealDeltaTimeSeconds();
+		//currentWave = em.GetComponent<Wave>(m_ActiveWavesIds);
+
+		//// Check current wave
+		//if (currentWave && enemySpawner->currentWaveCount > 0)
+		//{
+		//	m_HasWave = IsWaveFinished(*currentWave);
+		//}
+
+		//if (enemySpawner == nullptr)
+		//	return;
+
+		//// Finish the spawner
+		//if (enemySpawner->currentWaveCount >= enemySpawner->maxWaveCount)
+		//{
+		//	enemySpawner->hasFinished = true;
+		//}
+
+		//// Timer before deploying next wave
+		//if (!m_HasWave && !enemySpawner->hasFinished)
+		//{
+		//	SpawnWave();
+		//}
+	}
+
+	bool WaveSpawnerSystem::QueryActiveWaves()
+	{
+	/*	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
+		
+		for (int i = 0; i < m_ActiveWavesIds.size(); i++)
+		{
+			Wave* wave = em.GetComponent<Wave>(m_ActiveWavesIds[i]);
+			if (!wave->hasFinished)
+			{
+				if (m_LastWave == m_ActiveWavesIds.back())
+
+			}
+		}*/
+
+		return true;
 	}
 
 	bool WaveSpawnerSystem::IsWaveFinished(const Wiwa::Wave& wave)
 	{
-		// Finish terminated waves
-		if (wave.hasFinished)
-		{
-			m_CurrentWaveIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		//// Finish terminated waves
+		//if (wave.hasFinished)
+		//{
+		//	m_ActiveWavesIts = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
-			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-			Wiwa::EntityManager& em = _scene->GetEntityManager();
+		//	Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+		//	Wiwa::EntityManager& em = _scene->GetEntityManager();
 
-			// Delete the wave entity entirely
-			em.DestroyEntity(m_CurrentWaveEntityId);
-			return false;
-		}
-		return true;
+		//	// Delete the wave entity entirely
+		//	em.DestroyEntity(m_ActiveWavesIds);
+		//	return false;
+		//}
+		//return true;
 	}
 
 	void WaveSpawnerSystem::SpawnWave()
@@ -94,32 +122,33 @@ namespace Wiwa
 		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
-		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
-
-		enemySpawner->currentWaveCount += 1;
-		currentWavesCounter += 1;
+		WaveSpawner* wavesSpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
+		wavesSpawner->currentWaveCount += 1;
 
 		// Create an empty entity
 		std::string waveName = em.GetEntityName(m_EntityId);
-		waveName += "_wave_" + std::to_string(enemySpawner->currentWaveCount);
-		m_CurrentWaveEntityId = em.CreateEntity(waveName.c_str());
+		waveName += "_wave_" + std::to_string(wavesSpawner->currentWaveCount);
+		EntityId waveId = em.CreateEntity(waveName.c_str());
+		m_ActiveWavesIds.emplace_back(waveId);
 
-		//Transform3D* waveTransform = em.AddComponent<Transform3D>(m_CurrentWaveEntityId);
+		//Transform3D* waveTransform = em.AddComponent<Transform3D>(m_ActiveWavesIds);
 		//Transform3D* parent = GetComponentByIterator<Transform3D>(m_TransformIt);
 		//waveTransform->localPosition = parent->localPosition;
 		
 		// Create a wave component and wave system
-		Wave* wave = em.AddComponent<Wave>(m_CurrentWaveEntityId);
-		wave->maxEnemies = enemySpawner->maxEnemiesPerWave;
+		Wave* wave = em.AddComponent<Wave>(waveId);
+		std::uniform_int_distribution<> disMinMaxEnemy(wavesSpawner->minEnemiesPerWave, wavesSpawner->maxEnemiesPerWave);
+		wave->maxEnemies = disMinMaxEnemy(Application::s_Gen);
 		wave->hasFinished = false;
-		em.ApplySystem<WaveSystem>(m_CurrentWaveEntityId);
+		em.ApplySystem<WaveSystem>(waveId);
 
 		// Save the wave as current wave
-		m_CurrentWaveIt = GetComponentIterator<Wave>(m_CurrentWaveEntityId);
-		em.GetSystem<WaveSystem>(m_CurrentWaveEntityId)->SetSpawner(m_CurrentWaveIt);
+		EntityManager::ComponentIterator waveIt = GetComponentIterator<Wave>(waveId);
+		em.GetSystem<WaveSystem>(waveId)->SetSpawner(waveIt);
+		m_ActiveWavesIts.emplace_back(waveIt);
 
+		m_LastWave = waveId;
 		m_HasWave = false;
-	
 	}
 }
 
