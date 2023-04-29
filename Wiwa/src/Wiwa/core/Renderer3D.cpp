@@ -296,6 +296,21 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/enemy_bullet/enemy_bullet", bulletPhalanxRangedCore);
 
+		ResourceId animTexTranspShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/animated_texture_transparent");
+		Shader* animTexTranspShader = Wiwa::Resources::GetResourceById<Shader>(animTexTranspShaderId);
+		animTexTranspShader->Compile("resources/shaders/vfx/animated_texture_transparent");
+
+		animTexTranspShader->addUniform("u_LifeTime", UniformType::Float);
+		animTexTranspShader->addUniform("u_Time", UniformType::Float);
+		animTexTranspShader->addUniform("u_Color", UniformType::fVec4);
+		animTexTranspShader->addUniform("u_Velocity", UniformType::fVec2);
+		animTexTranspShader->addUniform("u_Offset", UniformType::fVec2);
+		animTexTranspShader->addUniform("u_Texture", UniformType::Sampler2D);
+		animTexTranspShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		animTexTranspShader->addUniform("u_FadeTexture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/animated_texture_transparent", animTexTranspShader);
+
 		//===========================================================================================================
 
 		// Normal Display Shader
