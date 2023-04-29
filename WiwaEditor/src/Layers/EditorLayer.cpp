@@ -548,6 +548,14 @@ void EditorLayer::MainMenuBar()
 
 			HelpMarker("Enables/Disables the automatic assembly compilation");
 
+			
+
+
+			if (ImGui::MenuItem("Compile"))			
+				system("call tools/buildgameasm.bat");
+			ImGui::SameLine();
+			HelpMarker("Builds the solution with MsBuild, you'll need to firs add it to the PATH env var to compile");
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))

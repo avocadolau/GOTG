@@ -61,31 +61,31 @@ void GameLayer::OnImGuiRender()
 	static bool active = false;
 
 	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F1))
-		active = true;
-	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F2))
-		active = false;
+		active = !active;
 
 	ImGuiContext* ctx = Wiwa::Application::Get().GetImGuiContext();
 	ImGui::SetCurrentContext(ctx);
+	if (active)
+	{
+		ImGui::Begin("Stats counter", &active);
 
-	ImGui::Begin("Stats counter", &active);
+		ImGui::Text("Game time since startup %.2fs", Wiwa::Time::GetTime());
+		ImGui::Text("Game delta time %.2fms", Wiwa::Time::GetDeltaTime());
+		ImGui::Text("Game FPS %.2fms", 1000.f / Wiwa::Time::GetDeltaTime());
+		ImGui::Text("Game frame count %i", Wiwa::Time::GetGameFrameCount());
+		ImGui::Text("Game time scale %i", Wiwa::Time::GetTimeScale());
 
-	ImGui::Text("Game time since startup %.2fs", Wiwa::Time::GetTime());
-	ImGui::Text("Game delta time %.2fms", Wiwa::Time::GetDeltaTime());
-	ImGui::Text("Game FPS %.2fms", 1000.f / Wiwa::Time::GetDeltaTime());
-	ImGui::Text("Game frame count %i", Wiwa::Time::GetGameFrameCount());
-	ImGui::Text("Game time scale %i", Wiwa::Time::GetTimeScale());
-	
-	ImGui::Text("Allocation count %i", Wiwa::AllocationMetrics::allocation_count);
-	ImGui::Text("Bytes allocated %i", Wiwa::AllocationMetrics::bytes_allocated);
+		ImGui::Text("Allocation count %i", Wiwa::AllocationMetrics::allocation_count);
+		ImGui::Text("Bytes allocated %i", Wiwa::AllocationMetrics::bytes_allocated);
 
-	PROCESS_MEMORY_COUNTERS_EX pmc;
-	GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-	SIZE_T virtualMemUsedByMe = pmc.WorkingSetSize >> 20;
+		PROCESS_MEMORY_COUNTERS_EX pmc;
+		GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+		SIZE_T virtualMemUsedByMe = pmc.WorkingSetSize >> 20;
 
-	ImGui::Text("Memory used %i", virtualMemUsedByMe);
+		ImGui::Text("Memory used %i", virtualMemUsedByMe);
 
-	ImGui::End();
+		ImGui::End();
+	}
 #endif
 }
 

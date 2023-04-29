@@ -39,3 +39,5 @@
 #include "systems/triggers/StartRun.h"
 #include "systems/triggers/EndRoom.h"
 #include "systems/triggers/InitHub.h"
+
+#include "systems/SkipScene.h"

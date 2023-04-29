@@ -13,7 +13,7 @@ GoToMilanoHub_ GoToMilanoHub()
 	//Wiwa::SceneManager::ChangeSceneByIndex(2);
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	EntityId parentID = em.GetEntityByName("Parent");
-	EntityId shipID = em.GetChildByName(parentID, "sm_milano_01a");
+	EntityId shipID = em.GetChildByName(parentID, "Ship");
 	Wiwa::ShipMainMenu* ship = em.GetSystem<Wiwa::ShipMainMenu>(shipID);
 	ship->SetPanToCamera(true);
 	return GoToMilanoHub_::hola;
@@ -21,7 +21,7 @@ GoToMilanoHub_ GoToMilanoHub()
 
 GoMainMenu_ GoMainMenu()
 {
-	Wiwa::SceneManager::ChangeSceneByIndex(1);
+	Wiwa::SceneManager::ChangeSceneByIndex(2);
 	return GoMainMenu_::hola;
 }
 
