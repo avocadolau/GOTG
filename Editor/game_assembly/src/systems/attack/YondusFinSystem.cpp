@@ -52,6 +52,7 @@ namespace Wiwa
 					{
 						
 						//m_EnemiesTransformIt.emplace_back(enemy.);
+						//enemy->waveId
 					}
 				}
 			}
