@@ -53,7 +53,7 @@ namespace Wiwa
 		}
 
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 6.0f)
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
 		{
 			enemy->SwitchState(enemy->m_AttackingState);
 		}
@@ -69,6 +69,10 @@ namespace Wiwa
 
 	void SentinelChasingState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)
 	{
-
+		/*std::string playerStr = "PLAYER";
+		if (body1->id == enemy->GetEntity() && playerStr == body2->selfTagStr)
+		{
+			enemy->SwitchState(enemy->m_DeathState);
+		}*/
 	}
 }

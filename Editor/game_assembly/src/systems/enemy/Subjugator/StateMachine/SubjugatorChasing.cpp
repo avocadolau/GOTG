@@ -86,5 +86,6 @@ namespace Wiwa
 
     void SubjugatorChasingState::OnCollisionEnter(EnemySubjugator* enemy, const Object* body1, const Object* body2)
     {
+
     }
 }

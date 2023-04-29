@@ -49,12 +49,17 @@ namespace Wiwa
 		
 		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > enemy->m_RangeOfExplosion)
 		{
+			/*if (prepareAttack == false)
+			{
+				enemy->SwitchState(enemy->m_ChasingState);
+			}*/
+
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
 
 		if (prepareAttack == false)
 		{
-			if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
+			if (glm::distance(selfTr->localPosition, playerTr->localPosition) <= enemy->m_RangeOfExplosion)
 			{
 				prepareAttack = true;
 			}
@@ -67,7 +72,7 @@ namespace Wiwa
 
 			m_TimerExplosion += dt;
 
-			if (m_TimerExplosion >= 1.0f)
+			if (m_TimerExplosion >= 3.0f)
 			{
 				enemy->SwitchState(enemy->m_DeathState);
 			}
@@ -94,6 +99,10 @@ namespace Wiwa
 
 	void SentinelAttackState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)
 	{
-
+		/*std::string playerStr = "PLAYER";
+		if (body1->id == enemy->GetEntity() && playerStr == body2->selfTagStr)
+		{
+			enemy->SwitchState(enemy->m_DeathState);
+		}*/
 	}
 }

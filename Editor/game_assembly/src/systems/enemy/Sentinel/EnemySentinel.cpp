@@ -99,6 +99,13 @@ namespace Wiwa
 	void EnemySentinel::OnCollisionEnter(Object* body1, Object* body2)
 	{
 		EnemySystem::OnCollisionEnter(body1, body2);
+
+		std::string playerStr = "PLAYER";
+		if (body1->id == m_EntityId && playerStr == body2->selfTagStr)
+		{
+			SwitchState(m_DeathState);
+		}
+
 		if (m_CurrentState)
 			m_CurrentState->OnCollisionEnter(this, body1, body2);
 	}
