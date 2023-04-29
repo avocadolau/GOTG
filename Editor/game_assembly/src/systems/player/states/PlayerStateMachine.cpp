@@ -6,6 +6,7 @@
 #include "PlayerDash.h"
 #include "PlayerDeath.h"
 #include <Wiwa/ecs/components/game/Character.h>
+#include <AK/SoundEngine/Common/AkSoundEngine.h>
 
 Wiwa::PlayerStateMachine::PlayerStateMachine()
 {
@@ -43,6 +44,7 @@ void Wiwa::PlayerStateMachine::OnUpdate()
 	m_CurrentState->UpdateState();
 	CheckHealth();
 	DashCooldown();
+	UpdateListenerPosition();
 }
 
 void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
@@ -92,4 +94,18 @@ void Wiwa::PlayerStateMachine::DashCooldown()
 void Wiwa::PlayerStateMachine::ResetCooldown()
 {
 	m_CooldownTimer = GetCharacter()->DashCooldown;
+}
+
+void Wiwa::PlayerStateMachine::UpdateListenerPosition()
+{
+	AkVector listenerPosition;
+	listenerPosition.X = GetTransform()->position.x;
+	listenerPosition.Y = GetTransform()->position.y;
+	listenerPosition.Z = GetTransform()->position.z;
+
+	AkTransform listenerTransform;
+	listenerTransform.SetPosition(listenerPosition);
+
+	//the 0 is the listener id, the player
+	AK::SoundEngine::SetPosition(0, listenerTransform);
 }

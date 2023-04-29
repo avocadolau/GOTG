@@ -9,6 +9,7 @@
 							<ChildrenList>
 								<Sound Name="phalanx_melee_attack" ID="{3764DF50-C258-449D-9434-D16F104342A1}" ShortID="325610447">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-6</Value>
@@ -16,6 +17,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -38,6 +42,7 @@
 								</Sound>
 								<Sound Name="phalanx_melee_death" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" ShortID="732399785">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-16</Value>
@@ -45,6 +50,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -67,6 +75,7 @@
 								</Sound>
 								<Sound Name="phalanx_melee_hit" ID="{608ADDD0-93F4-4684-9310-CCC7E1B778A4}" ShortID="100705267">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-8</Value>
@@ -74,6 +83,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -96,6 +108,7 @@
 								</Sound>
 								<Sound Name="phalanx_melee_spawn" ID="{B5DF3ABB-4670-43A1-9151-88EEC400E6EC}" ShortID="178843995">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -116,6 +129,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -147,6 +163,7 @@
 							<ChildrenList>
 								<Sound Name="phalanx_ranged_death" ID="{39ED648E-FC14-403A-8B96-3F753E9B9852}" ShortID="412219418">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-13</Value>
@@ -154,6 +171,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -176,6 +196,7 @@
 								</Sound>
 								<Sound Name="phalanx_ranged_hit" ID="{0B08FC8C-1FA0-4998-8EDC-D2CD5CD44FD4}" ShortID="1032561662">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-11</Value>
@@ -183,6 +204,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -210,6 +234,7 @@
 								</Sound>
 								<Sound Name="phalanx_ranged_attack" ID="{C64ADEA5-BB6F-4CDB-A83E-A774844F3AD1}" ShortID="93923488">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -230,6 +255,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -256,6 +284,7 @@
 							<ChildrenList>
 								<Sound Name="bullet_hit" ID="{4C7035E1-9236-43CB-9340-6872F7C3B629}" ShortID="194556234">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -276,6 +305,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -298,6 +330,7 @@
 								</Sound>
 								<Sound Name="palyer_hit" ID="{039EA729-BA8E-4740-815C-B8115ED0A564}" ShortID="456536316">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -318,6 +351,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -344,6 +380,7 @@
 								</Sound>
 								<RandomSequenceContainer Name="player_walk" ID="{AA06D645-82A5-4A60-9699-0C8FA1E1D2C1}" ShortID="744714633">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-13</Value>
@@ -351,6 +388,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -552,6 +592,7 @@
 								</Folder>
 								<RandomSequenceContainer Name="player_shoot" ID="{8AD4699B-AFE2-4FB6-B30A-BA53480B4F4B}" ShortID="866307643">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-2</Value>
@@ -559,6 +600,9 @@
 										</Property>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -739,10 +783,14 @@
 							<ChildrenList>
 								<RandomSequenceContainer Name="barrel_explosion" ID="{1100DA39-0E45-4BE3-9151-9E5666028B55}" ShortID="363715288">
 									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
 										<Property Name="RandomOrSequence" Type="int16" Value="0"/>
 									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
@@ -1209,8 +1257,7 @@
 													<Language>SFX</Language>
 													<AudioFile>17 Legions Of Chaos.wav</AudioFile>
 													<MediaIDList>
-														<MediaID ID="271795795"/>
-														<MediaID Platform="Windows" ID="500042405"/>
+														<MediaID ID="500042405"/>
 													</MediaIDList>
 												</AudioFileSource>
 											</ChildrenList>

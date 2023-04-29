@@ -8,7 +8,7 @@ Game Parameter	ID	Name			Wwise Object Path	Notes
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	11819362	Weapon 13 Shoot 2	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 13 Shoot 2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot\Weapon 13 Shoot 2		255660
-	174263698	player_health	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\heartbeat_C94F053F.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_health		3081756
+	174263698	player_health	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\heartbeat_743200E1.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_health		3081756
 	230242038	footstep_metal_high_run_08	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_08		56692
 	232484325	footstep_metal_high_run_10	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_10_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_10		53948
 	565066192	footstep_metal_high_run_07	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_07		67912

@@ -28,6 +28,7 @@ namespace Wiwa
 		void CheckHealth();
 		void DashCooldown();
 		void ResetCooldown();
+		void UpdateListenerPosition();
 	public:
 		class PlayerBaseState* m_IdleState;
 		class PlayerBaseState* m_MoveState;

@@ -3,6 +3,7 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa\ecs\systems\PhysicsSystem.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa {
 	struct StarLordShooter;

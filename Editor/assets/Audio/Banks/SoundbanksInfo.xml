@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="232625244" Type="User" Language="SFX" Hash="{FB989AFD-C613-9EF4-A196-A75AC18D0595}">
+		<SoundBank Id="232625244" Type="User" Language="SFX" Hash="{E0CF1E0D-8896-D1B0-57F9-A7F3DA8AAD2A}">
 			<ShortName>phalanx_melee</ShortName>
 			<Path>phalanx_melee.bnk</Path>
 			<Media>
@@ -23,7 +23,7 @@
 				</File>
 				<File Id="346607997" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_spawn.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_spawn_8CDE27F3.wem</CachePath>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_spawn_6543CCD5.wem</CachePath>
 				</File>
 				<File Id="395295600" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
@@ -122,29 +122,29 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="968010305" Type="User" Language="SFX" Hash="{109CD3DD-C8B0-7A45-DEF2-E36940CF4DC0}">
+		<SoundBank Id="968010305" Type="User" Language="SFX" Hash="{DC7BEC97-9915-776F-2CC2-36409C2D0809}">
 			<ShortName>props</ShortName>
 			<Path>props.bnk</Path>
 			<Media>
 				<File Id="148280736" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Thick Explosion 2.wav</ShortName>
-					<CachePath>SFX/Thick Explosion 2_779EA2F9.wem</CachePath>
+					<CachePath>SFX/Thick Explosion 2_67494C83.wem</CachePath>
 				</File>
 				<File Id="857917991" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Thick Explosion 1.wav</ShortName>
-					<CachePath>SFX/Thick Explosion 1_4E916635.wem</CachePath>
+					<CachePath>SFX/Thick Explosion 1_E6855930.wem</CachePath>
 				</File>
 				<File Id="938645777" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Gun 7 Loop.wav</ShortName>
-					<CachePath>SFX/Gun 7 Loop_71A5D678.wem</CachePath>
+					<CachePath>SFX/Gun 7 Loop_EB5C3951.wem</CachePath>
 				</File>
 				<File Id="971648507" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Thick Explosion 3.wav</ShortName>
-					<CachePath>SFX/Thick Explosion 3_528F163B.wem</CachePath>
+					<CachePath>SFX/Thick Explosion 3_13077FE9.wem</CachePath>
 				</File>
 			</Media>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{0FD7BF27-694F-6D97-55D7-1D0B307C2BAC}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{A44CC45C-C6FF-82F5-1390-3D3131F71A76}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -154,7 +154,7 @@
 				</File>
 				<File Id="174263698" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>heartbeat.wav</ShortName>
-					<CachePath>SFX/heartbeat_C94F053F.wem</CachePath>
+					<CachePath>SFX/heartbeat_743200E1.wem</CachePath>
 				</File>
 				<File Id="230242038" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_metal_high_run_08.wav</ShortName>
@@ -210,7 +210,7 @@
 				<GameParameter Id="215992295" Name="player_health"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1309352537" Type="User" Language="SFX" Hash="{34DF1FBE-400E-FABD-0182-002B1249DB8D}">
+		<SoundBank Id="1309352537" Type="User" Language="SFX" Hash="{45B257B9-4EF1-4381-013A-C9F0BD52B3B8}">
 			<ShortName>phalanx_ranged</ShortName>
 			<Path>phalanx_ranged.bnk</Path>
 			<Media>
@@ -224,7 +224,7 @@
 				</File>
 				<File Id="669719075" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_08A785CE.wem</CachePath>
+					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_BAC76913.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -500,5 +500,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{D234E580-E48A-6001-D6B5-62D1C628EA43}</FileHash>
+	<FileHash>{9F36E773-7D50-49AB-18CE-6936FA0A7DAA}</FileHash>
 </SoundBanksInfo>
