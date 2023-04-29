@@ -106,5 +106,5 @@ void Wiwa::PlayerStateMachine::UpdateListenerPosition()
 	AkTransform listenerTransform;
 	listenerTransform.SetPosition(listenerPosition);
 
-	AK::SoundEngine::SetPosition(Audio::GetDefaultListener(), listenerTransform);
+	//AK::SoundEngine::SetPosition(Audio::GetDefaultListener(), listenerTransform); This line currently gives a LNK2019 Error
 }
