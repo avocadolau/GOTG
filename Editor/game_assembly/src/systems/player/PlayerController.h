@@ -3,6 +3,7 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa\ecs\systems\PhysicsSystem.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/audio/Audio.h>
 
 namespace Wiwa {
@@ -39,6 +40,7 @@ namespace Wiwa {
 		AnimatorSystem* GetAnimator();
 		PhysicsSystem* GetPhysics();
 		Transform3D* GetFirePosition(const char* name);
+		AudioSystem* GetAudio();
 		void TakeDamage(uint32_t damage);
 
 		void SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const RocketShooter& rocket, const Character& character, glm::vec3 bullDir);
