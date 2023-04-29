@@ -28,6 +28,7 @@ namespace Wiwa
 			m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);
 		}
 		m_Camera->setRotation(m_CameraRotation);
+		m_Camera->setFOV(m_FOV);
 	}
 
 	void CameraController::OnUpdate()
@@ -53,9 +54,7 @@ namespace Wiwa
 
 
 		glm::vec3 finalpos = playerTr->position + m_CameraOffset;
-		m_Camera->setPosition(finalpos);
-
-				
+		m_Camera->setPosition(finalpos);	
 	}
 
 	void CameraController::OnDestroy()
