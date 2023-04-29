@@ -8,6 +8,7 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../Components.h"
 #include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -25,6 +26,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+
+	
 		// Fire shot
 		if (m_TimerAttackCooldown == 0.0f)
 		{
@@ -32,6 +36,7 @@ namespace Wiwa
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
 			animator->PlayAnimation("shot", false);
+			audio->PlayAudio("ranged_attack");
 		}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -48,6 +53,7 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
@@ -63,6 +69,7 @@ namespace Wiwa
 
 			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
 			animator->PlayAnimation("shot", false);
+			audio->PlayAudio("ranged_attack");
 		}
 
 		if (dist2Player > enemy->m_RangeOfAttack || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)

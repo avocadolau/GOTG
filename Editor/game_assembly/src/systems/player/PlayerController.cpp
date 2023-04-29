@@ -104,6 +104,11 @@ Wiwa::Transform3D* Wiwa::PlayerController::GetFirePosition(const char* name)
 	return (Transform3D*)m_Scene->GetEntityManager().GetComponentByIterator(it);
 }
 
+Wiwa::AudioSystem* Wiwa::PlayerController::GetAudio()
+{
+	return m_Scene->GetEntityManager().GetSystem<Wiwa::AudioSystem>(m_EntityId);
+}
+
 void Wiwa::PlayerController::TakeDamage(uint32_t damage)
 {
 

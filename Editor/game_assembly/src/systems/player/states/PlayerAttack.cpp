@@ -76,5 +76,6 @@ void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
 		}
 		shooter->ShootRight = !shooter->ShootRight;
 		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *rocket,*m_StateMachine->GetCharacter(), shootInput);
+		m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 	}
 }

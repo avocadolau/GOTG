@@ -3,6 +3,7 @@
 #include "../EnemyMeleePhalanx.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -18,7 +19,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
+		audio->PlayAudio("melee_hit");
 		EntityId hit_1 = em.GetChildByName(enemy->GetEntity(), "E_Hit_1");
 		EntityId hit_2 = em.GetChildByName(enemy->GetEntity(), "E_Hit_2");
 

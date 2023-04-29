@@ -142,11 +142,44 @@ void AudioPanel::Draw()
 		}
 	}
 
-	if (ImGui::Button("Save ##audio")) {
-		ret = Audio::Serialize();
+	ImGui::Text("Save or load a preset for the current secene");
+	ImGui::NewLine();
 
-		if (!ret) {
-			WI_ERROR("Error saving audio project no audio project is loaded");
+	if (ImGui::Button("Save preset##audio")) {
+		std::string filename = Wiwa::FileDialogs::SaveFile("Wwise preset (*.json)\0*.json\0");
+
+		if (filename != "") {
+
+			std::filesystem::path p = std::filesystem::relative(filename);
+			
+			p = p.replace_extension(".json");
+
+			filename = p.generic_string();
+			
+
+			bool ret = Audio::SavePreset(filename.c_str());
+
+			if (!ret) {
+				WI_ERROR("Error saving preset [{}]", Audio::GetLastError());
+			}
+		}
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load preset##audio")) {
+		std::string filename = Wiwa::FileDialogs::OpenFile("Wwise preset (*.json)\0*.json\0");
+
+		if (filename != "") {
+
+			std::filesystem::path p = std::filesystem::relative(filename);
+			filename = p.generic_string();
+
+			ret = Audio::LoadPreset(filename.c_str());
+
+			if (!ret) {
+				WI_ERROR("Error loading preset [{}]", Audio::GetLastError());
+			}
 		}
 	}
 

@@ -392,9 +392,6 @@ bool Audio::Init()
     if (gres != AK_Success) {
         setLastError(gres);
     }
-
-    //Deserialize();
-
     return true;
 }
 
@@ -867,37 +864,9 @@ void Audio::ChangeDialogVolume(int value)
     AK::SoundEngine::SetRTPCValue("DialogVolume", value);
 }
 
-bool Audio::Serialize()
+bool Audio::LoadPreset(const char* json_file)
 {
-    if (LoadedProject())
-    {
-       Wiwa::JSONDocument doc;
-       doc.AddMember("init_path", m_InitBankPath.c_str());
-
-        Wiwa::JSONValue banks = doc.AddMemberArray("banks");
-
-        for (auto& bank : GetLoadedBankList())
-        {
-            banks.PushBack(bank.path.c_str());
-        }
-
-        Wiwa::JSONValue events = doc.AddMemberArray("events");
-
-        for (auto& event : GetLoadedEventList())
-        {
-            events.PushBack(event.name.c_str());
-        }
-
-        doc.save_file("config/sound_banks.json");
-
-        return true;
-    }
-    return false;
-}
-
-void Audio::Deserialize()
-{
-    Wiwa::JSONDocument doc("config/sound_banks.json");
+    Wiwa::JSONDocument doc(json_file);
 
     if (doc.IsObject())
     {
@@ -925,8 +894,39 @@ void Audio::Deserialize()
                 }
             }
         }
-
+        return true;
     }
+    return false;
 }
+
+bool Audio::SavePreset(const char* filename)
+{
+    if (LoadedProject())
+    {
+       Wiwa::JSONDocument doc;
+       doc.AddMember("init_path", m_InitBankPath.c_str());
+
+       Wiwa::JSONValue banks = doc.AddMemberArray("banks");
+
+       for (auto& bank : GetLoadedBankList())
+       {
+           banks.PushBack(bank.path.c_str());
+       }
+
+       Wiwa::JSONValue events = doc.AddMemberArray("events");
+       
+       for (auto& event : GetLoadedEventList())
+       {
+           events.PushBack(event.name.c_str());
+       }
+
+       doc.save_file(filename);
+       
+       return true;
+    }
+    return false;
+}
+
+
 
 
