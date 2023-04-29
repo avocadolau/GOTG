@@ -1,5 +1,6 @@
 #include "YondusFinSystem.h"
 #include "../../components/attack/YondusFin.h"
+#include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -36,14 +37,26 @@ namespace Wiwa
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
 		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 
-		//std::vector<EntityId>* enemies = em.GetEntitiesAlive(m_EntityId);
-
-		for (size_t i = 0; i < 10; i++)
+		size_t size = 0;
+		Wiwa::Enemy* enemyList = nullptr;
+		enemyList = em.GetComponents<Enemy>(&size);
+		if (enemyList)
 		{
-			//m_EnemiesTransformIt.push_back(em.GetComponentIterator<Transform3D>(children->at(i)));
+			for (int i = 0; i < size; i++)
+			{
+				if (em.IsComponentRemoved<Enemy>(i)) {
+				}
+				else {
+					Wiwa::Enemy* enemy = &enemyList[i];
+					if (enemy && !enemy->hasFinished)
+					{
+						
+						//m_EnemiesTransformIt.emplace_back(enemy.);
+						//enemy->waveId
+					}
+				}
+			}
 		}
-		
-
 	}
 
 	void YondusFinSystem::OnUpdate()
