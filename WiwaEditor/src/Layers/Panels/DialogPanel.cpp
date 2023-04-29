@@ -281,6 +281,11 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::Checkbox("Is character on Right?", &dm.conversations[currentConversation].isInOppositeSide);
+				ImGui::TextWrapped("Note: 'Is character on Right?' defines wether the character is standing on the left or right sight of the bubble.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
@@ -301,6 +306,8 @@ void DialogPanel::Draw()
 					dm.editorConversations[currentConversation].characterImagePath = dm.conversations[currentConversation].characterImagePath;
 					dm.editorConversations[currentConversation].conversationName = dm.conversations[currentConversation].conversationName;
 					dm.editorConversations[currentConversation].nodes[0].occupied = dm.conversations[currentConversation].nodes[0].occupied;
+
+					dm.editorConversations[currentConversation].isInOppositeSide = dm.conversations[currentConversation].isInOppositeSide;
 
 					currentEditingConversationName[currentConversation] = dm.conversations[currentConversation].conversationName;
 

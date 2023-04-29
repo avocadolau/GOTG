@@ -368,9 +368,21 @@ namespace Wiwa
 			std::string memberNameBubbleImage = "BubbleImagePath_Conversation" + s;
 			std::string memberNameCharacterImage = "CharacterImagePath_Conversation" + s;
 
+			std::string memberNameGroupId = "GroupID_Conversation" + s;
+			std::string memberNameGroupOrder = "GroupOrder_Conversation" + s;
+
+			std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
+
+
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
 			doc.AddMember(memberNameBubbleImage.c_str(), conversations[i].bubbleImagePath.c_str());
 			doc.AddMember(memberNameCharacterImage.c_str(), conversations[i].characterImagePath.c_str());
+
+			doc.AddMember(memberNameGroupId.c_str(), (int)conversations[i].group.groupID);
+			doc.AddMember(memberNameGroupOrder.c_str(), (int)conversations[i].group.order);
+
+			doc.AddMember(memberNameOppositeSide.c_str(), (bool)conversations[i].isInOppositeSide);
+
 
 			for (int j = 0; j < MAX_CONVERSATION_NODES && conversations[i].nodes[j].occupied == true; j++)
 			{
@@ -414,9 +426,17 @@ namespace Wiwa
 				std::string memberNameBubbleImage = "BubbleImagePath_Conversation" + s;
 				std::string memberNameCharacterImage = "CharacterImagePath_Conversation" + s;
 
+				std::string memberNameGroupId = "GroupID_Conversation" + s;
+				std::string memberNameGroupOrder = "GroupOrder_Conversation" + s;
+
+				std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
+
 				if (doc.HasMember(memberNameConversation.c_str())
 					&& doc.HasMember(memberNameBubbleImage.c_str())
-					&& doc.HasMember(memberNameCharacterImage.c_str()))
+					&& doc.HasMember(memberNameCharacterImage.c_str())
+					&& doc.HasMember(memberNameGroupId.c_str())
+					&& doc.HasMember(memberNameGroupOrder.c_str())
+					&& doc.HasMember(memberNameOppositeSide.c_str()))
 				{
 					breakNodesLoop = false;
 				}
@@ -448,11 +468,20 @@ namespace Wiwa
 
 				if (doc.HasMember(memberNameConversation.c_str())
 					&& doc.HasMember(memberNameBubbleImage.c_str())
-					&& doc.HasMember(memberNameCharacterImage.c_str()))
+					&& doc.HasMember(memberNameCharacterImage.c_str())
+					&& doc.HasMember(memberNameGroupId.c_str())
+					&& doc.HasMember(memberNameGroupOrder.c_str())
+					&& doc.HasMember(memberNameOppositeSide.c_str()))
 				{
 					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
 					SetCharacterImage(doc[memberNameCharacterImage.c_str()].as_string(), i);
+
+					conversations[i].group.groupID = doc[memberNameGroupId.c_str()].as_int();
+					conversations[i].group.order = doc[memberNameGroupOrder.c_str()].as_int();
+
+					conversations[i].isInOppositeSide = doc[memberNameOppositeSide.c_str()].as_bool();
+
 					conversations[i].occupied = true;
 
 				}

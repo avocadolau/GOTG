@@ -11,6 +11,7 @@
 
 #define MAX_CONVERSATIONS 25
 #define MAX_CONVERSATION_NODES 25
+#define MAX_CONVERSATION_GROUPS 25
 
 namespace Wiwa
 {
@@ -29,7 +30,7 @@ namespace Wiwa
 		std::string bubbleImagePath;
 		std::string characterImagePath;
 
-		bool isOppositeSide = false;
+		bool isInOppositeSide = false;
 
 		bool occupied = false;
 
