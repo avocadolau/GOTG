@@ -15,6 +15,7 @@ namespace Wiwa {
 
 		int m_MaxWavesEnemies = 0;
 		int m_CurrentEnemiesDead = 0;
+		std::vector<EntityId> m_EnemiesIds;
 	public:
 		WaveSystem();
 		~WaveSystem();

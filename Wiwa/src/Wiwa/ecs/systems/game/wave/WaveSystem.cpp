@@ -211,31 +211,15 @@ namespace Wiwa
 		navAgentSys->SetPosition(enemyTransform->localPosition);
 		physSys->CreateBody();
 
+		m_EnemiesIds.emplace_back(newEnemyId);
 		return true;
 	}
 
 	void WaveSystem::DestroyEnemy(size_t id, Pool_Type enemy_type)
 	{
 		// Delete the enemy entity entirely
-		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
+		m_EnemiesIds.erase(std::remove(m_EnemiesIds.begin(), m_EnemiesIds.end(), id), m_EnemiesIds.end());
 
-		//switch (enemy_type)
-		//{
-		//case Pool_Type::PHALANX_MELEE:
-		//	GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
-		//	break;
-		//case Pool_Type::PHALAN_RANGED:
-		//	GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
-		//	break;
-		////case Pool_Type::SENTINEL:
-		////	GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
-		////	break;
-		////case Pool_Type::SUBJUGATOR:
-		////	GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
-		////	break;
-		//default:
-		//	break;
-		//}
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		wave->currentEnemiesAlive--;
 		m_CurrentEnemiesDead++;
