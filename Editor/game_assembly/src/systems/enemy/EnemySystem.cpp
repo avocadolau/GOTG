@@ -11,6 +11,8 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../components/attack/ExplosiveBarrel.h"
+#include "../../components/attack/Attack.h"
+#include "../../components/attack/SimpleBullet.h"
 
 namespace Wiwa
 {
@@ -91,7 +93,7 @@ namespace Wiwa
 
 	void EnemySystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
-		std::string playerBulletStr = "PLAYER_BULLET";
+		std::string playerBulletStr = "PLAYER_ATTACK";
 		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
@@ -118,8 +120,21 @@ namespace Wiwa
 					}
 				}
 			}
-		
-			//ReceiveDamage(bullet->Damage);
+			
+			Attack* attack = GetComponentByIterator<Attack>(em.GetComponentIterator<Attack>(body2->id));
+
+			if (!attack)
+				return;
+
+			std::string starlordBullet = "STARLORD_BULLET";
+			if (starlordBullet == attack->attackType)
+			{
+				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(em.GetComponentIterator<SimpleBullet>(body2->id));
+				if (!bullet)
+					return;
+				WI_INFO("damage apply {}", bullet->damage);
+				ReceiveDamage(bullet->damage);
+			}
 		}
 
 		std::string explosiveBarrelStr = "EXPLOSIVE_BARREL";

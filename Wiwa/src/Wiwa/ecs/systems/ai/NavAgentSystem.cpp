@@ -203,13 +203,13 @@ namespace Wiwa
         if (hit.t > 1)
         {
             // Hit
-            WI_INFO("HITTTTT");
+            //WI_INFO("HITTTTT");
             return true;
         }
         else
         {
             // No hit
-            WI_INFO("NO HIT");
+            //WI_INFO("NO HIT");
             return false;
         }
         return false;

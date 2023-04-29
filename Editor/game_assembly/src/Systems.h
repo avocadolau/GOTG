@@ -35,3 +35,7 @@
 #include "systems/InitPool.h"
 
 #include "systems/player/StarLordBullet.h"
+
+#include "systems/triggers/StartRun.h"
+#include "systems/triggers/EndRoom.h"
+#include "systems/triggers/InitHub.h"

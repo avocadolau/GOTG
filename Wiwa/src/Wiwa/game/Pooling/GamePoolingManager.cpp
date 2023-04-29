@@ -143,6 +143,9 @@ namespace Wiwa
 	}
 	void GamePoolingManager::LoadPhalanxMeleePool(Scene* scene)
 	{
+		if (s_PhalanxMeleePool->Loaded)
+			return;
+
 		s_PhalanxMeleePool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_PhalanxMeleePool->getMaxSize());
 		for (int i = 0; i < s_PhalanxMeleePool->getMaxSize(); i++)
@@ -156,6 +159,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadPhalanxRangedPool(Scene* scene)
 	{
+		if (s_PhalanxRangedPool->Loaded)
+			return;
+
 		s_PhalanxRangedPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_PhalanxRangedPool->getMaxSize());
 		for (int i = 0; i < s_PhalanxRangedPool->getMaxSize(); i++)
@@ -168,6 +174,9 @@ namespace Wiwa
 	}
 	void GamePoolingManager::LoadSentinelPool(Scene* scene)
 	{
+		if (s_SentinelPool->Loaded)
+			return;
+
 		s_SentinelPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_SentinelPool->getMaxSize());
 		for (int i = 0; i < s_SentinelPool->getMaxSize(); i++)
@@ -181,6 +190,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadSimpleBulletPool(Scene* scene)
 	{
+		if (s_SimpleBulletsPool->Loaded)
+			return;
+
 		s_SimpleBulletsPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_SimpleBulletsPool->getMaxSize());
 		for (int i = 0; i < s_SimpleBulletsPool->getMaxSize(); i++)
@@ -194,6 +206,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadSentinelExplosionPool(Scene* scene)
 	{
+		if (s_SentinelExplosion->Loaded)
+			return;
+
 		s_SentinelExplosion->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_SentinelExplosion->getMaxSize());
 		for (int i = 0; i < s_SentinelExplosion->getMaxSize(); i++)
@@ -207,6 +222,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadBossUltronPool(Scene* scene)
 	{
+		if (s_BossUltron->Loaded)
+			return;
+
 		s_BossUltron->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_BossUltron->getMaxSize());
 		for (int i = 0; i < s_BossUltron->getMaxSize(); i++)
@@ -220,6 +238,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadClusterBulletPool(Scene* scene)
 	{
+		if (s_ClusterBulletsPool->Loaded)
+			return;
+
 		s_ClusterBulletsPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_ClusterBulletsPool->getMaxSize());
 		for (int i = 0; i < s_ClusterBulletsPool->getMaxSize(); i++)
@@ -237,6 +258,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadUltronLaserBeamPool(Scene* scene)
 	{
+		if (s_UltronLaserBeamPool->Loaded)
+			return;
+
 		s_UltronLaserBeamPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_UltronLaserBeamPool->getMaxSize());
 		for (int i = 0; i < s_UltronLaserBeamPool->getMaxSize(); i++)
@@ -251,6 +275,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadSubjugatorPool(Scene* scene)
 	{
+		if (s_Subjugator->Loaded)
+			return;
+
 		s_Subjugator->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_Subjugator->getMaxSize());
 		for (int i = 0; i < s_Subjugator->getMaxSize(); i++)
@@ -265,6 +292,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadExplosiveBarrelPool(Scene* scene)
 	{
+		if (s_ExplosiveBarrel->Loaded)
+			return;
+
 		s_ExplosiveBarrel->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_ExplosiveBarrel->getMaxSize());
 		for (int i = 0; i < s_ExplosiveBarrel->getMaxSize(); i++)
@@ -279,6 +309,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadStarLordBulletsPool(Scene* scene)
 	{
+		if (s_StarLordBullets->Loaded)
+			return;
+
 		s_StarLordBullets->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_StarLordBullets->getMaxSize());
 		for (int i = 0; i < s_StarLordBullets->getMaxSize(); i++)
@@ -293,6 +326,9 @@ namespace Wiwa
 
 	void GamePoolingManager::LoadRocketBulletsPool(Scene* scene)
 	{
+		if (s_RocketBullets->Loaded)
+			return;
+
 		s_RocketBullets->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_RocketBullets->getMaxSize());
 		for (int i = 0; i < s_RocketBullets->getMaxSize(); i++)

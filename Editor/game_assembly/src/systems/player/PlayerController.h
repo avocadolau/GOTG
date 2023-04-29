@@ -18,6 +18,7 @@ namespace Wiwa {
 
 		void OnAwake() override;
 		void OnInit() override;
+		void OnDestroy() override;
 
 		void OnUpdate() override;
 		StarLordShooter* GetStarLord();

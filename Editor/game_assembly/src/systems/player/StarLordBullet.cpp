@@ -2,12 +2,15 @@
 #include "../../components/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
+#include "../../components/attack/Attack.h"
 
 namespace Wiwa
 {
 	StarLordBulletSystem::StarLordBulletSystem()
 	{
 		m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_AttackIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+
 		m_Timer = 0.0f;
 	}
 
@@ -18,7 +21,17 @@ namespace Wiwa
 
 	void StarLordBulletSystem::OnAwake()
 	{
+		m_AttackIt = GetComponentIterator<Attack>();
 		m_BulletIt = GetComponentIterator<SimpleBullet>();
+
+		Attack* attack = GetComponentByIterator<Attack>(m_AttackIt);
+		if (attack)
+		{
+			std::string atStr = "STARLORD_BULLET";
+			strcpy(attack->attackType, atStr.c_str());
+			attack->isPlayerAttack = true;
+			attack->isEnemyAttack = false;
+		}
 	}
 
 	void StarLordBulletSystem::OnInit()
@@ -75,12 +88,12 @@ namespace Wiwa
 	{
 		if (body1->id == m_EntityId)
 		{
-			std::string enemyStr = "ENEMY";
+			/*std::string enemyStr = "ENEMY";
 			if (enemyStr == body2->selfTagStr)
 			{
 				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 				GameStateManager::DamagePlayer(bullet->damage);
-			}
+			}*/
 
 			GameStateManager::s_PoolManager->s_StarLordBullets->ReturnToPool(m_EntityId);
 		}
