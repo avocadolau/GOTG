@@ -4,6 +4,8 @@
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 #include <Wiwa/utilities/render/Camera.h>
+#include <Wiwa/scene/SceneManager.h>
+
 
 Wiwa::ShipMainMenu::ShipMainMenu()
 {
@@ -39,6 +41,12 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	if (data->PanToCamera)
 	{
 		PanToCamera();
+		m_TimerToChangeScreen += Time::GetDeltaTimeSeconds();
+
+		if (m_TimerToChangeScreen >= 5.0f)
+		{
+			Wiwa::SceneManager::ChangeSceneByIndex(2);
+		}
 	}
 
 	float posY = GetTransform()->position.y;
@@ -62,4 +70,11 @@ void Wiwa::ShipMainMenu::PanToCamera()
 		camera->getRotation().z
 	};
 	camera->setRotation(rot);
+}
+
+void Wiwa::ShipMainMenu::SetPanToCamera(bool ret)
+{
+	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
+
+	data->PanToCamera = ret;
 }

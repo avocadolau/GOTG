@@ -1,14 +1,21 @@
 #include "UICallbacks.h"
 #include <Wiwa/scene/SceneManager.h>
+#include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/core/Application.h>
 #include <Wiwa/core/Window.h>
 #include <Wiwa/audio/Audio.h>
+#include "../systems/ships/ship_main_menu.h"
 #include <iostream>
 
 GoToMilanoHub_ GoToMilanoHub()
 {
-	Wiwa::SceneManager::ChangeSceneByIndex(2);
+	//Wiwa::SceneManager::ChangeSceneByIndex(2);
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	EntityId parentID = em.GetEntityByName("Parent");
+	EntityId shipID = em.GetChildByName(parentID, "sm_milano_01a");
+	Wiwa::ShipMainMenu* ship = em.GetSystem<Wiwa::ShipMainMenu>(shipID);
+	ship->SetPanToCamera(true);
 	return GoToMilanoHub_::hola;
 }
 

@@ -17,11 +17,14 @@ namespace Wiwa {
 
 		void PanToCamera();
 
+		void SetPanToCamera(bool ret);
+
 	private:
 		EntityManager::ComponentIterator m_ShipDataIt;
 
 		glm::vec3 m_StartPos;
 		float m_Time;
+		float m_TimerToChangeScreen;
 		glm::vec3 m_EndPanPos;
 	};
 }
