@@ -29,6 +29,10 @@ namespace Wiwa
 
 		//SentinelAudio - Dead Audio (explosion audio)
 		animator->PlayAnimation("atackdeath", false); //AnimacionSentinel
+
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		if (navAgentPtr)
+			navAgentPtr->StopAgent();
 	}
 
 	void SentinelDeathState::UpdateState(EnemySentinel* enemy)
@@ -39,7 +43,7 @@ namespace Wiwa
 		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		if (animator->HasFinished())
+		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{	
 			//Sentinel Explosion
 			Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
@@ -77,7 +81,9 @@ namespace Wiwa
 			{
 				em.DestroyEntity(enemy->GetEntity());
 			}
+			m_TimerToDie = 0.0f;
 		}
+		m_TimerToDie += Time::GetDeltaTimeSeconds();
 	}
 
 	void SentinelDeathState::ExitState(EnemySentinel* enemy)

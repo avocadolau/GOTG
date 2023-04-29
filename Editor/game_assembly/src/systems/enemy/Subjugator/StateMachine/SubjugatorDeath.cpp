@@ -25,13 +25,17 @@ namespace Wiwa
 
 		//SubjugatorAudio - Death audio for the Subjugator
 		animator->PlayAnimation("death", false);
+
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		if (navAgentPtr)
+			navAgentPtr->StopAgent();
 	}
 
 	void SubjugatorDeathState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
@@ -45,7 +49,9 @@ namespace Wiwa
 			{
 				em.DestroyEntity(enemy->GetEntity());
 			}
+			m_TimerToDie = 0.0f;
 		}
+		m_TimerToDie += Time::GetDeltaTimeSeconds();
 	}
 
 	void SubjugatorDeathState::ExitState(EnemySubjugator* enemy)

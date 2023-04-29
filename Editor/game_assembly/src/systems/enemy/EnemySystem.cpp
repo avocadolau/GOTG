@@ -132,7 +132,6 @@ namespace Wiwa
 				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(em.GetComponentIterator<SimpleBullet>(body2->id));
 				if (!bullet)
 					return;
-				WI_INFO("damage apply {}", bullet->damage);
 				ReceiveDamage(bullet->damage);
 			}
 		}

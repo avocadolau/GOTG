@@ -12,7 +12,6 @@ namespace Wiwa
 {
 	MeleePhalanxDeathState::MeleePhalanxDeathState()
 	{
-
 	}
 
 	MeleePhalanxDeathState::~MeleePhalanxDeathState()
@@ -25,13 +24,18 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		animator->PlayAnimation("dead", false);
+		m_TimerToDie = 0.0f;
+
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		if (navAgentPtr)
+			navAgentPtr->StopAgent();
 	}
 
 	void MeleePhalanxDeathState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
@@ -45,7 +49,10 @@ namespace Wiwa
 			{
 				em.DestroyEntity(enemy->GetEntity());
 			}
+			m_TimerToDie = 0.0f;
 		}
+
+		m_TimerToDie += Time::GetDeltaTimeSeconds();
 	}
 
 	void MeleePhalanxDeathState::ExitState(EnemyMeleePhalanx* enemy)

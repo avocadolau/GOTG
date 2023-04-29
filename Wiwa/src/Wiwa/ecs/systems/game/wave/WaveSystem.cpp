@@ -130,7 +130,7 @@ namespace Wiwa
 
 		EntityId newEnemyId = EntityManager::INVALID_INDEX;
 
-		switch (Pool_Type::PHALAN_RANGED)
+		switch (Pool_Type::PHALANX_MELEE)
 		{
 		case Pool_Type::PHALANX_MELEE:
 		{
@@ -182,12 +182,12 @@ namespace Wiwa
 
 		if (!enemyTransform)
 			return false;
-		WI_INFO("Rand: x: {}, z: {}", rand_x, rand_z);
+		//WI_INFO("Rand: x: {}, z: {}", rand_x, rand_z);
 
 		enemyTransform->localPosition.x = spawn_point.x + rand_x;
 		enemyTransform->localPosition.z = spawn_point.z + rand_z;
 		enemyTransform->localPosition.y = 0;
-		WI_INFO("Spawn: x: {}, y: {}, z: {}", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
+		//WI_INFO("Spawn: x: {}, y: {}, z: {}", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
 		NavAgentSystem* navAgentSys = entityManager.GetSystem<NavAgentSystem>(newEnemyId);
 	
 		/*WI_CORE_INFO("Spawned enemy at {}x {}y {}z", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
