@@ -40,18 +40,18 @@ namespace Wiwa
 			Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
 			Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
 
-			//SubjugatorAudio - Shooting audio for the Subjugator
-			animator->PlayAnimation("attack", false);
+			////SubjugatorAudio - Shooting audio for the Subjugator
+			//animator->PlayAnimation("attack", false);
 
 			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 25);
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 35);
 			Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 10);
-			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 5);
-			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 25);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 10);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 35);
 
 			SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
 			SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
@@ -120,10 +120,10 @@ namespace Wiwa
 				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
 				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
 
-				Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 15);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 15);
+				Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 45);
+				Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 25);
+				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 25);
+				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 45);
 
 				SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
 				SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
