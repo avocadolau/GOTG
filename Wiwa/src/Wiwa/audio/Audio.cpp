@@ -23,6 +23,7 @@
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
 #include <AK/SoundEngine/Common/AkQueryParameters.h>
 
+
 #include <Wiwa/utilities/json/JSONDocument.h>
 
 #include <AK/SoundEngine/Common/AkTypes.h>
@@ -628,9 +629,8 @@ bool Audio::UnloadEvent(const char* event_name)
 
 bool Audio::PostEvent(const char* event_name, uint64_t game_object)
 {
-     AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object);
-   
-
+    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object);
+    
     if (play_id == AK_INVALID_PLAYING_ID) {
         m_LastErrorMsg = "Couldn't post event [";
         m_LastErrorMsg += event_name;
@@ -643,16 +643,6 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object)
 
 bool Audio::PostNonSpatialEvent(const char* event_name)
 {
-    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, AK_INVALID_GAME_OBJECT);
-
-
-    if (play_id == AK_INVALID_PLAYING_ID) {
-        m_LastErrorMsg = "Couldn't post event [";
-        m_LastErrorMsg += event_name;
-        m_LastErrorMsg += "]";
-        return false;
-    }
-
     return true;
 }
 

@@ -106,6 +106,5 @@ void Wiwa::PlayerStateMachine::UpdateListenerPosition()
 	AkTransform listenerTransform;
 	listenerTransform.SetPosition(listenerPosition);
 
-	//the 0 is the listener id, the player
-	AK::SoundEngine::SetPosition(0, listenerTransform);
+	AK::SoundEngine::SetPosition(Audio::GetDefaultListener(), listenerTransform);
 }

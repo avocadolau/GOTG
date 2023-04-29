@@ -161,6 +161,8 @@ namespace Wiwa
 
 		void SetActive(EntityId entity, bool active) 
 		{
+			if (entity == WI_INVALID_INDEX) return;
+
 			m_EntityActive[entity] = active;
 
 			for (size_t i = 0; i < m_EntityChildren[entity].size(); i++)
