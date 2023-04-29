@@ -84,8 +84,8 @@ namespace Wiwa
 
 	void Scene::Update()
 	{
-		PlayerGUISystem* pgs;
-		//UltronGUISystem* ugs;
+		PlayerGUISystem* pgs = nullptr;
+		UltronGUISystem* ugs = nullptr;
 
 		switch (m_CurrentState)
 		{
@@ -113,11 +113,14 @@ namespace Wiwa
 			if (m_EntityManager.GetEntityCount() != 0)
 			{
 				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
-				if (pgs)
+				if (pgs != nullptr)
 					pgs->Update();
-				/*ugs = m_EntityManager.GetSystem<UltronGUISystem>(m_EntityManager.GetEntityByName("Ultron_01"));
-				if (ugs)
-					ugs->Update();*/
+				if (Wiwa::GameStateManager::GetType() == RoomType::ROOM_BOSS)
+				{
+					ugs = m_EntityManager.GetSystem<UltronGUISystem>(m_EntityManager.GetEntityByName("Ultron_01"));
+					if (ugs != nullptr)
+						ugs->Update();
+				}
 			}
 			m_GuiManager->Update();
 			m_DialogManager->Update();

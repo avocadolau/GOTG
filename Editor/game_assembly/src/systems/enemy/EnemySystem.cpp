@@ -136,7 +136,8 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::PhylasQuantumSword* phylasSword = em.GetComponent<Wiwa::PhylasQuantumSword>(body2->id);
+			Wiwa::PhylasQuantumSword* phylasSword = nullptr;
+			phylasSword = em.GetComponent<Wiwa::PhylasQuantumSword>(body2->id);
 			ReceiveDamage(phylasSword->damage);
 		}
 
@@ -145,7 +146,8 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::GrootSeeds* grootSeeds = em.GetComponent<Wiwa::GrootSeeds>(body2->id);
+			Wiwa::GrootSeeds* grootSeeds = nullptr;
+			grootSeeds = em.GetComponent<Wiwa::GrootSeeds>(body2->id);
 			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
 			statsSelf->Speed -= 2.0f;
 			ReceiveDamage(grootSeeds->damage);
@@ -156,7 +158,8 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::StarhawksBlast* starhawks = em.GetComponent<Wiwa::StarhawksBlast>(body2->id);
+			Wiwa::StarhawksBlast* starhawks = nullptr;
+			starhawks = em.GetComponent<Wiwa::StarhawksBlast>(body2->id);
 			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
 			ReceiveDamage(starhawks->damage);
 		}
