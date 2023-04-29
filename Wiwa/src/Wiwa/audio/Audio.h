@@ -166,5 +166,7 @@ public:
 	// Returns project path
 	static std::string GetProjectPath() { return m_InitBankPath; }
 
+	static uint64_t GetDefaultListener() { return m_DefaultListener; }
+
 	static const uint32_t INVALID_ID = -1;
 };
