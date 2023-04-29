@@ -36,7 +36,7 @@ namespace Wiwa
 
 	void ExplosiveBarrelProp::OnCollisionEnter(Object* body1, Object* body2)
 	{
-		std::string playerBulletStr = "PLAYER"; //Add PLAYER_BULLET when works again
+		std::string playerBulletStr = "PLAYER_ATTACK"; //Add PLAYER_BULLET when works again
 		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
