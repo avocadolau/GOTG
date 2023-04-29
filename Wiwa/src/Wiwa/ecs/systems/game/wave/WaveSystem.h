@@ -4,6 +4,7 @@
 #include <Wiwa/utilities/Reflection.h>
 
 #include <Wiwa/utilities/EntityPool.h>
+#include <random>
 
 namespace Wiwa {
 	class WI_API WaveSystem : public System {
@@ -33,6 +34,9 @@ namespace Wiwa {
 		void DestroyEnemy(size_t id, Pool_Type enemy_type);
 
 		void SetSpawner(const EntityManager::ComponentIterator& m_WaveIt);
+
+		Pool_Type GetEnemyFromProbabiliteis(std::mt19937& gen);
+		void GetSpawnPoints(std::vector<glm::vec3>& vec);
 
 		float m_SpawnDelay = 1.0f;
 		float m_TimeSinceLastSpawn = 0.0f;

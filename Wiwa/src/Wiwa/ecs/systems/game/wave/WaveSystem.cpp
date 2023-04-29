@@ -45,44 +45,23 @@ namespace Wiwa
 		spawner->hasTriggered = true;
 
 		std::vector<glm::vec3> points;
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		size_t size = 0;
-		Wiwa::WaveSpawnPoint* spawnPointsList = nullptr;
-		spawnPointsList = em.GetComponents<WaveSpawnPoint>(&size);
-		if (spawnPointsList)
-		{
-			for (int i = 0; i < size; i++)
-			{
-				if (em.IsComponentRemoved<WaveSpawnPoint>(i)) {
-				}
-				else{
-					Wiwa::WaveSpawnPoint* spawner = &spawnPointsList[i];
-					if (spawner)
-					{
-						points.emplace_back(spawner->point);
-					}
-				}
-			}
-		}
-
-		Pool_Type enemiesTypeList[] = {Pool_Type::PHALANX_MELEE , Pool_Type::PHALAN_RANGED , Pool_Type::SENTINEL, Pool_Type::SUBJUGATOR};
-		std::uniform_int_distribution<> dis(0, sizeof(enemiesTypeList) / sizeof(*enemiesTypeList) - 1);
-		Pool_Type enemyRandSelection = enemiesTypeList[dis(gen)];
+		GetSpawnPoints(points);
 
 		// Define the range for the random number generation
 		int min = -5;
 		int max = 5;
 		// Define the uniform_int_distribution once during initialization
-		std::uniform_int_distribution<int> distr(min, max);
+		std::uniform_int_distribution<int> disSpawn(min, max);
 		int j = 0;
 		for (int i = 0; i < wave->maxEnemies; i++)
 		{
 			if (j >= points.size())
 				j = 0;
 
-			int xRand = distr(gen);
-			int zRand = distr(gen);
-
+			int xRand = disSpawn(gen);
+			int zRand = disSpawn(gen);
+			
+			Pool_Type enemyRandSelection = GetEnemyFromProbabiliteis(gen);
 			if (SpawnEnemy(enemyRandSelection, points[j], xRand, zRand))
 			{
 				j++;
@@ -207,5 +186,48 @@ namespace Wiwa
 	void WaveSystem::SetSpawner(const EntityManager::ComponentIterator& m_WaveIt)
 	{
 		m_SpawnerIt = m_WaveIt;
+	}
+
+	Pool_Type WaveSystem::GetEnemyFromProbabiliteis(std::mt19937& gen)
+	{
+		Pool_Type enemiesTypeList[] = { Pool_Type::PHALANX_MELEE , Pool_Type::PHALAN_RANGED , Pool_Type::SENTINEL, Pool_Type::SUBJUGATOR };
+		std::uniform_int_distribution<> disEnemies(1, 100);
+		int randomNum = disEnemies(gen);
+		if (randomNum <= 45) // 45% probability
+		{
+			return Pool_Type::PHALANX_MELEE;
+		}
+		else if (randomNum <= 80) { // 35% probability
+			return Pool_Type::PHALAN_RANGED;
+		}
+		else if (randomNum <= 95) { // 15% probability
+			return Pool_Type::SENTINEL;
+		}
+		else { // 5% probability
+			return Pool_Type::SUBJUGATOR;
+		}
+	}
+
+	void WaveSystem::GetSpawnPoints(std::vector<glm::vec3>& vec)
+	{
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		size_t size = 0;
+		Wiwa::WaveSpawnPoint* spawnPointsList = nullptr;
+		spawnPointsList = em.GetComponents<WaveSpawnPoint>(&size);
+		if (spawnPointsList)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (em.IsComponentRemoved<WaveSpawnPoint>(i)) {
+				}
+				else {
+					Wiwa::WaveSpawnPoint* spawner = &spawnPointsList[i];
+					if (spawner)
+					{
+						vec.emplace_back(spawner->point);
+					}
+				}
+			}
+		}
 	}
 }
