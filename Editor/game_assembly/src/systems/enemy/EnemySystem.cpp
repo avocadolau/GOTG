@@ -126,17 +126,17 @@ namespace Wiwa
 			}
 			
 			Attack* attack = GetComponentByIterator<Attack>(em.GetComponentIterator<Attack>(body2->id));
-			std::string attackStr = attack->attackType;
-			if (!attack)
-				return;
-
-			std::string starlordBullet = "STARLORD_BULLET";
-			if (starlordBullet == attackStr)
+			if (attack)
 			{
-				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(em.GetComponentIterator<SimpleBullet>(body2->id));
-				if (!bullet)
-					return;
-				ReceiveDamage(bullet->damage);
+				std::string attackStr = attack->attackType;
+				std::string starlordBullet = "STARLORD_BULLET";
+				if (starlordBullet == attackStr)
+				{
+					SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(em.GetComponentIterator<SimpleBullet>(body2->id));
+					if (!bullet)
+						return;
+					ReceiveDamage(bullet->damage);
+				}
 			}
 		}
 
