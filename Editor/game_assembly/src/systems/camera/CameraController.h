@@ -15,7 +15,8 @@ namespace Wiwa
 
 
         glm::vec3 m_CameraOffset{ 0, 40.0f, -15.0f };
-        glm::vec3 m_CameraRotation{ 90, -70, 0 };
+        glm::vec3 m_CameraRotation{ 90, -65, 0 };
+        float m_FOV = 60;
 	public:
 		CameraController();
 		~CameraController();
