@@ -18,5 +18,6 @@ namespace Wiwa
 		float walkStepTimer = 0.62f;
 		float runStepTimer = 0.458f;
 		float stepParticleTimer = 0.0f;
+		float currentSteptime  =0.0f;
 	};
 }

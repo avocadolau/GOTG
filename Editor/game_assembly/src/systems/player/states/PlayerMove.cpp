@@ -13,6 +13,7 @@ void Wiwa::PlayerMove::EnterState()
 {
 	WI_INFO("Player move");
 	m_StateMachine->GetAnimator()->Blend("running", true, 0.2f);
+	currentSteptime = runStepTimer;
 }
 
 void Wiwa::PlayerMove::UpdateState()
@@ -32,6 +33,13 @@ void Wiwa::PlayerMove::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
 		return;
 	}
+	currentSteptime -= Time::GetDeltaTimeSeconds();
+	if (currentSteptime < 0)
+	{
+		m_StateMachine->GetAudio()->PlayAudio("player_walk");
+		currentSteptime = runStepTimer;
+	}
+
 
 	m_StateMachine->UpdateMovement();
 }
