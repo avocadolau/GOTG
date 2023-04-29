@@ -25,7 +25,7 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
-		bool EnableExplosion();
+		bool EnableExplosion(const glm::vec3& pos);
 
 		bool OnDisabledFromPool() override;
 

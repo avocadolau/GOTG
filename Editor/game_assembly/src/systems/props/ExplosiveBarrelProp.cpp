@@ -36,21 +36,19 @@ namespace Wiwa
 
 	void ExplosiveBarrelProp::OnCollisionEnter(Object* body1, Object* body2)
 	{
-		std::string playerBulletStr = "PLAYER"; //Add PLAYER_BULLET when works again
+		std::string playerBulletStr = "PLAYER_ATTACK"; //Add PLAYER_BULLET when works again
 		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(this->m_TransformIt);
-
-			SpawnExplosiveBarrelExplosion(this, selfTr);
+			SpawnExplosiveBarrelExplosion(this);
 
 			//Destroy the barrel
 			em.DestroyEntity(m_EntityId);
 		}
 	}
 
-	void ExplosiveBarrelProp::SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy, Wiwa::Transform3D* transform)
+	void ExplosiveBarrelProp::SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy)
 	{
 		if (GameStateManager::s_PoolManager->s_ExplosiveBarrel->getCountDisabled() <= 0)
 			return;
@@ -74,11 +72,11 @@ namespace Wiwa
 		if (!explosiveBarrelTr)
 			return;
 
-		explosiveBarrelTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
-		explosiveBarrelTr->localScale = transform->localScale;
+		explosiveBarrelTr->localPosition = Math::GetWorldPosition(GetTransform()->worldMatrix);
+		explosiveBarrelTr->localScale = GetTransform()->localScale;
 
 		physSys->CreateBody();
 
-		explosionBarrelSys->EnableExplosion();
+		explosionBarrelSys->EnableExplosion(Math::GetWorldPosition(GetTransform()->worldMatrix));
 	}
 }

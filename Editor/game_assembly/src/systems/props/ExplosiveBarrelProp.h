@@ -22,7 +22,7 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
-		void SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy, Wiwa::Transform3D* transform);
+		void SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy);
 	};
 }
 
