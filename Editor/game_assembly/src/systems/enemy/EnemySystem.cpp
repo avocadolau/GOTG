@@ -138,7 +138,10 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			Wiwa::PhylasQuantumSword* phylasSword = nullptr;
 			phylasSword = em.GetComponent<Wiwa::PhylasQuantumSword>(body2->id);
-			ReceiveDamage(phylasSword->damage);
+			if (phylasSword != nullptr)
+			{
+				ReceiveDamage(phylasSword->damage);
+			}
 		}
 
 		std::string groot_seeds = "GROOTS_SEEDS";
@@ -148,9 +151,12 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			Wiwa::GrootSeeds* grootSeeds = nullptr;
 			grootSeeds = em.GetComponent<Wiwa::GrootSeeds>(body2->id);
-			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
-			statsSelf->Speed -= 2.0f;
-			ReceiveDamage(grootSeeds->damage);
+			if (grootSeeds != nullptr)
+			{
+				Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
+				statsSelf->Speed -= 2.0f;
+				ReceiveDamage(grootSeeds->damage);
+			}
 		}
 
 		std::string starhawks_blast = "STARHAWKS_BLAST";
@@ -160,8 +166,11 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			Wiwa::StarhawksBlast* starhawks = nullptr;
 			starhawks = em.GetComponent<Wiwa::StarhawksBlast>(body2->id);
-			Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
-			ReceiveDamage(starhawks->damage);
+			if (starhawks != nullptr)
+			{
+				Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
+				ReceiveDamage(starhawks->damage);
+			}
 		}
 	}
 

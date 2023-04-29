@@ -29,19 +29,28 @@ namespace Wiwa
 		if (m_TimerAttackCooldown == 0.0f)
 		{
 			Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
-			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+			/*Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);*/
+
+			Transform3D* hand1Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand1It);
+			Transform3D* hand2Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand2It);
+			Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
+			Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
 
 			//SubjugatorAudio - Shooting audio for the Subjugator
-			animator->PlayAnimation("shot", false);
+			animator->PlayAnimation("attack", false);
 
-			glm::vec3 rotateBulledLeft = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRight = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, rotateBulledLeftHand1, 35);
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulletRightHand4, rotateBulledLeftHand4, 35);
 
-			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
-			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
-			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
+			SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
+			SpawnBullet(enemy, hand2Tr, stats, Math::CalculateForward(hand2Tr->rotation));
+			SpawnBullet(enemy, hand3Tr, stats, Math::CalculateForward(hand3Tr->rotation));
+			SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
 		}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -58,6 +67,10 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		Transform3D* hand1Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand1It);
+		Transform3D* hand2Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand2It);
+		Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
+		Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
@@ -71,18 +84,28 @@ namespace Wiwa
 		{
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;
-		
-			glm::vec3 rotateBulledLeft = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRight = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRight, rotateBulledLeft, 35);
+			glm::vec3 rotateBulledLeftHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			SpawnBullet(enemy, selfTr, stats, Math::CalculateForward(selfTr->rotation));
-			SpawnBullet(enemy, selfTr, stats, rotateBulletRight);
-			SpawnBullet(enemy, selfTr, stats, rotateBulledLeft);
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, rotateBulledLeftHand1, 35);
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, rotateBulledLeftHand2, 10);
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulletRightHand3, rotateBulledLeftHand3, 10);
+			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulletRightHand4, rotateBulledLeftHand4, 35);
+
+			SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
+			SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
+			SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
+			SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
 			
 			//SubjugatorAudio - Shooting audio for the Subjugator
-			animator->PlayAnimation("shot", false);
+			animator->PlayAnimation("attack", false);
 		}
 		
 
@@ -127,7 +150,7 @@ namespace Wiwa
 		if (!bulletTr || !playerTr)
 			return;
 
-		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix) + glm::vec3(0.0, 2.0f, 0.0f);
+		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));

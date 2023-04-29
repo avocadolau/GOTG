@@ -11,7 +11,11 @@ namespace Wiwa {
 		class SubjugatorBaseState* m_AttackingState;
 		class SubjugatorBaseState* m_DeathState;
 		class SubjugatorBaseState* m_HitState;
-		/*EntityManager::ComponentIterator m_GunTransformIt;*/
+
+		EntityManager::ComponentIterator m_Hand1It;
+		EntityManager::ComponentIterator m_Hand2It;
+		EntityManager::ComponentIterator m_Hand3It;
+		EntityManager::ComponentIterator m_Hand4It;
 
 		float m_Timer;
 		float m_RangeOfAttack = 0.0f;
