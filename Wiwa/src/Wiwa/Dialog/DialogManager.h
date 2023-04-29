@@ -29,7 +29,11 @@ namespace Wiwa
 		std::string bubbleImagePath;
 		std::string characterImagePath;
 
+		bool isOppositeSide = false;
+
 		bool occupied = false;
+
+		ConversationGroup group;
 	};
 
 	class WI_API DialogManager
