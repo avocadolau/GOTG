@@ -19,6 +19,11 @@ namespace Wiwa {
 
 		void SetPanToCamera(bool ret);
 
+		void OnCollisionEnter(Object* body1, Object* body2) override;
+
+		void OnCollisionExit(Object* body1, Object* body2) override;
+
+
 	private:
 		EntityManager::ComponentIterator m_ShipDataIt;
 
@@ -26,6 +31,9 @@ namespace Wiwa {
 		float m_Time;
 		float m_TimerToChangeScreen;
 		glm::vec3 m_EndPanPos;
+
+		bool m_SceneChange = false;
+		bool m_GlFWeskk = false;
 	};
 }
 REGISTER_SYSTEM(Wiwa::ShipMainMenu);

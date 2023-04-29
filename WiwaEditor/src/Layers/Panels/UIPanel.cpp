@@ -511,34 +511,7 @@ void UIPanel::DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		}
 	}
 
-	if (cbcount > 0) {
-		const Func* current_cb = app.getCallbackAt(current_item);
-
-		ImGui::Text("Callback type:");
-
-		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
-		{
-			for (size_t n = 0; n < cbcount; n++)
-			{
-				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				current_cb = app.getCallbackAt(n);
-
-				if (current_cb->params.size() == 0) {
-					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-					{
-						current_item = n;
-						if (is_selected)
-							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-					}
-				}
-
-			}
-			ImGui::EndCombo();
-		}
-	}
-
-	callbackID = current_item;
-
+	callbackID = WI_INVALID_INDEX;
 	ImGui::Text("Animations");
 	ImGui::Checkbox("animated", &animated);
 	VectorEdit(animationRects);

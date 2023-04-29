@@ -3,6 +3,7 @@
 #include <Wiwa/utilities/easings.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/core/Input.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/scene/SceneManager.h>
 
@@ -35,9 +36,7 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	m_Time += Time::GetDeltaTimeSeconds();
 	
 	
-	if (Wiwa::Input::IsKeyPressed(Key::Space))
-		data->PanToCamera = true;
-
+	
 	if (data->PanToCamera)
 	{
 		PanToCamera();
@@ -49,6 +48,17 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 	}
 
+	if (m_SceneChange)
+	{
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+		{
+			m_GlFWeskk = true;
+		}
+		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
+		{
+			Wiwa::SceneManager::ChangeSceneByIndex(3);
+		}
+	}
 	float posY = GetTransform()->position.y;
 	float move = sin(m_Time) * data->VelocityMove * Time::GetDeltaTimeSeconds();
 	float rot = cos(m_Time) * data->VelocityRot * Time::GetDeltaTimeSeconds();
@@ -77,4 +87,28 @@ void Wiwa::ShipMainMenu::SetPanToCamera(bool ret)
 	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
 
 	data->PanToCamera = ret;
+}
+
+void Wiwa::ShipMainMenu::OnCollisionEnter(Object* body1, Object* body2)
+{
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+	std::string playerTag = "PLAYER";
+
+	if (body1->id == m_EntityId && body2->selfTagStr == playerTag)
+	{
+		gm.canvas.at(7)->SwapActive();
+		m_SceneChange = true;
+	}
+}
+
+void Wiwa::ShipMainMenu::OnCollisionExit(Object* body1, Object* body2)
+{
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+	std::string playerTag = "PLAYER";
+
+	if (body1->id == m_EntityId && body2->selfTagStr == playerTag)
+	{
+		gm.canvas.at(7)->SwapActive();
+		m_SceneChange = false;
+	}
 }
