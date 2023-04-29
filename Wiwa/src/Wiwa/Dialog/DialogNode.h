@@ -18,3 +18,10 @@ struct DialogNode
 
 	bool occupied = false;
 };
+
+struct ConversationGroup
+{
+	
+	int groupID = -1;
+	int order = -1;
+};

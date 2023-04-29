@@ -39,8 +39,11 @@ namespace Wiwa {
 			for (size_t j = 0; j < system_size; j++) {
 				System* s = m_EntitySystems[i][j];
 
-				s->Destroy();
-				delete s;
+				if (s)
+				{
+					s->Destroy();
+					delete s;
+				}
 			}
 		}
 
