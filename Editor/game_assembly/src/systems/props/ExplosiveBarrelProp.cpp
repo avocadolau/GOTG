@@ -41,7 +41,7 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			SpawnExplosiveBarrelExplosion(this, selfTr);
+			SpawnExplosiveBarrelExplosion(this);
 
 			//Destroy the barrel
 			em.DestroyEntity(m_EntityId);
