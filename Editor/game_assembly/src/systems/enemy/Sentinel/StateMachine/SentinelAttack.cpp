@@ -43,11 +43,11 @@ namespace Wiwa
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		/*if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 2.0f)
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 2.0f)
 		{
 			navAgent->stoppingDistance = 1.0f;
 			navAgentPtr->StopAgent();
-		}*/
+		}
 		
 		//if (glm::distance(selfTr->localPosition, playerTr->localPosition) > enemy->m_RangeOfExplosion)
 		//{
@@ -82,10 +82,10 @@ namespace Wiwa
 
 		//-----------------------------------------------
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) <= 1.0f)
+		/*if (glm::distance(selfTr->localPosition, playerTr->localPosition) <= 1.0f)
 		{
 			enemy->SwitchState(enemy->m_DeathState);
-		}
+		}*/
 
 		/*animator->PlayAnimation("atackdeath", false);*/
 
@@ -93,7 +93,7 @@ namespace Wiwa
 
 		m_TimerExplosion += dt;
 
-		if (m_TimerExplosion >= 3.0f)
+		if (m_TimerExplosion >= 2.0f)
 		{
 			enemy->SwitchState(enemy->m_DeathState);
 		}
