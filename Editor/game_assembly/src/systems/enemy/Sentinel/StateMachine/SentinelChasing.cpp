@@ -53,7 +53,7 @@ namespace Wiwa
 		}
 
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < enemy->m_RangeOfExplosion)
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) <= enemy->m_RangeOfExplosion)
 		{
 			enemy->SwitchState(enemy->m_AttackingState);
 		}

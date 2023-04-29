@@ -65,6 +65,7 @@ namespace Wiwa
 		}
 
 		m_TimerAttackCooldown = -0.3f;
+		m_TimerSyncAnimationBullets = 0.0f;
 	}
 
 	void SubjugatorAttackState::UpdateState(EnemySubjugator* enemy)

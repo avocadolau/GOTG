@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="232625244" Type="User" Language="SFX" Hash="{E0CF1E0D-8896-D1B0-57F9-A7F3DA8AAD2A}">
+		<SoundBank Id="232625244" Type="User" Language="SFX" Hash="{A6D7C4B2-2ACC-FBFB-3802-EB22D900776C}">
 			<ShortName>phalanx_melee</ShortName>
 			<Path>phalanx_melee.bnk</Path>
 			<Media>
@@ -53,7 +53,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{AD4B00ED-60CE-784E-4CBE-DBC629881596}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{AF8642B2-A735-E39B-4EC1-D61A14AF9342}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -122,7 +122,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="968010305" Type="User" Language="SFX" Hash="{DC7BEC97-9915-776F-2CC2-36409C2D0809}">
+		<SoundBank Id="968010305" Type="User" Language="SFX" Hash="{D0748002-69BE-13C3-AC44-03EC1A26B015}">
 			<ShortName>props</ShortName>
 			<Path>props.bnk</Path>
 			<Media>
@@ -144,7 +144,7 @@
 				</File>
 			</Media>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{A44CC45C-C6FF-82F5-1390-3D3131F71A76}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{792FE8E6-6F4B-BCC6-F487-143FC7586A2B}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -210,7 +210,7 @@
 				<GameParameter Id="215992295" Name="player_health"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1309352537" Type="User" Language="SFX" Hash="{45B257B9-4EF1-4381-013A-C9F0BD52B3B8}">
+		<SoundBank Id="1309352537" Type="User" Language="SFX" Hash="{D59FADDE-8DED-6C97-DBBF-7809AE9E5D9F}">
 			<ShortName>phalanx_ranged</ShortName>
 			<Path>phalanx_ranged.bnk</Path>
 			<Media>
@@ -420,7 +420,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{30F22B7E-AC34-71F3-2905-D9987242FE22}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{5608F607-19DB-998A-BF3B-08BBA27D333A}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -500,5 +500,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{9F36E773-7D50-49AB-18CE-6936FA0A7DAA}</FileHash>
+	<FileHash>{1F07ADDB-1FBD-14E8-CDA4-C3CEB0B33500}</FileHash>
 </SoundBanksInfo>
