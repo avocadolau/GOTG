@@ -2,12 +2,14 @@
 #include "../../components/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
+#include "../../components/attack/Attack.h"
 
 namespace Wiwa
 {
 	SimpleBulletSystem::SimpleBulletSystem()
 	{
 		m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_AttackIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
 	}
 
@@ -18,7 +20,17 @@ namespace Wiwa
 
 	void SimpleBulletSystem::OnAwake()
 	{
+		m_AttackIt = GetComponentIterator<Attack>();
 		m_BulletIt = GetComponentIterator<SimpleBullet>();
+
+		Attack* attack = GetComponentByIterator<Attack>(m_AttackIt);
+		if (attack)
+		{
+			std::string atStr = "SIMPLE_BULLET";
+			strcpy(attack->attackType, atStr.c_str());
+			attack->isPlayerAttack = false;
+			attack->isEnemyAttack = true;
+		}
 	}
 
 	void SimpleBulletSystem::OnInit()

@@ -9,6 +9,7 @@ namespace Wiwa {
 	class  SimpleBulletSystem : public System {
 	private:
 		float m_Timer = 0;
+		EntityManager::ComponentIterator m_AttackIt;
 		EntityManager::ComponentIterator m_BulletIt;
 	public:
 		SimpleBulletSystem();

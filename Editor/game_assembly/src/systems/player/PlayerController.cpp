@@ -43,6 +43,11 @@ void Wiwa::PlayerController::OnInit()
 	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARLORD_BULLET, m_Scene);
 }
 
+void Wiwa::PlayerController::OnDestroy()
+{
+	GameStateManager::s_PoolManager->UnloadPool(Pool_Type::STARLORD_BULLET);
+}
+
 void Wiwa::PlayerController::OnUpdate()
 {
 	m_MovementInput = GetMovementInput();
@@ -133,7 +138,10 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bullDir;
-	WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
+	bullet->damage = this->GetCharacter()->Damage;
+	WI_INFO("damage set {}", bullet->damage);
+	//WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
+
 	physSys->CreateBody();
 	bulletSys->EnableBullet();
 
@@ -141,6 +149,7 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	entityManager.SetActive(muzzleFlash, true);
 	Transform3D* muzzleTransform = entityManager.GetComponent<Transform3D>(muzzleFlash);
 	muzzleTransform->localPosition = Math::GetWorldPosition(transform.localMatrix);
+
 }
 
 glm::vec3 Wiwa::PlayerController::GetMovementInput()

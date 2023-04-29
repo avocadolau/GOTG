@@ -9,6 +9,7 @@ namespace Wiwa {
 	class  StarLordBulletSystem : public System {
 	private:
 		float m_Timer = 0;
+		EntityManager::ComponentIterator m_AttackIt;
 		EntityManager::ComponentIterator m_BulletIt;
 	public:
 		StarLordBulletSystem();

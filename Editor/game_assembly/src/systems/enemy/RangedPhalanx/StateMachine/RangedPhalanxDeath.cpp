@@ -10,6 +10,7 @@ namespace Wiwa
 {
 	RangedPhalanxDeathState::RangedPhalanxDeathState()
 	{
+		m_TimeToDie = 1.0f;
 
 	}
 
@@ -23,13 +24,14 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		animator->PlayAnimation("death", false);
+		m_TimerToDie = 0.0f;
 	}
 
 	void RangedPhalanxDeathState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
 			self->hasFinished = true;
@@ -44,10 +46,13 @@ namespace Wiwa
 				em.DestroyEntity(enemy->GetEntity());
 			}
 		}
+
+		m_TimerToDie += Time::GetDeltaTime();
 	}
 
 	void RangedPhalanxDeathState::ExitState(EnemyRangedPhalanx* enemy)
 	{
+		m_TimerToDie = 0.0f;
 	}
 
 	void RangedPhalanxDeathState::OnCollisionEnter(EnemyRangedPhalanx* enemy, const Object* body1, const Object* body2)
