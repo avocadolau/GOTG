@@ -25,7 +25,12 @@ namespace Wiwa
 {
 	namespace Math
 	{
-
+		inline float RandomFloat(float a, float b) {
+			float random = ((float)rand()) / (float)RAND_MAX;
+			float diff = b - a;
+			float r = random * diff;
+			return a + r;
+		}
 		inline btVector3 ToBulletVector3(const glm::vec3 &vector)
 		{
 			return btVector3(vector.x, vector.y, vector.z);

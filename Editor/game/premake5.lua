@@ -59,7 +59,9 @@ project "WiwaGame"
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.filewatch}",
 		"%{IncludeDirs.Wwise}",
-		"%{IncludeDirs.bullet}"
+		"%{IncludeDirs.bullet}",
+		"%{IncludeDirs.OpenCV}",
+		"%{IncludeDirs.recastnavigation}"
 	}
 
 	links
