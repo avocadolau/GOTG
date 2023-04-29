@@ -20,7 +20,10 @@ namespace Wiwa
 		m_AttackingState = nullptr;
 		m_DeathState = nullptr;
 		m_HitState = nullptr;
-		/*m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };*/
+		m_Hand1It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_Hand2It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_Hand3It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_Hand4It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_RangeOfAttack = 20.0f;
 		m_MinimumPath = 5;
 		m_Timer = 0.0f;
@@ -41,8 +44,17 @@ namespace Wiwa
 		m_HitState = new SubjugatorHitState();
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		/*EntityId gunId = em.GetChildByName(m_EntityId, "gun");
-		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);*/
+		EntityId hand1Id = em.GetChildByName(m_EntityId, "Hand_1");
+		m_Hand1It = GetComponentIterator<Wiwa::Transform3D>(hand1Id);
+
+		EntityId hand2Id = em.GetChildByName(m_EntityId, "Hand_2");
+		m_Hand2It = GetComponentIterator<Wiwa::Transform3D>(hand2Id);
+
+		EntityId hand3Id = em.GetChildByName(m_EntityId, "Hand_3");
+		m_Hand3It = GetComponentIterator<Wiwa::Transform3D>(hand3Id);
+
+		EntityId hand4Id = em.GetChildByName(m_EntityId, "Hand_4");
+		m_Hand4It = GetComponentIterator<Wiwa::Transform3D>(hand4Id);
 	}
 
 	void EnemySubjugator::OnInit()

@@ -20,7 +20,7 @@ namespace Wiwa
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
 		//SubjugatorParticles - Damage particles for the Subjugator
-		animator->PlayAnimation("damage", false);
+		animator->PlayAnimation("hit", false);
 	}
 
 	void SubjugatorHitState::UpdateState(EnemySubjugator* enemy)
