@@ -1,5 +1,10 @@
+Event	ID	Name			Wwise Object Path	Notes
+	169915878	ranged_hit			\Default Work Unit\enemies\ranged\ranged_hit	
+	445652775	ranged_attack			\Default Work Unit\enemies\ranged\ranged_attack	
+	2801386309	ranged_dead			\Default Work Unit\enemies\ranged\ranged_dead	
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	480958233	phalanx_ranged_attack	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_attack_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_attack		255660
-	606851917	phalanx_ranged_death(No sabemos)	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos)_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos)		527040
-	669719075	phalanx_ranged_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_hit		176232
+	241674995	phalanx_ranged_attack	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Sci Fi Explosion 07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_attack		264696
+	606851917	phalanx_ranged_death	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos)_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_death		527040
+	669719075	phalanx_ranged_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_hit_08A785CE.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_hit		132900
 

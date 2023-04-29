@@ -3,26 +3,11 @@
 	<GameParameters>
 		<WorkUnit Name="Default Work Unit" ID="{02E271C5-C17C-4AA5-B1B0-C26312712607}" PersistMode="Standalone">
 			<ChildrenList>
-				<Folder Name="Volume" ID="{7A61670D-D8E1-4ABA-B480-305349227CE1}" ShortID="476455772">
+				<Folder Name="player" ID="{4855CF80-8D00-4550-8BD4-A11D4F7BDF2D}" ShortID="236406674">
 					<ChildrenList>
-						<GameParameter Name="MasterVolume" ID="{37155977-97CE-402C-89A9-1AE619F18259}">
+						<GameParameter Name="player_health" ID="{AEB3BC33-42AB-4D57-8CDE-C43D3B8C1D91}">
 							<PropertyList>
-								<Property Name="InitialValue" Type="Real64" Value="75"/>
-							</PropertyList>
-						</GameParameter>
-						<GameParameter Name="MusicVolume" ID="{CA819C77-268F-4C3F-ADAA-C8EC1A27420A}">
-							<PropertyList>
-								<Property Name="InitialValue" Type="Real64" Value="75"/>
-							</PropertyList>
-						</GameParameter>
-						<GameParameter Name="SFXVolume" ID="{A8646951-A86E-4292-9574-A0BAFAB470E6}">
-							<PropertyList>
-								<Property Name="InitialValue" Type="Real64" Value="75"/>
-							</PropertyList>
-						</GameParameter>
-						<GameParameter Name="DialogVolume" ID="{B081D778-5399-4F43-9F7C-7F931A9B2B07}">
-							<PropertyList>
-								<Property Name="InitialValue" Type="Real64" Value="75"/>
+								<Property Name="InitialValue" Type="Real64" Value="100"/>
 							</PropertyList>
 						</GameParameter>
 					</ChildrenList>

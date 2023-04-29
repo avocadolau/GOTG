@@ -3,7 +3,19 @@
 	<Switches>
 		<WorkUnit Name="Default Work Unit" ID="{8B776CA6-7F1B-44DE-AC39-C708D78D6476}" PersistMode="Standalone">
 			<ChildrenList>
-				<SwitchGroup Name="game" ID="{98B6CCD5-2349-4CBA-ABC5-D800E64BFFD6}"/>
+				<SwitchGroup Name="gameplay_music" ID="{98B6CCD5-2349-4CBA-ABC5-D800E64BFFD6}">
+					<PropertyList>
+						<Property Name="UseGameParameter" Type="bool" Value="True"/>
+					</PropertyList>
+					<ChildrenList>
+						<Switch Name="combat" ID="{6783A16B-0A20-41D3-8BA1-9B984CD6A13E}"/>
+						<Switch Name="hub" ID="{A174C6C0-B88B-4265-914B-61D2737103B7}"/>
+						<Switch Name="game_over" ID="{63B32FFC-88CD-4ED8-8E74-D40FE73AB959}"/>
+						<Switch Name="main_menu" ID="{9F6AF410-4D4A-44DD-8388-1E621C3FBC69}"/>
+						<Switch Name="intro" ID="{491CE50F-021D-42E2-B786-B79BD61DFD57}"/>
+					</ChildrenList>
+				</SwitchGroup>
+				<SwitchGroup Name="ground" ID="{E9DFD985-DDE3-4E4A-882F-D42B6F75DE11}"/>
 			</ChildrenList>
 		</WorkUnit>
 	</Switches>

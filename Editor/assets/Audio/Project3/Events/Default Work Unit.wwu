@@ -12,7 +12,7 @@
 										<Action Name="" ID="{7B598B8E-95D1-4516-993C-443EB6BBA2D4}" ShortID="479478646">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_melee_death(no sabemos)" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+													<ObjectRef Name="phalanx_melee_death" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -49,7 +49,7 @@
 										<Action Name="" ID="{5BE5F319-492E-45B3-BE2E-7380E4F0ED32}" ShortID="450156588">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_ranged_hit" ID="{9957D140-C773-44B2-81B5-4D525D7B3B26}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+													<ObjectRef Name="phalanx_ranged_hit" ID="{0B08FC8C-1FA0-4998-8EDC-D2CD5CD44FD4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -60,7 +60,7 @@
 										<Action Name="" ID="{54A5AAC5-6472-48CD-99BD-81782705BA17}" ShortID="1049476448">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_ranged_death" ID="{C43774A7-739A-40D1-B5E8-C3890C4B0C2D}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+													<ObjectRef Name="phalanx_ranged_death" ID="{39ED648E-FC14-403A-8B96-3F753E9B9852}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -71,7 +71,7 @@
 										<Action Name="" ID="{130A7352-6232-4782-A9A0-62ADC060A504}" ShortID="365705115">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_ranged_attack" ID="{706D54BF-DF81-473C-8AA8-244FFCB93732}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+													<ObjectRef Name="phalanx_ranged_attack" ID="{C64ADEA5-BB6F-4CDB-A83E-A774844F3AD1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -116,17 +116,6 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="logo_intro" ID="{E3D47F86-37B9-435C-ABE0-9996A7C18E4B}">
-							<ChildrenList>
-								<Action Name="" ID="{F81A912C-C98C-47C7-AF1A-852B9ADEAB27}" ShortID="729503507">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="game_intro" ID="{42A80673-FE15-4D51-8697-DDD469142191}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
 						<Event Name="on_hover" ID="{C0413F64-E9E0-4B28-A0C5-A859611A1B64}">
 							<ChildrenList>
 								<Action Name="" ID="{C22D4225-B20D-4433-96F0-EA2873B2EC5A}" ShortID="919270292">
@@ -138,23 +127,12 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="dialog_start" ID="{0AAB72C1-00A8-4F3B-B2BD-52951366D7C7}">
-							<ChildrenList>
-								<Action Name="" ID="{C0BB93C7-651F-4BCF-B7A6-5742EC2AE385}" ShortID="356696398">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="sound_dialog_start" ID="{A0E680D6-628E-4E8D-B5D5-7E409042F705}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
 						<Event Name="action_accepted" ID="{DE948CF6-9CFE-438C-8762-78B50C79ADCF}">
 							<ChildrenList>
 								<Action Name="" ID="{F5DCA666-B2E9-4573-903E-1A4B3B0F4A6E}" ShortID="959926918">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="ui_action_accepted" ID="{269331CD-2069-4F5A-86CD-EEEAFF6C282A}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+											<ObjectRef Name="ui_action_accepted" ID="{9E41CBCB-55E0-4506-928D-4341DDA6A91F}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -165,7 +143,7 @@
 								<Action Name="" ID="{FBCF3F73-2519-4A5E-99D4-1082C089AE16}" ShortID="801773385">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="ui_action_denied" ID="{63E4A29A-F100-41ED-A21E-EEC8261F07CA}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+											<ObjectRef Name="ui_action_denied" ID="{34D66139-BAB1-4B89-9E9A-0D22CC4CAEC7}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -240,7 +218,7 @@
 								<Action Name="" ID="{8068FEBF-7723-4489-A44B-DF20CBD99D67}" ShortID="915690533">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="default_footsteps_random" ID="{0DD4C1C8-B173-4CD7-8A86-BA99C55D9B35}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+											<ObjectRef Name="player_walk" ID="{AA06D645-82A5-4A60-9699-0C8FA1E1D2C1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -251,7 +229,7 @@
 								<Action Name="" ID="{875985E6-852F-43AF-B6D7-9759FBDA18B0}" ShortID="646949817">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="player_shoot" ID="{EF807C36-76F9-4AF8-8A5B-702C9F0C3523}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+											<ObjectRef Name="player_shoot" ID="{8AD4699B-AFE2-4FB6-B30A-BA53480B4F4B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -262,7 +240,7 @@
 								<Action Name="" ID="{9FE8E831-37D4-4A90-BBC7-FB4877D42D8D}" ShortID="592880476">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="palyer_hit" ID="{2835FA08-E894-4CF3-894B-FF506C5CDCE4}" WorkUnitID="{D9329DB3-E4D7-45AA-BD40-6EB28C6C4D39}"/>
+											<ObjectRef Name="palyer_hit" ID="{039EA729-BA8E-4740-815C-B8115ED0A564}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -270,50 +248,14 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
-				<Event Name="Set_Game_Parameter_MasterVolume" ID="{A995B702-D3A9-4F44-BF33-0ACAF6A677F0}">
-					<ChildrenList>
-						<Action Name="" ID="{0C0116EB-8D85-47F7-8F3A-119D9A30653E}" ShortID="927498933">
-							<PropertyList>
-								<Property Name="ActionType" Type="int16" Value="38"/>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Target">
-									<ObjectRef Name="MasterVolume" ID="{37155977-97CE-402C-89A9-1AE619F18259}" WorkUnitID="{02E271C5-C17C-4AA5-B1B0-C26312712607}"/>
-								</Reference>
-							</ReferenceList>
-						</Action>
-					</ChildrenList>
-				</Event>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
 					<ChildrenList>
-						<Event Name="music_hub" ID="{AB655294-2E7A-470C-93ED-AAC8204FACF3}">
+						<Event Name="music" ID="{F352CEEF-26A4-4F4C-88E5-F8C592DB2D2C}">
 							<ChildrenList>
-								<Action Name="" ID="{05CAE60C-75E5-4730-A7D6-ADDCA5C8DA01}" ShortID="303731342">
+								<Action Name="" ID="{B461EDF9-4676-4C0C-B14F-0134B75BBF99}" ShortID="129289267">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="Norman Greenbaum Spirit In The Sky" ID="{DCC91733-0E22-42CC-A9A6-2D00CD54D47B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="music_main_menu" ID="{203ACB29-5579-4399-A069-88C24B04CBC6}">
-							<ChildrenList>
-								<Action Name="" ID="{832B8346-5478-4DB7-8073-E8BE53E713DF}" ShortID="536141635">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="07 Whispers Of The Dead" ID="{480C08DF-0007-47BF-89A8-BE0EA6507F7E}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="music_combat_01" ID="{F3DC5FC5-220F-40CE-9456-D114AD096CB5}">
-							<ChildrenList>
-								<Action Name="" ID="{E7AB4F21-262F-4774-B135-654D046D5BEE}" ShortID="269947806">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="10 The Weirdboy" ID="{CB5A7877-8980-495B-AFA4-6B4BF8AEFF98}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="music_controller" ID="{D55FFCB4-0CAC-45CF-BCAA-2503785E186D}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

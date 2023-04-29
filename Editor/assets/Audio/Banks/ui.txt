@@ -1,5 +1,7 @@
 Event	ID	Name			Wwise Object Path	Notes
 	412874053	on_hover			\Default Work Unit\hud\on_hover	
+	781047007	action_denied			\Default Work Unit\hud\action_denied	
+	2046190213	action_accepted			\Default Work Unit\hud\action_accepted	
 	3112424181	character_selection			\Default Work Unit\hud\character_selection	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size

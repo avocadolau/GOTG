@@ -896,7 +896,7 @@ void Audio::Deserialize()
             {
                 for (uint32_t i = 0; i < events.Size(); i++)
                 {
-                    LoadEvent(events["events"].as_string());
+                    LoadEvent(events[i].as_string());
                 }
             }
         }

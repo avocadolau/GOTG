@@ -242,7 +242,7 @@ namespace Wiwa {
 
 	Animation* Animation::GetAnimationFromFile(const char* filepath)
 	{
-		Animation* anim = new Animation();
+		//Animation* anim = new Animation();
 
 		return nullptr;
 	}

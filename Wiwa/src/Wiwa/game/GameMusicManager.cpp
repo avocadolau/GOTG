@@ -37,7 +37,7 @@ namespace Wiwa
 			break;
 
 		default: 
-			PlayMusic("music_envirmoent");
+			PlayMusic("music_enviroment");
 			break;
 		}
 
