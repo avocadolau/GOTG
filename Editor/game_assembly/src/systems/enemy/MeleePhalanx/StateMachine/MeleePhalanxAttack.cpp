@@ -59,10 +59,7 @@ namespace Wiwa
 		}
 		else if (m_TimerAttackCooldown > 2000.0f)
 		{
-			animator->Blend("atack", false, 0.2f);
-
 			GenerateAttack(enemy);
-
 			// Reset the timer after generating the attack
 			m_TimerAttackCooldown = 0.0f;
 		}
@@ -84,7 +81,10 @@ namespace Wiwa
 
 	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx *enemy)
 	{
+
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
+
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
@@ -97,6 +97,7 @@ namespace Wiwa
 		{
 			if (distance <= 3.0f)
 			{
+				animator->Blend("atack", false, 0.2f);
 				GameStateManager::DamagePlayer(selfStats->Damage);
 				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
 				audio->PlayAudio("melee_attack");

@@ -59,7 +59,7 @@ namespace Wiwa
 		}
 
 		
-		if (distance < 4.0f && distance > 1.0f)
+		if (distance <= 3.0f && distance > 1.0f)
 		{
 			enemy->SwitchState(enemy->m_AttackingState);
 		}

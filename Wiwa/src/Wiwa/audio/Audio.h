@@ -172,8 +172,8 @@ public:
 	static void ChangeSFXVolume(int value);
 	static void ChangeDialogVolume(int value);
 
-	static bool Serialize();
-	static void Deserialize();
+	static bool LoadPreset(const char* json_file);
+	static bool SavePreset(const char* filename);
 
 	// Returns last error
 	static const char* GetLastError() { return m_LastErrorMsg.c_str(); }
