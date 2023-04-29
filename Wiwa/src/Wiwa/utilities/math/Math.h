@@ -25,7 +25,12 @@ namespace Wiwa
 {
 	namespace Math
 	{
-
+		inline float RandomFloat(float a, float b) {
+			float random = ((float)rand()) / (float)RAND_MAX;
+			float diff = b - a;
+			float r = random * diff;
+			return a + r;
+		}
 		inline btVector3 ToBulletVector3(const glm::vec3 &vector)
 		{
 			return btVector3(vector.x, vector.y, vector.z);
@@ -34,7 +39,13 @@ namespace Wiwa
 		inline glm::vec3 Forward(const glm::mat4& transform)
 		{
 			const glm::mat4 inverted = glm::inverse(transform);
-			return normalize(glm::vec3(inverted[2]));;
+			return normalize(glm::vec3(inverted[2]));
+		}
+
+		inline glm::vec3 Up(const glm::mat4& transform)
+		{
+			glm::vec3 upVector = glm::vec3(transform[1]);
+			return normalize(upVector);
 		}
 
 		inline float Distance(const glm::vec3 &a, const glm::vec3 &b)

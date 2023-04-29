@@ -9,6 +9,7 @@
 #include "../../components/attack/StarhawkBlast.h"
 
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../components/attack/ExplosiveBarrel.h"
 #include "../../components/attack/Attack.h"
@@ -24,6 +25,7 @@ namespace Wiwa
 		m_AgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_NavAgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_AudioSourceIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
 		m_PlayerTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_PlayerStatsIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -49,12 +51,14 @@ namespace Wiwa
 		m_ColliderIt = GetComponentIterator<CollisionBody>();
 		m_NavAgentIt = GetComponentIterator<NavAgent>();
 		m_TransformIt = GetComponentIterator<Transform3D>();
+		m_AudioSourceIt = GetComponentIterator<AudioSource>();
 		m_PlayerId = Wiwa::GameStateManager::s_PlayerId;
 		m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);
 		m_PlayerStatsIt = GetComponentIterator<Character>(m_PlayerId);
 
 		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+		AudioSource* audio = GetComponentByIterator<AudioSource>(m_AudioSourceIt);
 		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 		//transform->localPosition.y = 0.0f;
 		stats->Slowed = false;

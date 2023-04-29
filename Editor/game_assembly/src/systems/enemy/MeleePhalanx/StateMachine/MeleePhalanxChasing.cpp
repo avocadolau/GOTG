@@ -3,6 +3,8 @@
 #include "../EnemyMeleePhalanx.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {

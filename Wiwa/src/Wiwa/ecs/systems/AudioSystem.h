@@ -25,6 +25,8 @@ namespace Wiwa {
 		void OnDestroy() override;
 
 		void OnEventFinish(const char* ev_name);
+
+		void PlayAudio(const char* ev_name);
 	};
 }
 

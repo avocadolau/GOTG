@@ -33,6 +33,10 @@ namespace Wiwa {
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
+
+		//Set the go listener, we use the global world listener, the player.
+		Audio::SetWorldListener(m_EntityId);
+
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if (asrc->playOnAwake)
@@ -51,7 +55,7 @@ namespace Wiwa {
 
 		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_Transform);		
 
-		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Vector3F::FRONT, Vector3F::UP)) {
+		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Math::Forward(t3d->worldMatrix), Math::Up(t3d->worldMatrix))) {
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());
 		}
 	}
@@ -88,5 +92,13 @@ namespace Wiwa {
 		}
 
 		//WI_CORE_INFO("Audio finished [{}]", ev_name);
+	}
+	void AudioSystem::PlayAudio(const char* ev_name)
+	{
+		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
+
+		if (!Audio::PostEvent(ev_name, m_EntityId, { &AudioSystem::OnEventFinish, this })) {
+			WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
+		}
 	}
 }

@@ -16,3 +16,4 @@
 #include "components/attack/UltronLaserBeam.h"
 
 #include "components/attack/ExplosiveBarrel.h"
+#include "components/props/VentRotatorData.h"
