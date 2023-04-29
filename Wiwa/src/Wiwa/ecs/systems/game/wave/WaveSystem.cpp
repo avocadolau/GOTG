@@ -130,7 +130,7 @@ namespace Wiwa
 
 		EntityId newEnemyId = EntityManager::INVALID_INDEX;
 
-		switch (Pool_Type::PHALANX_MELEE)
+		switch (Pool_Type::SENTINEL)
 		{
 		case Pool_Type::PHALANX_MELEE:
 		{
@@ -146,12 +146,12 @@ namespace Wiwa
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
 		}
 		break;
-		//case Pool_Type::SENTINEL:
-		//{
-		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
-		//	newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
-		//}
+		case Pool_Type::SENTINEL:
+		{
+			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
+			GameStateManager::s_PoolManager->SetScene(m_Scene);
+			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
+		}
 		//case Pool_Type::SUBJUGATOR:
 		//{
 		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
