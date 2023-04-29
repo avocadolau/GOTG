@@ -39,6 +39,7 @@ bool Audio::m_LoadedProject = false;
 std::string Audio::m_LastErrorMsg = "None";
 std::string Audio::m_InitBankPath = "";
 uint64_t Audio::m_DefaultListener = 0;
+uint64_t Audio::m_WorldListener = 1;
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
@@ -392,7 +393,7 @@ bool Audio::Init()
         setLastError(gres);
     }
 
-    Deserialize();
+    //Deserialize();
 
     return true;
 }
@@ -717,6 +718,35 @@ bool Audio::StopAllEvents()
     return true;
 }
 
+void Audio::RegisterAsWorldListener(uint64_t go_id)
+{
+    Audio::UnregisterGameObject(m_WorldListener);
+
+    m_WorldListener = go_id;
+
+    AKRESULT gres = AK::SoundEngine::RegisterGameObj(m_WorldListener);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+
+    gres = AK::SoundEngine::AddDefaultListener(m_WorldListener);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+
+    AkSoundPosition position;
+    position.SetPosition(0.0f, 300.0f, 0.0f);
+    position.SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+
+    gres = AK::SoundEngine::SetPosition(m_WorldListener, position);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+}
+
 bool Audio::RegisterGameObject(uint64_t go_id)
 {
     AKRESULT res = AK::SoundEngine::RegisterGameObj(go_id);
@@ -770,6 +800,11 @@ bool Audio::SetPosition(uint64_t go_id, const Wiwa::Vector3f& position)
     }
 
     return false;
+}
+
+void Audio::SetWorldListener(uint64_t go_id_emmiter)
+{
+    AK::SoundEngine::SetListeners(go_id_emmiter, &m_WorldListener, 1);
 }
 
 bool Audio::AddDefaultListener(uint64_t go_id)

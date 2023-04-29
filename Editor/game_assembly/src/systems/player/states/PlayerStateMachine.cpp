@@ -44,7 +44,6 @@ void Wiwa::PlayerStateMachine::OnUpdate()
 	m_CurrentState->UpdateState();
 	CheckHealth();
 	DashCooldown();
-	UpdateListenerPosition();
 }
 
 void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
@@ -96,15 +95,3 @@ void Wiwa::PlayerStateMachine::ResetCooldown()
 	m_CooldownTimer = GetCharacter()->DashCooldown;
 }
 
-void Wiwa::PlayerStateMachine::UpdateListenerPosition()
-{
-	AkVector listenerPosition;
-	listenerPosition.X = GetTransform()->position.x;
-	listenerPosition.Y = GetTransform()->position.y;
-	listenerPosition.Z = GetTransform()->position.z;
-
-	AkTransform listenerTransform;
-	listenerTransform.SetPosition(listenerPosition);
-
-	//AK::SoundEngine::SetPosition(Audio::GetDefaultListener(), listenerTransform); This line currently gives a LNK2019 Error
-}

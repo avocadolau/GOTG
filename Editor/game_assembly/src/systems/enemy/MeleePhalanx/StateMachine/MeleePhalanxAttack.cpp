@@ -4,6 +4,8 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -50,7 +52,7 @@ namespace Wiwa
 
 		m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
 
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 4.0f) // animation->HasFinished()
+		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 3.0f) // animation->HasFinished()
 		{
 			m_TimerAttackCooldown = 0.0f;
 			enemy->SwitchState(enemy->m_ChasingState);
@@ -83,7 +85,7 @@ namespace Wiwa
 	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx *enemy)
 	{
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -97,6 +99,7 @@ namespace Wiwa
 			{
 				GameStateManager::DamagePlayer(selfStats->Damage);
 				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
+				audio->PlayAudio("melee_attack");
 			}
 		}
 	}

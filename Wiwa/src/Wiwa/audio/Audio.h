@@ -47,6 +47,10 @@ private:
 
 	// Default gameobject listener
 	static uint64_t m_DefaultListener;
+
+	// Default gameobject listener
+	static uint64_t m_WorldListener;
+
 public:
 	// Init audio engine
 	static bool Init();
@@ -113,9 +117,13 @@ public:
 	// Post an event into the default gameobject
 	static bool PostEvent(const char* event_name) { return PostEvent(event_name, m_DefaultListener); }
 
+	// Post an event into the world listener
+	static bool PostWorldEvent(const char* event_name) { return PostEvent(event_name, m_WorldListener); }
+
 	// Post an event into the default gameobject with callback
 	static bool PostEvent(const char* event_name, Action<const char*> callback) { return PostEvent(event_name, m_DefaultListener, callback); }
 
+	//set sitch state of music
 	static bool SetMusicState(const char* music_container, const char* music_track);
 	
 	// Stop event for a specific gameobject
@@ -126,6 +134,9 @@ public:
 
 	// Stop all events
 	static bool StopAllEvents();
+
+	//register Game object as wolrd listeners, all world sources will have it as listener
+	static void RegisterAsWorldListener(uint64_t go_id);
 
 	// Register a gameobject
 	static bool RegisterGameObject(uint64_t go_id);
@@ -140,6 +151,10 @@ public:
 
 	// Set gameobject's position
 	static bool SetPosition(uint64_t go_id, const Wiwa::Vector3f& position);
+
+	// Set gameobject's listener 
+
+	static void SetWorldListener(uint64_t go_id_emmiter);
 
 	// Add default listener
 	static bool AddDefaultListener(uint64_t go_id);
@@ -167,6 +182,8 @@ public:
 	static std::string GetProjectPath() { return m_InitBankPath; }
 
 	static uint64_t GetDefaultListener() { return m_DefaultListener; }
+
+	static uint64_t GetWorldListener() { return m_WorldListener; }
 
 	static const uint32_t INVALID_ID = -1;
 };

@@ -11,6 +11,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_AgentIt;
 		EntityManager::ComponentIterator m_NavAgentIt;
 		EntityManager::ComponentIterator m_TransformIt;
+		EntityManager::ComponentIterator m_AudioSourceIt;
 
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_PlayerStatsIt;

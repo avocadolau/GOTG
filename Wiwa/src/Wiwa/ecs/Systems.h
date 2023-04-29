@@ -2,6 +2,7 @@
 
 #include "systems/MeshRenderer.h"
 #include "systems/AudioSystem.h"
+#include "systems/AudioListenerSystem.h"
 #include "systems/LightSystem.h"
 
 #include "systems/AnimatorSystem.h"

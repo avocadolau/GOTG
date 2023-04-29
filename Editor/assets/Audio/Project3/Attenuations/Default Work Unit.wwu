@@ -3,7 +3,10 @@
 	<Attenuations>
 		<WorkUnit Name="Default Work Unit" ID="{524F4200-A673-4096-953E-5F376B1AE716}" PersistMode="Standalone">
 			<ChildrenList>
-				<Attenuation Name="test_atenuation" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" ShortID="687971307">
+				<Attenuation Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" ShortID="687971307">
+					<PropertyList>
+						<Property Name="RadiusMax" Type="Real64" Value="50"/>
+					</PropertyList>
 					<CurveUsageInfoList>
 						<VolumeDryUsage>
 							<CurveUsageInfo Platform="Linked" CurveToUse="Custom">
@@ -16,9 +19,10 @@
 											<XPos>0</XPos>
 											<YPos>0</YPos>
 											<Flags>5</Flags>
+											<SegmentShape>Exp1</SegmentShape>
 										</Point>
 										<Point>
-											<XPos>100</XPos>
+											<XPos>50</XPos>
 											<YPos>-200</YPos>
 											<Flags>37</Flags>
 										</Point>
