@@ -41,3 +41,5 @@
 #include "components/MapAI.h"
 #include "components/ai/NavMesh.h"
 #include "components/ai/NavAgent.h"
+
+#include "components/game/player/PlayerSpawnerData.h"

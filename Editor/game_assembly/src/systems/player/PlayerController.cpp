@@ -31,6 +31,10 @@ void Wiwa::PlayerController::OnAwake()
 
 void Wiwa::PlayerController::OnInit()
 {
+	if (!getAwake())
+		OnAwake();
+
+
 	m_StatsIt = GetComponentIterator<Character>();
 	m_TransformIt = GetComponentIterator<Transform3D>();
 	m_RigidbodyIt = GetComponentIterator<CollisionBody>();
@@ -50,6 +54,8 @@ void Wiwa::PlayerController::OnDestroy()
 
 void Wiwa::PlayerController::OnUpdate()
 {
+	if (!getInit())
+		OnInit();
 	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();
 	if(m_MovementInput != glm::vec3(0.f))
@@ -67,17 +73,17 @@ Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()
 
 Wiwa::RocketShooter* Wiwa::PlayerController::GetRocket()
 {
-	return (RocketShooter*)m_Scene->GetEntityManager().GetComponentByIterator(m_StatsIt);
+	return (RocketShooter*)m_Scene->GetEntityManager().GetComponentByIterator(m_RocketIt);
 }
 
 Wiwa::Character* Wiwa::PlayerController::GetCharacter()
 {
-	return (Character*)m_Scene->GetEntityManager().GetComponentByIterator(m_StatsIt);
+	return GetComponent<Character>();
 }
 
 Wiwa::Transform3D* Wiwa::PlayerController::GetTransform()
 {
-	return (Transform3D*)m_Scene->GetEntityManager().GetComponentByIterator(m_TransformIt);
+	return System::GetTransform();
 }
 
 Wiwa::CollisionBody* Wiwa::PlayerController::GetRigidBody()

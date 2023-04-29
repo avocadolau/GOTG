@@ -32,6 +32,7 @@ private:
 	void DrawParticleSystemComponent(byte* data);
 	void DrawItemComponent(byte* data);
 	void DrawNavMeshComponent(byte* data);
+	void DrawPlayerSpawnerComponent(byte* data);
 public:
 
 	InspectorPanel(EditorLayer* instance);

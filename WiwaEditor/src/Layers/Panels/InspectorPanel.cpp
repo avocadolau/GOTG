@@ -20,6 +20,7 @@
 #include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/ai/NavMesh.h>
+#include <Wiwa/ecs/components/game/player/PlayerSpawnerData.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -61,6 +62,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleSystemComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Item) { DrawItemComponent(data); }else
 		if (type->hash == (size_t)TypeHash::NavMesh) { DrawNavMeshComponent(data); }else
+		if (type->hash == (size_t)TypeHash::PlayerSpawner) { DrawPlayerSpawnerComponent(data); }
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -70,74 +72,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 				DrawField(data, cl->fields[i]);
 			}
 		}
-		else if (type->hash == (size_t)TypeHash::Transform3D)
-		{
-			DrawTransform3dComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::AudioSource)
-		{
-			DrawAudioSourceComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::PointLight)
-		{
-			DrawPointLightComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::DirectionalLight)
-		{
-			DrawDirectionalLightComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::SpotLight)
-		{
-			DrawSpotLightComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::AnimatorComponent)
-		{
-			DrawAnimatorComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::CollisionBody)
-		{
-			DrawCollisionBodyComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCube)
-		{
-			DrawColliderCubeComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderSphere)
-		{
-			DrawColliderSpehereComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCylinder)
-		{
-			DrawColliderCylinderComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::RayCast)
-		{
-			DrawRayCastComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ParticleEmitter)
-		{
-			DrawParticleSystemComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::Item)
-		{
-			DrawItemComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::NavMesh)
-		{
-			DrawNavMeshComponent(data);
-		}
-		else
-
-			// Basic component interface
-			if (type->is_class)
-			{
-				const Class *cl = (const Class *)type;
-
-				for (size_t i = 0; i < cl->fields.size(); i++)
-				{
-					DrawField(data, cl->fields[i]);
-				}
-			}
+		
 		ImGui::TreePop();
 	}
 
@@ -233,7 +168,7 @@ void InspectorPanel::DrawField(unsigned char *data, const Field &field)
 	{
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
-		ImGui::InputInt("", (int *)(data + field.offset));
+		ImGui::InputInt("", (int*)(data + field.offset));
 		ImGui::PopID();
 	}
 }
@@ -1486,6 +1421,12 @@ void InspectorPanel::DrawNavMeshComponent(byte* data)
 	Wiwa::NavMesh* navMesh = (Wiwa::NavMesh*)data;
 
 	AssetContainer(navMesh->filePath);
+}
+
+void InspectorPanel::DrawPlayerSpawnerComponent(byte* data)
+{
+	Wiwa::PlayerSpawnerData* spawn = (Wiwa::PlayerSpawnerData*)data;
+	DrawVec3Control("Position", &spawn->Position, 0.f);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)

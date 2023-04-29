@@ -1,47 +1,63 @@
 #include "PlayerSpawner.h"
+#include <Wiwa/game/GameStateManager.h>
+#include <Wiwa/ecs/components/game/player/PlayerSpawnerData.h>
 
 namespace Wiwa
 {
 	Wiwa::PlayerSpawner::PlayerSpawner()
 	{
-		m_PlayerSet = false;
+		
 	}
 
 	PlayerSpawner::~PlayerSpawner()
 	{
 	}
 
-	void PlayerSpawner::OnInit()
+	void PlayerSpawner::OnSystemAdded()
 	{
-		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		m_PlayerSet = false;
 
-		Transform3D* tr = GetComponent<Transform3D>();
-
-		playerId = em.LoadPrefab("assets\\Player\\Final\\Player.wiprefab");
-		Transform3D* playerTr = em.GetComponent<Transform3D>(playerId);
-
-		playerTr->localPosition.x = tr->worldMatrix[3].x;
-		playerTr->localPosition.y = tr->worldMatrix[3].y;
-		playerTr->localPosition.z = tr->worldMatrix[3].z;
-
-		/*playerTr->position.x = tr->worldMatrix[3].x;
-		playerTr->position.y = tr->worldMatrix[3].y;
-		playerTr->position.z = tr->worldMatrix[3].z;*/
-	}
-
-	void PlayerSpawner::OnUpdate()
-	{
-		if (!m_PlayerSet)
+		PlayerSpawnerData* data = GetComponent<PlayerSpawnerData>();
+		if (data)
 		{
-			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			Transform3D* tr = GetComponent<Transform3D>();
-			Transform3D* playerTr = em.GetComponent<Transform3D>(playerId);
-
-			playerTr->localPosition.x = tr->worldMatrix[3].x;
-			playerTr->localPosition.y = tr->worldMatrix[3].y;
-			playerTr->localPosition.z = tr->worldMatrix[3].z;
-			m_PlayerSet = true;
+			Transform3D* t3d = GetTransform();
+			if (t3d)
+			{
+				data->Position = Math::GetWorldPosition(t3d->worldMatrix);
+				m_LastAvailablePos = Math::GetWorldPosition(t3d->worldMatrix);
+			}
 		}
 	}
 
+	void PlayerSpawner::OnAwake()
+	{
+		m_DataIt = GetComponentIterator<PlayerSpawnerData>();
+		if (GameStateManager::s_CurrentCharacter == 0) // Starlord
+		{
+			m_PlayerId = m_Scene->GetEntityManager().LoadPrefab("assets\\player\\starlord.wiprefab");
+			WI_INFO("Loaded StarLord player");
+		}
+		else
+		{
+			m_PlayerId = m_Scene->GetEntityManager().LoadPrefab("assets\\player\\rocket.wiprefab");
+			WI_INFO("Loaded Rocket player");
+		}
+
+		Transform3D* playerT3D = m_Scene->GetEntityManager().GetComponent<Transform3D>(m_PlayerId);
+
+		PlayerSpawnerData* data = GetComponent<PlayerSpawnerData>();
+		if (data)
+		{
+			playerT3D->localPosition = data->Position;
+			playerT3D->localRotation = glm::vec3(0.f);
+			playerT3D->localScale = glm::vec3(1.f);
+		}
+		else
+		{
+			playerT3D->localPosition = m_LastAvailablePos;
+			playerT3D->localRotation = glm::vec3(0.f);
+			playerT3D->localScale = glm::vec3(1.f);
+		}
+		WI_INFO("Player set");
+	}
 }
