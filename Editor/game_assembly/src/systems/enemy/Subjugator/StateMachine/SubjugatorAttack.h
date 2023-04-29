@@ -18,5 +18,8 @@ namespace Wiwa {
 		void SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir);
 		
 		float m_TimerAttackCooldown = 0.0f;
+		float m_TimerSyncAnimationBullets = 0.0f;
+
+		bool m_ChangeShoot = false;
 	};
 }

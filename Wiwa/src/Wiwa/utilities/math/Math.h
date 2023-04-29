@@ -406,6 +406,22 @@ namespace Wiwa
 			left = glm::rotate(forward, radiansAngleLeft, up);
 		}
 
+		inline void GetRightRotatedFromForward(const glm::vec3& forward, glm::vec3& right, float angle)
+		{
+			glm::vec3 up(0.0f, 1.0f, 0.0f);
+			float radiansAngleRight = glm::radians(angle);
+
+			right = glm::rotate(forward, radiansAngleRight, up);
+		}
+
+		inline void GetLeftRotatedFromForward(const glm::vec3& forward, glm::vec3& left, float angle)
+		{
+			glm::vec3 up(0.0f, 1.0f, 0.0f);
+			float radiansAngleLeft = glm::radians(-angle);
+
+			left = glm::rotate(forward, radiansAngleLeft, up);
+		}
+
 		inline bool IsPointNear(const glm::vec3 &point_1, const glm::vec3 &point_2, float threshold)
 		{
 			return glm::distance2(point_1, point_2) < threshold * threshold;

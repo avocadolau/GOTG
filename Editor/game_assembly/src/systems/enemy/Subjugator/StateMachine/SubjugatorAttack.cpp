@@ -9,11 +9,15 @@
 #include "../../../../components/attack/SimpleBullet.h"
 #include <Wiwa/ecs/components/game/Character.h>
 
+#define ANIMATION_FRAME_TIME 41.66f
+
 namespace Wiwa
 {
 	SubjugatorAttackState::SubjugatorAttackState()
 	{
 		m_TimerAttackCooldown = 0.0f;
+		m_TimerSyncAnimationBullets = 0.0f;
+		m_ChangeShoot = false;
 	}
 
 	SubjugatorAttackState::~SubjugatorAttackState()
@@ -39,17 +43,19 @@ namespace Wiwa
 			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("attack", false);
 
-			glm::vec3 rotateBulledLeftHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRightHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, rotateBulledLeftHand1, 35);
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulletRightHand4, rotateBulledLeftHand4, 35);
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 25);
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 10);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 5);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 25);
 
 			SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
-			SpawnBullet(enemy, hand2Tr, stats, Math::CalculateForward(hand2Tr->rotation));
-			SpawnBullet(enemy, hand3Tr, stats, Math::CalculateForward(hand3Tr->rotation));
+			SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
+			SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
 			SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
 		}
 
@@ -57,6 +63,8 @@ namespace Wiwa
 		if (navAgent) {
 			navAgent->autoRotate = false;
 		}
+
+		m_TimerAttackCooldown = -0.3f;
 	}
 
 	void SubjugatorAttackState::UpdateState(EnemySubjugator* enemy)
@@ -77,37 +85,67 @@ namespace Wiwa
 		enemy->LookAt(playerTr->localPosition);
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
+		m_TimerSyncAnimationBullets += Time::GetDeltaTime();
 
 		//WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
 
-		if (m_TimerAttackCooldown > stats->RateOfFire)
+		if (m_TimerAttackCooldown > 1.0f)
 		{
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;
 
-			glm::vec3 rotateBulledLeftHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulledLeftHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRightHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-			glm::vec3 rotateBulletRightHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+			if (m_ChangeShoot == true)
+			{
+				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
 
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, rotateBulledLeftHand1, 35);
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, rotateBulledLeftHand2, 10);
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulletRightHand3, rotateBulledLeftHand3, 10);
-			Math::GetRightAndLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulletRightHand4, rotateBulledLeftHand4, 35);
+				Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 35);
+				Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 10);
+				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 10);
+				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 35);
 
-			SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
-			SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
-			SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
-			SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
-			
+				SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
+				SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
+				SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
+				SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
+
+				m_ChangeShoot = false;
+			}
+			else
+			{
+				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+				Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 15);
+				Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 5);
+				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 5);
+				Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 15);
+
+				SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
+				SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
+				SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
+				SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
+
+				SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
+				SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
+				SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
+				SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
+
+				m_ChangeShoot = true;
+			}		
+		}
+
+		if (m_TimerSyncAnimationBullets > stats->RateOfFire)
+		{
 			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("attack", false);
+
+			m_TimerSyncAnimationBullets = 0.0;
 		}
-		
 
 		if (dist2Player > enemy->m_RangeOfAttack || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
 		{
