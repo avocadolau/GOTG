@@ -1,0 +1,145 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl M_wall
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\farre\Documents\1. Uni\1. PROJECT3\BlenderRoomsForWiwa\T_EnvironmentWalls.png
+
+newmtl M_FloorRoom01
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.125 0.125 0.125
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\farre\Downloads\T_Room01.png
+
+newmtl M_Plants
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Plants\T_Plants.png
+
+newmtl BlackMaterial
+Kd 0 0 0
+Ka 0 0 0
+Ks 0 0 0
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+
+newmtl M_ElectricalBox
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\ElectricBox\T_TexElectricBoxClosedDifuse_01_C.png
+
+newmtl M_ElectricBoxOpen
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\ElectricBox\T_TexElectricBoxOpenDifuse_01_C.png
+
+newmtl M_InfoPanel
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\InformationPanel\T_TexInformationPanelDifuse_01_C.png
+
+newmtl M_Balcony_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Balcony\T_Balcony_01a_C.png
+
+newmtl M_Camera_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\cameras\CameraNew\T_Camera_01a_C.png
+
+newmtl M_Columns_02a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\columns\ColumnRework\T_Columns_02a_C.png
+
+newmtl M_WallFan
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\GeneratorsFanCounter\T_AtlasGeneratorsFanCounter.png
+
+newmtl M_SecondaryDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_SecondaryDoor_01a_C.png
+
+newmtl M_MainDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_MainDoor_01a_C.png
+

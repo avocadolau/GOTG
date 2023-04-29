@@ -4,6 +4,19 @@
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Input.h"
 
+void Wiwa::PlayerGUISystem::OnInit()
+{
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+	for (size_t i = 0; i < 18; i++)
+	{
+		int index_passives = 15 + i;
+		int index_passives_death = 12 + i;
+		gm.canvas.at(PauseHUD)->controls.at(index_passives)->SetNextFrame(0, &r2d);
+		gm.canvas.at(DeathHUD)->controls.at(index_passives_death)->SetNextFrame(0, &r2d);
+	}
+}
+
 void Wiwa::PlayerGUISystem::OnUpdate()
 {
 	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
@@ -386,6 +399,46 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 	}
 }
 
+void Wiwa::PlayerGUISystem::HandleActivePassives(std::vector<PassiveSkill> PassiveSkills, Wiwa::GuiManager& gm)
+{
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
+	std::map<std::string, int> passiveMap = {
+		{"Drax_Belt",0},
+		{"Angela_Crown",1},
+		{"Star_Lord_Walkman",2},
+		{"Gamora_Hood",3},
+		{"Ikons_Battery",4},
+		{"Iron_Man_Insurance",5},
+		{"Jack_Flag_Gloves",6},
+		{"Xandarian_Worldmind",7},
+		{"Adam_Warlock_Blessing",8},
+		{"Nova_Helmet",9}
+	};
+	if (!PassiveSkills.empty())
+	{
+		size_t amountOfPassives = PassiveSkills.size();
+		if (amountOfPassives > 18) amountOfPassives = 18;
+		for (size_t i = 0; i < amountOfPassives; i++)
+		{
+			int index_passives = 15 + i;
+			int index_passives_death = 12 + i;
+			auto passiveID = passiveMap.find(PassiveSkills.at(i).Name);
+			if (passiveID != passiveMap.end())
+			{
+				int idForItem = passiveID->second + 1;
+				gm.canvas.at(PauseHUD)->controls.at(index_passives)->SetNextFrame(idForItem, &r2d);
+				gm.canvas.at(DeathHUD)->controls.at(index_passives_death)->SetNextFrame(idForItem, &r2d);
+			}
+			else
+			{
+				gm.canvas.at(PauseHUD)->controls.at(index_passives)->SetNextFrame(0, &r2d);
+				gm.canvas.at(DeathHUD)->controls.at(index_passives_death)->SetNextFrame(0, &r2d);
+			}
+		}
+	}
+}
+
 void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* character)
 {
 	// Input
@@ -397,7 +450,8 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	
 	abilitiesList = Wiwa::GameStateManager::GetPlayerInventory().GetAbilities();
 	buffsList = Wiwa::GameStateManager::GetPlayerInventory().GetBuffs();
-	
+	passives = Wiwa::GameStateManager::GetPlayerInventory().GetPassives();
+
 	if (lastCoins != Wiwa::GameStateManager::GetPlayerInventory().GetTokens())
 	{
 		Coins(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
@@ -407,7 +461,7 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	CooldownState(buffsList, gm);
 	HandleActiveAbilities(abilitiesList, gm);
 	HandleActiveBuffs(buffsList, gm);
-
+	HandleActivePassives(passives, gm);
 	lastCoins = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
 
 }

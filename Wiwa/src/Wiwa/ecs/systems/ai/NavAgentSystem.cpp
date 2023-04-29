@@ -198,9 +198,13 @@ namespace Wiwa
         glm::vec3 pt(0.0f);
         dtPolyRef ref;
         float distance = 0.0f;
-        dtRaycastHit hit;
-        navMeshQuery->raycast(startRef, &start_point[0], &end_point[0], filter, 0, &hit);
-        if (hit.t > 1)
+        float t;
+        float hitNormal[3];
+        dtPolyRef path[6];
+        int count;
+        const int maxPath = 6;
+        navMeshQuery->raycast(startRef, &start_point[0], &end_point[0], filter, &t, hitNormal, path, &count, maxPath);
+        if (t > 1)
         {
             // Hit
             //WI_INFO("HITTTTT");
