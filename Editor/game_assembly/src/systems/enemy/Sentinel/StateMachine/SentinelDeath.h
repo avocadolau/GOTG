@@ -14,6 +14,8 @@ namespace Wiwa {
 		void ExitState(EnemySentinel* enemy) override;
 		void OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2) override;
 
+		const float m_TimeToDie = 1.5f;
+		float m_TimerToDie;
 		/*void SpawnExplosion(EnemySentinel* enemy, Wiwa::Transform3D* transform);*/
 	};
 }

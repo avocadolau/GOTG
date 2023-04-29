@@ -12,7 +12,7 @@ namespace Wiwa {
 		void ExitState(EnemyRangedPhalanx* enemy) override;
 		void OnCollisionEnter(EnemyRangedPhalanx* enemy, const Object* body1, const Object* body2) override;
 
-		float m_TimeToDie;
+		const float m_TimeToDie = 1.5f;
 		float m_TimerToDie;
 	};
 }

@@ -139,7 +139,6 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bullDir;
 	bullet->damage = this->GetCharacter()->Damage;
-	WI_INFO("damage set {}", bullet->damage);
 	//WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
 
 	physSys->CreateBody();
