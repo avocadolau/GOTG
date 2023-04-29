@@ -32,8 +32,12 @@ namespace Wiwa
 
 	void WaveSystem::OnInit()
 	{
-		m_WaveIt = GetComponentIterator<Wave>();
+		// Define random_device once during initialization
+		std::random_device rd;
+		// Use the Mersenne Twister engine to generate random numbers
+		std::mt19937 gen(rd());
 
+		m_WaveIt = GetComponentIterator<Wave>();
 		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
 		wave->currentEnemiesAlive = wave->maxEnemies;
 
@@ -41,7 +45,6 @@ namespace Wiwa
 		spawner->hasTriggered = true;
 
 		std::vector<glm::vec3> points;
-
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		size_t size = 0;
 		Wiwa::WaveSpawnPoint* spawnPointsList = nullptr;
@@ -62,17 +65,15 @@ namespace Wiwa
 			}
 		}
 
+		Pool_Type enemiesTypeList[] = {Pool_Type::PHALANX_MELEE , Pool_Type::PHALAN_RANGED , Pool_Type::SENTINEL, Pool_Type::SUBJUGATOR};
+		std::uniform_int_distribution<> dis(0, sizeof(enemiesTypeList) / sizeof(*enemiesTypeList) - 1);
+		Pool_Type enemyRandSelection = enemiesTypeList[dis(gen)];
+
 		// Define the range for the random number generation
 		int min = -5;
 		int max = 5;
 		// Define the uniform_int_distribution once during initialization
 		std::uniform_int_distribution<int> distr(min, max);
-		// Define random_device once during initialization
-		std::random_device rd;
-		// Use the Mersenne Twister engine to generate random numbers
-		std::mt19937 gen(rd());
-		
-
 		int j = 0;
 		for (int i = 0; i < wave->maxEnemies; i++)
 		{
@@ -82,15 +83,13 @@ namespace Wiwa
 			int xRand = distr(gen);
 			int zRand = distr(gen);
 
-			if (SpawnEnemy(i, points[j], xRand, zRand))
+			if (SpawnEnemy(enemyRandSelection, points[j], xRand, zRand))
 			{
 				j++;
 				m_HasTriggered = true;
 				m_MaxWavesEnemies++;
 			}
 		}
-
-		//m_MaxWavesEnemies = wave->maxEnemies;
 		m_CurrentEnemiesDead = 0;
 	}
 
@@ -113,54 +112,39 @@ namespace Wiwa
 	
 	}
 
-	bool WaveSystem::SpawnEnemy(int index, const glm::vec3& spawn_point, int rand_x, int rand_z)
+	bool WaveSystem::SpawnEnemy(Pool_Type enemy_type, const glm::vec3& spawn_point, int rand_x, int rand_z)
 	{
 		// Create an enemy from prefab
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
-
-		// Random enemy
-		std::srand(static_cast<unsigned int>(std::time(nullptr)));
-		Pool_Type values[] = { Pool_Type::PHALANX_MELEE, Pool_Type::PHALAN_RANGED };
-		size_t size = sizeof(values) / sizeof(values[0]);
-		size_t randomIndex = std::rand() % size;
-		Pool_Type selection = values[randomIndex];
-		//Pool_Type selection = Pool_Type::PHALANX_MELEE;
-
-		//int selection = 3;
-
 		EntityId newEnemyId = EntityManager::INVALID_INDEX;
 
-		switch (Pool_Type::SENTINEL)
+		switch (enemy_type)
 		{
 		case Pool_Type::PHALANX_MELEE:
 		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
 		}
 		break;
 		case Pool_Type::PHALAN_RANGED:
 		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
 		}
 		break;
 		case Pool_Type::SENTINEL:
 		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
 		}
-		//case Pool_Type::SUBJUGATOR:
-		//{
-		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
-		//	newEnemyId = GameStateManager::s_PoolManager->s_Subjugator->GetFromPool();
-		//}
-		//break;
+		break;
+		case Pool_Type::SUBJUGATOR:
+		{
+			GameStateManager::s_PoolManager->SetScene(m_Scene);
+			newEnemyId = GameStateManager::s_PoolManager->s_Subjugator->GetFromPool();
+		}
+		break;
 		default:
-			WI_INFO(":(");
 			break;
 		}
 
@@ -171,27 +155,17 @@ namespace Wiwa
 
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newEnemyId);
 		physSys->DeleteBody();
-		// Set readable name
-		/*Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
-		std::string enemyName = entityManager.GetEntityName(newEnemyId);
-		enemyName += "_enemy_" + std::to_string(index);
-		entityManager.SetEntityName(newEnemyId, enemyName.c_str());*/
 
-		// Set intial positions
 		Transform3D* enemyTransform = entityManager.GetComponent<Transform3D>(newEnemyId);
 
 		if (!enemyTransform)
 			return false;
-		//WI_INFO("Rand: x: {}, z: {}", rand_x, rand_z);
 
 		enemyTransform->localPosition.x = spawn_point.x + rand_x;
 		enemyTransform->localPosition.z = spawn_point.z + rand_z;
 		enemyTransform->localPosition.y = 0;
-		//WI_INFO("Spawn: x: {}, y: {}, z: {}", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
+
 		NavAgentSystem* navAgentSys = entityManager.GetSystem<NavAgentSystem>(newEnemyId);
-	
-		/*WI_CORE_INFO("Spawned enemy at {}x {}y {}z", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
-		WI_CORE_INFO("Spawn transform at {}x {}y {}z", spawnTransform->localPosition.x, spawnTransform->localPosition.y, spawnTransform->localPosition.z);*/
 
 		//// Set the correspondent tag
 		//CollisionBody *collBodyPtr = entityManager.GetComponent<CollisionBody>(newEnemyId);
@@ -204,7 +178,7 @@ namespace Wiwa
 		
 		Enemy* enemy = (Enemy*)entityManager.GetComponentByIterator(enemyIt);
 		enemy->hasFinished = false;
-		enemy->enemyType = (int)selection;
+		enemy->enemyType = (int)enemy_type;
 		enemy->waveId = (int)m_EntityId;
 
 		navAgentSys->OnInit();
