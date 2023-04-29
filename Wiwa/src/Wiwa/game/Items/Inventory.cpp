@@ -326,17 +326,23 @@ void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)
 }
 void Wiwa::Inventory::Clear()
 {
-    for(size_t i = 0; i < MAX_ABILITIES; i++)
-    {
-        delete m_Abilities[i];
-    }
-    delete[] m_Abilities;
+	if (m_Abilities != nullptr)
+	{
+		for (size_t i = 0; i < MAX_ABILITIES; i++)
+		{
+			delete m_Abilities[i];
+		}
+		delete[] m_Abilities;
+	}
+	if (m_Buffs != nullptr)
+	{
+		for (size_t i = 0; i < MAX_BUFFS; i++)
+		{
+			delete m_Buffs[i];
+		}
+		delete[] m_Buffs;
+	}
     
-    for(size_t i = 0; i < MAX_BUFFS; i++)
-    {
-        delete m_Buffs[i];
-    }
-    delete[] m_Buffs;
-    
-    m_PassiveSkill.clear();
+    if(!m_PassiveSkill.empty())
+		m_PassiveSkill.clear();
 }
