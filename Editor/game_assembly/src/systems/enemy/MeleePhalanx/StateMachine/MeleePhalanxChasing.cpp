@@ -42,7 +42,7 @@ namespace Wiwa
 
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		if (agent)
+		if (agent != nullptr)
 		{
 			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 

@@ -63,7 +63,7 @@ namespace Wiwa
 
 		if(IsSecondPatternFinished() == true || IsThirdPatternFinished() == true)
 		{
-			if (m_TimerRoundCooldown >= 6.0f)
+			if (m_TimerRoundCooldown >= TIMER_ATTACK)
 			{
 				SelectRandomAttack(enemy);
 			

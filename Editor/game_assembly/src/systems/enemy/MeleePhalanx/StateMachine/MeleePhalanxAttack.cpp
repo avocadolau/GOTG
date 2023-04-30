@@ -46,7 +46,7 @@ namespace Wiwa
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		enemy->LookAt(playerTr->localPosition);
+		enemy->LookAt(playerTr->localPosition, 30.f);
 
 		m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
 
