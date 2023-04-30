@@ -93,7 +93,7 @@ AssetsPanel::~AssetsPanel()
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
 {	
 	using namespace std::chrono_literals;
-	std::this_thread::sleep_for(500ms);
+	//std::this_thread::sleep_for(500ms);
 	Wiwa::Application::Get().SubmitToMainThread([path, change_type]()
 	{
 		std::filesystem::path assetsPath = "assets";
