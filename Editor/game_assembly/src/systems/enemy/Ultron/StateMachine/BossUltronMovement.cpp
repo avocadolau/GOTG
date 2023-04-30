@@ -10,6 +10,7 @@ namespace Wiwa
 	BossUltronMovementState::BossUltronMovementState()
 	{
 		m_DoAttack = false;
+		currentDestination = glm::vec3(0.0f);
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -30,15 +31,18 @@ namespace Wiwa
 		//pman.EmitBatch(currentEnemy);
 
 		//animator->PlayAnimation("move", true);
-
+		m_PremadePositions.clear();
 		FillPremadePosition(enemy, m_PremadePositions);
-		int indexRand = RAND(0, m_PremadePositions.size() - 1);
-		glm::vec3 destination = m_PremadePositions[indexRand];
-
 		if (navAgentPtr != nullptr)
 		{
-			navAgentPtr->SetDestination(destination);
-			currentDestination = destination;
+			glm::vec3 newDestination = currentDestination;
+			while (newDestination == currentDestination)
+			{
+				newDestination = GetNewPosition();
+			}
+			WI_INFO("NEW POS X: {}, Y: {}, Z: {}", newDestination.x, newDestination.y, newDestination.z);
+			navAgentPtr->SetDestination(newDestination);
+			currentDestination = newDestination;
 		}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -59,11 +63,27 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
-		if (distanceToPlayer < enemy->m_RangeOfAttack && navAgentPtr->Raycast(selfTr->localPosition, playerTr->localPosition))
+		/*if (Math::IsPointNear(currentDestination, selfTr->localPosition, 2.0f))
 		{
-			navAgentPtr->StopAgent();
+			glm::vec3 newDestination = currentDestination;
+			while (newDestination == currentDestination)
+			{
+				newDestination = GetNewPosition();
+			}
+			if (navAgentPtr)
+			{
+				navAgentPtr->SetDestination(newDestination);
+				currentDestination = newDestination;
+			}
+		}*/
+
+		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 2.0f))
+		{
 			m_DoAttack = true;
+			navAgentPtr->StopAgent();
 		}
+		else
+			m_DoAttack = false;
 
 		if (m_DoAttack)
 		{
@@ -71,6 +91,9 @@ namespace Wiwa
 			switch (nextAttack)
 			{
 			case Wiwa::UltronAttacks::NONE:
+			{
+				m_DoAttack = false;
+			}
 				break;
 			case Wiwa::UltronAttacks::BULLET_STORM:
 			{
@@ -147,5 +170,11 @@ namespace Wiwa
 				}
 			}
 		}
+	}
+	glm::vec3 BossUltronMovementState::GetNewPosition()
+	{
+		std::uniform_int_distribution<> disEnemies(0, m_PremadePositions.size() - 1);
+		int randomNum = disEnemies(Application::s_Gen);
+		return m_PremadePositions[randomNum];
 	}
 }
