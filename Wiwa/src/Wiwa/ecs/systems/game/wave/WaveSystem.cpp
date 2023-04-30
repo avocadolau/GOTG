@@ -32,14 +32,8 @@ namespace Wiwa
 
 	void WaveSystem::OnInit()
 	{
-		// Define random_device once during initialization
-		std::random_device rd;
-		// Use the Mersenne Twister engine to generate random numbers
-		std::mt19937 gen(rd());
-
 		m_WaveIt = GetComponentIterator<Wave>();
 		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
-		wave->currentEnemiesAlive = wave->maxEnemies;
 
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
 		spawner->hasTriggered = true;
@@ -58,18 +52,19 @@ namespace Wiwa
 			if (j >= points.size())
 				j = 0;
 
-			int xRand = disSpawn(gen);
-			int zRand = disSpawn(gen);
+			int xRand = disSpawn(Application::s_Gen);
+			int zRand = disSpawn(Application::s_Gen);
 			
-			Pool_Type enemyRandSelection = GetEnemyFromProbabiliteis(gen);
+			Pool_Type enemyRandSelection = GetEnemyFromProbabiliteis();
 			if (SpawnEnemy(enemyRandSelection, points[j], xRand, zRand))
 			{
+				wave->currentEnemiesAlive++;
 				j++;
 				m_HasTriggered = true;
-				m_MaxWavesEnemies++;
+				//m_MaxWavesEnemies++;
 			}
 		}
-		m_CurrentEnemiesDead = 0;
+		//m_CurrentEnemiesDead = 0;
 	}
 
 	void WaveSystem::OnUpdate()
@@ -79,7 +74,7 @@ namespace Wiwa
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		
 		// Wave has finished
-		if (m_CurrentEnemiesDead >= m_MaxWavesEnemies && m_HasTriggered)
+		if (wave->currentEnemiesAlive <= 0.0f && m_HasTriggered)
 		{
 			wave->hasFinished = true;
 		}
@@ -170,14 +165,15 @@ namespace Wiwa
 
 	void WaveSystem::DestroyEnemy(size_t id, Pool_Type enemy_type)
 	{
+		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
+
 		// Delete the enemy entity entirely
 		m_EnemiesIds.erase(std::remove(m_EnemiesIds.begin(), m_EnemiesIds.end(), id), m_EnemiesIds.end());
-
-		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		wave->currentEnemiesAlive--;
-		m_CurrentEnemiesDead++;
 
-		if (m_CurrentEnemiesDead >= m_MaxWavesEnemies)
+		//m_CurrentEnemiesDead++;
+
+		if (m_EnemiesIds.size() <= 0)
 		{
 			wave->hasFinished = true;
 		}
@@ -188,11 +184,11 @@ namespace Wiwa
 		m_SpawnerIt = m_WaveIt;
 	}
 
-	Pool_Type WaveSystem::GetEnemyFromProbabiliteis(std::mt19937& gen)
+	Pool_Type WaveSystem::GetEnemyFromProbabiliteis()
 	{
 		Pool_Type enemiesTypeList[] = { Pool_Type::PHALANX_MELEE , Pool_Type::PHALAN_RANGED , Pool_Type::SENTINEL, Pool_Type::SUBJUGATOR };
 		std::uniform_int_distribution<> disEnemies(1, 100);
-		int randomNum = disEnemies(gen);
+		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 45) // 45% probability
 		{
 			return Pool_Type::PHALANX_MELEE;
