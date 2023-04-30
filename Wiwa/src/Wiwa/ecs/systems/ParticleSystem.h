@@ -107,7 +107,13 @@ namespace Wiwa
 		float InterpolateFloat(float valStart, float valEnd, float currentPercentage, float targetPercentage);
 		glm::vec3 InterpolateVec3(glm::vec3 valStart, glm::vec3 valEnd, float currentPercentage, float targetPercentage);
 
+		//Emits a batch of particles based on the amount given.
 		void EmitParticleBatch(int amount);
+
+		//Emits a batch of particles based on the Emitter's spawn amount settings.
+		void EmitParticleBatch();
+
+		//Sets the Active state of the Emitter.
 		void SetActive(bool active);
 
 	private:

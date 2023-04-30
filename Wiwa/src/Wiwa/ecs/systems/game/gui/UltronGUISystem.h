@@ -14,6 +14,7 @@ namespace Wiwa
         bool activeBossCanvas = false;
         bool introBossFight = true;
         bool activeIntroCanvas = false;
+        bool m_CanvasHUD = true;
         float counterIntroAnim = 0.0f;
         float timeIntroAnim = 4.0f;
     public:
