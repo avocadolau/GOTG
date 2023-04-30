@@ -1,19 +1,26 @@
 Event	ID	Name			Wwise Object Path	Notes
 	871813740	player_hit			\Default Work Unit\player\player_hit	
 	2147561130	player_walk			\Default Work Unit\player\player_walk	
+	2226114503	player_dead			\Default Work Unit\player\player_dead	
+	2394582229	player_dash			\Default Work Unit\player\player_dash	
 	4004702906	player_shoot			\Default Work Unit\player\player_shoot	
-
-Game Parameter	ID	Name			Wwise Object Path	Notes
-	215992295	player_health			\Default Work Unit\player\player_health	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	11819362	Weapon 13 Shoot 2	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 13 Shoot 2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot\Weapon 13 Shoot 2		255660
-	174263698	player_health	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\heartbeat_743200E1.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_health		3081756
-	230242038	footstep_metal_high_run_08	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_08		56692
-	232484325	footstep_metal_high_run_10	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_10_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_10		53948
-	565066192	footstep_metal_high_run_07	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_07		67912
+	49179977	player_dash	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 09 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_dash		396996
+	236038091	footstep_concrete_run_07	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_07		51564
+	433002560	footstep_concrete_run_03	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_03		63872
+	541497451	footstep_concrete_run_04	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_04		54884
 	680197070	Weapon 13 Shoot 1	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 13 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot\Weapon 13 Shoot 1		296640
+	699504966	footstep_concrete_run_01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_01		44828
 	712169024	palyer_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\palyer_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\palyer_hit		159608
-	944440038	bullet_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\bullet_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\bullet_hit		22624
-	1066417521	footstep_metal_high_run_09	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_metal_high_run_09_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_metal_high_run_09		66244
+	714007581	footstep_concrete_run_12	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_12_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_12		69672
+	794767311	footstep_concrete_run_08	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_08		57696
+	799941768	footstep_concrete_run_11	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_11_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_11		51936
+	818976544	footstep_concrete_run_10	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_10_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_10		49028
+	869681828	footstep_concrete_run_06	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_06		63456
+	892625025	player_dead	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\player_dead_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_dead		783456
+	964798513	footstep_concrete_run_05	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_05		57696
+	1009229958	footstep_concrete_run_02	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_02		46176
+	1056090998	footstep_concrete_run_09	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_09_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_09		57696
 

@@ -15,7 +15,8 @@ void Wiwa::PlayerDeath::EnterState()
 	m_StateMachine->GetAnimator()->PlayAnimation("death", false);
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.f);
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
-	// TODO: Particles and audio
+	m_StateMachine->GetAudio()->PlayAudio("player_dash");
+	// TODO: Particles 
 }
 
 void Wiwa::PlayerDeath::UpdateState()

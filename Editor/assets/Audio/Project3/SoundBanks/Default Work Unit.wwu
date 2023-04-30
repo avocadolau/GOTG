@@ -5,51 +5,21 @@
 			<ChildrenList>
 				<SoundBank Name="player" ID="{E627507A-B8D4-47F9-B6D5-F80AE935642C}">
 					<ObjectInclusionList>
-						<ObjectRef Name="bullet_hit" ID="{4C7035E1-9236-43CB-9340-6872F7C3B629}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="palyer_hit" ID="{039EA729-BA8E-4740-815C-B8115ED0A564}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="player_walk" ID="{AA06D645-82A5-4A60-9699-0C8FA1E1D2C1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="player_health" ID="{6897FD48-E109-4ED8-8EC9-96743556B938}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="player_shoot" ID="{8AD4699B-AFE2-4FB6-B30A-BA53480B4F4B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="phalanx_melee" ID="{4BEBD95F-6B2D-4BA0-AA53-8A246D5091AF}">
-					<ObjectInclusionList>
-						<ObjectRef Name="phalanx_melee_death" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="phalanx_melee_spawn" ID="{B5DF3ABB-4670-43A1-9151-88EEC400E6EC}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="phalanx_melee_attack" ID="{3764DF50-C258-449D-9434-D16F104342A1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="phalanx_melee_hit" ID="{608ADDD0-93F4-4684-9310-CCC7E1B778A4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="phalanx_ranged" ID="{EE3FC8E2-2183-4A9F-8151-DFEFEDDA412B}">
-					<ObjectInclusionList>
-						<ObjectRef Name="ranged_hit" ID="{D655EF29-2F8B-41EA-85CC-4DCFB82CC7B9}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="ranged_attack" ID="{071B4895-6411-4943-B202-C8C2F037A5C7}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="ranged_dead" ID="{23B270F8-3A63-4FA0-99B2-F63D0DE5D238}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="props" ID="{B0E25E37-ACEF-4B1E-AF81-D4B87DF04F8A}">
-					<ObjectInclusionList>
-						<ObjectRef Name="props" ID="{84AC5DAC-9BF0-4738-845B-9E22EC658643}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="player" ID="{AC918341-D1DF-4688-A71E-04A89CE4E0CB}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
 				<SoundBank Name="scene_events" ID="{74DE3EB2-4032-4A2E-B945-EFE163A770A0}">
 					<ObjectInclusionList>
-						<ObjectRef Name="scene_events" ID="{855DD408-CD47-483D-AFAF-9DF6E3924BE0}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="scene_events" ID="{CF3EC4CC-A394-444D-B20D-63797100419B}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
 				<SoundBank Name="ui" ID="{AEA2AE59-7014-4E14-BDA6-C932D7D920FD}">
 					<ObjectInclusionList>
-						<ObjectRef Name="ui" ID="{56A5C07E-09B7-4F42-A622-2C8DAC455D48}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="hud" ID="{1870E9FE-0342-4D2F-8DDF-2D24D8FAC816}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
@@ -64,6 +34,20 @@
 				<SoundBank Name="audio_settings" ID="{DB5AA5C0-C377-4458-9DDE-C3885821E7FD}">
 					<ObjectInclusionList>
 						<ObjectRef Name="volume" ID="{584D449A-094E-4BE8-BF76-7144992B0248}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="enemies" ID="{D09D0CAA-2F6D-457D-989B-2EC6DA1FDA9C}">
+					<ObjectInclusionList>
+						<ObjectRef Name="enemies" ID="{9DD12A92-FC92-4275-98E4-F65921D75363}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="enviroment" ID="{F3DAE508-5AB4-4187-810C-C0FD921766F2}">
+					<ObjectInclusionList>
+						<ObjectRef Name="enviroment" ID="{0C557541-B03A-4594-8955-8B6471B9CFBC}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

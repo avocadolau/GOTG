@@ -1,6 +1,0 @@
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	148280736	Thick Explosion 2	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Thick Explosion 2_67494C83.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\barrel_explosion\explosion\Thick Explosion 2		355736
-	857917991	Thick Explosion 1	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Thick Explosion 1_E6855930.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\barrel_explosion\explosion\Thick Explosion 1		358312
-	938645777	aftermath	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Gun 7 Loop_EB5C3951.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\barrel_explosion\aftermath		705696
-	971648507	Thick Explosion 3	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Thick Explosion 3_13077FE9.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\barrel_explosion\explosion\Thick Explosion 3		360340
-

@@ -1,0 +1,9 @@
+Event	ID	Name			Wwise Object Path	Notes
+	13776098	explosion			\Default Work Unit\enviroment\explosion	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	348343627	Small Explosion 03	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 03		405288
+	715564319	Small Explosion 01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 01		360516
+	852151634	Small Explosion 02	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 02		426048
+	1043649091	Small Explosion 04	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 04		403972
+

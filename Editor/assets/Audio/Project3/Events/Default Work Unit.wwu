@@ -90,6 +90,32 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Folder Name="sentinel" ID="{09DA9ADF-E065-4137-B7BA-3EE6270383AB}" ShortID="25777087">
+							<ChildrenList>
+								<Event Name="sentinel_spawn" ID="{CF07C307-E78A-4795-9B51-6360DA271F0E}">
+									<ChildrenList>
+										<Action Name="" ID="{18035887-7401-497F-A87B-41C0C64D2D5D}" ShortID="785035317">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sentinel_spawn" ID="{643507BC-03DF-4159-B80A-40A70810DCA5}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="sentinel_hit" ID="{952D53D5-8DAD-41AD-9A44-393B687B3042}">
+									<ChildrenList>
+										<Action Name="" ID="{CA46A745-8E4B-4B07-8761-40A9EA26FB2C}" ShortID="130178820">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="sentinel_hit" ID="{B7D5C983-87D7-40CF-A77A-EF1F68EB945A}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="hud" ID="{1870E9FE-0342-4D2F-8DDF-2D24D8FAC816}" ShortID="166723439">
@@ -100,17 +126,6 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="s_character_selected" ID="{0F5F3D65-0466-4AE5-90A9-D23334371459}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="pause_sound" ID="{B9C6E3D0-3987-46F5-89D7-8C7B4E184648}">
-							<ChildrenList>
-								<Action Name="" ID="{90DCE654-9EED-4F7F-961A-4D8EBECB7F20}" ShortID="809832085">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="s_game_pause" ID="{AF901AC6-032D-40EC-8E78-193A834F7FD1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -246,6 +261,28 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="player_dead" ID="{512ED55E-DF91-48C4-9B3D-F3A55219F8C6}">
+							<ChildrenList>
+								<Action Name="" ID="{31B949F8-2DB7-4AE6-ADE4-220D39AA8B50}" ShortID="485822395">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="player_dead" ID="{2F497686-D493-4E43-821C-3370E7F1DB20}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="player_dash" ID="{50564C09-3765-4F08-A63D-953E2E7B6F5C}">
+							<ChildrenList>
+								<Action Name="" ID="{165FAEBB-CF8E-40E0-A450-D1939A3DA18A}" ShortID="45530923">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="player_dash" ID="{3BA67479-E7B9-43EF-AD09-B5BFA5E5E5C5}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
@@ -260,6 +297,58 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="music_controller" ID="{D55FFCB4-0CAC-45CF-BCAA-2503785E186D}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="enviroment" ID="{0C557541-B03A-4594-8955-8B6471B9CFBC}" ShortID="920130149">
+					<ChildrenList>
+						<Event Name="explosion" ID="{B5EC15D0-3D3D-450F-9452-A73F8B870D13}">
+							<ChildrenList>
+								<Action Name="" ID="{1C9158B6-3711-4955-8CD7-3D32E25C0955}" ShortID="982610254">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="explosions" ID="{4923C52D-993E-42E7-B866-C47637F1C317}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="scene_events" ID="{CF3EC4CC-A394-444D-B20D-63797100419B}" ShortID="339949101">
+					<ChildrenList>
+						<Event Name="combat_start" ID="{9C32F62D-C6BE-43AF-928C-261F791BB481}">
+							<ChildrenList>
+								<Action Name="" ID="{A9F95E00-A127-4639-BDDC-A969E218ABD4}" ShortID="319501349">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="combat_start" ID="{B0CEA24D-2CB1-4B39-B43E-C70CC05356A2}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="game_pause" ID="{18745D79-CB57-4A4F-9C0C-8D768E670525}">
+							<ChildrenList>
+								<Action Name="" ID="{FE0EBC07-2565-4473-89E5-41AE5C484F7D}" ShortID="684545411">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="s_game_pause" ID="{AF901AC6-032D-40EC-8E78-193A834F7FD1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="wave_start" ID="{047AEA4C-4835-431B-9AF2-A47298CD2A17}">
+							<ChildrenList>
+								<Action Name="" ID="{C856FD97-90EF-4562-BCC6-964989AF605A}" ShortID="752742808">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="wave_start" ID="{CEA50C9A-C6BF-41BA-B87E-ADA59FB36961}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
