@@ -14,11 +14,14 @@ class RewardChest : public System
 
 		virtual void OnCollisionEnter(Object* obj1, Object* obj2) override;
 
+		virtual void OnCollisionExit(Object* obj1, Object* obj2) override;
+
+
 	private:
 		EntityId m_Face1;
 		EntityId m_Face2;
 		EntityId m_Face3;
-
+		EntityId m_ColliderPreActive;
 		EntityManager::ComponentIterator m_Face1It;
 		EntityManager::ComponentIterator m_Face2It;
 		EntityManager::ComponentIterator m_Face3It;
@@ -29,6 +32,10 @@ class RewardChest : public System
 
 		float m_Velocity;
 		float m_FinalPos;
+
+		bool m_ActiveAnim;
+
+		bool m_Interacted;
 	};
 }
 REGISTER_SYSTEM(Wiwa::RewardChest)

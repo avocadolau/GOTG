@@ -83,6 +83,7 @@ void Wiwa::PlayerDash::ExitState()
 	m_StateMachine->ResetCooldown();
 
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
+	m_StateMachine->SetVelocity(glm::vec3(0.f));
 	m_StateMachine->GetAnimator()->Restart();
 	m_StateMachine->IsDashing = false;
 	
@@ -94,12 +95,14 @@ void Wiwa::PlayerDash::ExitState()
 	{
 		sys_dashParticle->SetActive(false);
 	}
-
 }
 
 void Wiwa::PlayerDash::OnCollisionEnter(Object* object1, Object* object2)
 {
 	if (object1 != object2)
 	{
+		m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
+		m_StateMachine->SetVelocity(glm::vec3(0.f));
+		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 	}
 }

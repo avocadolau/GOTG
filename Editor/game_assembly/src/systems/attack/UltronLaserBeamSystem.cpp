@@ -54,13 +54,14 @@ void Wiwa::UltronLaserBeamSystem::OnUpdate()
 	}
 
 	// Update the laser's position to be in front of the boss
-	float distanceInFront = 3.0f;
-	float laserHalfLength = 2.5f; // Adjust this value based on the actual half length of the laser
+	float distanceInFront = 6.0f;
+	float laserHalfLength = 26.5f; // Adjust this value based on the actual half length of the laser
 	glm::vec3 bossForward = Math::CalculateForward(enemyTr);
 	laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
-	
+	laserTr->localPosition.y += 2.5f;
+
 	// Update the boss's rotation to face the player
-	glm::vec3 directionToPlayer = glm::normalize(playerTr->localPosition - enemyTr->localPosition);
+	glm::vec3 directionToPlayer = glm::normalize(Math::CalculateForward(enemyTr) - enemyTr->localPosition);
 	float angleToPlayer = glm::degrees(atan2(directionToPlayer.x, directionToPlayer.z));
 	enemyTr->localRotation.y = angleToPlayer;
 	

@@ -561,6 +561,12 @@ namespace Wiwa {
 		}
 	}
 
+	
+	void ParticleSystem::EmitParticleBatch()
+	{
+		SpawnParticleSet();
+	}
+
 	void ParticleSystem::SetActive(bool active)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();

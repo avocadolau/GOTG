@@ -10,6 +10,7 @@ class SkipScene : public System
 		virtual void OnUpdate() override;
 	private:
 		bool m_Active;
+		bool m_SceneChange;
 	};
 }
 REGISTER_SYSTEM(Wiwa::SkipScene)
