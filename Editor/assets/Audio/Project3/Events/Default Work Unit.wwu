@@ -304,6 +304,17 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="player_hit_shield" ID="{6F3303F3-110C-4CD9-9C8C-F1DE20860499}">
+							<ChildrenList>
+								<Action Name="" ID="{22EF2978-8510-4D5A-B36B-28735E6AB418}" ShortID="408270331">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="player_hit_shield" ID="{2C423B0F-9DCF-4266-81C2-E81E76520873}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
