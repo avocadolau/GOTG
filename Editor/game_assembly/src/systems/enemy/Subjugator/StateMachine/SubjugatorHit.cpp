@@ -25,6 +25,7 @@ namespace Wiwa
 
 		mat->SetUniformData("u_Hit", true);
 		renderer->Update();
+		mat->SetUniformData("u_Hit", false);
 		//SubjugatorParticles - Damage particles for the Subjugator
 		animator->PlayAnimation("hit", false);
 	}
@@ -41,12 +42,6 @@ namespace Wiwa
 
 	void SubjugatorHitState::ExitState(EnemySubjugator* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
-		Wiwa::Material* mat = renderer->GetMaterial();
-
-		mat->SetUniformData("u_Hit", true);
-		renderer->Update();
 	}
 
 	void SubjugatorHitState::OnCollisionEnter(EnemySubjugator* enemy, const Object* body1, const Object* body2)

@@ -29,7 +29,7 @@ namespace Wiwa
 		Wiwa::Material* mat = renderer->GetMaterial();
 		mat->SetUniformData("u_Hit", true);
 		renderer->Update();
-
+		mat->SetUniformData("u_Hit", false);
 		animator->PlayAnimation("damage", false);
 
 		audio->PlayAudio("ranged_dead");
@@ -47,11 +47,6 @@ namespace Wiwa
 
 	void RangedPhalanxHitState::ExitState(EnemyRangedPhalanx* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
-		Wiwa::Material* mat = renderer->GetMaterial();
-		mat->SetUniformData("u_Hit", false);
-		renderer->Update();
 	}
 
 	void RangedPhalanxHitState::OnCollisionEnter(EnemyRangedPhalanx* enemy, const Object* body1, const Object* body2)

@@ -874,6 +874,11 @@ void Audio::ChangeDialogVolume(int value)
     AK::SoundEngine::SetRTPCValue("DialogVolume", value);
 }
 
+void Audio::SetRTPCValue(const char* name, int value)
+{
+    AK::SoundEngine::SetRTPCValue(name, value);
+}
+
 bool Audio::LoadPreset(const char* json_file)
 {
     Wiwa::JSONDocument doc(json_file);

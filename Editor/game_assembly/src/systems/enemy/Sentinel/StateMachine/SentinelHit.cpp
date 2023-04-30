@@ -26,8 +26,7 @@ namespace Wiwa
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		mat->SetUniformData("u_Hit", true);
 		renderer->Update();
-		//SentinelParticles - Hit Particles
-
+		mat->SetUniformData("u_Hit", false);
 		audio->PlayAudio("sentinel_hit");
 		animator->PlayAnimation("hit", false); //AnimacionSentinel
 	}
@@ -44,12 +43,6 @@ namespace Wiwa
 
 	void SentinelHitState::ExitState(EnemySentinel* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
-		Wiwa::Material* mat = renderer->GetMaterial();
-
-		mat->SetUniformData("u_Hit", false);
-		renderer->Update();
 	}
 
 	void SentinelHitState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)

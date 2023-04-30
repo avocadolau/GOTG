@@ -6,6 +6,7 @@
 #include "Achievements/AchievementsManager.h"
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -298,6 +299,7 @@ namespace Wiwa
 		if (character->Shield <= 0)
 		{
 			character->Health -= damage;
+			Audio::SetRTPCValue("player_health", character->Health);
 			if (character->Health <= 0)
 			{
 				Die();
