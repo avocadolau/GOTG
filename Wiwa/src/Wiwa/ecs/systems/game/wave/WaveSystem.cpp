@@ -16,8 +16,8 @@ namespace Wiwa
 	{
 		m_WaveIt = {WI_INVALID_INDEX, WI_INVALID_INDEX};
 		m_SpawnerIt = {WI_INVALID_INDEX, WI_INVALID_INDEX};
-		m_SpawnDelay = 2.0f;
-		m_TimeSinceLastSpawn = 0.0f;
+		m_PointIndex = 0;
+		m_TotalEnemiesSpawned = 0;
 		m_HasTriggered = false;
 	}
 
@@ -36,15 +36,9 @@ namespace Wiwa
 		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
 
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
-		std::vector<glm::vec3> points;
-		GetSpawnPoints(points);
+		GetSpawnPoints(m_Points);
 
-		// Define the range for the random number generation
-		int min = -5;
-		int max = 5;
-		// Define the uniform_int_distribution once during initialization
-		std::uniform_int_distribution<int> disSpawn(min, max);
-		int j = 0;
+		/*int j = 0;
 		for (int i = 0; i < wave->maxEnemies; i++)
 		{
 			if (j >= points.size())
@@ -59,24 +53,48 @@ namespace Wiwa
 				wave->currentEnemiesAlive++;
 				j++;
 				m_HasTriggered = true;
-				//m_MaxWavesEnemies++;
 			}
-		}
-		//m_CurrentEnemiesDead = 0;
+		}*/
 	}
 
 	void WaveSystem::OnUpdate()
 	{
 		if (!getAwake() && !getInit())
 			return;
+
+		m_Timer += Time::GetDeltaTimeSeconds();
+
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
-		
 		// Wave has finished
 		if (wave->currentEnemiesAlive <= 0.0f && m_HasTriggered)
 		{
 			wave->hasFinished = true;
 		}
 
+		// Define the range for the random number generation
+		int min = -5;
+		int max = 5;
+		disSpawn.param(std::uniform_int_distribution<int>::param_type{ min, max });
+
+		if (m_Timer >= wave->enemySpawnRate && m_TotalEnemiesSpawned < wave->maxEnemies)
+		{
+			m_Timer = 0.0f;
+
+			if (m_PointIndex >= m_Points.size())
+				m_PointIndex = 0;
+
+			int xRand = disSpawn(Application::s_Gen);
+			int zRand = disSpawn(Application::s_Gen);
+
+			Pool_Type enemyRandSelection = GetEnemyFromProbabiliteis();
+			if (SpawnEnemy(enemyRandSelection, m_Points[m_PointIndex], xRand, zRand))
+			{
+				wave->currentEnemiesAlive++;
+				m_PointIndex++;
+				m_TotalEnemiesSpawned++;
+				m_HasTriggered = true;
+			}
+		}
 	}
 
 	void WaveSystem::OnDestroy()

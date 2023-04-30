@@ -157,6 +157,7 @@ namespace Wiwa
 		std::uniform_int_distribution<> disMinMaxEnemy(wavesSpawner->minEnemiesPerWave, wavesSpawner->maxEnemiesPerWave);
 		wave->maxEnemies = disMinMaxEnemy(Application::s_Gen);
 		wave->hasFinished = false;
+		wave->enemySpawnRate = wavesSpawner->enemySpawnRate;
 		em.ApplySystem<WaveSystem>(waveId);
 
 		// Save the wave as current wave

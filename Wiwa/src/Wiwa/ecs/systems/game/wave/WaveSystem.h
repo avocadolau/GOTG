@@ -14,9 +14,9 @@ namespace Wiwa {
 
 		SystemHash physicsSystemHash;
 
-		//int m_MaxWavesEnemies = 0;
-		//int m_CurrentEnemiesDead = 0;
+		std::uniform_int_distribution<int> disSpawn;
 		std::vector<EntityId> m_EnemiesIds;
+		std::vector<glm::vec3> m_Points;
 	public:
 		WaveSystem();
 		~WaveSystem();
@@ -38,8 +38,9 @@ namespace Wiwa {
 		Pool_Type GetEnemyFromProbabiliteis();
 		void GetSpawnPoints(std::vector<glm::vec3>& vec);
 
-		float m_SpawnDelay = 1.0f;
-		float m_TimeSinceLastSpawn = 0.0f;
+		int m_TotalEnemiesSpawned = 0.0f;
+		int m_PointIndex = 0.0f;
+		float m_Timer = 0.0f;
 		bool m_HasTriggered;
 	};
 }
