@@ -398,7 +398,7 @@
 										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-8</Value>
+												<Value>-15</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -416,8 +416,10 @@
 									<ChildrenList>
 										<AudioFileSource Name="palyer_hit" ID="{6D825A1D-2B83-4AB1-92E9-2F4338A30CEA}">
 											<PropertyList>
-												<Property Name="LoopBegin" Type="Real64" Value="0.0973161605206074"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.309880848930481"/>
 												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.11662182486631"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.426502673796791"/>
 											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>project III sounds\player\palyer_hit.wav</AudioFile>
@@ -926,8 +928,8 @@
 																				<SegmentShape>Exp3</SegmentShape>
 																			</Point>
 																			<Point>
-																				<XPos>50.2439</XPos>
-																				<YPos>-200</YPos>
+																				<XPos>99.999</XPos>
+																				<YPos>0.82785</YPos>
 																				<Flags>0</Flags>
 																			</Point>
 																			<Point>
@@ -1013,6 +1015,41 @@
 									</ChildrenList>
 									<ActiveSourceList>
 										<ActiveSource Name="Weapon 09 Shoot 1" ID="{28A763F6-D2ED-4A7C-83E9-7AA10AA9DF00}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="player_hit_shield" ID="{2C423B0F-9DCF-4266-81C2-E81E76520873}" ShortID="533435576">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="mixkit-sci-fi-plasma-gun-power-up-1679" ID="{5570711B-C481-4A93-A408-3F6614E92FBF}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.208257817715946"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.231036016528626"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.231036016528626"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>mixkit-sci-fi-plasma-gun-power-up-1679.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="259805885"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="mixkit-sci-fi-plasma-gun-power-up-1679" ID="{5570711B-C481-4A93-A408-3F6614E92FBF}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
