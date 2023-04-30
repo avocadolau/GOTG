@@ -25,8 +25,6 @@ namespace Wiwa
 		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		m_TimerAttackCooldown = 0.0f;
 
-		animator->Blend("atack", false, 0.2f);
-
 		NavAgent *navAgent = (NavAgent *)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent)
 		{
@@ -36,7 +34,7 @@ namespace Wiwa
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
-
+		m_SoundCurrentTime = m_SoundTimer;
 		GenerateAttack(enemy);
 	}
 
@@ -44,7 +42,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
 
@@ -63,6 +61,13 @@ namespace Wiwa
 			// Reset the timer after generating the attack
 			m_TimerAttackCooldown = 0.0f;
 		}
+		m_SoundCurrentTime -= Time::GetDeltaTimeSeconds();
+		if (m_SoundCurrentTime < 0 && m_PlaySound)
+		{
+			audio->PlayAudio("melee_attack");
+			m_PlaySound = false;
+		}
+
 	}
 
 	void MeleePhalanxAttackState::ExitState(EnemyMeleePhalanx *enemy)
@@ -85,7 +90,7 @@ namespace Wiwa
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+
 
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -100,7 +105,8 @@ namespace Wiwa
 				animator->Blend("atack", false, 0.2f);
 				GameStateManager::DamagePlayer(selfStats->Damage);
 				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
-				audio->PlayAudio("melee_attack");
+				m_SoundCurrentTime = m_SoundTimer;
+				m_PlaySound = true;
 			}
 		}
 	}

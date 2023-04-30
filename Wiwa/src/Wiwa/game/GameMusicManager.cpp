@@ -27,17 +27,21 @@ namespace Wiwa
 		switch (scene_id)
 		{
 		case 0:
-			PlayMusic("music_intro");
+			//PlayMusic("music_intro");
+			Audio::ChangeSwitchContainer("music", "logo");
 			break;
 		case 1:
-			PlayMusic("music_main_menu");
+			//PlayMusic("music_main_menu");
+			Audio::ChangeSwitchContainer("music", "intro");
 			break;
 		case 2:
-			PlayMusic("music_hub");
+			//PlayMusic("music_hub");
+			Audio::ChangeSwitchContainer("music", "hub");
 			break;
 
 		default: 
-			PlayMusic("music_enviroment");
+			//PlayMusic("music_enviroment");
+			Audio::ChangeSwitchContainer("music_game_play", "test");
 			break;
 		}
 
