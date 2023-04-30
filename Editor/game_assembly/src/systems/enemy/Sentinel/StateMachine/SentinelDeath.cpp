@@ -5,6 +5,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/components/game/Character.h>
 #include "../../../attack/SentinelExplosionSystem.h"
@@ -27,7 +28,8 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		//SentinelAudio - Dead Audio (explosion audio)
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+		audio->PlayAudio("explosion");
 		/*animator->PlayAnimation("atackdeath", false);*/ //AnimacionSentinel
 
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());

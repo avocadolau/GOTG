@@ -3,6 +3,7 @@
 #include "../EnemySentinel.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -23,7 +24,8 @@ namespace Wiwa
 		EntityId currentEnemy = enemy->GetEntity();
 
 		//SentinelParticles - Spawn Particles
-		//SentinelAudio - Spawn Audio
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+		audio->PlayAudio("sentinel_spawn");
 
 		animator->PlayAnimation("spawn", false); //AnimacionSentinel
 	}

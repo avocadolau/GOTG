@@ -9,50 +9,6 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="232625244" Type="User" Language="SFX" Hash="{A6D7C4B2-2ACC-FBFB-3802-EB22D900776C}">
-			<ShortName>phalanx_melee</ShortName>
-			<Path>phalanx_melee.bnk</Path>
-			<Media>
-				<File Id="146913874" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_hit_10C4C929.wem</CachePath>
-				</File>
-				<File Id="254107624" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_attack.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_attack_10C4C929.wem</CachePath>
-				</File>
-				<File Id="346607997" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_spawn.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_spawn_6543CCD5.wem</CachePath>
-				</File>
-				<File Id="395295600" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="1353242594" Name="melee_attack">
-					<MediaRefs>
-						<MediaRef Id="254107624"/>
-					</MediaRefs>
-				</Event>
-				<Event Id="3947834608" Name="melee_dead">
-					<MediaRefs>
-						<MediaRef Id="395295600"/>
-					</MediaRefs>
-				</Event>
-				<Event Id="1255748329" Name="melee_hit">
-					<MediaRefs>
-						<MediaRef Id="146913874"/>
-					</MediaRefs>
-				</Event>
-				<Event Id="71202558" Name="spawn">
-					<MediaRefs>
-						<MediaRef Id="346607997"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-		</SoundBank>
 		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{AF8642B2-A735-E39B-4EC1-D61A14AF9342}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
@@ -122,29 +78,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="968010305" Type="User" Language="SFX" Hash="{D0748002-69BE-13C3-AC44-03EC1A26B015}">
-			<ShortName>props</ShortName>
-			<Path>props.bnk</Path>
-			<Media>
-				<File Id="148280736" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Thick Explosion 2.wav</ShortName>
-					<CachePath>SFX/Thick Explosion 2_67494C83.wem</CachePath>
-				</File>
-				<File Id="857917991" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Thick Explosion 1.wav</ShortName>
-					<CachePath>SFX/Thick Explosion 1_E6855930.wem</CachePath>
-				</File>
-				<File Id="938645777" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Gun 7 Loop.wav</ShortName>
-					<CachePath>SFX/Gun 7 Loop_EB5C3951.wem</CachePath>
-				</File>
-				<File Id="971648507" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Thick Explosion 3.wav</ShortName>
-					<CachePath>SFX/Thick Explosion 3_13077FE9.wem</CachePath>
-				</File>
-			</Media>
-		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{792FE8E6-6F4B-BCC6-F487-143FC7586A2B}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{979725AB-EAF8-F342-8C2B-691C3562A3A0}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -152,40 +86,82 @@
 					<ShortName>Weapon 13 Shoot 2.wav</ShortName>
 					<CachePath>SFX/Weapon 13 Shoot 2_10C4C929.wem</CachePath>
 				</File>
-				<File Id="174263698" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>heartbeat.wav</ShortName>
-					<CachePath>SFX/heartbeat_743200E1.wem</CachePath>
+				<File Id="49179977" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Weapon 09 Shoot 1.wav</ShortName>
+					<CachePath>SFX/Weapon 09 Shoot 1_10C4C929.wem</CachePath>
 				</File>
-				<File Id="230242038" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>footstep_metal_high_run_08.wav</ShortName>
-					<CachePath>SFX/footstep_metal_high_run_08_10C4C929.wem</CachePath>
+				<File Id="236038091" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_07.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_07_10C4C929.wem</CachePath>
 				</File>
-				<File Id="232484325" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>footstep_metal_high_run_10.wav</ShortName>
-					<CachePath>SFX/footstep_metal_high_run_10_10C4C929.wem</CachePath>
+				<File Id="433002560" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_03.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_03_10C4C929.wem</CachePath>
 				</File>
-				<File Id="565066192" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>footstep_metal_high_run_07.wav</ShortName>
-					<CachePath>SFX/footstep_metal_high_run_07_10C4C929.wem</CachePath>
+				<File Id="541497451" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_04.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_04_10C4C929.wem</CachePath>
 				</File>
 				<File Id="680197070" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 13 Shoot 1.wav</ShortName>
 					<CachePath>SFX/Weapon 13 Shoot 1_10C4C929.wem</CachePath>
 				</File>
+				<File Id="699504966" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_01.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_01_10C4C929.wem</CachePath>
+				</File>
 				<File Id="712169024" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\player\palyer_hit.wav</ShortName>
 					<CachePath>SFX/project III sounds/player/palyer_hit_10C4C929.wem</CachePath>
 				</File>
-				<File Id="944440038" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\player\bullet_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/player/bullet_hit_10C4C929.wem</CachePath>
+				<File Id="714007581" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_12.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_12_10C4C929.wem</CachePath>
 				</File>
-				<File Id="1066417521" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>footstep_metal_high_run_09.wav</ShortName>
-					<CachePath>SFX/footstep_metal_high_run_09_10C4C929.wem</CachePath>
+				<File Id="794767311" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_08.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_08_10C4C929.wem</CachePath>
+				</File>
+				<File Id="799941768" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_11.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_11_10C4C929.wem</CachePath>
+				</File>
+				<File Id="818976544" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_10.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_10_10C4C929.wem</CachePath>
+				</File>
+				<File Id="869681828" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_06.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="892625025" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>player_dead.wav</ShortName>
+					<CachePath>SFX/player_dead_10C4C929.wem</CachePath>
+				</File>
+				<File Id="964798513" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_05.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1009229958" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_02.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1056090998" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>footstep_concrete_run_09.wav</ShortName>
+					<CachePath>SFX/footstep_concrete_run_09_10C4C929.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
+				<Event Id="2394582229" Name="player_dash">
+					<MediaRefs>
+						<MediaRef Id="49179977"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2226114503" Name="player_dead">
+					<MediaRefs>
+						<MediaRef Id="892625025"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="871813740" Name="player_hit">
 					<MediaRefs>
 						<MediaRef Id="712169024"/>
@@ -199,48 +175,18 @@
 				</Event>
 				<Event Id="2147561130" Name="player_walk">
 					<MediaRefs>
-						<MediaRef Id="230242038"/>
-						<MediaRef Id="232484325"/>
-						<MediaRef Id="565066192"/>
-						<MediaRef Id="1066417521"/>
-					</MediaRefs>
-				</Event>
-			</Events>
-			<GameParameters>
-				<GameParameter Id="215992295" Name="player_health"/>
-			</GameParameters>
-		</SoundBank>
-		<SoundBank Id="1309352537" Type="User" Language="SFX" Hash="{D59FADDE-8DED-6C97-DBBF-7809AE9E5D9F}">
-			<ShortName>phalanx_ranged</ShortName>
-			<Path>phalanx_ranged.bnk</Path>
-			<Media>
-				<File Id="241674995" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Sci Fi Explosion 07.wav</ShortName>
-					<CachePath>SFX/Sci Fi Explosion 07_10C4C929.wem</CachePath>
-				</File>
-				<File Id="606851917" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos).wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_death(No sabemos)_10C4C929.wem</CachePath>
-				</File>
-				<File Id="669719075" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_BAC76913.wem</CachePath>
-				</File>
-			</Media>
-			<Events>
-				<Event Id="445652775" Name="ranged_attack">
-					<MediaRefs>
-						<MediaRef Id="241674995"/>
-					</MediaRefs>
-				</Event>
-				<Event Id="2801386309" Name="ranged_dead">
-					<MediaRefs>
-						<MediaRef Id="606851917"/>
-					</MediaRefs>
-				</Event>
-				<Event Id="169915878" Name="ranged_hit">
-					<MediaRefs>
-						<MediaRef Id="669719075"/>
+						<MediaRef Id="236038091"/>
+						<MediaRef Id="433002560"/>
+						<MediaRef Id="541497451"/>
+						<MediaRef Id="699504966"/>
+						<MediaRef Id="714007581"/>
+						<MediaRef Id="794767311"/>
+						<MediaRef Id="799941768"/>
+						<MediaRef Id="818976544"/>
+						<MediaRef Id="869681828"/>
+						<MediaRef Id="964798513"/>
+						<MediaRef Id="1009229958"/>
+						<MediaRef Id="1056090998"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -420,27 +366,37 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{5608F607-19DB-998A-BF3B-08BBA27D333A}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{AB6D77D3-1471-71C9-55C8-24733C647FFE}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
-				<File Id="51048589" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\scene_events\sound_dialog_start.wav</ShortName>
-					<CachePath>SFX/project III sounds/scene_events/sound_dialog_start_65BB790B.wem</CachePath>
+				<File Id="282638874" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>wave_start .wav</ShortName>
+					<CachePath>SFX/wave_start _10C4C929.wem</CachePath>
 				</File>
 				<File Id="444663328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>s_game_pause.wav</ShortName>
 					<CachePath>SFX/s_game_pause_10C4C929.wem</CachePath>
 				</File>
-				<File Id="683768978" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\scene_events\wave_start.wav</ShortName>
-					<CachePath>SFX/project III sounds/scene_events/wave_start_9F4B9AA2.wem</CachePath>
+				<File Id="846270693" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>mixkit-sci-fi-artificial-intelligence-speaks-291.wav</ShortName>
+					<CachePath>SFX/mixkit-sci-fi-artificial-intelligence-speaks-291_10C4C929.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
-				<Event Id="2715313045" Name="pause_sound">
+				<Event Id="1137411260" Name="combat_start">
+					<MediaRefs>
+						<MediaRef Id="846270693"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2772308904" Name="game_pause">
 					<MediaRefs>
 						<MediaRef Id="444663328"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="142118675" Name="wave_start">
+					<MediaRefs>
+						<MediaRef Id="282638874"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -455,7 +411,7 @@
 				<Event Id="3372228340" Name="set_sfx_volume"/>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{7B01A435-4441-BADE-5486-F6E747D10E1A}">
+		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -499,6 +455,127 @@
 				</Event>
 			</Events>
 		</SoundBank>
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{FB478A7F-C9E0-8F70-9CA0-995AC467CAE2}">
+			<ShortName>enemies</ShortName>
+			<Path>enemies.bnk</Path>
+			<Media>
+				<File Id="146913874" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_hit.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_hit_10C4C929.wem</CachePath>
+				</File>
+				<File Id="241674995" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sci Fi Explosion 07.wav</ShortName>
+					<CachePath>SFX/Sci Fi Explosion 07_10C4C929.wem</CachePath>
+				</File>
+				<File Id="254107624" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_attack.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_attack_10C4C929.wem</CachePath>
+				</File>
+				<File Id="346607997" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_spawn.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_spawn_6543CCD5.wem</CachePath>
+				</File>
+				<File Id="365689048" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sci-Fi Explosion 20.wav</ShortName>
+					<CachePath>SFX/Sci-Fi Explosion 20_10C4C929.wem</CachePath>
+				</File>
+				<File Id="395295600" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
+				</File>
+				<File Id="606851917" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos).wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_death(No sabemos)_10C4C929.wem</CachePath>
+				</File>
+				<File Id="669719075" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
+					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_BAC76913.wem</CachePath>
+				</File>
+				<File Id="858162241" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>mixkit-sci-fi-confirmation-914.wav</ShortName>
+					<CachePath>SFX/mixkit-sci-fi-confirmation-914_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="1353242594" Name="melee_attack">
+					<MediaRefs>
+						<MediaRef Id="254107624"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3947834608" Name="melee_dead">
+					<MediaRefs>
+						<MediaRef Id="395295600"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1255748329" Name="melee_hit">
+					<MediaRefs>
+						<MediaRef Id="146913874"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="445652775" Name="ranged_attack">
+					<MediaRefs>
+						<MediaRef Id="241674995"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2801386309" Name="ranged_dead">
+					<MediaRefs>
+						<MediaRef Id="606851917"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="169915878" Name="ranged_hit">
+					<MediaRefs>
+						<MediaRef Id="669719075"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1557725171" Name="sentinel_hit">
+					<MediaRefs>
+						<MediaRef Id="365689048"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3096654377" Name="sentinel_spawn">
+					<MediaRefs>
+						<MediaRef Id="858162241"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="71202558" Name="spawn">
+					<MediaRefs>
+						<MediaRef Id="346607997"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{11FA7034-8021-10EE-CAF1-E91DED69E08B}">
+			<ShortName>enviroment</ShortName>
+			<Path>enviroment.bnk</Path>
+			<Media>
+				<File Id="348343627" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Small Explosion 03.wav</ShortName>
+					<CachePath>SFX/Small Explosion 03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="715564319" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Small Explosion 01.wav</ShortName>
+					<CachePath>SFX/Small Explosion 01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="852151634" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Small Explosion 02.wav</ShortName>
+					<CachePath>SFX/Small Explosion 02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1043649091" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Small Explosion 04.wav</ShortName>
+					<CachePath>SFX/Small Explosion 04_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="13776098" Name="explosion">
+					<MediaRefs>
+						<MediaRef Id="348343627"/>
+						<MediaRef Id="715564319"/>
+						<MediaRef Id="852151634"/>
+						<MediaRef Id="1043649091"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
 	</SoundBanks>
-	<FileHash>{1F07ADDB-1FBD-14E8-CDA4-C3CEB0B33500}</FileHash>
+	<FileHash>{75FAC45B-4367-24F6-94B9-D26A2DF4230D}</FileHash>
 </SoundBanksInfo>

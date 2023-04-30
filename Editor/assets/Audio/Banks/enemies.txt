@@ -1,0 +1,22 @@
+Event	ID	Name			Wwise Object Path	Notes
+	71202558	spawn			\Default Work Unit\enemies\spawn	
+	169915878	ranged_hit			\Default Work Unit\enemies\ranged\ranged_hit	
+	445652775	ranged_attack			\Default Work Unit\enemies\ranged\ranged_attack	
+	1255748329	melee_hit			\Default Work Unit\enemies\melee\melee_hit	
+	1353242594	melee_attack			\Default Work Unit\enemies\melee\melee_attack	
+	1557725171	sentinel_hit			\Default Work Unit\enemies\sentinel\sentinel_hit	
+	2801386309	ranged_dead			\Default Work Unit\enemies\ranged\ranged_dead	
+	3096654377	sentinel_spawn			\Default Work Unit\enemies\sentinel\sentinel_spawn	
+	3947834608	melee_dead			\Default Work Unit\enemies\melee\melee_dead	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	146913874	phalanx_melee_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_melee\phalanx_melee_hit_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_melee\phalanx_melee_hit		195068
+	241674995	phalanx_ranged_attack	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Sci Fi Explosion 07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_attack		264696
+	254107624	phalanx_melee_attack	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_melee\phalanx_melee_attack_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_melee\phalanx_melee_attack		82548
+	346607997	phalanx_melee_spawn	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_melee\phalanx_melee_spawn_6543CCD5.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_melee\phalanx_melee_spawn		311456
+	365689048	sentinel_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Sci-Fi Explosion 20_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\sentinel\sentinel_hit		290972
+	395295600	phalanx_melee_death	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_melee\phalanx_melee_death(no sabemos)_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_melee\phalanx_melee_death		553024
+	606851917	phalanx_ranged_death	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos)_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_death		527040
+	669719075	phalanx_ranged_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\phalanx_ranged\phalanx_ranged_hit_BAC76913.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\phalanx_ranged\phalanx_ranged_hit		132900
+	858162241	sentinel_spawn	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\mixkit-sci-fi-confirmation-914_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\sentinel\sentinel_spawn		184256
+

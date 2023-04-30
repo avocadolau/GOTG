@@ -4,6 +4,7 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/components/Mesh.h>
 #include <Wiwa/utilities/render/Material.h>
 namespace Wiwa
@@ -22,10 +23,12 @@ namespace Wiwa
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
 		Wiwa::Material* mat = renderer->GetMaterial();
-
+		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		mat->SetUniformData("u_Hit", true);
 		renderer->Update();
 		//SentinelParticles - Hit Particles
+
+		audio->PlayAudio("sentinel_hit");
 		animator->PlayAnimation("hit", false); //AnimacionSentinel
 	}
 

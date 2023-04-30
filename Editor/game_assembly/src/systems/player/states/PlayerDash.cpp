@@ -23,6 +23,7 @@ void Wiwa::PlayerDash::EnterState()
 {
 	m_DashVFX = m_StateMachine->GetEntityManager().GetChildByName(m_StateMachine->GetEntity(), "p_dash");
 	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, true);
+	m_StateMachine->GetAudio()->PlayAudio("player_dash");
 
 	EntityManager& entityManager = GameStateManager::GetCurrentScene()->GetEntityManager();
 	ParticleSystem* sys_dashParticle = entityManager.GetSystem<ParticleSystem>(m_DashVFX);
