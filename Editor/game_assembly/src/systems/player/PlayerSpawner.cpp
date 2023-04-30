@@ -42,7 +42,7 @@ namespace Wiwa
 			m_PlayerId = m_Scene->GetEntityManager().LoadPrefab("assets\\player\\rocket.wiprefab");
 			WI_INFO("Loaded Rocket player");
 		}
-
+		GameStateManager::SetPlayerId(m_PlayerId, m_Scene);
 		Transform3D* playerT3D = m_Scene->GetEntityManager().GetComponent<Transform3D>(m_PlayerId);
 
 		PlayerSpawnerData* data = GetComponent<PlayerSpawnerData>();
