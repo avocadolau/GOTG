@@ -18,3 +18,4 @@
 
 #include "components/attack/ExplosiveBarrel.h"
 #include "components/props/VentRotatorData.h"
+#include "components/props/RewardChestData.h"

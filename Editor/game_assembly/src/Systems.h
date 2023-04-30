@@ -32,6 +32,7 @@
 #include "systems/attack/ExplosiveBarrelSystem.h"
 #include "systems/props/ExplosiveBarrelProp.h"
 #include "systems/props/VentRotator.h"
+#include "systems/props/RewardChest.h"
 
 #include "systems/InitPool.h"
 
