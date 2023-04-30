@@ -148,6 +148,7 @@ void ScenePanel::Draw()
                 Wiwa::SceneChangeEvent event(0);
                 Action<Wiwa::Event&> action = { &Wiwa::Application::OnEvent, &Wiwa::Application::Get() };
                 action(event);
+                InspectorPanel::s_EntitySet = false;
             }
             else if (p.extension() == ".wiprefab")
             {

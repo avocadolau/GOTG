@@ -22,6 +22,8 @@
 #include <Wiwa/ecs/components/ai/NavMesh.h>
 #include <Wiwa/ecs/components/game/player/PlayerSpawnerData.h>
 
+bool InspectorPanel::s_EntitySet = false;
+
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
 	bool ret = true;
@@ -1533,7 +1535,7 @@ void InspectorPanel::Draw()
 
 	ImGui::Begin(iconName.c_str(), &active);
 
-	if (m_EntitySet && m_CurrentID >= 0)
+	if (s_EntitySet && m_CurrentID >= 0)
 	{
 		ImGui::InputText("Name", &em.GetEntityString(m_CurrentID));
 		ImGui::SameLine();
@@ -1548,7 +1550,7 @@ void InspectorPanel::Draw()
 
 		if (ImGui::Button("Delete##entity"))
 		{
-			m_EntitySet = false;
+			s_EntitySet = false;
 			em.DestroyEntity(m_CurrentID);
 		}
 
@@ -1683,13 +1685,13 @@ void InspectorPanel::OnEvent(Wiwa::Event &e)
 bool InspectorPanel::OnEntityChangeEvent(EntityChangeEvent &e)
 {
 	m_CurrentID = e.GetResourceId();
-	m_EntitySet = true;
+	s_EntitySet = true;
 	return false;
 }
 
 bool InspectorPanel::OnSceneChangeEvent(Wiwa::SceneChangeEvent &e)
 {
 	m_CurrentID = -1;
-	m_EntitySet = false;
+	s_EntitySet = false;
 	return false;
 }

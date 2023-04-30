@@ -27,7 +27,7 @@ public:
 private:
 
 	int m_CurrentID = 0;
-	bool m_EntitySet = false;
+	bool s_EntitySet = false;
 
 
 

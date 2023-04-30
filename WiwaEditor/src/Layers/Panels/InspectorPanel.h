@@ -50,10 +50,11 @@ public:
 	inline bool GetCurrentEntity(int& id)
 	{
 		id = m_CurrentID;
-		return m_EntitySet;
+		return s_EntitySet;
 	}
 private:
 	
 	int m_CurrentID = 0;
-	bool m_EntitySet = false;
+public:
+	static bool s_EntitySet;
 };

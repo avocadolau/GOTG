@@ -32,7 +32,7 @@ void AnimationPanel::Draw()
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 	ImGui::BeginChild("select", ImVec2(w, h), true);
-	if (m_EntitySet && (m_CurrentID >= 0))
+	if (s_EntitySet && (m_CurrentID >= 0))
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
 		std::string edit = entName;
@@ -100,7 +100,7 @@ void AnimationPanel::OnEvent(Wiwa::Event& e)
 bool AnimationPanel::OnEntityChange(EntityChangeEvent& e)
 {
 	m_CurrentID = e.GetResourceId();
-	m_EntitySet = true;
+	s_EntitySet = true;
 
 
 	return false;
@@ -108,7 +108,7 @@ bool AnimationPanel::OnEntityChange(EntityChangeEvent& e)
 bool AnimationPanel::OnSceneChange(Wiwa::SceneChangeEvent& e)
 {
 	m_CurrentID = -1;
-	m_EntitySet = false;
+	s_EntitySet = false;
 
 
 

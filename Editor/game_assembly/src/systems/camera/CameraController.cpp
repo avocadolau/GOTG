@@ -28,6 +28,29 @@ namespace Wiwa
 			m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);
 		}
 		m_Camera->setRotation(m_CameraRotation);
+
+
+		switch (GameStateManager::GetType())
+		{
+		case RoomType::ROOM_HUB:
+			m_FOV = 70;
+			break;
+		case RoomType::ROOM_REWARD:
+			m_FOV = 45;
+			break;
+		case RoomType::ROOM_COMBAT:
+			m_FOV = 60;
+			break;
+		case RoomType::ROOM_BOSS:
+			m_FOV = 60;
+			break;
+		case RoomType::ROOM_SHOP:
+			m_FOV = 60;
+			break;
+		default:
+			m_FOV = 60;
+			break;
+		}
 		m_Camera->setFOV(m_FOV);
 	}
 

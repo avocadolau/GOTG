@@ -30,7 +30,7 @@ namespace Wiwa {
 		
 		Model* root_mod = Wiwa::Resources::GetResourceById<Wiwa::Model>(mesh->meshId);
 		Model* mod = root_mod;
-	
+
 		if (root_mod->IsRoot()) {
 			if(!mesh->drawChildren)
 				mod = root_mod->getModelAt(mesh->modelIndex);

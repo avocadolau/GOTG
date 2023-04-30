@@ -609,32 +609,35 @@ void EditorLayer::MainMenuBar()
 			// Play button
 			if (ImGui::Button(play))
 			{
+				InspectorPanel::s_EntitySet = false;
 				if (!is_playing)
 				{
 					
-						SaveScene();
+					SaveScene();
 
-						if (m_OpenedScenePath != "")
-						{
-							Wiwa::Time::Play();
-							Wiwa::Time::Update();
+					if (m_OpenedScenePath != "")
+					{
+						Wiwa::Time::Play();
+						Wiwa::Time::Update();
 
-							m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
-							Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
-							sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
+						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
+						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+						sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
 
-							// For debug purposes
-							std::string ex = sc->getName();
-							ex += "_execution";
-							sc->ChangeName(ex.c_str());
+						// For debug purposes
+						std::string ex = sc->getName();
+						ex += "_execution";
+						sc->ChangeName(ex.c_str());
 
-							Wiwa::SceneManager::PlayScene();
-						}
+						Wiwa::SceneManager::PlayScene();
+					}
 				}
 				else
 				{
 					StopScene();
 				}
+
+
 			}
 
 			if (ImGui::Button(ICON_FK_PAUSE))
@@ -818,6 +821,7 @@ void EditorLayer::OpenScene()
 		LoadScene(filePath);
 
 		WI_INFO("Succesfully opened scene at path {0}", filePath.c_str());
+		InspectorPanel::s_EntitySet = false;
 	}
 }
 
