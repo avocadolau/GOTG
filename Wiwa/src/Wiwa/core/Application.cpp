@@ -46,6 +46,8 @@ USE_REFLECTION;
 namespace Wiwa
 {
 	Application *Application::s_Instance = nullptr;
+	std::random_device Application::s_Rd;
+	std::mt19937 Application::s_Gen(s_Rd());
 
 	Application::Application(int argc, char **argv)
 	{
