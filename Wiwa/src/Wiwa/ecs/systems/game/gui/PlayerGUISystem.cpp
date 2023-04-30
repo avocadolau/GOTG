@@ -123,6 +123,7 @@ void Wiwa::PlayerGUISystem::DeathHud(Wiwa::GuiManager& gm)
 {
 	Wiwa::SceneManager::PauseCurrentScene();
 	gm.canvas.at(CanvasHUD)->SwapActive();
+	gm.canvas.at(DeathHUD)->SwapActive();
 }
 
 void Wiwa::PlayerGUISystem::CooldownState(Ability** ability,Wiwa::GuiManager& gm)
