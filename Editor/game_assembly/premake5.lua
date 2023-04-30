@@ -70,7 +70,9 @@ project "WiwaGameAssembly"
 		"ImGui"
 	}
 
-	debugdir "%{wks.location}/build"
+	debugdir ".."
+	debugcommand("../WiwaEditor.exe")
+
 
 	filter "system:windows"
 		cppdialect "C++latest"

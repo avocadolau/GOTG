@@ -68,12 +68,12 @@ void Wiwa::PlayerController::OnUpdate()
 
 Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()
 {
-	return (StarLordShooter*)m_Scene->GetEntityManager().GetComponentByIterator(m_ShooterIt);
+	return GetComponent<StarLordShooter>();
 }
 
 Wiwa::RocketShooter* Wiwa::PlayerController::GetRocket()
 {
-	return (RocketShooter*)m_Scene->GetEntityManager().GetComponentByIterator(m_RocketIt);
+	return GetComponent<RocketShooter>();
 }
 
 Wiwa::Character* Wiwa::PlayerController::GetCharacter()
@@ -88,7 +88,7 @@ Wiwa::Transform3D* Wiwa::PlayerController::GetTransform()
 
 Wiwa::CollisionBody* Wiwa::PlayerController::GetRigidBody()
 {
-	return (CollisionBody*)m_Scene->GetEntityManager().GetComponentByIterator(m_RigidbodyIt);
+	return GetComponent<CollisionBody>();
 }
 
 

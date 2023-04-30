@@ -3,7 +3,9 @@
 #include <Wiwa/ecs/components/game/Character.h>
 
 Wiwa::PlayerAttack::PlayerAttack(PlayerStateMachine* stateMachine, EntityId id)
-	: PlayerBaseState(stateMachine, id) {}
+	: PlayerBaseState(stateMachine, id) {
+	m_ShootTimer = 0.f;
+}
 
 Wiwa::PlayerAttack::~PlayerAttack() {}
 
