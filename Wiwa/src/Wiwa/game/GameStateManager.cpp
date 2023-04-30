@@ -131,7 +131,6 @@ namespace Wiwa
 
 	}
 
-
 	void GameStateManager::UpdateRoomState()
 	{
 		if (s_RoomType == RoomType::ROOM_COMBAT)
@@ -440,6 +439,7 @@ namespace Wiwa
 			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
+
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:

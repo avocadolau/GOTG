@@ -9,6 +9,7 @@
 #include <Wiwa/ecs/components/game/wave/Wave.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawnPoint.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
 {
@@ -38,6 +39,7 @@ namespace Wiwa
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
 		GetSpawnPoints(m_Points);
 
+		Audio::PostEvent("wave_start");
 		/*int j = 0;
 		for (int i = 0; i < wave->maxEnemies; i++)
 		{

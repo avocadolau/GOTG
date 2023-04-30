@@ -1,5 +1,9 @@
 #include "SkipScene.h"
 
+void Wiwa::SkipScene::OnInit()
+{
+}
+
 void Wiwa::SkipScene::OnUpdate()
 {
 	if (Input::IsKeyPressed(Key::Space)
