@@ -7,7 +7,7 @@
 					<ChildrenList>
 						<GameParameter Name="player_health" ID="{AEB3BC33-42AB-4D57-8CDE-C43D3B8C1D91}">
 							<PropertyList>
-								<Property Name="InitialValue" Type="Real64" Value="100"/>
+								<Property Name="InitialValue" Type="Real64" Value="0"/>
 							</PropertyList>
 						</GameParameter>
 					</ChildrenList>

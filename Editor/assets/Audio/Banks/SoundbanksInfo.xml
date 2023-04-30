@@ -78,7 +78,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{979725AB-EAF8-F342-8C2B-691C3562A3A0}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{54DD0360-ED15-76F5-AEC7-9C06C3A050B7}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -89,6 +89,10 @@
 				<File Id="49179977" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 09 Shoot 1.wav</ShortName>
 					<CachePath>SFX/Weapon 09 Shoot 1_10C4C929.wem</CachePath>
+				</File>
+				<File Id="174263698" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>heartbeat.wav</ShortName>
+					<CachePath>SFX/heartbeat_743200E1.wem</CachePath>
 				</File>
 				<File Id="236038091" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_07.wav</ShortName>
@@ -162,6 +166,11 @@
 						<MediaRef Id="892625025"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="215992295" Name="player_health">
+					<MediaRefs>
+						<MediaRef Id="174263698"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="871813740" Name="player_hit">
 					<MediaRefs>
 						<MediaRef Id="712169024"/>
@@ -190,8 +199,11 @@
 					</MediaRefs>
 				</Event>
 			</Events>
+			<GameParameters>
+				<GameParameter Id="215992295" Name="player_health"/>
+			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{309192D1-CB4E-79AA-C429-D474FF65CD04}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{EA8F32A7-89B2-686F-7F00-4E69B1D8127D}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -455,7 +467,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{FB478A7F-C9E0-8F70-9CA0-995AC467CAE2}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{EE499514-9CFC-A7D3-CF9D-25C5784029E6}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -577,5 +589,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{75FAC45B-4367-24F6-94B9-D26A2DF4230D}</FileHash>
+	<FileHash>{DC72827D-81F0-DC30-585B-A90824F26EDA}</FileHash>
 </SoundBanksInfo>
