@@ -3,6 +3,7 @@
 
 #include "Wiwa/ecs/components/game/Character.h"
 #include "Wiwa/game/GameStateManager.h"
+#include "../../Editor/game_assembly/src/components/attack/SimpleBullet.h"
 #include "Wiwa/scene/Scene.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 
@@ -90,9 +91,15 @@ namespace Wiwa
                 // TODO: Increase current buffs duration
                 Inventory& PlayerInventory = GameStateManager::GetPlayerInventory();
                 Buff** playerCurrentBuffs = PlayerInventory.GetBuffs();
-                for (int i = 0; i < 2; i++)
+                if (*playerCurrentBuffs != nullptr)
                 {
-                    playerCurrentBuffs[i]->Duration += playerCurrentBuffs[i]->Duration * buffPercent;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (playerCurrentBuffs[i] != nullptr)
+                        {
+                            playerCurrentBuffs[i]->Duration += playerCurrentBuffs[i]->Duration * buffPercent;
+                        }
+                    }
                 }
             }
             break;
@@ -114,12 +121,31 @@ namespace Wiwa
             break;
         case PassiveType::PROJECTILE:
             {
-                // TODO: ADD ABILITIES TAG
+                Inventory& PlayerInventory = GameStateManager::GetPlayerInventory();
+                Ability** playerCurrentAbilities = PlayerInventory.GetAbilities();
+                if (*playerCurrentAbilities != nullptr)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (playerCurrentAbilities[i] != nullptr)
+                        {
+                            if (playerCurrentAbilities[i]->itemTag[0] == ItemTags::PROJECTILE || playerCurrentAbilities[i]->itemTag[1] == ItemTags::PROJECTILE)
+                            {
+                                playerCurrentAbilities[i]->Damage += (int)((float)playerCurrentAbilities[i]->Damage * buffPercent);
+                            }
+                        }
+                    }
+                }
             }
             break;
         case PassiveType::RANGE:
             {
                 //
+                Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+                EntityId newBulletId = EntityManager::INVALID_INDEX;
+                newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
+                SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
+                bullet->lifeTime += (int)((float)bullet->lifeTime * buffPercent);
             }
             break;
         }
