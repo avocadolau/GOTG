@@ -109,6 +109,10 @@ namespace Wiwa
 			editorConversations[e].conversationName = conversations[e].conversationName;
 			editorConversations[e].occupied = conversations[e].occupied;
 
+			editorConversations[e].isInOppositeSide = conversations[e].isInOppositeSide;
+			editorConversations[e].group.groupID = conversations[e].group.groupID;
+			editorConversations[e].group.order = conversations[e].group.order;
+
 			for (int f = 0; f < MAX_CONVERSATION_NODES && conversations[e].nodes[f].occupied == true; f++)
 			{
 				editorConversations[e].nodes[f].text1 = conversations[e].nodes[f].text1;
@@ -378,8 +382,8 @@ namespace Wiwa
 			doc.AddMember(memberNameBubbleImage.c_str(), conversations[i].bubbleImagePath.c_str());
 			doc.AddMember(memberNameCharacterImage.c_str(), conversations[i].characterImagePath.c_str());
 
-			doc.AddMember(memberNameGroupId.c_str(), (int)conversations[i].group.groupID);
-			doc.AddMember(memberNameGroupOrder.c_str(), (int)conversations[i].group.order);
+			doc.AddMember(memberNameGroupId.c_str(), conversations[i].group.groupID.c_str());
+			doc.AddMember(memberNameGroupOrder.c_str(),conversations[i].group.order.c_str());
 
 			doc.AddMember(memberNameOppositeSide.c_str(), (bool)conversations[i].isInOppositeSide);
 
@@ -477,8 +481,8 @@ namespace Wiwa
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
 					SetCharacterImage(doc[memberNameCharacterImage.c_str()].as_string(), i);
 
-					conversations[i].group.groupID = doc[memberNameGroupId.c_str()].as_int();
-					conversations[i].group.order = doc[memberNameGroupOrder.c_str()].as_int();
+					conversations[i].group.groupID = doc[memberNameGroupId.c_str()].as_string();
+					conversations[i].group.order = doc[memberNameGroupOrder.c_str()].as_string();
 
 					conversations[i].isInOppositeSide = doc[memberNameOppositeSide.c_str()].as_bool();
 

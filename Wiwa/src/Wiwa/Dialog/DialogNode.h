@@ -22,6 +22,6 @@ struct DialogNode
 struct ConversationGroup
 {
 	
-	int groupID = -1;
-	int order = -1;
+	std::string groupID = std::to_string(-1);
+	std::string order = std::to_string(-1);
 };
