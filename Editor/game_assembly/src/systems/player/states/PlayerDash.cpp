@@ -1,5 +1,8 @@
 #include "PlayerDash.h"
 #include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
+#include "../../../Systems.h"
 
 Wiwa::PlayerDash::PlayerDash(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id)
@@ -8,8 +11,7 @@ Wiwa::PlayerDash::PlayerDash(PlayerStateMachine* stateMachine, EntityId id)
 	m_TargetPoint = glm::vec3(0.f);
 	m_DashDirection = glm::vec3(0.f);
 	m_MaxDashTime = 1.5f;
-
-
+	
 	
 }
 
@@ -21,6 +23,15 @@ void Wiwa::PlayerDash::EnterState()
 {
 	m_DashVFX = m_StateMachine->GetEntityManager().GetChildByName(m_StateMachine->GetEntity(), "p_dash");
 	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, true);
+
+	EntityManager& entityManager = GameStateManager::GetCurrentScene()->GetEntityManager();
+	ParticleSystem* sys_dashParticle = entityManager.GetSystem<ParticleSystem>(m_DashVFX);
+
+	if (sys_dashParticle != nullptr)
+	{
+		sys_dashParticle->SetActive(true);
+	}
+	
 	m_StateMachine->IsDashing = true;
 	m_DashTimer = m_StateMachine->GetCharacter()->DashCooldown;
 	if (m_StateMachine->CanMove())
@@ -73,7 +84,16 @@ void Wiwa::PlayerDash::ExitState()
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 	m_StateMachine->GetAnimator()->Restart();
 	m_StateMachine->IsDashing = false;
-	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, false);
+	
+
+	EntityManager& entityManager = GameStateManager::GetCurrentScene()->GetEntityManager();
+	ParticleSystem* sys_dashParticle = entityManager.GetSystem<ParticleSystem>(m_DashVFX);
+
+	if (sys_dashParticle != nullptr)
+	{
+		sys_dashParticle->SetActive(false);
+	}
+
 }
 
 void Wiwa::PlayerDash::OnCollisionEnter(Object* object1, Object* object2)

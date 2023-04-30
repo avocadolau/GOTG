@@ -540,6 +540,12 @@ namespace Wiwa {
 		}
 	}
 
+	void ParticleSystem::SetActive(bool active)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		emitter->m_active = active;
+	}
+
 
 	void ParticleSystem::OnDestroy()
 	{
