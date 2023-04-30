@@ -867,32 +867,28 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	}
 	ImGui::Dummy(ImVec2(0, 4));
 
-	if (emitter->m_loopSpawning)
+	ImGui::Checkbox("##m_rangedSpawnAmount", &emitter->m_rangedSpawnAmount);
+	ImGui::SameLine();
+	ImGui::Text("Spawn Amount");
+
+	if (emitter->m_rangedSpawnAmount)
 	{
 
-		ImGui::Checkbox("##m_rangedSpawnAmount", &emitter->m_rangedSpawnAmount);
+		ImGui::PushItemWidth(46.f);
+
+		ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
 		ImGui::SameLine();
-		ImGui::Text("Spawn Amount");
+		ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+	else
+	{
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
 
-		if (emitter->m_rangedSpawnAmount)
-		{
-
-			ImGui::PushItemWidth(46.f);
-
-			ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
-		}
-		else
-		{
-			ImGui::Dummy(ImVec2(38, 0));
-			ImGui::SameLine();
-			ImGui::PushItemWidth(100.0f);
-
-			ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
-		}
+		ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
 	}
 	
 	ImGui::Dummy(ImVec2(0, 4));

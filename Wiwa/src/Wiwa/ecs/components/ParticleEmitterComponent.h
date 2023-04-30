@@ -179,6 +179,8 @@ namespace Wiwa {
 		bool m_p_followEmitterRotationY;
 		bool m_p_followEmitterRotationZ;
 
+		ColorNode temp[20] = { ColorNode() }; //--> to fix colors later
+
 
 		// todo					----------------------------------------
 		// 

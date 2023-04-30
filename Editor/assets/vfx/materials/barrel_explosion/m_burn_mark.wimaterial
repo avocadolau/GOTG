@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.4695183038711548,"u_Color":{"r":0.24017465114593506,"g":0.24017465114593506,"b":0.24017465114593506,"a":1.0},"u_Texture":"assets/textures/t_explosion.png"}}
