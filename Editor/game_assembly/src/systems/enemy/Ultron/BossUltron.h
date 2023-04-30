@@ -2,6 +2,7 @@
 #include "../EnemySystem.h"
 
 namespace Wiwa {
+
 	class  BossUltron : public EnemySystem {
 	public:
 		class BossUltronBaseState* m_CurrentState;
