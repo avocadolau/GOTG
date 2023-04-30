@@ -40,7 +40,6 @@ namespace Wiwa
 			{
 				newDestination = GetNewPosition();
 			}
-			WI_INFO("NEW POS X: {}, Y: {}, Z: {}", newDestination.x, newDestination.y, newDestination.z);
 			navAgentPtr->SetDestination(newDestination);
 			currentDestination = newDestination;
 		}
@@ -62,20 +61,6 @@ namespace Wiwa
 		Transform3D* selfTr = enemy->GetTransform();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
-
-		/*if (Math::IsPointNear(currentDestination, selfTr->localPosition, 2.0f))
-		{
-			glm::vec3 newDestination = currentDestination;
-			while (newDestination == currentDestination)
-			{
-				newDestination = GetNewPosition();
-			}
-			if (navAgentPtr)
-			{
-				navAgentPtr->SetDestination(newDestination);
-				currentDestination = newDestination;
-			}
-		}*/
 
 		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 2.0f))
 		{
