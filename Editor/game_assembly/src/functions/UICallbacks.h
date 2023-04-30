@@ -12,6 +12,7 @@ enum class SetVolumeFX_ { hola };
 enum class PlaceHolderButton_ { hola };
 enum class ActivateOptionsMenu_ { hola };
 enum class DeActivateOptionsMenu_ { hola };
+enum class GoToVideo_ { hola };
 
 // Declare
 GoToMilanoHub_ GoToMilanoHub();
@@ -40,6 +41,8 @@ ActivateOptionsMenu_ ActivateOptionsMenu();
 
 DeActivateOptionsMenu_ DeActivateOptionsMenu();
 
+GoToVideo_ GoToIntroLoreVideo();
+
 //// Register
 REGISTER_FUNCTION(GoToMilanoHub);
 REGISTER_FUNCTION(GoMainMenu);
@@ -54,3 +57,4 @@ REGISTER_FUNCTION(SetVolumeFX);
 REGISTER_FUNCTION(PlaceHolderButton);
 REGISTER_FUNCTION(ActivateOptionsMenu);
 REGISTER_FUNCTION(DeActivateOptionsMenu);
+REGISTER_FUNCTION(GoToIntroLoreVideo);

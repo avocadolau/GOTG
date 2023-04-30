@@ -30,6 +30,7 @@ void Wiwa::PlayerStateMachine::OnAwake()
 {
 	PlayerController::OnAwake();
 	m_CurrentState = m_IdleState;
+	GetAudio()->PlayAudio("player_health");
 }
 
 void Wiwa::PlayerStateMachine::OnInit()
