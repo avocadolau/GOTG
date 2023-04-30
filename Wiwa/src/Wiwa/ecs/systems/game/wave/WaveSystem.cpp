@@ -36,8 +36,6 @@ namespace Wiwa
 		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
 
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
-		spawner->hasTriggered = true;
-
 		std::vector<glm::vec3> points;
 		GetSpawnPoints(points);
 

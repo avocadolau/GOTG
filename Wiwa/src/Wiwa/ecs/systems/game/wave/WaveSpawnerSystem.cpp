@@ -9,9 +9,7 @@ namespace Wiwa
 	{
 		m_EnemySpawnerIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_LastWave = WI_INVALID_INDEX;
-		//m_WavesIts = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		//m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		//m_WavesIds = 0;
+
 		m_HasWave = false;
 		m_TimerBetweenWaves = 0.0f;
 		m_TimerForNextWave = 0.0f;
@@ -34,8 +32,7 @@ namespace Wiwa
 		m_TimerBetweenWaves = enemySpawner->timeBetweenWaves;
 		enemySpawner->hasTriggered = false;
 		enemySpawner->hasFinished = false;
-	/*	maxWavesCounter = enemySpawner->maxWaveCount;
-		currentWavesCounter = 0;*/
+
 		SpawnWave();
 	}
 
@@ -46,13 +43,9 @@ namespace Wiwa
 
 		WaveSpawnerAction action = QueryActiveWaves();
 
-	/*	if (allWavesFinished && HasHadAllWaves(*enemySpawner))
-		{
-			enemySpawner->hasFinished = true;
-		}*/
-
 		if (m_TimerForNextWave >= enemySpawner->waveChangeRate)
 		{
+			//WI_INFO("--------- ACTION: SPAWN A WAVE (TIMER) --------- ");
 			action = WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
@@ -79,28 +72,6 @@ namespace Wiwa
 
 		m_TimerBetweenWaves += Time::GetRealDeltaTimeSeconds();
 		m_TimerForNextWave += Time::GetRealDeltaTimeSeconds();
-		
-
-		//// Check current wave
-		//if (currentWave && enemySpawner->currentWaveCount > 0)
-		//{
-		//	m_HasWave = IsWaveFinished(*currentWave);
-		//}
-
-		//if (enemySpawner == nullptr)
-		//	return;
-
-		//// Finish the spawner
-		//if (enemySpawner->currentWaveCount >= enemySpawner->maxWaveCount)
-		//{
-		//	enemySpawner->hasFinished = true;
-		//}
-
-		//// Timer before deploying next wave
-		//if (!m_HasWave && !enemySpawner->hasFinished)
-		//{
-		//	SpawnWave();
-		//}
 	}
 
 	WaveSpawnerAction WaveSpawnerSystem::QueryActiveWaves()
@@ -108,8 +79,9 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		
-		if (enemySpawner->hasTriggered = false)
+		if (enemySpawner->hasTriggered == false)
 		{
+			//WI_INFO("--------- ACTION: SPAWN A WAVE (FIRST) --------- ");
 			return WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
@@ -117,17 +89,26 @@ namespace Wiwa
 
 		for (int i = 0; i < m_WavesIds.size(); i++)
 		{
-			Wave* wave = em.GetComponent<Wave>(m_WavesIds[i]);
+			Wave* wave = GetComponentByIterator<Wave>(m_WavesIts[i]);
 			if (wave->hasFinished)
 			{
 				wavesFinished += 1;
 			}
 		}
 
+		//WI_INFO("WAVES FINISHED: {}", wavesFinished);
+		//WI_INFO("WAVES COUNT: {}", enemySpawner->maxWaveCount);
+		//WI_INFO("Has Had All Waves: {}", HasHadAllWaves(*enemySpawner));
+		//WI_INFO("Has triggered: {}", enemySpawner->hasTriggered);
+
 		if (wavesFinished >= enemySpawner->maxWaveCount && HasHadAllWaves(*enemySpawner) && enemySpawner->hasTriggered)
+		{
+			/*WI_INFO("--------- ACTION: ENDDDDDDDDDDDDDDDDDD --------- ");*/
 			return WaveSpawnerAction::END_SPAWNER;
+		}
 		else if (wavesFinished == m_WavesIds.size() && wavesFinished < enemySpawner->maxWaveCount)
 		{
+			//WI_INFO("--------- ACTION: SPAWN ANOTHER WAVE --------- ");
 			return WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
