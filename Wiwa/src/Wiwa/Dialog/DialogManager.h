@@ -105,5 +105,8 @@ namespace Wiwa
 		int firstTimeTimer = 0;
 		int endTimeTimer = 0;
 
+		int convGroup = 0;
+		int convOrder = 0;
+
 	};
 }

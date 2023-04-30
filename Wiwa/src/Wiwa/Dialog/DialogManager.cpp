@@ -138,7 +138,7 @@ namespace Wiwa
   
 			keyPressRefreshTimer = 0;
 		}
-		
+
 		if (actualConversationState == 0 || actualConversationState == 1)
 		{
 			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
@@ -146,6 +146,29 @@ namespace Wiwa
 				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()))
 				{
 					UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
+
+					if (std::stoi(conversations[i].group.groupID) != -1 && actualConversationState == 2)
+					{
+						convGroup = std::stoi(conversations[i].group.groupID);
+						convOrder = std::stoi(conversations[i].group.order) + 1;
+					}
+					else
+					{
+						convGroup = -1;
+						convOrder = -1;
+					}
+				}
+			}
+		}
+
+		if (convGroup != -1 && convOrder != -1)
+		{
+			for (int z = 0; (z < MAX_CONVERSATIONS) && conversations[z].occupied == true; z++)
+			{
+				if (convGroup == std::stoi(conversations[z].group.groupID) && convOrder == std::stoi(conversations[z].group.order))
+				{
+					actualConversationState == 0;
+					conversationToPlayName = conversations[z].conversationName;
 				}
 			}
 		}
