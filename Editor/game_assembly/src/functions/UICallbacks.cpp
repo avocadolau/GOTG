@@ -101,3 +101,9 @@ DeActivateOptionsMenu_ DeActivateOptionsMenu()
 	return DeActivateOptionsMenu_();
 }
 
+GoToVideo_ GoToIntroLoreVideo()
+{
+	Wiwa::SceneManager::ChangeSceneByIndex(1);
+	return GoToVideo_::hola;
+}
+
