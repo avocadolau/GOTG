@@ -88,6 +88,7 @@ namespace Wiwa
 		void SetValues(ParticleEmitterComponent settings);
 
 		void SpawnParticle(Particle& particle);
+		void SpawnParticleSet();
 
 		void UpdateParticleLife(Particle& particle, float deltaTime);
 		void SetParticleLifeTime(Particle& particle, float lifeTime);

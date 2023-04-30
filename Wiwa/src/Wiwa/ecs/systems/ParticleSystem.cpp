@@ -104,6 +104,12 @@ namespace Wiwa {
 			}
 			
 		}
+
+
+		if (!emitter->m_loopSpawning)
+		{
+			SpawnParticleSet();
+		}
 	}
 	void ParticleSystem::OnUpdate()
 	{
@@ -186,24 +192,39 @@ namespace Wiwa {
 				m_SpawnTimer -= dt;
 
 
-			if ((m_SpawnTimer < 0 && emitter->m_loopSpawning) || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
+
+			if (emitter->m_activeOverTime)
 			{
-				for (unsigned int i = 0; i < (uint)emitter->m_spawnAmount; ++i)
+				if (emitter->m_active && emitter->m_ActiveTimer <= 0)
 				{
-					if (m_AvailableParticles > 0)
+					if (emitter->m_rangedTimeActive)
 					{
-						int unusedParticle = FirstUnusedParticle();
-						SpawnParticle(m_Particles[unusedParticle]);
+						emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+					}
+					else
+					{
+						emitter->m_ActiveTimer = emitter->m_initialTimeActive;
 					}
 				}
 
-				m_SpawnTimer = emitter->m_spawnRate;
-
-				if (emitter->m_p_rangedSpawnRate)
+				if (m_SpawnTimer < 0 && emitter->m_ActiveTimer > 0)
 				{
-					m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+					SpawnParticleSet();
+				}
+				else
+				{
+					emitter->m_active = false;
 				}
 			}
+			else
+			{
+				if (m_SpawnTimer < 0 && emitter->m_loopSpawning)
+				{
+					SpawnParticleSet();
+				}
+			}
+
+
 
 			//WI_CORE_INFO("spawn timer = {0}", m_SpawnTimer);
 
@@ -775,6 +796,37 @@ namespace Wiwa {
 
 		//particle.life_time = emitter->m_p_lifeTime;
 		m_AvailableParticles--;		
+	}
+
+	void ParticleSystem::SpawnParticleSet()
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		int spawnAmount = 0;
+
+		if (emitter->m_rangedSpawnAmount)
+		{
+			spawnAmount = Wiwa::Math::RandomRange(emitter->m_minSpawnAmount, emitter->m_maxSpawnAmount);
+		}
+		else
+		{
+			spawnAmount = emitter->m_spawnAmount;
+		}
+
+		for (unsigned int i = 0; i < (uint)spawnAmount; ++i)
+		{
+			if (m_AvailableParticles > 0)
+			{
+				int unusedParticle = FirstUnusedParticle();
+				SpawnParticle(m_Particles[unusedParticle]);
+			}
+		}
+
+		m_SpawnTimer = emitter->m_spawnRate;
+
+		if (emitter->m_p_rangedSpawnRate)
+		{
+			m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+		}
 	}
 
 	unsigned int ParticleSystem::FirstUnusedParticle()
