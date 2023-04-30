@@ -6,6 +6,7 @@
 #include "Achievements/AchievementsManager.h"
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/audio/Audio.h>
 
 namespace Wiwa
@@ -129,7 +130,6 @@ namespace Wiwa
 		s_PlayerInventory->Deserialize(&doc);
 
 	}
-
 
 	void GameStateManager::UpdateRoomState()
 	{
@@ -295,13 +295,24 @@ namespace Wiwa
 		// to the health even when this surpases the shield ammount
 
 		// If there's no shield we take damage from the health
+
+		MeshRenderer* renderer = s_CurrentScene->GetEntityManager().GetSystem<MeshRenderer>(s_PlayerId);
+
 		
 		if (character->Shield <= 0)
 		{
 			character->Health -= damage;
-			Audio::SetRTPCValue("player_health", character->Health);
+			if (renderer != nullptr) 
+			{
+				renderer->GetMaterial()->SetUniformData("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+				renderer->GetMaterial()->SetUniformData("u_Hit", true);
+				renderer->Update();
+				renderer->GetMaterial()->SetUniformData("u_Hit", false);
+			}
+			Audio::PostEvent("player_hit");
 			if (character->Health <= 0)
 			{
+				Audio::PostEvent("player_dead");
 				Die();
 			}
 			return;
@@ -311,6 +322,14 @@ namespace Wiwa
 		if (character->Shield > 0)
 		{
 			character->Shield -= damage;
+			Audio::PostEvent("player_hit_shield");
+			if (renderer != nullptr)
+			{
+				renderer->GetMaterial()->SetUniformData("u_Color", glm::vec4(0, 0, 1.0f, 1.0f));
+				renderer->GetMaterial()->SetUniformData("u_Hit", true);
+				renderer->Update();
+				renderer->GetMaterial()->SetUniformData("u_Hit", false);
+			}
 		}
 
 		if (character->Shield <= 0)
@@ -420,6 +439,7 @@ namespace Wiwa
 			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
+
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
