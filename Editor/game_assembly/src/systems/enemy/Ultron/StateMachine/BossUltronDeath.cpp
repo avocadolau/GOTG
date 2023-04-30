@@ -37,19 +37,9 @@ namespace Wiwa
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//if (animator->HasFinished())
 		//{
-			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
-			self->hasFinished = true;
-			if (self->waveId != -1)
-			{
-				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-				waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::BOSS_ULTRON);
-				GameStateManager::s_PoolManager->s_BossUltron->ReturnToPool(enemy->GetEntity());
-			}
-			else
-			{
-				em.DestroyEntity(enemy->GetEntity());
-			}
-		//}
+		Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+		self->hasFinished = true;
+		em.DestroyEntity(enemy->GetEntity());
 	}
 
 	void BossUltronDeathState::ExitState(BossUltron* enemy)
