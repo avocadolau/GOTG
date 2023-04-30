@@ -140,6 +140,9 @@ namespace Wiwa
 					if (point)
 					{
 						vec.emplace_back(point->point);
+
+						if (point->isCenter)
+							enemy->m_SceneCenterPos = point->point;
 					}
 				}
 			}

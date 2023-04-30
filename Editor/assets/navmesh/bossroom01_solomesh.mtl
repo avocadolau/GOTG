@@ -1,0 +1,108 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl M_MainDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_MainDoor_01a_C.png
+
+newmtl M_SecondaryDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_SecondaryDoor_01a_C.png
+
+newmtl M_Benches
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Benches\T_Benches_01a_C.png
+
+newmtl M_Plants
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Plants\T_Plants.png
+
+newmtl M_Biombos_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\biombos\Biombos\T_Biombos_01a_C.png
+
+newmtl M_Biombos_02a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\biombos\Biombos\T_Biombos_02a_C.png
+
+newmtl M_Biombos_03
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\biombos\Biombos\T_Biombos_03a_C.png
+
+newmtl M_StandBin
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\NewsStandFrameRubishBin\T_StandFrameBin.png
+
+newmtl M_TvCilinderBounty
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\BountyTvCylinder\T_BountyTvCilinder.png
+
+newmtl lambert1
+Kd 0.400000006 0.400000006 0.400000006
+Ka 0 0 0
+d 1
+illum 1
+

@@ -20,7 +20,7 @@ namespace Wiwa {
 		float m_Timer;
 		float m_RangeOfAttack = 0.0f;
 		int m_MinimumPath = 0;
-
+		glm::vec3 m_SceneCenterPos = glm::vec3(0.0f);
 	public:
 		BossUltron();
 		~BossUltron();

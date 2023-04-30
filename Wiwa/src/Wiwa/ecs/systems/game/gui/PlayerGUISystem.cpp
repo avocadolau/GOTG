@@ -429,9 +429,6 @@ void Wiwa::PlayerGUISystem::HandleActivePassives(std::vector<PassiveSkill> Passi
 
 void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* character)
 {
-	// Input
-	const float rightTrigger = Input::GetAxis(Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger);
-	const float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
 	//Update hp & shield
 	gm.canvas.at(CanvasHUD)->controls.at(1)->SetValueForUIbar(character->Health, character->MaxHealth);
 	gm.canvas.at(CanvasHUD)->controls.at(2)->SetValueForUIbar(character->Shield, character->MaxShield);
@@ -824,6 +821,37 @@ void Wiwa::PlayerGUISystem::OnCollisionEnter(Object* body1, Object* body2)
 		else if (item->item_type == 2)//BUFF
 		{
 			shopActive = true;
+		}
+	}
+}
+
+void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
+{
+	std::string tag_item = "ITEM";
+
+	if (body1->id == m_EntityId && tag_item == body2->selfTagStr)
+	{
+		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+		Wiwa::EntityManager& em = _scene->GetEntityManager();
+		Item* item = em.GetComponent<Item>(body2->id);
+		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+
+		if (!item)
+		{
+			WI_CORE_ERROR("Item component can't be find");
+			return;
+		}
+		if (item->item_type == 0)//ABILITY
+		{
+			shopActive = false;
+			gm.canvas.at(ShopHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
+		}
+		else if (item->item_type == 2)//BUFF
+		{
+			shopActive = false;
+			gm.canvas.at(ShopHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
 		}
 	}
 }

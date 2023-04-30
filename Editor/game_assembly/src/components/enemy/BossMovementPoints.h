@@ -10,6 +10,7 @@
 namespace Wiwa {
 	struct BossMovementPoints {
 		glm::vec3 point;
+		bool isCenter;
 	};
 }
 
