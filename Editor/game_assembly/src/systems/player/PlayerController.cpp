@@ -155,11 +155,43 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	physSys->CreateBody();
 	bulletSys->EnableBullet();
 
-	EntityId muzzleFlash = entityManager.GetChildByName(m_EntityId, "p_muzzle");
-	entityManager.SetActive(muzzleFlash, true);
-	Transform3D* muzzleTransform = entityManager.GetComponent<Transform3D>(muzzleFlash);
-	muzzleTransform->localPosition = Math::GetWorldPosition(transform.localMatrix);
 
+	if (transform.localPosition.x > 0)
+	{
+		//emit left muzzle
+		EntityId shotMuzzleLeft = entityManager.GetChildByName(m_EntityId, "p_muzzleLeft");
+		EntityId shotMuzzleLeftImpact = entityManager.GetChildByName(shotMuzzleLeft, "vfx_impact");
+		EntityId shotMuzzleLeftFlash = entityManager.GetChildByName(shotMuzzleLeft, "vfx_flash");
+
+		entityManager.SetActive(shotMuzzleLeft, true);
+
+		ParticleSystem* sys_shotMuzzleLeftImpact = entityManager.GetSystem<ParticleSystem>(shotMuzzleLeftImpact);
+		ParticleSystem* sys_shotMuzzleLeftFlash = entityManager.GetSystem<ParticleSystem>(shotMuzzleLeftFlash);
+
+		if (sys_shotMuzzleLeftImpact != nullptr && sys_shotMuzzleLeftFlash != nullptr)
+		{
+			sys_shotMuzzleLeftImpact->EmitParticleBatch(1);
+			sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
+		}
+	}
+	else
+	{
+		//emit right muzzle
+		EntityId shotMuzzleRight = entityManager.GetChildByName(m_EntityId, "p_muzzleRight");
+		EntityId shotMuzzleRightImpact = entityManager.GetChildByName(shotMuzzleRight, "vfx_impact");
+		EntityId shotMuzzleRightFlash = entityManager.GetChildByName(shotMuzzleRight, "vfx_flash");
+
+		entityManager.SetActive(shotMuzzleRight, true);
+
+		ParticleSystem* sys_shotMuzzleRightImpact = entityManager.GetSystem<ParticleSystem>(shotMuzzleRightImpact);
+		ParticleSystem* sys_shotMuzzleRightFlash = entityManager.GetSystem<ParticleSystem>(shotMuzzleRightFlash);
+
+		if (sys_shotMuzzleRightImpact != nullptr && sys_shotMuzzleRightFlash != nullptr)
+		{
+			sys_shotMuzzleRightImpact->EmitParticleBatch(1);
+			sys_shotMuzzleRightFlash->EmitParticleBatch(1);
+		}
+	}
 }
 
 glm::vec3 Wiwa::PlayerController::GetMovementInput()
