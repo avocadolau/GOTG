@@ -27,8 +27,6 @@ namespace Wiwa
 		m_DashState = nullptr;
 		
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_RangeOfAttack = 100.0f;
-		m_MinimumPath = 5;
 		m_Timer = 0.0f;
 		m_SceneCenterPos = glm::vec3(0.0f);
 	}
