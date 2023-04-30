@@ -17,6 +17,7 @@
 #include <Wiwa/utilities/functions/Function.h>
 #include <Wiwa/utilities/functions/Action.h>
 #include "GameAssemblyHandle.h"
+#include <random>
 
 namespace Wiwa
 {
@@ -172,6 +173,10 @@ namespace Wiwa
 		bool FinishedImport = false;
 	private:
 		static Application *s_Instance;
+
+	public:
+		static std::random_device s_Rd; // static random_device
+		static std::mt19937 s_Gen; // static Mersenne Twister
 	};
 
 	// To be defined in a client

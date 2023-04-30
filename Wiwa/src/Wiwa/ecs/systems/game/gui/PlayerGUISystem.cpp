@@ -50,10 +50,7 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 {
 	CharacterInventory* characterInventory = m_Scene->GetEntityManager().GetSystem<CharacterInventory>(m_EntityId);
 	CurrentHUD = gm.getCurrentCanvas();
-	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY))
-	{
-		Wiwa::GameStateManager::GetPlayerInventory().AddTokens(15);
-	}
+
 	if (CurrentHUD == CanvasHUD)
 	{
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
@@ -64,23 +61,12 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		{
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
-			pauseGame = false;
 			m_Scene->SwapPauseActive();
-		}
-
-		if (Wiwa::Input::IsKeyPressed(Key::B))
-		{
-			pauseGame = true;
-		}
-		if (Wiwa::Input::IsKeyReleased(Key::B) && pauseGame)
-		{
-			gm.canvas.at(CanvasHUD)->SwapActive();
-			gm.canvas.at(PauseHUD)->SwapActive();
 			pauseGame = false;
-			m_Scene->SwapPauseActive();
+			
 		}
 	}
-	if (CurrentHUD == PauseHUD)
+	else if (CurrentHUD == PauseHUD)
 	{
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
 		{
@@ -88,13 +74,14 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		}
 		if (returnToHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
 		{
-			gm.canvas.at(CanvasHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
-			returnToHUD = false;
+			gm.canvas.at(CanvasHUD)->SwapActive();
 			m_Scene->SwapPauseActive();
+			returnToHUD = false;
+			
 		}
 	}
-	if (CurrentHUD == OptionsHUD)
+	else if (CurrentHUD == OptionsHUD)
 	{
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
 		{
@@ -107,7 +94,7 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			returnToPauseHUD = false;
 		}
 	}
-	if (CurrentHUD == ShopHUD)
+	else if (CurrentHUD == ShopHUD)
 	{
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 		{
