@@ -843,6 +843,26 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 	}
 
+	//start spawn delay
+	ImGui::Checkbox("##m_p_rangedSpawnDelay", &emitter->m_p_rangedSpawnDelay);
+	ImGui::SameLine();
+	ImGui::Text("Spawn Delay");
+
+	if (emitter->m_p_rangedSpawnDelay)
+	{
+		ImGui::PushItemWidth(46.f);
+
+		ImGui::DragFloat("##m_p_minSpawnDelay", &emitter->m_p_minSpawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::SameLine();
+		ImGui::DragFloat("##m_p_maxSpawnDelay", &emitter->m_p_maxSpawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+	else
+	{
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragFloat("##m_p_spawnDelay", &emitter->m_p_spawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
 	ImGui::Dummy(ImVec2(0, 4));
 
 	if (emitter->m_loopSpawning)
@@ -928,9 +948,36 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		if ((int)emitter->m_p_positionFollowsRotation > 1 || (int)emitter->m_p_positionFollowsRotation < 0)
 			emitter->m_p_positionFollowsRotation = false;
 
+		if ((int)emitter->m_p_positionFollowsRotationX > 1 || (int)emitter->m_p_positionFollowsRotationX < 0)
+			emitter->m_p_positionFollowsRotationX = false;
+
+		if ((int)emitter->m_p_positionFollowsRotationY > 1 || (int)emitter->m_p_positionFollowsRotationY < 0)
+			emitter->m_p_positionFollowsRotationY = false;
+
+		if ((int)emitter->m_p_positionFollowsRotationZ > 1 || (int)emitter->m_p_positionFollowsRotationZ < 0)
+			emitter->m_p_positionFollowsRotationZ = false;
+
 		ImGui::Checkbox("##m_p_positionFollowsRotation", &emitter->m_p_positionFollowsRotation);
 		ImGui::SameLine();
 		ImGui::Text("Position Depends on Rotation");
+
+		if (emitter->m_p_positionFollowsRotation)
+		{
+			ParticleTab();
+			ImGui::Text("X:");
+			ImGui::SameLine();
+			ImGui::Checkbox("##m_p_positionFollowsRotationX", &emitter->m_p_positionFollowsRotationX);
+			ImGui::SameLine();
+			ImGui::Text(" Y:");
+			ImGui::SameLine();
+			ImGui::Checkbox("##m_p_positionFollowsRotationY", &emitter->m_p_positionFollowsRotationY);
+			ImGui::SameLine();
+			ImGui::Text(" Z:");
+			ImGui::SameLine();
+			ImGui::Checkbox("##m_p_positionFollowsRotationZ", &emitter->m_p_positionFollowsRotationZ);
+			
+		}
+		ImGui::Dummy(ImVec2(0, 8));
 
 		ImGui::Text("Use Volume:");
 		ImGui::SameLine();
@@ -1103,6 +1150,37 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Text("Follow Emitter Rotation");
 
+		if ((int)emitter->m_p_followEmitterRotation > 1 || (int)emitter->m_p_followEmitterRotation < 0)
+			emitter->m_p_followEmitterRotation = false;
+
+		if ((int)emitter->m_p_followEmitterRotationX > 1 || (int)emitter->m_p_followEmitterRotationX < 0)
+			emitter->m_p_followEmitterRotationX = false;
+
+		if ((int)emitter->m_p_followEmitterRotationY > 1 || (int)emitter->m_p_followEmitterRotationY < 0)
+			emitter->m_p_followEmitterRotationY = false;
+
+		if ((int)emitter->m_p_followEmitterRotationZ > 1 || (int)emitter->m_p_followEmitterRotationZ < 0)
+			emitter->m_p_followEmitterRotationZ = false;
+		
+		if (emitter->m_p_followEmitterRotation)
+		{
+			ParticleTab();
+			ImGui::Text("X:");
+			ImGui::SameLine();
+			ImGui::Checkbox("##m_p_followEmitterRotationX", &emitter->m_p_followEmitterRotationX);
+			ImGui::SameLine();
+			ImGui::Text(" Y:");
+			ImGui::SameLine();
+			ImGui::Checkbox("##m_p_followEmitterRotationY", &emitter->m_p_followEmitterRotationY);
+			ImGui::SameLine();
+			ImGui::Text(" Z:");
+			ImGui::SameLine();
+			ImGui::Checkbox("##m_p_followEmitterRotationZ", &emitter->m_p_followEmitterRotationZ);
+
+		}
+		ImGui::Dummy(ImVec2(0, 8));
+		
+
 		ImGui::Checkbox("##m_p_followEmitterRotationSpawn", &emitter->m_p_followEmitterRotationSpawn);
 		ImGui::SameLine();
 		ImGui::Text("Follow Emitter Rotation Only on Spawn");
@@ -1270,6 +1348,17 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::Checkbox("##m_useAdditiveBlending", &emitter->m_useAdditiveBlending);
 		ImGui::SameLine();
 		ImGui::Text("Use Additive Blending");
+
+
+		if ((int)emitter->m_deactivateFaceCulling > 1 || (int)emitter->m_deactivateFaceCulling < 0)
+			emitter->m_deactivateFaceCulling = false;
+
+		ImGui::Checkbox("##m_deactivateFaceCulling", &emitter->m_deactivateFaceCulling);
+		ImGui::SameLine();
+		ImGui::Text("Deactivate Face Culling");
+
+
+		
 
 		if (emitter->m_colorsUsed < 1)
 		{

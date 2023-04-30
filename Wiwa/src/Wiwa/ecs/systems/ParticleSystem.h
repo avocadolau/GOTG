@@ -105,6 +105,9 @@ namespace Wiwa
 		glm::vec4 InterpolateVec4(glm::vec4 valStart, glm::vec4 valEnd, float currentPercentage, float targetPercentage);
 		float InterpolateFloat(float valStart, float valEnd, float currentPercentage, float targetPercentage);
 		glm::vec3 InterpolateVec3(glm::vec3 valStart, glm::vec3 valEnd, float currentPercentage, float targetPercentage);
+
+		void EmitParticleBatch(int amount);
+
 	private:
 		unsigned int m_VAO;
 

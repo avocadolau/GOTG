@@ -164,6 +164,21 @@ namespace Wiwa {
 
 		bool m_useAdditiveBlending;
 		bool m_p_positionFollowsRotation;
+		bool m_deactivateFaceCulling;
+
+		bool m_p_rangedSpawnDelay;
+		float m_p_spawnDelay;
+		float m_p_minSpawnDelay;
+		float m_p_maxSpawnDelay;
+
+		bool m_p_positionFollowsRotationX;
+		bool m_p_positionFollowsRotationY;
+		bool m_p_positionFollowsRotationZ;
+
+		bool m_p_followEmitterRotationX;
+		bool m_p_followEmitterRotationY;
+		bool m_p_followEmitterRotationZ;
+
 
 		// todo					----------------------------------------
 		// 
