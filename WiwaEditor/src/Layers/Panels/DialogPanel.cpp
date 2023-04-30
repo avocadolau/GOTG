@@ -84,6 +84,9 @@ void DialogPanel::Draw()
 				dm.conversations[currentConversation].bubbleImagePath = "";
 				dm.conversations[currentConversation].characterImagePath = "";
 				dm.conversations[currentConversation].conversationName = "";
+				dm.conversations[currentConversation].isInOppositeSide = false;
+				dm.conversations[currentConversation].group.groupID = "-1";
+				dm.conversations[currentConversation].group.order = "-1";
 				dm.conversations[currentConversation].nodes[0].occupied = true;
 
 				currentCreationStep = 1;
@@ -282,7 +285,15 @@ void DialogPanel::Draw()
 				ImGui::NewLine();
 
 				ImGui::Checkbox("Is character on Right?", &dm.conversations[currentConversation].isInOppositeSide);
-				ImGui::TextWrapped("Note: 'Is character on Right?' defines wether the character is standing on the left or right sight of the bubble.");
+				ImGui::TextWrapped("Note: 'Is character on Right?' defines wether the character is standing on the left or right side of the bubble. It will also make bubble appear higher.");
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Conversation Group", &dm.conversations[currentConversation].group.groupID);
+				ImGui::TextWrapped("Note: 'Conversation Group' defines if this conversation belongs to a group. Leave it to '-1' if this conversation should not belong to a group.");
+
+				ImGui::InputText("Group Order", &dm.conversations[currentConversation].group.order);
+				ImGui::TextWrapped("Note: 'Group Order' defines the order conversations will happen in the group starting from '0'. Leave it to '-1' if this conversation does not belong to any group.");
 
 				ImGui::NewLine();
 
@@ -308,6 +319,8 @@ void DialogPanel::Draw()
 					dm.editorConversations[currentConversation].nodes[0].occupied = dm.conversations[currentConversation].nodes[0].occupied;
 
 					dm.editorConversations[currentConversation].isInOppositeSide = dm.conversations[currentConversation].isInOppositeSide;
+					dm.editorConversations[currentConversation].group.groupID = dm.conversations[currentConversation].group.groupID;
+					dm.editorConversations[currentConversation].group.order = dm.conversations[currentConversation].group.order;
 
 					currentEditingConversationName[currentConversation] = dm.conversations[currentConversation].conversationName;
 
@@ -511,6 +524,19 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::Checkbox("Is character on Right?", &dm.editorConversations[i].isInOppositeSide);
+				ImGui::TextWrapped("Note: 'Is character on Right?' defines wether the character is standing on the left or right side of the bubble. It will also make bubble appear higher.");
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Conversation Group", &dm.editorConversations[i].group.groupID);
+				ImGui::TextWrapped("Note: 'Conversation Group' defines if this conversation belongs to a group. Leave it to '-1' if this conversation should not belong to a group.");
+
+				ImGui::InputText("Group Order", &dm.editorConversations[i].group.order);
+				ImGui::TextWrapped("Note: 'Group Order' defines the order conversations will happen in the group starting from '0'. Leave it to '-1' if this conversation does not belong to any group.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("DONR FORGET SAVING!");
 				ImGui::PushID(i);
 				if (ImGui::Button(" ~ Save Conversation ~ "))
@@ -532,6 +558,11 @@ void DialogPanel::Draw()
 					dm.conversations[i].bubbleImagePath = dm.editorConversations[i].bubbleImagePath;
 					dm.SetDialogBubbleImage(dm.conversations[i].bubbleImagePath.c_str(), i);
 					dm.conversations[i].conversationName = dm.editorConversations[i].conversationName;
+
+					dm.conversations[i].isInOppositeSide = dm.editorConversations[i].isInOppositeSide;
+					dm.conversations[i].group.groupID = dm.editorConversations[i].group.groupID;
+					dm.conversations[i].group.order = dm.editorConversations[i].group.order;
+
 					dm.SaveAllDialogs();
 
 					saved = 1;
@@ -559,6 +590,10 @@ void DialogPanel::Draw()
 							dm.conversations[l].bubbleImagePath = dm.conversations[l + 1].bubbleImagePath;
 							dm.conversations[l].characterImagePath = dm.conversations[l + 1].characterImagePath;
 							dm.conversations[l].conversationName = dm.conversations[l + 1].conversationName;
+
+							dm.conversations[l].isInOppositeSide = dm.conversations[l + 1].isInOppositeSide;
+							dm.conversations[l].group.groupID = dm.conversations[l + 1].group.groupID;
+							dm.conversations[l].group.order = dm.conversations[l + 1].group.order;
 							
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
@@ -596,6 +631,10 @@ void DialogPanel::Draw()
 							dm.editorConversations[l].bubbleImagePath = dm.editorConversations[l + 1].bubbleImagePath;
 							dm.editorConversations[l].characterImagePath = dm.editorConversations[l + 1].characterImagePath;
 							dm.editorConversations[l].conversationName = dm.editorConversations[l + 1].conversationName;
+
+							dm.editorConversations[l].isInOppositeSide = dm.editorConversations[l + 1].isInOppositeSide;
+							dm.editorConversations[l].group.groupID = dm.editorConversations[l + 1].group.groupID;
+							dm.editorConversations[l].group.order = dm.editorConversations[l + 1].group.order;
 
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
