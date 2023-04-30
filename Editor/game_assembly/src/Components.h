@@ -15,6 +15,7 @@
 
 #include "components/attack/ClusterBullet.h"
 #include "components/attack/UltronLaserBeam.h"
+#include "components/enemy/BossMovementPoints.h"
 
 #include "components/attack/ExplosiveBarrel.h"
 #include "components/props/VentRotatorData.h"
