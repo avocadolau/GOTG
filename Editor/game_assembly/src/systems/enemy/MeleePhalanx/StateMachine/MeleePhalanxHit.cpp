@@ -4,6 +4,9 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/components/Mesh.h>
+#include <Wiwa/utilities/render/Material.h>
 
 namespace Wiwa
 {
@@ -20,6 +23,11 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+		Wiwa::MeshRenderer* renderer= em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
+		Wiwa::Material* mat = renderer->GetMaterial();
+
+		mat->SetUniformData("u_Hit", true);
+		renderer->Update();
 
 		audio->PlayAudio("melee_hit");
 		EntityId hit_1 = em.GetChildByName(enemy->GetEntity(), "E_Hit_1");
@@ -41,6 +49,12 @@ namespace Wiwa
 
 	void MeleePhalanxHitState::ExitState(EnemyMeleePhalanx* enemy)
 	{
+
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
+		Wiwa::Material* mat = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity())->GetMaterial();
+		mat->SetUniformData("u_Hit", false);
+		renderer->Update();
 	}
 
 	void MeleePhalanxHitState::OnCollisionEnter(EnemyMeleePhalanx* enemy, const Object* body1, const Object* body2)

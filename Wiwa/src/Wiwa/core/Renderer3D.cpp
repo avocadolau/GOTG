@@ -64,6 +64,7 @@ namespace Wiwa
 		ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
 		Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
 		skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
+		skinnedTexturedOutlinedShader->addUniform("u_Color", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
 		skinnedTexturedOutlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
@@ -73,6 +74,7 @@ namespace Wiwa
 		skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_Hit", UniformType::Bool);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
 		//init skinned Outline
 		ResourceId skinnedOutlineShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_outline");

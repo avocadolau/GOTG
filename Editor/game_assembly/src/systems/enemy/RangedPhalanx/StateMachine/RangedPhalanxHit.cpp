@@ -4,6 +4,9 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/components/Mesh.h>
+#include <Wiwa/utilities/render/Material.h>
 
 namespace Wiwa
 {
@@ -21,8 +24,13 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		animator->PlayAnimation("damage", false);
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
+		Wiwa::Material* mat = renderer->GetMaterial();
+		mat->SetUniformData("u_Hit", true);
+		renderer->Update();
+
+		animator->PlayAnimation("damage", false);
 
 		audio->PlayAudio("ranged_dead");
 	}
@@ -39,6 +47,12 @@ namespace Wiwa
 
 	void RangedPhalanxHitState::ExitState(EnemyRangedPhalanx* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
+		Wiwa::Material* mat = renderer->GetMaterial();
+
+		mat->SetUniformData("u_Hit", false);
+		renderer->Update();
 	}
 
 	void RangedPhalanxHitState::OnCollisionEnter(EnemyRangedPhalanx* enemy, const Object* body1, const Object* body2)

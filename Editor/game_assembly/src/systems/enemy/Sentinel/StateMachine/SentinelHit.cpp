@@ -3,7 +3,9 @@
 #include "../EnemySentinel.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-
+#include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/components/Mesh.h>
+#include <Wiwa/utilities/render/Material.h>
 namespace Wiwa
 {
 	SentinelHitState::SentinelHitState()
@@ -18,7 +20,11 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
+		Wiwa::Material* mat = renderer->GetMaterial();
 
+		mat->SetUniformData("u_Hit", true);
+		renderer->Update();
 		//SentinelParticles - Hit Particles
 		animator->PlayAnimation("hit", false); //AnimacionSentinel
 	}
@@ -35,6 +41,12 @@ namespace Wiwa
 
 	void SentinelHitState::ExitState(EnemySentinel* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
+		Wiwa::Material* mat = renderer->GetMaterial();
+
+		mat->SetUniformData("u_Hit", false);
+		renderer->Update();
 	}
 
 	void SentinelHitState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)

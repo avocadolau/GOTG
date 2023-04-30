@@ -80,4 +80,11 @@ namespace Wiwa {
 		}
 		
 	}
+	Material* MeshRenderer::GetMaterial()
+	{
+		ResourceId matid = GetComponent<Mesh>()->materialId;
+
+		return Wiwa::Resources::GetResourceById<Material>(matid);
+	}
+
 }

@@ -22,6 +22,8 @@ namespace Wiwa {
 		bool OnComponentAdded(byte* data, const Type* type) override { return true; }
 
 		bool OnComponentRemoved(byte* data, const Type* type) override { return true; }
+
+		Material* GetMaterial();
 	};
 }
 
