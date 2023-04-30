@@ -512,10 +512,13 @@ namespace Wiwa
 			if (canvas.at(i)->active)
 			{
 				canvaSelected = i;
+
+				if (canvaSelected >= 5)
+					canvaSelected = 0;
+
+				return canvaSelected;
 			}
-		}
-		if (canvaSelected >= 5) canvaSelected = 0;
-		return canvaSelected;
+		}		
 	}
 	bool GuiManager::_loadGUIImpl(Wiwa::File& File)
 	{

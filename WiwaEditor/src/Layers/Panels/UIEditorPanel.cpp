@@ -368,6 +368,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		case Wiwa::GuiControlType::BUTTON:
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
+			ImGui::InputText("audio event:", &audioEventForButton);
 			CallbackElements(control);
 			ImGui::Text("Animations");
 			ImGui::Checkbox("animated", &animated);
@@ -377,6 +378,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 		case Wiwa::GuiControlType::CHECKBOX:
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
+			ImGui::InputText("audio event:", &audioEventForButton);
 			VectorEdit(animationRects);
 			CallbackElements(control);
 			AssetContainerPath();
@@ -396,6 +398,7 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			ImGui::DragInt2("origin size", originSize);
 			ImGui::DragInt2("origin position slider", extraOriginPos);
 			ImGui::DragInt2("origin size slider", extraOriginSize);
+			ImGui::InputText("audio event:", &audioEventForButton);
 			CallbackElements(control);
 			AssetContainerPath();
 			AssetContainerExtraPath();
