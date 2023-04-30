@@ -1,0 +1,123 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl M_MainDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_MainDoor_01a_C.png
+
+newmtl M_Door02
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_SecondaryDoor_01a_C.png
+
+newmtl M_Generators
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.125 0.125 0.125
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\GeneratorsFanCounter\T_AtlasGeneratorsFanCounter.png
+
+newmtl M_Columns_02a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\columns\ColumnRework\T_Columns_02a_C.png
+
+newmtl M_TvCilinderBounty
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\BountyTvCylinder\T_BountyTvCilinder.png
+
+newmtl M_PipeLines
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Pipelines\T_PipeLines_01a_C.png
+
+newmtl m_DoorMonitor
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\DoorMonitor\T_TexDoorMonitorDifuse_01_C.png
+
+newmtl M_Table
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\table\Table_03\T_TexTable3Difuse_01.png
+
+newmtl M_CombatKree02Floor
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.125 0.125 0.125
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\farre\Downloads\T_CombatKree02_C.png
+
+newmtl M_BlackCover
+Kd 0 0 0
+Ka 0 0 0
+Ks 0 0 0
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+
+newmtl M_wall
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\farre\Documents\1. Uni\1. PROJECT3\BlenderRoomsForWiwa\T_EnvironmentWalls.png
+
