@@ -167,10 +167,16 @@ public:
 	*/
 	static bool UnloadAllBanks();
 
+	//change the state of a switch, this is set to work with the default listener (music)
+	static bool ChangeSwitchContainer(const char* container_name, const char* swtich_state);
+
 	static void ChangeMasterVolume(int value);
 	static void ChangeMusicVolume(int value);
 	static void ChangeSFXVolume(int value);
 	static void ChangeDialogVolume(int value);
+
+	//set a rtpcValue 
+	static void SetRTPCValue(const char* name, int value);
 
 	static bool LoadPreset(const char* json_file);
 	static bool SavePreset(const char* filename);

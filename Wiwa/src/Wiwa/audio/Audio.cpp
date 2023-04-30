@@ -844,6 +844,16 @@ bool Audio::UnloadAllBanks()
     return true;
 }
 
+bool Audio::ChangeSwitchContainer(const char* container_name,const char* swtich_state)
+{
+    AKRESULT res = AK::SoundEngine::SetSwitch(container_name, swtich_state, m_DefaultListener);
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+    return true;
+}
+
 void Audio::ChangeMasterVolume(int value)
 {
     AK::SoundEngine::SetRTPCValue("MasterVolume", value);

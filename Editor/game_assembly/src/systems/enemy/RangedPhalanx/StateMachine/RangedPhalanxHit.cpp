@@ -50,7 +50,6 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
 		Wiwa::Material* mat = renderer->GetMaterial();
-
 		mat->SetUniformData("u_Hit", false);
 		renderer->Update();
 	}

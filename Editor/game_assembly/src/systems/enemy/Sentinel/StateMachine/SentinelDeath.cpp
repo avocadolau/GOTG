@@ -28,8 +28,6 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-		audio->PlayAudio("explosion");
 		/*animator->PlayAnimation("atackdeath", false);*/ //AnimacionSentinel
 
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -47,6 +45,8 @@ namespace Wiwa
 
 		if ( m_TimerToDie > m_TimeToDie)
 		{	
+			Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+			audio->PlayAudio("explosion");
 			//Sentinel Explosion
 			Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 			GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
