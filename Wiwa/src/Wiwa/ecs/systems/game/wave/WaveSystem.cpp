@@ -202,7 +202,6 @@ namespace Wiwa
 
 	Pool_Type WaveSystem::GetEnemyFromProbabiliteis()
 	{
-		Pool_Type enemiesTypeList[] = { Pool_Type::PHALANX_MELEE , Pool_Type::PHALAN_RANGED , Pool_Type::SENTINEL, Pool_Type::SUBJUGATOR };
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 45) // 45% probability

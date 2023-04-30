@@ -3,17 +3,13 @@
 #include "../BossUltron.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include "../../../../components/enemy/BossMovementPoints.h"
 
 namespace Wiwa
 {
-	std::vector<glm::vec2> BossUltronMovementState::m_PremadePositions;
-
 	BossUltronMovementState::BossUltronMovementState()
 	{
-		m_PremadePositions.push_back({ 20,3});
-		m_PremadePositions.push_back({ 3,20 });
-		m_PremadePositions.push_back({ 25,1 });
-		m_PremadePositions.push_back({ -15,-7 });
+		m_DoAttack = false;
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -35,14 +31,14 @@ namespace Wiwa
 
 		//animator->PlayAnimation("move", true);
 
-		glm::vec2 destination2D = RandomPremadePosition();
-
-		glm::vec3 destination3D = {destination2D.x,0.0f,destination2D.y};
+		FillPremadePosition(enemy, m_PremadePositions);
+		int indexRand = RAND(0, m_PremadePositions.size() - 1);
+		glm::vec3 destination = m_PremadePositions[indexRand];
 
 		if (navAgentPtr != nullptr)
 		{
-			navAgentPtr->SetDestination(destination3D);
-			currentDestination = destination3D;
+			navAgentPtr->SetDestination(destination);
+			currentDestination = destination;
 		}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -55,47 +51,49 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
-		
-		enemy->SwitchState(enemy->m_LaserBeamAttackState);
+		Transform3D* selfTr = enemy->GetTransform();
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
-			//if (Math::IsPointNear(navAgentPtr->GetCurrentPosition(), currentDestination, 1.0f)) // change it for a timer?
-			//{
-			//	navAgentPtr->StopAgent();
-			//	//agentPtr->StopMoving();
-			//	std::srand(std::time(0));
+		if (distanceToPlayer < enemy->m_RangeOfAttack && navAgentPtr->Raycast(selfTr->localPosition, playerTr->localPosition))
+		{
+			navAgentPtr->StopAgent();
+			m_DoAttack = true;
+		}
 
-			//	enemy->SwitchState(enemy->m_DashState);
-
-			//	//int randomAction = Math::RandomRange(0, NUMBER_OF_RANDOM_ACTIONS);
-			//	//switch (randomAction)
-			//	//{
-			//	//case 0:
-			//	//{
-			//	//	enemy->SwitchState(enemy->m_BulletStormAttackState);
-			//	//}
-			//	//break;
-			//	//case 1:
-			//	//{
-			//	//	enemy->SwitchState(enemy->m_ClusterShotsAttackState);
-			//	//}
-			//	//break;
-			//	//case 2:
-			//	//{
-			//	//	enemy->SwitchState(enemy->m_LaserBeamAttackState);
-			//	//}
-			//	//break;
-			//	///*case 3:
-			//	//{
-			//	//	enemy->SwitchState(enemy->m_DashState);
-			//	//}*/
-			//	//}
-			//}
-				
+		if (m_DoAttack)
+		{
+			UltronAttacks nextAttack = GetAttackFromProbabilites();
+			switch (nextAttack)
+			{
+			case Wiwa::UltronAttacks::NONE:
+				break;
+			case Wiwa::UltronAttacks::BULLET_STORM:
+			{
+				navAgentPtr->StopAgent();
+				enemy->SwitchState(enemy->m_BulletStormAttackState);
+			}
+				break;
+			case Wiwa::UltronAttacks::LASER_BEAM:
+			{
+				navAgentPtr->StopAgent();
+				enemy->SwitchState(enemy->m_LaserBeamAttackState);
+			}
+				break;
+			case Wiwa::UltronAttacks::CLUSTER_SHOTS:
+			{
+				navAgentPtr->StopAgent();
+				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
+			}
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	void BossUltronMovementState::ExitState(BossUltron* enemy)
@@ -107,4 +105,44 @@ namespace Wiwa
 	{
 	}
 
+	UltronAttacks BossUltronMovementState::GetAttackFromProbabilites()
+	{
+		std::uniform_int_distribution<> disEnemies(1, 100);
+		int randomNum = disEnemies(Application::s_Gen);
+		if (randomNum <= 50) // 50% probability
+		{
+			return UltronAttacks::BULLET_STORM;
+		}
+		else if (randomNum <= 75) { // 25% probability
+			return UltronAttacks::LASER_BEAM;
+		}
+		else if (randomNum <= 100) { // 25% probability
+			return UltronAttacks::CLUSTER_SHOTS;
+		}
+		
+		return UltronAttacks::NONE;
+	}
+
+	void BossUltronMovementState::FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec)
+	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		size_t size = 0;
+		Wiwa::BossMovementPoints* pointsList = nullptr;
+		pointsList = em.GetComponents<BossMovementPoints>(&size);
+		if (pointsList)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (em.IsComponentRemoved<BossMovementPoints>(i)) {
+				}
+				else {
+					Wiwa::BossMovementPoints* point = &pointsList[i];
+					if (point)
+					{
+						vec.emplace_back(point->point);
+					}
+				}
+			}
+		}
+	}
 }
