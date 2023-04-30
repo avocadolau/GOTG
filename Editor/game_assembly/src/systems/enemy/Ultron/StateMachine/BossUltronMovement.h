@@ -25,7 +25,7 @@ namespace Wiwa {
 		UltronAttacks GetAttackFromProbabilites();
 
 		void FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec);
-	
+		glm::vec3 GetNewPosition();
 	private:
 		std::vector<glm::vec3> m_PremadePositions;
 		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
