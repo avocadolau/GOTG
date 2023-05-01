@@ -26,9 +26,12 @@ namespace Wiwa
 	int GameStateManager::s_SpawnersFinished = 0;
 	bool GameStateManager::debug = true;
 	
+	int GameStateManager::s_RoomsToShop = 5;
+	int GameStateManager::s_RoomsToBoss = 5;
+
+	SceneId GameStateManager::s_BossRoomIndx;
+	SceneId GameStateManager::s_HUBRoomIndx;
 	SceneId GameStateManager::s_CurrentRoomIndx;
-	SceneId GameStateManager::s_RoomsToShop;
-	SceneId GameStateManager::s_RoomsToBoss;
 	SceneId GameStateManager::s_IntroductionRoom;
 	SceneId GameStateManager::s_LastCombatRoom;
 	SceneId GameStateManager::s_LastRewardRoom;
@@ -128,7 +131,6 @@ namespace Wiwa
 		if (debug)
 			WI_CORE_INFO("Player progression loaded");
 		s_PlayerInventory->Deserialize(&doc);
-
 	}
 
 	void GameStateManager::UpdateRoomState()
@@ -208,10 +210,6 @@ namespace Wiwa
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
-		s_CurrentRoomsCount = 3;
-		s_RoomsToBoss = 20;
-		s_RoomsToShop = 10;
-
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -419,12 +417,6 @@ namespace Wiwa
 	int GameStateManager::NextRoom()
 	{
 		WI_INFO("ROOM STATE: NextRoom()");
-		//if (s_CurrentRoomsCount > s_RoomsToShop)
-		//{
-		//	GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-		//	SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
-		//	return 1;
-		//}
 
 		RoomType type = GameStateManager::GetType();
 		switch (type)
@@ -436,10 +428,10 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
+			std::uniform_int_distribution<> dist(0, s_CombatRooms.size() - 1);
+			int nextRoom = dist(Application::s_Gen);
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
-
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -447,11 +439,8 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_REWARD");
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			int nextRoom = (int)s_LastRewardRoom;
-			/*while (nextRoom == s_LastRewardRoom)
-			{
-			}*/
-			nextRoom = RAND(0, s_RewardRooms.size() - 1);
+			std::uniform_int_distribution<> dist(0, s_RewardRooms.size() - 1);
+			int nextRoom = dist(Application::s_Gen);
 
 			s_LastRewardRoom = nextRoom;
 			SceneId id = s_RewardRooms[nextRoom];
@@ -463,12 +452,8 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			int nextRoom = (int)s_LastCombatRoom;
-			/*while (nextRoom == s_LastCombatRoom)
-			{
-				
-			}*/
-			nextRoom = RAND(0, s_CombatRooms.size() - 1);
+			std::uniform_int_distribution<> dist(0, s_CombatRooms.size() - 1);
+			int nextRoom = dist(Application::s_Gen);
 			s_LastCombatRoom = nextRoom;
 			SceneId id = s_CombatRooms[nextRoom];
 			SceneManager::ChangeSceneByIndex(id);
@@ -482,20 +467,18 @@ namespace Wiwa
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 				nextRoom = s_LastShopRoom;
-				while (nextRoom == s_LastShopRoom)
-				{
-					nextRoom = RAND(0, s_ShopRooms.size() - 1);
-				}
-				id = s_ShopRooms[id];
+				
+				std::uniform_int_distribution<> dist(0, s_ShopRooms.size() - 1);
+				int nextRoom = dist(Application::s_Gen);
+				
+				id = s_ShopRooms[0];
 				SceneManager::ChangeSceneByIndex(id);
-				s_RoomsToShop = 10;
 			}
 			break;
 		}
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
-			WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
-			SceneManager::ChangeSceneByName("RunEnd");
+			SceneManager::LoadSceneByIndex(s_HUBRoomIndx);
 			break;
 		}
 		case Wiwa::RoomType::ROOM_SHOP:
@@ -504,14 +487,15 @@ namespace Wiwa
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
-				//SceneManager::LoadScene("RunBoss");
+				SceneManager::LoadSceneByIndex(s_BossRoomIndx);
 			}
 			else
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-				int nextRoom = RAND(0, s_CombatRooms.size() - 1);
+				std::uniform_int_distribution<> dist(0, s_CombatRooms.size() - 1);
+				int nextRoom = dist(Application::s_Gen);
 				SceneId id = s_CombatRooms[nextRoom];
 				SceneManager::ChangeSceneByIndex(id);
 			}
@@ -547,6 +531,8 @@ namespace Wiwa
 		doc.AddMember("buff_chance", s_BuffChances);
 		doc.AddMember("npc_chance", s_NPCRoomChances);
 
+		doc.AddMember("hub", s_HUBRoomIndx);
+		doc.AddMember("boss", s_BossRoomIndx);
 		doc.AddMember("intro", s_IntroductionRoom);
 		JSONValue combatRooms = doc.AddMemberArray("combat");
 		for (size_t i = 0; i < s_CombatRooms.size(); i++)
@@ -620,10 +606,13 @@ namespace Wiwa
 		if (doc.HasMember("npc_chance"))
 			s_NPCRoomChances = doc["npc_chance"].as_int();
 
-		if (doc.HasMember("intro")) {
-			s_IntroductionRoom = doc["intro"].as_int();
+		if (doc.HasMember("hub")) {
+			s_HUBRoomIndx = doc["hub"].as_int();
 		}
-
+		if (doc.HasMember("boss"))
+		{
+			s_BossRoomIndx = doc["boss"].as_int();
+		}
 		if (doc.HasMember("combat")) {
 
 			JSONValue scene_list = doc["combat"];

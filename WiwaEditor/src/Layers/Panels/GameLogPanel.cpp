@@ -67,7 +67,8 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::Text("Rooms to boss %d", Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::Text("Rooms to shop %d", Wiwa::GameStateManager::s_RoomsToShop);
 	ImGui::Text("Rooms to end and return tu hub %d", Wiwa::GameStateManager::s_CurrentRoomsCount);
-	ImGui::InputInt("HUB room index", (int*)&Wiwa::GameStateManager::s_IntroductionRoom);
+	ImGui::InputInt("HUB room index", (int*)&Wiwa::GameStateManager::s_HUBRoomIndx);
+	ImGui::InputInt("Boss room index", (int*)&Wiwa::GameStateManager::s_BossRoomIndx);
 	ImGui::InputInt("Rooms to boss", (int*)&Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::InputInt("Rooms to shop", (int*)&Wiwa::GameStateManager::s_RoomsToShop);
 	ImGui::Separator();

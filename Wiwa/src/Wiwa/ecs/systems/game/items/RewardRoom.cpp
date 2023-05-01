@@ -24,7 +24,7 @@ void Wiwa::RewardRoom::OnInit()
 	counter += GameStateManager::s_BuffChances;
 	if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_NPCRoomChances))
 	{
-
+		GameStateManager::SpawnRandomItem(t3d->position, 1);
 	}
 	counter += GameStateManager::s_NPCRoomChances;
 }

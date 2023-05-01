@@ -160,11 +160,13 @@ namespace Wiwa {
 		static EntityManager::ComponentIterator s_CharacterStats;
 		static int s_CurrentCharacter;
 		static float s_GamepadDeadzone;
+		static int s_RoomsToShop;
+		static int s_RoomsToBoss;
 
-		static SceneId s_CurrentRoomIndx;
-		static SceneId s_RoomsToShop;
-		static SceneId s_RoomsToBoss;
+		static SceneId s_BossRoomIndx;
+		static SceneId s_HUBRoomIndx;
 		static SceneId s_IntroductionRoom;
+		static SceneId s_CurrentRoomIndx;
 		static SceneId s_LastCombatRoom;
 		static SceneId s_LastRewardRoom;
 		static SceneId s_LastShopRoom;
