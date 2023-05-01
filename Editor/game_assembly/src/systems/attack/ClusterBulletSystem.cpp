@@ -60,13 +60,16 @@ void Wiwa::ClusterBulletSystem::OnUpdate()
 
 	m_Timer += Time::GetDeltaTimeSeconds();
 
+
+
 	if (m_Timer >= bullet->lifeTime)
 	{
-		
+
 		int randomValue = Math::RandomRange(0, 1);
 
 		if (randomValue == 0)
 		{
+
 			BlowClusterBullet01(m_EntityId);
 		}
 		else
@@ -145,7 +148,7 @@ void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId 
 	bulletTr->localScale = {1.0f,1.0f,1.0f};
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bull_dir;
-	//bullet->damage = 10;
+	bullet->damage = 20; //TODO: Add to components
 
 	Wiwa::SimpleBulletSystem* simpleBulletSystem = entityManager.GetSystem<Wiwa::SimpleBulletSystem>(newBulletId);
 

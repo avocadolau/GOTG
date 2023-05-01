@@ -100,7 +100,7 @@ namespace Wiwa
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
-			enemy->LookAt(playerTr->localPosition, 50.0f);
+			enemy->LookAt(playerTr->localPosition, 70.0f);
 
 			if (m_TimerToLookAtPlayer >= 3.0f)
 			{
@@ -155,6 +155,7 @@ namespace Wiwa
 
 	void BossUltronClusterShotsAttackState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)
 	{
+
 	}	
 
 	bool BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
@@ -188,6 +189,7 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f); // this to fix the cluster bullet direction, not solving it yet since debugging this is a nightmare
 		//bulletTr->localScale = transform->localScale;
 		ClusterBullet* bullet = (ClusterBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ClusterBullet>(newBulletId));
+		bullet->damage = 40; //TODO: Add to components
 		bullet->direction = bull_dir;
 
 		
