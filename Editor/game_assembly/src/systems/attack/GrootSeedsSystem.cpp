@@ -38,9 +38,8 @@ namespace Wiwa
 
 		grootSeedsTransform->localRotation = playerTransform->localRotation;
 
-		grootSeedsTransform->position.x = playerTransform->position.x;
-		grootSeedsTransform->position.z = playerTransform->position.z;
-		grootSeedsTransform->position.y = playerTransform->position.y;
+		grootSeedsTransform->position = playerTransform->position;
+	
 
 		//grootSeedsTransform->localScale.x = 10.0f;
 		//grootSeedsTransform->localScale.z = 10.0f;
