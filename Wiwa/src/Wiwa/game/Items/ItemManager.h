@@ -13,7 +13,7 @@ namespace Wiwa
 	{
 	private:
 		ItemManager() = delete;
-		~ItemManager() = delete;
+		~ItemManager();
 	public:
 
 		static void AddAbility(const Ability& ability);

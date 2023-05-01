@@ -11,5 +11,15 @@ void Wiwa::VentRotator::OnInit()
 
 void Wiwa::VentRotator::OnUpdate()
 {
+	VentRotatorData* data = GetComponentByIterator<VentRotatorData>(m_VentRotatorIt);
+
+	if (data)
+	{
+		if (data->IsSide)
+		{
+			GetTransform()->localRotation.y += m_Velocity * Time::GetDeltaTimeSeconds();
+			return;
+		}
+	}
 	GetTransform()->localRotation.z += m_Velocity * Time::GetDeltaTimeSeconds();
 }
