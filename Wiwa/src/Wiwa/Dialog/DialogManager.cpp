@@ -557,7 +557,7 @@ namespace Wiwa
 						&& doc.HasMember(memberNameLine2.c_str())
 						&& doc.HasMember(memberNameLine3.c_str()))
 					{
-						SetDialogText((char*)doc[memberNameLine1.c_str()].as_string(), (char*)doc[memberNameLine2.c_str()].as_string(), (char*)doc[memberNameLine3.c_str()].as_string(), "assets/Fonts/Jade_Smile.ttf", i, j);
+						SetDialogText((char*)doc[memberNameLine1.c_str()].as_string(), (char*)doc[memberNameLine2.c_str()].as_string(), (char*)doc[memberNameLine3.c_str()].as_string(), "library/Fonts/Jade_Smile.ttf", i, j);
 					}
 					else
 					{

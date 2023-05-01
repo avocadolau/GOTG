@@ -714,14 +714,14 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 		gm.canvas.at(ShopHUD)->controls.at(8)->text = ability_Area.c_str();
 
 		//TODO: Do description with wrappedText
-		Text* abilityNameText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_name.c_str());
-		Text* abilityPriceText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_price.c_str());
-		Text* abilityTag1 = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_tag_1.c_str());
-		Text* abilityTag2 = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_tag_2.c_str());
-		Text* abilityDamageText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_damage.c_str());
-		Text* abilityRangeText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_Range.c_str());
-		Text* abilityCDText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_CD.c_str());
-		Text* AreaText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", ability_Area.c_str());
+		Text* abilityNameText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_name.c_str());
+		Text* abilityPriceText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_price.c_str());
+		Text* abilityTag1 = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_tag_1.c_str());
+		Text* abilityTag2 = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_tag_2.c_str());
+		Text* abilityDamageText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_damage.c_str());
+		Text* abilityRangeText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_Range.c_str());
+		Text* abilityCDText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_CD.c_str());
+		Text* AreaText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_Area.c_str());
 
 		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(0)->id_quad_normal, 1);
 		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(0)->id_quad_normal, abilityNameText->GetTextureId());
@@ -777,12 +777,12 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 		std::string buff_Area = std::to_string(buff->RoFInc);
 		gm.canvas.at(ShopHUD)->controls.at(8)->text = buff_Area.c_str();
 
-		Text* buffNameText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", buff_name.c_str());
-		Text* buffPriceText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", buff_price.c_str());
-		Text* buffDamageText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", buff_damage.c_str());
-		Text* buffRangeText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", buff_Range.c_str());
-		Text* buffCDText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", buff_CD.c_str());
-		Text* buffAreaText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", buff_Area.c_str());
+		Text* buffNameText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_name.c_str());
+		Text* buffPriceText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_price.c_str());
+		Text* buffDamageText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_damage.c_str());
+		Text* buffRangeText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_Range.c_str());
+		Text* buffCDText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_CD.c_str());
+		Text* buffAreaText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_Area.c_str());
 
 		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(0)->id_quad_normal, 1);
 		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(0)->id_quad_normal, buffNameText->GetTextureId());
