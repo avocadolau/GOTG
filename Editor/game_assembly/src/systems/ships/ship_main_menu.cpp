@@ -21,7 +21,9 @@ void Wiwa::ShipMainMenu::OnAwake()
 	m_Time = 0.f;
 	m_StartPos = GetTransform()->position;
 	m_ShipDataIt = GetComponentIterator<ShipMainMenuData>();
-
+	m_SceneChange = false;
+	m_GlFWeskk = false;
+	m_GLFWeskk2 = false;
 }
 
 void Wiwa::ShipMainMenu::OnInit()
@@ -69,14 +71,15 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 		{
 			m_GlFWeskk = true;
+			WI_INFO("PRESSED");
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
 		{
-			Wiwa::SceneManager::ChangeSceneByIndex(3);
 			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
 			{
 				Audio::PostEvent("action_accepted");
 			}
+			Wiwa::SceneManager::ChangeSceneByIndex(4);
 			m_GlFWeskk = false;
 		}
 	}

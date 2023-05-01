@@ -32,9 +32,9 @@ namespace Wiwa {
 		float m_TimerToChangeScreen;
 		glm::vec3 m_EndPanPos;
 
-		bool m_SceneChange = false;
-		bool m_GlFWeskk = false;
-		bool m_GLFWeskk2 = false;
+		bool m_SceneChange;
+		bool m_GlFWeskk;
+		bool m_GLFWeskk2;
 	};
 }
 REGISTER_SYSTEM(Wiwa::ShipMainMenu);
