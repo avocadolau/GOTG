@@ -9,7 +9,7 @@ namespace Wiwa
 
 	Wiwa::ExplosiveBarrelProp::ExplosiveBarrelProp()
 	{
-
+		m_SpawnExplosion = false;
 	}
 
 	ExplosiveBarrelProp::~ExplosiveBarrelProp()
@@ -22,36 +22,45 @@ namespace Wiwa
 
 	void ExplosiveBarrelProp::OnInit()
 	{
-
+		m_SpawnExplosion = false;
 	}
 
 	void ExplosiveBarrelProp::OnUpdate()
 	{
+		Wiwa::EntityManager& em = this->getScene().GetEntityManager();
+		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(this->m_TransformIt);
 
-	}
-
-	void ExplosiveBarrelProp::OnDestroy()
-	{
-	}
-
-	void ExplosiveBarrelProp::OnCollisionEnter(Object* body1, Object* body2)
-	{
-		std::string playerBulletStr = "PLAYER_ATTACK"; //Add PLAYER_BULLET when works again
-		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
+		if (m_SpawnExplosion)
 		{
+			SpawnExplosiveBarrelExplosion(this, selfTr);
+
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			SpawnExplosiveBarrelExplosion(this);
+
 
 			//Destroy the barrel
 			em.DestroyEntity(m_EntityId);
 		}
 	}
 
-	void ExplosiveBarrelProp::SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy)
+	void ExplosiveBarrelProp::OnDestroy()
 	{
-		if (GameStateManager::s_PoolManager->s_ExplosiveBarrel->getCountDisabled() <= 0)
-			return;
+
+	}
+
+	void ExplosiveBarrelProp::OnCollisionEnter(Object* body1, Object* body2)
+	{
+		std::string playerBulletStr = "PLAYER_ATTACK";
+		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
+		{
+			m_SpawnExplosion = true;
+		}
+	}
+
+	void ExplosiveBarrelProp::SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy, Transform3D* selfTransform)
+	{
+		/*if (GameStateManager::s_PoolManager->s_ExplosiveBarrel->getCountDisabled() <= 0)
+			return;*/
 
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
@@ -72,11 +81,11 @@ namespace Wiwa
 		if (!explosiveBarrelTr)
 			return;
 
-		explosiveBarrelTr->localPosition = Math::GetWorldPosition(GetTransform()->worldMatrix);
+		explosiveBarrelTr->localPosition = Math::GetWorldPosition(selfTransform->worldMatrix);
 		explosiveBarrelTr->localScale = GetTransform()->localScale;
 
 		physSys->CreateBody();
 
-		explosionBarrelSys->EnableExplosion(Math::GetWorldPosition(GetTransform()->worldMatrix));
+		explosionBarrelSys->EnableExplosion();
 	}
 }

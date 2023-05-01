@@ -84,13 +84,13 @@ namespace Wiwa
 		}
 	}*/
 
-	bool ExplosiveBarrelSystem::EnableExplosion(const glm::vec3& pos)
+	bool ExplosiveBarrelSystem::EnableExplosion()
 	{
 		ExplosiveBarrel* explosiveBarrel = GetComponent<ExplosiveBarrel>();
 		if (explosiveBarrel)
 		{
 			InitExplosion();
-			GetTransform()->localPosition = pos;
+			/*GetTransform()->localPosition = pos;*/
 		}
 		m_Timer = 0.0f;
 		return true;
