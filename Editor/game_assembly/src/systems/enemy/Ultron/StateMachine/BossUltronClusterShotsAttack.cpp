@@ -123,7 +123,7 @@ namespace Wiwa
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
-			enemy->LookAt(playerTr->localPosition, 50.0f);
+			enemy->LookAt(playerTr->localPosition, 70.0f);
 
 			if (m_TimerToLookAtPlayer >= 3.0f)
 			{
