@@ -6,6 +6,7 @@
 namespace Wiwa {
 	class ExplosiveBarrelProp : public System {
 	public:
+		bool m_SpawnExplosion;
 
 
 	public:
@@ -22,7 +23,7 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
-		void SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy);
+		void SpawnExplosiveBarrelExplosion(ExplosiveBarrelProp* enemy, Transform3D* selfTransform);
 	};
 }
 
