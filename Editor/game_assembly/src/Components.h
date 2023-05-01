@@ -7,7 +7,6 @@
 #include "components/trigger/Trigger.h"
 
 #include "components/attack/SimpleBullet.h"
-#include "components/attack/SentinelExplosion.h"
 #include "components/attack/PhylasQuantumSword.h"
 #include "components/attack/GrootSeeds.h"
 #include "components/attack/VictoryShield.h"
@@ -17,6 +16,6 @@
 #include "components/attack/UltronLaserBeam.h"
 #include "components/enemy/BossMovementPoints.h"
 
-#include "components/attack/ExplosiveBarrel.h"
+#include "components/attack/Explosion.h"
 #include "components/props/VentRotatorData.h"
 #include "components/props/RewardChestData.h"

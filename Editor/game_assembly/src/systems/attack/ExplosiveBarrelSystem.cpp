@@ -1,7 +1,7 @@
 #include "ExplosiveBarrelSystem.h"
-#include "../../components/attack/ExplosiveBarrel.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
+#include "../../components/attack/Explosion.h"
 
 namespace Wiwa
 {
@@ -18,7 +18,7 @@ namespace Wiwa
 
 	void ExplosiveBarrelSystem::OnAwake()
 	{
-		m_ExplosiveBarrelIt = GetComponentIterator<ExplosiveBarrel>();
+		m_ExplosiveBarrelIt = GetComponentIterator<Explosion>();
 	}
 
 	void ExplosiveBarrelSystem::OnInit()
@@ -31,7 +31,7 @@ namespace Wiwa
 		if (!getAwake())
 			System::Awake();
 
-		ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
+		Explosion* explosiveBarrel = GetComponentByIterator<Explosion>(m_ExplosiveBarrelIt);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
@@ -44,7 +44,7 @@ namespace Wiwa
 		if (!getInit())
 			System::Init();
 
-		ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
+		Explosion* explosiveBarrel = GetComponentByIterator<Explosion>(m_ExplosiveBarrelIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
@@ -66,7 +66,7 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
-				ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
+				Explosion* explosiveBarrel = GetComponentByIterator<Explosion>(m_ExplosiveBarrelIt);
 				GameStateManager::DamagePlayer(explosiveBarrel->damage);
 			}
 		}
@@ -86,7 +86,7 @@ namespace Wiwa
 
 	bool ExplosiveBarrelSystem::EnableExplosion()
 	{
-		ExplosiveBarrel* explosiveBarrel = GetComponent<ExplosiveBarrel>();
+		Explosion* explosiveBarrel = GetComponent<Explosion>();
 		if (explosiveBarrel)
 		{
 			InitExplosion();
