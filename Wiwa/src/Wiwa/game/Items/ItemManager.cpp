@@ -8,6 +8,14 @@ std::map<std::string, Wiwa::PassiveSkill> Wiwa::ItemManager::m_PassiveSkillPool;
 std::map<std::string, Wiwa::Buff> Wiwa::ItemManager::m_BuffPool;
 std::map<std::string, Wiwa::Consumable> Wiwa::ItemManager::m_ConsumablePool;
 
+Wiwa::ItemManager::~ItemManager()
+{
+	m_AbilityPool.clear();
+	m_PassiveSkillPool.clear();
+	m_BuffPool.clear();
+	m_ConsumablePool.clear();
+}
+
 void Wiwa::ItemManager::AddAbility(const Ability& ability)
 {
 	m_AbilityPool.emplace(ability.Name, ability);

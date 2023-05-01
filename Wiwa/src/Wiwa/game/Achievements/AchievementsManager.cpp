@@ -15,6 +15,8 @@ namespace Wiwa
 
 	AchievementsManager::~AchievementsManager()
 	{
+		m_Properties.clear();
+		m_Achievements.clear();
 	}
 
 	void AchievementsManager::DefineProperty(std::string name, std::string description, int initialValue, ActivationRules activationMode, int value)

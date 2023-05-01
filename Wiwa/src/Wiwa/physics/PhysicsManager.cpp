@@ -550,22 +550,43 @@ namespace Wiwa {
 
 	void PhysicsManager::DebugDrawWorld()
 	{
-		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-		if (camera->drawBoundingBoxes)
 		{
-			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-			camera->frameBuffer->Bind(false);
+			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+			if (camera->drawBoundingBoxes)
+			{
+				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+				camera->frameBuffer->Bind(false);
 
-			m_Debug_draw->lineDisplayShader->Bind();
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
-			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
-			m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
+				m_Debug_draw->lineDisplayShader->Bind();
+				m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+				m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+				m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+				m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
 
-			m_World->debugDrawWorld();
-			m_Debug_draw->Render();
-			m_Debug_draw->lineDisplayShader->UnBind();
-			camera->frameBuffer->Unbind();
+				m_World->debugDrawWorld();
+				m_Debug_draw->Render();
+				m_Debug_draw->lineDisplayShader->UnBind();
+				camera->frameBuffer->Unbind();
+			}
+		}
+		{
+			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			if (camera->drawBoundingBoxes)
+			{
+				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+				camera->frameBuffer->Bind(false);
+
+				m_Debug_draw->lineDisplayShader->Bind();
+				m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
+				m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.View, camera->getView());
+				m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Projection, camera->getProjection());
+				m_Debug_draw->lineDisplayShader->setUniformVec4(m_Debug_draw->lineDisplayShader->getUniformLocation("u_Color"), glm::vec4(1.0, 0.0f, 0.0f, 1.0f));
+
+				m_World->debugDrawWorld();
+				m_Debug_draw->Render();
+				m_Debug_draw->lineDisplayShader->UnBind();
+				camera->frameBuffer->Unbind();
+			}
 		}
 	}
 

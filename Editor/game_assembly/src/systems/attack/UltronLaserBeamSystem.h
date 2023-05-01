@@ -12,7 +12,8 @@ namespace Wiwa {
 	class  UltronLaserBeamSystem : public System {
 	private:
 
-		float m_Timer = 0;
+		float m_Timer = 0.0f;
+		float m_TimerDamagePerSec = 0.0f;
 		EntityManager::ComponentIterator m_LaserIt;
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_BossTransformIt;
@@ -30,7 +31,8 @@ namespace Wiwa {
 
 		void OnDestroy() override;
 
-		void OnCollisionEnter(Object* body1, Object* body2) override;
+		/*void OnCollisionEnter(Object* body1, Object* body2) override;*/
+		void OnCollision(Object* body1, Object* body2) override;
 
 		void InitLaserBeam();
 		//bool OnEnabledFromPool();

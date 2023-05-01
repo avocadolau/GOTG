@@ -22,6 +22,7 @@ class RewardChest : public System
 		EntityId m_Face2;
 		EntityId m_Face3;
 		EntityId m_ColliderPreActive;
+		std::vector<EntityId> m_EntityChildren;
 		EntityManager::ComponentIterator m_Face1It;
 		EntityManager::ComponentIterator m_Face2It;
 		EntityManager::ComponentIterator m_Face3It;

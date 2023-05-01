@@ -12,14 +12,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/ecs/components/game/Character.h>
 
-#define WI_DEBUG_BUILD
 
-#ifdef WI_DEBUG_BUILD
-	#include "windows.h"
-	#include "psapi.h"
-	#include <Wiwa/utilities/AllocationMetrics.h>
-#endif
-#define WI_DIST
 GameLayer::GameLayer()
 {
 
@@ -233,7 +226,33 @@ void GameLayer::OnImGuiRender()
 		ImGui::Text("Near %.2f", cam->getNear());
 		ImGui::Text("Far %.2f", cam->getFar());
 		ImGui::Checkbox("Cull", &cam->cull);
+		ImGui::Checkbox("Draw physics", &cam->drawBoundingBoxes);
 
+		ImGui::End();
+
+		ImGui::Begin("Entites", &active);
+		static ImGuiTextFilter filter;
+		filter.Draw("##searchbar", 200.f);
+		ImGui::Separator();
+		std::string sceneName;
+		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		sceneName += std::to_string(Wiwa::SceneManager::getActiveSceneId());
+		sceneName += " ";
+		sceneName += Wiwa::SceneManager::getActiveScene()->getName();
+		ImGui::Text(sceneName.c_str());
+		std::vector<EntityId>* entities = entityManager.GetParentEntitiesAlive();
+		size_t count = entities->size();
+		int id = 0;
+		for (size_t i = 0; i < count; i++) {
+			ImGui::PushID(id++);
+			EntityId eid = entities->at(i);
+			const char* entName = entityManager.GetEntityName(eid);
+			if (filter.PassFilter(entName))
+			{
+				CreateNode(eid, entName, filter, entityManager);
+			}
+			ImGui::PopID();
+		}
 		ImGui::End();
 	}
 #endif
@@ -256,4 +275,40 @@ bool GameLayer::OnGameSave(Wiwa::OnSaveEvent& e)
 bool GameLayer::OnGameLoad(Wiwa::OnLoadEvent& e)
 {
 	return false;
+}
+
+void GameLayer::CreateNode(const EntityId& eid, const char* entName, ImGuiTextFilter& filter, Wiwa::EntityManager& entityManager)
+{
+	std::vector<EntityId>* childs = entityManager.GetEntityChildren(eid);
+	std::string name;
+	name += entName;
+
+	if (!childs->empty())
+	{
+
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
+		if (open)
+		{
+			int i = 0;
+			for (EntityId id : *childs)
+			{
+				const char* name = entityManager.GetEntityName(id);
+				std::string label = name;
+				label += "##" + std::to_string(i++);
+				if (filter.PassFilter(label.c_str()))
+				{
+					CreateNode(id, label.c_str(), filter, entityManager);
+				}
+			}
+			ImGui::TreePop();
+		}
+
+	}
+	else
+	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+		bool open = ImGui::TreeNodeEx(name.c_str(), flags);
+		
+	}
 }
