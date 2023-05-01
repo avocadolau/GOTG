@@ -3,6 +3,7 @@
 #include "Wiwa/game/Items/ItemManager.h"
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Input.h"
+#include "Wiwa/audio/Audio.h"
 
 void Wiwa::PlayerGUISystem::OnInit()
 {
@@ -59,6 +60,11 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart) && pauseGame)
 		{
+			if (Audio::FindEvent("game_pause") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("game_pause");
+			}
+
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
 			m_Scene->SwapPauseActive();
@@ -102,6 +108,10 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		}
 		if (buyItem && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA))
 		{
+			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("action_accepted");
+			}
 			characterInventory->ShopElement(characterInventory->GetCurrentShopItem());
 			buyItem = false;
 		}

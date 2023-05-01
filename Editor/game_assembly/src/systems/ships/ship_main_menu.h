@@ -34,6 +34,7 @@ namespace Wiwa {
 
 		bool m_SceneChange = false;
 		bool m_GlFWeskk = false;
+		bool m_GLFWeskk2 = false;
 	};
 }
 REGISTER_SYSTEM(Wiwa::ShipMainMenu);

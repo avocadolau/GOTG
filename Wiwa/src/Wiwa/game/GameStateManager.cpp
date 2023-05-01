@@ -799,11 +799,10 @@ namespace Wiwa
 		}
 
 		EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-		EntityId id = em.LoadPrefab("assets/Prefabs/RewardChest.wiprefab");
-		EntityId childItem = em.GetChildByName(id, "Item");
-
-		Item* item = em.GetComponent<Item>(childItem);
-		Transform3D* t3d = em.GetComponent<Transform3D>(childItem);
+		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
+		
+		Item* item = em.GetComponent<Item>(id);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
 
 
 		WI_CORE_INFO("Spawning item at {}x{}y{}z", position.x, position.y, position.z);

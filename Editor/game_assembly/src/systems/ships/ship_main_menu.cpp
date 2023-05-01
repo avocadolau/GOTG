@@ -6,7 +6,7 @@
 #include <Wiwa/core/Input.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/scene/SceneManager.h>
-
+#include <Wiwa/audio/Audio.h>
 
 Wiwa::ShipMainMenu::ShipMainMenu()
 {
@@ -35,6 +35,22 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
 	m_Time += Time::GetDeltaTimeSeconds();
 	
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+
+	
+	if (gm.getCurrentCanvas() == 1)
+	{
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
+		{
+			m_GLFWeskk2 = true;
+		}
+		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB) && m_GLFWeskk2)
+		{
+			gm.canvas.at(1)->SwapActive();
+			gm.canvas.at(0)->SwapActive();
+			m_GLFWeskk2 = false;
+		}
+	}
 	
 	
 	if (data->PanToCamera)
@@ -57,6 +73,11 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
 		{
 			Wiwa::SceneManager::ChangeSceneByIndex(3);
+			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("action_accepted");
+			}
+			m_GlFWeskk = false;
 		}
 	}
 	float posY = GetTransform()->position.y;
