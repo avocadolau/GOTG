@@ -465,6 +465,13 @@ namespace Wiwa
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 	}
 
+	void DialogManager::ForceDialogStart(std::string forcedConversationToStart)
+	{
+		forcedDialogHappened = false;
+		forceStartConversation = true;
+		forcedConversationTag = forcedConversationToStart;
+	}
+
 	void DialogManager::SaveAllDialogs()
 	{
 		Wiwa::JSONDocument doc;
