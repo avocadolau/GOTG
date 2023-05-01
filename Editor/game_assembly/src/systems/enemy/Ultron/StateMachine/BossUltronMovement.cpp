@@ -11,6 +11,7 @@ namespace Wiwa
 	{
 		m_DoAttack = false;
 		currentDestination = glm::vec3(0.0f);
+		m_TimerToAttack = 0.0f;
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -50,6 +51,9 @@ namespace Wiwa
 		if (navAgent) {
 			navAgent->autoRotate = true;
 		}
+
+		m_TimerToAttack = 0.0f;
+		m_DoAttack = false;
 	}
 
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
@@ -70,7 +74,15 @@ namespace Wiwa
 			navAgentPtr->StopAgent();
 		}
 		else
-			m_DoAttack = false;
+		{
+			m_TimerToAttack += Time::GetDeltaTimeSeconds();
+			if (m_TimerToAttack >= 6.0f)
+			{
+				m_DoAttack = true;
+				navAgentPtr->StopAgent();
+				m_TimerToAttack = 0.0f;
+			}
+		}
 
 		if (m_DoAttack)
 		{
@@ -131,7 +143,7 @@ namespace Wiwa
 			return UltronAttacks::CLUSTER_SHOTS;
 		}
 		
-		return UltronAttacks::NONE;
+		return UltronAttacks::LASER_BEAM;
 	}
 
 	void BossUltronMovementState::FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec)
