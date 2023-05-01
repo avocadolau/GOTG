@@ -72,7 +72,8 @@ namespace Wiwa
 
 		if (m_DoAttack)
 		{
-			UltronAttacks nextAttack = GetAttackFromProbabilites();
+			/*UltronAttacks nextAttack = GetAttackFromProbabilites();*/
+			UltronAttacks nextAttack = Wiwa::UltronAttacks::LASER_BEAM;
 			
 			switch (nextAttack)
 			{
