@@ -83,9 +83,13 @@ namespace Wiwa
 
 		void OnInit() override;
 
+		bool OnEnabledFromPool() override;
+
 		void OnUpdate() override;
 
 		void OnDestroy() override;
+
+		bool OnDisabledFromPool() override;
 
 		void Render(Particle& particle);
 
@@ -121,6 +125,10 @@ namespace Wiwa
 		void SetActive(bool active);
 
 	private:
+
+		void SetEmitterBools(ParticleEmitterComponent* emitter);
+		void FixBool(bool& _bool);
+
 		unsigned int m_VAO;
 
 		unsigned int m_LastUsedParticle = 0;
@@ -128,6 +136,7 @@ namespace Wiwa
 		unsigned int m_AvailableParticles = 0;
 
 		float m_SpawnTimer;
+		float m_firstDelay;
 
 		std::vector<Particle> m_Particles;
 
