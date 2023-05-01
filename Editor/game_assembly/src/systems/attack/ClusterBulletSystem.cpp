@@ -10,6 +10,7 @@ Wiwa::ClusterBulletSystem::ClusterBulletSystem()
 {
 	m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	m_Timer = 0.0f;
+	m_CollisionByWall = false;
 }
 
 Wiwa::ClusterBulletSystem::~ClusterBulletSystem()
@@ -45,6 +46,7 @@ void Wiwa::ClusterBulletSystem::InitClusterBullet()
 	physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 
 	m_HasBlown = false;
+	m_CollisionByWall = false;
 }
 
 void Wiwa::ClusterBulletSystem::OnUpdate()
@@ -74,6 +76,22 @@ void Wiwa::ClusterBulletSystem::OnUpdate()
 
 		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 	}
+
+	if (m_CollisionByWall)
+	{
+		int pattern = Math::RandomRange(0, 1);
+		if (pattern == 0)
+		{
+			BlowClusterBullet01(m_EntityId);
+		}
+		else
+		{
+			BlowClusterBullet02(m_EntityId);
+		}
+		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+
+		m_CollisionByWall = false;
+	}
 }
 
 void Wiwa::ClusterBulletSystem::OnDestroy()
@@ -94,16 +112,7 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 		}
 		else
 		{
-			int pattern = Math::RandomRange(0, 1);
-			if (pattern == 0)
-			{
-				BlowClusterBullet01(m_EntityId);
-			}
-			else
-			{
-				BlowClusterBullet02(m_EntityId);
-			}
-			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+			m_CollisionByWall = true;
 		}		
 	}
 }

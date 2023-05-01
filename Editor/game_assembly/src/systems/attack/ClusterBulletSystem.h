@@ -14,6 +14,8 @@ namespace Wiwa {
 		float m_Timer = 0;
 		EntityManager::ComponentIterator m_BulletIt;
 
+		bool m_CollisionByWall = false;
+
 		bool m_HasBlown = true;
 	public:
 		ClusterBulletSystem();
