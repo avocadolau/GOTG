@@ -55,7 +55,7 @@ namespace Wiwa
         float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
         Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-        if (agent)
+        if (agent != nullptr)
         {
             //Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
            /* offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.75f);*/

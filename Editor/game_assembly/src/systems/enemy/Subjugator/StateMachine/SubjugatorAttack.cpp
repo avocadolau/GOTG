@@ -83,7 +83,7 @@ namespace Wiwa
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
-		enemy->LookAt(playerTr->localPosition);
+		enemy->LookAt(playerTr->localPosition, 30.f);
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 		m_TimerSyncAnimationBullets += Time::GetDeltaTime();

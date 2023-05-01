@@ -301,13 +301,13 @@ namespace Wiwa
 		return true;
 	}
 
-	void EnemySystem::LookAt(const glm::vec3& target_look)
+	void EnemySystem::LookAt(const glm::vec3& target_look, float rotation_speed)
 	{
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
 
 		float distance = glm::distance(transform->localPosition, target_look);
 
-		float timeToRotate = distance / 30.0f;
+		float timeToRotate = distance / rotation_speed;
 		float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
 
 		// Calculate the forward vector from the current position to the target position

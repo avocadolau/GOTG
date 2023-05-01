@@ -9,7 +9,8 @@ void Wiwa::UltronGUISystem::OnUpdate()
 	if (!bossIsDead)
 	{
 		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
-		Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Character* character = em.GetComponent<Character>(m_EntityId);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		if (introBossFight)
 		{
@@ -33,7 +34,23 @@ void Wiwa::UltronGUISystem::OnUpdate()
 			}
 			if (activeBossCanvas)
 			{
-				if (character->Health >= 0)
+				if (gm.getCurrentCanvas() == 0 && !m_CanvasHUD)
+				{
+					gm.canvas.at(5)->SwapActive();
+				}
+				if (gm.getCurrentCanvas() == 0)
+				{
+					m_CanvasHUD = true;
+				}
+				if (gm.getCurrentCanvas() != 0 && m_CanvasHUD)
+				{
+					gm.canvas.at(5)->SwapActive();
+					m_CanvasHUD = false;
+				}
+
+
+
+				if (character->Health > 0)
 				{
 					gm.canvas.at(5)->controls.at(1)->SetValueForUIbar(character->Health, character->MaxHealth);
 				}

@@ -48,7 +48,7 @@ namespace Wiwa
 				navAgent->autoRotate = false;
 			}
 
-			enemy->LookAt(playerTr->localPosition);
+			enemy->LookAt(playerTr->localPosition, 30.0f);
 
 			if (m_Timer >= 2.f && shootLaser == true)
 			{

@@ -44,7 +44,7 @@ namespace Wiwa {
 
 		bool OnDisabledFromPool() override;
 
-		void LookAt(const glm::vec3& target_look);
+		void LookAt(const glm::vec3& target_look, float rotation_speed);
 
 		void RotateTo(const glm::vec3& target);
 	};

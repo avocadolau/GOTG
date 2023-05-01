@@ -29,7 +29,7 @@ namespace Wiwa
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		if (navAgent)
+		if (navAgent != nullptr)
 		{
 			navAgent->autoRotate = false;
 		}
@@ -42,8 +42,8 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
-		//enemy->LookAt(playerTr->localPosition);
-		enemy->RotateTo(playerTr->localPosition);
+		enemy->LookAt(playerTr->localPosition, 30.0f);
+		//enemy->RotateTo(playerTr->localPosition);
 
 		if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
 		{
@@ -66,7 +66,7 @@ namespace Wiwa
 			NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 			if (navAgent)
 			{
-				navAgent->autoRotate = true;
+				//navAgent->autoRotate = true;
 			}
 
 			m_RoundThree = false;
@@ -111,7 +111,7 @@ namespace Wiwa
 		spawnPosition.y += 3.0f;
 
 		bulletTr->localPosition = spawnPosition;
-		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y + 90.0f);
+		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, bull_dir.y - 90.0f); // this to fix the cluster bullet direction, not solving it yet since debugging this is a nightmare
 		//bulletTr->localScale = transform->localScale;
 		ClusterBullet* bullet = (ClusterBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ClusterBullet>(newBulletId));
 		bullet->direction = bull_dir;

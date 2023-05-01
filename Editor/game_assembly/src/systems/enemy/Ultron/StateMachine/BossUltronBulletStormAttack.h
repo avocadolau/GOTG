@@ -2,6 +2,7 @@
 #include "BossUltronBase.h"
 
 #define NUMBER_OF_ROUNDS 3
+#define TIMER_ATTACK 2.0f
 
 namespace Wiwa {
 	class BossUltronBulletStormAttackState : public BossUltronBaseState {
