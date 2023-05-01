@@ -48,6 +48,15 @@ namespace Wiwa
 			navAgent->stoppingDistance = 1.0f;
 			navAgentPtr->StopAgent();
 		}
+
+		float dt = Time::GetDeltaTimeSeconds();
+
+		m_TimerExplosion += dt;
+
+		if (m_TimerExplosion >= 0.7f)
+		{
+			enemy->SwitchState(enemy->m_DeathState);
+		}
 		
 		//if (glm::distance(selfTr->localPosition, playerTr->localPosition) > enemy->m_RangeOfExplosion)
 		//{
@@ -89,14 +98,7 @@ namespace Wiwa
 
 		/*animator->PlayAnimation("atackdeath", false);*/
 
-		float dt = Time::GetDeltaTimeSeconds();
-
-		m_TimerExplosion += dt;
-
-		if (m_TimerExplosion >= 2.0f)
-		{
-			enemy->SwitchState(enemy->m_DeathState);
-		}
+		
 
 		//-------------------------------------------------
 
