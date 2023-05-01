@@ -231,6 +231,14 @@ namespace Wiwa
 		canvas.clear();
 		canvas.shrink_to_fit();
 		
+		for (int i = 0; i < textToDestroy.size(); i++)
+		{
+			delete textToDestroy.at(i);
+		}
+		textToDestroy.clear();
+		textToDestroy.shrink_to_fit();
+
+
 		return true;
 	}
 
@@ -378,7 +386,7 @@ namespace Wiwa
 
 		free(fontBuffer);
 		free(bitmap);
-
+		textToDestroy.push_back(text);
 		return text;
 	}
 
@@ -470,7 +478,7 @@ namespace Wiwa
 
 		free(fontBuffer);
 		free(bitmap);
-
+		textToDestroy.push_back(text);
 		return text;
 	}
 

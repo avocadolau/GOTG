@@ -24,6 +24,7 @@
 #include "systems/camera/CameraController.h"
 
 #include "systems/NpcSystem.h"
+#include "systems/ForcedDialogSystem.h"
 
 #include "systems/attack/ClusterBulletSystem.h"
 

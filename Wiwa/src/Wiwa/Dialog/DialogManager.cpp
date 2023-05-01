@@ -102,6 +102,8 @@ namespace Wiwa
 		bubbleImgPos.x = 640; // <--
 		bubbleImgPos.y = 300;
 
+		forcedDialogHappened = false;
+
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
 			editorConversations[e].bubbleImagePath = conversations[e].bubbleImagePath;
@@ -131,10 +133,18 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && (collidingWithNpc == true || forceStartConversation == true))
+		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+			|| (forceStartConversation == true && forcedDialogHappened == false))
 		{
- 			if(collidingWithNpc == true) conversationToPlayName = NpcConversationTag.c_str();
-			else if (forceStartConversation == true) conversationToPlayName = forcedConversationTag.c_str();
+			if (collidingWithNpc == true)
+			{
+				conversationToPlayName = NpcConversationTag.c_str();
+			}
+			else if (forceStartConversation == true)
+			{
+				conversationToPlayName = forcedConversationTag.c_str();
+				forcedDialogHappened = true;
+			}
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
@@ -453,6 +463,18 @@ namespace Wiwa
 
 		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+	}
+
+	void DialogManager::ForceDialogStart(std::string forcedConversationToStart)
+	{
+		forcedDialogHappened = false;
+		forceStartConversation = true;
+		forcedConversationTag = forcedConversationToStart;
+	}
+
+	void DialogManager::RestartForceDialogState()
+	{
+		forcedDialogHappened = false;
 	}
 
 	void DialogManager::SaveAllDialogs()

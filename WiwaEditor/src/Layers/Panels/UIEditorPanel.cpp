@@ -497,6 +497,8 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 			Wiwa::Text* newText = gm.InitFont("library/Fonts/Jade_Smile.ttf", (char*)text.c_str());
 			r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetSize(), originTexRect);
 			r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_normal, newText->GetTextureId());
+
+			delete newText;
 		}
 		originPos[0] = 0;
 		originPos[1] = 0;
