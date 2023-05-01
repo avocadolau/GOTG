@@ -35,7 +35,7 @@ namespace Wiwa
 
 	GuiText::~GuiText()
 	{
-
+		delete text_res;
 	}
 
 
