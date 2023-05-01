@@ -375,6 +375,19 @@ void EditorLayer::MainMenuBar()
 			{
 				SaveSceneAs();
 			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Import as ozz")) {
+				std::string filePath = Wiwa::FileDialogs::OpenFile("fbxozz (*.fbxozz)\0*.fbxozz\0");
+				if (!filePath.empty())
+				{
+					WI_INFO("Importing as ozz at path {0}", filePath.c_str());
+
+					ImportToOzz(filePath);
+				}
+			}
+			ImGui::Separator();
 			if (ImGui::MenuItem(ICON_FK_TIMES " Close", "ALT + Q"))
 				Wiwa::Application::Get().Quit();
 
@@ -919,6 +932,62 @@ void EditorLayer::SavePanelConfig()
 	}
 
 	config.save_file("config/panels.json");
+}
+
+void EditorLayer::ImportToOzz(std::string& file)
+{
+	std::filesystem::path file_path = file;
+
+	std::filesystem::path filename = file_path.filename();
+	filename.replace_extension();
+
+	// Skeleton output path
+	std::filesystem::path skeleton_path = file_path;
+	skeleton_path.replace_filename(filename.string() + "_skeleton");
+	skeleton_path.replace_extension(".ozz");
+
+	// Animations output path
+	std::filesystem::path anim_out_path = file_path;
+	anim_out_path.replace_filename(filename.string() + "_*");
+	anim_out_path.replace_extension(".ozz");
+
+	// Mesh output path
+	std::filesystem::path mesh_out_path = file_path;
+	mesh_out_path.replace_filename(filename.string() + "_mesh");
+	mesh_out_path.replace_extension(".ozz");
+
+	// === Setup ozz import json config ===
+	Wiwa::JSONDocument anim_import;
+	
+		// Skeleton settings
+		Wiwa::JSONValue skeleton_obj = anim_import.AddMemberObject("skeleton");
+			
+			// Skeleton filename
+			skeleton_obj.AddMember("filename", skeleton_path.string().c_str());
+	
+			// Skeleton import settings
+			Wiwa::JSONValue skeleton_import_obj = skeleton_obj.AddMemberObject("import");
+			skeleton_import_obj.AddMember("enable", true);
+			skeleton_import_obj.AddMember("raw", false);
+
+		// Animation settings
+		Wiwa::JSONValue animations_obj = anim_import.AddMemberArray("animations");
+			Wiwa::JSONValue anim_obj = animations_obj.PushBackObject();
+			anim_obj.AddMember("clip", "*");
+			anim_obj.AddMember("filename", anim_out_path.string().c_str());
+
+	anim_import.save_file("config\\import_anim.json");
+
+	// === Import ozz ===
+	std::string cmd = "tools\\import_anim.bat";
+	cmd += " \"";
+	cmd += file_path.string().c_str(); // Path of file to import (.fbx)
+	cmd += "\" \"";
+	cmd += mesh_out_path.string().c_str(); // Path of output mesh
+	cmd += "\" \"";
+	cmd += skeleton_path.string().c_str(); // Path of skeleton to import mesh
+	cmd += "\"";
+	system(cmd.c_str());
 }
 
 void EditorLayer::LoadCallback()

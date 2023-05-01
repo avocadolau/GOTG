@@ -95,6 +95,8 @@ private:
 	void LoadPanelConfig();
 	void SavePanelConfig();
 
+	void ImportToOzz(std::string& file);
+
 	void LoadCallback();
 	void SaveCallback();
 
