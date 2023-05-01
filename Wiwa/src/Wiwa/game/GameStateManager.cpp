@@ -26,8 +26,8 @@ namespace Wiwa
 	int GameStateManager::s_SpawnersFinished = 0;
 	bool GameStateManager::debug = true;
 	
-	int GameStateManager::s_RoomsToShop = 5;
-	int GameStateManager::s_RoomsToBoss = 5;
+	int GameStateManager::s_RoomsToShop = 1;
+	int GameStateManager::s_RoomsToBoss = 1;
 
 	SceneId GameStateManager::s_BossRoomIndx;
 	SceneId GameStateManager::s_HUBRoomIndx;
@@ -691,33 +691,36 @@ namespace Wiwa
 	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
 	{
 		uint32_t itemRand;
-		std::string_view name;
+		std::string name;
 		int i = 0;
 		switch (type)
 		{
 		case 0:
 		{
-			itemRand = RAND(0, ItemManager::GetAbilities().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size());
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetAbilities())
 			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
 		}break;
 		case 1:
 		{
-			itemRand = RAND(0, ItemManager::GetSkills().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size());
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetSkills())
 			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
 		}break;
 		case 2:
 		{
-			itemRand = RAND(0, ItemManager::GetBuffs().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size());
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetBuffs())
 			{
 				if (i == itemRand)
@@ -727,7 +730,8 @@ namespace Wiwa
 		}break;
 		case 3:
 		{
-			itemRand = RAND(0, ItemManager::GetConsumables().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size());
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetConsumables())
 			{
 				if (i == itemRand)
@@ -746,18 +750,13 @@ namespace Wiwa
 		EntityId childItem = em.GetChildByName(id, "Item");
 
 		Item* item = em.GetComponent<Item>(childItem);
-		Transform3D* t3d = em.GetComponent<Transform3D>(childItem);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
 
 		t3d->localPosition = position;
 		item->item_type = type;
-		for (uint32_t i = 0; i < 128; i++)
-		{
-			if (i >= name.size())
-			{
-				break;
-			}
-			item->Name[i] = name[i];
-		}
+
+		name.copy(item->Name, 128);		
+		item->Name[name.size()] = '\0';
 	}
 	void GameStateManager::SpawnItem(glm::vec3 position, uint8_t type, const char* name)
 	{
