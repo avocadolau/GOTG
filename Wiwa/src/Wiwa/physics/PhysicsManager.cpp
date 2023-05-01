@@ -516,19 +516,14 @@ namespace Wiwa {
 			newTag += std::to_string(i);
 			physics.AddMember(newTag.c_str(), GetFilterTag((int)i));
 		}
-		std::string path = "assets/Scenes/";
-		//path += SceneManager::getActiveScene()->getName();
-		path += "game_tags";
-		path += "_physics.json";
+		std::string path = "config/game_tags_physics.json";
 		physics.save_file(path.c_str());
 		return true;
 	}
 
 	bool PhysicsManager::OnLoad(const char* name)
 	{
-		std::string path = "assets/Scenes/";
-		path += "game_tags";
-		path += "_physics.json";
+		std::string path = "config/game_tags_physics.json";
 
 		JSONDocument physics;
 		if (!physics.load_file(path.c_str()))

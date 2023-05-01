@@ -19,6 +19,7 @@ copy "..\config\application.json" %config_path%
 copy "..\config\project.wiproject" %config_path%
 copy "..\config\room_data.json" %config_path%
 copy "..\config\player_data.json" %config_path%
+copy "..\config\game_tags_physics.json" %config_path%
 
 md %mono_path%
 

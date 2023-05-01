@@ -19,7 +19,7 @@
 	#include "psapi.h"
 	#include <Wiwa/utilities/AllocationMetrics.h>
 #endif
-
+#define WI_DIST
 GameLayer::GameLayer()
 {
 
@@ -43,7 +43,7 @@ void GameLayer::OnAttach()
 	Wiwa::Time::SetTargetFPS(60);
 	Wiwa::Time::SetTimeScale(1);
 	Wiwa::Application::Get().FinishedImport = true;
-	
+
 }
 
 void GameLayer::OnDetach()
@@ -203,6 +203,23 @@ void GameLayer::OnImGuiRender()
 		{
 			Wiwa::GameStateManager::SerializeData();
 		}
+		ImGui::End();
+
+		ImGui::Begin("Physics debug", &active);
+		Wiwa::PhysicsManager& py = Wiwa::SceneManager::getActiveScene()->GetPhysicsManager();
+		
+		static int selected = -1;
+		for (const auto& [key, value] : py.filterMapStringKey)
+		{
+			/*std::string tempStr = py.GetFilterTag(n);
+			int bits = 1 << n;
+			tempStr += "_" + std::to_string(bits);*/
+			std::string tagNameWitBits = key;
+			tagNameWitBits += "_" + std::to_string(value);
+			ImGui::Text(tagNameWitBits.c_str());
+
+		}
+
 		ImGui::End();
 	}
 #endif
