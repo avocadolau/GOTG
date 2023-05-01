@@ -90,20 +90,25 @@ void Wiwa::UltronLaserBeamSystem::OnUpdate()
 
 
 	m_Timer += Time::GetDeltaTimeSeconds();
+	m_TimerDamagePerSec += Time::GetDeltaTimeSeconds();
 }
 
 void Wiwa::UltronLaserBeamSystem::OnDestroy()
 {
 }
 
-void Wiwa::UltronLaserBeamSystem::OnCollisionEnter(Object* body1, Object* body2)
+void Wiwa::UltronLaserBeamSystem::OnCollision(Object* body1, Object* body2)
 {
 	std::string playerStr = "PLAYER";
 
 	if (body1->id == m_EntityId && playerStr == body2->selfTagStr)
-	{		
-		UltronLaserBeam* bullet = GetComponentByIterator<UltronLaserBeam>(m_LaserIt);
-		GameStateManager::DamagePlayer(bullet->damagePerSecond * Time::GetDeltaTime());
+	{	
+		if (m_TimerDamagePerSec >= 1.0f)
+		{
+			UltronLaserBeam* bullet = GetComponentByIterator<UltronLaserBeam>(m_LaserIt);
+			GameStateManager::DamagePlayer(bullet->damagePerSecond);
+			m_TimerDamagePerSec = 0.0f;
+		}
 	}
 }
 
