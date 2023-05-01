@@ -22,7 +22,7 @@ GoToMilanoHub_ GoToMilanoHub()
 
 GoMainMenu_ GoMainMenu()
 {
-	Wiwa::SceneManager::ChangeSceneByIndex(2);
+	Wiwa::SceneManager::ChangeSceneByIndex(3);
 	return GoMainMenu_::hola;
 }
 
