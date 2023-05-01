@@ -152,7 +152,7 @@ namespace Wiwa
 						convGroup = std::stoi(conversations[i].group.groupID);
 						convOrder = std::stoi(conversations[i].group.order) + 1;
 					}
-					else
+					else if (std::stoi(conversations[i].group.groupID) == -1 && actualConversationState == 2)
 					{
 						convGroup = -1;
 						convOrder = -1;
@@ -161,14 +161,14 @@ namespace Wiwa
 			}
 		}
 
-		if (convGroup != -1 && convOrder != -1)
+		if (convGroup != -1 && convOrder != -1 && actualConversationState == 2)
 		{
 			for (int z = 0; (z < MAX_CONVERSATIONS) && conversations[z].occupied == true; z++)
 			{
 				if (convGroup == std::stoi(conversations[z].group.groupID) && convOrder == std::stoi(conversations[z].group.order))
 				{
-					actualConversationState == 0;
 					conversationToPlayName = conversations[z].conversationName;
+					actualConversationState = 0;
 				}
 			}
 		}
@@ -209,7 +209,8 @@ namespace Wiwa
 
 			characterImgPos.x = -150;
 			characterImgPos.y = 100; // <--
-			bubbleImgPos.x = 640; // <--
+			if (conversations[conversationNumber].isInOppositeSide == true) bubbleImgPos.x = 500; // <--
+			else bubbleImgPos.x = 640; // <--
 			bubbleImgPos.y = 0;
 
 			render->EnableInstance(m_Scene, conversations[conversationNumber].characterImgID);
@@ -232,6 +233,15 @@ namespace Wiwa
 				{
 					render->EnableInstance(m_Scene, continueImgID2);
 					render->DisableInstance(m_Scene, continueImgID);
+
+					if (conversations[conversationNumber].isInOppositeSide == true)
+					{
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID2, { 1200,200 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					}
+					else
+					{
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID2, { 1400,750 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					}
 				}
 			}
 			else
@@ -240,6 +250,15 @@ namespace Wiwa
 				{
 					render->DisableInstance(m_Scene, continueImgID2);
 					render->EnableInstance(m_Scene, continueImgID);
+
+					if (conversations[conversationNumber].isInOppositeSide == true)
+					{
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID, { 1200,200 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					}
+					else
+					{
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID, { 1400,750 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					}
 				}
 
 			}
@@ -249,6 +268,19 @@ namespace Wiwa
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
+
+				if (conversations[conversationNumber].isInOppositeSide == true)
+				{
+					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID, { 600,140 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID, { 600,190 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID, { 600,240 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				}
+				else
+				{
+					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID, { 730,840 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID, { 730,890 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID, { 730,940 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				}
 			}
 			else if (firstTime == true && firstTimeTimer > 850 && endTime == false)
 			{
@@ -261,8 +293,16 @@ namespace Wiwa
 			{
 				firstTimeTimer += Time::GetDeltaTime();
 
-				characterImgPos.x = EaseBackOut(firstTimeTimer, -1500, -50 + 1500, 450);
-				bubbleImgPos.y = EaseExpoOut(firstTimeTimer, 1080, 300 - 1080, 450);
+				if (conversations[conversationNumber].isInOppositeSide == true)
+				{
+					characterImgPos.x = EaseBackOut(firstTimeTimer, 1800, 1100 - 1800, 450);
+					bubbleImgPos.y = EaseExpoOut(firstTimeTimer, -1080, -250 + 1080, 450);
+				}
+				else
+				{
+					characterImgPos.x = EaseBackOut(firstTimeTimer, -1500, -50 + 1500, 450);
+					bubbleImgPos.y = EaseExpoOut(firstTimeTimer, 1080, 300 - 1080, 450);
+				}
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -271,10 +311,20 @@ namespace Wiwa
 				{
 					firstTime = false;
 
-					characterImgPos.x = -50;
-					characterImgPos.y = 100; // <--
-					bubbleImgPos.x = 640; // <--
-					bubbleImgPos.y = 300;
+					if (conversations[conversationNumber].isInOppositeSide == true)
+					{
+						characterImgPos.x = 1100;
+						characterImgPos.y = 100; // <--
+						bubbleImgPos.x = 500; // <--
+						bubbleImgPos.y = -250;
+					}
+					else
+					{
+						characterImgPos.x = -50;
+						characterImgPos.y = 100; // <--
+						bubbleImgPos.x = 640; // <--
+						bubbleImgPos.y = 300;
+					}
 
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -289,9 +339,16 @@ namespace Wiwa
 				currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
 				currentTime++;
 				*/
-
-				characterImgPos.x = EaseBackIn(endTimeTimer, -50, -1500 + 50, 450);
-				bubbleImgPos.y = EaseExpoIn(endTimeTimer, 300, 1080 - 300, 450);
+				if (conversations[conversationNumber].isInOppositeSide == true)
+				{
+					characterImgPos.x = EaseBackIn(endTimeTimer, 1100, 1800 - 1100, 450);
+					bubbleImgPos.y = EaseExpoIn(endTimeTimer, -250, -1080 + 250, 450);
+				}
+				else
+				{
+					characterImgPos.x = EaseBackIn(endTimeTimer, -50, -1500 + 50, 450);
+					bubbleImgPos.y = EaseExpoIn(endTimeTimer, 300, 1080 - 300, 450);
+				}
 
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].characterImgID, characterImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].dialogImgID, bubbleImgPos, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -300,10 +357,20 @@ namespace Wiwa
 
 					endTime = false;
 
-					characterImgPos.x = -150;
-					characterImgPos.y = 100; // <--
-					bubbleImgPos.x = 640; // <--
-					bubbleImgPos.y = 0;
+					if (conversations[conversationNumber].isInOppositeSide == true)
+					{
+						characterImgPos.x = 1800;
+						characterImgPos.y = 100; // <--
+						bubbleImgPos.x = 500; // <--
+						bubbleImgPos.y = 0;
+					}
+					else
+					{
+						characterImgPos.x = -150;
+						characterImgPos.y = 100; // <--
+						bubbleImgPos.x = 640; // <--
+						bubbleImgPos.y = 0;
+					}
 
 					actualConversationState = 2;
 				}
