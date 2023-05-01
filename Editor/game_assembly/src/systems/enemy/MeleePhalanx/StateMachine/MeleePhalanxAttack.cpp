@@ -63,7 +63,13 @@ namespace Wiwa
 		}
 		m_SoundCurrentTime -= Time::GetDeltaTimeSeconds();
 		if (m_SoundCurrentTime < 0 && m_PlaySound)
-		{
+		{	
+			// make damage here when the animation is hitting
+	
+			Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+			if(selfStats != nullptr)
+				GameStateManager::DamagePlayer(selfStats->Damage);
+			
 			audio->PlayAudio("melee_attack");
 			m_PlaySound = false;
 		}
@@ -95,19 +101,14 @@ namespace Wiwa
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		Character *selfStats = (Character *)em.GetComponentByIterator(enemy->m_StatsIt);
-
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-		if (selfStats != nullptr)
+		if (distance <= 3.0f)
 		{
-			if (distance <= 3.0f)
-			{
-				animator->Blend("atack", false, 0.2f);
-				GameStateManager::DamagePlayer(selfStats->Damage);
-				EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
-				m_SoundCurrentTime = m_SoundTimer;
-				m_PlaySound = true;
-			}
+			animator->Blend("atack", false, 0.2f);
+	
+			EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
+			m_SoundCurrentTime = m_SoundTimer;
+			m_PlaySound = true;
 		}
 	}
 }

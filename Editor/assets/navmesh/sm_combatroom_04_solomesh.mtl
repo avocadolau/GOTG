@@ -1,0 +1,133 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl M_Floor
+Kd 0.800000012 0.800000012 0.800000012
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+
+newmtl M_BlackCover
+Kd 0 0 0
+Ka 0 0 0
+Ks 0 0 0
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+
+newmtl M_wall
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\BlenderRoomsForWiwa\T_EnvironmentWalls.png
+
+newmtl M_Columns_02a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\columns\ColumnRework\T_Columns_02a_C.png
+
+newmtl M_Plants
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Plants\T_Plants.png
+
+newmtl M_SecondaryDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_SecondaryDoor_01a_C.png
+
+newmtl M_MainDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\T_TexMainDoorDifuse_01_C.png
+
+newmtl M_Benches
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Benches\T_Benches_01a_C.png
+
+newmtl M_Balcony_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Balcony\T_Balcony_01a_C.png
+
+newmtl M_Window_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\window\T_Window_01a_C.png
+
+newmtl M_Fan
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\GeneratorsFanCounter\T_AtlasGeneratorsFanCounter.png
+
+newmtl M_Plants.001
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\Plants\T_Plants.png
+

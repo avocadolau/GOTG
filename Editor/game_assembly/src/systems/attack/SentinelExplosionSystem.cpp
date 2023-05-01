@@ -33,6 +33,16 @@ namespace Wiwa
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
+
+		//TODO: spawn prefab not from the pool
+
+		//EntityId explosion_prefab = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_explosion_remnants.wiprefab");
+		//Wiwa::Transform3D* t3d = em.GetComponent<Transform3D>(explosion_prefab);
+		//glm::vec3 position = GetTransform()->worldMatrix[3];
+		//WI_INFO("position {0},{1},{2}", position.x,position.y,position.z);
+
+		//t3d->localPosition = Math::GetWorldPosition(GetTransform()->worldMatrix);
+		//WI_INFO("new position {0},{1},{2}", t3d->localPosition.x, t3d->localPosition.y, t3d->localPosition.z);
 	}
 
 	void SentinelExplosionSystem::OnUpdate()
@@ -48,8 +58,6 @@ namespace Wiwa
 
 		if (m_Timer >= explosion->lifeTime)
 		{
-			/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			em.DestroyEntity(m_EntityId);*/
 			GameStateManager::s_PoolManager->s_SentinelExplosion->ReturnToPool(m_EntityId);
 		}
 
