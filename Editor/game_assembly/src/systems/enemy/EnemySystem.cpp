@@ -14,6 +14,7 @@
 #include "../../components/attack/ExplosiveBarrel.h"
 #include "../../components/attack/Attack.h"
 #include "../../components/attack/SimpleBullet.h"
+#include "../../components/attack/SentinelExplosion.h"
 
 namespace Wiwa
 {
@@ -138,6 +139,15 @@ namespace Wiwa
 					ReceiveDamage(bullet->damage);
 				}
 			}
+		}
+
+		std::string sentinelExplosionStr = "SENTINEL_EXPLOSION";
+		if (body1->id == m_EntityId && sentinelExplosionStr == body2->selfTagStr)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Wiwa::SentinelExplosion* explosion = em.GetComponent<Wiwa::SentinelExplosion>(body2->id);
+			ReceiveDamage(explosion->damage);
 		}
 
 		std::string explosiveBarrelStr = "EXPLOSIVE_BARREL";
