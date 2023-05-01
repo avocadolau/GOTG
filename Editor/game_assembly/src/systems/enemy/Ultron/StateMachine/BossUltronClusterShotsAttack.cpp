@@ -160,6 +160,7 @@ namespace Wiwa
 
 	bool BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
+
 		if (GameStateManager::s_PoolManager->s_ClusterBulletsPool->getCountDisabled() <= 0)
 			return false;
 
@@ -169,6 +170,9 @@ namespace Wiwa
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		animator->PlayAnimation("A_attak_bigprojetiles", false);
 
 		if (physSys != nullptr)
 		{
