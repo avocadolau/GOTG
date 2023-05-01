@@ -86,7 +86,7 @@ namespace Wiwa
 	{
 		PlayerGUISystem* pgs = nullptr;
 		UltronGUISystem* ugs = nullptr;
-
+		EntityId player = WI_INVALID_INDEX;
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
@@ -111,14 +111,17 @@ namespace Wiwa
 		case Scene::SCENE_LOOP:
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
-			if (m_EntityManager.GetEntityCount() != 0)
+			player = m_EntityManager.GetEntityByName("StarLord");
+			if (player != WI_INVALID_INDEX)
 			{
 				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
 				if (pgs != nullptr)
 					pgs->Update();
-				if (Wiwa::GameStateManager::GetType() == RoomType::ROOM_BOSS)
+
+				EntityId boss = m_EntityManager.GetEntityByName("Ultron_01");
+				if (boss != WI_INVALID_INDEX)
 				{
-					ugs = m_EntityManager.GetSystem<UltronGUISystem>(m_EntityManager.GetEntityByName("Ultron_01"));
+					ugs = m_EntityManager.GetSystem<UltronGUISystem>(boss);
 					if (ugs != nullptr)
 						ugs->Update();
 				}
