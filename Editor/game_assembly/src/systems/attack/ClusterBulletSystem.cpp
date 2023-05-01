@@ -11,6 +11,7 @@ Wiwa::ClusterBulletSystem::ClusterBulletSystem()
 	m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	m_Timer = 0.0f;
 	m_CollisionByWall = false;
+	m_NotCollidingPlayer = true;
 }
 
 Wiwa::ClusterBulletSystem::~ClusterBulletSystem()
@@ -47,6 +48,7 @@ void Wiwa::ClusterBulletSystem::InitClusterBullet()
 
 	m_HasBlown = false;
 	m_CollisionByWall = false;
+	m_NotCollidingPlayer = true;
 }
 
 void Wiwa::ClusterBulletSystem::OnUpdate()
@@ -108,6 +110,7 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 		std::string playerStr = "PLAYER";
 		if (playerStr == body2->selfTagStr)
 		{
+			m_NotCollidingPlayer = false;
 			ClusterBullet* bullet = GetComponentByIterator<ClusterBullet>(m_BulletIt);
 			GameStateManager::DamagePlayer(bullet->damage);
 
@@ -164,20 +167,23 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet01(EntityId bulletId)
 
 	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(bulletId));
 
-	int numBullets = 10;
-	float degreeStep = 360.0f / numBullets;
+	if (m_NotCollidingPlayer)
+	{
+		int numBullets = 10;
+		float degreeStep = 360.0f / numBullets;
 
-	for (int i = 0; i < numBullets; ++i) {
-		float directionAngle = i * degreeStep;
-		float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
-		float xDir = cos(radian);
-		float yDir = sin(radian);
+		for (int i = 0; i < numBullets; ++i) {
+			float directionAngle = i * degreeStep;
+			float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+			float xDir = cos(radian);
+			float yDir = sin(radian);
 
-		glm::vec3 direction(xDir, 0.0f, yDir);
-		this->SpawnBullet(direction, bulletId);
+			glm::vec3 direction(xDir, 0.0f, yDir);
+			this->SpawnBullet(direction, bulletId);
+		}
+
+		m_HasBlown = true;
 	}
-
-	m_HasBlown = true;
 }
 
 void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
@@ -192,19 +198,22 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 	float degreeStep = 360.0f / numGroups;
 	float groupDegreeStep = 10.0f; // The angle between bullets in a group
 
-	for (int i = 0; i < numGroups; ++i) {
-		for (int j = 0; j < numBulletsPerGroup; ++j) {
-			float directionAngle = i * degreeStep + j * groupDegreeStep;
-			float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
-			float xDir = cos(radian);
-			float yDir = sin(radian);
+	if (m_NotCollidingPlayer)
+	{
+		for (int i = 0; i < numGroups; ++i) {
+			for (int j = 0; j < numBulletsPerGroup; ++j) {
+				float directionAngle = i * degreeStep + j * groupDegreeStep;
+				float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+				float xDir = cos(radian);
+				float yDir = sin(radian);
 
-			glm::vec3 direction(xDir, 0.0f, yDir);
-			SpawnBullet(direction, bulletId);
+				glm::vec3 direction(xDir, 0.0f, yDir);
+				SpawnBullet(direction, bulletId);
+			}
 		}
-	}
 
-	m_HasBlown = true;
+		m_HasBlown = true;
+	}
 }
 
 bool Wiwa::ClusterBulletSystem::EnableBullet()

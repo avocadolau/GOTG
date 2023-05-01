@@ -15,6 +15,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_BulletIt;
 
 		bool m_CollisionByWall = false;
+		bool m_NotCollidingPlayer = true;
 
 		bool m_HasBlown = true;
 	public:
