@@ -26,8 +26,8 @@ namespace Wiwa
 	int GameStateManager::s_SpawnersFinished = 0;
 	bool GameStateManager::debug = true;
 	
-	int GameStateManager::s_RoomsToShop = 5;
-	int GameStateManager::s_RoomsToBoss = 5;
+	int GameStateManager::s_RoomsToShop = 1;
+	int GameStateManager::s_RoomsToBoss = 1;
 
 	SceneId GameStateManager::s_BossRoomIndx;
 	SceneId GameStateManager::s_HUBRoomIndx;
