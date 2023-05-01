@@ -18,7 +18,7 @@
         },
         {
             "name": "LVL_HUB",
-            "path": "f:/ttc/q6/projectiii/gotg/editor/library/scenes/game_scenes/rooms/lvl_hub.wiscene"
+            "path": "library/scenes/game_scenes/rooms/lvl_hub.wiscene"
         },
         {
             "name": "LVL_StartingRoom",
@@ -26,11 +26,11 @@
         },
         {
             "name": "LVL_CombatRoom01",
-            "path": "f:/ttc/q6/projectiii/gotg/editor/library/scenes/game_scenes/rooms/lvl_combatroom01.wiscene"
+            "path": "library/scenes/game_scenes/rooms/lvl_combatroom01.wiscene"
         },
         {
             "name": "LVL_CombatRoom02",
-            "path": "f:/ttc/q6/projectiii/gotg/editor/library/scenes/game_scenes/rooms/lvl_combatroom02.wiscene"
+            "path": "library/scenes/game_scenes/rooms/lvl_combatroom02.wiscene"
         },
         {
             "name": "LVL_CombatRoom03",
@@ -39,10 +39,6 @@
         {
             "name": "LVL_CombatRoom04",
             "path": "library/scenes/game_scenes/rooms/lvl_combatroom04.wiscene"
-        },
-        {
-            "name": "LVL_CombatRoom05",
-            "path": "library/scenes/game_scenes/rooms/lvl_combatroom05.wiscene"
         },
         {
             "name": "LVL_CombatRoom06",
@@ -58,11 +54,11 @@
         },
         {
             "name": "LVL_ShopRoom01",
-            "path": "f:/ttc/q6/projectiii/gotg/editor/library/scenes/game_scenes/rooms/lvl_shoproom01.wiscene"
+            "path": "library/scenes/game_scenes/rooms/lvl_shoproom01.wiscene"
         },
         {
             "name": "LVL_BossRoom01",
-            "path": "f:/ttc/q6/projectiii/gotg/editor/library/scenes/game_scenes/rooms/lvl_bossroom01.wiscene"
+            "path": "library/scenes/game_scenes/rooms/lvl_bossroom01.wiscene"
         }
     ]
 }
