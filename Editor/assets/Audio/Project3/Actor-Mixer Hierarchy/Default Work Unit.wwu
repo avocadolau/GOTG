@@ -1395,6 +1395,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="wave_start" ID="{CEA50C9A-C6BF-41BA-B87E-ADA59FB36961}" ShortID="128897002">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-4</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>

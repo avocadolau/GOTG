@@ -387,7 +387,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{AB6D77D3-1471-71C9-55C8-24733C647FFE}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{E2804F43-CD3E-1578-378D-01440CEA828C}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -598,5 +598,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{C0ED44B0-2C87-2120-DA54-FC279A41C025}</FileHash>
+	<FileHash>{C0E3D01B-F211-347C-C986-A125C3A2D259}</FileHash>
 </SoundBanksInfo>
