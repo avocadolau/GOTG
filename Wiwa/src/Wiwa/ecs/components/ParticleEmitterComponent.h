@@ -11,9 +11,9 @@ namespace Wiwa {
 	enum ParticleSimulationSpace
 	{
 		//The simulation depends on the Emitter's transform.
-		LOCAL,
+		LOCAL = 0,
 		//The simulation is independent from the Emitter's transform.
-		WORLD,
+		WORLD
 	};
 
 	enum ParticleSpawnVolume
@@ -21,21 +21,22 @@ namespace Wiwa {
 		NONE = 0, CUBE = 1, SPHERE = 2
 	};
 
-
-	struct WI_API ParticleEmitterComponent {
+	struct ColorNode
+	{
+		float m_percentage;
+		glm::vec4 color;
+		ColorNode()
+		{
+			m_percentage = 0.f;
+			color = glm::vec4(1, 1, 1, 1);
+		}
+	};
+	struct ParticleEmitterComponent 
+	{
 
 		//Emitter data			----------------------------------------
 		
-		struct ColorNode
-		{
-			float m_percentage;
-			glm::vec4 color;
-			ColorNode()
-			{
-				m_percentage = 0.f;
-				color = glm::vec4(1, 1, 1, 1);
-			}
-		};
+		
 
 		ResourceId m_materialId;
 		char m_materialPath[128];
@@ -159,7 +160,7 @@ namespace Wiwa {
 		glm::vec3	m_p_maxInitialGrowthVelocity;
 
 
-		ColorNode m_p_colorsOverLifetime[6] = {ColorNode()};
+		ColorNode m_p_colorsOverLifetime[6];
 		int m_colorsUsed;
 
 		bool m_useAdditiveBlending;
@@ -179,7 +180,7 @@ namespace Wiwa {
 		bool m_p_followEmitterRotationY;
 		bool m_p_followEmitterRotationZ;
 
-		ColorNode temp[20] = { ColorNode() }; //--> to fix colors later
+		ColorNode temp[20]; //--> to fix colors later
 
 		bool m_p_growUniformly;
 		float m_p_uniformGrowthVal;

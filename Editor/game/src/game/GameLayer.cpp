@@ -53,7 +53,8 @@ void GameLayer::OnDetach()
 
 void GameLayer::OnUpdate()
 {
-	
+	//Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->cull = true;
+	Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->setPlanes(0.01f, 10000.0f);
 }
 
 void GameLayer::OnImGuiRender()
@@ -219,6 +220,19 @@ void GameLayer::OnImGuiRender()
 			ImGui::Text(tagNameWitBits.c_str());
 
 		}
+
+		ImGui::End();
+
+
+		ImGui::Begin("Camera", &active);
+
+		Wiwa::Camera* cam = Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+
+		ImGui::Text("Pos %.2f x %.2f y %.2f z", cam->getPosition().x, cam->getPosition().y, cam->getPosition().z);
+		ImGui::Text("Rot %.2f x %.2f y %.2f z", cam->getRotation().x, cam->getRotation().y, cam->getRotation().z);
+		ImGui::Text("Near %.2f", cam->getNear());
+		ImGui::Text("Far %.2f", cam->getFar());
+		ImGui::Checkbox("Cull", &cam->cull);
 
 		ImGui::End();
 	}
