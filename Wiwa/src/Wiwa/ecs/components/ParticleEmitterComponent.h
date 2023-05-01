@@ -181,7 +181,12 @@ namespace Wiwa {
 
 		ColorNode temp[20] = { ColorNode() }; //--> to fix colors later
 
+		bool m_p_growUniformly;
+		float m_p_uniformGrowthVal;
+		float m_p_minUniformGrowthVal;
+		float m_p_maxUniformGrowthVal;
 
+		bool m_destroyOnFinishActive;
 		// todo					----------------------------------------
 		// 
 		// 

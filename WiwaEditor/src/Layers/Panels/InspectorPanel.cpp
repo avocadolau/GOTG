@@ -770,12 +770,23 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Text("Start Active");
 
+
+		if ((int)emitter->m_destroyOnFinishActive > 1 || (int)emitter->m_destroyOnFinishActive < 0)
+			emitter->m_destroyOnFinishActive = false;
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		ParticleTab();
+		ImGui::Checkbox("##m_destroyOnFinishActive", &emitter->m_destroyOnFinishActive);
+		ImGui::SameLine();
+		ImGui::Text("Destroy When Time Ends");
+
 		ImGui::Dummy(ImVec2(0, 4));
 
 		ParticleTab();
 		ImGui::Checkbox("##m_rangedTimeActive", &emitter->m_rangedTimeActive);
 		ImGui::SameLine();
-		ImGui::Text("Ranged");
+		ImGui::Text("Time Acive");
 
 		if (emitter->m_rangedTimeActive)
 		{
@@ -800,6 +811,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			if (ImGui::DragFloat("##m_initialTimeActive", &emitter->m_initialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f")) emitter->m_activeTimeChanged = true;
 			ImGui::PopItemWidth();
 		}
+
 	}
 
 	ImGui::Dummy(ImVec2(0, 4));
@@ -1281,14 +1293,13 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 		ImGui::Dummy(ImVec2(0, 8));
 
-		ImGui::Checkbox("##m_p_rangedGrowthVelocity", &emitter->m_p_rangedGrowthVelocity);
-		ImGui::SameLine();
-		ImGui::Text("Initial Growth Velocity");
+		if ((int)emitter->m_p_growUniformly > 1 || (int)emitter->m_p_growUniformly < 0)
+			emitter->m_p_growUniformly = false;
 
 		ImGui::Checkbox("##m_p_scaleOverTime", &emitter->m_p_scaleOverTime);
 		ImGui::SameLine();
 		ImGui::Text("Use Growth over life time");
-
+		
 
 		if (emitter->m_p_scaleOverTime)
 		{
@@ -1320,20 +1331,71 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		else
 		{
-			if (emitter->m_p_rangedGrowthVelocity)
+			ImGui::Checkbox("##m_p_rangedGrowthVelocity", &emitter->m_p_rangedGrowthVelocity);
+			ImGui::SameLine();
+			ImGui::Text("Initial Growth Velocity");
+
+			ImGui::Dummy(ImVec2(0, 4));
+
+			
+
+			if (emitter->m_p_growUniformly)
 			{
-				ImGui::Text("Min");
-				ImGui::SameLine();
-				ImGui::DragFloat3("##m_p_minInitialGrowthVelocity", &(emitter->m_p_minInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-				ImGui::Text("Max");
-				ImGui::SameLine();
-				ImGui::DragFloat3("##m_p_maxInitialGrowthVelocity", &(emitter->m_p_maxInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				if (emitter->m_p_rangedGrowthVelocity)
+				{
+					ParticleTab();
+					ImGui::PushItemWidth(100.f);
+
+					ImGui::Text("Min");
+					ImGui::SameLine();
+					ImGui::DragFloat("##m_p_minUniformGrowthVal", &emitter->m_p_minUniformGrowthVal, 0.05f, 0.0f, 0.0f, "%.2f");
+					
+					ParticleTab();
+					ImGui::Text("Max");
+					ImGui::SameLine();
+					ImGui::DragFloat("##m_p_maxUniformGrowthVal", &emitter->m_p_maxUniformGrowthVal, 0.05f, 0.0f, 0.0f, "%.2f");
+					ImGui::PopItemWidth();
+				}
+				else
+				{
+					ImGui::Dummy(ImVec2(38, 0));
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.0f);
+
+					ImGui::DragFloat("##m_p_uniformGrowthVal", &emitter->m_p_uniformGrowthVal, 0.05f, 0.0f, 0.0f, "%.2f");
+					ImGui::PopItemWidth();
+				}
 			}
 			else
 			{
-				ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				if (emitter->m_p_rangedGrowthVelocity)
+				{
+					ImGui::Text("Min");
+					ImGui::SameLine();
+					ImGui::DragFloat3("##m_p_minInitialGrowthVelocity", &(emitter->m_p_minInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+					ImGui::Text("Max");
+					ImGui::SameLine();
+					ImGui::DragFloat3("##m_p_maxInitialGrowthVelocity", &(emitter->m_p_maxInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				}
+				else
+				{
+					ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				}
 			}
+
+			ImGui::Dummy(ImVec2(0, 4));
+
+			ParticleTab();
+			ImGui::Checkbox("##m_p_growUniformly", &emitter->m_p_growUniformly);
+			ImGui::SameLine();
+			ImGui::Text("Scale Uniformly");
+			
 		}
+
+		
+		
+
+
 		ImGui::TreePop();
 		ImGui::Dummy(ImVec2(0, 8));
 	}

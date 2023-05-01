@@ -195,6 +195,12 @@ namespace Wiwa {
 
 			if (emitter->m_activeOverTime)
 			{
+				if (emitter->m_ActiveTimer <= 0 && emitter->m_destroyOnFinishActive && Time::IsPlaying())
+				{
+					m_Scene->GetEntityManager().DestroyEntity(m_EntityId);
+				}
+
+
 				if (emitter->m_active && emitter->m_ActiveTimer <= 0)
 				{
 					if (emitter->m_rangedTimeActive)
@@ -780,17 +786,41 @@ namespace Wiwa {
 		//initial growth velocity
 		if (emitter->m_p_rangedGrowthVelocity)
 		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.x, emitter->m_p_maxInitialGrowthVelocity.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.y, emitter->m_p_maxInitialGrowthVelocity.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.z, emitter->m_p_maxInitialGrowthVelocity.z);
+
+			float x = 0;
+			float y = 0;
+			float z = 0;
+
+			particle.uniformGrowthVal = Wiwa::Math::RandomRange(emitter->m_p_minUniformGrowthVal, emitter->m_p_maxUniformGrowthVal);
+
+			if (emitter->m_p_growUniformly)
+			{
+				x = y = z = particle.uniformGrowthVal;
+			}
+			else
+			{
+				x = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.x, emitter->m_p_maxInitialGrowthVelocity.x);
+				y = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.y, emitter->m_p_maxInitialGrowthVelocity.y);
+				z = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.z, emitter->m_p_maxInitialGrowthVelocity.z);
+			}
 
 			particle.growthVelocity = glm::vec3(x, y, z);
 		}
 		else
 		{
-			particle.growthVelocity = emitter->m_p_initialGrowthVelocity;
+			particle.uniformGrowthVal = emitter->m_p_uniformGrowthVal;
+
+			if (emitter->m_p_growUniformly)
+			{
+				particle.growthVelocity.x = particle.growthVelocity.y = particle.growthVelocity.z = particle.uniformGrowthVal;
+			}
+			else
+			{
+				particle.growthVelocity = emitter->m_p_initialGrowthVelocity;
+			}
 		}
 
+		//particle life time
 		if (emitter->m_p_rangedLifeTime)
 		{
 			SetParticleLifeTime(particle, Wiwa::Math::RandomRange(emitter->m_p_minLifeTime, emitter->m_p_maxLifeTime));
