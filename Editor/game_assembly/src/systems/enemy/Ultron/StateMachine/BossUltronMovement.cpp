@@ -25,8 +25,10 @@ namespace Wiwa
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//EntityId currentEnemy = enemy->GetEntity();
 
+		animator->PlayAnimation("A_walk", true);
 
 		//pman.EmitBatch(currentEnemy);
 

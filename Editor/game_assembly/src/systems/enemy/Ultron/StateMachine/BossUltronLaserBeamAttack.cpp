@@ -151,6 +151,9 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+
+		animator->PlayAnimation("A_attak_ray", false);
 
 		if (newBulletId == EntityManager::INVALID_INDEX)
 			return EntityManager::INVALID_INDEX;

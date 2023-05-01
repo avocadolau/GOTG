@@ -19,11 +19,12 @@ namespace Wiwa
 	void BossUltronSpawnState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 
 		EntityId currentEnemy = enemy->GetEntity();
 
+		//animator->PlayAnimation("");
 		//play particles
 		//play Animation		
 	}
