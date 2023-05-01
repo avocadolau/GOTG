@@ -141,6 +141,8 @@ namespace Wiwa
 		WaveSpawner* wavesSpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		wavesSpawner->currentWaveCount += 1;
 		wavesSpawner->hasTriggered = true;
+		if (wavesSpawner->hasFinished)
+			return;
 
 		// Create an empty entity
 		std::string waveName = em.GetEntityName(m_EntityId);
