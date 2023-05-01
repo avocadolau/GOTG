@@ -100,13 +100,13 @@ namespace Wiwa
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
-			enemy->LookAt(playerTr->localPosition, 70.0f);
+			enemy->LookAt(playerTr->localPosition, 90.0f);
 
-			if (m_TimerToLookAtPlayer >= 3.0f)
+			if (m_TimerToLookAtPlayer >= 2.0f)
 			{
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 
-				if (m_TimerBetweenBullet >= 5.0f)
+				if (m_TimerBetweenBullet >= 4.0f)
 				{
 					m_TimerToLookAtPlayer = 0.0f;
 					m_TimerBetweenBullet = 0.0f;
@@ -123,13 +123,13 @@ namespace Wiwa
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
-			enemy->LookAt(playerTr->localPosition, 70.0f);
+			enemy->LookAt(playerTr->localPosition, 90.0f);
 
-			if (m_TimerToLookAtPlayer >= 3.0f)
+			if (m_TimerToLookAtPlayer >= 2.0f)
 			{
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 
-				if (m_TimerBetweenBullet >= 7.0f)
+				if (m_TimerBetweenBullet >= 4.0f)
 				{
 					clusterState = ClusterState::END_STATE;
 				}

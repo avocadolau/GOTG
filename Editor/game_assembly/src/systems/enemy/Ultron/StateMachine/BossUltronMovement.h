@@ -29,6 +29,7 @@ namespace Wiwa {
 	private:
 		std::vector<glm::vec3> m_PremadePositions;
 		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
+		float m_TimerToAttack = 0.0f;
 		bool m_DoAttack = false;
 	};
 }
