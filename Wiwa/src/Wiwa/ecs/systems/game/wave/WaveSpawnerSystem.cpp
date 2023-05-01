@@ -13,6 +13,7 @@ namespace Wiwa
 		m_HasWave = false;
 		m_TimerBetweenWaves = 0.0f;
 		m_TimerForNextWave = 0.0f;
+		m_StopUpdating = false;
 	}
 
 	WaveSpawnerSystem::~WaveSpawnerSystem()
@@ -38,6 +39,9 @@ namespace Wiwa
 
 	void WaveSpawnerSystem::OnUpdate()
 	{
+		if (m_StopUpdating)
+			return;
+
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		Wave* currentWave = nullptr;
 
@@ -64,6 +68,7 @@ namespace Wiwa
 		case Wiwa::WaveSpawnerAction::END_SPAWNER:
 		{
 			enemySpawner->hasFinished = true;
+			m_StopUpdating = true;
 		}
 			break;
 		default:
@@ -141,7 +146,7 @@ namespace Wiwa
 		WaveSpawner* wavesSpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		wavesSpawner->currentWaveCount += 1;
 		wavesSpawner->hasTriggered = true;
-		if (wavesSpawner->hasFinished)
+		if (wavesSpawner->hasFinished || m_StopUpdating)
 			return;
 
 		// Create an empty entity

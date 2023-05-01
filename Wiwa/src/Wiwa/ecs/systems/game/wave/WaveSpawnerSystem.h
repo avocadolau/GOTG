@@ -26,6 +26,7 @@ namespace Wiwa {
 		bool m_HasWave = false;
 		/*int maxWavesCounter = 0;
 		int currentWavesCounter = 0;*/
+		bool m_StopUpdating = false;
 	public:
 		WaveSpawnerSystem();
 		~WaveSpawnerSystem();
