@@ -472,6 +472,11 @@ namespace Wiwa
 		forcedConversationTag = forcedConversationToStart;
 	}
 
+	void DialogManager::RestartForceDialogState()
+	{
+		forcedDialogHappened = false;
+	}
+
 	void DialogManager::SaveAllDialogs()
 	{
 		Wiwa::JSONDocument doc;

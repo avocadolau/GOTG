@@ -74,6 +74,7 @@ namespace Wiwa
 		//void SetContinueIndicatorImage(const char* path, int conversationNumber);
 
 		void ForceDialogStart(std::string forcedConversationToStart);
+		void RestartForceDialogState();
 
 		void SaveAllDialogs();
 		void LoadAllDialogs();
