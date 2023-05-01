@@ -1,0 +1,96 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl M_MainDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_MainDoor_01a_C.png
+
+newmtl M_SecondaryDoor_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\doors\NewDoors\T_SecondaryDoor_01a_C.png
+
+newmtl M_TubeCurve
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\tubes\T_TexTubeCurvedDifuse_01_C.png
+
+newmtl M_TubeStraight
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\tubes\T_TexTubeStraightDifuse_01_C.png
+
+newmtl M_BridgeRailing_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\bridges\BridgeRailing\T_BridgeRailing_01a_C.png
+
+newmtl M_DarkCover
+Kd 0 0 0
+Ka 0 0 0
+Ks 0 0 0
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+
+newmtl M_wall
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.25 0.25 0.25
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\BlenderRoomsForWiwa\T_EnvironmentWalls.png
+
+newmtl lambert1
+Kd 0.400000006 0.400000006 0.400000006
+Ka 0 0 0
+d 1
+illum 1
+
+newmtl M_biombos_03
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.200000003 0.200000003 0.200000003
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\biombos\Biombos\T_Biombos_03a_C.png
+
