@@ -7,13 +7,13 @@
 
 #include <glm/glm.hpp>
 namespace Wiwa {
-	struct ExplosiveBarrel {
+	struct Explosion {
 		float lifeTime;
 		int damage;
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::ExplosiveBarrel)
+REFLECTION_BEGIN(Wiwa::Explosion)
 REFLECT_MEMBER(lifeTime)
 REFLECT_MEMBER(damage)
 REFLECTION_END;

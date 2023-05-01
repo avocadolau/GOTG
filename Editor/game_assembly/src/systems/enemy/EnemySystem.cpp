@@ -11,10 +11,9 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include "../../components/attack/ExplosiveBarrel.h"
 #include "../../components/attack/Attack.h"
 #include "../../components/attack/SimpleBullet.h"
-#include "../../components/attack/SentinelExplosion.h"
+#include "../../components/attack/Explosion.h"
 
 namespace Wiwa
 {
@@ -146,17 +145,8 @@ namespace Wiwa
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::SentinelExplosion* explosion = em.GetComponent<Wiwa::SentinelExplosion>(body2->id);
+			Wiwa::Explosion* explosion = em.GetComponent<Wiwa::Explosion>(body2->id);
 			ReceiveDamage(explosion->damage);
-		}
-
-		std::string explosiveBarrelStr = "EXPLOSIVE_BARREL";
-		if (body1->id == m_EntityId && explosiveBarrelStr == body2->selfTagStr)
-		{
-			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::ExplosiveBarrel* explosiveBarrel = em.GetComponent<Wiwa::ExplosiveBarrel>(body2->id);
-			ReceiveDamage(explosiveBarrel->damage);
 		}
 
 		std::string phylasSword = "PHYLAS_QUANTUM_SWORD";

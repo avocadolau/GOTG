@@ -1,6 +1,6 @@
 #include "SentinelExplosionSystem.h"
-#include "../../components/attack/SentinelExplosion.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "../../components/attack/Explosion.h"
 
 namespace Wiwa
 {
@@ -17,7 +17,7 @@ namespace Wiwa
 
 	void SentinelExplosionSystem::OnAwake()
 	{
-		m_ExplosionIt = GetComponentIterator<SentinelExplosion>();
+		m_ExplosionIt = GetComponentIterator<Explosion>();
 	}
 
 	void SentinelExplosionSystem::OnInit()
@@ -27,7 +27,7 @@ namespace Wiwa
 
 	void SentinelExplosionSystem::InitExplosion()
 	{
-		SentinelExplosion* explosion = GetComponentByIterator<SentinelExplosion>(m_ExplosionIt);
+		Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
@@ -52,7 +52,7 @@ namespace Wiwa
 		if (!getInit())
 			System::Init();
 
-		SentinelExplosion* explosion = GetComponentByIterator<SentinelExplosion>(m_ExplosionIt);
+		Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
@@ -76,7 +76,7 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
-				SentinelExplosion* explosion = GetComponentByIterator<SentinelExplosion>(m_ExplosionIt);
+				Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
 				GameStateManager::DamagePlayer(explosion->damage);
 			}
 
