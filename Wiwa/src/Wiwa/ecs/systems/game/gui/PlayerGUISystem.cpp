@@ -115,17 +115,6 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			characterInventory->ShopElement(characterInventory->GetCurrentShopItem());
 			buyItem = false;
 		}
-
-		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
-		{
-			shopHUD = true;
-		}
-		if (shopHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
-		{
-			gm.canvas.at(ShopHUD)->SwapActive();
-			gm.canvas.at(CanvasHUD)->SwapActive();
-			shopHUD = false;
-		}
 	}
 }
 
