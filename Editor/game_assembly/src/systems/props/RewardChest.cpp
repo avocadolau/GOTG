@@ -8,7 +8,12 @@ void Wiwa::RewardChest::OnAwake()
 	m_Face1 = m_Scene->GetEntityManager().GetChildByName(m_EntityId, "Face1");
 	m_Face2 = m_Scene->GetEntityManager().GetChildByName(m_EntityId, "Face2");
 	m_Face3 = m_Scene->GetEntityManager().GetChildByName(m_EntityId, "Face3");
-	m_ColliderPreActive = m_Scene->GetEntityManager().GetChildByName(m_EntityId, "Collider");
+	m_EntityChildren = *m_Scene->GetEntityManager().GetEntityChildren(m_EntityId);
+	m_ColliderPreActive = m_Scene->GetEntityManager().GetChildByName(m_EntityId, "collider_item");
+	for (size_t i = 0; i < m_EntityChildren.size(); i++)
+	{
+		WI_INFO(m_Scene->GetEntityManager().GetEntityName(m_EntityChildren.at(i)));
+	}
 	m_Face1It = GetComponentIterator<Transform3D>(m_Face1);
 	m_Face2It = GetComponentIterator<Transform3D>(m_Face2);
 	m_Face3It = GetComponentIterator<Transform3D>(m_Face3);
