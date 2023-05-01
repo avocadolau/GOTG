@@ -26,6 +26,7 @@ namespace Wiwa {
 
 		void SelectRandomAttack(BossUltron* enemy);
 
+		bool IsFirstPatternFinished();
 		bool IsSecondPatternFinished();
 		bool IsThirdPatternFinished();
 
@@ -33,6 +34,11 @@ namespace Wiwa {
 		int m_RoundCounter = 0;
 		int m_SelectRandomAttack = 0;
 		bool m_IsAttackSelected = false;
+
+		//First Pattern Attack
+		int m_FirstPatternCounter = 0;
+		float m_FirstPatternAttackTimer = 0.0f;
+		bool m_FirstPatternEnabled = false;
 
 		//Second Pattern Attack
 		float m_SecondPatternAttackTimer = 0.0f;

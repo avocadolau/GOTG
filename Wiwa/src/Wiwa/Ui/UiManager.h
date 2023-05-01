@@ -77,6 +77,7 @@ namespace Wiwa
 	public:
 		std::vector<GuiCanvas*> canvas;
 		std::vector<GuiCanvas*> canvasToDestroy;
+		std::vector<Text*> textToDestroy;
 		float accumulatedTime = 0.0f;
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;
