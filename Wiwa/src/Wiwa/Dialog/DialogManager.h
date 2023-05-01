@@ -92,6 +92,9 @@ namespace Wiwa
 		bool collidingWithNpc = false;
 		std::string NpcConversationTag;
 
+		bool forceStartConversation = false;
+		std::string forcedConversationTag;
+
 		Wiwa::Renderer2D::InstanceData continueImgID;
 		Wiwa::Renderer2D::InstanceData continueImgID2;
 

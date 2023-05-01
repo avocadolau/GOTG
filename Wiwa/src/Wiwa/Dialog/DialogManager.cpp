@@ -131,9 +131,10 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && (collidingWithNpc == true || forceStartConversation == true))
 		{
- 			conversationToPlayName = NpcConversationTag.c_str();
+ 			if(collidingWithNpc == true) conversationToPlayName = NpcConversationTag.c_str();
+			else if (forceStartConversation == true) conversationToPlayName = forcedConversationTag.c_str();
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
@@ -146,6 +147,7 @@ namespace Wiwa
 				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()))
 				{
 					UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
+					forceStartConversation = false;
 
 					if (std::stoi(conversations[i].group.groupID) != -1 && actualConversationState == 2)
 					{
