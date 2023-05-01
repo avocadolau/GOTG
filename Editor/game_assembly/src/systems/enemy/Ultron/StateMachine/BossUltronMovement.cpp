@@ -143,7 +143,7 @@ namespace Wiwa
 			return UltronAttacks::CLUSTER_SHOTS;
 		}
 		
-		return UltronAttacks::LASER_BEAM;
+		return UltronAttacks::BULLET_STORM;
 	}
 
 	void BossUltronMovementState::FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec)

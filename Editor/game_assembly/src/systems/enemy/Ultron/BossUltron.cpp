@@ -11,6 +11,8 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/MeshRenderer.h>
 
 namespace Wiwa
 {
@@ -143,17 +145,21 @@ namespace Wiwa
 		WI_INFO("BossUltron hit by: {} damage", damage);
 
 		EnemySystem::ReceiveDamage(damage);
-		//SwitchState(m_HitState);
-		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
 
-		EntityId hitR_1 = em.GetChildByName(m_EntityId, "ER_Hit_1");
-		EntityId hitR_2 = em.GetChildByName(m_EntityId, "ER_Hit_2");
-		ParticleManager& pman = this->getScene().GetParticleManager();
-		pman.EmitBatch(hitR_1);
-		pman.EmitBatch(hitR_2);
+		Wiwa::EntityManager& em = this->getScene().GetEntityManager();
+		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(this->GetEntity());
+	/*	Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(this->GetEntity());
+		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(this->GetEntity());
+		Wiwa::Material* mat = renderer->GetMaterial();*/
 
-		animator->PlayAnimation("damage", false);*/
+		/*mat->SetUniformData("u_Hit", true);
+		renderer->Update();
+		mat->SetUniformData("u_Hit", false);
+		audio->PlayAudio("melee_hit");
+		EntityId hit_1 = em.GetChildByName(this->GetEntity(), "E_Hit_1");
+		EntityId hit_2 = em.GetChildByName(this->GetEntity(), "E_Hit_2");*/
+
+		animator->PlayAnimation("A_hit", false);
 	}
 
 	void BossUltron::SwitchState(BossUltronBaseState* state)

@@ -18,6 +18,8 @@ namespace Wiwa {
 	void ParticleSystem::OnSystemAdded()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		SetEmitterBools(emitter);
+
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
@@ -31,18 +33,9 @@ namespace Wiwa {
 		emitter->m_materialChanged = false;
 
 		//init with delay
-		float delay = 0;
-
-		if (emitter->m_p_rangedSpawnDelay)
-		{
-			delay = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
-		}
-		else
-		{
-			delay = emitter->m_p_spawnDelay;
-		}
 		
-		m_SpawnTimer = delay;
+
+		
 		m_AvailableParticles = emitter->m_maxParticles;
 
 		emitter->m_activeTimeChanged = false;
@@ -85,17 +78,29 @@ namespace Wiwa {
 		}
 
 
+
+		if (emitter->m_p_rangedSpawnDelay)
+		{
+			m_firstDelay = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
+		}
+		else
+		{
+			m_firstDelay = emitter->m_p_spawnDelay;
+		}
+
+		m_SpawnTimer = m_firstDelay;
+
 		if (emitter->m_activeOverTime)
 		{
 			if (emitter->m_startActive)
 			{
 				if (emitter->m_rangedTimeActive)
 				{
-					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive) + m_firstDelay;
 				}
 				else
 				{
-					emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+					emitter->m_ActiveTimer = emitter->m_initialTimeActive + m_firstDelay;
 				}
 			}
 			else
@@ -105,11 +110,60 @@ namespace Wiwa {
 			
 		}
 
+		if (m_SpawnTimer == 0) SpawnParticleSet();
 
-		if (!emitter->m_loopSpawning)
+	}
+	bool ParticleSystem::OnEnabledFromPool()
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+		if (m_Model == nullptr)
 		{
-			SpawnParticleSet();
+			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
+			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
 		}
+		if (m_Material == nullptr)
+		{
+			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+		}
+
+
+
+		if (emitter->m_p_rangedSpawnDelay)
+		{
+			m_firstDelay = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
+		}
+		else
+		{
+			m_firstDelay = emitter->m_p_spawnDelay;
+		}
+
+		m_SpawnTimer = m_firstDelay;
+
+		if (emitter->m_activeOverTime)
+		{
+			if (emitter->m_startActive)
+			{
+				if (emitter->m_rangedTimeActive)
+				{
+					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive) + m_firstDelay;
+				}
+				else
+				{
+					emitter->m_ActiveTimer = emitter->m_initialTimeActive + m_firstDelay;
+				}
+			}
+			else
+			{
+				emitter->m_ActiveTimer = 0;
+			}
+
+		}
+
+		if (m_SpawnTimer == 0) SpawnParticleSet();
+
+		return true;
 	}
 	void ParticleSystem::OnUpdate()
 	{
@@ -173,7 +227,6 @@ namespace Wiwa {
 			{
 				m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
-
 		}
 
 		emitter->m_activeParticles = 0;
@@ -184,12 +237,12 @@ namespace Wiwa {
 
 			if (emitter->m_activeOverTime)
 			{
-				if (emitter->m_ActiveTimer > 0)
-					m_SpawnTimer -= dt;
+				
 				emitter->m_ActiveTimer -= dt;
 			}
-			else
-				m_SpawnTimer -= dt;
+
+			if (m_SpawnTimer > 0)
+			m_SpawnTimer -= dt;
 
 
 
@@ -197,7 +250,9 @@ namespace Wiwa {
 			{
 				if (emitter->m_ActiveTimer <= 0 && emitter->m_destroyOnFinishActive && Time::IsPlaying())
 				{
-					m_Scene->GetEntityManager().DestroyEntity(m_EntityId);
+					EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+					eman.DestroyEntity(m_EntityId);
 				}
 
 
@@ -579,16 +634,28 @@ namespace Wiwa {
 		emitter->m_active = active;
 	}
 
-
 	void ParticleSystem::OnDestroy()
 	{
-		
 		m_Model = nullptr;
 		m_Material = nullptr;
 
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		emitter->m_ActiveTimer = 0;
 	}
+
+	bool ParticleSystem::OnDisabledFromPool()
+	{
+		for (size_t i = 0; i < m_Particles.size(); i++)
+		{
+			Particle& particle = m_Particles[i];
+			particle.life_percentage = 0;
+			particle.life_time_start = 0;
+			particle.life_time = 0;
+		}
+
+		return false;
+	}
+
 	void ParticleSystem::Render(Particle& particle)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
@@ -884,5 +951,54 @@ namespace Wiwa {
 		// override first particle if all others are alive
 		m_LastUsedParticle = 0;
 		return 0;
-	}	
+	}
+
+	void ParticleSystem::SetEmitterBools(ParticleEmitterComponent* emitter)
+	{
+		FixBool(emitter->m_meshChanged);
+		FixBool(emitter->m_materialChanged);
+		FixBool(emitter->m_loopSpawning);
+		FixBool(emitter->m_rangedSpawnAmount);
+		FixBool(emitter->m_p_rangedSpawnRate);
+		FixBool(emitter->m_startActive);
+		FixBool(emitter->m_active);
+		FixBool(emitter->m_activeTimeChanged);
+		FixBool(emitter->m_rangedTimeActive);
+		FixBool(emitter->m_activeOverTime);
+		FixBool(emitter->m_p_rangedLifeTime);
+		FixBool(emitter->m_billboardActive);
+		FixBool(emitter->m_p_followEmitterPosition);
+		FixBool(emitter->m_p_followEmitterPositionSpawn);
+		FixBool(emitter->m_p_positionTowardsPoint);
+		FixBool(emitter->m_p_rangedVelocity);
+		FixBool(emitter->m_p_useGravity);
+		FixBool(emitter->m_p_followEmitterRotation);
+		FixBool(emitter->m_p_followEmitterRotationSpawn);
+		FixBool(emitter->m_p_rangedInitialRotation);
+		FixBool(emitter->m_p_rangedAngularVelocity);
+		FixBool(emitter->m_p_rangedInitialScale);
+		FixBool(emitter->m_p_scaleOverTime);
+		FixBool(emitter->m_p_rangedGrowthVelocity);
+		FixBool(emitter->m_useAdditiveBlending);
+		FixBool(emitter->m_p_positionFollowsRotation);
+		FixBool(emitter->m_deactivateFaceCulling);
+		FixBool(emitter->m_p_rangedSpawnDelay);
+		FixBool(emitter->m_p_positionFollowsRotationX);
+		FixBool(emitter->m_p_positionFollowsRotationY);
+		FixBool(emitter->m_p_positionFollowsRotationZ);
+		FixBool(emitter->m_p_followEmitterRotationX);
+		FixBool(emitter->m_p_followEmitterRotationY);
+		FixBool(emitter->m_p_followEmitterRotationZ);
+		FixBool(emitter->m_p_growUniformly);
+		FixBool(emitter->m_destroyOnFinishActive);
+	}
+
+	void ParticleSystem::FixBool(bool& _bool)
+	{
+		if ((int)_bool < 0 || (int)_bool > 1)
+			_bool = false;
+	}
+
+	
+
 }
