@@ -51,6 +51,9 @@ private:
 	// Default gameobject listener
 	static uint64_t m_WorldListener;
 
+	//// store registered wolrd entities
+	//static std::vector<uint64_t> m_RegisteredWorldEntities;
+
 public:
 	// Init audio engine
 	static bool Init();
@@ -131,6 +134,9 @@ public:
 
 	// Stop event for the default gameobject
 	static bool StopEvent(const char* event_name) { return StopEvent(event_name, m_DefaultListener); }
+
+	//stop event for the world listener
+	static bool StopWorldEvent(const char* event_name) { return StopEvent(event_name, m_WorldListener); }
 
 	// Stop all events
 	static bool StopAllEvents();

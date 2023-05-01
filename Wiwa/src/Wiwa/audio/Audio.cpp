@@ -40,6 +40,7 @@ std::string Audio::m_LastErrorMsg = "None";
 std::string Audio::m_InitBankPath = "";
 uint64_t Audio::m_DefaultListener = 0;
 uint64_t Audio::m_WorldListener = 1;
+//std::vector<uint64_t> m_RegisteredWorldEntities;
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
@@ -747,6 +748,8 @@ void Audio::RegisterAsWorldListener(uint64_t go_id)
 bool Audio::RegisterGameObject(uint64_t go_id)
 {
     AKRESULT res = AK::SoundEngine::RegisterGameObj(go_id);
+
+    //m_RegisteredWorldEntities.push_back(go_id);
 
     if (res != AK_Success) {
         setLastError(res);

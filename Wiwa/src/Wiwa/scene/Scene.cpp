@@ -194,7 +194,7 @@ namespace Wiwa
 	{
 		GameStateManager::s_PoolManager->UnloadAllPools();
 
-		//Audio::StopAllEvents();
+		Audio::StopAllEvents();
 		m_EntityManager.Clear();
 		
 		// Sleep to wait till Audio thread stops entity events

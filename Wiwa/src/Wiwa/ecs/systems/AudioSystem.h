@@ -12,6 +12,7 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_AudioSource;
 		EntityManager::ComponentIterator m_Transform;
+		const char* m_CurrentEvent;
 	public:
 		AudioSystem();
 		~AudioSystem();

@@ -67,7 +67,7 @@ namespace Wiwa {
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if (asrc->isPlaying) {
-			if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
+			if (!Audio::StopEvent(m_CurrentEvent, m_EntityId)) {
 				WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
 			}
 
@@ -87,18 +87,25 @@ namespace Wiwa {
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
-		if (strcmp(ev_name, asrc->eventName) == 0) {
+		if (strcmp(ev_name, m_CurrentEvent) == 0) {
 			asrc->isPlaying = false;
 		}
-
-		//WI_CORE_INFO("Audio finished [{}]", ev_name);
 	}
 	void AudioSystem::PlayAudio(const char* ev_name)
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
-		if (!Audio::PostEvent(ev_name, m_EntityId, { &AudioSystem::OnEventFinish, this })) {
+		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
+
+		m_CurrentEvent = ev_name;
+		
+		if (!Audio::PostEvent(m_CurrentEvent, m_EntityId, { &AudioSystem::OnEventFinish, this })) {
 			WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
+			asrc->isPlaying = false;
+		}
+		else
+		{
+			asrc->isPlaying = true;
 		}
 	}
 }
