@@ -111,5 +111,6 @@ namespace Wiwa
 		int convGroup = -1;
 		int convOrder = -1;
 
+		bool forcedDialogHappened = false;
 	};
 }
