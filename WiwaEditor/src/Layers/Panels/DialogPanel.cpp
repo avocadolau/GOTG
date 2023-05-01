@@ -155,7 +155,7 @@ void DialogPanel::Draw()
 						(char*)dm.conversations[currentConversation].nodes[currentNode].text1.c_str(),
 						(char*)dm.conversations[currentConversation].nodes[currentNode].text2.c_str(),
 						(char*)dm.conversations[currentConversation].nodes[currentNode].text3.c_str(),
-						"assets/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
+						"library/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
 					dm.conversations[currentConversation].nodes[currentNode].occupied = true;
 
 					currentCreatingNodeIsSaved[currentNode] = true;
@@ -463,7 +463,7 @@ void DialogPanel::Draw()
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
-						"assets/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
+						"library/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
 
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = true;
 				}
@@ -551,7 +551,7 @@ void DialogPanel::Draw()
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
-						"assets/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
+						"library/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
 
 					dm.conversations[i].characterImagePath = dm.editorConversations[i].characterImagePath;
 					dm.SetCharacterImage(dm.conversations[i].characterImagePath.c_str(), i);

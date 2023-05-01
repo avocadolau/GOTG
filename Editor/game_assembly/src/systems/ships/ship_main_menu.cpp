@@ -75,10 +75,6 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
 		{
-			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
-			{
-				Audio::PostEvent("action_accepted");
-			}
 			Wiwa::SceneManager::ChangeSceneByIndex(4);
 			m_GlFWeskk = false;
 		}
