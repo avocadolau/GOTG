@@ -6,6 +6,11 @@
 
 namespace Wiwa {
 	class BossUltronClusterShotsAttackState : public BossUltronBaseState {
+		enum class ClusterState {
+			FIRST_ATTACK,
+			SECOND_ATTACK,
+			END_STATE,
+		};
 	public:
 		BossUltronClusterShotsAttackState();
 		~BossUltronClusterShotsAttackState();
@@ -17,11 +22,14 @@ namespace Wiwa {
 
 	private:
 
+		ClusterState clusterState;
+
 		bool SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir);
 
 		glm::vec3 CalculateForward(const Transform3D& t3d);
 
 		float m_TimerBetweenBullet = 0.0f;
+		float m_TimerToLookAtPlayer = 0.0f;
 
 		bool m_RoundOne, m_RoundTwo, m_RoundThree;
 		
