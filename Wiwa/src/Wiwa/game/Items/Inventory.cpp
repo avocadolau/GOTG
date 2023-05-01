@@ -16,7 +16,10 @@ Wiwa::Inventory::Inventory()
     InitGame();
 }
 
-Wiwa::Inventory::~Inventory() = default;
+Wiwa::Inventory::~Inventory()
+{
+	Clear();
+}
 
 void Wiwa::Inventory::Serialize(JSONDocument* doc)
 {

@@ -46,8 +46,19 @@ namespace Wiwa
 		//enemy->SwitchState(enemy->m_ChasingState);
 		/*m_SecondPatternBulletcounter = 0.0f;*/
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
+		m_FirstPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_ThirdPatternAttackTimer += Time::GetDeltaTimeSeconds();
+
+		if (IsFirstPatternFinished() == false)
+		{
+			if (m_FirstPatternAttackTimer > 0.6f)
+			{
+				SpawnFirstPattern(enemy);
+				m_FirstPatternAttackTimer = 0.0f;
+			}
+			m_TimerRoundCooldown = 0.0f;
+		}
 
 		if (IsSecondPatternFinished() == false)
 		{
@@ -61,7 +72,7 @@ namespace Wiwa
 			m_TimerRoundCooldown = 0.0f;
 		}
 
-		if(IsSecondPatternFinished() == true || IsThirdPatternFinished() == true)
+		if(IsSecondPatternFinished() == true || IsThirdPatternFinished() == true || IsFirstPatternFinished() == true)
 		{
 			if (m_TimerRoundCooldown >= TIMER_ATTACK)
 			{
@@ -133,6 +144,8 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
+		m_FirstPatternEnabled = true;
+
 		int numGroups = 8;
 		int numBulletsPerGroup = 3;
 		float degreeStep = 360.0f / numGroups;
@@ -149,6 +162,9 @@ namespace Wiwa
 				SpawnBullet(enemy, selfTr, direction);
 			}
 		}
+
+		m_FirstPatternCounter++;
+
 		m_SecondPatternBulletcounter = 0.0f;
 		m_SecondPatternCounter = 0;
 		m_ThirdPatternBulletcounter = 0.0f;
@@ -158,6 +174,7 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::SpawnSecondPattern(BossUltron* enemy)
 	{
 		m_ThirdPatternBulletcounter = 0.0f;
+		m_FirstPatternCounter = 0;
 		m_ThirdPatternCounter = 0;
 		m_IsAttackSelected = false;
 		//---------------------------------
@@ -206,6 +223,7 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::SpawnThirdPattern(BossUltron* enemy)
 	{
 		m_SecondPatternBulletcounter = 0.0f;
+		m_FirstPatternCounter = 0;
 		m_SecondPatternCounter = 0;
 		m_IsAttackSelected = false;
 		//-----------------------------------------
@@ -293,6 +311,23 @@ namespace Wiwa
 		{
 			SpawnThirdPattern(enemy);
 		}
+	}
+
+	bool BossUltronBulletStormAttackState::IsFirstPatternFinished()
+	{
+		if ((m_FirstPatternEnabled == true) && (m_FirstPatternCounter < 4))
+		{
+			return false;
+		}
+		if (m_FirstPatternCounter == 4)
+		{
+			m_FirstPatternEnabled = false;
+		}
+		if (m_FirstPatternEnabled == false)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	bool BossUltronBulletStormAttackState::IsSecondPatternFinished()

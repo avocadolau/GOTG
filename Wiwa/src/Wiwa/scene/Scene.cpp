@@ -91,7 +91,8 @@ namespace Wiwa
 		{
 		case Scene::SCENE_ENTERING:
 			m_EntityManager.UpdateWhitelist();
-
+			pgs = nullptr;
+			ugs = nullptr;
 			UpdateEnter();
 			RenderEnter();
 
