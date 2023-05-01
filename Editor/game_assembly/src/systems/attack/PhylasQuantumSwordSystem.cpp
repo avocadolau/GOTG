@@ -34,16 +34,12 @@ namespace Wiwa
 		
 		EntityId player = GameStateManager::GetPlayerId();
 
-		EntityId child = em.GetChildByName(m_EntityId,"bullet");
-		m_ChildTransformIt = em.GetComponentIterator<Transform3D>(child);
 
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
 		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-		Transform3D* childTransform = GetComponentByIterator<Transform3D>(m_ChildTransformIt);
 
 		PhylasSword->direction = CalculateForward(*playerTransform);
-		childTransform->localRotation = playerTransform->localRotation;
-
+		PhylasSwordTransform->localRotation = playerTransform->localRotation;
 		PhylasSwordTransform->localPosition.x = playerTransform->localPosition.x;
 		PhylasSwordTransform->localPosition.z = playerTransform->localPosition.z;
 		PhylasSwordTransform->localPosition.y = playerTransform->localPosition.y + 2.55;
