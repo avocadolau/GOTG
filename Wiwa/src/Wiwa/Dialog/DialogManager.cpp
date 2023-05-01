@@ -76,6 +76,12 @@ namespace Wiwa
 		continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, continueImgID2);
 
+		ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_TalkButton01.png");
+		Image* talkIndicatorImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
+
+		talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, talkIndicatorImgID);
+
 		//conversations[0].conversationName = "NPC_1";
 
 		//SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
@@ -133,6 +139,8 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false))
 		{
@@ -148,6 +156,19 @@ namespace Wiwa
 			actualConversationState = 0;
   
 			keyPressRefreshTimer = 0;
+		}
+
+		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false)
+		{
+			render.EnableInstance(m_Scene, talkIndicatorImgID);
+
+			talkIndicatorImgEnabled = true;
+		}
+		else if ((actualConversationState != 2 && talkIndicatorImgEnabled == true) || collidingWithNpc == false)
+		{
+			render.DisableInstance(m_Scene, talkIndicatorImgID);
+
+			talkIndicatorImgEnabled = false;
 		}
 
 		if (actualConversationState == 0 || actualConversationState == 1)

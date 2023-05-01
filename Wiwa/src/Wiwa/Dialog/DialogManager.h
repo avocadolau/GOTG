@@ -101,6 +101,9 @@ namespace Wiwa
 		Wiwa::Renderer2D::InstanceData continueImgID;
 		Wiwa::Renderer2D::InstanceData continueImgID2;
 
+		Wiwa::Renderer2D::InstanceData talkIndicatorImgID;
+		bool talkIndicatorImgEnabled = false;
+
 		Color4f	BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 		Vector2i characterImgPos = { 0 }; //Will be controlled with the easings
