@@ -111,8 +111,8 @@ namespace Wiwa
 		// Load assembly
 		LoadGameAssembly();
 
+		
 		WI_CORE_WARN("=======Systems initialized=======");
-
 		
 	}
 
@@ -176,7 +176,7 @@ namespace Wiwa
 			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+			SceneManager::ModuleInit();
 			//render skybox basically
 			m_Renderer3D->PreUpdate();
 

@@ -55,6 +55,8 @@ void HierarchyPanel::Draw()
 	filter.Draw("##searchbar", 200.f);
 	ImGui::Separator();
 	std::string sceneName = ICON_FK_CUBES " ";
+	sceneName += std::to_string(Wiwa::SceneManager::getActiveSceneId());
+	sceneName += " ";
 	sceneName += Wiwa::SceneManager::getActiveScene()->getName();
 	ImGui::Text(sceneName.c_str());
 	std::vector<EntityId>* entities = entityManager.GetParentEntitiesAlive();

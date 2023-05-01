@@ -40,15 +40,24 @@ namespace Wiwa
 		m_Scenes[m_ActiveScene]->Update();
 	}
 
+	void SceneManager::ModuleInit()
+	{
+		if (m_LoadScene) {
+			m_ActiveScene = LoadScene(m_LoadPath.c_str(), m_LoadFlags);
+			GameMusicManager::OnSceneChage(m_ActiveScene);
+			m_LoadScene = false;
+		}
+	}
+
 	void SceneManager::ModuleUpdate()
 	{
 		OPTICK_EVENT("Scene Update");
 
-		if (m_LoadScene) {
+		/*if (m_LoadScene) {
 			LoadScene(m_LoadPath.c_str(), m_LoadFlags);
 			GameMusicManager::OnSceneChage(m_ActiveScene);
 			m_LoadScene = false;
-		}
+		}*/
 
 		m_Scenes[m_ActiveScene]->ModuleUpdate();
 

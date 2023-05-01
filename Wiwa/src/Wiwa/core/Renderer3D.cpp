@@ -909,7 +909,9 @@ namespace Wiwa
 	void Renderer3D::RenderSkybox()
 	{
 		{
-			Camera *camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			Scene* scene = SceneManager::getActiveScene();
+			CameraManager& cm = scene->GetCameraManager();
+			Camera *camera = cm.getActiveCamera();
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());

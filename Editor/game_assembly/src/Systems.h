@@ -44,3 +44,4 @@
 #include "systems/triggers/InitHub.h"
 
 #include "systems/SkipScene.h"
+#include "systems/SkipIntro.h"

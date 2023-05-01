@@ -194,6 +194,8 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 		extension = ".winavmesh";
 	else if (assetsPath.extension() == ".gset")
 		extension = ".gset";
+	else if (assetsPath.extension() == ".ttf")
+		extension = ".ttf";
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -303,6 +305,12 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
 	else if (path.extension() == ".gset") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".ttf") {
 		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
 		std::filesystem::path rp = rpath.remove_filename();
 		std::filesystem::create_directories(rp);

@@ -19,7 +19,7 @@ namespace Wiwa
 		if (callbackID != WI_INVALID_INDEX)
 			callback = Wiwa::Application::Get().getCallbackAt(callbackID);
 
-		Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+		Wiwa::GuiManager& gm = scene->GetGuiManager();
 		textId1 = Wiwa::Resources::Load<Wiwa::Video>(pathVideo);
 		video_res = Wiwa::Resources::GetResourceById<Wiwa::Video>(textId1);
 	/*	video_res = new Video();

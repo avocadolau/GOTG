@@ -10,6 +10,7 @@
 
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/ecs/components/game/Character.h>
 
 #define WI_DEBUG_BUILD
 
@@ -40,6 +41,7 @@ void GameLayer::OnAttach()
 	Wiwa::RenderManager::SetRenderOnMainWindow(true);
 	Wiwa::Time::Update();
 	Wiwa::Time::SetTargetFPS(60);
+	Wiwa::Time::SetTimeScale(1);
 	Wiwa::Application::Get().FinishedImport = true;
 	
 }
@@ -61,7 +63,9 @@ void GameLayer::OnImGuiRender()
 	static bool active = false;
 
 	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F1))
-		active = !active;
+		active = true;
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F2))
+		active = false;
 
 	ImGuiContext* ctx = Wiwa::Application::Get().GetImGuiContext();
 	ImGui::SetCurrentContext(ctx);
@@ -74,6 +78,12 @@ void GameLayer::OnImGuiRender()
 		ImGui::Text("Game FPS %.2fms", 1000.f / Wiwa::Time::GetDeltaTime());
 		ImGui::Text("Game frame count %i", Wiwa::Time::GetGameFrameCount());
 		ImGui::Text("Game time scale %i", Wiwa::Time::GetTimeScale());
+		ImGui::Separator();
+		ImGui::Text("Time since startup %.2fs", Wiwa::Time::GetRealTimeSinceStartup());
+		ImGui::Text("Delta time %.2fms", Wiwa::Time::GetRealDeltaTime());
+		ImGui::Text("FPS %.2fms", 1000.f / Wiwa::Time::GetRealDeltaTime());
+		ImGui::Text("Frame count %i", Wiwa::Time::GetFrameCount());
+		
 
 		ImGui::Text("Allocation count %i", Wiwa::AllocationMetrics::allocation_count);
 		ImGui::Text("Bytes allocated %i", Wiwa::AllocationMetrics::bytes_allocated);
@@ -84,6 +94,115 @@ void GameLayer::OnImGuiRender()
 
 		ImGui::Text("Memory used %i", virtualMemUsedByMe);
 
+		ImGui::End();
+
+
+		ImGui::Begin("Game log", &active);
+
+		if (ImGui::CollapsingHeader("Chances"))
+		{
+			ImGui::Text("Enemy item drop chance %i", &Wiwa::GameStateManager::s_EnemyDropChances);
+			ImGui::Separator();
+			ImGui::Text("Active skill drop chance %i", Wiwa::GameStateManager::s_ActiveSkillChances);
+			ImGui::Text("Passive skill drop chance %i", Wiwa::GameStateManager::s_PassiveSkillChances);
+			ImGui::Text("Buff drop chance %i", Wiwa::GameStateManager::s_BuffChances);
+			ImGui::Text("NPC room chance %i", Wiwa::GameStateManager::s_NPCRoomChances);
+		}
+		ImGui::Separator();
+
+		const char* roomType = Wiwa::GameStateManager().GetRoomType();
+		ImGui::Text("Room type: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 255, 200, 1), roomType);
+
+		const char* roomState = Wiwa::GameStateManager().GetRoomState();
+		ImGui::Text("Room state: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 255, 200, 1), roomState);
+
+		ImGui::Separator();
+		ImGui::Text("Total spawners: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 0, 200, 1), "%d", Wiwa::GameStateManager::s_TotalSpawners);
+
+		ImGui::Text("Finished spawners: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::s_SpawnersFinished);
+
+		ImGui::Separator();
+
+		ImGui::Separator();
+		ImGui::Text("Rooms to boss %i", Wiwa::GameStateManager::s_RoomsToBoss);
+		ImGui::Text("Rooms to shop %i", Wiwa::GameStateManager::s_RoomsToShop);
+		ImGui::Text("Rooms to end and return tu hub %i", Wiwa::GameStateManager::s_CurrentRoomsCount);
+		ImGui::Separator();
+		ImGui::PushID(0);
+		ImGui::Text("Battle rooms");
+		for (const auto& room : Wiwa::GameStateManager::s_CombatRooms)
+		{
+			ImGui::Text("Room id %i", room);
+		}
+		ImGui::PopID();
+		ImGui::Separator();
+		ImGui::PushID(1);
+		ImGui::Text("Reward rooms");
+		for (const auto& room : Wiwa::GameStateManager::s_RewardRooms)
+		{
+			ImGui::Text("Room id %i", room);
+		}
+		ImGui::Separator();
+		ImGui::PopID();
+		ImGui::PushID(2);
+		ImGui::Text("Shop rooms");
+		for (const auto& room : Wiwa::GameStateManager::s_ShopRooms)
+		{
+			ImGui::Text("Room id %i", room);
+		}
+		ImGui::PopID();
+		ImGui::Separator();
+
+		ImGui::Text("Current player id %i", Wiwa::GameStateManager::s_PlayerId);
+
+		const char* startCharacter
+			= Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
+		ImGui::Text("Current character %s", startCharacter);
+
+		if (ImGui::CollapsingHeader("Current player stats"))
+		{
+			if (Wiwa::GameStateManager::s_CurrentScene && Wiwa::Time::IsPlaying())
+			{
+				if (Wiwa::GameStateManager::s_CharacterStats.c_id != WI_INVALID_INDEX)
+				{
+					Wiwa::Character* character =
+						(Wiwa::Character*)Wiwa::GameStateManager::s_CurrentScene->GetEntityManager().GetComponentByIterator(Wiwa::GameStateManager::s_CharacterStats);
+					if (character)
+					{
+						ImGui::Text("Max Health %i", character->MaxHealth);
+						ImGui::Text("Health %i", character->Health);
+						ImGui::Text("Max Shield %i", character->MaxShield);
+						ImGui::Text("Shield %i", character->Shield);
+						ImGui::Text("Damage %i", character->Damage);
+						ImGui::Text("Rate of fire %f", character->RateOfFire);
+						ImGui::Text("Speed %f", character->Speed);
+						ImGui::Text("Dash distance %f", character->DashDistance);
+						ImGui::Text("Dash speed %f", character->DashSpeed);
+						ImGui::Text("Dash cooldown %f", character->DashCooldown);
+						ImGui::Text("Walk threshold %f", character->WalkTreshold);
+					}
+				}
+			}
+			else
+			{
+				ImGui::Text("Not playing");
+			}
+		}
+
+		ImGui::InputFloat("Gamepad deadzone", &Wiwa::GameStateManager::s_GamepadDeadzone);
+
+		if (ImGui::Button("Save"))
+		{
+			Wiwa::GameStateManager::SerializeData();
+		}
 		ImGui::End();
 	}
 #endif

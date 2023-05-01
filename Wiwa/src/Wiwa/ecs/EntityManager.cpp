@@ -491,21 +491,28 @@ namespace Wiwa {
 
 	EntityId EntityManager::LoadPrefab(const char* path)
 	{
-		if (!Wiwa::FileSystem::Exists(path)) return WI_INVALID_INDEX;
 
 		std::filesystem::path assetspath = path;
 		std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path);
 
-		if(!Wiwa::FileSystem::Exists(libpath.string().c_str())) return WI_INVALID_INDEX;
+		if (!Wiwa::FileSystem::Exists(libpath.string().c_str()))
+		{
+			WI_CORE_CRITICAL("Prefab at {} doesn't exist", path);
+			return WI_INVALID_INDEX;
+		}
 
 		File file = Wiwa::FileSystem::Open(libpath.string().c_str(), FileSystem::OM_IN | FileSystem::OM_BINARY);
 
 		EntityId eid = WI_INVALID_INDEX;
-
+		WI_CORE_INFO("Loading prefab {}", path);
 		if (file.IsOpen()) {
+			WI_CORE_INFO("Loaded prefab {}", path);
 			eid = _loadEntityImpl(file, eid, true);
 		}
-
+		else
+		{
+			WI_CORE_CRITICAL("Can't load prefab {}", path);
+		}
 		file.Close();
 
 		return eid;
@@ -1141,7 +1148,7 @@ namespace Wiwa {
 			file.Read(&c_size, sizeof(size_t));
 			data = new byte[c_size];
 			file.Read(data, c_size);
-
+			WI_INFO("Loading component {}", Application::Get().GetComponentTypeH(c_hash)->name.c_str());
 			byte* component = AddComponent(eid, c_hash, data);
 			delete[] data;
 

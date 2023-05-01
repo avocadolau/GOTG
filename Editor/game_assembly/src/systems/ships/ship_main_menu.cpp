@@ -60,7 +60,7 @@ void Wiwa::ShipMainMenu::OnUpdate()
 
 		if (m_TimerToChangeScreen >= 5.0f)
 		{
-			Wiwa::SceneManager::ChangeSceneByIndex(2);
+			Wiwa::SceneManager::ChangeSceneByIndex(3);
 		}
 	}
 

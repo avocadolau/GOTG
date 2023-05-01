@@ -95,7 +95,6 @@ namespace Wiwa
 		}
 
 		
-
 		return control;
 	}
 
@@ -303,8 +302,8 @@ namespace Wiwa
 		FILE* fontFile = fopen(path, "rb");
 		if (!fontFile)
 		{
-			WI_CORE_INFO("Seems like font at {} doesn't exist", path);
-			return false;
+			WI_CORE_CRITICAL("Seems like font at {} doesn't exist", path);
+			return nullptr;
 		}
 		fseek(fontFile, 0, SEEK_END);
 		size = ftell(fontFile);
@@ -321,7 +320,7 @@ namespace Wiwa
 		if (!stbtt_InitFont(&info, fontBuffer, 0))
 		{
 			WI_CORE_ERROR("Failed to load font at {}", path);
-			return false;
+			return nullptr;
 		}
 
 		int b_w = 512; /* bitmap width */
@@ -395,8 +394,8 @@ namespace Wiwa
 		FILE* fontFile = fopen(path, "rb");
 		if (!fontFile)
 		{
-			WI_CORE_INFO("Seems like font at {} doesn't exist", path);
-			return false;
+			WI_CORE_CRITICAL("Seems like font at {} doesn't exist", path);
+			return nullptr;
 		}
 		fseek(fontFile, 0, SEEK_END);
 		size = ftell(fontFile);
@@ -413,7 +412,7 @@ namespace Wiwa
 		if (!stbtt_InitFont(&info, fontBuffer, 0))
 		{
 			WI_CORE_ERROR("Failed to load font at {}", path);
-			return false;
+			return nullptr;
 		}
 
 		int b_w = 1024; /* bitmap width */

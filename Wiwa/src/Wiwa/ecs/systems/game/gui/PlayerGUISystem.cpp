@@ -611,7 +611,7 @@ void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)
 
 	gm.canvas.at(CanvasHUD)->controls.at(5)->text = my_string.c_str();
 	gm.canvas.at(ShopHUD)->controls.at(2)->text = my_string.c_str();
-	Text* newText = gm.InitFont("assets/Fonts/Jade_Smile.ttf", my_string.c_str());
+	Text* newText = gm.InitFont("library/Fonts/Jade_Smile.ttf", my_string.c_str());
 	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, 1);
 	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetTextureId());
 	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(5)->id_quad_normal, newText->GetSize(), {0,0,512,512});
@@ -650,12 +650,12 @@ void Wiwa::PlayerGUISystem::HandlePlayerStatistics(int max_Health, int max_Shiel
 	gm.canvas.at(PauseHUD)->controls.at(14)->text = rateOfFireString.c_str();
 
 	std::vector<Text*> TextsForSwap;
-	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", maxHealthString.c_str()));
-	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", maxShieldString.c_str()));
-	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", rangeString.c_str()));
-	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", attackString.c_str()));
-	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", speedString.c_str()));
-	TextsForSwap.push_back(gm.InitFont("assets/Fonts/Jade_Smile.ttf", rateOfFireString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("library/Fonts/Jade_Smile.ttf", maxHealthString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("library/Fonts/Jade_Smile.ttf", maxShieldString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("library/Fonts/Jade_Smile.ttf", rangeString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("library/Fonts/Jade_Smile.ttf", attackString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("library/Fonts/Jade_Smile.ttf", speedString.c_str()));
+	TextsForSwap.push_back(gm.InitFont("library/Fonts/Jade_Smile.ttf", rateOfFireString.c_str()));
 
 	//Updating Canvas Textures
 	for (int i = 0; i < 6; i++)
