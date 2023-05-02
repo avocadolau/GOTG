@@ -17,6 +17,7 @@
 #include "ozz/base/maths/vec_float.h"
 #include "ozz/options/options.h"
 #include "samples/utils.h"
+#include "samples/mesh.h"
 
 namespace Wiwa {
     enum AnimationType {

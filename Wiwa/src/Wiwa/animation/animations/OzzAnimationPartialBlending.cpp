@@ -41,7 +41,7 @@ namespace Wiwa {
     OzzAnimationPartialBlending::~OzzAnimationPartialBlending()
     {}
 
-    bool OzzAnimationPartialBlending::LoadInfo(const char* skeleton, const char* lower, const char* upper)
+    bool OzzAnimationPartialBlending::LoadInfo(const char* mesh, const char* skeleton, const char* lower, const char* upper)
     {
         m_Loaded = false;
 
@@ -55,6 +55,43 @@ namespace Wiwa {
             Sampler& sampler = samplers_[i];
 
             if (!ozz::sample::LoadAnimation(filenames[i], &sampler.animation)) {
+                return false;
+            }
+
+            // Animation match skeleton joints
+            if (skeleton_.num_joints() != sampler.animation.num_tracks()) {
+                WI_ERROR("The provided animation doesn't match skeleton (joint count mismatch).");
+                return false;
+            }
+        }
+
+        // Allocates runtime buffers.
+        const int num_soa_joints = skeleton_.num_soa_joints();
+        locals_.resize(num_soa_joints);
+        const int num_joints = skeleton_.num_joints();
+        models_.resize(num_joints);
+
+        // Allocates a context that matches animation requirements.
+        context_.Resize(num_joints);
+
+        if (!ozz::sample::LoadMeshes(mesh, &meshes_)) {
+            return false;
+        }
+
+        size_t num_skinning_matrices = 0;
+        for (const ozz::sample::Mesh& mesh : meshes_) {
+            num_skinning_matrices =
+                ozz::math::Max(num_skinning_matrices, mesh.joint_remaps.size());
+        }
+
+        // Allocates skinning matrices.
+        skinning_matrices_.resize(num_skinning_matrices);
+
+        // Check the skeleton matches with the mesh, especially that the mesh
+        // doesn't expect more joints than the skeleton has.
+        for (const ozz::sample::Mesh& mesh : meshes_) {
+            if (num_joints < mesh.highest_joint_index()) {
+                WI_ERROR("The provided mesh doesn't match skeleton (joint count mismatch).");
                 return false;
             }
         }

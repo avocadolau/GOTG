@@ -52,6 +52,19 @@ namespace Wiwa {
 		// Samplers list
 		Sampler samplers_[kNumLayers];
 
+		// Sampling context.
+		ozz::animation::SamplingJob::Context context_;
+
+		// Buffer of local transforms as sampled from animation_.
+		ozz::vector<ozz::math::SoaTransform> locals_;
+
+		// The mesh used by the sample.
+		ozz::vector<ozz::sample::Mesh> meshes_;
+
+		// Buffer of skinning matrices, result of the joint multiplication of the
+		// inverse bind pose with the model space matrix.
+		ozz::vector<ozz::math::Float4x4> skinning_matrices_;
+
 		// Runtime skeleton.
 		ozz::animation::Skeleton skeleton_;
 
@@ -84,7 +97,7 @@ namespace Wiwa {
 		OzzAnimationPartialBlending();
 		~OzzAnimationPartialBlending();
 
-		bool LoadInfo(const char* skeleton, const char* lower, const char* upper);
+		bool LoadInfo(const char* mesh, const char* skeleton, const char* lower, const char* upper);
 		void SetUpperBodyRoot(int ubr);
 
 		bool Init() override;

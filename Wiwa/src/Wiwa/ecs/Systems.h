@@ -14,6 +14,8 @@
 #include "systems/AgentAISystem.h"
 #include "systems/ai/NavMeshLoadingSystem.h"
 
+#include "systems/OzzAnimationSystem.h"
+
 // Game systems
 #include "systems/game/enemy/EnemySystem.h"
 #include "systems/game/wave/WaveSystem.h"
