@@ -758,6 +758,75 @@ namespace Wiwa
 		name.copy(item->Name, 128);		
 		item->Name[name.size()] = '\0';
 	}
+	void GameStateManager::SpawnShopRandomItem(glm::vec3 position, uint8_t type)
+	{
+		uint32_t itemRand;
+		std::string name;
+		int i = 0;
+		switch (type)
+		{
+		case 0:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size());
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetAbilities())
+			{
+				if (i == randomNum)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 1:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size());
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetSkills())
+			{
+				if (i == randomNum)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 2:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size());
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetBuffs())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 3:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size());
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetConsumables())
+			{
+				if (i == itemRand)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		default:
+		{
+			WI_CORE_ERROR("Item type doesn't match any type!");
+			return;
+		}break;
+		}
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
+
+		Item* item = em.GetComponent<Item>(id);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
+		t3d->localPosition = position;
+		item->item_type = type;
+
+		name.copy(item->Name, 128);
+		item->Name[name.size()] = '\0';
+	}
 	void GameStateManager::SpawnItem(glm::vec3 position, uint8_t type, const char* name)
 	{
 		std::string_view newName;

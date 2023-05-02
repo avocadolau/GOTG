@@ -143,6 +143,12 @@ namespace Wiwa {
 		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
 		static void SpawnRandomItem(glm::vec3 position, uint8_t type);
 		/// <summary>
+		/// Spawns a random item of a given type in a given location, instead of using the chest prefab the item is displayed with another prefab
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
+		static void SpawnShopRandomItem(glm::vec3 position, uint8_t type);
+		/// <summary>
 		/// Spawns a given item of a given type in a given location
 		/// </summary>
 		/// <param name="position"></param>

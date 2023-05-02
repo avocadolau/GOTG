@@ -23,5 +23,7 @@
 
 #include "systems/game/items/RewardRoom.h"
 
+#include "systems/game/items/ShopRoom.h"
+
 #include "systems/game/gui/PlayerGUISystem.h"
 #include "systems/game/gui/UltronGUISystem.h"
