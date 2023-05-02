@@ -24,7 +24,8 @@ namespace Wiwa
 		m_Hand2It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Hand3It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Hand4It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_RangeOfAttack = 20.0f;
+
+		m_RangeOfAttack = 40.0f; //Add to components
 		m_MinimumPath = 5;
 		m_Timer = 0.0f;
 	}
