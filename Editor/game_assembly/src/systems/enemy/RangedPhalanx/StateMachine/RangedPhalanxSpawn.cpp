@@ -32,6 +32,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+
+		navAgent->autoRotate = true;
 		//if (animator->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}

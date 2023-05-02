@@ -35,6 +35,12 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+
+		navAgentPtr->StopAgent();
+		navAgent->autoRotate = false;
+
 		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
