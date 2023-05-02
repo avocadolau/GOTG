@@ -9,6 +9,7 @@ namespace Wiwa {
 		enum class ClusterState {
 			FIRST_ATTACK,
 			SECOND_ATTACK,
+			THIRD_ATTACK,
 			END_STATE,
 		};
 	public:
@@ -28,10 +29,10 @@ namespace Wiwa {
 
 		glm::vec3 CalculateForward(const Transform3D& t3d);
 
+		bool LookingAtPlayer();
+
 		float m_TimerBetweenBullet = 0.0f;
 		float m_TimerToLookAtPlayer = 0.0f;
-
-		bool m_RoundOne, m_RoundTwo, m_RoundThree;
-		
+		bool m_AlreadyShot = false;
 	};
 }
