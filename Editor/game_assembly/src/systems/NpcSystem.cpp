@@ -22,20 +22,17 @@ namespace Wiwa
 
 	void NpcSystem::OnInit()
 	{
-		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		_scene->GetDialogManager().InitOnSystem(m_Scene);
+		
 	}
 
 	void NpcSystem::OnUpdate()
 	{
-		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		_scene->GetDialogManager().UpdateOnSystem();
+		
 	}
 
 	void NpcSystem::OnDestroy()
 	{
-		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		_scene->GetDialogManager().CleanUpOnSystem();
+		
 	}
 
 	void NpcSystem::OnCollisionEnter(Object* body1, Object* body2)

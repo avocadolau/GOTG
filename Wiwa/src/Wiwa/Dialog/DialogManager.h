@@ -53,12 +53,8 @@ namespace Wiwa
 		// Init gui manager
 		bool Init(Scene* scene);
 
-		bool InitOnSystem(Scene* scene);
-
 		// Update gui manager
 		bool Update();
-
-		bool UpdateOnSystem();
 
 		bool Draw();
 
@@ -66,8 +62,6 @@ namespace Wiwa
 
 		// Called before quitting
 		bool CleanUp();
-
-		bool CleanUpOnSystem();
 
 		void UpdateConversation(int conversationNumber, Renderer2D* render);
 
