@@ -27,38 +27,19 @@ namespace Wiwa
 
 	DialogManager::~DialogManager()
 	{
-		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
-
-		render.RemoveInstance(m_Scene, continueImgID);
-
-		for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
-		{
-			render.RemoveInstance(m_Scene, conversations[i].characterImgID);
-			render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
-
-			for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
-			{
-				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
-				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text2_imgModeID);
-				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text3_imgModeID);
-			}
-		}
-
-		for (int l = 0; l < MAX_CONVERSATIONS; l++)
-		{
-			conversations[l].occupied = false;
-
-			for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
-			{
-				conversations[l].nodes[m].occupied = false;
-			}
-		}
+		
 	}
 
 	bool DialogManager::Init(Scene* scene)
 	{
+
+		return true;
+	}
+
+	bool DialogManager::InitOnSystem(Scene* scene)
+	{
 		m_Scene = scene;
-		
+
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
@@ -102,7 +83,7 @@ namespace Wiwa
 		keyPressRefreshTimer = 0;
 
 		collidingWithNpc = false;
-		
+
 		characterImgPos.x = -50;
 		characterImgPos.y = 100; // <--
 		bubbleImgPos.x = 640; // <--
@@ -139,6 +120,13 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
+
+		
+		return true;
+	}
+
+	bool DialogManager::UpdateOnSystem()
+	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
@@ -154,7 +142,7 @@ namespace Wiwa
 				forcedDialogHappened = true;
 			}
 			actualConversationState = 0;
-  
+
 			keyPressRefreshTimer = 0;
 		}
 
@@ -207,7 +195,7 @@ namespace Wiwa
 		}
 
 		keyPressRefreshTimer += Time::GetDeltaTime();
-		
+
 		return true;
 	}
 
@@ -226,6 +214,38 @@ namespace Wiwa
 	bool DialogManager::CleanUp()
 	{
 		
+
+		return true;
+	}
+
+	bool DialogManager::CleanUpOnSystem()
+	{
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
+		render.RemoveInstance(m_Scene, continueImgID);
+
+		for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
+		{
+			render.RemoveInstance(m_Scene, conversations[i].characterImgID);
+			render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
+
+			for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
+			{
+				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
+				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text2_imgModeID);
+				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text3_imgModeID);
+			}
+		}
+
+		for (int l = 0; l < MAX_CONVERSATIONS; l++)
+		{
+			conversations[l].occupied = false;
+
+			for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
+			{
+				conversations[l].nodes[m].occupied = false;
+			}
+		}
 
 		return true;
 	}
