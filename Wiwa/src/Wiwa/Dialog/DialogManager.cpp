@@ -133,6 +133,8 @@ namespace Wiwa
 
 		}
 
+		generalTimer = 0;
+
 		return true;
 	}
 
@@ -140,6 +142,11 @@ namespace Wiwa
 	bool DialogManager::Update()
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
+		/*if (generalTimer == 0)
+		{
+			LoadAllDialogs();
+		}*/
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false))
@@ -207,7 +214,8 @@ namespace Wiwa
 		}
 
 		keyPressRefreshTimer += Time::GetDeltaTime();
-		
+		if(generalTimer <= 5) generalTimer += Time::GetDeltaTime();
+
 		return true;
 	}
 
