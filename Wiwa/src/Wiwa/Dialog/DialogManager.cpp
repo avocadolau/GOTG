@@ -94,7 +94,11 @@ namespace Wiwa
 
 		//conversations[0].occupied = true;
 
-		LoadAllDialogs();
+		if (std::filesystem::exists("library"))
+		{
+			LoadAllDialogs();
+		}
+		//LoadAllDialogs();
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -132,8 +136,6 @@ namespace Wiwa
 
 
 		}
-
-		generalTimer = 0;
 
 		return true;
 	}
@@ -214,7 +216,6 @@ namespace Wiwa
 		}
 
 		keyPressRefreshTimer += Time::GetDeltaTime();
-		if(generalTimer <= 5) generalTimer += Time::GetDeltaTime();
 
 		return true;
 	}

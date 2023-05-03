@@ -119,6 +119,5 @@ namespace Wiwa
 
 		bool forcedDialogHappened = false;
 
-		int generalTimer = 0;
 	};
 }
