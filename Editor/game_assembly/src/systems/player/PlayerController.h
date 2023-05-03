@@ -52,7 +52,7 @@ namespace Wiwa {
 		void SpawnStarLordBullet(Transform3D& transform, const Character& character);
 		void SpawnRocketBullet(Transform3D& transform, const Character& character);
 
-		void SetPlayerRotation(const float angle, const float rotationSpeed);
+		void SetPlayerRotation(const float angle);
 	
 	public:
 		bool IsDashing;

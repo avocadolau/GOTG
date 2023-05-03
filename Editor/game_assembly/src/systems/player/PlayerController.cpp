@@ -69,12 +69,13 @@ void Wiwa::PlayerController::OnUpdate()
 	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();
 
-	if(m_MovementInput != glm::vec2(0.f))
+	if (m_MovementInput != glm::vec2(0.f))
 		SetDirection(Math::AngleFromVec2(m_MovementInput));
-	if(m_ShootInput != glm::vec2(0.f))
+	if (m_ShootInput != glm::vec2(0.f))
 		SetDirection(Math::AngleFromVec2(m_ShootInput));
-	if(!IsDashing)
-		SetPlayerRotation(GetDirection(), 1.0f);
+
+	if (!IsDashing)
+		SetPlayerRotation(GetDirection());
 }
 
 Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()
@@ -309,9 +310,12 @@ glm::vec2 Wiwa::PlayerController::GetShootingInput()
 	return input;
 }
 
-void Wiwa::PlayerController::SetPlayerRotation(const float angle, const float rotationSpeed)
+void Wiwa::PlayerController::SetPlayerRotation(const float angle)
 {
 	Transform3D* transform = GetTransform();
 
-	transform->localRotation.y = Math::LerpAngle(transform->localRotation.y, angle, rotationSpeed);
+	transform->localRotation.y = angle;
+	WI_INFO("Angle {}", angle);
+	if (transform->localRotation.y > 360.f)
+		transform->localRotation.y = 0.f;
 }

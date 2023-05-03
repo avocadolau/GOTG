@@ -37,7 +37,8 @@ void Wiwa::PlayerDash::EnterState()
 	m_DashTimer = m_StateMachine->GetCharacter()->DashCooldown;
 	if (m_StateMachine->CanMove())
 	{
-		m_DashDirection = glm::vec3(m_StateMachine->GetInput().x, 0.f, m_StateMachine->GetInput().y);
+		float direction = Math::AngleFromVec2(m_StateMachine->GetInput());
+		m_DashDirection = Math::Vec3FromAngle(direction);
 	}
 	else 
 	{
@@ -46,12 +47,12 @@ void Wiwa::PlayerDash::EnterState()
 
 	m_TargetPoint = Math::PointAlongDirection(m_StateMachine->GetTransform()->localPosition, m_DashDirection, m_StateMachine->GetCharacter()->DashDistance);
 
-	m_StateMachine->GetAnimator()->Blend("dash", false, 0.01f);
+	m_StateMachine->GetAnimator()->PlayAnimation("running", true);
 	m_MaxDashTime = 1.5f;
 	m_DashTimer = 0.f;
 
 
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 0.1f);
+	//m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection());
 }
 
 void Wiwa::PlayerDash::UpdateState()
@@ -69,16 +70,17 @@ void Wiwa::PlayerDash::UpdateState()
 
 	if (m_DashTimer >= m_MaxDashTime)
 	{
+		if (m_StateMachine->CanMove())
+		{
+			m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
+			return;
+		}
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
 
-	
-
 	glm::vec3 velocity = m_DashDirection * m_StateMachine->GetCharacter()->Speed * m_StateMachine->GetCharacter()->DashSpeed;
 	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(velocity);
-	
-
 	// TODO: Particles and audio queue
 }
 

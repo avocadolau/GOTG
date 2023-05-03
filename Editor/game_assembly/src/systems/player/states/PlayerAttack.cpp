@@ -32,8 +32,9 @@ void Wiwa::PlayerAttack::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
 		return;
 	}
-	
+
 	m_ShootTimer += Time::GetDeltaTimeSeconds();
+
 
 	if (m_StateMachine->CanAttack())
 	{
@@ -44,13 +45,14 @@ void Wiwa::PlayerAttack::UpdateState()
 		// TODO: Partial blending
 		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
 		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
+		m_StateMachine->UpdateRotation();
 	}
 	else
 	{
 		m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
 		m_StateMachine->UpdateMovement(0.f);
+		m_StateMachine->UpdateRotation();
 	}
-
 }
 
 void Wiwa::PlayerAttack::ExitState()
@@ -71,7 +73,6 @@ void Wiwa::PlayerAttack::Fire()
 		Transform3D* spawnPoint;
 		StarLordShooter* shooter = m_StateMachine->GetStarLord();
 		//Decide wich hand is going next
-
 
 		if (m_ShootTimer >= timeBetweenShots)
 		{

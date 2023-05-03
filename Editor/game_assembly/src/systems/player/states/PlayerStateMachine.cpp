@@ -62,10 +62,15 @@ void Wiwa::PlayerStateMachine::UpdateMovement(const float speed)
 	
 	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(glm::vec3(m_CurrentVelocity.x, 0.f, m_CurrentVelocity.y));
 
-	SetPlayerRotation(m_Direction, 0.1f);
+	SetPlayerRotation(m_Direction);
+}
 
-	//WI_WARN("Direction {}", m_Direction);
-	//WI_WARN("Current velocity {}x {}y", m_CurrentVelocity.x, m_CurrentVelocity.y);
+void Wiwa::PlayerStateMachine::UpdateRotation()
+{
+	if(m_ShootInput != glm::vec2(0.f))
+		m_Direction = Math::AngleFromVec2(m_ShootInput);
+
+	SetPlayerRotation(m_Direction);
 }
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
