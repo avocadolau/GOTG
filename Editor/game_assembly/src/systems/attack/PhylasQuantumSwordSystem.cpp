@@ -25,30 +25,24 @@ namespace Wiwa
 
 	void PhylasQuantumSwordSystem::OnInit()
 	{
-		PhylasQuantumSword* PhylasSword = GetComponentByIterator<PhylasQuantumSword>(m_PhylasSwordIt);
-		Transform3D* PhylasSwordTransform = GetComponentByIterator<Transform3D>(m_PhylasSwordTransformIt);
+		PhylasQuantumSword* PhylasSword = GetComponent<PhylasQuantumSword>();
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Transform3D* PhylasSwordTransform = em.GetComponent<Transform3D>(m_EntityId);
 		PhylasSword->damage = Wiwa::ItemManager::GetAbility("Phyla's Quantum Sword")->Damage;
 		PhylasSword->lifeTime = 30.0f;
 		PhylasSword->velocity = 30.0f;
 		
-		EntityId player = GameStateManager::GetPlayerId();
-
-
-		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
-		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-
+		EntityId player = em.GetEntityParent(m_EntityId);
+		Transform3D* playerTransform = em.GetComponent<Transform3D>(player);
 		PhylasSword->direction = CalculateForward(*playerTransform);
 		PhylasSwordTransform->localRotation = playerTransform->localRotation;
-		PhylasSwordTransform->localPosition.x = playerTransform->localPosition.x;
-		PhylasSwordTransform->localPosition.z = playerTransform->localPosition.z;
-		PhylasSwordTransform->localPosition.y = playerTransform->localPosition.y + 2.55;
+		PhylasSwordTransform->localPosition.x = 0.0f;
+		PhylasSwordTransform->localPosition.z = 0.0f;
+		PhylasSwordTransform->localPosition.y = 2.55;
 
 		PhylasSwordTransform->localScale.x = 1.0f;
 		PhylasSwordTransform->localScale.z = 1.0f;
 		PhylasSwordTransform->localScale.y = 1.0f;
-
-		
 	}
 
 	void PhylasQuantumSwordSystem::OnUpdate()
@@ -58,8 +52,8 @@ namespace Wiwa
 		if (!getInit())
 			System::Init();
 
-		PhylasQuantumSword* PhylasSword = GetComponentByIterator<PhylasQuantumSword>(m_PhylasSwordIt);
-		Transform3D* PhylasSwordTransform = GetComponentByIterator<Transform3D>(m_PhylasSwordTransformIt);
+		PhylasQuantumSword* PhylasSword = GetComponent<PhylasQuantumSword>();
+		Transform3D* PhylasSwordTransform = GetComponent<Transform3D>();
 
 		PhylasSwordTransform->localPosition += PhylasSword->direction * PhylasSword->velocity * Time::GetDeltaTimeSeconds();
 

@@ -1,6 +1,5 @@
 #include "wipch.h"
 #include "AchievementsManager.h"
-
 #include <Wiwa/utilities/json/JSONDocument.h>
 #include <rapidjson.h>
 
@@ -8,9 +7,13 @@ namespace Wiwa
 {	
 	std::map<std::string, Property> Wiwa::AchievementsManager::m_Properties;
 	std::map<std::string, Achievement> Wiwa::AchievementsManager::m_Achievements;
+	GameData Wiwa::AchievementsManager::gamedata;
 
 	AchievementsManager::AchievementsManager()
 	{
+		gamedata.m_EnemiesKilled = 0;
+		gamedata.m_ItemsBought = 0;
+		gamedata.m_KilledUltronCount = 0;
 	}
 
 	AchievementsManager::~AchievementsManager()
@@ -106,6 +109,12 @@ namespace Wiwa
 
 	void AchievementsManager::Serialize(JSONDocument* doc)
 	{
+		JSONValue gameAnalytics = doc->AddMemberArray("game_analytics");
+		JSONValue analyticsObj = gameAnalytics.PushBackObject();
+		analyticsObj.AddMember("enemies_killed", gamedata.m_EnemiesKilled);
+		analyticsObj.AddMember("ultron_killed", gamedata.m_KilledUltronCount);
+		analyticsObj.AddMember("items_bought", gamedata.m_ItemsBought);
+
 		JSONValue properties = doc->AddMemberArray("property");
 		for (std::map<std::string,Property>::iterator prop = m_Properties.begin(); prop != m_Properties.end(); prop++)
 		{
@@ -149,6 +158,13 @@ namespace Wiwa
 	void AchievementsManager::Deserialize(JSONDocument* doc)
 	{
 		JSONDocument& document = *doc;
+		if (doc->HasMember("game_analytics"))
+		{
+			JSONValue game_data = document["game_analytics"];
+			gamedata.m_EnemiesKilled = game_data["enemies_killed"].as_int();
+			gamedata.m_KilledUltronCount = game_data["ultron_killed"].as_int();
+			gamedata.m_ItemsBought = game_data["items_bought"].as_int();
+		}
 		if (doc->HasMember("property"))
 		{
 			JSONValue props = document["property"];
@@ -224,5 +240,18 @@ namespace Wiwa
 			return nullptr;
 	}
 
+	void AchievementsManager::IncrementGamedataKills(int amount)
+	{
+		gamedata.m_EnemiesKilled += amount;
+	}
 
+	void AchievementsManager::IncrementGamedataUltron(int amount)
+	{
+		gamedata.m_KilledUltronCount += amount;
+	}
+
+	void AchievementsManager::IncrementGamedataItems(int amount)
+	{
+		gamedata.m_ItemsBought += amount;
+	}
 }

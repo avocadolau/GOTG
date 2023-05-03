@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Wiwa/core/Core.h>
-
 #include <string>
-
+#include <Wiwa/game/Achievements/GameAnalyticData.h>
 #include <map>
 
 #include "Achievement.h"
@@ -14,6 +13,7 @@ namespace Wiwa {
 	public:
 		AchievementsManager();
 		~AchievementsManager();
+
 	public:
 		//adds a property
 		static void DefineProperty(std::string name, std::string description, int initialValue, ActivationRules activationMode, int value);
@@ -47,10 +47,20 @@ namespace Wiwa {
 		static Property* GetProperty(const char* name);
 		//returns Achievement
 		static Achievement* GetAchievement(const char* name);
+
+		void IncrementGamedataKills(int amount);
+		void IncrementGamedataUltron(int amount);
+		void IncrementGamedataItems(int amount);
+
+		static int GetGameDataKills() { return gamedata.m_EnemiesKilled; }
+		static int GetGameDataUltron() { return gamedata.m_KilledUltronCount; }
+		static int GetGameDataItems() { return gamedata.m_ItemsBought; }
 	private:
 		//are used to determine if an Achievement is active or not
 		static std::map<std::string, Property> m_Properties;
 		//are used to determine if some extra boost are can be applied
 		static std::map<std::string, Achievement> m_Achievements;
+
+		static GameData gamedata;
 	};
 }
