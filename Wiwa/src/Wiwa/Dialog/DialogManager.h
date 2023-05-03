@@ -31,6 +31,7 @@ namespace Wiwa
 		std::string characterImagePath;
 
 		bool isInOppositeSide = false;
+		bool isRandom = false;
 
 		bool occupied = false;
 
@@ -119,6 +120,6 @@ namespace Wiwa
 
 		bool forcedDialogHappened = false;
 
-		int generalTimer = 0;
+		bool finishedRandomizing = false;
 	};
 }

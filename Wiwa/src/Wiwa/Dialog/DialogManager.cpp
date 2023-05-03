@@ -94,7 +94,11 @@ namespace Wiwa
 
 		//conversations[0].occupied = true;
 
-		LoadAllDialogs();
+		if (std::filesystem::exists("library"))
+		{
+			LoadAllDialogs();
+		}
+		//LoadAllDialogs();
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -118,6 +122,7 @@ namespace Wiwa
 			editorConversations[e].occupied = conversations[e].occupied;
 
 			editorConversations[e].isInOppositeSide = conversations[e].isInOppositeSide;
+			editorConversations[e].isRandom = conversations[e].isRandom;
 			editorConversations[e].group.groupID = conversations[e].group.groupID;
 			editorConversations[e].group.order = conversations[e].group.order;
 
@@ -132,8 +137,6 @@ namespace Wiwa
 
 
 		}
-
-		generalTimer = 0;
 
 		return true;
 	}
@@ -163,6 +166,7 @@ namespace Wiwa
 			actualConversationState = 0;
 
 			keyPressRefreshTimer = 0;
+			finishedRandomizing = false;
 		}
 
 		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false)
@@ -182,7 +186,7 @@ namespace Wiwa
 		{
 			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
 			{
-				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()))
+				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()) && conversations[i].isRandom == false)
 				{
 					UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
 					forceStartConversation = false;
@@ -197,6 +201,51 @@ namespace Wiwa
 						convGroup = -1;
 						convOrder = -1;
 					}
+				}
+				else if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()) && conversations[i].isRandom == true && std::stoi(conversations[i].group.groupID) != -1)
+				{
+					if (finishedRandomizing == false)
+					{
+						convGroup = std::stoi(conversations[i].group.groupID);
+						int randomizerMaxValue = 0;
+						int randomizerResult = 0;
+
+						for (int y = 0; (y < MAX_CONVERSATIONS) && conversations[y].occupied == true; y++)
+						{
+							if (convGroup == std::stoi(conversations[y].group.groupID))
+							{
+								randomizerMaxValue++;
+							}
+						}
+
+						std::random_device rdev;
+						std::mt19937 rgen(rdev());
+						std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
+						randomizerResult = idist(rgen);
+
+						for (int x = 0; (x < MAX_CONVERSATIONS) && conversations[x].occupied == true; x++)
+						{
+							if (convGroup == std::stoi(conversations[x].group.groupID) && randomizerResult == std::stoi(conversations[x].group.order))
+							{
+								conversationToPlayName = conversations[x].conversationName;
+								actualConversationState = 0;
+							}
+						}
+					}
+
+					for (int j = 0; (j < MAX_CONVERSATIONS) && conversations[j].occupied == true; j++)
+					{
+						if (!strcmp(conversations[j].conversationName.c_str(), conversationToPlayName.c_str()))
+						{
+							UpdateConversation(j, &Wiwa::Application::Get().GetRenderer2D());
+						}
+					}
+
+					forceStartConversation = false;
+					finishedRandomizing = true;
+
+					convGroup = -1;
+					convOrder = -1;
 				}
 			}
 		}
@@ -214,7 +263,6 @@ namespace Wiwa
 		}
 
 		keyPressRefreshTimer += Time::GetDeltaTime();
-		if(generalTimer <= 5) generalTimer += Time::GetDeltaTime();
 
 		return true;
 	}
@@ -522,6 +570,7 @@ namespace Wiwa
 			std::string memberNameGroupOrder = "GroupOrder_Conversation" + s;
 
 			std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
+			std::string memberNameIsRandom = "IsRandom_Conversation" + s;
 
 
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
@@ -532,6 +581,7 @@ namespace Wiwa
 			doc.AddMember(memberNameGroupOrder.c_str(),conversations[i].group.order.c_str());
 
 			doc.AddMember(memberNameOppositeSide.c_str(), (bool)conversations[i].isInOppositeSide);
+			doc.AddMember(memberNameIsRandom.c_str(), (bool)conversations[i].isRandom);
 
 
 			for (int j = 0; j < MAX_CONVERSATION_NODES && conversations[i].nodes[j].occupied == true; j++)
@@ -580,6 +630,7 @@ namespace Wiwa
 				std::string memberNameGroupOrder = "GroupOrder_Conversation" + s;
 
 				std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
+				std::string memberNameIsRandom = "IsRandom_Conversation" + s;
 
 				if (doc.HasMember(memberNameConversation.c_str())
 					&& doc.HasMember(memberNameBubbleImage.c_str())
@@ -621,7 +672,8 @@ namespace Wiwa
 					&& doc.HasMember(memberNameCharacterImage.c_str())
 					&& doc.HasMember(memberNameGroupId.c_str())
 					&& doc.HasMember(memberNameGroupOrder.c_str())
-					&& doc.HasMember(memberNameOppositeSide.c_str()))
+					&& doc.HasMember(memberNameOppositeSide.c_str())
+					&& doc.HasMember(memberNameIsRandom.c_str()))
 				{
 					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
@@ -631,6 +683,7 @@ namespace Wiwa
 					conversations[i].group.order = doc[memberNameGroupOrder.c_str()].as_string();
 
 					conversations[i].isInOppositeSide = doc[memberNameOppositeSide.c_str()].as_bool();
+					conversations[i].isRandom = doc[memberNameIsRandom.c_str()].as_bool();
 
 					conversations[i].occupied = true;
 
