@@ -21,13 +21,15 @@ namespace Wiwa
 		
 		void AddAbility(const Ability* ability) const;
 		void AddBuff(const Buff* buff) const;
+		void AddShopPassive(const ShopElement* buff) const;
 		void AddPassive(const PassiveSkill& skill);
-		
 		void AddConsumable(const Consumable& consumable);
+
 		void Update();
 		
 		void UseAbility(size_t index) const;
 		void UseBuff(size_t index) const ;
+		void UseShopPassive(size_t index) const;
 
 		void SwapUITexture(ResourceId id, int indexUI);
 		void Clear();
@@ -35,18 +37,25 @@ namespace Wiwa
 		WI_HARD_INL void AddTokens(uint32_t tokens) { m_Tokens += tokens; }
 		WI_HARD_INL void SubstractTokens(uint32_t tokens) { m_Tokens -= tokens; }
 
+		WI_HARD_INL void AddTokensHoward(uint32_t tokens) { m_Tokens_Howard += tokens; }
+		WI_HARD_INL void SubstractTokensHoward(uint32_t tokens) { m_Tokens_Howard -= tokens; }
+
 		WI_HARD_INL Ability**& GetAbilities() { return m_Abilities; }
 		WI_HARD_INL Buff**& GetBuffs() { return m_Buffs; }
-
+		WI_HARD_INL ShopElement**& GetShopPassives() { return m_ShopPassives; }
 		WI_HARD_INL std::vector<PassiveSkill>& GetPassives() { return m_PassiveSkill; }
 		WI_HARD_INL uint32_t GetTokens() const { return m_Tokens; }
+		WI_HARD_INL uint32_t GetTokensHoward() const { return m_Tokens_Howard; }
 		
 	private:
 		Ability** m_Abilities;
 		Buff** m_Buffs;
 		Consumable m_Consumable;
+		ShopElement** m_ShopPassives;
+
 		std::vector<PassiveSkill> m_PassiveSkill;
 		uint32_t m_Tokens;
+		uint32_t m_Tokens_Howard;
 		friend class GameStateManager;
 	};
 }
