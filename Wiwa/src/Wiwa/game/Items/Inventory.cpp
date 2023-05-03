@@ -78,6 +78,7 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 	
 
 	doc->AddMember("tokens", m_Tokens);
+	doc->AddMember("tokens_howard", m_Tokens_Howard);
 }
 
 void Wiwa::Inventory::Deserialize(JSONDocument* doc)
@@ -149,6 +150,10 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 	if (doc->HasMember("tokens")) {
 		m_Tokens = (*doc)["tokens"].as_int();
 	}
+	if (doc->HasMember("tokens_howard")) {
+		m_Tokens_Howard = (*doc)["tokens_howard"].as_int();
+	}
+
 }
 
 void Wiwa::Inventory::InitGame()
@@ -156,6 +161,7 @@ void Wiwa::Inventory::InitGame()
     m_Abilities = new Ability*[MAX_ABILITIES] { nullptr, nullptr};
     m_Buffs = new Buff*[MAX_BUFFS] {nullptr, nullptr};
 	m_Tokens = 0;
+	m_Tokens_Howard = 0;
 }
 
 void Wiwa::Inventory::AddAbility(const Ability* ability) const

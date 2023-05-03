@@ -47,7 +47,26 @@ namespace Wiwa
 		SHIELD_CHARGE,
 		
 	};
-
+	enum class HowardElementType
+	{
+		HEALTH_CAPACITOR,
+		NANO_BOOST,
+		EASY_TRIGGER,
+		FANCY_BOOTS,
+		LETHAL_SHOOTER,
+		SHIELD_FAN,
+		NANO_MACHINES,
+		RECOVERY_SHIELD,
+		SECOND_WIND,
+		REROLL,
+		BEGINNERS_LUCK,
+		MIDAS_TOUCH,
+		DEVOURER,
+		FANATIC,
+		RECOVERY_HEALTH,
+		ULTIMATE_MIDAS_TOUCH,
+		FRIENDLY_FACE
+	};
 	enum class ItemTags
 	{
 		ATTACK,
@@ -244,6 +263,39 @@ namespace Wiwa
 		      IsEgosHelp(false)
 		{}
 		
+		void Use();
+	};
+
+	struct ShopElement
+	{
+		std::string Name;
+		ResourceId Icon;
+		std::vector<int> Steps;
+		int CurrentStep;
+		std::vector<int> Costs;
+		std::vector<int> PercentageIncreases;
+		HowardElementType PassiveBoost;
+		ShopElement() = default;
+		ShopElement(const ShopElement& shopElement)
+		{
+			this->Name = shopElement.Name;
+			this->Icon = shopElement.Icon;
+			this->Steps = shopElement.Steps;
+			this->CurrentStep = shopElement.CurrentStep;
+			this->Costs = shopElement.Costs;
+			this->PercentageIncreases = shopElement.PercentageIncreases;
+			this->PassiveBoost = shopElement.PassiveBoost;
+		}
+		ShopElement(const char* name)
+			: Name(name),
+			Icon(0),
+			Steps(),
+			CurrentStep(0),
+			Costs(),
+			PercentageIncreases(),
+			PassiveBoost(HowardElementType::FANCY_BOOTS)
+		{}
+
 		void Use();
 	};
 }
