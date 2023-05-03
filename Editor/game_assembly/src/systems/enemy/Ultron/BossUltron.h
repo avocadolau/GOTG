@@ -14,6 +14,7 @@ namespace Wiwa {
 		class BossUltronBaseState* m_BulletStormAttackState;
 		class BossUltronBaseState* m_DeathState;
 		class BossUltronBaseState* m_DashState;
+		class BossUltronBaseState* m_ProjectileRain;
 
 		EntityManager::ComponentIterator m_GunTransformIt;
 

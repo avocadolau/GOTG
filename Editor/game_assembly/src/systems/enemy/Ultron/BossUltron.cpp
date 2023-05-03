@@ -7,6 +7,7 @@
 #include "StateMachine/BossUltronBulletStormAttack.h"
 #include "StateMachine/BossUltronDeath.h"
 #include "StateMachine/BossUltronDash.h"
+#include "StateMachine/BossUltronProjectileRainAttack.h"
 #include "BossUltron.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
@@ -27,6 +28,7 @@ namespace Wiwa
 		m_LaserBeamAttackState = nullptr;
 		m_BulletStormAttackState = nullptr;
 		m_DashState = nullptr;
+		m_ProjectileRain = nullptr;
 		
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
@@ -49,6 +51,7 @@ namespace Wiwa
 		m_BulletStormAttackState = new BossUltronBulletStormAttackState();
 		m_DeathState = new BossUltronDeathState();
 		m_DashState = new BossUltronDashState();
+		m_ProjectileRain = new BossUltronProjectileRainAttackState();
 		
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
