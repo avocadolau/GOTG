@@ -103,6 +103,7 @@ namespace Wiwa {
 		static void EndRun();
 		static void InitHub();
 		static void InitPlayerData();
+		static void LoadPlayerAchievements(JSONDocument* doc);
 
 		static void Update();
 		static void Die();
@@ -120,7 +121,6 @@ namespace Wiwa {
 		static void LogRoomState();
 		static const char* GetRoomState();
 		static const char* GetRoomType();
-
 		// Reset combat data
 		static void ResetCombatRoomData();
 		static void setFinishRoom(bool value);

@@ -1,6 +1,10 @@
 #pragma once
-struct GameData
+namespace Wiwa
 {
-	int m_EnemiesKilled;
-	int m_KilledUltronCount;
-};
+	struct GameData
+	{
+		int m_EnemiesKilled;
+		int m_KilledUltronCount;
+		int m_ItemsBought;
+	};
+}

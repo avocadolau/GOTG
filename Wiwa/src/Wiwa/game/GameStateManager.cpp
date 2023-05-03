@@ -257,6 +257,33 @@ namespace Wiwa
 		}
 		if (debug)
 			WI_CORE_INFO("Player init loaded");
+
+		//LoadPlayerAchievements(&doc);
+	}
+
+	void GameStateManager::LoadPlayerAchievements(JSONDocument* doc)
+	{
+		if (debug)
+			WI_CORE_INFO("Init achievements loading");
+		Character* character = GetPlayerCharacterComp();
+		if (!character)
+		{
+			WI_ERROR("Character was nullptr");
+			return;
+		}
+		if (doc->IsObject())
+		{
+			JSONDocument& document = *doc;
+			if (doc->HasMember("Achievement"))
+			{
+				JSONValue achievementDoc = document["Achievement"];
+				if (achievementDoc.HasMember("walk_threshold"))
+					character->WalkTreshold = achievementDoc["walk_threshold"].as_float();
+			}
+		}
+		if (debug)
+			WI_CORE_INFO("Achievements init loaded");
+
 	}
 
 	void GameStateManager::Update()
