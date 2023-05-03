@@ -137,8 +137,6 @@ namespace Wiwa
 
 		}
 
-		generalTimer = 0;
-
 		return true;
 	}
 
@@ -218,7 +216,6 @@ namespace Wiwa
 		}
 
 		keyPressRefreshTimer += Time::GetDeltaTime();
-		if(generalTimer <= 5) generalTimer += Time::GetDeltaTime();
 
 		return true;
 	}
