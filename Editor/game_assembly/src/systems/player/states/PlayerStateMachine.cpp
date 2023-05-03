@@ -54,12 +54,18 @@ void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
 }
 
 
-void Wiwa::PlayerStateMachine::UpdateMovement()
+void Wiwa::PlayerStateMachine::UpdateMovement(const float speed)
 {
-	this->m_Direction = this->m_MovementInput;
-	this->m_Velocity = this->m_MovementInput * GetCharacter()->Speed;
-	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_Velocity);
-	SetPlayerRotation(m_MovementInput, 1.f);
+	m_Direction = Math::AngleFromVec2(m_MovementInput);
+	
+	m_CurrentVelocity = m_MovementInput * speed;
+	
+	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(glm::vec3(m_CurrentVelocity.x, 0.f, m_CurrentVelocity.y));
+
+	SetPlayerRotation(m_Direction, 0.1f);
+
+	WI_WARN("Direction {}", m_Direction);
+	WI_WARN("Current velocity {}x {}y", m_CurrentVelocity.x, m_CurrentVelocity.y);
 }
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)

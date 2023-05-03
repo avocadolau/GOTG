@@ -1,4 +1,5 @@
 #include "PlayerMove.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 Wiwa::PlayerMove::PlayerMove(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id)
@@ -41,7 +42,7 @@ void Wiwa::PlayerMove::UpdateState()
 	}
 
 
-	m_StateMachine->UpdateMovement();
+	m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
 }
 
 void Wiwa::PlayerMove::ExitState()

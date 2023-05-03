@@ -37,41 +37,40 @@ void Wiwa::PlayerDash::EnterState()
 	m_DashTimer = m_StateMachine->GetCharacter()->DashCooldown;
 	if (m_StateMachine->CanMove())
 	{
-		m_DashDirection = m_StateMachine->GetInput();
+		m_DashDirection = glm::vec3(m_StateMachine->GetInput().x, 0.f, m_StateMachine->GetInput().y);
 	}
-	else
+	else 
 	{
 		m_DashDirection = Math::CalculateForward(m_StateMachine->GetTransform());
 	}
 
 	m_TargetPoint = Math::PointAlongDirection(m_StateMachine->GetTransform()->localPosition, m_DashDirection, m_StateMachine->GetCharacter()->DashDistance);
 
-	m_StateMachine->GetAnimator()->Blend("dash", false, 0.1f);
+	m_StateMachine->GetAnimator()->Blend("dash", false, 0.01f);
 	m_MaxDashTime = 1.5f;
 	m_DashTimer = 0.f;
-	WI_INFO("Player dash");
-	WI_INFO("Target point {}x{}y{}z", m_TargetPoint.x, m_TargetPoint.y, m_TargetPoint.z);
 }
 
 void Wiwa::PlayerDash::UpdateState()
 {
-	if (Math::Distance(m_TargetPoint, m_StateMachine->GetTransform()->position) <= 0.5f)
+	float distance = Math::Distance(m_TargetPoint, m_StateMachine->GetTransform()->position);
+	WI_INFO("Distance {}", distance);
+
+	if (distance <= 0.5f)
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
 	WI_INFO("Dash timer {} ", m_DashTimer);
 	m_DashTimer += Time::GetDeltaTimeSeconds();
+
 	if (m_DashTimer >= m_MaxDashTime)
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
 
-	m_StateMachine->SetVelocity(m_DashDirection * m_StateMachine->GetCharacter()->DashSpeed);
-
-	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
-
+	m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed * m_StateMachine->GetCharacter()->DashSpeed);
 	// TODO: Particles and audio queue
 }
 
@@ -82,8 +81,7 @@ void Wiwa::PlayerDash::ExitState()
 	m_StateMachine->SetDashEnable(false);
 	m_StateMachine->ResetCooldown();
 
-	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
-	m_StateMachine->SetVelocity(glm::vec3(0.f));
+	
 	m_StateMachine->GetAnimator()->Restart();
 	m_StateMachine->IsDashing = false;
 	
@@ -102,7 +100,6 @@ void Wiwa::PlayerDash::OnCollisionEnter(Object* object1, Object* object2)
 	if (object1 != object2)
 	{
 		m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
-		m_StateMachine->SetVelocity(glm::vec3(0.f));
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 	}
 }

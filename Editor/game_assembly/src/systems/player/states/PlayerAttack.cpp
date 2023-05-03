@@ -13,6 +13,7 @@ void Wiwa::PlayerAttack::EnterState()
 {
 	WI_WARN("Player attack");
 	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
+	m_ShootTimer = 0.f;
 }
 
 void Wiwa::PlayerAttack::UpdateState()
@@ -32,17 +33,14 @@ void Wiwa::PlayerAttack::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
 		return;
 	}
-
-	m_StateMachine->SetVelocity(m_StateMachine->GetInput() * m_StateMachine->GetCharacter()->Speed);
-	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
-	m_ShootTimer += Time::GetDeltaTimeSeconds();
-
+	
 	if (m_StateMachine->CanAttack())
 	{
-		Fire(m_StateMachine->GetDirection());
+		Fire();
 	}
-	if (m_StateMachine->GetVelocity() != glm::vec3(0.f))
+	if (m_StateMachine->CanMove())
 	{
+		// TODO: Partial blending
 		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
 	}
 
@@ -57,27 +55,42 @@ void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
 {
 }
 
-void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
+void Wiwa::PlayerAttack::Fire()
 {
-	StarLordShooter* shooter = m_StateMachine->GetStarLord();
-	RocketShooter* rocket = m_StateMachine->GetRocket();
-	Transform3D* spawnPoint;
-	//Decide wich hand is going next
-	if (m_ShootTimer >= m_StateMachine->GetCharacter()->RateOfFire)
+
+	if (GameStateManager::s_CurrentCharacter == 0)
 	{
-		m_ShootTimer = 0;
-		if (shooter->ShootRight)
+		Transform3D* spawnPoint;
+		StarLordShooter* shooter = m_StateMachine->GetStarLord();
+		//Decide wich hand is going next
+		if (Time::GetTime() > m_ShootTimer + m_StateMachine->GetCharacter()->RateOfFire)
 		{
-			spawnPoint = m_StateMachine->GetFirePosition("RightPos");
-			m_StateMachine->GetAnimator()->PlayAnimation("shoot_right", false);
+			m_ShootTimer = Time::GetTime();
+			if (shooter->ShootRight)
+			{
+				spawnPoint = m_StateMachine->GetFirePosition("RightPos");
+				m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
+			}
+			else
+			{
+				spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
+				m_StateMachine->GetAnimator()->Blend("shoot_left", false, 0.1f);
+			}
+			shooter->ShootRight = !shooter->ShootRight;
+			m_StateMachine->SpawnStarLordBullet(*spawnPoint, *m_StateMachine->GetCharacter());
+			m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 		}
-		else
+	}
+	else
+	{
+		Transform3D* spawnPoint = m_StateMachine->GetFirePosition("FirePos");
+		RocketShooter* shooter = m_StateMachine->GetRocket();
+
+		//TODO: blend with current animation
+		if (Time::GetTime() > m_ShootTimer + m_StateMachine->GetCharacter()->RateOfFire)
 		{
-			spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
-			m_StateMachine->GetAnimator()->PlayAnimation("shoot_left", false);
+			m_ShootTimer = Time::GetTime();
+			m_StateMachine->SpawnRocketBullet(*spawnPoint, *m_StateMachine->GetCharacter());
 		}
-		shooter->ShootRight = !shooter->ShootRight;
-		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *rocket,*m_StateMachine->GetCharacter(), shootInput);
-		m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 	}
 }

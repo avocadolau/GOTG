@@ -1148,7 +1148,7 @@ namespace Wiwa {
 			file.Read(&c_size, sizeof(size_t));
 			data = new byte[c_size];
 			file.Read(data, c_size);
-			WI_INFO("Loading component {}", Application::Get().GetComponentTypeH(c_hash)->name.c_str());
+			//WI_INFO("Loading component {}", Application::Get().GetComponentTypeH(c_hash)->name.c_str());
 			byte* component = AddComponent(eid, c_hash, data);
 			delete[] data;
 

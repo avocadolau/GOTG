@@ -27,6 +27,15 @@ void Wiwa::PlayerController::OnAwake()
 	m_ShooterIt.c_id = WI_INVALID_INDEX;
 
 	GameStateManager::SetPlayerId(m_EntityId, m_Scene);
+	GameStateManager::LoadProgression();
+
+	if (GameStateManager::GetType() == RoomType::ROOM_HUB)
+	{
+		Wiwa::GameStateManager::InitPlayerData();
+		Wiwa::GameStateManager::SaveProgression();
+	}
+	m_Direction = 0.f;
+	m_CurrentVelocity = glm::vec2(0.f);
 }
 
 void Wiwa::PlayerController::OnInit()
@@ -40,7 +49,7 @@ void Wiwa::PlayerController::OnInit()
 	m_RigidbodyIt = GetComponentIterator<CollisionBody>();
 	m_ShooterIt = GetComponentIterator<StarLordShooter>();
 	m_RocketIt = GetComponentIterator<RocketShooter>();
-	GameStateManager::LoadProgression();
+	
 
 	m_DashEnable = true;
 	IsDashing = false;
@@ -56,12 +65,17 @@ void Wiwa::PlayerController::OnUpdate()
 {
 	if (!getInit())
 		OnInit();
-	m_MovementInput = GetMovementInput();
+	
+	if(!IsDashing)
+		m_MovementInput = GetMovementInput();
+
 	m_ShootInput = GetShootingInput();
-	if(m_MovementInput != glm::vec3(0.f))
-		SetDirection(m_MovementInput);
-	if(m_ShootInput != glm::vec3(0.f))
-		SetDirection(m_ShootInput);
+
+	if(m_MovementInput != glm::vec2(0.f))
+		SetDirection(Math::AngleFromVec2(m_MovementInput));
+	if(m_ShootInput != glm::vec2(0.f))
+		SetDirection(Math::AngleFromVec2(m_ShootInput));
+
 	if(!IsDashing)
 		SetPlayerRotation(GetDirection(), 1.0f);
 }
@@ -115,12 +129,7 @@ Wiwa::AudioSystem* Wiwa::PlayerController::GetAudio()
 	return m_Scene->GetEntityManager().GetSystem<Wiwa::AudioSystem>(m_EntityId);
 }
 
-void Wiwa::PlayerController::TakeDamage(uint32_t damage)
-{
-
-}
-
-void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const RocketShooter& rocket, const Character& character, glm::vec3 bullDir)
+void Wiwa::PlayerController::SpawnStarLordBullet(Transform3D& transform, const Character& character)
 {
 	if (GameStateManager::s_PoolManager->s_StarLordBullets->getCountDisabled() <= 0)
 		return;
@@ -147,10 +156,15 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	bulletTr->localPosition = Math::GetWorldPosition(transform.worldMatrix);
 	bulletTr->localRotation = glm::vec3(0.f, playerTr->localRotation.y + 90.0f, 0.f);
 	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
+	
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
-	bullet->direction = bullDir;
+
+	bullet->direction = Math::Vec3FromAngle(m_Direction);
+
 	bullet->damage = this->GetCharacter()->Damage;
-	//WI_INFO("Dir {}x {}y {}z", bullDir.x, bullDir.y, bullDir.z);
+	
+	WI_INFO("Direction {}", m_Direction);
+	WI_INFO("Dir {}x {}y {}z", bullet->direction.x, bullet->direction.y, bullet->direction.z);
 
 	physSys->CreateBody();
 	bulletSys->EnableBullet();
@@ -194,7 +208,60 @@ void Wiwa::PlayerController::SpawnBullet(Transform3D& transform, const StarLordS
 	}
 }
 
-glm::vec3 Wiwa::PlayerController::GetMovementInput()
+void Wiwa::PlayerController::SpawnRocketBullet(Transform3D& transform, const Character& character)
+{
+	if (GameStateManager::s_PoolManager->s_StarLordBullets->getCountDisabled() <= 0)
+		return;
+
+	EntityManager& entityManager = m_Scene->GetEntityManager();
+
+	GameStateManager::s_PoolManager->SetScene(m_Scene);
+	EntityId newBulletId = EntityManager::INVALID_INDEX;
+	newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
+	if (newBulletId == EntityManager::INVALID_INDEX)
+		return;
+
+	StarLordBulletSystem* bulletSys = entityManager.GetSystem<StarLordBulletSystem>(newBulletId);
+	PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+	physSys->DeleteBody();
+
+	// Set intial positions
+	Transform3D* playerTr = GetTransform();
+	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+	if (!bulletTr || !playerTr)
+		return;
+
+	bulletTr->localPosition = Math::GetWorldPosition(transform.worldMatrix);
+	bulletTr->localRotation = glm::vec3(0.f, playerTr->localRotation.y + 90.0f, 0.f);
+	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
+
+	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+	
+	bullet->direction = Math::Vec3FromAngle(m_Direction);
+	bullet->damage = this->GetCharacter()->Damage;
+
+	physSys->CreateBody();
+	bulletSys->EnableBullet();
+
+	//emit left muzzle
+	EntityId shotMuzzleLeft = entityManager.GetChildByName(m_EntityId, "p_muzzleLeft");
+	EntityId shotMuzzleLeftImpact = entityManager.GetChildByName(shotMuzzleLeft, "vfx_impact");
+	EntityId shotMuzzleLeftFlash = entityManager.GetChildByName(shotMuzzleLeft, "vfx_flash");
+
+	entityManager.SetActive(shotMuzzleLeft, true);
+
+	ParticleSystem* sys_shotMuzzleLeftImpact = entityManager.GetSystem<ParticleSystem>(shotMuzzleLeftImpact);
+	ParticleSystem* sys_shotMuzzleLeftFlash = entityManager.GetSystem<ParticleSystem>(shotMuzzleLeftFlash);
+
+	if (sys_shotMuzzleLeftImpact != nullptr && sys_shotMuzzleLeftFlash != nullptr)
+	{
+		sys_shotMuzzleLeftImpact->EmitParticleBatch(1);
+		sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
+	}
+}
+
+glm::vec2 Wiwa::PlayerController::GetMovementInput()
 {
 	//     z
 	//     |
@@ -203,24 +270,24 @@ glm::vec3 Wiwa::PlayerController::GetMovementInput()
 	//     |
 	//     |
 
-	glm::vec3 input = glm::vec3(0.f);
+	glm::vec2 input = glm::vec3(0.f);
 
 	if (Input::IsKeyPressed(Key::A))
 		input.x += 1;
 	if (Input::IsKeyPressed(Key::D))
 		input.x -= 1;
 	if (Input::IsKeyPressed(Key::W))
-		input.z += 1;
+		input.y += 1;
 	if (Input::IsKeyPressed(Key::S))
-		input.z -= 1;
+		input.y -= 1;
 
 	input.x -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftX, GameStateManager::GetControllerDeadZone());
-	input.z -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftY, GameStateManager::GetControllerDeadZone());
+	input.y -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftY, GameStateManager::GetControllerDeadZone());
 
 	return input;
 }
 
-glm::vec3 Wiwa::PlayerController::GetShootingInput()
+glm::vec2 Wiwa::PlayerController::GetShootingInput()
 {
 	//     z
 	//     |
@@ -228,35 +295,26 @@ glm::vec3 Wiwa::PlayerController::GetShootingInput()
 	//-----|----- -x
 	//     |
 	//     |
-	glm::vec3 input = glm::vec3(0.f);
+	glm::vec2 input = glm::vec3(0.f);
 
 	if (Input::IsKeyPressed(Key::Left))
-		input.x -= 1;
-	if (Input::IsKeyPressed(Key::Right))
 		input.x += 1;
+	if (Input::IsKeyPressed(Key::Right))
+		input.x -= 1;
 	if (Input::IsKeyPressed(Key::Up))
-		input.z += 1;
+		input.y += 1;
 	if (Input::IsKeyPressed(Key::Down))
-		input.z -= 1;
+		input.y -= 1;
 
 	input.x -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightX, GameStateManager::GetControllerDeadZone());
-	input.z -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightY, GameStateManager::GetControllerDeadZone());
+	input.y -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightY, GameStateManager::GetControllerDeadZone());
 
 	return input;
 }
 
-void Wiwa::PlayerController::SetPlayerRotation(const glm::vec3& input, const float rotationSpeed)
+void Wiwa::PlayerController::SetPlayerRotation(const float angle, const float rotationSpeed)
 {
 	Transform3D* transform = GetTransform();
-	float angle = AngleFromVec2(glm::vec2(input.z, input.x));
-	
+
 	transform->localRotation.y = Math::LerpAngle(transform->localRotation.y, angle, rotationSpeed);
-
-	if (transform->localRotation.y >= 360.f)
-		transform->localRotation.y = 0.f;
-}
-
-float Wiwa::PlayerController::AngleFromVec2(const glm::vec2& vector)
-{
-	return glm::degrees(glm::atan(vector.y, vector.x));
 }

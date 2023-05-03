@@ -1,13 +1,1 @@
-{
-    "max_health": 100,
-    "health": 100,
-    "max_shield": 50,
-    "shield": 50,
-    "damage": 10,
-    "rof": 0.8449999690055847,
-    "speed": 10.0,
-    "dash_distance": 10.0,
-    "dash_speed": 20.0,
-    "dash_cooldown": 0.5,
-    "walk_threshold": 0.5
-}
+{"max_health":70,"health":70,"max_shield":50,"shield":50,"damage":5,"rof":1.5,"speed":15.0,"dash_distance":10.0,"dash_speed":4.0,"dash_cooldown":0.5,"walk_threshold":0.5}

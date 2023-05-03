@@ -25,6 +25,20 @@ namespace Wiwa
 {
 	namespace Math
 	{
+		/// <summary>
+		/// Returns the angle formed by a vector
+		/// </summary>
+		/// <param name="vector"></param>
+		/// <returns></returns>
+		inline float AngleFromVec2(const glm::vec2& vector)
+		{
+			return glm::degrees(glm::atan(vector.x, vector.y));
+		}
+		inline glm::vec3 Vec3FromAngle(const float angle)
+		{
+			return glm::normalize(glm::vec3(glm::sin(glm::radians(angle)), 0.f, glm::cos(glm::radians(angle))));
+		}
+
 		inline float RandomFloat(float a, float b) {
 			float random = ((float)rand()) / (float)RAND_MAX;
 			float diff = b - a;
@@ -378,7 +392,20 @@ namespace Wiwa
 		{
 			return std::clamp(t - std::floor(t / length) * length, 0.0f, length);
 		}
+		// Perform Slerp interpolation between two angles in degrees
+		inline float Slerp(float startAngle, float endAngle, float t) {
+			// Convert start and end angles to quaternions
+			glm::quat startQuat = glm::angleAxis(glm::radians(startAngle), glm::vec3(0, 1, 0));
+			glm::quat endQuat = glm::angleAxis(glm::radians(endAngle), glm::vec3(0, 1, 0));
 
+			// Perform Slerp interpolation between the quaternions
+			glm::quat resultQuat = glm::slerp(startQuat, endQuat, t);
+
+			// Convert the resulting quaternion back to an angle in degrees
+			float resultAngle = glm::degrees(glm::angle(resultQuat));
+
+			return resultAngle;
+		}
 		inline float LerpAngle(float a, float b, float t)
 		{
 			float delta = Repeat((b - a), 360);

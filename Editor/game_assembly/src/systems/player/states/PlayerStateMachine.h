@@ -19,10 +19,10 @@ namespace Wiwa
 		virtual void OnCollisionEnter(Object* body1, Object* body2) override;
 
 		WI_HARD_INL bool CanDash() { return (Input::IsKeyPressed(Key::LeftShift) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadLeftBumper)) && IsDashEnable(); }
-		WI_HARD_INL bool CanMove() { return  GetInput() != glm::vec3(0.f); }
-		WI_HARD_INL bool IsAiming() { return GetShootInput() != glm::vec3(0.f); }
+		WI_HARD_INL bool CanMove() { return  GetInput() != glm::vec2(0.f); }
+		WI_HARD_INL bool IsAiming() { return GetShootInput() != glm::vec2(0.f); }
 		WI_HARD_INL bool CanAttack() { return Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadRigthBumper) || Input::IsKeyPressed(Key::Space); }
-		void UpdateMovement();
+		void UpdateMovement(const float speed);
 
 		void SwitchState(PlayerBaseState* state);
 		void CheckHealth();
