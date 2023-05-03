@@ -120,5 +120,6 @@ namespace Wiwa
 
 		bool forcedDialogHappened = false;
 
+		bool finishedRandomizing = false;
 	};
 }

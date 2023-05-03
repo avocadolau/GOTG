@@ -166,6 +166,7 @@ namespace Wiwa
 			actualConversationState = 0;
 
 			keyPressRefreshTimer = 0;
+			finishedRandomizing = false;
 		}
 
 		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false)
@@ -185,7 +186,7 @@ namespace Wiwa
 		{
 			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
 			{
-				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()))
+				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()) && conversations[i].isRandom == false)
 				{
 					UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
 					forceStartConversation = false;
@@ -200,6 +201,51 @@ namespace Wiwa
 						convGroup = -1;
 						convOrder = -1;
 					}
+				}
+				else if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()) && conversations[i].isRandom == true && std::stoi(conversations[i].group.groupID) != -1)
+				{
+					if (finishedRandomizing == false)
+					{
+						convGroup = std::stoi(conversations[i].group.groupID);
+						int randomizerMaxValue = 0;
+						int randomizerResult = 0;
+
+						for (int y = 0; (y < MAX_CONVERSATIONS) && conversations[y].occupied == true; y++)
+						{
+							if (convGroup == std::stoi(conversations[y].group.groupID))
+							{
+								randomizerMaxValue++;
+							}
+						}
+
+						std::random_device rdev;
+						std::mt19937 rgen(rdev());
+						std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
+						randomizerResult = idist(rgen);
+
+						for (int x = 0; (x < MAX_CONVERSATIONS) && conversations[x].occupied == true; x++)
+						{
+							if (convGroup == std::stoi(conversations[x].group.groupID) && randomizerResult == std::stoi(conversations[x].group.order))
+							{
+								conversationToPlayName = conversations[x].conversationName;
+								actualConversationState = 0;
+							}
+						}
+					}
+
+					for (int j = 0; (j < MAX_CONVERSATIONS) && conversations[j].occupied == true; j++)
+					{
+						if (!strcmp(conversations[j].conversationName.c_str(), conversationToPlayName.c_str()))
+						{
+							UpdateConversation(j, &Wiwa::Application::Get().GetRenderer2D());
+						}
+					}
+
+					forceStartConversation = false;
+					finishedRandomizing = true;
+
+					convGroup = -1;
+					convOrder = -1;
 				}
 			}
 		}
