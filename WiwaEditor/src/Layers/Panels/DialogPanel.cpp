@@ -85,6 +85,7 @@ void DialogPanel::Draw()
 				dm.conversations[currentConversation].characterImagePath = "";
 				dm.conversations[currentConversation].conversationName = "";
 				dm.conversations[currentConversation].isInOppositeSide = false;
+				dm.conversations[currentConversation].isRandom = false;
 				dm.conversations[currentConversation].group.groupID = "-1";
 				dm.conversations[currentConversation].group.order = "-1";
 				dm.conversations[currentConversation].nodes[0].occupied = true;
@@ -202,6 +203,11 @@ void DialogPanel::Draw()
 							dm.conversations[currentConversation].nodes[l].occupied = dm.conversations[currentConversation].nodes[l + 1].occupied;
 
 						}
+
+						if (dm.editorConversations[l].occupied == false && isNodeOccupiedNumTimesFalse == 2 && currentNode > 0)
+						{
+							currentNode--;
+						}
 					}
 				}
 				ImGui::PopID();
@@ -295,6 +301,9 @@ void DialogPanel::Draw()
 				ImGui::InputText("Group Order", &dm.conversations[currentConversation].group.order);
 				ImGui::TextWrapped("Note: 'Group Order' defines the order conversations will happen in the group starting from '0'. Leave it to '-1' if this conversation does not belong to any group.");
 
+				ImGui::Checkbox("Is Group Order Random?", &dm.conversations[currentConversation].isRandom);
+				ImGui::TextWrapped("Note: 'Is Group Order Random?' will make the dialog manager pick a random conversation from the group the conversations belongs when this current specific dialog is triggered.");
+
 				ImGui::NewLine();
 
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
@@ -319,6 +328,7 @@ void DialogPanel::Draw()
 					dm.editorConversations[currentConversation].nodes[0].occupied = dm.conversations[currentConversation].nodes[0].occupied;
 
 					dm.editorConversations[currentConversation].isInOppositeSide = dm.conversations[currentConversation].isInOppositeSide;
+					dm.editorConversations[currentConversation].isRandom = dm.conversations[currentConversation].isRandom;
 					dm.editorConversations[currentConversation].group.groupID = dm.conversations[currentConversation].group.groupID;
 					dm.editorConversations[currentConversation].group.order = dm.conversations[currentConversation].group.order;
 
@@ -426,7 +436,7 @@ void DialogPanel::Draw()
 
 					int isNodeOccupiedNumTimesFalse = 0;
 
-					for (int l = 0; (l < MAX_CONVERSATIONS) && (isNodeOccupiedNumTimesFalse < 2); l++)
+					for (int l = 0; (l < MAX_CONVERSATION_NODES) && (isNodeOccupiedNumTimesFalse < 2); l++)
 					{
 						if (dm.editorConversations[i].nodes[l].occupied == false)
 						{
@@ -535,6 +545,9 @@ void DialogPanel::Draw()
 				ImGui::InputText("Group Order", &dm.editorConversations[i].group.order);
 				ImGui::TextWrapped("Note: 'Group Order' defines the order conversations will happen in the group starting from '0'. Leave it to '-1' if this conversation does not belong to any group.");
 
+				ImGui::Checkbox("Is Group Order Random?", &dm.editorConversations[i].isRandom);
+				ImGui::TextWrapped("Note: 'Is Group Order Random?' will make the dialog manager pick a random conversation from the group the conversations belongs when this current specific dialog is triggered.");
+
 				ImGui::NewLine();
 
 				ImGui::TextWrapped("DONR FORGET SAVING!");
@@ -560,6 +573,7 @@ void DialogPanel::Draw()
 					dm.conversations[i].conversationName = dm.editorConversations[i].conversationName;
 
 					dm.conversations[i].isInOppositeSide = dm.editorConversations[i].isInOppositeSide;
+					dm.conversations[i].isRandom = dm.editorConversations[i].isRandom;
 					dm.conversations[i].group.groupID = dm.editorConversations[i].group.groupID;
 					dm.conversations[i].group.order = dm.editorConversations[i].group.order;
 
@@ -592,6 +606,7 @@ void DialogPanel::Draw()
 							dm.conversations[l].conversationName = dm.conversations[l + 1].conversationName;
 
 							dm.conversations[l].isInOppositeSide = dm.conversations[l + 1].isInOppositeSide;
+							dm.conversations[l].isRandom = dm.conversations[l + 1].isRandom;
 							dm.conversations[l].group.groupID = dm.conversations[l + 1].group.groupID;
 							dm.conversations[l].group.order = dm.conversations[l + 1].group.order;
 							
@@ -633,6 +648,7 @@ void DialogPanel::Draw()
 							dm.editorConversations[l].conversationName = dm.editorConversations[l + 1].conversationName;
 
 							dm.editorConversations[l].isInOppositeSide = dm.editorConversations[l + 1].isInOppositeSide;
+							dm.editorConversations[l].isRandom = dm.editorConversations[l + 1].isRandom;
 							dm.editorConversations[l].group.groupID = dm.editorConversations[l + 1].group.groupID;
 							dm.editorConversations[l].group.order = dm.editorConversations[l + 1].group.order;
 

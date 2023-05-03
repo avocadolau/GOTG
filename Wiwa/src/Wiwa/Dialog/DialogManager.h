@@ -31,6 +31,7 @@ namespace Wiwa
 		std::string characterImagePath;
 
 		bool isInOppositeSide = false;
+		bool isRandom = false;
 
 		bool occupied = false;
 

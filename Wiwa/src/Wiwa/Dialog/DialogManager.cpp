@@ -122,6 +122,7 @@ namespace Wiwa
 			editorConversations[e].occupied = conversations[e].occupied;
 
 			editorConversations[e].isInOppositeSide = conversations[e].isInOppositeSide;
+			editorConversations[e].isRandom = conversations[e].isRandom;
 			editorConversations[e].group.groupID = conversations[e].group.groupID;
 			editorConversations[e].group.order = conversations[e].group.order;
 
@@ -523,6 +524,7 @@ namespace Wiwa
 			std::string memberNameGroupOrder = "GroupOrder_Conversation" + s;
 
 			std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
+			std::string memberNameIsRandom = "IsRandom_Conversation" + s;
 
 
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
@@ -533,6 +535,7 @@ namespace Wiwa
 			doc.AddMember(memberNameGroupOrder.c_str(),conversations[i].group.order.c_str());
 
 			doc.AddMember(memberNameOppositeSide.c_str(), (bool)conversations[i].isInOppositeSide);
+			doc.AddMember(memberNameIsRandom.c_str(), (bool)conversations[i].isRandom);
 
 
 			for (int j = 0; j < MAX_CONVERSATION_NODES && conversations[i].nodes[j].occupied == true; j++)
@@ -581,6 +584,7 @@ namespace Wiwa
 				std::string memberNameGroupOrder = "GroupOrder_Conversation" + s;
 
 				std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
+				std::string memberNameIsRandom = "IsRandom_Conversation" + s;
 
 				if (doc.HasMember(memberNameConversation.c_str())
 					&& doc.HasMember(memberNameBubbleImage.c_str())
@@ -622,7 +626,8 @@ namespace Wiwa
 					&& doc.HasMember(memberNameCharacterImage.c_str())
 					&& doc.HasMember(memberNameGroupId.c_str())
 					&& doc.HasMember(memberNameGroupOrder.c_str())
-					&& doc.HasMember(memberNameOppositeSide.c_str()))
+					&& doc.HasMember(memberNameOppositeSide.c_str())
+					&& doc.HasMember(memberNameIsRandom.c_str()))
 				{
 					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
@@ -632,6 +637,7 @@ namespace Wiwa
 					conversations[i].group.order = doc[memberNameGroupOrder.c_str()].as_string();
 
 					conversations[i].isInOppositeSide = doc[memberNameOppositeSide.c_str()].as_bool();
+					conversations[i].isRandom = doc[memberNameIsRandom.c_str()].as_bool();
 
 					conversations[i].occupied = true;
 
