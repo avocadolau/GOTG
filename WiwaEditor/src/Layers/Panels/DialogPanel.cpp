@@ -675,6 +675,11 @@ void DialogPanel::Draw()
 	else
 	{
 		ImGui::TextWrapped("No conversations have been created yet.");
+
+		ImGui::NewLine();
+		ImGui::TextWrapped("WARNING:");
+		ImGui::TextWrapped("If you did create conversations and they are not showing here, reload the engine.");
+
 	}
 	
 	ImGui::End();

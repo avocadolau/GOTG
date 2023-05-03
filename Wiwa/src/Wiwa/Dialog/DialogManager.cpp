@@ -94,7 +94,11 @@ namespace Wiwa
 
 		//conversations[0].occupied = true;
 
-		LoadAllDialogs();
+		if (std::filesystem::exists("library"))
+		{
+			LoadAllDialogs();
+		}
+		//LoadAllDialogs();
 
 		actualConversationState = 2;
 		currentNode = 0;
