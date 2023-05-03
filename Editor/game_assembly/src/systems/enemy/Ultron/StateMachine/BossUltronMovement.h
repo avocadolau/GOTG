@@ -9,7 +9,8 @@ namespace Wiwa {
 		NONE = 0,
 		BULLET_STORM,
 		LASER_BEAM,
-		CLUSTER_SHOTS
+		CLUSTER_SHOTS,
+		DASH
 
 	};
 	class BossUltronMovementState : public BossUltronBaseState {

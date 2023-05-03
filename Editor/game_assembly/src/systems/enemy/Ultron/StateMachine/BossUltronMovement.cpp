@@ -87,7 +87,7 @@ namespace Wiwa
 		if (m_DoAttack)
 		{
 			UltronAttacks nextAttack = GetAttackFromProbabilites();
-			
+
 			switch (nextAttack)
 			{
 			case Wiwa::UltronAttacks::NONE:
@@ -113,6 +113,12 @@ namespace Wiwa
 				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
 			}
 				break;
+			case Wiwa::UltronAttacks::DASH:
+			{
+				navAgentPtr->StopAgent();
+				enemy->SwitchState(enemy->m_DashState);
+			}
+			break;
 			default:
 				break;
 			}

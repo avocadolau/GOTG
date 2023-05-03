@@ -24,13 +24,18 @@ namespace Wiwa {
 
 		DashState m_State;
 
+		float m_TimerToRotate = 0.0f;
 		float m_TimerDash = 0.0f;
 		float m_TimerAfterDash = 0.0f;
+
 		float lifetimeDash = 2.0f;
 		int damageDash = 0;
-		float dashDistance = 8.0f;
+
 		bool initiateDash = false;
 
-		glm::vec3 directionDash = glm::vec3(0.0f);
+		float interpolationValue = 0.0f;
+
+		glm::vec3 playerDistance = glm::vec3(0.0f);
+		glm::vec3 interpolatedDashDistance = glm::vec3(0.0f);
 	};
 }

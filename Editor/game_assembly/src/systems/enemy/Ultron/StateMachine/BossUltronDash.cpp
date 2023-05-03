@@ -3,17 +3,19 @@
 #include "../BossUltron.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <cmath>
 
 namespace Wiwa
 {
 	BossUltronDashState::BossUltronDashState()
 	{
+		m_TimerToRotate = 0.0f;
 		m_TimerDash = 0.0f;
 		lifetimeDash = 0.0f;
 		damageDash = 0;
-		dashDistance = 8.0f;
 		initiateDash = false;
-		directionDash = glm::vec3(0.0f);
+		playerDistance = glm::vec3(0.0f);
+		interpolatedDashDistance = glm::vec3(0.0f);
 	}
 
 	BossUltronDashState::~BossUltronDashState()
@@ -29,10 +31,12 @@ namespace Wiwa
 		enemy->RotateTo(playerTr->localPosition);*/
 
 		enemy->m_Timer = 0.0f;
+		m_TimerToRotate = 0.0f;
 		m_TimerDash = 0.0f;
 		m_TimerAfterDash = 0.0f;
+		playerDistance = glm::vec3(0.0f);
+		interpolatedDashDistance = glm::vec3(0.0f);
 		m_State = DashState::DASH_INIT;
-
 		/*animator->Blend("walk", true, 0.2f);*/
 		/*enemy->m_DashTimer = 0;*/
 	}
@@ -78,52 +82,67 @@ namespace Wiwa
 
 		agent->SetDestination(directionDash);*/
 
-		
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		switch (m_State)
 		{
 		case Wiwa::BossUltronDashState::DashState::DASH_INIT:
 		{
 			agent->StopAgent();
+			navAgent->autoRotate = false;
 
-			directionDash = glm::vec3(0.0f);
+			m_TimerToRotate += Time::GetDeltaTimeSeconds();
+
+			playerDistance = playerTr->localPosition;
 			//Part 1 del Dash
-			enemy->RotateTo(playerTr->localPosition);
-			/*glm::vec3 playerLastPosition = playerTr->localPosition;*/
-			/*directionDash = Math::PointAlongDirection(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation, dashDistance);*/
-			directionDash = Math::GetRoationBetweenTwoPoints(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation);
-			float dashVelocity = dashDistance / lifetimeDash;
-			/*agent->RequestMoveVelocity(directionDash * dashVelocity);*/
-			//directionDash = glm::vec3(-2.0f, 0.0f, -33.0f);
-
-
-			//TODO: Fer Funcio per calcular la posicio be (x = v * t)
-			/*enemy->GetTransform()->localPosition
-			agent->SetPosition(directionDash);*/
-		
-			m_State = DashState::DASH_PLAYING;
+			enemy->LookAt(playerTr->localPosition, 80.0f);
+			
+			if (m_TimerToRotate >= 2.0f)
+			{
+				m_TimerToRotate = 0.0f,
+				m_State = DashState::DASH_PLAYING;
+			}
 		}
 			break;
 		case Wiwa::BossUltronDashState::DashState::DASH_PLAYING:
 		{
 			m_TimerDash += Time::GetDeltaTimeSeconds();
 
-			if (m_TimerDash >= 2.0f)
+			if (m_TimerDash >= 0.2f && interpolationValue <= 0.9f)
 			{
 				m_TimerDash = 0.0f;
-				m_State = DashState::DASH_STOP;	
+				interpolationValue = interpolationValue + 0.05;
+			}
+
+			/*glm::vec3 playerLastPosition = playerTr->localPosition;*/
+			/*directionDash = Math::PointAlongDirection(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation, dashDistance);*/
+			/*directionDash = Math::GetRoationBetweenTwoPoints(enemy->GetTransform()->localPosition, enemy->GetTransform()->localRotation);*/
+			
+			/*agent->RequestMoveVelocity(directionDash * dashVelocity);*/
+			//directionDash = glm::vec3(-2.0f, 0.0f, -33.0f);
+
+			//TODO: Fer Funcio per calcular la posicio be (x = v * t)
+
+			/*float dashVelocity = dashDistance / lifetimeDash;*/
+
+			interpolatedDashDistance = Math::InterpolateTwoV3(enemy->GetTransform()->localPosition, playerDistance, interpolationValue);
+
+			agent->SetPosition(interpolatedDashDistance);
+
+			if (interpolationValue > 0.9f)
+			{
+				m_State = DashState::DASH_STOP;
 			}
 		}
 			break;
 		case Wiwa::BossUltronDashState::DashState::DASH_STOP:
 		{
 			agent->StopAgent();
-			/*agent->SetPreviousMaxSpeed();
-			agent->SetPreviousMaxAcceleration();*/
-
+			navAgent->autoRotate = true;
+		
 			m_State = DashState::DASH_COOLDOWN;
 		}
 			break;
@@ -131,16 +150,19 @@ namespace Wiwa
 		{
 			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
 
-			if (m_TimerAfterDash >= 3.0f)
+			if (m_TimerAfterDash >= 2.0f)
 			{
-				//Posibiliad switchState AQUI
 				WI_INFO("Dash DONE");
+				m_TimerAfterDash = 0.0f;
+				enemy->SwitchState(enemy->m_MovementState);
 			}
 		}
 			break;
 		default:
 			break;
 		}
+
+		
 
 		//if (initiateDash == false)
 		//{

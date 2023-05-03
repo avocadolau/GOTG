@@ -478,6 +478,16 @@ namespace Wiwa
 			glm::quat rotation = glm::rotation(p1Forward, p2Forward);
 			return glm::degrees(glm::eulerAngles(rotation));
 		}
+
+		inline glm::vec3 InterpolateTwoV3(glm::vec3 start, glm::vec3 end, float t)
+		{
+			return glm::vec3
+			{
+		       start.x + (end.x - start.x) * t,
+		       start.y + (end.y - start.y) * t,
+		       start.z + (end.z - start.z) * t
+			};
+		}
 	}
 
 }
