@@ -51,7 +51,6 @@ namespace Wiwa {
 		void IncrementGamedataKills(int amount);
 		void IncrementGamedataUltron(int amount);
 		void IncrementGamedataItems(int amount);
-
 		static int GetGameDataKills() { return gamedata.m_EnemiesKilled; }
 		static int GetGameDataUltron() { return gamedata.m_KilledUltronCount; }
 		static int GetGameDataItems() { return gamedata.m_ItemsBought; }

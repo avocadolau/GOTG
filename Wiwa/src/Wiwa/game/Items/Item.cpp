@@ -331,4 +331,69 @@ namespace Wiwa
             break;
         }
     }
+
+    void ShopElement::Use()
+    {
+        const float buffPercent = ((float)PercentageIncreases.at(CurrentStep) / 100.f);
+        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+        Character* player = GetPlayerComp();
+
+        switch (PassiveBoost)
+        {
+        case Wiwa::HowardElementType::FANCY_BOOTS:
+            player->Speed += player->Speed * buffPercent;
+            break;
+        case Wiwa::HowardElementType::EASY_TRIGGER:
+            player->RateOfFireMultiplier += player->RateOfFireMultiplier * buffPercent;
+            break;
+        case Wiwa::HowardElementType::NANO_BOOST:
+            player->Damage += player->Damage * buffPercent;
+            break;
+        case Wiwa::HowardElementType::NANO_MACHINES:
+            break;
+        case Wiwa::HowardElementType::HEALTH_CAPACITOR:
+            player->Health += player->Health * buffPercent;
+            break;
+        case Wiwa::HowardElementType::SHIELD_FAN:
+            player->ShieldRegeration += player->ShieldRegeration * buffPercent;
+            break;
+        case Wiwa::HowardElementType::RECOVERY_SHIELD:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::SECOND_WIND:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::REROLL:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::BEGINNERS_LUCK:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::MIDAS_TOUCH:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::DEVOURER:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::FANATIC:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::RECOVERY_HEALTH:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::FRIENDLY_FACE:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::LETHAL_SHOOTER:
+            Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+            EntityId newBulletId = EntityManager::INVALID_INDEX;
+            newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
+            SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
+            bullet->lifeTime += ((float)bullet->lifeTime * buffPercent);
+            break;
+        }
+    }
 }

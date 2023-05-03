@@ -109,8 +109,16 @@ namespace Wiwa
 			}
 			break;
 		case Scene::SCENE_LOOP:
-			if(!pausedGame)
+			if (pausedGame)
+			{
+				Time::SetTimeScale(0.0f);
+			}
+			else if (!pausedGame)
+			{
+				Time::SetTimeScale(1.0f);
 				m_EntityManager.SystemsUpdate();
+			}
+				
 			player = m_EntityManager.GetEntityByName("StarLord");
 			if (player != WI_INVALID_INDEX)
 			{
