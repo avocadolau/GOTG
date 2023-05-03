@@ -133,7 +133,7 @@ namespace Wiwa
 			JSONValue costs = AchievementsObj.AddMemberArray("costs");
 		
 			for (int i  = 0; i < Achievement->second.m_Costs.size(); i++)
-			{
+			{ 
 				costs.PushBack(Achievement->second.m_Costs[i]);
 			}
 
@@ -167,9 +167,9 @@ namespace Wiwa
 				}
 			}
 		}
-		if (doc->HasMember("Achievements"))
+		if (doc->HasMember("Achievement"))
 		{
-			JSONValue Achievements = document["property"];
+			JSONValue Achievements = document["Achievement"];
 			if (Achievements.IsArray())
 			{
 				for (size_t i = 0; i < Achievements.Size(); i++)
@@ -182,7 +182,7 @@ namespace Wiwa
 					Achievement.m_CurrentCost = Achievements[i]["current_cost"].as_int();
 					Achievement.m_Unlocked = Achievements[i]["unlocked"].as_bool();
 
-					JSONValue costs = Achievements["costs"];
+					JSONValue costs = Achievements[i]["costs"];
 					if (costs.IsArray())
 					{
 						for (size_t i = 0; i < costs.Size(); i++)
@@ -191,7 +191,7 @@ namespace Wiwa
 						}
 					}
 
-					JSONValue props = Achievements["properties"];
+					JSONValue props = Achievements[i]["properties"];
 					if (props.IsArray())
 					{
 						for (size_t i = 0; i < props.Size(); i++)
