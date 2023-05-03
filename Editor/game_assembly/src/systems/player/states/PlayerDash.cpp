@@ -49,6 +49,9 @@ void Wiwa::PlayerDash::EnterState()
 	m_StateMachine->GetAnimator()->Blend("dash", false, 0.01f);
 	m_MaxDashTime = 1.5f;
 	m_DashTimer = 0.f;
+
+
+	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 0.1f);
 }
 
 void Wiwa::PlayerDash::UpdateState()
@@ -70,7 +73,12 @@ void Wiwa::PlayerDash::UpdateState()
 		return;
 	}
 
-	m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed * m_StateMachine->GetCharacter()->DashSpeed);
+	
+
+	glm::vec3 velocity = m_DashDirection * m_StateMachine->GetCharacter()->Speed * m_StateMachine->GetCharacter()->DashSpeed;
+	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(velocity);
+	
+
 	// TODO: Particles and audio queue
 }
 

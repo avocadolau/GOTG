@@ -65,17 +65,14 @@ void Wiwa::PlayerController::OnUpdate()
 {
 	if (!getInit())
 		OnInit();
-	
-	if(!IsDashing)
-		m_MovementInput = GetMovementInput();
 
+	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();
 
 	if(m_MovementInput != glm::vec2(0.f))
 		SetDirection(Math::AngleFromVec2(m_MovementInput));
 	if(m_ShootInput != glm::vec2(0.f))
 		SetDirection(Math::AngleFromVec2(m_ShootInput));
-
 	if(!IsDashing)
 		SetPlayerRotation(GetDirection(), 1.0f);
 }

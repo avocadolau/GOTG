@@ -64,8 +64,8 @@ void Wiwa::PlayerStateMachine::UpdateMovement(const float speed)
 
 	SetPlayerRotation(m_Direction, 0.1f);
 
-	WI_WARN("Direction {}", m_Direction);
-	WI_WARN("Current velocity {}x {}y", m_CurrentVelocity.x, m_CurrentVelocity.y);
+	//WI_WARN("Direction {}", m_Direction);
+	//WI_WARN("Current velocity {}x {}y", m_CurrentVelocity.x, m_CurrentVelocity.y);
 }
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)

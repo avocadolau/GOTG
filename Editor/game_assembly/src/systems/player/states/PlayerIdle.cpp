@@ -17,8 +17,6 @@ void Wiwa::PlayerIdle::EnterState()
 	WI_INFO("Player idle");
 
 	m_StateMachine->GetAnimator()->Blend("idle", true, 0.3f);
-
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.f);
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 }
 

@@ -13,7 +13,6 @@ void Wiwa::PlayerAttack::EnterState()
 {
 	WI_WARN("Player attack");
 	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
-	m_ShootTimer = 0.f;
 }
 
 void Wiwa::PlayerAttack::UpdateState()
@@ -34,6 +33,8 @@ void Wiwa::PlayerAttack::UpdateState()
 		return;
 	}
 	
+	m_ShootTimer += Time::GetDeltaTimeSeconds();
+
 	if (m_StateMachine->CanAttack())
 	{
 		Fire();
@@ -42,6 +43,12 @@ void Wiwa::PlayerAttack::UpdateState()
 	{
 		// TODO: Partial blending
 		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
+		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
+	}
+	else
+	{
+		m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
+		m_StateMachine->UpdateMovement(0.f);
 	}
 
 }
@@ -58,14 +65,17 @@ void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
 void Wiwa::PlayerAttack::Fire()
 {
 
+	float timeBetweenShots = 1.0f / m_StateMachine->GetCharacter()->RateOfFire;
 	if (GameStateManager::s_CurrentCharacter == 0)
 	{
 		Transform3D* spawnPoint;
 		StarLordShooter* shooter = m_StateMachine->GetStarLord();
 		//Decide wich hand is going next
-		if (Time::GetTime() > m_ShootTimer + m_StateMachine->GetCharacter()->RateOfFire)
+
+
+		if (m_ShootTimer >= timeBetweenShots)
 		{
-			m_ShootTimer = Time::GetTime();
+			m_ShootTimer = 0;
 			if (shooter->ShootRight)
 			{
 				spawnPoint = m_StateMachine->GetFirePosition("RightPos");
@@ -87,9 +97,9 @@ void Wiwa::PlayerAttack::Fire()
 		RocketShooter* shooter = m_StateMachine->GetRocket();
 
 		//TODO: blend with current animation
-		if (Time::GetTime() > m_ShootTimer + m_StateMachine->GetCharacter()->RateOfFire)
+		if (m_ShootTimer >= timeBetweenShots)
 		{
-			m_ShootTimer = Time::GetTime();
+			m_ShootTimer = 0;
 			m_StateMachine->SpawnRocketBullet(*spawnPoint, *m_StateMachine->GetCharacter());
 		}
 	}

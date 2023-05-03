@@ -34,6 +34,7 @@ void Wiwa::PlayerMove::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
 		return;
 	}
+
 	currentSteptime -= Time::GetDeltaTimeSeconds();
 	if (currentSteptime < 0)
 	{
@@ -48,6 +49,7 @@ void Wiwa::PlayerMove::UpdateState()
 void Wiwa::PlayerMove::ExitState()
 {
 	m_StateMachine->GetAnimator()->Restart();
+	m_StateMachine->UpdateMovement(0.0);
 }
 
 void Wiwa::PlayerMove::OnCollisionEnter(Object* object1, Object* object2)

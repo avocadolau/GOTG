@@ -107,11 +107,15 @@ namespace Wiwa
 		if (glfwGetGamepadState(gamepadIndx, &state))
 		{
 			float input = state.axes[axis];
-			input = round(input * 10) / 10;
-			if (input >= -1 && input <= -deadzone)
-				return -1;
-			else if (input >= deadzone && input <= 1)
-				return 1;
+			float abs = glm::abs(input);
+
+			if (abs > deadzone)
+			{
+				float normalizedMagnitude = glm::clamp((abs - deadzone) / (1.0f - deadzone), 0.0f, 1.0f);
+				return glm::sign(input) * glm::ceil(normalizedMagnitude);
+			}
+
+			return 0.f;
 		}
 		return 0.f;
 	}
@@ -121,12 +125,14 @@ namespace Wiwa
 		if (glfwGetGamepadState(gamepadIndx, &state))
 		{
 			float input = state.axes[axis];
-			input = round(input * 10) / 10;
-			
-			float absInput = abs(input);
+			float abs = glm::abs(input);
+			if (abs > deadzone)
+			{
+				float normalizedMagnitude = glm::clamp((abs - deadzone) / (1.0f - deadzone), 0.0f, 1.0f);
+				return glm::sign(input) * normalizedMagnitude;
+			}
 
-			if (absInput >= deadzone)
-				return input;
+			return 0.f;
 		}
 		return 0.f;
 	}
