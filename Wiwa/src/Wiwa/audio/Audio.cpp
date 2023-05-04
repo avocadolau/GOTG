@@ -685,13 +685,13 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const
     return true;
 }
 
-bool Audio::SetMusicState(const char* music_container, const char* music_track)
+bool Audio::SetMusicState(const char* music_container, const char* state)
 {
     // Set the state of a state group to "music_container"
-    AkPlayingID play_id = AK::SoundEngine::SetState(music_container, music_track);
+    AkPlayingID play_id = AK::SoundEngine::SetState(music_container, state);
     if (play_id == AK_INVALID_PLAYING_ID) {
         m_LastErrorMsg = "Couldn't play track[";
-        m_LastErrorMsg += music_track;
+        m_LastErrorMsg += state;
         m_LastErrorMsg += "]";
         return false;
     }
