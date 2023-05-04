@@ -1991,6 +1991,12 @@
 						</Folder>
 					</ChildrenList>
 				</Folder>
+				<Effect Name="New_RoomVerb_01" ID="{5F19C7B5-DB9B-4F9E-B9CD-9130BB7F74CD}" PluginName="Wwise RoomVerb" CompanyID="0" PluginID="118" PluginType="3">
+					<PropertyList>
+						<Property Name="DecayTime" Type="Real32" Value="7.1"/>
+						<Property Name="Density" Type="Real32" Value="100"/>
+					</PropertyList>
+				</Effect>
 			</ChildrenList>
 		</WorkUnit>
 	</Effects>

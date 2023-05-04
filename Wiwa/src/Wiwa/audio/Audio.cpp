@@ -3,6 +3,8 @@
 #include <iostream>
 
 // AK Wwise
+#include <AK/SoundEngine/Common/AkSoundEngine.h>
+#include <AK/IBytes.h>
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
 
@@ -11,7 +13,6 @@
 #include <AK/Tools/Common/AkPlatformFuncs.h>
 #include "samples/Win32/AkFilePackageLowLevelIOBlocking.h"
 
-#include <AK/SoundEngine/Common/AkSoundEngine.h>
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 #include <AK/SpatialAudio/Common/AkSpatialAudio.h>
 
@@ -20,8 +21,8 @@
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 #include <AK/SoundEngine/Common/AkTypes.h>
 #include <AK/SoundEngine/Common/AkCallback.h>
-#include <AK/SoundEngine/Common/AkSoundEngine.h>
 #include <AK/SoundEngine/Common/AkQueryParameters.h>
+
 
 
 #include <Wiwa/utilities/json/JSONDocument.h>
@@ -393,6 +394,8 @@ bool Audio::Init()
     if (gres != AK_Success) {
         setLastError(gres);
     }
+   
+
     return true;
 }
 
@@ -859,22 +862,22 @@ bool Audio::ChangeSwitchContainer(const char* container_name,const char* swtich_
 
 void Audio::ChangeMasterVolume(int value)
 {
-    AK::SoundEngine::SetRTPCValue("MasterVolume", value);
+    AK::SoundEngine::SetRTPCValue("master_volume", value);
 }
 
 void Audio::ChangeMusicVolume(int value)
 {
-    AK::SoundEngine::SetRTPCValue("MusicVolume", value);
+    AK::SoundEngine::SetRTPCValue("music_volume", value);
 }
 
 void Audio::ChangeSFXVolume(int value)
 {
-    AK::SoundEngine::SetRTPCValue("SFXVolume", value);
+    AK::SoundEngine::SetRTPCValue("sfx_volume", value);
 }
 
 void Audio::ChangeDialogVolume(int value)
 {
-    AK::SoundEngine::SetRTPCValue("DialogVolume", value);
+    AK::SoundEngine::SetRTPCValue("dialog_volume", value);
 }
 
 void Audio::SetRTPCValue(const char* name, int value)

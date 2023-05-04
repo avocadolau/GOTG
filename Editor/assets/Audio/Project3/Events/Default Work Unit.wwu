@@ -168,7 +168,7 @@
 				</Folder>
 				<Folder Name="volume" ID="{584D449A-094E-4BE8-BF76-7144992B0248}" ShortID="715528837">
 					<ChildrenList>
-						<Event Name="set_music_volume" ID="{F4D8491C-BD25-49D9-BCB1-630793B3504E}">
+						<Event Name="music_volume" ID="{F4D8491C-BD25-49D9-BCB1-630793B3504E}">
 							<ChildrenList>
 								<Action Name="" ID="{E96FC8D6-C539-45DD-9E4D-99141DA75D4B}" ShortID="949216688">
 									<PropertyList>
@@ -182,7 +182,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="set_master_volume" ID="{C1D7A53F-D923-4A6E-959A-D98F6CD237B1}">
+						<Event Name="master_volume" ID="{C1D7A53F-D923-4A6E-959A-D98F6CD237B1}">
 							<ChildrenList>
 								<Action Name="" ID="{702B1937-29CE-491D-BC8F-AA2A65F99709}" ShortID="967513861">
 									<PropertyList>
@@ -196,7 +196,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="set_sfx_volume" ID="{6834BC3D-FC75-4BA2-8703-ED93F85E910D}">
+						<Event Name="sfx_volume" ID="{6834BC3D-FC75-4BA2-8703-ED93F85E910D}">
 							<ChildrenList>
 								<Action Name="" ID="{5CD31E3D-22E4-43F1-ACC3-E02264D4466F}" ShortID="865345928">
 									<PropertyList>
@@ -210,7 +210,7 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="set_dialog_volume" ID="{C3AAFC03-F0E8-4701-9F1C-1DE616D2811F}">
+						<Event Name="dialog_volume" ID="{C3AAFC03-F0E8-4701-9F1C-1DE616D2811F}">
 							<ChildrenList>
 								<Action Name="" ID="{EDC31FD1-8F65-4790-8F76-B6426075F686}" ShortID="124500203">
 									<PropertyList>
@@ -319,7 +319,7 @@
 				</Folder>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
 					<ChildrenList>
-						<Event Name="music" ID="{F352CEEF-26A4-4F4C-88E5-F8C592DB2D2C}">
+						<Event Name="play_music" ID="{F352CEEF-26A4-4F4C-88E5-F8C592DB2D2C}">
 							<ChildrenList>
 								<Action Name="" ID="{B461EDF9-4676-4C0C-B14F-0134B75BBF99}" ShortID="129289267">
 									<PropertyList>
@@ -328,7 +328,7 @@
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="music_controller" ID="{D55FFCB4-0CAC-45CF-BCAA-2503785E186D}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+											<ObjectRef Name="gotg_music" ID="{4BF02AE6-96FD-461C-ACBF-15A2E5CD0EA2}" WorkUnitID="{82A5D2E7-7775-4044-B8A5-0A016CEAE3BD}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

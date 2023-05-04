@@ -26,7 +26,7 @@
 				</SoundBank>
 				<SoundBank Name="game_music" ID="{F501B01C-17C6-42B0-97A0-A1D03FBA0FED}">
 					<ObjectInclusionList>
-						<ObjectRef Name="music" ID="{F352CEEF-26A4-4F4C-88E5-F8C592DB2D2C}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="play_music" ID="{F352CEEF-26A4-4F4C-88E5-F8C592DB2D2C}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
