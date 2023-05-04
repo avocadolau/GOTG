@@ -269,7 +269,7 @@ namespace Wiwa
 	struct ShopElement
 	{
 		std::string Name;
-		std::vector<int> Steps;
+		int AmountOfSteps;
 		int CurrentStep;
 		std::vector<int> Costs;
 		std::vector<int> PercentageIncreases;
@@ -279,7 +279,7 @@ namespace Wiwa
 		ShopElement(const ShopElement& shopElement)
 		{
 			this->Name = shopElement.Name;
-			this->Steps = shopElement.Steps;
+			this->AmountOfSteps = shopElement.AmountOfSteps;
 			this->CurrentStep = shopElement.CurrentStep;
 			this->Costs = shopElement.Costs;
 			this->PercentageIncreases = shopElement.PercentageIncreases;
@@ -288,7 +288,7 @@ namespace Wiwa
 		}
 		ShopElement(const char* name)
 			: Name(name),
-			Steps(),
+			AmountOfSteps(3),
 			CurrentStep(0),
 			Costs(),
 			PercentageIncreases(),

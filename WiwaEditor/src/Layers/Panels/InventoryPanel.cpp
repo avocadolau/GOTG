@@ -32,7 +32,9 @@ void InventoryPanel::Draw()
 		ImGui::Separator();
 		ImGui::Text("Consumables");
 		DrawConsumablePool(id);
-
+		ImGui::Separator();
+		ImGui::Text("Shop elements");
+		DrawShopElementPool(id);
 		if (ImGui::Button("Save"))
 		{
 			Wiwa::GameStateManager::SerializeData();
@@ -134,6 +136,19 @@ void InventoryPanel::Draw()
 			ImGui::Text("Empty slot");
 		
 		ImGui::Unindent();
+
+		ImGui::Text("Shop Elements");
+		ImGui::Separator();
+		ImGui::Indent();
+
+		std::vector<Wiwa::ShopElement>& shopElements = playerInventory.GetShopPassives();
+		for (const auto& shopElement : shopElements)
+		{
+			ImGui::Text("Name %s", shopElement.Name.c_str());
+		}
+
+		ImGui::Unindent();
+		ImGui::Separator();
 	}
 	ImGui::End();
 }
@@ -651,4 +666,122 @@ void InventoryPanel::DrawAbilityPool(int& id)
 		}
 	}
 	
+}
+
+void InventoryPanel::DrawShopElementPool(int& id)
+{
+	std::map<std::string, Wiwa::ShopElement>& shopElements = Wiwa::ItemManager::GetShopElements();
+	if (ImGui::Button("Add shop element"))
+	{
+		ImGui::OpenPopup("Create shop element");
+	}
+	if (ImGui::BeginPopup("Create shop element"))
+	{
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
+		if (ImGui::Button("Create"))
+		{
+			Wiwa::ItemManager::AddShopElement({ name.c_str() });
+			name.clear();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	if (!shopElements.empty())
+	{
+		const char* types[] =
+		{
+			"Health capacitor",
+			"Nano boost",
+			"Easy trigger",
+			"Fancy boots",
+			"Lethal shooter",
+			"Shield fan",
+			"Nano machines",
+			"Recovery shield",
+			"Second Wind",
+			"Reroll",
+			"Begginer's luck",
+			"Midas touch",
+			"Devourer",
+			"Fanatic",
+			"Recovery health",
+			"Ultimate midas touch",
+			"Friendly face"
+		};
+		if (ImGui::BeginTable("shop_elements", 7, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Unlocked");
+			ImGui::TableSetupColumn("Steps");
+			ImGui::TableSetupColumn("CurrentStep");
+			ImGui::TableSetupColumn("Costs");
+			ImGui::TableSetupColumn("PercentageIncreases");
+			ImGui::TableSetupColumn("PassiveBoost");
+			ImGui::TableHeadersRow();
+			for (auto& it : shopElements)
+			{
+				Wiwa::ShopElement* shopElement = Wiwa::ItemManager::GetShopElement(it.first.c_str());
+				ImGui::PushID(id++);
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(shopElement->Name.c_str());
+
+				if (ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddShopPassive(*shopElement);
+				}
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete"))
+				{
+					Wiwa::ItemManager::DeleteShopElement(it.first.c_str());
+				}
+				ImGui::PopStyleColor();
+
+				ImGui::TableNextColumn();
+				ImGui::Checkbox("##description", &shopElement->Unlocked);
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##amount_of_steps", &shopElement->AmountOfSteps);
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##current_step", &shopElement->CurrentStep);
+
+				ImGui::TableNextColumn();
+				ImGui::PushID("Costs");
+				VectorEdit(shopElement->Costs);
+				ImGui::PopID();
+
+				ImGui::TableNextColumn();
+				ImGui::PushID("PercentageIncreases");
+				VectorEdit(shopElement->PercentageIncreases);
+				ImGui::PopID();
+
+				ImGui::TableNextColumn();
+				const char* passiveHoward = types[(int)shopElement->PassiveBoost];
+				if (ImGui::BeginCombo("##tag_1", passiveHoward))
+				{
+					for (int i = 0; i < sizeof(types) / sizeof(char*); i++)
+					{
+						bool isSelected = (passiveHoward == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							passiveHoward = types[i];
+							shopElement->PassiveBoost = (Wiwa::HowardElementType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+				ImGui::PopID();
+
+			}
+			ImGui::EndTable();
+		}
+	}
 }

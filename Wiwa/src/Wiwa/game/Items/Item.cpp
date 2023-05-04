@@ -395,5 +395,11 @@ namespace Wiwa
             bullet->lifeTime += ((float)bullet->lifeTime * buffPercent);
             break;
         }
+
+        CurrentStep++;
+        if (CurrentStep > AmountOfSteps)
+        {
+            CurrentStep = AmountOfSteps;
+        }
     }
 }

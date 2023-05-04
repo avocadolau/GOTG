@@ -124,34 +124,28 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 	}
 
 	JSONValue shopElements = doc->AddMemberArray("shop_elements");
-
 	for (const auto& shopelement : m_ShopElementPool)
 	{
 		JSONValue shop_element = shopElements.PushBackObject();
 		shop_element.AddMember("name", shopelement.second.Name.c_str());
-		shop_element.AddMemberArray("steps");
-		JSONValue shop_element_steps = shop_element.PushBackObject();
-		for (size_t j = 0; j < shopelement.second.Steps.size(); j++)
-		{
-			char buffer[100];
-			std::sprintf(buffer, "%s%d", "step_", j);
-			shop_element_steps.AddMember(buffer, shopelement.second.Steps.at(j));
-		}
+		shop_element.AddMember("steps", shopelement.second.AmountOfSteps);
 		shop_element.AddMember("current_step", shopelement.second.CurrentStep);
-		for (size_t j = 0; j < shopelement.second.Costs.size(); j++)
+		JSONValue shopCosts = shop_element.AddMemberArray("costs").PushBackObject();
+		for (int i = 0; i < shopelement.second.AmountOfSteps; i++)
 		{
 			char buffer[100];
-			std::sprintf(buffer, "%s%d", "costs_", j);
-			shop_element_steps.AddMember(buffer, shopelement.second.Costs.at(j));
+			std::sprintf(buffer, "%s%d", "costs_", i);
+			shopCosts.AddMember(buffer, shopelement.second.Costs.at(i));
 		}
-		for (size_t j = 0; j < shopelement.second.PercentageIncreases.size(); j++)
+		JSONValue shopPercents = shop_element.AddMemberArray("percentages").PushBackObject();
+		for (int i = 0; i < shopelement.second.AmountOfSteps; i++)
 		{
 			char buffer[100];
-			std::sprintf(buffer, "%s%d", "perrcentage_increases", j);
-			shop_element_steps.AddMember(buffer, shopelement.second.PercentageIncreases.at(j));
+			std::sprintf(buffer, "%s%d", "percentages_", i);
+			shopPercents.AddMember(buffer, shopelement.second.PercentageIncreases.at(i));
 		}
 		shop_element.AddMember("howard_passive_type", (int)shopelement.second.PassiveBoost);
-		shop_element.AddMember("unlocked", (int)shopelement.second.Unlocked);
+		shop_element.AddMember("unlocked", (bool)shopelement.second.Unlocked);
 	}
 }
 
@@ -243,43 +237,32 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				Wiwa::ShopElement shopElement;
 				if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
 				{
-					for (uint32_t i = 0; i < shop_elements.Size(); i++)
+					Wiwa::ShopElement shopElement;
+					shopElement.Name = shop_elements[i]["name"].as_string();
+						
+					shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
+					if (JSONValue shop_element_costs = shop_elements[i]["costs"]; shop_element_costs.IsArray())
 					{
-						Wiwa::ShopElement shopElement;
-						shopElement.Name = shop_elements[i]["name"].as_string();
-						if (JSONValue shop_element_steps = shop_elements["steps"]; shop_element_steps.IsArray())
+						for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
 						{
-							for (uint32_t j = 0; j < shop_element_steps.Size(); j++)
-							{
-								char buffer[100];
-								std::sprintf(buffer, "%s%d", "step_", j);
-								shopElement.Steps.push_back(shop_element_steps[j][buffer].as_int());
-							}
+							char buffer[100];
+							std::sprintf(buffer, "%s%d", "costs_", j);
+							shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
 						}
-						shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
-						if (JSONValue shop_element_costs = shop_elements["costs"]; shop_element_costs.IsArray())
-						{
-							for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
-							{
-								char buffer[100];
-								std::sprintf(buffer, "%s%d", "costs_", j);
-								shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
-							}
-						}
-						if (JSONValue shop_element_percentages = (*doc)["shop_elements"]; shop_elements.IsArray())
-						{
-							for (uint32_t j = 0; j < shop_elements.Size(); j++)
-							{
-								char buffer[100];
-								std::sprintf(buffer, "%s%d", "percentage_increases_", j);
-								shopElement.Costs.push_back(shop_element_percentages[j][buffer].as_int());
-							}
-						}
-						shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
-						shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
-
-						AddShopElement(shopElement);
 					}
+					if (JSONValue shop_element_percentages = shop_elements[i]["percentages"]; shop_elements.IsArray())
+					{
+						for (uint32_t j = 0; j < shop_element_percentages.Size(); j++)
+						{
+							char buffer[100];
+							std::sprintf(buffer, "%s%d", "percentages_", j);
+							shopElement.Costs.push_back(shop_element_percentages[j][buffer].as_int());
+						}
+					}
+					shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
+					//shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
+
+					AddShopElement(shopElement);
 				}
 			}
 		}
