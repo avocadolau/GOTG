@@ -183,6 +183,14 @@ namespace Wiwa
         }
     }
 
+    void NavAgentSystem::RemoveAgent()
+    {
+        if (m_AgentIndex != -1) {
+            m_AgentIndex = -1;
+            Crowd::getInstance().RemoveAgent(m_AgentIndex);
+        }
+    }
+
     bool NavAgentSystem::Raycast(const glm::vec3& start_point, const glm::vec3& end_point)
     {
         Crowd& crowd = Crowd::getInstance();
@@ -282,9 +290,6 @@ namespace Wiwa
         }
         return current_transform_rotation;
     }
-
-
-
 
     float NavAgentSystem::GetMaxSpeed() const
     {

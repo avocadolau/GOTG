@@ -28,6 +28,7 @@ namespace Wiwa
 
         void RequestMoveVelocity(const glm::vec3& velocity);
         void StopAgent();
+        void RemoveAgent();
 
         bool Raycast(const glm::vec3& start_point, const glm::vec3& start_end);
 
