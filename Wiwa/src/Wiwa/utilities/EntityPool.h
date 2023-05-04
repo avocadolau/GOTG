@@ -21,6 +21,8 @@ namespace Wiwa
         CLUSTER_BULLET,
         ULTRON_LASER_BEAM,
         EXPLOSIVE_BARREL,
+        ULTRON_SECOND_DASH,
+        RAIN_PROJECTILE,
 
         STARLORD_BULLET,
         ROCKET_BULLET,
