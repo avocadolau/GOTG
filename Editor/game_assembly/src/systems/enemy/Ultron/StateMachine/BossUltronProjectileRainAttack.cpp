@@ -47,16 +47,16 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 	switch (m_RainState)
 	{
 	case ProjectileRainState::PREPARE_RAIN:
-
+	{
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
 
 		m_RainState = ProjectileRainState::RAIN_ATTACK;
 
-		break;
+	}break;
 	case ProjectileRainState::RAIN_ATTACK:
-
+	{
 		if (m_TimerRain >= TIME_BETWEEN_PROJECTILES)
 		{
 			SpawnProjectileRain(enemy, { 0.0f,-1.0f,0.0f });
@@ -71,13 +71,12 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 		}
 		m_TimerRain += Time::GetDeltaTimeSeconds();
 
-		break;
-
+	}break;
 	case ProjectileRainState::END_STATE:
-
+	{
 		enemy->SwitchState(enemy->m_MovementState);
 
-		break;
+	}break;
 	}	
 }
 
