@@ -161,9 +161,9 @@ namespace Wiwa {
 		float m_p_minSpawnDelay;
 		float m_p_maxSpawnDelay;
 
-		bool m_p_positionFollowsRotationX;	//unused -> leave to avoid corruption?
-		bool m_p_positionFollowsRotationY;	//unused -> leave to avoid corruption?
-		bool m_p_positionFollowsRotationZ;	//unused -> leave to avoid corruption?
+		bool m_stopSizeAtZeroX;
+		bool m_stopSizeAtZeroY;
+		bool m_stopSizeAtZeroZ;
 
 		bool m_p_followEmitterRotationX;	//unused -> leave to avoid corruption?
 		bool m_p_followEmitterRotationY;	//unused -> leave to avoid corruption?
@@ -182,6 +182,9 @@ namespace Wiwa {
 		float m_p_uniformStartSizeVal;
 		float m_p_minUniformStartSizeVal;
 		float m_p_maxUniformStartSizeVal;
+
+		bool m_stopSizeAtZero;
+
 		
 		// todo					----------------------------------------
 		// 
@@ -277,9 +280,9 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 	REFLECT_MEMBER(m_p_spawnDelay);
 	REFLECT_MEMBER(m_p_minSpawnDelay);
 	REFLECT_MEMBER(m_p_maxSpawnDelay);
-	REFLECT_MEMBER(m_p_positionFollowsRotationX);
-	REFLECT_MEMBER(m_p_positionFollowsRotationY);
-	REFLECT_MEMBER(m_p_positionFollowsRotationZ);
+	REFLECT_MEMBER(m_stopSizeAtZeroX);
+	REFLECT_MEMBER(m_stopSizeAtZeroY);
+	REFLECT_MEMBER(m_stopSizeAtZeroZ);
 	REFLECT_MEMBER(m_p_followEmitterRotationX);
 	REFLECT_MEMBER(m_p_followEmitterRotationY);
 	REFLECT_MEMBER(m_p_followEmitterRotationZ);

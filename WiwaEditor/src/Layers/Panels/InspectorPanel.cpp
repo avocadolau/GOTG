@@ -958,36 +958,20 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		if ((int)emitter->m_p_positionFollowsRotation > 1 || (int)emitter->m_p_positionFollowsRotation < 0)
 			emitter->m_p_positionFollowsRotation = false;
 
-		if ((int)emitter->m_p_positionFollowsRotationX > 1 || (int)emitter->m_p_positionFollowsRotationX < 0)
-			emitter->m_p_positionFollowsRotationX = false;
+		if ((int)emitter->m_stopSizeAtZeroX > 1 || (int)emitter->m_stopSizeAtZeroX < 0)
+			emitter->m_stopSizeAtZeroX = false;
 
-		if ((int)emitter->m_p_positionFollowsRotationY > 1 || (int)emitter->m_p_positionFollowsRotationY < 0)
-			emitter->m_p_positionFollowsRotationY = false;
+		if ((int)emitter->m_stopSizeAtZeroY > 1 || (int)emitter->m_stopSizeAtZeroY < 0)
+			emitter->m_stopSizeAtZeroY = false;
 
-		if ((int)emitter->m_p_positionFollowsRotationZ > 1 || (int)emitter->m_p_positionFollowsRotationZ < 0)
-			emitter->m_p_positionFollowsRotationZ = false;
+		if ((int)emitter->m_stopSizeAtZeroZ > 1 || (int)emitter->m_stopSizeAtZeroZ < 0)
+			emitter->m_stopSizeAtZeroZ = false;
 
 		ImGui::Checkbox("##m_p_positionFollowsRotation", &emitter->m_p_positionFollowsRotation);
 		ImGui::SameLine();
 		ImGui::Text("Position Depends on Rotation");
 
-		if (emitter->m_p_positionFollowsRotation)
-		{
-			ParticleTab();
-			ImGui::Text("X:");
-			ImGui::SameLine();
-			ImGui::Checkbox("##m_p_positionFollowsRotationX", &emitter->m_p_positionFollowsRotationX);
-			ImGui::SameLine();
-			ImGui::Text(" Y:");
-			ImGui::SameLine();
-			ImGui::Checkbox("##m_p_positionFollowsRotationY", &emitter->m_p_positionFollowsRotationY);
-			ImGui::SameLine();
-			ImGui::Text(" Z:");
-			ImGui::SameLine();
-			ImGui::Checkbox("##m_p_positionFollowsRotationZ", &emitter->m_p_positionFollowsRotationZ);
-			
-		}
-		ImGui::Dummy(ImVec2(0, 8));
+		
 
 		ImGui::Text("Use Volume:");
 		ImGui::SameLine();
@@ -1426,6 +1410,30 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::Checkbox("##m_p_growUniformly", &emitter->m_p_growUniformly);
 			ImGui::SameLine();
 			ImGui::Text("Scale Uniformly");
+
+			ParticleTab();
+			ImGui::Checkbox("##m_stopSizeAtZero", &emitter->m_stopSizeAtZero);
+			ImGui::SameLine();
+			ImGui::Text("Stop Growth At Zero");
+
+
+			if (emitter->m_stopSizeAtZero)
+			{
+				ParticleTab();
+				ImGui::Text("X:");
+				ImGui::SameLine();
+				ImGui::Checkbox("##m_stopSizeAtZeroX", &emitter->m_stopSizeAtZeroX);
+				ImGui::SameLine();
+				ImGui::Text(" Y:");
+				ImGui::SameLine();
+				ImGui::Checkbox("##m_stopSizeAtZeroY", &emitter->m_stopSizeAtZeroY);
+				ImGui::SameLine();
+				ImGui::Text(" Z:");
+				ImGui::SameLine();
+				ImGui::Checkbox("##m_stopSizeAtZeroZ", &emitter->m_stopSizeAtZeroZ);
+
+			}
+			ImGui::Dummy(ImVec2(0, 8));
 			
 		}
 
