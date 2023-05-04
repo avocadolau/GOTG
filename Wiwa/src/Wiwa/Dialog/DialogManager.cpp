@@ -526,7 +526,7 @@ namespace Wiwa
 		conversations[conversationNumber].bubbleImagePath = (std::string)path;
 
 		ResourceId textID;
-		Image* dialogImg;
+		Image* dialogImg = nullptr;
 		if (conversations[conversationNumber].detectsCharacter == true)
 		{
 			if (characterID == 0)
@@ -537,6 +537,11 @@ namespace Wiwa
 			else if (characterID == 1)
 			{
 				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.png");
+				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 			}
 		}
@@ -557,7 +562,7 @@ namespace Wiwa
 		conversations[conversationNumber].characterImagePath = (std::string)path;
 
 		ResourceId textID;
-		Image* characterImg;
+		Image* characterImg = nullptr;
 		if (conversations[conversationNumber].detectsCharacter == true)
 		{
 			if (characterID == 0)
@@ -568,6 +573,11 @@ namespace Wiwa
 			else if (characterID == 1)
 			{
 				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_Rocket_01.png");
+				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 			}
 		}
