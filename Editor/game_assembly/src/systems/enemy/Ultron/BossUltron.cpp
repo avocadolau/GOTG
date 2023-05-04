@@ -127,6 +127,9 @@ namespace Wiwa
 		if (m_SecondDashState != nullptr)
 			delete m_SecondDashState;
 
+		if (m_ProjectileRain != nullptr)
+			delete m_ProjectileRain;
+
 		m_CurrentState = nullptr;
 		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
@@ -137,7 +140,7 @@ namespace Wiwa
 		m_BulletStormAttackState = nullptr;
 		m_DashState = nullptr;
 		m_SecondDashState = nullptr;
-		
+		m_ProjectileRain = nullptr;		
 	}
 
 	void BossUltron::OnCollisionEnter(Object* body1, Object* body2)
