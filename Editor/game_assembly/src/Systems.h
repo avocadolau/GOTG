@@ -29,6 +29,7 @@
 #include "systems/attack/ClusterBulletSystem.h"
 
 #include "systems/attack/UltronLaserBeamSystem.h"
+#include "systems/attack/SecondDashSystem.h"
 #include "systems/enemy/BossMovementPointsSystem.h"
 
 #include "systems/attack/ExplosiveBarrelSystem.h"

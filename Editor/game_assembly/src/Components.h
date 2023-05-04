@@ -14,6 +14,7 @@
 
 #include "components/attack/ClusterBullet.h"
 #include "components/attack/UltronLaserBeam.h"
+#include "components/attack/DashEffect.h"
 #include "components/enemy/BossMovementPoints.h"
 
 #include "components/attack/Explosion.h"

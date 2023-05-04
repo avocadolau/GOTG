@@ -1,8 +1,5 @@
 #pragma once
 #include "BossUltronBase.h"
-//#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
-
-#define CLUSTER_BULLET_LIFETIME 5.0f
 
 namespace Wiwa {
 	class BossUltronClusterShotsAttackState : public BossUltronBaseState {
