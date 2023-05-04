@@ -186,8 +186,8 @@ namespace Wiwa
     void NavAgentSystem::RemoveAgent()
     {
         if (m_AgentIndex != -1) {
-            m_AgentIndex = -1;
             Crowd::getInstance().RemoveAgent(m_AgentIndex);
+            m_AgentIndex = -1;
         }
     }
 
