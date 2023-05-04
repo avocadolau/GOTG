@@ -71,6 +71,8 @@ namespace Wiwa {
 				WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
 			}
 
+			asrc->isPlaying = false;
+
 			Audio::Update();
 
 			// Wait to update audio engine thread so we can destroy the system
@@ -87,10 +89,11 @@ namespace Wiwa {
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
-		if (strcmp(ev_name, m_CurrentEvent) == 0) {
+		if (asrc != nullptr && strcmp(ev_name, m_CurrentEvent) == 0) {
 			asrc->isPlaying = false;
 		}
 	}
+
 	void AudioSystem::PlayAudio(const char* ev_name)
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;

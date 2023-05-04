@@ -136,7 +136,7 @@ namespace Wiwa
 		unsigned int m_AvailableParticles = 0;
 
 		float m_SpawnTimer;
-		float m_firstDelay;
+
 
 		std::vector<Particle> m_Particles;
 

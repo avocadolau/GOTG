@@ -13,7 +13,7 @@ public:
 	void Draw() override;
 
 	void DrawTable();
-
+	void DrawEnemyStatsTable(const char* label, const char* enemy_str);
 	/*void OnEvent(Wiwa::Event& e) override;
 	bool OnSceneChange(Wiwa::SceneChangeEvent& e);*/
 };

@@ -7,6 +7,7 @@ std::map<std::string, Wiwa::Ability> Wiwa::ItemManager::m_AbilityPool;
 std::map<std::string, Wiwa::PassiveSkill> Wiwa::ItemManager::m_PassiveSkillPool;
 std::map<std::string, Wiwa::Buff> Wiwa::ItemManager::m_BuffPool;
 std::map<std::string, Wiwa::Consumable> Wiwa::ItemManager::m_ConsumablePool;
+std::map<std::string, Wiwa::ShopElement> Wiwa::ItemManager::m_ShopElementPool;
 
 Wiwa::ItemManager::~ItemManager()
 {
@@ -14,6 +15,7 @@ Wiwa::ItemManager::~ItemManager()
 	m_PassiveSkillPool.clear();
 	m_BuffPool.clear();
 	m_ConsumablePool.clear();
+	m_ShopElementPool.clear();
 }
 
 void Wiwa::ItemManager::AddAbility(const Ability& ability)
@@ -54,6 +56,16 @@ void Wiwa::ItemManager::AddConsumable(const Consumable& consumable)
 void Wiwa::ItemManager::DeleteConsumable(const std::string& name)
 {
 	m_ConsumablePool.erase(name);
+}
+
+void Wiwa::ItemManager::AddShopElement(const ShopElement& shopElement)
+{
+	m_ShopElementPool[shopElement.Name] = shopElement;
+}
+
+void Wiwa::ItemManager::DeleteShopElement(const std::string& name)
+{
+	m_ShopElementPool.erase(name);
 }
 
 void Wiwa::ItemManager::Serialize(JSONDocument* doc)
@@ -111,6 +123,36 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		consumObj.AddMember("is_egos_help", consumable.second.IsEgosHelp);
 	}
 
+	JSONValue shopElements = doc->AddMemberArray("shop_elements");
+
+	for (const auto& shopelement : m_ShopElementPool)
+	{
+		JSONValue shop_element = shopElements.PushBackObject();
+		shop_element.AddMember("name", shopelement.second.Name.c_str());
+		shop_element.AddMemberArray("steps");
+		JSONValue shop_element_steps = shop_element.PushBackObject();
+		for (size_t j = 0; j < shopelement.second.Steps.size(); j++)
+		{
+			char buffer[100];
+			std::sprintf(buffer, "%s%d", "step_", j);
+			shop_element_steps.AddMember(buffer, shopelement.second.Steps.at(j));
+		}
+		shop_element.AddMember("current_step", shopelement.second.CurrentStep);
+		for (size_t j = 0; j < shopelement.second.Costs.size(); j++)
+		{
+			char buffer[100];
+			std::sprintf(buffer, "%s%d", "costs_", j);
+			shop_element_steps.AddMember(buffer, shopelement.second.Costs.at(j));
+		}
+		for (size_t j = 0; j < shopelement.second.PercentageIncreases.size(); j++)
+		{
+			char buffer[100];
+			std::sprintf(buffer, "%s%d", "perrcentage_increases", j);
+			shop_element_steps.AddMember(buffer, shopelement.second.PercentageIncreases.at(j));
+		}
+		shop_element.AddMember("howard_passive_type", (int)shopelement.second.PassiveBoost);
+
+	}
 }
 
 void Wiwa::ItemManager::Deserialize(JSONDocument* doc)

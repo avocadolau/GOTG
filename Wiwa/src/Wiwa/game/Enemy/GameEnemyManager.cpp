@@ -131,9 +131,6 @@ namespace Wiwa
 		meleePhalanxRedVariant.creditsDrop = 20;
 		meleePhalanxRedVariant.level = 0;
 		m_EnemyData[{meleePhalanxRedVariant.level, meleePhalanxRedVariant.name.c_str()}] = meleePhalanxRedVariant;
-		m_EnemyData[{meleePhalanxRedVariant.level++, meleePhalanxRedVariant.name.c_str()}] = meleePhalanxRedVariant;
-		m_EnemyData[{meleePhalanxRedVariant.level++, meleePhalanxRedVariant.name.c_str()}] = meleePhalanxRedVariant;
-		m_EnemyData[{meleePhalanxRedVariant.level++, meleePhalanxRedVariant.name.c_str()}] = meleePhalanxRedVariant;
 
 		// Load base stats melee phalanx BlueVariant
 		EnemyData meleePhalanxBlueVariant;

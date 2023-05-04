@@ -82,6 +82,8 @@ namespace Wiwa
 		talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, talkIndicatorImgID);
 
+		characterID = GameStateManager::s_CurrentCharacter;
+
 		//conversations[0].conversationName = "NPC_1";
 
 		//SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
@@ -96,9 +98,11 @@ namespace Wiwa
 
 		if (std::filesystem::exists("library"))
 		{
-			LoadAllDialogs();
+			if (std::filesystem::exists("library/fonts/Jade_Smile.ttf"))
+			{
+				LoadAllDialogs();
+			}
 		}
-		//LoadAllDialogs();
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -123,6 +127,7 @@ namespace Wiwa
 
 			editorConversations[e].isInOppositeSide = conversations[e].isInOppositeSide;
 			editorConversations[e].isRandom = conversations[e].isRandom;
+			editorConversations[e].detectsCharacter = conversations[e].detectsCharacter;
 			editorConversations[e].group.groupID = conversations[e].group.groupID;
 			editorConversations[e].group.order = conversations[e].group.order;
 
@@ -146,10 +151,7 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		/*if (generalTimer == 0)
-		{
-			LoadAllDialogs();
-		}*/
+		characterID = GameStateManager::s_CurrentCharacter;
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false))
@@ -522,8 +524,31 @@ namespace Wiwa
 
 		conversations[conversationNumber].bubbleImagePath = (std::string)path;
 
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		Image* dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		ResourceId textID;
+		Image* dialogImg = nullptr;
+		if (conversations[conversationNumber].detectsCharacter == true)
+		{
+			if (characterID == 0)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.png");
+				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else if (characterID == 1)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.png");
+				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+		}
+		else
+		{
+			textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+			dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		}
 
 		conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
@@ -535,8 +560,31 @@ namespace Wiwa
 
 		conversations[conversationNumber].characterImagePath = (std::string)path;
 
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		Image* characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		ResourceId textID;
+		Image* characterImg = nullptr;
+		if (conversations[conversationNumber].detectsCharacter == true)
+		{
+			if (characterID == 0)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_Starlord_01.png");
+				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else if (characterID == 1)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_Rocket_01.png");
+				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+		}
+		else
+		{
+			textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+			characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		}
 
 		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
@@ -571,6 +619,7 @@ namespace Wiwa
 
 			std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
 			std::string memberNameIsRandom = "IsRandom_Conversation" + s;
+			std::string memberNameDetectsCharacter = "DetectsCharacter_Conversation" + s;
 
 
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
@@ -582,6 +631,7 @@ namespace Wiwa
 
 			doc.AddMember(memberNameOppositeSide.c_str(), (bool)conversations[i].isInOppositeSide);
 			doc.AddMember(memberNameIsRandom.c_str(), (bool)conversations[i].isRandom);
+			doc.AddMember(memberNameDetectsCharacter.c_str(), (bool)conversations[i].detectsCharacter);
 
 
 			for (int j = 0; j < MAX_CONVERSATION_NODES && conversations[i].nodes[j].occupied == true; j++)
@@ -631,6 +681,8 @@ namespace Wiwa
 
 				std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
 				std::string memberNameIsRandom = "IsRandom_Conversation" + s;
+				std::string memberNameDetectsCharacter = "DetectsCharacter_Conversation" + s;
+
 
 				if (doc.HasMember(memberNameConversation.c_str())
 					&& doc.HasMember(memberNameBubbleImage.c_str())
@@ -673,8 +725,11 @@ namespace Wiwa
 					&& doc.HasMember(memberNameGroupId.c_str())
 					&& doc.HasMember(memberNameGroupOrder.c_str())
 					&& doc.HasMember(memberNameOppositeSide.c_str())
-					&& doc.HasMember(memberNameIsRandom.c_str()))
+					&& doc.HasMember(memberNameIsRandom.c_str())
+					&& doc.HasMember(memberNameDetectsCharacter.c_str()))
 				{
+					conversations[i].detectsCharacter = doc[memberNameDetectsCharacter.c_str()].as_bool();
+
 					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
 					SetCharacterImage(doc[memberNameCharacterImage.c_str()].as_string(), i);
