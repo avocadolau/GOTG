@@ -82,6 +82,8 @@ namespace Wiwa
 		talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, talkIndicatorImgID);
 
+		characterID = GameStateManager::s_CurrentCharacter;
+
 		//conversations[0].conversationName = "NPC_1";
 
 		//SetDialogText("I am not to interfere, Guardian.", "However, I will tell you this: ", "the Phalanx are a formidable species,", "assets/Fonts/Jade_Smile.ttf", 0, 0);
@@ -149,10 +151,7 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		/* This part will detect the current selected character
-		if (characterSelected == starlord) characterID = 0;
-		else if (characterSelected == rocket) characterID = 1;
-		*/
+		characterID = GameStateManager::s_CurrentCharacter;
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false))
