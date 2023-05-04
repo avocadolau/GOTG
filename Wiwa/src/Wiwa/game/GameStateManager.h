@@ -10,6 +10,7 @@
 //#include <Wiwa/ecs/components/game/wave/Wave.h>
 //#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include <Wiwa/game/Pooling/GamePoolingManager.h>
+#include "Enemy/GameEnemyManager.h"
 
 typedef size_t SceneId;
 
@@ -54,16 +55,6 @@ namespace Wiwa {
 	static const char* s_RoomStateStr[] =
 	{ "NONE", "STATE_STARTED", "STATE_FINISHED", "STATE_AWAITING_NEXT", "STATE_TRANSITIONING"};
 
-	struct GameEvent
-	{
-		GameEvent(const char* event_name, const char* event_description, bool is_completed = false, size_t id_ = 0) :
-			name(event_name), description(event_description), isCompleted(is_completed), id(id_) {};
-		const char* name;
-		const char* description;
-		bool isCompleted = false;
-		size_t id;
-	};
-
 	enum class ItemType : uint8_t
 	{
 		ABILITY = 0,
@@ -80,10 +71,6 @@ namespace Wiwa {
 		static bool s_HasFinshedRoom;
 		static bool s_CanPassNextRoom;
 		static bool s_PlayerTriggerNext;
-
-		static std::vector<GameEvent> s_PreStartEvents;
-		static std::vector<GameEvent> s_MiddleEvents;
-		static std::vector<GameEvent> s_PostFinishedEvents;
 
 		static void ChangeRoomState(RoomState room_state);
 
@@ -161,6 +148,8 @@ namespace Wiwa {
 		WI_HARD_INL static Scene* GetCurrentScene() { return s_CurrentScene; }
 		WI_HARD_INL static EntityId GetPlayerId() { return s_PlayerId; }
 		WI_HARD_INL static float GetControllerDeadZone() { return s_GamepadDeadzone; }
+		WI_HARD_INL static EnemyManager& GetEnemyManager() { return *s_EnemyManager; }
+
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
@@ -197,5 +186,7 @@ namespace Wiwa {
 		
 	public:
 		static GamePoolingManager* s_PoolManager;
+
+		static EnemyManager* s_EnemyManager;
 	};
 }

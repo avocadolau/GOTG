@@ -18,10 +18,6 @@ namespace Wiwa
 	bool GameStateManager::s_CanPassNextRoom = false;
 	bool GameStateManager::s_PlayerTriggerNext = false;
 	
-	std::vector<GameEvent> GameStateManager::s_PreStartEvents;
-	std::vector<GameEvent> GameStateManager::s_MiddleEvents;
-	std::vector<GameEvent> GameStateManager::s_PostFinishedEvents;
-	
 	int GameStateManager::s_TotalSpawners = 0;
 	int GameStateManager::s_SpawnersFinished = 0;
 	bool GameStateManager::debug = true;
@@ -58,6 +54,7 @@ namespace Wiwa
 	Scene* GameStateManager::s_CurrentScene = nullptr;
 	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
 	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
+	EnemyManager* GameStateManager::s_EnemyManager = new EnemyManager();
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -87,11 +84,12 @@ namespace Wiwa
 			doc.AddMember("dash_cooldown", character->DashCooldown);
 			doc.AddMember("walk_threshold", character->WalkTreshold);
 		}
-		doc.save_file("config/player_data.json");
 
 		if(debug)
 			WI_CORE_INFO("Player progression saved");
 		s_PlayerInventory->Serialize(&doc);
+
+		doc.save_file("config/player_data.json");
 	}
 
 	void GameStateManager::LoadProgression()
@@ -101,6 +99,7 @@ namespace Wiwa
 		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
 		JSONDocument doc("config/player_data.json");
+
 		if (!character)
 			return;
 		if (doc.IsObject())
@@ -545,6 +544,7 @@ namespace Wiwa
 		s_CombatRooms.clear();
 		s_ShopRooms.clear();
 		delete s_PoolManager;
+		delete s_EnemyManager;
 	}
 
 

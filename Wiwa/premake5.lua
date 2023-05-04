@@ -31,6 +31,7 @@ project "Wiwa"
 		"%{IncludeDirs.Glew}",
 		"%{IncludeDirs.PCG}",
 		"%{IncludeDirs.JSON}",
+		"%{IncludeDirs.NJSON}",
 		"%{IncludeDirs.XML}",
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.assimp}",
