@@ -49,7 +49,6 @@ void Wiwa::PlayerMove::UpdateState()
 void Wiwa::PlayerMove::ExitState()
 {
 	m_StateMachine->GetAnimator()->Restart();
-	m_StateMachine->UpdateMovement(0.0);
 }
 
 void Wiwa::PlayerMove::OnCollisionEnter(Object* object1, Object* object2)

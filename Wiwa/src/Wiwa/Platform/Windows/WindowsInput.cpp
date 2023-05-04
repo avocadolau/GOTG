@@ -108,14 +108,13 @@ namespace Wiwa
 		{
 			float input = state.axes[axis];
 			float abs = glm::abs(input);
-
-			if (abs > deadzone)
+			float inputDeadzone = deadzone * abs;
+			
+			if (abs < inputDeadzone)
 			{
-				float normalizedMagnitude = glm::clamp((abs - deadzone) / (1.0f - deadzone), 0.0f, 1.0f);
-				return glm::sign(input) * glm::ceil(normalizedMagnitude);
+				return 0.f;
 			}
-
-			return 0.f;
+			return std::ceil(input);
 		}
 		return 0.f;
 	}
@@ -126,16 +125,73 @@ namespace Wiwa
 		{
 			float input = state.axes[axis];
 			float abs = glm::abs(input);
-			if (abs > deadzone)
-			{
-				float normalizedMagnitude = glm::clamp((abs - deadzone) / (1.0f - deadzone), 0.0f, 1.0f);
-				return glm::sign(input) * normalizedMagnitude;
-			}
+			float inputDeadzone = deadzone * abs;
 
-			return 0.f;
+			if (abs < inputDeadzone)
+			{
+				return 0.f;
+			}
+			return input;
+
 		}
 		return 0.f;
 	}
+	glm::vec2 dz_scaled_radial(glm::vec2 stick_input, float deadzone) {
+		float input_magnitude = glm::length(stick_input);
+		if (input_magnitude < deadzone) {
+			return glm::vec2(0.0f, 0.0f);
+		}
+
+		glm::vec2 input_normalized = stick_input / input_magnitude;
+		float mapped_magnitude = glm::mix(0.0f, 1.0f, (input_magnitude - deadzone) / (1.0f - deadzone));
+		glm::vec2 result = input_normalized * mapped_magnitude;
+		return result;
+
+	}
+	glm::vec2 dz_sloped_scaled_axial(glm::vec2 stick_input, float deadzone) {
+		float deadzone_x = deadzone * glm::abs(stick_input.y);
+		float deadzone_y = deadzone * glm::abs(stick_input.x);
+		glm::vec2 result(0.0f, 0.0f);
+		glm::vec2 sign(glm::sign(stick_input.x), glm::sign(stick_input.y));
+		if (glm::abs(stick_input.x) > deadzone_x) {
+			result.x = sign.x * glm::mix(0.0f, 1.0f, (glm::abs(stick_input.x) - deadzone_x) / (1.0f - deadzone_x));
+		}
+		if (glm::abs(stick_input.y) > deadzone_y) {
+			result.y = sign.y * glm::mix(0.0f, 1.0f, (glm::abs(stick_input.y) - deadzone_y) / (1.0f - deadzone_y));
+		}
+		return result;
+	}
+	glm::vec2 WindowsInput::GetRawJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone)
+	{
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(gamepadIndx, &state))
+		{
+			float inputX = state.axes[axisX];
+			float inputY = state.axes[axisY];
+
+			glm::vec2 partialOutput = dz_scaled_radial({ inputX, inputY }, deadzone);
+			
+			return dz_sloped_scaled_axial(partialOutput, deadzone);
+		}
+		return glm::vec2(0.f);
+	}
+
+	glm::vec2 WindowsInput::GetJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone)
+	{
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(gamepadIndx, &state))
+		{
+			float inputX = state.axes[axisX];
+			float inputY = state.axes[axisY];
+
+			glm::vec2 partialOutput = dz_scaled_radial({ inputX, inputY }, deadzone);
+
+			glm::vec2 finalOutput = dz_sloped_scaled_axial(partialOutput, deadzone);
+			return glm::vec2(std::ceil(finalOutput.x), std::ceil(finalOutput.y));
+		}
+		return glm::vec2(0.f);
+	}
+
 	bool WindowsInput::IsButtonPressedImpl(int gamepadIndx, int keycode)
 	{
 		GLFWgamepadstate state;

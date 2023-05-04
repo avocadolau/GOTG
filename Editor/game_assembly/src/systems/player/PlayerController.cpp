@@ -160,9 +160,6 @@ void Wiwa::PlayerController::SpawnStarLordBullet(Transform3D& transform, const C
 	bullet->direction = Math::Vec3FromAngle(m_Direction);
 
 	bullet->damage = this->GetCharacter()->Damage;
-	
-	WI_INFO("Direction {}", m_Direction);
-	WI_INFO("Dir {}x {}y {}z", bullet->direction.x, bullet->direction.y, bullet->direction.z);
 
 	physSys->CreateBody();
 	bulletSys->EnableBullet();
@@ -279,9 +276,7 @@ glm::vec2 Wiwa::PlayerController::GetMovementInput()
 	if (Input::IsKeyPressed(Key::S))
 		input.y -= 1;
 
-	input.x -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftX, GameStateManager::GetControllerDeadZone());
-	input.y -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::LeftY, GameStateManager::GetControllerDeadZone());
-
+	input -= Wiwa::Input::GetRawJoystick(Gamepad::GamePad1, Gamepad::LeftX, Gamepad::LeftY, GameStateManager::s_GamepadDeadzone);
 	return input;
 }
 
@@ -304,9 +299,7 @@ glm::vec2 Wiwa::PlayerController::GetShootingInput()
 	if (Input::IsKeyPressed(Key::Down))
 		input.y -= 1;
 
-	input.x -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightX, GameStateManager::GetControllerDeadZone());
-	input.y -= Input::GetRawAxis(Gamepad::GamePad1, Gamepad::RightY, GameStateManager::GetControllerDeadZone());
-
+	input -= Wiwa::Input::GetRawJoystick(Gamepad::GamePad1, Gamepad::RightX, Gamepad::RightY, GameStateManager::s_GamepadDeadzone);
 	return input;
 }
 

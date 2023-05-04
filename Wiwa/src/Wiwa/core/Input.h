@@ -21,6 +21,8 @@ namespace Wiwa
 		inline static void UnlockCursor() { s_Instance->UnlockCursorImpl(); }
 		inline static float GetAxis(int gamepadIndx, int axis, float deadzone = 0.6) { return s_Instance->GetAxisImpl(gamepadIndx, axis, deadzone); }
 		inline static float GetRawAxis(int gamepadIndx, int axis, float deadzone) { return s_Instance->GetRawAxisImpl(gamepadIndx, axis, deadzone); }
+		inline static glm::vec2 GetJoystick(int gamepadIndx, int axisX, int axisY, float deadzone) { return s_Instance->GetJoystickImpl(gamepadIndx, axisX, axisY, deadzone); }
+		inline static glm::vec2 GetRawJoystick(int gamepadIndx, int axisX, int axisY, float deadzone) { return s_Instance->GetRawJoystickImpl(gamepadIndx, axisX, axisY, deadzone); }
 		inline static bool IsButtonPressed(int gamepadIndx,int keycode) { return s_Instance->IsButtonPressedImpl(gamepadIndx, keycode); }
 		inline static bool IsButtonReleased(int gamepadIndx, int keycode) { return s_Instance->IsButtonReleasedImpl(gamepadIndx, keycode); }
 
@@ -50,6 +52,8 @@ namespace Wiwa
 		virtual void UnlockCursorImpl() = 0;
 		virtual float GetAxisImpl(int gamepadIndx, int axis, float deadzone) = 0;
 		virtual float GetRawAxisImpl(int gamepadIndx, int axis, float deadzone) = 0;
+		virtual glm::vec2 GetJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone) = 0;
+		virtual glm::vec2 GetRawJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone) = 0;
 		virtual bool IsButtonPressedImpl(int gamepadIndx, int keycode) = 0;
 		virtual bool IsButtonReleasedImpl(int gamepadIndx, int keycode) = 0;
 	private:

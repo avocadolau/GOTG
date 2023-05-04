@@ -713,7 +713,7 @@ namespace Wiwa
 
 		Wiwa::ItemManager::Deserialize(&doc);
 
-		AchievementsManager::Deserialize(&doc);
+		//AchievementsManager::Deserialize(&doc);
 	}
 	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
 	{

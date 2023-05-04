@@ -201,6 +201,22 @@ void ConfigurationPanel::Draw()
 		ImGui::Text("Left trigger: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::LeftTrigger, 0.f));
 		ImGui::Text("Right trigger: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::RightTrigger, 0.f));
 	}
+	if (ImGui::CollapsingHeader("Gamepad joystick"))
+	{
+		ImGui::Text("Deadzone %f", Wiwa::GameStateManager::s_GamepadDeadzone);
+
+		ImGui::Text("Raw Gamepad 1");
+		ImGui::Text("Left X: %f", Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x);
+		ImGui::Text("Left Y: %f", Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y);
+		ImGui::Text("Right X: %f", Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightX, Wiwa::Gamepad::RightY, Wiwa::GameStateManager::s_GamepadDeadzone).x);
+		ImGui::Text("Right Y: %f", Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightX, Wiwa::Gamepad::RightY, Wiwa::GameStateManager::s_GamepadDeadzone).y);
+
+		ImGui::Text("Gamepad 1 ");
+		ImGui::Text("Left X: %f", Wiwa::Input::GetJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x);
+		ImGui::Text("Left Y: %f", Wiwa::Input::GetJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y);
+		ImGui::Text("Right X: %f", Wiwa::Input::GetJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightX, Wiwa::Gamepad::RightY, Wiwa::GameStateManager::s_GamepadDeadzone).x);
+		ImGui::Text("Right Y: %f", Wiwa::Input::GetJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightX, Wiwa::Gamepad::RightY, Wiwa::GameStateManager::s_GamepadDeadzone).y);
+	}
 	ImGui::End();
 }
 
