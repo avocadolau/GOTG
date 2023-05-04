@@ -108,11 +108,14 @@ public:
 	// Unload event
 	static bool UnloadEvent(const char* event_name);
 
+	//Cancels all Event callbacks for a specific playing ID.
+	static void CancelAudioAllCallback(uint64_t play_id);
+
 	// Post an event into the audio engine for a specific gameobject
 	static bool PostEvent(const char* event_name, uint64_t game_object);
 
-	// Post an event into the audio engine for a non spatial element, aka no game object attached
-	static bool PostNonSpatialEvent(const char* event_name);
+	// Post an event into the audio engine for a specific gameobject and callback
+	static bool PostEvent(const char* event_name, uint64_t game_object, Action<const char*> callback, uint64_t& play_id);
 
 	// Post an event into the audio engine for a specific gameobject and callback
 	static bool PostEvent(const char* event_name, uint64_t game_object, Action<const char*> callback);
@@ -126,9 +129,6 @@ public:
 	// Post an event into the default gameobject with callback
 	static bool PostEvent(const char* event_name, Action<const char*> callback) { return PostEvent(event_name, m_DefaultListener, callback); }
 
-	//set sitch state of music
-	static bool SetMusicState(const char* music_container, const char* state);
-	
 	// Stop event for a specific gameobject
 	static bool StopEvent(const char* event_name, uint64_t game_object);
 
@@ -167,9 +167,6 @@ public:
 
 	// Unregister all gameobjects
 	static bool UnregisterAllGameObjects();
-
-	//Executed if an event has finished
-	static bool OnEventFinish();
 
 	/* Unload all banks including init.bnk
 	 * Also stops playing everything and removes all events and data associated to them

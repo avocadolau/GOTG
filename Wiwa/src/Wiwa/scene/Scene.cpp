@@ -206,12 +206,7 @@ namespace Wiwa
 	{
 		GameStateManager::s_PoolManager->UnloadAllPools();
 
-		Audio::StopAllEvents();
 		m_EntityManager.Clear();
-		
-		// Sleep to wait till Audio thread stops entity events
-		Sleep(10);
-
 		if (unload_resources)
 		{
 			// TODO: Fix unloading for the editor

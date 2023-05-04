@@ -73,19 +73,27 @@ namespace Wiwa {
 
 			asrc->isPlaying = false;
 
+			Audio::CancelAudioAllCallback(play_id);
+
 			Audio::Update();
 
 			// Wait to update audio engine thread so we can destroy the system
-			
 			Sleep(8);
 		}
 
 		Audio::UnregisterGameObject(m_EntityId);
+
+		destroyed = true;
 	}
 
 	void AudioSystem::OnEventFinish(const char* ev_name)
 	{
-		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
+		if (!this || m_AudioSource.c_id == WI_INVALID_INDEX)
+			return;
+
+		if (destroyed)
+			return;
+		
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
@@ -102,13 +110,19 @@ namespace Wiwa {
 
 		m_CurrentEvent = ev_name;
 		
-		if (!Audio::PostEvent(m_CurrentEvent, m_EntityId, { &AudioSystem::OnEventFinish, this })) {
+		if (!Audio::PostEvent(m_CurrentEvent, m_EntityId, { &AudioSystem::OnEventFinish, this }, play_id)) {
 			WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
 			asrc->isPlaying = false;
 		}
 		else
 		{
 			asrc->isPlaying = true;
+		}
+	}
+	void AudioSystem::StopEvent(const char* ev_name)
+	{
+		if (!Audio::StopEvent(m_CurrentEvent, m_EntityId)) {
+			WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
 		}
 	}
 }

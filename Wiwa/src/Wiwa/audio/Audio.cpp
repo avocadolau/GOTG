@@ -27,7 +27,7 @@
 
 #include <Wiwa/utilities/json/JSONDocument.h>
 
-#include <AK/SoundEngine/Common/AkTypes.h>
+
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 
@@ -412,6 +412,8 @@ bool Audio::Terminate()
 {
     //AK::SpatialAudio::Term();
 
+    UnloadAllBanks();
+
     AK::MusicEngine::Term();
     AK::SoundEngine::Term();
 
@@ -526,25 +528,6 @@ bool Audio::LoadBank(const char* bank)
     return true;
 }
 
-bool Audio::LoadAllEvents()
-{
-    //// Get a list of all events in the bank
-    //AK::SoundEngine::Query::?????
-    // 
-    //AK::SoundEngine::Query::GetList(AK::SoundEngine::Query::ObjectType::Event, eventList);
-
-    //// Loop through the list of events and process each event as desired
-    //for (auto event : eventList)
-    //{
-    //    const char* eventName = event.GetName();
-    //    uint32_t eventID = event.GetID();
-    //    m_LoadedEvents.emplace_back(EventData{ eventName, eventID });
-    //}
-
-    //// Unload the init.bnk file
-    //AK::SoundEngine::UnloadBank("Init.bnk", nullptr)
-    return false;
-}
 
 bool Audio::UnloadBank(const char* bank)
 {
@@ -643,12 +626,6 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object)
     return true;
 }
 
-bool Audio::PostNonSpatialEvent(const char* event_name)
-{
-    return true;
-}
-
-
 struct AkCallbackCookie {
     std::string ev_name;
     Action<const char*> action;
@@ -667,6 +644,29 @@ void PostEventCallback(AkCallbackType type, AkCallbackInfo* cbinfo) {
     delete cbcookie;
 }
 
+void Audio::CancelAudioAllCallback(uint64_t play_id)
+{
+    AK::SoundEngine::CancelEventCallback(play_id);
+}
+
+bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const char*> action, uint64_t& play_id)
+{
+    AkCallbackCookie* cbcookie = new AkCallbackCookie();
+    cbcookie->ev_name = event_name;
+    cbcookie->action = action;
+
+    play_id = AK::SoundEngine::PostEvent(event_name, game_object, AK_EndOfEvent, PostEventCallback, cbcookie);
+
+    if (play_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't post event [";
+        m_LastErrorMsg += event_name;
+        m_LastErrorMsg += "]";
+        return false;
+    }
+
+    return true;
+}
+
 bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const char*> action)
 {
     AkCallbackCookie* cbcookie = new AkCallbackCookie();
@@ -682,19 +682,6 @@ bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const
         return false;
     }
 
-    return true;
-}
-
-bool Audio::SetMusicState(const char* music_container, const char* state)
-{
-    // Set the state of a state group to "music_container"
-    AkPlayingID play_id = AK::SoundEngine::SetState(music_container, state);
-    if (play_id == AK_INVALID_PLAYING_ID) {
-        m_LastErrorMsg = "Couldn't play track[";
-        m_LastErrorMsg += state;
-        m_LastErrorMsg += "]";
-        return false;
-    }
     return true;
 }
 
