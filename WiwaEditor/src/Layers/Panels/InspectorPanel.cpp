@@ -1277,19 +1277,56 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Text("Initial Scale");
 
-		if (emitter->m_p_rangedInitialScale)
+		if (emitter->m_p_uniformStartSize)
 		{
-			ImGui::Text("Min");
-			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_minInitialScale", &(emitter->m_p_minInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::Text("Max");
-			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_maxInitialScale", &(emitter->m_p_maxInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			if (emitter->m_p_rangedInitialScale)
+			{
+				ParticleTab();
+				ImGui::PushItemWidth(100.f);
+
+				ImGui::Text("Min");
+				ImGui::SameLine();
+				ImGui::DragFloat("##m_p_minUniformStartSizeVal", &emitter->m_p_minUniformStartSizeVal, 0.05f, 0.0f, 0.0f, "%.2f");
+
+				ParticleTab();
+				ImGui::Text("Max");
+				ImGui::SameLine();
+				ImGui::DragFloat("##m_p_maxUniformStartSizeVal", &emitter->m_p_maxUniformStartSizeVal, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::PopItemWidth();
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::PushItemWidth(100.0f);
+
+				ImGui::DragFloat("##m_p_uniformStartSizeVal", &emitter->m_p_uniformStartSizeVal, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::PopItemWidth();
+			}
 		}
 		else
 		{
-			ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			if (emitter->m_p_rangedInitialScale)
+			{
+				ImGui::Text("Min");
+				ImGui::SameLine();
+				ImGui::DragFloat3("##m_p_minInitialScale", &(emitter->m_p_minInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::Text("Max");
+				ImGui::SameLine();
+				ImGui::DragFloat3("##m_p_maxInitialScale", &(emitter->m_p_maxInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
 		}
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		ParticleTab();
+		ImGui::Checkbox("##m_p_uniformStartSize", &emitter->m_p_uniformStartSize);
+		ImGui::SameLine();
+		ImGui::Text("Uniform Start Scale");
 
 		ImGui::Dummy(ImVec2(0, 8));
 
@@ -1400,6 +1437,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::Dummy(ImVec2(0, 8));
 	}
 	ImGui::Separator();
+
 	if (ImGui::TreeNode("Color"))
 	{
 		if ((int)emitter->m_useAdditiveBlending > 1 || (int)emitter->m_useAdditiveBlending < 0)

@@ -178,6 +178,10 @@ namespace Wiwa {
 
 		bool m_destroyOnFinishActive;
 		
+		bool m_p_uniformStartSize;
+		float m_p_uniformStartSizeVal;
+		float m_p_minUniformStartSizeVal;
+		float m_p_maxUniformStartSizeVal;
 		
 		// todo					----------------------------------------
 		// 

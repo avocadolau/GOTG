@@ -65,6 +65,7 @@ namespace Wiwa {
 	void ParticleSystem::OnInit()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		SetEmitterBools(emitter);
 
 		if (m_Model == nullptr)
 		{
@@ -804,15 +805,33 @@ namespace Wiwa {
 		//initial scale
 		if (emitter->m_p_rangedInitialScale)
 		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.x, emitter->m_p_maxInitialScale.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.y, emitter->m_p_maxInitialScale.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.z, emitter->m_p_maxInitialScale.z);
+			float x = 0;
+			float y = 0;
+			float z = 0;
 
-			initScale = emitter->m_p_initialScale + t3d->localScale + glm::vec3(x, y, z);
+			if (emitter->m_p_uniformStartSize)
+			{
+				x = y = z = Wiwa::Math::RandomRange(emitter->m_p_minUniformStartSizeVal, emitter->m_p_maxUniformStartSizeVal);
+			}
+			else
+			{
+				x = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.x, emitter->m_p_maxInitialScale.x);
+				y = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.y, emitter->m_p_maxInitialScale.y);
+				z = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.z, emitter->m_p_maxInitialScale.z);
+			}
+
+			initScale = t3d->localScale + glm::vec3(x, y, z);
 		}
 		else
 		{
-			initScale = emitter->m_p_initialScale + t3d->localScale;
+			if (emitter->m_p_uniformStartSize)
+			{
+				initScale = t3d->localScale + glm::vec3(emitter->m_p_uniformStartSizeVal);
+			}
+			else
+			{
+				initScale = emitter->m_p_initialScale + t3d->localScale;
+			}
 		}
 
 		particle.startPosition = initPosition;
@@ -991,6 +1010,7 @@ namespace Wiwa {
 		FixBool(emitter->m_p_followEmitterRotationZ);
 		FixBool(emitter->m_p_growUniformly);
 		FixBool(emitter->m_destroyOnFinishActive);
+		FixBool(emitter->m_p_uniformStartSize);
 	}
 
 	void ParticleSystem::FixBool(bool& _bool)
