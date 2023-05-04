@@ -86,6 +86,7 @@ void DialogPanel::Draw()
 				dm.conversations[currentConversation].conversationName = "";
 				dm.conversations[currentConversation].isInOppositeSide = false;
 				dm.conversations[currentConversation].isRandom = false;
+				dm.conversations[currentConversation].detectsCharacter = false;
 				dm.conversations[currentConversation].group.groupID = "-1";
 				dm.conversations[currentConversation].group.order = "-1";
 				dm.conversations[currentConversation].nodes[0].occupied = true;
@@ -306,6 +307,11 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::Checkbox("Detects selected character?", &dm.conversations[currentConversation].detectsCharacter);
+				ImGui::TextWrapped("Note: 'Detects selected character?' will replace the bubble and character images with the ones assigned to the current selected character.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
@@ -329,6 +335,7 @@ void DialogPanel::Draw()
 
 					dm.editorConversations[currentConversation].isInOppositeSide = dm.conversations[currentConversation].isInOppositeSide;
 					dm.editorConversations[currentConversation].isRandom = dm.conversations[currentConversation].isRandom;
+					dm.editorConversations[currentConversation].detectsCharacter = dm.conversations[currentConversation].detectsCharacter;
 					dm.editorConversations[currentConversation].group.groupID = dm.conversations[currentConversation].group.groupID;
 					dm.editorConversations[currentConversation].group.order = dm.conversations[currentConversation].group.order;
 
@@ -550,6 +557,11 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::Checkbox("Detects selected character?", &dm.editorConversations[i].detectsCharacter);
+				ImGui::TextWrapped("Note: 'Detects selected character?' will replace the bubble and character images with the ones assigned to the current selected character.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("DONR FORGET SAVING!");
 				ImGui::PushID(i);
 				if (ImGui::Button(" ~ Save Conversation ~ "))
@@ -574,6 +586,7 @@ void DialogPanel::Draw()
 
 					dm.conversations[i].isInOppositeSide = dm.editorConversations[i].isInOppositeSide;
 					dm.conversations[i].isRandom = dm.editorConversations[i].isRandom;
+					dm.conversations[i].detectsCharacter = dm.editorConversations[i].detectsCharacter;
 					dm.conversations[i].group.groupID = dm.editorConversations[i].group.groupID;
 					dm.conversations[i].group.order = dm.editorConversations[i].group.order;
 
@@ -607,6 +620,7 @@ void DialogPanel::Draw()
 
 							dm.conversations[l].isInOppositeSide = dm.conversations[l + 1].isInOppositeSide;
 							dm.conversations[l].isRandom = dm.conversations[l + 1].isRandom;
+							dm.conversations[l].detectsCharacter = dm.conversations[l + 1].detectsCharacter;
 							dm.conversations[l].group.groupID = dm.conversations[l + 1].group.groupID;
 							dm.conversations[l].group.order = dm.conversations[l + 1].group.order;
 							
@@ -649,6 +663,7 @@ void DialogPanel::Draw()
 
 							dm.editorConversations[l].isInOppositeSide = dm.editorConversations[l + 1].isInOppositeSide;
 							dm.editorConversations[l].isRandom = dm.editorConversations[l + 1].isRandom;
+							dm.editorConversations[l].detectsCharacter = dm.editorConversations[l + 1].detectsCharacter;
 							dm.editorConversations[l].group.groupID = dm.editorConversations[l + 1].group.groupID;
 							dm.editorConversations[l].group.order = dm.editorConversations[l + 1].group.order;
 

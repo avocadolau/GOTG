@@ -32,6 +32,7 @@ namespace Wiwa
 
 		bool isInOppositeSide = false;
 		bool isRandom = false;
+		bool detectsCharacter = false;
 
 		bool occupied = false;
 
