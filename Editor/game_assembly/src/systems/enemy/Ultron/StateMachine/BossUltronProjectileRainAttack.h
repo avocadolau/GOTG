@@ -1,6 +1,10 @@
 #pragma once
 #include "BossUltronBase.h"
 
+#define RAIN_RANGE 5.0f
+#define RAIN_PROJECTILE_NUMBER 9
+#define TIME_BETWEEN_PROJECTILES 1.0f
+
 namespace Wiwa {
 	class BossUltronProjectileRainAttackState : public BossUltronBaseState {
 		enum class ProjectileRainState {
@@ -24,10 +28,12 @@ namespace Wiwa {
 
 		bool SpawnProjectileRain(BossUltron* enemy, const glm::vec3& bull_dir);
 
-		glm::vec3 CalculateForward(const Transform3D& t3d);
+		glm::vec3 GetRandomPositionInRange(const glm::vec3& position, float range);
 
 		ProjectileRainState m_RainState;
 		std::vector<glm::vec3> m_AfterRainPosition;
 		float m_TimerRain;
+
+		int m_RainProjectileCounter;
 	};
 }

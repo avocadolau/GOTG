@@ -7,6 +7,7 @@ Wiwa::RainProjectileSystem::RainProjectileSystem()
 {
 	m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	m_Timer = 0.0f;
+	m_DamageHasBeenApplied = false;
 }
 
 Wiwa::RainProjectileSystem::~RainProjectileSystem()
@@ -63,15 +64,19 @@ void Wiwa::RainProjectileSystem::OnCollisionEnter(Object* body1, Object* body2)
 {
 	if (body1->id == m_EntityId)
 	{
-		std::string playerStr = "PLAYER";
-		if (playerStr == body2->selfTagStr)
+		if (m_DamageHasBeenApplied == false)
 		{
-			
-			RainProjectile* bullet = GetComponentByIterator<RainProjectile>(m_BulletIt);
-			GameStateManager::DamagePlayer(bullet->damage);
+			std::string playerStr = "PLAYER";
+			if (playerStr == body2->selfTagStr)
+			{
 
-			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
-		}
+				RainProjectile* bullet = GetComponentByIterator<RainProjectile>(m_BulletIt);
+				GameStateManager::DamagePlayer(bullet->damage);
+
+				//GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+				m_DamageHasBeenApplied = true;
+			}
+		}	
 		
 	}
 }
@@ -103,6 +108,7 @@ bool Wiwa::RainProjectileSystem::OnDisabledFromPool()
 	physSystem->DeleteBody();
 
 	m_Timer = 0.0f;
+	m_DamageHasBeenApplied = false;
 
 	return true;
 }

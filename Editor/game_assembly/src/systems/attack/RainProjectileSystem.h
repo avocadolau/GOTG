@@ -11,8 +11,10 @@
 namespace Wiwa {
 	class  RainProjectileSystem : public System {
 	private:
-		float m_Timer = 0;
+		float m_Timer = 0.0f;
 		EntityManager::ComponentIterator m_BulletIt;
+
+		bool m_DamageHasBeenApplied = false;
 
 	public:
 		RainProjectileSystem();

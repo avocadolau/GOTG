@@ -29,11 +29,11 @@ namespace Wiwa
 
 		animator->PlayAnimation("A_attack_shot", true);
 
-		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		if (navAgent)
-		{
-			navAgent->autoRotate = false;
-		}
+		//NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		//if (navAgent)
+		//{
+		//	navAgent->autoRotate = false;
+		//}
 
 		//EntityId currentEnemy = enemy->GetEntity();
 
