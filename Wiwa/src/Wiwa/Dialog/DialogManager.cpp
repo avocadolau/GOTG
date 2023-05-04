@@ -101,7 +101,6 @@ namespace Wiwa
 				LoadAllDialogs();
 			}
 		}
-		//LoadAllDialogs();
 
 		actualConversationState = 2;
 		currentNode = 0;
@@ -126,6 +125,7 @@ namespace Wiwa
 
 			editorConversations[e].isInOppositeSide = conversations[e].isInOppositeSide;
 			editorConversations[e].isRandom = conversations[e].isRandom;
+			editorConversations[e].detectsCharacter = conversations[e].detectsCharacter;
 			editorConversations[e].group.groupID = conversations[e].group.groupID;
 			editorConversations[e].group.order = conversations[e].group.order;
 
@@ -574,6 +574,7 @@ namespace Wiwa
 
 			std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
 			std::string memberNameIsRandom = "IsRandom_Conversation" + s;
+			std::string memberNameDetectsCharacter = "DetectsCharacter_Conversation" + s;
 
 
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
@@ -585,6 +586,7 @@ namespace Wiwa
 
 			doc.AddMember(memberNameOppositeSide.c_str(), (bool)conversations[i].isInOppositeSide);
 			doc.AddMember(memberNameIsRandom.c_str(), (bool)conversations[i].isRandom);
+			doc.AddMember(memberNameDetectsCharacter.c_str(), (bool)conversations[i].detectsCharacter);
 
 
 			for (int j = 0; j < MAX_CONVERSATION_NODES && conversations[i].nodes[j].occupied == true; j++)
@@ -634,6 +636,8 @@ namespace Wiwa
 
 				std::string memberNameOppositeSide = "IsOppositeSide_Conversation" + s;
 				std::string memberNameIsRandom = "IsRandom_Conversation" + s;
+				std::string memberNameDetectsCharacter = "DetectsCharacter_Conversation" + s;
+
 
 				if (doc.HasMember(memberNameConversation.c_str())
 					&& doc.HasMember(memberNameBubbleImage.c_str())
@@ -676,7 +680,8 @@ namespace Wiwa
 					&& doc.HasMember(memberNameGroupId.c_str())
 					&& doc.HasMember(memberNameGroupOrder.c_str())
 					&& doc.HasMember(memberNameOppositeSide.c_str())
-					&& doc.HasMember(memberNameIsRandom.c_str()))
+					&& doc.HasMember(memberNameIsRandom.c_str())
+					&& doc.HasMember(memberNameDetectsCharacter.c_str()))
 				{
 					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
@@ -687,6 +692,7 @@ namespace Wiwa
 
 					conversations[i].isInOppositeSide = doc[memberNameOppositeSide.c_str()].as_bool();
 					conversations[i].isRandom = doc[memberNameIsRandom.c_str()].as_bool();
+					conversations[i].detectsCharacter = doc[memberNameDetectsCharacter.c_str()].as_bool();
 
 					conversations[i].occupied = true;
 
