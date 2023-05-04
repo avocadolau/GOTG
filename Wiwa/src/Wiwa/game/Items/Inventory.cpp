@@ -75,6 +75,38 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 			
 		}
 	}
+	JSONValue shopElements = doc->AddMemberArray("shop_elements");
+	if (!m_ShopPassives.empty())
+	{
+		for (size_t i = 0; i < m_ShopPassives.size(); i++)
+		{
+			JSONValue shop_element = shopElements.PushBackObject();
+			shop_element.AddMember("name", m_ShopPassives.at(i).Name.c_str());
+			shop_element.AddMemberArray("steps");
+			JSONValue shop_element_steps = shop_element.PushBackObject();
+			for (size_t j = 0; j < m_ShopPassives.at(i).Steps.size(); j++)
+			{
+				char buffer[100];
+				std::sprintf(buffer, "%s%d", "step_", j);
+				shop_element_steps.AddMember(buffer, m_ShopPassives.at(i).Steps.at(j));
+			}
+			shop_element.AddMember("current_step", m_ShopPassives.at(i).CurrentStep);
+			for (size_t j = 0; j < m_ShopPassives.at(i).Costs.size(); j++)
+			{
+				char buffer[100];
+				std::sprintf(buffer, "%s%d", "costs_", j);
+				shop_element_steps.AddMember(buffer, m_ShopPassives.at(i).Costs.at(j));
+			}
+			for (size_t j = 0; j < m_ShopPassives.at(i).PercentageIncreases.size(); j++)
+			{
+				char buffer[100];
+				std::sprintf(buffer, "%s%d", "perrcentage_increases", j);
+				shop_element_steps.AddMember(buffer, m_ShopPassives.at(i).PercentageIncreases.at(j));
+			}
+			shop_element.AddMember("howard_passive_type", (int)m_ShopPassives.at(i).PassiveBoost);
+
+		}
+	}
 	
 
 	doc->AddMember("tokens", m_Tokens);
@@ -160,6 +192,8 @@ void Wiwa::Inventory::InitGame()
 {
     m_Abilities = new Ability*[MAX_ABILITIES] { nullptr, nullptr};
     m_Buffs = new Buff*[MAX_BUFFS] {nullptr, nullptr};
+	m_PassiveSkill.clear();
+	m_ShopPassives.clear();
 	m_Tokens = 0;
 	m_Tokens_Howard = 0;
 }
@@ -206,6 +240,11 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 
 	m_Buffs[0] = new Buff(*buff);
 	m_Buffs[0]->IsActive = false;
+}
+
+void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
+{
+	m_ShopPassives.emplace_back(shopElement);
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
@@ -286,6 +325,9 @@ void Wiwa::Inventory::Update()
 			}
 		}
 		
+
+		//SHOULD CHECK IF AN SPECIAL SHOP ELEMENT CAN BE ACTIVATED
+
 	}
 }
 
@@ -319,6 +361,11 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 		return;
 	}
 	WI_CORE_INFO("Buff {} is on cooldown", index);
+}
+
+void Wiwa::Inventory::UseShopPassive(size_t index)
+{
+	m_ShopPassives.at(index).Use();
 }
 
 void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)

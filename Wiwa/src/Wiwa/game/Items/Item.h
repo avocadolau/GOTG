@@ -269,17 +269,16 @@ namespace Wiwa
 	struct ShopElement
 	{
 		std::string Name;
-		ResourceId Icon;
 		std::vector<int> Steps;
 		int CurrentStep;
 		std::vector<int> Costs;
 		std::vector<int> PercentageIncreases;
 		HowardElementType PassiveBoost;
+
 		ShopElement() = default;
 		ShopElement(const ShopElement& shopElement)
 		{
 			this->Name = shopElement.Name;
-			this->Icon = shopElement.Icon;
 			this->Steps = shopElement.Steps;
 			this->CurrentStep = shopElement.CurrentStep;
 			this->Costs = shopElement.Costs;
@@ -288,7 +287,6 @@ namespace Wiwa
 		}
 		ShopElement(const char* name)
 			: Name(name),
-			Icon(0),
 			Steps(),
 			CurrentStep(0),
 			Costs(),
@@ -296,6 +294,8 @@ namespace Wiwa
 			PassiveBoost(HowardElementType::FANCY_BOOTS)
 		{}
 
+		//Once you buy an element it uses it automatically in case of the normal abilities, and for the special ones it's used once the trigger
+		//is active
 		void Use();
 	};
 }
