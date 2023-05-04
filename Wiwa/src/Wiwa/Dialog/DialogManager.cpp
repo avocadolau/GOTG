@@ -96,7 +96,10 @@ namespace Wiwa
 
 		if (std::filesystem::exists("library"))
 		{
-			LoadAllDialogs();
+			if (std::filesystem::exists("library/fonts/Jade_Smile.ttf"))
+			{
+				LoadAllDialogs();
+			}
 		}
 		//LoadAllDialogs();
 
