@@ -91,19 +91,24 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 				shop_element_steps.AddMember(buffer, m_ShopPassives.at(i).Steps.at(j));
 			}
 			shop_element.AddMember("current_step", m_ShopPassives.at(i).CurrentStep);
+			shop_element.AddMemberArray("costs");
+			JSONValue shop_element_costs = shop_element.PushBackObject();
 			for (size_t j = 0; j < m_ShopPassives.at(i).Costs.size(); j++)
 			{
 				char buffer[100];
 				std::sprintf(buffer, "%s%d", "costs_", j);
-				shop_element_steps.AddMember(buffer, m_ShopPassives.at(i).Costs.at(j));
+				shop_element_costs.AddMember(buffer, m_ShopPassives.at(i).Costs.at(j));
 			}
+			shop_element.AddMemberArray("percentages");
+			JSONValue shop_element_percentages = shop_element.PushBackObject();
 			for (size_t j = 0; j < m_ShopPassives.at(i).PercentageIncreases.size(); j++)
 			{
 				char buffer[100];
 				std::sprintf(buffer, "%s%d", "perrcentage_increases", j);
-				shop_element_steps.AddMember(buffer, m_ShopPassives.at(i).PercentageIncreases.at(j));
+				shop_element_percentages.AddMember(buffer, m_ShopPassives.at(i).PercentageIncreases.at(j));
 			}
 			shop_element.AddMember("howard_passive_type", (int)m_ShopPassives.at(i).PassiveBoost);
+			shop_element.AddMember("unlocked", (int)m_ShopPassives.at(i).Unlocked);
 
 		}
 	}
@@ -179,6 +184,57 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 			}
 		}
 	}
+	if (doc->HasMember("shop_elements"))
+	{
+		if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+		{
+			for (uint32_t i = 0; i < shop_elements.Size(); i++)
+			{
+				Wiwa::ShopElement shopElement;
+				if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+				{
+					for (uint32_t i = 0; i < shop_elements.Size(); i++)
+					{
+						Wiwa::ShopElement shopElement;
+						shopElement.Name = shop_elements[i]["name"].as_string();
+						if (JSONValue shop_element_steps = shop_elements["steps"]; shop_element_steps.IsArray())
+						{
+							for (uint32_t j = 0; j < shop_element_steps.Size(); j++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "step_", j);
+								shopElement.Steps.push_back(shop_element_steps[j][buffer].as_int());
+							}
+						}
+						shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
+						if (JSONValue shop_element_costs = shop_elements["costs"]; shop_element_costs.IsArray())
+						{
+							for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "costs_", j);
+								shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
+							}
+						}
+						if (JSONValue shop_element_percentages = (*doc)["shop_elements"]; shop_elements.IsArray())
+						{
+							for (uint32_t j = 0; j < shop_elements.Size(); j++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "percentage_increases_", j);
+								shopElement.Costs.push_back(shop_element_percentages[j][buffer].as_int());
+							}
+						}
+						shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
+						shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
+
+						AddShopPassive(shopElement);
+					}
+				}
+			}
+		}
+	}
+
 	if (doc->HasMember("tokens")) {
 		m_Tokens = (*doc)["tokens"].as_int();
 	}

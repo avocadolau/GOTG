@@ -13,4 +13,5 @@ public:
 	void DrawBuffPool(int& id);
 	void DrawPassivePool(int& id);
 	void DrawAbilityPool(int& id);
+	void DrawShopElementPool(int& id);
 };

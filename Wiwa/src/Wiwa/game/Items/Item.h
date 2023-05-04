@@ -274,7 +274,7 @@ namespace Wiwa
 		std::vector<int> Costs;
 		std::vector<int> PercentageIncreases;
 		HowardElementType PassiveBoost;
-
+		bool Unlocked;
 		ShopElement() = default;
 		ShopElement(const ShopElement& shopElement)
 		{
@@ -284,6 +284,7 @@ namespace Wiwa
 			this->Costs = shopElement.Costs;
 			this->PercentageIncreases = shopElement.PercentageIncreases;
 			this->PassiveBoost = shopElement.PassiveBoost;
+			this->Unlocked = shopElement.Unlocked;
 		}
 		ShopElement(const char* name)
 			: Name(name),
@@ -291,7 +292,8 @@ namespace Wiwa
 			CurrentStep(0),
 			Costs(),
 			PercentageIncreases(),
-			PassiveBoost(HowardElementType::FANCY_BOOTS)
+			PassiveBoost(HowardElementType::FANCY_BOOTS),
+			Unlocked(true)
 		{}
 
 		//Once you buy an element it uses it automatically in case of the normal abilities, and for the special ones it's used once the trigger

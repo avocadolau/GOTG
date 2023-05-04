@@ -151,7 +151,7 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 			shop_element_steps.AddMember(buffer, shopelement.second.PercentageIncreases.at(j));
 		}
 		shop_element.AddMember("howard_passive_type", (int)shopelement.second.PassiveBoost);
-
+		shop_element.AddMember("unlocked", (int)shopelement.second.Unlocked);
 	}
 }
 
@@ -234,6 +234,56 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 			}
 		}
 	}
+	if (doc->HasMember("shop_elements"))
+	{
+		if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+		{
+			for (uint32_t i = 0; i < shop_elements.Size(); i++)
+			{
+				Wiwa::ShopElement shopElement;
+				if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+				{
+					for (uint32_t i = 0; i < shop_elements.Size(); i++)
+					{
+						Wiwa::ShopElement shopElement;
+						shopElement.Name = shop_elements[i]["name"].as_string();
+						if (JSONValue shop_element_steps = shop_elements["steps"]; shop_element_steps.IsArray())
+						{
+							for (uint32_t j = 0; j < shop_element_steps.Size(); j++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "step_", j);
+								shopElement.Steps.push_back(shop_element_steps[j][buffer].as_int());
+							}
+						}
+						shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
+						if (JSONValue shop_element_costs = shop_elements["costs"]; shop_element_costs.IsArray())
+						{
+							for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "costs_", j);
+								shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
+							}
+						}
+						if (JSONValue shop_element_percentages = (*doc)["shop_elements"]; shop_elements.IsArray())
+						{
+							for (uint32_t j = 0; j < shop_elements.Size(); j++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "percentage_increases_", j);
+								shopElement.Costs.push_back(shop_element_percentages[j][buffer].as_int());
+							}
+						}
+						shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
+						shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
+
+						AddShopElement(shopElement);
+					}
+				}
+			}
+		}
+	}
 }
 
 Wiwa::Ability* Wiwa::ItemManager::GetAbility(const char* name)
@@ -254,5 +304,10 @@ Wiwa::Buff* Wiwa::ItemManager::GetBuff(const char* name)
 Wiwa::Consumable* Wiwa::ItemManager::GetConsumable(const char* name)
 {
 	return &(*m_ConsumablePool.find(name)).second;
+}
+
+Wiwa::ShopElement* Wiwa::ItemManager::GetShopElement(const char* name)
+{
+	return &(*m_ShopElementPool.find(name)).second;
 }
 
