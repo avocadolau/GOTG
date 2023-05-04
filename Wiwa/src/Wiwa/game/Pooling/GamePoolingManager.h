@@ -20,6 +20,7 @@ namespace Wiwa
         EntityPool* s_ExplosiveBarrel;
         EntityPool* s_StarLordBullets;
         EntityPool* s_RocketBullets;
+        EntityPool* s_SecondDashPool;
 
         bool m_HasLoadedAll = false;
         void SetScene(Scene* scene);
@@ -66,5 +67,8 @@ namespace Wiwa
 
         void LoadRocketBulletsPool(Scene* scene);
         void UnloadRocketBulletsPool();
+
+        void LoadSecondDashPool(Scene* scene);
+        void UnloadSecondDashPool();
     };
 }

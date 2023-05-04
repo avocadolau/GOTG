@@ -20,6 +20,7 @@ namespace Wiwa
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
 		s_StarLordBullets = new EntityPool(Pool_Type::STARLORD_BULLET, 25, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
 		s_RocketBullets = new EntityPool(Pool_Type::ROCKET_BULLET, 2, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
+		s_SecondDashPool = new EntityPool(Pool_Type::SECOND_DASH, 2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 
 		m_HasLoadedAll = false;
 	}
@@ -36,6 +37,7 @@ namespace Wiwa
 		delete s_UltronLaserBeamPool;
 		delete s_Subjugator;
 		delete s_ExplosiveBarrel;
+		delete s_SecondDashPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -50,6 +52,7 @@ namespace Wiwa
 		s_UltronLaserBeamPool->SetScene(scene);
 		s_Subjugator->SetScene(scene);
 		s_ExplosiveBarrel->SetScene(scene);
+		s_SecondDashPool->SetScene(scene);
 	}
 
 
@@ -92,6 +95,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::ROCKET_BULLET:
 			LoadRocketBulletsPool(scene);
+			break;
+		case Pool_Type::SECOND_DASH:
+			LoadSecondDashPool(scene);
 			break;
 		default:
 			break;
@@ -136,6 +142,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::ROCKET_BULLET:
 			UnloadRocketBulletsPool();
+			break;
+		case Pool_Type::SECOND_DASH:
+			UnloadSecondDashPool();
 			break;
 		default:
 			break;
@@ -341,6 +350,23 @@ namespace Wiwa
 		s_RocketBullets->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadSecondDashPool(Scene* scene)
+	{
+		if (s_SecondDashPool->Loaded)
+			return;
+
+		s_SecondDashPool->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_SecondDashPool->getMaxSize());
+		for (int i = 0; i < s_SecondDashPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_SecondDashPool->getPath());
+		s_SecondDashPool->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadSecondDashPool()
+	{
+		s_SecondDashPool->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		if (m_HasLoadedAll)
@@ -358,6 +384,7 @@ namespace Wiwa
 		LoadExplosiveBarrelPool(scene);
 		LoadStarLordBulletsPool(scene);
 		LoadRocketBulletsPool(scene);
+		LoadSecondDashPool(scene);
 
 		m_HasLoadedAll = true;
 	}
@@ -377,5 +404,6 @@ namespace Wiwa
 		UnloadExplosiveBarrelPool();
 		UnloadStarLordBulletsPool();
 		UnloadRocketBulletsPool();
+		UnloadSecondDashPool();
 	}
 }
