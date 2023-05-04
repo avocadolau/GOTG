@@ -119,6 +119,12 @@ namespace Wiwa
 				enemy->SwitchState(enemy->m_DashState);
 			}
 			break;
+			case Wiwa::UltronAttacks::SECOND_DASH:
+			{
+				navAgentPtr->StopAgent();
+				enemy->SwitchState(enemy->m_SecondDashState);
+			}
+			break;
 			default:
 				break;
 			}
@@ -134,7 +140,7 @@ namespace Wiwa
 	{
 	}
 
-	UltronAttacks BossUltronMovementState::GetAttackFromProbabilites()
+	UltronAttacks BossUltronMovementState::GetAttackFromProbabilites() //Reajuste de Probabilidades con 2 dashes distintos + Rain
 	{
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);
