@@ -22,7 +22,7 @@ namespace Wiwa {
 
 		void OnInit() override;
 
-		void InitClusterBullet();
+		void InitRainProjectileBullet();
 
 		void OnUpdate() override;
 
