@@ -6,6 +6,7 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
 
 namespace Wiwa
 {
@@ -32,6 +33,9 @@ namespace Wiwa
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		if (navAgentPtr)
 			navAgentPtr->StopAgent();
+
+		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(enemy->GetEntity());
+		physSys->DeleteBody();
 	}
 
 	void RangedPhalanxDeathState::UpdateState(EnemyRangedPhalanx* enemy)

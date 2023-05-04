@@ -33,6 +33,9 @@ namespace Wiwa
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		if (navAgentPtr)
 			navAgentPtr->StopAgent();
+
+		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(enemy->GetEntity());
+		physSys->DeleteBody();
 	}
 
 	void SentinelDeathState::UpdateState(EnemySentinel* enemy)
