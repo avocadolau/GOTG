@@ -7,6 +7,7 @@
 #include "StateMachine/BossUltronBulletStormAttack.h"
 #include "StateMachine/BossUltronDeath.h"
 #include "StateMachine/BossUltronDash.h"
+#include "StateMachine/BossUltronSecondDash.h"
 #include "StateMachine/BossUltronProjectileRainAttack.h"
 #include "BossUltron.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
@@ -28,6 +29,7 @@ namespace Wiwa
 		m_LaserBeamAttackState = nullptr;
 		m_BulletStormAttackState = nullptr;
 		m_DashState = nullptr;
+		m_SecondDashState = nullptr;
 		m_ProjectileRain = nullptr;
 		
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -51,6 +53,7 @@ namespace Wiwa
 		m_BulletStormAttackState = new BossUltronBulletStormAttackState();
 		m_DeathState = new BossUltronDeathState();
 		m_DashState = new BossUltronDashState();
+		m_SecondDashState = new BossUltronSecondDashState();
 		m_ProjectileRain = new BossUltronProjectileRainAttackState();
 		
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
@@ -121,6 +124,9 @@ namespace Wiwa
 		if (m_DashState != nullptr)
 			delete m_DashState;
 
+		if (m_SecondDashState != nullptr)
+			delete m_SecondDashState;
+
 		m_CurrentState = nullptr;
 		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
@@ -130,6 +136,7 @@ namespace Wiwa
 		m_LaserBeamAttackState = nullptr;
 		m_BulletStormAttackState = nullptr;
 		m_DashState = nullptr;
+		m_SecondDashState = nullptr;
 		
 	}
 
