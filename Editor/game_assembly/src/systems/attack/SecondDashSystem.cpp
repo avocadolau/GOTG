@@ -59,12 +59,18 @@ namespace Wiwa
 			System::Init();
 
 		DashEffect* bullet = GetComponentByIterator<DashEffect>(m_DashIt);
+		Transform3D* transform = GetComponent<Transform3D>();
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		if (m_Timer >= bullet->lifeTime)
+		if (m_Timer > bullet->lifeTime)
 		{
 			GameStateManager::s_PoolManager->s_UltronSecondDashPool->ReturnToPool(m_EntityId);
+		}
+
+		if (m_Timer == bullet->lifeTime)
+		{
+			bullet->positionAfterDash = transform->localPosition;
 		}
 	}
 
