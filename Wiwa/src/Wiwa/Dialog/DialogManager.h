@@ -122,5 +122,7 @@ namespace Wiwa
 		bool forcedDialogHappened = false;
 
 		bool finishedRandomizing = false;
+
+		int characterID = 0; // 0 is Starlord, 1 is Rocket
 	};
 }

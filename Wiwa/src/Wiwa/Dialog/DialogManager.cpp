@@ -149,10 +149,10 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		/*if (generalTimer == 0)
-		{
-			LoadAllDialogs();
-		}*/
+		/* This part will detect the current selected character
+		if (characterSelected == starlord) characterID = 0;
+		else if (characterSelected == rocket) characterID = 1;
+		*/
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false))
@@ -525,8 +525,26 @@ namespace Wiwa
 
 		conversations[conversationNumber].bubbleImagePath = (std::string)path;
 
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		Image* dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		ResourceId textID;
+		Image* dialogImg;
+		if (conversations[conversationNumber].detectsCharacter == true)
+		{
+			if (characterID == 0)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.png");
+				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else if (characterID == 1)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.png");
+				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+		}
+		else
+		{
+			textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+			dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		}
 
 		conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
@@ -538,8 +556,26 @@ namespace Wiwa
 
 		conversations[conversationNumber].characterImagePath = (std::string)path;
 
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>(path);
-		Image* characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		ResourceId textID;
+		Image* characterImg;
+		if (conversations[conversationNumber].detectsCharacter == true)
+		{
+			if (characterID == 0)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_Starlord_01.png");
+				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+			else if (characterID == 1)
+			{
+				textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_Rocket_01.png");
+				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			}
+		}
+		else
+		{
+			textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+			characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+		}
 
 		conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
@@ -683,6 +719,8 @@ namespace Wiwa
 					&& doc.HasMember(memberNameIsRandom.c_str())
 					&& doc.HasMember(memberNameDetectsCharacter.c_str()))
 				{
+					conversations[i].detectsCharacter = doc[memberNameDetectsCharacter.c_str()].as_bool();
+
 					conversations[i].conversationName = doc[memberNameConversation.c_str()].as_string();
 					SetDialogBubbleImage(doc[memberNameBubbleImage.c_str()].as_string(), i);
 					SetCharacterImage(doc[memberNameCharacterImage.c_str()].as_string(), i);
@@ -692,7 +730,6 @@ namespace Wiwa
 
 					conversations[i].isInOppositeSide = doc[memberNameOppositeSide.c_str()].as_bool();
 					conversations[i].isRandom = doc[memberNameIsRandom.c_str()].as_bool();
-					conversations[i].detectsCharacter = doc[memberNameDetectsCharacter.c_str()].as_bool();
 
 					conversations[i].occupied = true;
 
