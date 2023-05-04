@@ -125,6 +125,12 @@ namespace Wiwa
 				enemy->SwitchState(enemy->m_SecondDashState);
 			}
 			break;
+			case Wiwa::UltronAttacks::RAIN_PROJECTILE:
+			{
+				navAgentPtr->StopAgent();
+				enemy->SwitchState(enemy->m_ProjectileRain);
+			}
+			break;
 			default:
 				break;
 			}

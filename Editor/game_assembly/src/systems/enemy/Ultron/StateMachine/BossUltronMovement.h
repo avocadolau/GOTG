@@ -12,6 +12,7 @@ namespace Wiwa {
 		CLUSTER_SHOTS,
 		DASH,
 		SECOND_DASH,
+		RAIN_PROJECTILE
 	};
 
 	class BossUltronMovementState : public BossUltronBaseState {
