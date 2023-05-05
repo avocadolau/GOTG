@@ -34,6 +34,7 @@ namespace Wiwa {
 		int laserBeam_duration = 5;
 
 		float bulletSpeed;
+		float bulletLifeTime;
 	};
 }
 

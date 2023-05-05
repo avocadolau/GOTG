@@ -194,6 +194,9 @@ namespace Wiwa
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		bullet->direction = bull_dir;
+		bullet->velocity = GameStateManager::GetEnemyManager().m_SubjugatorData.bulletSpeed;
+		bullet->lifeTime = GameStateManager::GetEnemyManager().m_SubjugatorData.bulletLifeTime;
+		bullet->damage = character->damage;
 
 		physSys->CreateBody();
 

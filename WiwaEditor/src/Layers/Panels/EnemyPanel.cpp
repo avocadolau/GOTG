@@ -67,6 +67,14 @@ void EnemyPanel::DrawTables()
 		DrawEnemyStatsTable("Ultron", "ULTRON");
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Enemies bullets & attacks"))
+	{
+		DrawRangedData();
+		DrawSubjugatorData();
+		DrawUltronData();
+		ImGui::TreePop();
+	}
 }
 
 void EnemyPanel::DrawEnemyStatsTable(const char* label, const char* enemy_str)
@@ -175,6 +183,39 @@ void EnemyPanel::DrawInputs()
 
 	if (manager.m_IncreaseDiffEvery < 0)
 		manager.m_IncreaseDiffEvery = 0;
+}
+
+void EnemyPanel::DrawRangedData()
+{
+	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
+	if (ImGui::TreeNodeEx("Ranged Enemy Behavior Data", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::InputFloat("##bulletSpeedR", &manager.m_RangedData.bulletSpeed, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("##bulletLifetimeR", &manager.m_RangedData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+		ImGui::TreePop();
+	}
+}
+
+void EnemyPanel::DrawSubjugatorData()
+{
+	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
+	if (ImGui::TreeNodeEx("Subjugator Enemy Behavior Data", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::InputFloat("##bulletSpeedS", &manager.m_SubjugatorData.bulletSpeed, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("##bulletLifetimeS", &manager.m_SubjugatorData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+		ImGui::TreePop();
+	}
+}
+
+void EnemyPanel::DrawUltronData()
+{
+	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
+	if (ImGui::TreeNodeEx("Ultron Enemy Behavior Data", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::InputFloat("##bulletSpeedU", &manager.m_UltronData.bulletSpeed, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("##bulletLifetimeU", &manager.m_UltronData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+		ImGui::TreePop();
+	}
 }
 
 	//if (ImGui::BeginTable("Enemies stats", 9))

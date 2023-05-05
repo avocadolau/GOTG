@@ -217,7 +217,8 @@ namespace Wiwa
 		ClusterBullet* bullet = (ClusterBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ClusterBullet>(newBulletId));
 		bullet->damage = 40; //TODO: Add to components
 		bullet->direction = bull_dir;
-
+		bullet->velocity = GameStateManager::GetEnemyManager().m_UltronData.bulletSpeed;
+		bullet->lifeTime = GameStateManager::GetEnemyManager().m_UltronData.bulletLifeTime;
 		
 		physSys->CreateBody();
 

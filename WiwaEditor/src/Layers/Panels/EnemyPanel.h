@@ -15,6 +15,10 @@ public:
 	void DrawTables();
 	void DrawEnemyStatsTable(const char* label, const char* enemy_str);
 	void DrawInputs();
+
+	void DrawRangedData();
+	void DrawSubjugatorData();
+	void DrawUltronData();
 	/*void OnEvent(Wiwa::Event& e) override;
 	bool OnSceneChange(Wiwa::SceneChangeEvent& e);*/
 };

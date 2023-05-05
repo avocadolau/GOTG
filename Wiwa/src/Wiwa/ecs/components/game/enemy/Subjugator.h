@@ -10,10 +10,12 @@ namespace Wiwa {
 	struct WI_API Subjugator {
 		int variant;
 		float bulletSpeed;
+		float bulletLifeTime;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::Subjugator)
 REFLECT_MEMBER(variant)
 REFLECT_MEMBER(bulletSpeed)
+REFLECT_MEMBER(bulletLifeTime)
 REFLECTION_END;

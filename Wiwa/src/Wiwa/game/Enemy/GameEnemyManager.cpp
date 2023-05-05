@@ -66,6 +66,15 @@ namespace Wiwa
 		m_MaxLevel = 4;
 		m_CurrentRunLevel = 0;
 		m_IncreaseDiffEvery = 1;
+
+		m_RangedData.bulletLifeTime = 6.0f;
+		m_RangedData.bulletSpeed = 30.0f;
+			
+		m_SubjugatorData.bulletLifeTime = 6.0f;
+		m_SubjugatorData.bulletSpeed = 30.0f;
+
+		m_UltronData.bulletLifeTime = 6.0f;
+		m_UltronData.bulletSpeed = 30.0f;
 	}
 	EnemyManager::~EnemyManager()
 	{
@@ -84,6 +93,15 @@ namespace Wiwa
 		doc["m_MaxLevel"] = m_MaxLevel;
 		doc["m_CurrentRunLevel"] = m_CurrentRunLevel;
 		doc["m_IncreaseDiffEvery"] = m_IncreaseDiffEvery;
+
+		doc["m_RangedData"]["bulletLifeTime"] = m_RangedData.bulletLifeTime;
+		doc["m_RangedData"]["bulletSpeed"] = m_RangedData.bulletSpeed;
+
+		doc["m_SubjugatorData"]["bulletLifeTime"] = m_SubjugatorData.bulletLifeTime;
+		doc["m_SubjugatorData"]["bulletSpeed"] = m_SubjugatorData.bulletSpeed;
+
+		doc["m_UltronData"]["bulletLifeTime"] = m_UltronData.bulletLifeTime;
+		doc["m_UltronData"]["bulletSpeed"] = m_UltronData.bulletSpeed;
 
 		std::ofstream file("config/enemy_data.json");
 		if (file.is_open())
@@ -120,6 +138,15 @@ namespace Wiwa
 			m_MaxLevel = serializedData["m_MaxLevel"].get<int>();
 			m_CurrentRunLevel = serializedData["m_CurrentRunLevel"].get<int>();
 			m_IncreaseDiffEvery = serializedData["m_IncreaseDiffEvery"].get<int>();
+
+			m_RangedData.bulletLifeTime = serializedData["m_RangedData"]["bulletLifeTime"].get<float>();
+			m_RangedData.bulletSpeed = serializedData["m_RangedData"]["bulletSpeed"].get<float>();
+
+			m_SubjugatorData.bulletLifeTime = serializedData["m_SubjugatorData"]["bulletLifeTime"].get<float>();
+			m_SubjugatorData.bulletSpeed = serializedData["m_SubjugatorData"]["bulletSpeed"].get<float>();
+
+			m_UltronData.bulletLifeTime = serializedData["m_UltronData"]["bulletLifeTime"].get<float>();
+			m_UltronData.bulletSpeed = serializedData["m_UltronData"]["bulletSpeed"].get<float>();
 
 			file.close();
 			WI_INFO("Enemy stats saved to enemy_stats.json");
@@ -276,6 +303,15 @@ namespace Wiwa
 		doc["m_MaxLevel"] = m_MaxLevel;
 		doc["m_CurrentRunLevel"] = m_CurrentRunLevel;
 		doc["m_IncreaseDiffEvery"] = m_IncreaseDiffEvery;
+
+		doc["m_RangedData"]["bulletLifeTime"] = m_RangedData.bulletLifeTime;
+		doc["m_RangedData"]["bulletSpeed"] = m_RangedData.bulletSpeed;
+
+		doc["m_SubjugatorData"]["bulletLifeTime"] = m_SubjugatorData.bulletLifeTime;
+		doc["m_SubjugatorData"]["bulletSpeed"] = m_SubjugatorData.bulletSpeed;
+
+		doc["m_UltronData"]["bulletLifeTime"] = m_UltronData.bulletLifeTime;
+		doc["m_UltronData"]["bulletSpeed"] = m_UltronData.bulletSpeed;
 
 		std::ofstream file("config/enemy_data.json");
 		if (file.is_open())
