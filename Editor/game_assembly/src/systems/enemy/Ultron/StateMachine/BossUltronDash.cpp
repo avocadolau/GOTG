@@ -111,7 +111,7 @@ namespace Wiwa
 		{
 			m_TimerDash += Time::GetDeltaTimeSeconds();
 
-			if (m_TimerDash >= 0.2f && interpolationValue <= 0.9f)
+			if (m_TimerDash >= 0.6f && interpolationValue <= 0.9f)
 			{
 				m_TimerDash = 0.0f;
 				interpolationValue = interpolationValue + 0.05;
@@ -134,6 +134,7 @@ namespace Wiwa
 
 			if (interpolationValue > 0.9f)
 			{
+				interpolationValue = 0.0f;
 				m_State = DashState::DASH_STOP;
 			}
 		}

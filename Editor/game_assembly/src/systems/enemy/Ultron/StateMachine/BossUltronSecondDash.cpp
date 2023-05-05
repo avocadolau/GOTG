@@ -34,87 +34,106 @@ namespace Wiwa
 
 		m_SpawnDashEffect = true;
 		m_TimerToLookAtPlayer = 0.0f;
+		m_TimerAfterDash = 0.0f;
+		m_TimerOfDashAction = 0.0f;
 
 		m_SecondDashState = Wiwa::BossUltronSecondDashState::SecondDashState::PREPARE_DASH;
 	}
 
 	void BossUltronSecondDashState::UpdateState(BossUltron* enemy)
 	{
-		//Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		//Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		//NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
-		//switch (m_SecondDashState)
-		//{
-		//case Wiwa::BossUltronSecondDashState::SecondDashState::PREPARE_DASH:
-		//{
-		//	agent->StopAgent();
-		//	navAgent->autoRotate = false;
+		switch (m_SecondDashState)
+		{
+		case Wiwa::BossUltronSecondDashState::SecondDashState::PREPARE_DASH:
+		{
+			agent->StopAgent();
+			navAgent->autoRotate = false;
 
-		//	m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
+			m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
 
-		//	enemy->LookAt(playerTr->localPosition, 80.0f);
+			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-		//	if (m_TimerToLookAtPlayer >= 2.0f)
-		//	{
-		//		m_TimerToLookAtPlayer = 0.0f,
-		//		m_SecondDashState = SecondDashState::PLAY_DASH;
-		//	}
-		//}
-		//break;
-		//case Wiwa::BossUltronSecondDashState::SecondDashState::PLAY_DASH:
-		//{
-		//	Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+			if (m_TimerToLookAtPlayer >= 2.0f)
+			{
+				m_TimerToLookAtPlayer = 0.0f,
+				m_SecondDashState = SecondDashState::PLAY_DASH;
+			}
+		}
+		break;
+		case Wiwa::BossUltronSecondDashState::SecondDashState::PLAY_DASH:
+		{
+			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
 
-		//	EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronSecondDashPool->GetFromPool();
-		//	DashEffect* bullet = (DashEffect*)em.GetComponentByIterator(em.GetComponentIterator<DashEffect>(newBulletId));
+			m_TimerOfDashAction += Time::GetDeltaTimeSeconds();
 
-		//	m_TimerOfDashAction += Time::GetDeltaTimeSeconds();
+			//First Play Animation
+			if (m_SpawnDashEffect)
+			{
+				agent->StopAgent();
 
-		//	//First Play Animation
-		//	if (m_SpawnDashEffect)
-		//	{
-		//		glm::vec3 outOfScene = glm::vec3(0.0f, 600.0f, 0.0f);
-		//		agent->SetPosition(outOfScene);
-		//		SpawnDashEffect(enemy, CalculateForward(*gunTr));
+				SpawnDashEffect(enemy, CalculateForward(*gunTr));
 
-		//		m_SpawnDashEffect = false;
-		//	}
-		//	
-		//	if (bullet->lifeTime >= m_TimerOfDashAction)
-		//	{
-		//		m_TimerOfDashAction = 0.0f;
-		//		m_SecondDashState = SecondDashState::FINISH_DASH;
-		//	}
-		//}
-		//break;
-		//case Wiwa::BossUltronSecondDashState::SecondDashState::FINISH_DASH:
-		//{
-		//	EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronSecondDashPool->GetFromPool();
-		//	DashEffect* bullet = (DashEffect*)em.GetComponentByIterator(em.GetComponentIterator<DashEffect>(newBulletId));
+				/*glm::vec3 outOfScene = glm::vec3(100.0f, 100.0f, 100.0f);*/
+				agent->RemoveAgent();
 
-		//	agent->StopAgent();
-		//	navAgent->autoRotate = true;
+				selfTr->localPosition.x = 100.0f;
+				/*selfTr->localPosition.y = outOfScene.y;*/
+				/*selfTr->localPosition.z = outOfScene.z;*/
+				/*WI_INFO("Pos: x: {}, y: {}, z:{}", selfTr->localPosition.x, selfTr->localPosition.y, selfTr->localPosition.z);*/
 
-		//	agent->SetPosition()
-		//}
-		//break;
-		//case Wiwa::BossUltronDashState::DashState::DASH_COOLDOWN:
-		//{
-		//	m_TimerAfterDash += Time::GetDeltaTimeSeconds();
+				m_SpawnDashEffect = false;
+			}
+			
+			if (/*bullet->lifeTime*/ m_TimerOfDashAction >= 2.5f)
+			{
+				m_TimerOfDashAction = 0.0f;
+				m_SecondDashState = SecondDashState::FINISH_DASH;
+			}
+		}
+		break;
+		case Wiwa::BossUltronSecondDashState::SecondDashState::FINISH_DASH:
+		{
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
+			EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronSecondDashPool->GetFromPool();
+			Wiwa::SecondDashSystem* dashSystem = em.GetSystem<Wiwa::SecondDashSystem>(newBulletId);
+			WI_INFO("ULTRON SECOND DASH ID: {}", newBulletId);
 
-		//	if (m_TimerAfterDash >= 2.0f)
-		//	{
-		//		WI_INFO("Dash DONE");
-		//		m_TimerAfterDash = 0.0f;
-		//		enemy->SwitchState(enemy->m_MovementState);
-		//	}
-		//}
-		//break;
-		//default:
-		//	break;
-		//}
+			//Animation here
+			/*selfTr->localPosition = dashSystem->GetPositionAfterDash();*/
+			/*WI_INFO("Pos: x: {}, y: {}, z:{}", selfTr->localPosition.x, selfTr->localPosition.y, selfTr->localPosition.z);*/
+			/*agent->SetPosition(dashSystem->GetPositionAfterDash());*/
+
+			selfTr->localPosition.x = dashSystem->GetPositionAfterDash().x;
+			/*selfTr->localPosition.y = 40.0f;*/
+			selfTr->localPosition.z = dashSystem->GetPositionAfterDash().z;
+			m_SecondDashState = SecondDashState::END_DASH;
+		}
+		break;
+		case Wiwa::BossUltronSecondDashState::SecondDashState::END_DASH:
+		{
+			/*agent->RegisterWithCrowd();
+			agent->StopAgent();
+			navAgent->autoRotate = true;*/
+
+			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
+
+			if (m_TimerAfterDash >= 2.0f)
+			{
+				WI_INFO("Dash DONE");
+				m_TimerAfterDash = 0.0f;
+				enemy->SwitchState(enemy->m_MovementState);
+			}
+		}
+		break;
+		default:
+			break;
+		}
 	}
 
 	void BossUltronSecondDashState::ExitState(BossUltron* enemy)
@@ -163,7 +182,6 @@ namespace Wiwa
 		DashEffect* bullet = (DashEffect*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<DashEffect>(newBulletId));
 		bullet->damage = 40; //TODO: Add to components
 		bullet->direction = bull_dir;
-
 
 		physSys->CreateBody();
 

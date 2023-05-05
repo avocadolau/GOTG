@@ -31,6 +31,7 @@ namespace Wiwa {
 
 		float m_TimerToLookAtPlayer = 0.0f;
 		float m_TimerOfDashAction = 0.0f;
+		float m_TimerAfterDash = 0.0f;
 
 		bool m_SpawnDashEffect = true;
 	};

@@ -12,7 +12,6 @@ namespace Wiwa {
 		float lifeTime;
 		int damage;
 		glm::vec3 direction;
-		glm::vec3 positionAfterDash;
 	};
 }
 
@@ -21,5 +20,4 @@ REFLECT_MEMBER(velocity)
 REFLECT_MEMBER(lifeTime)
 REFLECT_MEMBER(damage)
 REFLECT_MEMBER(direction)
-REFLECT_MEMBER(positionAfterDash)
 REFLECTION_END;

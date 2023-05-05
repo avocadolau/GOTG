@@ -23,14 +23,14 @@ namespace Wiwa
 		m_AttackIt = GetComponentIterator<Attack>();
 		m_DashIt = GetComponentIterator<DashEffect>();
 
-		Attack* attack = GetComponentByIterator<Attack>(m_AttackIt);
-		if (attack)
-		{
-			std::string atStr = "ULTRON_SECOND_DASH";
-			strcpy(attack->attackType, atStr.c_str());
-			attack->isPlayerAttack = false;
-			attack->isEnemyAttack = true;
-		}
+		//Attack* attack = GetComponentByIterator<Attack>(m_AttackIt);
+		//if (attack)
+		//{
+		//	std::string atStr = "ULTRON_SECOND_DASH";
+		//	strcpy(attack->attackType, atStr.c_str());
+		//	attack->isPlayerAttack = false;
+		//	attack->isEnemyAttack = true;
+		//}
 	}
 
 	void SecondDashSystem::OnInit()
@@ -47,30 +47,40 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+		m_Timer = 0.0f;
 
 		physicsManager.SetVelocity(obj, glm::normalize(dash->direction) * dash->velocity);
 	}
 
 	void SecondDashSystem::OnUpdate()
-	{
+	{   
 		if (!getAwake())
 			System::Awake();
 		if (!getInit())
 			System::Init();
 
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		DashEffect* bullet = GetComponentByIterator<DashEffect>(m_DashIt);
-		Transform3D* transform = GetComponent<Transform3D>();
+		Transform3D* transform = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(m_EntityId));
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		if (m_Timer > bullet->lifeTime)
+		if (m_Timer >= bullet->lifeTime)
 		{
 			GameStateManager::s_PoolManager->s_UltronSecondDashPool->ReturnToPool(m_EntityId);
 		}
 
-		if (m_Timer == bullet->lifeTime)
+		if (m_Timer < bullet->lifeTime)
 		{
-			bullet->positionAfterDash = transform->localPosition;
+			if (transform->localPosition.y != 3000.0f)
+			{
+				if (transform->localPosition.x != 0.0f || transform->localPosition.z != 0.0f)
+				{
+					m_PositionAfterDash = transform->localPosition;
+				}
+			}
+			
+			WI_INFO("Pos: x: {}, y: {}, z:{}", m_PositionAfterDash.x, m_PositionAfterDash.y, m_PositionAfterDash.z);
 		}
 	}
 
@@ -122,5 +132,10 @@ namespace Wiwa
 		m_Timer = 0.0f;
 
 		return true;
+	}
+
+	glm::vec3 SecondDashSystem::GetPositionAfterDash()
+	{
+		return m_PositionAfterDash;
 	}
 }
