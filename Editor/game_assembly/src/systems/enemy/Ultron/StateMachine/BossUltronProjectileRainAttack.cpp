@@ -92,6 +92,7 @@ bool Wiwa::BossUltronProjectileRainAttackState::SpawnProjectileRain(BossUltron* 
 	Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 	GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 	EntityId newBulletId = GameStateManager::s_PoolManager->s_RainProjectilePool->GetFromPool();
+
 	Wiwa::RainProjectileSystem* rainProjectileSystem = entityManager.GetSystem<Wiwa::RainProjectileSystem>(newBulletId);
 	Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 	Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
@@ -113,11 +114,16 @@ bool Wiwa::BossUltronProjectileRainAttackState::SpawnProjectileRain(BossUltron* 
 	glm::vec3 spawnPosition = GetRandomPositionInRange(playerTr->localPosition, RAIN_RANGE);
 	spawnPosition.y += 4.0f;
 
+	EnemyData* stats = (EnemyData*)entityManager.GetComponentByIterator(enemy->m_StatsIt);
+	Ultron* ultron = (Ultron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
+
 	bulletTr->localPosition = spawnPosition;
 	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, 90.0f);
 	RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
 	bullet->direction = bull_dir;
-
+	bullet->velocity = ultron->bulletSpeed;
+	bullet->lifeTime = ultron->bulletLifeTime;
+	bullet->damage = stats->damage;
 
 	physSys->CreateBody();
 

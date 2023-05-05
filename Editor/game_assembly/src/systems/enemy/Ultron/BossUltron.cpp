@@ -34,6 +34,7 @@ namespace Wiwa
 		m_ProjectileRain = nullptr;
 		
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_Ultron = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
 		m_SceneCenterPos = glm::vec3(0.0f);
 	}
@@ -59,9 +60,13 @@ namespace Wiwa
 		
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
-		
 		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
 		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);
+
+		m_Ultron = GetComponentIterator<Wiwa::Ultron>();
+		Ultron* ultron = GetComponentByIterator<Ultron>(m_Ultron);
+		EnemyManager& manager = GameStateManager::GetEnemyManager();
+		*ultron = manager.m_UltronData;
 	}
 
 	void BossUltron::OnInit()

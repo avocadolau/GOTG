@@ -189,7 +189,7 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ClusterBulletsPool->GetFromPool();
-		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
+
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
@@ -213,12 +213,14 @@ namespace Wiwa
 
 		bulletTr->localPosition = spawnPosition;
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f); // this to fix the cluster bullet direction, not solving it yet since debugging this is a nightmare
-		//bulletTr->localScale = transform->localScale;
+
 		ClusterBullet* bullet = (ClusterBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ClusterBullet>(newBulletId));
-		bullet->damage = 40; //TODO: Add to components
+		Ultron* ultron = (Ultron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
+
+		bullet->damage = 40; 
 		bullet->direction = bull_dir;
-		bullet->velocity = GameStateManager::GetEnemyManager().m_UltronData.bulletSpeed;
-		bullet->lifeTime = GameStateManager::GetEnemyManager().m_UltronData.bulletLifeTime;
+		bullet->velocity = ultron->bulletSpeed;
+		bullet->lifeTime = ultron->bulletLifeTime;
 		
 		physSys->CreateBody();
 

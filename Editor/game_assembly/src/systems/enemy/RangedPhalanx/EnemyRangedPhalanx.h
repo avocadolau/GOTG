@@ -12,6 +12,7 @@ namespace Wiwa {
 		class RangedPhalanxBaseState* m_DeathState;
 		class RangedPhalanxBaseState* m_HitState;
 		EntityManager::ComponentIterator m_GunTransformIt;
+		EntityManager::ComponentIterator m_PhalanxIt;
 
 		float m_Timer;
 		int m_MinimumPath = 0;

@@ -120,9 +120,11 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+		PhalanxRanged* phalanx = (PhalanxRanged*)entityManager.GetComponentByIterator(enemy->m_PhalanxIt);
+
 		bullet->direction = bull_dir;
-		bullet->velocity = GameStateManager::GetEnemyManager().m_RangedData.bulletSpeed;
-		bullet->lifeTime = GameStateManager::GetEnemyManager().m_RangedData.bulletLifeTime;
+		bullet->velocity = phalanx->bulletSpeed;
+		bullet->lifeTime = phalanx->bulletLifeTime;
 		bullet->damage = character->damage;
 
 		physSys->CreateBody();

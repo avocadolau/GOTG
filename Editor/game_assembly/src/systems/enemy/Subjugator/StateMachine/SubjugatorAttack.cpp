@@ -192,15 +192,16 @@ namespace Wiwa
 		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
+
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+		Subjugator* subjugator = (Subjugator*)entityManager.GetComponentByIterator(enemy->m_Subjugator);
+
 		bullet->direction = bull_dir;
-		bullet->velocity = GameStateManager::GetEnemyManager().m_SubjugatorData.bulletSpeed;
-		bullet->lifeTime = GameStateManager::GetEnemyManager().m_SubjugatorData.bulletLifeTime;
+		bullet->velocity = subjugator->bulletSpeed;
+		bullet->lifeTime = subjugator->bulletLifeTime;
 		bullet->damage = character->damage;
 
 		physSys->CreateBody();
-
 		bulletSys->EnableBullet();
 	}
-
 }

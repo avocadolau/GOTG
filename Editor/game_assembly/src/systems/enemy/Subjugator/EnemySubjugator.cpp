@@ -25,6 +25,7 @@ namespace Wiwa
 		m_Hand2It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Hand3It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Hand4It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_Subjugator = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
 		//m_RangeOfAttack = 40.0f; //Add to components
 		m_MinimumPath = 5;
@@ -57,6 +58,12 @@ namespace Wiwa
 
 		EntityId hand4Id = em.GetChildByName(m_EntityId, "Hand_4");
 		m_Hand4It = GetComponentIterator<Wiwa::Transform3D>(hand4Id);
+
+		m_Subjugator = GetComponentIterator<Wiwa::Subjugator>();
+		Subjugator* subjugator = GetComponentByIterator<Subjugator>(m_Subjugator);
+		EnemyManager& manager = GameStateManager::GetEnemyManager();
+		subjugator->bulletLifeTime = manager.m_RangedData.bulletLifeTime;;
+		subjugator->bulletSpeed = manager.m_RangedData.bulletSpeed;;
 	}
 
 	void EnemySubjugator::OnInit()

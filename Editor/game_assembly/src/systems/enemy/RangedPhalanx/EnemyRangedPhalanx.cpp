@@ -22,6 +22,7 @@ namespace Wiwa
 		m_DeathState = nullptr;
 		m_HitState = nullptr;
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_PhalanxIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		//m_RangeOfAttack = 20.0f;
 		m_MinimumPath = 5;
 		m_Timer = 0.0f;
@@ -44,6 +45,11 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		EntityId gunId = em.GetChildByName(m_EntityId, "gun");
 		m_GunTransformIt = GetComponentIterator<Wiwa::Transform3D>(gunId);
+		m_PhalanxIt = GetComponentIterator<Wiwa::PhalanxRanged>();
+		PhalanxRanged* phalanx = GetComponentByIterator<PhalanxRanged>(m_PhalanxIt);
+		EnemyManager& manager = GameStateManager::GetEnemyManager();
+		phalanx->bulletLifeTime = manager.m_RangedData.bulletLifeTime;
+		phalanx->bulletSpeed = manager.m_RangedData.bulletSpeed;
 	}
 
 	void EnemyRangedPhalanx::OnInit()

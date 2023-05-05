@@ -18,6 +18,7 @@ namespace Wiwa {
 		class BossUltronBaseState* m_ProjectileRain;
 
 		EntityManager::ComponentIterator m_GunTransformIt;
+		EntityManager::ComponentIterator m_Ultron;
 
 		float m_Timer;
 		int m_MinimumPath = 0;

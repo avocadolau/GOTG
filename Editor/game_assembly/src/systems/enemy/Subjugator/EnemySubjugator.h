@@ -12,6 +12,7 @@ namespace Wiwa {
 		class SubjugatorBaseState* m_DeathState;
 		class SubjugatorBaseState* m_HitState;
 
+		EntityManager::ComponentIterator m_Subjugator;
 		EntityManager::ComponentIterator m_Hand1It;
 		EntityManager::ComponentIterator m_Hand2It;
 		EntityManager::ComponentIterator m_Hand3It;

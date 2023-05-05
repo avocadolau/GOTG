@@ -115,12 +115,14 @@ namespace Wiwa
 		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix) + glm::vec3(0.0, 2.0f, 0.0f);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
+
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		EnemyData* stats = (EnemyData*)entityManager.GetComponentByIterator(enemy->m_StatsIt);
+		Ultron* ultron = (Ultron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
 
 		bullet->direction = bull_dir;
-		bullet->velocity = GameStateManager::GetEnemyManager().m_UltronData.bulletSpeed;
-		bullet->lifeTime = GameStateManager::GetEnemyManager().m_UltronData.bulletLifeTime;
+		bullet->velocity = ultron->bulletSpeed;
+		bullet->lifeTime = ultron->bulletLifeTime;
 		bullet->damage = stats->damage;
 
 		physSys->CreateBody();
