@@ -91,7 +91,7 @@ namespace Wiwa
 
 		//WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
 
-		if (m_TimerAttackCooldown > stats->rateOfFire)
+		if (m_TimerAttackCooldown > 1.0f / stats->rateOfFire)
 		{
 			if (m_ChangeShoot == true)
 			{
@@ -140,7 +140,7 @@ namespace Wiwa
 			m_TimerAttackCooldown = 0.0f;
 		}
 
-		if (m_TimerSyncAnimationBullets > stats->rateOfFire)
+		if (m_TimerSyncAnimationBullets > 1.0f / stats->rateOfFire)
 		{
 			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("attack", false);

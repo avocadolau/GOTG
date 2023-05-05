@@ -44,17 +44,18 @@ namespace Wiwa
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
+		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		enemy->LookAt(playerTr->localPosition, 30.f);
 
-		m_TimerAttackCooldown += Time::GetDeltaTime(); // This is in milliseconds
+		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds(); // This is in milliseconds
 
 		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 3.0f) // animation->HasFinished()
 		{
 			m_TimerAttackCooldown = 0.0f;
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
-		else if (m_TimerAttackCooldown > 2000.0f)
+		else if (m_TimerAttackCooldown > 1.0f / stats->rateOfFire)
 		{
 			GenerateAttack(enemy);
 			// Reset the timer after generating the attack

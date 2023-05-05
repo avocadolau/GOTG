@@ -61,7 +61,7 @@ namespace Wiwa
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 
-		if (m_TimerAttackCooldown > stats->rateOfFire)
+		if (m_TimerAttackCooldown > 1.0f / stats->rateOfFire)
 		{
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;

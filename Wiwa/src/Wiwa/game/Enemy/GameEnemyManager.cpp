@@ -165,8 +165,8 @@ namespace Wiwa
 		meleePhalanxGeneric.damage = 10;
 		meleePhalanxGeneric.maxVelocity = 15;
 		meleePhalanxGeneric.maxAcceleration = 15;
-		meleePhalanxGeneric.stoppingDistance = 2;
-		meleePhalanxGeneric.rateOfFire = 1;
+		meleePhalanxGeneric.stoppingDistance = 20;
+		meleePhalanxGeneric.rateOfFire = 2;
 		meleePhalanxGeneric.range = 1;
 		meleePhalanxGeneric.creditsDrop = 15;
 		meleePhalanxGeneric.level = 0;
@@ -179,8 +179,8 @@ namespace Wiwa
 		meleePhalanxRedVariant.damage = 20;
 		meleePhalanxRedVariant.maxVelocity = 15;
 		meleePhalanxRedVariant.maxAcceleration = 15;
-		meleePhalanxRedVariant.stoppingDistance = 2;
-		meleePhalanxRedVariant.rateOfFire = 1;
+		meleePhalanxRedVariant.stoppingDistance = 20;
+		meleePhalanxRedVariant.rateOfFire = 2;
 		meleePhalanxRedVariant.range = 1;
 		meleePhalanxRedVariant.creditsDrop = 20;
 		meleePhalanxRedVariant.level = 0;
@@ -193,8 +193,8 @@ namespace Wiwa
 		meleePhalanxBlueVariant.damage = 20;
 		meleePhalanxBlueVariant.maxVelocity = 15;
 		meleePhalanxBlueVariant.maxAcceleration = 15;
-		meleePhalanxBlueVariant.stoppingDistance = 2;
-		meleePhalanxBlueVariant.rateOfFire = 3;
+		meleePhalanxBlueVariant.stoppingDistance = 20;
+		meleePhalanxBlueVariant.rateOfFire = 1;
 		meleePhalanxBlueVariant.range = 1;
 		meleePhalanxBlueVariant.creditsDrop = 20;
 		meleePhalanxBlueVariant.level = 0;
