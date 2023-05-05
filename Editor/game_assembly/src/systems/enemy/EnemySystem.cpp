@@ -446,5 +446,11 @@ namespace Wiwa
 		agent->maxAcceleration = stats->maxAcceleration;
 		agent->maxSpeed = stats->maxVelocity;
 		agent->stoppingDistance = stats->stoppingDistance;
+
+		Health* health = GetComponent<Health>();
+		if (health)
+		{
+			health->health = stats->health;
+		}
 	}
 }
