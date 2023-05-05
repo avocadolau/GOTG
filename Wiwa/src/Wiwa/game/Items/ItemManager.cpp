@@ -68,6 +68,11 @@ void Wiwa::ItemManager::DeleteShopElement(const std::string& name)
 	m_ShopElementPool.erase(name);
 }
 
+void Wiwa::ItemManager::UnlockShopElement(const std::string& name ,bool ret)
+{
+	m_ShopElementPool[name].Unlocked = ret;
+}
+
 void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 {
 	JSONValue actives = doc->AddMemberArray("actives");
@@ -239,28 +244,36 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				{
 					Wiwa::ShopElement shopElement;
 					shopElement.Name = shop_elements[i]["name"].as_string();
-						
+					shopElement.AmountOfSteps = shop_elements[i]["steps"].as_int();
 					shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
 					if (JSONValue shop_element_costs = shop_elements[i]["costs"]; shop_element_costs.IsArray())
 					{
 						for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
 						{
-							char buffer[100];
-							std::sprintf(buffer, "%s%d", "costs_", j);
-							shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
+							for (uint32_t k = 0; k < 5; k++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "costs_", k);
+								if (shop_element_costs[j].HasMember(buffer))
+									shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
+							}
 						}
 					}
-					if (JSONValue shop_element_percentages = shop_elements[i]["percentages"]; shop_elements.IsArray())
+					if(JSONValue shop_element_percentages = shop_elements[i]["percentages"]; shop_element_percentages.IsArray())
 					{
 						for (uint32_t j = 0; j < shop_element_percentages.Size(); j++)
 						{
-							char buffer[100];
-							std::sprintf(buffer, "%s%d", "percentages_", j);
-							shopElement.Costs.push_back(shop_element_percentages[j][buffer].as_int());
+							for (uint32_t k = 0; k < 5; k++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "percentages_", k);
+								if (shop_element_percentages[j].HasMember(buffer))
+									shopElement.PercentageIncreases.push_back(shop_element_percentages[j][buffer].as_int());
+							}
 						}
 					}
 					shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
-					//shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
+					shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
 
 					AddShopElement(shopElement);
 				}

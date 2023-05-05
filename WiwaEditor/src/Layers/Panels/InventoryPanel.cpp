@@ -750,6 +750,11 @@ void InventoryPanel::DrawShopElementPool(int& id)
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##current_step", &shopElement->CurrentStep);
 
+				if (shopElement->CurrentStep > shopElement->AmountOfSteps)
+					shopElement->CurrentStep = shopElement->AmountOfSteps;
+				if (shopElement->CurrentStep <= 0)
+					shopElement->CurrentStep = 1;
+
 				ImGui::TableNextColumn();
 				ImGui::PushID("Costs");
 				VectorEdit(shopElement->Costs);

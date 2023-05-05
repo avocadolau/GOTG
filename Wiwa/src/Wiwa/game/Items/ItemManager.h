@@ -30,6 +30,7 @@ namespace Wiwa
 
 		static void AddShopElement(const ShopElement& consumable);
 		static void DeleteShopElement(const std::string& name);
+		static void UnlockShopElement(const std::string& name, bool ret);
 
 		static void Serialize(JSONDocument* doc);
 		static void Deserialize(JSONDocument* doc);

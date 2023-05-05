@@ -334,7 +334,7 @@ namespace Wiwa
 
     void ShopElement::Use()
     {
-        const float buffPercent = ((float)PercentageIncreases.at(CurrentStep) / 100.f);
+        const float buffPercent = ((float)PercentageIncreases.at(CurrentStep-1) / 100.f);
         Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
         Character* player = GetPlayerComp();
 
@@ -353,6 +353,7 @@ namespace Wiwa
             break;
         case Wiwa::HowardElementType::HEALTH_CAPACITOR:
             player->Health += player->Health * buffPercent;
+            player->MaxHealth += player->MaxHealth * buffPercent;
             break;
         case Wiwa::HowardElementType::SHIELD_FAN:
             player->ShieldRegeration += player->ShieldRegeration * buffPercent;

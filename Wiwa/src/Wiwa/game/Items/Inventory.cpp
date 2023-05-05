@@ -179,41 +179,45 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 	{
 		if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
 		{
+			
+			Wiwa::ShopElement shopElement;
 			for (uint32_t i = 0; i < shop_elements.Size(); i++)
 			{
 				Wiwa::ShopElement shopElement;
-				if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+				shopElement.Name = shop_elements[i]["name"].as_string();
+				shopElement.AmountOfSteps = shop_elements[i]["steps"].as_int();
+				shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
+				if (JSONValue shop_element_costs = shop_elements[i]["costs"]; shop_element_costs.IsArray())
 				{
-					for (uint32_t i = 0; i < shop_elements.Size(); i++)
+					for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
 					{
-						Wiwa::ShopElement shopElement;
-						shopElement.Name = shop_elements[i]["name"].as_string();
-						shopElement.AmountOfSteps = shop_elements[i]["steps"].as_int();
-						shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
-						if (JSONValue shop_element_costs = shop_elements["costs"]; shop_element_costs.IsArray())
+						for (uint32_t k = 0; k < 5; k++)
 						{
-							for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
-							{
-								char buffer[100];
-								std::sprintf(buffer, "%s%d", "costs_", j);
+							char buffer[100];
+							std::sprintf(buffer, "%s%d", "costs_", k);
+							if (shop_element_costs[j].HasMember(buffer))
 								shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
-							}
 						}
-						if (JSONValue shop_element_percentages = (*doc)["percentages"]; shop_elements.IsArray())
-						{
-							for (uint32_t j = 0; j < shop_element_percentages.Size(); j++)
-							{
-								char buffer[100];
-								std::sprintf(buffer, "%s%d", "percentage_", j);
-								shopElement.Costs.push_back(shop_element_percentages[j][buffer].as_int());
-							}
-						}
-						shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
-						shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
-
-						AddShopPassive(shopElement);
 					}
 				}
+						
+				if (JSONValue shop_element_percentages = shop_elements[i]["percentages"]; shop_elements.IsArray())
+				{
+					for (uint32_t j = 0; j < shop_element_percentages.Size(); j++)
+					{
+						for (uint32_t k = 0; k < 5; k++)
+						{
+							char buffer[100];
+							std::sprintf(buffer, "%s%d", "percentages_", k);
+							if (shop_element_percentages[j].HasMember(buffer))
+								shopElement.PercentageIncreases.push_back(shop_element_percentages[j][buffer].as_int());
+						}
+					}
+				}
+				shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
+				shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
+				AddShopPassive(shopElement);
+
 			}
 		}
 	}
@@ -284,6 +288,18 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 {
 	m_ShopPassives.emplace_back(shopElement);
+	//If the passive boost is one of the easy ones we should implement it right away
+	switch (shopElement.PassiveBoost)
+	{
+	case Wiwa::HowardElementType::FANCY_BOOTS:
+	case Wiwa::HowardElementType::EASY_TRIGGER:
+	case Wiwa::HowardElementType::NANO_BOOST:
+	case Wiwa::HowardElementType::NANO_MACHINES:
+	case Wiwa::HowardElementType::HEALTH_CAPACITOR:
+	case Wiwa::HowardElementType::SHIELD_FAN:
+		m_ShopPassives.back().Use();
+	}
+	
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
@@ -446,4 +462,7 @@ void Wiwa::Inventory::Clear()
     
     if(!m_PassiveSkill.empty())
 		m_PassiveSkill.clear();
+
+	if (!m_ShopPassives.empty())
+		m_ShopPassives.clear();
 }
