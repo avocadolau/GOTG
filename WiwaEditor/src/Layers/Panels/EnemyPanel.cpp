@@ -190,8 +190,8 @@ void EnemyPanel::DrawRangedData()
 	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
 	if (ImGui::TreeNodeEx("Ranged Enemy Behavior Data", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::InputFloat("##bulletSpeedR", &manager.m_RangedData.bulletSpeed, 0.0f, 0.0f, "%.1f");
-		ImGui::InputFloat("##bulletLifetimeR", &manager.m_RangedData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("bulletSpeedR", &manager.m_RangedData.bulletSpeed, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("bulletLifetimeR", &manager.m_RangedData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
 		ImGui::TreePop();
 	}
 }
@@ -201,8 +201,8 @@ void EnemyPanel::DrawSubjugatorData()
 	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
 	if (ImGui::TreeNodeEx("Subjugator Enemy Behavior Data", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::InputFloat("##bulletSpeedS", &manager.m_SubjugatorData.bulletSpeed, 0.0f, 0.0f, "%.1f");
-		ImGui::InputFloat("##bulletLifetimeS", &manager.m_SubjugatorData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("bulletSpeedS", &manager.m_SubjugatorData.bulletSpeed, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("bulletLifetimeS", &manager.m_SubjugatorData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
 		ImGui::TreePop();
 	}
 }
@@ -212,8 +212,33 @@ void EnemyPanel::DrawUltronData()
 	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
 	if (ImGui::TreeNodeEx("Ultron Enemy Behavior Data", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::InputFloat("##bulletSpeedU", &manager.m_UltronData.bulletSpeed, 0.0f, 0.0f, "%.1f");
-		ImGui::InputFloat("##bulletLifetimeU", &manager.m_UltronData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("bulletSpeedU", &manager.m_UltronData.bulletSpeed, 0.0f, 0.0f, "%.1f");
+		ImGui::InputFloat("bulletLifetimeU", &manager.m_UltronData.bulletLifeTime, 0.0f, 0.0f, "%.1f");
+
+		// Splash
+		ImGui::InputInt("bulletStorm_firstPattern_bulletsPerWave", &manager.m_UltronData.bulletStorm_firstPattern_bulletsPerWave);
+		ImGui::InputInt("bulletStorm_firstPattern_waves", &manager.m_UltronData.bulletStorm_firstPattern_waves);
+
+		// Spiral
+		ImGui::InputInt("bulletStorm_secondPattern_bulletsPerSpiral", &manager.m_UltronData.bulletStorm_secondPattern_bulletsPerSpiral);
+		ImGui::InputFloat("bulletStorm_secondPattern_timerBetweenSpirals", &manager.m_UltronData.bulletStorm_secondPattern_timerBetweenSpirals, 0.0f, 0.0f, "%.1f");
+		ImGui::InputInt("bulletStorm_secondPattern_spirals", &manager.m_UltronData.bulletStorm_secondPattern_spirals);
+
+		// Cross
+		ImGui::InputInt("bulletStorm_thirdPattern_bulletsPerCross", &manager.m_UltronData.bulletStorm_thirdPattern_bulletsPerCross);
+		ImGui::InputFloat("bulletStorm_thirdPattern_timerBetweenCross", &manager.m_UltronData.bulletStorm_thirdPattern_timerBetweenCross, 0.0f, 0.0f, "%.1f");
+		ImGui::InputInt("bulletStorm_thirdPattern_crosses", &manager.m_UltronData.bulletStorm_thirdPattern_crosses);
+
+		/*-------- Cluster Shot --------*/
+		ImGui::InputInt("clusterShot_bullets", &manager.m_UltronData.clusterShot_bullets);
+		ImGui::InputFloat("clusterShot_timerBetweenBullets", &manager.m_UltronData.clusterShot_timerBetweenBullets, 0.0f, 0.0f, "%.1f");
+		ImGui::InputInt("clusterShot_miniBullets", &manager.m_UltronData.clusterShot_miniBullets);
+
+		/*-------- Laser beam --------*/
+		ImGui::InputInt("laserBeam_tickDamage", &manager.m_UltronData.laserBeam_tickDamage);
+		ImGui::InputFloat("laserBeam_tickTimer", &manager.m_UltronData.laserBeam_tickTimer, 0.0f, 0.0f, "%.1f");
+		ImGui::InputInt("laserBeam_duration", &manager.m_UltronData.laserBeam_duration);
+
 		ImGui::TreePop();
 	}
 }

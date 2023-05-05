@@ -30,7 +30,7 @@ namespace Wiwa {
 
 		/*-------- Laser beam --------*/
 		int laserBeam_tickDamage = 20;
-		float laserBeam_tickTimer = 1;
+		float laserBeam_tickTimer = 1.0f;
 		int laserBeam_duration = 5;
 
 		float bulletSpeed;

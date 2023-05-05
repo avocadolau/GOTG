@@ -48,6 +48,46 @@ namespace nlohmann {
     };
 }
 
+void to_json(nlohmann::json& j, const Wiwa::Ultron& u) {
+	j = nlohmann::json{
+		{"bulletStorm_firstPattern_bulletsPerWave", u.bulletStorm_firstPattern_bulletsPerWave},
+		{"bulletStorm_firstPattern_waves", u.bulletStorm_firstPattern_waves},
+		{"bulletStorm_secondPattern_bulletsPerSpiral", u.bulletStorm_secondPattern_bulletsPerSpiral},
+		{"bulletStorm_secondPattern_timerBetweenSpirals", u.bulletStorm_secondPattern_timerBetweenSpirals},
+		{"bulletStorm_secondPattern_spirals", u.bulletStorm_secondPattern_spirals},
+		{"bulletStorm_thirdPattern_bulletsPerCross", u.bulletStorm_thirdPattern_bulletsPerCross},
+		{"bulletStorm_thirdPattern_timerBetweenCross", u.bulletStorm_thirdPattern_timerBetweenCross},
+		{"bulletStorm_thirdPattern_crosses", u.bulletStorm_thirdPattern_crosses},
+		{"clusterShot_bullets", u.clusterShot_bullets},
+		{"clusterShot_timerBetweenBullets", u.clusterShot_timerBetweenBullets},
+		{"clusterShot_miniBullets", u.clusterShot_miniBullets},
+		{"laserBeam_tickDamage", u.laserBeam_tickDamage},
+		{"laserBeam_tickTimer", u.laserBeam_tickTimer},
+		{"laserBeam_duration", u.laserBeam_duration},
+	};
+}
+
+void from_json(const nlohmann::json& j, Wiwa::Ultron& u) {
+	u.bulletStorm_firstPattern_bulletsPerWave = j.value("bulletStorm_firstPattern_bulletsPerWave", 8);
+	u.bulletStorm_firstPattern_waves = j.value("bulletStorm_firstPattern_waves", 4);
+
+	u.bulletStorm_secondPattern_bulletsPerSpiral = j.value("bulletStorm_secondPattern_bulletsPerSpiral", 8);
+	u.bulletStorm_secondPattern_timerBetweenSpirals = j.value("bulletStorm_secondPattern_timerBetweenSpirals", 0.2f);
+	u.bulletStorm_secondPattern_spirals = j.value("bulletStorm_secondPattern_spirals", 3);
+
+	u.bulletStorm_thirdPattern_bulletsPerCross = j.value("bulletStorm_thirdPattern_bulletsPerCross", 8);
+	u.bulletStorm_thirdPattern_timerBetweenCross = j.value("bulletStorm_thirdPattern_timerBetweenCross", 0.2f);
+	u.bulletStorm_thirdPattern_crosses = j.value("bulletStorm_thirdPattern_crosses", 3);
+
+	u.clusterShot_bullets = j.value("clusterShot_bullets", 3);
+	u.clusterShot_timerBetweenBullets = j.value("clusterShot_timerBetweenBullets", 2.0f);
+	u.clusterShot_miniBullets = j.value("clusterShot_miniBullets", 8);
+
+	u.laserBeam_tickDamage = j.value("laserBeam_tickDamage", 20);
+	u.laserBeam_tickTimer = j.value("laserBeam_tickTimer", 1.0f);
+	u.laserBeam_duration = j.value("laserBeam_duration", 5);
+}
+
 struct MapKeyComparator {
 	bool operator()(const std::pair<int, std::string>& a, const std::pair<int, std::string>& b) const {
 		if (a.second != b.second) {
