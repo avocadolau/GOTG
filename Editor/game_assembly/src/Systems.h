@@ -13,6 +13,7 @@
 #include "systems/enemy/Subjugator/EnemySubjugator.h"
 
 #include "systems/attack/SimpleBulletSystem.h"
+#include "systems/attack/RainProjectileSystem.h"
 #include "systems/attack/SentinelExplosionSystem.h"
 
 #include "systems/attack/VictoryShieldSystem.h"

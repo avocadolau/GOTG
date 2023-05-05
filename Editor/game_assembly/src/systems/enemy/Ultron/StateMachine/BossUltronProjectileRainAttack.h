@@ -3,7 +3,7 @@
 
 #define RAIN_RANGE 5.0f
 #define RAIN_PROJECTILE_NUMBER 9
-#define TIME_BETWEEN_PROJECTILES 1.0f
+#define TIME_BETWEEN_PROJECTILES 2.0f
 
 namespace Wiwa {
 	class BossUltronProjectileRainAttackState : public BossUltronBaseState {

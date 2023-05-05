@@ -48,36 +48,45 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 	{
 	case ProjectileRainState::PREPARE_RAIN:
 	{
+		//WI_INFO("Prepare rain");
+
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
 
-		m_RainState = ProjectileRainState::RAIN_ATTACK;
+		if (m_TimerRain >= TIME_BETWEEN_PROJECTILES)
+		{
+			m_RainState = ProjectileRainState::RAIN_ATTACK;
+			m_TimerRain = 0.0f;
+			m_RainProjectileCounter = 0;
+		}
 
 	}break;
 	case ProjectileRainState::RAIN_ATTACK:
 	{
+		//WI_INFO("Attack rain");
 		if (m_TimerRain >= TIME_BETWEEN_PROJECTILES)
 		{
-			SpawnProjectileRain(enemy, { 0.0f,-1.0f,0.0f });
-
 			m_TimerRain = 0.0f;
 			m_RainProjectileCounter++;
+			SpawnProjectileRain(enemy, /*{0.0f,-1.0f,0.0f}*/{ 0.0f,-1.0f,0.0f });
 		}
 
-		if (RAIN_PROJECTILE_NUMBER >= m_RainProjectileCounter)
+		if (RAIN_PROJECTILE_NUMBER <= m_RainProjectileCounter)
 		{
 			m_RainState = ProjectileRainState::END_STATE;
 		}
-		m_TimerRain += Time::GetDeltaTimeSeconds();
+		
 
 	}break;
 	case ProjectileRainState::END_STATE:
 	{
+		//WI_INFO("End rain");
 		enemy->SwitchState(enemy->m_MovementState);
 
 	}break;
 	}	
+	m_TimerRain += Time::GetDeltaTimeSeconds();
 }
 
 void Wiwa::BossUltronProjectileRainAttackState::ExitState(BossUltron* enemy)
@@ -92,6 +101,9 @@ bool Wiwa::BossUltronProjectileRainAttackState::SpawnProjectileRain(BossUltron* 
 	Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 	GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 	EntityId newBulletId = GameStateManager::s_PoolManager->s_RainProjectilePool->GetFromPool();
+
+	if(newBulletId == WI_INVALID_INDEX)
+		return false;
 
 	Wiwa::RainProjectileSystem* rainProjectileSystem = entityManager.GetSystem<Wiwa::RainProjectileSystem>(newBulletId);
 	Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);

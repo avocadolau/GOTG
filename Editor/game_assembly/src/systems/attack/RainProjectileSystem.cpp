@@ -99,13 +99,15 @@ bool Wiwa::RainProjectileSystem::OnDisabledFromPool()
 	if (transform)
 	{
 		transform->localPosition.y = 4100.0f;
+		//WI_INFO("transform local pos");
 	}
 
 	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-
+	//WI_INFO("em");
 	PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
-
+	//WI_INFO("physsys");
 	physSystem->DeleteBody();
+	//WI_INFO("delete body");
 
 	m_Timer = 0.0f;
 	m_DamageHasBeenApplied = false;
