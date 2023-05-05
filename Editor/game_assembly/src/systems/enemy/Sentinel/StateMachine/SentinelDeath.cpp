@@ -7,7 +7,7 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
-#include <Wiwa/ecs/components/game/Character.h>
+
 #include "../../../attack/SentinelExplosionSystem.h"
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
@@ -43,9 +43,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
-		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-
 		
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		audio->PlayAudio("explosion");
@@ -73,7 +71,7 @@ namespace Wiwa
 		explosionSys->EnableExplosion();
 
 		// Destroy enemy
-		Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+		EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 		self->hasFinished = true;
 		if (self->waveId != -1)
 		{

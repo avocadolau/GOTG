@@ -51,49 +51,23 @@ namespace Wiwa
 
         Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+        EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
         
         float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
         Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
         if (agent != nullptr)
         {
-            //Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-           /* offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.75f);*/
-            //m_TargetPoint = agent->GetRandPointOutsideCircle(playerTr->localPosition, enemy->m_RangeOfAttack);
             m_TargetPoint = playerTr->localPosition;
             agent->SetDestination(m_TargetPoint);
-
-            //m_HasTargetPoint = true;
         }
 
-       // bool isNearTargetPoint = Math::IsPointNear(selfTr->localPosition, m_TargetPoint, 2.0f);
-       //
-       // if (isNearTargetPoint)
-       //     m_HasTargetPoint = false;
-
-        //bool messi = agent->Raycast(selfTr->localPosition, playerTr->localPosition);
-        //WI_INFO(" Raycast, something in betwee: {}", messi);
-
-        if (distanceToPlayer < enemy->m_RangeOfAttack && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
+        if (distanceToPlayer < stats->range && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
         {
             agent->StopAgent();
             enemy->SwitchState(enemy->m_AttackingState);
         }
 
-        //if (agentPtr)
-        //{
-        //    agentPtr->AllowRotationByTile();
-
-        //    if (glm::distance(selfTr->localPosition, offsetPosition) < enemy->m_RangeOfAttack)
-        //    {
-        //        agentPtr->StopMoving();
-        //        agentPtr->DisableRotationByTile();
-        //        agentPtr->LookAtPosition(playerTr->localPosition);
-        //        //WI_INFO(" Distance: {},", glm::distance(selfTr->localPosition, offsetPosition));
-        //        enemy->SwitchState(enemy->m_AttackingState);
-        //    }
-
-        //}
     }
 
 	

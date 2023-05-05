@@ -5,8 +5,9 @@
 namespace Wiwa {
 	class  EnemySystem : public System {
 	public:
-		EntityManager::ComponentIterator m_EnemyIt;
+		EntityManager::ComponentIterator m_EnemyStateIt;
 		EntityManager::ComponentIterator m_StatsIt;
+		EntityManager::ComponentIterator m_Health;
 		EntityManager::ComponentIterator m_ColliderIt;
 		EntityManager::ComponentIterator m_AgentIt;
 		EntityManager::ComponentIterator m_NavAgentIt;
@@ -47,6 +48,8 @@ namespace Wiwa {
 		void LookAt(const glm::vec3& target_look, float rotation_speed);
 
 		void RotateTo(const glm::vec3& target);
+
+		void SetStatsFromTable();
 	};
 }
 

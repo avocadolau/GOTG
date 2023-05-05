@@ -10,10 +10,19 @@ namespace Wiwa
 {
     enum Pool_Type
     {
-        PHALANX_MELEE = 0,
-        PHALAN_RANGED,
+        PHALANX_MELEE_GENERIC = 0,
+        PHALANX_MELEE_REDVARIANT,
+        PHALANX_MELEE_BLUEVARIANT,
+
+        PHALANX_RANGED_GENERIC,
+        PHALANX_RANGED_REDVARIANT,
+        PHALANX_RANGED_BLUEVARIANT,
+
         SENTINEL,
+
         SUBJUGATOR,
+        SUBJUGATOR_CHIEF,
+
         BOSS_ULTRON,
 
         SIMPLE_BULLET,

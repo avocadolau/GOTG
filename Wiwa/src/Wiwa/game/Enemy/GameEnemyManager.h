@@ -2,10 +2,11 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <Wiwa/ecs/components/game/enemy/EnemyData.h>
 
 namespace Wiwa
 {
-	struct WI_API EnemyData
+	/*struct WI_API EnemyData
 	{
 		std::string name = "NONE";
 		int level = 0;
@@ -16,9 +17,7 @@ namespace Wiwa
 		float rateOfFire = 0;
 		float range = 0;
 		int creditsDrop = 0;
-	};
-
-
+	};*/
 
 	class WI_API EnemyManager
 	{
@@ -32,7 +31,8 @@ namespace Wiwa
 		bool CreateEmptyFile();
 		void Reset();
 
-		bool CheckIfHasLevel(int level, const std::string& str);
+		bool CheckIfHasLevelCreate(int level, const std::string& str);
+		bool CheckIfHasLevelDelete(int level, const std::string& str);
 
 		//void PushBackArrayJson(JSONValue& json_value, const EnemyData& data);
 		inline std::map<std::pair<int, std::string>, EnemyData>& GetData() { return m_EnemyData; };
@@ -40,5 +40,7 @@ namespace Wiwa
 
 		const int m_BaseLevel = 0;
 		int m_MaxLevel = 4;
+		int m_CurrentRunLevel = 0;
+		int m_IncreaseDiffEvery = 1;
 	};
 }

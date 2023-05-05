@@ -8,8 +8,8 @@ namespace Wiwa
 {
 	GamePoolingManager::GamePoolingManager()
 	{
-		s_PhalanxMeleePool = new EntityPool(Pool_Type::PHALANX_MELEE, 3, "assets\\Enemy\\PhalanxMelee\\MeleePhalanx_01.wiprefab");
-		s_PhalanxRangedPool = new EntityPool(Pool_Type::PHALAN_RANGED, 3, "assets\\Enemy\\PhalanxRanged\\RangedPhalanx_01.wiprefab");
+		s_PhalanxMeleePool = new EntityPool(Pool_Type::PHALANX_MELEE_GENERIC, 3, "assets\\Enemy\\PhalanxMelee\\MeleePhalanx_01.wiprefab");
+		s_PhalanxRangedPool = new EntityPool(Pool_Type::PHALANX_RANGED_GENERIC, 3, "assets\\Enemy\\PhalanxRanged\\RangedPhalanx_01.wiprefab");
 		s_SentinelPool = new EntityPool(Pool_Type::SENTINEL, 3, "assets\\Enemy\\Sentinel\\sk_sentinel01a.wiprefab");
 		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 100, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		s_SentinelExplosion = new EntityPool(Pool_Type::SENTINEL_EXPLOSION, 3, "assets\\Enemy\\Explosions\\SentinelExplosion_01.wiprefab");
@@ -63,10 +63,10 @@ namespace Wiwa
 	{
 		switch (type)
 		{
-		case Pool_Type::PHALANX_MELEE:
+		case Pool_Type::PHALANX_MELEE_GENERIC:
 			LoadPhalanxMeleePool(scene);
 			break;
-		case Pool_Type::PHALAN_RANGED:
+		case Pool_Type::PHALANX_RANGED_GENERIC:
 			LoadPhalanxRangedPool(scene);
 			break;
 		case Pool_Type::SENTINEL:
@@ -113,10 +113,10 @@ namespace Wiwa
 	{
 		switch (type)
 		{
-		case Pool_Type::PHALANX_MELEE:
+		case Pool_Type::PHALANX_MELEE_GENERIC:
 			UnloadPhalanxMeleePool();
 			break;
-		case Pool_Type::PHALAN_RANGED:
+		case Pool_Type::PHALANX_RANGED_GENERIC:
 			UnloadPhalanxRangedPool();
 			break;
 		case Pool_Type::SENTINEL:

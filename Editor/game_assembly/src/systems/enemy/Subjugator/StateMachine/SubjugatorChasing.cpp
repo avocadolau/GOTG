@@ -52,26 +52,18 @@ namespace Wiwa
 
         Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+        EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
         float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
         Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
         if (agent != nullptr)
         {
-            //Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-            //m_TargetPoint = agent->GetRandPointOutsideCircle(playerTr->localPosition, enemy->m_RangeOfAttack);
             m_TargetPoint = playerTr->localPosition;
             agent->SetDestination(m_TargetPoint);
-
-            //m_HasTargetPoint = true;
         }
 
-        //bool isNearTargetPoint = Math::IsPointNear(selfTr->localPosition, m_TargetPoint, 2.0f);
-        //
-        //if (isNearTargetPoint)
-        //    m_HasTargetPoint = false;
-
-        if (distanceToPlayer < enemy->m_RangeOfAttack && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
+        if (distanceToPlayer < stats->range && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
         {
             agent->StopAgent();
             enemy->SwitchState(enemy->m_AttackingState);

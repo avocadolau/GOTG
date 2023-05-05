@@ -7,7 +7,7 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../attack/SimpleBulletSystem.h"
 #include "../../../../components/attack/SimpleBullet.h"
-#include <Wiwa/ecs/components/game/Character.h>
+
 
 #define ANIMATION_FRAME_TIME 41.66f
 
@@ -72,7 +72,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
+
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -90,10 +91,8 @@ namespace Wiwa
 
 		//WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
 
-		if (m_TimerAttackCooldown > 1.0f)
+		if (m_TimerAttackCooldown > stats->rateOfFire)
 		{
-			
-
 			if (m_ChangeShoot == true)
 			{
 				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -141,7 +140,7 @@ namespace Wiwa
 			m_TimerAttackCooldown = 0.0f;
 		}
 
-		if (m_TimerSyncAnimationBullets > stats->RateOfFire)
+		if (m_TimerSyncAnimationBullets > stats->rateOfFire)
 		{
 			//SubjugatorAudio - Shooting audio for the Subjugator
 			animator->PlayAnimation("attack", false);
@@ -149,7 +148,7 @@ namespace Wiwa
 			m_TimerSyncAnimationBullets = 0.0;
 		}
 
-		if (dist2Player > enemy->m_RangeOfAttack || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
+		if (dist2Player > stats->range || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
@@ -169,7 +168,7 @@ namespace Wiwa
 
 	}
 
-	void SubjugatorAttackState::SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
+	void SubjugatorAttackState::SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::EnemyData* character, const glm::vec3& bull_dir)
 	{
 		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountActive());
 		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled());

@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 namespace Wiwa {
-	struct WI_API Enemy {
+	struct WI_API EnemyState {
 		int enemyType;
 		bool hasFinished;
 		int waveId;
@@ -15,7 +15,7 @@ namespace Wiwa {
 	};
 }
 
-REFLECTION_BEGIN(Wiwa::Enemy)
+REFLECTION_BEGIN(Wiwa::EnemyState)
 REFLECT_MEMBER(enemyType)
 REFLECT_MEMBER(hasFinished)
 REFLECT_MEMBER(currentRotation)

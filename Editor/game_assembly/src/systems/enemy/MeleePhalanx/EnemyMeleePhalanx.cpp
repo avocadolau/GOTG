@@ -7,7 +7,7 @@
 #include "StateMachine/MeleePhalanxHit.h"
 #include "EnemyMeleePhalanx.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/components/game/Health.h>
 
 namespace Wiwa
 {
@@ -39,6 +39,7 @@ namespace Wiwa
 
 	void EnemyMeleePhalanx::OnInit()
 	{
+
 		if (!getAwake())
 			System::Awake();
 
@@ -65,8 +66,8 @@ namespace Wiwa
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-		if (stats->Health <= 0 && m_CurrentState != m_DeathState)
+		Health* stats = GetComponentByIterator<Health>(m_Health);
+		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
 			SwitchState(m_DeathState);
 		}
@@ -116,18 +117,6 @@ namespace Wiwa
 
 		EnemySystem::ReceiveDamage(damage);
 		SwitchState(m_HitState);
-		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
-
-		EntityId hit_1 = em.GetChildByName(m_EntityId, "E_Hit_1");
-		EntityId hit_2 = em.GetChildByName(m_EntityId, "E_Hit_2");
-		ParticleManager& pman = this->getScene().GetParticleManager();
-		pman.EmitBatch(hit_1);
-		pman.EmitBatch(hit_2);
-
-
-		animator->PlayAnimation("hit", false);*/
-		//PlaySound(ScriptEngine::CreateString("melee_hit"), m_PlayerId);
 	}
 
 	void EnemyMeleePhalanx::SwitchState(MeleePhalanxBaseState* state)

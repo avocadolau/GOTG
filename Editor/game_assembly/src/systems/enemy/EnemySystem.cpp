@@ -2,8 +2,15 @@
 #include "EnemySystem.h"
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
-#include <Wiwa/ecs/components/game/Character.h>
+
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/ecs/components/game/Health.h>
+#include <Wiwa/ecs/components/game/enemy/PhalanxMelee.h>
+#include <Wiwa/ecs/components/game/enemy/PhalanxRanged.h>
+#include <Wiwa/ecs/components/game/enemy/Sentinel.h>
+#include <Wiwa/ecs/components/game/enemy/Subjugator.h>
+#include <Wiwa/ecs/components/game/enemy/Ultron.h>
+
 #include "../../components/attack/PhylasQuantumSword.h"
 #include "../../components/attack/GrootSeeds.h"
 #include "../../components/attack/StarhawkBlast.h"
@@ -14,13 +21,17 @@
 #include "../../components/attack/Attack.h"
 #include "../../components/attack/SimpleBullet.h"
 #include "../../components/attack/Explosion.h"
+#include <Wiwa/ecs/components/game/Character.h>
+#include "MeleePhalanx/EnemyMeleePhalanx.h"
 
 namespace Wiwa
 {
 	Wiwa::EnemySystem::EnemySystem()
 	{
-		m_EnemyIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_EnemyStateIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_StatsIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_Health = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+
 		m_ColliderIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_AgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_NavAgentIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -46,8 +57,10 @@ namespace Wiwa
 
 	void EnemySystem::OnInit()
 	{
-		m_EnemyIt = GetComponentIterator<Enemy>();
-		m_StatsIt = GetComponentIterator<Character>();
+		m_EnemyStateIt = GetComponentIterator<EnemyState>();
+		m_StatsIt = GetComponentIterator<EnemyData>();
+		m_Health = GetComponentIterator<Health>();
+
 		m_ColliderIt = GetComponentIterator<CollisionBody>();
 		m_NavAgentIt = GetComponentIterator<NavAgent>();
 		m_TransformIt = GetComponentIterator<Transform3D>();
@@ -56,39 +69,40 @@ namespace Wiwa
 		m_PlayerTransformIt = GetComponentIterator<Transform3D>(m_PlayerId);
 		m_PlayerStatsIt = GetComponentIterator<Character>(m_PlayerId);
 
-		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
+		SetStatsFromTable();
+
+		EnemyState* self = GetComponentByIterator<EnemyState>(m_EnemyStateIt);
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
 		AudioSource* audio = GetComponentByIterator<AudioSource>(m_AudioSourceIt);
-		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-		//transform->localPosition.y = 0.0f;
-		stats->Slowed = false;
-		stats->CounterSlowed = 0.0f;
+	
 		self->currentRotation = transform->localRotation;
 	}
 
 	void EnemySystem::OnUpdate()
 	{
-		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
+		EnemyData* stats = GetComponentByIterator<EnemyData>(m_StatsIt);
+
 		if (Input::IsKeyPressed(Wiwa::Key::M))
 		{
 			ReceiveDamage(100000);
 		}
+
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
 		transform->localPosition.y = 0.0f;
 		
-		//SLOWED LOGIC
-		if (stats->Slowed)
-		{
-			stats->CounterSlowed += Time::GetDeltaTimeSeconds();
-		}
+		////SLOWED LOGIC
+		//if (stats->Slowed)
+		//{
+		//	stats->CounterSlowed += Time::GetDeltaTimeSeconds();
+		//}
 
-		if (stats->CounterSlowed >= timerSlow && stats->Slowed)
-		{
-			stats->Slowed = false;
-			stats->CounterSlowed = 0.0f;
-			/*AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
-			statsSelf->speed = previousSpeed;*/
-		}
+		//if (stats->CounterSlowed >= timerSlow && stats->Slowed)
+		//{
+		//	stats->Slowed = false;
+		//	stats->CounterSlowed = 0.0f;
+		//	/*AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
+		//	statsSelf->speed = previousSpeed;*/
+		//}
 	}
 
 	void EnemySystem::OnDestroy()
@@ -171,8 +185,8 @@ namespace Wiwa
 			grootSeeds = em.GetComponent<Wiwa::GrootSeeds>(body2->id);
 			if (grootSeeds != nullptr)
 			{
-				Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
-				statsSelf->Speed -= 2.0f;
+				EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
+				//statsSelf->Speed -= 2.0f;
 				ReceiveDamage(grootSeeds->damage);
 			}
 		}
@@ -186,7 +200,7 @@ namespace Wiwa
 			starhawks = em.GetComponent<Wiwa::StarhawksBlast>(body2->id);
 			if (starhawks != nullptr)
 			{
-				Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
+				EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
 				ReceiveDamage(starhawks->damage);
 			}
 		}
@@ -195,11 +209,11 @@ namespace Wiwa
 	void EnemySystem::ReceiveDamage(int damage)
 	{
 		WI_INFO("Enemy hit by: {} damage", damage);
-		Character* statsSelf = GetComponentByIterator<Character>(m_StatsIt);
-		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
+		Health* health = GetComponentByIterator<Health>(m_Health);
+		EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
 
-		statsSelf->Health = statsSelf->Health - damage;
-		if (statsSelf->Health <= 0)
+		health->health = health->health - damage;
+		if (health->health <= 0)
 		{
 			// Notify the player and spawn an item
 			// TODO: Modify depending on the enemy
@@ -208,7 +222,7 @@ namespace Wiwa
 			default:
 				break;
 			}*/
-			GameStateManager::GetPlayerInventory().AddTokens(15);
+			GameStateManager::GetPlayerInventory().AddTokens(statsSelf->creditsDrop);
 			Character* player = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Character>(GameStateManager::GetPlayerId());
 			// As in the GDD for each enemy the player kills the shield regenerates
 			// TODO: Change with a stats
@@ -259,13 +273,14 @@ namespace Wiwa
 
 	bool EnemySystem::OnEnabledFromPool()
 	{
-		Character* stats = GetComponent<Character>();
-		if (stats)
+		Health* health = GetComponent<Health>();
+		EnemyData* stats = GetComponent<EnemyData>();
+		if (health)
 		{
-			stats->Health = stats->MaxHealth;
+			health->health = stats->health;
 		}
 
-		Enemy* self = GetComponent<Enemy>();
+		EnemyState* self = GetComponent<EnemyState>();
 		if (self)
 		{
 			self->hasFinished = false;
@@ -287,13 +302,14 @@ namespace Wiwa
 			transform->localPosition.y = 1000.0f;
 		}
 
-		Character* stats = GetComponent<Character>();
-		if (stats)
+		Health* health = GetComponent<Health>();
+		EnemyData* stats = GetComponent<EnemyData>();
+		if (health)
 		{
-			stats->Health = stats->MaxHealth;
+			health->health = stats->health;
 		}
 
-		Enemy* self = GetComponent<Enemy>();
+		EnemyState* self = GetComponent<EnemyState>();
 		if (self)
 		{
 			self->hasFinished = true;
@@ -345,7 +361,7 @@ namespace Wiwa
 	{
 		float angle = glm::degrees(std::atan2(target.x, target.z));
 		
-		Enemy* self = GetComponentByIterator<Enemy>(m_EnemyIt);
+		EnemyState* self = GetComponentByIterator<EnemyState>(m_EnemyStateIt);
 
 		self->currentRotation.y = Wiwa::Math::LerpAngle(self->currentRotation.y, angle, 10);
 
@@ -355,5 +371,80 @@ namespace Wiwa
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
 
 		transform->localRotation.y = self->currentRotation.y;
+	}
+
+	void EnemySystem::SetStatsFromTable()
+	{
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
+		EnemyManager& enemyManager = Wiwa::GameStateManager::GetEnemyManager();
+		auto& data = enemyManager.GetData();
+		m_StatsIt = GetComponentIterator<EnemyData>();
+		EnemyData* stats = GetComponentByIterator<EnemyData>(m_StatsIt);
+		EnemyState* state = GetComponentByIterator<EnemyState>(m_EnemyStateIt);
+		NavAgent* agent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+
+		std::string nameType = typeid(this).name();
+
+		PhalanxMelee* Pm = GetComponent<Wiwa::PhalanxMelee>();
+		PhalanxRanged* Pr = GetComponent<Wiwa::PhalanxRanged>();
+		Sentinel* Sent = GetComponent<Wiwa::Sentinel>();
+		Subjugator* Sub = GetComponent<Wiwa::Subjugator>();
+		Ultron* ultron = GetComponent<Wiwa::Ultron>();
+
+		if (Pm)
+		{
+			if (Pm->variant == 1)
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "MELEE_PHALANX_REDVARIANT"}];
+			}
+			else if (Pm->variant == 2)
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "MELEE_PHALANX_BLUEVARIANT"}];
+			}
+			else
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "MELEE_PHALANX_GENERIC"}];
+			}
+		}
+		else if (Pr)
+		{
+			if (Pr->variant == 1)
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "RANGED_PHALANX_REDVARIANT"}];
+			}
+			else if (Pr->variant == 2)
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "RANGED_PHALANX_BLUEVARIANT"}];
+			}
+			else
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "RANGED_PHALANX_GENERIC"}];
+			}
+		}
+		else if (Sent)
+		{
+			*stats = data[{enemyManager.m_CurrentRunLevel, "SENTINEL"}];
+		}
+		else if (Sub)
+		{
+			if (Sub->variant == 1)
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "SUBJUGATOR_CHIEF"}];
+
+			}
+			else
+			{
+				*stats = data[{enemyManager.m_CurrentRunLevel, "SUBJUGATOR"}];
+
+			}
+		}
+		else if (ultron)
+		{
+			*stats = data[{enemyManager.m_CurrentRunLevel, "ULTRON"}];
+		}
+
+		agent->maxAcceleration = stats->maxAcceleration;
+		agent->maxSpeed = stats->maxVelocity;
+		agent->stoppingDistance = stats->stoppingDistance;
 	}
 }

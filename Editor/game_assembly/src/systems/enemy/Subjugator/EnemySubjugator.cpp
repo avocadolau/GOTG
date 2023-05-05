@@ -7,7 +7,8 @@
 #include "StateMachine/SubjugatorHit.h"
 #include "EnemySubjugator.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/components/game/Health.h>
+
 
 namespace Wiwa
 {
@@ -25,7 +26,7 @@ namespace Wiwa
 		m_Hand3It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Hand4It = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 
-		m_RangeOfAttack = 40.0f; //Add to components
+		//m_RangeOfAttack = 40.0f; //Add to components
 		m_MinimumPath = 5;
 		m_Timer = 0.0f;
 	}
@@ -83,8 +84,8 @@ namespace Wiwa
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-		if (stats->Health <= 0 && m_CurrentState != m_DeathState)
+		Health* stats = GetComponentByIterator<Health>(m_Health);
+		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
 			SwitchState(m_DeathState);
 		}

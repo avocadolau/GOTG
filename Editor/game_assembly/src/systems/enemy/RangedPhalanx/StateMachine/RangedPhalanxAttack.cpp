@@ -7,7 +7,7 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../Components.h"
-#include <Wiwa/ecs/components/game/Character.h>
+
 #include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
@@ -28,11 +28,10 @@ namespace Wiwa
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
-	
 		// Fire shot
 		if (m_TimerAttackCooldown == 0.0f)
 		{
-			Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+			EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
 			animator->PlayAnimation("shot", false);
@@ -49,7 +48,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
+
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -61,7 +61,7 @@ namespace Wiwa
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 
-		if (m_TimerAttackCooldown > stats->RateOfFire)
+		if (m_TimerAttackCooldown > stats->rateOfFire)
 		{
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;
@@ -72,7 +72,7 @@ namespace Wiwa
 			audio->PlayAudio("ranged_attack");
 		}
 
-		if (dist2Player > enemy->m_RangeOfAttack || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
+		if (dist2Player > stats->range || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
@@ -92,7 +92,7 @@ namespace Wiwa
 
 	}
 
-	void RangedPhalanxAttackState::SpawnBullet(EnemyRangedPhalanx* enemy, Wiwa::Transform3D* transform, const Wiwa::Character* character, const glm::vec3& bull_dir)
+	void RangedPhalanxAttackState::SpawnBullet(EnemyRangedPhalanx* enemy, Wiwa::Transform3D* transform, const Wiwa::EnemyData* character, const glm::vec3& bull_dir)
 	{
 		if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0)
 			return;

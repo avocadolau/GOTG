@@ -47,7 +47,7 @@ namespace Wiwa
 
 		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
-			Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+			EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 			self->hasFinished = true;
 			if (self->waveId != -1)
 			{

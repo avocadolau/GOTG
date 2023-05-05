@@ -37,7 +37,7 @@ namespace Wiwa
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//if (animator->HasFinished())
 		//{
-		Enemy* self = (Enemy*)em.GetComponentByIterator(enemy->m_EnemyIt);
+		EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 		self->hasFinished = true;
 		em.DestroyEntity(enemy->GetEntity());
 	}

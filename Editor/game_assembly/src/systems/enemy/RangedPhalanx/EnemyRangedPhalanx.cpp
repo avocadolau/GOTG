@@ -7,7 +7,8 @@
 #include "StateMachine/RangedPhalanxHit.h"
 #include "EnemyRangedPhalanx.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/components/game/Health.h>
+
 
 namespace Wiwa
 {
@@ -21,7 +22,7 @@ namespace Wiwa
 		m_DeathState = nullptr;
 		m_HitState = nullptr;
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-		m_RangeOfAttack = 20.0f;
+		//m_RangeOfAttack = 20.0f;
 		m_MinimumPath = 5;
 		m_Timer = 0.0f;
 	}
@@ -63,18 +64,15 @@ namespace Wiwa
 
 	void EnemyRangedPhalanx::OnUpdate()
 	{
-		/*if (!getAwake())
-			System::Awake();
-		if (!getInit())
-			System::Init();*/
 		if (!getAwake() && !getInit())
 			return;
+
 		EnemySystem::OnUpdate();
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-		if (stats->Health <= 0 && m_CurrentState != m_DeathState)
+		Health* stats = GetComponentByIterator<Health>(m_Health);
+		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
 			SwitchState(m_DeathState);
 		}
@@ -125,16 +123,6 @@ namespace Wiwa
 
 		EnemySystem::ReceiveDamage(damage);
 		SwitchState(m_HitState);
-		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
-
-		EntityId hitR_1 = em.GetChildByName(m_EntityId, "ER_Hit_1");
-		EntityId hitR_2 = em.GetChildByName(m_EntityId, "ER_Hit_2");
-		ParticleManager& pman = this->getScene().GetParticleManager();
-		pman.EmitBatch(hitR_1);
-		pman.EmitBatch(hitR_2);
-
-		animator->PlayAnimation("damage", false);*/
 	}
 
 	void EnemyRangedPhalanx::SwitchState(RangedPhalanxBaseState* state)

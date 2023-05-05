@@ -7,7 +7,8 @@
 #include "StateMachine/SentinelHit.h"
 #include "EnemySentinel.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/components/game/Character.h>
+#include <Wiwa/ecs/components/game/Health.h>
+
 
 namespace Wiwa
 {
@@ -61,8 +62,8 @@ namespace Wiwa
 		m_CurrentState->UpdateState(this);
 		m_TimerSentinel += Time::GetDeltaTimeSeconds();
 
-		Character* stats = GetComponentByIterator<Character>(m_StatsIt);
-		if (stats->Health <= 0 && m_CurrentState != m_DeathState)
+		Health* stats = GetComponentByIterator<Health>(m_Health);
+		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
 			SwitchState(m_DeathState);
 		}

@@ -112,13 +112,13 @@ namespace Wiwa
 
 		switch (enemy_type)
 		{
-		case Pool_Type::PHALANX_MELEE:
+		case Pool_Type::PHALANX_MELEE_GENERIC:
 		{
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
 		}
 		break;
-		case Pool_Type::PHALAN_RANGED:
+		case Pool_Type::PHALANX_RANGED_GENERIC:
 		{
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
@@ -166,9 +166,9 @@ namespace Wiwa
 		//collBodyPtr->filterBits |= 1 << m_Scene->GetPhysicsManager().GetFilterTag("PLAYER");
 
 		// Save the enemy component in the list
-		EntityManager::ComponentIterator enemyIt = GetComponentIterator<Enemy>(newEnemyId);
+		EntityManager::ComponentIterator enemyIt = GetComponentIterator<EnemyState>(newEnemyId);
 		
-		Enemy* enemy = (Enemy*)entityManager.GetComponentByIterator(enemyIt);
+		EnemyState* enemy = (EnemyState*)entityManager.GetComponentByIterator(enemyIt);
 		enemy->hasFinished = false;
 		enemy->enemyType = (int)enemy_type;
 		enemy->waveId = (int)m_EntityId;
@@ -208,10 +208,10 @@ namespace Wiwa
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 45) // 45% probability
 		{
-			return Pool_Type::PHALANX_MELEE;
+			return Pool_Type::PHALANX_MELEE_GENERIC;
 		}
 		else if (randomNum <= 80) { // 35% probability
-			return Pool_Type::PHALAN_RANGED;
+			return Pool_Type::PHALANX_RANGED_GENERIC;
 		}
 		else if (randomNum <= 95) { // 15% probability
 			return Pool_Type::SENTINEL;

@@ -18,7 +18,7 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_Hand4It;
 
 		float m_Timer;
-		float m_RangeOfAttack = 0.0f;
+		//float m_RangeOfAttack = 0.0f;
 		int m_MinimumPath = 0;
 	public:
 		EnemySubjugator();

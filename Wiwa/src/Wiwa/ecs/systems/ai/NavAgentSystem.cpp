@@ -325,7 +325,7 @@ namespace Wiwa
             m_AgentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
             m_AgentParams.obstacleAvoidanceType = 3;
             m_AgentParams.queryFilterType = 0;
-            m_AgentParams.separationWeight = 1;
+            m_AgentParams.separationWeight = 6;
         }
     }
 

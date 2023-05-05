@@ -3,7 +3,6 @@
 #include "../EnemyMeleePhalanx.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/components/game/Character.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/audio/Audio.h>
 
@@ -65,10 +64,9 @@ namespace Wiwa
 		if (m_SoundCurrentTime < 0 && m_PlaySound)
 		{	
 			// make damage here when the animation is hitting
-	
-			Character* selfStats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
+			EnemyData* selfStats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 			if(selfStats != nullptr)
-				GameStateManager::DamagePlayer(selfStats->Damage);
+				GameStateManager::DamagePlayer(selfStats->damage);
 			
 			audio->PlayAudio("melee_attack");
 			m_PlaySound = false;
@@ -92,11 +90,8 @@ namespace Wiwa
 
 	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx *enemy)
 	{
-
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
 
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);

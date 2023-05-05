@@ -21,7 +21,6 @@ namespace Wiwa
 	{
 		m_YondusFinIt = GetComponentIterator<YondusFin>();
 		m_YondusFinTransformIt = GetComponentIterator<Transform3D>();
-
 	}
 
 	void YondusFinSystem::OnInit()
@@ -38,16 +37,16 @@ namespace Wiwa
 		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 
 		size_t size = 0;
-		Wiwa::Enemy* enemyList = nullptr;
-		enemyList = em.GetComponents<Enemy>(&size);
+		Wiwa::EnemyState* enemyList = nullptr;
+		enemyList = em.GetComponents<EnemyState>(&size);
 		if (enemyList)
 		{
 			for (int i = 0; i < size; i++)
 			{
-				if (em.IsComponentRemoved<Enemy>(i)) {
+				if (em.IsComponentRemoved<EnemyState>(i)) {
 				}
 				else {
-					Wiwa::Enemy* enemy = &enemyList[i];
+					Wiwa::EnemyState* enemy = &enemyList[i];
 					if (enemy && !enemy->hasFinished)
 					{
 						
@@ -73,15 +72,12 @@ namespace Wiwa
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-
 		if (m_Timer >= yondusFin->lifeTime)
 		{
 			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			em.DestroyEntity(m_EntityId);
 		}
-
 	}
-
 
 	void YondusFinSystem::OnDestroy()
 	{
@@ -90,7 +86,6 @@ namespace Wiwa
 
 	void YondusFinSystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
+
 	}
-
-
 }

@@ -386,6 +386,8 @@ enum class TypeHash : size_t {
 	Wave = FNV1A_HASH("Wave"),
 	ParticleEmitter = FNV1A_HASH("ParticleEmitterComponent"),
 	WaveSpawner = FNV1A_HASH("WaveSpawner"),
-	Enemy = FNV1A_HASH("Enemy")
+	EnemyState = FNV1A_HASH("EnemyState"),
+	EnemyData = FNV1A_HASH("EnemyData"),
+	Health = FNV1A_HASH("Health")
 
 };

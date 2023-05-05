@@ -22,33 +22,15 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//EntityId currentEnemy = enemy->GetEntity();
 
 		animator->PlayAnimation("A_attack_shot", true);
-
-		//NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		//if (navAgent)
-		//{
-		//	navAgent->autoRotate = false;
-		//}
-
-		//EntityId currentEnemy = enemy->GetEntity();
-
-		//pman.EmitBatch(currentEnemy);
-
-		//animator->PlayAnimation("spawn", false);
 	}
 
 	void BossUltronBulletStormAttackState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//if (animator->HasFinished())
-		//enemy->SwitchState(enemy->m_ChasingState);
-		/*m_SecondPatternBulletcounter = 0.0f;*/
+
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
 		m_FirstPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();

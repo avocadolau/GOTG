@@ -33,9 +33,14 @@
 #include "components/game/wave/WaveSpawnPoint.h"
 #include "components/game/enemy/Enemy.h"
 #include "components/game/wave/Wave.h"
-
+#include "components/game/Health.h"
 #include "components/game/items/Item.h"
 
+#include "components/game/enemy/PhalanxMelee.h"
+#include "components/game/enemy/PhalanxRanged.h"
+#include "components/game/enemy/Sentinel.h"
+#include "components/game/enemy/Subjugator.h"
+#include "components/game/enemy/Ultron.h"
 
 // Ai components
 #include "components/MapAI.h"

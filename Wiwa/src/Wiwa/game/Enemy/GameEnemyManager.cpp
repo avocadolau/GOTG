@@ -9,7 +9,7 @@ namespace nlohmann {
         static void to_json(json& j, const Wiwa::EnemyData& e)
         {
             j = json{ {"level", e.level}, {"name", e.name}, {"health", e.health}, {"damage", e.damage}, {"maxVelocity", e.maxVelocity}, 
-				{"maxAcceleration", e.maxAcceleration}, {"rateOfFire", e.rateOfFire},  {"range", e.range}, {"creditsDrop", e.creditsDrop} };
+				{"maxAcceleration", e.maxAcceleration}, {"stoppingDistance", e.stoppingDistance}, {"rateOfFire", e.rateOfFire},  {"range", e.range}, {"creditsDrop", e.creditsDrop} };
         }
 
         static void from_json(const json& j, Wiwa::EnemyData& e)
@@ -20,6 +20,7 @@ namespace nlohmann {
             j.at("damage").get_to(e.damage);
             j.at("maxVelocity").get_to(e.maxVelocity);
             j.at("maxAcceleration").get_to(e.maxAcceleration);
+            j.at("stoppingDistance").get_to(e.stoppingDistance);
             j.at("rateOfFire").get_to(e.rateOfFire);
             j.at("range").get_to(e.range);
             j.at("creditsDrop").get_to(e.creditsDrop);
@@ -63,6 +64,8 @@ namespace Wiwa
 	EnemyManager::EnemyManager()
 	{
 		m_MaxLevel = 4;
+		m_CurrentRunLevel = 0;
+		m_IncreaseDiffEvery = 1;
 	}
 	EnemyManager::~EnemyManager()
 	{
@@ -73,6 +76,25 @@ namespace Wiwa
 	
 	bool EnemyManager::Serialize()
 	{
+		std::filesystem::path path;
+		path = "config/enemy_data.json";
+
+		json doc;
+		doc["m_EnemyData"] = m_EnemyData;
+		doc["m_MaxLevel"] = m_MaxLevel;
+		doc["m_CurrentRunLevel"] = m_CurrentRunLevel;
+		doc["m_IncreaseDiffEvery"] = m_IncreaseDiffEvery;
+
+		std::ofstream file("config/enemy_data.json");
+		if (file.is_open())
+		{
+			file << doc;
+			file.close();
+			WI_INFO("Enemy stats saved to enemy_stats.json");
+			return true;
+		}
+
+		WI_INFO("Error: Could not open config/enemy_data.json for writing");
 		return false;
 	}
 
@@ -94,7 +116,10 @@ namespace Wiwa
 
 			serializedData = json::parse(data);
 
-			m_EnemyData = serializedData.get<std::map<std::pair<int, std::string>, EnemyData>>();
+			m_EnemyData = serializedData["m_EnemyData"].get<std::map<std::pair<int, std::string>, EnemyData>>();
+			m_MaxLevel = serializedData["m_MaxLevel"].get<int>();
+			m_CurrentRunLevel = serializedData["m_CurrentRunLevel"].get<int>();
+			m_IncreaseDiffEvery = serializedData["m_IncreaseDiffEvery"].get<int>();
 
 			file.close();
 			WI_INFO("Enemy stats saved to enemy_stats.json");
@@ -111,10 +136,11 @@ namespace Wiwa
 		meleePhalanxGeneric.name = "MELEE_PHALANX_GENERIC";
 		meleePhalanxGeneric.health = 30;
 		meleePhalanxGeneric.damage = 10;
-		meleePhalanxGeneric.maxVelocity = 10;
-		meleePhalanxGeneric.maxAcceleration = 10;
+		meleePhalanxGeneric.maxVelocity = 15;
+		meleePhalanxGeneric.maxAcceleration = 15;
+		meleePhalanxGeneric.stoppingDistance = 2;
 		meleePhalanxGeneric.rateOfFire = 1;
-		meleePhalanxGeneric.range = 0;
+		meleePhalanxGeneric.range = 1;
 		meleePhalanxGeneric.creditsDrop = 15;
 		meleePhalanxGeneric.level = 0;
 		m_EnemyData[{meleePhalanxGeneric.level, meleePhalanxGeneric.name.c_str()}] = meleePhalanxGeneric;
@@ -124,10 +150,11 @@ namespace Wiwa
 		meleePhalanxRedVariant.name = "MELEE_PHALANX_REDVARIANT";
 		meleePhalanxRedVariant.health = 70;
 		meleePhalanxRedVariant.damage = 20;
-		meleePhalanxRedVariant.maxVelocity = 10;
-		meleePhalanxRedVariant.maxAcceleration = 10;
+		meleePhalanxRedVariant.maxVelocity = 15;
+		meleePhalanxRedVariant.maxAcceleration = 15;
+		meleePhalanxRedVariant.stoppingDistance = 2;
 		meleePhalanxRedVariant.rateOfFire = 1;
-		meleePhalanxRedVariant.range = 0;
+		meleePhalanxRedVariant.range = 1;
 		meleePhalanxRedVariant.creditsDrop = 20;
 		meleePhalanxRedVariant.level = 0;
 		m_EnemyData[{meleePhalanxRedVariant.level, meleePhalanxRedVariant.name.c_str()}] = meleePhalanxRedVariant;
@@ -137,10 +164,11 @@ namespace Wiwa
 		meleePhalanxBlueVariant.name = "MELEE_PHALANX_BLUEVARIANT";
 		meleePhalanxBlueVariant.health = 20;
 		meleePhalanxBlueVariant.damage = 20;
-		meleePhalanxBlueVariant.maxVelocity = 10;
-		meleePhalanxBlueVariant.maxAcceleration = 10;
+		meleePhalanxBlueVariant.maxVelocity = 15;
+		meleePhalanxBlueVariant.maxAcceleration = 15;
+		meleePhalanxBlueVariant.stoppingDistance = 2;
 		meleePhalanxBlueVariant.rateOfFire = 3;
-		meleePhalanxBlueVariant.range = 0;
+		meleePhalanxBlueVariant.range = 1;
 		meleePhalanxBlueVariant.creditsDrop = 20;
 		meleePhalanxBlueVariant.level = 0;
 		m_EnemyData[{meleePhalanxBlueVariant.level, meleePhalanxBlueVariant.name.c_str()}] = meleePhalanxBlueVariant;
@@ -150,9 +178,10 @@ namespace Wiwa
 		rangedPhalanxGeneric.name = "RANGED_PHALANX_GENERIC";
 		rangedPhalanxGeneric.health = 20;
 		rangedPhalanxGeneric.damage = 5;
-		rangedPhalanxGeneric.maxVelocity = 10;
-		rangedPhalanxGeneric.maxAcceleration = 10;
-		rangedPhalanxGeneric.range = 5;
+		rangedPhalanxGeneric.maxVelocity = 8;
+		rangedPhalanxGeneric.maxAcceleration = 8;
+		rangedPhalanxGeneric.stoppingDistance = 2;
+		rangedPhalanxGeneric.range = 20;
 		rangedPhalanxGeneric.rateOfFire = 1;
 		rangedPhalanxGeneric.creditsDrop = 15;
 		rangedPhalanxGeneric.level = 0;
@@ -163,9 +192,10 @@ namespace Wiwa
 		rangedPhalanxRedVariant.name = "RANGED_PHALANX_REDVARIANT";
 		rangedPhalanxRedVariant.health = 20;
 		rangedPhalanxRedVariant.damage = 25;
-		rangedPhalanxRedVariant.maxVelocity = 10;
-		rangedPhalanxRedVariant.maxAcceleration = 10;
-		rangedPhalanxRedVariant.range = 8;
+		rangedPhalanxRedVariant.maxVelocity = 8;
+		rangedPhalanxRedVariant.maxAcceleration = 8;
+		rangedPhalanxRedVariant.stoppingDistance = 2;
+		rangedPhalanxRedVariant.range = 20;
 		rangedPhalanxRedVariant.rateOfFire = 1.5;
 		rangedPhalanxRedVariant.creditsDrop = 20;
 		rangedPhalanxRedVariant.level = 0;
@@ -178,7 +208,8 @@ namespace Wiwa
 		rangedPhalanxblueVariant.damage = 20;
 		rangedPhalanxblueVariant.maxVelocity = 10;
 		rangedPhalanxblueVariant.maxAcceleration = 10;
-		rangedPhalanxblueVariant.range = 5;
+		rangedPhalanxblueVariant.stoppingDistance = 2;
+		rangedPhalanxblueVariant.range = 20;
 		rangedPhalanxblueVariant.rateOfFire = 3;
 		rangedPhalanxblueVariant.creditsDrop = 25;
 		rangedPhalanxblueVariant.level = 0;
@@ -189,8 +220,9 @@ namespace Wiwa
 		sentinel.name = "SENTINEL";
 		sentinel.health = 20;
 		sentinel.damage = 25;
-		sentinel.maxVelocity = 10;
-		sentinel.maxAcceleration = 10;
+		sentinel.maxVelocity = 14;
+		sentinel.maxAcceleration = 14;
+		sentinel.stoppingDistance = 6;
 		sentinel.range = 2;
 		sentinel.rateOfFire = 0;
 		sentinel.creditsDrop = 15;
@@ -202,9 +234,10 @@ namespace Wiwa
 		subjugator.name = "SUBJUGATOR";
 		subjugator.health = 40;
 		subjugator.damage = 15;
-		subjugator.maxVelocity = 10;
-		subjugator.maxAcceleration = 10;
-		subjugator.range = 8;
+		subjugator.maxVelocity = 12;
+		subjugator.maxAcceleration = 12;
+		subjugator.stoppingDistance = 2;
+		subjugator.range = 40;
 		subjugator.rateOfFire = 2;
 		subjugator.creditsDrop = 30;
 		subjugator.level = 0;
@@ -215,9 +248,10 @@ namespace Wiwa
 		subjugatorChief.name = "SUBJUGATOR_CHIEF";
 		subjugatorChief.health = 50;
 		subjugatorChief.damage = 25;
-		subjugatorChief.maxVelocity = 10;
-		subjugatorChief.maxAcceleration = 10;
-		subjugatorChief.range = 10;
+		subjugatorChief.maxVelocity = 16;
+		subjugatorChief.maxAcceleration = 16;
+		subjugatorChief.stoppingDistance = 2;
+		subjugatorChief.range = 40;
 		subjugatorChief.rateOfFire = 2;
 		subjugatorChief.creditsDrop = 35;
 		subjugatorChief.level = 0;
@@ -228,15 +262,21 @@ namespace Wiwa
 		ultron.name = "ULTRON";
 		ultron.health = 500;
 		ultron.damage = 20;
-		ultron.maxVelocity = 10;
-		ultron.maxAcceleration = 10;
+		ultron.maxVelocity = 20;
+		ultron.maxAcceleration = 12;
+		ultron.stoppingDistance = 2;
 		ultron.range = 15;
 		ultron.rateOfFire = 2;
 		ultron.creditsDrop = 35;
 		ultron.level = 0;
 		m_EnemyData[{ultron.level, ultron.name.c_str()}] = ultron;
 
-		json doc = m_EnemyData;
+		json doc;
+		doc["m_EnemyData"] = m_EnemyData;
+		doc["m_MaxLevel"] = m_MaxLevel;
+		doc["m_CurrentRunLevel"] = m_CurrentRunLevel;
+		doc["m_IncreaseDiffEvery"] = m_IncreaseDiffEvery;
+
 		std::ofstream file("config/enemy_data.json");
 		if (file.is_open())
 		{
@@ -259,18 +299,34 @@ namespace Wiwa
 		CreateEmptyFile();
 	}
 
-	bool EnemyManager::CheckIfHasLevel(int level, const std::string& str)
+	bool EnemyManager::CheckIfHasLevelCreate(int level, const std::string& str)
 	{	
 		std::pair<int, std::string> key = std::make_pair(level, str);
-		EnemyData enemyData;
+		EnemyData enemyData = m_EnemyData[{level - 1, str}];
+		enemyData.level = level;
 
 		// Check if the key exists in the map
 		auto it = m_EnemyData.find(key);
 		if (it == m_EnemyData.end()) {
 			m_EnemyData.insert({ key, enemyData });
-			return true;
+			return false;
 		}
-		return false;
+		return true;
+	}
+
+	bool EnemyManager::CheckIfHasLevelDelete(int level, const std::string& str)
+	{
+		std::pair<int, std::string> key = std::make_pair(level, str);
+		EnemyData enemyData;
+		enemyData.level = level;
+
+		// Check if the key exists in the map
+		auto it = m_EnemyData.find(key);
+		if (it != m_EnemyData.end()) {
+			m_EnemyData.erase(it);
+			return false;
+		}
+		return true;
 	}
 
 	//void EnemyManager::PushBackArrayJson(JSONValue& json_value_array, const EnemyData& data)
