@@ -90,9 +90,6 @@ public:
 	// Load bank into audio engine with name
 	static bool LoadBank(const char* bank);
 
-	// Load bank into audio engine with name
-	static bool LoadAllEvents();
-
 	// Unload bank
 	static bool UnloadBank(const char* bank);
 
@@ -174,7 +171,7 @@ public:
 	static bool UnloadAllBanks();
 
 	//change the state of a switch, this is set to work with the default listener (music)
-	static bool ChangeSwitchContainer(const char* container_name, const char* swtich_state);
+	static bool ChangeStateContainer(const char* container_name, const char* swtich_state);
 
 	static void ChangeMasterVolume(int value);
 	static void ChangeMusicVolume(int value);

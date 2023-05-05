@@ -42,6 +42,7 @@ namespace Wiwa
 
 	void SceneManager::ModuleInit()
 	{
+	
 		if (m_LoadScene) {
 			m_ActiveScene = LoadScene(m_LoadPath.c_str(), m_LoadFlags);
 			GameMusicManager::OnSceneChage(m_ActiveScene);
@@ -66,7 +67,6 @@ namespace Wiwa
 			Update();
 			GameStateManager::UpdateRoomState();
 		}
-		GameMusicManager::Update();
 	}
 
 	void SceneManager::CleanUp()

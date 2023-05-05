@@ -725,7 +725,7 @@ void Audio::RegisterAsWorldListener(uint64_t go_id)
     }
 
     AkSoundPosition position;
-    position.SetPosition(0.0f, 300.0f, 0.0f);
+    position.SetPosition(0.0f, 0.0f, 0.0f);
     position.SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
 
     gres = AK::SoundEngine::SetPosition(m_WorldListener, position);
@@ -738,8 +738,6 @@ void Audio::RegisterAsWorldListener(uint64_t go_id)
 bool Audio::RegisterGameObject(uint64_t go_id)
 {
     AKRESULT res = AK::SoundEngine::RegisterGameObj(go_id);
-
-    //m_RegisteredWorldEntities.push_back(go_id);
 
     if (res != AK_Success) {
         setLastError(res);
@@ -837,9 +835,10 @@ bool Audio::UnloadAllBanks()
     return true;
 }
 
-bool Audio::ChangeSwitchContainer(const char* container_name,const char* swtich_state)
+bool Audio::ChangeStateContainer(const char* container_name,const char* swtich_state)
 {
-    AKRESULT res = AK::SoundEngine::SetSwitch(container_name, swtich_state, m_DefaultListener);
+    AKRESULT res = AK::SoundEngine::SetState(container_name, swtich_state);
+    
     if (res != AK_Success) {
         setLastError(res);
         return false;

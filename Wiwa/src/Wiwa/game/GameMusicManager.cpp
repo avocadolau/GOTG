@@ -6,15 +6,6 @@
 
 namespace Wiwa
 {
-	void GameMusicManager::Update()
-	{
-	}
-	void GameMusicManager::PlayMusic(const char* music_event_name)
-	{
-		Audio::StopAllEvents();
-		Audio::PostEvent(music_event_name);
-	}
-
 	void GameMusicManager::OnSceneChage(size_t scene_id)
 	{
 
@@ -23,20 +14,34 @@ namespace Wiwa
 			WI_ERROR("Audio project not loaded");
 			return;
 		}
+	
 
+		Audio::ChangeStateContainer("music_states", "menus");
+		Audio::ChangeStateContainer("menu_scene", "main_menu");
+		Audio::PostEvent("play_music");
+		
 		switch (scene_id)
 		{
 		case 0:
-			Audio::ChangeSwitchContainer("music", "logo");
+			Audio::PostEvent("play_music");
+			Audio::ChangeStateContainer("music_states", "menus");
+			Audio::ChangeStateContainer("menu_scene", "logo");
+
 			break;
-		case 1:
-			Audio::ChangeSwitchContainer("music", "intro");
+		
+		 case 1:	
+			Audio::PostEvent("play_music");
+		    Audio::ChangeStateContainer("music_states", "menus");
+			Audio::ChangeStateContainer("menu_scene", "intro");
 			break;
 		case 2:
-			Audio::ChangeSwitchContainer("music", "hub");
+			Audio::ChangeStateContainer("music_states", "menus");
+			Audio::ChangeStateContainer("menu_scene", "main_menu");
 			break;
 		default: 
-			Audio::ChangeSwitchContainer("music_game_play", "test");
+			Audio::PostEvent("play_music");
+			Audio::ChangeStateContainer("music_states", "game_play");
+			Audio::ChangeStateContainer("music_game_play", "test");
 			break;
 		}
 

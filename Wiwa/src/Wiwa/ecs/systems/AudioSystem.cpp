@@ -78,7 +78,7 @@ namespace Wiwa {
 			Audio::Update();
 
 			// Wait to update audio engine thread so we can destroy the system
-			Sleep(8);
+			Sleep(15);
 		}
 
 		Audio::UnregisterGameObject(m_EntityId);
