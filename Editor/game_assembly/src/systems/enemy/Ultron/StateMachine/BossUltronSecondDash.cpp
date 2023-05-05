@@ -58,9 +58,10 @@ namespace Wiwa
 
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerToLookAtPlayer >= 2.0f)
+			if (m_TimerToLookAtPlayer >= 2.0f) //Time to Look At player, (Add as a Component)
 			{
-				m_TimerToLookAtPlayer = 0.0f,
+				m_TimerToLookAtPlayer = 0.0f;
+				m_TimerOfDashAction = 0.0f;
 				m_SecondDashState = SecondDashState::PLAY_DASH;
 			}
 		}
@@ -83,43 +84,22 @@ namespace Wiwa
 				agent->RemoveAgent();
 
 				selfTr->localPosition.x = 100.0f;
-				/*selfTr->localPosition.y = outOfScene.y;*/
-				/*selfTr->localPosition.z = outOfScene.z;*/
-				/*WI_INFO("Pos: x: {}, y: {}, z:{}", selfTr->localPosition.x, selfTr->localPosition.y, selfTr->localPosition.z);*/
-
+	
 				m_SpawnDashEffect = false;
 			}
 			
-			if (/*bullet->lifeTime*/ m_TimerOfDashAction >= 2.5f)
+			if (m_TimerOfDashAction >= 2.2f) //Bullet Lifetime
 			{
 				m_TimerOfDashAction = 0.0f;
-				m_SecondDashState = SecondDashState::FINISH_DASH;
+				m_SecondDashState = SecondDashState::END_DASH;
 			}
-		}
-		break;
-		case Wiwa::BossUltronSecondDashState::SecondDashState::FINISH_DASH:
-		{
-			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
-			EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronSecondDashPool->GetFromPool();
-			Wiwa::SecondDashSystem* dashSystem = em.GetSystem<Wiwa::SecondDashSystem>(newBulletId);
-			WI_INFO("ULTRON SECOND DASH ID: {}", newBulletId);
-
-			//Animation here
-			/*selfTr->localPosition = dashSystem->GetPositionAfterDash();*/
-			/*WI_INFO("Pos: x: {}, y: {}, z:{}", selfTr->localPosition.x, selfTr->localPosition.y, selfTr->localPosition.z);*/
-			/*agent->SetPosition(dashSystem->GetPositionAfterDash());*/
-
-			selfTr->localPosition.x = dashSystem->GetPositionAfterDash().x;
-			/*selfTr->localPosition.y = 40.0f;*/
-			selfTr->localPosition.z = dashSystem->GetPositionAfterDash().z;
-			m_SecondDashState = SecondDashState::END_DASH;
 		}
 		break;
 		case Wiwa::BossUltronSecondDashState::SecondDashState::END_DASH:
 		{
 			/*agent->RegisterWithCrowd();
-			agent->StopAgent();
-			navAgent->autoRotate = true;*/
+			agent->StopAgent();*/
+			navAgent->autoRotate = true;
 
 			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
 
@@ -185,7 +165,7 @@ namespace Wiwa
 
 		physSys->CreateBody();
 
-		dashSystem->EnableBullet();
+		dashSystem->EnableBullet(enemy);
 
 		return true;
 	}

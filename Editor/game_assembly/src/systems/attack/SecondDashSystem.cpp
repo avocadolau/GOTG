@@ -3,6 +3,8 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 #include "../../components/attack/Attack.h"
+#include "../enemy/Ultron/BossUltron.h"
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -48,6 +50,7 @@ namespace Wiwa
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 		m_Timer = 0.0f;
+		m_CollisionWithWall = false;
 
 		physicsManager.SetVelocity(obj, glm::normalize(dash->direction) * dash->velocity);
 	}
@@ -65,23 +68,43 @@ namespace Wiwa
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
-		if (m_Timer >= bullet->lifeTime)
+		if (m_Timer > bullet->lifeTime)
 		{
 			GameStateManager::s_PoolManager->s_UltronSecondDashPool->ReturnToPool(m_EntityId);
 		}
 
-		if (m_Timer < bullet->lifeTime)
+		if (m_CollisionWithWall == true)
 		{
-			if (transform->localPosition.y != 3000.0f)
+			Transform3D* transformBossUltron = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(BossUltronEnemy->GetEntity()));
+			Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(BossUltronEnemy->GetEntity());
+			transformBossUltron->localPosition.x = transform->localPosition.x;
+			transformBossUltron->localPosition.z = transform->localPosition.z;
+
+			GameStateManager::s_PoolManager->s_UltronSecondDashPool->ReturnToPool(m_EntityId);
+
+			agent->RegisterWithCrowd();
+			agent->SetPosition(transformBossUltron->localPosition);
+			agent->StopAgent();
+		}
+
+		if (m_CollisionWithWall == false)
+		{
+			if ((m_Timer >= bullet->lifeTime - 0.05f) && (m_Timer <= bullet->lifeTime))
 			{
-				if (transform->localPosition.x != 0.0f || transform->localPosition.z != 0.0f)
+				if (transform->localPosition.y != 3000.0f)
 				{
-					m_PositionAfterDash = transform->localPosition;
+					Transform3D* transformBossUltron = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(BossUltronEnemy->GetEntity()));
+					Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(BossUltronEnemy->GetEntity());
+					transformBossUltron->localPosition.x = transform->localPosition.x;
+					transformBossUltron->localPosition.z = transform->localPosition.z;
+
+					agent->RegisterWithCrowd();
+					agent->SetPosition(transformBossUltron->localPosition);
+					agent->StopAgent();
 				}
 			}
-			
-			WI_INFO("Pos: x: {}, y: {}, z:{}", m_PositionAfterDash.x, m_PositionAfterDash.y, m_PositionAfterDash.z);
 		}
+		
 	}
 
 	void SecondDashSystem::OnDestroy()
@@ -100,11 +123,24 @@ namespace Wiwa
 				GameStateManager::DamagePlayer(dash->damage);
 			}
 
-			GameStateManager::s_PoolManager->s_UltronSecondDashPool->ReturnToPool(m_EntityId);
+			std::string wallStr = "WALL";
+			if (wallStr == body2->selfTagStr)
+			{
+				DashEffect* dash = GetComponentByIterator<DashEffect>(m_DashIt);
+				Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+				Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
+				Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+
+				physicsManager.SetVelocity(obj, glm::normalize(dash->direction) * 0.0f);
+
+				m_CollisionWithWall = true;
+			}
+
+			/*GameStateManager::s_PoolManager->s_UltronSecondDashPool->ReturnToPool(m_EntityId);*/
 		}
 	}
 
-	bool SecondDashSystem::EnableBullet()
+	bool SecondDashSystem::EnableBullet(BossUltron* enemy)
 	{
 		DashEffect* dash = GetComponent<DashEffect>();
 		if (dash)
@@ -112,6 +148,9 @@ namespace Wiwa
 			InitBullet();
 		}
 		m_Timer = 0.0f;
+
+		BossUltronEnemy = enemy;
+
 		return true;
 	}
 
@@ -134,8 +173,8 @@ namespace Wiwa
 		return true;
 	}
 
-	glm::vec3 SecondDashSystem::GetPositionAfterDash()
+	glm::vec3 SecondDashSystem::GetPositionAfterDash(glm::vec3 position)
 	{
-		return m_PositionAfterDash;
+		return position;
 	}
 }

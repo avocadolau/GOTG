@@ -20,7 +20,7 @@ namespace Wiwa
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
 		s_StarLordBullets = new EntityPool(Pool_Type::STARLORD_BULLET, 25, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
 		s_RocketBullets = new EntityPool(Pool_Type::ROCKET_BULLET, 2, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
-		s_UltronSecondDashPool = new EntityPool(Pool_Type::ULTRON_SECOND_DASH, 2, "assets\\Enemy\\DashEffect\\DashEffect_01.wiprefab");
+		s_UltronSecondDashPool = new EntityPool(Pool_Type::ULTRON_SECOND_DASH, 1, "assets\\Enemy\\DashEffect\\DashEffect_01.wiprefab");
 		s_RainProjectilePool = new EntityPool(Pool_Type::RAIN_PROJECTILE, 10, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 
 		m_HasLoadedAll = false;

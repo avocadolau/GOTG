@@ -8,7 +8,6 @@ namespace Wiwa {
 		enum class SecondDashState {
 			PREPARE_DASH,
 			PLAY_DASH,
-			FINISH_DASH,
 			END_DASH,
 		};
 
