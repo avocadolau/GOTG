@@ -159,11 +159,35 @@ namespace Wiwa
 			if (collidingWithNpc == true)
 			{
 				conversationToPlayName = NpcConversationTag.c_str();
+
+				if (characterSensitive == true)
+				{
+					if (characterID == 0)
+					{
+						conversationToPlayName = conversationToPlayName + "_Starlord";
+					}
+					else if (characterID == 1)
+					{
+						conversationToPlayName = conversationToPlayName + "_Rocket";
+					}
+				}
 			}
 			else if (forceStartConversation == true)
 			{
 				conversationToPlayName = forcedConversationTag.c_str();
 				forcedDialogHappened = true;
+
+				if (characterSensitive == true)
+				{
+					if (characterID == 0)
+					{
+						conversationToPlayName = conversationToPlayName + "_Starlord";
+					}
+					else if (characterID == 1)
+					{
+						conversationToPlayName = conversationToPlayName + "_Rocket";
+					}
+				}
 			}
 			actualConversationState = 0;
 

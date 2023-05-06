@@ -124,5 +124,6 @@ namespace Wiwa
 		bool finishedRandomizing = false;
 
 		int characterID = -1; // -1 is none, 0 is Starlord, 1 is Rocket
+		bool characterSensitive = false;
 	};
 }

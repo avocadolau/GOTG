@@ -26,6 +26,7 @@
 
 #include "systems/NpcSystem.h"
 #include "systems/ForcedDialogSystem.h"
+#include "systems/CharacterSensitiveDialogSystem.h"
 
 #include "systems/attack/ClusterBulletSystem.h"
 
