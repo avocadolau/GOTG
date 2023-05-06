@@ -20,18 +20,18 @@ void Wiwa::BossUltronProjectileRainAttackState::EnterState(BossUltron* enemy)
 	m_TimerRain = 0.0f;
 	m_RainProjectileCounter = 0;
 	m_RainState = ProjectileRainState::PREPARE_RAIN;
-	//Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+	Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 	//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 	//ParticleManager& pman = enemy->getScene().GetParticleManager();
 	//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 	//EntityId currentEnemy = enemy->GetEntity();
 
 	
-	//NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-	//if (navAgent)
-	//{
-	//	navAgent->autoRotate = false;
-	//}
+	NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+	if (navAgent)
+	{
+		navAgent->autoRotate = true;
+	}
 
 	//EntityId currentEnemy = enemy->GetEntity();
 
@@ -124,7 +124,7 @@ bool Wiwa::BossUltronProjectileRainAttackState::SpawnProjectileRain(BossUltron* 
 		return false;
 
 	glm::vec3 spawnPosition = GetRandomPositionInRange(playerTr->localPosition, RAIN_RANGE);
-	spawnPosition.y += 4.0f;
+	spawnPosition.y += 30.0f;
 
 	EnemyData* stats = (EnemyData*)entityManager.GetComponentByIterator(enemy->m_StatsIt);
 	Ultron* ultron = (Ultron*)entityManager.GetComponentByIterator(enemy->m_Ultron);

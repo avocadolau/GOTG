@@ -50,7 +50,7 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 
 	if (m_Timer >= bullet->lifeTime)
 	{
-		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+		GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
 	}
 
 	m_Timer += Time::GetDeltaTimeSeconds();

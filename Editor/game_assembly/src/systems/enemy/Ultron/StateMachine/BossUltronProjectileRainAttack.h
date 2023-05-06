@@ -1,7 +1,7 @@
 #pragma once
 #include "BossUltronBase.h"
 
-#define RAIN_RANGE 5.0f
+#define RAIN_RANGE 3.0f
 #define RAIN_PROJECTILE_NUMBER 9
 #define TIME_BETWEEN_PROJECTILES 2.0f
 
