@@ -431,6 +431,18 @@ namespace Wiwa
 				{
 					firstTime = false;
 
+					if (conversations[conversationNumber].detectsCharacter == true)
+					{
+						if (characterID == 0)
+						{
+							conversations[conversationNumber].nodes[currentNode].audioEventName = conversations[conversationNumber].nodes[currentNode].audioEventName + "_Starlord";
+						}
+						else if (characterID == 1)
+						{
+							conversations[conversationNumber].nodes[currentNode].audioEventName = conversations[conversationNumber].nodes[currentNode].audioEventName + "_Rocket";
+						}
+					}
+
 					Audio::PostWorldEvent(conversations[conversationNumber].nodes[currentNode].audioEventName.c_str());
 
 					if (conversations[conversationNumber].isInOppositeSide == true)
@@ -521,6 +533,18 @@ namespace Wiwa
 				}
 				else
 				{
+					if (conversations[conversationNumber].detectsCharacter == true)
+					{
+						if (characterID == 0)
+						{
+							conversations[conversationNumber].nodes[currentNode].audioEventName = conversations[conversationNumber].nodes[currentNode].audioEventName + "_Starlord";
+						}
+						else if (characterID == 1)
+						{
+							conversations[conversationNumber].nodes[currentNode].audioEventName = conversations[conversationNumber].nodes[currentNode].audioEventName + "_Rocket";
+						}
+					}
+
 					Audio::PostWorldEvent(conversations[conversationNumber].nodes[currentNode].audioEventName.c_str());
 				}
 			}
