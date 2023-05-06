@@ -16,6 +16,8 @@ struct DialogNode
 	std::string text2;
 	std::string text3;
 
+	std::string audioEventName;
+
 	bool occupied = false;
 };
 

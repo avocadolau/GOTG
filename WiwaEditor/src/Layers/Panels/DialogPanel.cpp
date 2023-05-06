@@ -79,6 +79,7 @@ void DialogPanel::Draw()
 					dm.conversations[currentConversation].nodes[m].text2 = "";
 					dm.conversations[currentConversation].nodes[m].text3 = "";
 
+					dm.conversations[currentConversation].nodes[m].audioEventName = "";
 				}
 
 				dm.conversations[currentConversation].bubbleImagePath = "";
@@ -115,6 +116,13 @@ void DialogPanel::Draw()
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
+				ImGui::NewLine();
+				if (ImGui::InputText("Audio event name", &dm.conversations[currentConversation].nodes[currentNode].audioEventName))
+				{
+					currentCreatingNodeIsSaved[currentNode] = false;
+				}
+				ImGui::TextWrapped("Note: Leave 'Audio event name' case blank if no audio event should be played. This event is normally used for voice line audio.");
+				ImGui::NewLine();
 
 				ImGui::PushID(currentNode);
 				if (currentNode > 0)
@@ -201,6 +209,9 @@ void DialogPanel::Draw()
 							dm.conversations[currentConversation].nodes[l].text1 = dm.conversations[currentConversation].nodes[l + 1].text1;
 							dm.conversations[currentConversation].nodes[l].text2 = dm.conversations[currentConversation].nodes[l + 1].text2;
 							dm.conversations[currentConversation].nodes[l].text3 = dm.conversations[currentConversation].nodes[l + 1].text3;
+
+							dm.conversations[currentConversation].nodes[l].audioEventName = dm.conversations[currentConversation].nodes[l + 1].audioEventName;
+
 							dm.conversations[currentConversation].nodes[l].occupied = dm.conversations[currentConversation].nodes[l + 1].occupied;
 
 						}
@@ -325,6 +336,7 @@ void DialogPanel::Draw()
 						dm.editorConversations[currentConversation].nodes[m].text1 = dm.conversations[currentConversation].nodes[m].text1;
 						dm.editorConversations[currentConversation].nodes[m].text2 = dm.conversations[currentConversation].nodes[m].text2;
 						dm.editorConversations[currentConversation].nodes[m].text3 = dm.conversations[currentConversation].nodes[m].text3;
+						dm.editorConversations[currentConversation].nodes[m].audioEventName = dm.conversations[currentConversation].nodes[m].audioEventName;
 
 					}
 
@@ -390,6 +402,15 @@ void DialogPanel::Draw()
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
+				ImGui::NewLine();
+				ImGui::PushID(currentEditingNode[i]);
+				if (ImGui::InputText("Audio event name", &dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName))
+				{
+					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
+				}
+				ImGui::PopID();
+				ImGui::TextWrapped("Note: Leave 'Audio event name' case blank if no audio event should be played. This event is normally used for voice line audio.");
+				ImGui::NewLine();
 				ImGui::PushID(currentEditingNode[i]);
 				if (currentEditingNode[i] > 0)
 				{
@@ -455,6 +476,9 @@ void DialogPanel::Draw()
 							dm.editorConversations[i].nodes[l].text1 = dm.editorConversations[i].nodes[l + 1].text1;
 							dm.editorConversations[i].nodes[l].text2 = dm.editorConversations[i].nodes[l + 1].text2;
 							dm.editorConversations[i].nodes[l].text3 = dm.editorConversations[i].nodes[l + 1].text3;
+
+							dm.editorConversations[i].nodes[l].audioEventName = dm.editorConversations[i].nodes[l + 1].audioEventName;
+
 							dm.editorConversations[i].nodes[l].occupied = dm.editorConversations[i].nodes[l + 1].occupied;
 
 							currentEditingNodeIsSaved[currentEditingNode[i]][l] = currentEditingNodeIsSaved[currentEditingNode[i]][l + 1];
@@ -475,6 +499,8 @@ void DialogPanel::Draw()
 					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
 					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
 					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
+
+					dm.conversations[i].nodes[currentEditingNode[i]].audioEventName = dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName;
 
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
@@ -572,6 +598,8 @@ void DialogPanel::Draw()
 					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
 					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
 
+					dm.conversations[i].nodes[currentEditingNode[i]].audioEventName = dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName;
+
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
@@ -629,6 +657,9 @@ void DialogPanel::Draw()
 								dm.conversations[l].nodes[m].text1 = dm.conversations[l + 1].nodes[m].text1;
 								dm.conversations[l].nodes[m].text2 = dm.conversations[l + 1].nodes[m].text2;
 								dm.conversations[l].nodes[m].text3 = dm.conversations[l + 1].nodes[m].text3;
+
+								dm.conversations[l].nodes[m].audioEventName = dm.conversations[l + 1].nodes[m].audioEventName;
+
 								dm.conversations[l].nodes[m].occupied = dm.conversations[l + 1].nodes[m].occupied;
 
 								currentEditingNodeIsSaved[currentEditingNode[i]][m] = true;
@@ -672,6 +703,9 @@ void DialogPanel::Draw()
 								dm.editorConversations[l].nodes[m].text1 = dm.editorConversations[l + 1].nodes[m].text1;
 								dm.editorConversations[l].nodes[m].text2 = dm.editorConversations[l + 1].nodes[m].text2;
 								dm.editorConversations[l].nodes[m].text3 = dm.editorConversations[l + 1].nodes[m].text3;
+
+								dm.editorConversations[l].nodes[m].audioEventName = dm.editorConversations[l + 1].nodes[m].audioEventName;
+
 								dm.editorConversations[l].nodes[m].occupied = dm.editorConversations[l + 1].nodes[m].occupied;
 
 								currentEditingNodeIsSaved[currentEditingNode[i]][m] = true;

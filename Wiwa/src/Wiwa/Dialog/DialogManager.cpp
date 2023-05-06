@@ -2,6 +2,8 @@
 
 #include "DialogManager.h"
 
+#include "Wiwa/audio/Audio.h"
+
 #include <Wiwa/core/Application.h>
 //#include <Wiwa/scene/SceneManager.h>
 #include <Wiwa/scene/Scene.h>
@@ -136,6 +138,9 @@ namespace Wiwa
 				editorConversations[e].nodes[f].text1 = conversations[e].nodes[f].text1;
 				editorConversations[e].nodes[f].text2 = conversations[e].nodes[f].text2;
 				editorConversations[e].nodes[f].text3 = conversations[e].nodes[f].text3;
+
+				editorConversations[e].nodes[f].audioEventName = conversations[e].nodes[f].audioEventName;
+
 				editorConversations[e].nodes[f].occupied = conversations[e].nodes[f].occupied;
 
 			}
@@ -150,6 +155,8 @@ namespace Wiwa
 	bool DialogManager::Update()
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
+		//Audio::PostWorldEvent(""); <--
 
 		characterID = GameStateManager::s_CurrentCharacter;
 
@@ -667,13 +674,18 @@ namespace Wiwa
 				std::string memberNameLine1 = "_Line1_Node" + s2;
 				std::string memberNameLine2 = "_Line2_Node" + s2;
 				std::string memberNameLine3 = "_Line3_Node" + s2;
+				std::string memberNameLine4 = "_AudioEvent_Node" + s2;
+
 				memberNameLine1 = conv + memberNameLine1;
 				memberNameLine2 = conv + memberNameLine2;
 				memberNameLine3 = conv + memberNameLine3;
+				memberNameLine4 = conv + memberNameLine4;
 
 				doc.AddMember(memberNameLine1.c_str(), conversations[i].nodes[j].text1.c_str());
 				doc.AddMember(memberNameLine2.c_str(), conversations[i].nodes[j].text2.c_str());
 				doc.AddMember(memberNameLine3.c_str(), conversations[i].nodes[j].text3.c_str());
+
+				doc.AddMember(memberNameLine4.c_str(), conversations[i].nodes[j].audioEventName.c_str());
 
 			}
 		}
@@ -727,15 +739,20 @@ namespace Wiwa
 					std::string memberNameLine1 = "_Line1_Node" + s2;
 					std::string memberNameLine2 = "_Line2_Node" + s2;
 					std::string memberNameLine3 = "_Line3_Node" + s2;
+					std::string memberNameLine4 = "_AudioEvent_Node" + s2;
+
 					memberNameLine1 = conv + memberNameLine1;
 					memberNameLine2 = conv + memberNameLine2;
 					memberNameLine3 = conv + memberNameLine3;
+					memberNameLine4 = conv + memberNameLine4;
 
 					if (doc.HasMember(memberNameLine1.c_str())
 						&& doc.HasMember(memberNameLine2.c_str())
-						&& doc.HasMember(memberNameLine3.c_str()))
+						&& doc.HasMember(memberNameLine3.c_str())
+						&& doc.HasMember(memberNameLine4.c_str()))
 					{
 						SetDialogText((char*)doc[memberNameLine1.c_str()].as_string(), (char*)doc[memberNameLine2.c_str()].as_string(), (char*)doc[memberNameLine3.c_str()].as_string(), "library/Fonts/Jade_Smile.ttf", i, j);
+						conversations[i].nodes[j].audioEventName = doc[memberNameLine4.c_str()].as_string();
 					}
 					else
 					{
