@@ -8,6 +8,7 @@ Wiwa::RainProjectileSystem::RainProjectileSystem()
 	m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	m_Timer = 0.0f;
 	m_DamageHasBeenApplied = false;
+	m_BulletSpeedStored = 1.0f;
 }
 
 Wiwa::RainProjectileSystem::~RainProjectileSystem()
@@ -37,6 +38,11 @@ void Wiwa::RainProjectileSystem::InitRainProjectileBullet()
 
 	physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 
+	m_BulletSpeedStored = bullet->velocity;
+	bullet->lifeTime += RAIN_BULLET_WAITINGTIME;
+
+	bullet->velocity = 0.0f;
+
 }
 
 void Wiwa::RainProjectileSystem::OnUpdate()
@@ -48,8 +54,19 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 
 	RainProjectile* bullet = GetComponentByIterator<RainProjectile>(m_BulletIt);
 
+	if (m_Timer >= RAIN_BULLET_WAITINGTIME)
+	{
+		//WI_INFO("timer Setting velocity");
+		bullet->velocity = m_BulletSpeedStored;
+	}
+	//else
+	//{
+	//	WI_INFO("timer NOT Setting velocity");
+	//}
+
 	if (m_Timer >= bullet->lifeTime)
 	{
+		bullet->lifeTime -= RAIN_BULLET_WAITINGTIME;
 		GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
 	}
 
@@ -78,6 +95,12 @@ void Wiwa::RainProjectileSystem::OnCollisionEnter(Object* body1, Object* body2)
 			}
 		}	
 		
+		std::string wallStr = "WALL";
+		if (wallStr == body2->selfTagStr)
+		{
+			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+		}
+
 	}
 }
 
