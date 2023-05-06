@@ -22,6 +22,8 @@ namespace Wiwa
         EntityPool* s_RocketBullets;
         EntityPool* s_UltronSecondDashPool;
         EntityPool* s_RainProjectilePool;
+        EntityPool* s_SmashExplosionPool;
+
 
         bool m_HasLoadedAll = false;
         void SetScene(Scene* scene);
@@ -74,5 +76,8 @@ namespace Wiwa
 
         void LoadRainProjectilePool(Scene* scene);
         void UnloadRainProjectilePool();
+
+        void LoadSmashExplosionPool(Scene* scene);
+        void UnloadSmashExplosionPool();
     };
 }

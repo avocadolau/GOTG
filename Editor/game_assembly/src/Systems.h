@@ -31,6 +31,7 @@
 
 #include "systems/attack/UltronLaserBeamSystem.h"
 #include "systems/attack/SecondDashSystem.h"
+#include "systems/attack/UltronSmashExplosionSystem.h"
 #include "systems/enemy/BossMovementPointsSystem.h"
 
 #include "systems/attack/ExplosiveBarrelSystem.h"

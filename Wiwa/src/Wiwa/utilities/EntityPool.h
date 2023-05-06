@@ -32,6 +32,7 @@ namespace Wiwa
         EXPLOSIVE_BARREL,
         ULTRON_SECOND_DASH,
         RAIN_PROJECTILE,
+        ULTRON_SMASH_EXPLOSION,
 
         STARLORD_BULLET,
         ROCKET_BULLET,
