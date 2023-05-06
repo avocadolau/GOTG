@@ -30,6 +30,8 @@ namespace Wiwa {
 
 		glm::vec3 GetRandomPositionInRange(const glm::vec3& position, float range);
 
+		bool SpawnThunderStorm(int numBullets, float totalTime, const glm::vec3 boundary, BossUltron* enemy, const glm::vec3& bull_dir);
+
 		ProjectileRainState m_RainState;
 		std::vector<glm::vec3> m_AfterRainPosition;
 		float m_TimerRain;
