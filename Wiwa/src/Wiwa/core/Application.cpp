@@ -97,6 +97,8 @@ namespace Wiwa
 
 		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
+		Input::Init();
+
 		bool res = Audio::Init();
 
 		if (!res)

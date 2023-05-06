@@ -8,6 +8,46 @@
 
 namespace Wiwa
 {
+
+	glm::vec2 dz_scaled_radial(glm::vec2 stick_input, float deadzone) {
+		float input_magnitude = glm::length(stick_input);
+		if (input_magnitude < deadzone) {
+			return glm::vec2(0.0f, 0.0f);
+		}
+
+		glm::vec2 input_normalized = stick_input / input_magnitude;
+		float mapped_magnitude = glm::mix(0.0f, 1.0f, (input_magnitude - deadzone) / (1.0f - deadzone));
+		glm::vec2 result = input_normalized * mapped_magnitude;
+		return result;
+
+	}
+	glm::vec2 dz_sloped_scaled_axial(glm::vec2 stick_input, float deadzone) {
+		float deadzone_x = deadzone * glm::abs(stick_input.y);
+		float deadzone_y = deadzone * glm::abs(stick_input.x);
+		glm::vec2 result(0.0f, 0.0f);
+		glm::vec2 sign(glm::sign(stick_input.x), glm::sign(stick_input.y));
+		if (glm::abs(stick_input.x) > deadzone_x) {
+			result.x = sign.x * glm::mix(0.0f, 1.0f, (glm::abs(stick_input.x) - deadzone_x) / (1.0f - deadzone_x));
+		}
+		if (glm::abs(stick_input.y) > deadzone_y) {
+			result.y = sign.y * glm::mix(0.0f, 1.0f, (glm::abs(stick_input.y) - deadzone_y) / (1.0f - deadzone_y));
+		}
+		return result;
+	}
+	glm::vec2 WindowsInput::GetRawJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone)
+	{
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(gamepadIndx, &state))
+		{
+			float inputX = GetRawAxis(gamepadIndx, axisX, GetDeadzone(axisX));
+			float inputY = GetRawAxis(gamepadIndx, axisY, GetDeadzone(axisY));
+			glm::vec2 partialOutput = dz_scaled_radial({ inputX, inputY }, deadzone);
+
+			return dz_sloped_scaled_axial(partialOutput, deadzone);
+		}
+		return glm::vec2(0.f);
+	}
+
 	Input* Input::s_Instance = new WindowsInput();
 	float Input::MouseXDelta = 0;
 	float Input::MouseYDelta = 0;
@@ -108,9 +148,8 @@ namespace Wiwa
 		{
 			float input = state.axes[axis];
 			float abs = glm::abs(input);
-			float inputDeadzone = deadzone * abs;
 			
-			if (abs < inputDeadzone)
+			if (abs < deadzone)
 			{
 				return 0.f;
 			}
@@ -125,9 +164,8 @@ namespace Wiwa
 		{
 			float input = state.axes[axis];
 			float abs = glm::abs(input);
-			float inputDeadzone = deadzone * abs;
 
-			if (abs < inputDeadzone)
+			if (abs < deadzone)
 			{
 				return 0.f;
 			}
@@ -136,53 +174,15 @@ namespace Wiwa
 		}
 		return 0.f;
 	}
-	glm::vec2 dz_scaled_radial(glm::vec2 stick_input, float deadzone) {
-		float input_magnitude = glm::length(stick_input);
-		if (input_magnitude < deadzone) {
-			return glm::vec2(0.0f, 0.0f);
-		}
-
-		glm::vec2 input_normalized = stick_input / input_magnitude;
-		float mapped_magnitude = glm::mix(0.0f, 1.0f, (input_magnitude - deadzone) / (1.0f - deadzone));
-		glm::vec2 result = input_normalized * mapped_magnitude;
-		return result;
-
-	}
-	glm::vec2 dz_sloped_scaled_axial(glm::vec2 stick_input, float deadzone) {
-		float deadzone_x = deadzone * glm::abs(stick_input.y);
-		float deadzone_y = deadzone * glm::abs(stick_input.x);
-		glm::vec2 result(0.0f, 0.0f);
-		glm::vec2 sign(glm::sign(stick_input.x), glm::sign(stick_input.y));
-		if (glm::abs(stick_input.x) > deadzone_x) {
-			result.x = sign.x * glm::mix(0.0f, 1.0f, (glm::abs(stick_input.x) - deadzone_x) / (1.0f - deadzone_x));
-		}
-		if (glm::abs(stick_input.y) > deadzone_y) {
-			result.y = sign.y * glm::mix(0.0f, 1.0f, (glm::abs(stick_input.y) - deadzone_y) / (1.0f - deadzone_y));
-		}
-		return result;
-	}
-	glm::vec2 WindowsInput::GetRawJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone)
-	{
-		GLFWgamepadstate state;
-		if (glfwGetGamepadState(gamepadIndx, &state))
-		{
-			float inputX = state.axes[axisX];
-			float inputY = state.axes[axisY];
-
-			glm::vec2 partialOutput = dz_scaled_radial({ inputX, inputY }, deadzone);
-			
-			return dz_sloped_scaled_axial(partialOutput, deadzone);
-		}
-		return glm::vec2(0.f);
-	}
+	
 
 	glm::vec2 WindowsInput::GetJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone)
 	{
 		GLFWgamepadstate state;
 		if (glfwGetGamepadState(gamepadIndx, &state))
 		{
-			float inputX = state.axes[axisX];
-			float inputY = state.axes[axisY];
+			float inputX = GetRawAxis(gamepadIndx, axisX, GetDeadzone(axisX));;
+			float inputY = GetRawAxis(gamepadIndx, axisY, GetDeadzone(axisY));;
 
 			glm::vec2 partialOutput = dz_scaled_radial({ inputX, inputY }, deadzone);
 
@@ -217,5 +217,48 @@ namespace Wiwa
 		}
 		return false;
 
+	}
+	void WindowsInput::InitImpl()
+	{
+		InitDeadzone();
+	}
+	void WindowsInput::InitDeadzone()
+	{
+		GLFWgamepadstate state;
+		if (glfwGetGamepadState(Gamepad::GamePad1, &state))
+		{
+			m_LeftDeadzone.x = glm::abs(state.axes[Gamepad::LeftX]);
+			m_LeftDeadzone.y = glm::abs(state.axes[Gamepad::LeftY]);
+
+			m_RightDeadzone.x = glm::abs(state.axes[Gamepad::RightX]);
+			m_RightDeadzone.y = glm::abs(state.axes[Gamepad::RightY]);
+
+			return;
+		}
+		m_LeftDeadzone = glm::vec2(0.f);
+		m_RightDeadzone = glm::vec2(0.f);
+	}
+	float WindowsInput::GetDeadzone(int axis)
+	{
+		switch (axis)
+		{
+		case Gamepad::LeftX:
+			return m_LeftDeadzone.x;
+			break;
+		case Gamepad::LeftY:
+			return m_LeftDeadzone.y;
+			break;
+		case Gamepad::RightX:
+			return m_RightDeadzone.x;
+			break;
+		case Gamepad::RightY:
+			return m_RightDeadzone.y;
+			break;
+		default:
+			break;
+		}
+
+
+		return 0.0f;
 	}
 }

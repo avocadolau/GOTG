@@ -8,6 +8,7 @@
 #include <Wiwa/utilities/AllocationMetrics.h>
 #include "../EditorLayer.h"
 #include <Wiwa/core/Input.h>
+#include <Wiwa/Platform/Windows/WindowsInput.h>
 
 ConfigurationPanel::ConfigurationPanel(EditorLayer *instance)
 	: Panel("Configuration", ICON_FK_COG, instance), info()
@@ -175,6 +176,11 @@ void ConfigurationPanel::Draw()
 	if (ImGui::CollapsingHeader("Gamepad axis"))
 	{
 		ImGui::Text("Deadzone %f", Wiwa::GameStateManager::s_GamepadDeadzone);
+		ImGui::Text("Deadzone left %f X", Wiwa::Input::GetLeftDeadzone().x);
+		ImGui::Text("Deadzone left %f Y", Wiwa::Input::GetLeftDeadzone().y);
+		ImGui::Text("Deadzone right %f X", Wiwa::Input::GetRightDeadzone().x);
+		ImGui::Text("Deadzone right %f Y", Wiwa::Input::GetRightDeadzone().y);
+
 
 		ImGui::Text("Raw Gamepad 1");
 		ImGui::Text("Left X: %f", Wiwa::Input::GetRawAxis( Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::GameStateManager::s_GamepadDeadzone));
