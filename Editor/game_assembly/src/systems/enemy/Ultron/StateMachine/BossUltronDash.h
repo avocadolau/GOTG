@@ -20,18 +20,22 @@ namespace Wiwa {
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
+		void SpawnExplosionAfterDash(BossUltron* enemy, Transform3D* selfTransform, float explosionPositionX, float explosionPositionZ);
+
 	private:
 
 		DashState m_State;
 
 		float m_TimerToRotate = 0.0f;
 		float m_TimerDash = 0.0f;
+		float m_TimerToStopDash = 0.0f;
 		float m_TimerAfterDash = 0.0f;
 
 		float lifetimeDash = 2.0f;
 		int damageDash = 0;
 
 		bool initiateDash = false;
+		bool m_UltronJump = false;
 
 		float interpolationValue = 0.0f;
 

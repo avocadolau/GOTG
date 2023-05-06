@@ -14,7 +14,7 @@ namespace Wiwa
 		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 100, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		s_SentinelExplosion = new EntityPool(Pool_Type::SENTINEL_EXPLOSION, 3, "assets\\Enemy\\Explosions\\SentinelExplosion_01.wiprefab");
 		s_BossUltron = new EntityPool(Pool_Type::BOSS_ULTRON, 1, "assets\\Enemy\\Prefabs\\melee_phalanx.wiprefab");
-		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,2, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
+		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,6, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\UltronLaserBeam\\UltronLaserBeam_01.wiprefab");
 		s_Subjugator = new EntityPool(Pool_Type::SUBJUGATOR, 6, "assets\\Enemy\\Subjugator\\sk_subjugator01.wiprefab");
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
@@ -22,6 +22,7 @@ namespace Wiwa
 		s_RocketBullets = new EntityPool(Pool_Type::ROCKET_BULLET, 2, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");
 		s_UltronSecondDashPool = new EntityPool(Pool_Type::ULTRON_SECOND_DASH, 1, "assets\\Enemy\\DashEffect\\DashEffect_01.wiprefab");
 		s_RainProjectilePool = new EntityPool(Pool_Type::RAIN_PROJECTILE, 10, "assets\\Enemy\\RainProjectile\\RainProjectile_01.wiprefab");
+		s_SmashExplosionPool = new EntityPool(Pool_Type::ULTRON_SMASH_EXPLOSION, 12, "assets\\Enemy\\Explosions\\SmashExplosion_01.wiprefab");
 
 		m_HasLoadedAll = false;
 	}
@@ -40,6 +41,7 @@ namespace Wiwa
 		delete s_ExplosiveBarrel;
 		delete s_UltronSecondDashPool;
 		delete s_RainProjectilePool;
+		delete s_SmashExplosionPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -56,6 +58,7 @@ namespace Wiwa
 		s_ExplosiveBarrel->SetScene(scene);
 		s_UltronSecondDashPool->SetScene(scene);
 		s_RainProjectilePool->SetScene(scene);
+		s_SmashExplosionPool->SetScene(scene);
 	}
 
 
@@ -104,6 +107,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::RAIN_PROJECTILE:
 			LoadRainProjectilePool(scene);
+			break;
+		case Pool_Type::ULTRON_SMASH_EXPLOSION:
+			LoadSmashExplosionPool(scene);
 			break;
 		default:
 			break;
@@ -154,6 +160,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::RAIN_PROJECTILE:
 			UnloadRainProjectilePool();
+			break;
+		case Pool_Type::ULTRON_SMASH_EXPLOSION:
+			UnloadSmashExplosionPool();
 			break;
 		default:
 			break;
@@ -393,6 +402,23 @@ namespace Wiwa
 		s_RainProjectilePool->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadSmashExplosionPool(Scene* scene)
+	{
+		if (s_SmashExplosionPool->Loaded)
+			return;
+
+		s_SmashExplosionPool->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_SmashExplosionPool->getMaxSize());
+		for (int i = 0; i < s_SmashExplosionPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_SmashExplosionPool->getPath());
+		s_SmashExplosionPool->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadSmashExplosionPool()
+	{
+		s_SmashExplosionPool->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		if (m_HasLoadedAll)
@@ -412,6 +438,7 @@ namespace Wiwa
 		LoadRocketBulletsPool(scene);
 		LoadSecondDashPool(scene);
 		LoadRainProjectilePool(scene);
+		LoadSmashExplosionPool(scene);
 
 		m_HasLoadedAll = true;
 	}
@@ -433,5 +460,6 @@ namespace Wiwa
 		UnloadRocketBulletsPool();
 		UnloadSecondDashPool();
 		UnloadRainProjectilePool();
+		UnloadSmashExplosionPool();
 	}
 }
