@@ -16,6 +16,7 @@
 #include "components/attack/UltronLaserBeam.h"
 #include "components/attack/DashEffect.h"
 #include "components/attack/RainProjectile.h"
+#include "components/attack/ZigZagBullet.h"
 #include "components/enemy/BossMovementPoints.h"
 
 #include "components/attack/Explosion.h"

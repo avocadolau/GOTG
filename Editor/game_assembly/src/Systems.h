@@ -29,6 +29,7 @@
 #include "systems/CharacterSensitiveDialogSystem.h"
 
 #include "systems/attack/ClusterBulletSystem.h"
+#include "systems/attack/ZigZagSystem.h"
 
 #include "systems/attack/UltronLaserBeamSystem.h"
 #include "systems/attack/SecondDashSystem.h"

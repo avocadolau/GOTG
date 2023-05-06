@@ -23,6 +23,8 @@ namespace Wiwa
 		s_UltronSecondDashPool = new EntityPool(Pool_Type::ULTRON_SECOND_DASH, 1, "assets\\Enemy\\DashEffect\\DashEffect_01.wiprefab");
 		s_RainProjectilePool = new EntityPool(Pool_Type::RAIN_PROJECTILE, 80, "assets\\Enemy\\RainProjectile\\RainProjectile_01.wiprefab");
 		s_SmashExplosionPool = new EntityPool(Pool_Type::ULTRON_SMASH_EXPLOSION, 12, "assets\\Enemy\\Explosions\\SmashExplosion_01.wiprefab");
+		s_ZigZagBulletPool = new EntityPool(Pool_Type::ZIG_ZAG_BULLET, 40, "assets\\Enemy\\ZigZagBullet\\ZigZagBullet_01.wiprefab");
+
 		m_HasLoadedAll = false;
 	}
 
@@ -41,6 +43,7 @@ namespace Wiwa
 		delete s_UltronSecondDashPool;
 		delete s_RainProjectilePool;
 		delete s_SmashExplosionPool;
+		delete s_ZigZagBulletPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -58,6 +61,7 @@ namespace Wiwa
 		s_UltronSecondDashPool->SetScene(scene);
 		s_RainProjectilePool->SetScene(scene);
 		s_SmashExplosionPool->SetScene(scene);
+		s_ZigZagBulletPool->SetScene(scene);
 	}
 
 
@@ -109,6 +113,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::ULTRON_SMASH_EXPLOSION:
 			LoadSmashExplosionPool(scene);
+			break;
+		case Pool_Type::ZIG_ZAG_BULLET:
+			LoadZigZagBulletPool(scene);
 			break;
 		default:
 			break;
@@ -162,6 +169,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::ULTRON_SMASH_EXPLOSION:
 			UnloadSmashExplosionPool();
+			break;
+		case Pool_Type::ZIG_ZAG_BULLET:
+			UnloadZigZagBulletPool();
 			break;
 		default:
 			break;
@@ -418,6 +428,23 @@ namespace Wiwa
 		s_SmashExplosionPool->ReleaseAllPools();
 	}
 
+	void GamePoolingManager::LoadZigZagBulletPool(Scene* scene)
+	{
+		if (s_ZigZagBulletPool->Loaded)
+			return;
+
+		s_ZigZagBulletPool->SetScene(scene);
+		std::vector<EntityId> meleeEnemyIds(s_ZigZagBulletPool->getMaxSize());
+		for (int i = 0; i < s_ZigZagBulletPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_ZigZagBulletPool->getPath());
+		s_ZigZagBulletPool->IncreasePoolSize(meleeEnemyIds);
+	}
+
+	void GamePoolingManager::UnloadZigZagBulletPool()
+	{
+		s_ZigZagBulletPool->ReleaseAllPools();
+	}
+
 	void GamePoolingManager::LoadAllPools(Scene* scene)
 	{
 		if (m_HasLoadedAll)
@@ -438,6 +465,7 @@ namespace Wiwa
 		LoadSecondDashPool(scene);
 		LoadRainProjectilePool(scene);
 		LoadSmashExplosionPool(scene);
+		LoadZigZagBulletPool(scene);
 
 		m_HasLoadedAll = true;
 	}
@@ -460,5 +488,6 @@ namespace Wiwa
 		UnloadSecondDashPool();
 		UnloadRainProjectilePool();
 		UnloadSmashExplosionPool();
+		UnloadZigZagBulletPool();
 	}
 }

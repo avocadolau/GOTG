@@ -33,6 +33,7 @@ namespace Wiwa
         ULTRON_SECOND_DASH,
         RAIN_PROJECTILE,
         ULTRON_SMASH_EXPLOSION,
+        ZIG_ZAG_BULLET,
 
         STARLORD_BULLET,
         ROCKET_BULLET,

@@ -7,6 +7,8 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../attack/SimpleBulletSystem.h"
 #include "../../../../components/attack/SimpleBullet.h"
+#include "../../../../components/attack/ZigZagBullet.h"
+#include "../../../attack/ZigZagSystem.h"
 
 
 #define ANIMATION_FRAME_TIME 41.66f
@@ -93,7 +95,7 @@ namespace Wiwa
 
 		if (m_TimerAttackCooldown > 1.0f / stats->rateOfFire)
 		{
-			if (m_ChangeShoot == true)
+			/*if (m_ChangeShoot == true)
 			{
 				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -135,7 +137,20 @@ namespace Wiwa
 				SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
 
 				m_ChangeShoot = true;
-			}
+			}*/
+
+			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 35);
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 10);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 10);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 35);
+
+			SpawnBulletZigZag(enemy, hand4Tr, rotateBulledLeftHand4);
+
 
 			m_TimerAttackCooldown = 0.0f;
 		}
@@ -200,6 +215,42 @@ namespace Wiwa
 		bullet->velocity = subjugator->bulletSpeed;
 		bullet->lifeTime = subjugator->bulletLifeTime;
 		bullet->damage = character->damage;
+
+		physSys->CreateBody();
+		bulletSys->EnableBullet();
+	}
+
+	void SubjugatorAttackState::SpawnBulletZigZag(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir)
+	{
+		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_ZigZagBulletPool->getCountActive());
+		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_ZigZagBulletPool->getCountDisabled());
+
+		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+		EntityId newBulletId = GameStateManager::s_PoolManager->s_ZigZagBulletPool->GetFromPool();
+		ZigZagBulletSystem* bulletSys = entityManager.GetSystem<ZigZagBulletSystem>(newBulletId);
+
+		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
+
+		// Set intial positions
+		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+		if (!bulletTr || !playerTr)
+			return;
+
+		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
+		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
+		bulletTr->localScale = transform->localScale;
+
+		ZigZagBullet* bullet = (ZigZagBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ZigZagBullet>(newBulletId));
+		Subjugator* subjugator = (Subjugator*)entityManager.GetComponentByIterator(enemy->m_Subjugator);
+
+		bullet->direction = bull_dir;
+		bullet->velocity = subjugator->bulletSpeed;
+		bullet->lifeTime = subjugator->bulletLifeTime;
 
 		physSys->CreateBody();
 		bulletSys->EnableBullet();
