@@ -155,7 +155,7 @@ namespace Wiwa
 		EntityId waveId = em.CreateEntity(waveName.c_str());
 		m_WavesIds.emplace_back(waveId);
 
-		//Transform3D* waveTransform = em.AddComponent<Transform3D>(m_WavesIds);
+		Transform3D* waveTransform = em.AddComponent<Transform3D>(waveId);
 		//Transform3D* parent = GetComponentByIterator<Transform3D>(m_TransformIt);
 		//waveTransform->localPosition = parent->localPosition;
 		
