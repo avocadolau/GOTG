@@ -87,7 +87,7 @@ namespace Wiwa
 		if (m_DoAttack)
 		{
 			/*UltronAttacks nextAttack = GetAttackFromProbabilites();*/
-			UltronAttacks nextAttack = Wiwa::UltronAttacks::SECOND_DASH;
+			UltronAttacks nextAttack = Wiwa::UltronAttacks::DASH;
 
 			switch (nextAttack)
 			{

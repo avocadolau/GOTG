@@ -87,8 +87,8 @@ namespace Wiwa
 			ReceiveDamage(100000);
 		}
 
-		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
-		transform->localPosition.y = 0.0f;
+		/*Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+		transform->localPosition.y = 0.0f;*/
 		
 		////SLOWED LOGIC
 		//if (stats->Slowed)

@@ -7,9 +7,10 @@ namespace Wiwa {
 
 		enum class DashState {
 			DASH_INIT,
-			DASH_PLAYING,
-			DASH_STOP,
-			DASH_COOLDOWN
+			DASH_GO_UP,
+			DASH_GO_DOWN,
+			DASH_EXPLOSION,
+			DASH_FINISH
 	};
 	public:
 		BossUltronDashState();
@@ -37,7 +38,7 @@ namespace Wiwa {
 		bool initiateDash = false;
 		bool m_UltronJump = false;
 
-		float interpolationValue = 0.0f;
+		float m_MoveUpwardsCounter = 0.0f;
 
 		glm::vec3 playerDistance = glm::vec3(0.0f);
 		glm::vec3 interpolatedDashDistance = glm::vec3(0.0f);

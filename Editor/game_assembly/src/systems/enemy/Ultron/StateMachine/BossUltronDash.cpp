@@ -7,6 +7,9 @@
 #include "../../../attack/UltronSmashExplosionSystem.h"
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 
+#define TIMER_GO_UPWARDS 0.01f
+#define TIMER_GO_DOWNWARDS 0.01f
+
 namespace Wiwa
 {
 	BossUltronDashState::BossUltronDashState()
@@ -15,6 +18,7 @@ namespace Wiwa
 		m_TimerDash = 0.0f;
 		lifetimeDash = 0.0f;
 		damageDash = 0;
+		m_MoveUpwardsCounter = 0.0f;
 		initiateDash = false;
 		playerDistance = glm::vec3(0.0f);
 		interpolatedDashDistance = glm::vec3(0.0f);
@@ -34,6 +38,7 @@ namespace Wiwa
 		m_TimerAfterDash = 0.0f;
 		playerDistance = glm::vec3(0.0f);
 		interpolatedDashDistance = glm::vec3(0.0f);
+		m_MoveUpwardsCounter = 0.0f;
 		m_State = DashState::DASH_INIT;
 		/*animator->Blend("walk", true, 0.2f);*/
 		/*enemy->m_DashTimer = 0;*/
@@ -45,98 +50,6 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-
-		//switch (m_State)
-		//{
-		//case Wiwa::BossUltronDashState::DashState::DASH_INIT:
-		//{
-		//	agent->StopAgent();
-		//	navAgent->autoRotate = false;
-
-		//	m_TimerToRotate += Time::GetDeltaTimeSeconds();
-
-		//	playerDistance = playerTr->localPosition;
-
-		//	enemy->LookAt(playerTr->localPosition, 80.0f);
-		//	
-		//	if (m_TimerToRotate >= 2.0f)
-		//	{
-		//		m_TimerToRotate = 0.0f;
-		//		interpolationValue = 0.0f;
-		//		m_TimerToStopDash = 0.0f;
-		//		m_State = DashState::DASH_PLAYING;
-		//	}
-		//}
-		//	break;
-		//case Wiwa::BossUltronDashState::DashState::DASH_PLAYING:
-		//{
-		//	m_TimerDash += Time::GetDeltaTimeSeconds();
-		//	m_TimerToStopDash += Time::GetDeltaTimeSeconds();
-
-		//	if (m_TimerDash >= 0.6f && interpolationValue < 0.95f)
-		//	{
-		//		m_TimerDash = 0.0f;
-		//		interpolationValue = interpolationValue + 0.05;
-		//	}
-
-		//	interpolatedDashDistance = Math::InterpolateTwoV3(enemy->GetTransform()->localPosition, playerDistance, interpolationValue);
-
-		//	agent->SetPosition(interpolatedDashDistance);
-
-		//	if (m_TimerToStopDash >= 1.5f)
-		//	{
-		//		WI_INFO("INTERPOLATION DONE");
-		//		m_State = DashState::DASH_STOP;
-		//	}
-		//}
-		//	break;
-		//case Wiwa::BossUltronDashState::DashState::DASH_STOP:
-		//{
-		//	Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//	Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-
-		//	float center_x = 0.0f; // center x position of the circle
-		//	float center_z = 0.0f; // center z position of the circle
-		//	float radius = 8.0f; // radius of the circle
-		//	float angle_increment = 1.0f; // angle increment between consecutive explosions
-		//	float current_angle = 0.0f; // current angle
-		//	int numberOfExplosion = 6;
-
-		//	for (int i = 0; i < numberOfExplosion; i++) 
-		//	{
-		//		float x_pos = center_x + radius * cos(current_angle); // calculate x position of current explosion
-		//		float z_pos = center_z + radius * sin(current_angle); // calculate z position of current explosion
-
-		//		SpawnExplosionAfterDash(enemy, selfTr, x_pos, z_pos);
-
-		//		current_angle += angle_increment; // increment angle for next explosion
-		//	}
-
-		//	/*SpawnExplosionAfterDash(enemy, selfTr);*/
-
-		//	agent->StopAgent();
-		//	navAgent->autoRotate = true;
-		//
-		//	m_State = DashState::DASH_COOLDOWN;
-		//}
-		//	break;
-		//case Wiwa::BossUltronDashState::DashState::DASH_COOLDOWN:
-		//{
-		//	m_TimerAfterDash += Time::GetDeltaTimeSeconds();
-
-		//	if (m_TimerAfterDash >= 2.0f)
-		//	{
-		//		WI_INFO("Dash DONE");
-		//		m_TimerAfterDash = 0.0f;
-		//		enemy->SwitchState(enemy->m_MovementState);
-		//	}
-		//}
-		//	break;
-		//default:
-		//	break;
-		//}
-
-		//-----------------------------------------------------------------------------------------
 
 		switch (m_State)
 		{
@@ -151,88 +64,106 @@ namespace Wiwa
 
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerToRotate >= 2.0f)
+			if (m_TimerToRotate >= 2.0f) //Timer to look at player
 			{
 				m_TimerToRotate = 0.0f;
-				interpolationValue = 0.0f;
+				m_MoveUpwardsCounter = 0.0f;
 				m_TimerToStopDash = 0.0f;
 				m_UltronJump = false;
-				m_State = DashState::DASH_PLAYING;
+				agent->StopAgent();
+				agent->RemoveAgent();
+
+				playerDistance.x = playerDistance.x + 1.0f;
+
+				m_State = DashState::DASH_GO_UP;
 			}
 		}
 		break;
-		case Wiwa::BossUltronDashState::DashState::DASH_PLAYING:
+		case Wiwa::BossUltronDashState::DashState::DASH_GO_UP:
 		{
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
 
 			m_TimerDash += Time::GetDeltaTimeSeconds();
 			m_TimerToStopDash += Time::GetDeltaTimeSeconds();
 
-			if (m_TimerDash >= 0.6f && interpolationValue < 0.95f)
+			if (m_TimerDash >= TIMER_GO_UPWARDS)
 			{
 				m_TimerDash = 0.0f;
-				interpolationValue = interpolationValue + 0.05;
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 1.0f; //Offset for the Smash
+				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 
-			if (m_UltronJump == false)
+			if (m_TimerToStopDash >= 2.0f) //Timer for the Ultron to go up
 			{
-				glm::vec3 bossUltronToTheSky = glm::vec3(0.0f, 100.0f, 0.0f);
-
-				agent->StopAgent();
-
-				agent->RemoveAgent();
-
-				selfTr->localPosition.x = 100.0f;
-
-				m_UltronJump = true;
-			}
-
-			if (m_TimerToStopDash >= 2.0f)
-			{
-				agent->RegisterWithCrowd();
+				/*agent->RegisterWithCrowd();
 				agent->SetPosition(playerDistance);
 				agent->StopAgent();
+				agent->RemoveAgent();*/
+
+				selfTr->localPosition.x = playerDistance.x;
+				selfTr->localPosition.z = playerDistance.z;
 
 				WI_INFO("INTERPOLATION DONE");
-				m_State = DashState::DASH_STOP;
+				m_State = DashState::DASH_GO_DOWN;
 			}
 		}
 		break;
-		case Wiwa::BossUltronDashState::DashState::DASH_STOP:
+		case Wiwa::BossUltronDashState::DashState::DASH_GO_DOWN:
 		{
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
+
+			m_TimerDash += Time::GetDeltaTimeSeconds();
+			
+			if (m_TimerDash >= TIMER_GO_DOWNWARDS)
+			{
+				m_TimerDash = 0.0f;
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter - 1.0f;
+				selfTr->localPosition.y = m_MoveUpwardsCounter;
+			}
+
+			if (selfTr->localPosition.y <= 0.05f)
+			{
+				WI_INFO("INTERPOLATION DONE");
+				m_State = DashState::DASH_EXPLOSION;
+			}
+		}
+		break;
+		case Wiwa::BossUltronDashState::DashState::DASH_EXPLOSION:
+		{
+			agent->RegisterWithCrowd();
+			agent->SetPosition(playerDistance);
+			agent->StopAgent();
+
 			Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-			float center_x = 0.0f; // center x position of the circle
-			float center_z = 0.0f; // center z position of the circle
-			float radius = 8.0f; // radius of the circle
-			float angle_increment = 1.0f; // angle increment between consecutive explosions
-			float current_angle = 0.0f; // current angle
+			float center_x = 0.0f;
+			float center_z = 0.0f;
+			float radius = 8.0f;
+			float angle_increment = 1.0f;
+			float current_angle = 0.0f;
 			int numberOfExplosion = 6;
 
 			for (int i = 0; i < numberOfExplosion; i++)
 			{
-				float x_pos = center_x + radius * cos(current_angle); // calculate x position of current explosion
-				float z_pos = center_z + radius * sin(current_angle); // calculate z position of current explosion
+				float x_pos = center_x + radius * cos(current_angle);
+				float z_pos = center_z + radius * sin(current_angle);
 
 				SpawnExplosionAfterDash(enemy, selfTr, x_pos, z_pos);
 
-				current_angle += angle_increment; // increment angle for next explosion
+				current_angle += angle_increment;
 			}
 
-			/*SpawnExplosionAfterDash(enemy, selfTr);*/
-
-			agent->StopAgent();
 			navAgent->autoRotate = true;
 
-			m_State = DashState::DASH_COOLDOWN;
+			m_State = DashState::DASH_FINISH;
 		}
 		break;
-		case Wiwa::BossUltronDashState::DashState::DASH_COOLDOWN:
+		case Wiwa::BossUltronDashState::DashState::DASH_FINISH:
 		{
 			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
 
-			if (m_TimerAfterDash >= 2.0f)
+			if (m_TimerAfterDash >= 1.0f)
 			{
 				WI_INFO("Dash DONE");
 				m_TimerAfterDash = 0.0f;
@@ -253,15 +184,7 @@ namespace Wiwa
 
 	void BossUltronDashState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)
 	{
-		//std::string playerStr = "PLAYER";
-
-		//if (body1->id == enemy->GetEntity() && playerStr == body2->selfTagStr /* && m_AlreadyHitted == false*/)
-		//{
-		//	WI_INFO("Ultron Collided");
-		//	GameStateManager::DamagePlayer(20);
-		//	
-		//	/*m_AlreadyHitted = true;*/
-		//}
+		
 	}
 
 	void BossUltronDashState::SpawnExplosionAfterDash(BossUltron* enemy, Transform3D* selfTransform, float explosionPositionX, float explosionPositionZ)
