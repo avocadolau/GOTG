@@ -156,8 +156,6 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		//Audio::PostWorldEvent(""); <--
-
 		characterID = GameStateManager::s_CurrentCharacter;
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
@@ -433,6 +431,8 @@ namespace Wiwa
 				{
 					firstTime = false;
 
+					Audio::PostWorldEvent(conversations[conversationNumber].nodes[currentNode].audioEventName.c_str());
+
 					if (conversations[conversationNumber].isInOppositeSide == true)
 					{
 						characterImgPos.x = 1100;
@@ -518,6 +518,10 @@ namespace Wiwa
 					currentNode = 0;
 					firstTime = false;
 					endTime = true;
+				}
+				else
+				{
+					Audio::PostWorldEvent(conversations[conversationNumber].nodes[currentNode].audioEventName.c_str());
 				}
 			}
 		}
