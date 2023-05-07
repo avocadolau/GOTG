@@ -214,5 +214,9 @@ namespace Wiwa
 		static int s_DoorsReward[2];
 		static bool s_CanContinue;
 		static EnemyManager *s_EnemyManager;
+
+		// Enemies
+		public:
+			static int GetActiveEnemies();
 	};
 }

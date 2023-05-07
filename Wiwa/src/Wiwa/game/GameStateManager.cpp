@@ -7,6 +7,7 @@
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSpawnerSystem.h>
 
 namespace Wiwa
 {
@@ -1047,6 +1048,38 @@ namespace Wiwa
 				break;
 			}
 		}
+	}
+
+	int GameStateManager::GetActiveEnemies()
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		int total = 0;
+
+		// Get the first and only spawner in scene
+		size_t size = 0;
+		Wiwa::WaveSpawner* waveSpawner = nullptr;
+		waveSpawner = em.GetComponents<WaveSpawner>(&size);
+		if (waveSpawner) {
+			if (em.IsComponentRemoved<WaveSpawner>(0))
+				return;
+			waveSpawner = &waveSpawner[0];
+			if (waveSpawner && !waveSpawner->hasFinished) {
+				// Check for all the active waves in that spawner.
+				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+				if (waveSpawnerSystem) {
+					const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+					for (int i = 0; i < waveIds.size(); i++)
+					{
+						Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+						if (wave && !wave->hasFinished) {
+							total += wave->currentEnemiesAlive;
+						}
+					}
+				}
+			}
+		}
+
+		return total;
 	}
 }
 
