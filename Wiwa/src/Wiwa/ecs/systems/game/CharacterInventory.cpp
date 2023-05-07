@@ -72,6 +72,8 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		{
 			Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
 			Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
+			em.DestroyEntity(body2->id);
+
 		}
 		else if (item->item_type == 1)//PASSIVE
 		{
@@ -88,6 +90,7 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		{
 			Buff* buff = Wiwa::ItemManager::GetBuff(item->Name);
 			Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);
+			em.DestroyEntity(body2->id);
 		}
 		else if (item->item_type == 3)//CONSUMABLE
 		{

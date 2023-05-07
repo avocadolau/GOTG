@@ -364,6 +364,10 @@ namespace Wiwa
             break;
         case Wiwa::HowardElementType::RECOVERY_SHIELD:
             player->Shield += player->MaxShield * buffPercent;
+            if (player->Shield >= player->MaxShield)
+            {
+                player->Shield = player->MaxShield;
+            }
             break;
         case Wiwa::HowardElementType::SECOND_WIND:
             //TODO: MAKE IT WORK
@@ -387,6 +391,10 @@ namespace Wiwa
             break;
         case Wiwa::HowardElementType::RECOVERY_HEALTH:
             player->Health += player->MaxHealth * buffPercent;
+            if (player->Health >= player->MaxHealth)
+            {
+                player->Health = player->MaxHealth;
+            }
             break;
         case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:
             //TODO: MAKE IT WORK
