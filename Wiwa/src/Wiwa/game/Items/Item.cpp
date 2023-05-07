@@ -335,7 +335,7 @@ namespace Wiwa
         const float buffPercent = ((float)PercentageIncreases.at(CurrentStep-1) / 100.f);
         Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
         Character* player = GetPlayerComp();
-
+        int newDropChance = 0;
         switch (PassiveBoost)
         {
         case Wiwa::HowardElementType::FANCY_BOOTS:
@@ -363,7 +363,6 @@ namespace Wiwa
             player->ShieldRegeration += player->ShieldRegeration * buffPercent;
             break;
         case Wiwa::HowardElementType::RECOVERY_SHIELD:
-            //TODO: MAKE IT WORK
             player->Shield += player->MaxShield * buffPercent;
             break;
         case Wiwa::HowardElementType::SECOND_WIND:
@@ -379,14 +378,14 @@ namespace Wiwa
             //TODO: MAKE IT WORK
             break;
         case Wiwa::HowardElementType::DEVOURER:
-            //TODO: MAKE IT WORK
-            Wiwa::GameStateManager::s_EnemyDropChances += Wiwa::GameStateManager::s_EnemyDropChances * buffPercent;
+            newDropChance = Wiwa::GameStateManager::s_EnemyDropChances;
+            newDropChance += newDropChance * buffPercent;
+            Wiwa::GameStateManager::SetEnemyDropChance(newDropChance);
             break;
         case Wiwa::HowardElementType::FANATIC:
-            //TODO: MAKE IT WORK
+            Wiwa::GameStateManager::SetFanaticEffect(true);
             break;
         case Wiwa::HowardElementType::RECOVERY_HEALTH:
-            //TODO: MAKE IT WORK
             player->Health += player->MaxHealth * buffPercent;
             break;
         case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:

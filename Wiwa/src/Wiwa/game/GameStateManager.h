@@ -106,6 +106,7 @@ namespace Wiwa
 		static void SetPlayerId(EntityId id, Scene *scene);
 		static void EndCurrentRoom();
 
+		WI_HARD_INL static void SetEnemyDropChance(int newDropChance) { s_EnemyDropChances = newDropChance; }
 		WI_HARD_INL static void SetRoomType(RoomType type) { s_RoomType = type; }
 		WI_HARD_INL static void SetRoomState(RoomState type) { s_RoomState = type; }
 		WI_HARD_INL static RoomType GetType() { return s_RoomType; }
@@ -164,7 +165,8 @@ namespace Wiwa
 
 		// Achievement items progression
 		static void AchievementsFunctionality();
-
+		static void SetFanaticEffect(bool ret) { FanaticEffect = ret; }
+		static void IncrementPrometheanGems(int amount) { PrometheanGemsToAdd += amount; }
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
@@ -201,6 +203,7 @@ namespace Wiwa
 		static int s_NPCRoomChances;
 
 		static bool FanaticEffect;
+		static bool SecondWind;
 		static int PrometheanGemsToAdd;
 		static int DamageDivisor;
 

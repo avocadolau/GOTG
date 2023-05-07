@@ -87,6 +87,7 @@ namespace Wiwa
 		PlayerGUISystem* pgs = nullptr;
 		UltronGUISystem* ugs = nullptr;
 		EntityId player = WI_INVALID_INDEX;
+		EntityId player2 = WI_INVALID_INDEX;
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
@@ -120,7 +121,9 @@ namespace Wiwa
 			}
 				
 			player = m_EntityManager.GetEntityByName("StarLord");
-			if (player != WI_INVALID_INDEX)
+			player2 = m_EntityManager.GetEntityByName("Rocket");
+
+			if (player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX)
 			{
 				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
 				if (pgs != nullptr)
