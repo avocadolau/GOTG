@@ -19,6 +19,7 @@ namespace Wiwa {
 	private:
 
 		void SpawnBullet(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
+		void SpawnBulletZigZag(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
 
 		void SpawnFirstPattern(BossUltron* enemy);
 		void SpawnSecondPattern(BossUltron* enemy);

@@ -5,7 +5,10 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../components/attack/SimpleBullet.h"
+#include "../../../../components/attack/ZigZagBullet.h"
 #include "../../../attack/SimpleBulletSystem.h"
+#include "../../../attack/ZigZagSystem.h"
+
 
 namespace Wiwa
 {
@@ -131,6 +134,42 @@ namespace Wiwa
 		bulletSys->EnableBullet();
 	}
 
+	void BossUltronBulletStormAttackState::SpawnBulletZigZag(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir)
+	{
+		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_ZigZagBulletPool->getCountActive());
+		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_ZigZagBulletPool->getCountDisabled());
+
+		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+		EntityId newBulletId = GameStateManager::s_PoolManager->s_ZigZagBulletPool->GetFromPool();
+		ZigZagBulletSystem* bulletSys = entityManager.GetSystem<ZigZagBulletSystem>(newBulletId);
+
+		WI_INFO("Getting bullet from pool id: {}", newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
+
+		// Set intial positions
+		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+		if (!bulletTr || !playerTr)
+			return;
+
+		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
+		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
+		bulletTr->localScale = transform->localScale;
+
+		ZigZagBullet* bullet = (ZigZagBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ZigZagBullet>(newBulletId));
+		Ultron* ultron = (Ultron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
+
+		bullet->direction = bull_dir;
+		bullet->velocity = ultron->bulletSpeed / 4;
+		bullet->lifeTime = ultron->bulletLifeTime;
+
+		physSys->CreateBody();
+		bulletSys->EnableBullet();
+	}
+
 	void BossUltronBulletStormAttackState::SpawnFirstPattern(BossUltron* enemy)
 	{
 		m_IsAttackSelected = false;
@@ -145,8 +184,12 @@ namespace Wiwa
 		float degreeStep = 360.0f / numGroups;
 		float groupDegreeStep = 10.0f; // The angle between bullets in a group
 
-		for (int i = 0; i < numGroups; ++i) {
-			for (int j = 0; j < numBulletsPerGroup; ++j) {
+		
+
+		for (int i = 0; i < numGroups; ++i) 
+		{
+			for (int j = 0; j < numBulletsPerGroup; ++j) 
+			{
 				float directionAngle = i * degreeStep + j * groupDegreeStep;
 				float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
 				float xDir = cos(radian);
@@ -250,8 +293,8 @@ namespace Wiwa
 
 				glm::vec3 direction1(xDir1, 0.0f, yDir1);
 				glm::vec3 direction2(xDir2, 0.0f, yDir2);
-				SpawnBullet(enemy, selfTr, direction1);
-				SpawnBullet(enemy, selfTr, direction2);
+				SpawnBulletZigZag(enemy, selfTr, direction1);
+				SpawnBulletZigZag(enemy, selfTr, direction2);
 
 				m_ThirdPatternBulletcounter = m_ThirdPatternBulletcounter + 1.0f;
 				m_ThirdPatternAttackTimer = 0.0f;
