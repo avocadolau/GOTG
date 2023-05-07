@@ -9,76 +9,185 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{AF8642B2-A735-E39B-4EC1-D61A14AF9342}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{5BF7EF08-BDAF-CE3C-1BB1-FDC1261C2177}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
-				<File Id="87112991" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>01 Prologue.wav</ShortName>
-					<CachePath>SFX/01 Prologue_10C4C929.wem</CachePath>
+				<File Id="97638580" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>04 Against All Odds.wav</ShortName>
+					<CachePath>SFX/04 Against All Odds_D79FB2B7.wem</CachePath>
 				</File>
-				<File Id="187098932" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>13 The Meat Grinder.wav</ShortName>
-					<CachePath>SFX/13 The Meat Grinder_10C4C929.wem</CachePath>
+				<File Id="138789204" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>shakers_130_bpm.wav</ShortName>
+					<CachePath>SFX/shakers_130_bpm_D79FB2B7.wem</CachePath>
 				</File>
-				<File Id="349817337" Language="SFX" Streaming="false" Location="Memory">
+				<File Id="160840083" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>logo_130_bpms.wav</ShortName>
+					<CachePath>SFX/logo_130_bpms_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="203794371" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>rides_130_bpm.wav</ShortName>
+					<CachePath>SFX/rides_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="314088076" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Norman Greenbaum Spirit In The Sky.wav</ShortName>
-					<CachePath>SFX/Norman Greenbaum Spirit In The Sky_10C4C929.wem</CachePath>
+					<CachePath>SFX/Norman Greenbaum Spirit In The Sky_D79FB2B7.wem</CachePath>
 				</File>
-				<File Id="1059857239" Language="SFX" Streaming="false" Location="Memory">
+				<File Id="332505682" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>hats_130_bpm.wav</ShortName>
+					<CachePath>SFX/hats_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="389483863" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>01 Prologue.wav</ShortName>
+					<CachePath>SFX/01 Prologue_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="446020800" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>clap_130_bpm.wav</ShortName>
+					<CachePath>SFX/clap_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="531104562" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>bass_130_bpm.wav</ShortName>
+					<CachePath>SFX/bass_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="632501729" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>kick_130_bpm.wav</ShortName>
+					<CachePath>SFX/kick_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="680226910" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>melody_130_bpm.wav</ShortName>
+					<CachePath>SFX/melody_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="694303710" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>07 Whispers Of The Dead.wav</ShortName>
-					<CachePath>SFX/07 Whispers Of The Dead_10C4C929.wem</CachePath>
+					<CachePath>SFX/07 Whispers Of The Dead_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="753465857" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>arp_130_bpm.wav</ShortName>
+					<CachePath>SFX/arp_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="772738426" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>waa_130_bpm.wav</ShortName>
+					<CachePath>SFX/waa_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="901990650" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>stab_130_bpm.wav</ShortName>
+					<CachePath>SFX/stab_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="998287055" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>chill_130_bpm.wav</ShortName>
+					<CachePath>SFX/chill_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="1056004488" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>percs_130_bpm.wav</ShortName>
+					<CachePath>SFX/percs_130_bpm_D79FB2B7.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
-				<Event Id="3991942870" Name="music">
+				<Event Id="2932040671" Name="play_music">
 					<SwitchContainers>
 						<SwitchContainer>
-							<SwitchValue GroupType="Switch" GroupId="2322231365" Id="1125500713"/>
-							<MediaRefs>
-								<MediaRef Id="87112991"/>
-							</MediaRefs>
+							<SwitchValue GroupType="State" GroupId="1021618141" Id="89505537"/>
+							<Children>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="1992536912" Id="2764240573"/>
+									<MediaRefs>
+										<MediaRef Id="138789204"/>
+										<MediaRef Id="203794371"/>
+										<MediaRef Id="332505682"/>
+										<MediaRef Id="446020800"/>
+										<MediaRef Id="531104562"/>
+										<MediaRef Id="632501729"/>
+										<MediaRef Id="680226910"/>
+										<MediaRef Id="753465857"/>
+										<MediaRef Id="772738426"/>
+										<MediaRef Id="901990650"/>
+										<MediaRef Id="998287055"/>
+										<MediaRef Id="1056004488"/>
+									</MediaRefs>
+								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="1992536912" Id="646625282"/>
+									<MediaRefs>
+										<MediaRef Id="314088076"/>
+									</MediaRefs>
+								</SwitchContainer>
+							</Children>
 						</SwitchContainer>
 						<SwitchContainer>
-							<SwitchValue GroupType="Switch" GroupId="2322231365" Id="2005704188"/>
-							<MediaRefs>
-								<MediaRef Id="1059857239"/>
-							</MediaRefs>
-						</SwitchContainer>
-						<SwitchContainer>
-							<SwitchValue GroupType="Switch" GroupId="2322231365" Id="2764240573" Default="true"/>
-							<MediaRefs>
-								<MediaRef Id="187098932"/>
-							</MediaRefs>
-						</SwitchContainer>
-						<SwitchContainer>
-							<SwitchValue GroupType="Switch" GroupId="2322231365" Id="646625282"/>
-							<MediaRefs>
-								<MediaRef Id="349817337"/>
-							</MediaRefs>
-						</SwitchContainer>
-						<SwitchContainer>
-							<SwitchValue GroupType="Switch" GroupId="2322231365" Id="1432716332"/>
-							<MediaRefs>
-								<MediaRef Id="1059857239"/>
-							</MediaRefs>
+							<SwitchValue GroupType="State" GroupId="1021618141" Id="2604644515"/>
+							<Children>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="4227810856" Id="4158285989"/>
+									<MediaRefs>
+										<MediaRef Id="389483863"/>
+									</MediaRefs>
+								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="4227810856" Id="556785088"/>
+									<MediaRefs>
+										<MediaRef Id="160840083"/>
+									</MediaRefs>
+								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="4227810856" Id="3604647259"/>
+									<MediaRefs>
+										<MediaRef Id="694303710"/>
+									</MediaRefs>
+								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="4227810856" Id="1125500713"/>
+									<MediaRefs>
+										<MediaRef Id="97638580"/>
+									</MediaRefs>
+								</SwitchContainer>
+							</Children>
 						</SwitchContainer>
 					</SwitchContainers>
 				</Event>
 			</Events>
-			<SwitchGroups>
-				<SwitchGroup Id="2322231365" Name="gameplay_music">
-					<Switches>
-						<Switch Id="646625282" Name="hub"/>
-						<Switch Id="1125500713" Name="intro"/>
-						<Switch Id="1432716332" Name="game_over"/>
-						<Switch Id="2005704188" Name="main_menu"/>
-						<Switch Id="2764240573" Name="combat"/>
-					</Switches>
-				</SwitchGroup>
-			</SwitchGroups>
+			<Busses>
+				<Bus Id="1669749310" Name="Dialogues"/>
+				<Bus Id="3803692087" Name="Master Audio Bus"/>
+				<Bus Id="3922907557" Name="Enviromental"/>
+				<Bus Id="3991942870" Name="Music"/>
+			</Busses>
+			<GameParameters>
+				<GameParameter Id="1039994295" Name="DialogVolume"/>
+				<GameParameter Id="1301299809" Name="MusicIntensity"/>
+				<GameParameter Id="2346531308" Name="MusicVolume"/>
+				<GameParameter Id="2918011349" Name="MasterVolume"/>
+				<GameParameter Id="4249125308" Name="EnviromentVolume"/>
+			</GameParameters>
+			<StateGroups>
+				<StateGroup Id="1021618141" Name="MusicState">
+					<States>
+						<State Id="89505537" Name="GamePlay"/>
+						<State Id="748895195" Name="None"/>
+						<State Id="2604644515" Name="Menus"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="1992536912" Name="RoomType">
+					<States>
+						<State Id="251412225" Name="Shop"/>
+						<State Id="646625282" Name="Hub"/>
+						<State Id="748895195" Name="None"/>
+						<State Id="1873057832" Name="Reward"/>
+						<State Id="2764240573" Name="Combat"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="4227810856" Name="MenuScene">
+					<States>
+						<State Id="556785088" Name="Logo"/>
+						<State Id="748895195" Name="None"/>
+						<State Id="1125500713" Name="Intro"/>
+						<State Id="3604647259" Name="MainMenu"/>
+						<State Id="4158285989" Name="GameOver"/>
+						<State Id="4184794294" Name="Outro"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{061ED799-F822-EB94-E36E-793A2BB73FA3}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -100,7 +209,7 @@
 				</File>
 				<File Id="259805885" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>mixkit-sci-fi-plasma-gun-power-up-1679.wav</ShortName>
-					<CachePath>SFX/mixkit-sci-fi-plasma-gun-power-up-1679_08ECF749.wem</CachePath>
+					<CachePath>SFX/mixkit-sci-fi-plasma-gun-power-up-1679_0CACFF2F.wem</CachePath>
 				</File>
 				<File Id="433002560" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_03.wav</ShortName>
@@ -120,7 +229,7 @@
 				</File>
 				<File Id="712169024" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\player\palyer_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/player/palyer_hit_BD35DF9F.wem</CachePath>
+					<CachePath>SFX/project III sounds/player/palyer_hit_4BAA7DC1.wem</CachePath>
 				</File>
 				<File Id="714007581" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_12.wav</ShortName>
@@ -212,7 +321,7 @@
 				<GameParameter Id="215992295" Name="player_health"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{EA8F32A7-89B2-686F-7F00-4E69B1D8127D}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{4F4E5779-50D5-9012-16BE-6E4C434F38A5}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -231,47 +340,56 @@
 				<GameParameter Id="215992295" Name="player_health"/>
 				<GameParameter Id="822163944" Name="SS_Air_RPM"/>
 				<GameParameter Id="1029930033" Name="SS_Air_Fury"/>
+				<GameParameter Id="1039994295" Name="DialogVolume"/>
+				<GameParameter Id="1301299809" Name="MusicIntensity"/>
 				<GameParameter Id="1351367891" Name="SS_Air_Fear"/>
+				<GameParameter Id="2346531308" Name="MusicVolume"/>
 				<GameParameter Id="2648548617" Name="SS_Air_Month"/>
+				<GameParameter Id="2918011349" Name="MasterVolume"/>
 				<GameParameter Id="3002758120" Name="SS_Air_Freefall"/>
 				<GameParameter Id="3074696722" Name="SS_Air_Size"/>
 				<GameParameter Id="3203397129" Name="SS_Air_TimeOfDay"/>
 				<GameParameter Id="3715662592" Name="SS_Air_Storm"/>
 				<GameParameter Id="3847924954" Name="SS_Air_Presence"/>
 				<GameParameter Id="4160247818" Name="SS_Air_Turbulence"/>
+				<GameParameter Id="4249125308" Name="EnviromentVolume"/>
 			</GameParameters>
 			<StateGroups>
-				<StateGroup Id="444815956" Name="PlayerLife">
+				<StateGroup Id="1021618141" Name="MusicState">
 					<States>
-						<State Id="655265632" Name="Alive"/>
+						<State Id="89505537" Name="GamePlay"/>
 						<State Id="748895195" Name="None"/>
-						<State Id="2044049779" Name="Dead"/>
+						<State Id="2604644515" Name="Menus"/>
 					</States>
 				</StateGroup>
-				<StateGroup Id="3991942870" Name="music">
+				<StateGroup Id="1253610732" Name="CombatIntensity">
 					<States>
-						<State Id="646625282" Name="hub"/>
+						<State Id="545371365" Name="Low"/>
 						<State Id="748895195" Name="None"/>
-						<State Id="1125500713" Name="intro"/>
-						<State Id="2005704188" Name="main_menu"/>
-						<State Id="2764240573" Name="combat"/>
+						<State Id="2849147824" Name="Medium"/>
+						<State Id="3550808449" Name="High"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="1992536912" Name="RoomType">
+					<States>
+						<State Id="251412225" Name="Shop"/>
+						<State Id="646625282" Name="Hub"/>
+						<State Id="748895195" Name="None"/>
+						<State Id="1873057832" Name="Reward"/>
+						<State Id="2764240573" Name="Combat"/>
+					</States>
+				</StateGroup>
+				<StateGroup Id="4227810856" Name="MenuScene">
+					<States>
+						<State Id="556785088" Name="Logo"/>
+						<State Id="748895195" Name="None"/>
+						<State Id="1125500713" Name="Intro"/>
+						<State Id="3604647259" Name="MainMenu"/>
+						<State Id="4158285989" Name="GameOver"/>
+						<State Id="4184794294" Name="Outro"/>
 					</States>
 				</StateGroup>
 			</StateGroups>
-			<SwitchGroups>
-				<SwitchGroup Id="2322231365" Name="gameplay_music">
-					<Switches>
-						<Switch Id="646625282" Name="hub"/>
-						<Switch Id="1125500713" Name="intro"/>
-						<Switch Id="1432716332" Name="game_over"/>
-						<Switch Id="2005704188" Name="main_menu"/>
-						<Switch Id="2764240573" Name="combat"/>
-					</Switches>
-				</SwitchGroup>
-				<SwitchGroup Id="2528658256" Name="ground">
-					<Switches/>
-				</SwitchGroup>
-			</SwitchGroups>
 			<AcousticTextures>
 				<AcousticTexture Id="504532776" Name="Brick">
 					<Properties>
@@ -387,7 +505,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{E2804F43-CD3E-1578-378D-01440CEA828C}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -422,17 +540,11 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1484330123" Type="User" Language="SFX" Hash="{8B9EED78-738A-0DE7-5B89-3081F45CD1CA}">
+		<SoundBank Id="1484330123" Type="User" Language="SFX">
 			<ShortName>audio_settings</ShortName>
 			<Path>audio_settings.bnk</Path>
-			<Events>
-				<Event Id="3860563679" Name="set_dialog_volume"/>
-				<Event Id="531447497" Name="set_master_volume"/>
-				<Event Id="722843456" Name="set_music_volume"/>
-				<Event Id="3372228340" Name="set_sfx_volume"/>
-			</Events>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
+		<SoundBank Id="1551306167" Type="User" Language="SFX">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -476,7 +588,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{EE499514-9CFC-A7D3-CF9D-25C5784029E6}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -565,7 +677,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{11FA7034-8021-10EE-CAF1-E91DED69E08B}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -598,5 +710,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{C0E3D01B-F211-347C-C986-A125C3A2D259}</FileHash>
+	<FileHash>{1B69EF8B-CE7B-290C-0FD2-F2597911EE98}</FileHash>
 </SoundBanksInfo>

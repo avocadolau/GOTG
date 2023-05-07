@@ -3,38 +3,38 @@
 	<States>
 		<WorkUnit Name="Default Work Unit" ID="{4A056DB4-08A4-4B00-8606-B945ED9E21A4}" PersistMode="Standalone">
 			<ChildrenList>
-				<StateGroup Name="music_states" ID="{11F820A3-7878-4E33-A9F3-A979FAE8CC4A}">
+				<StateGroup Name="MusicState" ID="{11F820A3-7878-4E33-A9F3-A979FAE8CC4A}">
 					<ChildrenList>
 						<State Name="None" ID="{56C4A0C5-5979-4FA5-9129-CBFDD783EE99}"/>
-						<State Name="menus" ID="{94D7F000-F4EE-4BB5-899D-199C1F69F737}"/>
-						<State Name="game_play" ID="{5C1A02C3-32DD-4D79-9C9E-82B3C3AFB63D}"/>
+						<State Name="Menus" ID="{94D7F000-F4EE-4BB5-899D-199C1F69F737}"/>
+						<State Name="GamePlay" ID="{5C1A02C3-32DD-4D79-9C9E-82B3C3AFB63D}"/>
 					</ChildrenList>
 				</StateGroup>
-				<StateGroup Name="room_type" ID="{F5D0FA6C-62FA-42B0-A1E8-851299A23C47}">
+				<StateGroup Name="RoomType" ID="{F5D0FA6C-62FA-42B0-A1E8-851299A23C47}">
 					<ChildrenList>
 						<State Name="None" ID="{D3C6A936-DB8F-42A6-AF3B-05B85197CEC3}"/>
-						<State Name="shop" ID="{3DC5753C-4C9B-4112-902F-B5BA95F03389}"/>
-						<State Name="combat" ID="{77334FC6-E925-4D9B-B69C-0D71B1142486}"/>
-						<State Name="hub" ID="{9699AB3F-BAE6-4A3B-897A-06451564E158}"/>
-						<State Name="reward" ID="{52C42071-18CC-4E43-B274-9D5ADDFD6E85}"/>
+						<State Name="Shop" ID="{3DC5753C-4C9B-4112-902F-B5BA95F03389}"/>
+						<State Name="Combat" ID="{77334FC6-E925-4D9B-B69C-0D71B1142486}"/>
+						<State Name="Hub" ID="{9699AB3F-BAE6-4A3B-897A-06451564E158}"/>
+						<State Name="Reward" ID="{52C42071-18CC-4E43-B274-9D5ADDFD6E85}"/>
 					</ChildrenList>
 				</StateGroup>
-				<StateGroup Name="combat_intensity" ID="{0031D2C8-AA10-4F47-9933-5D0532C594EA}">
+				<StateGroup Name="CombatIntensity" ID="{0031D2C8-AA10-4F47-9933-5D0532C594EA}">
 					<ChildrenList>
 						<State Name="None" ID="{5399241E-55F3-43E7-BAEE-24548C2771FA}"/>
-						<State Name="low" ID="{A2D984AA-72D7-4F0E-806D-0F5538D04ED6}"/>
-						<State Name="mediun" ID="{A76799DE-0E55-4C48-B305-F5D2C536A095}"/>
-						<State Name="high" ID="{EB290A2B-8753-4F7E-A2CC-9891B1A15AEF}"/>
+						<State Name="Low" ID="{A2D984AA-72D7-4F0E-806D-0F5538D04ED6}"/>
+						<State Name="Medium" ID="{A76799DE-0E55-4C48-B305-F5D2C536A095}"/>
+						<State Name="High" ID="{EB290A2B-8753-4F7E-A2CC-9891B1A15AEF}"/>
 					</ChildrenList>
 				</StateGroup>
-				<StateGroup Name="menu_scene" ID="{2B0D9D1A-215F-4B6B-A552-049742C0C904}">
+				<StateGroup Name="MenuScene" ID="{2B0D9D1A-215F-4B6B-A552-049742C0C904}">
 					<ChildrenList>
 						<State Name="None" ID="{8D93B6F0-1855-4757-BB69-E86FA868D4F5}"/>
-						<State Name="intro" ID="{4E4CCE3C-244D-48E7-AD6A-69E5D51D0918}"/>
-						<State Name="logo" ID="{427A32AA-A920-4A24-94E4-63F9F5E63A3C}"/>
-						<State Name="main_menu" ID="{35D63DDA-1EA8-48F7-BF05-3A08E6689C8C}"/>
-						<State Name="game_over" ID="{23A34FEC-6952-43CD-AB72-7A6230C4C10E}"/>
-						<State Name="outro" ID="{6F5CBE62-C718-4D7C-9417-826FD0312F8B}"/>
+						<State Name="Intro" ID="{4E4CCE3C-244D-48E7-AD6A-69E5D51D0918}"/>
+						<State Name="Logo" ID="{427A32AA-A920-4A24-94E4-63F9F5E63A3C}"/>
+						<State Name="MainMenu" ID="{35D63DDA-1EA8-48F7-BF05-3A08E6689C8C}"/>
+						<State Name="GameOver" ID="{23A34FEC-6952-43CD-AB72-7A6230C4C10E}"/>
+						<State Name="Outro" ID="{6F5CBE62-C718-4D7C-9417-826FD0312F8B}"/>
 					</ChildrenList>
 				</StateGroup>
 			</ChildrenList>

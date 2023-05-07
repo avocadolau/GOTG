@@ -5,6 +5,7 @@
 #include <Wiwa/core/Application.h>
 #include <Wiwa/core/Window.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/game/GameMusicManager.h>
 #include "../systems/ships/ship_main_menu.h"
 #include <iostream>
 
@@ -17,12 +18,14 @@ GoToMilanoHub_ GoToMilanoHub()
 	Wiwa::ShipMainMenu* ship = em.GetSystem<Wiwa::ShipMainMenu>(shipID);
 	ship->SetPanToCamera(true);
 	gm.canvas.at(0)->SwapActive();
+	Wiwa::GameMusicManager::MainHub();
 	return GoToMilanoHub_::hola;
 }
 
 GoMainMenu_ GoMainMenu()
 {
 	Wiwa::SceneManager::ChangeSceneByIndex(3);
+	Wiwa::GameMusicManager::MainMenu();
 	return GoMainMenu_::hola;
 }
 
@@ -71,13 +74,13 @@ SetVsync_ SetVsync(bool ret)
 
 SetVolumeMusic_ SetVolumeMusic(float level)
 {
-	Audio::ChangeMasterVolume((int)level);
+	Audio::ChangeMusicVolume((int)level);
 	return SetVolumeMusic_();
 }
 
 SetVolumeFX_ SetVolumeFX(float level)
 {
-	Audio::ChangeMasterVolume((int)level);
+	Audio::ChangeSFXVolume((int)level);
 	return SetVolumeFX_();
 }
 

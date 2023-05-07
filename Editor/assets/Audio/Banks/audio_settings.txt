@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	531447497	set_master_volume			\Default Work Unit\volume\set_master_volume	
-	722843456	set_music_volume			\Default Work Unit\volume\set_music_volume	
-	3372228340	set_sfx_volume			\Default Work Unit\volume\set_sfx_volume	
-	3860563679	set_dialog_volume			\Default Work Unit\volume\set_dialog_volume	
-

@@ -111,6 +111,9 @@ public:
 	// Post an event into the audio engine for a specific gameobject
 	static bool PostEvent(const char* event_name, uint64_t game_object);
 
+	// Post an event into the audio engine for a specific gameobject
+	static bool PostEvent(const char* event_name, uint64_t game_object, uint64_t& event_id);
+
 	// Post an event into the audio engine for a specific gameobject and callback
 	static bool PostEvent(const char* event_name, uint64_t game_object, Action<const char*> callback, uint64_t& play_id);
 
@@ -120,11 +123,17 @@ public:
 	// Post an event into the default gameobject
 	static bool PostEvent(const char* event_name) { return PostEvent(event_name, m_DefaultListener); }
 
+	// Post an event into the default gameobject
+	static bool PostEventDefaultListener(const char* event_name, uint64_t& event_id) { return PostEvent(event_name, m_DefaultListener, event_id); }
+
 	// Post an event into the world listener
 	static bool PostWorldEvent(const char* event_name) { return PostEvent(event_name, m_WorldListener); }
 
 	// Post an event into the default gameobject with callback
 	static bool PostEvent(const char* event_name, Action<const char*> callback) { return PostEvent(event_name, m_DefaultListener, callback); }
+
+	//check if a event id is playing
+	static bool IsEventPlaying(uint64_t event_id);
 
 	// Stop event for a specific gameobject
 	static bool StopEvent(const char* event_name, uint64_t game_object);
@@ -170,8 +179,12 @@ public:
 	*/
 	static bool UnloadAllBanks();
 
-	//change the state of a switch, this is set to work with the default listener (music)
-	static bool ChangeStateContainer(const char* container_name, const char* swtich_state);
+	//change the state of of a group state by id
+	static bool SetState(uint32_t state_group_id, uint32_t state_id);
+	//change the state of of a group state by name
+	static bool SetState(const char* state_group_id, const char* state_id);
+
+	static uint32_t GetIdFromString(const char* name);
 
 	static void ChangeMasterVolume(int value);
 	static void ChangeMusicVolume(int value);

@@ -20,7 +20,7 @@ namespace Wiwa
 		m_TimerAttackCooldown = 0.0f;
 		m_TimerSyncAnimationBullets = 0.0f;
 		m_ChangeShoot = false;
-		m_SelectRandomAttack = 0;
+		m_SelectRandomAttack = -1;
 		m_IsAttackSelected = false;
 	}
 
@@ -33,44 +33,16 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		//// Fire shot
-		//if (m_TimerAttackCooldown == 0.0f)
-		//{
-		//	Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
-		//	/*Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);*/
-
-		//	Transform3D* hand1Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand1It);
-		//	Transform3D* hand2Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand2It);
-		//	Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
-		//	Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
-
-		//	////SubjugatorAudio - Shooting audio for the Subjugator
-		//	//animator->PlayAnimation("attack", false);
-
-		//	glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-		//	glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-		//	glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-		//	glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-		//	Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 35);
-		//	Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 10);
-		//	Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 10);
-		//	Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 35);
-
-		//	SpawnBullet(enemy, hand1Tr, stats, rotateBulletRightHand1);
-		//	SpawnBullet(enemy, hand2Tr, stats, rotateBulletRightHand2);
-		//	SpawnBullet(enemy, hand3Tr, stats, rotateBulledLeftHand3);
-		//	SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
-		//}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		if (navAgent) {
+		if (navAgent) 
+		{
 			navAgent->autoRotate = false;
 		}
 
 		m_TimerAttackCooldown = -0.3f;
 		m_TimerSyncAnimationBullets = 0.0f;
-		m_SelectRandomAttack = 0;
+		m_SelectRandomAttack = -1;
 		m_IsAttackSelected = false;
 	}
 
@@ -94,8 +66,6 @@ namespace Wiwa
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 		m_TimerSyncAnimationBullets += Time::GetDeltaTime();
-
-		//WI_INFO(" Timer {}, Rate of Fire {}", m_TimerAttackCooldown, stats->RateOfFire);
 
 		if (m_TimerAttackCooldown > 1.0f / stats->rateOfFire)
 		{
@@ -220,34 +190,54 @@ namespace Wiwa
 		Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
 		Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
 
-		if (m_SelectRandomAttack == 0)
+		if (m_SelectRandomAttack == -1)
 		{
 			m_IsAttackSelected = true;
-			m_SelectRandomAttack = RAND(1, 3);
+			m_SelectRandomAttack = RAND(0, 3);
+		}
+
+		if (m_SelectRandomAttack == 0 && m_IsAttackSelected == false)
+		{
+			int randomNumber123 = rand() % 3;
+			if (randomNumber123 == 0)
+			{
+				randomNumber123 = 3;
+			}
+			m_SelectRandomAttack = randomNumber123;
+			m_IsAttackSelected = true;
 		}
 
 		if (m_SelectRandomAttack == 1 && m_IsAttackSelected == false)
 		{
-			int randomNumber23 = rand() % 2;
-			m_SelectRandomAttack = (randomNumber23 == 0) ? 2 : 3;
+			int randomNumber023 = rand() % 3;
+			if (randomNumber023 == 1)
+			{
+				randomNumber023 = 3;
+			}
+			m_SelectRandomAttack = randomNumber023;
 			m_IsAttackSelected = true;
 		}
 
 		if (m_SelectRandomAttack == 2 && m_IsAttackSelected == false)
 		{
-			int randomNumber13 = rand() % 2;
-			m_SelectRandomAttack = (randomNumber13 == 0) ? 1 : 3;
+			int randomNumber013 = rand() % 3;
+			if (randomNumber013 == 2)
+			{
+				randomNumber013 = 3;
+			}
+			m_SelectRandomAttack = randomNumber013;
 			m_IsAttackSelected = true;
 		}
 
 		if (m_SelectRandomAttack == 3 && m_IsAttackSelected == false)
 		{
-			int randomNumber12 = rand() % 2;
-			m_SelectRandomAttack = (randomNumber12 == 0) ? 1 : 2;
+			int randomNumber012 = rand() % 3;
+
+			m_SelectRandomAttack = randomNumber012;
 			m_IsAttackSelected = true;
 		}
 
-		if (m_SelectRandomAttack == 1)
+		if (m_SelectRandomAttack == 0)
 		{
 			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -265,7 +255,7 @@ namespace Wiwa
 			SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
 			m_IsAttackSelected = false;
 		}
-		if (m_SelectRandomAttack == 2)
+		if (m_SelectRandomAttack == 1)
 		{
 			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -283,7 +273,7 @@ namespace Wiwa
 			SpawnBullet(enemy, hand4Tr, stats, rotateBulledLeftHand4);
 			m_IsAttackSelected = false;
 		}
-		if (m_SelectRandomAttack == 3)
+		if (m_SelectRandomAttack == 2)
 		{
 			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -294,6 +284,24 @@ namespace Wiwa
 			Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 10);
 			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 10);
 			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 35);
+
+			SpawnBulletZigZag(enemy, hand1Tr, rotateBulletRightHand1);
+			SpawnBulletZigZag(enemy, hand2Tr, rotateBulletRightHand2);
+			SpawnBulletZigZag(enemy, hand3Tr, rotateBulledLeftHand3);
+			SpawnBulletZigZag(enemy, hand4Tr, rotateBulledLeftHand4);
+			m_IsAttackSelected = false;
+		}
+		if (m_SelectRandomAttack == 3)
+		{
+			glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand1Tr->rotation), rotateBulletRightHand1, 45);
+			Math::GetRightRotatedFromForward(Math::CalculateForward(hand2Tr->rotation), rotateBulletRightHand2, 25);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand3Tr->rotation), rotateBulledLeftHand3, 25);
+			Math::GetLeftRotatedFromForward(Math::CalculateForward(hand4Tr->rotation), rotateBulledLeftHand4, 45);
 
 			SpawnBulletZigZag(enemy, hand1Tr, rotateBulletRightHand1);
 			SpawnBulletZigZag(enemy, hand2Tr, rotateBulletRightHand2);
