@@ -149,15 +149,8 @@ namespace Wiwa
 		glm::vec3 currentEnemyPosition = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[0])->worldMatrix);
 		if (Math::IsPointNear(selfTr->localPosition, currentEnemyPosition, 2.0f))
 		{
-			/*EnemySystem* enemySys = em.GetSystem<EnemySystem>(m_EnemiesIds[0]);
-			YondusFin* yondusFin = GetComponentByIterator<YondusFin>(m_YondusFinIt);
-			if (yondusFin && enemySys)
-			{
-				enemySys->ReceiveDamage(yondusFin->damage);
-				WI_INFO("Damaged ({}) enemy with id: {} ", yondusFin->damage, m_EnemiesIds[0]);
-			}*/
-			agentSys->StopAgent();
-			agentSys->SetPosition(selfTr->localPosition);
+		/*	agentSys->StopAgent();
+			agentSys->SetPosition(selfTr->localPosition);*/
 			m_EnemiesIds.erase(m_EnemiesIds.begin());
 			m_EnemiesTransformIt.erase(m_EnemiesTransformIt.begin());
 			m_EnemiesStateIt.erase(m_EnemiesStateIt.begin());
@@ -167,34 +160,6 @@ namespace Wiwa
 		if (agentSys && m_EnemiesTransformIt.size() > 0) {
 			agentSys->SetDestination(currentEnemyPosition);
 		}
-		//const glm::vec3 position = Math::GetWorldPosition(selfTr->worldMatrix);
-		//auto distComparator = [&position](const glm::vec3& a, const glm::vec3& b) {
-		//	return glm::distance(position, a) < glm::distance(position, b);
-		//};
-
-		/*int totalEnemies = m_EnemiesTransformIt.size();
-		std::vector<glm::vec3> currentPositions(totalEnemies);
-		for (int i = 0; i < totalEnemies; i++)
-		{
-			currentPositions[i] = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[i])->worldMatrix);
-		}
-		std::sort(currentPositions.begin(), currentPositions.end(), distComparator);*/
-
-
-		//// Pick the nearest enemy alive
-		//int totalEnemies = m_EnemiesTransformIt.size();
-		//for (int i = 0; i < totalEnemies; i++)
-		//{
-		//	Transform3D* enemyTr = GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[i]);
-		//	float dist = glm::distance(Math::GetWorldPosition(selfTr->worldMatrix), Math::GetWorldPosition(enemyTr->worldMatrix));
-
-		//	/*if (dist < smallestDist) {
-		//		smallestDist = dist;
-		//		closestEnemy = vec;
-		//	}
-
-		//		hasTargetEnemy = true;*/
-		//}
 	}
 
 	void YondusFinSystem::OnDestroy()

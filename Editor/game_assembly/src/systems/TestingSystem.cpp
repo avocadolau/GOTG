@@ -1,5 +1,6 @@
 #include "TestingSystem.h"
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -29,11 +30,13 @@ namespace Wiwa
 			EntityId id = em.LoadPrefab("assets\\Prefabs\\YondusFin\\YundusFin_01.wiprefab");
 			Transform3D* tr = em.GetComponent<Transform3D>(id);
 			PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(id);
-			physSys->DeleteBody();
+			NavAgentSystem* navAgentSys = em.GetSystem<NavAgentSystem>(id);
 			*tr = *GetTransform();
-			tr->localPosition.y = 2.3f;
+		/*	tr->localPosition.y = 2.3f;
 			tr->position = tr->localPosition;
-			physSys->CreateBody();
+			physSys->ForceSetPosition(tr->localPosition);
+			navAgentSys->OnInit();
+			navAgentSys->SetPosition(tr->localPosition);*/
 			m_SpawnOnce = true;
 		}
 	}

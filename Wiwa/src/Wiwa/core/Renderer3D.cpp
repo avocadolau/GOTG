@@ -805,8 +805,13 @@ namespace Wiwa
 		glDepthFunc(GL_LESS);
 
 		camera->frameBuffer->Bind(clear);
-
+		if (!material)
+		{
+			WI_ERROR("Material not valid at {}", mesh->getModelPath());
+			return;
+		}
 		Shader *matShader = material->getShader();
+		
 		matShader->Bind();
 
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
