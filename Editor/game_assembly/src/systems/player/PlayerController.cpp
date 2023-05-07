@@ -36,10 +36,6 @@ void Wiwa::PlayerController::OnAwake()
 	}
 	m_Direction = 0.f;
 	m_CurrentVelocity = glm::vec2(0.f);
-
-
-
-
 }
 
 void Wiwa::PlayerController::OnInit()
@@ -70,6 +66,9 @@ void Wiwa::PlayerController::OnUpdate()
 {
 	if (!getInit())
 		OnInit();
+
+	if (!GetCharacter()->CanMove)
+		return;
 
 	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();
