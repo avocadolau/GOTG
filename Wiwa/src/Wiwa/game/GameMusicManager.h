@@ -2,18 +2,33 @@
 
 #include <Wiwa/core/Core.h>
 #include <Wiwa/audio/Audio.h>
-namespace Wiwa {
+namespace  Wiwa {
 
-	class GameMusicManager
+	class WI_API GameMusicManager
 	{
 	public:
+		static uint64_t m_PlayEventId;
+		static bool m_Playing ;
+		std::string m_InitBank;
+		static void Init();
+		
+		void static StopMusic();
 
-		std::vector<std::string> m_MusicBanks;
+		//menu states
+		void static Logo();
+		void static Intro();
+		void static Outro();
+		void static MainMenu();
+		void static GameOver();
+		//game states
+		void static MainHub();
+		void static Combat();
+		void static Rewad();
+		void static Shop();
 
-		void static Update();
-		void static PlayMusic(const char* music_event_name);
+		void static UpdateCombatIntesity(int n_enemies);
 
-		void static OnSceneChage(size_t scene_id);
+		void static OnSceneChage(const char* scene_path);
 	};
 
 }

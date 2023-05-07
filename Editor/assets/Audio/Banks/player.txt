@@ -8,19 +8,19 @@ Event	ID	Name			Wwise Object Path	Notes
 	4004702906	player_shoot			\Default Work Unit\player\player_shoot	
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
-	215992295	player_health			\Default Work Unit\player\player_health	
+	215992295	player_health			\Default Work Unit\player_health	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	11819362	Weapon 13 Shoot 2	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 13 Shoot 2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot\Weapon 13 Shoot 2		255660
 	49179977	player_dash	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 09 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_dash		396996
 	174263698	player_health	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\heartbeat_743200E1.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_health		3081756
 	236038091	footstep_concrete_run_07	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_07		51564
-	259805885	player_hit_shield	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\mixkit-sci-fi-plasma-gun-power-up-1679_08ECF749.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_hit_shield		40852
+	259805885	player_hit_shield	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\mixkit-sci-fi-plasma-gun-power-up-1679_0CACFF2F.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_hit_shield		40852
 	433002560	footstep_concrete_run_03	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_03		63872
 	541497451	footstep_concrete_run_04	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_04		54884
 	680197070	Weapon 13 Shoot 1	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 13 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot\Weapon 13 Shoot 1		296640
 	699504966	footstep_concrete_run_01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_01		44828
-	712169024	palyer_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\palyer_hit_BD35DF9F.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\palyer_hit		59592
+	712169024	palyer_hit	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\project III sounds\player\palyer_hit_4BAA7DC1.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\palyer_hit		59592
 	714007581	footstep_concrete_run_12	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_12_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_12		69672
 	794767311	footstep_concrete_run_08	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_08		57696
 	799941768	footstep_concrete_run_11	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_11_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_11		51936

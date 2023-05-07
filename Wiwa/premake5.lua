@@ -56,7 +56,8 @@ project "Wiwa"
 		"%{Library.Wwise_MMgr}",
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
-		"%{Library.Wwise_SA}"
+		"%{Library.Wwise_SA}",
+		"%{Library.Wwise_CC}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"

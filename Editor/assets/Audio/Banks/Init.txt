@@ -1,31 +1,47 @@
 State Group	ID	Name			Wwise Object Path	Notes
-	444815956	PlayerLife			\Default Work Unit\PlayerLife	
-	3991942870	music			\Default Work Unit\music	
+	1021618141	MusicState			\Default Work Unit\MusicState	
+	1253610732	CombatIntensity			\Default Work Unit\CombatIntensity	
+	1992536912	RoomType			\Default Work Unit\RoomType	
+	4227810856	MenuScene			\Default Work Unit\MenuScene	
 
 State	ID	Name	State Group			Notes
-	655265632	Alive	PlayerLife			
-	748895195	None	PlayerLife			
-	2044049779	Dead	PlayerLife			
-	646625282	hub	music			
-	748895195	None	music			
-	1125500713	intro	music			
-	2005704188	main_menu	music			
-	2764240573	combat	music			
+	89505537	GamePlay	MusicState			
+	748895195	None	MusicState			
+	2604644515	Menus	MusicState			
+	545371365	Low	CombatIntensity			
+	748895195	None	CombatIntensity			
+	2849147824	Medium	CombatIntensity			
+	3550808449	High	CombatIntensity			
+	251412225	Shop	RoomType			
+	646625282	Hub	RoomType			
+	748895195	None	RoomType			
+	1873057832	Reward	RoomType			
+	2764240573	Combat	RoomType			
+	556785088	Logo	MenuScene			
+	748895195	None	MenuScene			
+	1125500713	Intro	MenuScene			
+	3604647259	MainMenu	MenuScene			
+	4158285989	GameOver	MenuScene			
+	4184794294	Outro	MenuScene			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	504532776	Brick			\Factory Acoustic Textures\Textures\Brick	
 	513139656	Mountain			\Factory Acoustic Textures\Textures\Mountain	
 	841620460	Concrete			\Factory Acoustic Textures\Textures\Concrete	
+	1039994295	DialogVolume			\Default Work Unit\DialogVolume	
 	1755085759	Wood_Deep			\Factory Acoustic Textures\Textures\Wood_Deep	
 	1873957695	Anechoic			\Factory Acoustic Textures\Textures\Anechoic	
 	1970351858	Fabric			\Factory Acoustic Textures\Textures\Fabric	
 	2058049674	Wood			\Factory Acoustic Textures\Textures\Wood	
+	2346531308	MusicVolume			\Default Work Unit\MusicVolume	
 	2412606308	Carpet			\Factory Acoustic Textures\Textures\Carpet	
 	2637588553	Tile			\Factory Acoustic Textures\Textures\Tile	
+	2918011349	MasterVolume			\Default Work Unit\MasterVolume	
 	2928161104	Curtains			\Factory Acoustic Textures\Textures\Curtains	
 	3195498748	Cork_Tiles			\Factory Acoustic Textures\Textures\Cork_Tiles	
 	3670307564	Drywall			\Factory Acoustic Textures\Textures\Drywall	
 	4168643977	Acoustic_Banner			\Factory Acoustic Textures\Textures\Acoustic_Banner	
+	4249125308	EnviromentVolume			\Default Work Unit\EnviromentVolume	
 	4262522749	Wood_Bright			\Factory Acoustic Textures\Textures\Wood_Bright	
 
 Audio Bus	ID	Name			Wwise Object Path	Notes

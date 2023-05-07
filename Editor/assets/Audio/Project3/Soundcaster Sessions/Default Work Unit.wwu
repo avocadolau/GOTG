@@ -10,9 +10,37 @@
 							<Position X="0" Y="0"/>
 						</Module>
 					</ModuleList>
-					<RTPCValueList ShowAll="true"/>
+					<RTPCValueList ShowAll="true">
+						<RTPCValue>
+							<GameParameterRef Name="MusicIntensity" ID="{E2590234-28F1-40B1-A3D4-679C646BF4A1}"/>
+							<Value>87</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="MasterVolume" ID="{770EF029-4E28-4A64-A06E-BC48B63A362E}"/>
+							<Value>100</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="MusicVolume" ID="{03181680-887A-4CB8-A633-7A3BEBA17018}"/>
+							<Value>100</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="EnviromentVolume" ID="{4A488459-9103-4D3C-9BB7-E48EB9D8BD80}"/>
+							<Value>100</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="player_health" ID="{AEB3BC33-42AB-4D57-8CDE-C43D3B8C1D91}"/>
+							<Value>0</Value>
+						</RTPCValue>
+						<RTPCValue>
+							<GameParameterRef Name="DialogVolume" ID="{9D6B2F9C-A807-4DE0-9BA3-B54CA64A431C}"/>
+							<Value>50</Value>
+						</RTPCValue>
+					</RTPCValueList>
 					<CurrentStateList ShowAll="true">
-						<CurrentStateRef Name="game_over" ID="{23A34FEC-6952-43CD-AB72-7A6230C4C10E}"/>
+						<CurrentStateRef Name="Combat" ID="{77334FC6-E925-4D9B-B69C-0D71B1142486}"/>
+						<CurrentStateRef Name="MainMenu" ID="{35D63DDA-1EA8-48F7-BF05-3A08E6689C8C}"/>
+						<CurrentStateRef Name="Menus" ID="{94D7F000-F4EE-4BB5-899D-199C1F69F737}"/>
+						<CurrentStateRef Name="Low" ID="{A2D984AA-72D7-4F0E-806D-0F5538D04ED6}"/>
 					</CurrentStateList>
 					<CurrentSwitchList ShowAll="true"/>
 				</SoundcasterSession>
