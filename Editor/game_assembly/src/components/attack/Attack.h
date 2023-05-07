@@ -13,4 +13,6 @@ namespace Wiwa
 
 REFLECTION_BEGIN(Wiwa::Attack)
 REFLECT_MEMBER(attackType)
+REFLECT_MEMBER(isPlayerAttack)
+REFLECT_MEMBER(isEnemyAttack)
 REFLECTION_END;

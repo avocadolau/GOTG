@@ -97,16 +97,21 @@ namespace Wiwa
 		int totalEnemies = m_EnemiesTransformIt.size();
 		for (int i = 1; i < totalEnemies; ++i) {
 			glm::vec3 key = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[i])->worldMatrix);
+
 			EntityManager::ComponentIterator keyIt = m_EnemiesTransformIt[i];
 
 			const glm::vec3 position = Math::GetWorldPosition(selfTr->worldMatrix);
 			int j = i - 1;
 			while (j >= 0 && glm::distance(position, Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[j])->worldMatrix)) > glm::distance(position, key)) {
 				m_EnemiesTransformIt[j + 1] = m_EnemiesTransformIt[j];
+				m_EnemiesIds[j + 1] = m_EnemiesIds[j];
+				m_EnemiesStateIt[j + 1] = m_EnemiesStateIt[j];
 				j--;
 			}
 
 			m_EnemiesTransformIt[j + 1] = keyIt;
+			m_EnemiesIds[j + 1] = m_EnemiesIds[i];
+			m_EnemiesStateIt[j + 1] = m_EnemiesStateIt[i];
 		}
 	}
 
