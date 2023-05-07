@@ -247,6 +247,7 @@ namespace Wiwa
 		if (debug) WI_INFO("GAME STATE: StartRun()");
 		SaveProgression();
 		StartNewRoom();
+		RandomizeRewardRoom();
 	}
 
 	void GameStateManager::EndRun()
