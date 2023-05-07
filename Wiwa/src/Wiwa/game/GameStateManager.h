@@ -188,6 +188,8 @@ namespace Wiwa {
 		static int s_NPCRoomChances;
 
 		static bool FanaticEffect;
+		static int PrometheanGemsToAdd;
+		static int DamageDivisor;
 	public:
 		static GamePoolingManager* s_PoolManager;
 

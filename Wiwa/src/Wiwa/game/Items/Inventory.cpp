@@ -288,12 +288,23 @@ void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 	switch (shopElement.PassiveBoost)
 	{
 	case Wiwa::HowardElementType::FANCY_BOOTS:
+		m_ShopPassives.back().Use();
+		break;
 	case Wiwa::HowardElementType::EASY_TRIGGER:
+		m_ShopPassives.back().Use();
+		break;
 	case Wiwa::HowardElementType::NANO_BOOST:
+		m_ShopPassives.back().Use();
+		break;
 	case Wiwa::HowardElementType::NANO_MACHINES:
+		m_ShopPassives.back().Use();
+		break;
 	case Wiwa::HowardElementType::HEALTH_CAPACITOR:
+		m_ShopPassives.back().Use();
+		break;
 	case Wiwa::HowardElementType::SHIELD_FAN:
 		m_ShopPassives.back().Use();
+		break;
 	}
 }
 
