@@ -285,18 +285,6 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 {
 	m_ShopPassives.emplace_back(shopElement);
-	//If the passive boost is one of the easy ones we should implement it right away
-	switch (shopElement.PassiveBoost)
-	{
-	case Wiwa::HowardElementType::FANCY_BOOTS:
-	case Wiwa::HowardElementType::EASY_TRIGGER:
-	case Wiwa::HowardElementType::NANO_BOOST:
-	case Wiwa::HowardElementType::NANO_MACHINES:
-	case Wiwa::HowardElementType::HEALTH_CAPACITOR:
-	case Wiwa::HowardElementType::SHIELD_FAN:
-		m_ShopPassives.back().Use();
-	}
-	
 }
 
 void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)

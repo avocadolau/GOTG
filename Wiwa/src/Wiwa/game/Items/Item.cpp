@@ -339,21 +339,96 @@ namespace Wiwa
         {
         case Wiwa::HowardElementType::FANCY_BOOTS:
             player->Speed += player->Speed * buffPercent;
+            MovSpeedInc = player->Speed * buffPercent;
             break;
         case Wiwa::HowardElementType::EASY_TRIGGER:
             player->RateOfFireMultiplier += player->RateOfFireMultiplier * buffPercent;
+            RofInc = player->RateOfFireMultiplier * buffPercent;
             break;
         case Wiwa::HowardElementType::NANO_BOOST:
             player->Damage += player->Damage * buffPercent;
+            DamageInc = player->Damage * buffPercent;
             break;
         case Wiwa::HowardElementType::NANO_MACHINES:
             break;
         case Wiwa::HowardElementType::HEALTH_CAPACITOR:
             player->Health += player->Health * buffPercent;
+            HealthInc = player->Health * buffPercent;
             player->MaxHealth += player->MaxHealth * buffPercent;
+            MaxHealthInc = player->MaxHealth * buffPercent;
             break;
         case Wiwa::HowardElementType::SHIELD_FAN:
             player->ShieldRegeration += player->ShieldRegeration * buffPercent;
+            break;
+        case Wiwa::HowardElementType::RECOVERY_SHIELD:
+            //TODO: MAKE IT WORK
+            player->Shield += player->MaxShield * buffPercent;
+            break;
+        case Wiwa::HowardElementType::SECOND_WIND:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::REROLL:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::BEGINNERS_LUCK:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::MIDAS_TOUCH:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::DEVOURER:
+            //TODO: MAKE IT WORK
+            Wiwa::GameStateManager::s_EnemyDropChances += Wiwa::GameStateManager::s_EnemyDropChances * buffPercent;
+            break;
+        case Wiwa::HowardElementType::FANATIC:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::RECOVERY_HEALTH:
+            //TODO: MAKE IT WORK
+            player->Health += player->MaxHealth * buffPercent;
+            break;
+        case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::FRIENDLY_FACE:
+            //TODO: MAKE IT WORK
+            break;
+        case Wiwa::HowardElementType::LETHAL_SHOOTER:
+            Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+            EntityId newBulletId = EntityManager::INVALID_INDEX;
+            newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
+            SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
+            bullet->lifeTime += ((float)bullet->lifeTime * buffPercent);
+            RangeInc = ((float)bullet->lifeTime * buffPercent);
+            break;
+        }
+    }
+
+    void ShopElement::UnUse()
+    {
+        const float buffPercent = ((float)PercentageIncreases.at(CurrentStep - 1) / 100.f);
+        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+        Character* player = GetPlayerComp();
+
+        switch (PassiveBoost)
+        {
+        case Wiwa::HowardElementType::FANCY_BOOTS:
+            player->Speed -= MovSpeedInc;
+            break;
+        case Wiwa::HowardElementType::EASY_TRIGGER:
+            player->RateOfFireMultiplier -= RofInc;
+            break;
+        case Wiwa::HowardElementType::NANO_BOOST:
+            player->Damage -= DamageInc;
+            break;
+        case Wiwa::HowardElementType::NANO_MACHINES:
+            break;
+        case Wiwa::HowardElementType::HEALTH_CAPACITOR:
+            player->Health -= HealthInc;
+            player->MaxHealth -= MaxHealthInc;
+            break;
+        case Wiwa::HowardElementType::SHIELD_FAN:
+            player->ShieldRegeration -= ShieldRegenInc;
             break;
         case Wiwa::HowardElementType::RECOVERY_SHIELD:
             //TODO: MAKE IT WORK
@@ -390,12 +465,14 @@ namespace Wiwa
             EntityId newBulletId = EntityManager::INVALID_INDEX;
             newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
             SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
-            bullet->lifeTime += ((float)bullet->lifeTime * buffPercent);
+            bullet->lifeTime -= RangeInc;
             break;
         }
-
+    }
+    void ShopElement::AugmentStep()
+    {
         CurrentStep++;
-        if (CurrentStep > AmountOfSteps)
+        if (CurrentStep >= AmountOfSteps)
         {
             CurrentStep = AmountOfSteps;
         }
