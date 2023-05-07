@@ -27,6 +27,7 @@ namespace Wiwa {
 		/*int maxWavesCounter = 0;
 		int currentWavesCounter = 0;*/
 		bool m_StopUpdating = false;
+		WaveSpawnerAction m_Action = WaveSpawnerAction::DO_NOTHING;
 	public:
 		WaveSpawnerSystem();
 		~WaveSpawnerSystem();
@@ -44,6 +45,8 @@ namespace Wiwa {
 		inline bool HasHadAllWaves(const WaveSpawner& enemySpawner) { return enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount; };
 
 		inline const std::vector<EntityId>& getWaveIds() { return m_WavesIds; };
+
+		inline const WaveSpawnerAction& getWaveCurrentAction() { return m_Action; };
 
 		void SpawnWave();
 		//void OnDestroy() override;

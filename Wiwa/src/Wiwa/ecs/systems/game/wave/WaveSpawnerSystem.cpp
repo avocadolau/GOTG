@@ -46,15 +46,15 @@ namespace Wiwa
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		Wave* currentWave = nullptr;
 
-		WaveSpawnerAction action = QueryActiveWaves();
+		m_Action = QueryActiveWaves();
 
 		if (m_TimerForNextWave >= enemySpawner->waveChangeRate)
 		{
 			//WI_INFO("--------- ACTION: SPAWN A WAVE (TIMER) --------- ");
-			action = WaveSpawnerAction::SPAWN_A_WAVE;
+			m_Action = WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
-		switch (action)
+		switch (m_Action)
 		{
 		case Wiwa::WaveSpawnerAction::DO_NOTHING:
 		{

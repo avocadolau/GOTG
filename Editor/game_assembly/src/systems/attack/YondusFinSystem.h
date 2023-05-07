@@ -30,6 +30,8 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
+		void DamageEnemy(Pool_Type enemy_type, EntityId id);
+
 		bool hasReachedAnEnemy = false;
 	};
 }

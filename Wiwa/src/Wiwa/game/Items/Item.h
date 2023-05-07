@@ -312,8 +312,19 @@ namespace Wiwa
 			Unlocked(true)
 		{}
 
-		//Once you buy an element it uses it automatically in case of the normal abilities, and for the special ones it's used once the trigger
-		//is active
 		void Use();
+		//UnUse, when an item gets upgraded in your inventory we can reduce the percentage increase to re increase it again
+		void UnUse();
+
+		void AugmentStep();
+
+		int HealthInc;
+		int MaxHealthInc;
+		int DamageInc;
+		int RofInc;
+		float MovSpeedInc;
+		int RangeInc;
+		int ShieldRegenInc;
+
 	};
 }

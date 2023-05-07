@@ -62,11 +62,17 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		ZigZagBullet* bullet = GetComponentByIterator<ZigZagBullet>(m_BulletIt);
 		Transform3D* transform = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(m_EntityId));
+		
 
 		m_Timer += Time::GetDeltaTimeSeconds();
-		m_ZigZagTimer += Time::GetDeltaTime();
+		m_ZigZagTimer += Time::GetDeltaTimeSeconds();
 
+		glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 2, 2.0f, 20, m_ZigZagTimer, bullet->direction);
 
+		//WI_INFO(" Update Position ZIGZAG: x {} y {} z {}", updatePosition.x, updatePosition.y, updatePosition.z);
+
+		transform->localPosition = updatePosition;
+		em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->ForceSetPosition(updatePosition);
 
 		if (m_Timer >= bullet->lifeTime)
 		{
@@ -124,5 +130,22 @@ namespace Wiwa
 		m_ZigZagTimer = 0.0f;
 
 		return true;
+	}
+
+	glm::vec3 ZigZagBulletSystem::ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time, glm::vec3 forward_direction)
+	{		
+		forward_direction = glm::normalize(forward_direction);
+
+		glm::vec3 world_up(0.0f, 1.0f, 0.0f);
+		glm::vec3 right = glm::normalize(glm::cross(forward_direction, world_up));
+		glm::vec3 new_up = glm::cross(right, forward_direction);
+
+		float zigzag_offset = amplitude * sin(frequency * delta_time);
+
+		glm::vec3 zigzag_global = zigzag_offset * right;
+
+		glm::vec3 new_position = current_position + forward_direction * speed * delta_time + zigzag_global;
+
+		return new_position;		
 	}
 }

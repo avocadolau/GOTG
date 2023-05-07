@@ -76,8 +76,6 @@ void DialogPanel::Draw()
 					currentCreatingNodeIsSaved[m] = false;
 					dm.conversations[currentConversation].nodes[m].occupied = false;
 					dm.conversations[currentConversation].nodes[m].text1 = "";
-					dm.conversations[currentConversation].nodes[m].text2 = "";
-					dm.conversations[currentConversation].nodes[m].text3 = "";
 
 					dm.conversations[currentConversation].nodes[m].audioEventName = "";
 				}
@@ -101,18 +99,8 @@ void DialogPanel::Draw()
 				if (currentCreatingNodeIsSaved[currentNode] == true) ImGui::TextWrapped("Currently Editing Node # %i", currentNode);
 				ImGui::NewLine();
 
-				ImGui::Text("|<------------- Max Length ------------->|");
-				if (ImGui::InputText("Line 1 text", &dm.conversations[currentConversation].nodes[currentNode].text1))
-				{
-					currentCreatingNodeIsSaved[currentNode] = false;
-				}
-				ImGui::Text("|<------------- Max Length ------------->|");
-				if (ImGui::InputText("Line 2 text", &dm.conversations[currentConversation].nodes[currentNode].text2))
-				{
-					currentCreatingNodeIsSaved[currentNode] = false;
-				}
-				ImGui::Text("|<------------- Max Length ------------->|");
-				if (ImGui::InputText("Line 3 text", &dm.conversations[currentConversation].nodes[currentNode].text3))
+				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit.");
+				if (ImGui::InputText("Bubble text", &dm.conversations[currentConversation].nodes[currentNode].text1))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
@@ -163,8 +151,6 @@ void DialogPanel::Draw()
 				{
 					dm.SetDialogText(
 						(char*)dm.conversations[currentConversation].nodes[currentNode].text1.c_str(),
-						(char*)dm.conversations[currentConversation].nodes[currentNode].text2.c_str(),
-						(char*)dm.conversations[currentConversation].nodes[currentNode].text3.c_str(),
 						"library/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
 					dm.conversations[currentConversation].nodes[currentNode].occupied = true;
 
@@ -207,8 +193,6 @@ void DialogPanel::Draw()
 						if (isNodeOccupiedNumTimesFalse == 1)
 						{
 							dm.conversations[currentConversation].nodes[l].text1 = dm.conversations[currentConversation].nodes[l + 1].text1;
-							dm.conversations[currentConversation].nodes[l].text2 = dm.conversations[currentConversation].nodes[l + 1].text2;
-							dm.conversations[currentConversation].nodes[l].text3 = dm.conversations[currentConversation].nodes[l + 1].text3;
 
 							dm.conversations[currentConversation].nodes[l].audioEventName = dm.conversations[currentConversation].nodes[l + 1].audioEventName;
 
@@ -334,8 +318,6 @@ void DialogPanel::Draw()
 						currentCreatingNodeIsSaved[m] = false;
 						dm.editorConversations[currentConversation].nodes[m].occupied = dm.conversations[currentConversation].nodes[m].occupied;
 						dm.editorConversations[currentConversation].nodes[m].text1 = dm.conversations[currentConversation].nodes[m].text1;
-						dm.editorConversations[currentConversation].nodes[m].text2 = dm.conversations[currentConversation].nodes[m].text2;
-						dm.editorConversations[currentConversation].nodes[m].text3 = dm.conversations[currentConversation].nodes[m].text3;
 						dm.editorConversations[currentConversation].nodes[m].audioEventName = dm.conversations[currentConversation].nodes[m].audioEventName;
 
 					}
@@ -381,23 +363,9 @@ void DialogPanel::Draw()
 				else if (currentEditingNodeIsSaved[currentEditingNode[i]][i] == false) ImGui::TextWrapped("Node %i (unsaved*):", currentEditingNode[i]);
 				ImGui::NewLine();
 
-				ImGui::Text("|<------------- Max Length ------------->|");
+				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit.");
 				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 1 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
-				{
-					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
-				}
-				ImGui::PopID();
-				ImGui::Text("|<------------- Max Length ------------->|");
-				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 2 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text2))
-				{
-					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
-				}
-				ImGui::PopID();
-				ImGui::Text("|<------------- Max Length ------------->|");
-				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 3 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text3))
+				if (ImGui::InputText("Bubble text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
@@ -474,8 +442,6 @@ void DialogPanel::Draw()
 						if (isNodeOccupiedNumTimesFalse == 1)
 						{
 							dm.editorConversations[i].nodes[l].text1 = dm.editorConversations[i].nodes[l + 1].text1;
-							dm.editorConversations[i].nodes[l].text2 = dm.editorConversations[i].nodes[l + 1].text2;
-							dm.editorConversations[i].nodes[l].text3 = dm.editorConversations[i].nodes[l + 1].text3;
 
 							dm.editorConversations[i].nodes[l].audioEventName = dm.editorConversations[i].nodes[l + 1].audioEventName;
 
@@ -497,15 +463,11 @@ void DialogPanel::Draw()
 				if (ImGui::Button(" -= SAVE NODE =- "))
 				{
 					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
-					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
-					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
 
 					dm.conversations[i].nodes[currentEditingNode[i]].audioEventName = dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName;
 
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
 						"library/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
 
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = true;
@@ -595,15 +557,11 @@ void DialogPanel::Draw()
 					currentEditingNode[i] = 0;
 
 					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
-					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
-					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
 
 					dm.conversations[i].nodes[currentEditingNode[i]].audioEventName = dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName;
 
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
 						"library/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
 
 					dm.conversations[i].characterImagePath = dm.editorConversations[i].characterImagePath;
@@ -655,8 +613,6 @@ void DialogPanel::Draw()
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
 								dm.conversations[l].nodes[m].text1 = dm.conversations[l + 1].nodes[m].text1;
-								dm.conversations[l].nodes[m].text2 = dm.conversations[l + 1].nodes[m].text2;
-								dm.conversations[l].nodes[m].text3 = dm.conversations[l + 1].nodes[m].text3;
 
 								dm.conversations[l].nodes[m].audioEventName = dm.conversations[l + 1].nodes[m].audioEventName;
 
@@ -701,8 +657,6 @@ void DialogPanel::Draw()
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
 								dm.editorConversations[l].nodes[m].text1 = dm.editorConversations[l + 1].nodes[m].text1;
-								dm.editorConversations[l].nodes[m].text2 = dm.editorConversations[l + 1].nodes[m].text2;
-								dm.editorConversations[l].nodes[m].text3 = dm.editorConversations[l + 1].nodes[m].text3;
 
 								dm.editorConversations[l].nodes[m].audioEventName = dm.editorConversations[l + 1].nodes[m].audioEventName;
 
