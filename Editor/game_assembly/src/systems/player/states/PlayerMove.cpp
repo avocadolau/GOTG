@@ -20,6 +20,11 @@ void Wiwa::PlayerMove::EnterState()
 
 void Wiwa::PlayerMove::UpdateState()
 {
+	if (!m_StateMachine->GetCharacter()->CanMove)
+	{
+		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
+		return;
+	}
 	if (!m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);

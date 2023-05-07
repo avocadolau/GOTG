@@ -15,6 +15,7 @@ Wiwa::PlayerStateMachine::PlayerStateMachine()
 	m_AttackState = new PlayerAttack(this, m_EntityId);
 	m_DashState = new PlayerDash(this, m_EntityId);
 	m_DeathState = new PlayerDeath(this, m_EntityId);
+
 }
 
 Wiwa::PlayerStateMachine::~PlayerStateMachine()

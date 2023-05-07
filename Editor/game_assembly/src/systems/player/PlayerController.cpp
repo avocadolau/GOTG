@@ -50,7 +50,8 @@ void Wiwa::PlayerController::OnInit()
 	m_ShooterIt = GetComponentIterator<StarLordShooter>();
 	m_RocketIt = GetComponentIterator<RocketShooter>();
 	
-
+	Character* data = GetComponentByIterator<Character>(m_StatsIt);
+	data->CanMove = true;
 	m_DashEnable = true;
 	IsDashing = false;
 	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARLORD_BULLET, m_Scene);
@@ -65,6 +66,9 @@ void Wiwa::PlayerController::OnUpdate()
 {
 	if (!getInit())
 		OnInit();
+
+	if (!GetCharacter()->CanMove)
+		return;
 
 	m_MovementInput = GetMovementInput();
 	m_ShootInput = GetShootingInput();

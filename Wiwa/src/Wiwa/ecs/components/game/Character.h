@@ -35,6 +35,7 @@ namespace Wiwa {
 		bool Slowed;
 		float CounterSlowed;
 
+		bool CanMove;
 	
 	};
 }
@@ -53,4 +54,5 @@ REFLECTION_BEGIN(Wiwa::Character)
 	REFLECT_MEMBER(WalkTreshold)
 	REFLECT_MEMBER(Slowed)
 	REFLECT_MEMBER(CounterSlowed)
+	REFLECT_MEMBER(CanMove)
 REFLECTION_END;
