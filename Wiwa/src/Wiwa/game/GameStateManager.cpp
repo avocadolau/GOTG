@@ -56,6 +56,8 @@ namespace Wiwa
 	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
 	EnemyManager* GameStateManager::s_EnemyManager = new EnemyManager();
 
+	bool GameStateManager::FanaticEffect = true;
+
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
@@ -914,6 +916,53 @@ namespace Wiwa
 	Transform3D* GameStateManager::GetPlayerTransform()
 	{
 		return s_CurrentScene->GetEntityManager().GetComponent<Transform3D>(s_PlayerId);
+	}
+	void GameStateManager::AchievementsFunctionality()
+	{
+		std::vector<ShopElement> m_ShopPassives = s_PlayerInventory->GetShopPassives();
+		for (size_t i = 0; i < m_ShopPassives.size(); i++)
+		{
+			Wiwa::HowardElementType type_howard = m_ShopPassives.at(i).PassiveBoost;
+			switch (type_howard)
+			{
+			case Wiwa::HowardElementType::RECOVERY_SHIELD:
+				if(s_RoomState == Wiwa::RoomState::STATE_FINISHED)
+					m_ShopPassives.at(i).Use();
+				break;
+			case Wiwa::HowardElementType::SECOND_WIND:
+				break;
+			case Wiwa::HowardElementType::REROLL:
+				break;
+			case Wiwa::HowardElementType::BEGINNERS_LUCK:
+				break;
+			case Wiwa::HowardElementType::MIDAS_TOUCH:
+				break;
+			case Wiwa::HowardElementType::DEVOURER:
+				break;
+			case Wiwa::HowardElementType::FANATIC:
+				if (FanaticEffect)
+				{
+					Character* character = GetPlayerCharacterComp();
+
+					if (character->Health <= 0)
+					{
+						character->Health = 1;
+						FanaticEffect = false;
+					}
+				}
+				break;
+			case Wiwa::HowardElementType::RECOVERY_HEALTH:
+				if (s_RoomState == Wiwa::RoomState::STATE_FINISHED)
+					m_ShopPassives.at(i).Use();
+				break;
+			case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:
+				break;
+			case Wiwa::HowardElementType::FRIENDLY_FACE:
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
 

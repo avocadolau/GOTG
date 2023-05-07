@@ -150,6 +150,8 @@ namespace Wiwa {
 		WI_HARD_INL static float GetControllerDeadZone() { return s_GamepadDeadzone; }
 		WI_HARD_INL static EnemyManager& GetEnemyManager() { return *s_EnemyManager; }
 
+		//Achievement items progression
+		static void AchievementsFunctionality();
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
@@ -184,7 +186,8 @@ namespace Wiwa {
 		static int s_BuffChances;
 		static int s_PassiveSkillChances;
 		static int s_NPCRoomChances;
-		
+
+		static bool FanaticEffect;
 	public:
 		static GamePoolingManager* s_PoolManager;
 
