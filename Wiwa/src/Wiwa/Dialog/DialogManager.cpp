@@ -41,8 +41,6 @@ namespace Wiwa
 			for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
 			{
 				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
-				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text2_imgModeID);
-				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text3_imgModeID);
 			}
 		}
 
@@ -136,8 +134,6 @@ namespace Wiwa
 			for (int f = 0; f < MAX_CONVERSATION_NODES && conversations[e].nodes[f].occupied == true; f++)
 			{
 				editorConversations[e].nodes[f].text1 = conversations[e].nodes[f].text1;
-				editorConversations[e].nodes[f].text2 = conversations[e].nodes[f].text2;
-				editorConversations[e].nodes[f].text3 = conversations[e].nodes[f].text3;
 
 				editorConversations[e].nodes[f].audioEventName = conversations[e].nodes[f].audioEventName;
 
@@ -342,10 +338,6 @@ namespace Wiwa
 
 			InstanceRenderer& instanceRenderer = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.renderer_id);
 			instanceRenderer.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.instance_id, BLACK);
-			InstanceRenderer& instanceRenderer2 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text2_imgModeID.renderer_id);
-			instanceRenderer2.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text2_imgModeID.instance_id, BLACK);
-			InstanceRenderer& instanceRenderer3 = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.renderer_id);
-			instanceRenderer3.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text3_imgModeID.instance_id, BLACK);
 
 			if (((keyPressRefreshTimer / 450) % 2) == 0)
 			{
@@ -386,27 +378,19 @@ namespace Wiwa
 			if (firstTime == false && endTime == false)
 			{
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
-				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
-				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
 
 				if (conversations[conversationNumber].isInOppositeSide == true)
 				{
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID, { 600,140 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID, { 600,190 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID, { 600,240 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				}
 				else
 				{
 					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID, { 730,840 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID, { 730,890 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-					render->UpdateInstancedQuadTexPosition(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID, { 730,940 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				}
 			}
 			else if (firstTime == true && firstTimeTimer > 850 && endTime == false)
 			{
 				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
-				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
-				render->EnableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
 			}
 
 			if (firstTime == true)
@@ -516,8 +500,6 @@ namespace Wiwa
 			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && (keyPressRefreshTimer > 850 && firstTime == false && endTime == false))
 			{
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
-				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text2_imgModeID);
-				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text3_imgModeID);
 
 				keyPressRefreshTimer = 0;
 
@@ -551,28 +533,18 @@ namespace Wiwa
 		}
 	}
 
-	void DialogManager::SetDialogText(char* line1Text, char* line2Text, char* line3Text, const char* fontPath, int conversationNumber, int nodeNumber)
+	void DialogManager::SetDialogText(char* line1Text, const char* fontPath, int conversationNumber, int nodeNumber)
 	{
 		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 
 		Text* text1_imgMode = gm.InitFontForDialog(fontPath, line1Text, 950);
-		Text* text2_imgMode = gm.InitFontForDialog(fontPath, line2Text, 950);
-		Text* text3_imgMode = gm.InitFontForDialog(fontPath, line3Text, 950);
 
 		conversations[conversationNumber].nodes[nodeNumber].text1 = (std::string)line1Text;
-		conversations[conversationNumber].nodes[nodeNumber].text2 = (std::string)line2Text;
-		conversations[conversationNumber].nodes[nodeNumber].text3 = (std::string)line3Text;
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 		conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID = render.CreateInstancedQuadTex(m_Scene, text1_imgMode->GetTextureId(), text1_imgMode->GetSize(), {730,840}, {1000,650}, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID);
-		
-		conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID = render.CreateInstancedQuadTex(m_Scene, text2_imgMode->GetTextureId(), text2_imgMode->GetSize(), { 730,890 }, { 1000,650 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text2_imgModeID);
-		
-		conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID = render.CreateInstancedQuadTex(m_Scene, text3_imgMode->GetTextureId(), text3_imgMode->GetSize(), { 730,940 }, { 1000,650 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text3_imgModeID);
 
 		conversations[conversationNumber].nodes[nodeNumber].occupied = true;
 	}
@@ -702,18 +674,12 @@ namespace Wiwa
 				std::string conv = "Conversation" + s;
 
 				std::string memberNameLine1 = "_Line1_Node" + s2;
-				std::string memberNameLine2 = "_Line2_Node" + s2;
-				std::string memberNameLine3 = "_Line3_Node" + s2;
 				std::string memberNameLine4 = "_AudioEvent_Node" + s2;
 
 				memberNameLine1 = conv + memberNameLine1;
-				memberNameLine2 = conv + memberNameLine2;
-				memberNameLine3 = conv + memberNameLine3;
 				memberNameLine4 = conv + memberNameLine4;
 
 				doc.AddMember(memberNameLine1.c_str(), conversations[i].nodes[j].text1.c_str());
-				doc.AddMember(memberNameLine2.c_str(), conversations[i].nodes[j].text2.c_str());
-				doc.AddMember(memberNameLine3.c_str(), conversations[i].nodes[j].text3.c_str());
 
 				doc.AddMember(memberNameLine4.c_str(), conversations[i].nodes[j].audioEventName.c_str());
 
@@ -767,21 +733,17 @@ namespace Wiwa
 					std::string conv = "Conversation" + s;
 
 					std::string memberNameLine1 = "_Line1_Node" + s2;
-					std::string memberNameLine2 = "_Line2_Node" + s2;
-					std::string memberNameLine3 = "_Line3_Node" + s2;
+
 					std::string memberNameLine4 = "_AudioEvent_Node" + s2;
 
 					memberNameLine1 = conv + memberNameLine1;
-					memberNameLine2 = conv + memberNameLine2;
-					memberNameLine3 = conv + memberNameLine3;
+
 					memberNameLine4 = conv + memberNameLine4;
 
 					if (doc.HasMember(memberNameLine1.c_str())
-						&& doc.HasMember(memberNameLine2.c_str())
-						&& doc.HasMember(memberNameLine3.c_str())
 						&& doc.HasMember(memberNameLine4.c_str()))
 					{
-						SetDialogText((char*)doc[memberNameLine1.c_str()].as_string(), (char*)doc[memberNameLine2.c_str()].as_string(), (char*)doc[memberNameLine3.c_str()].as_string(), "library/Fonts/Jade_Smile.ttf", i, j);
+						SetDialogText((char*)doc[memberNameLine1.c_str()].as_string(), "library/Fonts/Jade_Smile.ttf", i, j);
 						conversations[i].nodes[j].audioEventName = doc[memberNameLine4.c_str()].as_string();
 					}
 					else

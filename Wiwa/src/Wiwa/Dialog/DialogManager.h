@@ -68,7 +68,7 @@ namespace Wiwa
 		void UpdateConversation(int conversationNumber, Renderer2D* render);
 
 		// Set the dialog font and texts
-		void SetDialogText(char* line1Text, char* line2Text, char* line3Text, const char* fontPath, int conversationNumber, int nodeNumber);
+		void SetDialogText(char* line1Text, const char* fontPath, int conversationNumber, int nodeNumber);
 
 		// Set the dialog background images
 		void SetDialogBubbleImage(const char* path, int conversationNumber);
