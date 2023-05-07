@@ -1,6 +1,7 @@
 #include <wipch.h>
 
 #include "DialogManager.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 #include "Wiwa/audio/Audio.h"
 
@@ -153,6 +154,18 @@ namespace Wiwa
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 		characterID = GameStateManager::s_CurrentCharacter;
+
+		Character* character = GameStateManager::GetPlayerCharacterComp();
+
+		if (actualConversationState == 1 && character != nullptr)
+		{
+			character->CanMove = false;
+
+		}
+		else if (actualConversationState != 1 && character != nullptr)
+		{
+			character->CanMove = true;
+		}
 
 		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false))
