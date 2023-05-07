@@ -208,7 +208,6 @@ namespace Wiwa
 	public:
 		static GamePoolingManager *s_PoolManager;
 
-		static GamePoolingManager *s_PoolManager;
 		static bool s_CanContinue;
 		static EnemyManager *s_EnemyManager;
 	};

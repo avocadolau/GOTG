@@ -19,7 +19,7 @@ void GameLogPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
 	ImGui::TextColored(ImVec4(102, 0, 255, 1), "Panel to check information about room");
-	
+	ImGui::Text("Save file found %i", Wiwa::GameStateManager::s_CanContinue);
 	if (ImGui::CollapsingHeader("Chances"))
 	{
 

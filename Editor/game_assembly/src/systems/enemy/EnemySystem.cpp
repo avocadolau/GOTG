@@ -239,7 +239,7 @@ namespace Wiwa
 			// TODO: Change with a stats
 			if (player)
 			{
-				player->Shield += 2;
+				player->Shield += player->ShieldRegeration;
 				if (player->Shield >= player->MaxShield)
 					player->Shield = player->MaxShield;
 			}

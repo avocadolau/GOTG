@@ -93,7 +93,7 @@ namespace Wiwa
 		}
 
 		s_PlayerInventory->Serialize(&doc);
-		doc.save_file("config/player_data.json");
+		doc.save_file("config/player_run.json");
 
 		JSONDocument doc_progression;
 		s_GameProgression->Serialize(&doc_progression);
@@ -107,7 +107,7 @@ namespace Wiwa
 			WI_CORE_INFO("Loading player progression");
 		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
-		JSONDocument doc("config/player_data.json");
+		JSONDocument doc("config/player_run.json");
 
 		if (!character)
 			return;
@@ -228,12 +228,17 @@ namespace Wiwa
 
 		// TODO: Reset all progression
 
-		doc.save_file("config/player_progression.json");
+		doc.save_file("config/player_data.json");
 	}
 
 	bool GameStateManager::Continue()
 	{
-		return false;
+		if (!s_CanContinue)
+			return false;
+
+
+
+		return true;
 	}
 
 	void GameStateManager::StartRun()
@@ -267,7 +272,11 @@ namespace Wiwa
 			WI_CORE_INFO("Init progression");
 		Character* character = GetPlayerCharacterComp();
 		
-		JSONDocument doc("config/room_data.json");
+
+		if (!s_CanContinue)
+			NewGame();
+
+		JSONDocument doc("config/player_data.json");
 		if (!character)
 		{
 			WI_ERROR("Character was nullptr");
@@ -280,6 +289,7 @@ namespace Wiwa
 				JSONValue characterDoc = doc["starlord"];
 				if (s_CurrentCharacter == 1)
 					characterDoc = doc["rocket"];
+
 				if (characterDoc.HasMember("max_health"))
 					character->MaxHealth = characterDoc["max_health"].as_int();
 				character->Health = character->MaxHealth;
@@ -304,9 +314,6 @@ namespace Wiwa
 					character->WalkTreshold = characterDoc["walk_threshold"].as_float();
 			}
 		}
-		if (debug)
-			WI_CORE_INFO("Player init loaded");
-
 		//LoadPlayerAchievements(&doc);
 	}
 
@@ -781,6 +788,16 @@ namespace Wiwa
 
 		Wiwa::ItemManager::Deserialize(&doc);
 
+		if (std::filesystem::exists("config/player_data.json"))
+		{
+
+			JSONDocument doc("config/player_data.json");
+			if (doc.IsObject())
+			{
+				if (doc.HasMember("starlord") && doc.HasMember("rocket"))
+					s_CanContinue = true;
+			}
+		}
 		//AchievementsManager::Deserialize(&doc);
 	}
 	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)

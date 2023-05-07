@@ -23,3 +23,5 @@
 #include "components/attack/YondusFin.h"
 #include "components/props/VentRotatorData.h"
 #include "components/props/RewardChestData.h"
+
+#include "components/trigger/RewardRoomData.h"

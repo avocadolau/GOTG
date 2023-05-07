@@ -4,5 +4,5 @@
 
 void Wiwa::RewardRoom::OnInit()
 {
-
+	GameStateManager::SpawnRandomItem(GetTransform()->position, GameStateManager::s_NextRewardRoomReward);
 }

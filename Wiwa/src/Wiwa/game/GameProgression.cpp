@@ -28,9 +28,12 @@ void Wiwa::GameProgression::Serialize(JSONDocument* doc)
 
 void Wiwa::GameProgression::Deserialize(JSONDocument* doc)
 {
-	m_PlayerData.m_EnemiesKilled = (*doc)["enemies_killed"].as_int();
-	m_PlayerData.m_ItemsBought = (*doc)["items_bought"].as_int();
-	m_PlayerData.m_KilledUltronCount = (*doc)["killed_ultron_counter"].as_int();
+	if(doc->HasMember("enemies_killed"))
+		m_PlayerData.m_EnemiesKilled = (*doc)["enemies_killed"].as_int();
+	if (doc->HasMember("items_bought"))
+		m_PlayerData.m_ItemsBought = (*doc)["items_bought"].as_int();
+	if (doc->HasMember("killed_ultron_counter"))
+		m_PlayerData.m_KilledUltronCount = (*doc)["killed_ultron_counter"].as_int();
 }
 
 void Wiwa::GameProgression::InitGame()
