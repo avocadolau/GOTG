@@ -1061,7 +1061,7 @@ namespace Wiwa
 		waveSpawner = em.GetComponents<WaveSpawner>(&size);
 		if (waveSpawner) {
 			if (em.IsComponentRemoved<WaveSpawner>(0))
-				return;
+				return 0;
 			waveSpawner = &waveSpawner[0];
 			if (waveSpawner && !waveSpawner->hasFinished) {
 				// Check for all the active waves in that spawner.
