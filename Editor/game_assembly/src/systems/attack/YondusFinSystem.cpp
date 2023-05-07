@@ -9,6 +9,12 @@
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include <Wiwa/ecs/components/ai/NavAgent.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include "../enemy/EnemySystem.h"
+#include "../enemy/MeleePhalanx/EnemyMeleePhalanx.h"
+#include "../enemy/RangedPhalanx/EnemyRangedPhalanx.h"
+#include "../enemy/Sentinel/EnemySentinel.h"
+#include "../enemy/Subjugator/EnemySubjugator.h"
+#include "../../components/attack/Attack.h"
 namespace Wiwa
 {
 	YondusFinSystem::YondusFinSystem()
@@ -34,6 +40,12 @@ namespace Wiwa
 			System::Awake();
 
 		YondusFin* yondus_fin = GetComponentByIterator<YondusFin>(m_YondusFinIt);
+		Attack* attack = GetComponentByIterator<Attack>(GetComponentIterator<Attack>(m_EntityId));
+		if (attack)
+		{
+			strcpy(attack->attackType, "YONDUS_FIN");
+		}
+
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		yondus_fin->damage = Wiwa::ItemManager::GetAbility("Yondu's Fin")->Damage;
 		yondus_fin->lifeTime = 5.0f;
@@ -125,22 +137,35 @@ namespace Wiwa
 		if (m_EnemiesTransformIt.size() <= 0)
 			return;
 
+		EntityManager& em = GetEntityManager();
 		YondusFin* yondusFin = GetComponentByIterator<YondusFin>(m_YondusFinIt);
 		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 		Transform3D* selfTr = GetTransform();
-	
+		
+		NavAgentSystem* agentSys = em.GetSystem<NavAgentSystem>(m_EntityId);
+		NavAgent* agent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+		agent->agentSliding = false;
+
 		glm::vec3 currentEnemyPosition = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[0])->worldMatrix);
 		if (Math::IsPointNear(selfTr->localPosition, currentEnemyPosition, 2.0f))
 		{
+			/*EnemySystem* enemySys = em.GetSystem<EnemySystem>(m_EnemiesIds[0]);
+			YondusFin* yondusFin = GetComponentByIterator<YondusFin>(m_YondusFinIt);
+			if (yondusFin && enemySys)
+			{
+				enemySys->ReceiveDamage(yondusFin->damage);
+				WI_INFO("Damaged ({}) enemy with id: {} ", yondusFin->damage, m_EnemiesIds[0]);
+			}*/
+			agentSys->StopAgent();
+			agentSys->SetPosition(selfTr->localPosition);
 			m_EnemiesIds.erase(m_EnemiesIds.begin());
 			m_EnemiesTransformIt.erase(m_EnemiesTransformIt.begin());
 			m_EnemiesStateIt.erase(m_EnemiesStateIt.begin());
 			currentEnemyPosition = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[0])->worldMatrix);
 		}
 
-		NavAgentSystem* agent = GetEntityManager().GetSystem<NavAgentSystem>(m_EntityId);
-		if (agent) {
-			agent->SetDestination(currentEnemyPosition);
+		if (agentSys && m_EnemiesTransformIt.size() > 0) {
+			agentSys->SetDestination(currentEnemyPosition);
 		}
 		//const glm::vec3 position = Math::GetWorldPosition(selfTr->worldMatrix);
 		//auto distComparator = [&position](const glm::vec3& a, const glm::vec3& b) {
@@ -179,6 +204,60 @@ namespace Wiwa
 
 	void YondusFinSystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
+		WI_INFO("Yondusss collision!!!");
+	}
 
+	void YondusFinSystem::DamageEnemy(Pool_Type enemy_type, EntityId id)
+	{
+		EntityManager& em = GetEntityManager();
+		YondusFin* yondusFin = GetComponentByIterator<YondusFin>(m_YondusFinIt);
+		if (!yondusFin)
+			return;
+
+		switch (enemy_type)
+		{
+		case Pool_Type::PHALANX_MELEE_GENERIC:
+		{
+			EnemyMeleePhalanx* enemySys = em.GetSystem<EnemyMeleePhalanx>(id);
+			if (enemySys)
+			{
+				enemySys->ReceiveDamage(yondusFin->damage);
+				WI_INFO("Damaged ({}) enemy with id: {} ", yondusFin->damage, m_EnemiesIds[0]);
+			}
+		}
+		break;
+		case Pool_Type::PHALANX_RANGED_GENERIC:
+		{
+			EnemyRangedPhalanx* enemySys = em.GetSystem<EnemyRangedPhalanx>(id);
+			if (enemySys)
+			{
+				enemySys->ReceiveDamage(yondusFin->damage);
+				WI_INFO("Damaged ({}) enemy with id: {} ", yondusFin->damage, m_EnemiesIds[0]);
+			}
+		}
+		break;
+		case Pool_Type::SENTINEL:
+		{
+			EnemySentinel* enemySys = em.GetSystem<EnemySentinel>(id);
+			if (enemySys)
+			{
+				enemySys->ReceiveDamage(yondusFin->damage);
+				WI_INFO("Damaged ({}) enemy with id: {} ", yondusFin->damage, m_EnemiesIds[0]);
+			}
+		}
+		break;
+		case Pool_Type::SUBJUGATOR:
+		{
+			EnemySubjugator* enemySys = em.GetSystem<EnemySubjugator>(id);
+			if (enemySys)
+			{
+				enemySys->ReceiveDamage(yondusFin->damage);
+				WI_INFO("Damaged ({}) enemy with id: {} ", yondusFin->damage, m_EnemiesIds[0]);
+			}
+		}
+		break;
+		default:
+			break;
+		}
 	}
 }
