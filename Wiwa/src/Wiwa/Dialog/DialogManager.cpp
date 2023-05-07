@@ -649,7 +649,7 @@ namespace Wiwa
 		render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 	}
 
-	void DialogManager::ForceDialogStart(std::string forcedConversationToStart, bool isCharacterSensitive = false)
+	void DialogManager::ForceDialogStart(std::string forcedConversationToStart, bool isCharacterSensitive)
 	{
 		forcedDialogHappened = false;
 		forceStartConversation = true;
