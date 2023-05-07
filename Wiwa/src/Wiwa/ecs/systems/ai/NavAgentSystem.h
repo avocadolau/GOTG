@@ -28,6 +28,7 @@ namespace Wiwa
 
         void RequestMoveVelocity(const glm::vec3& velocity);
         void StopAgent();
+        void StopAgentAndVelocity();
         void RemoveAgent();
 
         bool Raycast(const glm::vec3& start_point, const glm::vec3& start_end);
@@ -55,7 +56,6 @@ namespace Wiwa
         glm::vec3 m_CurrentPos;
         float m_PreviousVelocity;
         float m_PreviousAcceleration;
-
         //glm::vec3 m_CurrentVel;
         dtCrowdAgentParams m_AgentParams;
         EntityManager::ComponentIterator m_NavAgentIt;

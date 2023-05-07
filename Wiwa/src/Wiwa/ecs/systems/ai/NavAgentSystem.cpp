@@ -43,6 +43,8 @@ namespace Wiwa
         Transform3D* tr = GetComponent<Transform3D>();
         m_CurrentPos = tr->localPosition;
         m_NavAgentIt = GetComponentIterator<Wiwa::NavAgent>();
+        Wiwa::NavAgent* agent = GetComponentByIterator<Wiwa::NavAgent>(m_NavAgentIt);
+        agent->agentSliding = true;
         RefreshParamters();
         RegisterWithCrowd();
     }
@@ -97,6 +99,17 @@ namespace Wiwa
                     speed = std::max(speed, 0.0f);
                     crowd.SetAgentMaxAcceleration(m_AgentIndex, m_AgentParams.maxAcceleration);
                     crowd.SetAgentMaxSpeed(m_AgentIndex, speed);
+                }
+            }
+
+            if (!navAgent->agentSliding)
+            {
+                dtCrowdAgent* agent = crowd.getCrowd().getEditableAgent(m_AgentIndex);
+                if (agent)
+                {
+                    agent->vel[0] = agent->dvel[0];
+                    agent->vel[1] = agent->dvel[1];
+                    agent->vel[2] = agent->dvel[2];
                 }
             }
 
@@ -179,7 +192,23 @@ namespace Wiwa
     void NavAgentSystem::StopAgent()
     {
         if (m_AgentIndex != -1) {
-            Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
+            Crowd& crowd = Crowd::getInstance();
+            crowd.getCrowd().resetMoveTarget(m_AgentIndex);
+        }
+    }
+
+    void NavAgentSystem::StopAgentAndVelocity()
+    {
+        if (m_AgentIndex != -1) {
+            Crowd& crowd = Crowd::getInstance();
+            crowd.getCrowd().resetMoveTarget(m_AgentIndex);
+            dtCrowdAgent* agent = crowd.getCrowd().getEditableAgent(m_AgentIndex);
+            if (agent)
+            {
+                agent->vel[0] = agent->dvel[0];
+                agent->vel[1] = agent->dvel[1];
+                agent->vel[2] = agent->dvel[2];
+            }
         }
     }
 

@@ -23,6 +23,7 @@
 #include "../../components/attack/Explosion.h"
 #include <Wiwa/ecs/components/game/Character.h>
 #include "MeleePhalanx/EnemyMeleePhalanx.h"
+#include "../../components/attack/YondusFin.h"
 
 namespace Wiwa
 {
@@ -143,6 +144,7 @@ namespace Wiwa
 			if (attack)
 			{
 				std::string attackStr = attack->attackType;
+
 				std::string starlordBullet = "STARLORD_BULLET";
 				if (starlordBullet == attackStr)
 				{
@@ -150,6 +152,15 @@ namespace Wiwa
 					if (!bullet)
 						return;
 					ReceiveDamage(bullet->damage);
+				}
+
+				std::string yondusFinStr = "YONDUS_FIN";
+				if (yondusFinStr == attackStr)
+				{
+					YondusFin* yondusFin = GetComponentByIterator<YondusFin>(em.GetComponentIterator<YondusFin>(body2->id));
+					if (!yondusFin)
+						return;
+					ReceiveDamage(yondusFin->damage);
 				}
 			}
 		}
