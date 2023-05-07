@@ -436,7 +436,7 @@ namespace Wiwa
 		char* word = _word;
 
 		int x = 0;
-		int y = 0;
+		int y_extra = 0;
 		int lineWidth = 0;
 
 		int ascent, descent, lineGap;
@@ -459,13 +459,13 @@ namespace Wiwa
 			stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
 			/* compute y (different characters have different heights) */
-			int y = ascent + c_y1;
+			int y = ascent + c_y1 + y_extra;
 
 			/* check if we need to wrap to the next line */
 			if (lineWidth + (int)roundf(ax * scale) > maxWidth)
 			{
 				x = 0;
-				y += l_h;
+				y_extra += l_h;
 				lineWidth = 0;
 			}
 
@@ -485,7 +485,7 @@ namespace Wiwa
 
 
 		Text* text = new Text();
-		text->InitWrapped(b_w, b_h, lineWidth, y, descent, bitmap);
+		text->InitWrapped(b_w, b_h, lineWidth, y_extra, descent, bitmap);
 
 		free(fontBuffer);
 		free(bitmap);
