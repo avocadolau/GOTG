@@ -448,11 +448,20 @@ namespace Wiwa
 		int i;
 		for (i = 0; i < strlen(word); ++i)
 		{
+
 			/* how wide is this character */
 			int ax;
 			int lsb;
 			stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
 			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
+
+			/* check if we need to wrap to the next line */
+			if (lineWidth + (int)roundf(ax * scale) >= maxWidth)
+			{
+				y_extra += l_h;
+				x = 0;
+				lineWidth = 0;
+			}
 
 			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
 			int c_x1, c_y1, c_x2, c_y2;
@@ -460,14 +469,6 @@ namespace Wiwa
 
 			/* compute y (different characters have different heights) */
 			int y = ascent + c_y1 + y_extra;
-
-			/* check if we need to wrap to the next line */
-			if (lineWidth + (int)roundf(ax * scale) > maxWidth)
-			{
-				x = 0;
-				y_extra += l_h;
-				lineWidth = 0;
-			}
 
 			/* render character (stride and offset is important here) */
 			int byteOffset = (int)(x + roundf(lsb * scale) + (y * b_w));
