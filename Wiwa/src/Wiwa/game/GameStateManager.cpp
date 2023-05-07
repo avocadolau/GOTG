@@ -61,9 +61,10 @@ namespace Wiwa
 	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
 	EnemyManager* GameStateManager::s_EnemyManager = new EnemyManager();
 
-	bool GameStateManager::FanaticEffect = true;
+	bool GameStateManager::FanaticEffect = false;
 	int GameStateManager::PrometheanGemsToAdd = 0;
 	int GameStateManager::DamageDivisor = 1;
+	bool GameStateManager::SecondWind = false;
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
@@ -247,6 +248,7 @@ namespace Wiwa
 		if (debug) WI_INFO("GAME STATE: StartRun()");
 		SaveProgression();
 		StartNewRoom();
+		RandomizeRewardRoom();
 	}
 
 	void GameStateManager::EndRun()
@@ -347,6 +349,9 @@ namespace Wiwa
 	void GameStateManager::Update()
 	{
 		OPTICK_EVENT("Game state manager update");
+		AchievementsFunctionality();
+		if (s_RoomState == RoomState::STATE_FINISHED && s_RoomType == RoomType::ROOM_BOSS)
+			s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
 		s_PlayerInventory->Update();
 		s_GameProgression->Update();
 	}
@@ -354,7 +359,7 @@ namespace Wiwa
 	void GameStateManager::Die()
 	{
 		if (debug)
-			WI_CORE_INFO("Player dead");		
+			WI_CORE_INFO("Player dead");	
 		EndRun();
 	}
 
@@ -395,7 +400,7 @@ namespace Wiwa
 				renderer->GetMaterial()->SetUniformData("u_Hit", false);
 			}
 			Audio::PostEvent("player_hit");
-			if (character->Health <= 0)
+			if (character->Health <= 0 && !FanaticEffect)
 			{
 				Audio::PostEvent("player_dead");
 				Die();
@@ -1008,6 +1013,7 @@ namespace Wiwa
 					m_ShopPassives.at(i).Use();
 				break;
 			case Wiwa::HowardElementType::SECOND_WIND:
+
 				break;
 			case Wiwa::HowardElementType::REROLL:
 				break;

@@ -802,24 +802,26 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 void Wiwa::PlayerGUISystem::OnCollisionEnter(Object* body1, Object* body2)
 {
 	std::string tag_item = "ITEM";
-
-	if (body1->id == m_EntityId && tag_item == body2->selfTagStr)
+	if (GameStateManager::GetRoomType() == "ROOM_SHOP")
 	{
-		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		Wiwa::EntityManager& em = _scene->GetEntityManager();
-		Item* item = em.GetComponent<Item>(body2->id);
-		if (!item)
+		if (body1->id == m_EntityId && tag_item == body2->selfTagStr)
 		{
-			WI_CORE_ERROR("Item component can't be find");
-			return;
-		}
-		if (item->item_type == 0)//ABILITY
-		{
-			shopActive = true;
-		}
-		else if (item->item_type == 2)//BUFF
-		{
-			shopActive = true;
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Item* item = em.GetComponent<Item>(body2->id);
+			if (!item)
+			{
+				WI_CORE_ERROR("Item component can't be find");
+				return;
+			}
+			if (item->item_type == 0)//ABILITY
+			{
+				shopActive = true;
+			}
+			else if (item->item_type == 2)//BUFF
+			{
+				shopActive = true;
+			}
 		}
 	}
 }
@@ -827,30 +829,32 @@ void Wiwa::PlayerGUISystem::OnCollisionEnter(Object* body1, Object* body2)
 void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
 {
 	std::string tag_item = "ITEM";
-
-	if (body1->id == m_EntityId && tag_item == body2->selfTagStr)
+	if (GameStateManager::GetRoomType() == "ROOM_SHOP")
 	{
-		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		Wiwa::EntityManager& em = _scene->GetEntityManager();
-		Item* item = em.GetComponent<Item>(body2->id);
-		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+		if (body1->id == m_EntityId && tag_item == body2->selfTagStr)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			Item* item = em.GetComponent<Item>(body2->id);
+			Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 
-		if (!item)
-		{
-			WI_CORE_ERROR("Item component can't be find");
-			return;
-		}
-		if (item->item_type == 0)//ABILITY
-		{
-			shopActive = false;
-			gm.canvas.at(ShopHUD)->SwapActive();
-			gm.canvas.at(CanvasHUD)->SwapActive();
-		}
-		else if (item->item_type == 2)//BUFF
-		{
-			shopActive = false;
-			gm.canvas.at(ShopHUD)->SwapActive();
-			gm.canvas.at(CanvasHUD)->SwapActive();
+			if (!item)
+			{
+				WI_CORE_ERROR("Item component can't be find");
+				return;
+			}
+			if (item->item_type == 0)//ABILITY
+			{
+				shopActive = false;
+				gm.canvas.at(ShopHUD)->SwapActive();
+				gm.canvas.at(CanvasHUD)->SwapActive();
+			}
+			else if (item->item_type == 2)//BUFF
+			{
+				shopActive = false;
+				gm.canvas.at(ShopHUD)->SwapActive();
+				gm.canvas.at(CanvasHUD)->SwapActive();
+			}
 		}
 	}
 }
