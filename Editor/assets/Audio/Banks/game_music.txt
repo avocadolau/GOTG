@@ -1,10 +1,56 @@
 Event	ID	Name			Wwise Object Path	Notes
-	888826129	music_combat_01			\Default Work Unit\music\music_combat_01	
-	1840167780	music_main_menu			\Default Work Unit\music\music_main_menu	
-	2615423034	music_hub			\Default Work Unit\music\music_hub	
+	2932040671	play_music			\Default Work Unit\music\play_music	
+
+State Group	ID	Name			Wwise Object Path	Notes
+	1021618141	MusicState			\Default Work Unit\MusicState	
+	1992536912	RoomType			\Default Work Unit\RoomType	
+	4227810856	MenuScene			\Default Work Unit\MenuScene	
+
+State	ID	Name	State Group			Notes
+	89505537	GamePlay	MusicState			
+	748895195	None	MusicState			
+	2604644515	Menus	MusicState			
+	251412225	Shop	RoomType			
+	646625282	Hub	RoomType			
+	748895195	None	RoomType			
+	1873057832	Reward	RoomType			
+	2764240573	Combat	RoomType			
+	556785088	Logo	MenuScene			
+	748895195	None	MenuScene			
+	1125500713	Intro	MenuScene			
+	3604647259	MainMenu	MenuScene			
+	4158285989	GameOver	MenuScene			
+	4184794294	Outro	MenuScene			
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	1039994295	DialogVolume			\Default Work Unit\DialogVolume	
+	1301299809	MusicIntensity			\Default Work Unit\MusicIntensity	
+	2346531308	MusicVolume			\Default Work Unit\MusicVolume	
+	2918011349	MasterVolume			\Default Work Unit\MasterVolume	
+	4249125308	EnviromentVolume			\Default Work Unit\EnviromentVolume	
+
+Audio Bus	ID	Name			Wwise Object Path	Notes
+	1669749310	Dialogues			\Default Work Unit\Master Audio Bus\Dialogues	
+	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
+	3922907557	Enviromental			\Default Work Unit\Master Audio Bus\Enviromental	
+	3991942870	Music			\Default Work Unit\Master Audio Bus\Music	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	126765455	10 The Weirdboy	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\10 The Weirdboy_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\10 The Weirdboy		20815296
-	349817337	Norman Greenbaum Spirit In The Sky	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Norman Greenbaum Spirit In The Sky_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\Norman Greenbaum Spirit In The Sky		45598888
-	1059857239	07 Whispers Of The Dead	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\07 Whispers Of The Dead_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\music\07 Whispers Of The Dead		15993696
+	97638580	04 Against All Odds	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\04 Against All Odds_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\intro\intro\04 Against All Odds		28207632
+	138789204	shakers_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\shakers_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\shakers_130_bpm		2931048
+	160840083	logo_130_bpms	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\logo_130_bpms_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\logo\logo\logo_130_bpms		4233692
+	203794371	rides_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\rides_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\rides_130_bpm		3582372
+	314088076	Norman Greenbaum Spirit In The Sky	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Norman Greenbaum Spirit In The Sky_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\hub\Norman Greenbaum Spirit In The Sky\Norman Greenbaum Spirit In The Sky		45598888
+	332505682	hats_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\hats_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\hats_130_bpm		2605388
+	389483863	01 Prologue	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\01 Prologue_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\game_over\01 Prologue\01 Prologue		25754496
+	446020800	clap_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\clap_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\clap_130_bpm		2931048
+	531104562	bass_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\bass_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\bass_130_bpm		4233692
+	632501729	kick_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\kick_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\kick_130_bpm		2605388
+	680226910	melody_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\melody_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\melody_130_bpm		4233692
+	694303710	07 Whispers Of The Dead	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\07 Whispers Of The Dead_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\main_menu\07 Whispers Of The Dead\07 Whispers Of The Dead		15993696
+	753465857	arp_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\arp_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\arp_130_bpm		4233692
+	772738426	waa_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\waa_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\waa_130_bpm		4233692
+	901990650	stab_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\stab_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\stab_130_bpm		3908032
+	998287055	chill_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\chill_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\chill_130_bpm		3582372
+	1056004488	percs_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\percs_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\percs_130_bpm		2931048
 
