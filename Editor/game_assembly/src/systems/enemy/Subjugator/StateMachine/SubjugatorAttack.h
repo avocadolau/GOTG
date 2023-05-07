@@ -24,7 +24,7 @@ namespace Wiwa {
 		float m_TimerAttackCooldown = 0.0f;
 		float m_TimerSyncAnimationBullets = 0.0f;
 
-		int m_SelectRandomAttack = 0;
+		int m_SelectRandomAttack = -1;
 		bool m_IsAttackSelected = false;
 
 		bool m_ChangeShoot = false;
