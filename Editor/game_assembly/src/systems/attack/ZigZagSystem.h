@@ -7,7 +7,9 @@ namespace Wiwa {
 	class  ZigZagBulletSystem : public System {
 	private:
 		float m_Timer = 0;
+		float m_TimerAmplitude = 0.0f;
 		float m_ZigZagTimer = 0.0f;
+		bool m_GetMaxAmplitude = false;
 		EntityManager::ComponentIterator m_AttackIt;
 		EntityManager::ComponentIterator m_BulletIt;
 	public:
@@ -30,7 +32,7 @@ namespace Wiwa {
 
 		bool OnDisabledFromPool() override;
 
-		glm::vec3 ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time, glm::vec3 forward_direction);
+		glm::vec3 ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time, glm::vec3 forward_direction, float timer_amplitude);
 	};
 }
 
