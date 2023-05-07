@@ -58,7 +58,7 @@ namespace Wiwa
 		void RemoveControl(GuiControl* control);
 
 		Text* InitFont(const char* path, const char* word);
-		Text* InitFontForDialog(const char* path, char* word);
+		Text* InitFontForDialog(const char* path, char* word, int maxWidth);
 
 		
 		Video* InitVideo(std::string path);

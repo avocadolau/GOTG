@@ -555,9 +555,9 @@ namespace Wiwa
 	{
 		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 
-		Text* text1_imgMode = gm.InitFontForDialog(fontPath, line1Text);
-		Text* text2_imgMode = gm.InitFontForDialog(fontPath, line2Text);
-		Text* text3_imgMode = gm.InitFontForDialog(fontPath, line3Text);
+		Text* text1_imgMode = gm.InitFontForDialog(fontPath, line1Text, 950);
+		Text* text2_imgMode = gm.InitFontForDialog(fontPath, line2Text, 950);
+		Text* text3_imgMode = gm.InitFontForDialog(fontPath, line3Text, 950);
 
 		conversations[conversationNumber].nodes[nodeNumber].text1 = (std::string)line1Text;
 		conversations[conversationNumber].nodes[nodeNumber].text2 = (std::string)line2Text;

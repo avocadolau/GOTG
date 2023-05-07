@@ -390,7 +390,7 @@ namespace Wiwa
 		return text;
 	}
 
-	Text* GuiManager::InitFontForDialog(const char* path, char* _word)
+	Text* GuiManager::InitFontForDialog(const char* path, char* _word, int maxWidth)
 	{
 
 		/* load font file */
@@ -436,6 +436,8 @@ namespace Wiwa
 		char* word = _word;
 
 		int x = 0;
+		int y_extra = 0;
+		int lineWidth = 0;
 
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
@@ -457,7 +459,15 @@ namespace Wiwa
 			stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
 			/* compute y (different characters have different heights) */
-			int y = ascent + c_y1;
+			int y = ascent + c_y1 + y_extra;
+
+			/* check if we need to wrap to the next line */
+			if (lineWidth + (int)roundf(ax * scale) > maxWidth)
+			{
+				x = 0;
+				y_extra += l_h;
+				lineWidth = 0;
+			}
 
 			/* render character (stride and offset is important here) */
 			int byteOffset = (int)(x + roundf(lsb * scale) + (y * b_w));
@@ -465,6 +475,7 @@ namespace Wiwa
 
 			/* advance x */
 			x += (int)roundf(ax * scale);
+			lineWidth += roundf(ax * scale);
 
 			/* add kerning */
 			int kern;
@@ -474,7 +485,7 @@ namespace Wiwa
 
 
 		Text* text = new Text();
-		text->Init(b_w, b_h, bitmap);
+		text->InitWrapped(b_w, b_h, lineWidth, y_extra, descent, bitmap);
 
 		free(fontBuffer);
 		free(bitmap);
