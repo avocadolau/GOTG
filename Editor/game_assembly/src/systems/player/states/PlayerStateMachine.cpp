@@ -83,7 +83,7 @@ void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 
 void Wiwa::PlayerStateMachine::CheckHealth()
 {
-	if (GetCharacter()->Health <= 0)
+	if (GetCharacter()->Health <= 0 && !Wiwa::GameStateManager::ReturnFanaticEffect())
 	{
 		SwitchState(m_DeathState);
 	}

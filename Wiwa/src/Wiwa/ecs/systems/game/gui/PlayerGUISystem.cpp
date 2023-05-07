@@ -30,8 +30,11 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 
 	if (character->Health <= 0 && !deathHud)
 	{
-		DeathHud(gm);
-		deathHud = true;
+		if (!GameStateManager::ReturnFanaticEffect())
+		{
+			DeathHud(gm);
+			deathHud = true;
+		}
 	}
 	if (characterInventory != NULL)
 	{

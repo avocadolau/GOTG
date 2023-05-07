@@ -167,6 +167,7 @@ namespace Wiwa
 		static void AchievementsFunctionality();
 		static void SetFanaticEffect(bool ret) { FanaticEffect = ret; }
 		static void IncrementPrometheanGems(int amount) { PrometheanGemsToAdd += amount; }
+		static bool ReturnFanaticEffect() { return FanaticEffect; }
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;

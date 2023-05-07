@@ -1030,7 +1030,7 @@ namespace Wiwa
 
 					if (character->Health <= 0)
 					{
-						character->Health = 1;
+						character->Health = 100;
 						FanaticEffect = false;
 					}
 				}

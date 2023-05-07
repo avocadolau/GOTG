@@ -305,6 +305,9 @@ void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 	case Wiwa::HowardElementType::SHIELD_FAN:
 		m_ShopPassives.back().Use();
 		break;
+	case Wiwa::HowardElementType::FANATIC:
+		m_ShopPassives.back().Use();
+		break;
 	}
 }
 
