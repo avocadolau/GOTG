@@ -13,6 +13,12 @@ void Wiwa::PlayerAttack::EnterState()
 {
 	WI_WARN("Player attack");
 	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
+
+	if (!m_StateMachine->GetCharacter()->CanMove)
+	{
+		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
+		return;
+	}
 }
 
 void Wiwa::PlayerAttack::UpdateState()

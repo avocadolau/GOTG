@@ -21,6 +21,12 @@ Wiwa::PlayerDash::~PlayerDash()
 
 void Wiwa::PlayerDash::EnterState()
 {
+	if (!m_StateMachine->GetCharacter()->CanMove)
+	{
+		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
+		return;
+	}
+
 	m_DashVFX = m_StateMachine->GetEntityManager().GetChildByName(m_StateMachine->GetEntity(), "p_dash");
 	m_StateMachine->GetEntityManager().SetActive(m_DashVFX, true);
 	m_StateMachine->GetAudio()->PlayAudio("player_dash");

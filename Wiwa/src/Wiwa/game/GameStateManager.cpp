@@ -516,7 +516,7 @@ namespace Wiwa
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 			LoadRandomRoom(s_CombatRooms);
-
+			RandomizeRewardRoom();
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
