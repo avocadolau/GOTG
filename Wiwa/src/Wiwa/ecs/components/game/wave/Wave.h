@@ -10,6 +10,7 @@ namespace Wiwa {
 		int currentEnemiesAlive;
 		float enemySpawnRate;
 		bool hasFinished;
+		size_t entityId;
 	};
 }
 
@@ -18,4 +19,5 @@ REFLECT_MEMBER(maxEnemies)
 REFLECT_MEMBER(currentEnemiesAlive)
 REFLECT_MEMBER(enemySpawnRate)
 REFLECT_MEMBER(hasFinished)
+REFLECT_MEMBER(entityId)
 REFLECTION_END;

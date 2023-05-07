@@ -15,6 +15,7 @@ namespace Wiwa {
 		float waveChangeRate;
 		bool hasFinished;
 		bool hasTriggered;
+		size_t entityId;
 	};
 }
 
@@ -28,4 +29,5 @@ REFLECT_MEMBER(timeBetweenWaves)
 REFLECT_MEMBER(waveChangeRate)
 REFLECT_MEMBER(hasFinished)
 REFLECT_MEMBER(hasTriggered)
+REFLECT_MEMBER(entityId)
 REFLECTION_END;

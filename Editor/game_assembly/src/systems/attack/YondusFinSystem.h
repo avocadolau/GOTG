@@ -8,9 +8,14 @@ namespace Wiwa {
 	private:
 		float m_Timer = 0;
 		EntityManager::ComponentIterator m_YondusFinIt;
-		EntityManager::ComponentIterator m_YondusFinTransformIt;
 		EntityManager::ComponentIterator m_PlayerTransformIt;
-		EntityManager::ComponentIterator m_WaveEnemiesIt;
+		EntityManager::ComponentIterator m_NavAgentIt;
+		std::vector<EntityManager::ComponentIterator> m_EnemiesTransformIt;
+		std::vector<EntityId> m_EnemiesIds;
+		std::vector<EntityManager::ComponentIterator> m_EnemiesStateIt;
+		uint currentWantedEnemies = 0;
+		const uint maximumWantedEnemies = 7;
+		//EntityManager::ComponentIterator m_WaveEnemiesIt;
 	public:
 		YondusFinSystem();
 		~YondusFinSystem();
@@ -24,6 +29,8 @@ namespace Wiwa {
 		void OnDestroy() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
+
+		bool hasReachedAnEnemy = false;
 	};
 }
 

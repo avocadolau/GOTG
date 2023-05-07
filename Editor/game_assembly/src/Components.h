@@ -20,5 +20,6 @@
 #include "components/enemy/BossMovementPoints.h"
 
 #include "components/attack/Explosion.h"
+#include "components/attack/YondusFin.h"
 #include "components/props/VentRotatorData.h"
 #include "components/props/RewardChestData.h"

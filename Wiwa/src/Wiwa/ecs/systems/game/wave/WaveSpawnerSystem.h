@@ -43,6 +43,8 @@ namespace Wiwa {
 
 		inline bool HasHadAllWaves(const WaveSpawner& enemySpawner) { return enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount; };
 
+		inline const std::vector<EntityId>& getWaveIds() { return m_WavesIds; };
+
 		void SpawnWave();
 		//void OnDestroy() override;
 	};

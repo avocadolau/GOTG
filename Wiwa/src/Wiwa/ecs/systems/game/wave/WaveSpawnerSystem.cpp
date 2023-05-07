@@ -33,6 +33,7 @@ namespace Wiwa
 		m_TimerBetweenWaves = enemySpawner->timeBetweenWaves;
 		enemySpawner->hasTriggered = false;
 		enemySpawner->hasFinished = false;
+		enemySpawner->entityId = m_EntityId;
 
 		SpawnWave();
 	}
@@ -165,6 +166,8 @@ namespace Wiwa
 		wave->maxEnemies = disMinMaxEnemy(Application::s_Gen);
 		wave->hasFinished = false;
 		wave->enemySpawnRate = wavesSpawner->enemySpawnRate;
+		wave->entityId = waveId;
+
 		em.ApplySystem<WaveSystem>(waveId);
 
 		// Save the wave as current wave

@@ -35,6 +35,7 @@
 #include "systems/attack/SecondDashSystem.h"
 #include "systems/attack/UltronSmashExplosionSystem.h"
 #include "systems/enemy/BossMovementPointsSystem.h"
+#include "systems/attack/YondusFinSystem.h"
 
 #include "systems/attack/ExplosiveBarrelSystem.h"
 #include "systems/props/ExplosiveBarrelProp.h"
@@ -52,4 +53,5 @@
 #include "systems/SkipScene.h"
 #include "systems/SkipIntro.h"
 #include "systems/Reset_HubSystem.h"
-#include "systems/attack/StarlordUltimateSystem.h"
+#include "systems/TestingSystem.h"
+//#include "systems/attack/StarlordUltimateSystem.h"

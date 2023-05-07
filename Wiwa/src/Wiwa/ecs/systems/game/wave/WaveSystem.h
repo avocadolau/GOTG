@@ -38,6 +38,8 @@ namespace Wiwa {
 		Pool_Type GetEnemyFromProbabiliteis();
 		void GetSpawnPoints(std::vector<glm::vec3>& vec);
 
+		inline const std::vector<EntityId>& getEnemiesIds() { return m_EnemiesIds; };
+
 		int m_TotalEnemiesSpawned = 0.0f;
 		int m_PointIndex = 0.0f;
 		float m_Timer = 0.0f;
