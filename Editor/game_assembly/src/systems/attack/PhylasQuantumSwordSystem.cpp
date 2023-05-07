@@ -36,9 +36,9 @@ namespace Wiwa
 		Transform3D* playerTransform = em.GetComponent<Transform3D>(player);
 		PhylasSword->direction = CalculateForward(*playerTransform);
 		PhylasSwordTransform->localRotation = playerTransform->localRotation;
-		PhylasSwordTransform->localPosition.x = 0.0f;
-		PhylasSwordTransform->localPosition.z = 0.0f;
-		PhylasSwordTransform->localPosition.y = 2.55;
+		PhylasSwordTransform->localPosition.x = playerTransform->localPosition.x;
+		PhylasSwordTransform->localPosition.z = playerTransform->localPosition.z;
+		PhylasSwordTransform->localPosition.y = playerTransform->localPosition.y  + 2.55f;
 
 		PhylasSwordTransform->localScale.x = 1.0f;
 		PhylasSwordTransform->localScale.z = 1.0f;

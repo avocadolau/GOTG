@@ -5,7 +5,7 @@
 #include <Wiwa/ecs/EntityManager.h>
 #include <vector>
 #include "Items/Inventory.h"
-
+#include <Wiwa/game/GameProgression.h>
 //#include <Wiwa/ecs/components/game/Character.h>
 //#include <Wiwa/ecs/components/game/wave/Wave.h>
 //#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
@@ -176,6 +176,7 @@ namespace Wiwa {
 
 		static Inventory* s_PlayerInventory;
 
+		static GameProgression* s_GameProgression;
 		static AchivementsManager* s_AchivementsManager;
 
 		static int s_EnemyDropChances;
