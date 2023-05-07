@@ -710,7 +710,13 @@ void InventoryPanel::DrawShopElementPool(int& id)
 			"Ultimate midas touch",
 			"Friendly face"
 		};
-		if (ImGui::BeginTable("shop_elements", 7, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* unlockingMethods[] =
+		{
+			"Enemies killed",
+			"Items bought",
+			"Ultron killed count"
+		};
+		if (ImGui::BeginTable("shop_elements", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Unlocked");
@@ -719,6 +725,8 @@ void InventoryPanel::DrawShopElementPool(int& id)
 			ImGui::TableSetupColumn("Costs");
 			ImGui::TableSetupColumn("PercentageIncreases");
 			ImGui::TableSetupColumn("PassiveBoost");
+			ImGui::TableSetupColumn("UnlockingMethod");
+			ImGui::TableSetupColumn("UnlockingAmount");
 			ImGui::TableHeadersRow();
 			for (auto& it : shopElements)
 			{
@@ -767,7 +775,7 @@ void InventoryPanel::DrawShopElementPool(int& id)
 
 				ImGui::TableNextColumn();
 				const char* passiveHoward = types[(int)shopElement->PassiveBoost];
-				if (ImGui::BeginCombo("##tag_1", passiveHoward))
+				if (ImGui::BeginCombo("##passive_type", passiveHoward))
 				{
 					for (int i = 0; i < sizeof(types) / sizeof(char*); i++)
 					{
@@ -783,6 +791,28 @@ void InventoryPanel::DrawShopElementPool(int& id)
 
 					ImGui::EndCombo();
 				}
+
+				ImGui::TableNextColumn();
+				const char* unlockingMethod = unlockingMethods[(int)shopElement->unlockingMethod];
+				if (ImGui::BeginCombo("##unlocking_method", unlockingMethod))
+				{
+					for (int i = 0; i < sizeof(unlockingMethods) / sizeof(char*); i++)
+					{
+						bool isSelected = (unlockingMethod == unlockingMethods[i]);
+						if (ImGui::Selectable(unlockingMethods[i], isSelected))
+						{
+							unlockingMethod = unlockingMethods[i];
+							shopElement->unlockingMethod = (Wiwa::ShopElementUnlockingMethod)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##amount_to_unlock", &shopElement->amountForUnlocking);
 				ImGui::PopID();
 
 			}

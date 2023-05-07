@@ -49,7 +49,6 @@ namespace Wiwa
 					Wiwa::EnemyState* enemy = &enemyList[i];
 					if (enemy && !enemy->hasFinished)
 					{
-						
 						//m_EnemiesTransformIt.emplace_back(enemy.);
 						//enemy->waveId
 					}

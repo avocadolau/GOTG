@@ -36,7 +36,6 @@
 #include "Panels/DialogPanel.h"
 #include "Panels/GameLogPanel.h"
 #include "Panels/InventoryPanel.h"
-#include "Panels/AchievementsPanel.h"
 #include "Panels/AIPanel.h"
 #include "Panels/EnemyPanel.h"
 
@@ -139,7 +138,6 @@ private:
 	std::unique_ptr<Panel> m_UiEditorPanel;
 	std::unique_ptr<Panel> m_GameLogPanel;
 	std::unique_ptr<Panel> m_InventoryPanel;
-	std::unique_ptr<Panel> m_AchievementsPanel;
 	std::unique_ptr<Panel> m_AiPanel;
 	std::unique_ptr<Panel> m_EnemyPanel;
 

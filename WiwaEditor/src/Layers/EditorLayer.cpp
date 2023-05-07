@@ -92,7 +92,6 @@ void EditorLayer::OnAttach()
 	m_DialogPanel = std::make_unique<DialogPanel>(this);
 	m_GameLogPanel = std::make_unique<GameLogPanel>(this);
 	m_InventoryPanel = std::make_unique<InventoryPanel>(this);
-	m_AchievementsPanel = std::make_unique<AchievementsPanel>(this);
 	m_AiPanel = std::make_unique<AIPanel>(this);
 	m_EnemyPanel = std::make_unique<EnemyPanel>(this);
 
@@ -127,7 +126,6 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_AudioPanel.get());
 	m_Panels.push_back(m_GameLogPanel.get());
 	m_Panels.push_back(m_InventoryPanel.get());
-	m_Panels.push_back(m_AchievementsPanel.get());
 	m_Panels.push_back(m_AiPanel.get());
 	m_Panels.push_back(m_EnemyPanel.get());
 	

@@ -99,8 +99,6 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 				shopPercents.AddMember(buffer, m_ShopPassives.at(i).PercentageIncreases.at(j));
 			}
 			shop_element.AddMember("howard_passive_type", (int)m_ShopPassives.at(i).PassiveBoost);
-			shop_element.AddMember("unlocked", m_ShopPassives.at(i).Unlocked);
-
 		}
 	}
 	
@@ -215,7 +213,6 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 					}
 				}
 				shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
-				shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
 				AddShopPassive(shopElement);
 
 			}

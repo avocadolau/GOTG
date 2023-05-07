@@ -67,6 +67,12 @@ namespace Wiwa
 		ULTIMATE_MIDAS_TOUCH,
 		FRIENDLY_FACE
 	};
+	enum class ShopElementUnlockingMethod
+	{
+		ENEMIES_KILLED,
+		ITEMS_BOUGHT,
+		ULTRON_KILLED
+	};
 	enum class ItemTags
 	{
 		ATTACK,
@@ -275,6 +281,9 @@ namespace Wiwa
 		std::vector<int> PercentageIncreases;
 		HowardElementType PassiveBoost;
 		bool Unlocked;
+		ShopElementUnlockingMethod unlockingMethod;
+		int amountForUnlocking;
+		int countForUnlocking;
 		ShopElement() = default;
 		ShopElement(const ShopElement& shopElement)
 		{
@@ -284,7 +293,11 @@ namespace Wiwa
 			this->Costs = shopElement.Costs;
 			this->PercentageIncreases = shopElement.PercentageIncreases;
 			this->PassiveBoost = shopElement.PassiveBoost;
+			this->unlockingMethod = shopElement.unlockingMethod;
 			this->Unlocked = shopElement.Unlocked;
+			this->amountForUnlocking = shopElement.amountForUnlocking;
+			this->countForUnlocking = shopElement.countForUnlocking;
+
 		}
 		ShopElement(const char* name)
 			: Name(name),
@@ -293,6 +306,9 @@ namespace Wiwa
 			Costs(),
 			PercentageIncreases(),
 			PassiveBoost(HowardElementType::FANCY_BOOTS),
+			unlockingMethod(ShopElementUnlockingMethod::ITEMS_BOUGHT),
+			amountForUnlocking(100),
+			countForUnlocking(0),
 			Unlocked(true)
 		{}
 

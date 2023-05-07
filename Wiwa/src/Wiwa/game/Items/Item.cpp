@@ -57,9 +57,6 @@ namespace Wiwa
     {
         Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
         EntityId phylasSword = em.LoadPrefab("assets/Prefabs/PhylasSword.wiprefab");
-        em.SetParent(phylasSword, Wiwa::GameStateManager::GetPlayerId());
-        Transform3D* phylasTransform = em.GetComponent<Transform3D>(phylasSword);
-        Transform3D* playerTransform = em.GetComponent<Transform3D>(Wiwa::GameStateManager::GetPlayerId());
     }
 
     void Ability::StarhawksBlast()

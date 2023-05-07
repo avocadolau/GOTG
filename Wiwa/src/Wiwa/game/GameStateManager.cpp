@@ -3,7 +3,6 @@
 #include "Wiwa/scene/SceneManager.h"
 #include "Items/ItemManager.h"
 #include <Wiwa/ecs/components/game/Character.h>
-#include "Achievements/AchievementsManager.h"
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -53,6 +52,7 @@ namespace Wiwa
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
 	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
+	GameProgression* GameStateManager::s_GameProgression = new GameProgression();
 	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
 	EnemyManager* GameStateManager::s_EnemyManager = new EnemyManager();
 
@@ -88,8 +88,12 @@ namespace Wiwa
 		if(debug)
 			WI_CORE_INFO("Player progression saved");
 		s_PlayerInventory->Serialize(&doc);
-
 		doc.save_file("config/player_data.json");
+
+		JSONDocument doc_progression;
+		s_GameProgression->Serialize(&doc_progression);
+		doc_progression.save_file("config/player_progression.json");
+
 	}
 
 	void GameStateManager::LoadProgression()
@@ -130,6 +134,9 @@ namespace Wiwa
 		if (debug)
 			WI_CORE_INFO("Player progression loaded");
 		s_PlayerInventory->Deserialize(&doc);
+
+		JSONDocument doc_progression("config/player_progression.json");
+		s_GameProgression->Deserialize(&doc_progression);
 	}
 
 	void GameStateManager::UpdateRoomState()
@@ -200,6 +207,7 @@ namespace Wiwa
 		if (debug) WI_INFO("GAME STATE: EndRun()");
 		SetRoomType(RoomType::NONE);
 		s_PlayerInventory->Clear();
+		s_GameProgression->Clear();
 	}
 
 	void GameStateManager::InitHub()
@@ -289,6 +297,7 @@ namespace Wiwa
 	{
 		OPTICK_EVENT("Game state manager update");
 		s_PlayerInventory->Update();
+		s_GameProgression->Update();
 	}
 
 	void GameStateManager::Die()
@@ -540,6 +549,7 @@ namespace Wiwa
 	{
 		WI_INFO("Game state manager clean up");
 		delete s_PlayerInventory;
+		delete s_GameProgression;
 		s_RewardRooms.clear();
 		s_CombatRooms.clear();
 		s_ShopRooms.clear();
@@ -607,8 +617,6 @@ namespace Wiwa
 		doc.AddMember("current_character", s_CurrentCharacter);
 
 		ItemManager::Serialize(&doc);
-
-		AchievementsManager::Serialize(&doc);
 
 		doc.save_file("config/room_data.json");
 	}
