@@ -152,6 +152,7 @@ void Wiwa::ClusterBulletSystem::SpawnBullet(const glm::vec3& bull_dir, EntityId 
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 	bullet->direction = bull_dir;
 	bullet->damage = 20; //TODO: Add to components
+	bullet->isFromPool = true;
 
 	Wiwa::SimpleBulletSystem* simpleBulletSystem = entityManager.GetSystem<Wiwa::SimpleBulletSystem>(newBulletId);
 

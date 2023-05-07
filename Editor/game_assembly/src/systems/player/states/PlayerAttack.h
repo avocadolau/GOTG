@@ -15,6 +15,7 @@ namespace Wiwa
 		virtual void OnCollisionEnter(Object* object1, Object* object2) override;
 
 		void Fire();
+		void FireStarlordUltimate();
 	private:
 		float m_ShootTimer;
 		glm::vec2 m_MousePos;

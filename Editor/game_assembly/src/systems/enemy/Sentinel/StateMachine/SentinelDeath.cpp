@@ -10,6 +10,8 @@
 
 #include "../../../attack/SentinelExplosionSystem.h"
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
+#include "../../../../components/attack/Attack.h"
+#include "../../../../components/attack/Explosion.h"
 
 namespace Wiwa
 {
@@ -47,18 +49,25 @@ namespace Wiwa
 		
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		audio->PlayAudio("explosion");
+
 		//Sentinel Explosion
-		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newExplosionId = GameStateManager::s_PoolManager->s_SentinelExplosion->GetFromPool();
-		SentinelExplosionSystem* explosionSys = entityManager.GetSystem<SentinelExplosionSystem>(newExplosionId);
+		SentinelExplosionSystem* explosionSys = em.GetSystem<SentinelExplosionSystem>(newExplosionId);
 
-		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newExplosionId);
+		Attack* attack = (Attack*)em.GetComponentByIterator(em.GetComponentIterator<Attack>(newExplosionId));
+		attack->isEnemyAttack = true;
+		attack->isPlayerAttack = false;
+
+		Explosion* explosion = (Explosion*)em.GetComponentByIterator(em.GetComponentIterator<Explosion>(newExplosionId));
+		explosion->isFromPool = true;
+
+		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(newExplosionId);
 		physSys->DeleteBody();
 
 		// Set intial positions
-		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D* explosionTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(newExplosionId));
 
 		if (!explosionTr || !playerTr)
 			return;

@@ -124,6 +124,7 @@ namespace Wiwa
 		bullet->velocity = ultron->bulletSpeed;
 		bullet->lifeTime = ultron->bulletLifeTime;
 		bullet->damage = stats->damage;
+		bullet->isFromPool = true;
 
 		physSys->CreateBody();
 

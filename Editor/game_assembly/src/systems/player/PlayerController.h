@@ -51,6 +51,7 @@ namespace Wiwa {
 
 		void SpawnStarLordBullet(Transform3D& transform, const Character& character);
 		void SpawnRocketBullet(Transform3D& transform, const Character& character);
+		void SpawnStarLordUltimate(Transform3D& transform, const Character& character);
 
 		void SetPlayerRotation(const float angle);
 	

@@ -3,6 +3,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include "../attack/ExplosiveBarrelSystem.h"
 #include <Wiwa/game/GameStateManager.h>
+#include "../../components/attack/Explosion.h"
 
 namespace Wiwa
 {
@@ -77,6 +78,8 @@ namespace Wiwa
 		// Set intial positions
 		//Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_TransformIt); //Transform
 		Transform3D* explosiveBarrelTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
+		Explosion* explosion = (Explosion*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Explosion>(newExplosionId));
+		explosion->isFromPool = true;
 
 		if (!explosiveBarrelTr)
 			return;

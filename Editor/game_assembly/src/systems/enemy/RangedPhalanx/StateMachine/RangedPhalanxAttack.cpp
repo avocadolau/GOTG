@@ -126,6 +126,7 @@ namespace Wiwa
 		bullet->velocity = phalanx->bulletSpeed;
 		bullet->lifeTime = phalanx->bulletLifeTime;
 		bullet->damage = character->damage;
+		bullet->isFromPool = true;
 
 		physSys->CreateBody();
 

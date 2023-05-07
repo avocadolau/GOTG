@@ -158,7 +158,7 @@ void Wiwa::PlayerController::SpawnStarLordBullet(Transform3D& transform, const C
 	SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 
 	bullet->direction = Math::Vec3FromAngle(m_Direction);
-
+	bullet->isFromPool = true;
 	bullet->damage = this->GetCharacter()->Damage;
 
 	physSys->CreateBody();
@@ -256,6 +256,73 @@ void Wiwa::PlayerController::SpawnRocketBullet(Transform3D& transform, const Cha
 	}
 }
 
+void Wiwa::PlayerController::SpawnStarLordUltimate(Transform3D& transform, const Character& character)
+{
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+	Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+	audio->PlayAudio("explosion");
+
+	//Sentinel Explosion
+	EntityId newBulletId = em.LoadPrefab("assets\\Prefabs\\StarlordUltimate\\P_StarLordUltimateBullet.wiprefab");
+	StarLordBulletSystem* bulletSys = em.GetSystem<StarLordBulletSystem>(newBulletId);
+
+	PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(newBulletId);
+	physSys->DeleteBody();
+
+	// Set intial positions
+	Transform3D* playerTr = GetTransform();
+	Transform3D* bulletTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(newBulletId));
+
+	if (!bulletTr)
+		return;
+
+	bulletTr->localPosition = Math::GetWorldPosition(transform.worldMatrix);
+	bulletTr->localRotation = glm::vec3(0.f, playerTr->localRotation.y + 90.0f, 0.f);
+	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
+
+	SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
+
+	bullet->direction = Math::Vec3FromAngle(m_Direction);
+	bullet->damage = 50;
+	bullet->isFromPool = false;
+
+	physSys->CreateBody();
+	bulletSys->EnableBullet();
+
+	//emit left muzzle
+	EntityId shotMuzzleLeft = em.GetChildByName(m_EntityId, "p_muzzleLeft");
+	EntityId shotMuzzleLeftImpact = em.GetChildByName(shotMuzzleLeft, "vfx_impact");
+	EntityId shotMuzzleLeftFlash = em.GetChildByName(shotMuzzleLeft, "vfx_flash");
+
+	em.SetActive(shotMuzzleLeft, true);
+
+	ParticleSystem* sys_shotMuzzleLeftImpact = em.GetSystem<ParticleSystem>(shotMuzzleLeftImpact);
+	ParticleSystem* sys_shotMuzzleLeftFlash = em.GetSystem<ParticleSystem>(shotMuzzleLeftFlash);
+
+	if (sys_shotMuzzleLeftImpact != nullptr && sys_shotMuzzleLeftFlash != nullptr)
+	{
+		sys_shotMuzzleLeftImpact->EmitParticleBatch(1);
+		sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
+	}
+	
+	//emit right muzzle
+	EntityId shotMuzzleRight = em.GetChildByName(m_EntityId, "p_muzzleRight");
+	EntityId shotMuzzleRightImpact = em.GetChildByName(shotMuzzleRight, "vfx_impact");
+	EntityId shotMuzzleRightFlash = em.GetChildByName(shotMuzzleRight, "vfx_flash");
+
+	em.SetActive(shotMuzzleRight, true);
+
+	ParticleSystem* sys_shotMuzzleRightImpact = em.GetSystem<ParticleSystem>(shotMuzzleRightImpact);
+	ParticleSystem* sys_shotMuzzleRightFlash = em.GetSystem<ParticleSystem>(shotMuzzleRightFlash);
+
+	if (sys_shotMuzzleRightImpact != nullptr && sys_shotMuzzleRightFlash != nullptr)
+	{
+		sys_shotMuzzleRightImpact->EmitParticleBatch(1);
+		sys_shotMuzzleRightFlash->EmitParticleBatch(1);
+	}
+}
+
 glm::vec2 Wiwa::PlayerController::GetMovementInput()
 {
 	//     z
@@ -308,7 +375,7 @@ void Wiwa::PlayerController::SetPlayerRotation(const float angle)
 	Transform3D* transform = GetTransform();
 
 	transform->localRotation.y = angle;
-	WI_INFO("Angle {}", angle);
+	//WI_INFO("Angle {}", angle);
 	if (transform->localRotation.y > 360.f)
 		transform->localRotation.y = 0.f;
 }

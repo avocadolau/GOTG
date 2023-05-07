@@ -6,6 +6,7 @@
 #include <cmath>
 #include "../../../attack/UltronSmashExplosionSystem.h"
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include "../../../../components/attack/Explosion.h"
 
 #define TIMER_GO_UPWARDS 0.01f
 #define TIMER_GO_DOWNWARDS 0.01f
@@ -207,6 +208,8 @@ namespace Wiwa
 		// Set intial positions
 		//Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_TransformIt); //Transform
 		Transform3D* explosiveBarrelTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
+		Explosion* explosion = (Explosion*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Explosion>(newExplosionId));
+		explosion->isFromPool = true;
 
 		if (!explosiveBarrelTr)
 			return;

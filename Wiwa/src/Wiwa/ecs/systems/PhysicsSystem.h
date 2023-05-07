@@ -29,6 +29,8 @@ namespace Wiwa {
 		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 
+		void ForceSetPosition(const glm::vec3& new_position);
+
 		void DeleteBody();
 		void CreateBody();
 		Object* getBody();

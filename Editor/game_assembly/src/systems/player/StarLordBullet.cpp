@@ -43,8 +43,6 @@ namespace Wiwa
 	{
 		if (!getAwake())
 			System::Awake();
-		/*GameStateManager::s_PoolManager->SetScene(m_Scene);
-		GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();*/
 
 		SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
@@ -52,14 +50,6 @@ namespace Wiwa
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
-		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-
-		//PhysicsSystem* physSystem = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId);
-
-		//if (physSystem)
-		//{
-		//	physSystem->DeactivateBody();
-		//}
 	}
 
 	void StarLordBulletSystem::OnUpdate()
@@ -75,7 +65,10 @@ namespace Wiwa
 
 		if (m_Timer >= bullet->lifeTime)
 		{
-			GameStateManager::s_PoolManager->s_StarLordBullets->ReturnToPool(m_EntityId);
+			if (bullet->isFromPool)
+				GameStateManager::s_PoolManager->s_StarLordBullets->ReturnToPool(m_EntityId);
+			else
+				GetEntityManager().DestroyEntity(m_EntityId);
 		}
 	}
 
@@ -94,8 +87,11 @@ namespace Wiwa
 				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 				GameStateManager::DamagePlayer(bullet->damage);
 			}*/
-
-			GameStateManager::s_PoolManager->s_StarLordBullets->ReturnToPool(m_EntityId);
+			SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
+			if (bullet->isFromPool)
+				GameStateManager::s_PoolManager->s_StarLordBullets->ReturnToPool(m_EntityId);
+			else
+				GetEntityManager().DestroyEntity(m_EntityId);
 		}
 	}
 
@@ -117,17 +113,6 @@ namespace Wiwa
 		{
 			transform->localPosition.y = 3000.0f;
 		}
-
-		//SimpleBullet* bullet = GetComponent<SimpleBullet>();
-		//
-		//if (bullet)
-		//{
-		//	bullet->direction = glm::vec3(0.0f);
-		//	bullet->lifeTime = 0.0f;
-		//	bullet->velocity = 0.0f;
-		//}
-
-		//CollisionBody* collisionBody = GetComponent<CollisionBody>();
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 

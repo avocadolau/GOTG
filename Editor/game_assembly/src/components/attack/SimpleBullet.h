@@ -8,12 +8,13 @@
 #include <glm/glm.hpp>
 namespace Wiwa 
 {
-	struct  SimpleBullet
+	struct SimpleBullet
 	{
 		float velocity;
 		float lifeTime;
 		int damage;
 		glm::vec3 direction;
+		bool isFromPool = false;
 	};
 }
 
@@ -22,4 +23,5 @@ REFLECT_MEMBER(velocity)
 REFLECT_MEMBER(lifeTime)
 REFLECT_MEMBER(damage)
 REFLECT_MEMBER(direction)
+REFLECT_MEMBER(isFromPool)
 REFLECTION_END;

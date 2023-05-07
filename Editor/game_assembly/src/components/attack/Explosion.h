@@ -10,10 +10,12 @@ namespace Wiwa {
 	struct Explosion {
 		float lifeTime;
 		int damage;
+		bool isFromPool = false;
 	};
 }
 
 REFLECTION_BEGIN(Wiwa::Explosion)
 REFLECT_MEMBER(lifeTime)
 REFLECT_MEMBER(damage)
+REFLECT_MEMBER(isFromPool)
 REFLECTION_END;

@@ -215,6 +215,7 @@ namespace Wiwa
 		bullet->velocity = subjugator->bulletSpeed;
 		bullet->lifeTime = subjugator->bulletLifeTime;
 		bullet->damage = character->damage;
+		bullet->isFromPool = true;
 
 		physSys->CreateBody();
 		bulletSys->EnableBullet();

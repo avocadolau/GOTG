@@ -35,11 +35,16 @@ void Wiwa::PlayerAttack::UpdateState()
 
 	m_ShootTimer += Time::GetDeltaTimeSeconds();
 
-
+	Character* character = m_StateMachine->GetCharacter();
 	if (m_StateMachine->CanAttack())
 	{
 		Fire();
 	}
+	else if (m_StateMachine->CanUltimate() && character->Shield >= character->MaxShield)
+	{
+		FireStarlordUltimate();
+	}
+
 	if (m_StateMachine->CanMove())
 	{
 		// TODO: Partial blending
@@ -104,4 +109,16 @@ void Wiwa::PlayerAttack::Fire()
 			m_StateMachine->SpawnRocketBullet(*spawnPoint, *m_StateMachine->GetCharacter());
 		}
 	}
+}
+
+void Wiwa::PlayerAttack::FireStarlordUltimate()
+{
+	Transform3D* spawnPoint;
+	Character* character = m_StateMachine->GetCharacter();
+	character->Shield = 0;
+	spawnPoint = m_StateMachine->GetFirePosition("RightPos");
+	m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
+	
+	m_StateMachine->SpawnStarLordUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
+	m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 }

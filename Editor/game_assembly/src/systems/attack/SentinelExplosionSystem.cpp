@@ -1,6 +1,7 @@
 #include "SentinelExplosionSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "../../components/attack/Explosion.h"
+#include "../../components/attack/Attack.h"
 
 namespace Wiwa
 {
@@ -27,6 +28,9 @@ namespace Wiwa
 
 	void SentinelExplosionSystem::InitExplosion()
 	{
+		if (!getAwake())
+			System::Awake();
+
 		Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
@@ -58,7 +62,10 @@ namespace Wiwa
 
 		if (m_Timer >= explosion->lifeTime)
 		{
-			GameStateManager::s_PoolManager->s_SentinelExplosion->ReturnToPool(m_EntityId);
+			if (explosion->isFromPool)
+				GameStateManager::s_PoolManager->s_SentinelExplosion->ReturnToPool(m_EntityId);
+			else
+				GetEntityManager().DestroyEntity(m_EntityId);
 		}
 
 	}
@@ -76,8 +83,19 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
+				EntityManager& em = GetEntityManager();
+				Attack* attack = GetComponentByIterator<Attack>(em.GetComponentIterator<Attack>(m_EntityId));
 				Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
-				GameStateManager::DamagePlayer(explosion->damage);
+
+				if (attack)
+				{
+					if (attack->isPlayerAttack)
+						return;
+
+					GameStateManager::DamagePlayer(explosion->damage);
+				}
+				else
+					GameStateManager::DamagePlayer(explosion->damage);
 			}
 
 	/*		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
