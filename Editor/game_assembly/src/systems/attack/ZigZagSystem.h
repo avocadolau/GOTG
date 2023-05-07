@@ -30,7 +30,7 @@ namespace Wiwa {
 
 		bool OnDisabledFromPool() override;
 
-		glm::vec3 ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time);
+		glm::vec3 ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time, glm::vec3 forward_direction);
 	};
 }
 
