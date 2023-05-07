@@ -10,6 +10,11 @@
 
 namespace Wiwa
 {
+	bool GameStateManager::s_CanContinue = false;
+	int GameStateManager::s_NextRewardRoomReward = 0;
+
+	int GameStateManager::s_DoorsReward[2] = { 0 };
+
 	RoomType GameStateManager::s_RoomType = RoomType::NONE;
 	RoomState GameStateManager::s_RoomState = RoomState::NONE;
 	
@@ -85,8 +90,6 @@ namespace Wiwa
 			doc.AddMember("walk_threshold", character->WalkTreshold);
 		}
 
-		if(debug)
-			WI_CORE_INFO("Player progression saved");
 		s_PlayerInventory->Serialize(&doc);
 		doc.save_file("config/player_data.json");
 
@@ -131,8 +134,7 @@ namespace Wiwa
 			if (doc.HasMember("walk_threshold"))
 				character->WalkTreshold = doc["walk_threshold"].as_float();
 		}
-		if (debug)
-			WI_CORE_INFO("Player progression loaded");
+		s_PlayerInventory->Clear();
 		s_PlayerInventory->Deserialize(&doc);
 
 		JSONDocument doc_progression("config/player_progression.json");
@@ -195,6 +197,43 @@ namespace Wiwa
 			ChangeRoomState(RoomState::STATE_STARTED);
 	}
 
+	void GameStateManager::NewGame()
+	{
+		JSONDocument doc;
+
+		JSONValue starlord = doc.AddMemberObject("starlord");
+		starlord.AddMember("max_health", s_CharacterSettings[0].MaxHealth);
+		starlord.AddMember("max_shield", s_CharacterSettings[0].MaxShield);
+		starlord.AddMember("damage", s_CharacterSettings[0].Damage);
+		starlord.AddMember("rof", s_CharacterSettings[0].RateOfFire);
+		starlord.AddMember("speed", s_CharacterSettings[0].Speed);
+		starlord.AddMember("dash_speed", s_CharacterSettings[0].DashSpeed);
+		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
+		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
+		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
+
+
+		JSONValue rocket = doc.AddMemberObject("rocket");
+		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
+		rocket.AddMember("max_shield", s_CharacterSettings[1].MaxShield);
+		rocket.AddMember("damage", s_CharacterSettings[1].Damage);
+		rocket.AddMember("rof", s_CharacterSettings[1].RateOfFire);
+		rocket.AddMember("speed", s_CharacterSettings[1].Speed);
+		rocket.AddMember("dash_speed", s_CharacterSettings[1].DashSpeed);
+		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
+		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
+		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
+
+		// TODO: Reset all progression
+
+		doc.save_file("config/player_progression.json");
+	}
+
+	bool GameStateManager::Continue()
+	{
+		return false;
+	}
+
 	void GameStateManager::StartRun()
 	{
 		if (debug) WI_INFO("GAME STATE: StartRun()");
@@ -206,6 +245,7 @@ namespace Wiwa
 	{
 		if (debug) WI_INFO("GAME STATE: EndRun()");
 		SetRoomType(RoomType::NONE);
+
 		s_PlayerInventory->Clear();
 		s_GameProgression->Clear();
 	}
@@ -463,10 +503,8 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-			std::uniform_int_distribution<> dist(0, s_CombatRooms.size() - 1);
-			int nextRoom = dist(Application::s_Gen);
-			SceneId id = s_CombatRooms[nextRoom];
-			SceneManager::ChangeSceneByIndex(id);
+			LoadRandomRoom(s_CombatRooms);
+
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -474,12 +512,10 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_REWARD");
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			std::uniform_int_distribution<> dist(0, s_RewardRooms.size() - 1);
-			int nextRoom = dist(Application::s_Gen);
+			
+			LoadRandomRoom(s_RewardRooms);
 
-			s_LastRewardRoom = nextRoom;
-			SceneId id = s_RewardRooms[nextRoom];
-			SceneManager::ChangeSceneByIndex(id);
+			RandomizeRewardRoom();
 			break;
 		}
 		case Wiwa::RoomType::ROOM_REWARD:
@@ -487,11 +523,10 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			std::uniform_int_distribution<> dist(0, s_CombatRooms.size() - 1);
-			int nextRoom = dist(Application::s_Gen);
-			s_LastCombatRoom = nextRoom;
-			SceneId id = s_CombatRooms[nextRoom];
-			SceneManager::ChangeSceneByIndex(id);
+
+
+			LoadRandomRoom(s_CombatRooms);
+
 
 			s_RoomsToBoss--;
 			s_RoomsToShop--;
@@ -501,13 +536,8 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_SHOP");
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-				nextRoom = s_LastShopRoom;
 				
-				std::uniform_int_distribution<> dist(0, s_ShopRooms.size() - 1);
-				int nextRoom = dist(Application::s_Gen);
-				
-				id = s_ShopRooms[0];
-				SceneManager::ChangeSceneByIndex(id);
+				LoadRandomRoom(s_ShopRooms);
 			}
 			break;
 		}
@@ -529,10 +559,7 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-				std::uniform_int_distribution<> dist(0, s_CombatRooms.size() - 1);
-				int nextRoom = dist(Application::s_Gen);
-				SceneId id = s_CombatRooms[nextRoom];
-				SceneManager::ChangeSceneByIndex(id);
+				LoadRandomRoom(s_CombatRooms);
 			}
 			break;
 		}
@@ -541,8 +568,39 @@ namespace Wiwa
 		}
 		s_CurrentRoomsCount--;
 		return 1;
-		//SceneManager::getActiveScene()->GetPhysicsManager().OnLoad("game_tags");
 		
+	}
+
+	int GameStateManager::LoadRandomRoom(const std::vector<int>& roomPool)
+	{
+		std::uniform_int_distribution<> dist(0, roomPool.size() - 1);
+		int nextRoom = dist(Application::s_Gen);
+		SceneId id = roomPool[nextRoom];
+		SceneManager::ChangeSceneByIndex(id);
+		return nextRoom;
+	}
+
+	int GameStateManager::RandomizeRewardRoom()
+	{
+		for (size_t i = 0; i < 2; i++)
+		{
+			std::uniform_int_distribution<> dist(0,  100);
+			uint32_t randomNum = dist(Application::s_Gen);
+			uint32_t counter = 0;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
+				s_DoorsReward[i] = 0;
+			counter += GameStateManager::s_ActiveSkillChances;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_PassiveSkillChances))
+				s_DoorsReward[i] = 1;
+			counter += GameStateManager::s_PassiveSkillChances;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_BuffChances))
+				s_DoorsReward[i] = 2;
+			counter += GameStateManager::s_BuffChances;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_NPCRoomChances))
+				s_DoorsReward[i] = 3;
+			counter += GameStateManager::s_NPCRoomChances;
+		}
+		return 0;
 	}
 
 	void GameStateManager::CleanUp()
@@ -758,7 +816,7 @@ namespace Wiwa
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetBuffs())
 			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}

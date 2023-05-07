@@ -13,6 +13,7 @@ Wiwa::PlayerMove::~PlayerMove()
 void Wiwa::PlayerMove::EnterState()
 {
 	WI_INFO("Player move");
+
 	m_StateMachine->GetAnimator()->Blend("running", true, 0.2f);
 	currentSteptime = runStepTimer;
 }

@@ -78,7 +78,8 @@ namespace Wiwa {
 		static int s_TotalSpawners;
 		static int s_SpawnersFinished;
 		static bool debug;
-		// Save & Load Overall Player Progression
+
+		// Save & Load Overall Player Progression inside the run
 		static void SaveProgression();
 		static void LoadProgression();
 
@@ -86,6 +87,9 @@ namespace Wiwa {
 		static void UpdateCombatRoom();
 
 		// Run and rooms
+		static void NewGame();
+		static bool Continue();
+
 		static void StartRun();
 		static void EndRun();
 		static void InitHub();
@@ -106,6 +110,7 @@ namespace Wiwa {
 		WI_HARD_INL static RoomState GetState() { return s_RoomState; }
 
 		static void LogRoomState();
+
 		static const char* GetRoomState();
 		static const char* GetRoomType();
 		// Reset combat data
@@ -119,10 +124,16 @@ namespace Wiwa {
 
 		static int NextRoom();
 
+		static int LoadRandomRoom(const std::vector<int>& roomPool);
+
+		static int RandomizeRewardRoom();
+
 		static void CleanUp();
 
 		static void SerializeData();
 		static void DeserializeData();
+
+
 		/// <summary>
 		/// Spawns a random item of a given type in a given location
 		/// </summary>
@@ -185,9 +196,11 @@ namespace Wiwa {
 		static int s_PassiveSkillChances;
 		static int s_NPCRoomChances;
 		
-	public:
-		static GamePoolingManager* s_PoolManager;
+		static int s_NextRewardRoomReward;
+		static int s_DoorsReward[2];
 
+		static GamePoolingManager* s_PoolManager;
+		static bool s_CanContinue;
 		static EnemyManager* s_EnemyManager;
 	};
 }

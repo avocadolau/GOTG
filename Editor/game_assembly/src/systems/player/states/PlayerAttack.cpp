@@ -48,9 +48,27 @@ void Wiwa::PlayerAttack::UpdateState()
 	if (m_StateMachine->CanMove())
 	{
 		// TODO: Partial blending
+		 
 		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
 		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
 		m_StateMachine->UpdateRotation();
+		float shootDirection = m_StateMachine->GetTransform()->localRotation.y;
+		float movementDirection = Math::AngleFromVec2(m_StateMachine->GetInput());
+		float difference = glm::abs(shootDirection - movementDirection);
+
+		WI_INFO("Diff angle {}", difference);
+		if (IN_BETWEEN(difference, 120.f, 270.f))
+		{
+			m_StateMachine->GetAnimator()->PlayAnimation("moonwalk", true);
+		}
+		else if (IN_BETWEEN(difference, 45.0f, 119.f))
+		{
+			m_StateMachine->GetAnimator()->PlayAnimation("walking_left", true);
+		}
+		else if (IN_BETWEEN(difference, 270.0f, 360.0f))
+		{
+			m_StateMachine->GetAnimator()->PlayAnimation("walking_right", true);
+		}
 	}
 	else
 	{
