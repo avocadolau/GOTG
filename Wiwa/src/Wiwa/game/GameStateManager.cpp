@@ -62,7 +62,8 @@ namespace Wiwa
 	EnemyManager* GameStateManager::s_EnemyManager = new EnemyManager();
 
 	bool GameStateManager::FanaticEffect = true;
-
+	int GameStateManager::PrometheanGemsToAdd = 0;
+	int GameStateManager::DamageDivisor = 1;
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
@@ -251,6 +252,7 @@ namespace Wiwa
 	void GameStateManager::EndRun()
 	{
 		if (debug) WI_INFO("GAME STATE: EndRun()");
+		s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
 		SetRoomType(RoomType::NONE);
 
 		s_PlayerInventory->Clear();
@@ -367,6 +369,7 @@ namespace Wiwa
 	{
 		Wiwa::GuiManager& gm = s_CurrentScene->GetGuiManager();
 		Character* character = GetPlayerCharacterComp();
+		damage = damage / DamageDivisor;
 		if (!character)
 		{
 			WI_CORE_CRITICAL("Player can't take damage because character is nullptr");

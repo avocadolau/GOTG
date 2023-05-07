@@ -200,14 +200,14 @@ namespace Wiwa
 		static int s_PassiveSkillChances;
 		static int s_NPCRoomChances;
 
-		static int s_NextRewardRoomReward;
-		static int s_DoorsReward[2];
-
 		static bool FanaticEffect;
+		static int PrometheanGemsToAdd;
+		static int DamageDivisor;
 
-	public:
 		static GamePoolingManager *s_PoolManager;
 
+		static int s_NextRewardRoomReward;
+		static int s_DoorsReward[2];
 		static bool s_CanContinue;
 		static EnemyManager *s_EnemyManager;
 	};

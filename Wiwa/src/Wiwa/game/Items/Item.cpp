@@ -351,6 +351,7 @@ namespace Wiwa
             DamageInc = player->Damage * buffPercent;
             break;
         case Wiwa::HowardElementType::NANO_MACHINES:
+            Wiwa::GameStateManager::DamageDivisor = buffPercent * 100;
             break;
         case Wiwa::HowardElementType::HEALTH_CAPACITOR:
             player->Health += player->Health * buffPercent;

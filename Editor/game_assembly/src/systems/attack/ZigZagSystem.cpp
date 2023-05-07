@@ -11,7 +11,9 @@ namespace Wiwa
 		m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_AttackIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
+		m_TimerAmplitude = 0.0f;
 		m_ZigZagTimer = 0.0f;
+		m_GetMaxAmplitude = false;
 	}
 
 	ZigZagBulletSystem::~ZigZagBulletSystem()
@@ -49,6 +51,11 @@ namespace Wiwa
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
 
+		m_Timer = 0.0f;
+		m_TimerAmplitude = 0.0f;
+		m_ZigZagTimer = 0.0f;
+		m_GetMaxAmplitude = false;
+
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 	}
 
@@ -65,14 +72,29 @@ namespace Wiwa
 		
 
 		m_Timer += Time::GetDeltaTimeSeconds();
+		m_TimerAmplitude += Time::GetDeltaTimeSeconds();
 		m_ZigZagTimer += Time::GetDeltaTimeSeconds();
 
-		glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 2, 2.0f, 20, m_ZigZagTimer, bullet->direction);
+		if (m_TimerAmplitude >= 10.0f)
+		{
+			m_TimerAmplitude = 4.0f;
+		}
 
-		//WI_INFO(" Update Position ZIGZAG: x {} y {} z {}", updatePosition.x, updatePosition.y, updatePosition.z);
+		if (m_GetMaxAmplitude == false)
+		{
+			glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 0.5f, 1.4f / 2, 10.0f, m_ZigZagTimer, bullet->direction, m_TimerAmplitude / 2.0f);
+			transform->localPosition = updatePosition;
+			em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->ForceSetPosition(updatePosition);
 
-		transform->localPosition = updatePosition;
-		em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->ForceSetPosition(updatePosition);
+			m_GetMaxAmplitude = true;
+		}
+
+		if (m_GetMaxAmplitude == true)
+		{
+			glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 0.5f, 1.4f, 10.0f, m_ZigZagTimer, bullet->direction, m_TimerAmplitude / 2.0f);
+			transform->localPosition = updatePosition;
+			em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->ForceSetPosition(updatePosition);
+		}
 
 		if (m_Timer >= bullet->lifeTime)
 		{
@@ -132,7 +154,7 @@ namespace Wiwa
 		return true;
 	}
 
-	glm::vec3 ZigZagBulletSystem::ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time, glm::vec3 forward_direction)
+	glm::vec3 ZigZagBulletSystem::ZigZagBulletMotion(glm::vec3 current_position, float speed, float amplitude, float frequency, float delta_time, glm::vec3 forward_direction, float timerAmplitude)
 	{		
 		forward_direction = glm::normalize(forward_direction);
 
@@ -140,7 +162,7 @@ namespace Wiwa
 		glm::vec3 right = glm::normalize(glm::cross(forward_direction, world_up));
 		glm::vec3 new_up = glm::cross(right, forward_direction);
 
-		float zigzag_offset = amplitude * sin(frequency * delta_time);
+		float zigzag_offset = amplitude * sin(frequency * delta_time) * timerAmplitude;
 
 		glm::vec3 zigzag_global = zigzag_offset * right;
 
