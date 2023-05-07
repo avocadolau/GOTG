@@ -15,6 +15,7 @@ namespace Wiwa {
 		~Text();
 
 		bool Init(int width,int height, byte* data);
+		bool InitWrapped(int width, int height, int lineWidth, int y, int descent, byte* data);
 
 		uint32_t GetTextureId() { return m_TextureId; }
 
