@@ -44,7 +44,8 @@ namespace Wiwa
 
     void Ability::YondusFin()
     {
-        
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId yondusFin = em.LoadPrefab("assets/Prefabs/YondusFin/YundusFin_01.wiprefab");
     }
 
     void Ability::GrootsSeeds()
