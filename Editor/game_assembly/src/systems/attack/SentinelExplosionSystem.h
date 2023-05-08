@@ -7,6 +7,7 @@ namespace Wiwa {
 	class  SentinelExplosionSystem : public System {
 	private:
 		float m_Timer = 0;
+		bool m_DoSentinelDamage = true;
 		EntityManager::ComponentIterator m_ExplosionIt;
 	public:
 		SentinelExplosionSystem();

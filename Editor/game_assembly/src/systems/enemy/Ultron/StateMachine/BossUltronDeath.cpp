@@ -5,6 +5,7 @@
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
+#include <Wiwa/Dialog/DialogManager.h>
 
 namespace Wiwa
 {
@@ -20,9 +21,11 @@ namespace Wiwa
 
 	void BossUltronDeathState::EnterState(BossUltron* enemy)
 	{
-		//Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::Scene& em = enemy->getScene();
+		Wiwa::DialogManager& dialogManager = em.GetDialogManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
+		dialogManager.ForceDialogStart("UltronIsKilled", true);
 		
 		//EntityId currentEnemy = enemy->GetEntity();
 
@@ -34,12 +37,25 @@ namespace Wiwa
 	void BossUltronDeathState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::Scene& ems = enemy->getScene();
+		Wiwa::DialogManager& dialogManager = ems.GetDialogManager();
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		//if (animator->HasFinished())
 		//{
 		EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 		self->hasFinished = true;
-		em.DestroyEntity(enemy->GetEntity());
+
+		if (dialogManager.actualConversationState == 1) // while talking
+		{
+			navAgentPtr->StopAgent();
+		}
+
+		if (dialogManager.actualConversationState == 2) // when dialog ends
+		{
+			em.DestroyEntity(enemy->GetEntity());
+		}
+		
 	}
 
 	void BossUltronDeathState::ExitState(BossUltron* enemy)
