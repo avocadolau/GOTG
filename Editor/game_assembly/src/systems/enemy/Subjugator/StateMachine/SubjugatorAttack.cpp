@@ -190,6 +190,18 @@ namespace Wiwa
 		Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
 		Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
 
+		Subjugator* subjugator = em.GetComponent<Subjugator>(enemy->GetEntity());
+		if (subjugator)
+		{
+			if (subjugator->variant == 0) // Generic
+			{
+
+			}
+			else if (subjugator->variant == 1) // Chief
+			{
+
+			}
+		}
 		if (m_SelectRandomAttack == -1)
 		{
 			m_IsAttackSelected = true;
