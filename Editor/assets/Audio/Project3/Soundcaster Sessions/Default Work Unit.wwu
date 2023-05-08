@@ -13,7 +13,7 @@
 					<RTPCValueList ShowAll="true">
 						<RTPCValue>
 							<GameParameterRef Name="MusicIntensity" ID="{E2590234-28F1-40B1-A3D4-679C646BF4A1}"/>
-							<Value>87</Value>
+							<Value>100</Value>
 						</RTPCValue>
 						<RTPCValue>
 							<GameParameterRef Name="MasterVolume" ID="{770EF029-4E28-4A64-A06E-BC48B63A362E}"/>

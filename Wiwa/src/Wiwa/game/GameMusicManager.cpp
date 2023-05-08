@@ -10,6 +10,7 @@ namespace Wiwa
 {
 	uint64_t GameMusicManager::m_PlayEventId;
 	bool GameMusicManager::m_Playing = false;
+	float GameMusicManager::m_MusicInterporlation = 0.2f;
 
 	void GameMusicManager::Init()
 	{
@@ -18,9 +19,34 @@ namespace Wiwa
 		Audio::PostEventDefaultListener("play_music", GameMusicManager::m_PlayEventId);
 		m_Playing = true;
 	}
-	void GameMusicManager::UpdateCombatIntesity(int n_enemies)
+	void GameMusicManager::UpdateCombatIntesity( int numEnemies)
 	{
-		Audio::SetRTPCValue("MusicIntensity", n_enemies);
+		// Define the range of enemy counts that will result in danger levels between 0 and 100
+		const float minEnemies = 1.0f;
+		const float maxEnemies = 10.0f;
+
+		// Calculate the danger level based on the number of enemies
+		float dangerLevel = ((numEnemies - minEnemies) / (maxEnemies - minEnemies)) * 100.0f;
+
+		// Calculate the target danger level based on the elapsed time and interpolation time
+		float targetDangerLevel = ((numEnemies - minEnemies) / (maxEnemies - minEnemies)) * 100.0f;
+		if (Time::GetDeltaTimeSeconds() < m_MusicInterporlation) {
+			targetDangerLevel *= Time::GetDeltaTimeSeconds() / m_MusicInterporlation;
+		}
+
+		// Interpolate smoothly between the current danger level and the target danger level
+		const float interpolationSpeed = 5.0f;
+		dangerLevel += (targetDangerLevel - dangerLevel) * interpolationSpeed * Time::GetDeltaTimeSeconds();
+
+		// Clamp the danger level to the range of 0 to 100
+		if (dangerLevel < 0.0f) {
+			dangerLevel = 0.0f;
+		}
+		else if (dangerLevel > 100.0f) {
+			dangerLevel = 100.0f;
+		}
+
+		Audio::SetRTPCValue("MusicIntensity", dangerLevel);
 	}
 	void GameMusicManager::StopMusic()
 	{
@@ -90,7 +116,7 @@ namespace Wiwa
 			MainMenu();
 			break;
 		case 3:
-		//	MainHub();
+			//hub is made on new game
 			break;
 
 		default:

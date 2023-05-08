@@ -8,6 +8,7 @@
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSpawnerSystem.h>
+#include <Wiwa/game/GameMusicManager.h>
 
 namespace Wiwa
 {
@@ -194,7 +195,8 @@ namespace Wiwa
 			s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
 			s_CanPassNextRoom = s_HasFinshedRoom;
 		}
-	
+		
+		GameMusicManager::UpdateCombatIntesity(GetActiveEnemies());
 
 		if (s_HasFinshedRoom)
 			ChangeRoomState(RoomState::STATE_FINISHED);

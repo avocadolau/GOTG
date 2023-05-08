@@ -9,7 +9,7 @@ namespace  Wiwa {
 	public:
 		static uint64_t m_PlayEventId;
 		static bool m_Playing ;
-		std::string m_InitBank;
+		static float m_MusicInterporlation ;
 		static void Init();
 		
 		void static StopMusic();

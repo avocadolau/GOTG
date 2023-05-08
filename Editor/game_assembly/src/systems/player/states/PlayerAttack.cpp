@@ -5,6 +5,9 @@
 Wiwa::PlayerAttack::PlayerAttack(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id) {
 	m_ShootTimer = 0.f;
+	m_audioDelay = 5.0f;
+	m_FirstShoot = false;
+	m_currentAudioDelay = m_audioDelay;
 }
 
 Wiwa::PlayerAttack::~PlayerAttack() {}
@@ -62,7 +65,7 @@ void Wiwa::PlayerAttack::UpdateState()
 		float movementDirection = Math::AngleFromVec2(m_StateMachine->GetInput());
 		float difference = glm::abs(shootDirection - movementDirection);
 
-		WI_INFO("Diff angle {}", difference);
+		//WI_INFO("Diff angle {}", difference);
 		if (IN_BETWEEN(difference, 120.f, 270.f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("moonwalk", true);
@@ -82,6 +85,8 @@ void Wiwa::PlayerAttack::UpdateState()
 		m_StateMachine->UpdateMovement(0.f);
 		m_StateMachine->UpdateRotation();
 	}
+
+	m_currentAudioDelay -= Time::GetDeltaTimeSeconds();
 }
 
 void Wiwa::PlayerAttack::ExitState()
@@ -119,6 +124,27 @@ void Wiwa::PlayerAttack::Fire()
 			shooter->ShootRight = !shooter->ShootRight;
 			m_StateMachine->SpawnStarLordBullet(*spawnPoint, *m_StateMachine->GetCharacter());
 			m_StateMachine->GetAudio()->PlayAudio("player_shoot");
+			
+
+
+		
+			if ((int)GameStateManager::GetType() ==  2 || (int) GameStateManager::GetRoomType() == 4)
+			{
+				if (!m_FirstShoot)
+				{
+					m_StateMachine->GetAudio()->PlayAudio("combat_start");
+					m_FirstShoot = true;
+					
+				}
+			}
+			else {
+				if (m_currentAudioDelay < 0 && !m_FirstShoot)
+				{
+					m_StateMachine->GetAudio()->PlayAudio("combat_start");
+					m_FirstShoot = false;
+					m_currentAudioDelay = m_audioDelay;
+				}
+			}
 		}
 	}
 	else
