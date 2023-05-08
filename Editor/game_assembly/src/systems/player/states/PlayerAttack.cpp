@@ -126,7 +126,6 @@ void Wiwa::PlayerAttack::Fire()
 			m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 			
 
-
 		
 			if ((int)GameStateManager::GetType() ==  2 || (int) GameStateManager::GetRoomType() == 4)
 			{
