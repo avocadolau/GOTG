@@ -106,6 +106,7 @@ namespace Wiwa
 		m_MaxLevel = 4;
 		m_CurrentRunLevel = 0;
 		m_IncreaseDiffEvery = 1;
+		m_RewardRoomCounter = 0;
 
 		m_RangedData.bulletLifeTime = 6.0f;
 		m_RangedData.bulletSpeed = 30.0f;
@@ -405,19 +406,37 @@ namespace Wiwa
 		return true;
 	}
 
-	//void EnemyManager::PushBackArrayJson(JSONValue& json_value_array, const EnemyData& data)
-	//{
-	//	JSONValue dataJson = json_value_array.PushBackObject();
-	//	dataJson.AddMember("level", data.level);
-	//	dataJson.AddMember("name", data.name.c_str());
-	//	dataJson.AddMember("health", data.health);
-	//	dataJson.AddMember("damage", data.damage);
-	//	dataJson.AddMember("maxVelocity", data.maxVelocity);
-	//	dataJson.AddMember("maxAcceleration", data.maxAcceleration);
-	//	dataJson.AddMember("rateOfFire", data.rateOfFire);
-	//	dataJson.AddMember("creditsDrop", data.creditsDrop);
-	//}
+	int EnemyManager::ResetDifficulty()
+	{
+		m_CurrentRunLevel = 0;
+		m_RewardRoomCounter = 0;
+		return m_CurrentRunLevel;
+	}
 
+	int EnemyManager::IncreaseDifficulty()
+	{
+		m_CurrentRunLevel++;
+		if (m_CurrentRunLevel >= m_MaxLevel)
+			m_CurrentRunLevel = m_MaxLevel;
+		return m_CurrentRunLevel;
+	}
 
+	int EnemyManager::DecreaseDifficulty()
+	{
+		m_CurrentRunLevel--;
+		if (m_CurrentRunLevel <= 0)
+			m_CurrentRunLevel = 0;
+		return m_CurrentRunLevel;
+	}
 
+	int EnemyManager::IncreaseRoomRewardCounter()
+	{
+		m_RewardRoomCounter++;
+		if (m_RewardRoomCounter >= m_IncreaseDiffEvery)
+		{
+			IncreaseDifficulty();
+			m_RewardRoomCounter = 0;
+		}
+		return m_CurrentRunLevel;
+	}
 }

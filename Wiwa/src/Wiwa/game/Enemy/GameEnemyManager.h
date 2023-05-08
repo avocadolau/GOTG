@@ -24,7 +24,12 @@ namespace Wiwa
 		bool CheckIfHasLevelCreate(int level, const std::string& str);
 		bool CheckIfHasLevelDelete(int level, const std::string& str);
 
-		//void PushBackArrayJson(JSONValue& json_value, const EnemyData& data);
+		// Level difficulty managing
+		int ResetDifficulty();
+		int IncreaseDifficulty();
+		int DecreaseDifficulty();
+		int IncreaseRoomRewardCounter();
+
 		inline std::map<std::pair<int, std::string>, EnemyData>& GetData() { return m_EnemyData; };
 		std::map<std::pair<int, std::string>, EnemyData> m_EnemyData;
 		PhalanxRanged m_RangedData;
@@ -35,5 +40,6 @@ namespace Wiwa
 		int m_MaxLevel = 4;
 		int m_CurrentRunLevel = 0;
 		int m_IncreaseDiffEvery = 1;
+		int m_RewardRoomCounter = 0;
 	};
 }

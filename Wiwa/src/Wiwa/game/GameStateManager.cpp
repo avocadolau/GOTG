@@ -525,6 +525,8 @@ namespace Wiwa
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 			LoadRandomRoom(s_CombatRooms);
 			RandomizeRewardRoom();
+
+			s_EnemyManager->ResetDifficulty();
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -536,6 +538,8 @@ namespace Wiwa
 			LoadRandomRoom(s_RewardRooms);
 
 			RandomizeRewardRoom();
+
+			s_EnemyManager->IncreaseRoomRewardCounter();
 			break;
 		}
 		case Wiwa::RoomType::ROOM_REWARD:
