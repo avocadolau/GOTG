@@ -20,6 +20,7 @@ namespace Wiwa {
 
 	Shader::~Shader()
 	{
+		glDeleteProgram(m_IDprogram);
 	}
 
 	void Shader::CreateDefault(const char* path)

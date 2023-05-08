@@ -16,7 +16,11 @@ namespace Wiwa {
 
 	InstanceRenderer::~InstanceRenderer()
 	{
-
+		glDeleteBuffers(1, &m_VBO);
+		glDeleteBuffers(1, &m_EBO);
+		glDeleteBuffers(1, &m_IVBO);
+		glDeleteVertexArrays(1, &m_VAO);
+		delete[] m_InstanceVertex;
 	}
 
 	void InstanceRenderer::Init(const char* shader_path)

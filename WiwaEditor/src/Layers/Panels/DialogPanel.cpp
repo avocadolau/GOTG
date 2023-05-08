@@ -19,7 +19,8 @@ DialogPanel::DialogPanel(EditorLayer* instance)
 	}
 
 	Wiwa::DialogManager& dm_onInit = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
-
+	if (!&dm_onInit)
+		return;
 	for (int c = 0; c < MAX_CONVERSATIONS && dm_onInit.conversations[c].occupied == true; c++)
 	{
 		currentEditingConversationName[c] = dm_onInit.conversations[c].conversationName;

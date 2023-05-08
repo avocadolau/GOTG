@@ -12,6 +12,8 @@ namespace Wiwa {
 		EndRoomTrigger();
 		~EndRoomTrigger();
 
+		void OnDestroy() override;
+
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;

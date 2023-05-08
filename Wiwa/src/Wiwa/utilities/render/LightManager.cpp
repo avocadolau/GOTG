@@ -7,6 +7,8 @@ Wiwa::LightManager::LightManager()
 
 Wiwa::LightManager::~LightManager()
 {
+	m_PointLights.clear();
+	m_SpotLights.clear();
 }
 
 void Wiwa::LightManager::AddPointLight(size_t light)

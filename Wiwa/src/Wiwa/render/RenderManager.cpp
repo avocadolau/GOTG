@@ -21,6 +21,13 @@ namespace Wiwa {
 	uint32_t RenderManager::m_ModelLoc;
 	bool RenderManager::m_RenderOnMainWindow = false;
 
+	RenderManager::~RenderManager()
+	{
+		glDeleteBuffers(1, &m_VBO);
+		glDeleteBuffers(1, &m_EBO);
+		glDeleteVertexArrays(1, &m_VAO);
+	}
+
 	void RenderManager::Init(int width, int height)
 	{
 		// Quad vertices
