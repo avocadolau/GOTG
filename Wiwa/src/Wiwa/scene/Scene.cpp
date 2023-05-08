@@ -61,6 +61,8 @@ namespace Wiwa
 			delete m_PhysicsManager;
 		}
 		RecastManager::DeAllocate();
+
+		m_InstanceRenderers.clear();
 	}
 
 	void Scene::Start()
