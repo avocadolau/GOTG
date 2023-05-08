@@ -9,6 +9,7 @@ namespace Wiwa
 	{
 		m_ExplosionIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
+		m_DoSmashDamage = true;
 	}
 
 	UltronSmashExplosionSystem::~UltronSmashExplosionSystem()
@@ -35,6 +36,8 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+
+		m_DoSmashDamage = true;
 	}
 
 	void UltronSmashExplosionSystem::OnUpdate()
@@ -47,6 +50,11 @@ namespace Wiwa
 		Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
+
+		if (m_Timer >= 0.2f)
+		{
+			m_DoSmashDamage = false;
+		}
 
 		if (m_Timer >= explosion->lifeTime)
 		{
@@ -66,8 +74,11 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
-				Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
-				GameStateManager::DamagePlayer(explosion->damage);
+				if (m_DoSmashDamage)
+				{
+					Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
+					GameStateManager::DamagePlayer(explosion->damage);
+				}
 			}
 		}
 	}

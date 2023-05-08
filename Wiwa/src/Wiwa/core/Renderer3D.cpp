@@ -182,6 +182,23 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
 
+		ResourceId laserShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/laser");
+		Shader* laserShader = Wiwa::Resources::GetResourceById<Shader>(laserShaderId);
+		laserShader->Compile("resources/shaders/vfx/laser");
+
+		laserShader->addUniform("u_LifeTime", UniformType::Float);
+		laserShader->addUniform("u_Color", UniformType::fVec4);
+		laserShader->addUniform("u_FresnelColor", UniformType::fVec4);
+		laserShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		laserShader->addUniform("u_HologramColor", UniformType::fVec4);
+		laserShader->addUniform("u_Speed", UniformType::Float);
+		laserShader->addUniform("u_Texture", UniformType::Sampler2D);
+		laserShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+		laserShader->addUniform("u_HologramTexture", UniformType::Sampler2D);
+		laserShader->addUniform("u_StartDissolve", UniformType::Float);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/laser", laserShader);
+
 		ResourceId justTextureShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/justtexture");
 		Shader* justTextureShader = Wiwa::Resources::GetResourceById<Shader>(justTextureShaderId);
 		justTextureShader->Compile("resources/shaders/vfx/justtexture");
