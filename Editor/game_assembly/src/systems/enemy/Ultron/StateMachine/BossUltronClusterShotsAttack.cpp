@@ -142,8 +142,8 @@ namespace Wiwa
 	bool BossUltronClusterShotsAttackState::SpawnClusterBullet(BossUltron* enemy, const glm::vec3& bull_dir)
 	{
 
-		if (GameStateManager::s_PoolManager->s_ClusterBulletsPool->getCountDisabled() <= 0)
-			return false;
+		/*if (GameStateManager::s_PoolManager->s_ClusterBulletsPool->getCountDisabled() <= 0)
+			return false;*/
 
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
