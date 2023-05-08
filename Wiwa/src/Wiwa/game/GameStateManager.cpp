@@ -1011,7 +1011,7 @@ namespace Wiwa
 			switch (type_howard)
 			{
 			case Wiwa::HowardElementType::RECOVERY_SHIELD:
-				if(s_RoomState == Wiwa::RoomState::STATE_FINISHED)
+				if(s_RoomState == Wiwa::RoomState::STATE_AWAITING_NEXT)
 					m_ShopPassives.at(i).Use();
 				break;
 			case Wiwa::HowardElementType::SECOND_WIND:
@@ -1038,7 +1038,7 @@ namespace Wiwa
 				}
 				break;
 			case Wiwa::HowardElementType::RECOVERY_HEALTH:
-				if (s_RoomState == Wiwa::RoomState::STATE_FINISHED)
+				if (s_RoomState == Wiwa::RoomState::STATE_AWAITING_NEXT)
 					m_ShopPassives.at(i).Use();
 				break;
 			case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:
