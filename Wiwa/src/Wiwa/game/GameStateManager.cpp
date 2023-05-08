@@ -69,7 +69,7 @@ namespace Wiwa
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
-		if(room_state  == RoomState::STATE_FINISHED)
+		if(room_state  == RoomState::STATE_AWAITING_NEXT)
 			s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
 	}
 
@@ -150,18 +150,18 @@ namespace Wiwa
 
 	void GameStateManager::UpdateRoomState()
 	{
+		if (s_PlayerTriggerNext && s_RoomState == RoomState::STATE_AWAITING_NEXT)
+		{
+			EndCurrentRoom();
+			StartNewRoom();
+		}
+
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 			UpdateCombatRoom();
 
 		if (s_HasFinshedRoom && s_CanPassNextRoom && s_PlayerTriggerNext)
 		{
 			ChangeRoomState(RoomState::STATE_AWAITING_NEXT);		
-		}
-
-		if (s_PlayerTriggerNext && s_RoomState == RoomState::STATE_AWAITING_NEXT)
-		{
-			EndCurrentRoom();
-			StartNewRoom();
 		}
 	}
 
