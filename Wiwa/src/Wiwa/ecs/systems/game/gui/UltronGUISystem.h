@@ -16,7 +16,10 @@ namespace Wiwa
         bool activeIntroCanvas = false;
         bool m_CanvasHUD = true;
         float counterIntroAnim = 0.0f;
-        float timeIntroAnim = 4.0f;
+        float timeIntroAnim = 100.0f;
+        bool m_IterationForPause = false;
+
+        float maxUltronHealth = 0.0f;
     public:
         UltronGUISystem() = default;
         virtual ~UltronGUISystem() = default;
