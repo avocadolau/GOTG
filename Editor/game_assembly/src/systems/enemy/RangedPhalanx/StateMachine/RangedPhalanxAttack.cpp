@@ -9,7 +9,7 @@
 #include "../../../../Components.h"
 
 #include <Wiwa/ecs/systems/AudioSystem.h>
-
+#include "../../../../Systems.h"
 namespace Wiwa
 {
 	RangedPhalanxAttackState::RangedPhalanxAttackState()
@@ -131,6 +131,31 @@ namespace Wiwa
 		physSys->CreateBody();
 
 		bulletSys->EnableBullet();
+
+
+		//emit left muzzle
+		EntityId shotMuzzleLeft = entityManager.GetChildByName(enemy->GetEntity(), "p_shot_muzzle_ranged_phalanx");
+		EntityId shotMuzzleLeftImpact = entityManager.GetChildByName(shotMuzzleLeft, "vfx_impact");
+		EntityId shotMuzzleLeftFlash = entityManager.GetChildByName(shotMuzzleLeft, "vfx_flash");
+
+
+		if (shotMuzzleLeft != EntityManager::INVALID_INDEX &&
+			shotMuzzleLeftImpact != EntityManager::INVALID_INDEX &&
+			shotMuzzleLeftFlash != EntityManager::INVALID_INDEX)
+		{
+			entityManager.SetActive(shotMuzzleLeft, true);
+
+			ParticleSystem* sys_shotMuzzleLeftImpact = entityManager.GetSystem<ParticleSystem>(shotMuzzleLeftImpact);
+			ParticleSystem* sys_shotMuzzleLeftFlash = entityManager.GetSystem<ParticleSystem>(shotMuzzleLeftFlash);
+
+			if (sys_shotMuzzleLeftImpact != nullptr && sys_shotMuzzleLeftFlash != nullptr)
+			{
+				sys_shotMuzzleLeftImpact->EmitParticleBatch(1);
+				sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
+			}
+		}
+		
+
 	}
 
 	glm::vec3 RangedPhalanxAttackState::CalculateForward(const Transform3D& t3d)
