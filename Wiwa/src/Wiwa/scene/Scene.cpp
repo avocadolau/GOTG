@@ -220,14 +220,13 @@ namespace Wiwa
 	void Scene::Unload(bool unload_resources)
 	{
 		GameStateManager::s_PoolManager->UnloadAllPools();
-		//Without this the user gets multiple items
-		GameStateManager::s_PlayerInventory->Clear();
 		m_EntityManager.Clear();
 		if (unload_resources)
 		{
 			// TODO: Fix unloading for the editor
+			if(Wiwa::Application::Get().UnloadSceneResources)
+				Wiwa::Resources::UnloadAllResources();
 			return;
-			Wiwa::Resources::UnloadAllResources();
 		}
 	}
 

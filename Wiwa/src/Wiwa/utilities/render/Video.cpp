@@ -15,6 +15,8 @@ namespace Wiwa {
 		if (m_TextureId != uint32_t(-1)) {
 			glDeleteTextures(1, &m_TextureId);
 		}
+		m_Cap.release();
+		m_Frame.release();
 	}
 
 	bool Video::Init(std::string videoPath, byte* data)
