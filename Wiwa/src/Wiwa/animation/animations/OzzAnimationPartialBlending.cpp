@@ -293,6 +293,7 @@ namespace Wiwa {
         Sampler& upper_body_sampler = samplers_[kUpperBody];
         upper_body_sampler.weight_setting = 1.f;
         upper_body_sampler.joint_weight_setting = 1.f;
+        
 
         // Allocates local space runtime buffers of blended data.
         blended_locals_.resize(num_soa_joints);
@@ -307,11 +308,6 @@ namespace Wiwa {
         SetupPerJointWeights();
 
         return true;
-    }
-
-    bool OzzAnimationPartialBlending::SampleAnimation()
-    {
-        return false;
     }
 
     bool OzzAnimationPartialBlending::Update(float _dt)

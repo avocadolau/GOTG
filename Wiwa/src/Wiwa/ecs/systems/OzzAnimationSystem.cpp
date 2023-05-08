@@ -41,7 +41,9 @@ namespace Wiwa {
 		// Return if required components unavailable
 		if (!m_TransformIt || !m_MeshIt) return;
 
-		bool update = m_Animation.Update(0.002f);
+		float dt = Time::GetDeltaTime() / 1000.0f;
+
+		bool update = m_Animation.Update(dt);
 
 		if(!update){
 			WI_CORE_ERROR("Error updating partial animation");
