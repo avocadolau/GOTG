@@ -71,6 +71,16 @@ namespace Wiwa
 		//glm::mat4 transform;
 	};
 
+	class WI_API ParticleSystemHolder : public System
+	{
+	public:
+		ParticleSystemHolder() {}
+		~ParticleSystemHolder() {}
+
+		void OnUpdate() override;
+
+	};
+
 	class WI_API ParticleSystem : public System
 	{
 	public: 
@@ -137,6 +147,7 @@ namespace Wiwa
 
 		float m_SpawnTimer;
 
+		bool m_SpawnedOnce;
 
 		std::vector<Particle> m_Particles;
 
@@ -146,4 +157,5 @@ namespace Wiwa
 	};
 }
 REGISTER_SYSTEM(Wiwa::ParticleSystem);
+REGISTER_SYSTEM(Wiwa::ParticleSystemHolder);
 

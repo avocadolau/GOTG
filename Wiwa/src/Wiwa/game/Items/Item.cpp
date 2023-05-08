@@ -17,6 +17,30 @@ namespace Wiwa
     
     void Ability::Use()
     {
+        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+        EntityId playerId = em.GetEntityByName("StarLord");
+
+        if (playerId != EntityManager::INVALID_INDEX)
+        {
+
+            EntityId pe_healing = em.LoadPrefab("assets/vfx/prefabs/p_player_use.wiprefab");
+
+            if (pe_healing != EntityManager::INVALID_INDEX)
+            {
+                em.SetParent(pe_healing, playerId);
+                //WI_CORE_INFO("spawning regeneartion particle");
+
+            }
+            else
+            {
+                WI_CORE_INFO("Failed Spawning Use Particles");
+
+            }
+
+        }
+        else
+            WI_CORE_INFO("No valid Player ID");
+
         switch (AbilityType)
         {
         case AbilityType::YONDUS_FIN:
@@ -288,19 +312,34 @@ namespace Wiwa
             return;
         }
 
-        EntityId playerParticles = em.GetEntityByName("Player");
+        EntityId playerId = em.GetEntityByName("StarLord");
 
         const float buffPercent = ((float)BuffPercent / 100.f);
         switch (Type)
         {
         case Wiwa::ConsumableType::HEAL:
             {
-                if (playerParticles)
+                if (playerId != EntityManager::INVALID_INDEX)
                 {
 
-                    EntityId pe_healing = em.GetChildByName(playerParticles, "PE_Healing");
+                    EntityId pe_healing = em.LoadPrefab("assets/vfx/prefabs/p_player_regeneration.wiprefab");
+                    
+                    if (pe_healing != EntityManager::INVALID_INDEX)
+                    {
+                        em.SetParent(pe_healing, playerId);
+                        //WI_CORE_INFO("spawning regeneartion particle");
+
+                    }
+                    else
+                    {
+                        WI_CORE_INFO("Failed Spawning Regeneration Particles");
+
+                    }
 
                 }
+                else
+                    WI_CORE_INFO("No valid Player ID");
+
 
                 int healAmount = (int)((float)player->Health * buffPercent);
                 player->Health += healAmount;
@@ -312,10 +351,10 @@ namespace Wiwa
             break;
         case Wiwa::ConsumableType::SHIELD:
             {
-                if (playerParticles)
+                if (playerId)
                 {
 
-                    EntityId pe_shield = em.GetChildByName(playerParticles, "PE_Shield");
+                    EntityId pe_shield = em.GetChildByName(playerId, "PE_Shield");
 
                 }
 
