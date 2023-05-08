@@ -49,7 +49,7 @@ namespace Wiwa
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent) {
-			navAgent->autoRotate = true;
+			navAgent->autoRotate = false;
 		}
 
 		m_TimerToAttack = 0.0f;
@@ -68,6 +68,8 @@ namespace Wiwa
 		Transform3D* selfTr = enemy->GetTransform();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
+
+		enemy->LookAt(playerTr->localPosition, 60.0f);
 
 		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 2.0f))
 		{

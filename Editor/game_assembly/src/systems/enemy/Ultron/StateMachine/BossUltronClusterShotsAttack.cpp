@@ -45,47 +45,6 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		//enemy->LookAt(playerTr->localPosition, 50.0f);
-		////enemy->RotateTo(playerTr->localPosition);
-
-		//if(m_TimerBetweenBullet >= 0.0f && m_RoundOne == true)
-		//{
-		//	navAgentPtr->StopAgent();
-		//	//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		//	Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
-		//	enemy->LookAt(playerTr->localPosition, 50.0f);
-
-
-		//	SpawnClusterBullet(enemy, CalculateForward(*gunTr));
-
-		//	m_RoundOne = false;
-		//}
-		//else if (m_TimerBetweenBullet >= 2.0f && m_RoundTwo == true)
-		//{
-		//	navAgentPtr->StopAgent();
-		//	//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		//	Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
-
-		//	SpawnClusterBullet(enemy, CalculateForward(*gunTr));
-
-		//	m_RoundTwo = false;
-		//}
-		//else if (m_TimerBetweenBullet >= 5.0f && m_RoundThree == true)
-		//{
-		//	enemy->SwitchState(enemy->m_MovementState);
-
-		//	NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		//	if (navAgent)
-		//	{
-		//		//navAgent->autoRotate = true;
-		//	}
-
-		//	m_RoundThree = false;
-		//}
-
-		//---------------------------------------------------------
-
-
 		m_TimerBetweenBullet += Time::GetDeltaTimeSeconds();
 		m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
 
