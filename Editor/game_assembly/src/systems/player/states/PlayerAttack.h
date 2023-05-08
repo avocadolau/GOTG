@@ -19,5 +19,8 @@ namespace Wiwa
 	private:
 		float m_ShootTimer;
 		glm::vec2 m_MousePos;
+		bool m_FirstShoot;
+		float m_audioDelay;
+		float m_currentAudioDelay;
 	};
 }
