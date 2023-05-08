@@ -92,7 +92,7 @@ void Wiwa::RewardChest::OnCollisionEnter(Object* obj1, Object* obj2)
 
 	if (obj1->id == m_EntityId && obj2->selfTagStr == playerTag)
 	{
-		gm.canvas.at(7)->SwapActive();
+		gm.canvas.at(9)->SwapActive();
 		m_ActiveAnim = true;
 	}
 }
@@ -104,7 +104,7 @@ void Wiwa::RewardChest::OnCollisionExit(Object* obj1, Object* obj2)
 
 	if (obj1->id == m_EntityId && obj2->selfTagStr == playerTag)
 	{
-		gm.canvas.at(7)->SwapActive();
+		gm.canvas.at(9)->SwapActive();
 		m_ActiveAnim = false;
 	}
 }
