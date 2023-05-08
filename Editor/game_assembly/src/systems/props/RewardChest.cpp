@@ -60,7 +60,7 @@ void Wiwa::RewardChest::OnUpdate()
 			data->Active = true;
 			m_Scene->GetEntityManager().GetSystem<PhysicsSystem>(m_ColliderPreActive)->DeleteBody();
 			m_Scene->GetEntityManager().GetSystem<PhysicsSystem>(m_EntityId)->DeleteBody();
-			gm.canvas.at(7)->SwapActive();
+			gm.canvas.at(9)->SwapActive();
 			m_ActiveAnim = false;
 			m_Interacted = false;
 		}
