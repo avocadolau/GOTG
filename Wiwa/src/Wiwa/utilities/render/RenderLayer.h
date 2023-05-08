@@ -7,7 +7,7 @@ namespace Wiwa {
 	class WI_API RenderLayer {
 		private:
 			// Camera associated to this layer
-			Camera* m_LayerCamera;
+			Camera* m_LayerCamera = nullptr;
 		public:
 			// Default constructor
 			RenderLayer() : m_LayerCamera(NULL){}

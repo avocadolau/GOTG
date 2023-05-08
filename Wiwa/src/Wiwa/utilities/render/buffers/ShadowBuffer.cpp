@@ -13,6 +13,7 @@ Wiwa::ShadowBuffer::~ShadowBuffer()
 	if (m_Init) {
 		glDeleteTextures(1, &m_ShadowMap);
 		glDeleteFramebuffers(1, &m_DBO);
+		glDeleteTextures(1, &m_ShadowMap);
 	}
 }
 

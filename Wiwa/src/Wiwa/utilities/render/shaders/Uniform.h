@@ -53,7 +53,9 @@ namespace Wiwa {
 		{
 			setEmptyData();
 		}
-
+		~Uniform()
+		{
+		}
 		void sendToShader(const uint16_t shaderProgram, int& textureId);
 
 		template <class T>

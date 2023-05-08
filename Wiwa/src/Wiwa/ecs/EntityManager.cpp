@@ -25,7 +25,7 @@ namespace Wiwa {
 
 	EntityManager::~EntityManager()
 	{
-		
+		Clear();
 	}
 
 	void EntityManager::Clear()

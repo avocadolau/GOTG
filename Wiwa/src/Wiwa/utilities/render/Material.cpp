@@ -36,6 +36,7 @@ namespace Wiwa {
 	{
 		if (m_Shader)
 			m_Shader->DeleteRef(this);
+		m_Uniforms.clear();
 	}
 
 	void Material::Load(const char* path)

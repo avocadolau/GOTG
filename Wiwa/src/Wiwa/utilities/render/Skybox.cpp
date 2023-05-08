@@ -73,6 +73,9 @@ Wiwa::Skybox::Skybox()
 
 Wiwa::Skybox::~Skybox()
 {
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteTextures(1, &m_TextureID);
 }
 
 void Wiwa::Skybox::LoadCubemap(const std::vector<const char*>& faces)

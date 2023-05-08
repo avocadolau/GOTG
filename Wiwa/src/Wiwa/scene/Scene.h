@@ -72,13 +72,12 @@ namespace Wiwa {
 		size_t mMaxTimeEntering, mMaxTimeLeaving = 0;
 
 		EntityManager m_EntityManager;
-		CameraManager* m_CameraManager;
-		PhysicsManager* m_PhysicsManager;
-		LightManager* m_LightManager;
-		GuiManager* m_GuiManager;
-		DialogManager* m_DialogManager;
+		CameraManager* m_CameraManager = nullptr;
+		PhysicsManager* m_PhysicsManager = nullptr;
+		LightManager* m_LightManager = nullptr;
+		GuiManager* m_GuiManager = nullptr;
+		DialogManager* m_DialogManager = nullptr;
 		std::vector<std::string> m_AudioBanks;
-	public:
 	private:
 		std::vector<InstanceRenderer> m_InstanceRenderers;
 
