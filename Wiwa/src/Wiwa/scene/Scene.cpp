@@ -138,7 +138,10 @@ namespace Wiwa
 				}
 			}
 			m_GuiManager->Update();
-			m_DialogManager->Update();
+			if (player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX)
+			{
+				m_DialogManager->Update();
+			}
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();

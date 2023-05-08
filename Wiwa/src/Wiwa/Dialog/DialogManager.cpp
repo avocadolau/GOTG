@@ -1,6 +1,7 @@
 #include <wipch.h>
 
 #include "DialogManager.h"
+
 #include <Wiwa/ecs/components/game/Character.h>
 
 #include "Wiwa/audio/Audio.h"
@@ -151,7 +152,7 @@ namespace Wiwa
 
 	bool DialogManager::Update()
 	{
-		/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 		characterID = GameStateManager::s_CurrentCharacter;
 
@@ -302,7 +303,7 @@ namespace Wiwa
 			}
 		}
 
-		keyPressRefreshTimer += Time::GetDeltaTime();*/
+		keyPressRefreshTimer += Time::GetDeltaTime();
 
 		return true;
 	}
