@@ -5,6 +5,7 @@
 #include "../../components/attack/Attack.h"
 #include "../enemy/Ultron/BossUltron.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/components/game/Health.h>
 
 namespace Wiwa
 {
@@ -65,6 +66,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		DashEffect* bullet = GetComponentByIterator<DashEffect>(m_DashIt);
 		Transform3D* transform = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(m_EntityId));
+		Health* healthBossUltron = (Health*)em.GetComponentByIterator(em.GetComponentIterator<Health>(BossUltronEnemy->GetEntity()));
 
 		m_Timer += Time::GetDeltaTimeSeconds();
 
@@ -91,7 +93,7 @@ namespace Wiwa
 		{
 			if ((m_Timer >= bullet->lifeTime - 0.05f) && (m_Timer <= bullet->lifeTime))
 			{
-				if (transform->localPosition.y != 3000.0f)
+				if (transform->localPosition.y != 3000.0f && healthBossUltron->health > 0.0f)
 				{
 					Transform3D* transformBossUltron = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(BossUltronEnemy->GetEntity()));
 					Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(BossUltronEnemy->GetEntity());
