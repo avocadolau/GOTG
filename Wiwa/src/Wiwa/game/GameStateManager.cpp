@@ -177,13 +177,22 @@ namespace Wiwa
 			for (int i = 0; i < size; i++){
 				if (em.IsComponentRemoved<WaveSpawner>(i)) {
 				}
-				else{
+				else {
 					Wiwa::WaveSpawner* spawner = &enemySpawnerList[i];
-					if (spawner){
+					if (spawner) {
 						isFinished = IsWaveSpawnerFinished(spawner);
 					}
-					if (Input::IsKeyPressed(Key::N))
+
+					if (Input::IsKeyPressed(Key::F6))
 						EndCombatRoom(spawner);
+
+					if (Input::IsKeyPressed(Key::F5))
+					{
+						EndCurrentRoom();
+						WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
+						GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
+						SceneManager::LoadSceneByIndex(s_BossRoomIndx);
+					}
 				}
 			}
 			s_HasFinshedRoom = isFinished;
