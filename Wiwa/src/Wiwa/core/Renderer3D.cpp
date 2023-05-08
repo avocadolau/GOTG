@@ -330,6 +330,24 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/animated_texture_transparent", animTexTranspShader);
 
+		ResourceId enemySpawnFlashShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/bullet/enemy_spawn_flash");
+		Shader* enemySpawnFlashShader = Wiwa::Resources::GetResourceById<Shader>(enemySpawnFlashShaderId);
+		enemySpawnFlashShader->Compile("resources/shaders/vfx/bullet/enemy_spawn_flash");
+
+		enemySpawnFlashShader->addUniform("u_LifeTime", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_Time", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_Color", UniformType::fVec4);
+		enemySpawnFlashShader->addUniform("u_FresnelColor", UniformType::fVec4);
+		enemySpawnFlashShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		enemySpawnFlashShader->addUniform("u_Texture", UniformType::Sampler2D);
+		enemySpawnFlashShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		enemySpawnFlashShader->addUniform("u_HologramTexture", UniformType::Sampler2D);
+		enemySpawnFlashShader->addUniform("u_HologramColor", UniformType::fVec4);
+		enemySpawnFlashShader->addUniform("u_Amplitude", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_Frequency", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_OffsetMultiplier", UniformType::fVec2);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet/enemy_spawn_flash", enemySpawnFlashShader);
 		//===========================================================================================================
 
 		// Normal Display Shader

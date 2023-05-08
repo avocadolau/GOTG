@@ -1140,44 +1140,24 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	if (ImGui::TreeNode("Rotation & Angular Velocity"))
 	{
-		ImGui::Checkbox("##m_p_followEmitterRotation", &emitter->m_p_followEmitterRotation);
-		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Rotation");
-
 		if ((int)emitter->m_p_followEmitterRotation > 1 || (int)emitter->m_p_followEmitterRotation < 0)
 			emitter->m_p_followEmitterRotation = false;
 
-		if ((int)emitter->m_p_followEmitterRotationX > 1 || (int)emitter->m_p_followEmitterRotationX < 0)
-			emitter->m_p_followEmitterRotationX = false;
-
-		if ((int)emitter->m_p_followEmitterRotationY > 1 || (int)emitter->m_p_followEmitterRotationY < 0)
-			emitter->m_p_followEmitterRotationY = false;
-
-		if ((int)emitter->m_p_followEmitterRotationZ > 1 || (int)emitter->m_p_followEmitterRotationZ < 0)
-			emitter->m_p_followEmitterRotationZ = false;
-		
-		if (emitter->m_p_followEmitterRotation)
+		if (!emitter->m_p_followEmitterRotationSpawn)
 		{
-			ParticleTab();
-			ImGui::Text("X:");
+			ImGui::Checkbox("##m_p_followEmitterRotation", &emitter->m_p_followEmitterRotation);
 			ImGui::SameLine();
-			ImGui::Checkbox("##m_p_followEmitterRotationX", &emitter->m_p_followEmitterRotationX);
-			ImGui::SameLine();
-			ImGui::Text(" Y:");
-			ImGui::SameLine();
-			ImGui::Checkbox("##m_p_followEmitterRotationY", &emitter->m_p_followEmitterRotationY);
-			ImGui::SameLine();
-			ImGui::Text(" Z:");
-			ImGui::SameLine();
-			ImGui::Checkbox("##m_p_followEmitterRotationZ", &emitter->m_p_followEmitterRotationZ);
-
+			ImGui::Text("Follow Emitter Rotation");
 		}
-		ImGui::Dummy(ImVec2(0, 8));
-		
 
-		ImGui::Checkbox("##m_p_followEmitterRotationSpawn", &emitter->m_p_followEmitterRotationSpawn);
-		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Rotation Only on Spawn");
+		if (!emitter->m_p_followEmitterRotation)
+		{
+			ImGui::Checkbox("##m_p_followEmitterRotationSpawn", &emitter->m_p_followEmitterRotationSpawn);
+			ImGui::SameLine();
+			ImGui::Text("Follow Emitter Rotation Only on Spawn");
+		}
+		
+		ImGui::Dummy(ImVec2(0, 8));
 
 		ImGui::Checkbox("##m_p_initialRotation", &emitter->m_p_rangedInitialRotation);
 		ImGui::SameLine();

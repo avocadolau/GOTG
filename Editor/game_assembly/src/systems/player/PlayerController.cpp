@@ -281,9 +281,15 @@ void Wiwa::PlayerController::SpawnStarLordUltimate(Transform3D& transform, const
 	if (!bulletTr)
 		return;
 
-	bulletTr->localPosition = Math::GetWorldPosition(transform.worldMatrix);
+	bulletTr->localPosition = Math::GetWorldPosition(playerTr->worldMatrix);
 	bulletTr->localRotation = glm::vec3(0.f, playerTr->localRotation.y + 90.0f, 0.f);
 	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
+	
+	//std::string ptemp = "px: " + std::to_string(playerTr->localPosition.x) + " py: " + std::to_string(playerTr->localPosition.y) + " pz: " + std::to_string(playerTr->localPosition.z);
+	//std::string temp = "x: " + std::to_string(bulletTr->localPosition.x) + " y: " + std::to_string(bulletTr->localPosition.y) + " z: " + std::to_string(bulletTr->localPosition.z);
+
+	//WI_CORE_INFO(ptemp.c_str());
+	//WI_CORE_INFO(temp.c_str());
 
 	SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
 

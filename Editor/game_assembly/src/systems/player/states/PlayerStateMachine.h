@@ -22,7 +22,8 @@ namespace Wiwa
 		WI_HARD_INL bool CanMove() { return  GetInput() != glm::vec2(0.f); }
 		WI_HARD_INL bool IsAiming() { return GetShootInput() != glm::vec2(0.f); }
 		WI_HARD_INL bool CanAttack() { return Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadRigthBumper) || Input::IsKeyPressed(Key::Space); }
-		WI_HARD_INL bool CanUltimate() { return Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadRitghtThumb); }
+		WI_HARD_INL bool CanUltimate() { return (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadRitghtThumb) || (Input::IsKeyRepeat(Key::Q) && Input::IsKeyRepeat(Key::E))); }
+		
 		void UpdateMovement(const float speed);
 		void UpdateRotation();
 
