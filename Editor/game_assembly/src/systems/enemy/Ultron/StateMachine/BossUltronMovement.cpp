@@ -49,7 +49,7 @@ namespace Wiwa
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent) {
-			navAgent->autoRotate = true;
+			navAgent->autoRotate = false;
 		}
 
 		m_TimerToAttack = 0.0f;
@@ -69,6 +69,8 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
+		enemy->LookAt(playerTr->localPosition, 60.0f);
+
 		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 2.0f))
 		{
 			m_DoAttack = true;
@@ -77,7 +79,7 @@ namespace Wiwa
 		else
 		{
 			m_TimerToAttack += Time::GetDeltaTimeSeconds();
-			if (m_TimerToAttack >= 6.0f)
+			if (m_TimerToAttack >= 4.0f)
 			{
 				m_DoAttack = true;
 				navAgentPtr->StopAgent();
@@ -87,10 +89,17 @@ namespace Wiwa
 
 		if (m_DoAttack)
 		{
-			/*UltronAttacks nextAttack = GetAttackFromProbabilites();*/
-			UltronAttacks nextAttack = Wiwa::UltronAttacks::LASER_BEAM;
+			if (!enemy->m_IsSecondPhaseActive)
+			{
+				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
+			}
 
-			switch (nextAttack)
+			if (enemy->m_IsSecondPhaseActive)
+			{
+				m_NextAttack = GetAttackFromProbabilitesSecondPhase();
+			}
+
+			switch (m_NextAttack)
 			{
 			case Wiwa::UltronAttacks::NONE:
 			{
@@ -148,22 +157,45 @@ namespace Wiwa
 	{
 	}
 
-	UltronAttacks BossUltronMovementState::GetAttackFromProbabilites() //Reajuste de Probabilidades con 2 dashes distintos + Rain
+	UltronAttacks BossUltronMovementState::GetAttackFromProbabilitesFirstPhase()
 	{
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);
-		if (randomNum <= 50) // 50% probability
+		if (randomNum <= 20) // 20 % probability
 		{
 			return UltronAttacks::BULLET_STORM;
 		}
-		else if (randomNum <= 75) { // 25% probability
+		else if (randomNum <= 40) { // 20 % probability
 			return UltronAttacks::LASER_BEAM;
 		}
-		else if (randomNum <= 100) { // 25% probability
+		else if (randomNum <= 60) { // 20 % probability
 			return UltronAttacks::CLUSTER_SHOTS;
 		}
-		
-		return UltronAttacks::BULLET_STORM;
+		else if (randomNum <= 80) { // 20 % probability
+			return UltronAttacks::DASH;
+		}
+		else if (randomNum <= 100) { // 20 % probability
+			return UltronAttacks::SECOND_DASH;
+		}
+	}
+
+	UltronAttacks BossUltronMovementState::GetAttackFromProbabilitesSecondPhase()
+	{
+		std::uniform_int_distribution<> disEnemies(1, 100);
+		int randomNum = disEnemies(Application::s_Gen);
+		if (randomNum <= 25) // 25% probability
+		{
+			return UltronAttacks::BULLET_STORM;
+		}
+		else if (randomNum <= 50) { // 25% probability
+			return UltronAttacks::DASH;
+		}
+		else if (randomNum <= 75) { // 25% probability
+			return UltronAttacks::SECOND_DASH;
+		}
+		else if (randomNum <= 100) { // 25% probability
+			return UltronAttacks::RAIN_PROJECTILE;
+		}
 	}
 
 	void BossUltronMovementState::FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec)

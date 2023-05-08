@@ -24,7 +24,8 @@ namespace Wiwa {
 
 	private: 
 		SecondPhaseState m_SecondPhaseState;
-
+		EntityId m_RegenWallPrefabId;
+		EntityId m_SpawnerPrefabId;
 		std::vector<glm::vec3> m_AfterRegenPosition;
 
 		bool m_SpawnEnemies = false;

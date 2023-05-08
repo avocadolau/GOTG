@@ -26,6 +26,11 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		if (navAgent != nullptr)
+		{
+			navAgent->autoRotate = false;
+		}
 
 		animator->PlayAnimation("A_attack_shot", true);
 	}
@@ -33,11 +38,17 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
 		m_FirstPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_ThirdPatternAttackTimer += Time::GetDeltaTimeSeconds();
+
+		navAgentPtr->StopAgent();
+		enemy->LookAt(playerTr->localPosition, 30.0f);
 
 		if (IsFirstPatternFinished() == false)
 		{
@@ -73,7 +84,7 @@ namespace Wiwa
 
 			if (m_RoundCounter >= NUMBER_OF_ROUNDS)
 			{
-				NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+				
 				if (navAgent)
 				{
 					navAgent->autoRotate = true;

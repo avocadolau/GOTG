@@ -75,7 +75,7 @@ namespace Wiwa
 		m_TimerAmplitude += Time::GetDeltaTimeSeconds();
 		m_ZigZagTimer += Time::GetDeltaTimeSeconds();
 
-		if (m_TimerAmplitude >= 10.0f)
+		if (m_TimerAmplitude >= 4.0f)
 		{
 			m_TimerAmplitude = 4.0f;
 		}

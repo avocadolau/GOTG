@@ -41,7 +41,7 @@ namespace Wiwa
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		Health* stats = (Health*)em.GetComponentByIterator(enemy->m_Health);
 
-		m_TimerSecondPhase += Time::GetDeltaTimeSeconds();
+		
 		
 
 		switch (m_SecondPhaseState)
@@ -53,11 +53,11 @@ namespace Wiwa
 			navAgentPtr->RemoveAgent();
 			selfTr->localPosition = m_CenterPosition;
 
-			EntityId regenWallPrefabId = em.LoadPrefab(m_WallPrefabPath);
-			Transform3D* regenWallPrefabTr = em.GetComponent<Transform3D>(regenWallPrefabId);
+			m_RegenWallPrefabId = em.LoadPrefab(m_WallPrefabPath);
+			Transform3D* regenWallPrefabTr = em.GetComponent<Transform3D>(m_RegenWallPrefabId);
 			
 
-			PhysicsSystem* physSysWallRegen = em.GetSystem<PhysicsSystem>(regenWallPrefabId);
+			PhysicsSystem* physSysWallRegen = em.GetSystem<PhysicsSystem>(m_RegenWallPrefabId);
 			physSysWallRegen->DeleteBody();
 
 			if (!regenWallPrefabTr || !playerTr)
@@ -78,25 +78,48 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::REGENERATE:
 		{
+			m_TimerSecondPhase += Time::GetDeltaTimeSeconds();
 			m_TimerHealing += Time::GetDeltaTimeSeconds();
 
 			if (m_TimerHealing >= 1.0f)
 			{
-				stats->health = stats->health + 20.0f;
+				if (enemy->m_MaxHealth <= stats->health)
+				{
+					stats->health = enemy->m_MaxHealth;
+				}
+				else
+				{
+					stats->health = stats->health + 20.0f;
+				}
+
 				m_TimerHealing = 0.0f;
 			}
 
 			if (m_SpawnEnemies)
 			{
 				//Add enemies
-				em.LoadPrefab(m_EnemySpawnerPath);
+				m_SpawnerPrefabId = em.LoadPrefab(m_EnemySpawnerPath);
 				m_SpawnEnemies = false;
+			}
+
+			if (m_TimerSecondPhase >= 16.0f) //Cambiar por num enemigos derrotados
+			{
+				m_TimerSecondPhase = 0.0f;
+				m_SecondPhaseState = SecondPhaseState::END_STATE;
 			}
 		}
 		break;
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::END_STATE:
 		{
+
+			//Destroy wall
+			em.DestroyEntity(m_RegenWallPrefabId);
+			em.DestroyEntity(m_SpawnerPrefabId);
+
 			selfTr->localPosition = GetNewPositionAfterRegen();
+			navAgentPtr->RegisterWithCrowd();
+			navAgentPtr->SetPosition(selfTr->localPosition);
+			navAgentPtr->StopAgent();
 
 			enemy->SwitchState(enemy->m_MovementState);
 		}
