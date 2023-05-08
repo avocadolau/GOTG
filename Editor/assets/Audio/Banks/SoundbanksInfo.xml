@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{2177B3E1-78AA-5486-5190-29508C1DFF44}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{52CA7564-6804-EED2-3943-B09ACF717259}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -505,7 +505,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{2F06D129-A5B5-A859-3A2F-585CD93B427C}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -710,5 +710,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{A63D40B3-BDF6-8AC3-48FA-6F1B48F726D6}</FileHash>
+	<FileHash>{78799D95-8247-C678-F913-6F1C3C2FDA8F}</FileHash>
 </SoundBanksInfo>

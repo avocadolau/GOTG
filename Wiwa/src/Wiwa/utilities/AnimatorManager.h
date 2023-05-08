@@ -10,7 +10,7 @@ namespace Wiwa
 	class WI_API AnimatorManager
 	{
 	public:
-
+		static void CleanUp();
 		static std::shared_ptr<Animation> GetAnimation(const char* file_path);
 		static void StoreAnimation(std::shared_ptr<Animation> animation);
 		

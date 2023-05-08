@@ -34,6 +34,8 @@
 
 #include <Wiwa/render/RenderManager.h>
 
+#include <Wiwa/utilities/AnimatorManager.h>
+
 #include <Wiwa/core/ProjectManager.h>
 #include <stdlib.h>
 #include <time.h>
@@ -149,6 +151,7 @@ namespace Wiwa
 	
 		Audio::Terminate();
 		GameStateManager::CleanUp();
+		AnimatorManager::CleanUp();
 	}
 
 	void Application::Run()

@@ -11,6 +11,7 @@ namespace  Wiwa {
 		static bool m_Playing ;
 		static float m_MusicInterporlation ;
 		static void Init();
+		static void CleanUp();
 		
 		void static StopMusic();
 

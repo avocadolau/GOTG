@@ -139,7 +139,7 @@ void Wiwa::PlayerAttack::Fire()
 			else {
 				if (m_currentAudioDelay < 0 && !m_FirstShoot)
 				{
-					m_StateMachine->GetAudio()->PlayAudio("combat_start");
+					//m_StateMachine->GetAudio()->PlayAudio("combat_start");
 					m_FirstShoot = false;
 					m_currentAudioDelay = m_audioDelay;
 				}

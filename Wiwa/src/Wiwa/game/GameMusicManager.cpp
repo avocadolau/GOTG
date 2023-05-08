@@ -19,6 +19,10 @@ namespace Wiwa
 		Audio::PostEventDefaultListener("play_music", GameMusicManager::m_PlayEventId);
 		m_Playing = true;
 	}
+	void GameMusicManager::CleanUp()
+	{
+		
+	}
 	void GameMusicManager::UpdateCombatIntesity( int numEnemies)
 	{
 		// Define the range of enemy counts that will result in danger levels between 0 and 100
