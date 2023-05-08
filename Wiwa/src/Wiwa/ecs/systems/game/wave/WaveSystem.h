@@ -43,7 +43,12 @@ namespace Wiwa {
 		int m_TotalEnemiesSpawned = 0;
 		int m_PointIndex = 0;
 		float m_Timer = 0.0f;
+		float m_TimerSpawnParticle = 0.0f;
 		bool m_HasTriggered;
+		int m_xRand = 0;
+		int m_zRand = 0;
+		bool m_HasSetSpawnParticle = false;
+		Pool_Type enemyRandSelection;
 	};
 }
 

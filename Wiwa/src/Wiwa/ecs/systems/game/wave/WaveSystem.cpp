@@ -20,6 +20,7 @@ namespace Wiwa
 		m_PointIndex = 0;
 		m_TotalEnemiesSpawned = 0;
 		m_HasTriggered = false;
+		m_HasSetSpawnParticle = false;
 	}
 
 	WaveSystem::~WaveSystem()
@@ -63,8 +64,10 @@ namespace Wiwa
 	{
 		if (!getAwake() && !getInit())
 			return;
+		EntityManager& em = GetEntityManager();
 
 		m_Timer += Time::GetDeltaTimeSeconds();
+		m_TimerSpawnParticle += Time::GetDeltaTimeSeconds();
 
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		// Wave has finished
@@ -78,6 +81,53 @@ namespace Wiwa
 		int max = 5;
 		disSpawn.param(std::uniform_int_distribution<int>::param_type{ min, max });
 
+		if (m_TimerSpawnParticle >= wave->enemySpawnRate - 4.0f && !m_HasSetSpawnParticle)
+		{
+			m_xRand = disSpawn(Application::s_Gen);
+			m_zRand = disSpawn(Application::s_Gen);
+			enemyRandSelection = GetEnemyFromProbabiliteis();
+
+			if (m_PointIndex >= m_Points.size())
+				m_PointIndex = 0;
+
+			m_TimerSpawnParticle = 0.0f;
+			m_HasSetSpawnParticle = true;
+
+			EntityId spawnerParticle = EntityManager::INVALID_INDEX;
+			switch (enemyRandSelection)
+			{
+			case Pool_Type::PHALANX_MELEE_GENERIC:
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxMelee.wiprefab");
+			}
+			break;
+			case Pool_Type::PHALANX_RANGED_GENERIC:
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxRanged.wiprefab");
+			}
+			break;
+			case Pool_Type::SENTINEL:
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSentinel.wiprefab");
+			}
+			break;
+			case Pool_Type::SUBJUGATOR:
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSubjugator.wiprefab");
+			}
+			break;
+			default:
+				break;
+			}
+			Transform3D* enemyTransform = em.GetComponent<Transform3D>(spawnerParticle);
+			if (enemyTransform)
+			{
+				enemyTransform->localPosition.x = m_Points[m_PointIndex].x + m_xRand;
+				enemyTransform->localPosition.z = m_Points[m_PointIndex].z + m_zRand;
+				enemyTransform->localPosition.y = 0;
+			}
+		}
+
 		if (m_Timer >= wave->enemySpawnRate && m_TotalEnemiesSpawned < wave->maxEnemies)
 		{
 			m_Timer = 0.0f;
@@ -85,16 +135,13 @@ namespace Wiwa
 			if (m_PointIndex >= m_Points.size())
 				m_PointIndex = 0;
 
-			int xRand = disSpawn(Application::s_Gen);
-			int zRand = disSpawn(Application::s_Gen);
-
-			Pool_Type enemyRandSelection = GetEnemyFromProbabiliteis();
-			if (SpawnEnemy(enemyRandSelection, m_Points[m_PointIndex], xRand, zRand))
+			if (SpawnEnemy(enemyRandSelection, m_Points[m_PointIndex], m_xRand, m_zRand))
 			{
 				wave->currentEnemiesAlive++;
 				m_PointIndex++;
 				m_TotalEnemiesSpawned++;
 				m_HasTriggered = true;
+				m_HasSetSpawnParticle = false;
 			}
 		}
 	}
