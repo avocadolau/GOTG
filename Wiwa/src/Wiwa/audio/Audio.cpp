@@ -204,7 +204,7 @@ bool Audio::Terminate()
 
     AK::MusicEngine::Term();
     AK::SoundEngine::Term();
-
+    AK::Comm::Term();
     g_lowLevelIO.Term();
 
     if (AK::IAkStreamMgr::Get())
