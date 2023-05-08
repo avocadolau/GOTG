@@ -26,6 +26,7 @@ namespace Wiwa
         bool shopActive = false;
         bool buyItem = false;
         size_t lastCoins = -1;
+        size_t lastPromethiumGems = -1;
         Ability** abilitiesList;
         Buff** buffsList;
         std::vector<PassiveSkill> passives;
@@ -51,6 +52,7 @@ namespace Wiwa
         void PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm);
 
         void Coins(uint32_t coins, Wiwa::GuiManager& gm);
+        void PromethiumGems(uint32_t promethiumGems, Wiwa::GuiManager& gm);
 
         void HandlePlayerStatistics(int max_Health, int max_Shield, float range, int attack, float speed, float rateOfFire, Wiwa::GuiManager& gm);
 

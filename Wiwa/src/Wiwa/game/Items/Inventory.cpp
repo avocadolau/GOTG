@@ -284,30 +284,37 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 
 void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 {
-	m_ShopPassives.emplace_back(shopElement);
-	switch (shopElement.PassiveBoost)
+	if (CheckIfShopPassiveAlreadyImplemented(shopElement.Name))
 	{
-	case Wiwa::HowardElementType::FANCY_BOOTS:
-		m_ShopPassives.back().Use();
-		break;
-	case Wiwa::HowardElementType::EASY_TRIGGER:
-		m_ShopPassives.back().Use();
-		break;
-	case Wiwa::HowardElementType::NANO_BOOST:
-		m_ShopPassives.back().Use();
-		break;
-	case Wiwa::HowardElementType::NANO_MACHINES:
-		m_ShopPassives.back().Use();
-		break;
-	case Wiwa::HowardElementType::HEALTH_CAPACITOR:
-		m_ShopPassives.back().Use();
-		break;
-	case Wiwa::HowardElementType::SHIELD_FAN:
-		m_ShopPassives.back().Use();
-		break;
-	case Wiwa::HowardElementType::FANATIC:
-		m_ShopPassives.back().Use();
-		break;
+		m_ShopPassives.at(GetShopPassiveIndex(shopElement)).AugmentStep();
+	}
+	else if (!CheckIfShopPassiveAlreadyImplemented(shopElement.Name))
+	{
+		m_ShopPassives.emplace_back(shopElement);
+		switch (shopElement.PassiveBoost)
+		{
+		case Wiwa::HowardElementType::FANCY_BOOTS:
+			m_ShopPassives.back().Use();
+			break;
+		case Wiwa::HowardElementType::EASY_TRIGGER:
+			m_ShopPassives.back().Use();
+			break;
+		case Wiwa::HowardElementType::NANO_BOOST:
+			m_ShopPassives.back().Use();
+			break;
+		case Wiwa::HowardElementType::NANO_MACHINES:
+			m_ShopPassives.back().Use();
+			break;
+		case Wiwa::HowardElementType::HEALTH_CAPACITOR:
+			m_ShopPassives.back().Use();
+			break;
+		case Wiwa::HowardElementType::SHIELD_FAN:
+			m_ShopPassives.back().Use();
+			break;
+		case Wiwa::HowardElementType::FANATIC:
+			m_ShopPassives.back().Use();
+			break;
+		}
 	}
 }
 
@@ -430,6 +437,30 @@ void Wiwa::Inventory::UseBuff(size_t index) const
 void Wiwa::Inventory::UseShopPassive(size_t index)
 {
 	m_ShopPassives.at(index).Use();
+}
+
+bool Wiwa::Inventory::CheckIfShopPassiveAlreadyImplemented(std::string name)
+{
+	for (int i = 0; i < m_ShopPassives.size(); i++)
+	{
+		if (m_ShopPassives.at(i).Name == name)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+size_t Wiwa::Inventory::GetShopPassiveIndex(const ShopElement& shopElement)
+{
+	for (size_t i = 0; i < m_ShopPassives.size(); i++)
+	{
+		if (m_ShopPassives.at(i).Name == shopElement.Name)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
 void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)

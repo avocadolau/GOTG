@@ -6,6 +6,8 @@
 #include <Wiwa/core/Window.h>
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/game/GameMusicManager.h>
+#include <Wiwa/game/Items/Inventory.h>
+#include <Wiwa/game/Items/ItemManager.h>
 #include "../systems/ships/ship_main_menu.h"
 #include <iostream>
 
@@ -109,5 +111,82 @@ GoToVideo_ GoToIntroLoreVideo()
 {
 	Wiwa::SceneManager::ChangeSceneByIndex(1);
 	return GoToVideo_::hola;
+}
+
+AddHealthCapacitor_ AddHealthCapacitor()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Health Capacitor"));
+	return AddHealthCapacitor_();
+}
+
+AddNanooBoost_ AddNanooBoost()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Nano Boost"));
+	return AddNanooBoost_();
+}
+
+AddEasyTrigger_ AddEasyTrigger()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Easy Trigger"));
+	return AddEasyTrigger_();
+}
+
+AddFancyBoots_ AddFancyBoots()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Fancy Boots"));
+	return AddFancyBoots_();
+}
+
+AddLethalShooter_ AddLethalShooter()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Lethal shooter"));
+	return AddLethalShooter_();
+}
+
+AddShieldFan_ AddShieldFan()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Shield Fan"));
+	return AddShieldFan_();
+}
+
+AddNanoMachines_ AddNanoMachines()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Nanomachines"));
+	return AddNanoMachines_();
+}
+
+AddRecoveryShield_ AddRecoveryShield()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery Shield"));
+	return AddRecoveryShield_();
+}
+
+AddDevourer_ AddDevourer()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Devourer"));
+	return AddDevourer_();
+}
+
+AddFanatic_ AddFanatic()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Fanatic"));
+	return AddFanatic_();
+}
+
+AddRecoveryHealth_ AddRecoveryHealth()
+{
+	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
+	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery health"));
+	return AddRecoveryHealth_();
 }
 

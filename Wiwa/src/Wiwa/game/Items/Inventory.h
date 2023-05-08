@@ -30,7 +30,8 @@ namespace Wiwa
 		void UseAbility(size_t index) const;
 		void UseBuff(size_t index) const ;
 		void UseShopPassive(size_t index);
-
+		bool CheckIfShopPassiveAlreadyImplemented(std::string name);
+		size_t GetShopPassiveIndex(const ShopElement& shopElement);
 		void SwapUITexture(ResourceId id, int indexUI);
 		void Clear();
 

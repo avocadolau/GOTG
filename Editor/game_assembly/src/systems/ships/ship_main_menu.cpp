@@ -116,7 +116,7 @@ void Wiwa::ShipMainMenu::OnCollisionEnter(Object* body1, Object* body2)
 
 	if (body1->id == m_EntityId && body2->selfTagStr == playerTag)
 	{
-		gm.canvas.at(7)->SwapActive();
+		gm.canvas.at(9)->SwapActive();
 		m_SceneChange = true;
 	}
 }
@@ -128,7 +128,7 @@ void Wiwa::ShipMainMenu::OnCollisionExit(Object* body1, Object* body2)
 
 	if (body1->id == m_EntityId && body2->selfTagStr == playerTag)
 	{
-		gm.canvas.at(7)->SwapActive();
+		gm.canvas.at(9)->SwapActive();
 		m_SceneChange = false;
 	}
 }

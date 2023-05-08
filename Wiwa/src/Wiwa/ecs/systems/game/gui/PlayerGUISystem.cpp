@@ -444,12 +444,19 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 		Coins(Wiwa::GameStateManager::GetPlayerInventory().GetTokens(), gm);
 	}
 
+	if (lastPromethiumGems != Wiwa::GameStateManager::GetPlayerInventory().GetTokensHoward())
+	{
+		PromethiumGems(Wiwa::GameStateManager::GetPlayerInventory().GetTokensHoward(), gm);
+	}
+
 	CooldownState(abilitiesList, gm);
 	CooldownState(buffsList, gm);
 	HandleActiveAbilities(abilitiesList, gm);
 	HandleActiveBuffs(buffsList, gm);
 	HandleActivePassives(passives, gm);
 	lastCoins = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
+	lastPromethiumGems = Wiwa::GameStateManager::GetPlayerInventory().GetTokensHoward();
+
 
 }
 
@@ -611,6 +618,19 @@ void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)
 	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(ShopHUD)->controls.at(2)->id_quad_normal, 1);
 	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(ShopHUD)->controls.at(2)->id_quad_normal, newText->GetTextureId());
 	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(ShopHUD)->controls.at(2)->id_quad_normal, newText->GetSize(), { 0,0,512,512 });
+}
+
+void Wiwa::PlayerGUISystem::PromethiumGems(uint32_t promethiumGems, Wiwa::GuiManager& gm)
+{
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+	std::string my_string = std::to_string(promethiumGems);
+
+	gm.canvas.at(CanvasHUD)->controls.at(5)->text = my_string.c_str();
+	gm.canvas.at(ShopHUD)->controls.at(2)->text = my_string.c_str();
+	Text* newText = gm.InitFont("library/Fonts/Jade_Smile.ttf", my_string.c_str());
+	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(6)->id_quad_normal, 1);
+	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(6)->id_quad_normal, newText->GetTextureId());
+	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(6)->id_quad_normal, newText->GetSize(), { 0,0,512,512 });
 }
 
 void Wiwa::PlayerGUISystem::HandlePlayerStatistics(int max_Health, int max_Shield, float range, int attack, float speed, float rateOfFire, Wiwa::GuiManager& gm)

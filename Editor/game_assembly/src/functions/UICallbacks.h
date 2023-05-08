@@ -14,6 +14,18 @@ enum class ActivateOptionsMenu_ { hola };
 enum class DeActivateOptionsMenu_ { hola };
 enum class GoToVideo_ { hola };
 
+enum class AddHealthCapacitor_ { hola };
+enum class AddNanooBoost_ { hola };
+enum class AddEasyTrigger_ { hola };
+enum class AddFancyBoots_ { hola };
+enum class AddLethalShooter_ { hola };
+enum class AddShieldFan_ { hola };
+enum class AddNanoMachines_ { hola };
+enum class AddRecoveryShield_ { hola };
+enum class AddDevourer_ { hola };
+enum class AddFanatic_ { hola };
+enum class AddRecoveryHealth_ { hola };
+
 // Declare
 GoToMilanoHub_ GoToMilanoHub();
 
@@ -43,6 +55,28 @@ DeActivateOptionsMenu_ DeActivateOptionsMenu();
 
 GoToVideo_ GoToIntroLoreVideo();
 
+AddHealthCapacitor_ AddHealthCapacitor();
+
+AddNanooBoost_ AddNanooBoost();
+
+AddEasyTrigger_ AddEasyTrigger();
+
+AddFancyBoots_ AddFancyBoots();
+
+AddLethalShooter_ AddLethalShooter();
+
+AddShieldFan_ AddShieldFan();
+
+AddNanoMachines_ AddNanoMachines();
+
+AddRecoveryShield_ AddRecoveryShield();
+
+AddDevourer_ AddDevourer();
+
+AddFanatic_ AddFanatic();
+
+AddRecoveryHealth_ AddRecoveryHealth();
+
 //// Register
 REGISTER_FUNCTION(GoToMilanoHub);
 REGISTER_FUNCTION(GoMainMenu);
@@ -58,3 +92,15 @@ REGISTER_FUNCTION(PlaceHolderButton);
 REGISTER_FUNCTION(ActivateOptionsMenu);
 REGISTER_FUNCTION(DeActivateOptionsMenu);
 REGISTER_FUNCTION(GoToIntroLoreVideo);
+
+REGISTER_FUNCTION(AddHealthCapacitor);
+REGISTER_FUNCTION(AddNanooBoost);
+REGISTER_FUNCTION(AddEasyTrigger);
+REGISTER_FUNCTION(AddFancyBoots);
+REGISTER_FUNCTION(AddLethalShooter);
+REGISTER_FUNCTION(AddShieldFan);
+REGISTER_FUNCTION(AddNanoMachines);
+REGISTER_FUNCTION(AddRecoveryShield);
+REGISTER_FUNCTION(AddDevourer);
+REGISTER_FUNCTION(AddFanatic);
+REGISTER_FUNCTION(AddRecoveryHealth);

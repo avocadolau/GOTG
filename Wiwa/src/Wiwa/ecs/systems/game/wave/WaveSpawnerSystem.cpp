@@ -68,6 +68,7 @@ namespace Wiwa
 			break;
 		case Wiwa::WaveSpawnerAction::END_SPAWNER:
 		{
+			Wiwa::GameStateManager::IncrementPrometheanGems(20);
 			enemySpawner->hasFinished = true;
 			m_StopUpdating = true;
 		}
