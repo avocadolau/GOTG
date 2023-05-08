@@ -107,7 +107,12 @@ namespace Wiwa
 		static void EndCurrentRoom();
 
 		WI_HARD_INL static void SetEnemyDropChance(int newDropChance) { s_EnemyDropChances = newDropChance; }
-		WI_HARD_INL static void SetRoomType(RoomType type) { s_RoomType = type; }
+		static void SetRoomType(RoomType type) 
+		{
+			s_RoomType = type;
+			if(s_RoomType == RoomType::ROOM_BOSS)
+				s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
+		}
 		WI_HARD_INL static void SetRoomState(RoomState type) { s_RoomState = type; }
 		WI_HARD_INL static RoomType GetType() { return s_RoomType; }
 		WI_HARD_INL static RoomState GetState() { return s_RoomState; }

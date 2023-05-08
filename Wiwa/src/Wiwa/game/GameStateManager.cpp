@@ -70,6 +70,8 @@ namespace Wiwa
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
+		if(room_state  == RoomState::STATE_FINISHED)
+			s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
 	}
 
 	void GameStateManager::SaveProgression()
@@ -199,7 +201,10 @@ namespace Wiwa
 		GameMusicManager::UpdateCombatIntesity(GetActiveEnemies());
 
 		if (s_HasFinshedRoom)
+		{
 			ChangeRoomState(RoomState::STATE_FINISHED);
+			s_HasFinshedRoom = false;
+		}
 		else
 			ChangeRoomState(RoomState::STATE_STARTED);
 	}
@@ -240,8 +245,6 @@ namespace Wiwa
 	{
 		if (!s_CanContinue)
 			return false;
-
-
 
 		return true;
 	}
@@ -353,8 +356,7 @@ namespace Wiwa
 	{
 		OPTICK_EVENT("Game state manager update");
 		AchievementsFunctionality();
-		if (s_RoomState == RoomState::STATE_FINISHED && s_RoomType == RoomType::ROOM_BOSS)
-			s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
+			
 		s_PlayerInventory->Update();
 		s_GameProgression->Update();
 	}
