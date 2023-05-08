@@ -9,6 +9,7 @@ namespace Wiwa
 	{
 		m_ExplosiveBarrelIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
+		m_DoDamage = true;
 	}
 
 	ExplosiveBarrelSystem::~ExplosiveBarrelSystem()
@@ -35,6 +36,8 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+
+		m_DoDamage = true;
 	}
 
 	void ExplosiveBarrelSystem::OnUpdate()
@@ -47,6 +50,11 @@ namespace Wiwa
 		Explosion* explosiveBarrel = GetComponentByIterator<Explosion>(m_ExplosiveBarrelIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
+
+		if (m_Timer >= 0.2f)
+		{
+			m_DoDamage = false;
+		}
 
 		if (m_Timer >= explosiveBarrel->lifeTime)
 		{
@@ -66,8 +74,11 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
-				Explosion* explosiveBarrel = GetComponentByIterator<Explosion>(m_ExplosiveBarrelIt);
-				GameStateManager::DamagePlayer(explosiveBarrel->damage);
+				if (m_DoDamage)
+				{
+					Explosion* explosiveBarrel = GetComponentByIterator<Explosion>(m_ExplosiveBarrelIt);
+					GameStateManager::DamagePlayer(explosiveBarrel->damage);
+				}
 			}
 		}
 	}
