@@ -38,6 +38,7 @@ namespace Wiwa
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Ultron = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
+		m_MaxHealth = 0;
 		m_SceneCenterPos = glm::vec3(0.0f);
 	}
 
@@ -70,6 +71,8 @@ namespace Wiwa
 		Ultron* ultron = GetComponentByIterator<Ultron>(m_Ultron);
 		EnemyManager& manager = GameStateManager::GetEnemyManager();
 		*ultron = manager.m_UltronData;
+
+		
 	}
 
 	void BossUltron::OnInit()
@@ -83,6 +86,9 @@ namespace Wiwa
 		if (navAgent) {
 			navAgent->autoRotate = true;
 		}
+
+		Health* stats = GetComponentByIterator<Health>(m_Health);
+		m_MaxHealth = stats->health;
 
 		m_CurrentState = m_SpawnState;
 		m_CurrentState->EnterState(this);
@@ -101,11 +107,12 @@ namespace Wiwa
 		m_Timer += Time::GetDeltaTimeSeconds();
 
 		Health* stats = GetComponentByIterator<Health>(m_Health);
-		/*if (stats->health <= (stats->health * 0.5f))
+
+		if (stats->health <= (m_MaxHealth * 0.5f) && m_IsSecondPhaseActive == false)
 		{
 			m_IsSecondPhaseActive = true;
 			SwitchState(m_TransitionSecondPhaseState);
-		}*/
+		}
 
 		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{

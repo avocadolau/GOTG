@@ -23,6 +23,7 @@ namespace Wiwa {
 
 		float m_Timer;
 		int m_MinimumPath = 0;
+		int m_MaxHealth = 0;
 		bool m_IsSecondPhaseActive = false;
 		glm::vec3 m_SceneCenterPos = glm::vec3(0.0f);
 	public:

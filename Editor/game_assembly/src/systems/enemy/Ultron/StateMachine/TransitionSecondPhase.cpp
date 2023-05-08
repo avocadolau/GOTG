@@ -25,6 +25,7 @@ namespace Wiwa
 	{
 		m_TimerSecondPhase = 0.0f;
 		m_TimerHealing = 0.0f;
+		m_SpawnEnemies = false;
 
 		m_AfterRegenPosition.clear();
 		FillPremadePositionAfterRegen(enemy, m_AfterRegenPosition);
@@ -41,7 +42,7 @@ namespace Wiwa
 		Health* stats = (Health*)em.GetComponentByIterator(enemy->m_Health);
 
 		m_TimerSecondPhase += Time::GetDeltaTimeSeconds();
-		m_TimerHealing += Time::GetDeltaTimeSeconds();
+		
 
 		switch (m_SecondPhaseState)
 		{
@@ -70,11 +71,14 @@ namespace Wiwa
 
 			m_TimerSecondPhase = 0.0f;
 
+			m_SpawnEnemies = true;
+
 			m_SecondPhaseState = SecondPhaseState::REGENERATE;
 		}
 		break;
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::REGENERATE:
 		{
+			m_TimerHealing += Time::GetDeltaTimeSeconds();
 
 			if (m_TimerHealing >= 1.0f)
 			{
@@ -82,9 +86,12 @@ namespace Wiwa
 				m_TimerHealing = 0.0f;
 			}
 
-			//Add enemies
-			em.LoadPrefab(m_EnemySpawnerPath);
-
+			if (m_SpawnEnemies)
+			{
+				//Add enemies
+				em.LoadPrefab(m_EnemySpawnerPath);
+				m_SpawnEnemies = false;
+			}
 		}
 		break;
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::END_STATE:
