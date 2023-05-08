@@ -90,7 +90,7 @@ namespace Wiwa
 			if (m_TimerDash >= TIMER_GO_UPWARDS)
 			{
 				m_TimerDash = 0.0f;
-				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 1.0f; //Offset for the Smash
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 2.0f; //Offset for the Smash
 				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 

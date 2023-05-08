@@ -61,6 +61,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
@@ -87,7 +88,7 @@ namespace Wiwa
 		if (m_DoAttack)
 		{
 			/*UltronAttacks nextAttack = GetAttackFromProbabilites();*/
-			UltronAttacks nextAttack = Wiwa::UltronAttacks::DASH;
+			UltronAttacks nextAttack = Wiwa::UltronAttacks::LASER_BEAM;
 
 			switch (nextAttack)
 			{
@@ -96,37 +97,37 @@ namespace Wiwa
 				m_DoAttack = false;
 			}
 				break;
-			case Wiwa::UltronAttacks::BULLET_STORM:
+			case Wiwa::UltronAttacks::BULLET_STORM: //1 - 2
 			{
 				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_BulletStormAttackState);
 			}
 				break;
-			case Wiwa::UltronAttacks::LASER_BEAM:
+			case Wiwa::UltronAttacks::LASER_BEAM: //1
 			{
 				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_LaserBeamAttackState);
 			}
 				break;
-			case Wiwa::UltronAttacks::CLUSTER_SHOTS:
+			case Wiwa::UltronAttacks::CLUSTER_SHOTS: //1
 			{
 				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
 			}
 				break;
-			case Wiwa::UltronAttacks::DASH:
+			case Wiwa::UltronAttacks::DASH: //1 - 2
 			{
 				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_DashState);
 			}
 			break;
-			case Wiwa::UltronAttacks::SECOND_DASH:
+			case Wiwa::UltronAttacks::SECOND_DASH: //1 - 2
 			{
 				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_SecondDashState);
 			}
 			break;
-			case Wiwa::UltronAttacks::RAIN_PROJECTILE:
+			case Wiwa::UltronAttacks::RAIN_PROJECTILE: //2
 			{
 				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_ProjectileRain);

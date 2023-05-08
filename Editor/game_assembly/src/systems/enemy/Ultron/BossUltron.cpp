@@ -9,6 +9,7 @@
 #include "StateMachine/BossUltronDash.h"
 #include "StateMachine/BossUltronSecondDash.h"
 #include "StateMachine/BossUltronProjectileRainAttack.h"
+#include "StateMachine/TransitionSecondPhase.h"
 #include "BossUltron.h"
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
@@ -32,6 +33,7 @@ namespace Wiwa
 		m_DashState = nullptr;
 		m_SecondDashState = nullptr;
 		m_ProjectileRain = nullptr;
+		m_TransitionSecondPhaseState = nullptr;
 		
 		m_GunTransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Ultron = { WI_INVALID_INDEX, WI_INVALID_INDEX };
@@ -57,6 +59,7 @@ namespace Wiwa
 		m_DashState = new BossUltronDashState();
 		m_SecondDashState = new BossUltronSecondDashState();
 		m_ProjectileRain = new BossUltronProjectileRainAttackState();
+		m_TransitionSecondPhaseState = new BossUltronSecondPhaseState();
 		
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
@@ -98,6 +101,12 @@ namespace Wiwa
 		m_Timer += Time::GetDeltaTimeSeconds();
 
 		Health* stats = GetComponentByIterator<Health>(m_Health);
+		/*if (stats->health <= (stats->health * 0.5f))
+		{
+			m_IsSecondPhaseActive = true;
+			SwitchState(m_TransitionSecondPhaseState);
+		}*/
+
 		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
 			SwitchState(m_DeathState);
@@ -136,6 +145,9 @@ namespace Wiwa
 		if (m_ProjectileRain != nullptr)
 			delete m_ProjectileRain;
 
+		if (m_TransitionSecondPhaseState != nullptr)
+			delete m_TransitionSecondPhaseState;
+
 		m_CurrentState = nullptr;
 		m_SpawnState = nullptr;
 		m_IdleState = nullptr;
@@ -146,7 +158,8 @@ namespace Wiwa
 		m_BulletStormAttackState = nullptr;
 		m_DashState = nullptr;
 		m_SecondDashState = nullptr;
-		m_ProjectileRain = nullptr;		
+		m_ProjectileRain = nullptr;
+		m_TransitionSecondPhaseState = nullptr;
 	}
 
 	void BossUltron::OnCollisionEnter(Object* body1, Object* body2)

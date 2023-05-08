@@ -16,12 +16,14 @@ namespace Wiwa {
 		class BossUltronBaseState* m_DashState;
 		class BossUltronBaseState* m_SecondDashState;
 		class BossUltronBaseState* m_ProjectileRain;
+		class BossUltronBaseState* m_TransitionSecondPhaseState;
 
 		EntityManager::ComponentIterator m_GunTransformIt;
 		EntityManager::ComponentIterator m_Ultron;
 
 		float m_Timer;
 		int m_MinimumPath = 0;
+		bool m_IsSecondPhaseActive = false;
 		glm::vec3 m_SceneCenterPos = glm::vec3(0.0f);
 	public:
 		BossUltron();

@@ -42,34 +42,6 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
-		/*float dist2Player = glm::distance(selfTr->localPosition, m_LaserAttackPosition);
-
-		if (dist2Player < 0.5f)
-		{
-			NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-			if (navAgent) {
-				navAgent->autoRotate = false;
-			}
-
-			enemy->LookAt(playerTr->localPosition, 30.0f);
-
-			if (m_Timer >= 2.f && shootLaser == true)
-			{
-				SpawnLaserBeam(enemy, CalculateForward(*selfTr));
-
-				shootLaser = false;
-			}
-
-			if (m_Timer >= 8.f)
-			{
-				enemy->SwitchState(enemy->m_MovementState);
-			}
-
-			m_Timer += Time::GetDeltaTimeSeconds();
-		}*/
-
-		//----------------------------------------------------------------
-
 		m_TimerLaser += Time::GetDeltaTimeSeconds();
 
 		switch (laserState)
@@ -82,7 +54,11 @@ namespace Wiwa
 
 			if (m_TimerLaser >= 2.0f)
 			{
-				navAgentPtr->SetPosition(m_LaserAttackPosition);
+				//ARREGLO-AGENT
+				navAgentPtr->StopAgent();
+				navAgentPtr->RemoveAgent();
+				selfTr->localPosition = m_LaserAttackPosition;
+
 				laserState = LaserState::PREPARE_LASER;
 				m_TimerLaser = 0.0f;
 			}	
@@ -90,7 +66,7 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::PREPARE_LASER:
 		{
-			navAgentPtr->StopAgent();
+			/*navAgentPtr->StopAgent();*/
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
 			if (m_TimerLaser >= 1.0f)
@@ -105,7 +81,7 @@ namespace Wiwa
 		{
 			enemy->LookAt(playerTr->localPosition, 50.0f);
 
-			navAgent->autoRotate = false;
+			/*navAgent->autoRotate = false;*/
 			SpawnLaserBeam(enemy, CalculateForward(*selfTr));
 
 			if (m_TimerLaser >= 5.0f)
@@ -119,10 +95,15 @@ namespace Wiwa
 		{
 			if (m_TimerLaser >= 1.0f)
 			{
-				navAgent->autoRotate = true;
-				navAgentPtr->StopAgent();
-				navAgentPtr->SetPosition(GetNewPositionAfterLaser());
+				/*navAgent->autoRotate = true;
+				navAgentPtr->StopAgent();*/
+				selfTr->localPosition = GetNewPositionAfterLaser();
+				/*navAgentPtr->SetPosition(GetNewPositionAfterLaser());*/
 				m_TimerLaser = 0.0f;
+
+				navAgentPtr->RegisterWithCrowd();
+				navAgentPtr->SetPosition(selfTr->localPosition);
+				navAgentPtr->StopAgent();
 				enemy->SwitchState(enemy->m_MovementState);	
 			}
 		}
