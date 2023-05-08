@@ -8,6 +8,11 @@ Wiwa::EndRoomTrigger::~EndRoomTrigger()
 {
 }
 
+void Wiwa::EndRoomTrigger::OnDestroy()
+{
+	GameStateManager::setPlayerTriggerNextRoom(false);
+}
+
 void Wiwa::EndRoomTrigger::OnCollisionEnter(Object* body1, Object* body2)
 {
 	std::string playerBulletStr = "PLAYER";

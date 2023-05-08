@@ -48,6 +48,7 @@ namespace Wiwa
 		NavAgent* navAgent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
 		if (navAgent) {
 			navAgent->autoRotate = true;
+			navAgent->agentSliding = false;
 		}
 
 		m_CurrentState = m_SpawnState;

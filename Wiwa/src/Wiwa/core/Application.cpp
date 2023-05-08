@@ -113,9 +113,7 @@ namespace Wiwa
 		// Load assembly
 		LoadGameAssembly();
 
-		
 		WI_CORE_WARN("=======Systems initialized=======");
-		
 	}
 
 	void Application::SetHwInfo()

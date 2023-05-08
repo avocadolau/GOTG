@@ -24,7 +24,6 @@ namespace Wiwa {
 
 		void Init(int width, int height, bool depth=true);
 		void Init(int width, int height, int n_Textures, bool depth = true);
-		void InitBlur(int width, int height);
 
 		void Bind(bool clear=true);
 		void Unbind();

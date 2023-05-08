@@ -33,6 +33,9 @@ namespace Wiwa {
 	{
 		delete frameBuffer;
 		delete shadowBuffer;
+		delete hdrBuffer;
+		delete vBlurBuffer;
+		delete hBlurBuffer;
 	}
 
 	void Camera::updateView()

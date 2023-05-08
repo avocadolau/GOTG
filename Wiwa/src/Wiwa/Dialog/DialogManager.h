@@ -49,7 +49,7 @@ namespace Wiwa
 		DialogManager();
 
 		// Destructor
-		virtual ~DialogManager();
+		~DialogManager();
 
 	
 		// Init gui manager

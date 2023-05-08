@@ -610,8 +610,7 @@ void EditorLayer::MainMenuBar()
 			{
 				InspectorPanel::s_EntitySet = false;
 				if (!is_playing)
-				{
-					
+				{	
 					SaveScene();
 
 					if (m_OpenedScenePath != "")
