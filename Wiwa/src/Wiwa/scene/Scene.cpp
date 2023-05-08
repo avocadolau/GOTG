@@ -54,12 +54,12 @@ namespace Wiwa
 
 		// Clear entity manager
 		//m_EntityManager.Clear();
-
-		// Clear physics world
-		m_PhysicsManager->CleanWorld();
-		delete m_PhysicsManager;
-		m_PhysicsManager = nullptr;
-
+		if (m_PhysicsManager)
+		{
+			// Clear physics world
+			m_PhysicsManager->CleanWorld();
+			delete m_PhysicsManager;
+		}
 		RecastManager::DeAllocate();
 	}
 
@@ -137,10 +137,16 @@ namespace Wiwa
 						ugs->Update();
 				}
 			}
-			m_GuiManager->Update();
-			if (player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX)
+			if (m_GuiManager)
 			{
-				m_DialogManager->Update();
+				m_GuiManager->Update();
+			}
+			if (m_DialogManager)
+			{
+				if (player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX)
+				{
+					m_DialogManager->Update();
+				}
 			}
 			ProcessInput();
 			UpdateLoop();
@@ -177,12 +183,12 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		r2d.UpdateInstanced(this);
-
-		m_GuiManager->Draw();
+		if(m_GuiManager)
+			m_GuiManager->Draw();
 		
 		m_EntityManager.Update();
-
-		m_PhysicsManager->UpdateEngineToPhysics();
+		if(m_PhysicsManager)
+			m_PhysicsManager->UpdateEngineToPhysics();
 
 		if (SceneManager::IsPlaying())
 		{
