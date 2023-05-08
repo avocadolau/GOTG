@@ -184,8 +184,32 @@ namespace Wiwa
 
 		s_PhalanxMeleePool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_PhalanxMeleePool->getMaxSize());
-		for (int i = 0; i < s_PhalanxMeleePool->getMaxSize(); i++)
+		int i = 0;
+		while (i < s_PhalanxMeleePool->getMaxSize())
+		{
 			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_PhalanxMeleePool->getPath());
+
+			i++;
+			if (i >= s_PhalanxMeleePool->getMaxSize())
+				break;
+
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab("assets\\Enemy\\PhalanxMelee\\MeleePhalanx_01a.wiprefab");
+
+			i++;
+			if (i >= s_PhalanxMeleePool->getMaxSize())
+				break;
+
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab("assets\\Enemy\\PhalanxMelee\\MeleePhalanx_01b.wiprefab");
+
+			i++;
+			if (i >= s_PhalanxMeleePool->getMaxSize())
+				break;
+		}
+	/*	for (int i = 0; i < s_PhalanxMeleePool->getMaxSize(); i++)
+		{
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_PhalanxMeleePool->getPath());
+
+		}*/
 		s_PhalanxMeleePool->IncreasePoolSize(meleeEnemyIds);
 	}
 	void GamePoolingManager::UnloadPhalanxMeleePool()
@@ -200,8 +224,29 @@ namespace Wiwa
 
 		s_PhalanxRangedPool->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_PhalanxRangedPool->getMaxSize());
-		for (int i = 0; i < s_PhalanxRangedPool->getMaxSize(); i++)
+		int i = 0;
+		while (i < s_PhalanxRangedPool->getMaxSize())
+		{
 			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_PhalanxRangedPool->getPath());
+
+			i++;
+			if (i >= s_PhalanxRangedPool->getMaxSize())
+				break;
+
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab("assets\\Enemy\\PhalanxRanged\\RangedPhalanx_01a.wiprefab");
+
+			i++;
+			if (i >= s_PhalanxRangedPool->getMaxSize())
+				break;
+
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab("assets\\Enemy\\PhalanxRanged\\RangedPhalanx_01b.wiprefab");
+
+			i++;
+			if (i >= s_PhalanxRangedPool->getMaxSize())
+				break;
+		}
+		/*for (int i = 0; i < s_PhalanxRangedPool->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_PhalanxRangedPool->getPath());*/
 		s_PhalanxRangedPool->IncreasePoolSize(meleeEnemyIds);
 	}
 	void GamePoolingManager::UnloadPhalanxRangedPool()
@@ -316,8 +361,23 @@ namespace Wiwa
 
 		s_Subjugator->SetScene(scene);
 		std::vector<EntityId> meleeEnemyIds(s_Subjugator->getMaxSize());
-		for (int i = 0; i < s_Subjugator->getMaxSize(); i++)
+		int i = 0;
+		while (i < s_Subjugator->getMaxSize())
+		{
 			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_Subjugator->getPath());
+
+			i++;
+			if (i >= s_Subjugator->getMaxSize())
+				break;
+
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab("assets\\Enemy\\Subjugator\\sk_subjugator01_chief.wiprefab");
+
+			i++;
+			if (i >= s_Subjugator->getMaxSize())
+				break;
+		}
+	/*	for (int i = 0; i < s_Subjugator->getMaxSize(); i++)
+			meleeEnemyIds[i] = scene->GetEntityManager().LoadPrefab(s_Subjugator->getPath());*/
 		s_Subjugator->IncreasePoolSize(meleeEnemyIds);
 	}
 
