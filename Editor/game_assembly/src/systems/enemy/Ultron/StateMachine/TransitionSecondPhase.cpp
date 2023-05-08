@@ -48,10 +48,11 @@ namespace Wiwa
 		{
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::MOVE_CENTER:
 		{
-			glm::vec3 m_CenterPosition = { 0.0f,0.0f,0.0f };
+			glm::vec3 m_CenterPositionBoss = { 0.0f, 10.0f,0.0f };
+			glm::vec3 m_CenterPositionRegenWall = { 0.0f, 0.0f,0.0f };
 			navAgentPtr->StopAgent();
 			navAgentPtr->RemoveAgent();
-			selfTr->localPosition = m_CenterPosition;
+			selfTr->localPosition = m_CenterPositionBoss;
 
 			m_RegenWallPrefabId = em.LoadPrefab(m_WallPrefabPath);
 			Transform3D* regenWallPrefabTr = em.GetComponent<Transform3D>(m_RegenWallPrefabId);
@@ -63,7 +64,7 @@ namespace Wiwa
 			if (!regenWallPrefabTr || !playerTr)
 				return;
 
-			regenWallPrefabTr->localPosition = m_CenterPosition;
+			regenWallPrefabTr->localPosition = m_CenterPositionRegenWall;
 			regenWallPrefabTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 			regenWallPrefabTr->localScale = selfTr->localScale;
 
