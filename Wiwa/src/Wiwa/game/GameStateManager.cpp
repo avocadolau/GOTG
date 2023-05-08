@@ -515,6 +515,7 @@ namespace Wiwa
 	int GameStateManager::NextRoom()
 	{
 		WI_INFO("ROOM STATE: NextRoom()");
+		s_PlayerTriggerNext = false;
 
 		RoomType type = GameStateManager::GetType();
 		switch (type)
@@ -530,7 +531,6 @@ namespace Wiwa
 			RandomizeRewardRoom();
 
 			s_EnemyManager->ResetDifficulty();
-			s_PlayerTriggerNext = false;
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
