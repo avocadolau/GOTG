@@ -77,6 +77,7 @@ namespace Wiwa {
 		LightManager* m_LightManager = nullptr;
 		GuiManager* m_GuiManager = nullptr;
 		DialogManager* m_DialogManager = nullptr;
+
 		std::vector<std::string> m_AudioBanks;
 	private:
 		std::vector<InstanceRenderer> m_InstanceRenderers;

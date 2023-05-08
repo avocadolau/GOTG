@@ -20,7 +20,8 @@ namespace Wiwa {
 		glDeleteBuffers(1, &m_EBO);
 		glDeleteBuffers(1, &m_IVBO);
 		glDeleteVertexArrays(1, &m_VAO);
-		delete[] m_InstanceVertex;
+
+		m_InstanceVertex.clear();
 	}
 
 	void InstanceRenderer::Init(const char* shader_path)
@@ -120,7 +121,7 @@ namespace Wiwa {
 		glVertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(19 * sizeof(float)));
 		glVertexAttribDivisor(12, 1);
 
-		m_InstanceVertex = new VertexInstanceTexture[m_MaxInstances];
+		m_InstanceVertex.resize(m_MaxInstances);
 
 		m_OrthoLocation = m_InstanceShader.getUniformLocation("u_Proj");
 		m_ViewLocation = m_InstanceShader.getUniformLocation("u_View");
@@ -134,7 +135,7 @@ namespace Wiwa {
 	{
 		glBindVertexArray(m_VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, m_IVBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex.data());
 	}
 
 	void InstanceRenderer::Render(glm::mat4& proj, glm::mat4& view)

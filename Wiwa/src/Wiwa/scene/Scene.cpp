@@ -21,11 +21,6 @@ namespace Wiwa
 		mMaxTimeEntering = 450;
 		mMaxTimeLeaving = 450;
 
-		m_GuiManager = new GuiManager();
-		m_GuiManager->Init(this);
-		m_DialogManager = new DialogManager();
-		m_DialogManager->Init(this);
-
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
@@ -41,7 +36,13 @@ namespace Wiwa
 
 		r2d.DisableInstance(this, m_TransitionInstance);
 
+		m_GuiManager = new GuiManager();
+		m_GuiManager->Init(this);
+		m_DialogManager = new DialogManager();
+		m_DialogManager->Init(this);
+
 		m_PhysicsManager->InitWorld();
+
 
 	}
 
