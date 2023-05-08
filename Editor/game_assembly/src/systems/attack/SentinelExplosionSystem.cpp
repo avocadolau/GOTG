@@ -9,6 +9,7 @@ namespace Wiwa
 	{
 		m_ExplosionIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Timer = 0.0f;
+		m_DoSentinelDamage = true;
 	}
 
 	SentinelExplosionSystem::~SentinelExplosionSystem()
@@ -38,6 +39,8 @@ namespace Wiwa
 
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 
+		m_DoSentinelDamage = true;
+
 		//TODO: spawn prefab not from the pool
 
 		//EntityId explosion_prefab = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_explosion_remnants.wiprefab");
@@ -59,6 +62,11 @@ namespace Wiwa
 		Explosion* explosion = GetComponentByIterator<Explosion>(m_ExplosionIt);
 
 		m_Timer += Time::GetDeltaTimeSeconds();
+
+		if (m_Timer >= 0.2f)
+		{
+			m_DoSentinelDamage = false;
+		}
 
 		if (m_Timer >= explosion->lifeTime)
 		{
@@ -92,10 +100,20 @@ namespace Wiwa
 					if (attack->isPlayerAttack)
 						return;
 
-					GameStateManager::DamagePlayer(explosion->damage);
+					if (m_DoSentinelDamage)
+					{
+						GameStateManager::DamagePlayer(explosion->damage);
+					}
+					
 				}
 				else
-					GameStateManager::DamagePlayer(explosion->damage);
+				{
+
+					if (m_DoSentinelDamage)
+					{
+						GameStateManager::DamagePlayer(explosion->damage);
+					}
+				}
 			}
 
 	/*		Wiwa::EntityManager& em = m_Scene->GetEntityManager();

@@ -102,7 +102,7 @@ namespace Wiwa
 				m_SpawnEnemies = false;
 			}
 
-			if (m_TimerSecondPhase >= 16.0f) //Cambiar por num enemigos derrotados
+			if (m_TimerSecondPhase >= 24.0f) //Cambiar por num enemigos derrotados
 			{
 				m_TimerSecondPhase = 0.0f;
 				m_SecondPhaseState = SecondPhaseState::END_STATE;
