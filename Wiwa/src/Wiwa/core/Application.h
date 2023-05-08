@@ -171,6 +171,7 @@ namespace Wiwa
 	
 	public:
 		bool FinishedImport = false;
+		bool UnloadSceneResources = false;
 	private:
 		static Application *s_Instance;
 

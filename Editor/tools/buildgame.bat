@@ -20,10 +20,10 @@ copy "..\config\project.wiproject" %config_path%
 copy "..\config\room_data.json" %config_path%
 copy "..\config\player_data.json" %config_path%
 copy "..\config\game_tags_physics.json" %config_path%
-
-md %mono_path%
-
-xcopy /e /v /s "..\mono" %mono_path%
+copy "..\config\player_run.json" %config_path%
+copy "..\config\player_progression.json" %config_path%
+copy "..\config\enemy_data.json" %config_path%
+copy "..\config\conversations.wiconversation" %config_path%
 
 md %lib_path%
 

@@ -226,8 +226,9 @@ namespace Wiwa
 		if (unload_resources)
 		{
 			// TODO: Fix unloading for the editor
+			if(Wiwa::Application::Get().UnloadSceneResources)
+				Wiwa::Resources::UnloadAllResources();
 			return;
-			Wiwa::Resources::UnloadAllResources();
 		}
 	}
 
