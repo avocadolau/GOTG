@@ -47,7 +47,7 @@ void InventoryPanel::Draw()
 
 		ImGui::Text("Tokens %i", playerInventory.GetTokens());
 		
-		Wiwa::Ability**& abilities = playerInventory.GetAbilities();
+		Wiwa::Ability** abilities = playerInventory.GetAbilities();
 		
 		ImGui::Text("Abilities");
 		ImGui::Separator();
@@ -55,31 +55,38 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if (abilities[0])
+		if (abilities != nullptr)
 		{
-			ImGui::Text("%s", abilities[0]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", abilities[0]->CurrentTime);
-			ImGui::Text("Cooldown %f", abilities[0]->Cooldown);
-			ImGui::Unindent();
+			if (abilities[0] != nullptr)
+			{
+				ImGui::Text("%s", abilities[0]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", abilities[0]->CurrentTime);
+				ImGui::Text("Cooldown %f", abilities[0]->Cooldown);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
+		
 		ImGui::Unindent();
 		ImGui::Separator();
 
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if (abilities[1])
+		if (abilities != nullptr)
 		{
-			ImGui::Text("%s", abilities[1]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", abilities[1]->CurrentTime);
-			ImGui::Text("Cooldown %f", abilities[1]->Cooldown);
-			ImGui::Unindent();
+			if (abilities[1] != nullptr)
+			{
+				ImGui::Text("%s", abilities[1]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", abilities[1]->CurrentTime);
+				ImGui::Text("Cooldown %f", abilities[1]->Cooldown);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
 		ImGui::Unindent();
 		ImGui::Unindent();
 		
@@ -97,7 +104,7 @@ void InventoryPanel::Draw()
 		ImGui::Unindent();
 		ImGui::Separator();
 
-		Wiwa::Buff**& buffs = playerInventory.GetBuffs();
+		Wiwa::Buff** buffs = playerInventory.GetBuffs();
 		
 		ImGui::Text("Buffs");
 		ImGui::Separator();
@@ -105,36 +112,43 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if (buffs[0])
+		if (buffs != nullptr)
 		{
-			ImGui::Text("%s", buffs[0]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", buffs[0]->CurrentTime);
-			ImGui::Text("Cooldown %f", buffs[0]->Cooldown);
-			ImGui::Text("Duration %f", buffs[0]->Duration);
-			ImGui::Text("Cooldown timer %f", buffs[0]->CoolDownTimer);
-			ImGui::Unindent();
+
+
+			if (buffs[0] != nullptr)
+			{
+				ImGui::Text("%s", buffs[0]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", buffs[0]->CurrentTime);
+				ImGui::Text("Cooldown %f", buffs[0]->Cooldown);
+				ImGui::Text("Duration %f", buffs[0]->Duration);
+				ImGui::Text("Cooldown timer %f", buffs[0]->CoolDownTimer);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
 		ImGui::Unindent();
 		ImGui::Separator();
 		
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if (buffs[1])
+		if (buffs != nullptr)
 		{
-			ImGui::Text("%s", buffs[1]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", buffs[1]->CurrentTime);
-			ImGui::Text("Cooldown %f", buffs[1]->Cooldown);
-			ImGui::Text("Duration %f", buffs[1]->Duration);
-			ImGui::Text("Cooldown timer %f", buffs[1]->CoolDownTimer);
-			ImGui::Unindent();
+			if (buffs[1])
+			{
+				ImGui::Text("%s", buffs[1]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", buffs[1]->CurrentTime);
+				ImGui::Text("Cooldown %f", buffs[1]->Cooldown);
+				ImGui::Text("Duration %f", buffs[1]->Duration);
+				ImGui::Text("Cooldown timer %f", buffs[1]->CoolDownTimer);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
-		
 		ImGui::Unindent();
 
 		ImGui::Text("Shop Elements");

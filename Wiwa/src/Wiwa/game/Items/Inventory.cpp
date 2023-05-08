@@ -18,7 +18,6 @@ Wiwa::Inventory::Inventory()
 
 Wiwa::Inventory::~Inventory()
 {
-	Clear();
 }
 
 void Wiwa::Inventory::Serialize(JSONDocument* doc)
@@ -26,40 +25,47 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 	JSONValue abilities = doc->AddMemberArray("abilities");
 	for (size_t i = 0; i < MAX_ABILITIES; i++)
 	{
-		if (m_Abilities[i])
+		if (m_Abilities != nullptr)
 		{
-			JSONValue ability = abilities.PushBackObject();
-			ability.AddMember("name", m_Abilities[i]->Name.c_str());
-			ability.AddMember("description", m_Abilities[i]->Description.c_str());
-			ability.AddMember("icon", (int)m_Abilities[i]->Icon);
-			ability.AddMember("damage", m_Abilities[i]->Damage);
-			ability.AddMember("range", m_Abilities[i]->Range);
-			ability.AddMember("area", m_Abilities[i]->Area);
-			ability.AddMember("cooldown", m_Abilities[i]->Cooldown);
-			ability.AddMember("current_time", m_Abilities[i]->CurrentTime);
-			ability.AddMember("price", m_Abilities[i]->Price);
-			ability.AddMember("type", (int)m_Abilities[i]->AbilityType);
-			ability.AddMember("tag_1", (int)m_Abilities[i]->itemTag[0]);
-			ability.AddMember("tag_2", (int)m_Abilities[i]->itemTag[1]);
+			if (m_Abilities[i] != nullptr)
+			{
+				JSONValue ability = abilities.PushBackObject();
+				ability.AddMember("name", m_Abilities[i]->Name.c_str());
+				ability.AddMember("description", m_Abilities[i]->Description.c_str());
+				ability.AddMember("icon", (int)m_Abilities[i]->Icon);
+				ability.AddMember("damage", m_Abilities[i]->Damage);
+				ability.AddMember("range", m_Abilities[i]->Range);
+				ability.AddMember("area", m_Abilities[i]->Area);
+				ability.AddMember("cooldown", m_Abilities[i]->Cooldown);
+				ability.AddMember("current_time", m_Abilities[i]->CurrentTime);
+				ability.AddMember("price", m_Abilities[i]->Price);
+				ability.AddMember("type", (int)m_Abilities[i]->AbilityType);
+				ability.AddMember("tag_1", (int)m_Abilities[i]->itemTag[0]);
+				ability.AddMember("tag_2", (int)m_Abilities[i]->itemTag[1]);
+			}
 		}
+		
 	}
 	JSONValue Buffs = doc->AddMemberArray("buffs");
 	for (size_t i = 0; i < MAX_BUFFS; i++)
 	{
-		if (m_Buffs[i] != NULL)
+		if (m_Buffs != nullptr)
 		{
-			JSONValue buff = Buffs.PushBackObject();
-			buff.AddMember("name", m_Buffs[i]->Name.c_str());
-			buff.AddMember("description", m_Buffs[i]->Description.c_str());
-			buff.AddMember("icon", (int)m_Buffs[i]->Icon);
-			buff.AddMember("buff_percent", m_Buffs[i]->BuffPercent);
-			buff.AddMember("duration", m_Buffs[i]->Duration);
-			buff.AddMember("cooldown", m_Buffs[i]->Cooldown);
-			buff.AddMember("current_time", m_Buffs[i]->CurrentTime);
-			buff.AddMember("cooldown_timer", m_Buffs[i]->CoolDownTimer);
-			buff.AddMember("price", m_Buffs[i]->Price);
-			buff.AddMember("type", (int)m_Buffs[i]->buffType);
-			
+			if (m_Buffs[i] != nullptr)
+			{
+				JSONValue buff = Buffs.PushBackObject();
+				buff.AddMember("name", m_Buffs[i]->Name.c_str());
+				buff.AddMember("description", m_Buffs[i]->Description.c_str());
+				buff.AddMember("icon", (int)m_Buffs[i]->Icon);
+				buff.AddMember("buff_percent", m_Buffs[i]->BuffPercent);
+				buff.AddMember("duration", m_Buffs[i]->Duration);
+				buff.AddMember("cooldown", m_Buffs[i]->Cooldown);
+				buff.AddMember("current_time", m_Buffs[i]->CurrentTime);
+				buff.AddMember("cooldown_timer", m_Buffs[i]->CoolDownTimer);
+				buff.AddMember("price", m_Buffs[i]->Price);
+				buff.AddMember("type", (int)m_Buffs[i]->buffType);
+
+			}
 		}
 	}
 	JSONValue Passives = doc->AddMemberArray("passives");
@@ -109,7 +115,6 @@ void Wiwa::Inventory::Serialize(JSONDocument* doc)
 
 void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 {
-
 	if (doc->HasMember("abilities")) {
 
 		JSONValue abilities = (*doc)["abilities"];
@@ -243,11 +248,12 @@ void Wiwa::Inventory::AddAbility(const Ability* ability) const
 	if (!ability)
 		return;
 	// If the first slot is occupied shift the ability one place
-	if(m_Abilities[0])
+	
+	if (m_Abilities[0] != nullptr)
 	{
 		// TODO: Instead of deleting just spawn the ability on the floor
-		
-		if (m_Abilities[1])
+
+		if (m_Abilities[1] != nullptr)
 		{
 			GameStateManager::SpawnItem(
 				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 0, m_Abilities[1]->Name.c_str());
@@ -256,19 +262,23 @@ void Wiwa::Inventory::AddAbility(const Ability* ability) const
 		m_Abilities[1] = m_Abilities[0];
 	}
 	
+	
 	m_Abilities[0] = new Ability(*ability);
+	m_Abilities[0]->CurrentTime = 0.0f;
+	
+	
 }
 
 void Wiwa::Inventory::AddBuff(const Buff* buff) const
 {
 	if (!buff)
 		return;
-
+	
 	// If the first slot is occupied shift the buff one place
-	if(m_Buffs[0])
+	if (m_Buffs[0] != nullptr)
 	{
 		// TODO: Instead of deleting just spawn the buff on the floor
-		if (m_Buffs[1])
+		if (m_Buffs[1] != nullptr)
 		{
 
 			GameStateManager::SpawnItem(
@@ -279,7 +289,9 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 	}
 
 	m_Buffs[0] = new Buff(*buff);
+	m_Buffs[0]->CurrentTime = 0.0f;
 	m_Buffs[0]->IsActive = false;
+	
 }
 
 void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
@@ -339,62 +351,69 @@ void Wiwa::Inventory::Update()
 		const float leftTrigger = Input::GetAxis(Gamepad::GamePad1, Gamepad::LeftTrigger);
 
 		// Ability 1
-		if(m_Abilities[0])
+		if (m_Abilities != nullptr)
 		{
-			SwapUITexture(m_Abilities[0]->Icon, 3);
-			m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
-			if(Input::IsKeyPressed(Key::Q) || leftTrigger >= 0.f)
-			{	
-				UseAbility(0);
+			if (m_Abilities[0] != nullptr)
+			{
+				SwapUITexture(m_Abilities[0]->Icon, 3);
+				m_Abilities[0]->CurrentTime += Time::GetDeltaTimeSeconds();
+				if (Input::IsKeyPressed(Key::Q) || leftTrigger >= 0.f)
+				{
+					UseAbility(0);
+				}
 			}
-		}
-		if(m_Abilities[1])
-		{
-			SwapUITexture(m_Abilities[1]->Icon, 4);
+			if (m_Abilities[1] != nullptr)
+			{
+				SwapUITexture(m_Abilities[1]->Icon, 4);
 
-			m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
-			if(Input::IsKeyPressed(Key::E) || rightTrigger >= 0.f)
-			{
-				WI_CORE_INFO("Ability 2 activated");
-				UseAbility(1);
+				m_Abilities[1]->CurrentTime += Time::GetDeltaTimeSeconds();
+				if (Input::IsKeyPressed(Key::E) || rightTrigger >= 0.f)
+				{
+					WI_CORE_INFO("Ability 2 activated");
+					UseAbility(1);
+				}
 			}
 		}
+		
+		if (m_Buffs != nullptr)
+		{
+			if (m_Buffs[0] != nullptr)
+			{
+				SwapUITexture(m_Buffs[0]->Icon, 5);
+				if (m_Buffs[0]->IsActive)
+				{
+					m_Buffs[0]->CoolDownTimer += Time::GetDeltaTimeSeconds();
+					if (m_Buffs[0]->CoolDownTimer >= m_Buffs[0]->Duration)
+						m_Buffs[0]->UnUse();
+				}
+				else
+					m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
+				if (Input::IsKeyPressed(Key::R) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadX))
+				{
+					WI_CORE_INFO("Buff 1 activated");
+					UseBuff(0);
+				}
+			}
+			if (m_Buffs[1] != nullptr)
+			{
+				SwapUITexture(m_Buffs[1]->Icon, 6);
+				if (m_Buffs[1]->IsActive)
+				{
+					m_Buffs[1]->CoolDownTimer += Time::GetDeltaTimeSeconds();
+					if (m_Buffs[1]->CoolDownTimer >= m_Buffs[1]->Duration)
+						m_Buffs[1]->UnUse();
+				}
+				else
+					m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 
-		if(m_Buffs[0])
-		{
-			SwapUITexture(m_Buffs[0]->Icon, 5);
-			if (m_Buffs[0]->IsActive)
-			{
-				m_Buffs[0]->CoolDownTimer += Time::GetDeltaTimeSeconds();
-				if (m_Buffs[0]->CoolDownTimer >= m_Buffs[0]->Duration)
-					m_Buffs[0]->UnUse();
-			}
-			else
-				m_Buffs[0]->CurrentTime += Time::GetDeltaTimeSeconds();
-			if(Input::IsKeyPressed(Key::R) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadX))
-			{
-				WI_CORE_INFO("Buff 1 activated");
-				UseBuff(0);
+				if (Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+				{
+					WI_CORE_INFO("Buff 2 activated");
+					UseBuff(1);
+				}
 			}
 		}
-		if(m_Buffs[1])
-		{
-			SwapUITexture(m_Buffs[1]->Icon, 6);
-			if (m_Buffs[1]->IsActive)
-			{
-				m_Buffs[1]->CoolDownTimer += Time::GetDeltaTimeSeconds();
-				if(m_Buffs[1]->CoolDownTimer >= m_Buffs[1]->Duration)
-					m_Buffs[1]->UnUse();
-			}
-			else
-				m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
-			
-			if(Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
-			{
-				WI_CORE_INFO("Buff 2 activated");
-				UseBuff(1);
-			}
-		}
+		
 		
 
 		//SHOULD CHECK IF AN SPECIAL SHOP ELEMENT CAN BE ACTIVATED
@@ -477,27 +496,32 @@ void Wiwa::Inventory::SwapUITexture(ResourceId id, int indexUI)
 }
 void Wiwa::Inventory::Clear()
 {
-	if (*m_Abilities != nullptr)
+	if (m_Abilities != nullptr)
 	{
 		for (size_t i = 0; i < MAX_ABILITIES; i++)
 		{
 			if (m_Abilities[i] != nullptr)
 			{
 				delete m_Abilities[i];
+				m_Abilities[i] = nullptr;
 			}
 		}
 		delete[] m_Abilities;
+		m_Abilities = nullptr;
 	}
-	if (*m_Buffs != nullptr)
+	if (m_Buffs != nullptr)
 	{
 		for (size_t i = 0; i < MAX_BUFFS; i++)
 		{
 			if (m_Buffs[i] != nullptr)
 			{
 				delete m_Buffs[i];
+				m_Buffs[i] = nullptr;
 			}
 		}
 		delete[] m_Buffs;
+		m_Buffs = nullptr;
+
 	}
     
     if(!m_PassiveSkill.empty())

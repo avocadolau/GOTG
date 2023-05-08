@@ -142,6 +142,7 @@ namespace Wiwa
 				character->WalkTreshold = doc["walk_threshold"].as_float();
 		}
 		s_PlayerInventory->Clear();
+		s_PlayerInventory->InitGame();
 		s_PlayerInventory->Deserialize(&doc);
 
 		JSONDocument doc_progression("config/player_progression.json");
