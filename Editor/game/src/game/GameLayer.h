@@ -4,7 +4,7 @@
 #include <Wiwa/Events/Event.h>
 #include <Wiwa/Events/ApplicationEvent.h>
 
-//#define WI_DEBUG_BUILD
+#define WI_DEBUG_BUILD
 #define WI_DIST
 
 #ifdef WI_DEBUG_BUILD
