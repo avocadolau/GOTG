@@ -8,6 +8,7 @@ namespace Wiwa {
 	class ExplosiveBarrelSystem : public System {
 	private:
 		float m_Timer = 0;
+		bool m_DoDamage = true;
 		EntityManager::ComponentIterator m_ExplosiveBarrelIt;
 	public:
 		ExplosiveBarrelSystem();

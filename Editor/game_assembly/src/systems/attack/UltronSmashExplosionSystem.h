@@ -8,6 +8,7 @@ namespace Wiwa {
 	class UltronSmashExplosionSystem : public System {
 	private:
 		float m_Timer = 0;
+		bool m_DoSmashDamage = true;
 		EntityManager::ComponentIterator m_ExplosionIt;
 	public:
 		UltronSmashExplosionSystem();
