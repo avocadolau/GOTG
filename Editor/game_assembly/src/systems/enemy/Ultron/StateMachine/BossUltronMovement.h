@@ -25,11 +25,13 @@ namespace Wiwa {
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
-		UltronAttacks GetAttackFromProbabilites();
+		UltronAttacks GetAttackFromProbabilitesFirstPhase();
+		UltronAttacks GetAttackFromProbabilitesSecondPhase();
 
 		void FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec);
 		glm::vec3 GetNewPosition();
 	private:
+		UltronAttacks m_NextAttack;
 		std::vector<glm::vec3> m_PremadePositions;
 		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
 		float m_TimerToAttack = 0.0f;
