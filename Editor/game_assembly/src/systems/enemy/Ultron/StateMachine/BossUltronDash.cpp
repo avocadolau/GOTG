@@ -65,7 +65,7 @@ namespace Wiwa
 
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerToRotate >= 2.0f) //Timer to look at player
+			if (m_TimerToRotate >= 1.6f) //Timer to look at player
 			{
 				m_TimerToRotate = 0.0f;
 				m_MoveUpwardsCounter = 0.0f;
@@ -74,7 +74,8 @@ namespace Wiwa
 				agent->StopAgent();
 				agent->RemoveAgent();
 
-				playerDistance.x = playerDistance.x + 1.0f;
+				playerDistance.x = playerDistance.x + 2.0f;
+				playerDistance.z = playerDistance.z + 2.0f;
 
 				m_State = DashState::DASH_GO_UP;
 			}
@@ -90,7 +91,7 @@ namespace Wiwa
 			if (m_TimerDash >= TIMER_GO_UPWARDS)
 			{
 				m_TimerDash = 0.0f;
-				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 2.0f; //Offset for the Smash
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 1.0f; //Offset for the Smash
 				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 

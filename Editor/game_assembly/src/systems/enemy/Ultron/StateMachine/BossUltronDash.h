@@ -39,6 +39,7 @@ namespace Wiwa {
 		bool m_UltronJump = false;
 
 		float m_MoveUpwardsCounter = 0.0f;
+		float m_MoveDownwardsCounter = 0.0f;
 
 		glm::vec3 playerDistance = glm::vec3(0.0f);
 		glm::vec3 interpolatedDashDistance = glm::vec3(0.0f);
