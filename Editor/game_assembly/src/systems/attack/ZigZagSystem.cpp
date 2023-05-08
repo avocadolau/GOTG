@@ -75,14 +75,14 @@ namespace Wiwa
 		m_TimerAmplitude += Time::GetDeltaTimeSeconds();
 		m_ZigZagTimer += Time::GetDeltaTimeSeconds();
 
-		if (m_TimerAmplitude >= 4.0f)
+		if (m_TimerAmplitude >= 2.0f)
 		{
-			m_TimerAmplitude = 4.0f;
+			m_TimerAmplitude = 2.0f;
 		}
 
 		if (m_GetMaxAmplitude == false)
 		{
-			glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 0.5f, 1.4f / 2, 10.0f, m_ZigZagTimer, bullet->direction, m_TimerAmplitude / 2.0f);
+			glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 0.5f, 1.4f / 2, 10.0f, m_ZigZagTimer, bullet->direction, m_TimerAmplitude / 5.0f);
 			transform->localPosition = updatePosition;
 			em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->ForceSetPosition(updatePosition);
 
@@ -91,7 +91,7 @@ namespace Wiwa
 
 		if (m_GetMaxAmplitude == true)
 		{
-			glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 0.5f, 1.4f, 10.0f, m_ZigZagTimer, bullet->direction, m_TimerAmplitude / 2.0f);
+			glm::vec3 updatePosition = ZigZagBulletMotion(transform->localPosition, 0.5f, 1.4f, 10.0f, m_ZigZagTimer, bullet->direction, m_TimerAmplitude / 5.0f);
 			transform->localPosition = updatePosition;
 			em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->ForceSetPosition(updatePosition);
 		}
