@@ -318,7 +318,7 @@ namespace Wiwa {
 		}
 
 
-		int activeParticles = emitter->m_activeParticles;
+		int activeParticles = 0;
 
 		if (!Time::IsPaused())
 			activeParticles = 0;

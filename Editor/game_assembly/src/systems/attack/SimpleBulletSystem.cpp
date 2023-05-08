@@ -3,6 +3,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 #include "../../components/attack/Attack.h"
+#include "../../Systems.h"
 
 namespace Wiwa
 {
@@ -92,6 +93,28 @@ namespace Wiwa
 			{
 				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 				GameStateManager::DamagePlayer(bullet->damage);
+
+				//emit player blood
+				Wiwa::EntityManager& entityManager = getScene().GetEntityManager();
+				EntityId playerId = entityManager.GetEntityByName("StarLord");
+
+				if (playerId != EntityManager::INVALID_INDEX)
+				{
+					EntityId p_hurt = entityManager.GetChildByName(playerId, "p_player_hurt");
+
+					if (p_hurt != EntityManager::INVALID_INDEX)
+					{
+						entityManager.SetActive(p_hurt, true);
+
+						ParticleSystem* sys_p_hurt = entityManager.GetSystem<ParticleSystem>(p_hurt);
+
+						if (sys_p_hurt != nullptr)
+							sys_p_hurt->EmitParticleBatch(1);
+						
+					}
+				}
+				
+
 			}
 
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
