@@ -8,7 +8,7 @@
 #include <Wiwa/game/GameProgression.h>
 // #include <Wiwa/ecs/components/game/Character.h>
 // #include <Wiwa/ecs/components/game/wave/Wave.h>
-// #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 #include <Wiwa/game/Pooling/GamePoolingManager.h>
 #include "Enemy/GameEnemyManager.h"
 
@@ -70,15 +70,12 @@ namespace Wiwa
 		static RoomType s_RoomType;
 		static RoomState s_RoomState;
 
-		static bool s_HasFinshedRoom;
-		static bool s_CanPassNextRoom;
-		static bool s_PlayerTriggerNext;
-
 		static void ChangeRoomState(RoomState room_state);
 
 	public:
-		static int s_TotalSpawners;
-		static int s_SpawnersFinished;
+		static bool s_HasFinshedRoom;
+		static bool s_CanPassNextRoom;
+		static bool s_PlayerTriggerNext;
 		static bool debug;
 
 		// Save & Load Overall Player Progression inside the run
@@ -222,6 +219,9 @@ namespace Wiwa
 
 		// Enemies
 		public:
-			static int GetActiveEnemies();
+		static int GetActiveEnemies();
+		static int GetAproximateTotalEnemies();
+		static bool IsWaveSpawnerFinished(WaveSpawner* waveSpawner);
+		static void EndCombatRoom(WaveSpawner* waveSpawner);
 	};
 }

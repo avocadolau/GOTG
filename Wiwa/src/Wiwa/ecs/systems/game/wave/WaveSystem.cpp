@@ -68,7 +68,7 @@ namespace Wiwa
 
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 		// Wave has finished
-		if (wave->currentEnemiesAlive <= 0.0f && m_HasTriggered)
+		if (wave->currentEnemiesAlive <= 0.0f && m_HasTriggered && m_EnemiesIds.size() <= 0 && m_TotalEnemiesSpawned >= wave->maxEnemies)
 		{
 			wave->hasFinished = true;
 		}
@@ -191,7 +191,7 @@ namespace Wiwa
 
 		//m_CurrentEnemiesDead++;
 
-		if (m_EnemiesIds.size() <= 0)
+		if (m_EnemiesIds.size() <= 0 && m_TotalEnemiesSpawned >= wave->maxEnemies)
 		{
 			wave->hasFinished = true;
 		}

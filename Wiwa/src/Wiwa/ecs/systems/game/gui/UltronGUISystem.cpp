@@ -3,15 +3,15 @@
 #include "UltronGUISystem.h"
 #include <Wiwa/core/Core.h>
 #include <Wiwa/ecs/Systems.h>
-#include "UltronGUISystem.h"
+#include <Wiwa/ecs/components/game/Health.h>
 void Wiwa::UltronGUISystem::OnUpdate()
 {
 	if (!bossIsDead)
 	{
 		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Character* character = em.GetComponent<Character>(m_EntityId);
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		Wiwa::Health* health = em.GetComponent<Health>(m_EntityId);
 		if (introBossFight)
 		{
 			if (!activeIntroCanvas)
@@ -23,13 +23,14 @@ void Wiwa::UltronGUISystem::OnUpdate()
 			}
 			introBossFight = AnimationIntroBoss(gm);
 		}
-		if (!introBossFight)
+		if (!introBossFight && !m_Scene->IsScenePaused())
 		{
 			if (!activeBossCanvas)
 			{
 				gm.canvas.at(6)->SwapActive();
 				gm.canvas.at(5)->SwapActive();
 				gm.canvas.at(0)->SwapActive();
+				maxUltronHealth = health->health;
 				activeBossCanvas = true;
 			}
 			if (activeBossCanvas)
@@ -49,16 +50,18 @@ void Wiwa::UltronGUISystem::OnUpdate()
 				}
 
 
-
-				if (character->Health > 0)
+				if (health != nullptr)
 				{
-					gm.canvas.at(5)->controls.at(1)->SetValueForUIbar(character->Health, character->MaxHealth);
-				}
-				else
-				{
-					gm.canvas.at(5)->SwapActive();
-					activeBossCanvas = false;
-					bossIsDead = true;
+					if (health->health > 0)
+					{
+						gm.canvas.at(5)->controls.at(1)->SetValueForUIbar(health->health, maxUltronHealth);
+					}
+					else
+					{
+						gm.canvas.at(5)->SwapActive();
+						activeBossCanvas = false;
+						bossIsDead = true;
+					}
 				}
 			}
 		}
@@ -68,16 +71,21 @@ void Wiwa::UltronGUISystem::OnUpdate()
 
 bool Wiwa::UltronGUISystem::AnimationIntroBoss(Wiwa::GuiManager& gm)
 {
-	counterIntroAnim += Wiwa::Time::GetDeltaTime();
+	counterIntroAnim += 0.16f;
 	//gm.canvas.at(6)->controls.at(8)->ScaleGUIElement({ 1024.0f,1024.0f }, 10, { 640.0f,640.0f }, GuiControlEasing::SineInOut);
 
-	if (counterIntroAnim/1000 <= timeIntroAnim) 
+	if (counterIntroAnim <= timeIntroAnim) 
 	{
 		return true;
 	}
-	else
+	else if(counterIntroAnim > timeIntroAnim && counterIntroAnim <= timeIntroAnim + 25 && !m_IterationForPause)
 	{
 		m_Scene->SwapPauseActive();
+		m_IterationForPause = true;
+		return true;
+	}
+	else if (counterIntroAnim > timeIntroAnim + 25)
+	{
 		return false;
 	}
 }
