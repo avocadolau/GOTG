@@ -532,8 +532,8 @@ namespace Wiwa
 			{
 				canvaSelected = i;
 
-				if (canvaSelected >= 5)
-					canvaSelected = 0;
+				if (canvaSelected >= 5 && canvaSelected < 7)
+					canvaSelected = -1;
 
 				return canvaSelected;
 			}

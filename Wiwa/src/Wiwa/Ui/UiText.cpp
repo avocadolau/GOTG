@@ -43,6 +43,7 @@ namespace Wiwa
 	{
 		Color4f color = { 0.0f,0.0f,0.0f,1.0f };
 		
+		render->UpdateInstancedQuadTexPriority(m_Scene, id_quad_normal, 1);
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);

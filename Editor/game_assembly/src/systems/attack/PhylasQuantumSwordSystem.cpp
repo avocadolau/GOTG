@@ -38,7 +38,7 @@ namespace Wiwa
 		PhylasSwordTransform->localRotation = playerTransform->localRotation;
 		PhylasSwordTransform->localPosition.x = playerTransform->localPosition.x;
 		PhylasSwordTransform->localPosition.z = playerTransform->localPosition.z;
-		PhylasSwordTransform->localPosition.y = playerTransform->localPosition.y  + 2.55f;
+		PhylasSwordTransform->localPosition.y = playerTransform->localPosition.y;
 
 		PhylasSwordTransform->localScale.x = 1.0f;
 		PhylasSwordTransform->localScale.z = 1.0f;
