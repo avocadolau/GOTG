@@ -1,10 +1,24 @@
 #include <wipch.h>
+
 #include "OzzAnimationSystem.h"
+
+#include <Wiwa/utilities/Log.h>
+#include <Wiwa/core/Renderer3D.h>
+
+#include <Wiwa/utilities/render/Model.h>
+#include <Wiwa/utilities/render/Material.h>
+
+#include <Wiwa/ecs/components/Mesh.h>
+
+#include <Wiwa/ecs/EntityManager.h>
+#include <Wiwa/utilities/render/CameraManager.h>
+#include <Wiwa/utilities/render/LightManager.h>
 
 namespace Wiwa {
 	OzzAnimationSystem::OzzAnimationSystem()
 	{
-		
+		m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_MeshIt = { WI_INVALID_INDEX, WI_INVALID_INDEX, WI_INVALID_INDEX };
 	}
 
 	OzzAnimationSystem::~OzzAnimationSystem()
@@ -14,10 +28,35 @@ namespace Wiwa {
 
 	void OzzAnimationSystem::OnAwake()
 	{
+		
 	}
 
 	void OzzAnimationSystem::OnInit()
 	{
+		
+	}
+
+	void OzzAnimationSystem::OnUpdate()
+	{
+		// Return if required components unavailable
+		if (!m_TransformIt || !m_MeshIt) return;
+
+		bool update = m_Animation.Update(0.002f);
+
+		if(!update){
+			WI_CORE_ERROR("Error updating partial animation");
+		}
+	}
+
+	void OzzAnimationSystem::OnDestroy()
+	{
+	}
+
+	void OzzAnimationSystem::OnSystemAdded()
+	{
+		m_TransformIt = GetComponentIterator<Wiwa::Transform3D>();
+		m_MeshIt = GetComponentIterator<Wiwa::Mesh>();
+
 		bool load = m_Animation.LoadInfo(
 			"assets\\Ozz\\A_StarlordAnimations_mesh.ozz",
 			"assets\\Ozz\\A_StarlordAnimations_skeleton.ozz",
@@ -38,25 +77,5 @@ namespace Wiwa {
 		else {
 			WI_CORE_INFO("Couldn't load partial animation");
 		}
-	}
-
-	void OzzAnimationSystem::OnUpdate()
-	{
-		bool update = m_Animation.Update(0.002f);
-
-		if (!update) {
-			WI_CORE_ERROR("Error updating partial animation");
-			return;
-		}
-
-		// Render animation
-	}
-
-	void OzzAnimationSystem::OnDestroy()
-	{
-	}
-
-	void OzzAnimationSystem::OnSystemAdded()
-	{
 	}
 }

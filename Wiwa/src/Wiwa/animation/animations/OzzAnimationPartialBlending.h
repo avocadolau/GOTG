@@ -3,6 +3,8 @@
 #include "../OzzAnimation.h"
 
 namespace Wiwa {
+	class Model;
+
 	class WI_API OzzAnimationPartialBlending : public OzzAnimation {
 	private:
 		// Sampler struct that helps to control an animation
@@ -93,9 +95,16 @@ namespace Wiwa {
 		};
 
 		bool m_Loaded;
+
+		bool UpdateAnimation(float _dt);
+		bool RenderAnimationSkinned();
 	public:
 		OzzAnimationPartialBlending();
 		~OzzAnimationPartialBlending();
+
+		ozz::vector<ozz::math::Float4x4>& GetFinalBoneMatrices() { return skinning_matrices_; }
+
+		std::vector<glm::mat4> GetOrderedFinalBoneMatrices(Model* model);
 
 		bool LoadInfo(const char* mesh, const char* skeleton, const char* lower, const char* upper);
 		void SetUpperBodyRoot(int ubr);

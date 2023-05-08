@@ -107,9 +107,9 @@ namespace Wiwa
 		case Scene::SCENE_LOOP:
 			if(!pausedGame)
 				m_EntityManager.SystemsUpdate();
-			pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
+			/*pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
 			if(pgs != nullptr)
-				pgs->Update();
+				pgs->Update();*/
 			m_GuiManager->Update();
 			m_DialogManager->Update();
 			ProcessInput();
@@ -146,7 +146,7 @@ namespace Wiwa
 		Application::Get().GetRenderer3D().RenderSkybox();
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		r2d.UpdateInstanced(this);
+		//r2d.UpdateInstanced(this);
 
 		m_GuiManager->Draw();
 		

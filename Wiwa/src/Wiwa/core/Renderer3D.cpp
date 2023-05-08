@@ -10,10 +10,49 @@
 #include <Wiwa/utilities/render/animator.h>
 
 #include <Wiwa/ecs/systems/LightSystem.h>
+#include <ozz/geometry/runtime/skinning_job.h>
+
+#define GL_PTR_OFFSET(i) reinterpret_cast<void*>(static_cast<intptr_t>(i))
+#define GL(_f) gl##_f
+
+#define GLERR do {\
+        GLuint glerr;\
+        while((glerr = glGetError()) != GL_NO_ERROR)\
+            fprintf(stderr, "%s:%d glGetError() = 0x%04x", __FILE__, __LINE__, glerr);\
+    } while (0)
+
+const uint8_t kDefaultColorsArray[][4] = {
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
+	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255}
+};
 
 namespace Wiwa
 {
-	Renderer3D::Renderer3D()
+	Renderer3D::Renderer3D() :
+		dynamic_array_bo_(0),
+		dynamic_index_bo_(0)
 	{
 	}
 
@@ -23,6 +62,25 @@ namespace Wiwa
 
 	bool Renderer3D::Init()
 	{
+		GLERR;
+		// ========= BEG OZZ ANIMATIONS =========
+		// Builds the dynamic vbo
+		glGenBuffers(1, &dynamic_array_bo_);
+		glGenBuffers(1, &dynamic_index_bo_);
+
+		// Instantiate ambient rendering shader.
+		ambient_shader = ozz::sample::internal::AmbientShader::Build();
+		if (!ambient_shader) {
+			return false;
+		}
+
+		// Instantiate ambient textured rendering shader.
+		ambient_textured_shader = ozz::sample::internal::AmbientTexturedShader::Build();
+		if (!ambient_textured_shader) {
+			return false;
+		}
+		// ========= END OZZ ANIMATIONS =========
+
 		Size2i &resolution = Application::Get().GetTargetResolution();
 
 		WI_CORE_INFO("Renderer3D initialized");
@@ -370,7 +428,6 @@ namespace Wiwa
 		m_Model = glm::mat4(1.0f);
 		m_Model = glm::translate(m_Model, glm::vec3((float)1920 / 2.0f, (float)920 / 2.0f, 0.0f));
 		m_Model = glm::scale(m_Model, glm::vec3((float)1920, (float)920, 1.0f));
-
 
 		return true;
 	}
@@ -854,6 +911,307 @@ namespace Wiwa
 		glActiveTexture(GL_TEXTURE1);
 		camera->frameBuffer->Unbind();
 		glEnable(GL_CULL_FACE);
+	}
+
+	Renderer3D::ScratchBuffer::ScratchBuffer() : buffer_(nullptr), size_(0) {}
+
+	Renderer3D::ScratchBuffer::~ScratchBuffer() {
+		ozz::memory::default_allocator()->Deallocate(buffer_);
+	}
+
+	void* Renderer3D::ScratchBuffer::Resize(size_t _size) {
+		if (_size > size_) {
+			size_ = _size;
+			ozz::memory::default_allocator()->Deallocate(buffer_);
+			buffer_ = ozz::memory::default_allocator()->Allocate(_size, 16);
+		}
+		return buffer_;
+	}
+
+	bool Renderer3D::RenderOzzSkinnedMesh(Camera* camera, const ozz::sample::Mesh& _mesh, const ozz::span<ozz::math::Float4x4> _skinning_matrices, const ozz::math::Float4x4& _transform)
+	{
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		camera->frameBuffer->Bind(false);
+
+		const int vertex_count = _mesh.vertex_count();
+
+		// Positions and normals are interleaved to improve caching while executing
+		// skinning job.
+
+		const GLsizei positions_offset = 0;
+		const GLsizei positions_stride = sizeof(float) * 3;
+		const GLsizei normals_offset = vertex_count * positions_stride;
+		const GLsizei normals_stride = sizeof(float) * 3;
+		const GLsizei tangents_offset =
+			normals_offset + vertex_count * normals_stride;
+		const GLsizei tangents_stride = sizeof(float) * 3;
+		const GLsizei skinned_data_size =
+			tangents_offset + vertex_count * tangents_stride;
+
+		// Colors and uvs are contiguous. They aren't transformed, so they can be
+		// directly copied from source mesh which is non-interleaved as-well.
+		// Colors will be filled with white if _options.colors is false.
+		// UVs will be skipped if _options.textured is false.
+		const GLsizei colors_offset = skinned_data_size;
+		const GLsizei colors_stride = sizeof(uint8_t) * 4;
+		const GLsizei colors_size = vertex_count * colors_stride;
+		const GLsizei uvs_offset = colors_offset + colors_size;
+		// TODO: TEXTURE
+		//const GLsizei uvs_stride = _options.texture ? sizeof(float) * 2 : 0;
+		const GLsizei uvs_stride = 0;
+		const GLsizei uvs_size = vertex_count * uvs_stride;
+		const GLsizei fixed_data_size = colors_size + uvs_size;
+
+		// Reallocate vertex buffer.
+		const GLsizei vbo_size = skinned_data_size + fixed_data_size;
+		void* vbo_map = scratch_buffer_.Resize(vbo_size);
+
+		// Iterate mesh parts and fills vbo.
+		// Runs a skinning job per mesh part. Triangle indices are shared
+		// across parts.
+		size_t processed_vertex_count = 0;
+		for (size_t i = 0; i < _mesh.parts.size(); ++i) {
+			const ozz::sample::Mesh::Part& part = _mesh.parts[i];
+
+			// Skip this iteration if no vertex.
+			const size_t part_vertex_count = part.positions.size() / 3;
+			if (part_vertex_count == 0) {
+				continue;
+			}
+
+			// Fills the job.
+			ozz::geometry::SkinningJob skinning_job;
+			skinning_job.vertex_count = static_cast<int>(part_vertex_count);
+			const int part_influences_count = part.influences_count();
+
+			// Clamps joints influence count according to the option.
+			skinning_job.influences_count = part_influences_count;
+
+			// Setup skinning matrices, that came from the animation stage before being
+			// multiplied by inverse model-space bind-pose.
+			skinning_job.joint_matrices = _skinning_matrices;
+
+			// Setup joint's indices.
+			skinning_job.joint_indices = make_span(part.joint_indices);
+			skinning_job.joint_indices_stride =
+				sizeof(uint16_t) * part_influences_count;
+
+			// Setup joint's weights.
+			if (part_influences_count > 1) {
+				skinning_job.joint_weights = make_span(part.joint_weights);
+				skinning_job.joint_weights_stride =
+					sizeof(float) * (part_influences_count - 1);
+			}
+
+			// Setup input positions, coming from the loaded mesh.
+			skinning_job.in_positions = make_span(part.positions);
+			skinning_job.in_positions_stride =
+				sizeof(float) * ozz::sample::Mesh::Part::kPositionsCpnts;
+
+			// Setup output positions, coming from the rendering output mesh buffers.
+			// We need to offset the buffer every loop.
+			float* out_positions_begin = reinterpret_cast<float*>(ozz::PointerStride(
+				vbo_map, positions_offset + processed_vertex_count * positions_stride));
+			float* out_positions_end = ozz::PointerStride(
+				out_positions_begin, part_vertex_count * positions_stride);
+			skinning_job.out_positions = { out_positions_begin, out_positions_end };
+			skinning_job.out_positions_stride = positions_stride;
+
+			// Setup normals if input are provided.
+			float* out_normal_begin = reinterpret_cast<float*>(ozz::PointerStride(
+				vbo_map, normals_offset + processed_vertex_count * normals_stride));
+			float* out_normal_end = ozz::PointerStride(
+				out_normal_begin, part_vertex_count * normals_stride);
+
+			if (part.normals.size() / ozz::sample::Mesh::Part::kNormalsCpnts ==
+				part_vertex_count) {
+				// Setup input normals, coming from the loaded mesh.
+				skinning_job.in_normals = make_span(part.normals);
+				skinning_job.in_normals_stride =
+					sizeof(float) * ozz::sample::Mesh::Part::kNormalsCpnts;
+
+				// Setup output normals, coming from the rendering output mesh buffers.
+				// We need to offset the buffer every loop.
+				skinning_job.out_normals = { out_normal_begin, out_normal_end };
+				skinning_job.out_normals_stride = normals_stride;
+			}
+			else {
+				// Fills output with default normals.
+				for (float* normal = out_normal_begin; normal < out_normal_end;
+					normal = ozz::PointerStride(normal, normals_stride)) {
+					normal[0] = 0.f;
+					normal[1] = 1.f;
+					normal[2] = 0.f;
+				}
+			}
+
+			// Setup tangents if input are provided.
+			float* out_tangent_begin = reinterpret_cast<float*>(ozz::PointerStride(
+				vbo_map, tangents_offset + processed_vertex_count * tangents_stride));
+			float* out_tangent_end = ozz::PointerStride(
+				out_tangent_begin, part_vertex_count * tangents_stride);
+
+			if (part.tangents.size() / ozz::sample::Mesh::Part::kTangentsCpnts ==
+				part_vertex_count) {
+				// Setup input tangents, coming from the loaded mesh.
+				skinning_job.in_tangents = make_span(part.tangents);
+				skinning_job.in_tangents_stride =
+					sizeof(float) * ozz::sample::Mesh::Part::kTangentsCpnts;
+
+				// Setup output tangents, coming from the rendering output mesh buffers.
+				// We need to offset the buffer every loop.
+				skinning_job.out_tangents = { out_tangent_begin, out_tangent_end };
+				skinning_job.out_tangents_stride = tangents_stride;
+			}
+			else {
+				// Fills output with default tangents.
+				for (float* tangent = out_tangent_begin; tangent < out_tangent_end;
+					tangent = ozz::PointerStride(tangent, tangents_stride)) {
+					tangent[0] = 1.f;
+					tangent[1] = 0.f;
+					tangent[2] = 0.f;
+				}
+			}
+
+			// Execute the job, which should succeed unless a parameter is invalid.
+			if (!skinning_job.Run()) {
+				return false;
+			}
+
+			// Handles colors which aren't affected by skinning.
+			//if (_options.colors &&
+			//	part_vertex_count ==
+			//	part.colors.size() / ozz::sample::Mesh::Part::kColorsCpnts) {
+			//	// Optimal path used when the right number of colors is provided.
+			//	memcpy(
+			//		ozz::PointerStride(
+			//			vbo_map, colors_offset + processed_vertex_count * colors_stride),
+			//		array_begin(part.colors), part_vertex_count * colors_stride);
+			//}
+			//else {
+			//	// Un-optimal path used when the right number of colors is not provided.
+			//	static_assert(sizeof(kDefaultColorsArray[0]) == colors_stride,
+			//		"Stride mismatch");
+
+			//	for (size_t j = 0; j < part_vertex_count;
+			//		j += OZZ_ARRAY_SIZE(kDefaultColorsArray)) {
+			//		const size_t this_loop_count = math::Min(
+			//			OZZ_ARRAY_SIZE(kDefaultColorsArray), part_vertex_count - j);
+			//		memcpy(ozz::PointerStride(
+			//			vbo_map, colors_offset +
+			//			(processed_vertex_count + j) * colors_stride),
+			//			kDefaultColorsArray, colors_stride * this_loop_count);
+			//	}
+			//}
+			
+			// OZZ COLORS
+			// Un-optimal path used when the right number of colors is not provided.
+			static_assert(sizeof(kDefaultColorsArray[0]) == colors_stride,
+				"Stride mismatch");
+
+			for (size_t j = 0; j < part_vertex_count;
+				j += OZZ_ARRAY_SIZE(kDefaultColorsArray)) {
+				const size_t this_loop_count = ozz::math::Min(
+					OZZ_ARRAY_SIZE(kDefaultColorsArray), part_vertex_count - j);
+				memcpy(ozz::PointerStride(
+					vbo_map, colors_offset +
+					(processed_vertex_count + j) * colors_stride),
+					kDefaultColorsArray, colors_stride * this_loop_count);
+			}
+
+			// Copies uvs which aren't affected by skinning.
+			//if (_options.texture) {
+			//	if (part_vertex_count ==
+			//		part.uvs.size() / ozz::sample::Mesh::Part::kUVsCpnts) {
+			//		// Optimal path used when the right number of uvs is provided.
+			//		memcpy(ozz::PointerStride(
+			//			vbo_map, uvs_offset + processed_vertex_count * uvs_stride),
+			//			array_begin(part.uvs), part_vertex_count * uvs_stride);
+			//	}
+			//	else {
+			//		// Un-optimal path used when the right number of uvs is not provided.
+			//		assert(sizeof(kDefaultUVsArray[0]) == uvs_stride);
+			//		for (size_t j = 0; j < part_vertex_count;
+			//			j += OZZ_ARRAY_SIZE(kDefaultUVsArray)) {
+			//			const size_t this_loop_count = math::Min(
+			//				OZZ_ARRAY_SIZE(kDefaultUVsArray), part_vertex_count - j);
+			//			memcpy(ozz::PointerStride(
+			//				vbo_map,
+			//				uvs_offset + (processed_vertex_count + j) * uvs_stride),
+			//				kDefaultUVsArray, uvs_stride * this_loop_count);
+			//		}
+			//	}
+			//}
+
+			// Some more vertices were processed.
+			processed_vertex_count += part_vertex_count;
+		}
+
+		// After processing everything, render
+
+		// Updates dynamic vertex buffer with skinned data.
+		glBindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_);
+		glBufferData(GL_ARRAY_BUFFER, vbo_size, nullptr, GL_STREAM_DRAW);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vbo_size, vbo_map);
+
+		// Binds shader with this array buffer, depending on rendering options.
+		ozz::sample::internal::Shader* shader = nullptr;
+		//if (_options.texture) {
+		//	ambient_textured_shader->Bind(
+		//		_transform, camera()->view_proj(), positions_stride, positions_offset,
+		//		normals_stride, normals_offset, colors_stride, colors_offset,
+		//		uvs_stride, uvs_offset);
+		//	shader = ambient_textured_shader.get();
+
+		//	// Binds default texture
+		//	GL(BindTexture(GL_TEXTURE_2D, checkered_texture_));
+		//}
+		//else {
+		//	ambient_shader->Bind(_transform, camera()->view_proj(), positions_stride,
+		//		positions_offset, normals_stride, normals_offset,
+		//		colors_stride, colors_offset);
+		//	shader = ambient_shader.get();
+		//}
+		
+		// Build mvp for object
+		glm::mat4 glm_mvp = camera->getProjection() * camera->getView();
+		ozz::math::Float4x4 ozz_mvp;
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				// m128_f32 for float4x4
+				ozz_mvp.cols[i].m128_f32[j] = glm_mvp[i][j];
+			}
+		}
+		
+		ambient_shader->Bind(_transform, ozz_mvp, positions_stride,
+			positions_offset, normals_stride, normals_offset,
+			colors_stride, colors_offset);
+		shader = ambient_shader.get();
+
+		// Maps the index dynamic buffer and update it.
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, dynamic_index_bo_));
+		const ozz::sample::Mesh::TriangleIndices& indices = _mesh.triangle_indices;
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER,
+			indices.size() * sizeof(ozz::sample::Mesh::TriangleIndices::value_type),
+			array_begin(indices), GL_STREAM_DRAW));
+
+		// Draws the mesh.
+		static_assert(sizeof(ozz::sample::Mesh::TriangleIndices::value_type) == 2,
+			"Expects 2 bytes indices.");
+		GL(DrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()),
+			GL_UNSIGNED_SHORT, 0));
+
+		// Unbinds.
+		GL(BindBuffer(GL_ARRAY_BUFFER, 0));
+		GL(BindTexture(GL_TEXTURE_2D, 0));
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+		shader->Unbind();
+
+		camera->frameBuffer->Unbind();
+
+		return true;
 	}
 
 	void Renderer3D::RenderSkybox()

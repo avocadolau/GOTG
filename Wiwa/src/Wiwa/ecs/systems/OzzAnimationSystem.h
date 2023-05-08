@@ -7,6 +7,8 @@ namespace Wiwa {
 	class WI_API OzzAnimationSystem : public System {
 	private:
 		OzzAnimationPartialBlending m_Animation;
+		EntityManager::ComponentIterator m_TransformIt;
+		EntityManager::ComponentIterator m_MeshIt;
 	public:
 		OzzAnimationSystem();
 		~OzzAnimationSystem();

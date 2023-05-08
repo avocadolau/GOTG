@@ -61,6 +61,7 @@ void EditorLayer::OnAttach()
 	m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 	m_EditorScene->GetEntityManager().SetInitSystemsOnApply(false);
 	m_EditorScene->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
+	m_EditorScene->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
 	
 
 	Wiwa::SceneManager::SetScene(m_EditorSceneId, false);
@@ -213,6 +214,7 @@ SceneId EditorLayer::LoadScene(const std::string &m_Path)
 	SceneId id = Wiwa::SceneManager::LoadScene(m_Path.c_str(), Wiwa::SceneManager::LoadFlags::LOAD_DEFAULT | Wiwa::SceneManager::LoadFlags::LOAD_NO_INIT);
 	Wiwa::Scene *scene = Wiwa::SceneManager::getScene(id);
 	scene->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
+	scene->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
 
 	// Update editor scene references
 	m_OpenedScenePath = m_Path;
@@ -629,6 +631,7 @@ void EditorLayer::MainMenuBar()
 							m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
 							Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
 							sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
+							sc->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
 
 							// For debug purposes
 							std::string ex = sc->getName();
