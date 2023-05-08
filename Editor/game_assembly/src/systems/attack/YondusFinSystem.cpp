@@ -160,6 +160,10 @@ namespace Wiwa
 		if (agentSys && m_EnemiesTransformIt.size() > 0) {
 			agentSys->SetDestination(currentEnemyPosition);
 		}
+
+		if (m_EnemiesTransformIt.size() <= 0) {
+			em.DestroyEntity(m_EntityId);
+		}
 	}
 
 	void YondusFinSystem::OnDestroy()

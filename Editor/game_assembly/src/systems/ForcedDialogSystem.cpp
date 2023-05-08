@@ -42,7 +42,7 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			
 			_scene->GetDialogManager().forceStartConversation = true;
-			_scene->GetDialogManager().forcedConversationTag = (std::string)em.GetEntityName(body1->id);
+			_scene->GetDialogManager().forcedConversationTag = em.GetEntityName(body1->id);
 		}
 	}
 

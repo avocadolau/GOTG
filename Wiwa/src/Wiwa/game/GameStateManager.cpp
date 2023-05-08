@@ -9,6 +9,7 @@
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSpawnerSystem.h>
 #include <Wiwa/game/GameMusicManager.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {
@@ -23,9 +24,7 @@ namespace Wiwa
 	bool GameStateManager::s_HasFinshedRoom = false;
 	bool GameStateManager::s_CanPassNextRoom = false;
 	bool GameStateManager::s_PlayerTriggerNext = false;
-	
-	int GameStateManager::s_TotalSpawners = 0;
-	int GameStateManager::s_SpawnersFinished = 0;
+
 	bool GameStateManager::debug = true;
 	
 	int GameStateManager::s_RoomsToShop = 5;
@@ -173,28 +172,21 @@ namespace Wiwa
 		Wiwa::WaveSpawner* enemySpawnerList = nullptr;
 		enemySpawnerList = em.GetComponents<WaveSpawner>(&size);
 
-		s_TotalSpawners = 0;
-		s_SpawnersFinished = 0;
-		if (enemySpawnerList)
-		{
-			for (int i = 0; i < size; i++)
-			{
+		bool isFinished = false;
+		if (enemySpawnerList){
+			for (int i = 0; i < size; i++){
 				if (em.IsComponentRemoved<WaveSpawner>(i)) {
-					//WI_INFO("Removed at: [{}]", i);
 				}
-				else
-				{
-					s_TotalSpawners += 1;
-
+				else{
 					Wiwa::WaveSpawner* spawner = &enemySpawnerList[i];
-					if (spawner)
-					{
-						if (spawner->hasFinished)
-							s_SpawnersFinished += 1;
+					if (spawner){
+						isFinished = IsWaveSpawnerFinished(spawner);
 					}
+					if (Input::IsKeyPressed(Key::N))
+						EndCombatRoom(spawner);
 				}
 			}
-			s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
+			s_HasFinshedRoom = isFinished;
 			s_CanPassNextRoom = s_HasFinshedRoom;
 		}
 		
@@ -203,10 +195,11 @@ namespace Wiwa
 		if (s_HasFinshedRoom)
 		{
 			ChangeRoomState(RoomState::STATE_FINISHED);
-			s_HasFinshedRoom = false;
 		}
 		else
 			ChangeRoomState(RoomState::STATE_STARTED);
+
+
 	}
 
 	void GameStateManager::NewGame()
@@ -457,6 +450,7 @@ namespace Wiwa
 
 	void GameStateManager::EndCurrentRoom()
 	{
+		s_PlayerTriggerNext = false;
 		if (debug) WI_INFO("GAME STATE: EndCurrentRoom()");
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 		{
@@ -484,8 +478,6 @@ namespace Wiwa
 	void GameStateManager::ResetCombatRoomData()
 	{
 		if (debug) WI_INFO("GAME STATE: ResetCombatRoomData()");
-		s_TotalSpawners = 0;
-		s_SpawnersFinished = 0;
 	}
 
 	void GameStateManager::setFinishRoom(bool value)
@@ -529,6 +521,7 @@ namespace Wiwa
 			RandomizeRewardRoom();
 
 			s_EnemyManager->ResetDifficulty();
+			s_PlayerTriggerNext = false;
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -1088,6 +1081,92 @@ namespace Wiwa
 		}
 
 		return total;
+	}
+
+	int GameStateManager::GetAproximateTotalEnemies()
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		int total = 0;
+
+		// Get the first and only spawner in scene
+		size_t size = 0;
+		Wiwa::WaveSpawner* waveSpawner = nullptr;
+		waveSpawner = em.GetComponents<WaveSpawner>(&size);
+		if (waveSpawner) {
+			if (em.IsComponentRemoved<WaveSpawner>(0))
+				return 0;
+			waveSpawner = &waveSpawner[0];
+			if (waveSpawner) {
+				// Check for all the active waves in that spawner.
+				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+				if (waveSpawnerSystem) {
+					const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+					for (int i = 0; i < waveIds.size(); i++)
+					{
+						Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+						if (wave) {
+							total += wave->maxEnemies;
+						}
+					}
+				}
+			}
+		}
+
+		return total;
+	}
+
+	bool GameStateManager::IsWaveSpawnerFinished(WaveSpawner* waveSpawner)
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		if (waveSpawner && !waveSpawner->hasFinished) {
+			// Check for all the active waves in that spawner.
+			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+			if (waveSpawnerSystem) {
+				const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+				for (int i = 0; i < waveIds.size(); i++)
+				{
+					Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+					if (wave) {
+						if (!wave->hasFinished)
+							return false;
+					}
+				}
+			}
+		}
+
+		if (waveSpawner->hasFinished)
+			return true;
+	}
+
+	void GameStateManager::EndCombatRoom(WaveSpawner* waveSpawner)
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		if (waveSpawner && !waveSpawner->hasFinished) {
+			// Check for all the active waves in that spawner.
+			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+			if (waveSpawnerSystem) {
+				const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+				for (int i = 0; i < waveIds.size(); i++)
+				{
+					Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+					if (wave) {
+
+						WaveSystem* waveSystem = em.GetSystem<WaveSystem>(waveIds[i]);
+						if (waveSystem) {
+							const std::vector<EntityId>& enemiesIds = waveSystem->getEnemiesIds();
+							for (int j = 0; j < enemiesIds.size(); j++)
+							{
+								em.DestroyEntity(enemiesIds[j]);
+								waveSystem->DestroyEnemy(enemiesIds[j], Pool_Type::SUBJUGATOR);
+							}
+						}
+
+						wave->hasFinished = true;
+					}
+				}
+			}
+			waveSpawner->hasFinished = true;
+		}
 	}
 }
 

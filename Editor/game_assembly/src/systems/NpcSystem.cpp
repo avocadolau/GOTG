@@ -44,7 +44,7 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			
 			_scene->GetDialogManager().collidingWithNpc = true;
-			_scene->GetDialogManager().NpcConversationTag = (std::string)em.GetEntityName(body1->id);
+			_scene->GetDialogManager().NpcConversationTag = em.GetEntityName(body1->id);
 		}
 	}
 
