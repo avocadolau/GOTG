@@ -255,8 +255,8 @@ void Wiwa::Inventory::AddAbility(const Ability* ability) const
 
 		if (m_Abilities[1] != nullptr)
 		{
-			GameStateManager::SpawnItem(
-				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 0, m_Abilities[1]->Name.c_str());
+			/*GameStateManager::SpawnItem(
+				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 0, m_Abilities[1]->Name.c_str());*/
 			delete m_Abilities[1];
 		}
 		m_Abilities[1] = m_Abilities[0];
@@ -281,8 +281,8 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 		if (m_Buffs[1] != nullptr)
 		{
 
-			GameStateManager::SpawnItem(
-				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 2, m_Buffs[1]->Name.c_str());
+			/*GameStateManager::SpawnItem(
+				GameStateManager::GetPlayerTransform()->position + glm::vec3(0.f, 0.f, 3.f), 2, m_Buffs[1]->Name.c_str());*/
 			delete m_Buffs[1];
 		}
 		m_Buffs[1] = m_Buffs[0];
@@ -443,11 +443,11 @@ void Wiwa::Inventory::UseAbility(size_t index) const
 }
 void Wiwa::Inventory::UseBuff(size_t index) const
 {
-	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown)
+	if(m_Buffs[index]->CurrentTime >= m_Buffs[index]->Cooldown && m_Buffs[index]->IsActive == false)
 	{
 		m_Buffs[index]->CurrentTime = 0.f;
 		m_Buffs[index]->Use();
-		
+		m_Buffs[index]->IsActive = true;
 		return;
 	}
 	WI_CORE_INFO("Buff {} is on cooldown", index);
