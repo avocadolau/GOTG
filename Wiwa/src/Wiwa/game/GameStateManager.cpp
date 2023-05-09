@@ -185,10 +185,14 @@ namespace Wiwa
 					}
 
 					if (Input::IsKeyPressed(Key::F6))
+					{
+						WI_INFO("F66666666666666666666666666666");
 						EndCombatRoom(spawner);
+					}
 
 					if (Input::IsKeyPressed(Key::F5))
 					{
+						WI_INFO("F555555555555555555555555555555");
 						EndCurrentRoom();
 						WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 						GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
@@ -818,6 +822,9 @@ namespace Wiwa
 					s_CanContinue = true;
 			}
 		}
+
+		Wiwa::GameStateManager::GetEnemyManager().DeSerialize();
+
 		//AchievementsManager::Deserialize(&doc);
 	}
 	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
@@ -1146,6 +1153,8 @@ namespace Wiwa
 
 		if (waveSpawner->hasFinished)
 			return true;
+
+		return false;
 	}
 
 	void GameStateManager::EndCombatRoom(WaveSpawner* waveSpawner)
