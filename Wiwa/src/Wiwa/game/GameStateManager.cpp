@@ -141,7 +141,6 @@ namespace Wiwa
 			if (doc.HasMember("walk_threshold"))
 				character->WalkTreshold = doc["walk_threshold"].as_float();
 		}
-		s_PlayerInventory->Clear();
 		s_PlayerInventory->InitGame();
 		s_PlayerInventory->Deserialize(&doc);
 

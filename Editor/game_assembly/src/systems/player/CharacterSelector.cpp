@@ -16,6 +16,9 @@ void Wiwa::CharacterSelector::OnCollisionEnter(Object* obj1, Object* obj2)
 	if (!m_CanInteract)
 		return;
 	//TODO: Alejandro pop the image here
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+
+	gm.canvas.at(10)->SwapActive();
 }
 
 void Wiwa::CharacterSelector::OnCollision(Object* obj1, Object* obj2)
@@ -42,4 +45,7 @@ void Wiwa::CharacterSelector::OnCollisionExit(Object* obj1, Object* obj2)
 	if (!m_CanInteract)
 		return;
 	// TODO: Alejandro hide the image here
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+
+	gm.canvas.at(10)->SwapActive();
 }

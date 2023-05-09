@@ -43,7 +43,7 @@ void Wiwa::GameProgression::InitGame()
 	m_PlayerData.m_EnemiesKilled = 0;
 	m_PlayerData.m_ItemsBought = 0;
 	m_PlayerData.m_KilledUltronCount = 0;
-	m_PlayerData.m_UnlockedRocket = false;
+	m_PlayerData.m_UnlockedRocket = true;
 }
 
 void Wiwa::GameProgression::Update()
