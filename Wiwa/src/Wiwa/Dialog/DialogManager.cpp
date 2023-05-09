@@ -514,7 +514,7 @@ namespace Wiwa
 			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && (keyPressRefreshTimer > 850 && firstTime == false && endTime == false))
 			{
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
-
+				Audio::StopWorldEvent(conversations[conversationNumber].nodes[currentNode].audioEventName.c_str());
 				keyPressRefreshTimer = 0;
 
 				currentNode++;
