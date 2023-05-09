@@ -822,14 +822,14 @@ namespace Wiwa
 	}
 	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
 	{
-		uint32_t itemRand;
+		
 		std::string name;
 		int i = 0;
 		switch (type)
 		{
 		case 0:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size() - 1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetAbilities())
 			{
@@ -840,7 +840,7 @@ namespace Wiwa
 		}break;
 		case 1:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size() - 1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetSkills())
 			{
@@ -851,7 +851,7 @@ namespace Wiwa
 		}break;
 		case 2:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size() - 1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetBuffs())
 			{
@@ -862,11 +862,11 @@ namespace Wiwa
 		}break;
 		case 3:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size() -1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetConsumables())
 			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
