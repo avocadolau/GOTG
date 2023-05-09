@@ -24,7 +24,6 @@ namespace Wiwa {
 		void OnDestroy() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
-		glm::vec3 CalculateForward(const Transform3D& t3d);
 	};
 }
 

@@ -32,9 +32,9 @@ namespace Wiwa
 		PhylasSword->lifeTime = 30.0f;
 		PhylasSword->velocity = 30.0f;
 		
-		EntityId player = em.GetEntityParent(m_EntityId);
+		EntityId player = Wiwa::GameStateManager::GetPlayerId();
 		Transform3D* playerTransform = em.GetComponent<Transform3D>(player);
-		PhylasSword->direction = CalculateForward(*playerTransform);
+		PhylasSword->direction = Math::CalculateForward(playerTransform);
 		PhylasSwordTransform->localRotation = playerTransform->localRotation;
 		PhylasSwordTransform->localPosition.x = playerTransform->localPosition.x;
 		PhylasSwordTransform->localPosition.z = playerTransform->localPosition.z;
@@ -84,21 +84,4 @@ namespace Wiwa
 			em.DestroyEntity(m_EntityId);
 		}
 	}
-
-
-	glm::vec3 PhylasQuantumSwordSystem::CalculateForward(const Transform3D& t3d)
-	{
-		glm::vec3 rotrad = glm::radians(t3d.rotation);
-
-		glm::vec3 forward;
-
-		forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
-		forward.y = -glm::sin(rotrad.x);
-		forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
-
-		forward = glm::degrees(forward);
-
-		return glm::normalize(forward);
-	}
-
 }
