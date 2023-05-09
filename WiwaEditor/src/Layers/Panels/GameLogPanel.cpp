@@ -64,9 +64,12 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
 
-	ImGui::Text("Approximate total enemies: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());
+	if (Wiwa::Time::IsPlaying())
+	{
+		ImGui::Text("Approximate total enemies: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());
+	}
 }
 
 void GameLogPanel::DrawRoomVariables()

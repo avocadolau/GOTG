@@ -153,14 +153,24 @@ void GameLayer::OnImGuiRender()
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0, 255, 200, 1), roomState);
 
-		ImGui::Separator();
-		ImGui::Text("Total spawners: ");
+		ImGui::Text("Has finished: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0, 0, 200, 1), "%d", Wiwa::GameStateManager::s_TotalSpawners);
+		ImGui::TextColored(ImVec4(0, 0, 200, 1), "%s", Wiwa::GameStateManager::s_HasFinshedRoom ? "true" : "false");
 
-		ImGui::Text("Finished spawners: ");
+		ImGui::Text("Is triggering next: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::s_SpawnersFinished);
+		ImGui::TextColored(ImVec4(0, 0, 200, 1), "%s", Wiwa::GameStateManager::s_PlayerTriggerNext ? "true" : "false");
+
+		ImGui::Text("Enemies active: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
+
+		if (Wiwa::Time::IsPlaying())
+		{
+			ImGui::Text("Approximate total enemies: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());
+		}
 
 		ImGui::Separator();
 

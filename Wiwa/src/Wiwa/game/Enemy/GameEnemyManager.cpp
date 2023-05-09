@@ -103,7 +103,7 @@ namespace Wiwa
 {
 	EnemyManager::EnemyManager()
 	{
-		m_MaxLevel = 4;
+		m_MaxLevel = 2;
 		m_CurrentRunLevel = 0;
 		m_IncreaseDiffEvery = 1;
 		m_RewardRoomCounter = 0;
@@ -190,7 +190,7 @@ namespace Wiwa
 			m_UltronData.bulletSpeed = serializedData["m_UltronData"]["bulletSpeed"].get<float>();
 
 			file.close();
-			WI_INFO("Enemy stats saved to enemy_stats.json");
+			WI_INFO("Enemy stats LOADED FROM enemy_stats.json");
 			return true;
 		}
 
