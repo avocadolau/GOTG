@@ -49,6 +49,7 @@ namespace Wiwa
 
 	bool GuiSlider::Update()
 	{
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 		if (state != GuiControlState::DISABLED)
 		{
 			if (canClick == true)
@@ -80,7 +81,6 @@ namespace Wiwa
 					}*/
 
 					//RIGHT
-					
 					if (Wiwa::Input::IsButtonPressed(0, 12))
 					{
 						extraPosition.width += 1;
@@ -142,7 +142,18 @@ namespace Wiwa
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_extra, { extraPosition.x,extraPosition.y }, { extraPosition.width,extraPosition.height }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render->UpdateInstancedQuadTexClip(m_Scene, id_quad_extra, extraTexture->GetSize(), extraTexturePosition);
 
-
+		if (state != GuiControlState::FOCUSED)
+		{
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, { 1.0,1.0,1.0,1.0 });
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_extra, { 1.0,1.0,1.0,1.0 });
+		}
+			
+		if (state == GuiControlState::FOCUSED)
+		{
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, { 0.5,0.5,0.5,1.0 });
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_extra, { 0.5,0.5,0.5,1.0 });
+		}
+			
 
 		return false;
 	}
