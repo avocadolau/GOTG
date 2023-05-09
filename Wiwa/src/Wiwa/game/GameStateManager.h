@@ -13,7 +13,8 @@
 #include "Enemy/GameEnemyManager.h"
 
 typedef size_t SceneId;
-
+#define STARLORD 0
+#define ROCKET 1
 namespace Wiwa
 {
 	class GamePoolingManager;

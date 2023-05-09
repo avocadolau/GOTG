@@ -45,7 +45,7 @@ namespace Wiwa
 	int GameStateManager::s_CurrentRoomsCount;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
 
-	int GameStateManager::s_CurrentCharacter = 0;
+	int GameStateManager::s_CurrentCharacter = STARLORD;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
 	EntityId GameStateManager::s_PlayerId = 0;
 	

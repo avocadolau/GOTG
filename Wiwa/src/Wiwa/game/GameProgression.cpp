@@ -20,10 +20,10 @@ Wiwa::GameProgression::~GameProgression()
 
 void Wiwa::GameProgression::Serialize(JSONDocument* doc)
 {
-	
 	(*doc).AddMember("enemies_killed", m_PlayerData.m_EnemiesKilled);
-	(*doc).AddMember("items_bought", m_PlayerData.m_ItemsBought = 0);
-	(*doc).AddMember("killed_ultron_counter", m_PlayerData.m_KilledUltronCount = 0);
+	(*doc).AddMember("items_bought", m_PlayerData.m_ItemsBought);
+	(*doc).AddMember("killed_ultron_counter", m_PlayerData.m_KilledUltronCount);
+	(*doc).AddMember("unlocked_rocket", m_PlayerData.m_UnlockedRocket);
 }
 
 void Wiwa::GameProgression::Deserialize(JSONDocument* doc)
@@ -34,6 +34,8 @@ void Wiwa::GameProgression::Deserialize(JSONDocument* doc)
 		m_PlayerData.m_ItemsBought = (*doc)["items_bought"].as_int();
 	if (doc->HasMember("killed_ultron_counter"))
 		m_PlayerData.m_KilledUltronCount = (*doc)["killed_ultron_counter"].as_int();
+	if (doc->HasMember("unlocked_rocket"))
+		m_PlayerData.m_UnlockedRocket = (*doc)["unlocked_rocket"].as_bool();
 }
 
 void Wiwa::GameProgression::InitGame()
@@ -41,6 +43,7 @@ void Wiwa::GameProgression::InitGame()
 	m_PlayerData.m_EnemiesKilled = 0;
 	m_PlayerData.m_ItemsBought = 0;
 	m_PlayerData.m_KilledUltronCount = 0;
+	m_PlayerData.m_UnlockedRocket = false;
 }
 
 void Wiwa::GameProgression::Update()
@@ -77,6 +80,8 @@ void Wiwa::GameProgression::Update()
 			}
 		}
 	}
+	if (m_PlayerData.m_KilledUltronCount >= 1)
+		m_PlayerData.m_UnlockedRocket = true;
 }
 
 void Wiwa::GameProgression::Clear()

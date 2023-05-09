@@ -42,6 +42,8 @@ void Wiwa::PlayerStateMachine::OnInit()
 
 void Wiwa::PlayerStateMachine::OnUpdate()
 {
+	
+
 	PlayerController::OnUpdate();
 	m_CurrentState->UpdateState();
 	CheckHealth();

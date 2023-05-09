@@ -32,7 +32,7 @@ namespace Wiwa
 	void PlayerSpawner::OnAwake()
 	{
 		m_DataIt = GetComponentIterator<PlayerSpawnerData>();
-		if (GameStateManager::s_CurrentCharacter == 0) // Starlord
+		if (GameStateManager::s_CurrentCharacter == STARLORD) // Starlord
 		{
 			m_PlayerId = m_Scene->GetEntityManager().LoadPrefab("assets\\player\\starlord.wiprefab");
 			WI_INFO("Loaded StarLord player");

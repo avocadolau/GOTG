@@ -17,15 +17,16 @@ void Wiwa::PlayerAttack::EnterState()
 	WI_WARN("Player attack");
 	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
 
+	
+}
+
+void Wiwa::PlayerAttack::UpdateState()
+{
 	if (!m_StateMachine->GetCharacter()->CanMove)
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
-}
-
-void Wiwa::PlayerAttack::UpdateState()
-{
 	if (!m_StateMachine->CanAttack() && !m_StateMachine->IsAiming() && !m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);

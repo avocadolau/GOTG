@@ -1,6 +1,8 @@
 #include "systems/player/states/PlayerStateMachine.h"
 #include "systems/player/PlayerSpawner.h"
 #include "systems/camera/CameraController.h"
+#include "systems/player/CharacterSelector.h"
+
 #include "systems/ships/ship_main_menu.h"
 #include "systems/ships/ShipRotator.h"
 
@@ -20,7 +22,6 @@
 #include "systems/attack/StarhawksBlastSystem.h"
 #include "systems/attack/PhylasQuantumSwordSystem.h"
 #include "systems/attack/GrootSeedsSystem.h"
-
 
 #include "systems/camera/CameraController.h"
 

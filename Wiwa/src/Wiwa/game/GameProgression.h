@@ -11,6 +11,7 @@ namespace Wiwa
 		int m_EnemiesKilled;
 		int m_KilledUltronCount;
 		int m_ItemsBought;
+		bool m_UnlockedRocket;
 	};
 
 	class JSONDocument;
@@ -27,7 +28,8 @@ namespace Wiwa
 		void IncrementEnemiesKilled() { m_PlayerData.m_EnemiesKilled++; }
 		void IncrementUltronKills() { m_PlayerData.m_KilledUltronCount++; }
 		void IncrementItemsBought() { m_PlayerData.m_ItemsBought++; }
-
+		void UnlockRocket() { m_PlayerData.m_UnlockedRocket = true; }
+		bool IsRocketUnlocked() { return m_PlayerData.m_UnlockedRocket; }
 		void InitGame();
 		void Update();
 		void Clear();
