@@ -11,6 +11,7 @@ namespace Wiwa
 	Wiwa::ExplosiveBarrelProp::ExplosiveBarrelProp()
 	{
 		m_SpawnExplosion = false;
+		m_ExplosionMarkPath = "assets\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab";
 	}
 
 	ExplosiveBarrelProp::~ExplosiveBarrelProp()
@@ -38,6 +39,9 @@ namespace Wiwa
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 
+			m_ExplosionMarkId = em.LoadPrefab(m_ExplosionMarkPath);
+			Transform3D* explosionMarkTr = em.GetComponent<Transform3D>(m_ExplosionMarkId);
+			explosionMarkTr->localPosition = selfTr->localPosition;
 
 			//Destroy the barrel
 			em.DestroyEntity(m_EntityId);

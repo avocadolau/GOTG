@@ -4,7 +4,11 @@
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	class SentinelDeathState : public SentinelBaseState {
+	class SentinelDeathState : public SentinelBaseState 
+	{
+	private: 
+		EntityId m_ExplosionMarkId;
+		const char* m_ExplosionMarkPath;
 	public:
 		SentinelDeathState();
 		~SentinelDeathState();

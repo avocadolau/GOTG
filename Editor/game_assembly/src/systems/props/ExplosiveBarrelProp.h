@@ -6,8 +6,10 @@
 namespace Wiwa {
 	class ExplosiveBarrelProp : public System {
 	public:
-		bool m_SpawnExplosion;
 
+		EntityId m_ExplosionMarkId;
+		const char* m_ExplosionMarkPath;
+		bool m_SpawnExplosion;
 
 	public:
 		ExplosiveBarrelProp();
