@@ -67,18 +67,22 @@ void Wiwa::PlayerAttack::UpdateState()
 		float difference = glm::abs(shootDirection - movementDirection);
 
 		//WI_INFO("Diff angle {}", difference);
-		if (IN_BETWEEN(difference, 120.f, 270.f))
+		if (IN_BETWEEN(difference, 170.f, 289.f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("moonwalk", true);
+
 		}
-		else if (IN_BETWEEN(difference, 45.0f, 119.f))
+		else if (IN_BETWEEN(difference, 45.0f, 169.f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("walking_left", true);
+
 		}
-		else if (IN_BETWEEN(difference, 270.0f, 360.0f))
+		else if (IN_BETWEEN(difference, 290.0f, 360.0f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("walking_right", true);
+
 		}
+
 	}
 	else
 	{
