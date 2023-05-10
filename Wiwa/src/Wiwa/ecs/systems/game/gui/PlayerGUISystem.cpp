@@ -37,12 +37,20 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 			{
 				//STARLORD
 				gm.canvas.at(DeathHUD)->controls.at(1)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/ui_speechmenustarlordwithshadows_01.dds",Wiwa::Application::Get().GetRenderer2D());
+				r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(1)->id_quad_normal, 1);
+				r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(0)->id_quad_normal, 2);
+
+
 
 			}
 			else if (Wiwa::GameStateManager::s_CurrentCharacter == 1)
 			{
 				//ROCKET
 				gm.canvas.at(DeathHUD)->controls.at(1)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/ui_speechmenurocket_01.dds", Wiwa::Application::Get().GetRenderer2D());
+				r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(1)->id_quad_normal, 1);
+				r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(DeathHUD)->controls.at(0)->id_quad_normal, 2);
+
+
 			}
 			deathHud = true;
 		}
