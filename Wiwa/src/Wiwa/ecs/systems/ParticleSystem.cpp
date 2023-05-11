@@ -249,16 +249,25 @@ namespace Wiwa {
 
 			if (emitter->m_activeOverTime)
 			{
-				if (emitter->m_ActiveTimer <= 0 && emitter->m_destroyOnFinishActive && Time::IsPlaying() && emitter->m_activeParticles == 0)
+				if (emitter->m_ActiveTimer <= 0 && emitter->m_destroyOnFinishActive && Time::IsPlaying() )
 				{
 					if (emitter->m_destroyActiveParticles)
 					{
 						m_Particles.clear();
-					}
 
-					EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-					//WI_CORE_INFO("active timer over");
-					eman.DestroyEntity(m_EntityId);
+						EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+						//WI_CORE_INFO("active timer over");
+						eman.DestroyEntity(m_EntityId);
+					}
+					else if (emitter->m_activeParticles == 0)
+					{
+						EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+						//WI_CORE_INFO("active timer over");
+						eman.DestroyEntity(m_EntityId);
+					}
+					
+
+					
 				}
 
 
