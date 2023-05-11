@@ -47,7 +47,7 @@ namespace Wiwa
 
 	int GameStateManager::s_CurrentCharacter = STARLORD;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
-	EntityId GameStateManager::s_PlayerId = 0;
+	EntityId GameStateManager::s_PlayerId = WI_INVALID_INDEX;
 	
 	int GameStateManager::s_ActiveSkillChances = 20;
 	int GameStateManager::s_BuffChances = 20;
