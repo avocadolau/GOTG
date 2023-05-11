@@ -199,6 +199,7 @@ void ConfigurationPanel::Draw()
 		ImGui::Text("Right trigger: %f", Wiwa::Input::GetAxis(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::RightTrigger, Wiwa::GameStateManager::s_GamepadDeadzone));
 
 		ImGui::Separator();
+		
 		ImGui::Text("Gamepad 2");
 		ImGui::Text("Left X: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::LeftX, 0.f));
 		ImGui::Text("Left Y: %f", Wiwa::Input::GetRawAxis(Wiwa::Gamepad::GamePad2, Wiwa::Gamepad::LeftY, 0.f));

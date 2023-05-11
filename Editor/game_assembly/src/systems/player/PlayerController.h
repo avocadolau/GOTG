@@ -54,7 +54,8 @@ namespace Wiwa {
 		void SpawnStarLordUltimate(Transform3D& transform, const Character& character);
 
 		void SetPlayerRotation(const float angle);
-	
+		
+
 	public:
 		bool IsDashing;
 	private:

@@ -32,6 +32,8 @@ namespace Wiwa
 		void DashCooldown();
 		void ResetCooldown();
 
+		virtual void OnCollision(Object*, Object*) override;
+		virtual void OnCollisionExit(Object* obj1, Object* obj2) override;
 	public:
 		class PlayerBaseState* m_IdleState;
 		class PlayerBaseState* m_MoveState;
@@ -41,6 +43,7 @@ namespace Wiwa
 
 	private:
 		PlayerBaseState* m_CurrentState;
+		bool m_Colliding = false;
 	};
 }
 

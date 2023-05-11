@@ -708,10 +708,11 @@ void EditorLayer::MainMenuBar()
 			ImGui::Text(buff);
 			ImGui::PopStyleColor();
 			ImGui::Text(ICON_FK_EXCLAMATION_CIRCLE);
-
-			const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
-			ImGui::TextUnformatted(beg, log.Buf.end());
-			
+			if (!log.Buf.empty())
+			{
+				const char* beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
+				ImGui::TextUnformatted(beg, log.Buf.end());
+			}
 			
 			ImGui::EndMenuBar();
 		}

@@ -17,8 +17,7 @@ namespace Wiwa
 		virtual void EnterState() = 0;
 		virtual void UpdateState() = 0;
 		virtual void ExitState() = 0;
-		virtual void OnCollisionEnter(Object* object1, Object* object2) = 0;
-
+		virtual void OnCollisionEnter(Object*, Object*) = 0;
 	
 	protected:
 		EntityId m_Id;

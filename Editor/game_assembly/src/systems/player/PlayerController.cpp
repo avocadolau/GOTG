@@ -60,6 +60,7 @@ void Wiwa::PlayerController::OnInit()
 void Wiwa::PlayerController::OnDestroy()
 {
 	GameStateManager::s_PoolManager->UnloadPool(Pool_Type::STARLORD_BULLET);
+	GameStateManager::SetPlayerId(WI_INVALID_INDEX, nullptr);
 }
 
 void Wiwa::PlayerController::OnUpdate()
