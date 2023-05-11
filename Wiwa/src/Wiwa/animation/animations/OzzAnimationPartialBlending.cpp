@@ -245,7 +245,7 @@ namespace Wiwa {
         models_.resize(num_joints);
 
         // Set body root joint
-        upper_body_root_ = 0;
+        upper_body_root_ = 10;
         
         // Init joint weights
         SetupPerJointWeights();
