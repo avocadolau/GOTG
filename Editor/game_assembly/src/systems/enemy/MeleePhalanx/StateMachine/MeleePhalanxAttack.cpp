@@ -33,8 +33,8 @@ namespace Wiwa
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
-		m_SoundCurrentTime = m_SoundTimer;
-		GenerateAttack(enemy);
+		m_SoundCurrentTime = 0.0f;
+		//GenerateAttack(enemy);
 	}
 
 	void MeleePhalanxAttackState::UpdateState(EnemyMeleePhalanx *enemy)
@@ -47,10 +47,9 @@ namespace Wiwa
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		enemy->LookAt(playerTr->localPosition, 30.f);
+		float distance = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
-		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds(); // This is in milliseconds
-
-		if (glm::distance(selfTr->localPosition, playerTr->localPosition) > 3.0f) // animation->HasFinished()
+		if (distance > 4.0f && !m_PlaySound) // animation->HasFinished()
 		{
 			m_TimerAttackCooldown = 0.0f;
 			enemy->SwitchState(enemy->m_ChasingState);
@@ -61,18 +60,27 @@ namespace Wiwa
 			// Reset the timer after generating the attack
 			m_TimerAttackCooldown = 0.0f;
 		}
-		m_SoundCurrentTime -= Time::GetDeltaTimeSeconds();
-		if (m_SoundCurrentTime < 0 && m_PlaySound)
+		m_SoundCurrentTime += Time::GetDeltaTimeSeconds();
+		WI_INFO("m_SoundCurrentTime: {}", m_SoundCurrentTime);
+		WI_INFO("m_PlaySound: {}", m_PlaySound);
+
+		if (m_SoundCurrentTime >= m_SoundTimer && m_PlaySound)
 		{	
+			WI_INFO("attack!!!!!!!!!!!!!!!!!!!: {}", m_PlaySound);
 			// make damage here when the animation is hitting
 			EnemyData* selfStats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
-			if(selfStats != nullptr)
+			if (selfStats != nullptr)
+			{
+				WI_INFO("Melee damage: {}", selfStats->damage);
 				GameStateManager::DamagePlayer(selfStats->damage);
+			}
 			
 			audio->PlayAudio("melee_attack");
 			m_PlaySound = false;
+			m_SoundCurrentTime = 0.0f;
 		}
 
+		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds(); // This is in milliseconds
 	}
 
 	void MeleePhalanxAttackState::ExitState(EnemyMeleePhalanx *enemy)

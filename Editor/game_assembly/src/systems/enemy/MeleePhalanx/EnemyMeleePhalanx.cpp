@@ -67,6 +67,11 @@ namespace Wiwa
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
 
+		NavAgent* navAgent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+		if (navAgent) {
+			navAgent->agentSliding = false;
+		}
+
 		Health* stats = GetComponentByIterator<Health>(m_Health);
 		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
