@@ -14,6 +14,7 @@ namespace Wiwa {
 	class LightManager;
 	class GuiManager;
 	class DialogManager;
+	class DialogEventManager;
 
 
 	class WI_API Scene {
@@ -56,6 +57,7 @@ namespace Wiwa {
 		LightManager& GetLightManager() { return *m_LightManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		DialogManager& GetDialogManager() { return *m_DialogManager; }
+		DialogEventManager& GetDialogEventManager() { return *m_DialogEventManager; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -77,6 +79,7 @@ namespace Wiwa {
 		LightManager* m_LightManager = nullptr;
 		GuiManager* m_GuiManager = nullptr;
 		DialogManager* m_DialogManager = nullptr;
+		DialogEventManager* m_DialogEventManager = nullptr;
 
 		std::vector<std::string> m_AudioBanks;
 	private:

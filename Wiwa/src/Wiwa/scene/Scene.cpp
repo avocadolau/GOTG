@@ -9,6 +9,7 @@
 
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/Dialog/DialogManager.h>
+#include <Wiwa/Dialog/DialogEventManager.h>
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
 #include <Wiwa/ecs/systems/game/gui/UltronGUISystem.h>
@@ -40,6 +41,8 @@ namespace Wiwa
 		m_GuiManager->Init(this);
 		m_DialogManager = new DialogManager();
 		m_DialogManager->Init(this);
+		m_DialogEventManager = new DialogEventManager();
+		m_DialogEventManager->Init(this);
 
 		m_PhysicsManager->InitWorld();
 
@@ -52,6 +55,7 @@ namespace Wiwa
 		delete m_LightManager;
 		delete m_GuiManager;
 		delete m_DialogManager;
+		delete m_DialogEventManager;
 
 		// Clear entity manager
 		//m_EntityManager.Clear();
@@ -122,11 +126,8 @@ namespace Wiwa
 				Time::SetTimeScale(1.0f);
 				m_EntityManager.SystemsUpdate();
 			}
-				
-			player = m_EntityManager.GetEntityByName("StarLord");
-			player2 = m_EntityManager.GetEntityByName("Rocket");
 
-			if (player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX)
+			if (GameStateManager::GetPlayerId() != WI_INVALID_INDEX)
 			{
 				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
 				if (pgs != nullptr)
@@ -146,9 +147,16 @@ namespace Wiwa
 			}
 			if (m_DialogManager)
 			{
-				if (player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX)
+				if (GameStateManager::GetPlayerId() != WI_INVALID_INDEX) //old version: player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX
 				{
 					m_DialogManager->Update();
+				}
+			}
+			if (m_DialogEventManager)
+			{
+				if (GameStateManager::GetPlayerId() != WI_INVALID_INDEX)
+				{
+					m_DialogEventManager->Update();
 				}
 			}
 			ProcessInput();
