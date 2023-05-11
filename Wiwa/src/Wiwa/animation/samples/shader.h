@@ -244,7 +244,7 @@ class AmbientTexturedShader : public AmbientShader {
   // Returns nullptr if shader compilation failed or a valid Shader pointer on
   // success. The shader must then be deleted using default allocator Delete
   // function.
-  static ozz::unique_ptr<AmbientTexturedShader> Build();
+  static ozz::unique_ptr<AmbientTexturedShader> Build(const char* vs_data, const char* fs_data);
 
   // Binds the shader.
   void Bind(const math::Float4x4& _model, const math::Float4x4& _view_proj,

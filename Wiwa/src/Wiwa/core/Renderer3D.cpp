@@ -18,7 +18,7 @@
 #define GLERR do {\
         GLuint glerr;\
         while((glerr = glGetError()) != GL_NO_ERROR)\
-            fprintf(stderr, "%s:%d glGetError() = 0x%04x", __FILE__, __LINE__, glerr);\
+            fprintf(stderr, "%s:%d glGetError() = 0x%04x\n", __FILE__, __LINE__, glerr);\
     } while (0)
 
 const uint8_t kDefaultColorsArray[][4] = {
@@ -48,6 +48,37 @@ const uint8_t kDefaultColorsArray[][4] = {
 	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255}
 };
 
+const float kDefaultNormalsArray[][3] = {
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f},
+	{0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 1.f, 0.f} };
+
+const float kDefaultUVsArray[][2] = {
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f},
+	{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f} };
+
 namespace Wiwa
 {
 	Renderer3D::Renderer3D() :
@@ -68,17 +99,24 @@ namespace Wiwa
 		glGenBuffers(1, &dynamic_array_bo_);
 		glGenBuffers(1, &dynamic_index_bo_);
 
+		
+
 		// Instantiate ambient rendering shader.
 		ambient_shader = ozz::sample::internal::AmbientShader::Build();
 		if (!ambient_shader) {
 			return false;
 		}
 
+		std::string* vs_data = Shader::getFileData("resources/shaders/animation/animation_skinned_textured.vs");
+		std::string* fs_data = Shader::getFileData("resources/shaders/animation/animation_skinned_textured.fs");
+
 		// Instantiate ambient textured rendering shader.
-		ambient_textured_shader = ozz::sample::internal::AmbientTexturedShader::Build();
+		ambient_textured_shader = ozz::sample::internal::AmbientTexturedShader::Build(vs_data->c_str(), fs_data->c_str());
 		if (!ambient_textured_shader) {
 			return false;
 		}
+		delete vs_data;
+		delete fs_data;
 		// ========= END OZZ ANIMATIONS =========
 
 		Size2i &resolution = Application::Get().GetTargetResolution();
@@ -957,9 +995,7 @@ namespace Wiwa
 		const GLsizei colors_stride = sizeof(uint8_t) * 4;
 		const GLsizei colors_size = vertex_count * colors_stride;
 		const GLsizei uvs_offset = colors_offset + colors_size;
-		// TODO: TEXTURE
-		//const GLsizei uvs_stride = _options.texture ? sizeof(float) * 2 : 0;
-		const GLsizei uvs_stride = 0;
+		const GLsizei uvs_stride = sizeof(float) * 2;
 		const GLsizei uvs_size = vertex_count * uvs_stride;
 		const GLsizei fixed_data_size = colors_size + uvs_size;
 
@@ -1078,32 +1114,6 @@ namespace Wiwa
 			if (!skinning_job.Run()) {
 				return false;
 			}
-
-			// Handles colors which aren't affected by skinning.
-			//if (_options.colors &&
-			//	part_vertex_count ==
-			//	part.colors.size() / ozz::sample::Mesh::Part::kColorsCpnts) {
-			//	// Optimal path used when the right number of colors is provided.
-			//	memcpy(
-			//		ozz::PointerStride(
-			//			vbo_map, colors_offset + processed_vertex_count * colors_stride),
-			//		array_begin(part.colors), part_vertex_count * colors_stride);
-			//}
-			//else {
-			//	// Un-optimal path used when the right number of colors is not provided.
-			//	static_assert(sizeof(kDefaultColorsArray[0]) == colors_stride,
-			//		"Stride mismatch");
-
-			//	for (size_t j = 0; j < part_vertex_count;
-			//		j += OZZ_ARRAY_SIZE(kDefaultColorsArray)) {
-			//		const size_t this_loop_count = math::Min(
-			//			OZZ_ARRAY_SIZE(kDefaultColorsArray), part_vertex_count - j);
-			//		memcpy(ozz::PointerStride(
-			//			vbo_map, colors_offset +
-			//			(processed_vertex_count + j) * colors_stride),
-			//			kDefaultColorsArray, colors_stride * this_loop_count);
-			//	}
-			//}
 			
 			// OZZ COLORS
 			// Un-optimal path used when the right number of colors is not provided.
@@ -1120,29 +1130,26 @@ namespace Wiwa
 					kDefaultColorsArray, colors_stride * this_loop_count);
 			}
 
-			// Copies uvs which aren't affected by skinning.
-			//if (_options.texture) {
-			//	if (part_vertex_count ==
-			//		part.uvs.size() / ozz::sample::Mesh::Part::kUVsCpnts) {
-			//		// Optimal path used when the right number of uvs is provided.
-			//		memcpy(ozz::PointerStride(
-			//			vbo_map, uvs_offset + processed_vertex_count * uvs_stride),
-			//			array_begin(part.uvs), part_vertex_count * uvs_stride);
-			//	}
-			//	else {
-			//		// Un-optimal path used when the right number of uvs is not provided.
-			//		assert(sizeof(kDefaultUVsArray[0]) == uvs_stride);
-			//		for (size_t j = 0; j < part_vertex_count;
-			//			j += OZZ_ARRAY_SIZE(kDefaultUVsArray)) {
-			//			const size_t this_loop_count = math::Min(
-			//				OZZ_ARRAY_SIZE(kDefaultUVsArray), part_vertex_count - j);
-			//			memcpy(ozz::PointerStride(
-			//				vbo_map,
-			//				uvs_offset + (processed_vertex_count + j) * uvs_stride),
-			//				kDefaultUVsArray, uvs_stride * this_loop_count);
-			//		}
-			//	}
-			//}
+			if (part_vertex_count ==
+				part.uvs.size() / ozz::sample::Mesh::Part::kUVsCpnts) {
+				// Optimal path used when the right number of uvs is provided.
+				memcpy(ozz::PointerStride(
+					vbo_map, uvs_offset + processed_vertex_count * uvs_stride),
+					array_begin(part.uvs), part_vertex_count * uvs_stride);
+			}
+			else {
+				// Un-optimal path used when the right number of uvs is not provided.
+				assert(sizeof(kDefaultUVsArray[0]) == uvs_stride);
+				for (size_t j = 0; j < part_vertex_count;
+					j += OZZ_ARRAY_SIZE(kDefaultUVsArray)) {
+					const size_t this_loop_count = ozz::math::Min(
+						OZZ_ARRAY_SIZE(kDefaultUVsArray), part_vertex_count - j);
+					memcpy(ozz::PointerStride(
+						vbo_map,
+						uvs_offset + (processed_vertex_count + j) * uvs_stride),
+						kDefaultUVsArray, uvs_stride * this_loop_count);
+				}
+			}
 
 			// Some more vertices were processed.
 			processed_vertex_count += part_vertex_count;
@@ -1154,25 +1161,6 @@ namespace Wiwa
 		glBindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_);
 		glBufferData(GL_ARRAY_BUFFER, vbo_size, nullptr, GL_STREAM_DRAW);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vbo_size, vbo_map);
-
-		// Binds shader with this array buffer, depending on rendering options.
-		ozz::sample::internal::Shader* shader = nullptr;
-		//if (_options.texture) {
-		//	ambient_textured_shader->Bind(
-		//		_transform, camera()->view_proj(), positions_stride, positions_offset,
-		//		normals_stride, normals_offset, colors_stride, colors_offset,
-		//		uvs_stride, uvs_offset);
-		//	shader = ambient_textured_shader.get();
-
-		//	// Binds default texture
-		//	GL(BindTexture(GL_TEXTURE_2D, checkered_texture_));
-		//}
-		//else {
-		//	ambient_shader->Bind(_transform, camera()->view_proj(), positions_stride,
-		//		positions_offset, normals_stride, normals_offset,
-		//		colors_stride, colors_offset);
-		//	shader = ambient_shader.get();
-		//}
 		
 		// Build mvp for object
 		glm::mat4 glm_mvp = camera->getProjection() * camera->getView();
@@ -1184,11 +1172,22 @@ namespace Wiwa
 				ozz_mvp.cols[i].m128_f32[j] = glm_mvp[i][j];
 			}
 		}
-		
-		ambient_shader->Bind(_transform, ozz_mvp, positions_stride,
-			positions_offset, normals_stride, normals_offset,
-			colors_stride, colors_offset);
-		shader = ambient_shader.get();
+
+		WI_INFO("Pos: s({}) off({}) Normals: s({}) off({}) Colors: s({}) off({}) Uvs: s({}) off({})", positions_stride, positions_offset,
+			normals_stride, normals_offset, colors_stride, colors_offset,
+			uvs_stride, uvs_offset);
+
+		ambient_textured_shader->Bind(
+			_transform, ozz_mvp, positions_stride, positions_offset,
+			normals_stride, normals_offset, colors_stride, colors_offset,
+			uvs_stride, uvs_offset);
+
+		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>("assets\\Models\\Starlord\\T_StarLordBaseColor_01_C.png");
+		Wiwa::Image* img = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+
+		unsigned int texture_ = img->GetTextureId();
+
+		GL(BindTexture(GL_TEXTURE_2D, texture_));
 
 		// Maps the index dynamic buffer and update it.
 		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, dynamic_index_bo_));
@@ -1207,8 +1206,7 @@ namespace Wiwa
 		GL(BindBuffer(GL_ARRAY_BUFFER, 0));
 		GL(BindTexture(GL_TEXTURE_2D, 0));
 		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-		shader->Unbind();
-
+		ambient_textured_shader->Unbind();
 		camera->frameBuffer->Unbind();
 
 		return true;

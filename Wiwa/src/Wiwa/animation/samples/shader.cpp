@@ -623,16 +623,14 @@ ozz::unique_ptr<AmbientShader> AmbientShader::Build() {
       "uniform mat4 u_mw;\n mat4 GetWorldMatrix() {return u_mw;}\n",
       kShaderUberVS};
 
-  std::cout << vs[0] << vs[1] << vs[2] << vs[3] << std::endl << std::endl;
-
   const char* fs[] = {kPlatformSpecivicFSHeader, kShaderAmbientFct,
                       kShaderAmbientFS};
-
-  std::cout << fs[0] << fs[1] << fs[2] << std::endl << std::endl;
 
   ozz::unique_ptr<AmbientShader> shader = make_unique<AmbientShader>();
   bool success =
       shader->InternalBuild(OZZ_ARRAY_SIZE(vs), vs, OZZ_ARRAY_SIZE(fs), fs);
+
+  
 
   if (!success) {
     shader.reset();
@@ -649,9 +647,9 @@ bool AmbientShader::InternalBuild(int _vertex_count, const char** _vertex,
       BuildFromSource(_vertex_count, _vertex, _fragment_count, _fragment);
 
   // Binds default attributes
-  success &= FindAttrib("a_position");
-  success &= FindAttrib("a_normal");
-  success &= FindAttrib("a_color");
+  //success &= FindAttrib("a_position");
+  //success &= FindAttrib("a_normal");
+  //success &= FindAttrib("a_color");
 
   // Binds default uniforms
   success &= BindUniform("u_mw");
@@ -667,17 +665,17 @@ void AmbientShader::Bind(const math::Float4x4& _model,
                          GLsizei _color_offset) {
   GL(UseProgram(program()));
 
-  const GLint position_attrib = attrib(0);
+  const GLint position_attrib = 1;//attrib(0);
   GL(EnableVertexAttribArray(position_attrib));
   GL(VertexAttribPointer(position_attrib, 3, GL_FLOAT, GL_FALSE, _pos_stride,
                          GL_PTR_OFFSET(_pos_offset)));
 
-  const GLint normal_attrib = attrib(1);
+  const GLint normal_attrib = 2;// attrib(1);
   GL(EnableVertexAttribArray(normal_attrib));
   GL(VertexAttribPointer(normal_attrib, 3, GL_FLOAT, GL_TRUE, _normal_stride,
                          GL_PTR_OFFSET(_normal_offset)));
 
-  const GLint color_attrib = attrib(2);
+  const GLint color_attrib = 3;// attrib(2);
   GL(EnableVertexAttribArray(color_attrib));
   GL(VertexAttribPointer(color_attrib, 4, GL_UNSIGNED_BYTE, GL_TRUE,
                          _color_stride, GL_PTR_OFFSET(_color_offset)));
@@ -807,20 +805,24 @@ void AmbientShaderInstanced::Unbind() {
   Shader::Unbind();
 }
 
-ozz::unique_ptr<AmbientTexturedShader> AmbientTexturedShader::Build() {
-  const char* vs[] = {
+ozz::unique_ptr<AmbientTexturedShader> AmbientTexturedShader::Build(const char* vs_data, const char* fs_data) {
+  /*const char* vs[] = {
       kPlatformSpecivicVSHeader, kPassUv,
       "uniform mat4 u_mw;\n mat4 GetWorldMatrix() {return u_mw;}\n",
       kShaderUberVS};
-  const char* fs[] = {kPlatformSpecivicFSHeader, kShaderAmbientFct,
-                      kShaderAmbientTexturedFS};
 
+  const char* fs[] = {kPlatformSpecivicFSHeader, kShaderAmbientFct,
+                      kShaderAmbientTexturedFS};*/
+    
   ozz::unique_ptr<AmbientTexturedShader> shader =
       make_unique<AmbientTexturedShader>();
+  /*bool success =
+      shader->InternalBuild(OZZ_ARRAY_SIZE(vs), vs, OZZ_ARRAY_SIZE(fs), fs);*/
+  
   bool success =
-      shader->InternalBuild(OZZ_ARRAY_SIZE(vs), vs, OZZ_ARRAY_SIZE(fs), fs);
+      shader->InternalBuild(1, &vs_data, 1, &fs_data);
 
-  success &= shader->FindAttrib("a_uv");
+  //success &= shader->FindAttrib("a_uv");
 
   if (!success) {
     shader.reset();
@@ -839,7 +841,7 @@ void AmbientTexturedShader::Bind(const math::Float4x4& _model,
                       _normal_stride, _normal_offset, _color_stride,
                       _color_offset);
 
-  const GLint uv_attrib = attrib(3);
+  const GLint uv_attrib = 0;//attrib(3);
   GL(EnableVertexAttribArray(uv_attrib));
   GL(VertexAttribPointer(uv_attrib, 2, GL_FLOAT, GL_FALSE, _uv_stride,
                          GL_PTR_OFFSET(_uv_offset)));

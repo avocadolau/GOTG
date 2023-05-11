@@ -39,6 +39,9 @@ namespace Wiwa {
 			ozz::vector<ozz::math::SimdFloat4> joint_weights;
 		};
 	private:
+		std::string m_LowerBodyFile;
+		std::string m_UpperBodyFile;
+
 		// Index of the joint at the base of the upper body hierarchy.
 		int upper_body_root_;
 
@@ -110,6 +113,12 @@ namespace Wiwa {
 		void SetUpperBodyRoot(int ubr);
 
 		bool Init() override;
+
+		bool SampleLocals(float _dt);
+
 		bool Update(float _dt) override;
+
+		const char* getLowerBodyFile() { return m_LowerBodyFile.c_str(); }
+		const char* getUpperBodyFile() { return m_UpperBodyFile.c_str(); }
 	};
 }

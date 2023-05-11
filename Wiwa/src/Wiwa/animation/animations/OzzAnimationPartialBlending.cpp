@@ -34,53 +34,7 @@ namespace Wiwa {
 
     bool OzzAnimationPartialBlending::UpdateAnimation(float _dt)
     {
-        // Updates and samples both animations to their respective local space
-        // transform buffers.
-        for (int i = 0; i < kNumLayers; ++i) {
-            Sampler& sampler = samplers_[i];
-
-            // Updates animations time.
-            sampler.controller.Update(sampler.animation, _dt);
-
-            // Setup sampling job.
-            ozz::animation::SamplingJob sampling_job;
-            sampling_job.animation = &sampler.animation;
-            sampling_job.context = &sampler.context;
-            sampling_job.ratio = sampler.controller.time_ratio();
-            sampling_job.output = make_span(sampler.locals);
-
-            // Samples animation.
-            if (!sampling_job.Run()) {
-                return false;
-            }
-        }
-
-        // Blends animations.
-        // Blends the local spaces transforms computed by sampling all animations
-        // (1st stage just above), and outputs the result to the local space
-        // transform buffer blended_locals_
-
-        // Prepares blending layers.
-        ozz::animation::BlendingJob::Layer layers[kNumLayers];
-        for (int i = 0; i < kNumLayers; ++i) {
-            layers[i].transform = make_span(samplers_[i].locals);
-            layers[i].weight = samplers_[i].weight_setting;
-
-            // Set per-joint weights for the partially blended layer.
-            layers[i].joint_weights = make_span(samplers_[i].joint_weights);
-        }
-
-        // Setups blending job.
-        ozz::animation::BlendingJob blend_job;
-        blend_job.threshold = threshold_;
-        blend_job.layers = layers;
-        blend_job.rest_pose = skeleton_.joint_rest_poses();
-        blend_job.output = make_span(blended_locals_);
-
-        // Blends.
-        if (!blend_job.Run()) {
-            return false;
-        }
+        if (!SampleLocals(_dt)) return false;        
 
         // Converts from local space to model space matrices.
         // Gets the output of the blending stage, and converts it to model space.
@@ -103,20 +57,6 @@ namespace Wiwa {
         for (size_t i = 0; i < s; i++) {
             skinning_matrices_[i] = models_[mesh.joint_remaps[i]] * mesh.inverse_bind_poses[i];
         }
-
-        // Test
-        /*static bool f = true;
-
-        if (f) {
-            ozz::span<const char* const> names = skeleton_.joint_names();
-            size_t names_size = names.size();
-
-            for (size_t i = 0; i < names_size; i++) {
-                std::cout << "Ozz bone [" << i << "] " << names[i] << std::endl;
-            }
-
-            f = false;
-        }*/
 
         return true;
     }
@@ -216,6 +156,9 @@ namespace Wiwa {
             }
         }
 
+        m_LowerBodyFile = lower;
+        m_UpperBodyFile = upper;
+
         // Allocates runtime buffers.
         const int num_soa_joints = skeleton_.num_soa_joints();
         locals_.resize(num_soa_joints);
@@ -302,10 +245,63 @@ namespace Wiwa {
         models_.resize(num_joints);
 
         // Set body root joint
-        upper_body_root_ = 10;
+        upper_body_root_ = 0;
         
         // Init joint weights
         SetupPerJointWeights();
+
+        return true;
+    }
+
+    bool OzzAnimationPartialBlending::SampleLocals(float _dt)
+    {
+        // Updates and samples both animations to their respective local space
+        // transform buffers.
+        for (int i = 0; i < kNumLayers; ++i) {
+            Sampler& sampler = samplers_[i];
+
+            // Updates animations time.
+            sampler.controller.Update(sampler.animation, _dt);
+
+            // Setup sampling job.
+            ozz::animation::SamplingJob sampling_job;
+            sampling_job.animation = &sampler.animation;
+            sampling_job.context = &sampler.context;
+            sampling_job.ratio = sampler.controller.time_ratio();
+            sampling_job.output = make_span(sampler.locals);
+
+            // Samples animation.
+            if (!sampling_job.Run()) {
+                return false;
+            }
+        }
+
+        // Blends animations.
+        // Blends the local spaces transforms computed by sampling all animations
+        // (1st stage just above), and outputs the result to the local space
+        // transform buffer blended_locals_
+
+        // Prepares blending layers.
+        ozz::animation::BlendingJob::Layer layers[kNumLayers];
+        for (int i = 0; i < kNumLayers; ++i) {
+            layers[i].transform = make_span(samplers_[i].locals);
+            layers[i].weight = samplers_[i].weight_setting;
+
+            // Set per-joint weights for the partially blended layer.
+            layers[i].joint_weights = make_span(samplers_[i].joint_weights);
+        }
+
+        // Setups blending job.
+        ozz::animation::BlendingJob blend_job;
+        blend_job.threshold = threshold_;
+        blend_job.layers = layers;
+        blend_job.rest_pose = skeleton_.joint_rest_poses();
+        blend_job.output = make_span(blended_locals_);
+
+        // Blends.
+        if (!blend_job.Run()) {
+            return false;
+        }
 
         return true;
     }
