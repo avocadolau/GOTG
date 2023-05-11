@@ -251,6 +251,11 @@ namespace Wiwa {
 			{
 				if (emitter->m_ActiveTimer <= 0 && emitter->m_destroyOnFinishActive && Time::IsPlaying() && emitter->m_activeParticles == 0)
 				{
+					if (emitter->m_destroyActiveParticles)
+					{
+						m_Particles.clear();
+					}
+
 					EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 					//WI_CORE_INFO("active timer over");
 					eman.DestroyEntity(m_EntityId);
@@ -770,6 +775,10 @@ namespace Wiwa {
 		{
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		}
+		else if (emitter->m_useMultiplyBlending)
+		{
+			glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+		}
 
 		glBlendEquation(GL_FUNC_ADD);
 
@@ -1086,6 +1095,8 @@ namespace Wiwa {
 		FixBool(emitter->m_p_growUniformly);
 		FixBool(emitter->m_destroyOnFinishActive);
 		FixBool(emitter->m_p_uniformStartSize);
+		FixBool(emitter->m_useMultiplyBlending);
+		FixBool(emitter->m_destroyActiveParticles);
 	}
 
 	void ParticleSystem::FixBool(bool& _bool)

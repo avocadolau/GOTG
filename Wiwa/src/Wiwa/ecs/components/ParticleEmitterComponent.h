@@ -184,6 +184,8 @@ namespace Wiwa {
 		float m_p_maxUniformStartSizeVal;
 
 		bool m_stopSizeAtZero;
+		bool m_useMultiplyBlending;
+		bool m_destroyActiveParticles;
 
 		
 		// todo					----------------------------------------

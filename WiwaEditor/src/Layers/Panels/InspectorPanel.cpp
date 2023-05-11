@@ -783,6 +783,16 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 		ImGui::Dummy(ImVec2(0, 4));
 
+		if (emitter->m_destroyOnFinishActive)
+		{
+			ParticleTab();
+			ImGui::Checkbox("##m_destroyActiveParticles", &emitter->m_destroyActiveParticles);
+			ImGui::SameLine();
+			ImGui::Text("Destroy Active Particles");
+		}
+
+		ImGui::Dummy(ImVec2(0, 4));
+
 		ParticleTab();
 		ImGui::Checkbox("##m_rangedTimeActive", &emitter->m_rangedTimeActive);
 		ImGui::SameLine();
@@ -1424,17 +1434,44 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::TreePop();
 		ImGui::Dummy(ImVec2(0, 8));
 	}
-	ImGui::Separator();
 
-	if (ImGui::TreeNode("Color"))
+	if (ImGui::TreeNode("Color & Blending"))
 	{
 		if ((int)emitter->m_useAdditiveBlending > 1 || (int)emitter->m_useAdditiveBlending < 0)
 			emitter->m_useAdditiveBlending = false;
 
-		ImGui::Checkbox("##m_useAdditiveBlending", &emitter->m_useAdditiveBlending);
-		ImGui::SameLine();
-		ImGui::Text("Use Additive Blending");
+		if ((int)emitter->m_useMultiplyBlending > 1 || (int)emitter->m_useMultiplyBlending < 0)
+			emitter->m_useMultiplyBlending = false;
 
+
+		ImGui::Text("Blending Mode:");
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		if (!emitter->m_useMultiplyBlending)
+		{
+			ParticleTab();
+			ImGui::Checkbox("##m_useAdditiveBlending", &emitter->m_useAdditiveBlending);
+			ImGui::SameLine();
+			ImGui::Text("Additive");
+
+			ImGui::Dummy(ImVec2(0, 4));
+		}
+		else
+			ImGui::Dummy(ImVec2(0, 8));
+
+
+		if (!emitter->m_useAdditiveBlending)
+		{
+			ParticleTab();
+			ImGui::Checkbox("##m_useMultiplyBlending", &emitter->m_useMultiplyBlending);
+			ImGui::SameLine();
+			ImGui::Text("Multiply");
+
+			ImGui::Dummy(ImVec2(0, 4));
+		}
+		else
+			ImGui::Dummy(ImVec2(0, 8));
 
 		if ((int)emitter->m_deactivateFaceCulling > 1 || (int)emitter->m_deactivateFaceCulling < 0)
 			emitter->m_deactivateFaceCulling = false;
@@ -1445,15 +1482,33 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 
 		
+		ImGui::Dummy(ImVec2(0, 12));
 
 		if (emitter->m_colorsUsed < 1)
 		{
 			emitter->m_colorsUsed = 1;
 		}
-		if (emitter->m_colorsUsed >= 128)
+		if (emitter->m_colorsUsed >= 20)
 		{
-			emitter->m_colorsUsed = 128;
+			emitter->m_colorsUsed = 20;
 		}
+
+		ImGui::Text("Colors:");
+
+		//todo: add delete color and duplicate color
+		ImGui::Dummy(ImVec2(0, 8));
+		ImGui::Text("Colors over lifetime:");
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		if (ImGui::Button("+") && emitter->m_colorsUsed < 128) emitter->m_colorsUsed++;
+		ImGui::SameLine();
+		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
+		ImGui::Dummy(ImVec2(0, 4));
+
+
 		if (ImGui::Button("Sort Colors by Percentage"))
 		{
 			for (int i = 0; i < emitter->m_colorsUsed; i++) {
@@ -1478,20 +1533,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 		}
 
-
-
-		//todo: add delete color and duplicate color
-		ImGui::Dummy(ImVec2(0, 8));
-		ImGui::Text("Colors over lifetime:");
-		ImGui::SameLine();
-		ImGui::PushItemWidth(100.0f);
-		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-		if (ImGui::Button("+") && emitter->m_colorsUsed < 128) emitter->m_colorsUsed++;
-		ImGui::SameLine();
-		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
 		ImGui::Dummy(ImVec2(0, 4));
+
 
 		for (size_t i = 0; i < emitter->m_colorsUsed; i++)
 		{
@@ -1580,7 +1623,12 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 		}
 		ImGui::TreePop();
+
+		
+
 	}
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 8));
 }
 
 void InspectorPanel::DrawItemComponent(byte* data)
