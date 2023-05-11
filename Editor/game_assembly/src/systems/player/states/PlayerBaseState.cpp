@@ -9,3 +9,4 @@ Wiwa::PlayerBaseState::PlayerBaseState(PlayerStateMachine* stateMachine, EntityI
 Wiwa::PlayerBaseState::~PlayerBaseState()
 {
 }
+

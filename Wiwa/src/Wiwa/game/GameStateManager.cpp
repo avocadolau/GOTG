@@ -185,13 +185,13 @@ namespace Wiwa
 
 					if (Input::IsKeyPressed(Key::F6))
 					{
-						WI_INFO("F66666666666666666666666666666");
+						WI_INFO("End combat room");
 						EndCombatRoom(spawner);
 					}
 
 					if (Input::IsKeyPressed(Key::F5))
 					{
-						WI_INFO("F555555555555555555555555555555");
+						WI_INFO("Changing to boss");
 						EndCurrentRoom();
 						WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 						GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
@@ -455,9 +455,13 @@ namespace Wiwa
 
 	void GameStateManager::SetPlayerId(EntityId id, Scene* scene)
 	{
+
 		s_PlayerId = id;
-		s_CurrentScene = scene;
-		s_CharacterStats = scene->GetEntityManager().GetComponentIterator<Character>(id);
+		if (id != WI_INVALID_INDEX)
+		{
+			s_CurrentScene = scene;
+			s_CharacterStats = scene->GetEntityManager().GetComponentIterator<Character>(id);
+		}
 		WI_CORE_INFO("Player id set to {}", id);
 	}
 

@@ -52,6 +52,9 @@ void Wiwa::PlayerStateMachine::OnUpdate()
 
 void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
 {
+	if (body1 != body2)
+		return;
+	m_Colliding = true;
 	PlayerController::OnCollisionEnter(body1, body2);
 	m_CurrentState->OnCollisionEnter(body1, body2);
 }
@@ -78,6 +81,7 @@ void Wiwa::PlayerStateMachine::UpdateRotation()
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 {
+	WI_INFO("Changing state");
 	m_CurrentState->ExitState();
 	m_CurrentState = state;
 	m_CurrentState->EnterState();
@@ -108,5 +112,19 @@ void Wiwa::PlayerStateMachine::DashCooldown()
 void Wiwa::PlayerStateMachine::ResetCooldown()
 {
 	m_CooldownTimer = GetCharacter()->DashCooldown;
+}
+
+void Wiwa::PlayerStateMachine::OnCollision(Object* obj1, Object* obj2)
+{
+	if (obj1 == obj2)
+		return;
+	if(m_CurrentState != m_IdleState)
+		SwitchState(m_IdleState);
+}
+
+void Wiwa::PlayerStateMachine::OnCollisionExit(Object* obj1, Object* obj2)
+{
+	if (obj1 == obj2)
+		return;
 }
 
