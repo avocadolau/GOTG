@@ -17,7 +17,7 @@ namespace Wiwa
 {
 	SentinelDeathState::SentinelDeathState()
 	{
-		m_ExplosionMarkPath = "assets\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab";
+		//m_ExplosionMarkPath = "assets\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab";
 	}
 
 	SentinelDeathState::~SentinelDeathState()
@@ -79,9 +79,9 @@ namespace Wiwa
 		physSys->CreateBody();
 		explosionSys->EnableExplosion();
 
-		m_ExplosionMarkId = em.LoadPrefab(m_ExplosionMarkPath);
+		/*m_ExplosionMarkId = em.LoadPrefab(m_ExplosionMarkPath);
 		Transform3D* explosionMarkTr = em.GetComponent<Transform3D>(m_ExplosionMarkId);
-		explosionMarkTr->localPosition = selfTr->localPosition;
+		explosionMarkTr->localPosition = selfTr->localPosition;*/
 
 		// Destroy enemy
 		EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);

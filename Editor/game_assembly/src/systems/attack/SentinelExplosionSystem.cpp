@@ -24,7 +24,7 @@ namespace Wiwa
 
 	void SentinelExplosionSystem::OnInit()
 	{
-		//InitExplosion();
+		InitExplosion();
 	}
 
 	void SentinelExplosionSystem::InitExplosion()
@@ -42,6 +42,10 @@ namespace Wiwa
 		m_DoSentinelDamage = true;
 
 		//TODO: spawn prefab not from the pool
+
+		EntityId m_ExplosionMarkId = em.LoadPrefab("assets\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab");
+		Transform3D* explosionMarkTr = em.GetComponent<Transform3D>(m_ExplosionMarkId);
+		explosionMarkTr->localPosition = GetComponent<Transform3D>()->localPosition;
 
 		//EntityId explosion_prefab = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_explosion_remnants.wiprefab");
 		//Wiwa::Transform3D* t3d = em.GetComponent<Transform3D>(explosion_prefab);
