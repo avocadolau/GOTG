@@ -802,18 +802,24 @@ namespace Wiwa {
 		glEnable(GL_BLEND);
 		glDepthMask(GL_FALSE);
 		
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 		if (emitter->m_useAdditiveBlending)
 		{
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			glBlendEquation(GL_FUNC_ADD);
 		}
 		else if (emitter->m_useMultiplyBlending)
 		{
-			glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendFunc(GL_DST_COLOR, GL_ZERO);
+			glBlendEquation(GL_FUNC_ADD);
+		}
+		else {
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendEquation(GL_FUNC_ADD);
 		}
 
-		glBlendEquation(GL_FUNC_ADD);
+
+
 
 		for (size_t i = 0; i < cameraCount; i++)
 		{
