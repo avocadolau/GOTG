@@ -54,8 +54,8 @@ void Wiwa::UltronLaserBeamSystem::OnUpdate()
 	}
 
 	// Update the laser's position to be in front of the boss
-	float distanceInFront = 6.0f;
-	float laserHalfLength = 26.5f; // Adjust this value based on the actual half length of the laser
+	float distanceInFront = 1.0f;
+	float laserHalfLength = 20.0f; // Adjust this value based on the actual half length of the laser
 	glm::vec3 bossForward = Math::CalculateForward(enemyTr);
 	laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
 	laserTr->localPosition.y += 2.5f;
@@ -67,27 +67,6 @@ void Wiwa::UltronLaserBeamSystem::OnUpdate()
 	
 	// Update the laser's rotation to match the boss's rotation
 	laserTr->localRotation = glm::vec3(-90.0f, angleToPlayer, 0.0f);
-
-	///////////////////////////////////////////
-
-	//// Update the laser's position to be in front of the boss
-	//float distanceInFront = 3.0f;
-	//float laserHalfLength = 2.5f; // Adjust this value based on the actual half length of the laser
-	//glm::vec3 bossForward = Math::CalculateForward(enemyTr);
-	//laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
-	//
-	//// Calculate the target rotation for the boss to face the player
-	//glm::vec3 directionToPlayer = glm::normalize(playerTr->localPosition - enemyTr->localPosition);
-	//float targetAngle = glm::degrees(atan2(directionToPlayer.x, directionToPlayer.z));
-	//
-	//// Interpolate the boss's rotation towards the target rotation based on rotation speed and delta time
-	//float currentAngle = enemyTr->localRotation.y;
-	//float newAngle = glm::mix(currentAngle, targetAngle, 0.5f);
-	//enemyTr->localRotation.y = newAngle;
-	//
-	//// Update the laser's rotation to match the boss's rotation
-	//laserTr->localRotation = glm::vec3(-90.0f, newAngle, 0.0f);
-
 
 	m_Timer += Time::GetDeltaTimeSeconds();
 	m_TimerDamagePerSec += Time::GetDeltaTimeSeconds();
