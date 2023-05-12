@@ -53,7 +53,7 @@ namespace Wiwa
 			{
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
 				waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::SUBJUGATOR);
-				GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(enemy->GetEntity());
+				GameStateManager::s_PoolManager->s_SubjugatorPool->ReturnToPool(enemy->GetEntity());
 			}
 			else
 			{

@@ -7,7 +7,7 @@ namespace Wiwa
 {
     EntityPool::~EntityPool()
     {
-        ReleaseAllPools();
+        ReleasePool();
     }
 
     EntityId EntityPool::GetFromPool()
@@ -94,7 +94,18 @@ namespace Wiwa
         Loaded = true;
     }
 
-    void EntityPool::ReleaseAllPools()
+    void EntityPool::LoadPool(Scene* scene)
+    {
+        if (Loaded)
+            return;
+        SetScene(scene);
+        std::vector<EntityId> ids(getMaxSize());
+        for (int i = 0; i < getMaxSize(); i++)
+            ids[i] = scene->GetEntityManager().LoadPrefab(getPath());
+       IncreasePoolSize(ids);
+    }
+
+    void EntityPool::ReleasePool()
     {
         if (!Loaded)
             return;

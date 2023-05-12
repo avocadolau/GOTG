@@ -162,13 +162,13 @@ namespace Wiwa
 		case Pool_Type::PHALANX_MELEE_GENERIC:
 		{
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeGenericPool->GetFromPool();
 		}
 		break;
 		case Pool_Type::PHALANX_RANGED_GENERIC:
 		{
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedGenericPool->GetFromPool();
 		}
 		break;
 		case Pool_Type::SENTINEL:
@@ -180,7 +180,7 @@ namespace Wiwa
 		case Pool_Type::SUBJUGATOR:
 		{
 			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_Subjugator->GetFromPool();
+			newEnemyId = GameStateManager::s_PoolManager->s_SubjugatorPool->GetFromPool();
 		}
 		break;
 		default:

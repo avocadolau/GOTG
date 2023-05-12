@@ -11,19 +11,17 @@ namespace Wiwa
     enum Pool_Type
     {
         PHALANX_MELEE_GENERIC = 0,
-        PHALANX_MELEE_REDVARIANT,
-        PHALANX_MELEE_BLUEVARIANT,
+        PHALANX_MELEE_VARIANT_A,
+        PHALANX_MELEE_VARIANT_B,
 
         PHALANX_RANGED_GENERIC,
-        PHALANX_RANGED_REDVARIANT,
-        PHALANX_RANGED_BLUEVARIANT,
+        PHALANX_RANGED_VARIANT_A,
+        PHALANX_RANGED_VARIANT_B,
 
         SENTINEL,
 
         SUBJUGATOR,
         SUBJUGATOR_CHIEF,
-
-        BOSS_ULTRON,
 
         SIMPLE_BULLET,
         SENTINEL_EXPLOSION,
@@ -61,7 +59,9 @@ namespace Wiwa
 
         void IncreasePoolSize(const std::vector<EntityId>& new_entities, bool disable = true);
 
-        void ReleaseAllPools();
+        void LoadPool(Scene* scene);
+
+        void ReleasePool();
 
         void SetScene(Scene* scene);
 
