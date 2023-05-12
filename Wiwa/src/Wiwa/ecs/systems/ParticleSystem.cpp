@@ -337,9 +337,8 @@ namespace Wiwa {
 		if (!Time::IsPaused())
 			activeParticles = 0;
 
-		for (unsigned int i = 0; i < m_MaxParticles; ++i)
+		for (unsigned int i = 0; i < m_MaxParticles && !m_Particles.empty(); ++i)
 		{
-			if (m_Particles.empty()) break;
 			Particle& particle = m_Particles[i];
 
 			if (particle.life_time > 0.0f)
