@@ -134,6 +134,12 @@ namespace Wiwa
 		//Sets the Active state of the Emitter.
 		void SetActive(bool active);
 
+		//Sets the material of the Particles the Emitter generates;
+		void SetMaterial(const char* materialPath);
+
+		//Sets the mesh of the Particles the Emitter generates;
+		void SetMesh(const char* meshPath);
+
 	private:
 
 		void SetEmitterBools(ParticleEmitterComponent* emitter);

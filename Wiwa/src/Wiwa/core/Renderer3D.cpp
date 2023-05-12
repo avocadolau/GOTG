@@ -345,9 +345,21 @@ namespace Wiwa
 		enemySpawnFlashShader->addUniform("u_StartDissolve", UniformType::Float);
 		enemySpawnFlashShader->addUniform("u_OffsetMultiplier", UniformType::fVec2);
 
-
-
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/enemy_spawn_flash", enemySpawnFlashShader);
+
+		ResourceId spriteSheetFrameShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/spritesheet_frame");
+		Shader* spriteSheetFrameShader = Wiwa::Resources::GetResourceById<Shader>(spriteSheetFrameShaderId);
+		spriteSheetFrameShader->Compile("resources/shaders/vfx/spritesheet_frame");
+
+		spriteSheetFrameShader->addUniform("u_LifeTime", UniformType::Float);
+		spriteSheetFrameShader->addUniform("u_Time", UniformType::Float);
+		spriteSheetFrameShader->addUniform("u_Color", UniformType::fVec4);
+		spriteSheetFrameShader->addUniform("u_Texture", UniformType::Sampler2D);
+		spriteSheetFrameShader->addUniform("u_SpritesheetSize", UniformType::fVec2);
+		spriteSheetFrameShader->addUniform("u_CellSize", UniformType::fVec2);
+		spriteSheetFrameShader->addUniform("u_Index", UniformType::Uint);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/spritesheet_frame", spriteSheetFrameShader);
 		//===========================================================================================================
 
 		// Normal Display Shader

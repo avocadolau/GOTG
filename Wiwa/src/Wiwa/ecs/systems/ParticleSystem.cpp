@@ -729,6 +729,30 @@ namespace Wiwa {
 		emitter->m_active = active;
 	}
 
+	void ParticleSystem::SetMaterial(const char* materialPath)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+		ResourceId matid = Wiwa::Resources::Load<Material>(materialPath);
+
+		if (matid != -1)
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+		else
+			WI_CORE_INFO("Material could not be found {0}", materialPath);
+	}
+
+	void ParticleSystem::SetMesh(const char* meshPath)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+		ResourceId meshid = Wiwa::Resources::Load<Model>(meshPath);
+		
+		if (meshid != -1)
+			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+		else
+			WI_CORE_INFO("Mesh could not be found {0}", meshPath);
+	}
+
 	void ParticleSystem::OnDestroy()
 	{
 		m_Model = nullptr;
