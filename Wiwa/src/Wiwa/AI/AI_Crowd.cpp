@@ -70,9 +70,9 @@ void Crowd::RemoveAgent(int agentIndex)
     }
 }
 
-void Crowd::SetAgentTarget(int agentIndex, const float* target)
+bool Crowd::SetAgentTarget(int agentIndex, const float* target)
 {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         const dtCrowdAgent* agent = m_Crowd->getAgent(agentIndex);
 
         dtPolyRef targetRef;
@@ -80,12 +80,14 @@ void Crowd::SetAgentTarget(int agentIndex, const float* target)
         const dtQueryFilter* filter = m_Crowd->getFilter(agentIndex);
         const float* extents = m_Crowd->getQueryExtents();
         m_Crowd->getNavMeshQuery()->findNearestPoly(target, extents, filter, &targetRef, targetPos);
-        m_Crowd->requestMoveTarget(agentIndex, targetRef, targetPos);
+        bool isSetCorrect = m_Crowd->requestMoveTarget(agentIndex, targetRef, targetPos);
+        return isSetCorrect;
     }
+    return false;
 }
 
 void Crowd::SetAgentMaxSpeed(int agentIndex, float speed) {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         dtCrowdAgentParams params = m_AgentParams;
         params.maxSpeed = speed;
         m_Crowd->updateAgentParameters(agentIndex, &params);
@@ -94,7 +96,7 @@ void Crowd::SetAgentMaxSpeed(int agentIndex, float speed) {
 
 void Crowd::SetAgentMaxAcceleration(int agentIndex, float acceleration)
 {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         dtCrowdAgentParams params = m_AgentParams;
         params.maxAcceleration = acceleration;
         m_Crowd->updateAgentParameters(agentIndex, &params);
@@ -116,7 +118,7 @@ int Crowd::GetAgentCount() const
 
 const float* Crowd::GetAgentPosition(int agentIndex) const
 {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         const dtCrowdAgent* agent = m_Crowd->getAgent(agentIndex);
         return agent->npos;
     }
@@ -125,7 +127,7 @@ const float* Crowd::GetAgentPosition(int agentIndex) const
 
 const float* Crowd::GetAgentVelocity(int agentIndex) const
 {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         const dtCrowdAgent* agent = m_Crowd->getAgent(agentIndex);
         return agent->dvel;
     }
@@ -134,7 +136,7 @@ const float* Crowd::GetAgentVelocity(int agentIndex) const
 
 glm::vec3 Crowd::GetAgentPositionVec(int agentIndex) const
 {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         const dtCrowdAgent* agent = m_Crowd->getAgent(agentIndex);
         return glm::vec3(agent->npos[0], agent->npos[1], agent->npos[2]);
     }
@@ -143,7 +145,7 @@ glm::vec3 Crowd::GetAgentPositionVec(int agentIndex) const
 
 glm::vec3 Crowd::GetAgentVelocityVec(int agentIndex) const
 {
-    if (agentIndex >= 0 && agentIndex < m_Agents.size()) {
+    if (agentIndex >= 0) {
         const dtCrowdAgent* agent = m_Crowd->getAgent(agentIndex);
         return glm::vec3(agent->dvel[0], agent->dvel[1], agent->dvel[2]);
     }

@@ -21,7 +21,7 @@ public:
     void Update(float deltaTime);
     int AddAgent(const float* position, dtCrowdAgentParams* param, bool defaultParam = false);
     void RemoveAgent(int agentIndex);
-    void SetAgentTarget(int agentIndex, const float* target);
+    bool SetAgentTarget(int agentIndex, const float* target);
     void SetAgentMaxSpeed(int agentIndex, float speed);
     void SetAgentMaxAcceleration(int agentIndex, float acceleration);
     void SetAgentParameters(int agentIndex, const dtCrowdAgentParams& param);
