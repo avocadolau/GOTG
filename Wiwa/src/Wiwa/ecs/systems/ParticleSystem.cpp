@@ -339,6 +339,7 @@ namespace Wiwa {
 
 		for (unsigned int i = 0; i < m_MaxParticles; ++i)
 		{
+			if (m_Particles.empty()) break;
 			Particle& particle = m_Particles[i];
 
 			if (particle.life_time > 0.0f)
