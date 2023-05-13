@@ -75,6 +75,12 @@ void EnemyPanel::DrawTables()
 		DrawUltronData();
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Spawn data"))
+	{
+		DrawVariantsTable();
+		ImGui::TreePop();
+	}
 }
 
 void EnemyPanel::DrawEnemyStatsTable(const char* label, const char* enemy_str)
@@ -183,6 +189,69 @@ void EnemyPanel::DrawInputs()
 
 	if (manager.m_IncreaseDiffEvery < 0)
 		manager.m_IncreaseDiffEvery = 0;
+}
+
+void EnemyPanel::DrawVariantsTable()
+{
+	Wiwa::EnemyManager& manager = Wiwa::GameStateManager::GetEnemyManager();
+	std::vector<Wiwa::VariantData>& data1 = manager.m_VariantsTable;
+	std::vector<Wiwa::SpawnerData>& data2 = manager.m_SpawnerDataTable;
+
+	if (ImGui::TreeNodeEx("Spawner & Variants data (At percentage of the run defined by the number of combat rooms)", ImGuiTreeNodeFlags_DefaultOpen)){
+		if (ImGui::BeginTable("Variants table", 11, s_FlagsEnemyTable)){
+
+			ImGui::TableSetupColumn("0%");
+			ImGui::TableSetupColumn("10%");
+			ImGui::TableSetupColumn("20%");
+			ImGui::TableSetupColumn("30%");
+			ImGui::TableSetupColumn("40%");
+			ImGui::TableSetupColumn("50%");
+			ImGui::TableSetupColumn("60%");
+			ImGui::TableSetupColumn("70%");
+			ImGui::TableSetupColumn("80%");
+			ImGui::TableSetupColumn("90%");
+			ImGui::TableSetupColumn("100%");
+
+			ImGui::TableHeadersRow();
+			ImGui::TableNextRow();
+
+			for (int i = 0; i <= 10; i++){
+				ImGui::TableSetColumnIndex(i);
+				for (auto& [key, value] : data1[i].list){
+					if (i == 0)
+						ImGui::Checkbox((key + std::to_string(i)).c_str(), &value);
+					else
+						ImGui::Checkbox(("##" + key + std::to_string(i)).c_str(), &value);
+				}
+
+				if (i == 0)
+				{
+					ImGui::Separator();
+					Wiwa::SpawnerData& s = data2[i];
+					ImGui::InputInt(("maxEnemiesPerWave" + std::to_string(i)).c_str(), &s.waveSpawnData.maxEnemiesPerWave);
+					ImGui::InputInt(("minEnemiesPerWave" + std::to_string(i)).c_str(), &s.waveSpawnData.minEnemiesPerWave);
+					ImGui::InputFloat(("enemySpawnRate" + std::to_string(i)).c_str(), &s.waveSpawnData.enemySpawnRate, 0.0f, 0.0f, "%.1f");
+					ImGui::InputInt(("maxWaveCount" + std::to_string(i)).c_str(), &s.waveSpawnData.maxWaveCount);
+					ImGui::InputFloat(("timeBetweenWaves" + std::to_string(i)).c_str(), &s.waveSpawnData.timeBetweenWaves, 0.0f, 0.0f, "%.1f");
+					ImGui::InputFloat(("waveChangeRate" + std::to_string(i)).c_str(), &s.waveSpawnData.waveChangeRate, 0.0f, 0.0f, "%.1f");
+				}
+				else
+				{
+					ImGui::Separator();
+					Wiwa::SpawnerData& s = data2[i];
+					ImGui::InputInt(("##maxEnemiesPerWave" + std::to_string(i)).c_str(), &s.waveSpawnData.maxEnemiesPerWave);
+					ImGui::InputInt(("##minEnemiesPerWave" + std::to_string(i)).c_str(), &s.waveSpawnData.minEnemiesPerWave);
+					ImGui::InputFloat(("##enemySpawnRate" + std::to_string(i)).c_str(), &s.waveSpawnData.enemySpawnRate, 0.0f, 0.0f, "%.1f");
+					ImGui::InputInt(("##maxWaveCount" + std::to_string(i)).c_str(), &s.waveSpawnData.maxWaveCount);
+					ImGui::InputFloat(("##timeBetweenWaves" + std::to_string(i)).c_str(), &s.waveSpawnData.timeBetweenWaves, 0.0f, 0.0f, "%.1f");
+					ImGui::InputFloat(("##waveChangeRate" + std::to_string(i)).c_str(), &s.waveSpawnData.waveChangeRate, 0.0f, 0.0f, "%.1f");
+				}
+				
+			}
+			ImGui::EndTable();
+		}
+		ImGui::TreePop();
+	}
 }
 
 void EnemyPanel::DrawRangedData()

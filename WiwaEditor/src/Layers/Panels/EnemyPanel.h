@@ -15,6 +15,7 @@ public:
 	void DrawTables();
 	void DrawEnemyStatsTable(const char* label, const char* enemy_str);
 	void DrawInputs();
+	void DrawVariantsTable();
 
 	void DrawRangedData();
 	void DrawSubjugatorData();
