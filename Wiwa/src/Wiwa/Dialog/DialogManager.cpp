@@ -132,6 +132,7 @@ namespace Wiwa
 			editorConversations[e].detectsCharacter = conversations[e].detectsCharacter;
 			editorConversations[e].group.groupID = conversations[e].group.groupID;
 			editorConversations[e].group.order = conversations[e].group.order;
+			editorConversations[e].eventName = conversations[e].eventName;
 
 			for (int f = 0; f < MAX_CONVERSATION_NODES && conversations[e].nodes[f].occupied == true; f++)
 			{
