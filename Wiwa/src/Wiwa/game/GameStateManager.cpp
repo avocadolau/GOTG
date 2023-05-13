@@ -43,6 +43,7 @@ namespace Wiwa
 	std::vector<int> GameStateManager::s_ShopRooms;
 	
 	int GameStateManager::s_CurrentRoomsCount;
+	int GameStateManager::s_CurrentCombatRoomsCount = 0;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
 
 	int GameStateManager::s_CurrentCharacter = STARLORD;
@@ -562,7 +563,7 @@ namespace Wiwa
 
 
 			LoadRandomRoom(s_CombatRooms);
-
+			s_CurrentCombatRoomsCount++;
 
 			s_RoomsToBoss--;
 			s_RoomsToShop--;
@@ -596,6 +597,7 @@ namespace Wiwa
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 				LoadRandomRoom(s_CombatRooms);
+				s_CurrentCombatRoomsCount++;
 			}
 			break;
 		}
@@ -1084,7 +1086,7 @@ namespace Wiwa
 			if (em.IsComponentRemoved<WaveSpawner>(0))
 				return 0;
 			waveSpawner = &waveSpawner[0];
-			if (waveSpawner && !waveSpawner->hasFinished) {
+			if (waveSpawner && !waveSpawner->hasFinished && waveSpawner->hasTriggered) {
 				// Check for all the active waves in that spawner.
 				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
 				if (waveSpawnerSystem) {
@@ -1116,7 +1118,7 @@ namespace Wiwa
 			if (em.IsComponentRemoved<WaveSpawner>(0))
 				return 0;
 			waveSpawner = &waveSpawner[0];
-			if (waveSpawner) {
+			if (waveSpawner && waveSpawner->hasTriggered) {
 				// Check for all the active waves in that spawner.
 				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
 				if (waveSpawnerSystem) {

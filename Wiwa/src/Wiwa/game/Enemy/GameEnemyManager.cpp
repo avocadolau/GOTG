@@ -46,6 +46,60 @@ namespace nlohmann {
             }
         }
     };
+
+	template <>
+	struct adl_serializer<Wiwa::VariantData> {
+		static void to_json(json& j, const Wiwa::VariantData& e)
+		{
+			j = json{ {"n", e.n},
+				{"list", e.list} };
+		}
+
+		static void from_json(const json& j, Wiwa::VariantData& e)
+		{
+			j.at("n").get_to(e.n);
+			j.at("list").get_to(e.list);
+		}
+	};
+
+	template <>
+	struct adl_serializer<Wiwa::WaveSpawner> {
+		static void to_json(json& j, const Wiwa::WaveSpawner& e)
+		{
+			j = json{ {"maxEnemiesPerWave", e.maxEnemiesPerWave},
+				{"minEnemiesPerWave", e.minEnemiesPerWave},
+				{"enemySpawnRate", e.enemySpawnRate},
+				{"maxWaveCount", e.maxWaveCount},
+				{"timeBetweenWaves", e.timeBetweenWaves},
+				{"waveChangeRate", e.waveChangeRate},
+			};
+		}
+
+		static void from_json(const json& j, Wiwa::WaveSpawner& e)
+		{
+			j.at("maxEnemiesPerWave").get_to(e.maxEnemiesPerWave);
+			j.at("minEnemiesPerWave").get_to(e.minEnemiesPerWave);
+			j.at("enemySpawnRate").get_to(e.enemySpawnRate);
+			j.at("maxWaveCount").get_to(e.maxWaveCount);
+			j.at("timeBetweenWaves").get_to(e.timeBetweenWaves);
+			j.at("waveChangeRate").get_to(e.waveChangeRate);
+		}
+	};
+
+	template <>
+	struct adl_serializer<Wiwa::SpawnerData> {
+		static void to_json(json& j, const Wiwa::SpawnerData& e)
+		{
+			j = json{ {"n", e.n},
+				{"waveSpawnData", e.waveSpawnData} };
+		}
+
+		static void from_json(const json& j, Wiwa::SpawnerData& e)
+		{
+			j.at("n").get_to(e.n);
+			j.at("waveSpawnData").get_to(e.waveSpawnData);
+		}
+	};
 }
 
 void to_json(nlohmann::json& j, const Wiwa::Ultron& u) {
@@ -144,6 +198,9 @@ namespace Wiwa
 		doc["m_UltronData"]["bulletLifeTime"] = m_UltronData.bulletLifeTime;
 		doc["m_UltronData"]["bulletSpeed"] = m_UltronData.bulletSpeed;
 
+		doc["m_VariantsTable"] = m_VariantsTable;
+		doc["m_SpawnerDataTable"] = m_SpawnerDataTable;
+
 		std::ofstream file("config/enemy_data.json");
 		if (file.is_open())
 		{
@@ -189,6 +246,9 @@ namespace Wiwa
 			m_UltronData.bulletLifeTime = serializedData["m_UltronData"]["bulletLifeTime"].get<float>();
 			m_UltronData.bulletSpeed = serializedData["m_UltronData"]["bulletSpeed"].get<float>();
 
+			m_VariantsTable = serializedData["m_VariantsTable"].get<std::vector<VariantData>>();
+			m_SpawnerDataTable = serializedData["m_SpawnerDataTable"].get<std::vector<SpawnerData>>();
+
 			file.close();
 			WI_INFO("Enemy stats LOADED FROM enemy_stats.json");
 			return true;
@@ -199,6 +259,8 @@ namespace Wiwa
 
 	bool EnemyManager::CreateEmptyFile()
 	{
+		VariantData variantData;
+
 		// Load base stats melee phalanx generic
 		EnemyData meleePhalanxGeneric;
 		meleePhalanxGeneric.name = "MELEE_PHALANX_GENERIC";
@@ -212,6 +274,7 @@ namespace Wiwa
 		meleePhalanxGeneric.creditsDrop = 15;
 		meleePhalanxGeneric.level = 0;
 		m_EnemyData[{meleePhalanxGeneric.level, meleePhalanxGeneric.name.c_str()}] = meleePhalanxGeneric;
+		variantData.list["MELEE_PHALANX_GENERIC"] = true;
 
 		// Load base stats melee phalanx RedVariant
 		EnemyData meleePhalanxRedVariant;
@@ -226,6 +289,7 @@ namespace Wiwa
 		meleePhalanxRedVariant.creditsDrop = 20;
 		meleePhalanxRedVariant.level = 0;
 		m_EnemyData[{meleePhalanxRedVariant.level, meleePhalanxRedVariant.name.c_str()}] = meleePhalanxRedVariant;
+		variantData.list["MELEE_PHALANX_REDVARIANT"] = true;
 
 		// Load base stats melee phalanx BlueVariant
 		EnemyData meleePhalanxBlueVariant;
@@ -240,6 +304,7 @@ namespace Wiwa
 		meleePhalanxBlueVariant.creditsDrop = 20;
 		meleePhalanxBlueVariant.level = 0;
 		m_EnemyData[{meleePhalanxBlueVariant.level, meleePhalanxBlueVariant.name.c_str()}] = meleePhalanxBlueVariant;
+		variantData.list["MELEE_PHALANX_BLUEVARIANT"] = true;
 
 		// Load base stats ranged phalanx generic
 		EnemyData rangedPhalanxGeneric;
@@ -254,6 +319,7 @@ namespace Wiwa
 		rangedPhalanxGeneric.creditsDrop = 15;
 		rangedPhalanxGeneric.level = 0;
 		m_EnemyData[{rangedPhalanxGeneric.level, rangedPhalanxGeneric.name.c_str()}] = rangedPhalanxGeneric;
+		variantData.list["RANGED_PHALANX_GENERIC"] = true;
 
 		// Load base stats ranged phalanx red variant
 		EnemyData rangedPhalanxRedVariant;
@@ -268,6 +334,7 @@ namespace Wiwa
 		rangedPhalanxRedVariant.creditsDrop = 20;
 		rangedPhalanxRedVariant.level = 0;
 		m_EnemyData[{rangedPhalanxRedVariant.level, rangedPhalanxRedVariant.name.c_str()}] = rangedPhalanxRedVariant;
+		variantData.list["RANGED_PHALANX_REDVARIANT"] = true;
 
 		// Load base stats ranged phalanx blue variant
 		EnemyData rangedPhalanxblueVariant;
@@ -282,6 +349,7 @@ namespace Wiwa
 		rangedPhalanxblueVariant.creditsDrop = 25;
 		rangedPhalanxblueVariant.level = 0;
 		m_EnemyData[{rangedPhalanxblueVariant.level, rangedPhalanxblueVariant.name.c_str()}] = rangedPhalanxblueVariant;
+		variantData.list["RANGED_PHALANX_BLUEVARIANT"] = true;
 
 		// Load base stats sentinel
 		EnemyData sentinel;
@@ -310,6 +378,7 @@ namespace Wiwa
 		subjugator.creditsDrop = 30;
 		subjugator.level = 0;
 		m_EnemyData[{subjugator.level, subjugator.name.c_str()}] = subjugator;
+		variantData.list["SUBJUGATOR"] = true;
 
 		// Load base stats subjugatorChief
 		EnemyData subjugatorChief;
@@ -324,6 +393,7 @@ namespace Wiwa
 		subjugatorChief.creditsDrop = 35;
 		subjugatorChief.level = 0;
 		m_EnemyData[{subjugatorChief.level, subjugatorChief.name.c_str()}] = subjugatorChief;
+		variantData.list["SUBJUGATOR_CHIEF"] = true;
 
 		// Load base stats ultron
 		EnemyData ultron;
@@ -339,6 +409,22 @@ namespace Wiwa
 		ultron.level = 0;
 		m_EnemyData[{ultron.level, ultron.name.c_str()}] = ultron;
 
+		SpawnerData spawnerData;
+		spawnerData.waveSpawnData.maxEnemiesPerWave = 10;
+		spawnerData.waveSpawnData.minEnemiesPerWave = 5;
+		spawnerData.waveSpawnData.enemySpawnRate = 1.5f;
+		spawnerData.waveSpawnData.maxWaveCount = 3;
+		spawnerData.waveSpawnData.timeBetweenWaves = 2.0f;
+		spawnerData.waveSpawnData.waveChangeRate = 30.0f;
+		// Index variants data
+		for (int i = 0; i <= 10; i++)
+		{
+			variantData.n = i;
+			spawnerData.n = i;
+			m_VariantsTable.emplace_back(variantData);
+			m_SpawnerDataTable.emplace_back(spawnerData);
+		}
+
 		json doc;
 		doc["m_EnemyData"] = m_EnemyData;
 		doc["m_MaxLevel"] = m_MaxLevel;
@@ -353,6 +439,9 @@ namespace Wiwa
 
 		doc["m_UltronData"]["bulletLifeTime"] = m_UltronData.bulletLifeTime;
 		doc["m_UltronData"]["bulletSpeed"] = m_UltronData.bulletSpeed;
+
+		doc["m_VariantsTable"] = m_VariantsTable;
+		doc["m_SpawnerDataTable"] = m_SpawnerDataTable;
 
 		std::ofstream file("config/enemy_data.json");
 		if (file.is_open())

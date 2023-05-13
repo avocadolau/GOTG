@@ -6,9 +6,22 @@
 #include <Wiwa/ecs/components/game/enemy/PhalanxRanged.h>
 #include <Wiwa/ecs/components/game/enemy/Subjugator.h>
 #include <Wiwa/ecs/components/game/enemy/Ultron.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
 
 namespace Wiwa
 {
+	struct VariantData
+	{
+		int n;
+		std::map<std::string, bool> list;
+	};
+
+	struct SpawnerData
+	{
+		int n;
+		WaveSpawner waveSpawnData;
+	};
+
 	class WI_API EnemyManager
 	{
 	public:
@@ -32,6 +45,9 @@ namespace Wiwa
 
 		inline std::map<std::pair<int, std::string>, EnemyData>& GetData() { return m_EnemyData; };
 		std::map<std::pair<int, std::string>, EnemyData> m_EnemyData;
+		std::vector<VariantData> m_VariantsTable;
+		std::vector<SpawnerData> m_SpawnerDataTable;
+
 		PhalanxRanged m_RangedData;
 		Subjugator m_SubjugatorData;
 		Ultron m_UltronData;
