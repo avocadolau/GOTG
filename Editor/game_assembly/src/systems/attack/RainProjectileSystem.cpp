@@ -38,11 +38,10 @@ void Wiwa::RainProjectileSystem::InitRainProjectileBullet()
 
 	physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 
-	m_BulletSpeedStored = bullet->velocity;
+	/*m_BulletSpeedStored = bullet->velocity;
 	bullet->lifeTime += RAIN_BULLET_WAITINGTIME;
 
-	bullet->velocity = 0.0f;
-
+	bullet->velocity = 0.0f;*/
 }
 
 void Wiwa::RainProjectileSystem::OnUpdate()
@@ -53,20 +52,27 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 		System::Init();
 
 	RainProjectile* bullet = GetComponentByIterator<RainProjectile>(m_BulletIt);
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+	Transform3D* transform = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(m_EntityId));
 
-	if (m_Timer >= RAIN_BULLET_WAITINGTIME)
-	{
-		//WI_INFO("timer Setting velocity");
-		bullet->velocity = m_BulletSpeedStored;
-	}
+	//if (m_Timer >= RAIN_BULLET_WAITINGTIME)
+	//{
+	//	//WI_INFO("timer Setting velocity");
+	//	bullet->velocity = m_BulletSpeedStored;
+	//}
 	//else
 	//{
 	//	WI_INFO("timer NOT Setting velocity");
 	//}
 
+	if (transform->localPosition.y <= 0.08f)
+	{
+		transform->localPosition.y = 0.08f;
+	}
+
 	if (m_Timer >= bullet->lifeTime)
 	{
-		bullet->lifeTime -= RAIN_BULLET_WAITINGTIME;
+		/*bullet->lifeTime -= RAIN_BULLET_WAITINGTIME;*/
 		GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
 	}
 

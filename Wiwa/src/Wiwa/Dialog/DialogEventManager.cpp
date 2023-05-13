@@ -1,6 +1,7 @@
 #include <wipch.h>
 
 #include "DialogEventManager.h"
+#include "DialogManager.h"
 
 #include <Wiwa/ecs/components/game/Character.h>
 
@@ -44,6 +45,25 @@ namespace Wiwa
 
 	bool DialogEventManager::Update()
 	{
+		//DialogManager* dm = Wiwa::Application::Get();
+		Wiwa::Scene * _scene = (Wiwa::Scene*)m_Scene;
+
+
+		if (_scene->GetDialogManager().triggerEvent == true)
+		{
+			if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Uatu"))
+			{
+				
+			}
+			else if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Aron"))
+			{
+
+			}
+			else if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Ulana"))
+			{
+
+			}
+		}
 
 		return true;
 	}

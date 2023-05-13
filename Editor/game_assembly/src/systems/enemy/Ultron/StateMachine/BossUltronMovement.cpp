@@ -207,16 +207,16 @@ namespace Wiwa
 		else if (randomNum <= 40) { // 20 % probability
 			return UltronAttacks::LASER_BEAM;
 		}
-		else if (randomNum <= 55) { // 20 % probability
+		else if (randomNum <= 55) { // 15 % probability
 			return UltronAttacks::CLUSTER_SHOTS;
 		}
-		else if (randomNum <= 70) { // 20 % probability
+		else if (randomNum <= 70) { // 15 % probability
 			return UltronAttacks::DASH;
 		}
-		else if (randomNum <= 85) { // 20 % probability
+		else if (randomNum <= 85) { // 15 % probability
 			return UltronAttacks::SECOND_DASH;
 		}
-		else if (randomNum <= 100) { // 20 % probability
+		else if (randomNum <= 100) { // 15 % probability
 			return UltronAttacks::BULLET_STORM;
 		}
 	}
