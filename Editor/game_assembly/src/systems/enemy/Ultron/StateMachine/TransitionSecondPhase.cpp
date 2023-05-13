@@ -48,8 +48,8 @@ namespace Wiwa
 		{
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::MOVE_CENTER:
 		{
-			glm::vec3 m_CenterPositionBoss = { 0.0f, 10.0f,0.0f };
-			glm::vec3 m_CenterPositionRegenWall = { 0.0f, 0.0f,0.0f };
+			glm::vec3 m_CenterPositionBoss = { 0.0f, 7.0f,0.0f };
+			glm::vec3 m_CenterPositionRegenWall = { 0.0f, 13.0f,0.0f };
 			navAgentPtr->StopAgent();
 			navAgentPtr->RemoveAgent();
 			selfTr->localPosition = m_CenterPositionBoss;

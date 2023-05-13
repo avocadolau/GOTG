@@ -33,6 +33,7 @@ namespace Wiwa
 		navAgentPtr->StopAgent();
 
 		m_SpawnDashEffect = true;
+		m_CollisionWall = false;
 		m_TimerToLookAtPlayer = 0.0f;
 		m_TimerAfterDash = 0.0f;
 		m_TimerOfDashAction = 0.0f;
@@ -51,15 +52,20 @@ namespace Wiwa
 		{
 		case Wiwa::BossUltronSecondDashState::SecondDashState::PREPARE_DASH:
 		{
-			agent->StopAgent();
-			navAgent->autoRotate = false;
-
 			m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
 
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerToLookAtPlayer >= 2.0f) //Time to Look At player, (Add as a Component)
+			/*if (m_TimerToLookAtPlayer >= 1.0f)
 			{
+				agent->SetDestination(playerTr->localPosition);
+			}*/
+
+			if (m_TimerToLookAtPlayer >= 1.0f) //Time to Look At player, (Add as a Component)
+			{
+				agent->StopAgent();
+				navAgent->autoRotate = false;
+
 				m_TimerToLookAtPlayer = 0.0f;
 				m_TimerOfDashAction = 0.0f;
 				m_SecondDashState = SecondDashState::PLAY_DASH;
@@ -88,7 +94,7 @@ namespace Wiwa
 				m_SpawnDashEffect = false;
 			}
 			
-			if (m_TimerOfDashAction >= 2.2f) //Bullet Lifetime
+			if (m_TimerOfDashAction >= 2.2f || m_CollisionWall) //Bullet Lifetime
 			{
 				m_TimerOfDashAction = 0.0f;
 				m_SecondDashState = SecondDashState::END_DASH;
@@ -101,14 +107,17 @@ namespace Wiwa
 			agent->StopAgent();*/
 			navAgent->autoRotate = true;
 
-			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
+		/*	m_TimerAfterDash += Time::GetDeltaTimeSeconds();
 
-			if (m_TimerAfterDash >= 2.0f)
+			if (m_TimerAfterDash >= 0.5f)
 			{
 				WI_INFO("Dash DONE");
 				m_TimerAfterDash = 0.0f;
 				enemy->SwitchState(enemy->m_MovementState);
-			}
+			}*/
+
+			m_TimerAfterDash = 0.0f;
+			enemy->SwitchState(enemy->m_MovementState);
 		}
 		break;
 		default:
@@ -122,7 +131,11 @@ namespace Wiwa
 
 	void BossUltronSecondDashState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)
 	{
-
+		std::string wallStr = "WALL";
+		if (wallStr == body2->selfTagStr)
+		{
+			m_CollisionWall = true;
+		}
 	}
 
 	bool BossUltronSecondDashState::SpawnDashEffect(BossUltron* enemy, const glm::vec3& bull_dir)

@@ -33,5 +33,6 @@ namespace Wiwa {
 		float m_TimerAfterDash = 0.0f;
 
 		bool m_SpawnDashEffect = true;
+		bool m_CollisionWall = false;
 	};
 }
