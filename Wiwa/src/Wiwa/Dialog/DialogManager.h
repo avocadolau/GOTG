@@ -37,6 +37,8 @@ namespace Wiwa
 		bool occupied = false;
 
 		ConversationGroup group;
+
+		std::string eventName;
 	};
 
 	class WI_API DialogManager
