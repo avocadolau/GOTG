@@ -2,7 +2,6 @@
 #include "BossUltronBase.h"
 
 #define RAIN_RANGE 3.0f
-#define RAIN_PROJECTILE_NUMBER 9
 #define TIME_BETWEEN_PROJECTILES 2.0f
 
 namespace Wiwa {
@@ -26,16 +25,35 @@ namespace Wiwa {
 
 	private:
 
-		bool SpawnProjectileRain(BossUltron* enemy, const glm::vec3& bull_dir);
+		/*bool SpawnProjectileRain(BossUltron* enemy, const glm::vec3& bull_dir);*/
 
 		glm::vec3 GetRandomPositionInRange(const glm::vec3& position, float range);
 
-		bool SpawnThunderStorm(int numBullets, float totalTime, const glm::vec3 boundary, BossUltron* enemy, const glm::vec3& bull_dir);
+		void SpawnThunderStorm(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir);
+
+		void SetupThunderMark(BossUltron* enemy, int id, glm::vec3 pos, const char* path);
+
+		glm::vec3 RandomPointInHexagon();
 
 		ProjectileRainState m_RainState;
 		std::vector<glm::vec3> m_AfterRainPosition;
-		float m_TimerRain;
 
+		float m_TimerRain;
+		float m_TimerThundersSpawn = 0.0f;
+		float m_TimerThundersMark = 0.0f;
+		float m_TimerThundersMarkDelete = 0.0f;
+
+		bool m_RandomPositionSetted = false;
 		int m_RainProjectileCounter;
+
+		//temporal
+		EntityId m_ThunderMarkId1;
+
+
+		const char* m_ThunderMarkPath;
+
+		//temporal
+		glm::vec3 m_ThunderPos1 = glm::vec3(0.0f, 0.0f, 0.0f);
+
 	};
 }
