@@ -89,6 +89,7 @@ void DialogPanel::Draw()
 				dm.conversations[currentConversation].detectsCharacter = false;
 				dm.conversations[currentConversation].group.groupID = "-1";
 				dm.conversations[currentConversation].group.order = "-1";
+				dm.conversations[currentConversation].eventName = "";
 				dm.conversations[currentConversation].nodes[0].occupied = true;
 
 				currentCreationStep = 1;
@@ -308,6 +309,11 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::InputText("Event name", &dm.conversations[currentConversation].eventName);
+				ImGui::TextWrapped("Note: 'Event name' will trigger a specific event when the conversation ends if the input written here is correct (see list of event names). Leave it blank if no event should be triggered.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
@@ -333,6 +339,7 @@ void DialogPanel::Draw()
 					dm.editorConversations[currentConversation].detectsCharacter = dm.conversations[currentConversation].detectsCharacter;
 					dm.editorConversations[currentConversation].group.groupID = dm.conversations[currentConversation].group.groupID;
 					dm.editorConversations[currentConversation].group.order = dm.conversations[currentConversation].group.order;
+					dm.editorConversations[currentConversation].eventName = dm.conversations[currentConversation].eventName;
 
 					currentEditingConversationName[currentConversation] = dm.conversations[currentConversation].conversationName;
 
@@ -551,6 +558,11 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::InputText("Event name", &dm.editorConversations[i].eventName);
+				ImGui::TextWrapped("Note: 'Event name' will trigger a specific event when the conversation ends if the input written here is correct (see list of event names). Leave it blank if no event should be triggered.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("DONR FORGET SAVING!");
 				ImGui::PushID(i);
 				if (ImGui::Button(" ~ Save Conversation ~ "))
@@ -576,6 +588,7 @@ void DialogPanel::Draw()
 					dm.conversations[i].detectsCharacter = dm.editorConversations[i].detectsCharacter;
 					dm.conversations[i].group.groupID = dm.editorConversations[i].group.groupID;
 					dm.conversations[i].group.order = dm.editorConversations[i].group.order;
+					dm.conversations[i].eventName = dm.editorConversations[i].eventName;
 
 					dm.SaveAllDialogs();
 
@@ -610,7 +623,8 @@ void DialogPanel::Draw()
 							dm.conversations[l].detectsCharacter = dm.conversations[l + 1].detectsCharacter;
 							dm.conversations[l].group.groupID = dm.conversations[l + 1].group.groupID;
 							dm.conversations[l].group.order = dm.conversations[l + 1].group.order;
-							
+							dm.conversations[l].eventName = dm.conversations[l + 1].eventName;
+
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
 								dm.conversations[l].nodes[m].text1 = dm.conversations[l + 1].nodes[m].text1;
@@ -654,6 +668,7 @@ void DialogPanel::Draw()
 							dm.editorConversations[l].detectsCharacter = dm.editorConversations[l + 1].detectsCharacter;
 							dm.editorConversations[l].group.groupID = dm.editorConversations[l + 1].group.groupID;
 							dm.editorConversations[l].group.order = dm.editorConversations[l + 1].group.order;
+							dm.editorConversations[l].eventName = dm.editorConversations[l + 1].eventName;
 
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
