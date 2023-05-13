@@ -1,6 +1,7 @@
 #include <wipch.h>
 
 #include "DialogManager.h"
+#include "DialogEventManager.h"
 
 #include <Wiwa/ecs/components/game/Character.h>
 
@@ -159,12 +160,11 @@ namespace Wiwa
 
 		Character* character = GameStateManager::GetPlayerCharacterComp();
 
-		if (actualConversationState == 1 && character != nullptr)
+		if (actualConversationState == 1)
 		{
 			character->CanMove = false;
-
 		}
-		else if (actualConversationState != 1 && character != nullptr)
+		else if (actualConversationState != 1)
 		{
 			character->CanMove = true;
 		}
@@ -507,6 +507,17 @@ namespace Wiwa
 
 					render->DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 					render->DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+
+					dialogEventToTrigger = conversations[conversationNumber].eventName;
+
+					if (!strcmp(dialogEventToTrigger.c_str(), ""))
+					{
+						triggerEvent = false;
+					}
+					else
+					{
+						triggerEvent = true;
+					}
 
 					actualConversationState = 2;
 				}
