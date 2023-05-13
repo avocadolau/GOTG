@@ -160,11 +160,11 @@ namespace Wiwa
 
 		Character* character = GameStateManager::GetPlayerCharacterComp();
 
-		if (actualConversationState == 1)
+		if (actualConversationState == 1 || triggerEvent == true)
 		{
 			character->CanMove = false;
 		}
-		else if (actualConversationState != 1)
+		else if (actualConversationState != 1 && triggerEvent == false)
 		{
 			character->CanMove = true;
 		}

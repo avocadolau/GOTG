@@ -44,7 +44,17 @@ namespace Wiwa
 
 	public:
 
-		
+		Wiwa::Renderer2D::InstanceData choice2Opt1ImgID;
+		Wiwa::Renderer2D::InstanceData choice2Opt2ImgID;
+		Wiwa::Renderer2D::InstanceData choice2Opt3ImgID;
 
+		int selector = 0;
+
+		bool eventStarted = false;
+		bool eventFinished = false;
+
+		int eventState = 2; // 0 = started event, 1 = running event, 2 = finished event
+
+		int keyPressTimer = 0;
 	};
 }

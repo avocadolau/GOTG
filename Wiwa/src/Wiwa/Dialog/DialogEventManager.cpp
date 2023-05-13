@@ -39,31 +39,135 @@ namespace Wiwa
 	{
 		m_Scene = scene;
 
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
+
+
+		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/selections_placeholder.png");
+		Image* choice2Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+
+		choice2Opt1ImgID = render.CreateInstancedQuadTex(m_Scene, choice2Opt1Img->GetTextureId(), choice2Opt1Img->GetSize(), { 300,250 }, { 300,300 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice2Opt1ImgID);
+
+		ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/selections_placeholder.png");
+		Image* choice2Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
+
+		choice2Opt2ImgID = render.CreateInstancedQuadTex(m_Scene, choice2Opt2Img->GetTextureId(), choice2Opt2Img->GetSize(), { 800,250 }, { 300,300 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice2Opt2ImgID);
+
+		ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/selections_placeholder.png");
+		Image* choice2Opt3Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
+
+		choice2Opt3ImgID = render.CreateInstancedQuadTex(m_Scene, choice2Opt3Img->GetTextureId(), choice2Opt3Img->GetSize(), { 1300,250 }, { 300,300 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice2Opt3ImgID);
+
+		eventStarted = false;
+		eventFinished = false;
+		selector = 0;
+		eventState = 2;
+		keyPressTimer = 0;
 
 		return true;
 	}
 
 	bool DialogEventManager::Update()
 	{
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
 		//DialogManager* dm = Wiwa::Application::Get();
 		Wiwa::Scene * _scene = (Wiwa::Scene*)m_Scene;
 
-
 		if (_scene->GetDialogManager().triggerEvent == true)
 		{
+			eventState = 0;
+			_scene->GetDialogManager().triggerEvent = false;
+		}
+
+		if (eventState != 2)
+		{
+			if (eventState == 0)
+			{
+				eventStarted = true;
+
+				eventState = 1;
+			}
+
 			if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Uatu"))
 			{
 				
 			}
 			else if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Aron"))
 			{
+				if (eventStarted == true)
+				{
+					render.EnableInstance(m_Scene, choice2Opt1ImgID);
+					render.EnableInstance(m_Scene, choice2Opt2ImgID);
+					render.EnableInstance(m_Scene, choice2Opt3ImgID);
 
+
+					eventStarted = false;
+				}
+
+				if (selector == 0)
+				{
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 300, 300 }, { 20, 660 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 300, 300 }, { 350, 60 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 300, 300 }, { 680, 60 });
+				}
+				else if (selector == 1)
+				{
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 300, 300 }, { 20, 60 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 300, 300 }, { 350, 660 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 300, 300 }, { 680, 60 });
+				}
+				else if (selector == 2)
+				{
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 300, 300 }, { 20, 60 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 300, 300 }, { 350, 60 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 300, 300 }, { 680, 660 });
+				}
+
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer >= 120)
+				{
+					keyPressTimer = 0;
+
+					selector++;
+
+					if (selector >= 3) selector = 0;
+				}
+
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter)))
+				{
+					eventFinished = true;
+				}
+
+				if (eventFinished == true)
+				{
+					render.DisableInstance(m_Scene, choice2Opt1ImgID);
+					render.DisableInstance(m_Scene, choice2Opt2ImgID);
+					render.DisableInstance(m_Scene, choice2Opt3ImgID);
+
+					eventState = 2;
+
+					eventFinished = false;
+				}
 			}
 			else if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Ulana"))
 			{
 
 			}
+			else
+			{
+				eventState = 2;
+			}
 		}
+
+		if (eventState == 2)
+		{
+			_scene->GetDialogManager().triggerEvent = false;
+		}
+
+		keyPressTimer += Time::GetDeltaTime();
 
 		return true;
 	}
