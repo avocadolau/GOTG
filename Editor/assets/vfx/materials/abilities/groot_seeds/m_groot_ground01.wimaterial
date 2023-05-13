@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/dissolve","uniforms":{"u_LifeTime":0.8075162172317505,"u_Color":{"r":0.4769081473350525,"g":0.8034934401512146,"b":0.435079425573349,"a":1.0},"u_Texture":"assets/textures/t_spark.png","u_DissolveAmount":0.949999988079071,"u_DiscardTex":"assets/textures/t_perlin_noise.png"}}
