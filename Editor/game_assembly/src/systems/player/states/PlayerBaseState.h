@@ -18,7 +18,8 @@ namespace Wiwa
 		virtual void UpdateState() = 0;
 		virtual void ExitState() = 0;
 		virtual void OnCollisionEnter(Object*, Object*) = 0;
-	
+		virtual void OnCollision(Object*, Object*);
+		virtual void OnCollisionExit(Object*, Object*);
 	protected:
 		EntityId m_Id;
 		PlayerStateMachine* m_StateMachine;
