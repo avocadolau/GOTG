@@ -77,10 +77,9 @@ namespace Wiwa
 		//DialogManager* dm = Wiwa::Application::Get();
 		Wiwa::Scene * _scene = (Wiwa::Scene*)m_Scene;
 
-		if (_scene->GetDialogManager().triggerEvent == true)
+		if (_scene->GetDialogManager().triggerEvent == true && eventState == 2)
 		{
 			eventState = 0;
-			_scene->GetDialogManager().triggerEvent = false;
 		}
 
 		if (eventState != 2)
@@ -110,24 +109,24 @@ namespace Wiwa
 
 				if (selector == 0)
 				{
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 300, 300 }, { 20, 660 });
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 300, 300 }, { 350, 60 });
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 300, 300 }, { 680, 60 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 1080, 1080 }, { 20, 660, 300, 300 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 1080, 1080 }, { 350, 60, 300, 300 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 1080, 1080 }, { 680, 60, 300, 300 });
 				}
 				else if (selector == 1)
 				{
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 300, 300 }, { 20, 60 });
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 300, 300 }, { 350, 660 });
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 300, 300 }, { 680, 60 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 1080, 1080 }, { 20, 60, 300, 300 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 1080, 1080 }, { 350, 660, 300, 300 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 1080, 1080 }, { 680, 60, 300, 300 });
 				}
 				else if (selector == 2)
 				{
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 300, 300 }, { 20, 60 });
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 300, 300 }, { 350, 60 });
-					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 300, 300 }, { 680, 660 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 1080, 1080 }, { 20, 60, 300, 300 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 1080, 1080 }, { 350, 60, 300, 300 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 1080, 1080 }, { 680, 660, 300, 300 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer >= 120)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -138,6 +137,19 @@ namespace Wiwa
 
 				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter)))
 				{
+					if (selector == 0)
+					{
+						
+					}
+					else if (selector == 1)
+					{
+						
+					}
+					else if (selector == 2)
+					{
+					
+					}
+
 					eventFinished = true;
 				}
 
