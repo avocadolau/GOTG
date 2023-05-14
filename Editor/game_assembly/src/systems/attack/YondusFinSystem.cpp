@@ -153,7 +153,7 @@ namespace Wiwa
 		agent->agentSliding = false;
 
 		glm::vec3 currentEnemyPosition = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[0])->worldMatrix);
-		if (Math::IsPointNear(selfTr->localPosition, currentEnemyPosition, 2.0f))
+		if (Math::IsPointNear(selfTr->localPosition, currentEnemyPosition, 1.0f))
 		{
 		/*	agentSys->StopAgent();
 			agentSys->SetPosition(selfTr->localPosition);*/
