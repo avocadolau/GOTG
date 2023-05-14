@@ -222,6 +222,9 @@ namespace Wiwa
 		public:
 		static int GetActiveEnemies();
 		static int GetAproximateTotalEnemies();
+		static int GetTotalWaves();
+		static int GetCurrentWaves();
+
 		static bool IsWaveSpawnerFinished(WaveSpawner* waveSpawner);
 		static void EndCombatRoom(WaveSpawner* waveSpawner);
 	};
