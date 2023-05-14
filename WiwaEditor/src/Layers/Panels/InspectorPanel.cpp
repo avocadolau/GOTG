@@ -21,6 +21,7 @@
 #include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/ai/NavMesh.h>
+#include <Wiwa/ecs/components/OzzAnimatorCmp.h>
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -63,6 +64,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleSystemComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Item) { DrawItemComponent(data); }else
 		if (type->hash == (size_t)TypeHash::NavMesh) { DrawNavMeshComponent(data); }else
+		if (type->hash == FNV1A_HASH("OzzAnimatorCmp")) { DrawOzzAnimatorCmp(data); } else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -1503,6 +1505,33 @@ void InspectorPanel::DrawNavMeshComponent(byte* data)
 	Wiwa::NavMesh* navMesh = (Wiwa::NavMesh*)data;
 
 	AssetContainer(navMesh->filePath);
+}
+
+void InspectorPanel::DrawOzzAnimatorCmp(byte* data)
+{
+	Wiwa::OzzAnimatorCmp* a_cmp = (Wiwa::OzzAnimatorCmp*)data;
+
+	ImGui::PushID("a_cmp");
+
+	AssetContainer(a_cmp->animator_path);
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".wiozzanimator")
+			{
+				strcpy_s(a_cmp->animator_path, p.string().c_str());
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	ImGui::PopID();
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)

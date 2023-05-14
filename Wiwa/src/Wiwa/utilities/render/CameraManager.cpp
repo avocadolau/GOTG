@@ -60,6 +60,8 @@ namespace Wiwa {
 		m_CamerasAlive.clear();
 		m_RemovedCameras.clear();
 
+		//delete editorCamera;
+
 		m_ActiveCamera = -1;
 	}
 	void CameraManager::CleanUp()

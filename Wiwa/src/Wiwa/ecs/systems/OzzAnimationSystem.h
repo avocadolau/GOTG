@@ -2,13 +2,14 @@
 
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/animation/animations/OzzAnimationPartialBlending.h>
+#include <Wiwa/animation/OzzAnimator.h>
 
 namespace Wiwa {
 	class WI_API OzzAnimationSystem : public System {
 	private:
-		OzzAnimationPartialBlending m_Animation;
+		OzzAnimator* m_Animator;
 		EntityManager::ComponentIterator m_TransformIt;
-		EntityManager::ComponentIterator m_MeshIt;
+		EntityManager::ComponentIterator m_AnimatorIt;
 	public:
 		OzzAnimationSystem();
 		~OzzAnimationSystem();

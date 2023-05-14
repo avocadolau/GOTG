@@ -22,19 +22,42 @@
 namespace Wiwa {
     enum AnimationType {
         AT_PARTIAL_BLEND,
+        AT_SIMPLE,
         AT_LAST
     };
 
 	class WI_API OzzAnimation {
+    public:
+        enum Status {
+            VALID,
+            INVALID,
+            LAST
+        };
 	protected:
         AnimationType m_AnimType;
 
-        virtual bool Init() = 0;
-        virtual bool Update(float _dt) = 0;
+        Status m_Status;
+
+        // Runtime skeleton.
+        ozz::animation::Skeleton* skeleton_;
+
+        // Sampling context.
+        ozz::animation::SamplingJob::Context context_;
     public:
-        OzzAnimation() : m_AnimType(AT_LAST){}
+        OzzAnimation() : m_AnimType(AT_LAST), skeleton_(nullptr), m_Status(INVALID) {}
 
         AnimationType getAnimationType() { return m_AnimType; }
 
+        virtual ozz::vector<ozz::math::SoaTransform>& getLocals() = 0;
+
+        virtual Status Validate() = 0;
+
+        virtual bool Update(float _dt) = 0;
+
+        virtual void OnSkeletonSet() = 0;
+
+        void SetSkeleton(ozz::animation::Skeleton* skeleton);
+
+        Status getStatus() { return m_Status; }
 	};
 }

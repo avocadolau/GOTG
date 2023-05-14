@@ -17,6 +17,7 @@
 
 // Animations
 #include "components/AnimatorComponent.h"
+#include "components/OzzAnimatorCmp.h"
 
 // Physics components
 #include "components/CollisionBody.h"

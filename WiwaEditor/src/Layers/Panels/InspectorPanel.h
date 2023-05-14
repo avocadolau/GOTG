@@ -33,6 +33,7 @@ private:
 	void DrawParticleSystemComponent(byte* data);
 	void DrawItemComponent(byte* data);
 	void DrawNavMeshComponent(byte* data);
+	void DrawOzzAnimatorCmp(byte* data);
 public:
 
 	InspectorPanel(EditorLayer* instance);

@@ -40,6 +40,12 @@
 
 #include <Wiwa/utilities/functions/Function.h>
 
+#define GLERR do {\
+        GLuint glerr;\
+        while((glerr = glGetError()) != GL_NO_ERROR)\
+            fprintf(stderr, "%s:%d glGetError() = 0x%04x\n", __FILE__, __LINE__, glerr);\
+    } while (0)
+
 USE_REFLECTION;
 
 namespace Wiwa
@@ -84,8 +90,9 @@ namespace Wiwa
 		WI_CORE_WARN("=======Initializing systems=======");
 		m_Renderer2D = new Renderer2D();
 		m_Renderer2D->Init();
-
+		
 		m_Renderer3D = new Renderer3D();
+		
 		m_Renderer3D->Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
@@ -156,6 +163,8 @@ namespace Wiwa
 		{
 			OPTICK_FRAME("Application Loop");
 
+			
+
 			if (FinishedImport)
 			{
 				FinishedImport = false;
@@ -179,7 +188,7 @@ namespace Wiwa
 			m_Renderer3D->PreUpdate();
 
 			// Update scene manager
-			SceneManager::ModuleUpdate();
+			SceneManager::ModuleUpdate();			
 
 			// Update audio
 			
@@ -224,6 +233,8 @@ namespace Wiwa
 			// Update main window
 			m_Window->OnUpdate();
 			Time::PostUpdate();
+
+			
 		}
 	}
 

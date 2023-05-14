@@ -85,11 +85,12 @@ namespace Wiwa {
 		bool hasGS = geometryShaderSourceStr;
 
 		bool retflag;
+		
 		CompileFiles(vertexShaderSource, fragmentShaderSource, hasGS, geometryShaderSourceStr, retflag);
 		delete vertexShaderSourceStr;
 		delete fragmentShaderSourceStr;
 		delete geometryShaderSourceStr;
-
+		
 		if (retflag) return;
 
 
@@ -170,7 +171,6 @@ namespace Wiwa {
 		glAttachShader(m_IDprogram, vertexShader);
 		glAttachShader(m_IDprogram, fragmentShader);
 
-
 		unsigned int geometryShader;
 		if (hasGS)
 		{
@@ -193,12 +193,13 @@ namespace Wiwa {
 			glAttachShader(m_IDprogram, geometryShader);
 		}
 
+		
 		glLinkProgram(m_IDprogram);
-
-		glGetShaderiv(m_IDprogram, GL_COMPILE_STATUS, &success);
-
+		
+		glGetProgramiv(m_IDprogram, GL_LINK_STATUS, &success);
+		
 		if (!success) {
-			glGetShaderInfoLog(m_IDprogram, 512, NULL, infoLog);
+			glGetProgramInfoLog(m_IDprogram, 512, NULL, infoLog);
 			std::string msg = "Shader program compile error: ";
 			msg += infoLog;
 
@@ -207,6 +208,7 @@ namespace Wiwa {
 			return;
 		}
 
+		
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 		if (hasGS)
@@ -215,7 +217,7 @@ namespace Wiwa {
 		retflag = false;
 
 		m_CompileState = State::Compiled;
-
+		
 		m_Model = glGetUniformLocation(m_IDprogram, "u_Model");
 		m_Proj = glGetUniformLocation(m_IDprogram, "u_Proj");
 		m_View = glGetUniformLocation(m_IDprogram, "u_View");

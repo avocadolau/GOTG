@@ -159,7 +159,8 @@ namespace Wiwa
 			{1.0f, 1.0f},
 			{1.0f, 0.0f},
 			{0.0f, 0.0f},
-			{0.0f, 1.0f}};
+			{0.0f, 1.0f}
+		};
 
 		Color4f color = Color::WHITE;
 

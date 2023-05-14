@@ -40,6 +40,7 @@
 #include "Panels/AchievementsPanel.h"
 #include "Panels/AIPanel.h"
 
+#include "Panels/animation/OzzAnimationPanel.h"
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -145,6 +146,7 @@ private:
 	std::unique_ptr<Panel> m_InventoryPanel;
 	std::unique_ptr<Panel> m_AchievementsPanel;
 	std::unique_ptr<Panel> m_AiPanel;
+	std::unique_ptr<Panel> m_OzzAnimationPanel;
 
 
 	std::vector<Panel *> m_Panels;

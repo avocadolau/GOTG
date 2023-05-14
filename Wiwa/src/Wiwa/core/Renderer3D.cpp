@@ -15,12 +15,6 @@
 #define GL_PTR_OFFSET(i) reinterpret_cast<void*>(static_cast<intptr_t>(i))
 #define GL(_f) gl##_f
 
-#define GLERR do {\
-        GLuint glerr;\
-        while((glerr = glGetError()) != GL_NO_ERROR)\
-            fprintf(stderr, "%s:%d glGetError() = 0x%04x\n", __FILE__, __LINE__, glerr);\
-    } while (0)
-
 const uint8_t kDefaultColorsArray[][4] = {
 	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
 	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
@@ -85,15 +79,24 @@ namespace Wiwa
 		dynamic_array_bo_(0),
 		dynamic_index_bo_(0)
 	{
+		
 	}
 
 	Renderer3D::~Renderer3D()
 	{
+		if (dynamic_array_bo_) {
+			GL(DeleteBuffers(1, &dynamic_array_bo_));
+			dynamic_array_bo_ = 0;
+		}
+
+		if (dynamic_index_bo_) {
+			GL(DeleteBuffers(1, &dynamic_index_bo_));
+			dynamic_index_bo_ = 0;
+		}
 	}
 
 	bool Renderer3D::Init()
 	{
-		GLERR;
 		// ========= BEG OZZ ANIMATIONS =========
 		// Builds the dynamic vbo
 		glGenBuffers(1, &dynamic_array_bo_);
@@ -478,8 +481,6 @@ namespace Wiwa
 	void Renderer3D::Update()
 	{
 		OPTICK_EVENT("Renderer 3D Update");
-
-		
 	}
 
 	void Renderer3D::PostUpdate()
@@ -1173,9 +1174,9 @@ namespace Wiwa
 			}
 		}
 
-		WI_INFO("Pos: s({}) off({}) Normals: s({}) off({}) Colors: s({}) off({}) Uvs: s({}) off({})", positions_stride, positions_offset,
+		/*WI_INFO("Pos: s({}) off({}) Normals: s({}) off({}) Colors: s({}) off({}) Uvs: s({}) off({})", positions_stride, positions_offset,
 			normals_stride, normals_offset, colors_stride, colors_offset,
-			uvs_stride, uvs_offset);
+			uvs_stride, uvs_offset);*/
 
 		ambient_textured_shader->Bind(
 			_transform, ozz_mvp, positions_stride, positions_offset,

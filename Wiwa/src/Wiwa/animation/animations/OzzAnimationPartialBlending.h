@@ -3,8 +3,6 @@
 #include "../OzzAnimation.h"
 
 namespace Wiwa {
-	class Model;
-
 	class WI_API OzzAnimationPartialBlending : public OzzAnimation {
 	private:
 		// Sampler struct that helps to control an animation
@@ -57,28 +55,11 @@ namespace Wiwa {
 		// Samplers list
 		Sampler samplers_[kNumLayers];
 
-		// Sampling context.
-		ozz::animation::SamplingJob::Context context_;
-
 		// Buffer of local transforms as sampled from animation_.
 		ozz::vector<ozz::math::SoaTransform> locals_;
 
-		// The mesh used by the sample.
-		ozz::vector<ozz::sample::Mesh> meshes_;
-
-		// Buffer of skinning matrices, result of the joint multiplication of the
-		// inverse bind pose with the model space matrix.
-		ozz::vector<ozz::math::Float4x4> skinning_matrices_;
-
-		// Runtime skeleton.
-		ozz::animation::Skeleton skeleton_;
-
 		// Buffer of local transforms which stores the blending result.
 		ozz::vector<ozz::math::SoaTransform> blended_locals_;
-
-		// Buffer of model space matrices. These are computed by the local-to-model
-		// job after the blending stage.
-		ozz::vector<ozz::math::Float4x4> models_;
 
 		void SetupPerJointWeights();
 
@@ -97,26 +78,31 @@ namespace Wiwa {
 			float weight_setting;
 		};
 
-		bool m_Loaded;
+		bool m_LoadedLower;
+		bool m_LoadedUpper;
 
 		bool UpdateAnimation(float _dt);
-		bool RenderAnimationSkinned();
+		bool SampleLocals(float _dt);
 	public:
 		OzzAnimationPartialBlending();
 		~OzzAnimationPartialBlending();
 
-		ozz::vector<ozz::math::Float4x4>& GetFinalBoneMatrices() { return skinning_matrices_; }
-
-		std::vector<glm::mat4> GetOrderedFinalBoneMatrices(Model* model);
-
-		bool LoadInfo(const char* mesh, const char* skeleton, const char* lower, const char* upper);
 		void SetUpperBodyRoot(int ubr);
+		int GetUpperBodyRoot() { return upper_body_root_; }
 
-		bool Init() override;
+		bool LoadLowerAnimation(const char* lower);
+		bool LoadUpperAnimation(const char* upper);
 
-		bool SampleLocals(float _dt);
+		bool IsLowerAnimationLoaded() { return m_LoadedLower; }
+		bool IsUpperAnimationLoaded() { return m_LoadedUpper; }
 
 		bool Update(float _dt) override;
+
+		Status Validate() override;
+
+		void OnSkeletonSet() override;
+
+		ozz::vector<ozz::math::SoaTransform>& getLocals() override { return blended_locals_; }
 
 		const char* getLowerBodyFile() { return m_LowerBodyFile.c_str(); }
 		const char* getUpperBodyFile() { return m_UpperBodyFile.c_str(); }
