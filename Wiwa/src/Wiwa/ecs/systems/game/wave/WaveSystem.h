@@ -31,7 +31,7 @@ namespace Wiwa {
 
 		bool SpawnEnemy(Pool_Type enemy_type, const glm::vec3& spawn_point, int rand_x, int rand_z);
 
-		void DestroyEnemy(size_t id, Pool_Type enemy_type);
+		void DestroyEnemy(size_t id);
 
 		void SetSpawner(const EntityManager::ComponentIterator& m_WaveIt);
 

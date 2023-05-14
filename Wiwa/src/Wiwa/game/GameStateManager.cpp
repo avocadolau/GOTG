@@ -262,6 +262,7 @@ namespace Wiwa
 		SaveProgression();
 		StartNewRoom();
 		RandomizeRewardRoom();
+		s_CurrentCombatRoomsCount = 0;
 	}
 
 	void GameStateManager::EndRun()
@@ -540,6 +541,7 @@ namespace Wiwa
 			RandomizeRewardRoom();
 
 			s_EnemyManager->ResetDifficulty();
+			s_CurrentCombatRoomsCount = 0;
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -1181,7 +1183,7 @@ namespace Wiwa
 							for (int j = 0; j < enemiesIds.size(); j++)
 							{
 								em.DestroyEntity(enemiesIds[j]);
-								waveSystem->DestroyEnemy(enemiesIds[j], Pool_Type::SUBJUGATOR);
+								waveSystem->DestroyEnemy(enemiesIds[j]);
 							}
 						}
 

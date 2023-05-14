@@ -41,23 +41,6 @@ namespace Wiwa
 		GetSpawnPoints(m_Points);
 
 		Audio::PostEvent("wave_start");
-		/*int j = 0;
-		for (int i = 0; i < wave->maxEnemies; i++)
-		{
-			if (j >= points.size())
-				j = 0;
-
-			int xRand = disSpawn(Application::s_Gen);
-			int zRand = disSpawn(Application::s_Gen);
-			
-			Pool_Type enemyRandSelection = GetEnemyFromProbabiliteis();
-			if (SpawnEnemy(enemyRandSelection, points[j], xRand, zRand))
-			{
-				wave->currentEnemiesAlive++;
-				j++;
-				m_HasTriggered = true;
-			}
-		}*/
 	}
 
 	void WaveSystem::OnUpdate()
@@ -94,31 +77,24 @@ namespace Wiwa
 			m_HasSetSpawnParticle = true;
 
 			EntityId spawnerParticle = EntityManager::INVALID_INDEX;
-			switch (enemyRandSelection)
-			{
-			case Pool_Type::PHALANX_MELEE_GENERIC:
+
+			if (enemyRandSelection == PHALANX_MELEE_GENERIC || enemyRandSelection == PHALANX_MELEE_VARIANT_A || enemyRandSelection == PHALANX_MELEE_VARIANT_B)
 			{
 				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxMelee.wiprefab");
 			}
-			break;
-			case Pool_Type::PHALANX_RANGED_GENERIC:
+			else if (enemyRandSelection == PHALANX_RANGED_GENERIC || enemyRandSelection == PHALANX_RANGED_VARIANT_A || enemyRandSelection == PHALANX_RANGED_VARIANT_B)
 			{
 				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxRanged.wiprefab");
 			}
-			break;
-			case Pool_Type::SENTINEL:
+			else if (enemyRandSelection == SUBJUGATOR || enemyRandSelection == SUBJUGATOR_CHIEF)
 			{
 				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSentinel.wiprefab");
 			}
-			break;
-			case Pool_Type::SUBJUGATOR:
+			else if (enemyRandSelection == SENTINEL)
 			{
-				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSubjugator.wiprefab");
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSentinel.wiprefab");
 			}
-			break;
-			default:
-				break;
-			}
+
 			Transform3D* enemyTransform = em.GetComponent<Transform3D>(spawnerParticle);
 			if (enemyTransform)
 			{
@@ -157,30 +133,53 @@ namespace Wiwa
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
 		EntityId newEnemyId = EntityManager::INVALID_INDEX;
 
+		GameStateManager::s_PoolManager->SetScene(m_Scene);
+
 		switch (enemy_type)
 		{
 		case Pool_Type::PHALANX_MELEE_GENERIC:
 		{
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeGenericPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_MELEE_VARIANT_A:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeVariantAPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_MELEE_VARIANT_B:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeVariantBPool->GetFromPool();
 		}
 		break;
 		case Pool_Type::PHALANX_RANGED_GENERIC:
 		{
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedGenericPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_RANGED_VARIANT_A:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedVariantAPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_RANGED_VARIANT_B:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedVariantBPool->GetFromPool();
 		}
 		break;
 		case Pool_Type::SENTINEL:
 		{
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
 		}
 		break;
 		case Pool_Type::SUBJUGATOR:
 		{
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
 			newEnemyId = GameStateManager::s_PoolManager->s_SubjugatorPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::SUBJUGATOR_CHIEF:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_SubjugatorChiefPool->GetFromPool();
 		}
 		break;
 		default:
@@ -228,7 +227,7 @@ namespace Wiwa
 		return true;
 	}
 
-	void WaveSystem::DestroyEnemy(size_t id, Pool_Type enemy_type)
+	void WaveSystem::DestroyEnemy(size_t id)
 	{
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 
@@ -251,20 +250,61 @@ namespace Wiwa
 
 	Pool_Type WaveSystem::GetEnemyFromProbabiliteis()
 	{
+		EnemyManager& enemyManager = GameStateManager::GetEnemyManager();
+		const VariantData& data = enemyManager.m_VariantsTable[GameStateManager::s_CurrentCombatRoomsCount];
+
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 45) // 45% probability
 		{
-			return Pool_Type::PHALANX_MELEE_GENERIC;
+			int randomNum2 = disEnemies(Application::s_Gen);
+			if (randomNum2 <= 33.33f && data.list.at("MELEE_PHALANX_GENERIC"))
+			{
+				return Pool_Type::PHALANX_MELEE_GENERIC;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("MELEE_PHALANX_REDVARIANT"))
+			{
+				return Pool_Type::PHALANX_MELEE_VARIANT_A;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("MELEE_PHALANX_BLUEVARIANT"))
+			{
+				return Pool_Type::PHALANX_MELEE_VARIANT_B;
+			}
+			else
+				return GetEnemyFromProbabiliteis();
 		}
 		else if (randomNum <= 80) { // 35% probability
-			return Pool_Type::PHALANX_RANGED_GENERIC;
+			int randomNum2 = disEnemies(Application::s_Gen);
+			if (randomNum2 <= 33.33f && data.list.at("RANGED_PHALANX_GENERIC"))
+			{
+				return Pool_Type::PHALANX_RANGED_GENERIC;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("RANGED_PHALANX_REDVARIANT"))
+			{
+				return Pool_Type::PHALANX_RANGED_VARIANT_A;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("RANGED_PHALANX_BLUEVARIANT"))
+			{
+				return Pool_Type::PHALANX_RANGED_VARIANT_B;
+			}
+			else
+				return GetEnemyFromProbabiliteis();
 		}
 		else if (randomNum <= 95) { // 15% probability
 			return Pool_Type::SENTINEL;
 		}
 		else { // 5% probability
-			return Pool_Type::SUBJUGATOR;
+			int randomNum2 = disEnemies(Application::s_Gen);
+			if (randomNum2 <= 33.33f && data.list.at("SUBJUGATOR"))
+			{
+				return Pool_Type::SUBJUGATOR;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("SUBJUGATOR_CHIEF"))
+			{
+				return Pool_Type::SUBJUGATOR_CHIEF;
+			}
+			else
+				return GetEnemyFromProbabiliteis();
 		}
 	}
 

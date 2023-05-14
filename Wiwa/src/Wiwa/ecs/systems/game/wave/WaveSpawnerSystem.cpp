@@ -30,6 +30,18 @@ namespace Wiwa
 		m_EnemySpawnerIt = GetComponentIterator<WaveSpawner>();
 		//m_TransformIt = GetComponentIterator<Transform3D>();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
+
+		// Retreive data from enemy manager table
+		EnemyManager& enemyManager = GameStateManager::GetEnemyManager();
+
+		const WaveSpawner& data = enemyManager.m_SpawnerDataTable[GameStateManager::s_CurrentCombatRoomsCount].waveSpawnData;
+		enemySpawner->maxEnemiesPerWave = data.maxEnemiesPerWave;
+		enemySpawner->minEnemiesPerWave = data.minEnemiesPerWave;
+		enemySpawner->enemySpawnRate = data.enemySpawnRate;
+		enemySpawner->maxWaveCount = data.maxWaveCount;
+		enemySpawner->timeBetweenWaves = data.timeBetweenWaves;
+		enemySpawner->waveChangeRate = data.waveChangeRate;
+
 		m_TimerBetweenWaves = enemySpawner->timeBetweenWaves;
 		enemySpawner->hasTriggered = false;
 		enemySpawner->hasFinished = false;

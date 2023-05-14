@@ -441,12 +441,10 @@ namespace Wiwa
 			if (Sub->variant == 1)
 			{
 				*stats = data[{enemyManager.m_CurrentRunLevel, "SUBJUGATOR_CHIEF"}];
-
 			}
 			else
 			{
 				*stats = data[{enemyManager.m_CurrentRunLevel, "SUBJUGATOR"}];
-
 			}
 		}
 		else if (ultron)

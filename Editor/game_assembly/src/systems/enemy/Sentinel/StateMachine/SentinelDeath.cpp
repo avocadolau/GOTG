@@ -89,7 +89,7 @@ namespace Wiwa
 		if (self->waveId != -1)
 		{
 			Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-			waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::SENTINEL);
+			waveSys->DestroyEnemy(enemy->GetEntity());
 			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(enemy->GetEntity());
 		}
 		else

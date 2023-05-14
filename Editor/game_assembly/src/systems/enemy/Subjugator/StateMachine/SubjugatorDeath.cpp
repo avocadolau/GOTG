@@ -51,9 +51,17 @@ namespace Wiwa
 			self->hasFinished = true;
 			if (self->waveId != -1)
 			{
+				Subjugator* Sub = em.GetComponent<Wiwa::Subjugator>(enemy->GetEntity());
+				if (Sub->variant == 1)
+				{
+					GameStateManager::s_PoolManager->s_SubjugatorChiefPool->ReturnToPool(enemy->GetEntity());
+				}
+				else
+				{
+					GameStateManager::s_PoolManager->s_SubjugatorPool->ReturnToPool(enemy->GetEntity());
+				}
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-				waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::SUBJUGATOR);
-				GameStateManager::s_PoolManager->s_SubjugatorPool->ReturnToPool(enemy->GetEntity());
+				waveSys->DestroyEnemy(enemy->GetEntity());
 			}
 			else
 			{

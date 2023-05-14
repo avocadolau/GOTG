@@ -54,9 +54,21 @@ namespace Wiwa
 			self->hasFinished = true;
 			if (self->waveId != -1)
 			{
+				PhalanxRanged* Pr = em.GetComponent<Wiwa::PhalanxRanged>(enemy->GetEntity());
+				if (Pr->variant == 1)
+				{
+					GameStateManager::s_PoolManager->s_PhalanxRangedVariantAPool->ReturnToPool(enemy->GetEntity());
+				}
+				else if (Pr->variant == 2)
+				{
+					GameStateManager::s_PoolManager->s_PhalanxRangedVariantBPool->ReturnToPool(enemy->GetEntity());
+				}
+				else
+				{
+					GameStateManager::s_PoolManager->s_PhalanxRangedGenericPool->ReturnToPool(enemy->GetEntity());
+				}
 				Wiwa::WaveSystem* waveSys = em.GetSystem<Wiwa::WaveSystem>(self->waveId);
-				waveSys->DestroyEnemy(enemy->GetEntity(), Pool_Type::PHALANX_RANGED_GENERIC);
-				GameStateManager::s_PoolManager->s_PhalanxRangedGenericPool->ReturnToPool(enemy->GetEntity());
+				waveSys->DestroyEnemy(enemy->GetEntity());
 			}
 			else
 			{
