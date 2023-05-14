@@ -47,6 +47,8 @@ namespace Wiwa {
 
 		void LookAt(const glm::vec3& target_look, float rotation_speed);
 
+		void LookAtWithoutInterpolation(const glm::vec3& target_look);
+
 		void RotateTo(const glm::vec3& target);
 
 		void SetStatsFromTable();

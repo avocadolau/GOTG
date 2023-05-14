@@ -337,13 +337,10 @@ namespace Wiwa
 		float timeToRotate = distance / rotation_speed;
 		float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
 
-		// Calculate the forward vector from the current position to the target position
 		glm::vec3 forward = glm::normalize(target_look - transform->localPosition);
 
-		// Calculate the angle between the forward vector and the world forward vector (0, 0, 1)
 		float angle = glm::angle(forward, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		// Determine the sign of the angle based on the cross product between the forward vector and the world forward vector (0, 0, 1)
 		glm::vec3 crossProduct = glm::cross(forward, glm::vec3(0.0f, 0.0f, 1.0f));
 		if (crossProduct.y > 0.0f) {
 			angle = -angle;
@@ -351,10 +348,8 @@ namespace Wiwa
 
 		float targetRotation = angle * 180 / glm::pi<float>();
 
-		// Calculate the difference between the current rotation and target rotation
 		float rotationDifference = targetRotation - transform->localRotation.y;
 
-		// Adjust the rotation difference to be within the range of -180 to 180 degrees
 		while (rotationDifference > 180.0f) {
 			rotationDifference -= 360.0f;
 		}
@@ -362,10 +357,36 @@ namespace Wiwa
 			rotationDifference += 360.0f;
 		}
 
-		// Calculate the new interpolated rotation
 		float interpolatedRotation = transform->localRotation.y + rotationDifference * tRot;
 
 		transform->localRotation.y = interpolatedRotation;
+	}
+
+	void EnemySystem::LookAtWithoutInterpolation(const glm::vec3& target_look)
+	{
+		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
+
+		glm::vec3 forward = glm::normalize(target_look - transform->localPosition);
+
+		float angle = glm::angle(forward, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		glm::vec3 crossProduct = glm::cross(forward, glm::vec3(0.0f, 0.0f, 1.0f));
+		if (crossProduct.y > 0.0f) {
+			angle = -angle;
+		}
+
+		float targetRotation = angle * 180 / glm::pi<float>();
+
+		float rotationDifference = targetRotation - transform->localRotation.y;
+
+		while (rotationDifference > 180.0f) {
+			rotationDifference -= 360.0f;
+		}
+		while (rotationDifference < -180.0f) {
+			rotationDifference += 360.0f;
+		}
+
+		transform->localRotation.y = transform->localRotation.y + rotationDifference;
 	}
 
 	void EnemySystem::RotateTo(const glm::vec3& target)
