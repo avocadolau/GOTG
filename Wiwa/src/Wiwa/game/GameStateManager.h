@@ -190,7 +190,6 @@ namespace Wiwa
 		static std::vector<int> s_RewardRooms;
 		static std::vector<int> s_ShopRooms;
 		static int s_CurrentRoomsCount;
-		static int s_CurrentCombatRoomsCount;
 
 		static EntityId s_PlayerId;
 
@@ -223,6 +222,9 @@ namespace Wiwa
 		public:
 		static int GetActiveEnemies();
 		static int GetAproximateTotalEnemies();
+		static int GetTotalWaves();
+		static int GetCurrentWaves();
+
 		static bool IsWaveSpawnerFinished(WaveSpawner* waveSpawner);
 		static void EndCombatRoom(WaveSpawner* waveSpawner);
 	};

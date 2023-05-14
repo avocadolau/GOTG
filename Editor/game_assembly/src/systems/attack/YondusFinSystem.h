@@ -6,7 +6,7 @@
 namespace Wiwa {
 	class  YondusFinSystem : public System {
 	private:
-		float m_Timer = 0;
+		float m_Timer = 0.0f;
 		EntityManager::ComponentIterator m_YondusFinIt;
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_NavAgentIt;

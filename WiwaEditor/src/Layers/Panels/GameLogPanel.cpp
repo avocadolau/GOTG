@@ -70,6 +70,20 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());
 	}
+
+	ImGui::Separator();
+
+	ImGui::Text("Current difficulty level: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentRunLevel);
+
+	ImGui::Text("Count of combat rooms: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentCombatRoomsCount);
+
+	ImGui::Text("Count of reward rooms: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentRewardRoomCount);
 }
 
 void GameLogPanel::DrawRoomVariables()

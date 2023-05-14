@@ -251,7 +251,7 @@ namespace Wiwa
 	Pool_Type WaveSystem::GetEnemyFromProbabiliteis()
 	{
 		EnemyManager& enemyManager = GameStateManager::GetEnemyManager();
-		const VariantData& data = enemyManager.m_VariantsTable[GameStateManager::s_CurrentCombatRoomsCount];
+		const VariantData& data = enemyManager.m_VariantsTable[enemyManager.m_CurrentCombatRoomsCount];
 
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);

@@ -141,13 +141,19 @@ namespace Wiwa
 		YondusFin* yondusFin = GetComponentByIterator<YondusFin>(m_YondusFinIt);
 		Transform3D* playerTransform = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 		Transform3D* selfTr = GetTransform();
+
+		if (m_Timer >= yondusFin->lifeTime)
+		{
+			em.DestroyEntity(m_EntityId);
+			return;
+		}
 		
 		NavAgentSystem* agentSys = em.GetSystem<NavAgentSystem>(m_EntityId);
 		NavAgent* agent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
 		agent->agentSliding = false;
 
 		glm::vec3 currentEnemyPosition = Math::GetWorldPosition(GetComponentByIterator<Transform3D>(m_EnemiesTransformIt[0])->worldMatrix);
-		if (Math::IsPointNear(selfTr->localPosition, currentEnemyPosition, 2.0f))
+		if (Math::IsPointNear(selfTr->localPosition, currentEnemyPosition, 1.0f))
 		{
 		/*	agentSys->StopAgent();
 			agentSys->SetPosition(selfTr->localPosition);*/
@@ -164,6 +170,8 @@ namespace Wiwa
 		if (m_EnemiesTransformIt.size() <= 0) {
 			em.DestroyEntity(m_EntityId);
 		}
+
+		m_Timer += Time::GetDeltaTimeSeconds();
 	}
 
 	void YondusFinSystem::OnDestroy()

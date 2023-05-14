@@ -15,6 +15,7 @@ namespace Wiwa
 		void OnUpdate() override;
 
 		bool m_SpawnOnce = false;
+		float m_Timer = 0.0f;
 	};
 }
 REGISTER_SYSTEM(Wiwa::TestingSystem)
