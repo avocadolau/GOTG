@@ -266,7 +266,7 @@ namespace Wiwa
 			{
 				return Pool_Type::PHALANX_MELEE_VARIANT_A;
 			}
-			else if (randomNum2 <= 66.66f && data.list.at("MELEE_PHALANX_BLUEVARIANT"))
+			else if (data.list.at("MELEE_PHALANX_BLUEVARIANT"))
 			{
 				return Pool_Type::PHALANX_MELEE_VARIANT_B;
 			}
@@ -283,7 +283,7 @@ namespace Wiwa
 			{
 				return Pool_Type::PHALANX_RANGED_VARIANT_A;
 			}
-			else if (randomNum2 <= 66.66f && data.list.at("RANGED_PHALANX_BLUEVARIANT"))
+			else if (data.list.at("RANGED_PHALANX_BLUEVARIANT"))
 			{
 				return Pool_Type::PHALANX_RANGED_VARIANT_B;
 			}
@@ -295,11 +295,11 @@ namespace Wiwa
 		}
 		else { // 5% probability
 			int randomNum2 = disEnemies(Application::s_Gen);
-			if (randomNum2 <= 33.33f && data.list.at("SUBJUGATOR"))
+			if (randomNum2 <= 50 && data.list.at("SUBJUGATOR"))
 			{
 				return Pool_Type::SUBJUGATOR;
 			}
-			else if (randomNum2 <= 66.66f && data.list.at("SUBJUGATOR_CHIEF"))
+			else if (data.list.at("SUBJUGATOR_CHIEF"))
 			{
 				return Pool_Type::SUBJUGATOR_CHIEF;
 			}
