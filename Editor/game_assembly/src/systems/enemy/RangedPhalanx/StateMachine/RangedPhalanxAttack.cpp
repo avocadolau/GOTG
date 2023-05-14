@@ -27,6 +27,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
 		// Fire shot
 		if (m_TimerAttackCooldown == 0.0f)
@@ -41,6 +42,7 @@ namespace Wiwa
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent) {
 			navAgent->autoRotate = false;
+			enemy->LookAt(playerTr->localPosition, 50.f);
 		}
 	}
 	

@@ -27,6 +27,9 @@ namespace Wiwa
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		/*Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);*/
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+
+		navAgent->agentSliding = false;
 
 		animator->PlayAnimation("atackdeath", false);
 	}

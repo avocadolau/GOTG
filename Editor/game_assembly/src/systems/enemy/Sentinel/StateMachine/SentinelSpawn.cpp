@@ -27,6 +27,10 @@ namespace Wiwa
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		audio->PlayAudio("sentinel_spawn");
 
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+
+		navAgent->agentSliding = true;
+
 		animator->PlayAnimation("spawn", false); //AnimacionSentinel
 	}
 

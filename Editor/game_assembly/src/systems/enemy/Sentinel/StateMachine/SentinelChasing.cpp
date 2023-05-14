@@ -22,6 +22,10 @@ namespace Wiwa
 
 		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
 
+		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+
+		navAgent->agentSliding = true;
+
 		animator->Blend("walk", true, 0.2f); //AnimacionSentinel
 
 		enemy->m_TimerSentinel = 0;
