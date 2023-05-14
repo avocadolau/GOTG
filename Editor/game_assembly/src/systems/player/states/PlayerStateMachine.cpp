@@ -42,7 +42,6 @@ void Wiwa::PlayerStateMachine::OnInit()
 
 void Wiwa::PlayerStateMachine::OnUpdate()
 {
-	
 
 	PlayerController::OnUpdate();
 	m_CurrentState->UpdateState();
@@ -52,18 +51,19 @@ void Wiwa::PlayerStateMachine::OnUpdate()
 
 void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
 {
-	if (body1 != body2)
+	if (body1 == body2)
 		return;
 	m_Colliding = true;
 	PlayerController::OnCollisionEnter(body1, body2);
 	m_CurrentState->OnCollisionEnter(body1, body2);
+	GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 }
 
 
 void Wiwa::PlayerStateMachine::UpdateMovement(const float speed)
 {
 	m_Direction = Math::AngleFromVec2(m_MovementInput);
-	
+	 
 	m_CurrentVelocity = m_MovementInput * speed;
 	
 	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(glm::vec3(m_CurrentVelocity.x, 0.f, m_CurrentVelocity.y));
@@ -118,13 +118,17 @@ void Wiwa::PlayerStateMachine::OnCollision(Object* obj1, Object* obj2)
 {
 	if (obj1 == obj2)
 		return;
-	if(m_CurrentState != m_IdleState)
-		SwitchState(m_IdleState);
+
+	PlayerController::OnCollision(obj1, obj2);
+	m_CurrentState->OnCollision(obj1, obj2);
 }
 
 void Wiwa::PlayerStateMachine::OnCollisionExit(Object* obj1, Object* obj2)
 {
 	if (obj1 == obj2)
 		return;
+
+	PlayerController::OnCollision(obj1, obj2);
+	m_CurrentState->OnCollision(obj1, obj2);
 }
 

@@ -113,9 +113,12 @@ void Wiwa::PlayerDash::ExitState()
 
 void Wiwa::PlayerDash::OnCollisionEnter(Object* object1, Object* object2)
 {
-	if (object1 != object2)
-	{
-		m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
-		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
-	}
+	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
+	m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
+}
+
+void Wiwa::PlayerDash::OnCollision(Object* object1, Object* object2)
+{
+	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
+	m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 }
