@@ -30,19 +30,19 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
 		// Fire shot
-		if (m_TimerAttackCooldown == 0.0f)
-		{
-			EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
-			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
-			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
-			animator->PlayAnimation("shot", false);
-			audio->PlayAudio("ranged_attack");
-		}
+		//if (m_TimerAttackCooldown == 0.0f)
+		//{
+		//	EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
+		//	Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+		//	SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
+		//	animator->PlayAnimation("shot", false);
+		//	audio->PlayAudio("ranged_attack");
+		//}
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent) {
 			navAgent->autoRotate = false;
-			enemy->LookAt(playerTr->localPosition, 50.f);
+			enemy->LookAt(playerTr->localPosition, ROTATION_SPEED);
 		}
 	}
 	
@@ -59,7 +59,7 @@ namespace Wiwa
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
-		enemy->LookAt(playerTr->localPosition, 50.f);
+		enemy->LookAt(playerTr->localPosition, ROTATION_SPEED);
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
 

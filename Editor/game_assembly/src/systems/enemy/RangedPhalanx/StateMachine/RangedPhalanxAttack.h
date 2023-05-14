@@ -2,6 +2,9 @@
 #include "RangedPhalanxBase.h"
 #include <Wiwa/ecs/components/Transform3D.h>
 #include <Wiwa/utilities/Reflection.h>
+
+#define ROTATION_SPEED 1000.0f
+
 namespace Wiwa {
 	struct Character;
 	struct EnemyData;
