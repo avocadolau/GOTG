@@ -43,7 +43,6 @@ namespace Wiwa
 	std::vector<int> GameStateManager::s_ShopRooms;
 	
 	int GameStateManager::s_CurrentRoomsCount;
-	int GameStateManager::s_CurrentCombatRoomsCount = 0;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
 
 	int GameStateManager::s_CurrentCharacter = STARLORD;
@@ -76,7 +75,6 @@ namespace Wiwa
 
 	void GameStateManager::SaveProgression()
 	{
-		
 		if(debug)
 			WI_CORE_INFO("Saving player progression");
 
@@ -105,6 +103,7 @@ namespace Wiwa
 		s_GameProgression->Serialize(&doc_progression);
 		doc_progression.save_file("config/player_progression.json");
 
+		GetEnemyManager().Serialize();
 	}
 
 	void GameStateManager::LoadProgression()
@@ -147,6 +146,8 @@ namespace Wiwa
 
 		JSONDocument doc_progression("config/player_progression.json");
 		s_GameProgression->Deserialize(&doc_progression);
+
+		GetEnemyManager().DeSerialize();
 	}
 
 	void GameStateManager::UpdateRoomState()
@@ -262,7 +263,7 @@ namespace Wiwa
 		SaveProgression();
 		StartNewRoom();
 		RandomizeRewardRoom();
-		s_CurrentCombatRoomsCount = 0;
+		s_PlayerTriggerNext = false;
 	}
 
 	void GameStateManager::EndRun()
@@ -282,6 +283,10 @@ namespace Wiwa
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
+
+		s_EnemyManager->m_CurrentCombatRoomsCount = 0;
+		s_EnemyManager->ResetDifficulty();
+		s_EnemyManager->Serialize();
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -539,9 +544,6 @@ namespace Wiwa
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 			LoadRandomRoom(s_CombatRooms);
 			RandomizeRewardRoom();
-
-			s_EnemyManager->ResetDifficulty();
-			s_CurrentCombatRoomsCount = 0;
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -551,7 +553,6 @@ namespace Wiwa
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 			
 			LoadRandomRoom(s_RewardRooms);
-
 			RandomizeRewardRoom();
 
 			s_EnemyManager->IncreaseRoomRewardCounter();
@@ -563,9 +564,8 @@ namespace Wiwa
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 
-
 			LoadRandomRoom(s_CombatRooms);
-			s_CurrentCombatRoomsCount++;
+			s_EnemyManager->m_CurrentCombatRoomsCount++;
 
 			s_RoomsToBoss--;
 			s_RoomsToShop--;
@@ -582,7 +582,8 @@ namespace Wiwa
 		}
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
-			SceneManager::LoadSceneByIndex(s_HUBRoomIndx);
+			SceneManager::ChangeSceneByIndex(s_HUBRoomIndx);
+			//SceneManager::LoadSceneByIndex(s_HUBRoomIndx);
 			break;
 		}
 		case Wiwa::RoomType::ROOM_SHOP:
@@ -599,7 +600,7 @@ namespace Wiwa
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
 				LoadRandomRoom(s_CombatRooms);
-				s_CurrentCombatRoomsCount++;
+				s_EnemyManager->m_CurrentCombatRoomsCount++;
 			}
 			break;
 		}
@@ -607,8 +608,9 @@ namespace Wiwa
 			break;
 		}
 		s_CurrentRoomsCount--;
+		GetEnemyManager().Serialize();
+
 		return 1;
-		
 	}
 
 	int GameStateManager::LoadRandomRoom(const std::vector<int>& roomPool)
@@ -1157,7 +1159,7 @@ namespace Wiwa
 				}
 			}
 		}
-
+		
 		if (waveSpawner->hasFinished)
 			return true;
 

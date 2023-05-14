@@ -12,9 +12,13 @@ namespace Wiwa {
 		StartRunTrigger();
 		~StartRunTrigger();
 
+		void OnInit();
+
 		void OnAwake() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
+
+		EntityManager::ComponentIterator m_DataIt;
 	};
 }
 

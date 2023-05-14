@@ -56,6 +56,7 @@ namespace Wiwa
 		int m_MaxLevel = 4;
 		int m_CurrentRunLevel = 0;
 		int m_IncreaseDiffEvery = 1;
-		int m_RewardRoomCounter = 0;
+		int m_CurrentRewardRoomCount = 0;
+		int m_CurrentCombatRoomsCount = 0;
 	};
 }

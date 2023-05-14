@@ -160,7 +160,8 @@ namespace Wiwa
 		m_MaxLevel = 2;
 		m_CurrentRunLevel = 0;
 		m_IncreaseDiffEvery = 1;
-		m_RewardRoomCounter = 0;
+		m_CurrentRewardRoomCount = 0;
+		m_CurrentCombatRoomsCount = 0;
 
 		m_RangedData.bulletLifeTime = 6.0f;
 		m_RangedData.bulletSpeed = 30.0f;
@@ -188,6 +189,8 @@ namespace Wiwa
 		doc["m_MaxLevel"] = m_MaxLevel;
 		doc["m_CurrentRunLevel"] = m_CurrentRunLevel;
 		doc["m_IncreaseDiffEvery"] = m_IncreaseDiffEvery;
+		doc["m_CurrentCombatRoomsCount"] = m_CurrentCombatRoomsCount;
+		doc["m_CurrentRewardRoomCount"] = m_CurrentRewardRoomCount;
 
 		doc["m_RangedData"]["bulletLifeTime"] = m_RangedData.bulletLifeTime;
 		doc["m_RangedData"]["bulletSpeed"] = m_RangedData.bulletSpeed;
@@ -236,6 +239,8 @@ namespace Wiwa
 			m_MaxLevel = serializedData["m_MaxLevel"].get<int>();
 			m_CurrentRunLevel = serializedData["m_CurrentRunLevel"].get<int>();
 			m_IncreaseDiffEvery = serializedData["m_IncreaseDiffEvery"].get<int>();
+			m_CurrentCombatRoomsCount = serializedData["m_CurrentCombatRoomsCount"].get<int>();
+			m_CurrentRewardRoomCount = serializedData["m_CurrentRewardRoomCount"].get<int>();
 
 			m_RangedData.bulletLifeTime = serializedData["m_RangedData"]["bulletLifeTime"].get<float>();
 			m_RangedData.bulletSpeed = serializedData["m_RangedData"]["bulletSpeed"].get<float>();
@@ -430,6 +435,8 @@ namespace Wiwa
 		doc["m_MaxLevel"] = m_MaxLevel;
 		doc["m_CurrentRunLevel"] = m_CurrentRunLevel;
 		doc["m_IncreaseDiffEvery"] = m_IncreaseDiffEvery;
+		doc["m_CurrentCombatRoomsCount"] = m_CurrentCombatRoomsCount;
+		doc["m_CurrentRewardRoomCount"] = m_CurrentRewardRoomCount;
 
 		doc["m_RangedData"]["bulletLifeTime"] = m_RangedData.bulletLifeTime;
 		doc["m_RangedData"]["bulletSpeed"] = m_RangedData.bulletSpeed;
@@ -498,7 +505,7 @@ namespace Wiwa
 	int EnemyManager::ResetDifficulty()
 	{
 		m_CurrentRunLevel = 0;
-		m_RewardRoomCounter = 0;
+		m_CurrentRewardRoomCount = 0;
 		return m_CurrentRunLevel;
 	}
 
@@ -520,11 +527,11 @@ namespace Wiwa
 
 	int EnemyManager::IncreaseRoomRewardCounter()
 	{
-		m_RewardRoomCounter++;
-		if (m_RewardRoomCounter >= m_IncreaseDiffEvery)
+		m_CurrentRewardRoomCount++;
+		if (m_CurrentRewardRoomCount >= m_IncreaseDiffEvery)
 		{
 			IncreaseDifficulty();
-			m_RewardRoomCounter = 0;
+			m_CurrentRewardRoomCount = 0;
 		}
 		return m_CurrentRunLevel;
 	}

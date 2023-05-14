@@ -34,7 +34,7 @@ namespace Wiwa
 		// Retreive data from enemy manager table
 		EnemyManager& enemyManager = GameStateManager::GetEnemyManager();
 
-		const WaveSpawner& data = enemyManager.m_SpawnerDataTable[GameStateManager::s_CurrentCombatRoomsCount].waveSpawnData;
+		const WaveSpawner& data = enemyManager.m_SpawnerDataTable[enemyManager.m_CurrentCombatRoomsCount].waveSpawnData;
 		enemySpawner->maxEnemiesPerWave = data.maxEnemiesPerWave;
 		enemySpawner->minEnemiesPerWave = data.minEnemiesPerWave;
 		enemySpawner->enemySpawnRate = data.enemySpawnRate;
