@@ -5,8 +5,8 @@
 
 Wiwa::StartRunTrigger::StartRunTrigger()
 {
-    //triggerIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-
+    m_DataIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
+	m_Activated = false;
 }
 
 Wiwa::StartRunTrigger::~StartRunTrigger()
@@ -32,17 +32,43 @@ void Wiwa::StartRunTrigger::OnInit()
 
 void Wiwa::StartRunTrigger::OnAwake()
 {
-    //triggerIt = GetComponentIterator<Trigger>();
+}
+
+void Wiwa::StartRunTrigger::OnUpdate()
+{
+	if (!m_Activated)
+		return;
+
+	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)
+		|| Wiwa::Input::IsKeyPressed(Key::Enter))
+	{
+		WI_INFO("----------- Starting a new run -----------");
+		RewardRoomData* data = GetComponentByIterator<RewardRoomData>(m_DataIt);
+		GameStateManager::s_NextRewardRoomReward = data->num;
+		GameStateManager::StartRun();
+	}
 }
 
 void Wiwa::StartRunTrigger::OnCollisionEnter(Object* body1, Object* body2)
 {
-    WI_INFO("-----------OnCollision start room -----------");
-    if (body1->id == m_EntityId)
-    {
-        WI_INFO("----------- Starting a new run -----------");
-		RewardRoomData* data = GetComponentByIterator<RewardRoomData>(m_DataIt);
-		GameStateManager::s_NextRewardRoomReward = data->num;
-        GameStateManager::StartRun();
-    }
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+	std::string playerTag = "PLAYER";
+
+	if (body1->id == m_EntityId && body2->selfTagStr == playerTag)
+	{
+		gm.canvas.at(9)->SwapActive();
+		m_Activated = true;
+	}
+}
+
+void Wiwa::StartRunTrigger::OnCollisionExit(Object* body1, Object* body2)
+{
+	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+	std::string playerTag = "PLAYER";
+
+	if (body1->id == m_EntityId && body2->selfTagStr == playerTag)
+	{
+		gm.canvas.at(9)->SwapActive();
+		m_Activated = false;
+	}
 }

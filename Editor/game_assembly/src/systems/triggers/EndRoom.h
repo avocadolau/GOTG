@@ -13,10 +13,11 @@ namespace Wiwa {
 		~EndRoomTrigger();
 
 		void OnDestroy() override;
+		void OnUpdate() override;
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
-		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
+		bool m_Activated = false;
 	};
 }
 

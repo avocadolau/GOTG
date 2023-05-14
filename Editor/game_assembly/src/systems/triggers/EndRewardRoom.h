@@ -12,12 +12,15 @@ class EndRewardRoom : public System
 		//Called every frame
 		virtual void OnUpdate() override;
 
+		void OnDestroy() override;
+
 		void OnCollisionEnter(Object* body1, Object* body2) override;
-		void OnCollision(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 
 	private:
 		EntityManager::ComponentIterator m_DataIt;
+		bool m_Activated = false;
+
 	};
 }
 REGISTER_SYSTEM(Wiwa::EndRewardRoom)

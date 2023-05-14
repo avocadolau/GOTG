@@ -27,6 +27,8 @@ namespace Wiwa
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		dialogManager.ForceDialogStart("UltronIsKilled", true);
 		
+		GameStateManager::setFinishRoom(true);
+		GameStateManager::setCanPassNextRoom(true);
 		//EntityId currentEnemy = enemy->GetEntity();
 
 		//pman.EmitBatch(currentEnemy);
