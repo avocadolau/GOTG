@@ -183,10 +183,10 @@ void Wiwa::BossUltronProjectileRainAttackState::SpawnThunderStorm(BossUltron* en
 glm::vec3 Wiwa::BossUltronProjectileRainAttackState::RandomPoint()
 {
 	// Square dimensions
-	float minX = -19.10f;
-	float maxX = 19.10f;
-	float minZ = -24.58f;
-	float maxZ = 24.58f;
+	float minX = -29.10f;
+	float maxX = 29.10f;
+	float minZ = -34.58f;
+	float maxZ = 34.58f;
 
 	// Create a random number generator
 	std::random_device rd;

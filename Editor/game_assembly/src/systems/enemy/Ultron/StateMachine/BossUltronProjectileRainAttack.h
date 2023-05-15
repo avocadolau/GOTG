@@ -2,9 +2,9 @@
 #include "BossUltronBase.h"
 
 #define NUMBER_WAVES 3
-#define NUMBER_OF_THUNDERS 10
+#define NUMBER_OF_THUNDERS 14
 #define ALTITUDE_THUNDERSTORM 30.0f
-#define THUNDERS_SPAWN_OFFSET 4.0f
+#define THUNDERS_SPAWN_OFFSET 8.0f
 
 namespace Wiwa {
 	class BossUltronProjectileRainAttackState : public BossUltronBaseState {
