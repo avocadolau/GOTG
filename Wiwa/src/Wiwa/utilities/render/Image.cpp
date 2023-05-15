@@ -1,6 +1,5 @@
 #include <wipch.h>
 
-#include "Image.h"
 #define STB_IMAGE_IMPLEMENTATION
 #define CHECKERS_HEIGHT 100
 #define CHECKERS_WIDTH 100
@@ -8,6 +7,8 @@
 #include "../vendor/stb/stb_image.h"
 #include "../vendor/gli/gli/gli.hpp"
 #include <glew.h>
+
+#include "Image.h"
 
 namespace Wiwa {
 	Image::Image() : m_TextureId(-1)
@@ -18,7 +19,7 @@ namespace Wiwa {
 	Image::~Image()
 	{
         if (m_TextureId != uint32_t(-1)) {
-            glDeleteTextures(1, &m_TextureId);
+            GL(DeleteTextures(1, &m_TextureId));
         }
 	}
 
@@ -32,19 +33,19 @@ namespace Wiwa {
 			return false;
 		}
 	
-		glGenTextures(1, &m_TextureId);
-		glBindTexture(GL_TEXTURE_2D, m_TextureId);
+		GL(GenTextures(1, &m_TextureId));
+		GL(BindTexture(GL_TEXTURE_2D, m_TextureId));
 
 		int PicType = GL_RGBA;
 		/*if (ch == 3)
 			PicType = GL_RGB;*/
-		glTexImage2D(GL_TEXTURE_2D, 0, PicType, w, h, 0, PicType, GL_UNSIGNED_BYTE, image);
+		GL(TexImage2D(GL_TEXTURE_2D, 0, PicType, w, h, 0, PicType, GL_UNSIGNED_BYTE, image));
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		GL(GenerateMipmap(GL_TEXTURE_2D));
 
 		stbi_image_free(image);
 
@@ -74,21 +75,21 @@ namespace Wiwa {
             return false;
         }
 
-        glGenTextures(1, &m_TextureId);
-        glBindTexture(GL_TEXTURE_2D, m_TextureId);
+        GL(GenTextures(1, &m_TextureId));
+        GL(BindTexture(GL_TEXTURE_2D, m_TextureId));
 
         //glTexImage2D(GL_TEXTURE_2D, 0, PicType, w, h, 0, PicType, GL_UNSIGNED_BYTE, texture.data());
-        gli::gl GL(gli::gl::PROFILE_GL33);
-        gli::gl::format const Format = GL.translate(texture.format(), texture.swizzles());
+        gli::gl gli(gli::gl::PROFILE_GL33);
+        gli::gl::format const Format = gli.translate(texture.format(), texture.swizzles());
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, &Format.Swizzles[0]);
+        GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+        GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+        GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GL(TexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, &Format.Swizzles[0]));
 
-        glCompressedTexImage2D(GL_TEXTURE_2D, 0, Format.Internal, w, h, 0, (GLsizei)texture.size(), texture.data());
-        glGenerateMipmap(GL_TEXTURE_2D);
+        GL(CompressedTexImage2D(GL_TEXTURE_2D, 0, Format.Internal, w, h, 0, (GLsizei)texture.size(), texture.data()));
+        GL(GenerateMipmap(GL_TEXTURE_2D));
 
         m_ImageSize.x = w;
         m_ImageSize.y = h;
@@ -110,15 +111,15 @@ namespace Wiwa {
 			}
 		}
 
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glGenTextures(1, &m_TextureId);
-		glBindTexture(GL_TEXTURE_2D, m_TextureId);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
-			0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+		GL(PixelStorei(GL_UNPACK_ALIGNMENT, 1));
+		GL(GenTextures(1, &m_TextureId));
+		GL(BindTexture(GL_TEXTURE_2D, m_TextureId));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+		GL(TexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+			0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage));
 
 		return true;
 	}

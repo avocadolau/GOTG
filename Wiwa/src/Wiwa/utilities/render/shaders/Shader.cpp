@@ -132,16 +132,16 @@ namespace Wiwa {
 	{
 		retflag = true;
 		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-		glCompileShader(vertexShader);
+		GL(ShaderSource(vertexShader, 1, &vertexShaderSource, NULL));
+		GL(CompileShader(vertexShader));
 
 		int success;
 		char infoLog[512];
 
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+		GL(GetShaderiv(vertexShader, GL_COMPILE_STATUS, &success));
 
 		if (!success) {
-			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+			GL(GetShaderInfoLog(vertexShader, 512, NULL, infoLog));
 
 			std::string msg = "Vertex shader compile error: ";
 			msg += infoLog;
@@ -151,14 +151,14 @@ namespace Wiwa {
 			return;
 		}
 
-		unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-		glCompileShader(fragmentShader);
+		unsigned int fragmentShader = GL(CreateShader(GL_FRAGMENT_SHADER));
+		GL(ShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL));
+		GL(CompileShader(fragmentShader));
 
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+		GL(GetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success));
 
 		if (!success) {
-			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+			GL(GetShaderInfoLog(fragmentShader, 512, NULL, infoLog));
 			std::string msg = "Fragment shader compile error: ";
 			msg += infoLog;
 
@@ -167,22 +167,22 @@ namespace Wiwa {
 			return;
 		}
 
-		m_IDprogram = glCreateProgram();
-		glAttachShader(m_IDprogram, vertexShader);
-		glAttachShader(m_IDprogram, fragmentShader);
+		m_IDprogram = GL(CreateProgram());
+		GL(AttachShader(m_IDprogram, vertexShader));
+		GL(AttachShader(m_IDprogram, fragmentShader));
 
 		unsigned int geometryShader;
 		if (hasGS)
 		{
 			const char* geometryShaderSource = geometryShaderSourceStr->c_str();
-			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-			glShaderSource(geometryShader, 1, &geometryShaderSource, NULL);
-			glCompileShader(geometryShader);
+			geometryShader = GL(CreateShader(GL_GEOMETRY_SHADER));
+			GL(ShaderSource(geometryShader, 1, &geometryShaderSource, NULL));
+			GL(CompileShader(geometryShader));
 
-			glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
+			GL(GetShaderiv(geometryShader, GL_COMPILE_STATUS, &success));
 
 			if (!success) {
-				glGetShaderInfoLog(geometryShader, 512, NULL, infoLog);
+				GL(GetShaderInfoLog(geometryShader, 512, NULL, infoLog));
 				std::string msg = "Geometry shader compile error: ";
 				msg += infoLog;
 
@@ -190,16 +190,16 @@ namespace Wiwa {
 				m_CompileState = State::Error;
 				return;
 			}
-			glAttachShader(m_IDprogram, geometryShader);
+			GL(AttachShader(m_IDprogram, geometryShader));
 		}
 
 		
-		glLinkProgram(m_IDprogram);
+		GL(LinkProgram(m_IDprogram));
 		
-		glGetProgramiv(m_IDprogram, GL_LINK_STATUS, &success);
+		GL(GetProgramiv(m_IDprogram, GL_LINK_STATUS, &success));
 		
 		if (!success) {
-			glGetProgramInfoLog(m_IDprogram, 512, NULL, infoLog);
+			GL(GetProgramInfoLog(m_IDprogram, 512, NULL, infoLog));
 			std::string msg = "Shader program compile error: ";
 			msg += infoLog;
 
@@ -209,20 +209,21 @@ namespace Wiwa {
 		}
 
 		
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-		if (hasGS)
-			glDeleteShader(geometryShader);
+		GL(DeleteShader(vertexShader));
+		GL(DeleteShader(fragmentShader));
+		if (hasGS) {
+			GL(DeleteShader(geometryShader));
+		}
 
 		retflag = false;
 
 		m_CompileState = State::Compiled;
 		
-		m_Model = glGetUniformLocation(m_IDprogram, "u_Model");
-		m_Proj = glGetUniformLocation(m_IDprogram, "u_Proj");
-		m_View = glGetUniformLocation(m_IDprogram, "u_View");
-		m_UCamera = glGetUniformLocation(m_IDprogram, "u_CameraPosition");
-		m_BoneLocation = glGetUniformLocation(m_IDprogram, "u_Bones");
+		m_Model = GL(GetUniformLocation(m_IDprogram, "u_Model"));
+		m_Proj = GL(GetUniformLocation(m_IDprogram, "u_Proj"));
+		m_View = GL(GetUniformLocation(m_IDprogram, "u_View"));
+		m_UCamera = GL(GetUniformLocation(m_IDprogram, "u_CameraPosition"));
+		m_BoneLocation = GL(GetUniformLocation(m_IDprogram, "u_Bones"));
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)
@@ -285,17 +286,17 @@ namespace Wiwa {
 	{
 		if (m_CompileState != State::Compiled)
 			return;
-		glUseProgram(m_IDprogram);
+		GL(UseProgram(m_IDprogram));
 	}
 
 	void Shader::UnBind()
 	{
-		glUseProgram(0);
+		GL(UseProgram(0));
 	}
 
 	void Shader::Delete()
 	{
-		glDeleteProgram(m_IDprogram);
+		GL(DeleteProgram(m_IDprogram));
 	}
 
 	std::string* Shader::getFileData(const char* file)
@@ -317,43 +318,45 @@ namespace Wiwa {
 
 	unsigned int Shader::getUniformLocation(const char* uniform_name)
 	{
-		return glGetUniformLocation(m_IDprogram, uniform_name);
+		unsigned int uloc = GL(GetUniformLocation(m_IDprogram, uniform_name));
+
+		return uloc;
 	}
 
 	void Shader::setUniformInt(unsigned int uniform_id, int value)
 	{
-		glUseProgram(m_IDprogram);
-		glUniform1i(uniform_id, value);
+		GL(UseProgram(m_IDprogram));
+		GL(Uniform1i(uniform_id, value));
 	}
 
 	void Shader::setUniformUInt(unsigned int uniform_id, unsigned int value)
 	{
-		glUseProgram(m_IDprogram);
-		glUniform1ui(uniform_id, value);
+		GL(UseProgram(m_IDprogram));
+		GL(Uniform1ui(uniform_id, value));
 	}
 
 	void Shader::setUniformMat4(unsigned int uniform_id, glm::mat4 value)
 	{
-		glUseProgram(m_IDprogram);
-		glUniformMatrix4fv(uniform_id, 1, GL_FALSE, glm::value_ptr(value));
+		GL(UseProgram(m_IDprogram));
+		GL(UniformMatrix4fv(uniform_id, 1, GL_FALSE, glm::value_ptr(value)));
 	}
 
 	void Shader::setUniformFloat(unsigned int uniform_id, float value)
 	{
-		glUseProgram(m_IDprogram);
-		glUniform1f(uniform_id, value);
+		GL(UseProgram(m_IDprogram));
+		GL(Uniform1f(uniform_id, value));
 	}
 
 	void Shader::setUniformVec3(unsigned int uniform_id, glm::vec3 value)
 	{
-		glUseProgram(m_IDprogram);
-		glUniform3f(uniform_id, value.x, value.y, value.z);
+		GL(UseProgram(m_IDprogram));
+		GL(Uniform3f(uniform_id, value.x, value.y, value.z));
 	}
 
 	void Shader::setUniformVec4(unsigned int uniform_id, glm::vec4 value)
 	{
-		glUseProgram(m_IDprogram);
-		glUniform4f(uniform_id, value.r, value.g, value.b, value.a);
+		GL(UseProgram(m_IDprogram));
+		GL(Uniform4f(uniform_id, value.r, value.g, value.b, value.a));
 	}
 
 	void Shader::addUniform(const char* name, const UniformType type)
@@ -366,13 +369,13 @@ namespace Wiwa {
 				return;
 			
 			uniform->type = type;
-			uniform->location = glGetUniformLocation(m_IDprogram, name);
+			uniform->location = GL(GetUniformLocation(m_IDprogram, name));
 			return;
 		}
 		UniformField field;
 		field.name = name;
 		field.type = type;
-		field.location = glGetUniformLocation(m_IDprogram, name);
+		field.location = GL(GetUniformLocation(m_IDprogram, name));
 
 
 		m_Uniforms.emplace_back(field);
@@ -414,14 +417,14 @@ namespace Wiwa {
 
 	void Shader::SetMVP(const glm::mat4& model, const glm::mat4& view, const glm::mat4& proj)
 	{
-		glUniformMatrix4fv(m_Model, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(m_View, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(m_Proj, 1, GL_FALSE, glm::value_ptr(proj));
+		GL(UniformMatrix4fv(m_Model, 1, GL_FALSE, glm::value_ptr(model)));
+		GL(UniformMatrix4fv(m_View, 1, GL_FALSE, glm::value_ptr(view)));
+		GL(UniformMatrix4fv(m_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
 	}
 
 	void Shader::SetBoneTransform(const std::vector<glm::mat4>& transform)
 	{
-		glUniformMatrix4fv(m_BoneLocation,(GLsizei)transform.size(), GL_FALSE, glm::value_ptr(transform[0]));
+		GL(UniformMatrix4fv(m_BoneLocation,(GLsizei)transform.size(), GL_FALSE, glm::value_ptr(transform[0])));
 	}
 
 	void Shader::SetCameraPos(const glm::vec3& position)

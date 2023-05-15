@@ -84,6 +84,8 @@ namespace Wiwa {
 		glm::mat4 m_Model;
 
 		// ===== Ozz helpers =====
+		GLuint dynamic_vao_;
+
 		// Dynamic vbo used for arrays.
 		GLuint dynamic_array_bo_;
 

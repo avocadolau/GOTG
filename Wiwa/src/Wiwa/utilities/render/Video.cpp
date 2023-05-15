@@ -32,14 +32,14 @@ namespace Wiwa {
 		int videoWidth = m_Frame.cols;
 		int videoHeight = m_Frame.rows;
 		m_VideoImage = cvMat2TexInput(m_Frame);
-		glGenTextures(1, &m_TextureId);
-		glBindTexture(GL_TEXTURE_2D, m_TextureId);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		GL(GenTextures(1, &m_TextureId));
+		GL(BindTexture(GL_TEXTURE_2D, m_TextureId));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-		glTexImage2D(
+		GL(TexImage2D(
 			GL_TEXTURE_2D,
 			0,
 			GL_RGB,
@@ -48,7 +48,7 @@ namespace Wiwa {
 			0,
 			GL_RGB,
 			GL_UNSIGNED_BYTE,
-			m_VideoImage);
+			m_VideoImage));
 
 		m_ImageSize.w = videoWidth;
 		m_ImageSize.h = videoHeight;
@@ -92,15 +92,15 @@ namespace Wiwa {
 
 			if (m_VideoImage)
 			{
-				glDeleteTextures(1, &m_TextureId);
+				GL(DeleteTextures(1, &m_TextureId));
 
-				glGenTextures(1, &m_TextureId);
-				glBindTexture(GL_TEXTURE_2D, m_TextureId);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_ImageSize.w, m_ImageSize.h, 0, GL_RGB, GL_UNSIGNED_BYTE, m_VideoImage);
+				GL(GenTextures(1, &m_TextureId));
+				GL(BindTexture(GL_TEXTURE_2D, m_TextureId));
+				GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+				GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+				GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+				GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+				GL(TexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_ImageSize.w, m_ImageSize.h, 0, GL_RGB, GL_UNSIGNED_BYTE, m_VideoImage));
 
 			}
 

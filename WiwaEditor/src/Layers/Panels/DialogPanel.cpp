@@ -10,7 +10,7 @@ using namespace Wiwa;
 DialogPanel::DialogPanel(EditorLayer* instance)
 	: Panel("Dialog", ICON_FK_LIST, instance)
 {
-	for (int a = 0; a < MAX_CONVERSATIONS; a++)
+	/*for (int a = 0; a < MAX_CONVERSATIONS; a++)
 	{
 		for (int b = 0; b < MAX_CONVERSATION_NODES; b++)
 		{
@@ -23,7 +23,7 @@ DialogPanel::DialogPanel(EditorLayer* instance)
 	for (int c = 0; c < MAX_CONVERSATIONS && dm_onInit.conversations[c].occupied == true; c++)
 	{
 		currentEditingConversationName[c] = dm_onInit.conversations[c].conversationName;
-	}
+	}*/
 }
 
 DialogPanel::~DialogPanel()

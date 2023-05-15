@@ -14,6 +14,9 @@
 #include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
 #include <Wiwa/AI/AI_Crowd.h>
 
+#include <glew.h>
+#include <Wiwa/utilities/Log.h>
+
 namespace Wiwa
 {
 	Scene::Scene()
@@ -23,8 +26,8 @@ namespace Wiwa
 
 		m_GuiManager = new GuiManager();
 		m_GuiManager->Init(this);
-		m_DialogManager = new DialogManager();
-		m_DialogManager->Init(this);
+		//m_DialogManager = new DialogManager();
+		//m_DialogManager->Init(this);
 
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
@@ -50,7 +53,7 @@ namespace Wiwa
 		delete m_CameraManager;
 		delete m_LightManager;
 		delete m_GuiManager;
-		delete m_DialogManager;
+		//delete m_DialogManager;
 
 		// Clear entity manager
 		//m_EntityManager.Clear();
@@ -111,7 +114,7 @@ namespace Wiwa
 			if(pgs != nullptr)
 				pgs->Update();*/
 			m_GuiManager->Update();
-			m_DialogManager->Update();
+			//m_DialogManager->Update();
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -146,10 +149,9 @@ namespace Wiwa
 		Application::Get().GetRenderer3D().RenderSkybox();
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		//r2d.UpdateInstanced(this);
+		r2d.UpdateInstanced(this);
 
 		m_GuiManager->Draw();
-		
 
 		m_EntityManager.Update();
 

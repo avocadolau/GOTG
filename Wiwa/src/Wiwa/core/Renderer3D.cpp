@@ -12,9 +12,6 @@
 #include <Wiwa/ecs/systems/LightSystem.h>
 #include <ozz/geometry/runtime/skinning_job.h>
 
-#define GL_PTR_OFFSET(i) reinterpret_cast<void*>(static_cast<intptr_t>(i))
-#define GL(_f) gl##_f
-
 const uint8_t kDefaultColorsArray[][4] = {
 	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
 	{255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255},
@@ -77,13 +74,19 @@ namespace Wiwa
 {
 	Renderer3D::Renderer3D() :
 		dynamic_array_bo_(0),
-		dynamic_index_bo_(0)
+		dynamic_index_bo_(0),
+		dynamic_vao_(0)
 	{
 		
 	}
 
 	Renderer3D::~Renderer3D()
 	{
+		if (dynamic_vao_) {
+			GL(DeleteVertexArrays(1, &dynamic_vao_));
+			dynamic_vao_ = 0;
+		}
+
 		if (dynamic_array_bo_) {
 			GL(DeleteBuffers(1, &dynamic_array_bo_));
 			dynamic_array_bo_ = 0;
@@ -99,10 +102,9 @@ namespace Wiwa
 	{
 		// ========= BEG OZZ ANIMATIONS =========
 		// Builds the dynamic vbo
-		glGenBuffers(1, &dynamic_array_bo_);
-		glGenBuffers(1, &dynamic_index_bo_);
-
-		
+		GL(GenVertexArrays(1, &dynamic_vao_));
+		GL(GenBuffers(1, &dynamic_array_bo_));
+		GL(GenBuffers(1, &dynamic_index_bo_));
 
 		// Instantiate ambient rendering shader.
 		ambient_shader = ozz::sample::internal::AmbientShader::Build();
@@ -1157,16 +1159,16 @@ namespace Wiwa
 		}
 
 		// After processing everything, render
-
+		GL(BindVertexArray(dynamic_vao_));
 		// Updates dynamic vertex buffer with skinned data.
-		glBindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_);
-		glBufferData(GL_ARRAY_BUFFER, vbo_size, nullptr, GL_STREAM_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, vbo_size, vbo_map);
-		
+		GL(BindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_));
+		GL(BufferData(GL_ARRAY_BUFFER, vbo_size, nullptr, GL_STREAM_DRAW));
+		GL(BufferSubData(GL_ARRAY_BUFFER, 0, vbo_size, vbo_map));
+
 		// Build mvp for object
 		glm::mat4 glm_mvp = camera->getProjection() * camera->getView();
 		ozz::math::Float4x4 ozz_mvp;
-		
+
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				// m128_f32 for float4x4
@@ -1208,6 +1210,7 @@ namespace Wiwa
 		GL(BindTexture(GL_TEXTURE_2D, 0));
 		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 		ambient_textured_shader->Unbind();
+		GL(BindVertexArray(0));
 		camera->frameBuffer->Unbind();
 
 		return true;

@@ -269,19 +269,19 @@ namespace Wiwa
 		size_t instance_size = instanceRenderers.size();
 
 		FrameBuffer &framebuffer = *m_ActiveCamera.frameBuffer;
-		glViewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight());
+		GL(Viewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight()));
 
 		framebuffer.Bind();
-		glEnable(GL_BLEND);
+		GL(Enable(GL_BLEND));
 		//glBlendEquation(GL_ADD);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		GL(BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
 			instanceRenderers[i].Update();
 			instanceRenderers[i].Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
 		}
 		//glDepthMask(true);
-        glDisable(GL_BLEND);
+		GL(Disable(GL_BLEND));
 		framebuffer.Unbind();
 
 		m_RenderCallsInstancedCount++;

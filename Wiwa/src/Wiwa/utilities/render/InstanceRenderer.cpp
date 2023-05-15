@@ -30,12 +30,12 @@ namespace Wiwa {
 		m_InstanceShader.Init(shader_path);
 
 		m_InstanceShader.Bind();
-		uint32_t texs_id = glGetUniformLocation(m_InstanceShader.getID(), "u_Textures");
+		uint32_t texs_id = GL(GetUniformLocation(m_InstanceShader.getID(), "u_Textures"));
 
 		// Set samplers id
 		int samplers[MAX_INSTANCE_TEXTURES];
 		for (int i = 0; i < MAX_INSTANCE_TEXTURES; i++) samplers[i] = i;
-		glUniform1iv(texs_id, MAX_INSTANCE_TEXTURES, samplers);
+		GL(Uniform1iv(texs_id, MAX_INSTANCE_TEXTURES, samplers));
 
 		// Vertex quad	
 		float verticesInstancedTexture[] = {
@@ -46,17 +46,17 @@ namespace Wiwa {
 		};
 
 		// Create buffers
-		glGenBuffers(1, &m_VBO);
-		glGenBuffers(1, &m_EBO);
-		glGenVertexArrays(1, &m_VAO);
+		GL(GenBuffers(1, &m_VBO));
+		GL(GenBuffers(1, &m_EBO));
+		GL(GenVertexArrays(1, &m_VAO));
 
-		glBindVertexArray(m_VAO);
+		GL(BindVertexArray(m_VAO));
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(verticesInstancedTexture), verticesInstancedTexture, GL_STATIC_DRAW);
+		GL(BindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		GL(BufferData(GL_ARRAY_BUFFER, sizeof(verticesInstancedTexture), verticesInstancedTexture, GL_STATIC_DRAW));
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), (void*)0);
+		GL(EnableVertexAttribArray(0));
+		GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3f), (void*)0));
 
 		/*glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexTexture), (void*)(3 * sizeof(float)));*/
@@ -65,51 +65,51 @@ namespace Wiwa {
 			0, 1, 3, 1, 2, 3
 		};
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW));
 
-		glGenBuffers(1, &m_IVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_IVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexInstanceTexture) * m_MaxInstances, nullptr, GL_DYNAMIC_DRAW);
+		GL(GenBuffers(1, &m_IVBO));
+		GL(BindBuffer(GL_ARRAY_BUFFER, m_IVBO));
+		GL(BufferData(GL_ARRAY_BUFFER, sizeof(VertexInstanceTexture) * m_MaxInstances, nullptr, GL_DYNAMIC_DRAW));
 
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)0);
-		glVertexAttribDivisor(2, 1);
+		GL(EnableVertexAttribArray(2));
+		GL(VertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)0));
+		GL(VertexAttribDivisor(2, 1));
 
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(2 * sizeof(float)));
-		glVertexAttribDivisor(3, 1);
+		GL(EnableVertexAttribArray(3));
+		GL(VertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(2 * sizeof(float))));
+		GL(VertexAttribDivisor(3, 1));
 
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(4 * sizeof(float)));
-		glVertexAttribDivisor(4, 1);
+		GL(EnableVertexAttribArray(4));
+		GL(VertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(4 * sizeof(float))));
+		GL(VertexAttribDivisor(4, 1));
 
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(8 * sizeof(float)));
-		glVertexAttribDivisor(5, 1);
+		GL(EnableVertexAttribArray(5));
+		GL(VertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(8 * sizeof(float))));
+		GL(VertexAttribDivisor(5, 1));
 
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(9 * sizeof(float)));
-		glVertexAttribDivisor(6, 1);
+		GL(EnableVertexAttribArray(6));
+		GL(VertexAttribPointer(6, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(9 * sizeof(float))));
+		GL(VertexAttribDivisor(6, 1));
 
-		glEnableVertexAttribArray(7);
-		glVertexAttribPointer(7, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(11 * sizeof(float)));
-		glVertexAttribDivisor(7, 1);
+		GL(EnableVertexAttribArray(7));
+		GL(VertexAttribPointer(7, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(11 * sizeof(float))));
+		GL(VertexAttribDivisor(7, 1));
 
-		glEnableVertexAttribArray(8);
-		glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(13 * sizeof(float)));
-		glVertexAttribDivisor(8, 1);
+		GL(EnableVertexAttribArray(8));
+		GL(VertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(13 * sizeof(float))));
+		GL(VertexAttribDivisor(8, 1));
 
-		glEnableVertexAttribArray(9);
-		glVertexAttribPointer(9, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(15 * sizeof(float)));
-		glVertexAttribDivisor(9, 1);
+		GL(EnableVertexAttribArray(9));
+		GL(VertexAttribPointer(9, 2, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(15 * sizeof(float))));
+		GL(VertexAttribDivisor(9, 1));
 
-		glEnableVertexAttribArray(10);
-		glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(17 * sizeof(float)));
-		glVertexAttribDivisor(10, 1);
+		GL(EnableVertexAttribArray(10));
+		GL(VertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(17 * sizeof(float))));
+		GL(VertexAttribDivisor(10, 1));
 
-		glEnableVertexAttribArray(11);
-		glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(18 * sizeof(float)));
+		GL(EnableVertexAttribArray(11));
+		GL(VertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(18 * sizeof(float))));
 
 
 
@@ -125,9 +125,9 @@ namespace Wiwa {
 
 	void InstanceRenderer::Update()
 	{
-		glBindVertexArray(m_VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_IVBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex);
+		GL(BindVertexArray(m_VAO));
+		GL(BindBuffer(GL_ARRAY_BUFFER, m_IVBO));
+		GL(BufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex));
 	}
 
 	void InstanceRenderer::Render(glm::mat4& proj, glm::mat4& view)
@@ -138,21 +138,22 @@ namespace Wiwa {
 
 		GLuint texSize = static_cast<GLuint>(m_Textures.size());
 
-		glBindVertexArray(m_VAO);
+		GL(BindVertexArray(m_VAO));
 
 		for (GLuint i = 0; i < texSize; i++) {
-			glBindTextureUnit(i, m_Textures[i]);
+			GL(BindTextureUnit(i, m_Textures[i]));
 		}
 
-		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, m_InstanceCount);
+		GL(DrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, m_InstanceCount));
 
 		m_InstanceShader.UnBind();
 	}
 
 	uint32_t InstanceRenderer::AddInstance(uint32_t textureId, const Vector2i& position, const Size2i& size, const Color4f& color, const TextureClip& clip, Renderer2D::Pivot pivot, float rotation)
 	{
-		size_t remove_size = m_RemovedInstances.size();
 		size_t instance_id = WI_INVALID_INDEX;
+
+		size_t remove_size = m_RemovedInstances.size();
 
 		if (remove_size > 0) {
 			instance_id = m_RemovedInstances[remove_size - 1];

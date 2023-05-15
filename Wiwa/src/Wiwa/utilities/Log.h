@@ -54,6 +54,22 @@ namespace Wiwa {
 #define WI_CORE_CRITICAL(...)
 #endif
 
+#ifdef WI_DEBUG
+#define GL(_f)                     \
+    gl##_f;                        \
+    { GLenum error = glGetError(); \
+    assert(error == GL_NO_ERROR); }
+#else  // NOT WI_DEBUG
+#define GL(_f) gl##_f
+#endif  // WI_DEBUG
+
+#define GLERR do {\
+        GLuint glerr;\
+        while((glerr = glGetError()) != GL_NO_ERROR)\
+            fprintf(stderr, "%s:%d glGetError() = 0x%04x\n", __FILE__, __LINE__, glerr);\
+    } while (0)
+
+#define GL_PTR_OFFSET(i) reinterpret_cast<void*>(static_cast<intptr_t>(i))
 
 //Client log macros
 #define WI_TRACE(...)           ::Wiwa::Log::GetClientLogger()->trace(__VA_ARGS__); ::Wiwa::Log::ImGuiConsoleTrace(::Wiwa::Log::GetClientLastLog())
