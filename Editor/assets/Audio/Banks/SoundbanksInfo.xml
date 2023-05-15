@@ -9,14 +9,10 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{52CA7564-6804-EED2-3943-B09ACF717259}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{7F6B8107-D274-19F9-C963-2A20974CD100}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
-				<File Id="97638580" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>04 Against All Odds.wav</ShortName>
-					<CachePath>SFX/04 Against All Odds_D79FB2B7.wem</CachePath>
-				</File>
 				<File Id="138789204" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>shakers_130_bpm.wav</ShortName>
 					<CachePath>SFX/shakers_130_bpm_D79FB2B7.wem</CachePath>
@@ -40,6 +36,10 @@
 				<File Id="389483863" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>01 Prologue.wav</ShortName>
 					<CachePath>SFX/01 Prologue_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="424263943" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>IntroSceneAudio.wav</ShortName>
+					<CachePath>SFX/IntroSceneAudio_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="446020800" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>clap_130_bpm.wav</ShortName>
@@ -137,7 +137,7 @@
 								<SwitchContainer>
 									<SwitchValue GroupType="State" GroupId="4227810856" Id="1125500713"/>
 									<MediaRefs>
-										<MediaRef Id="97638580"/>
+										<MediaRef Id="424263943"/>
 									</MediaRefs>
 								</SwitchContainer>
 							</Children>
@@ -187,41 +187,121 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{DD80CBDC-E951-FDD2-82A1-7B66297C7C6E}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{BDAEC968-709A-0523-700A-4A418573A260}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
+				<File Id="5404081" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_powerup01.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_powerup01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="7424031" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_room_completed02.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_room_completed02_10C4C929.wem</CachePath>
+				</File>
 				<File Id="11819362" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 13 Shoot 2.wav</ShortName>
 					<CachePath>SFX/Weapon 13 Shoot 2_10C4C929.wem</CachePath>
+				</File>
+				<File Id="35764461" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_deathalt.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_deathalt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="41348199" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_death.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_death_10C4C929.wem</CachePath>
 				</File>
 				<File Id="49179977" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 09 Shoot 1.wav</ShortName>
 					<CachePath>SFX/Weapon 09 Shoot 1_10C4C929.wem</CachePath>
 				</File>
+				<File Id="119658343" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup02alt.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_powerup02alt_10C4C929.wem</CachePath>
+				</File>
 				<File Id="174263698" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>heartbeat.wav</ShortName>
 					<CachePath>SFX/heartbeat_743200E1.wem</CachePath>
+				</File>
+				<File Id="205629044" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_spawn.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_spawn_10C4C929.wem</CachePath>
+				</File>
+				<File Id="209809605" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_powerup02alt.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_powerup02alt_10C4C929.wem</CachePath>
 				</File>
 				<File Id="236038091" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_07.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_07_10C4C929.wem</CachePath>
 				</File>
+				<File Id="250945655" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_hit01alt.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_hit01alt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="259614640" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_hit02.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_hit02_10C4C929.wem</CachePath>
+				</File>
 				<File Id="259805885" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>mixkit-sci-fi-plasma-gun-power-up-1679.wav</ShortName>
 					<CachePath>SFX/mixkit-sci-fi-plasma-gun-power-up-1679_0CACFF2F.wem</CachePath>
+				</File>
+				<File Id="290991297" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_healalt.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_healalt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="412971102" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_room_completed01alt.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_room_completed01alt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="413280821" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup01alt.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_powerup01alt_10C4C929.wem</CachePath>
 				</File>
 				<File Id="433002560" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_03.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_03_10C4C929.wem</CachePath>
 				</File>
+				<File Id="481157629" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_room_completed01.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_room_completed01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="484613134" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_completed02.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_completed02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="500509315" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_room_completed01.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_room_completed01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="510247001" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup01.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_powerup01_10C4C929.wem</CachePath>
+				</File>
 				<File Id="541497451" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_04.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_04_10C4C929.wem</CachePath>
 				</File>
+				<File Id="608521725" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_hit01.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_hit01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="617015282" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_death.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_death_10C4C929.wem</CachePath>
+				</File>
+				<File Id="618280537" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_heal.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_heal_10C4C929.wem</CachePath>
+				</File>
 				<File Id="680197070" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 13 Shoot 1.wav</ShortName>
 					<CachePath>SFX/Weapon 13 Shoot 1_10C4C929.wem</CachePath>
+				</File>
+				<File Id="690801981" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_heal.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_heal_10C4C929.wem</CachePath>
 				</File>
 				<File Id="699504966" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_01.wav</ShortName>
@@ -243,6 +323,10 @@
 					<ShortName>footstep_concrete_run_11.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_11_10C4C929.wem</CachePath>
 				</File>
+				<File Id="800339520" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup02.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_powerup02_10C4C929.wem</CachePath>
+				</File>
 				<File Id="818976544" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_10.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_10_10C4C929.wem</CachePath>
@@ -251,9 +335,21 @@
 					<ShortName>footstep_concrete_run_06.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_06_10C4C929.wem</CachePath>
 				</File>
+				<File Id="884564412" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_powerup02.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_powerup02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="891950696" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Star-Lord Voice Lines\vo_starlord_spawn.wav</ShortName>
+					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_spawn_10C4C929.wem</CachePath>
+				</File>
 				<File Id="892625025" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>player_dead.wav</ShortName>
 					<CachePath>SFX/player_dead_10C4C929.wem</CachePath>
+				</File>
+				<File Id="910753261" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_hit01.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_hit01_10C4C929.wem</CachePath>
 				</File>
 				<File Id="964798513" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_05.wav</ShortName>
@@ -262,6 +358,10 @@
 				<File Id="1009229958" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_02.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1032448818" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Rocket - Voice Lines\vo_rocket_hit02.wav</ShortName>
+					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_hit02_10C4C929.wem</CachePath>
 				</File>
 				<File Id="1056090998" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_09.wav</ShortName>
@@ -314,6 +414,79 @@
 						<MediaRef Id="964798513"/>
 						<MediaRef Id="1009229958"/>
 						<MediaRef Id="1056090998"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3095733913" Name="vo_rocket_complete_run">
+					<MediaRefs>
+						<MediaRef Id="7424031"/>
+						<MediaRef Id="500509315"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1133938312" Name="vo_rocket_death">
+					<MediaRefs>
+						<MediaRef Id="35764461"/>
+						<MediaRef Id="41348199"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1425247012" Name="vo_rocket_heal">
+					<MediaRefs>
+						<MediaRef Id="290991297"/>
+						<MediaRef Id="618280537"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4099180457" Name="vo_rocket_hit">
+					<MediaRefs>
+						<MediaRef Id="250945655"/>
+						<MediaRef Id="910753261"/>
+						<MediaRef Id="1032448818"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3847142362" Name="vo_rocket_powerup">
+					<MediaRefs>
+						<MediaRef Id="5404081"/>
+						<MediaRef Id="209809605"/>
+						<MediaRef Id="884564412"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3828780779" Name="vo_rocket_spawn">
+					<MediaRefs>
+						<MediaRef Id="205629044"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="722391850" Name="vo_starlord_complete_run">
+					<MediaRefs>
+						<MediaRef Id="412971102"/>
+						<MediaRef Id="481157629"/>
+						<MediaRef Id="484613134"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1711574905" Name="vo_starlord_death">
+					<MediaRefs>
+						<MediaRef Id="617015282"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4051325399" Name="vo_starlord_heal">
+					<MediaRefs>
+						<MediaRef Id="690801981"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="475445591" Name="vo_starlord_powerup">
+					<MediaRefs>
+						<MediaRef Id="119658343"/>
+						<MediaRef Id="413280821"/>
+						<MediaRef Id="510247001"/>
+						<MediaRef Id="800339520"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1003499174" Name="vo_starlord_spawn">
+					<MediaRefs>
+						<MediaRef Id="891950696"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3710617558" Name="vo_startlord_hit">
+					<MediaRefs>
+						<MediaRef Id="259614640"/>
+						<MediaRef Id="608521725"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -588,13 +761,25 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{D81BADB9-5D70-812F-29EE-4303321BCF0C}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{4F6C8A63-272C-2AB5-7342-A711653CEAAE}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
+				<File Id="131081328" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_hit04.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="143564780" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_hit01alt.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit01alt_10C4C929.wem</CachePath>
+				</File>
 				<File Id="146913874" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_hit.wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_hit_10C4C929.wem</CachePath>
+				</File>
+				<File Id="233384674" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_attack03.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack03_10C4C929.wem</CachePath>
 				</File>
 				<File Id="241674995" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Sci Fi Explosion 07.wav</ShortName>
@@ -616,6 +801,10 @@
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
 				</File>
+				<File Id="574236853" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_attack01.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack01_10C4C929.wem</CachePath>
+				</File>
 				<File Id="606851917" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos).wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_death(No sabemos)_10C4C929.wem</CachePath>
@@ -624,9 +813,37 @@
 					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_BAC76913.wem</CachePath>
 				</File>
+				<File Id="723172612" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_hit03.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit03_10C4C929.wem</CachePath>
+				</File>
 				<File Id="858162241" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>mixkit-sci-fi-confirmation-914.wav</ShortName>
 					<CachePath>SFX/mixkit-sci-fi-confirmation-914_10C4C929.wem</CachePath>
+				</File>
+				<File Id="863695100" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_attack02.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="958892231" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_spawn.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_spawn_10C4C929.wem</CachePath>
+				</File>
+				<File Id="966046594" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_death01.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_death01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1024819660" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_hit01.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1061623375" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ultron Voice Lines\vo_ultron_death02.wav</ShortName>
+					<CachePath>SFX/Ultron Voice Lines/vo_ultron_death02_10C4C929.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -675,6 +892,33 @@
 						<MediaRef Id="346607997"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="858825023" Name="vo_boss_attack">
+					<MediaRefs>
+						<MediaRef Id="233384674"/>
+						<MediaRef Id="574236853"/>
+						<MediaRef Id="863695100"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2394718767" Name="vo_boss_death">
+					<MediaRefs>
+						<MediaRef Id="966046594"/>
+						<MediaRef Id="1061623375"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4206501886" Name="vo_boss_hit">
+					<MediaRefs>
+						<MediaRef Id="131081328"/>
+						<MediaRef Id="143564780"/>
+						<MediaRef Id="723172612"/>
+						<MediaRef Id="941542944"/>
+						<MediaRef Id="1024819660"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="791531800" Name="vo_boss_spawn">
+					<MediaRefs>
+						<MediaRef Id="958892231"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{11FA7034-8021-10EE-CAF1-E91DED69E08B}">
@@ -710,5 +954,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{78799D95-8247-C678-F913-6F1C3C2FDA8F}</FileHash>
+	<FileHash>{572F3CC0-65E2-0E0F-6EA6-508408EE0461}</FileHash>
 </SoundBanksInfo>
