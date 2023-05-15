@@ -54,14 +54,9 @@ namespace Wiwa
 		{
 			m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
 
-			enemy->LookAt(playerTr->localPosition, 80.0f);
+			enemy->LookAt(playerTr->localPosition, 100.0f);
 
-			/*if (m_TimerToLookAtPlayer >= 1.0f)
-			{
-				agent->SetDestination(playerTr->localPosition);
-			}*/
-
-			if (m_TimerToLookAtPlayer >= 1.0f) //Time to Look At player, (Add as a Component)
+			if (m_TimerToLookAtPlayer >= 1.0f) //Time to Look At player
 			{
 				agent->StopAgent();
 				navAgent->autoRotate = false;
@@ -94,7 +89,7 @@ namespace Wiwa
 				m_SpawnDashEffect = false;
 			}
 			
-			if (m_TimerOfDashAction >= 2.2f || m_CollisionWall) //Bullet Lifetime
+			if (m_TimerOfDashAction >= 1.0f || m_CollisionWall) //Bullet Lifetime
 			{
 				m_TimerOfDashAction = 0.0f;
 				m_SecondDashState = SecondDashState::END_DASH;

@@ -50,6 +50,31 @@ namespace Wiwa
 		navAgentPtr->StopAgent();
 		enemy->LookAt(playerTr->localPosition, 30.0f);
 
+		if (IsSecondPatternFinished() == true || IsThirdPatternFinished() == true || IsFirstPatternFinished() == true)
+		{
+			if (m_TimerRoundCooldown >= TIMER_ATTACK)
+			{
+				m_TimerRoundCooldown = 0.0f;
+				m_RoundCounter++;
+
+				if (m_RoundCounter >= NUMBER_OF_ROUNDS)
+				{
+					if (navAgent)
+					{
+						navAgent->autoRotate = true;
+					}
+
+					m_RoundCounter = 0;
+					enemy->SwitchState(enemy->m_MovementState);
+				}
+
+				else
+				{
+					SelectRandomAttack(enemy);
+				}
+			}
+		}
+
 		if (IsFirstPatternFinished() == false)
 		{
 			if (m_FirstPatternAttackTimer > 0.6f)
@@ -70,28 +95,6 @@ namespace Wiwa
 		{
 			SpawnThirdPattern(enemy);
 			m_TimerRoundCooldown = 0.0f;
-		}
-
-		if(IsSecondPatternFinished() == true || IsThirdPatternFinished() == true || IsFirstPatternFinished() == true)
-		{
-			if (m_TimerRoundCooldown >= TIMER_ATTACK)
-			{
-				SelectRandomAttack(enemy);
-			
-				m_TimerRoundCooldown = 0.0f;
-				m_RoundCounter++;
-			}
-
-			if (m_RoundCounter >= NUMBER_OF_ROUNDS)
-			{
-				if (navAgent)
-				{
-					navAgent->autoRotate = true;
-				}
-
-				m_RoundCounter = 0;
-				enemy->SwitchState(enemy->m_MovementState);
-			}
 		}
 	}
 
@@ -287,7 +290,7 @@ namespace Wiwa
 			{
 
 				float directionAngle1 = m_ThirdPatternBulletcounter * degreeStep;
-				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 90; //To get the symmetry attack
+				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 45; //To get the symmetry attack
 
 				float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
 				float xDir1 = cos(radian1);
@@ -377,7 +380,7 @@ namespace Wiwa
 
 	bool BossUltronBulletStormAttackState::IsSecondPatternFinished()
 	{
-		if ((m_SecondPatternEnabled == true) && /*(m_SecondPatternBulletcounter <= 24.0f) &&*/ (m_SecondPatternCounter < 3))
+		if ((m_SecondPatternEnabled == true) && (m_SecondPatternCounter < 3))
 		{
 			return false;
 		}
@@ -394,11 +397,11 @@ namespace Wiwa
 
 	bool BossUltronBulletStormAttackState::IsThirdPatternFinished()
 	{
-		if ((m_ThirdPatternEnabled == true) && /*(m_ThirdPatternBulletcounter <= 24.0f) &&*/ (m_ThirdPatternCounter < 3))
+		if ((m_ThirdPatternEnabled == true) && (m_ThirdPatternCounter < 2))
 		{
 			return false;
 		}
-		if (m_ThirdPatternCounter == 3)
+		if (m_ThirdPatternCounter == 2)
 		{
 			m_ThirdPatternEnabled = false;
 		}

@@ -1,7 +1,7 @@
 #pragma once
 #include "BossUltronBase.h"
 
-#define NUMBER_OF_ROUNDS 3
+#define NUMBER_OF_ROUNDS 4
 #define TIMER_ATTACK 1.0f
 #define SECOND_PATTERN_BULLETS 16.0f
 #define THIRD_PATTERN_BULLETS 14.0f
