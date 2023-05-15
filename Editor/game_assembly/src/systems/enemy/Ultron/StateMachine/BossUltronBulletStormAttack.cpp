@@ -230,19 +230,17 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		float numBullets = 8.0f;
+		float numBullets = SECOND_PATTERN_BULLETS;
 		float degreeStep = 360.0f / numBullets;
 		float halfDegreeStep = degreeStep / 2;
 
 		if (m_SecondPatternBulletcounter <= numBullets)
 		{
-			if (m_SecondPatternAttackTimer > 0.2f)
+			if (m_SecondPatternAttackTimer > 0.1f)
 			{
 
 				float directionAngle1 = m_SecondPatternBulletcounter * degreeStep;
-				float directionAngle2 = m_SecondPatternBulletcounter * degreeStep - halfDegreeStep; //To get the symmetry attack
-
-				WI_INFO(directionAngle1);
+				float directionAngle2 = m_SecondPatternBulletcounter * degreeStep - halfDegreeStep;
 
 				float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
 				float xDir1 = cos(radian1);
@@ -259,7 +257,8 @@ namespace Wiwa
 
 				m_SecondPatternBulletcounter = m_SecondPatternBulletcounter + 1.0f;
 				m_SecondPatternAttackTimer = 0.0f;
-				if (m_SecondPatternBulletcounter == 8.0f)
+
+				if (m_SecondPatternBulletcounter == SECOND_PATTERN_BULLETS)
 				{
 					m_SecondPatternCounter++;
 					m_SecondPatternBulletcounter = 0;
@@ -280,7 +279,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		float numBullets = 8.0f;
+		float numBullets = THIRD_PATTERN_BULLETS;
 		float degreeStep = 360.0f / numBullets;
 		float halfDegreeStep = degreeStep / 2;
 
@@ -292,8 +291,6 @@ namespace Wiwa
 				float directionAngle1 = m_ThirdPatternBulletcounter * degreeStep;
 				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 180; //To get the symmetry attack
 
-				WI_INFO(directionAngle1);
-
 				float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
 				float xDir1 = cos(radian1);
 				float yDir1 = sin(radian1);
@@ -304,12 +301,14 @@ namespace Wiwa
 
 				glm::vec3 direction1(xDir1, 0.0f, yDir1);
 				glm::vec3 direction2(xDir2, 0.0f, yDir2);
+
 				SpawnBulletZigZag(enemy, selfTr, direction1);
 				SpawnBulletZigZag(enemy, selfTr, direction2);
 
 				m_ThirdPatternBulletcounter = m_ThirdPatternBulletcounter + 1.0f;
 				m_ThirdPatternAttackTimer = 0.0f;
-				if (m_ThirdPatternBulletcounter == 8.0f)
+
+				if (m_ThirdPatternBulletcounter == THIRD_PATTERN_BULLETS)
 				{
 					m_ThirdPatternCounter++;
 					m_ThirdPatternBulletcounter = 0;
@@ -380,7 +379,7 @@ namespace Wiwa
 
 	bool BossUltronBulletStormAttackState::IsSecondPatternFinished()
 	{
-		if ((m_SecondPatternEnabled == true) && (m_SecondPatternBulletcounter <= 24.0f) && (m_SecondPatternCounter < 3))
+		if ((m_SecondPatternEnabled == true) && /*(m_SecondPatternBulletcounter <= 24.0f) &&*/ (m_SecondPatternCounter < 3))
 		{
 			return false;
 		}
@@ -397,7 +396,7 @@ namespace Wiwa
 
 	bool BossUltronBulletStormAttackState::IsThirdPatternFinished()
 	{
-		if ((m_ThirdPatternEnabled == true) && (m_ThirdPatternBulletcounter <= 24.0f) && (m_ThirdPatternCounter < 3))
+		if ((m_ThirdPatternEnabled == true) && /*(m_ThirdPatternBulletcounter <= 24.0f) &&*/ (m_ThirdPatternCounter < 3))
 		{
 			return false;
 		}

@@ -200,7 +200,7 @@ glm::vec3 Wiwa::BossUltronProjectileRainAttackState::RandomPoint()
 		float x = distributionX(generator);
 		float z = distributionZ(generator);
 
-		// Check if the point is at least 3.0f away from all previously selected points
+		// Check if the point is at least 8.0f away from all previously selected points
 		bool isValidPoint = true;
 		for (const glm::vec3& prevPoint : m_PreviousPoints)
 		{
