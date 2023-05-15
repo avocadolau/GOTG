@@ -64,7 +64,7 @@ namespace Wiwa
 				m_AlreadyShot = true;
 			}
 
-			if (m_TimerBetweenBullet >= 2.0f)
+			if (m_TimerBetweenBullet >= TIME_BETWEEN_CLUSTER_BULLET)
 			{
 				m_TimerToLookAtPlayer = 0.0f;
 				m_TimerBetweenBullet = 0.0f;
@@ -88,7 +88,7 @@ namespace Wiwa
 				m_AlreadyShot = true;
 			}
 
-			if (m_TimerBetweenBullet >= 2.0f)
+			if (m_TimerBetweenBullet >= TIME_BETWEEN_CLUSTER_BULLET)
 			{
 				m_TimerToLookAtPlayer = 0.0f;
 				m_TimerBetweenBullet = 0.0f;
@@ -111,7 +111,76 @@ namespace Wiwa
 				m_AlreadyShot = true;
 			}
 
-			if (m_TimerBetweenBullet >= 2.0f)
+			if (m_TimerBetweenBullet >= TIME_BETWEEN_CLUSTER_BULLET)
+			{
+				m_TimerToLookAtPlayer = 0.0f;
+				m_TimerBetweenBullet = 0.0f;
+				m_AlreadyShot = false;
+				clusterState = ClusterState::FOURTH_ATTACK;
+			}
+		}
+		break;
+		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::FOURTH_ATTACK:
+		{
+			navAgentPtr->StopAgent();
+			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+
+			enemy->LookAt(playerTr->localPosition, 90.0f);
+
+			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
+			{
+				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
+				m_AlreadyShot = true;
+			}
+
+			if (m_TimerBetweenBullet >= TIME_BETWEEN_CLUSTER_BULLET)
+			{
+				m_TimerToLookAtPlayer = 0.0f;
+				m_TimerBetweenBullet = 0.0f;
+				m_AlreadyShot = false;
+				clusterState = ClusterState::FIFTH_ATTACK;
+			}
+		}
+		break;
+		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::FIFTH_ATTACK:
+		{
+			navAgentPtr->StopAgent();
+			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+
+			enemy->LookAt(playerTr->localPosition, 90.0f);
+
+			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
+			{
+				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
+				m_AlreadyShot = true;
+			}
+
+			if (m_TimerBetweenBullet >= TIME_BETWEEN_CLUSTER_BULLET)
+			{
+				m_TimerToLookAtPlayer = 0.0f;
+				m_TimerBetweenBullet = 0.0f;
+				m_AlreadyShot = false;
+				clusterState = ClusterState::SIXTH_ATTACK;
+			}
+		}
+		break;
+		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::SIXTH_ATTACK:
+		{
+			navAgentPtr->StopAgent();
+			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
+
+			enemy->LookAt(playerTr->localPosition, 90.0f);
+
+			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
+			{
+				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
+				m_AlreadyShot = true;
+			}
+
+			if (m_TimerBetweenBullet >= TIME_BETWEEN_CLUSTER_BULLET)
 			{
 				clusterState = ClusterState::END_STATE;
 			}
@@ -178,7 +247,7 @@ namespace Wiwa
 
 		bullet->damage = 40; 
 		bullet->direction = bull_dir;
-		bullet->velocity = ultron->bulletSpeed;
+		bullet->velocity = 45;
 		bullet->lifeTime = ultron->bulletLifeTime;
 		
 		physSys->CreateBody();
