@@ -792,6 +792,11 @@ namespace Wiwa
 
 		//camera->shadowBuffer->BindTexture();
 
+		if (material == nullptr)
+		{
+			WI_ERROR("missing material {}",mesh->getModelName());
+			return;
+		}
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
