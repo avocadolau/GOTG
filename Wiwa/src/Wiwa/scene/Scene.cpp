@@ -32,7 +32,7 @@ namespace Wiwa
 		
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		m_TransitionInstance = r2d.CreateInstancedQuadTex(this, img->GetTextureId(), img->GetSize(), { 0,0 }, { 1920,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		m_TransitionInstance = r2d.CreateInstancedQuadTex(this, img->GetTextureId(), img->GetSize(), { 0,0 }, { 2000,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		r2d.UpdateInstancedQuadTexColor(this, m_TransitionInstance, { 0.1f, 0.1f, 0.1f, 1.0f });
 
 		r2d.DisableInstance(this, m_TransitionInstance);
@@ -285,7 +285,7 @@ namespace Wiwa
 		int w = (int)(256.f * (1.0f - perc));
 
 		Wiwa::Size2i size = {
-			(int)(1920 * (1.0f - perc)),
+			(int)(2000 * (1.0f - perc)),
 			1080
 		};
 
@@ -301,7 +301,7 @@ namespace Wiwa
 		int w = (int)(256.f * perc);
 
 		Wiwa::Size2i size = {
-			(int)(1920 * perc),
+			(int)(2000 * perc),
 			1080
 		};
 
