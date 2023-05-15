@@ -157,6 +157,15 @@ namespace Wiwa {
 		GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 		GL(BindFramebuffer(GL_FRAMEBUFFER, 0));
 	}
+
+	void FrameBuffer::Clear(const Vector4f& color)
+	{
+		GL(BindFramebuffer(GL_FRAMEBUFFER, m_FBOs[0]));
+		GL(ClearColor(color.r, color.g, color.b, color.a));
+		GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+		GL(BindFramebuffer(GL_FRAMEBUFFER, 0));
+	}
+
 	inline std::vector<uint32_t> FrameBuffer::getColorBuffers()
 	{
 		return m_ColorBuffers;

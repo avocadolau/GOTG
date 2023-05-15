@@ -62,8 +62,8 @@ namespace Wiwa {
 
 		bool HasAnimation(const std::string& name);
 
-		void PlayAnimation(const std::string& name);
-		void PlayAnimation(size_t anim_id);
+		AnimationData* PlayAnimation(const std::string& name);
+		AnimationData* PlayAnimation(size_t anim_id);
 
 		size_t getAnimationCount() { return m_AnimationList.size(); }
 

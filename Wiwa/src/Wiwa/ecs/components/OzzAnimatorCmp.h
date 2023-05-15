@@ -5,6 +5,7 @@
 
 namespace Wiwa {
 	struct WI_API OzzAnimatorCmp {
+		// For animator system
 		char animator_path[256];
 	};
 }

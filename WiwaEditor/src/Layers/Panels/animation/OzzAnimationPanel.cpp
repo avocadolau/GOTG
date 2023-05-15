@@ -6,6 +6,7 @@
 
 #include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
 #include "../../../Utils/EditorUtils.h"
+#include <Wiwa/utilities/render/Camera.h>
 
 void OzzAnimationPanel::DrawTopbar()
 {
@@ -97,6 +98,44 @@ void OzzAnimationPanel::DrawBody()
 	DrawMeshContainer();
 	DrawSkeletonContainer();
 	DrawAnimations();
+
+	/*if (ImGui::BeginTable("##anim_table", 2, ImGuiTableFlags_Resizable)) {
+		ImGui::TableNextColumn();
+
+		
+
+		ImGui::TableNextColumn();
+
+		DrawAnimationViewer();
+
+		ImGui::EndTable();
+	}*/
+}
+
+void OzzAnimationPanel::DrawAnimationViewer()
+{
+	m_Camera->frameBuffer->Clear({1.0f, 0.5f, 0.5f, 1.0f});
+	
+	// Render animation
+
+
+	// ImGui draw
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+	Wiwa::Size2i resolution = Wiwa::Application::Get().GetTargetResolution();
+	float ar = resolution.w / (float)resolution.h;
+	Wiwa::Size2f scales = { viewportPanelSize.x / (float)resolution.w, viewportPanelSize.y / (float)resolution.h };
+
+	float scale = scales.x < scales.y ? scales.x : scales.y;
+
+	ImVec2 isize = { resolution.w * scale, resolution.h * scale };
+	ImVec2 cpos = ImGui::GetCursorPos();
+	cpos.x = (viewportPanelSize.x - isize.x) / 2;
+
+	ImGui::SetCursorPos(cpos);
+
+	ImTextureID tex = (ImTextureID)(intptr_t)m_Camera->frameBuffer->getColorBufferTexture();
+	ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
 }
 
 void OzzAnimationPanel::DrawMeshContainer()
@@ -403,13 +442,20 @@ void OzzAnimationPanel::DrawSimpleAnimation(Wiwa::OzzAnimationSimple* simple_ani
 
 OzzAnimationPanel::OzzAnimationPanel(EditorLayer* instance)
 	: Panel("Ozz Animation Panel", ICON_FK_INFO, instance),
-	m_ActiveAnimator(nullptr)
+	m_ActiveAnimator(nullptr),
+	m_Camera(nullptr)
 {
+	m_Camera = new Wiwa::Camera();
+
+	Wiwa::Size2i& size = Wiwa::Application::Get().GetTargetResolution();
+	float aratio = size.w / (float)size.h;
+
+	m_Camera->SetPerspective(45.0f, aratio);
 }
 
 OzzAnimationPanel::~OzzAnimationPanel()
 {
-	
+	delete m_Camera;
 }
 
 void OzzAnimationPanel::Draw()

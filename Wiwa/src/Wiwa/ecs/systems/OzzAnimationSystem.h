@@ -14,6 +14,8 @@ namespace Wiwa {
 		OzzAnimationSystem();
 		~OzzAnimationSystem();
 
+		void PlayAnimation(const char* name);
+
 		void OnAwake() override;
 		void OnInit() override;
 		void OnUpdate() override;

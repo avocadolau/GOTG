@@ -27,6 +27,15 @@ namespace Wiwa {
 		
 	}
 
+	void OzzAnimationSystem::PlayAnimation(const char* name)
+	{
+		if (!m_Animator) return;
+
+		OzzAnimator::AnimationData* a_data = m_Animator->PlayAnimation(name);
+
+
+	}
+
 	void OzzAnimationSystem::OnAwake()
 	{
 		
@@ -42,10 +51,6 @@ namespace Wiwa {
 		// Return if required components unavailable
 		if (!m_TransformIt || !m_AnimatorIt) return;
 		if (!m_Animator) return;
-
-		if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Space)) {
-			m_Animator->PlayAnimation("aim_run");
-		}
 
 		Wiwa::Transform3D* t3d = GetComponentByIterator<Wiwa::Transform3D>(m_TransformIt);
 

@@ -8,14 +8,21 @@
 
 #include <Wiwa/animation/animations/OzzAnimationSimple.h>
 
+namespace Wiwa {
+	class Camera;
+}
+
 class OzzAnimationPanel : public Panel
 {
 private:
 	std::string m_ActiveAnimatorPath;
 	Wiwa::OzzAnimator* m_ActiveAnimator;
 
+	Wiwa::Camera* m_Camera;
+
 	void DrawTopbar();
 	void DrawBody();
+	void DrawAnimationViewer();
 
 	void DrawMeshContainer();
 	void DrawSkeletonContainer();

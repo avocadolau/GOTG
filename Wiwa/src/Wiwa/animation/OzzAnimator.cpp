@@ -148,7 +148,7 @@ namespace Wiwa {
 		return m_AnimationsIndex.find(name) != m_AnimationsIndex.end();
 	}
 
-	void OzzAnimator::PlayAnimation(const std::string& name)
+	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(const std::string& name)
 	{
 		std::unordered_map<std::string, int>::iterator it = m_AnimationsIndex.find(name);
 		
@@ -156,14 +156,24 @@ namespace Wiwa {
 			m_ActiveAnimationName = it->first;
 			m_ActiveAnimationId = it->second;
 			m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
+
+			return m_ActiveAnimation;
 		}
+
+		return nullptr;
 	}
 
-	void OzzAnimator::PlayAnimation(size_t anim_id)
+	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(size_t anim_id)
 	{
-		m_ActiveAnimationId = anim_id;
-		m_ActiveAnimationName = m_AnimationList[anim_id].name;
-		m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
+		if (anim_id >= 0 && anim_id < m_AnimationList.size()) {
+			m_ActiveAnimationId = anim_id;
+			m_ActiveAnimationName = m_AnimationList[anim_id].name;
+			m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
+
+			return m_ActiveAnimation;
+		}
+
+		return nullptr;
 	}
 
 	void OzzAnimator::Init()
