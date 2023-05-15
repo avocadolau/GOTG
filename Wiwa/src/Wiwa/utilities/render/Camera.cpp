@@ -9,7 +9,12 @@
 namespace Wiwa {
 	const int IND_COUNT = 24;
 
-	Camera::Camera()
+	Camera::Camera() :
+		frameBuffer(nullptr),
+		shadowBuffer(nullptr),
+		hdrBuffer(nullptr),
+		vBlurBuffer(nullptr),
+		hBlurBuffer(nullptr)
 	{
 		// Initialize camera transform
 		m_CameraPos = glm::vec3(0.0f, 0.0f, 1.5f);

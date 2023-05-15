@@ -148,6 +148,9 @@ namespace Wiwa
 	
 		Audio::Terminate();
 		GameStateManager::CleanUp();
+
+		delete m_Renderer2D;
+		delete m_Renderer3D;
 	}
 
 	void Application::Run()

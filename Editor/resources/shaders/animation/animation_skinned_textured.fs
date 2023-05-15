@@ -19,5 +19,8 @@ vec4 GetAmbient(vec3 _world_normal) {
 
 void main() {
   vec4 ambient = GetAmbient(v_world_normal);
-  out_color = texture(u_texture, vec2(v_vertex_uv.s, 1. - v_vertex_uv.t)); //ambient * v_vertex_color * texture(u_texture, v_vertex_uv);
+  
+  vec2 flipuv = vec2(v_vertex_uv.s, 1. - v_vertex_uv.t);
+  
+  out_color = ambient * v_vertex_color * texture(u_texture, flipuv);//texture(u_texture, flipuv); //
 }
