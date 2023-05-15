@@ -7,9 +7,6 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
-
-#define RAIN_PROJECTILE_NUMBER 10
-
 Wiwa::BossUltronProjectileRainAttackState::BossUltronProjectileRainAttackState()
 {
 	m_ThunderMarkPath = "assets\\Enemy\\RainProjectile\\ThunderMark_01.wiprefab";
@@ -55,18 +52,17 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 	{
 		//WI_INFO("Prepare rain");
 
+		//Posar anim de preparacio
+
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
 
-		if (m_TimerRain >= TIME_BETWEEN_PROJECTILES)
-		{
-			m_RainState = ProjectileRainState::RAIN_ATTACK;
-			m_TimerRain = 0.0f;
-			m_RainProjectileCounter = 0;
-			m_TimerThundersSpawn = 0.0f;
-			m_TimerThundersMark = 0.0f;
-		}
+		m_RainState = ProjectileRainState::RAIN_ATTACK;
+		m_TimerRain = 0.0f;
+		m_RainProjectileCounter = 0;
+		m_TimerThundersSpawn = 0.0f;
+		m_TimerThundersMark = 0.0f;
 
 	}break;
 	case ProjectileRainState::RAIN_ATTACK:
@@ -80,32 +76,42 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 
 			if (!m_RandomPositionSetted)
 			{
-				m_ThunderMarkId1 = em.LoadPrefab(m_ThunderMarkPath);
-				Transform3D* thunderMarkTr1 = em.GetComponent<Transform3D>(m_ThunderMarkId1);
-				m_ThunderPos1 = RandomPointInHexagon();
-				thunderMarkTr1->localPosition.x = m_ThunderPos1.x;
-				thunderMarkTr1->localPosition.y = 0.1f;
-				thunderMarkTr1->localPosition.z = m_ThunderPos1.z;
+				for (int i = 1; i <= NUMBER_OF_THUNDERS; ++i) {
+					EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
+					m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
+					Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
+					glm::vec3 thunderPos = RandomPoint();
+					m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
+					thunderMarkTr->localPosition.x = thunderPos.x;
+					thunderMarkTr->localPosition.y = 0.1f;
+					thunderMarkTr->localPosition.z = thunderPos.z;
+				}
 
 				m_RandomPositionSetted = true;
 			}
 
 			if (m_TimerThundersMark >= 1.1f)
 			{
-				SpawnThunderStorm(enemy, m_ThunderPos1, { 0.0f,-1.0f,0.0f });
+				for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
+					em.DestroyEntity(m_ThunderMarkIds[i]);
+					SpawnThunderStorm(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
+				}
 
+				// Clear the vectors
+				m_ThunderMarkIds.clear();
+				m_ThunderPositions.clear();
+				
 
 				m_TimerThundersMark = 0.0f;
 				m_TimerThundersSpawn = 0.0f;
 				m_RandomPositionSetted = false;
 				m_RainProjectileCounter++;
-
-				em.DestroyEntity(m_ThunderMarkId1);
 			}
 		}
 
-		if (RAIN_PROJECTILE_NUMBER <= m_RainProjectileCounter)
+		if (NUMBER_WAVES <= m_RainProjectileCounter)
 		{
+			m_PreviousPoints.clear();
 			m_RainState = ProjectileRainState::END_STATE;
 		}
 
@@ -174,86 +180,42 @@ void Wiwa::BossUltronProjectileRainAttackState::SpawnThunderStorm(BossUltron* en
 	bulletSys->EnableBullet();
 }
 
-glm::vec3 Wiwa::BossUltronProjectileRainAttackState::RandomPointInHexagon()
+glm::vec3 Wiwa::BossUltronProjectileRainAttackState::RandomPoint()
 {
+	// Square dimensions
+	float minX = -29.10f;
+	float maxX = 29.10f;
+	float minZ = -34.58f;
+	float maxZ = 34.58f;
+
 	// Create a random number generator
 	std::random_device rd;
 	std::mt19937 generator(rd());
-	std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
+	std::uniform_real_distribution<float> distributionX(minX, maxX);
+	std::uniform_real_distribution<float> distributionZ(minZ, maxZ);
 
-	while (true) {
-		// Select a random vertex of the hexagon
-		int randomIndex = static_cast<int>(distribution(generator) * hexagonVertices.size());
-		glm::vec3 vertex = hexagonVertices[randomIndex];
+	while (true)
+	{
+		// Generate random coordinates within the square
+		float x = distributionX(generator);
+		float z = distributionZ(generator);
 
-		// Generate random barycentric coordinates
-		float u = distribution(generator);
-		float v = distribution(generator);
-
-		// Check if the point is inside the hexagon
-		if (u + v > 1.0f) {
-			u = 1.0f - u;
-			v = 1.0f - v;
+		// Check if the point is at least 3.0f away from all previously selected points
+		bool isValidPoint = true;
+		for (const glm::vec3& prevPoint : m_PreviousPoints)
+		{
+			if (glm::distance(glm::vec2(x, z), glm::vec2(prevPoint.x, prevPoint.z)) < THUNDERS_SPAWN_OFFSET)
+			{
+				isValidPoint = false;
+				break;
+			}
 		}
 
-		// Compute the point inside the hexagon
-		glm::vec3 point = vertex + u * (hexagonVertices[(randomIndex + 1) % hexagonVertices.size()] - vertex) +
-			v * (hexagonVertices[(randomIndex + 2) % hexagonVertices.size()] - vertex);
-
-		return point;
+		if (isValidPoint)
+		{
+			m_PreviousPoints.push_back(glm::vec3(x, ALTITUDE_THUNDERSTORM, z));
+			return glm::vec3(x, ALTITUDE_THUNDERSTORM, z);
+		}
+			
 	}
 }
-
-//bool Wiwa::BossUltronProjectileRainAttackState::SpawnProjectileRain(BossUltron* enemy, const glm::vec3& bull_dir)
-//{
-//	if (GameStateManager::s_PoolManager->s_RainProjectilePool->getCountDisabled() <= 0)
-//		return false;
-//
-//	Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
-//	GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
-//	EntityId newBulletId = GameStateManager::s_PoolManager->s_RainProjectilePool->GetFromPool();
-//
-//	if (newBulletId == WI_INVALID_INDEX)
-//		return false;
-//
-//	Wiwa::RainProjectileSystem* rainProjectileSystem = entityManager.GetSystem<Wiwa::RainProjectileSystem>(newBulletId);
-//	Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-//	Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-//
-//	animator->PlayAnimation("A_attack_shot", false);
-//
-//	if (physSys != nullptr)
-//	{
-//		physSys->DeleteBody();
-//	}
-//
-//	// Set intial positions
-//	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
-//	Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
-//
-//	if (!bulletTr || !playerTr)
-//		return false;
-//
-//	glm::vec3 spawnPosition = GetRandomPositionInRange(playerTr->localPosition, RAIN_RANGE);
-//	spawnPosition.y += 30.0f;
-//
-//	EnemyData* stats = (EnemyData*)entityManager.GetComponentByIterator(enemy->m_StatsIt);
-//	Ultron* ultron = (Ultron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
-//
-//	bulletTr->localPosition = spawnPosition;
-//	bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, 90.0f);
-//	RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
-//	bullet->direction = bull_dir;
-//	bullet->velocity = ultron->bulletSpeed;
-//	bullet->lifeTime = ultron->bulletLifeTime;
-//	bullet->damage = stats->damage;
-//
-//	physSys->CreateBody();
-//
-//	rainProjectileSystem->EnableBullet();
-//
-//	return true;
-//}
-
-
-

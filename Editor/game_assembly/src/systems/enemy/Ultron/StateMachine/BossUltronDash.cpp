@@ -23,6 +23,8 @@ namespace Wiwa
 		initiateDash = false;
 		playerDistance = glm::vec3(0.0f);
 		interpolatedDashDistance = glm::vec3(0.0f);
+
+		m_PreSmashMarkPath = "assets\\Enemy\\RainProjectile\\ThunderMark_01.wiprefab";
 	}
 
 	BossUltronDashState::~BossUltronDashState()
@@ -95,7 +97,7 @@ namespace Wiwa
 				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 
-			if (m_TimerToStopDash >= 2.0f) //Timer for the Ultron to go up
+			if (m_TimerToStopDash >= 1.2f) //Timer for the Ultron to go up
 			{
 				/*agent->RegisterWithCrowd();
 				agent->SetPosition(playerDistance);
@@ -104,6 +106,13 @@ namespace Wiwa
 
 				selfTr->localPosition.x = playerDistance.x;
 				selfTr->localPosition.z = playerDistance.z;
+
+				m_PreSmashMarkId = em.LoadPrefab(m_PreSmashMarkPath);
+				Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(m_PreSmashMarkId);
+
+				thunderMarkTr->localPosition.x = playerDistance.x;
+				thunderMarkTr->localPosition.y = 0.1f;
+				thunderMarkTr->localPosition.z = playerDistance.z;
 
 				WI_INFO("INTERPOLATION DONE");
 				m_State = DashState::DASH_GO_DOWN;
@@ -132,6 +141,8 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronDashState::DashState::DASH_EXPLOSION:
 		{
+			em.DestroyEntity(m_PreSmashMarkId);
+
 			agent->RegisterWithCrowd();
 			agent->SetPosition(playerDistance);
 			agent->StopAgent();

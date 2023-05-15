@@ -1,9 +1,10 @@
 #pragma once
 #include "BossUltronBase.h"
 
-#define RAIN_RANGE 3.0f
-#define TIME_BETWEEN_PROJECTILES 2.0f
+#define NUMBER_WAVES 3
+#define NUMBER_OF_THUNDERS 14
 #define ALTITUDE_THUNDERSTORM 30.0f
+#define THUNDERS_SPAWN_OFFSET 8.0f
 
 namespace Wiwa {
 	class BossUltronProjectileRainAttackState : public BossUltronBaseState {
@@ -32,9 +33,9 @@ namespace Wiwa {
 
 		void SpawnThunderStorm(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir);
 
-		void SetupThunderMark(BossUltron* enemy, int id, glm::vec3 pos, const char* path);
+		/*void SetupThunderMark(BossUltron* enemy, int id, glm::vec3 pos, const char* path);*/
 
-		glm::vec3 RandomPointInHexagon();
+		glm::vec3 RandomPoint();
 
 		ProjectileRainState m_RainState;
 		std::vector<glm::vec3> m_AfterRainPosition;
@@ -46,24 +47,10 @@ namespace Wiwa {
 
 		bool m_RandomPositionSetted = false;
 		int m_RainProjectileCounter;
-
-		//temporal
-		EntityId m_ThunderMarkId1;
-
-
 		const char* m_ThunderMarkPath;
 
-		//temporal
-		glm::vec3 m_ThunderPos1 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-		std::vector<glm::vec3> hexagonVertices = {
-		{-15.0f, ALTITUDE_THUNDERSTORM, -25.0f},
-	{-30.0f, ALTITUDE_THUNDERSTORM, 0.0f},
-	{-16.0f, ALTITUDE_THUNDERSTORM, 27.0f},
-	{14.44f, ALTITUDE_THUNDERSTORM, 26.0f},
-	{29.33f, ALTITUDE_THUNDERSTORM, -1.0f},
-	{13.72f, ALTITUDE_THUNDERSTORM, -26.89f}
-		};
-
+		std::vector<EntityId> m_ThunderMarkIds;
+		std::vector<glm::vec3> m_ThunderPositions;
+		std::vector<glm::vec3> m_PreviousPoints;
 	};
 }

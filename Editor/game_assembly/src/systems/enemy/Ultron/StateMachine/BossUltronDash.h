@@ -43,5 +43,9 @@ namespace Wiwa {
 
 		glm::vec3 playerDistance = glm::vec3(0.0f);
 		glm::vec3 interpolatedDashDistance = glm::vec3(0.0f);
+
+		const char* m_PreSmashMarkPath;
+
+		EntityId m_PreSmashMarkId;
 	};
 }
