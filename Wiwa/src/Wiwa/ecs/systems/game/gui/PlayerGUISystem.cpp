@@ -480,6 +480,12 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	gm.canvas.at(CanvasHUD)->controls.at(1)->SetValueForUIbar(character->Health, character->MaxHealth);
 	gm.canvas.at(CanvasHUD)->controls.at(2)->SetValueForUIbar(character->Shield, character->MaxShield);
 	
+	int total = Wiwa::GameStateManager::GetAproximateTotalEnemies();
+	int activeEnemies = Wiwa::GameStateManager::GetActiveEnemies();
+	if (total != 0)
+		gm.canvas.at(CanvasHUD)->controls.at(18)->SetValueForUIbar(activeEnemies, total);
+
+
 	abilitiesList = Wiwa::GameStateManager::GetPlayerInventory().GetAbilities();
 	buffsList = Wiwa::GameStateManager::GetPlayerInventory().GetBuffs();
 	passives = Wiwa::GameStateManager::GetPlayerInventory().GetPassives();
