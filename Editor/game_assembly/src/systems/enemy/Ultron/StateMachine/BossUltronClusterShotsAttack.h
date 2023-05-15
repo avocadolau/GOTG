@@ -1,12 +1,17 @@
 #pragma once
 #include "BossUltronBase.h"
 
+#define TIME_BETWEEN_CLUSTER_BULLET 1.0f
+
 namespace Wiwa {
 	class BossUltronClusterShotsAttackState : public BossUltronBaseState {
 		enum class ClusterState {
 			FIRST_ATTACK,
 			SECOND_ATTACK,
 			THIRD_ATTACK,
+			FOURTH_ATTACK,
+			FIFTH_ATTACK,
+			SIXTH_ATTACK,
 			END_STATE,
 		};
 	public:
