@@ -54,7 +54,7 @@ void Wiwa::PlayerDash::EnterState()
 	m_TargetPoint = Math::PointAlongDirection(m_StateMachine->GetTransform()->localPosition, m_DashDirection, m_StateMachine->GetCharacter()->DashDistance);
 
 	m_StateMachine->GetAnimator()->PlayAnimation("running", true);
-	m_MaxDashTime = 1.5f;
+	m_MaxDashTime = 0.3f;
 	m_DashTimer = 0.f;
 
 

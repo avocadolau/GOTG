@@ -58,7 +58,7 @@ namespace Wiwa
 	{
 		if (!m_Camera)
 			return;
-		if (m_PlayerId == -1)
+		if (m_PlayerId == WI_INVALID_INDEX)
 		{
 			m_PlayerId = GameStateManager::GetPlayerId();
 			return;
