@@ -170,7 +170,7 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet01(EntityId bulletId)
 
 	if (m_NotCollidingPlayer)
 	{
-		int numBullets = 10;
+		int numBullets = LITTLE_BULLETS_NUMBER;
 		float degreeStep = 360.0f / numBullets;
 
 		for (int i = 0; i < numBullets; ++i) {
@@ -194,7 +194,7 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 
 	Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(bulletId));
 
-	int numGroups = 10;
+	int numGroups = LITTLE_BULLETS_NUMBER;
 	int numBulletsPerGroup = 3;
 	float degreeStep = 360.0f / numGroups;
 	float groupDegreeStep = 10.0f; // The angle between bullets in a group

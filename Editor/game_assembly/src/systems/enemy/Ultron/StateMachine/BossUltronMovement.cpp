@@ -92,7 +92,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::SECOND_DASH;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::CLUSTER_SHOTS;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
@@ -160,25 +160,6 @@ namespace Wiwa
 
 	UltronAttacks BossUltronMovementState::GetAttackFromProbabilitesFirstPhase()
 	{
-		//std::uniform_int_distribution<> disEnemies(1, 100);
-		//int randomNum = disEnemies(Application::s_Gen);
-		//if (randomNum <= 20) // 20 % probability
-		//{
-		//	return UltronAttacks::BULLET_STORM;
-		//}
-		//else if (randomNum <= 40) { // 20 % probability
-		//	return UltronAttacks::LASER_BEAM;
-		//}
-		//else if (randomNum <= 60) { // 20 % probability
-		//	return UltronAttacks::CLUSTER_SHOTS;
-		//}
-		//else if (randomNum <= 80) { // 20 % probability
-		//	return UltronAttacks::DASH;
-		//}
-		//else if (randomNum <= 100) { // 20 % probability
-		//	return UltronAttacks::SECOND_DASH;
-		//}
-
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 25) // 25% probability
