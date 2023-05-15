@@ -2854,23 +2854,23 @@
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
-												<MusicTrack Name="04 Against All Odds" ID="{D7F38037-36EE-4CFF-8219-98D23B354549}" ShortID="673863444">
+												<MusicTrack Name="IntroSceneAudio" ID="{388A3592-DD4D-4075-8D8F-186064E78140}" ShortID="457894477">
 													<ReferenceList>
 														<Reference Name="OutputBus">
 															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 														</Reference>
 													</ReferenceList>
 													<ChildrenList>
-														<AudioFileSource Name="04 Against All Odds" ID="{602C538B-12F4-4601-8DEB-57320C4874B0}">
+														<AudioFileSource Name="IntroSceneAudio" ID="{7D5D5477-EF99-4BFC-80BC-57DF7AB24576}">
 															<Language>SFX</Language>
-															<AudioFile>04 Against All Odds.wav</AudioFile>
+															<AudioFile>IntroSceneAudio.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="97638580"/>
+																<MediaID ID="424263943"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
 													<TransitionList>
-														<MusicTransition Name="Root" ID="{DC16B24B-3B86-47D2-9EA7-866FA278BDF6}">
+														<MusicTransition Name="Root" ID="{C88ADE36-0DBE-4E96-977A-372A64273EEB}">
 															<PropertyList>
 																<Property Name="IsFolder" Type="bool" Value="True"/>
 															</PropertyList>
@@ -2881,18 +2881,18 @@
 														<ObjectList Name="Sequences">
 															<Reference>
 																<Local>
-																	<MusicTrackSequence Name="" ID="{2EC1E162-9593-45C7-8F13-AF7B5816CAF6}">
+																	<MusicTrackSequence Name="" ID="{EEA30D7D-6980-4139-AFC7-08277FC0B65D}">
 																		<ObjectLists>
 																			<ObjectList Name="Clips">
 																				<Reference>
 																					<Local>
-																						<MusicClip Name="04 Against All Odds" ID="{B3E0C592-EBBE-4625-AF0E-DE8E3BD6437E}">
+																						<MusicClip Name="IntroSceneAudio" ID="{9B9A1448-79EA-493C-96EE-BA5CEA5B36C8}">
 																							<PropertyList>
-																								<Property Name="EndTrimOffset" Type="Real64" Value="159906.666666667"/>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="59359.2970521542"/>
 																								<Property Name="FadeInMode" Type="int16" Value="0"/>
 																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
 																							</PropertyList>
-																							<AudioSourceRef Name="04 Against All Odds" ID="{602C538B-12F4-4601-8DEB-57320C4874B0}"/>
+																							<AudioSourceRef Name="IntroSceneAudio" ID="{7D5D5477-EF99-4BFC-80BC-57DF7AB24576}"/>
 																						</MusicClip>
 																					</Local>
 																				</Reference>

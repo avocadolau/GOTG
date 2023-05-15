@@ -116,6 +116,54 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Folder Name="boss" ID="{87464212-44F7-40D3-A5AA-3CC763010A96}" ShortID="1015297158">
+							<ChildrenList>
+								<Event Name="vo_boss_attack" ID="{E101C525-A2DE-4D16-8C1A-DABBD9C0A7D6}">
+									<ChildrenList>
+										<Action Name="" ID="{0CB667A5-9E6C-40FE-800A-D60B9C5AE9ED}" ShortID="15728733">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ultron_attack" ID="{AC67416B-BBEA-4772-A39D-62320D69A776}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_boss_hit" ID="{818C113F-EBB7-49EA-A2B4-B1E73DA49AD1}">
+									<ChildrenList>
+										<Action Name="" ID="{25BA4EC6-CEE4-47DA-90CB-B122AF1A72FA}" ShortID="194411819">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ultron_hit" ID="{6078F540-F1D3-4D91-8EE0-18FE130DEA85}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_boss_death" ID="{79873508-1CF5-440E-B361-AC925CD28642}">
+									<ChildrenList>
+										<Action Name="" ID="{E7F867C4-7A54-4F33-9C60-4711D8B5C085}" ShortID="935500510">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ultron_death" ID="{4606A0DE-BBC9-4713-9057-ED18288A2E03}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_boss_spawn" ID="{AC06192A-6052-4681-B210-E86CB7E32483}">
+									<ChildrenList>
+										<Action Name="" ID="{9FD4FE63-FF61-4B61-A58C-96BE268E396D}" ShortID="328702744">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ultron_spawn" ID="{80369F28-0754-4DAA-BF99-B606EFBF2D91}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="hud" ID="{1870E9FE-0342-4D2F-8DDF-2D24D8FAC816}" ShortID="166723439">
@@ -315,6 +363,146 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Folder Name="startlord vo" ID="{3E2851D0-1A2C-4CAB-810D-16A2FFEB9F2B}" ShortID="624913241">
+							<ChildrenList>
+								<Event Name="vo_starlord_complete_run" ID="{48237092-F934-4887-95BB-A97AF97CDFC1}">
+									<ChildrenList>
+										<Action Name="" ID="{FE11D7C2-AC93-4F7A-8F64-888735A11CA5}" ShortID="246897409">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_starlord_complete_run" ID="{022370C8-E287-4EAD-BD79-003101CA043F}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_starlord_powerup" ID="{70374191-B446-433C-AE9B-93B28C065910}">
+									<ChildrenList>
+										<Action Name="" ID="{04656081-F1CF-4E19-9273-520708DBE893}" ShortID="31119777">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_starlord_powerup" ID="{EF81DA89-EAF3-4E5E-ACF3-20D2CAADC6DD}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_startlord_hit" ID="{69243348-CDDF-46A6-9EDB-E2EA28955CDC}">
+									<ChildrenList>
+										<Action Name="" ID="{6DEB8B29-7CE7-465F-B64F-65392A1EFFE3}" ShortID="931629723">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_startlord_hit" ID="{17C7AAE6-7DDC-4168-BDA7-60CA0C137128}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_starlord_death" ID="{0DE97FD3-EAC0-4C43-8C0C-F058513A4C93}">
+									<ChildrenList>
+										<Action Name="" ID="{2D680465-69D4-4F15-98B1-9C907A014053}" ShortID="927056777">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_starlord_death" ID="{AEFAEBAF-AC0A-4011-AA8C-D8C3C3F153FC}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_starlord_heal" ID="{F3787B7E-D64A-4F8B-A859-A421580F0772}">
+									<ChildrenList>
+										<Action Name="" ID="{276708BF-9335-4CB0-BC0A-B847D7BA2BE1}" ShortID="326365052">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_starlord_heal" ID="{E109E5F8-2FC6-46F4-9D37-EE869BBD5C92}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_starlord_spawn" ID="{97205774-F9CE-42B7-BD27-8D81DF423492}">
+									<ChildrenList>
+										<Action Name="" ID="{F87FDD32-9141-4AF6-A885-1DCC626E7132}" ShortID="565655983">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_starlord_spawn" ID="{D2B87549-9B3B-4CEB-97FB-F0AB7A832083}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="rocket vo" ID="{C8F40ADE-41D5-4DCA-9A5C-7E3A833ED888}" ShortID="1051037856">
+							<ChildrenList>
+								<Event Name="vo_rocket_complete_run" ID="{5FDCC46E-6D42-492F-AFCF-70139D30699E}">
+									<ChildrenList>
+										<Action Name="" ID="{1F9687B6-4CDF-434E-AA36-54F6B5CAAC43}" ShortID="951879572">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_rocket_complete_run" ID="{5A82013C-64BE-4A39-A7C5-EB6C8C1A3D11}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_rocket_death" ID="{FC17D1A6-109D-4A35-839C-95CB06F8A01C}">
+									<ChildrenList>
+										<Action Name="" ID="{E188A2B9-FA71-4341-965C-05B092103FC4}" ShortID="833774397">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_rocket_death" ID="{20981816-7FBD-43E3-A337-B5B527E7FCB1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_rocket_heal" ID="{DCF46FB8-67EA-42B2-8C23-F207FB2A885E}">
+									<ChildrenList>
+										<Action Name="" ID="{B372470A-4D19-4FCC-9DC7-CBA0E9949E37}" ShortID="100676738">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_rocket_heal" ID="{FDDB8C47-AFCF-41E1-9B2A-530FEBFA9D18}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_rocket_hit" ID="{D771A57E-F7C9-4B67-B15C-BEAD98637A80}">
+									<ChildrenList>
+										<Action Name="" ID="{1D53508D-A0D2-4FD1-8058-7F2AB8B7E022}" ShortID="621770223">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_rocket_hit" ID="{6A7376A6-1EC8-40AE-9D9F-718C5EA53FE6}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_rocket_powerup" ID="{BA494B87-1161-430D-9F02-643E3FCE5D54}">
+									<ChildrenList>
+										<Action Name="" ID="{4DA2F591-C8BE-4B80-89C6-D743887266B9}" ShortID="795878477">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_rocket_powerup" ID="{193A6ED5-7AE9-46D4-BB0C-B70AE74E7568}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_rocket_spawn" ID="{7E8DAA4A-2062-4124-B13D-8EB42297F9C3}">
+									<ChildrenList>
+										<Action Name="" ID="{62CA591C-0D39-4EAF-8DA1-B6BDFCA844B6}" ShortID="1051797226">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_rocket_spawn" ID="{5CC5D454-6E48-40B7-A681-638443A63619}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">
@@ -400,6 +588,121 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="npcs" ID="{F12E07E6-0573-4B32-ACEA-31B460D27432}" ShortID="380552169">
+					<ChildrenList>
+						<Folder Name="aaron" ID="{5E6BDE2F-72CF-4D0F-A454-76338927326B}" ShortID="79926683">
+							<ChildrenList>
+								<Event Name="vo_aron_generic" ID="{6ED836CD-AE29-4DB3-882B-4C9D291FA95D}">
+									<ChildrenList>
+										<Action Name="" ID="{D3550372-921D-4525-8AA9-72C91887C67F}" ShortID="507579941">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_aron_generic" ID="{A96DAED2-0429-4A46-AA5B-5E6EDAD1FD89}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_aron_interaction" ID="{A41532E6-0D2B-4785-9F48-35372717000F}">
+									<ChildrenList>
+										<Action Name="" ID="{BEF09483-8983-4F41-8142-FC9BEDD6E471}" ShortID="983662174">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_aron_interaction" ID="{2995AE94-A085-4843-94C1-DB302C8CA64F}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_aron_reward" ID="{25EC261F-CBB5-4660-A73F-DC8DC70918E5}">
+									<ChildrenList>
+										<Action Name="" ID="{C8F94811-1A1C-4D8E-AF30-8E89E684BCEF}" ShortID="646488950">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_aron_reward" ID="{9D70E05A-48D3-4082-8B60-124D3F1414AB}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="ulana" ID="{D308B31E-3200-4047-9440-864E15C4A440}" ShortID="138490128">
+							<ChildrenList>
+								<Event Name="vo_ulana_generic" ID="{B12FE6D4-193D-4B0D-9956-FEA90F278E71}">
+									<ChildrenList>
+										<Action Name="" ID="{73CD0C45-1021-472D-8BE1-F1991ECF0D23}" ShortID="61028404">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ulana_generic" ID="{297B9BE9-614E-443E-9789-AFAB0B3F70F8}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_ulana_interaction" ID="{02079D83-E52E-49DE-B29A-778FC4C59F72}">
+									<ChildrenList>
+										<Action Name="" ID="{2181C766-C2E4-4FA0-8106-A22ECE1CF7DD}" ShortID="218009028">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ulana_interaction" ID="{7B6E3F3F-4D85-47B6-A9DA-3F175B545DBF}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_ulana_reward" ID="{C58AF6AB-FBE0-4533-9FD0-9C6DB09EFF03}">
+									<ChildrenList>
+										<Action Name="" ID="{DACF61CB-6493-457E-9495-B2B97A7DF5F3}" ShortID="284437011">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_ulana_reward" ID="{82876506-414F-4CFD-8DD2-42917DCEC505}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="uatu" ID="{412EE795-A10E-488A-AFF9-AD74AF266911}" ShortID="399738238">
+							<ChildrenList>
+								<Event Name="vo_uatu_generic" ID="{E09BE3D5-1EEC-43C2-AECA-E5272FE1AAF2}">
+									<ChildrenList>
+										<Action Name="" ID="{5A906E76-8AD0-413C-B1C5-369905AEA6C1}" ShortID="839908635">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_uatu_generic" ID="{EF5084AD-6968-42FA-A28C-74DB31158152}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_uatu_interaction" ID="{186E7F95-94EE-4A6B-B53A-F879E1924D72}">
+									<ChildrenList>
+										<Action Name="" ID="{6120C536-F353-4D76-BE59-CDFEF6FF90E9}" ShortID="798447579">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_uatu_interaction" ID="{253C7402-67B1-45C7-B4C7-B8B8EDD8A71E}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="vo_uatu_reward" ID="{4B8A062E-79B4-4B97-8E1C-D5F3DF6B258F}">
+									<ChildrenList>
+										<Action Name="" ID="{C9E7877B-6D22-41DD-AD00-D902C3D751DB}" ShortID="1067348060">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="vo_uatu_reward" ID="{23EC1A41-52C3-4431-910D-1622D36CD69F}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>
