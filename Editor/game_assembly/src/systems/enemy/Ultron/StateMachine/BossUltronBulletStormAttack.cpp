@@ -84,7 +84,6 @@ namespace Wiwa
 
 			if (m_RoundCounter >= NUMBER_OF_ROUNDS)
 			{
-				
 				if (navAgent)
 				{
 					navAgent->autoRotate = true;
@@ -94,7 +93,6 @@ namespace Wiwa
 				enemy->SwitchState(enemy->m_MovementState);
 			}
 		}
-		
 	}
 
 	void BossUltronBulletStormAttackState::ExitState(BossUltron* enemy)
@@ -285,11 +283,11 @@ namespace Wiwa
 
 		if (m_ThirdPatternBulletcounter <= numBullets)
 		{
-			if (m_ThirdPatternAttackTimer > 0.2f)
+			if (m_ThirdPatternAttackTimer > 0.1f)
 			{
 
 				float directionAngle1 = m_ThirdPatternBulletcounter * degreeStep;
-				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 180; //To get the symmetry attack
+				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 90; //To get the symmetry attack
 
 				float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
 				float xDir1 = cos(radian1);

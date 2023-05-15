@@ -3,8 +3,8 @@
 
 #define NUMBER_OF_ROUNDS 3
 #define TIMER_ATTACK 1.0f
-#define SECOND_PATTERN_BULLETS 12.0f
-#define THIRD_PATTERN_BULLETS 8.0f
+#define SECOND_PATTERN_BULLETS 16.0f
+#define THIRD_PATTERN_BULLETS 14.0f
 
 namespace Wiwa {
 	class BossUltronBulletStormAttackState : public BossUltronBaseState {
