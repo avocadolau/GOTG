@@ -3,6 +3,7 @@
 
 #define RAIN_RANGE 3.0f
 #define TIME_BETWEEN_PROJECTILES 2.0f
+#define ALTITUDE_THUNDERSTORM 30.0f
 
 namespace Wiwa {
 	class BossUltronProjectileRainAttackState : public BossUltronBaseState {
@@ -54,6 +55,15 @@ namespace Wiwa {
 
 		//temporal
 		glm::vec3 m_ThunderPos1 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+		std::vector<glm::vec3> hexagonVertices = {
+		{-15.0f, ALTITUDE_THUNDERSTORM, -25.0f},
+	{-30.0f, ALTITUDE_THUNDERSTORM, 0.0f},
+	{-16.0f, ALTITUDE_THUNDERSTORM, 27.0f},
+	{14.44f, ALTITUDE_THUNDERSTORM, 26.0f},
+	{29.33f, ALTITUDE_THUNDERSTORM, -1.0f},
+	{13.72f, ALTITUDE_THUNDERSTORM, -26.89f}
+		};
 
 	};
 }

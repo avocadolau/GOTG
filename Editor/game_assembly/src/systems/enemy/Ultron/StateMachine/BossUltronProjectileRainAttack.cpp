@@ -7,7 +7,7 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
-#define ALTITUDE_THUNDERSTORM 30.0f
+
 #define RAIN_PROJECTILE_NUMBER 10
 
 Wiwa::BossUltronProjectileRainAttackState::BossUltronProjectileRainAttackState()
@@ -176,35 +176,32 @@ void Wiwa::BossUltronProjectileRainAttackState::SpawnThunderStorm(BossUltron* en
 
 glm::vec3 Wiwa::BossUltronProjectileRainAttackState::RandomPointInHexagon()
 {
-	// Define the vertices of the hexagon
-	glm::vec3 v1 = glm::vec3(0.0f, ALTITUDE_THUNDERSTORM, 46.0f);
-	glm::vec3 v2 = glm::vec3(-17.0f, ALTITUDE_THUNDERSTORM, 30.0f);
-	glm::vec3 v3 = glm::vec3(-36.0f, ALTITUDE_THUNDERSTORM, 0.0f);
-	glm::vec3 v4 = glm::vec3(-21.0f, ALTITUDE_THUNDERSTORM, -29.0f);
-	glm::vec3 v5 = glm::vec3(0.0f, ALTITUDE_THUNDERSTORM, -46.0f);
-	glm::vec3 v6 = glm::vec3(21.0f, ALTITUDE_THUNDERSTORM, 29.0f);
-	glm::vec3 v7 = glm::vec3(36.0f, ALTITUDE_THUNDERSTORM, 0.0f);
-	glm::vec3 v8 = glm::vec3(17.0f, ALTITUDE_THUNDERSTORM, -30.0f);
+	// Create a random number generator
+	std::random_device rd;
+	std::mt19937 generator(rd());
+	std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
 
-	// Choose a random point inside the hexagon
-	float r1 = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-	float r2 = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	while (true) {
+		// Select a random vertex of the hexagon
+		int randomIndex = static_cast<int>(distribution(generator) * hexagonVertices.size());
+		glm::vec3 vertex = hexagonVertices[randomIndex];
 
-	if (r1 + r2 > 1.0f) {
-		r1 = 1.0f - r1;
-		r2 = 1.0f - r2;
+		// Generate random barycentric coordinates
+		float u = distribution(generator);
+		float v = distribution(generator);
+
+		// Check if the point is inside the hexagon
+		if (u + v > 1.0f) {
+			u = 1.0f - u;
+			v = 1.0f - v;
+		}
+
+		// Compute the point inside the hexagon
+		glm::vec3 point = vertex + u * (hexagonVertices[(randomIndex + 1) % hexagonVertices.size()] - vertex) +
+			v * (hexagonVertices[(randomIndex + 2) % hexagonVertices.size()] - vertex);
+
+		return point;
 	}
-
-	float s = r1 + r2;
-	float t = r1 / s;
-	float u = 1.0f - t;
-
-	glm::vec3 randomPoint = t * (u * v1 + t * v2 + r2 * v3) +
-		u * (t * v3 + r2 * v4 + u * v5) +
-		r2 * (u * v5 + r1 * v6 + t * v7) +
-		r1 * (t * v7 + u * v8 + u * v1);
-
-	return randomPoint;
 }
 
 //bool Wiwa::BossUltronProjectileRainAttackState::SpawnProjectileRain(BossUltron* enemy, const glm::vec3& bull_dir)
