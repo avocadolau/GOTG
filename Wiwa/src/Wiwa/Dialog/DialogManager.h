@@ -11,6 +11,7 @@
 
 #define MAX_CONVERSATIONS 25
 #define MAX_CONVERSATION_NODES 25
+#define MAX_CONVERSATION_GROUPS 25
 
 namespace Wiwa
 {
@@ -29,7 +30,15 @@ namespace Wiwa
 		std::string bubbleImagePath;
 		std::string characterImagePath;
 
+		bool isInOppositeSide = false;
+		bool isRandom = false;
+		bool detectsCharacter = false;
+
 		bool occupied = false;
+
+		ConversationGroup group;
+
+		std::string eventName;
 	};
 
 	class WI_API DialogManager
@@ -42,7 +51,7 @@ namespace Wiwa
 		DialogManager();
 
 		// Destructor
-		virtual ~DialogManager();
+		~DialogManager();
 
 	
 		// Init gui manager
@@ -61,12 +70,15 @@ namespace Wiwa
 		void UpdateConversation(int conversationNumber, Renderer2D* render);
 
 		// Set the dialog font and texts
-		void SetDialogText(char* line1Text, char* line2Text, char* line3Text, const char* fontPath, int conversationNumber, int nodeNumber);
+		void SetDialogText(char* line1Text, const char* fontPath, int conversationNumber, int nodeNumber);
 
 		// Set the dialog background images
 		void SetDialogBubbleImage(const char* path, int conversationNumber);
 		void SetCharacterImage(const char* path, int conversationNumber);
 		//void SetContinueIndicatorImage(const char* path, int conversationNumber);
+
+		void ForceDialogStart(std::string forcedConversationToStart, bool isCharacterSensitive = false);
+		void RestartForceDialogState();
 
 		void SaveAllDialogs();
 		void LoadAllDialogs();
@@ -87,8 +99,36 @@ namespace Wiwa
 		bool collidingWithNpc = false;
 		std::string NpcConversationTag;
 
+		bool forceStartConversation = false;
+		std::string forcedConversationTag;
+
 		Wiwa::Renderer2D::InstanceData continueImgID;
+		Wiwa::Renderer2D::InstanceData continueImgID2;
+
+		Wiwa::Renderer2D::InstanceData talkIndicatorImgID;
+		bool talkIndicatorImgEnabled = false;
 
 		Color4f	BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+		Vector2i characterImgPos = { 0 }; //Will be controlled with the easings
+		Vector2i bubbleImgPos = { 0 }; //Will be controlled with the easings
+
+		bool firstTime = false;
+		bool endTime = false;
+		int firstTimeTimer = 0;
+		int endTimeTimer = 0;
+
+		int convGroup = -1;
+		int convOrder = -1;
+
+		bool forcedDialogHappened = false;
+
+		bool finishedRandomizing = false;
+
+		int characterID = -1; // -1 is none, 0 is Starlord, 1 is Rocket
+		bool characterSensitive = false;
+
+		std::string dialogEventToTrigger = "";
+		bool triggerEvent = false;
 	};
 }

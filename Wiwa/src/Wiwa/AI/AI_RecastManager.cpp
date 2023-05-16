@@ -87,6 +87,8 @@ namespace Wiwa
 		{
 			m_RecastMesh->handleMeshChanged(m_Geom);
 		}
+
+		return true;
 	}
 
 	bool RecastManager::Render()
@@ -294,6 +296,21 @@ namespace Wiwa
 		gsetPath = Wiwa::Resources::_assetToLibPath(gsetPath);
 		FileSystem::RemoveAll(path.c_str());
 		FileSystem::RemoveAll(gsetPath.c_str());
+	}
+
+	void RecastManager::DeAllocate()
+	{
+		if (m_RecastMesh)
+		{
+			delete m_RecastMesh;
+			m_RecastMesh = nullptr;
+		}
+
+		if (m_Geom)
+		{
+			delete m_Geom;
+			m_Geom = nullptr;
+		}
 	}
 
 }

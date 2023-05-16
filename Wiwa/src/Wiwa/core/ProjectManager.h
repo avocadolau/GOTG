@@ -56,6 +56,7 @@ namespace Wiwa
 		static SceneData& getSceneDataAt(uint32_t index) { return m_SceneList[index]; }
 		static SceneData* getSceneByName(const char* name);
 		static size_t getSceneIndexByName(const char* name);
+		static size_t getSceneIndexByPath(const char* path);
 	private:
 		ProjectManager();
 	};

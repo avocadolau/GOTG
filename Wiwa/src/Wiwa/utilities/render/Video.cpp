@@ -15,6 +15,8 @@ namespace Wiwa {
 		if (m_TextureId != uint32_t(-1)) {
 			glDeleteTextures(1, &m_TextureId);
 		}
+		m_Cap.release();
+		m_Frame.release();
 	}
 
 	bool Video::Init(std::string videoPath, byte* data)
@@ -120,11 +122,11 @@ namespace Wiwa {
 	}
 	void Video::WriteVideo(const char* destination, Video* video)
 	{
-		int fourcc = static_cast<int>(video->m_Cap.get(cv::CAP_PROP_FOURCC));
+		/*int fourcc = static_cast<int>(video->m_Cap.get(cv::CAP_PROP_FOURCC));
 		cv::VideoWriter oVideoWriter(destination,fourcc,
 			(int)video->GetFrameRate(), cv::Size(video->GetSize().w,video->GetSize().h), true);
 
-		//If the VideoWriter object is not initialized successfully, exit the program
+		If the VideoWriter object is not initialized successfully, exit the program
 		if (oVideoWriter.isOpened() == false)
 		{
 			WI_CORE_ERROR("Cannot save the video to a file");
@@ -135,6 +137,6 @@ namespace Wiwa {
 		{
 			video->m_Cap >> frame;
 			oVideoWriter.write(frame);
-		}
+		}*/
 	}
 }

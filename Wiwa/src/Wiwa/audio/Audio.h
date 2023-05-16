@@ -47,6 +47,13 @@ private:
 
 	// Default gameobject listener
 	static uint64_t m_DefaultListener;
+
+	// Default gameobject listener
+	static uint64_t m_WorldListener;
+
+	//// store registered wolrd entities
+	//static std::vector<uint64_t> m_RegisteredWorldEntities;
+
 public:
 	// Init audio engine
 	static bool Init();
@@ -98,8 +105,17 @@ public:
 	// Unload event
 	static bool UnloadEvent(const char* event_name);
 
+	//Cancels all Event callbacks for a specific playing ID.
+	static void CancelAudioAllCallback(uint64_t play_id);
+
 	// Post an event into the audio engine for a specific gameobject
 	static bool PostEvent(const char* event_name, uint64_t game_object);
+
+	// Post an event into the audio engine for a specific gameobject
+	static bool PostEvent(const char* event_name, uint64_t game_object, uint64_t& event_id);
+
+	// Post an event into the audio engine for a specific gameobject and callback
+	static bool PostEvent(const char* event_name, uint64_t game_object, Action<const char*> callback, uint64_t& play_id);
 
 	// Post an event into the audio engine for a specific gameobject and callback
 	static bool PostEvent(const char* event_name, uint64_t game_object, Action<const char*> callback);
@@ -107,8 +123,17 @@ public:
 	// Post an event into the default gameobject
 	static bool PostEvent(const char* event_name) { return PostEvent(event_name, m_DefaultListener); }
 
+	// Post an event into the default gameobject
+	static bool PostEventDefaultListener(const char* event_name, uint64_t& event_id) { return PostEvent(event_name, m_DefaultListener, event_id); }
+
+	// Post an event into the world listener
+	static bool PostWorldEvent(const char* event_name) { return PostEvent(event_name, m_WorldListener); }
+
 	// Post an event into the default gameobject with callback
 	static bool PostEvent(const char* event_name, Action<const char*> callback) { return PostEvent(event_name, m_DefaultListener, callback); }
+
+	//check if a event id is playing
+	static bool IsEventPlaying(uint64_t event_id);
 
 	// Stop event for a specific gameobject
 	static bool StopEvent(const char* event_name, uint64_t game_object);
@@ -116,8 +141,14 @@ public:
 	// Stop event for the default gameobject
 	static bool StopEvent(const char* event_name) { return StopEvent(event_name, m_DefaultListener); }
 
+	//stop event for the world listener
+	static bool StopWorldEvent(const char* event_name) { return StopEvent(event_name, m_WorldListener); }
+
 	// Stop all events
 	static bool StopAllEvents();
+
+	//register Game object as wolrd listeners, all world sources will have it as listener
+	static void RegisterAsWorldListener(uint64_t go_id);
 
 	// Register a gameobject
 	static bool RegisterGameObject(uint64_t go_id);
@@ -133,6 +164,10 @@ public:
 	// Set gameobject's position
 	static bool SetPosition(uint64_t go_id, const Wiwa::Vector3f& position);
 
+	// Set gameobject's listener 
+
+	static void SetWorldListener(uint64_t go_id_emmiter);
+
 	// Add default listener
 	static bool AddDefaultListener(uint64_t go_id);
 
@@ -144,13 +179,34 @@ public:
 	*/
 	static bool UnloadAllBanks();
 
+	//change the state of of a group state by id
+	static bool SetState(uint32_t state_group_id, uint32_t state_id);
+	//change the state of of a group state by name
+	static bool SetState(const char* state_group_id, const char* state_id);
+
+	static uint32_t GetIdFromString(const char* name);
+
 	static void ChangeMasterVolume(int value);
+	static void ChangeMusicVolume(int value);
+	static void ChangeSFXVolume(int value);
+	static void ChangeDialogVolume(int value);
+
+	//set a rtpcValue 
+	static void SetRTPCValue(const char* name, int value);
+	//load a preset of banks
+	static bool LoadPreset(const char* json_file);
+	//saves a preset of banks
+	static bool SavePreset(const char* filename);
 
 	// Returns last error
 	static const char* GetLastError() { return m_LastErrorMsg.c_str(); }
 
 	// Returns project path
 	static std::string GetProjectPath() { return m_InitBankPath; }
+
+	static uint64_t GetDefaultListener() { return m_DefaultListener; }
+
+	static uint64_t GetWorldListener() { return m_WorldListener; }
 
 	static const uint32_t INVALID_ID = -1;
 };

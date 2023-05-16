@@ -14,6 +14,7 @@ namespace Wiwa {
 		float separationWeight; /// How aggresive the agent manager should be at avoiding collisions with this agent. [Limit: >= 0]
 		float stoppingDistance;
 		bool autoRotate;
+		bool agentSliding;
 	};
 }
 

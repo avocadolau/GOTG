@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":1.0054665803909302,"u_Color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_Texture":"assets/textures/t_place_holder_manin.png"}}

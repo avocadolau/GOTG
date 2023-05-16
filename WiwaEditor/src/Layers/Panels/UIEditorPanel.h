@@ -52,12 +52,14 @@ public:
 	int originSize[2];
 	int extraOriginPos[2];
 	int extraOriginSize[2];
+	int priority;
 
 	float rotation;
 	size_t callbackID;
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 	std::string audioEventForButton;
+	std::string text;
 
 	bool animated;
 	float animSpeed = 0.0f;

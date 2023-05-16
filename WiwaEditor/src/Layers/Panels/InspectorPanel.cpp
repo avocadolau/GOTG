@@ -17,11 +17,13 @@
 #include <Wiwa/ecs/components/DirectionalLight.h>
 #include <Wiwa/ecs/components/AnimatorComponent.h>
 #include <Wiwa/ecs/components/CollisionBody.h>
-#include <Wiwa/ecs/systems/AgentAISystem.h>
 #include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/ai/NavMesh.h>
 #include <Wiwa/ecs/components/OzzAnimatorCmp.h>
+#include <Wiwa/ecs/components/game/player/PlayerSpawnerData.h>
+
+bool InspectorPanel::s_EntitySet = false;
 
 bool InspectorPanel::DrawComponent(size_t componentId)
 {
@@ -60,11 +62,11 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 		if (type->hash == (size_t)TypeHash::ColliderCylinder) { DrawColliderCylinderComponent(data); } else
 		if (type->hash == (size_t)TypeHash::RayCast) { DrawRayCastComponent(data); } else
 		if (type->hash == (size_t)TypeHash::AnimatorComponent) { DrawAnimatorComponent(data); } else
-		if (type->hash == (size_t)TypeHash::AgentAI) { DrawAiAgentComponent(data); } else
 		if (type->hash == (size_t)TypeHash::ParticleEmitter) { DrawParticleSystemComponent(data); } else
 		if (type->hash == (size_t)TypeHash::Item) { DrawItemComponent(data); }else
 		if (type->hash == (size_t)TypeHash::NavMesh) { DrawNavMeshComponent(data); }else
 		if (type->hash == FNV1A_HASH("OzzAnimatorCmp")) { DrawOzzAnimatorCmp(data); } else
+		if (type->hash == (size_t)TypeHash::PlayerSpawner) { DrawPlayerSpawnerComponent(data); } else
 		// Basic component interface
 		if (type->is_class) {
 			const Class* cl = (const Class*)type;
@@ -74,78 +76,7 @@ bool InspectorPanel::DrawComponent(size_t componentId)
 				DrawField(data, cl->fields[i]);
 			}
 		}
-		else if (type->hash == (size_t)TypeHash::Transform3D)
-		{
-			DrawTransform3dComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::AudioSource)
-		{
-			DrawAudioSourceComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::PointLight)
-		{
-			DrawPointLightComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::DirectionalLight)
-		{
-			DrawDirectionalLightComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::SpotLight)
-		{
-			DrawSpotLightComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::AnimatorComponent)
-		{
-			DrawAnimatorComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::CollisionBody)
-		{
-			DrawCollisionBodyComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCube)
-		{
-			DrawColliderCubeComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderSphere)
-		{
-			DrawColliderSpehereComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ColliderCylinder)
-		{
-			DrawColliderCylinderComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::RayCast)
-		{
-			DrawRayCastComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::AgentAI)
-		{
-			DrawAiAgentComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::ParticleEmitter)
-		{
-			DrawParticleSystemComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::Item)
-		{
-			DrawItemComponent(data);
-		}
-		else if (type->hash == (size_t)TypeHash::NavMesh)
-		{
-			DrawNavMeshComponent(data);
-		}
-		else
-
-			// Basic component interface
-			if (type->is_class)
-			{
-				const Class *cl = (const Class *)type;
-
-				for (size_t i = 0; i < cl->fields.size(); i++)
-				{
-					DrawField(data, cl->fields[i]);
-				}
-			}
+		
 		ImGui::TreePop();
 	}
 
@@ -185,7 +116,12 @@ void InspectorPanel::DrawField(unsigned char *data, const Field &field)
 		ImGui::PopID();
 		return;
 	}
-
+	if (field.type->hash == (size_t)TypeHash::Bool)
+	{
+		ImGui::PushID(field.name.c_str());
+		ImGui::Checkbox(field.name.c_str(), (bool*)(data + field.offset));
+		ImGui::PopID();
+	}
 	// Draw basic fields
 	if (field.type->hash == (size_t)TypeHash::Vector2i)
 	{
@@ -236,7 +172,7 @@ void InspectorPanel::DrawField(unsigned char *data, const Field &field)
 	{
 		ImGui::Text(field.name.c_str());
 		ImGui::PushID(field.name.c_str());
-		ImGui::InputInt("", (int *)(data + field.offset));
+		ImGui::InputInt("", (int*)(data + field.offset));
 		ImGui::PopID();
 	}
 }
@@ -735,31 +671,6 @@ void InspectorPanel::DrawRayCastComponent(byte *data)
 	ImGui::Checkbox("Enabled", &rayCast->doRayCasting);
 }
 
-void InspectorPanel::DrawAiAgentComponent(byte* data)
-{
-	Wiwa::AgentAI* agent = (Wiwa::AgentAI*)data;
-	DrawVec3Control("Target", &agent->target, 0.0f, 100.0f);
-	ImGui::InputFloat("Speed", &agent->speed);
-	ImGui::InputFloat("Angular Speed", &agent->angularSpeed);
-	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-	Wiwa::AgentAISystem* agentSys = em.GetSystem<Wiwa::AgentAISystem>(m_CurrentID);
-
-	if (agent)
-	{
-		if (ImGui::Button("Create path to") && Wiwa::SceneManager::IsPlaying())
-		{
-			agentSys->CreatePath(agent->target);
-		}
-
-		//if (ImGui::Button("Go to next position"))
-		//{
-		//	agentSys->GoToNextPosition();
-		//}
-	}
-}
-
-
-
 void ParticleTab()
 {
 	ImGui::Dummy(ImVec2(38, 0));
@@ -861,12 +772,33 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Text("Start Active");
 
+
+		if ((int)emitter->m_destroyOnFinishActive > 1 || (int)emitter->m_destroyOnFinishActive < 0)
+			emitter->m_destroyOnFinishActive = false;
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		ParticleTab();
+		ImGui::Checkbox("##m_destroyOnFinishActive", &emitter->m_destroyOnFinishActive);
+		ImGui::SameLine();
+		ImGui::Text("Destroy When Time Ends");
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		if (emitter->m_destroyOnFinishActive)
+		{
+			ParticleTab();
+			ImGui::Checkbox("##m_destroyActiveParticles", &emitter->m_destroyActiveParticles);
+			ImGui::SameLine();
+			ImGui::Text("Destroy Active Particles");
+		}
+
 		ImGui::Dummy(ImVec2(0, 4));
 
 		ParticleTab();
 		ImGui::Checkbox("##m_rangedTimeActive", &emitter->m_rangedTimeActive);
 		ImGui::SameLine();
-		ImGui::Text("Ranged");
+		ImGui::Text("Time Acive");
 
 		if (emitter->m_rangedTimeActive)
 		{
@@ -891,6 +823,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			if (ImGui::DragFloat("##m_initialTimeActive", &emitter->m_initialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f")) emitter->m_activeTimeChanged = true;
 			ImGui::PopItemWidth();
 		}
+
 	}
 
 	ImGui::Dummy(ImVec2(0, 4));
@@ -936,34 +869,50 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 	}
 
+	//start spawn delay
+	ImGui::Checkbox("##m_p_rangedSpawnDelay", &emitter->m_p_rangedSpawnDelay);
+	ImGui::SameLine();
+	ImGui::Text("Spawn Delay");
+
+	if (emitter->m_p_rangedSpawnDelay)
+	{
+		ImGui::PushItemWidth(46.f);
+
+		ImGui::DragFloat("##m_p_minSpawnDelay", &emitter->m_p_minSpawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::SameLine();
+		ImGui::DragFloat("##m_p_maxSpawnDelay", &emitter->m_p_maxSpawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+	else
+	{
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragFloat("##m_p_spawnDelay", &emitter->m_p_spawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
 	ImGui::Dummy(ImVec2(0, 4));
 
-	if (emitter->m_loopSpawning)
+	ImGui::Checkbox("##m_rangedSpawnAmount", &emitter->m_rangedSpawnAmount);
+	ImGui::SameLine();
+	ImGui::Text("Spawn Amount");
+
+	if (emitter->m_rangedSpawnAmount)
 	{
 
-		ImGui::Checkbox("##m_rangedSpawnAmount", &emitter->m_rangedSpawnAmount);
+		ImGui::PushItemWidth(46.f);
+
+		ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
 		ImGui::SameLine();
-		ImGui::Text("Spawn Amount");
+		ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+	}
+	else
+	{
+		ImGui::Dummy(ImVec2(38, 0));
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
 
-		if (emitter->m_rangedSpawnAmount)
-		{
-
-			ImGui::PushItemWidth(46.f);
-
-			ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::SameLine();
-			ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
-		}
-		else
-		{
-			ImGui::Dummy(ImVec2(38, 0));
-			ImGui::SameLine();
-			ImGui::PushItemWidth(100.0f);
-
-			ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
-		}
+		ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
 	}
 	
 	ImGui::Dummy(ImVec2(0, 4));
@@ -1016,6 +965,23 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::SameLine();
 			ImGui::Text("Follow Emitter Position Only on Spawn");
 		}
+
+
+		if ((int)emitter->m_p_positionFollowsRotation > 1 || (int)emitter->m_p_positionFollowsRotation < 0)
+			emitter->m_p_positionFollowsRotation = false;
+
+		if ((int)emitter->m_stopSizeAtZeroX > 1 || (int)emitter->m_stopSizeAtZeroX < 0)
+			emitter->m_stopSizeAtZeroX = false;
+
+		if ((int)emitter->m_stopSizeAtZeroY > 1 || (int)emitter->m_stopSizeAtZeroY < 0)
+			emitter->m_stopSizeAtZeroY = false;
+
+		if ((int)emitter->m_stopSizeAtZeroZ > 1 || (int)emitter->m_stopSizeAtZeroZ < 0)
+			emitter->m_stopSizeAtZeroZ = false;
+
+		ImGui::Checkbox("##m_p_positionFollowsRotation", &emitter->m_p_positionFollowsRotation);
+		ImGui::SameLine();
+		ImGui::Text("Position Depends on Rotation");
 
 		
 
@@ -1186,13 +1152,24 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	if (ImGui::TreeNode("Rotation & Angular Velocity"))
 	{
-		ImGui::Checkbox("##m_p_followEmitterRotation", &emitter->m_p_followEmitterRotation);
-		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Rotation");
+		if ((int)emitter->m_p_followEmitterRotation > 1 || (int)emitter->m_p_followEmitterRotation < 0)
+			emitter->m_p_followEmitterRotation = false;
 
-		ImGui::Checkbox("##m_p_followEmitterRotationSpawn", &emitter->m_p_followEmitterRotationSpawn);
-		ImGui::SameLine();
-		ImGui::Text("Follow Emitter Rotation Only on Spawn");
+		if (!emitter->m_p_followEmitterRotationSpawn)
+		{
+			ImGui::Checkbox("##m_p_followEmitterRotation", &emitter->m_p_followEmitterRotation);
+			ImGui::SameLine();
+			ImGui::Text("Follow Emitter Rotation");
+		}
+
+		if (!emitter->m_p_followEmitterRotation)
+		{
+			ImGui::Checkbox("##m_p_followEmitterRotationSpawn", &emitter->m_p_followEmitterRotationSpawn);
+			ImGui::SameLine();
+			ImGui::Text("Follow Emitter Rotation Only on Spawn");
+		}
+		
+		ImGui::Dummy(ImVec2(0, 8));
 
 		ImGui::Checkbox("##m_p_initialRotation", &emitter->m_p_rangedInitialRotation);
 		ImGui::SameLine();
@@ -1276,30 +1253,66 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::Text("Initial Scale");
 
-		if (emitter->m_p_rangedInitialScale)
+		if (emitter->m_p_uniformStartSize)
 		{
-			ImGui::Text("Min");
-			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_minInitialScale", &(emitter->m_p_minInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-			ImGui::Text("Max");
-			ImGui::SameLine();
-			ImGui::DragFloat3("##m_p_maxInitialScale", &(emitter->m_p_maxInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			if (emitter->m_p_rangedInitialScale)
+			{
+				ParticleTab();
+				ImGui::PushItemWidth(100.f);
+
+				ImGui::Text("Min");
+				ImGui::SameLine();
+				ImGui::DragFloat("##m_p_minUniformStartSizeVal", &emitter->m_p_minUniformStartSizeVal, 0.05f, 0.0f, 0.0f, "%.2f");
+
+				ParticleTab();
+				ImGui::Text("Max");
+				ImGui::SameLine();
+				ImGui::DragFloat("##m_p_maxUniformStartSizeVal", &emitter->m_p_maxUniformStartSizeVal, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::PopItemWidth();
+			}
+			else
+			{
+				ImGui::Dummy(ImVec2(38, 0));
+				ImGui::SameLine();
+				ImGui::PushItemWidth(100.0f);
+
+				ImGui::DragFloat("##m_p_uniformStartSizeVal", &emitter->m_p_uniformStartSizeVal, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::PopItemWidth();
+			}
 		}
 		else
 		{
-			ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			if (emitter->m_p_rangedInitialScale)
+			{
+				ImGui::Text("Min");
+				ImGui::SameLine();
+				ImGui::DragFloat3("##m_p_minInitialScale", &(emitter->m_p_minInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::Text("Max");
+				ImGui::SameLine();
+				ImGui::DragFloat3("##m_p_maxInitialScale", &(emitter->m_p_maxInitialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
+			else
+			{
+				ImGui::DragFloat3("##m_p_initialScale", &(emitter->m_p_initialScale)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+			}
 		}
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		ParticleTab();
+		ImGui::Checkbox("##m_p_uniformStartSize", &emitter->m_p_uniformStartSize);
+		ImGui::SameLine();
+		ImGui::Text("Uniform Start Scale");
 
 		ImGui::Dummy(ImVec2(0, 8));
 
-		ImGui::Checkbox("##m_p_rangedGrowthVelocity", &emitter->m_p_rangedGrowthVelocity);
-		ImGui::SameLine();
-		ImGui::Text("Initial Growth Velocity");
+		if ((int)emitter->m_p_growUniformly > 1 || (int)emitter->m_p_growUniformly < 0)
+			emitter->m_p_growUniformly = false;
 
 		ImGui::Checkbox("##m_p_scaleOverTime", &emitter->m_p_scaleOverTime);
 		ImGui::SameLine();
 		ImGui::Text("Use Growth over life time");
-
+		
 
 		if (emitter->m_p_scaleOverTime)
 		{
@@ -1331,38 +1344,173 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		}
 		else
 		{
-			if (emitter->m_p_rangedGrowthVelocity)
+			ImGui::Checkbox("##m_p_rangedGrowthVelocity", &emitter->m_p_rangedGrowthVelocity);
+			ImGui::SameLine();
+			ImGui::Text("Initial Growth Velocity");
+
+			ImGui::Dummy(ImVec2(0, 4));
+
+			
+
+			if (emitter->m_p_growUniformly)
 			{
-				ImGui::Text("Min");
-				ImGui::SameLine();
-				ImGui::DragFloat3("##m_p_minInitialGrowthVelocity", &(emitter->m_p_minInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
-				ImGui::Text("Max");
-				ImGui::SameLine();
-				ImGui::DragFloat3("##m_p_maxInitialGrowthVelocity", &(emitter->m_p_maxInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				if (emitter->m_p_rangedGrowthVelocity)
+				{
+					ParticleTab();
+					ImGui::PushItemWidth(100.f);
+
+					ImGui::Text("Min");
+					ImGui::SameLine();
+					ImGui::DragFloat("##m_p_minUniformGrowthVal", &emitter->m_p_minUniformGrowthVal, 0.05f, 0.0f, 0.0f, "%.2f");
+					
+					ParticleTab();
+					ImGui::Text("Max");
+					ImGui::SameLine();
+					ImGui::DragFloat("##m_p_maxUniformGrowthVal", &emitter->m_p_maxUniformGrowthVal, 0.05f, 0.0f, 0.0f, "%.2f");
+					ImGui::PopItemWidth();
+				}
+				else
+				{
+					ImGui::Dummy(ImVec2(38, 0));
+					ImGui::SameLine();
+					ImGui::PushItemWidth(100.0f);
+
+					ImGui::DragFloat("##m_p_uniformGrowthVal", &emitter->m_p_uniformGrowthVal, 0.05f, 0.0f, 0.0f, "%.2f");
+					ImGui::PopItemWidth();
+				}
 			}
 			else
 			{
-				ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				if (emitter->m_p_rangedGrowthVelocity)
+				{
+					ImGui::Text("Min");
+					ImGui::SameLine();
+					ImGui::DragFloat3("##m_p_minInitialGrowthVelocity", &(emitter->m_p_minInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+					ImGui::Text("Max");
+					ImGui::SameLine();
+					ImGui::DragFloat3("##m_p_maxInitialGrowthVelocity", &(emitter->m_p_maxInitialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				}
+				else
+				{
+					ImGui::DragFloat3("##m_p_initialGrowthVelocity", &(emitter->m_p_initialGrowthVelocity)[0], 0.05f, 0.0f, 0.0f, "%.2f");
+				}
 			}
+
+			ImGui::Dummy(ImVec2(0, 4));
+
+			ParticleTab();
+			ImGui::Checkbox("##m_p_growUniformly", &emitter->m_p_growUniformly);
+			ImGui::SameLine();
+			ImGui::Text("Scale Uniformly");
+
+			ParticleTab();
+			ImGui::Checkbox("##m_stopSizeAtZero", &emitter->m_stopSizeAtZero);
+			ImGui::SameLine();
+			ImGui::Text("Stop Growth At Zero");
+
+
+			if (emitter->m_stopSizeAtZero)
+			{
+				ParticleTab();
+				ImGui::Text("X:");
+				ImGui::SameLine();
+				ImGui::Checkbox("##m_stopSizeAtZeroX", &emitter->m_stopSizeAtZeroX);
+				ImGui::SameLine();
+				ImGui::Text(" Y:");
+				ImGui::SameLine();
+				ImGui::Checkbox("##m_stopSizeAtZeroY", &emitter->m_stopSizeAtZeroY);
+				ImGui::SameLine();
+				ImGui::Text(" Z:");
+				ImGui::SameLine();
+				ImGui::Checkbox("##m_stopSizeAtZeroZ", &emitter->m_stopSizeAtZeroZ);
+
+			}
+			ImGui::Dummy(ImVec2(0, 8));
+			
 		}
+
+		
+		
+
+
 		ImGui::TreePop();
 		ImGui::Dummy(ImVec2(0, 8));
 	}
-	ImGui::Separator();
-	if (ImGui::TreeNode("Color"))
+
+	if (ImGui::TreeNode("Color & Blending"))
 	{
-		ImGui::Checkbox("##useAdditiveBlending", &emitter->useAdditiveBlending);
+		if ((int)emitter->m_useAdditiveBlending > 1 || (int)emitter->m_useAdditiveBlending < 0)
+			emitter->m_useAdditiveBlending = false;
+
+		if ((int)emitter->m_useMultiplyBlending > 1 || (int)emitter->m_useMultiplyBlending < 0)
+			emitter->m_useMultiplyBlending = false;
+
+
+		ImGui::Text("Blending Mode:");
+
+		ImGui::Dummy(ImVec2(0, 4));
+
+		if (!emitter->m_useMultiplyBlending)
+		{
+			ParticleTab();
+			ImGui::Checkbox("##m_useAdditiveBlending", &emitter->m_useAdditiveBlending);
+			ImGui::SameLine();
+			ImGui::Text("Additive");
+
+			ImGui::Dummy(ImVec2(0, 4));
+		}
+		else
+			ImGui::Dummy(ImVec2(0, 8));
+
+
+		if (!emitter->m_useAdditiveBlending)
+		{
+			ParticleTab();
+			ImGui::Checkbox("##m_useMultiplyBlending", &emitter->m_useMultiplyBlending);
+			ImGui::SameLine();
+			ImGui::Text("Multiply");
+
+			ImGui::Dummy(ImVec2(0, 4));
+		}
+		else
+			ImGui::Dummy(ImVec2(0, 8));
+
+		if ((int)emitter->m_deactivateFaceCulling > 1 || (int)emitter->m_deactivateFaceCulling < 0)
+			emitter->m_deactivateFaceCulling = false;
+
+		ImGui::Checkbox("##m_deactivateFaceCulling", &emitter->m_deactivateFaceCulling);
 		ImGui::SameLine();
-		ImGui::Text("Use Additive Blending");
+		ImGui::Text("Deactivate Face Culling");
+
+
+		
+		ImGui::Dummy(ImVec2(0, 12));
 
 		if (emitter->m_colorsUsed < 1)
 		{
 			emitter->m_colorsUsed = 1;
 		}
-		if (emitter->m_colorsUsed >= 128)
+		if (emitter->m_colorsUsed >= 20)
 		{
-			emitter->m_colorsUsed = 128;
+			emitter->m_colorsUsed = 20;
 		}
+
+		ImGui::Text("Colors:");
+
+		//todo: add delete color and duplicate color
+		ImGui::Dummy(ImVec2(0, 8));
+		ImGui::Text("Colors over lifetime:");
+		ImGui::SameLine();
+		ImGui::PushItemWidth(100.0f);
+		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		if (ImGui::Button("+") && emitter->m_colorsUsed < 128) emitter->m_colorsUsed++;
+		ImGui::SameLine();
+		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
+		ImGui::Dummy(ImVec2(0, 4));
+
+
 		if (ImGui::Button("Sort Colors by Percentage"))
 		{
 			for (int i = 0; i < emitter->m_colorsUsed; i++) {
@@ -1387,20 +1535,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 		}
 
-
-
-		//todo: add delete color and duplicate color
-		ImGui::Dummy(ImVec2(0, 8));
-		ImGui::Text("Colors over lifetime:");
-		ImGui::SameLine();
-		ImGui::PushItemWidth(100.0f);
-		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-		if (ImGui::Button("+") && emitter->m_colorsUsed < 128) emitter->m_colorsUsed++;
-		ImGui::SameLine();
-		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
 		ImGui::Dummy(ImVec2(0, 4));
+
 
 		for (size_t i = 0; i < emitter->m_colorsUsed; i++)
 		{
@@ -1489,7 +1625,12 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			}
 		}
 		ImGui::TreePop();
+
+		
+
 	}
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0, 8));
 }
 
 void InspectorPanel::DrawItemComponent(byte* data)
@@ -1532,6 +1673,10 @@ void InspectorPanel::DrawOzzAnimatorCmp(byte* data)
 	}
 
 	ImGui::PopID();
+void InspectorPanel::DrawPlayerSpawnerComponent(byte* data)
+{
+	Wiwa::PlayerSpawnerData* spawn = (Wiwa::PlayerSpawnerData*)data;
+	DrawVec3Control("Position", &spawn->Position, 0.f);
 }
 
 InspectorPanel::InspectorPanel(EditorLayer *instance)
@@ -1549,17 +1694,22 @@ void InspectorPanel::Draw()
 
 	ImGui::Begin(iconName.c_str(), &active);
 
-	if (m_EntitySet && m_CurrentID >= 0)
+	if (s_EntitySet && m_CurrentID >= 0)
 	{
 		ImGui::InputText("Name", &em.GetEntityString(m_CurrentID));
 		ImGui::SameLine();
 		ImGui::Text("(%i)", m_CurrentID);
+		
 
 		DrawCollisionTags();
+		ImGui::SameLine();
+		bool active = em.IsActive(m_CurrentID);
+		if (ImGui::Checkbox("Active", &active))
+			em.SetActive(m_CurrentID, active);
 
 		if (ImGui::Button("Delete##entity"))
 		{
-			m_EntitySet = false;
+			s_EntitySet = false;
 			em.DestroyEntity(m_CurrentID);
 		}
 
@@ -1694,13 +1844,13 @@ void InspectorPanel::OnEvent(Wiwa::Event &e)
 bool InspectorPanel::OnEntityChangeEvent(EntityChangeEvent &e)
 {
 	m_CurrentID = e.GetResourceId();
-	m_EntitySet = true;
+	s_EntitySet = true;
 	return false;
 }
 
 bool InspectorPanel::OnSceneChangeEvent(Wiwa::SceneChangeEvent &e)
 {
 	m_CurrentID = -1;
-	m_EntitySet = false;
+	s_EntitySet = false;
 	return false;
 }

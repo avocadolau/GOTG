@@ -165,6 +165,7 @@ namespace Wiwa
 		ResourceId skinnedTexturedOutlinedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_textured_outlined");
 		Shader* skinnedTexturedOutlinedShader = Wiwa::Resources::GetResourceById<Shader>(skinnedTexturedOutlinedShaderId);
 		skinnedTexturedOutlinedShader->Compile("resources/shaders/skinned/skinned_textured_outlined");
+		skinnedTexturedOutlinedShader->addUniform("u_Color", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
 		skinnedTexturedOutlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
@@ -174,6 +175,7 @@ namespace Wiwa
 		skinnedTexturedOutlinedShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		skinnedTexturedOutlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		skinnedTexturedOutlinedShader->addUniform("u_Hit", UniformType::Bool);
 		Wiwa::Resources::Import<Shader>("resources/shaders/skinned/skinned_textured_outlined", skinnedTexturedOutlinedShader);
 		//init skinned Outline
 		ResourceId skinnedOutlineShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/skinned/skinned_outline");
@@ -281,6 +283,23 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/shield", shieldShader);
 
+		ResourceId laserShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/laser");
+		Shader* laserShader = Wiwa::Resources::GetResourceById<Shader>(laserShaderId);
+		laserShader->Compile("resources/shaders/vfx/laser");
+
+		laserShader->addUniform("u_LifeTime", UniformType::Float);
+		laserShader->addUniform("u_Color", UniformType::fVec4);
+		laserShader->addUniform("u_FresnelColor", UniformType::fVec4);
+		laserShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		laserShader->addUniform("u_HologramColor", UniformType::fVec4);
+		laserShader->addUniform("u_Speed", UniformType::Float);
+		laserShader->addUniform("u_Texture", UniformType::Sampler2D);
+		laserShader->addUniform("u_DiscardTex", UniformType::Sampler2D);
+		laserShader->addUniform("u_HologramTexture", UniformType::Sampler2D);
+		laserShader->addUniform("u_StartDissolve", UniformType::Float);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/laser", laserShader);
+
 		ResourceId justTextureShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/justtexture");
 		Shader* justTextureShader = Wiwa::Resources::GetResourceById<Shader>(justTextureShaderId);
 		justTextureShader->Compile("resources/shaders/vfx/justtexture");
@@ -364,6 +383,84 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/bullet/bullet_plasma", bulletPlasmaShader);
 
+		ResourceId textureAnimatedShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/texture_animated");
+		Shader* textureAnimatedShader = Wiwa::Resources::GetResourceById<Shader>(textureAnimatedShaderId);
+		textureAnimatedShader->Compile("resources/shaders/vfx/texture_animated");
+
+		textureAnimatedShader->addUniform("u_LifeTime", UniformType::Float);
+		textureAnimatedShader->addUniform("u_Time", UniformType::Float);
+		textureAnimatedShader->addUniform("u_Color", UniformType::fVec4);
+		textureAnimatedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		textureAnimatedShader->addUniform("u_SpriteSize", UniformType::fVec2);
+		textureAnimatedShader->addUniform("u_NumColumns", UniformType::Int);
+		textureAnimatedShader->addUniform("u_NumRows", UniformType::Int);
+		textureAnimatedShader->addUniform("u_NumFrames", UniformType::Int);
+		textureAnimatedShader->addUniform("u_AnimationSpeed", UniformType::Float);
+		textureAnimatedShader->addUniform("u_LoopAnimation", UniformType::Bool);
+		textureAnimatedShader->addUniform("u_PingPong", UniformType::Bool);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/texture_animated", textureAnimatedShader);
+
+		ResourceId bulletPhalanxRangedCoreId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/enemy_bullet/enemy_bullet");
+		Shader* bulletPhalanxRangedCore = Wiwa::Resources::GetResourceById<Shader>(bulletPhalanxRangedCoreId);
+		bulletPhalanxRangedCore->Compile("resources/shaders/vfx/enemy_bullet/enemy_bullet");
+
+		bulletPhalanxRangedCore->addUniform("u_LifeTime", UniformType::Float);
+		bulletPhalanxRangedCore->addUniform("u_Time", UniformType::Float);
+		bulletPhalanxRangedCore->addUniform("u_Color", UniformType::fVec4);
+		bulletPhalanxRangedCore->addUniform("u_FresnelColor", UniformType::fVec4);
+		bulletPhalanxRangedCore->addUniform("u_FresnelRange", UniformType::fVec2);
+		bulletPhalanxRangedCore->addUniform("u_Texture", UniformType::Sampler2D);
+		bulletPhalanxRangedCore->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		bulletPhalanxRangedCore->addUniform("u_OffsetMultiplier", UniformType::fVec2);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/enemy_bullet/enemy_bullet", bulletPhalanxRangedCore);
+
+		ResourceId animTexTranspShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/animated_texture_transparent");
+		Shader* animTexTranspShader = Wiwa::Resources::GetResourceById<Shader>(animTexTranspShaderId);
+		animTexTranspShader->Compile("resources/shaders/vfx/animated_texture_transparent");
+
+		animTexTranspShader->addUniform("u_LifeTime", UniformType::Float);
+		animTexTranspShader->addUniform("u_Time", UniformType::Float);
+		animTexTranspShader->addUniform("u_Color", UniformType::fVec4);
+		animTexTranspShader->addUniform("u_Velocity", UniformType::fVec2);
+		animTexTranspShader->addUniform("u_Offset", UniformType::fVec2);
+		animTexTranspShader->addUniform("u_Texture", UniformType::Sampler2D);
+		animTexTranspShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		animTexTranspShader->addUniform("u_FadeTexture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/animated_texture_transparent", animTexTranspShader);
+
+		ResourceId enemySpawnFlashShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/enemy_spawn_flash");
+		Shader* enemySpawnFlashShader = Wiwa::Resources::GetResourceById<Shader>(enemySpawnFlashShaderId);
+		enemySpawnFlashShader->Compile("resources/shaders/vfx/enemy_spawn_flash");
+
+		enemySpawnFlashShader->addUniform("u_LifeTime", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_Time", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_Color", UniformType::fVec4);
+		enemySpawnFlashShader->addUniform("u_Texture", UniformType::Sampler2D);
+		enemySpawnFlashShader->addUniform("u_DiscardTexture", UniformType::Sampler2D);
+		enemySpawnFlashShader->addUniform("u_TransparencyTexture", UniformType::Sampler2D);
+		enemySpawnFlashShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		enemySpawnFlashShader->addUniform("u_FresnelColor", UniformType::fVec4);
+		enemySpawnFlashShader->addUniform("u_StartDissolve", UniformType::Float);
+		enemySpawnFlashShader->addUniform("u_OffsetMultiplier", UniformType::fVec2);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/enemy_spawn_flash", enemySpawnFlashShader);
+
+		ResourceId spriteSheetFrameShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/spritesheet_frame");
+		Shader* spriteSheetFrameShader = Wiwa::Resources::GetResourceById<Shader>(spriteSheetFrameShaderId);
+		spriteSheetFrameShader->Compile("resources/shaders/vfx/spritesheet_frame");
+
+		spriteSheetFrameShader->addUniform("u_LifeTime", UniformType::Float);
+		spriteSheetFrameShader->addUniform("u_Time", UniformType::Float);
+		spriteSheetFrameShader->addUniform("u_Color", UniformType::fVec4);
+		spriteSheetFrameShader->addUniform("u_Texture", UniformType::Sampler2D);
+		spriteSheetFrameShader->addUniform("u_SpritesheetSize", UniformType::fVec2);
+		spriteSheetFrameShader->addUniform("u_CellSize", UniformType::fVec2);
+		spriteSheetFrameShader->addUniform("u_Index", UniformType::Uint);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/spritesheet_frame", spriteSheetFrameShader);
 		//===========================================================================================================
 
 		// Normal Display Shader
@@ -452,13 +549,13 @@ namespace Wiwa
 		"resources/images/skybox/urban_light/front.png",
 		"resources/images/skybox/urban_light/back.png" };
 		std::vector<const char*> main_menu = {
-		"resources/images/skybox/main_menu/UI_RightSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_LeftSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_BottomSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_FrontSkyBox_01.png",
-		"resources/images/skybox/main_menu/UI_BackSkyBox_01.png" };
-		m_DefaultSkybox.LoadCubemap(dooms_day);
+		"resources/images/skybox/main_menu/right.png",
+		"resources/images/skybox/main_menu/left.png",
+		"resources/images/skybox/main_menu/top.png",
+		"resources/images/skybox/main_menu/bottom.png",
+		"resources/images/skybox/main_menu/front.png",
+		"resources/images/skybox/main_menu/back.png" };
+		m_DefaultSkybox.LoadCubemap(main_menu);
 
 
 
@@ -793,6 +890,11 @@ namespace Wiwa
 
 		//camera->shadowBuffer->BindTexture();
 
+		if (material == nullptr)
+		{
+			WI_ERROR("missing material {}",mesh->getModelName());
+			return;
+		}
 
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
@@ -853,8 +955,13 @@ namespace Wiwa
 		glDepthFunc(GL_LESS);
 
 		camera->frameBuffer->Bind(clear);
-
+		if (!material)
+		{
+			WI_ERROR("Material not valid at {}", mesh->getModelPath());
+			return;
+		}
 		Shader *matShader = material->getShader();
+		
 		matShader->Bind();
 
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
@@ -1219,7 +1326,9 @@ namespace Wiwa
 	void Renderer3D::RenderSkybox()
 	{
 		{
-			Camera *camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			Scene* scene = SceneManager::getActiveScene();
+			CameraManager& cm = scene->GetCameraManager();
+			Camera *camera = cm.getActiveCamera();
 			if (camera)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());

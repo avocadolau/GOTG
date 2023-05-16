@@ -25,10 +25,41 @@ namespace Wiwa
 {
 	namespace Math
 	{
+		/// <summary>
+		/// Returns the angle formed by a vector
+		/// </summary>
+		/// <param name="vector"></param>
+		/// <returns></returns>
+		inline float AngleFromVec2(const glm::vec2& vector)
+		{
+			return glm::degrees(glm::atan(vector.x, vector.y));
+		}
+		inline glm::vec3 Vec3FromAngle(const float angle)
+		{
+			return glm::normalize(glm::vec3(glm::sin(glm::radians(angle)), 0.f, glm::cos(glm::radians(angle))));
+		}
 
+		inline float RandomFloat(float a, float b) {
+			float random = ((float)rand()) / (float)RAND_MAX;
+			float diff = b - a;
+			float r = random * diff;
+			return a + r;
+		}
 		inline btVector3 ToBulletVector3(const glm::vec3 &vector)
 		{
 			return btVector3(vector.x, vector.y, vector.z);
+		}
+
+		inline glm::vec3 Forward(const glm::mat4& transform)
+		{
+			const glm::mat4 inverted = glm::inverse(transform);
+			return normalize(glm::vec3(inverted[2]));
+		}
+
+		inline glm::vec3 Up(const glm::mat4& transform)
+		{
+			glm::vec3 upVector = glm::vec3(transform[1]);
+			return normalize(upVector);
 		}
 
 		inline float Distance(const glm::vec3 &a, const glm::vec3 &b)
@@ -52,21 +83,17 @@ namespace Wiwa
 		{
 			return deg * PI_F / 180.0f;
 		}
-		inline glm::vec3 CalculateForward(Transform3D *t3d)
+		inline glm::vec3 CalculateForward(const Transform3D* t3d)
 		{
-			glm::vec3 rotrad;
-			rotrad.x = DegToRad(t3d->rotation.x);
-			rotrad.y = DegToRad(t3d->rotation.y);
-			rotrad.z = DegToRad(t3d->rotation.z);
+			glm::vec3 rotrad = glm::radians(t3d->rotation);
 
 			glm::vec3 forward;
+
 			forward.x = glm::cos(rotrad.x) * glm::sin(rotrad.y);
 			forward.y = -glm::sin(rotrad.x);
 			forward.z = glm::cos(rotrad.x) * glm::cos(rotrad.y);
 
-			forward.x = RadToDeg(forward.x);
-			forward.y = RadToDeg(forward.y);
-			forward.z = RadToDeg(forward.z);
+			forward = glm::degrees(forward);
 
 			return glm::normalize(forward);
 		}
@@ -365,7 +392,20 @@ namespace Wiwa
 		{
 			return std::clamp(t - std::floor(t / length) * length, 0.0f, length);
 		}
+		// Perform Slerp interpolation between two angles in degrees
+		inline float Slerp(float startAngle, float endAngle, float t) {
+			// Convert start and end angles to quaternions
+			glm::quat startQuat = glm::angleAxis(glm::radians(startAngle), glm::vec3(0, 1, 0));
+			glm::quat endQuat = glm::angleAxis(glm::radians(endAngle), glm::vec3(0, 1, 0));
 
+			// Perform Slerp interpolation between the quaternions
+			glm::quat resultQuat = glm::slerp(startQuat, endQuat, t);
+
+			// Convert the resulting quaternion back to an angle in degrees
+			float resultAngle = glm::degrees(glm::angle(resultQuat));
+
+			return resultAngle;
+		}
 		inline float LerpAngle(float a, float b, float t)
 		{
 			float delta = Repeat((b - a), 360);
@@ -404,6 +444,22 @@ namespace Wiwa
 			left = glm::rotate(forward, radiansAngleLeft, up);
 		}
 
+		inline void GetRightRotatedFromForward(const glm::vec3& forward, glm::vec3& right, float angle)
+		{
+			glm::vec3 up(0.0f, 1.0f, 0.0f);
+			float radiansAngleRight = glm::radians(angle);
+
+			right = glm::rotate(forward, radiansAngleRight, up);
+		}
+
+		inline void GetLeftRotatedFromForward(const glm::vec3& forward, glm::vec3& left, float angle)
+		{
+			glm::vec3 up(0.0f, 1.0f, 0.0f);
+			float radiansAngleLeft = glm::radians(-angle);
+
+			left = glm::rotate(forward, radiansAngleLeft, up);
+		}
+
 		inline bool IsPointNear(const glm::vec3 &point_1, const glm::vec3 &point_2, float threshold)
 		{
 			return glm::distance2(point_1, point_2) < threshold * threshold;
@@ -421,6 +477,16 @@ namespace Wiwa
 			glm::vec3 p2Forward = glm::normalize(point_2);
 			glm::quat rotation = glm::rotation(p1Forward, p2Forward);
 			return glm::degrees(glm::eulerAngles(rotation));
+		}
+
+		inline glm::vec3 InterpolateTwoV3(glm::vec3 start, glm::vec3 end, float t)
+		{
+			return glm::vec3
+			{
+		       start.x + (end.x - start.x) * t,
+		       start.y + (end.y - start.y) * t,
+		       start.z + (end.z - start.z) * t
+			};
 		}
 	}
 

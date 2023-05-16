@@ -21,9 +21,11 @@ namespace Wiwa
 		inline static void UnlockCursor() { s_Instance->UnlockCursorImpl(); }
 		inline static float GetAxis(int gamepadIndx, int axis, float deadzone = 0.6) { return s_Instance->GetAxisImpl(gamepadIndx, axis, deadzone); }
 		inline static float GetRawAxis(int gamepadIndx, int axis, float deadzone) { return s_Instance->GetRawAxisImpl(gamepadIndx, axis, deadzone); }
+		inline static glm::vec2 GetJoystick(int gamepadIndx, int axisX, int axisY, float deadzone) { return s_Instance->GetJoystickImpl(gamepadIndx, axisX, axisY, deadzone); }
+		inline static glm::vec2 GetRawJoystick(int gamepadIndx, int axisX, int axisY, float deadzone) { return s_Instance->GetRawJoystickImpl(gamepadIndx, axisX, axisY, deadzone); }
 		inline static bool IsButtonPressed(int gamepadIndx,int keycode) { return s_Instance->IsButtonPressedImpl(gamepadIndx, keycode); }
 		inline static bool IsButtonReleased(int gamepadIndx, int keycode) { return s_Instance->IsButtonReleasedImpl(gamepadIndx, keycode); }
-
+		inline static void Init() { return s_Instance->InitImpl(); }
 		inline static void Update() { return s_Instance->UpdateImpl(); }
 		inline static void OverrideMouseInputs(float mx, float my, float px, float py, float dx, float dy) 
 		{
@@ -34,7 +36,10 @@ namespace Wiwa
 			MouseXDelta = dx;
 			MouseYDelta = dy;
 		}
+		inline static glm::vec2 GetLeftDeadzone() { return s_Instance->GetLeftDeadzoneImpl(); }
+		inline static glm::vec2 GetRightDeadzone() { return s_Instance->GetRightDeadzoneImpl(); }
 	protected:
+		virtual void InitImpl() = 0;
 		virtual bool IsKeyPressedImpl(int keycode) = 0;
 		virtual bool IsKeyReleasedImpl(int keycode) = 0;
 		virtual bool IsKeyRepeatImpl(int keycode) = 0;
@@ -50,8 +55,12 @@ namespace Wiwa
 		virtual void UnlockCursorImpl() = 0;
 		virtual float GetAxisImpl(int gamepadIndx, int axis, float deadzone) = 0;
 		virtual float GetRawAxisImpl(int gamepadIndx, int axis, float deadzone) = 0;
+		virtual glm::vec2 GetJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone) = 0;
+		virtual glm::vec2 GetRawJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone) = 0;
 		virtual bool IsButtonPressedImpl(int gamepadIndx, int keycode) = 0;
 		virtual bool IsButtonReleasedImpl(int gamepadIndx, int keycode) = 0;
+		virtual glm::vec2 GetLeftDeadzoneImpl() = 0;
+		virtual glm::vec2 GetRightDeadzoneImpl() = 0;
 	private:
 		static Input* s_Instance;
 	protected:

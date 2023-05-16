@@ -176,7 +176,6 @@ namespace Wiwa {
 		file.Write(&animation->m_Duration, sizeof(double));
 		file.Write(&animation->m_TicksPerSecond, sizeof(double));
 		file.Write(&animation->m_NumChannels, sizeof(unsigned int));
-		file.Write(&animation->m_Loop, sizeof(bool));
 
 		//save NodeAnim structure
 		animation->SaveNodeData(file, animation->m_RootNode);
@@ -242,7 +241,7 @@ namespace Wiwa {
 
 	Animation* Animation::GetAnimationFromFile(const char* filepath)
 	{
-		Animation* anim = new Animation();
+		//Animation* anim = new Animation();
 
 		return nullptr;
 	}
@@ -275,8 +274,6 @@ namespace Wiwa {
 		file.Read(&anim->m_Duration, sizeof(double));
 		file.Read(&anim->m_TicksPerSecond, sizeof(double));
 		file.Read(&anim->m_NumChannels, sizeof(unsigned int));
-		file.Read(&anim->m_Loop, sizeof(bool));
-
 
 		//Load NodeAnim structure
 		anim->m_RootNode = anim->LoadNodeData(file);

@@ -163,7 +163,17 @@ namespace Wiwa
 
 		bool IsParent(EntityId entity) { return m_EntityParent[entity] == entity; }
 
-		void SetActive(EntityId entity, bool active) { m_EntityActive[entity] = active; }
+		void SetActive(EntityId entity, bool active) 
+		{
+			if (entity == WI_INVALID_INDEX) return;
+
+			m_EntityActive[entity] = active;
+
+			for (size_t i = 0; i < m_EntityChildren[entity].size(); i++)
+			{
+				SetActive(m_EntityChildren[entity][i], active);
+			}
+		}
 
 		// Save entity in a file for prefab purposes
 		void SavePrefab(EntityId entity, const char* path);

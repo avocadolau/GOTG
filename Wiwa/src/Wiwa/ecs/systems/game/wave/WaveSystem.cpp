@@ -1,21 +1,26 @@
 #include <wipch.h>
 #include "WaveSystem.h"
-#include "../../PhysicsSystem.h"
-#include "../../AgentAISystem.h"
+#include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
-#include <Wiwa/ecs/systems/game/enemy/EnemySystem.h>
 #include <Wiwa/utilities/EntityPool.h>
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 #include <random>
+#include <Wiwa/ecs/components/game/wave/Wave.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/ecs/components/game/wave/WaveSpawnPoint.h>
+#include <Wiwa/audio/Audio.h>
+
 namespace Wiwa
 {
 	WaveSystem::WaveSystem()
 	{
 		m_WaveIt = {WI_INVALID_INDEX, WI_INVALID_INDEX};
 		m_SpawnerIt = {WI_INVALID_INDEX, WI_INVALID_INDEX};
-		m_SpawnDelay = 2.0f;
-		m_TimeSinceLastSpawn = 0.0f;
+		m_PointIndex = 0;
+		m_TotalEnemiesSpawned = 0;
 		m_HasTriggered = false;
+		m_HasSetSpawnParticle = false;
 	}
 
 	WaveSystem::~WaveSystem()
@@ -30,137 +35,175 @@ namespace Wiwa
 	void WaveSystem::OnInit()
 	{
 		m_WaveIt = GetComponentIterator<Wave>();
-
 		Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
-		/*wave->currentEnemiesAlive = 3;*/
-		wave->currentEnemiesAlive = wave->maxEnemies;
 
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
-		spawner->hasTriggered = true;
+		GetSpawnPoints(m_Points);
 
-		for (int i = 0; i < wave->maxEnemies; i++)
-		{
-			SpawnEnemy(i);
-			m_HasTriggered = true;
-		}
-
-		m_MaxWavesEnemies = wave->maxEnemies;
-		m_CurrentEnemiesDead = 0;
+		Audio::PostEvent("wave_start");
 	}
 
 	void WaveSystem::OnUpdate()
 	{
 		if (!getAwake() && !getInit())
 			return;
+		EntityManager& em = GetEntityManager();
+
+		m_Timer += Time::GetDeltaTimeSeconds();
+		m_TimerSpawnParticle += Time::GetDeltaTimeSeconds();
+
 		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
-		
 		// Wave has finished
-		if (m_CurrentEnemiesDead >= m_MaxWavesEnemies && m_HasTriggered)
+		if (wave->currentEnemiesAlive <= 0.0f && m_HasTriggered && m_EnemiesIds.size() <= 0 && m_TotalEnemiesSpawned >= wave->maxEnemies)
 		{
 			wave->hasFinished = true;
 		}
 
-		//QueryEnemies(m_WaveIt);
+		// Define the range for the random number generation
+		int min = -5;
+		int max = 5;
+		disSpawn.param(std::uniform_int_distribution<int>::param_type{ min, max });
+
+		if (m_TimerSpawnParticle >= wave->enemySpawnRate - 4.0f && !m_HasSetSpawnParticle)
+		{
+			m_xRand = disSpawn(Application::s_Gen);
+			m_zRand = disSpawn(Application::s_Gen);
+			enemyRandSelection = GetEnemyFromProbabiliteis();
+
+			if (m_PointIndex >= m_Points.size())
+				m_PointIndex = 0;
+
+			m_TimerSpawnParticle = 0.0f;
+			m_HasSetSpawnParticle = true;
+
+			EntityId spawnerParticle = EntityManager::INVALID_INDEX;
+
+			if (enemyRandSelection == PHALANX_MELEE_GENERIC || enemyRandSelection == PHALANX_MELEE_VARIANT_A || enemyRandSelection == PHALANX_MELEE_VARIANT_B)
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxMelee.wiprefab");
+			}
+			else if (enemyRandSelection == PHALANX_RANGED_GENERIC || enemyRandSelection == PHALANX_RANGED_VARIANT_A || enemyRandSelection == PHALANX_RANGED_VARIANT_B)
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxRanged.wiprefab");
+			}
+			else if (enemyRandSelection == SUBJUGATOR || enemyRandSelection == SUBJUGATOR_CHIEF)
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSentinel.wiprefab");
+			}
+			else if (enemyRandSelection == SENTINEL)
+			{
+				spawnerParticle = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\vfx_enemy_spawn_marker\\p_enemy_spawn_PhalanxSentinel.wiprefab");
+			}
+
+			Transform3D* enemyTransform = em.GetComponent<Transform3D>(spawnerParticle);
+			if (enemyTransform)
+			{
+				enemyTransform->localPosition.x = m_Points[m_PointIndex].x + m_xRand;
+				enemyTransform->localPosition.z = m_Points[m_PointIndex].z + m_zRand;
+				enemyTransform->localPosition.y = 0;
+			}
+		}
+
+		if (m_Timer >= wave->enemySpawnRate && m_TotalEnemiesSpawned < wave->maxEnemies)
+		{
+			m_Timer = 0.0f;
+
+			if (m_PointIndex >= m_Points.size())
+				m_PointIndex = 0;
+
+			if (SpawnEnemy(enemyRandSelection, m_Points[m_PointIndex], m_xRand, m_zRand))
+			{
+				wave->currentEnemiesAlive++;
+				m_PointIndex++;
+				m_TotalEnemiesSpawned++;
+				m_HasTriggered = true;
+				m_HasSetSpawnParticle = false;
+			}
+		}
 	}
 
 	void WaveSystem::OnDestroy()
 	{
-		/*m_EnemiesCmp.clear();
-		m_EnemiesId.clear();*/
+	
 	}
 
-	void WaveSystem::QueryEnemies(const EntityManager::ComponentIterator& m_WaveIt)
-	{
-	/*	Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
-
-		for (int i = 0; i < m_EnemiesCmp.size(); i++)
-		{
-			Enemy *enemy = GetComponentByIterator<Enemy>(m_EnemiesCmp[i]);
-			if (enemy->hasFinished)
-			{
-				DestroyEnemy(i);
-				i--;
-				wave->currentEnemiesAlive--;
-				if (wave->currentEnemiesAlive <= 0)
-				{
-					wave->hasFinished = true;
-				}
-			}
-		}*/
-	}
-
-	void WaveSystem::SpawnEnemy(int index)
+	bool WaveSystem::SpawnEnemy(Pool_Type enemy_type, const glm::vec3& spawn_point, int rand_x, int rand_z)
 	{
 		// Create an enemy from prefab
 		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
+		EntityId newEnemyId = EntityManager::INVALID_INDEX;
 
-		// Random enemy
-		std::srand(static_cast<unsigned int>(std::time(nullptr)));
-		Pool_Type values[] = { Pool_Type::PHALANX_MELEE, Pool_Type::PHALAN_RANGED };
-		size_t size = sizeof(values) / sizeof(values[0]);
-		size_t randomIndex = std::rand() % size;
-		//Pool_Type selection = values[randomIndex];
-		Pool_Type selection = Pool_Type::PHALANX_MELEE;
+		GameStateManager::s_PoolManager->SetScene(m_Scene);
 
-		//int selection = 3;
-
-		EntityId newEnemyId = -1;
-
-		switch (selection)
+		switch (enemy_type)
 		{
-		case Pool_Type::PHALANX_MELEE:
+		case Pool_Type::PHALANX_MELEE_GENERIC:
 		{
-			//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\melee_phalanx.wiprefab");
-			GameStateManager::s_PoolManager->SetScene(m_Scene);
-			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleePool->GetFromPool();
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeGenericPool->GetFromPool();
 		}
 		break;
-		//case Pool_Type::PHALAN_RANGED:
-		//{
-		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
-		//	newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedPool->GetFromPool();
-		//}
-		//break;
-		//case Pool_Type::SENTINEL:
-		//{
-		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
-		//	newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
-		//}
-		//case Pool_Type::SUBJUGATOR:
-		//{
-		//	//newEnemyId = entityManager.LoadPrefab("assets\\enemy\\prefabs\\ranged_phalanx.wiprefab");
-		//	GameStateManager::s_PoolManager->SetScene(m_Scene);
-		//	newEnemyId = GameStateManager::s_PoolManager->s_Subjugator->GetFromPool();
-		//}
-		//break;
+		case Pool_Type::PHALANX_MELEE_VARIANT_A:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeVariantAPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_MELEE_VARIANT_B:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxMeleeVariantBPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_RANGED_GENERIC:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedGenericPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_RANGED_VARIANT_A:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedVariantAPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::PHALANX_RANGED_VARIANT_B:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_PhalanxRangedVariantBPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::SENTINEL:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_SentinelPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::SUBJUGATOR:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_SubjugatorPool->GetFromPool();
+		}
+		break;
+		case Pool_Type::SUBJUGATOR_CHIEF:
+		{
+			newEnemyId = GameStateManager::s_PoolManager->s_SubjugatorChiefPool->GetFromPool();
+		}
+		break;
 		default:
-			WI_INFO(":(");
 			break;
+		}
+
+		if (newEnemyId == EntityManager::INVALID_INDEX)
+		{
+			return false;
 		}
 
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newEnemyId);
 		physSys->DeleteBody();
-		// Set readable name
-		/*Wave *wave = GetComponentByIterator<Wave>(m_WaveIt);
-		std::string enemyName = entityManager.GetEntityName(newEnemyId);
-		enemyName += "_enemy_" + std::to_string(index);
-		entityManager.SetEntityName(newEnemyId, enemyName.c_str());*/
 
-		// Set intial positions
-		Transform3D* spawnTransform = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(m_EntityId));
-		Transform3D* enemyTransform = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newEnemyId));
+		Transform3D* enemyTransform = entityManager.GetComponent<Transform3D>(newEnemyId);
 
-		if (!enemyTransform || !spawnTransform)
-			return;
+		if (!enemyTransform)
+			return false;
 
-		enemyTransform->localPosition.x = spawnTransform->localPosition.x + RAND(-10, 10);
-		enemyTransform->localPosition.z = spawnTransform->localPosition.z + RAND(-10, 10);
+		enemyTransform->localPosition.x = spawn_point.x + rand_x;
+		enemyTransform->localPosition.z = spawn_point.z + rand_z;
 		enemyTransform->localPosition.y = 0;
-	
-		/*WI_CORE_INFO("Spawned enemy at {}x {}y {}z", enemyTransform->localPosition.x, enemyTransform->localPosition.y, enemyTransform->localPosition.z);
-		WI_CORE_INFO("Spawn transform at {}x {}y {}z", spawnTransform->localPosition.x, spawnTransform->localPosition.y, spawnTransform->localPosition.z);*/
+
+		NavAgentSystem* navAgentSys = entityManager.GetSystem<NavAgentSystem>(newEnemyId);
 
 		//// Set the correspondent tag
 		//CollisionBody *collBodyPtr = entityManager.GetComponent<CollisionBody>(newEnemyId);
@@ -169,51 +212,32 @@ namespace Wiwa
 		//collBodyPtr->filterBits |= 1 << m_Scene->GetPhysicsManager().GetFilterTag("PLAYER");
 
 		// Save the enemy component in the list
-		EntityManager::ComponentIterator enemyIt = GetComponentIterator<Enemy>(newEnemyId);
-		/*m_EnemiesCmp.emplace_back(enemyIt);
-		m_EnemiesId.emplace_back(newEnemyId);*/
-		Enemy* enemy = (Enemy*)entityManager.GetComponentByIterator(enemyIt);
+		EntityManager::ComponentIterator enemyIt = GetComponentIterator<EnemyState>(newEnemyId);
+		
+		EnemyState* enemy = (EnemyState*)entityManager.GetComponentByIterator(enemyIt);
 		enemy->hasFinished = false;
-		enemy->enemyType = (int)selection;
-		enemy->waveId = m_EntityId;
+		enemy->enemyType = (int)enemy_type;
+		enemy->waveId = (int)m_EntityId;
 
+		navAgentSys->OnInit();
+		navAgentSys->SetPosition(enemyTransform->localPosition);
 		physSys->CreateBody();
+
+		m_EnemiesIds.emplace_back(newEnemyId);
+		return true;
 	}
 
-	void WaveSystem::DestroyEnemy(size_t id, Pool_Type enemy_type)
+	void WaveSystem::DestroyEnemy(size_t id)
 	{
-		//EntityId id = m_EnemiesId[index];
+		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
 
 		// Delete the enemy entity entirely
-		Wiwa::EntityManager &entityManager = m_Scene->GetEntityManager();
-
-		switch (enemy_type)
-		{
-		case Pool_Type::PHALANX_MELEE:
-			GameStateManager::s_PoolManager->s_PhalanxMeleePool->ReturnToPool(id);
-			break;
-		/*case Pool_Type::PHALAN_RANGED:
-			GameStateManager::s_PoolManager->s_PhalanxRangedPool->ReturnToPool(id);
-			break;*/
-	/*	case Pool_Type::SENTINEL:
-			GameStateManager::s_PoolManager->s_SentinelPool->ReturnToPool(id);
-			break;
-		case Pool_Type::SUBJUGATOR:
-			GameStateManager::s_PoolManager->s_Subjugator->ReturnToPool(id);
-			break;*/
-		default:
-			break;
-		}
-		Wave* wave = GetComponentByIterator<Wave>(m_WaveIt);
+		m_EnemiesIds.erase(std::remove(m_EnemiesIds.begin(), m_EnemiesIds.end(), id), m_EnemiesIds.end());
 		wave->currentEnemiesAlive--;
-		m_CurrentEnemiesDead++;
-		//entityManager.DestroyEntity(id);
 
-		/*m_EnemiesCmp.erase(m_EnemiesCmp.begin() + index);
-		m_EnemiesId.erase(m_EnemiesId.begin() + index);
-		m_PoolType.erase(m_PoolType.begin() + index);*/
+		//m_CurrentEnemiesDead++;
 
-		if (m_CurrentEnemiesDead >= m_MaxWavesEnemies)
+		if (m_EnemiesIds.size() <= 0 && m_TotalEnemiesSpawned >= wave->maxEnemies)
 		{
 			wave->hasFinished = true;
 		}
@@ -222,5 +246,88 @@ namespace Wiwa
 	void WaveSystem::SetSpawner(const EntityManager::ComponentIterator& m_WaveIt)
 	{
 		m_SpawnerIt = m_WaveIt;
+	}
+
+	Pool_Type WaveSystem::GetEnemyFromProbabiliteis()
+	{
+		EnemyManager& enemyManager = GameStateManager::GetEnemyManager();
+		const VariantData& data = enemyManager.m_VariantsTable[enemyManager.m_CurrentCombatRoomsCount];
+
+		std::uniform_int_distribution<> disEnemies(1, 100);
+		int randomNum = disEnemies(Application::s_Gen);
+		if (randomNum <= 45) // 45% probability
+		{
+			int randomNum2 = disEnemies(Application::s_Gen);
+			if (randomNum2 <= 33.33f && data.list.at("MELEE_PHALANX_GENERIC"))
+			{
+				return Pool_Type::PHALANX_MELEE_GENERIC;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("MELEE_PHALANX_REDVARIANT"))
+			{
+				return Pool_Type::PHALANX_MELEE_VARIANT_A;
+			}
+			else if (data.list.at("MELEE_PHALANX_BLUEVARIANT"))
+			{
+				return Pool_Type::PHALANX_MELEE_VARIANT_B;
+			}
+			else
+				return GetEnemyFromProbabiliteis();
+		}
+		else if (randomNum <= 80) { // 35% probability
+			int randomNum2 = disEnemies(Application::s_Gen);
+			if (randomNum2 <= 33.33f && data.list.at("RANGED_PHALANX_GENERIC"))
+			{
+				return Pool_Type::PHALANX_RANGED_GENERIC;
+			}
+			else if (randomNum2 <= 66.66f && data.list.at("RANGED_PHALANX_REDVARIANT"))
+			{
+				return Pool_Type::PHALANX_RANGED_VARIANT_A;
+			}
+			else if (data.list.at("RANGED_PHALANX_BLUEVARIANT"))
+			{
+				return Pool_Type::PHALANX_RANGED_VARIANT_B;
+			}
+			else
+				return GetEnemyFromProbabiliteis();
+		}
+		else if (randomNum <= 95) { // 15% probability
+			return Pool_Type::SENTINEL;
+		}
+		else { // 5% probability
+			int randomNum2 = disEnemies(Application::s_Gen);
+			if (randomNum2 <= 50 && data.list.at("SUBJUGATOR"))
+			{
+				return Pool_Type::SUBJUGATOR;
+			}
+			else if (data.list.at("SUBJUGATOR_CHIEF"))
+			{
+				return Pool_Type::SUBJUGATOR_CHIEF;
+			}
+			else
+				return GetEnemyFromProbabiliteis();
+		}
+	}
+
+	void WaveSystem::GetSpawnPoints(std::vector<glm::vec3>& vec)
+	{
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		size_t size = 0;
+		Wiwa::WaveSpawnPoint* spawnPointsList = nullptr;
+		spawnPointsList = em.GetComponents<WaveSpawnPoint>(&size);
+		if (spawnPointsList)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (em.IsComponentRemoved<WaveSpawnPoint>(i)) {
+				}
+				else {
+					Wiwa::WaveSpawnPoint* spawner = &spawnPointsList[i];
+					if (spawner)
+					{
+						vec.emplace_back(spawner->point);
+					}
+				}
+			}
+		}
 	}
 }

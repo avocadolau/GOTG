@@ -14,9 +14,13 @@ namespace Wiwa
 		virtual void ExitState() override;
 		virtual void OnCollisionEnter(Object* object1, Object* object2) override;
 
-		void Fire(const glm::vec3& shootInput);
+		void Fire();
+		void FireStarlordUltimate();
 	private:
 		float m_ShootTimer;
 		glm::vec2 m_MousePos;
+		bool m_FirstShoot;
+		float m_audioDelay;
+		float m_currentAudioDelay;
 	};
 }

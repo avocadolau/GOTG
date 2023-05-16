@@ -1,4 +1,3 @@
-#include "wipch.h"
 #include "PlayerBaseState.h"
 
 
@@ -10,3 +9,12 @@ Wiwa::PlayerBaseState::PlayerBaseState(PlayerStateMachine* stateMachine, EntityI
 Wiwa::PlayerBaseState::~PlayerBaseState()
 {
 }
+
+void Wiwa::PlayerBaseState::OnCollision(Object*, Object*)
+{
+}
+
+void Wiwa::PlayerBaseState::OnCollisionExit(Object*, Object*)
+{
+}
+

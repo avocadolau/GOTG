@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerDeath.h"
 
 Wiwa::PlayerDeath::PlayerDeath(PlayerStateMachine* stateMachine, EntityId id)
@@ -14,9 +13,10 @@ void Wiwa::PlayerDeath::EnterState()
 {
 	WI_INFO("Player death");
 	m_StateMachine->GetAnimator()->PlayAnimation("death", false);
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.f);
+	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection());
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
-	// TODO: Particles and audio
+	m_StateMachine->GetAudio()->PlayAudio("player_dash");
+	// TODO: Particles 
 }
 
 void Wiwa::PlayerDeath::UpdateState()

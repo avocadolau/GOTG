@@ -511,34 +511,7 @@ void UIPanel::DrawAbilityCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		}
 	}
 
-	if (cbcount > 0) {
-		const Func* current_cb = app.getCallbackAt(current_item);
-
-		ImGui::Text("Callback type:");
-
-		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
-		{
-			for (size_t n = 0; n < cbcount; n++)
-			{
-				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				current_cb = app.getCallbackAt(n);
-
-				if (current_cb->params.size() == 0) {
-					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-					{
-						current_item = n;
-						if (is_selected)
-							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-					}
-				}
-
-			}
-			ImGui::EndCombo();
-		}
-	}
-
-	callbackID = current_item;
-
+	callbackID = WI_INVALID_INDEX;
 	ImGui::Text("Animations");
 	ImGui::Checkbox("animated", &animated);
 	VectorEdit(animationRects);
@@ -589,49 +562,7 @@ void UIPanel::DrawImageCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		ImGui::EndDragDropTarget();
 	}
 
-	static size_t current_item = WI_INVALID_INDEX;
-
-	Wiwa::Application& app = Wiwa::Application::Get();
-
-	size_t cbcount = app.GetCallbacksCount();
-
-	if (current_item == WI_INVALID_INDEX) {
-		for (size_t i = 0; i < cbcount; i++) {
-			const Func* cb = app.getCallbackAt(i);
-
-			if (cb->params.size() == 0) {
-				current_item = i;
-			}
-		}
-	}
-
-	if (cbcount > 0) {
-		const Func* current_cb = app.getCallbackAt(current_item);
-
-		ImGui::Text("Callback type:");
-
-		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
-		{
-			for (size_t n = 0; n < cbcount; n++)
-			{
-				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
-				current_cb = app.getCallbackAt(n);
-				
-				if (current_cb->params.size() == 0) {
-					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
-					{
-						current_item = n;
-						if (is_selected)
-							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-					}
-				}
-				
-			}
-			ImGui::EndCombo();
-		}
-	}
-
-	callbackID = current_item;
+	callbackID = WI_INVALID_INDEX;
 
 	ImGui::Text("Animations");
 	ImGui::Checkbox("animated", &animated);
@@ -705,7 +636,51 @@ void UIPanel::DrawVideoCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		ImGui::EndDragDropTarget();
 	}
 
-	if (ImGui::Button("Create Text"))
+	static size_t current_item = WI_INVALID_INDEX;
+
+	Wiwa::Application& app = Wiwa::Application::Get();
+
+	size_t cbcount = app.GetCallbacksCount();
+
+	if (current_item == WI_INVALID_INDEX) {
+		for (size_t i = 0; i < cbcount; i++) {
+			const Func* cb = app.getCallbackAt(i);
+
+			if (cb->params.size() == 1 && cb->params.at(0).hash == FNV1A_HASH("void")) {
+				current_item = i;
+			}
+		}
+	}
+
+	if (cbcount > 0) {
+		const Func* current_cb = app.getCallbackAt(current_item);
+
+		ImGui::Text("Callback type:");
+
+		if (ImGui::BeginCombo("##combo", current_cb->name.c_str())) // The second parameter is the label previewed before opening the combo.
+		{
+			for (size_t n = 0; n < cbcount; n++)
+			{
+				bool is_selected = n == current_item; // You can store your selection however you want, outside or inside your objects
+				current_cb = app.getCallbackAt(n);
+
+				if (current_cb->params.size() == 1 && current_cb->params.at(0).hash == FNV1A_HASH("void")) {
+					if (ImGui::Selectable(current_cb->name.c_str(), is_selected))
+					{
+						current_item = n;
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+					}
+				}
+
+			}
+			ImGui::EndCombo();
+		}
+	}
+
+	callbackID = current_item;
+
+	if (ImGui::Button("Create video"))
 	{
 		Wiwa::Rect2i rect;
 		rect.x = position[0];
@@ -713,7 +688,7 @@ void UIPanel::DrawVideoCreation(int canvas_id, Wiwa::GuiManager& m_GuiManager)
 		rect.width = size[0];
 		rect.height = size[1];
 		if (canvas_id > -1)
-			m_GuiManager.CreateGuiControl_Video(GuiControlType::VIDEO, m_GuiManager.canvas.at(canvas_id)->controls.size(), canvas_id, rect, pathForAsset.c_str(),true);
+			m_GuiManager.CreateGuiControl_Video(GuiControlType::VIDEO, m_GuiManager.canvas.at(canvas_id)->controls.size(), canvas_id, rect, pathForAsset.c_str(),true,callbackID);
 	}
 	ImGui::PopID();
 }

@@ -11,6 +11,7 @@ layout (location = 5) in float l_TexID;
 layout (location = 6) in vec2 l_TexClip[4]; // from loc 6 to 9
 layout (location = 10) in float l_Active;
 layout (location = 11) in float l_Rotation;
+layout (location = 12) in float l_Priority;
 
 //uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -41,7 +42,8 @@ void main()
 		vpos = model * vpos;
 		// Translate
 		vpos.xy += l_PosOffset;
-
+		
+		vpos.z = l_Priority;
 		// Out position
 		gl_Position = u_Proj * u_View * vpos;
 		

@@ -21,6 +21,8 @@ namespace Wiwa
         //m_AgentParams.obstacleAvoidanceType = 3;
         //m_AgentParams.queryFilterType = 0;
         //m_AgentParams.separationWeight = 1;
+        m_PreviousVelocity = 0.0f;
+        m_PreviousAcceleration = 0.0f;
     }
 
     NavAgentSystem::~NavAgentSystem()
@@ -32,9 +34,17 @@ namespace Wiwa
 
     void NavAgentSystem::OnInit()
     {
+        if (GetEntityManager().IsActive(m_EntityId) == false)
+        {
+            m_AgentIndex = -1;
+            return;
+        }
+
         Transform3D* tr = GetComponent<Transform3D>();
         m_CurrentPos = tr->localPosition;
         m_NavAgentIt = GetComponentIterator<Wiwa::NavAgent>();
+        Wiwa::NavAgent* agent = GetComponentByIterator<Wiwa::NavAgent>(m_NavAgentIt);
+        agent->agentSliding = true;
         RefreshParamters();
         RegisterWithCrowd();
     }
@@ -92,6 +102,17 @@ namespace Wiwa
                 }
             }
 
+            if (!navAgent->agentSliding)
+            {
+                dtCrowdAgent* agent = crowd.getCrowd().getEditableAgent(m_AgentIndex);
+                if (agent)
+                {
+                    agent->vel[0] = agent->dvel[0];
+                    agent->vel[1] = agent->dvel[1];
+                    agent->vel[2] = agent->dvel[2];
+                }
+            }
+
             Render();
 
             // Move the target
@@ -121,31 +142,126 @@ namespace Wiwa
     {
         if (m_AgentIndex != -1) {
             dtCrowdAgent* agent = Crowd::getInstance().getCrowd().getEditableAgent(m_AgentIndex);
-
+            Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
             if (agent)
             {
                 agent->npos[0] = position.x;
                 agent->npos[1] = position.y;
                 agent->npos[2] = position.z;
             }
+
+            m_CurrentPos = position;
         }
     }
 
     void NavAgentSystem::SetMaxSpeed(float maxSpeed)
     {
+        m_PreviousVelocity = m_AgentParams.maxSpeed;
         m_AgentParams.maxSpeed = maxSpeed;
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().updateAgentParameters(m_AgentIndex, &m_AgentParams);
+        }
     }
 
     void NavAgentSystem::SetMaxAcceleration(float maxAcceleration)
     {
+        m_PreviousAcceleration = m_AgentParams.maxAcceleration;
         m_AgentParams.maxAcceleration = maxAcceleration;
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().updateAgentParameters(m_AgentIndex, &m_AgentParams);
+        }
+    }
+
+    void NavAgentSystem::SetPreviousMaxSpeed()
+    {
+        m_AgentParams.maxSpeed = m_PreviousVelocity;
+    }
+
+    void NavAgentSystem::SetPreviousMaxAcceleration()
+    {
+        m_AgentParams.maxAcceleration = m_PreviousAcceleration;
+    }
+
+    void NavAgentSystem::RequestMoveVelocity(const glm::vec3& velocity)
+    {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().getCrowd().requestMoveVelocity(m_AgentIndex, &velocity[0]);
+        }
     }
 
     void NavAgentSystem::StopAgent()
     {
         if (m_AgentIndex != -1) {
-            Crowd::getInstance().getCrowd().resetMoveTarget(m_AgentIndex);
+            Crowd& crowd = Crowd::getInstance();
+            crowd.getCrowd().resetMoveTarget(m_AgentIndex);
         }
+    }
+
+    void NavAgentSystem::StopAgentAndVelocity()
+    {
+        if (m_AgentIndex != -1) {
+            Crowd& crowd = Crowd::getInstance();
+            crowd.getCrowd().resetMoveTarget(m_AgentIndex);
+            dtCrowdAgent* agent = crowd.getCrowd().getEditableAgent(m_AgentIndex);
+            if (agent)
+            {
+                agent->vel[0] = agent->dvel[0];
+                agent->vel[1] = agent->dvel[1];
+                agent->vel[2] = agent->dvel[2];
+            }
+        }
+    }
+
+    void NavAgentSystem::RemoveAgent()
+    {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().RemoveAgent(m_AgentIndex);
+            m_AgentIndex = -1;
+        }
+    }
+
+    bool NavAgentSystem::Raycast(const glm::vec3& start_point, const glm::vec3& end_point)
+    {
+        Crowd& crowd = Crowd::getInstance();
+        dtCrowd& dtCrowd = crowd.getCrowd();
+        const dtNavMeshQuery* navMeshQuery = dtCrowd.getNavMeshQuery();
+
+        dtPolyRef startRef;
+        float targetPos[3];
+        const dtQueryFilter* filter = dtCrowd.getFilter(m_AgentIndex);
+        const float* extents = dtCrowd.getQueryExtents();
+        navMeshQuery->findNearestPoly(&start_point[0], extents, filter, &startRef, targetPos);
+
+        glm::vec3 pt(0.0f);
+        dtPolyRef ref;
+        float distance = 0.0f;
+        float t;
+        float hitNormal[3];
+        dtPolyRef path[6];
+        int count;
+        const int maxPath = 6;
+        navMeshQuery->raycast(startRef, &start_point[0], &end_point[0], filter, &t, hitNormal, path, &count, maxPath);
+        if (t > 1)
+        {
+            // Hit
+            //WI_INFO("HITTTTT");
+            return true;
+        }
+        else
+        {
+            // No hit
+            //WI_INFO("NO HIT");
+            return false;
+        }
+        return false;
+       /* if (dtStatusSucceed(status))
+        {
+            if (hit.t == FLT_MAX)
+                return false;
+
+            return true;
+        }
+        return false;*/
     }
 
     const glm::vec3& NavAgentSystem::GetCurrentPosition() const
@@ -201,10 +317,8 @@ namespace Wiwa
 
             return glm::vec3(current_transform_rotation.x, interpolatedRotation, current_transform_rotation.z);
         }
+        return current_transform_rotation;
     }
-
-
-
 
     float NavAgentSystem::GetMaxSpeed() const
     {
@@ -218,6 +332,10 @@ namespace Wiwa
 
     void NavAgentSystem::RegisterWithCrowd()
     {
+        if (m_AgentIndex != -1) {
+            Crowd::getInstance().RemoveAgent(m_AgentIndex);
+        }
+
         m_AgentIndex = Crowd::getInstance().AddAgent(&m_CurrentPos[0], &m_AgentParams);
         Crowd::getInstance().SetAgentParameters(m_AgentIndex, m_AgentParams);
     }
@@ -236,7 +354,7 @@ namespace Wiwa
             m_AgentParams.updateFlags = DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS | DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
             m_AgentParams.obstacleAvoidanceType = 3;
             m_AgentParams.queryFilterType = 0;
-            m_AgentParams.separationWeight = 1;
+            m_AgentParams.separationWeight = 6;
         }
     }
 
@@ -270,7 +388,7 @@ namespace Wiwa
 
     bool NavAgentSystem::OnEnabledFromPool()
     {
-        this->OnInit();
+        OnInit();
         return true;
     }
 

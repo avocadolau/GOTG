@@ -3,10 +3,13 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa\ecs\systems\PhysicsSystem.h>
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
+#include <Wiwa/audio/Audio.h>
 
 namespace Wiwa {
 	struct StarLordShooter;
 	struct RocketShooter;
+	struct Character;
 
 	class PlayerController : public System {
 		bool m_PlayerSet = false;
@@ -17,34 +20,47 @@ namespace Wiwa {
 
 		void OnAwake() override;
 		void OnInit() override;
+		void OnDestroy() override;
 
 		void OnUpdate() override;
+
 		StarLordShooter* GetStarLord();
 		RocketShooter* GetRocket();
 		Character* GetCharacter();
 		Transform3D* GetTransform();
 		CollisionBody* GetRigidBody();
+		
 		WI_HARD_INL EntityId GetEntity() { return m_EntityId; }
-		WI_HARD_INL glm::vec3 GetDirection() { return m_Direction; }
-		WI_HARD_INL glm::vec3 GetInput() { return m_MovementInput; }
-		WI_HARD_INL glm::vec3 GetShootInput() { return m_ShootInput; }
-		glm::vec3 GetVelocity() { return m_Velocity; }
+		WI_HARD_INL float GetDirection() { return m_Direction; }
+		WI_HARD_INL glm::vec2 GetInput() { return m_MovementInput; }
+		WI_HARD_INL glm::vec2 GetShootInput() { return m_ShootInput; }
+		WI_HARD_INL EntityManager& GetEntityManager() { return m_Scene->GetEntityManager(); }
+		
+		void SetVelocity(const glm::vec2& velocity) { m_CurrentVelocity = velocity; }
+
 		bool IsDashEnable() { return m_DashEnable; }
+		
 		void SetDashEnable(bool value) { m_DashEnable = value; }
-		void SetDirection(const glm::vec3& value) { m_Direction = value; }
-		void SetVelocity(const glm::vec3& velocity) { m_Velocity = velocity; }
+
+		void SetDirection(const float value) { m_Direction = value; }
+
 		AnimatorSystem* GetAnimator();
 		PhysicsSystem* GetPhysics();
 		Transform3D* GetFirePosition(const char* name);
-		void TakeDamage(uint32_t damage);
+		AudioSystem* GetAudio();
 
-		void SpawnBullet(Transform3D& transform, const StarLordShooter& shooter, const Character& character, glm::vec3 bullDir);
+		void SpawnStarLordBullet(Transform3D& transform, const Character& character);
+		void SpawnRocketBullet(Transform3D& transform, const Character& character);
+		void SpawnStarLordUltimate(Transform3D& transform, const Character& character);
 
-		void SetPlayerRotation(const glm::vec3& input, const float rotationSpeed);
-		float AngleFromVec2(const glm::vec2& vector);
+		void SetPlayerRotation(const float angle);
+		
+
+	public:
+		bool IsDashing;
 	private:
-		glm::vec3 GetMovementInput();
-		glm::vec3 GetShootingInput();
+		glm::vec2 GetMovementInput();
+		glm::vec2 GetShootingInput();
 	protected:
 		EntityManager::ComponentIterator m_TransformIt;
 		EntityManager::ComponentIterator m_StatsIt;
@@ -52,14 +68,14 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_ShooterIt;
 		EntityManager::ComponentIterator m_RocketIt;
 		
-		glm::vec3 m_ShootInput;
-		glm::vec3 m_MovementInput;
-		glm::vec3 m_Velocity;
-		glm::vec3 m_Direction;
+		glm::vec2 m_ShootInput;
+		glm::vec2 m_MovementInput;
 
+		glm::vec2 m_CurrentVelocity;
+
+		float m_Direction;
 		bool m_DashEnable;
 		float m_CooldownTimer;
-		
 	};
 }
 

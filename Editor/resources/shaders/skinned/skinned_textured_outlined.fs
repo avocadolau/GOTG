@@ -43,7 +43,7 @@ struct SpotLight
 };
 
 // Outline percentage
-uniform vec2 u_OutlineSmoothRange;
+uniform vec2 u_OutlineSmoothRange = vec2(0.4,0.4);
 // Outline color
 uniform vec4 u_OutlineColor;
 
@@ -66,7 +66,8 @@ uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
 
-
+uniform vec4 u_Color = vec4(0.0,0.0,0.0,0.0);
+uniform bool u_Hit = false;
 uniform vec2 u_NearFar;
 
 
@@ -177,8 +178,13 @@ void main()
     float dotEyeNormal = dot(normalize(dir),normalize(Normal));
     dotEyeNormal =abs(dotEyeNormal);
 
-    vec4 colorLight  =  texture(u_Texture,TexCoord)* totalLight;
-
-    FragColor = mix(u_OutlineColor,colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
-
+    vec4 colorLight  =  texture(u_Texture,TexCoord) * totalLight;
+    
+    
+    if(u_Hit)
+    {
+        FragColor = u_Color;
+    }else{
+        FragColor = mix(u_OutlineColor,colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
+    }
 }

@@ -51,7 +51,7 @@ namespace Wiwa {
 		static void Awake();
 		static void Init();
 		static void Update();
-
+		static void ModuleInit();
 		static void ModuleUpdate();
 
 		static void PlayScene() { m_PlayScene = true; }

@@ -18,6 +18,8 @@ namespace Wiwa {
 	void ParticleSystem::OnSystemAdded()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		SetEmitterBools(emitter);
+
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
@@ -30,9 +32,9 @@ namespace Wiwa {
 		emitter->m_meshChanged = false;
 		emitter->m_materialChanged = false;
 
-		//init with delay
-		float delay = 0;
-		m_SpawnTimer = delay;
+		m_SpawnTimer = 0;
+		m_SpawnedOnce = false;
+		
 		m_AvailableParticles = emitter->m_maxParticles;
 
 		emitter->m_activeTimeChanged = false;
@@ -44,17 +46,75 @@ namespace Wiwa {
 
 		// init particle struct
 		m_Particles.resize(m_MaxParticles);
-		for (int i = 0; i < m_MaxParticles; i++)
+		for (uint i = 0; i < m_MaxParticles; i++)
 		{
 			m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 
+		if ((int)emitter->m_p_positionFollowsRotation > 1 || (int)emitter->m_p_positionFollowsRotation < 0)
+			emitter->m_p_positionFollowsRotation = false;
 
+		if ((int)emitter->m_useAdditiveBlending > 1 || (int)emitter->m_useAdditiveBlending < 0)
+			emitter->m_useAdditiveBlending = false;
+
+
+		//start
+
+		if (m_Model == nullptr)
+		{
+			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
+			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+		}
+		if (m_Material == nullptr)
+		{
+			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+		}
+
+
+
+		if (emitter->m_p_rangedSpawnDelay)
+		{
+			m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
+
+		}
+		else
+		{
+
+			m_SpawnTimer = emitter->m_p_spawnDelay;
+		}
+
+
+		if (emitter->m_activeOverTime)
+		{
+			if (emitter->m_startActive)
+			{
+				if (emitter->m_rangedTimeActive)
+				{
+					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+				}
+				else
+				{
+					emitter->m_ActiveTimer = emitter->m_initialTimeActive + emitter->m_p_spawnDelay;
+				}
+			}
+			else
+			{
+				emitter->m_ActiveTimer = 0;
+			}
+
+		}
+		if (m_SpawnTimer == 0 && (emitter->m_active || emitter->m_activeOverTime))
+			SpawnParticleSet();
 	}
 	void ParticleSystem::OnAwake()
 	{
 	}
 	void ParticleSystem::OnInit()
+	{
+
+	}
+	bool ParticleSystem::OnEnabledFromPool()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 
@@ -70,6 +130,19 @@ namespace Wiwa {
 		}
 
 
+
+		if (emitter->m_p_rangedSpawnDelay)
+		{
+			m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
+
+		}
+		else
+		{
+
+			m_SpawnTimer = emitter->m_p_spawnDelay;
+		}
+
+
 		if (emitter->m_activeOverTime)
 		{
 			if (emitter->m_startActive)
@@ -80,15 +153,19 @@ namespace Wiwa {
 				}
 				else
 				{
-					emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+					emitter->m_ActiveTimer = emitter->m_initialTimeActive + emitter->m_p_spawnDelay;
 				}
 			}
 			else
 			{
 				emitter->m_ActiveTimer = 0;
 			}
-			
+
 		}
+		if (m_SpawnTimer == 0 && (emitter->m_active || emitter->m_activeOverTime))
+			SpawnParticleSet();
+
+		return true;
 	}
 	void ParticleSystem::OnUpdate()
 	{
@@ -106,6 +183,7 @@ namespace Wiwa {
 
 
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		float dt = Time::GetDeltaTime() * 0.001;
 
 		if (emitter->m_meshChanged)
 		{
@@ -148,60 +226,124 @@ namespace Wiwa {
 			
 			m_Particles.resize(m_MaxParticles);
 			
-			for (int i = 0; i < m_MaxParticles; i++)
+			for (uint i = 0; i < m_MaxParticles; i++)
 			{
 				m_Particles[i] = Particle(0, initZero, initZero, initZero, initZero, initZero, initZero, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			}
-
 		}
 
-		emitter->m_activeParticles = 0;
-
-		if (emitter->m_active || emitter->m_activeOverTime)
+		if ((emitter->m_active || emitter->m_activeOverTime) /*&& !Time::IsPaused()*/)
 		{
-			float dt = Time::GetDeltaTime() * 0.001;
+			
 
 			if (emitter->m_activeOverTime)
 			{
-				if (emitter->m_ActiveTimer > 0)
-					m_SpawnTimer -= dt;
+				
 				emitter->m_ActiveTimer -= dt;
 			}
-			else
-				m_SpawnTimer -= dt;
+
+			if (m_SpawnTimer > 0)
+			m_SpawnTimer -= dt;
 
 
-			if ((m_SpawnTimer < 0 && emitter->m_loopSpawning) || (emitter->m_activeOverTime && emitter->m_ActiveTimer > 0))
+
+			if (emitter->m_activeOverTime)
 			{
-				for (unsigned int i = 0; i < emitter->m_spawnAmount; ++i)
+				if (emitter->m_ActiveTimer <= 0 && emitter->m_destroyOnFinishActive && Time::IsPlaying() )
 				{
-					if (m_AvailableParticles > 0)
+					if (emitter->m_destroyActiveParticles)
 					{
-						int unusedParticle = FirstUnusedParticle();
-						SpawnParticle(m_Particles[unusedParticle]);
+						m_Particles.clear();
+
+						EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+						//WI_CORE_INFO("active timer over");
+						eman.DestroyEntity(m_EntityId);
+					}
+					else if (emitter->m_activeParticles == 0)
+					{
+						EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+						//WI_CORE_INFO("active timer over");
+						eman.DestroyEntity(m_EntityId);
+					}
+					
+
+					
+				}
+
+
+				if (emitter->m_active && emitter->m_ActiveTimer <= 0)
+				{
+					if (emitter->m_rangedTimeActive)
+					{
+						emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+					}
+					else
+					{
+						emitter->m_ActiveTimer = emitter->m_initialTimeActive;
 					}
 				}
 
-				m_SpawnTimer = emitter->m_spawnRate;
-
-				if (emitter->m_p_rangedSpawnRate)
+				if (m_SpawnTimer <= 0 && emitter->m_ActiveTimer > 0)
 				{
-					m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+					if (!m_SpawnedOnce)
+						SpawnParticleSet();
+
+					if (emitter->m_loopSpawning)
+					{
+						m_SpawnTimer = emitter->m_spawnRate;
+
+						if (emitter->m_p_rangedSpawnRate)
+						{
+							m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+						}
+					}
+					else
+					{
+						m_SpawnedOnce = true;
+					}
+					
+				}
+				else
+				{
+					emitter->m_active = false;
 				}
 			}
+			else
+			{
+				if (m_SpawnTimer <= 0 && emitter->m_loopSpawning)
+				{
+					SpawnParticleSet();
+
+					m_SpawnTimer = emitter->m_spawnRate;
+
+					if (emitter->m_p_rangedSpawnRate)
+					{
+						m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+					}
+				}
+
+				
+			}
+
+
 
 			//WI_CORE_INFO("spawn timer = {0}", m_SpawnTimer);
 
+		}
 
 
+		int activeParticles = 0;
 
-			int activeParticles = 0;
-			for (unsigned int i = 0; i < m_MaxParticles; ++i)
+		if (!Time::IsPaused())
+			activeParticles = 0;
+
+		for (unsigned int i = 0; i < m_MaxParticles && !m_Particles.empty(); ++i)
+		{
+			Particle& particle = m_Particles[i];
+
+			if (particle.life_time > 0.0f)
 			{
-				Particle& particle = m_Particles[i];
-				float dt = Time::GetDeltaTime() * 0.001f;
-
-				if (particle.life_time > 0.0f)
+				/*if (!Time::IsPaused())*/
 				{
 					UpdateParticleLife(particle, dt);
 
@@ -220,7 +362,7 @@ namespace Wiwa {
 							{
 								/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
 								WI_CORE_INFO(cid.c_str());*/
-								
+
 								color = particle.color = InterpolateVec4(
 									emitter->m_p_colorsOverLifetime[j].color,
 									emitter->m_p_colorsOverLifetime[j + 1].color,
@@ -234,7 +376,7 @@ namespace Wiwa {
 					{
 						color = particle.color = emitter->m_p_colorsOverLifetime[0].color;
 					}
-					
+
 
 					Uniform* u_color = m_Material->getUniform("u_Color");
 					if (u_color != nullptr)
@@ -247,8 +389,8 @@ namespace Wiwa {
 					Uniform* u_Time = m_Material->getUniform("u_Time");
 					if (u_Time != nullptr)
 						u_Time->setData(Wiwa::Time::GetRealTimeSinceStartup(), UniformType::Float);
-					
-					
+
+
 					//calculate everything
 					Transform3D* t3d = GetComponent<Transform3D>();
 
@@ -258,9 +400,9 @@ namespace Wiwa {
 					}
 					else
 					{
-						
+
 						particle.transform.localPosition += particle.velocity * dt;
-						
+
 					}
 
 					if (emitter->m_p_useGravity)
@@ -294,12 +436,62 @@ namespace Wiwa {
 							//WI_CORE_INFO("[{0}] clamp to end scale", particle.life_percentage);
 							particle.transform.localScale = emitter->m_p_scaleOverTimeEnd;
 						}
-						
-					
+
+
 					}
 					else
 					{
-						particle.transform.localScale += particle.growthVelocity * dt;
+						//calculate size X
+						if (emitter->m_stopSizeAtZero && emitter->m_stopSizeAtZeroX)
+						{
+							if (particle.transform.localScale.x + particle.growthVelocity.x * dt > 0)
+							{
+								particle.transform.localScale.x += particle.growthVelocity.x * dt;
+							}
+							else
+							{
+								particle.transform.localScale.x = 0;
+							}
+						}
+						else
+						{
+							particle.transform.localScale.x += particle.growthVelocity.x * dt;
+						}
+
+						//calculate size Y
+						if (emitter->m_stopSizeAtZero && emitter->m_stopSizeAtZeroY)
+						{
+							if (particle.transform.localScale.y + particle.growthVelocity.y * dt > 0)
+							{
+								particle.transform.localScale.y += particle.growthVelocity.y * dt;
+							}
+							else
+							{
+								particle.transform.localScale.y = 0;
+							}
+						}
+						else
+						{
+							particle.transform.localScale.y += particle.growthVelocity.y * dt;
+						}
+
+						//calculate size Z
+						if (emitter->m_stopSizeAtZero && emitter->m_stopSizeAtZeroZ)
+						{
+							if (particle.transform.localScale.z + particle.growthVelocity.z * dt > 0)
+							{
+								particle.transform.localScale.z += particle.growthVelocity.z * dt;
+							}
+							else
+							{
+								particle.transform.localScale.z = 0;
+							}
+						}
+						else
+						{
+							particle.transform.localScale.z += particle.growthVelocity.z * dt;
+						}
+
 					}
 
 					if (emitter->m_p_rotationOverTime)
@@ -328,7 +520,7 @@ namespace Wiwa {
 
 						}
 					}
-					else 
+					else
 					{
 						particle.transform.localRotation += particle.angularVelocity * dt;
 					}
@@ -336,17 +528,6 @@ namespace Wiwa {
 
 
 					//update world space values
-					if (emitter->m_p_followEmitterPosition)
-					{
-						particle.transform.position = t3d->position + particle.transform.localPosition;
-
-					}
-					else
-					{
-						particle.transform.position = particle.transform.localPosition;
-
-					}
-
 					if (emitter->m_p_followEmitterRotation)
 					{
 						particle.transform.rotation = t3d->rotation + particle.transform.localRotation;
@@ -358,9 +539,43 @@ namespace Wiwa {
 
 					}
 
+					glm::mat4 rotMat(1);
+					glm::vec3 rotationRad = glm::radians(particle.transform.rotation);
+					glm::vec3 orginalPos(0);
+
+
+
+
+					/*if (emitter->m_p_followEmitterPosition)
+					{
+						orginalPos = (t3d->position + particle.transform.localPosition);
+
+
+					}
+					else
+					{
+						orginalPos = particle.transform.localPosition;
+
+					}*/
+					orginalPos = particle.transform.localPosition;
+
+					if (emitter->m_p_positionFollowsRotation)
+					{
+						orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+						orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+						orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+					}
+
+					if (emitter->m_p_followEmitterPosition)
+						orginalPos += t3d->position;
+
+
+					particle.transform.position = orginalPos;
+
 					particle.transform.scale = particle.transform.localScale;
 
-					
+
 
 					// Create transformation matrix
 					glm::mat4 transform = glm::mat4(1.0f);
@@ -397,7 +612,7 @@ namespace Wiwa {
 
 						//pass transformation matrix
 						particle.transform.worldMatrix = transform;
-						
+
 					}
 					else
 					{
@@ -412,44 +627,44 @@ namespace Wiwa {
 						//pass transformation matrix
 						particle.transform.worldMatrix = transform;
 					}
-					
-
-					//DEBUG PURPOSES ----------------------------------------------------------------------------
-
-					/*WI_CORE_INFO("Local Matrix: ");
-
-					for (size_t _y = 0; _y < 4; _y++)
-					{
-						std::string r;
-						for (size_t _x = 0; _x < 4; _x++)
-						{
-							r += std::to_string(particle.transform.localMatrix[_x][_y]) + " ";
-						}
-						WI_CORE_INFO(r.c_str());
-					}
-					WI_CORE_INFO("-------------------");
-
-					WI_CORE_INFO("World Matrix: ");
-
-					for (size_t _y = 0; _y < 4; _y++)
-					{
-						std::string r;
-						for (size_t _x = 0; _x < 4; _x++)
-						{
-							r += std::to_string(particle.transform.worldMatrix[_x][_y]) + " ";
-						}
-						WI_CORE_INFO(r.c_str());
-					}
-					WI_CORE_INFO("===================");*/
-
-					Render(particle);
 				}
+
+				//DEBUG PURPOSES ----------------------------------------------------------------------------
+
+				/*WI_CORE_INFO("Local Matrix: ");
+
+				for (size_t _y = 0; _y < 4; _y++)
+				{
+					std::string r;
+					for (size_t _x = 0; _x < 4; _x++)
+					{
+						r += std::to_string(particle.transform.localMatrix[_x][_y]) + " ";
+					}
+					WI_CORE_INFO(r.c_str());
+				}
+				WI_CORE_INFO("-------------------");
+
+				WI_CORE_INFO("World Matrix: ");
+
+				for (size_t _y = 0; _y < 4; _y++)
+				{
+					std::string r;
+					for (size_t _x = 0; _x < 4; _x++)
+					{
+						r += std::to_string(particle.transform.worldMatrix[_x][_y]) + " ";
+					}
+					WI_CORE_INFO(r.c_str());
+				}
+				WI_CORE_INFO("===================");*/
+
+				Render(particle);
 			}
-
-			emitter->m_activeParticles = activeParticles;
-			m_AvailableParticles = emitter->m_maxParticles - activeParticles;
-
 		}
+
+		emitter->m_activeParticles = activeParticles;
+		m_AvailableParticles = emitter->m_maxParticles - activeParticles;
+
+		
 		if (emitter->m_ActiveTimer < 0)  emitter->m_ActiveTimer = 0;
 	}
 
@@ -490,16 +705,76 @@ namespace Wiwa {
 		return res;
 	}
 
+	void ParticleSystem::EmitParticleBatch(int amount)
+	{
+		for (unsigned int i = 0; i < (uint)amount; ++i)
+		{
+			if (m_AvailableParticles > 0)
+			{
+				int unusedParticle = FirstUnusedParticle();
+				SpawnParticle(m_Particles[unusedParticle]);
+			}
+		}
+	}
+
+	
+	void ParticleSystem::EmitParticleBatch()
+	{
+		SpawnParticleSet();
+	}
+
+	void ParticleSystem::SetActive(bool active)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		emitter->m_active = active;
+	}
+
+	void ParticleSystem::SetMaterial(const char* materialPath)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+		ResourceId matid = Wiwa::Resources::Load<Material>(materialPath);
+
+		if (matid != -1)
+			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+		else
+			WI_CORE_INFO("Material could not be found {0}", materialPath);
+	}
+
+	void ParticleSystem::SetMesh(const char* meshPath)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+		ResourceId meshid = Wiwa::Resources::Load<Model>(meshPath);
+		
+		if (meshid != -1)
+			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+		else
+			WI_CORE_INFO("Mesh could not be found {0}", meshPath);
+	}
 
 	void ParticleSystem::OnDestroy()
 	{
-		
 		m_Model = nullptr;
 		m_Material = nullptr;
 
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		emitter->m_ActiveTimer = 0;
 	}
+
+	bool ParticleSystem::OnDisabledFromPool()
+	{
+		for (size_t i = 0; i < m_Particles.size(); i++)
+		{
+			Particle& particle = m_Particles[i];
+			particle.life_percentage = 0;
+			particle.life_time_start = 0;
+			particle.life_time = 0;
+		}
+
+		return false;
+	}
+
 	void ParticleSystem::Render(Particle& particle)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
@@ -513,17 +788,38 @@ namespace Wiwa {
 		size_t cameraCount = man.getCameraSize();
 		std::vector<CameraId>& cameras = man.getCameras();
 
+		
+
+		
+		glEnable(GL_CULL_FACE);
+
+		if (emitter->m_deactivateFaceCulling)
+		{
+			glDisable(GL_CULL_FACE);
+		}
+
+
 		glEnable(GL_BLEND);
 		glDepthMask(GL_FALSE);
 		
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		if (emitter->useAdditiveBlending)
+	
+		if (emitter->m_useAdditiveBlending)
 		{
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			glBlendEquation(GL_FUNC_ADD);
+		}
+		else if (emitter->m_useMultiplyBlending)
+		{
+			glBlendFunc(GL_DST_COLOR, GL_ZERO);
+			glBlendEquation(GL_FUNC_ADD);
+		}
+		else {
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendEquation(GL_FUNC_ADD);
 		}
 
-		glBlendEquation(GL_FUNC_ADD);
+
+
 
 		for (size_t i = 0; i < cameraCount; i++)
 		{
@@ -582,7 +878,6 @@ namespace Wiwa {
 		if (emitter->m_p_followEmitterPositionSpawn) followSpawnPos = t3d->position;
 		if (emitter->m_p_followEmitterRotationSpawn) followSpawnRot = t3d->rotation;
 
-
 		switch (emitter->m_spawnVolume)
 		{
 			case Wiwa::ParticleSpawnVolume::NONE:
@@ -619,6 +914,7 @@ namespace Wiwa {
 			}
 			break;
 		}
+
 		//initial rotation
 		if (emitter->m_p_rangedInitialRotation)
 		{
@@ -632,24 +928,44 @@ namespace Wiwa {
 		{
 			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
 		}
+		
 
 		//initial scale
 		if (emitter->m_p_rangedInitialScale)
 		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.x, emitter->m_p_maxInitialScale.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.y, emitter->m_p_maxInitialScale.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.z, emitter->m_p_maxInitialScale.z);
+			float x = 0;
+			float y = 0;
+			float z = 0;
 
-			initScale = emitter->m_p_initialScale + t3d->localScale + glm::vec3(x, y, z);
+			if (emitter->m_p_uniformStartSize)
+			{
+				x = y = z = Wiwa::Math::RandomRange(emitter->m_p_minUniformStartSizeVal, emitter->m_p_maxUniformStartSizeVal);
+			}
+			else
+			{
+				x = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.x, emitter->m_p_maxInitialScale.x);
+				y = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.y, emitter->m_p_maxInitialScale.y);
+				z = Wiwa::Math::RandomRange(emitter->m_p_minInitialScale.z, emitter->m_p_maxInitialScale.z);
+			}
+
+			initScale = t3d->localScale + glm::vec3(x, y, z);
 		}
 		else
 		{
-			initScale = emitter->m_p_initialScale + t3d->localScale;
+			if (emitter->m_p_uniformStartSize)
+			{
+				initScale = t3d->localScale + glm::vec3(emitter->m_p_uniformStartSizeVal);
+			}
+			else
+			{
+				initScale = emitter->m_p_initialScale + t3d->localScale;
+			}
 		}
 
 		particle.startPosition = initPosition;
 		particle.transform.localPosition = initPosition;
-		particle.transform.localRotation= initRotation;
+		particle.transform.localRotation = initRotation;
+		particle.startRotation = t3d->rotation;
 		particle.transform.localScale = initScale;
 
 
@@ -684,17 +1000,41 @@ namespace Wiwa {
 		//initial growth velocity
 		if (emitter->m_p_rangedGrowthVelocity)
 		{
-			float x = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.x, emitter->m_p_maxInitialGrowthVelocity.x);
-			float y = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.y, emitter->m_p_maxInitialGrowthVelocity.y);
-			float z = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.z, emitter->m_p_maxInitialGrowthVelocity.z);
+
+			float x = 0;
+			float y = 0;
+			float z = 0;
+
+			particle.uniformGrowthVal = Wiwa::Math::RandomRange(emitter->m_p_minUniformGrowthVal, emitter->m_p_maxUniformGrowthVal);
+
+			if (emitter->m_p_growUniformly)
+			{
+				x = y = z = particle.uniformGrowthVal;
+			}
+			else
+			{
+				x = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.x, emitter->m_p_maxInitialGrowthVelocity.x);
+				y = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.y, emitter->m_p_maxInitialGrowthVelocity.y);
+				z = Wiwa::Math::RandomRange(emitter->m_p_minInitialGrowthVelocity.z, emitter->m_p_maxInitialGrowthVelocity.z);
+			}
 
 			particle.growthVelocity = glm::vec3(x, y, z);
 		}
 		else
 		{
-			particle.growthVelocity = emitter->m_p_initialGrowthVelocity;
+			particle.uniformGrowthVal = emitter->m_p_uniformGrowthVal;
+
+			if (emitter->m_p_growUniformly)
+			{
+				particle.growthVelocity.x = particle.growthVelocity.y = particle.growthVelocity.z = particle.uniformGrowthVal;
+			}
+			else
+			{
+				particle.growthVelocity = emitter->m_p_initialGrowthVelocity;
+			}
 		}
 
+		//particle life time
 		if (emitter->m_p_rangedLifeTime)
 		{
 			SetParticleLifeTime(particle, Wiwa::Math::RandomRange(emitter->m_p_minLifeTime, emitter->m_p_maxLifeTime));
@@ -706,6 +1046,32 @@ namespace Wiwa {
 
 		//particle.life_time = emitter->m_p_lifeTime;
 		m_AvailableParticles--;		
+	}
+
+	void ParticleSystem::SpawnParticleSet()
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		int spawnAmount = 0;
+
+		if (emitter->m_rangedSpawnAmount)
+		{
+			spawnAmount = Wiwa::Math::RandomRange(emitter->m_minSpawnAmount, emitter->m_maxSpawnAmount);
+		}
+		else
+		{
+			spawnAmount = emitter->m_spawnAmount;
+		}
+
+		for (unsigned int i = 0; i < (uint)spawnAmount; ++i)
+		{
+			if (m_AvailableParticles > 0)
+			{
+				int unusedParticle = FirstUnusedParticle();
+				SpawnParticle(m_Particles[unusedParticle]);
+			}
+		}
+
+		
 	}
 
 	unsigned int ParticleSystem::FirstUnusedParticle()
@@ -727,5 +1093,72 @@ namespace Wiwa {
 		// override first particle if all others are alive
 		m_LastUsedParticle = 0;
 		return 0;
-	}	
+	}
+
+	void ParticleSystem::SetEmitterBools(ParticleEmitterComponent* emitter)
+	{
+		FixBool(emitter->m_meshChanged);
+		FixBool(emitter->m_materialChanged);
+		FixBool(emitter->m_loopSpawning);
+		FixBool(emitter->m_rangedSpawnAmount);
+		FixBool(emitter->m_p_rangedSpawnRate);
+		FixBool(emitter->m_startActive);
+		FixBool(emitter->m_active);
+		FixBool(emitter->m_activeTimeChanged);
+		FixBool(emitter->m_rangedTimeActive);
+		FixBool(emitter->m_activeOverTime);
+		FixBool(emitter->m_p_rangedLifeTime);
+		FixBool(emitter->m_billboardActive);
+		FixBool(emitter->m_p_followEmitterPosition);
+		FixBool(emitter->m_p_followEmitterPositionSpawn);
+		FixBool(emitter->m_p_positionTowardsPoint);
+		FixBool(emitter->m_p_rangedVelocity);
+		FixBool(emitter->m_p_useGravity);
+		FixBool(emitter->m_p_followEmitterRotation);
+		FixBool(emitter->m_p_followEmitterRotationSpawn);
+		FixBool(emitter->m_p_rangedInitialRotation);
+		FixBool(emitter->m_p_rangedAngularVelocity);
+		FixBool(emitter->m_p_rangedInitialScale);
+		FixBool(emitter->m_p_scaleOverTime);
+		FixBool(emitter->m_p_rangedGrowthVelocity);
+		FixBool(emitter->m_useAdditiveBlending);
+		FixBool(emitter->m_p_positionFollowsRotation);
+		FixBool(emitter->m_deactivateFaceCulling);
+		FixBool(emitter->m_p_rangedSpawnDelay);
+		FixBool(emitter->m_stopSizeAtZeroX);
+		FixBool(emitter->m_stopSizeAtZeroY);
+		FixBool(emitter->m_stopSizeAtZeroZ);
+		FixBool(emitter->m_p_followEmitterRotationX);
+		FixBool(emitter->m_p_followEmitterRotationY);
+		FixBool(emitter->m_p_followEmitterRotationZ);
+		FixBool(emitter->m_p_growUniformly);
+		FixBool(emitter->m_destroyOnFinishActive);
+		FixBool(emitter->m_p_uniformStartSize);
+		FixBool(emitter->m_useMultiplyBlending);
+		FixBool(emitter->m_destroyActiveParticles);
+	}
+
+	void ParticleSystem::FixBool(bool& _bool)
+	{
+		if ((int)_bool < 0 || (int)_bool > 1)
+			_bool = false;
+	}
+
+	
+
+	void ParticleSystemHolder::OnUpdate()
+	{
+
+		if (Time::IsPlaying())
+		{
+			EntityManager& eman = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+
+			std::vector<SystemHash>* children = eman.GetEntityChildren(m_EntityId);
+
+			if (children->empty())
+				eman.DestroyEntity(m_EntityId);
+		}
+		
+	}
+
 }

@@ -15,5 +15,8 @@ int main(int argc, char** argv)
 	app->Run();
 
 	delete app;
+	
+	quick_exit(EXIT_SUCCESS);
+	return 0;
 }
 #endif // WI_PLATFORM_WINDOWS

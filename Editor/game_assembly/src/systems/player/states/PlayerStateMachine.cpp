@@ -1,4 +1,3 @@
-#include <wipch.h>
 #include "PlayerStateMachine.h"
 #include "PlayerBaseState.h"
 #include "PlayerIdle.h"
@@ -6,6 +5,8 @@
 #include "PlayerMove.h"
 #include "PlayerDash.h"
 #include "PlayerDeath.h"
+#include <Wiwa/ecs/components/game/Character.h>
+#include <AK/SoundEngine/Common/AkSoundEngine.h>
 
 Wiwa::PlayerStateMachine::PlayerStateMachine()
 {
@@ -14,6 +15,7 @@ Wiwa::PlayerStateMachine::PlayerStateMachine()
 	m_AttackState = new PlayerAttack(this, m_EntityId);
 	m_DashState = new PlayerDash(this, m_EntityId);
 	m_DeathState = new PlayerDeath(this, m_EntityId);
+
 }
 
 Wiwa::PlayerStateMachine::~PlayerStateMachine()
@@ -29,6 +31,7 @@ void Wiwa::PlayerStateMachine::OnAwake()
 {
 	PlayerController::OnAwake();
 	m_CurrentState = m_IdleState;
+	GetAudio()->PlayAudio("player_health");
 }
 
 void Wiwa::PlayerStateMachine::OnInit()
@@ -39,6 +42,7 @@ void Wiwa::PlayerStateMachine::OnInit()
 
 void Wiwa::PlayerStateMachine::OnUpdate()
 {
+
 	PlayerController::OnUpdate();
 	m_CurrentState->UpdateState();
 	CheckHealth();
@@ -47,21 +51,37 @@ void Wiwa::PlayerStateMachine::OnUpdate()
 
 void Wiwa::PlayerStateMachine::OnCollisionEnter(Object* body1, Object* body2)
 {
+	if (body1 == body2)
+		return;
+	m_Colliding = true;
 	PlayerController::OnCollisionEnter(body1, body2);
 	m_CurrentState->OnCollisionEnter(body1, body2);
+	GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 }
 
 
-void Wiwa::PlayerStateMachine::UpdateMovement()
+void Wiwa::PlayerStateMachine::UpdateMovement(const float speed)
 {
-	this->m_Direction = this->m_MovementInput;
-	this->m_Velocity = this->m_MovementInput * GetCharacter()->Speed;
-	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_Velocity);
-	SetPlayerRotation(m_MovementInput, 1.f);
+	m_Direction = Math::AngleFromVec2(m_MovementInput);
+	 
+	m_CurrentVelocity = m_MovementInput * speed;
+	
+	GetPhysics()->getBody()->velocity = Math::ToBulletVector3(glm::vec3(m_CurrentVelocity.x, 0.f, m_CurrentVelocity.y));
+
+	SetPlayerRotation(m_Direction);
+}
+
+void Wiwa::PlayerStateMachine::UpdateRotation()
+{
+	if(m_ShootInput != glm::vec2(0.f))
+		m_Direction = Math::AngleFromVec2(m_ShootInput);
+
+	SetPlayerRotation(m_Direction);
 }
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 {
+	WI_INFO("Changing state");
 	m_CurrentState->ExitState();
 	m_CurrentState = state;
 	m_CurrentState->EnterState();
@@ -69,7 +89,7 @@ void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 
 void Wiwa::PlayerStateMachine::CheckHealth()
 {
-	if (GetCharacter()->Health <= 0)
+	if (GetCharacter()->Health <= 0 && !Wiwa::GameStateManager::ReturnFanaticEffect())
 	{
 		SwitchState(m_DeathState);
 	}
@@ -93,3 +113,22 @@ void Wiwa::PlayerStateMachine::ResetCooldown()
 {
 	m_CooldownTimer = GetCharacter()->DashCooldown;
 }
+
+void Wiwa::PlayerStateMachine::OnCollision(Object* obj1, Object* obj2)
+{
+	if (obj1 == obj2)
+		return;
+
+	PlayerController::OnCollision(obj1, obj2);
+	m_CurrentState->OnCollision(obj1, obj2);
+}
+
+void Wiwa::PlayerStateMachine::OnCollisionExit(Object* obj1, Object* obj2)
+{
+	if (obj1 == obj2)
+		return;
+
+	PlayerController::OnCollision(obj1, obj2);
+	m_CurrentState->OnCollision(obj1, obj2);
+}
+

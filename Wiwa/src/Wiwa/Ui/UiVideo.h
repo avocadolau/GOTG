@@ -14,13 +14,14 @@ namespace Wiwa
 	{
 	public:
 
-		GuiVideo(Scene* scene, unsigned int id, Rect2i bounds, const char* pathVideo, bool active);
+		GuiVideo(Scene* scene, unsigned int id, Rect2i bounds, const char* pathVideo, bool active,size_t callbackID);
 		virtual ~GuiVideo();
 
 		bool Update();
 		bool Draw(Renderer2D* render);
 
 		Video* video_res;
+		bool video_finished = false;
 	};
 }
 

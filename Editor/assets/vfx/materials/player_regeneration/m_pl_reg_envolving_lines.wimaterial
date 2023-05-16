@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/bullet/bullet","uniforms":{"u_LifeTime":0.3906065821647644,"u_Time":237.6033172607422,"u_Color":{"r":0.6069868803024292,"g":1.0,"b":0.6344462633132935,"a":1.0},"u_Texture":"assets/textures/particle_regeneration/t_regeneration_slash_05.png","u_TransparencyTexture":"assets/textures/particle_regeneration/t_regeneration_slash_05.png"}}

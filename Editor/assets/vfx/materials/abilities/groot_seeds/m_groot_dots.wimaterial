@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.3559097647666931,"u_Color":{"r":0.4769081473350525,"g":0.8034934401512146,"b":0.435079425573349,"a":1.0},"u_Texture":"assets/textures/t_spark.png"}}

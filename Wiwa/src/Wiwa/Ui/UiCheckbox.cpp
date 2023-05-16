@@ -61,7 +61,6 @@ namespace Wiwa
 			{
 				state = GuiControlState::FOCUSED;
 			}
-
 			if (state == GuiControlState::FOCUSED)
 			{
 				/*if (Wiwa::Input::IsMouseButtonPressed(0))
@@ -122,6 +121,10 @@ namespace Wiwa
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
 		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);
+		if(state != GuiControlState::FOCUSED)
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, { 1.0,1.0,1.0,1.0 });
+		if(state == GuiControlState::FOCUSED)
+			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, { 0.5,0.5,0.5,1.0 });
 
 		//HandleAnim(render);
 		return false;

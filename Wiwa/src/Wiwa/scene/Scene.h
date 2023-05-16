@@ -5,7 +5,6 @@
 #include <vector>
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/physics/PhysicsManager.h>
-#include <Wiwa/AI/AIPathFindingManager.h>
 #include <Wiwa/utilities/render/Camera.h>
 #include <Wiwa/utilities/render/CameraManager.h>
 
@@ -15,6 +14,7 @@ namespace Wiwa {
 	class LightManager;
 	class GuiManager;
 	class DialogManager;
+	class DialogEventManager;
 
 
 	class WI_API Scene {
@@ -57,6 +57,7 @@ namespace Wiwa {
 		LightManager& GetLightManager() { return *m_LightManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		DialogManager& GetDialogManager() { return *m_DialogManager; }
+		DialogEventManager& GetDialogEventManager() { return *m_DialogEventManager; }
 		inline const char* getName() { return m_Name.c_str(); }
 		inline void ChangeName(const char* name) { m_Name = name; }
 	protected:
@@ -73,13 +74,14 @@ namespace Wiwa {
 		size_t mMaxTimeEntering, mMaxTimeLeaving = 0;
 
 		EntityManager m_EntityManager;
-		CameraManager* m_CameraManager;
-		PhysicsManager* m_PhysicsManager;
-		LightManager* m_LightManager;
-		GuiManager* m_GuiManager;
-		DialogManager* m_DialogManager;
+		CameraManager* m_CameraManager = nullptr;
+		PhysicsManager* m_PhysicsManager = nullptr;
+		LightManager* m_LightManager = nullptr;
+		GuiManager* m_GuiManager = nullptr;
+		DialogManager* m_DialogManager = nullptr;
+		DialogEventManager* m_DialogEventManager = nullptr;
 
-	public:
+		std::vector<std::string> m_AudioBanks;
 	private:
 		std::vector<InstanceRenderer> m_InstanceRenderers;
 

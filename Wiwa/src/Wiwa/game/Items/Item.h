@@ -47,7 +47,40 @@ namespace Wiwa
 		SHIELD_CHARGE,
 		
 	};
-
+	enum class HowardElementType
+	{
+		HEALTH_CAPACITOR,
+		NANO_BOOST,
+		EASY_TRIGGER,
+		FANCY_BOOTS,
+		LETHAL_SHOOTER,
+		SHIELD_FAN,
+		NANO_MACHINES,
+		RECOVERY_SHIELD,
+		SECOND_WIND,
+		REROLL,
+		BEGINNERS_LUCK,
+		MIDAS_TOUCH,
+		DEVOURER,
+		FANATIC,
+		RECOVERY_HEALTH,
+		ULTIMATE_MIDAS_TOUCH,
+		FRIENDLY_FACE
+	};
+	enum class ShopElementUnlockingMethod
+	{
+		ENEMIES_KILLED,
+		ITEMS_BOUGHT,
+		ULTRON_KILLED
+	};
+	enum class ItemTags
+	{
+		ATTACK,
+		PROJECTILE,
+		AOE,
+		DEBUFF,
+		HOMING,
+	};
 	struct Ability
 	{
 		std::string Name;
@@ -66,6 +99,7 @@ namespace Wiwa
 
 		CooldownState CooldownState;
 
+		ItemTags itemTag[2];
 		Ability() = default;
 		Ability(const Ability& ability)
 		{
@@ -80,20 +114,23 @@ namespace Wiwa
 			this->Price = ability.Price;
 			this->AbilityType = ability.AbilityType;
 			this->CooldownState = ability.CooldownState;
+			this->itemTag[0] = ability.itemTag[0];
+			this->itemTag[1] = ability.itemTag[1];
 		}
 		
 		Ability(const char* name)
 			: Name(name),
-			  Description(""),
-			  Icon(0),
-			  Damage(0),
-			  Range(0.f),
-			  Area(0.f),
-			  Cooldown(0.f),
-			  CurrentTime(0.f),
-			  Price(0),
-			  AbilityType(AbilityType::YONDUS_FIN),
-			  CooldownState(CooldownState::NO_CHARGED)
+			Description(""),
+			Icon(0),
+			Damage(0),
+			Range(0.f),
+			Area(0.f),
+			Cooldown(0.f),
+			CurrentTime(0.f),
+			Price(0),
+			AbilityType(AbilityType::YONDUS_FIN),
+			CooldownState(CooldownState::NO_CHARGED),
+			itemTag{ItemTags::AOE,ItemTags::ATTACK}
 
 		{}
 
@@ -233,5 +270,61 @@ namespace Wiwa
 		{}
 		
 		void Use();
+	};
+
+	struct ShopElement
+	{
+		std::string Name;
+		int AmountOfSteps;
+		int CurrentStep;
+		std::vector<int> Costs;
+		std::vector<int> PercentageIncreases;
+		HowardElementType PassiveBoost;
+		bool Unlocked;
+		ShopElementUnlockingMethod unlockingMethod;
+		int amountForUnlocking;
+		int countForUnlocking;
+		ShopElement() = default;
+		ShopElement(const ShopElement& shopElement)
+		{
+			this->Name = shopElement.Name;
+			this->AmountOfSteps = shopElement.AmountOfSteps;
+			this->CurrentStep = shopElement.CurrentStep;
+			this->Costs = shopElement.Costs;
+			this->PercentageIncreases = shopElement.PercentageIncreases;
+			this->PassiveBoost = shopElement.PassiveBoost;
+			this->unlockingMethod = shopElement.unlockingMethod;
+			this->Unlocked = shopElement.Unlocked;
+			this->amountForUnlocking = shopElement.amountForUnlocking;
+			this->countForUnlocking = shopElement.countForUnlocking;
+
+		}
+		ShopElement(const char* name)
+			: Name(name),
+			AmountOfSteps(3),
+			CurrentStep(0),
+			Costs(),
+			PercentageIncreases(),
+			PassiveBoost(HowardElementType::FANCY_BOOTS),
+			unlockingMethod(ShopElementUnlockingMethod::ITEMS_BOUGHT),
+			amountForUnlocking(100),
+			countForUnlocking(0),
+			Unlocked(true)
+		{}
+
+		void Use();
+		//UnUse, when an item gets upgraded in your inventory we can reduce the percentage increase to re increase it again
+		void UnUse();
+
+		void AugmentStep();
+
+		int HealthInc;
+		int MaxHealthInc;
+		int DamageInc;
+		int RofInc;
+		float MovSpeedInc;
+		int RangeInc;
+		int ShieldRegenInc;
+
 	};
 }

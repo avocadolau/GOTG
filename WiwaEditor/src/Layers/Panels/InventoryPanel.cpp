@@ -32,7 +32,9 @@ void InventoryPanel::Draw()
 		ImGui::Separator();
 		ImGui::Text("Consumables");
 		DrawConsumablePool(id);
-
+		ImGui::Separator();
+		ImGui::Text("Shop elements");
+		DrawShopElementPool(id);
 		if (ImGui::Button("Save"))
 		{
 			Wiwa::GameStateManager::SerializeData();
@@ -45,7 +47,7 @@ void InventoryPanel::Draw()
 
 		ImGui::Text("Tokens %i", playerInventory.GetTokens());
 		
-		Wiwa::Ability**& abilities = playerInventory.GetAbilities();
+		Wiwa::Ability** abilities = playerInventory.GetAbilities();
 		
 		ImGui::Text("Abilities");
 		ImGui::Separator();
@@ -53,31 +55,38 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if (abilities[0])
+		if (abilities != nullptr)
 		{
-			ImGui::Text("%s", abilities[0]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", abilities[0]->CurrentTime);
-			ImGui::Text("Cooldown %f", abilities[0]->Cooldown);
-			ImGui::Unindent();
+			if (abilities[0] != nullptr)
+			{
+				ImGui::Text("%s", abilities[0]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", abilities[0]->CurrentTime);
+				ImGui::Text("Cooldown %f", abilities[0]->Cooldown);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
+		
 		ImGui::Unindent();
 		ImGui::Separator();
 
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if (abilities[1])
+		if (abilities != nullptr)
 		{
-			ImGui::Text("%s", abilities[1]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", abilities[1]->CurrentTime);
-			ImGui::Text("Cooldown %f", abilities[1]->Cooldown);
-			ImGui::Unindent();
+			if (abilities[1] != nullptr)
+			{
+				ImGui::Text("%s", abilities[1]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", abilities[1]->CurrentTime);
+				ImGui::Text("Cooldown %f", abilities[1]->Cooldown);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
 		ImGui::Unindent();
 		ImGui::Unindent();
 		
@@ -95,7 +104,7 @@ void InventoryPanel::Draw()
 		ImGui::Unindent();
 		ImGui::Separator();
 
-		Wiwa::Buff**& buffs = playerInventory.GetBuffs();
+		Wiwa::Buff** buffs = playerInventory.GetBuffs();
 		
 		ImGui::Text("Buffs");
 		ImGui::Separator();
@@ -103,37 +112,57 @@ void InventoryPanel::Draw()
 		
 		ImGui::Text("Slot 1");
 		ImGui::Indent();
-		if (buffs[0])
+		if (buffs != nullptr)
 		{
-			ImGui::Text("%s", buffs[0]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", buffs[0]->CurrentTime);
-			ImGui::Text("Cooldown %f", buffs[0]->Cooldown);
-			ImGui::Text("Duration %f", buffs[0]->Duration);
-			ImGui::Text("Cooldown timer %f", buffs[0]->CoolDownTimer);
-			ImGui::Unindent();
+
+
+			if (buffs[0] != nullptr)
+			{
+				ImGui::Text("%s", buffs[0]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", buffs[0]->CurrentTime);
+				ImGui::Text("Cooldown %f", buffs[0]->Cooldown);
+				ImGui::Text("Duration %f", buffs[0]->Duration);
+				ImGui::Text("Cooldown timer %f", buffs[0]->CoolDownTimer);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
 		ImGui::Unindent();
 		ImGui::Separator();
 		
 		ImGui::Text("Slot 2");
 		ImGui::Indent();
-		if (buffs[1])
+		if (buffs != nullptr)
 		{
-			ImGui::Text("%s", buffs[1]->Name.c_str());
-			ImGui::Indent();
-			ImGui::Text("Current time %f", buffs[1]->CurrentTime);
-			ImGui::Text("Cooldown %f", buffs[1]->Cooldown);
-			ImGui::Text("Duration %f", buffs[1]->Duration);
-			ImGui::Text("Cooldown timer %f", buffs[1]->CoolDownTimer);
-			ImGui::Unindent();
+			if (buffs[1])
+			{
+				ImGui::Text("%s", buffs[1]->Name.c_str());
+				ImGui::Indent();
+				ImGui::Text("Current time %f", buffs[1]->CurrentTime);
+				ImGui::Text("Cooldown %f", buffs[1]->Cooldown);
+				ImGui::Text("Duration %f", buffs[1]->Duration);
+				ImGui::Text("Cooldown timer %f", buffs[1]->CoolDownTimer);
+				ImGui::Unindent();
+			}
+			else
+				ImGui::Text("Empty slot");
 		}
-		else
-			ImGui::Text("Empty slot");
-		
 		ImGui::Unindent();
+
+		ImGui::Text("Shop Elements");
+		ImGui::Separator();
+		ImGui::Indent();
+
+		std::vector<Wiwa::ShopElement>& shopElements = playerInventory.GetShopPassives();
+		for (const auto& shopElement : shopElements)
+		{
+			ImGui::Text("Name %s", shopElement.Name.c_str());
+		}
+
+		ImGui::Unindent();
+		ImGui::Separator();
 	}
 	ImGui::End();
 }
@@ -511,7 +540,15 @@ void InventoryPanel::DrawAbilityPool(int& id)
 			"Phylas Quantum Sword",
 			"StarHawks blast",
 		};
-		if (ImGui::BeginTable("actives", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		const char* tags[] =
+		{
+			"Attack",
+			"Projectile",
+			"Aoe",
+			"Debuff",
+			"Homing",
+		};
+		if (ImGui::BeginTable("actives", 10, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
 			ImGui::TableSetupColumn("Name");
 			ImGui::TableSetupColumn("Description");
@@ -522,6 +559,7 @@ void InventoryPanel::DrawAbilityPool(int& id)
 			ImGui::TableSetupColumn("Area");
 			ImGui::TableSetupColumn("Cooldown");
 			ImGui::TableSetupColumn("Price");
+			ImGui::TableSetupColumn("Tags");
 			ImGui::TableHeadersRow();
 			for (auto& it : abilities)
 			{
@@ -601,10 +639,198 @@ void InventoryPanel::DrawAbilityPool(int& id)
 				ImGui::TableNextColumn();
 				ImGui::InputInt("##price", &ability->Price);
 
+				ImGui::TableNextColumn();
+				const char* currentItem_1 = tags[(int)ability->itemTag[0]];
+				if (ImGui::BeginCombo("##tag_1", currentItem_1))
+				{
+					for (int i = 0; i < sizeof(tags) / sizeof(char*); i++)
+					{
+						bool isSelected = (currentItem_1 == tags[i]);
+						if (ImGui::Selectable(tags[i], isSelected))
+						{
+							currentItem_1 = tags[i];
+							ability->itemTag[0] = (Wiwa::ItemTags)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+				const char* currentItem_2 = tags[(int)ability->itemTag[1]];
+				if (ImGui::BeginCombo("##tag_2", currentItem_2))
+				{
+					for (int i = 0; i < sizeof(tags) / sizeof(char*); i++)
+					{
+						bool isSelected = (currentItem_2 == tags[i]);
+						if (ImGui::Selectable(tags[i], isSelected))
+						{
+							currentItem_2 = tags[i];
+							ability->itemTag[1] = (Wiwa::ItemTags)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
 				ImGui::PopID();
 			}
 			ImGui::EndTable();
 		}
 	}
 	
+}
+
+void InventoryPanel::DrawShopElementPool(int& id)
+{
+	std::map<std::string, Wiwa::ShopElement>& shopElements = Wiwa::ItemManager::GetShopElements();
+	if (ImGui::Button("Add shop element"))
+	{
+		ImGui::OpenPopup("Create shop element");
+	}
+	if (ImGui::BeginPopup("Create shop element"))
+	{
+		static std::string name;
+		ImGui::InputText("Name", &name);
+		ImGui::SameLine();
+		if (ImGui::Button("Create"))
+		{
+			Wiwa::ItemManager::AddShopElement({ name.c_str() });
+			name.clear();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	if (!shopElements.empty())
+	{
+		const char* types[] =
+		{
+			"Health capacitor",
+			"Nano boost",
+			"Easy trigger",
+			"Fancy boots",
+			"Lethal shooter",
+			"Shield fan",
+			"Nano machines",
+			"Recovery shield",
+			"Second Wind",
+			"Reroll",
+			"Begginer's luck",
+			"Midas touch",
+			"Devourer",
+			"Fanatic",
+			"Recovery health",
+			"Ultimate midas touch",
+			"Friendly face"
+		};
+		const char* unlockingMethods[] =
+		{
+			"Enemies killed",
+			"Items bought",
+			"Ultron killed count"
+		};
+		if (ImGui::BeginTable("shop_elements", 9, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+		{
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Unlocked");
+			ImGui::TableSetupColumn("Steps");
+			ImGui::TableSetupColumn("CurrentStep");
+			ImGui::TableSetupColumn("Costs");
+			ImGui::TableSetupColumn("PercentageIncreases");
+			ImGui::TableSetupColumn("PassiveBoost");
+			ImGui::TableSetupColumn("UnlockingMethod");
+			ImGui::TableSetupColumn("UnlockingAmount");
+			ImGui::TableHeadersRow();
+			for (auto& it : shopElements)
+			{
+				Wiwa::ShopElement* shopElement = Wiwa::ItemManager::GetShopElement(it.first.c_str());
+				ImGui::PushID(id++);
+
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(shopElement->Name.c_str());
+
+				if (ImGui::Button("Add to inventory"))
+				{
+					Wiwa::GameStateManager::GetPlayerInventory().AddShopPassive(*shopElement);
+				}
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f, 0.f, 0.f, 1.f));
+				if (ImGui::Button("Delete"))
+				{
+					Wiwa::ItemManager::DeleteShopElement(it.first.c_str());
+				}
+				ImGui::PopStyleColor();
+
+				ImGui::TableNextColumn();
+				ImGui::Checkbox("##description", &shopElement->Unlocked);
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##amount_of_steps", &shopElement->AmountOfSteps);
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##current_step", &shopElement->CurrentStep);
+
+				if (shopElement->CurrentStep > shopElement->AmountOfSteps)
+					shopElement->CurrentStep = shopElement->AmountOfSteps;
+				if (shopElement->CurrentStep <= 0)
+					shopElement->CurrentStep = 1;
+
+				ImGui::TableNextColumn();
+				ImGui::PushID("Costs");
+				VectorEdit(shopElement->Costs);
+				ImGui::PopID();
+
+				ImGui::TableNextColumn();
+				ImGui::PushID("PercentageIncreases");
+				VectorEdit(shopElement->PercentageIncreases);
+				ImGui::PopID();
+
+				ImGui::TableNextColumn();
+				const char* passiveHoward = types[(int)shopElement->PassiveBoost];
+				if (ImGui::BeginCombo("##passive_type", passiveHoward))
+				{
+					for (int i = 0; i < sizeof(types) / sizeof(char*); i++)
+					{
+						bool isSelected = (passiveHoward == types[i]);
+						if (ImGui::Selectable(types[i], isSelected))
+						{
+							passiveHoward = types[i];
+							shopElement->PassiveBoost = (Wiwa::HowardElementType)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::TableNextColumn();
+				const char* unlockingMethod = unlockingMethods[(int)shopElement->unlockingMethod];
+				if (ImGui::BeginCombo("##unlocking_method", unlockingMethod))
+				{
+					for (int i = 0; i < sizeof(unlockingMethods) / sizeof(char*); i++)
+					{
+						bool isSelected = (unlockingMethod == unlockingMethods[i]);
+						if (ImGui::Selectable(unlockingMethods[i], isSelected))
+						{
+							unlockingMethod = unlockingMethods[i];
+							shopElement->unlockingMethod = (Wiwa::ShopElementUnlockingMethod)(i);
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::TableNextColumn();
+				ImGui::InputInt("##amount_to_unlock", &shopElement->amountForUnlocking);
+				ImGui::PopID();
+
+			}
+			ImGui::EndTable();
+		}
+	}
 }

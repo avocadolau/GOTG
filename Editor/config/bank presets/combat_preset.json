@@ -1,0 +1,5 @@
+{
+  "init_path": "library\\audio\\banks\\init.bnk",
+  "banks": [ "library\\audio\\banks\\player.bnk", "library\\audio\\banks\\enemies.bnk", "library\\audio\\banks\\enviroment.bnk", "library\\audio\\banks\\scene_events.bnk", "library\\audio\\banks\\game_music.bnk", "library\\audio\\banks\\audio_settings.bnk" ],
+  "events": [ "player_dash", "player_dead", "player_hit", "player_shoot", "player_walk", "melee_attack", "melee_dead", "melee_hit", "ranged_attack", "ranged_dead", "ranged_hit", "sentinel_hit", "sentinel_spawn", "spawn", "explosion", "combat_start", "game_pause", "wave_start", "play_music", "combat_start", "vo_boss_attack", "vo_boss_death", "vo_boss_hit", "vo_boss_spawn", "vo_rocket_complete_run", "vo_rocket_death", "vo_rocket_heal", "vo_rocket_hit", "vo_rocket_powerup", "vo_rocket_spawn", "vo_starlord_complete_run", "vo_starlord_death", "vo_starlord_heal", "vo_starlord_powerup", "vo_starlord_spawn", "vo_startlord_hit" ]
+}

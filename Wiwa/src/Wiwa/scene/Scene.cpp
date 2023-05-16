@@ -9,9 +9,10 @@
 
 #include <Wiwa/Ui/UiManager.h>
 #include <Wiwa/Dialog/DialogManager.h>
+#include <Wiwa/Dialog/DialogEventManager.h>
 #include <Wiwa/audio/Audio.h>
-#include <Wiwa/AI/AIMapGeneration.h>
 #include <Wiwa/ecs/systems/game/gui/PlayerGUISystem.h>
+#include <Wiwa/ecs/systems/game/gui/UltronGUISystem.h>
 #include <Wiwa/AI/AI_Crowd.h>
 
 #include <glew.h>
@@ -24,11 +25,6 @@ namespace Wiwa
 		mMaxTimeEntering = 450;
 		mMaxTimeLeaving = 450;
 
-		m_GuiManager = new GuiManager();
-		m_GuiManager->Init(this);
-		//m_DialogManager = new DialogManager();
-		//m_DialogManager->Init(this);
-
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
@@ -39,12 +35,20 @@ namespace Wiwa
 		
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		m_TransitionInstance = r2d.CreateInstancedQuadTex(this, img->GetTextureId(), img->GetSize(), { 0,0 }, { 1920,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		m_TransitionInstance = r2d.CreateInstancedQuadTex(this, img->GetTextureId(), img->GetSize(), { 0,0 }, { 2000,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		r2d.UpdateInstancedQuadTexColor(this, m_TransitionInstance, { 0.1f, 0.1f, 0.1f, 1.0f });
 
 		r2d.DisableInstance(this, m_TransitionInstance);
 
+		m_GuiManager = new GuiManager();
+		m_GuiManager->Init(this);
+		m_DialogManager = new DialogManager();
+		m_DialogManager->Init(this);
+		m_DialogEventManager = new DialogEventManager();
+		m_DialogEventManager->Init(this);
+
 		m_PhysicsManager->InitWorld();
+
 
 	}
 
@@ -53,15 +57,20 @@ namespace Wiwa
 		delete m_CameraManager;
 		delete m_LightManager;
 		delete m_GuiManager;
-		//delete m_DialogManager;
+		delete m_DialogManager;
+		delete m_DialogEventManager;
 
 		// Clear entity manager
 		//m_EntityManager.Clear();
+		if (m_PhysicsManager)
+		{
+			// Clear physics world
+			m_PhysicsManager->CleanWorld();
+			delete m_PhysicsManager;
+		}
+		RecastManager::DeAllocate();
 
-		// Clear physics world
-		m_PhysicsManager->CleanWorld();
-		delete m_PhysicsManager;
-		m_PhysicsManager = nullptr;
+		m_InstanceRenderers.clear();
 	}
 
 	void Scene::Start()
@@ -85,13 +94,16 @@ namespace Wiwa
 
 	void Scene::Update()
 	{
-		PlayerGUISystem* pgs;
-
+		PlayerGUISystem* pgs = nullptr;
+		UltronGUISystem* ugs = nullptr;
+		EntityId player = WI_INVALID_INDEX;
+		EntityId player2 = WI_INVALID_INDEX;
 		switch (m_CurrentState)
 		{
 		case Scene::SCENE_ENTERING:
 			m_EntityManager.UpdateWhitelist();
-
+			pgs = nullptr;
+			ugs = nullptr;
 			UpdateEnter();
 			RenderEnter();
 
@@ -108,13 +120,48 @@ namespace Wiwa
 			}
 			break;
 		case Scene::SCENE_LOOP:
-			if(!pausedGame)
+			if (pausedGame)
+			{
+				Time::SetTimeScale(0.0f);
+			}
+			else if (!pausedGame)
+			{
+				Time::SetTimeScale(1.0f);
 				m_EntityManager.SystemsUpdate();
-			/*pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
-			if(pgs != nullptr)
-				pgs->Update();*/
-			m_GuiManager->Update();
-			//m_DialogManager->Update();
+			}
+
+			if (GameStateManager::GetPlayerId() != WI_INVALID_INDEX)
+			{
+				pgs = m_EntityManager.GetSystem<PlayerGUISystem>(Wiwa::GameStateManager::GetPlayerId());
+				if (pgs != nullptr)
+					pgs->Update();
+
+				EntityId boss = m_EntityManager.GetEntityByName("Ultron_01");
+				if (boss != WI_INVALID_INDEX)
+				{
+					ugs = m_EntityManager.GetSystem<UltronGUISystem>(boss);
+					if (ugs != nullptr)
+						ugs->Update();
+				}
+			}
+			if (m_GuiManager)
+			{
+				m_GuiManager->Update();
+			}
+			if (m_DialogManager)
+			{
+				if (GameStateManager::GetPlayerId() != WI_INVALID_INDEX) //old version: player != WI_INVALID_INDEX || player2 != WI_INVALID_INDEX
+				{
+					m_DialogManager->Update();
+				}
+			}
+			if (m_DialogEventManager)
+			{
+				if (GameStateManager::GetPlayerId() != WI_INVALID_INDEX)
+				{
+					m_DialogEventManager->Update();
+				}
+			}
 			ProcessInput();
 			UpdateLoop();
 			RenderLoop();
@@ -150,12 +197,12 @@ namespace Wiwa
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		r2d.UpdateInstanced(this);
-
-		m_GuiManager->Draw();
-
+		if(m_GuiManager)
+			m_GuiManager->Draw();
+		
 		m_EntityManager.Update();
-
-		m_PhysicsManager->UpdateEngineToPhysics();
+		if(m_PhysicsManager)
+			m_PhysicsManager->UpdateEngineToPhysics();
 
 		if (SceneManager::IsPlaying())
 		{
@@ -164,11 +211,8 @@ namespace Wiwa
 
 			Crowd& crowd = Crowd::getInstance();
 			crowd.Update(Wiwa::Time::GetDeltaTimeSeconds());
-			// m_PhysicsManager->LogBodies();
 		}
 		m_PhysicsManager->DebugDrawWorld();
-		// m_PhysicsManager->LogBodies();
-
 
 		if (!SceneManager::IsPlaying())
 		{
@@ -187,18 +231,13 @@ namespace Wiwa
 	void Scene::Unload(bool unload_resources)
 	{
 		GameStateManager::s_PoolManager->UnloadAllPools();
-
-		//Audio::StopAllEvents();
 		m_EntityManager.Clear();
-		
-		// Sleep to wait till Audio thread stops entity events
-		Sleep(10);
-
 		if (unload_resources)
 		{
 			// TODO: Fix unloading for the editor
+			if(Wiwa::Application::Get().UnloadSceneResources)
+				Wiwa::Resources::UnloadAllResources();
 			return;
-			Wiwa::Resources::UnloadAllResources();
 		}
 	}
 
@@ -249,7 +288,7 @@ namespace Wiwa
 		int w = (int)(256.f * (1.0f - perc));
 
 		Wiwa::Size2i size = {
-			(int)(1920 * (1.0f - perc)),
+			(int)(2000 * (1.0f - perc)),
 			1080
 		};
 
@@ -265,7 +304,7 @@ namespace Wiwa
 		int w = (int)(256.f * perc);
 
 		Wiwa::Size2i size = {
-			(int)(1920 * perc),
+			(int)(2000 * perc),
 			1080
 		};
 

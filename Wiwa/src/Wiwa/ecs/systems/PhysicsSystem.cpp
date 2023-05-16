@@ -68,9 +68,15 @@ namespace Wiwa {
 		//WI_INFO("Collision leave of --> {}", e_name);
 	}
 
-	void PhysicsSystem::DeactivateBody()
+	void PhysicsSystem::ForceSetPosition(const glm::vec3& new_position)
 	{
-		PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+		if (!obj)
+			return;
+
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		CollisionBody* collBody = (CollisionBody*)em.GetComponentByIterator(em.GetComponentIterator<CollisionBody>(m_EntityId));
+		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(m_EntityId));
+		m_Scene->GetPhysicsManager().UpdateSingleEngineToPhys(new_position, *selfTr, *collBody, obj);
 	}
 
 	Object* PhysicsSystem::getBody()
@@ -78,10 +84,20 @@ namespace Wiwa {
 		return obj;
 	}
 
-	bool PhysicsSystem::OnEnabledFromPool()
+	void PhysicsSystem::ActivateBody()
 	{
-		
-		return false;
+		if (obj != nullptr)
+		{
+			obj->collisionObject->setActivationState(ACTIVE_TAG);
+		}
+	}
+
+	void PhysicsSystem::DeActivateBody()
+	{
+		if (obj != nullptr)
+		{
+			obj->collisionObject->setActivationState(DISABLE_SIMULATION);
+		}
 	}
 
 	bool PhysicsSystem::OnDisabledFromPool()

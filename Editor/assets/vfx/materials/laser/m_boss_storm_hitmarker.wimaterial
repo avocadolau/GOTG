@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":1.001192569732666,"u_Color":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"u_Texture":"assets/textures/enemy_spawn/t_spawntransparent_01.png"}}

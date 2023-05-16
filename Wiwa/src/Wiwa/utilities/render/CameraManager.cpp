@@ -45,6 +45,10 @@ namespace Wiwa {
 			CameraId cam_id = m_CamerasAlive[i];
 			m_Cameras[cam_id]->frameBuffer->Clear();
 			m_Cameras[cam_id]->shadowBuffer->Clear();
+			if (m_Cameras[cam_id]->drawFrustrums)
+			{
+				Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
+			}
 		}
 	}
 	void CameraManager::Clear()

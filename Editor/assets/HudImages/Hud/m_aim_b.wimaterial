@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/particle_display","uniforms":{"u_Texture":"assets/hudimages/hud/ui_aim_02_a.png","u_ColorP":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}}}

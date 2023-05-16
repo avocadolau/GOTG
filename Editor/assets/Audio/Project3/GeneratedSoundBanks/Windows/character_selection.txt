@@ -1,6 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	3112424181	character_selection			\Default Work Unit\hud\character_selection	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	256689755	s_character_selected	C:\Users\achic\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\s_character_selected_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\ui\s_character_selected		154256
-

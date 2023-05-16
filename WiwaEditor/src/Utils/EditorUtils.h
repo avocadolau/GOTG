@@ -88,6 +88,10 @@ inline void VectorEdit(std::vector<int>& vector)
 	ImGui::SameLine();
 	if (ImGui::Button("-"))
 	{
-		vector.erase(vector.begin() + vector.size() - 1);
+		if (vector.size() > 0)
+		{
+			vector.erase(vector.begin() + vector.size() - 1);
+		}
+		
 	}
 }

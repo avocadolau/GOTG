@@ -1,9 +1,14 @@
-#include <wipch.h>
 #include "PlayerAttack.h"
 #include "../../../components/player/StarLordShooter.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 Wiwa::PlayerAttack::PlayerAttack(PlayerStateMachine* stateMachine, EntityId id)
-	: PlayerBaseState(stateMachine, id) {}
+	: PlayerBaseState(stateMachine, id) {
+	m_ShootTimer = 0.f;
+	m_audioDelay = 5.0f;
+	m_FirstShoot = false;
+	m_currentAudioDelay = m_audioDelay;
+}
 
 Wiwa::PlayerAttack::~PlayerAttack() {}
 
@@ -11,10 +16,17 @@ void Wiwa::PlayerAttack::EnterState()
 {
 	WI_WARN("Player attack");
 	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
+
+	
 }
 
 void Wiwa::PlayerAttack::UpdateState()
 {
+	if (!m_StateMachine->GetCharacter()->CanMove)
+	{
+		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
+		return;
+	}
 	if (!m_StateMachine->CanAttack() && !m_StateMachine->IsAiming() && !m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
@@ -25,39 +37,61 @@ void Wiwa::PlayerAttack::UpdateState()
 		m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
 		return;
 	}
-
-	m_MousePos.x = Input::GetMouseX();
-	m_MousePos.y = Input::GetMouseY();
-
-	if (m_StateMachine->GetShootInput() == glm::vec3(0.f))
+	if (m_StateMachine->CanDash())
 	{
-		Camera* cam = Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
-		glm::vec3 worldPos = cam->ScreenToWorlPosition(m_MousePos, m_StateMachine->GetTransform()->position.y);
-		m_StateMachine->SetDirection(glm::vec3(
-			-worldPos.x,
-			worldPos.y,
-			worldPos.z
-		));
+		m_StateMachine->SwitchState(m_StateMachine->m_DashState);
+		return;
+	}
+
+	m_ShootTimer += Time::GetDeltaTimeSeconds();
+
+	Character* character = m_StateMachine->GetCharacter();
+	if (m_StateMachine->CanAttack())
+	{
+		Fire();
+	}
+	else if (m_StateMachine->CanUltimate() && character->Shield >= character->MaxShield)
+	{
+		FireStarlordUltimate();
+	}
+
+	if (m_StateMachine->CanMove())
+	{
+		// TODO: Partial blending
+		 
+		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
+		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
+		m_StateMachine->UpdateRotation();
+		float shootDirection = m_StateMachine->GetTransform()->localRotation.y;
+		float movementDirection = Math::AngleFromVec2(m_StateMachine->GetInput());
+		float difference = glm::abs(shootDirection - movementDirection);
+
+		//WI_INFO("Diff angle {}", difference);
+		if (IN_BETWEEN(difference, 170.f, 289.f))
+		{
+			m_StateMachine->GetAnimator()->PlayAnimation("moonwalk", true);
+
+		}
+		else if (IN_BETWEEN(difference, 45.0f, 169.f))
+		{
+			m_StateMachine->GetAnimator()->PlayAnimation("walking_left", true);
+
+		}
+		else if (IN_BETWEEN(difference, 290.0f, 360.0f))
+		{
+			m_StateMachine->GetAnimator()->PlayAnimation("walking_right", true);
+
+		}
+
 	}
 	else
 	{
-		m_StateMachine->SetDirection(m_StateMachine->GetShootInput());
+		m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
+		m_StateMachine->UpdateMovement(0.f);
+		m_StateMachine->UpdateRotation();
 	}
 
-	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection(), 1.0f);
-	m_StateMachine->SetVelocity(m_StateMachine->GetInput() * m_StateMachine->GetCharacter()->Speed);
-	m_StateMachine->GetPhysics()->getBody()->velocity = Math::ToBulletVector3(m_StateMachine->GetVelocity());
-	m_ShootTimer += Time::GetDeltaTimeSeconds();
-
-	if (m_StateMachine->CanAttack())
-	{
-		Fire(m_StateMachine->GetShootInput());
-	}
-	if (m_StateMachine->GetVelocity() != glm::vec3(0.f))
-	{
-		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
-	}
-
+	m_currentAudioDelay -= Time::GetDeltaTimeSeconds();
 }
 
 void Wiwa::PlayerAttack::ExitState()
@@ -69,25 +103,76 @@ void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
 {
 }
 
-void Wiwa::PlayerAttack::Fire(const glm::vec3& shootInput)
+void Wiwa::PlayerAttack::Fire()
 {
-	StarLordShooter* shooter = m_StateMachine->GetStarLord();
-	Transform3D* spawnPoint;
-	//Decide wich hand is going next
-	if (m_ShootTimer >= m_StateMachine->GetCharacter()->RateOfFire)
+
+	float timeBetweenShots = 1.0f / m_StateMachine->GetCharacter()->RateOfFire;
+	if (GameStateManager::s_CurrentCharacter == 0)
 	{
-		m_ShootTimer = 0;
-		if (shooter->ShootRight)
+		Transform3D* spawnPoint;
+		StarLordShooter* shooter = m_StateMachine->GetStarLord();
+		//Decide wich hand is going next
+
+		if (m_ShootTimer >= timeBetweenShots)
 		{
-			spawnPoint = m_StateMachine->GetFirePosition("RightPos");
-			m_StateMachine->GetAnimator()->PlayAnimation("shoot_right", false);
+			m_ShootTimer = 0;
+			if (shooter->ShootRight)
+			{
+				spawnPoint = m_StateMachine->GetFirePosition("RightPos");
+				m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
+			}
+			else
+			{
+				spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
+				m_StateMachine->GetAnimator()->Blend("shoot_left", false, 0.1f);
+			}
+			shooter->ShootRight = !shooter->ShootRight;
+			m_StateMachine->SpawnStarLordBullet(*spawnPoint, *m_StateMachine->GetCharacter());
+			m_StateMachine->GetAudio()->PlayAudio("player_shoot");
+			
+
+		
+			if ((int)GameStateManager::GetType() ==  2 || (int) GameStateManager::GetRoomType() == 4)
+			{
+				if (!m_FirstShoot)
+				{
+					m_StateMachine->GetAudio()->PlayAudio("combat_start");
+					m_FirstShoot = true;
+					
+				}
+			}
+			else {
+				if (m_currentAudioDelay < 0 && !m_FirstShoot)
+				{
+					//m_StateMachine->GetAudio()->PlayAudio("combat_start");
+					m_FirstShoot = false;
+					m_currentAudioDelay = m_audioDelay;
+				}
+			}
 		}
-		else
-		{
-			spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
-			m_StateMachine->GetAnimator()->PlayAnimation("shoot_left", false);
-		}
-		shooter->ShootRight = !shooter->ShootRight;
-		m_StateMachine->SpawnBullet(*spawnPoint, *shooter, *m_StateMachine->GetCharacter(), Math::CalculateForward(spawnPoint));
 	}
+	else
+	{
+		Transform3D* spawnPoint = m_StateMachine->GetFirePosition("FirePos");
+		RocketShooter* shooter = m_StateMachine->GetRocket();
+
+		//TODO: blend with current animation
+		if (m_ShootTimer >= timeBetweenShots)
+		{
+			m_ShootTimer = 0;
+			m_StateMachine->SpawnRocketBullet(*spawnPoint, *m_StateMachine->GetCharacter());
+		}
+	}
+}
+
+void Wiwa::PlayerAttack::FireStarlordUltimate()
+{
+	Transform3D* spawnPoint;
+	Character* character = m_StateMachine->GetCharacter();
+	character->Shield = 0;
+	spawnPoint = m_StateMachine->GetFirePosition("RightPos");
+	m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
+	
+	m_StateMachine->SpawnStarLordUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
+	m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 }

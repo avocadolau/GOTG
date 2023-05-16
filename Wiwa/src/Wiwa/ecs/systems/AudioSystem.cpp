@@ -33,6 +33,10 @@ namespace Wiwa {
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
+
+		//Set the go listener, we use the global world listener, the player.
+		Audio::SetWorldListener(m_EntityId);
+
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if (asrc->playOnAwake)
@@ -51,7 +55,7 @@ namespace Wiwa {
 
 		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_Transform);		
 
-		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Vector3F::FRONT, Vector3F::UP)) {
+		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Math::Forward(t3d->worldMatrix), Math::Up(t3d->worldMatrix))) {
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());
 		}
 	}
@@ -63,30 +67,64 @@ namespace Wiwa {
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
 		if (asrc->isPlaying) {
-			if (!Audio::StopEvent(asrc->eventName, m_EntityId)) {
+			if (!Audio::StopEvent(m_CurrentEvent, m_EntityId)) {
 				WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
 			}
+
+			asrc->isPlaying = false;
+
+			Audio::CancelAudioAllCallback(play_id);
 
 			Audio::Update();
 
 			// Wait to update audio engine thread so we can destroy the system
-			
-			Sleep(8);
+			Sleep(30);
+
+			Audio::Update();
 		}
 
 		Audio::UnregisterGameObject(m_EntityId);
+
+		destroyed = true;
 	}
 
 	void AudioSystem::OnEventFinish(const char* ev_name)
+	{
+		if (!this || m_AudioSource.c_id == WI_INVALID_INDEX)
+			return;
+
+		if (destroyed)
+			return;
+		
+
+		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
+
+		if (asrc != nullptr && strcmp(ev_name, m_CurrentEvent) == 0) {
+			asrc->isPlaying = false;
+		}
+	}
+
+	void AudioSystem::PlayAudio(const char* ev_name)
 	{
 		if (m_AudioSource.c_id == WI_INVALID_INDEX) return;
 
 		AudioSource* asrc = GetComponentByIterator<AudioSource>(m_AudioSource);
 
-		if (strcmp(ev_name, asrc->eventName) == 0) {
+		m_CurrentEvent = ev_name;
+		
+		if (!Audio::PostEvent(m_CurrentEvent, m_EntityId, { &AudioSystem::OnEventFinish, this }, play_id)) {
+			WI_CORE_ERROR("Audio couldn't post event [{}]", Audio::GetLastError());
 			asrc->isPlaying = false;
 		}
-
-		//WI_CORE_INFO("Audio finished [{}]", ev_name);
+		else
+		{
+			asrc->isPlaying = true;
+		}
+	}
+	void AudioSystem::StopEvent(const char* ev_name)
+	{
+		if (!Audio::StopEvent(m_CurrentEvent, m_EntityId)) {
+			WI_CORE_ERROR("Audio couldn't stop event [{}]", Audio::GetLastError());
+		}
 	}
 }

@@ -15,6 +15,7 @@ namespace Wiwa {
 	class WI_API RenderManager {
 	private:
 		RenderManager();
+		~RenderManager();
 
 		static FrameBuffer* m_FrameBuffer;
 		static FrameBuffer* m_ShadowBuffer;

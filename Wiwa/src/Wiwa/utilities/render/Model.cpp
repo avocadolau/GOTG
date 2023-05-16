@@ -120,6 +120,7 @@ namespace Wiwa {
 							Image* img = Resources::GetResourceById<Image>(imgId);
 							material.SetUniformData("u_Texture", Uniform::SamplerData(img->GetTextureId(), imgId, texture_path.string()));
 						}
+						material.SetUniformData("u_ToonLevels", 4);
 					}
 					else
 					{
@@ -127,6 +128,7 @@ namespace Wiwa {
 						material.setShader(Resources::GetResourceById<Shader>(id), "resources/shaders/light/toon_color");
 
 						material.SetUniformData("u_Color", glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+						material.SetUniformData("u_ToonLevels", 4);
 					}
 
 

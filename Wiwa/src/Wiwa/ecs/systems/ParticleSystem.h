@@ -23,13 +23,14 @@ namespace Wiwa
 			life_percentage(0.0f),
 			//position(0.0f),
 			startPosition(0.0f),
-			//rotation(0.0f),
+			startRotation(0.0f),
 			angularVelocity(0.0f),
 			//scale(0.0f),
 			growthVelocity(0.0f),
 			velocity(0.0f),
 			color(0.0f),
-			timeAlive(0.0f) {};
+			timeAlive(0.0f),
+			uniformGrowthVal(0.f) {};
 
 		Particle(float _life, glm::vec3 _startPosition, glm::vec3 _rotation, glm::vec3 _angularVelocity, glm::vec3 _scale, glm::vec3 _growthVelocity, glm::vec3 _velocity, glm::vec4 _color)
 		{
@@ -40,6 +41,7 @@ namespace Wiwa
 			life_time_start = _life;
 			life_percentage = 0.0f;
 			startPosition = _startPosition;
+			startRotation = _rotation;
 			//position = startPosition;
 			//rotation = _rotation;
 			angularVelocity = _angularVelocity;
@@ -48,22 +50,35 @@ namespace Wiwa
 			velocity = _velocity;
 			color = _color;	
 			timeAlive = 0.0f;
+			uniformGrowthVal = 0;
+
 		};
 		
 		float life_time = 0;
 		float life_time_start = 0;
 		float life_percentage = 0;
 		float timeAlive = 0.f;
+		float uniformGrowthVal = 0;
 		Transform3D transform;
 		//glm::vec3 position;
 		glm::vec3 startPosition;
 		glm::vec3 velocity;
-		//glm::vec3 rotation;
+		glm::vec3 startRotation;
 		glm::vec3 angularVelocity;
 		//glm::vec3 scale;
 		glm::vec3 growthVelocity;
 		glm::vec4 color;
 		//glm::mat4 transform;
+	};
+
+	class WI_API ParticleSystemHolder : public System
+	{
+	public:
+		ParticleSystemHolder() {}
+		~ParticleSystemHolder() {}
+
+		void OnUpdate() override;
+
 	};
 
 	class WI_API ParticleSystem : public System
@@ -78,15 +93,20 @@ namespace Wiwa
 
 		void OnInit() override;
 
+		bool OnEnabledFromPool() override;
+
 		void OnUpdate() override;
 
 		void OnDestroy() override;
+
+		bool OnDisabledFromPool() override;
 
 		void Render(Particle& particle);
 
 		void SetValues(ParticleEmitterComponent settings);
 
 		void SpawnParticle(Particle& particle);
+		void SpawnParticleSet();
 
 		void UpdateParticleLife(Particle& particle, float deltaTime);
 		void SetParticleLifeTime(Particle& particle, float lifeTime);
@@ -104,7 +124,27 @@ namespace Wiwa
 		glm::vec4 InterpolateVec4(glm::vec4 valStart, glm::vec4 valEnd, float currentPercentage, float targetPercentage);
 		float InterpolateFloat(float valStart, float valEnd, float currentPercentage, float targetPercentage);
 		glm::vec3 InterpolateVec3(glm::vec3 valStart, glm::vec3 valEnd, float currentPercentage, float targetPercentage);
+
+		//Emits a batch of particles based on the amount given.
+		void EmitParticleBatch(int amount);
+
+		//Emits a batch of particles based on the Emitter's spawn amount settings.
+		void EmitParticleBatch();
+
+		//Sets the Active state of the Emitter.
+		void SetActive(bool active);
+
+		//Sets the material of the Particles the Emitter generates;
+		void SetMaterial(const char* materialPath);
+
+		//Sets the mesh of the Particles the Emitter generates;
+		void SetMesh(const char* meshPath);
+
 	private:
+
+		void SetEmitterBools(ParticleEmitterComponent* emitter);
+		void FixBool(bool& _bool);
+
 		unsigned int m_VAO;
 
 		unsigned int m_LastUsedParticle = 0;
@@ -112,6 +152,8 @@ namespace Wiwa
 		unsigned int m_AvailableParticles = 0;
 
 		float m_SpawnTimer;
+
+		bool m_SpawnedOnce;
 
 		std::vector<Particle> m_Particles;
 
@@ -121,4 +163,5 @@ namespace Wiwa
 	};
 }
 REGISTER_SYSTEM(Wiwa::ParticleSystem);
+REGISTER_SYSTEM(Wiwa::ParticleSystemHolder);
 

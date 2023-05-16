@@ -31,20 +31,21 @@
 #include "components/game/Character.h"
 #include "components/game/wave/Wave.h"
 #include "components/game/wave/WaveSpawner.h"
+#include "components/game/wave/WaveSpawnPoint.h"
 #include "components/game/enemy/Enemy.h"
 #include "components/game/wave/Wave.h"
-
-#include "components/game/attack/SimpleBullet.h"
-#include "components/game/attack/SentinelExplosion.h"
-#include "components/game/attack/PhylasQuantumSword.h"
-#include "components/game/attack/GrootSeeds.h"
-#include "components/game/attack/VictoryShield.h"
+#include "components/game/Health.h"
 #include "components/game/items/Item.h"
-#include "components/game/attack/ClusterBullet.h"
-#include "components/game/attack/UltronLaserBeam.h"
+
+#include "components/game/enemy/PhalanxMelee.h"
+#include "components/game/enemy/PhalanxRanged.h"
+#include "components/game/enemy/Sentinel.h"
+#include "components/game/enemy/Subjugator.h"
+#include "components/game/enemy/Ultron.h"
 
 // Ai components
-#include "components/AgentAI.h"
 #include "components/MapAI.h"
 #include "components/ai/NavMesh.h"
 #include "components/ai/NavAgent.h"
+
+#include "components/game/player/PlayerSpawnerData.h"

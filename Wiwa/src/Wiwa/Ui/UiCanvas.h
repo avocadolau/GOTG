@@ -33,7 +33,7 @@ namespace Wiwa
 		 bool selected;
 		 int id;
 
-		 int idGuiSelected = -1;
+		 int idGuiSelected = 0;
 
 		 bool DpadUp = false;
 		 bool DpadDown = false;

@@ -95,7 +95,6 @@ namespace Wiwa
 		}
 
 		
-
 		return control;
 	}
 
@@ -126,11 +125,11 @@ namespace Wiwa
 		return control;
 	}
 
-	GuiControl* GuiManager::CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active)
+	GuiControl* GuiManager::CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active, size_t callbackID)
 	{
 		GuiControl* control = nullptr;
 
-		control = new GuiVideo(m_Scene, id, bounds, path, active);
+		control = new GuiVideo(m_Scene, id, bounds, path, active,callbackID);
 		canvas.at(canvas_id)->controls.push_back(control);
 		return control;
 	}
@@ -232,6 +231,14 @@ namespace Wiwa
 		canvas.clear();
 		canvas.shrink_to_fit();
 		
+		for (int i = 0; i < textToDestroy.size(); i++)
+		{
+			delete textToDestroy.at(i);
+		}
+		textToDestroy.clear();
+		textToDestroy.shrink_to_fit();
+
+
 		return true;
 	}
 
@@ -303,8 +310,8 @@ namespace Wiwa
 		FILE* fontFile = fopen(path, "rb");
 		if (!fontFile)
 		{
-			WI_CORE_INFO("Seems like font at {} doesn't exist", path);
-			return false;
+			WI_CORE_CRITICAL("Seems like font at {} doesn't exist", path);
+			return nullptr;
 		}
 		fseek(fontFile, 0, SEEK_END);
 		size = ftell(fontFile);
@@ -321,7 +328,7 @@ namespace Wiwa
 		if (!stbtt_InitFont(&info, fontBuffer, 0))
 		{
 			WI_CORE_ERROR("Failed to load font at {}", path);
-			return false;
+			return nullptr;
 		}
 
 		int b_w = 512; /* bitmap width */
@@ -379,11 +386,11 @@ namespace Wiwa
 
 		free(fontBuffer);
 		free(bitmap);
-
+		textToDestroy.push_back(text);
 		return text;
 	}
 
-	Text* GuiManager::InitFontForDialog(const char* path, char* _word)
+	Text* GuiManager::InitFontForDialog(const char* path, char* _word, int maxWidth)
 	{
 
 		/* load font file */
@@ -395,8 +402,8 @@ namespace Wiwa
 		FILE* fontFile = fopen(path, "rb");
 		if (!fontFile)
 		{
-			WI_CORE_INFO("Seems like font at {} doesn't exist", path);
-			return false;
+			WI_CORE_CRITICAL("Seems like font at {} doesn't exist", path);
+			return nullptr;
 		}
 		fseek(fontFile, 0, SEEK_END);
 		size = ftell(fontFile);
@@ -413,7 +420,7 @@ namespace Wiwa
 		if (!stbtt_InitFont(&info, fontBuffer, 0))
 		{
 			WI_CORE_ERROR("Failed to load font at {}", path);
-			return false;
+			return nullptr;
 		}
 
 		int b_w = 1024; /* bitmap width */
@@ -429,6 +436,8 @@ namespace Wiwa
 		char* word = _word;
 
 		int x = 0;
+		int y_extra = 0;
+		int lineWidth = 0;
 
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
@@ -439,18 +448,27 @@ namespace Wiwa
 		int i;
 		for (i = 0; i < strlen(word); ++i)
 		{
+
 			/* how wide is this character */
 			int ax;
 			int lsb;
 			stbtt_GetCodepointHMetrics(&info, word[i], &ax, &lsb);
 			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
 
+			/* check if we need to wrap to the next line */
+			if (lineWidth + (int)roundf(ax * scale) >= maxWidth)
+			{
+				y_extra += l_h;
+				x = 0;
+				lineWidth = 0;
+			}
+
 			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
 			int c_x1, c_y1, c_x2, c_y2;
 			stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
 			/* compute y (different characters have different heights) */
-			int y = ascent + c_y1;
+			int y = ascent + c_y1 + y_extra;
 
 			/* render character (stride and offset is important here) */
 			int byteOffset = (int)(x + roundf(lsb * scale) + (y * b_w));
@@ -458,6 +476,7 @@ namespace Wiwa
 
 			/* advance x */
 			x += (int)roundf(ax * scale);
+			lineWidth += roundf(ax * scale);
 
 			/* add kerning */
 			int kern;
@@ -467,11 +486,11 @@ namespace Wiwa
 
 
 		Text* text = new Text();
-		text->Init(b_w, b_h, bitmap);
+		text->InitWrapped(b_w, b_h, lineWidth, y_extra, descent, bitmap);
 
 		free(fontBuffer);
 		free(bitmap);
-
+		textToDestroy.push_back(text);
 		return text;
 	}
 
@@ -512,9 +531,13 @@ namespace Wiwa
 			if (canvas.at(i)->active)
 			{
 				canvaSelected = i;
+
+				if (canvaSelected >= 5 && canvaSelected < 7)
+					canvaSelected = -1;
+
+				return canvaSelected;
 			}
-		}
-		return canvaSelected;
+		}		
 	}
 	bool GuiManager::_loadGUIImpl(Wiwa::File& File)
 	{
@@ -641,7 +664,7 @@ namespace Wiwa
 					control = CreateGuiControl_Ability(guiType, id,canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::VIDEO:
-					control = CreateGuiControl_Video(guiType, id, canvas.at(i)->id,position, textureGui.c_str(), active);
+					control = CreateGuiControl_Video(guiType, id, canvas.at(i)->id,position, textureGui.c_str(), active,callbackID);
 					break;
 				default:
 					break;

@@ -16,7 +16,12 @@ namespace Wiwa {
 
 	InstanceRenderer::~InstanceRenderer()
 	{
+		glDeleteBuffers(1, &m_VBO);
+		glDeleteBuffers(1, &m_EBO);
+		glDeleteBuffers(1, &m_IVBO);
+		glDeleteVertexArrays(1, &m_VAO);
 
+		m_InstanceVertex.clear();
 	}
 
 	void InstanceRenderer::Init(const char* shader_path)
@@ -110,10 +115,13 @@ namespace Wiwa {
 
 		GL(EnableVertexAttribArray(11));
 		GL(VertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(18 * sizeof(float))));
+		GL(VertexAttribDivisor(11, 1));
 
+		GL(EnableVertexAttribArray(12));
+		GL(VertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(19 * sizeof(float))));
+		GL(VertexAttribDivisor(12, 1));
 
-
-		m_InstanceVertex = new VertexInstanceTexture[m_MaxInstances];
+		m_InstanceVertex.resize(m_MaxInstances);
 
 		m_OrthoLocation = m_InstanceShader.getUniformLocation("u_Proj");
 		m_ViewLocation = m_InstanceShader.getUniformLocation("u_View");
@@ -127,7 +135,7 @@ namespace Wiwa {
 	{
 		GL(BindVertexArray(m_VAO));
 		GL(BindBuffer(GL_ARRAY_BUFFER, m_IVBO));
-		GL(BufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex));
+		GL(BufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex.data()));
 	}
 
 	void InstanceRenderer::Render(glm::mat4& proj, glm::mat4& view)
@@ -178,6 +186,8 @@ namespace Wiwa {
 		m_InstanceVertex[instance_id].textureClip = clip;
 
 		m_InstanceVertex[instance_id].active = 1.0f;
+
+		m_InstanceVertex[instance_id].priority = 0.0f;
 
 		return instance_id;
 	}
@@ -261,7 +271,6 @@ namespace Wiwa {
 		if (index == texSize) {
 			if (texSize >= MAX_INSTANCE_TEXTURES) {
 				return -1;
-				//WI_ASSERT_MSG("Trying to add more textures than MAX_INSTANCE_TEXTURES.\n");
 			}
 			else
 			{
@@ -292,5 +301,9 @@ namespace Wiwa {
 		m_InstanceVertex[instance].active = 0.0f;
 
 		m_RemovedInstances.push_back(instance);
+	}
+	void InstanceRenderer::SetPriority(uint32_t instance, int priority)
+	{
+		m_InstanceVertex[instance].priority = priority;
 	}
 }

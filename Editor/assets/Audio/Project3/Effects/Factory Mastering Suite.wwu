@@ -2,6 +2,13 @@
 <WwiseDocument Type="WorkUnit" ID="{0D1C409E-A735-471E-A538-63B18D993BE9}" SchemaVersion="110">
 	<Effects>
 		<WorkUnit Name="Factory Mastering Suite" ID="{0D1C409E-A735-471E-A538-63B18D993BE9}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Inclusion" Type="bool">
+					<ValueList>
+						<Value>False</Value>
+					</ValueList>
+				</Property>
+			</PropertyList>
 			<ChildrenList>
 				<Effect Name="Off" ID="{84CEF724-7161-4B51-BF6E-D22BD9E150AE}" PluginName="Mastering Suite" CompanyID="0" PluginID="186" PluginType="3">
 					<PropertyList>

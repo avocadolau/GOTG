@@ -3,30 +3,36 @@
 #include "Wiwa/scene/SceneManager.h"
 #include "Items/ItemManager.h"
 #include <Wiwa/ecs/components/game/Character.h>
-#include "Achievements/AchievementsManager.h"
 #include <Wiwa/ecs/components/game/items/Item.h>
 #include <Wiwa/ecs/components/game/wave/WaveSpawner.h>
+#include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/audio/Audio.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSpawnerSystem.h>
+#include <Wiwa/game/GameMusicManager.h>
+#include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 
 namespace Wiwa
 {
+	bool GameStateManager::s_CanContinue = false;
+	int GameStateManager::s_NextRewardRoomReward = 0;
+
+	int GameStateManager::s_DoorsReward[2] = { 0 };
+
 	RoomType GameStateManager::s_RoomType = RoomType::NONE;
 	RoomState GameStateManager::s_RoomState = RoomState::NONE;
 	
 	bool GameStateManager::s_HasFinshedRoom = false;
 	bool GameStateManager::s_CanPassNextRoom = false;
 	bool GameStateManager::s_PlayerTriggerNext = false;
-	
-	std::vector<GameEvent> GameStateManager::s_PreStartEvents;
-	std::vector<GameEvent> GameStateManager::s_MiddleEvents;
-	std::vector<GameEvent> GameStateManager::s_PostFinishedEvents;
-	
-	int GameStateManager::s_TotalSpawners = 0;
-	int GameStateManager::s_SpawnersFinished = 0;
+
 	bool GameStateManager::debug = true;
 	
+	int GameStateManager::s_RoomsToShop = 5;
+	int GameStateManager::s_RoomsToBoss = 5;
+
+	SceneId GameStateManager::s_BossRoomIndx;
+	SceneId GameStateManager::s_HUBRoomIndx;
 	SceneId GameStateManager::s_CurrentRoomIndx;
-	SceneId GameStateManager::s_RoomsToShop;
-	SceneId GameStateManager::s_RoomsToBoss;
 	SceneId GameStateManager::s_IntroductionRoom;
 	SceneId GameStateManager::s_LastCombatRoom;
 	SceneId GameStateManager::s_LastRewardRoom;
@@ -39,9 +45,9 @@ namespace Wiwa
 	int GameStateManager::s_CurrentRoomsCount;
 	DefaultCharacterSettings GameStateManager::s_CharacterSettings[2];
 
-	int GameStateManager::s_CurrentCharacter = 0;
+	int GameStateManager::s_CurrentCharacter = STARLORD;
 	float GameStateManager::s_GamepadDeadzone = 0.f;
-	EntityId GameStateManager::s_PlayerId = 0;
+	EntityId GameStateManager::s_PlayerId = WI_INVALID_INDEX;
 	
 	int GameStateManager::s_ActiveSkillChances = 20;
 	int GameStateManager::s_BuffChances = 20;
@@ -52,16 +58,23 @@ namespace Wiwa
 	EntityManager::ComponentIterator GameStateManager::s_CharacterStats;
 	Scene* GameStateManager::s_CurrentScene = nullptr;
 	Inventory* GameStateManager::s_PlayerInventory =  new Inventory();
+	GameProgression* GameStateManager::s_GameProgression = new GameProgression();
 	GamePoolingManager* GameStateManager::s_PoolManager = new GamePoolingManager();
+	EnemyManager* GameStateManager::s_EnemyManager = new EnemyManager();
 
+	bool GameStateManager::FanaticEffect = false;
+	int GameStateManager::PrometheanGemsToAdd = 0;
+	int GameStateManager::DamageDivisor = 1;
+	bool GameStateManager::SecondWind = false;
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
+		if(room_state  == RoomState::STATE_AWAITING_NEXT)
+			s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
 	}
 
 	void GameStateManager::SaveProgression()
 	{
-		
 		if(debug)
 			WI_CORE_INFO("Saving player progression");
 
@@ -82,11 +95,15 @@ namespace Wiwa
 			doc.AddMember("dash_cooldown", character->DashCooldown);
 			doc.AddMember("walk_threshold", character->WalkTreshold);
 		}
-		doc.save_file("config/player_data.json");
 
-		if(debug)
-			WI_CORE_INFO("Player progression saved");
 		s_PlayerInventory->Serialize(&doc);
+		doc.save_file("config/player_run.json");
+
+		JSONDocument doc_progression;
+		s_GameProgression->Serialize(&doc_progression);
+		doc_progression.save_file("config/player_progression.json");
+
+		GetEnemyManager().Serialize();
 	}
 
 	void GameStateManager::LoadProgression()
@@ -95,7 +112,8 @@ namespace Wiwa
 			WI_CORE_INFO("Loading player progression");
 		EntityManager& em = s_CurrentScene->GetEntityManager();
 		Character* character = em.GetComponent<Character>(s_PlayerId);
-		JSONDocument doc("config/player_data.json");
+		JSONDocument doc("config/player_run.json");
+
 		if (!character)
 			return;
 		if (doc.IsObject())
@@ -123,27 +141,29 @@ namespace Wiwa
 			if (doc.HasMember("walk_threshold"))
 				character->WalkTreshold = doc["walk_threshold"].as_float();
 		}
-		if (debug)
-			WI_CORE_INFO("Player progression loaded");
+		s_PlayerInventory->InitGame();
 		s_PlayerInventory->Deserialize(&doc);
 
-	}
+		JSONDocument doc_progression("config/player_progression.json");
+		s_GameProgression->Deserialize(&doc_progression);
 
+		GetEnemyManager().DeSerialize();
+	}
 
 	void GameStateManager::UpdateRoomState()
 	{
+		if (s_PlayerTriggerNext && s_RoomState == RoomState::STATE_AWAITING_NEXT)
+		{
+			EndCurrentRoom();
+			StartNewRoom();
+		}
+
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 			UpdateCombatRoom();
 
 		if (s_HasFinshedRoom && s_CanPassNextRoom && s_PlayerTriggerNext)
 		{
 			ChangeRoomState(RoomState::STATE_AWAITING_NEXT);		
-		}
-
-		if (s_PlayerTriggerNext && s_RoomState == RoomState::STATE_AWAITING_NEXT)
-		{
-			EndCurrentRoom();
-			StartNewRoom();
 		}
 	}
 
@@ -154,36 +174,87 @@ namespace Wiwa
 		Wiwa::WaveSpawner* enemySpawnerList = nullptr;
 		enemySpawnerList = em.GetComponents<WaveSpawner>(&size);
 
-		s_TotalSpawners = 0;
-		s_SpawnersFinished = 0;
-		if (enemySpawnerList)
-		{
-			for (int i = 0; i < size; i++)
-			{
+		bool isFinished = false;
+		if (enemySpawnerList){
+			for (int i = 0; i < size; i++){
 				if (em.IsComponentRemoved<WaveSpawner>(i)) {
-					//WI_INFO("Removed at: [{}]", i);
 				}
-				else
-				{
-					s_TotalSpawners += 1;
-
+				else {
 					Wiwa::WaveSpawner* spawner = &enemySpawnerList[i];
-					if (spawner)
+					if (spawner) {
+						isFinished = IsWaveSpawnerFinished(spawner);
+					}
+
+					if (Input::IsKeyPressed(Key::F6))
 					{
-						if (spawner->hasFinished)
-							s_SpawnersFinished += 1;
+						WI_INFO("End combat room");
+						EndCombatRoom(spawner);
+					}
+
+					if (Input::IsKeyPressed(Key::F5))
+					{
+						WI_INFO("Changing to boss");
+						EndCurrentRoom();
+						WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
+						GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
+						SceneManager::LoadSceneByIndex(s_BossRoomIndx);
 					}
 				}
 			}
-			s_HasFinshedRoom = (s_SpawnersFinished == s_TotalSpawners);
+			s_HasFinshedRoom = isFinished;
 			s_CanPassNextRoom = s_HasFinshedRoom;
 		}
-	
+		
+		GameMusicManager::UpdateCombatIntesity(GetActiveEnemies());
 
 		if (s_HasFinshedRoom)
+		{
 			ChangeRoomState(RoomState::STATE_FINISHED);
+		}
 		else
 			ChangeRoomState(RoomState::STATE_STARTED);
+
+
+	}
+
+	void GameStateManager::NewGame()
+	{
+		JSONDocument doc;
+
+		JSONValue starlord = doc.AddMemberObject("starlord");
+		starlord.AddMember("max_health", s_CharacterSettings[0].MaxHealth);
+		starlord.AddMember("max_shield", s_CharacterSettings[0].MaxShield);
+		starlord.AddMember("damage", s_CharacterSettings[0].Damage);
+		starlord.AddMember("rof", s_CharacterSettings[0].RateOfFire);
+		starlord.AddMember("speed", s_CharacterSettings[0].Speed);
+		starlord.AddMember("dash_speed", s_CharacterSettings[0].DashSpeed);
+		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
+		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
+		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
+
+
+		JSONValue rocket = doc.AddMemberObject("rocket");
+		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
+		rocket.AddMember("max_shield", s_CharacterSettings[1].MaxShield);
+		rocket.AddMember("damage", s_CharacterSettings[1].Damage);
+		rocket.AddMember("rof", s_CharacterSettings[1].RateOfFire);
+		rocket.AddMember("speed", s_CharacterSettings[1].Speed);
+		rocket.AddMember("dash_speed", s_CharacterSettings[1].DashSpeed);
+		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
+		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
+		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
+
+		// TODO: Reset all progression
+
+		doc.save_file("config/player_data.json");
+	}
+
+	bool GameStateManager::Continue()
+	{
+		if (!s_CanContinue)
+			return false;
+
+		return true;
 	}
 
 	void GameStateManager::StartRun()
@@ -191,13 +262,18 @@ namespace Wiwa
 		if (debug) WI_INFO("GAME STATE: StartRun()");
 		SaveProgression();
 		StartNewRoom();
+		RandomizeRewardRoom();
+		s_PlayerTriggerNext = false;
 	}
 
 	void GameStateManager::EndRun()
 	{
 		if (debug) WI_INFO("GAME STATE: EndRun()");
+		s_PlayerInventory->AddTokensHoward(PrometheanGemsToAdd);
 		SetRoomType(RoomType::NONE);
+
 		s_PlayerInventory->Clear();
+		s_GameProgression->Clear();
 	}
 
 	void GameStateManager::InitHub()
@@ -207,10 +283,10 @@ namespace Wiwa
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
-		s_CurrentRoomsCount = 3;
-		s_RoomsToBoss = 20;
-		s_RoomsToShop = 10;
 
+		s_EnemyManager->m_CurrentCombatRoomsCount = 0;
+		s_EnemyManager->ResetDifficulty();
+		s_EnemyManager->Serialize();
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -219,7 +295,11 @@ namespace Wiwa
 			WI_CORE_INFO("Init progression");
 		Character* character = GetPlayerCharacterComp();
 		
-		JSONDocument doc("config/room_data.json");
+
+		if (!s_CanContinue)
+			NewGame();
+
+		JSONDocument doc("config/player_data.json");
 		if (!character)
 		{
 			WI_ERROR("Character was nullptr");
@@ -232,6 +312,7 @@ namespace Wiwa
 				JSONValue characterDoc = doc["starlord"];
 				if (s_CurrentCharacter == 1)
 					characterDoc = doc["rocket"];
+
 				if (characterDoc.HasMember("max_health"))
 					character->MaxHealth = characterDoc["max_health"].as_int();
 				character->Health = character->MaxHealth;
@@ -256,20 +337,47 @@ namespace Wiwa
 					character->WalkTreshold = characterDoc["walk_threshold"].as_float();
 			}
 		}
+		//LoadPlayerAchievements(&doc);
+	}
+
+	void GameStateManager::LoadPlayerAchievements(JSONDocument* doc)
+	{
 		if (debug)
-			WI_CORE_INFO("Player init loaded");
+			WI_CORE_INFO("Init achievements loading");
+		Character* character = GetPlayerCharacterComp();
+		if (!character)
+		{
+			WI_ERROR("Character was nullptr");
+			return;
+		}
+		if (doc->IsObject())
+		{
+			JSONDocument& document = *doc;
+			if (doc->HasMember("Achievement"))
+			{
+				JSONValue achievementDoc = document["Achievement"];
+				if (achievementDoc.HasMember("walk_threshold"))
+					character->WalkTreshold = achievementDoc["walk_threshold"].as_float();
+			}
+		}
+		if (debug)
+			WI_CORE_INFO("Achievements init loaded");
+
 	}
 
 	void GameStateManager::Update()
 	{
 		OPTICK_EVENT("Game state manager update");
+		AchievementsFunctionality();
+			
 		s_PlayerInventory->Update();
+		s_GameProgression->Update();
 	}
 
 	void GameStateManager::Die()
 	{
 		if (debug)
-			WI_CORE_INFO("Player dead");		
+			WI_CORE_INFO("Player dead");	
 		EndRun();
 	}
 
@@ -284,6 +392,7 @@ namespace Wiwa
 	{
 		Wiwa::GuiManager& gm = s_CurrentScene->GetGuiManager();
 		Character* character = GetPlayerCharacterComp();
+		damage = damage / DamageDivisor;
 		if (!character)
 		{
 			WI_CORE_CRITICAL("Player can't take damage because character is nullptr");
@@ -294,12 +403,24 @@ namespace Wiwa
 		// to the health even when this surpases the shield ammount
 
 		// If there's no shield we take damage from the health
+
+		MeshRenderer* renderer = s_CurrentScene->GetEntityManager().GetSystem<MeshRenderer>(s_PlayerId);
+
 		
 		if (character->Shield <= 0)
 		{
 			character->Health -= damage;
-			if (character->Health <= 0)
+			if (renderer != nullptr) 
 			{
+				renderer->GetMaterial()->SetUniformData("u_Color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+				renderer->GetMaterial()->SetUniformData("u_Hit", true);
+				renderer->Update();
+				renderer->GetMaterial()->SetUniformData("u_Hit", false);
+			}
+			Audio::PostEvent("player_hit");
+			if (character->Health <= 0 && !FanaticEffect)
+			{
+				Audio::PostEvent("player_dead");
 				Die();
 			}
 			return;
@@ -309,6 +430,14 @@ namespace Wiwa
 		if (character->Shield > 0)
 		{
 			character->Shield -= damage;
+			Audio::PostEvent("player_hit_shield");
+			if (renderer != nullptr)
+			{
+				renderer->GetMaterial()->SetUniformData("u_Color", glm::vec4(0, 0, 1.0f, 1.0f));
+				renderer->GetMaterial()->SetUniformData("u_Hit", true);
+				renderer->Update();
+				renderer->GetMaterial()->SetUniformData("u_Hit", false);
+			}
 		}
 
 		if (character->Shield <= 0)
@@ -333,14 +462,19 @@ namespace Wiwa
 
 	void GameStateManager::SetPlayerId(EntityId id, Scene* scene)
 	{
+
 		s_PlayerId = id;
-		s_CurrentScene = scene;
-		s_CharacterStats = scene->GetEntityManager().GetComponentIterator<Character>(id);
+		if (id != WI_INVALID_INDEX)
+		{
+			s_CurrentScene = scene;
+			s_CharacterStats = scene->GetEntityManager().GetComponentIterator<Character>(id);
+		}
 		WI_CORE_INFO("Player id set to {}", id);
 	}
 
 	void GameStateManager::EndCurrentRoom()
 	{
+		s_PlayerTriggerNext = false;
 		if (debug) WI_INFO("GAME STATE: EndCurrentRoom()");
 		if (s_RoomType == RoomType::ROOM_COMBAT)
 		{
@@ -368,8 +502,6 @@ namespace Wiwa
 	void GameStateManager::ResetCombatRoomData()
 	{
 		if (debug) WI_INFO("GAME STATE: ResetCombatRoomData()");
-		s_TotalSpawners = 0;
-		s_SpawnersFinished = 0;
 	}
 
 	void GameStateManager::setFinishRoom(bool value)
@@ -398,12 +530,7 @@ namespace Wiwa
 	int GameStateManager::NextRoom()
 	{
 		WI_INFO("ROOM STATE: NextRoom()");
-		//if (s_CurrentRoomsCount > s_RoomsToShop)
-		//{
-		//	GameStateManager::SetRoomType(RoomType::ROOM_HUB);
-		//	SceneManager::ChangeSceneByIndex(s_IntroductionRoom); // Hardcoded hub index (intro scene)
-		//	return 1;
-		//}
+		s_PlayerTriggerNext = false;
 
 		RoomType type = GameStateManager::GetType();
 		switch (type)
@@ -415,9 +542,8 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-			int nextRoom = RAND(0, s_CombatRooms.size() - 1);
-			SceneId id = s_CombatRooms[nextRoom];
-			SceneManager::ChangeSceneByIndex(id);
+			LoadRandomRoom(s_CombatRooms);
+			RandomizeRewardRoom();
 			break;
 		}
 		case Wiwa::RoomType::ROOM_COMBAT:
@@ -425,15 +551,11 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_REWARD");
 			GameStateManager::SetRoomType(RoomType::ROOM_REWARD);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			int nextRoom = s_LastRewardRoom;
-			/*while (nextRoom == s_LastRewardRoom)
-			{
-			}*/
-			nextRoom = RAND(0, s_RewardRooms.size() - 1);
+			
+			LoadRandomRoom(s_RewardRooms);
+			RandomizeRewardRoom();
 
-			s_LastRewardRoom = nextRoom;
-			SceneId id = s_RewardRooms[nextRoom];
-			SceneManager::ChangeSceneByIndex(id);
+			s_EnemyManager->IncreaseRoomRewardCounter();
 			break;
 		}
 		case Wiwa::RoomType::ROOM_REWARD:
@@ -441,15 +563,9 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			int nextRoom = s_LastCombatRoom;
-			/*while (nextRoom == s_LastCombatRoom)
-			{
-				
-			}*/
-			nextRoom = RAND(0, s_CombatRooms.size() - 1);
-			s_LastCombatRoom = nextRoom;
-			SceneId id = s_CombatRooms[nextRoom];
-			SceneManager::ChangeSceneByIndex(id);
+
+			LoadRandomRoom(s_CombatRooms);
+			s_EnemyManager->m_CurrentCombatRoomsCount++;
 
 			s_RoomsToBoss--;
 			s_RoomsToShop--;
@@ -459,21 +575,15 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_SHOP");
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-				nextRoom = s_LastShopRoom;
-				while (nextRoom == s_LastShopRoom)
-				{
-					nextRoom = RAND(0, s_ShopRooms.size() - 1);
-				}
-				id = s_ShopRooms[id];
-				SceneManager::ChangeSceneByIndex(id);
-				s_RoomsToShop = 10;
+				
+				LoadRandomRoom(s_ShopRooms);
 			}
 			break;
 		}
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
-			WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
-			SceneManager::ChangeSceneByName("RunEnd");
+			SceneManager::ChangeSceneByIndex(s_HUBRoomIndx);
+			//SceneManager::LoadSceneByIndex(s_HUBRoomIndx);
 			break;
 		}
 		case Wiwa::RoomType::ROOM_SHOP:
@@ -482,16 +592,15 @@ namespace Wiwa
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
-				//SceneManager::LoadScene("RunBoss");
+				SceneManager::LoadSceneByIndex(s_BossRoomIndx);
 			}
 			else
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-				int nextRoom = RAND(0, s_CombatRooms.size() - 1);
-				SceneId id = s_CombatRooms[nextRoom];
-				SceneManager::ChangeSceneByIndex(id);
+				LoadRandomRoom(s_CombatRooms);
+				s_EnemyManager->m_CurrentCombatRoomsCount++;
 			}
 			break;
 		}
@@ -499,19 +608,53 @@ namespace Wiwa
 			break;
 		}
 		s_CurrentRoomsCount--;
+		GetEnemyManager().Serialize();
+
 		return 1;
-		//SceneManager::getActiveScene()->GetPhysicsManager().OnLoad("game_tags");
-		
+	}
+
+	int GameStateManager::LoadRandomRoom(const std::vector<int>& roomPool)
+	{
+		std::uniform_int_distribution<> dist(0, roomPool.size() - 1);
+		int nextRoom = dist(Application::s_Gen);
+		SceneId id = roomPool[nextRoom];
+		SceneManager::ChangeSceneByIndex(id);
+		return nextRoom;
+	}
+
+	int GameStateManager::RandomizeRewardRoom()
+	{
+		for (size_t i = 0; i < 2; i++)
+		{
+			std::uniform_int_distribution<> dist(0,  100);
+			uint32_t randomNum = dist(Application::s_Gen);
+			uint32_t counter = 0;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
+				s_DoorsReward[i] = 0;
+			counter += GameStateManager::s_ActiveSkillChances;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_PassiveSkillChances))
+				s_DoorsReward[i] = 1;
+			counter += GameStateManager::s_PassiveSkillChances;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_BuffChances))
+				s_DoorsReward[i] = 2;
+			counter += GameStateManager::s_BuffChances;
+			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_NPCRoomChances))
+				s_DoorsReward[i] = 3;
+			counter += GameStateManager::s_NPCRoomChances;
+		}
+		return 0;
 	}
 
 	void GameStateManager::CleanUp()
 	{
 		WI_INFO("Game state manager clean up");
 		delete s_PlayerInventory;
+		delete s_GameProgression;
 		s_RewardRooms.clear();
 		s_CombatRooms.clear();
 		s_ShopRooms.clear();
 		delete s_PoolManager;
+		delete s_EnemyManager;
 	}
 
 
@@ -525,6 +668,8 @@ namespace Wiwa
 		doc.AddMember("buff_chance", s_BuffChances);
 		doc.AddMember("npc_chance", s_NPCRoomChances);
 
+		doc.AddMember("hub", s_HUBRoomIndx);
+		doc.AddMember("boss", s_BossRoomIndx);
 		doc.AddMember("intro", s_IntroductionRoom);
 		JSONValue combatRooms = doc.AddMemberArray("combat");
 		for (size_t i = 0; i < s_CombatRooms.size(); i++)
@@ -573,8 +718,6 @@ namespace Wiwa
 
 		ItemManager::Serialize(&doc);
 
-		AchievementsManager::Serialize(&doc);
-
 		doc.save_file("config/room_data.json");
 	}
 
@@ -598,10 +741,13 @@ namespace Wiwa
 		if (doc.HasMember("npc_chance"))
 			s_NPCRoomChances = doc["npc_chance"].as_int();
 
-		if (doc.HasMember("intro")) {
-			s_IntroductionRoom = doc["intro"].as_int();
+		if (doc.HasMember("hub")) {
+			s_HUBRoomIndx = doc["hub"].as_int();
 		}
-
+		if (doc.HasMember("boss"))
+		{
+			s_BossRoomIndx = doc["boss"].as_int();
+		}
 		if (doc.HasMember("combat")) {
 
 			JSONValue scene_list = doc["combat"];
@@ -675,38 +821,124 @@ namespace Wiwa
 
 		Wiwa::ItemManager::Deserialize(&doc);
 
-		AchievementsManager::Deserialize(&doc);
+		if (std::filesystem::exists("config/player_data.json"))
+		{
+
+			JSONDocument doc("config/player_data.json");
+			if (doc.IsObject())
+			{
+				if (doc.HasMember("starlord") && doc.HasMember("rocket"))
+					s_CanContinue = true;
+			}
+		}
+
+		Wiwa::GameStateManager::GetEnemyManager().DeSerialize();
+
+		//AchievementsManager::Deserialize(&doc);
 	}
 	void GameStateManager::SpawnRandomItem(glm::vec3 position, uint8_t type)
 	{
-		uint32_t itemRand;
-		std::string_view name;
+		
+		std::string name;
 		int i = 0;
 		switch (type)
 		{
 		case 0:
 		{
-			itemRand = RAND(0, ItemManager::GetAbilities().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size() - 1);
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetAbilities())
 			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
 		}break;
 		case 1:
 		{
-			itemRand = RAND(0, ItemManager::GetSkills().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size() - 1);
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetSkills())
 			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
 		}break;
 		case 2:
 		{
-			itemRand = RAND(0, ItemManager::GetBuffs().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size() - 1);
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetBuffs())
+			{
+				if (i == randomNum)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 3:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size() -1);
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetConsumables())
+			{
+				if (i == randomNum)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		default:
+		{
+			WI_CORE_ERROR("Item type doesn't match any type!");
+			return;
+		}break;
+		}
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		EntityId id = em.LoadPrefab("assets/Prefabs/RewardChest.wiprefab");
+		EntityId childItem = em.GetChildByName(id, "Item");
+
+		Item* item = em.GetComponent<Item>(childItem);
+		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
+		t3d->localPosition = position;
+		item->item_type = type;
+
+		name.copy(item->Name, 128);		
+		item->Name[name.size()] = '\0';
+	}
+	void GameStateManager::SpawnShopRandomItem(glm::vec3 position, uint8_t type)
+	{
+		uint32_t itemRand;
+		std::string name;
+		int i = 0;
+		switch (type)
+		{
+		case 0:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size());
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetAbilities())
+			{
+				if (i == randomNum)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 1:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size());
+			int randomNum = itemRandom(Application::s_Gen);
+			for (const auto& ability : ItemManager::GetSkills())
+			{
+				if (i == randomNum)
+					name = ability.second.Name;
+				i++;
+			}
+		}break;
+		case 2:
+		{
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size());
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetBuffs())
 			{
 				if (i == itemRand)
@@ -716,7 +948,8 @@ namespace Wiwa
 		}break;
 		case 3:
 		{
-			itemRand = RAND(0, ItemManager::GetConsumables().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size());
+			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetConsumables())
 			{
 				if (i == itemRand)
@@ -731,21 +964,16 @@ namespace Wiwa
 		}break;
 		}
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
+		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
 
 		Item* item = em.GetComponent<Item>(id);
 		Transform3D* t3d = em.GetComponent<Transform3D>(id);
 
 		t3d->localPosition = position;
 		item->item_type = type;
-		for (uint32_t i = 0; i < 128; i++)
-		{
-			if (i >= name.size())
-			{
-				break;
-			}
-			item->Name[i] = name[i];
-		}
+
+		name.copy(item->Name, 128);
+		item->Name[name.size()] = '\0';
 	}
 	void GameStateManager::SpawnItem(glm::vec3 position, uint8_t type, const char* name)
 	{
@@ -776,10 +1004,11 @@ namespace Wiwa
 		}
 
 		EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-		EntityId id = em.LoadPrefab("assets/prefabs/item.wiprefab");
-
+		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
+		
 		Item* item = em.GetComponent<Item>(id);
 		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+
 
 		WI_CORE_INFO("Spawning item at {}x{}y{}z", position.x, position.y, position.z);
 		
@@ -798,6 +1027,216 @@ namespace Wiwa
 	Transform3D* GameStateManager::GetPlayerTransform()
 	{
 		return s_CurrentScene->GetEntityManager().GetComponent<Transform3D>(s_PlayerId);
+	}
+	void GameStateManager::AchievementsFunctionality()
+	{
+		std::vector<ShopElement> m_ShopPassives = s_PlayerInventory->GetShopPassives();
+		for (size_t i = 0; i < m_ShopPassives.size(); i++)
+		{
+			Wiwa::HowardElementType type_howard = m_ShopPassives.at(i).PassiveBoost;
+			switch (type_howard)
+			{
+			case Wiwa::HowardElementType::RECOVERY_SHIELD:
+				if(s_RoomState == Wiwa::RoomState::STATE_AWAITING_NEXT)
+					m_ShopPassives.at(i).Use();
+				break;
+			case Wiwa::HowardElementType::SECOND_WIND:
+
+				break;
+			case Wiwa::HowardElementType::REROLL:
+				break;
+			case Wiwa::HowardElementType::BEGINNERS_LUCK:
+				break;
+			case Wiwa::HowardElementType::MIDAS_TOUCH:
+				break;
+			case Wiwa::HowardElementType::DEVOURER:
+				break;
+			case Wiwa::HowardElementType::FANATIC:
+				if (FanaticEffect)
+				{
+					Character* character = GetPlayerCharacterComp();
+
+					if (character->Health <= 0)
+					{
+						character->Health = 100;
+						FanaticEffect = false;
+					}
+				}
+				break;
+			case Wiwa::HowardElementType::RECOVERY_HEALTH:
+				if (s_RoomState == Wiwa::RoomState::STATE_AWAITING_NEXT)
+					m_ShopPassives.at(i).Use();
+				break;
+			case Wiwa::HowardElementType::ULTIMATE_MIDAS_TOUCH:
+				break;
+			case Wiwa::HowardElementType::FRIENDLY_FACE:
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	int GameStateManager::GetActiveEnemies()
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		int total = 0;
+
+		// Get the first and only spawner in scene
+		size_t size = 0;
+		Wiwa::WaveSpawner* waveSpawner = nullptr;
+		waveSpawner = em.GetComponents<WaveSpawner>(&size);
+		if (waveSpawner) {
+			if (em.IsComponentRemoved<WaveSpawner>(0))
+				return 0;
+			waveSpawner = &waveSpawner[0];
+			if (waveSpawner && !waveSpawner->hasFinished && waveSpawner->hasTriggered) {
+				// Check for all the active waves in that spawner.
+				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+				if (waveSpawnerSystem) {
+					const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+					for (int i = 0; i < waveIds.size(); i++)
+					{
+						Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+						if (wave && !wave->hasFinished) {
+							total += wave->currentEnemiesAlive;
+						}
+					}
+				}
+			}
+		}
+
+		return total;
+	}
+
+	int GameStateManager::GetAproximateTotalEnemies()
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		int total = 0;
+
+		// Get the first and only spawner in scene
+		size_t size = 0;
+		Wiwa::WaveSpawner* waveSpawner = nullptr;
+		waveSpawner = em.GetComponents<WaveSpawner>(&size);
+		if (waveSpawner) {
+			if (em.IsComponentRemoved<WaveSpawner>(0))
+				return 0;
+			waveSpawner = &waveSpawner[0];
+			if (waveSpawner && waveSpawner->hasTriggered) {
+				// Check for all the active waves in that spawner.
+				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+				if (waveSpawnerSystem) {
+					const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+					for (int i = 0; i < waveIds.size(); i++)
+					{
+						Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+						if (wave) {
+							total += wave->maxEnemies;
+						}
+					}
+				}
+			}
+		}
+
+		return total;
+	}
+
+	int GameStateManager::GetTotalWaves()
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		int zero = 0;
+
+		// Get the first and only spawner in scene
+		size_t size = 0;
+		Wiwa::WaveSpawner* waveSpawner = nullptr;
+		waveSpawner = em.GetComponents<WaveSpawner>(&size);
+		if (waveSpawner) {
+			if (em.IsComponentRemoved<WaveSpawner>(0))
+				return zero;
+			waveSpawner = &waveSpawner[0];
+			if (waveSpawner && waveSpawner->hasTriggered) {
+				return waveSpawner->maxWaveCount;
+			}
+		}
+
+		return zero;
+	}
+
+	int GameStateManager::GetCurrentWaves()
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		int zero = 0;
+
+		// Get the first and only spawner in scene
+		size_t size = 0;
+		Wiwa::WaveSpawner* waveSpawner = nullptr;
+		waveSpawner = em.GetComponents<WaveSpawner>(&size);
+		if (waveSpawner) {
+			if (em.IsComponentRemoved<WaveSpawner>(0))
+				return zero;
+			waveSpawner = &waveSpawner[0];
+			if (waveSpawner && waveSpawner->hasTriggered) {
+				return waveSpawner->currentWaveCount;
+			}
+		}
+
+		return zero;
+	}
+
+	bool GameStateManager::IsWaveSpawnerFinished(WaveSpawner* waveSpawner)
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		if (waveSpawner && !waveSpawner->hasFinished) {
+			// Check for all the active waves in that spawner.
+			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+			if (waveSpawnerSystem) {
+				const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+				for (int i = 0; i < waveIds.size(); i++)
+				{
+					Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+					if (wave) {
+						if (!wave->hasFinished)
+							return false;
+					}
+				}
+			}
+		}
+		
+		if (waveSpawner->hasFinished)
+			return true;
+
+		return false;
+	}
+
+	void GameStateManager::EndCombatRoom(WaveSpawner* waveSpawner)
+	{
+		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+		if (waveSpawner && !waveSpawner->hasFinished) {
+			// Check for all the active waves in that spawner.
+			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+			if (waveSpawnerSystem) {
+				const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+				for (int i = 0; i < waveIds.size(); i++)
+				{
+					Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+					if (wave) {
+
+						WaveSystem* waveSystem = em.GetSystem<WaveSystem>(waveIds[i]);
+						if (waveSystem) {
+							const std::vector<EntityId>& enemiesIds = waveSystem->getEnemiesIds();
+							for (int j = 0; j < enemiesIds.size(); j++)
+							{
+								em.DestroyEntity(enemiesIds[j]);
+								waveSystem->DestroyEnemy(enemiesIds[j]);
+							}
+						}
+
+						wave->hasFinished = true;
+					}
+				}
+			}
+			waveSpawner->hasFinished = true;
+		}
 	}
 }
 

@@ -2,6 +2,7 @@
 #include <Wiwa/utilities/Reflection.h>
 #include <fstream>
 #include <Wiwa/core/Resources.h>
+#include "../Layers/EditorLayer.h"
 
 void DrawVec3Control(const char* label, unsigned char* data, const Field field, float resetValue, float columnWidth)
 {
@@ -440,37 +441,67 @@ bool VideoExtensionComp(const std::filesystem::path file)
 
 void CreateScriptFile(const char* filePath, const char* name)
 {
-	std::string file = filePath;
-	file += ".cs";
+	std::string file = "game_assembly\\src\\systems\\";
+	file += name;
+	file += ".h";
 
 	std::ofstream scriptFile(file.c_str());
-	scriptFile << "using Wiwa;\n";
-	scriptFile << "using System;\n";
-	scriptFile << "using System.Collections;\n";
-	scriptFile << "using System.Collections.Generic;\n";
-	scriptFile << "namespace Game\n";
+	scriptFile << "#pragma once\n";
+	scriptFile << "#include <Wiwa/ecs/systems/System.h>\n";
+	scriptFile << "namespace Wiwa\n";
 	scriptFile << "{\n";
-	scriptFile << "	public class ";
+	scriptFile << "class ";
 	scriptFile << name;
-	scriptFile << " : Behaviour\n";
+	scriptFile << " : public System\n";
 	scriptFile << "	{\n";
+	scriptFile << "	public:\n";
 	scriptFile << "		//Called the first frame\n";
-	scriptFile << "		void Awake()\n";
-	scriptFile << "		{\n";
-	scriptFile << "		}\n";
-	scriptFile << "		//Called after Awake()\n";
-	scriptFile << "		void Init()\n";
-	scriptFile << "		{\n";
-	scriptFile << "		}\n";
+	scriptFile << "		virtual void OnAwake() override;\n";
+	scriptFile << "		//Called after OnAwake()\n";
+	scriptFile << "		virtual void OnInit() override;\n";
 	scriptFile << "		//Called every frame\n";
-	scriptFile << "		void Update()\n";
-	scriptFile << "		{\n";
-	scriptFile << "		}\n";
-	scriptFile << "	}\n";
+	scriptFile << "		virtual void OnUpdate() override;\n";
+	scriptFile << "     virtual void OnCollisionEnter(Object* obj1, Object* obj2) override;\n";
+	scriptFile << "	};\n";
 	scriptFile << "}\n";
+	scriptFile << "REGISTER_SYSTEM(Wiwa::";
+	scriptFile << name;
+	scriptFile << ")\n";
 	scriptFile.close();
 
+	std::string cppFile = "game_assembly\\src\\systems\\";
+	cppFile += name;
+	cppFile += ".cpp";
+	std::ofstream scriptCppFile(cppFile.c_str());
+	scriptCppFile << "#include \"";
+	scriptCppFile << name;
+	scriptCppFile << ".h\"\n";
+	scriptCppFile << "void Wiwa::";
+	scriptCppFile << name;
+	scriptCppFile << "::OnAwake()\n";
+	scriptCppFile << "{\n";
+	scriptCppFile << "}\n";
+	scriptCppFile << "void Wiwa::";
+	scriptCppFile << name;
+	scriptCppFile << "::OnInit()\n";
+	scriptCppFile << "{\n";
+	scriptCppFile << "}\n";
+	scriptCppFile << "void Wiwa::";
+	scriptCppFile << name;
+	scriptCppFile << "::OnUpdate()\n";
+	scriptCppFile << "{\n";
+	scriptCppFile << "}\n";
+	scriptCppFile << "void Wiwa::";
+	scriptCppFile << name;
+	scriptCppFile << "::OnCollisionEnter(Object* obj1, Object* obj2)\n";
+	scriptCppFile << "{\n";
+	scriptCppFile << "}\n";
+	scriptCppFile.close();
 
+	std::string command = "call tools/regensol.bat ";
+	command += EditorLayer::s_SolVersion;
+
+	system(command.c_str());
 }
 
 void DrawVec3Control(const std::string& label, float* values, float resetValue, float columnWidth)

@@ -19,7 +19,8 @@ DialogPanel::DialogPanel(EditorLayer* instance)
 	}
 
 	Wiwa::DialogManager& dm_onInit = Wiwa::SceneManager::getActiveScene()->GetDialogManager();
-
+	if (!&dm_onInit)
+		return;
 	for (int c = 0; c < MAX_CONVERSATIONS && dm_onInit.conversations[c].occupied == true; c++)
 	{
 		currentEditingConversationName[c] = dm_onInit.conversations[c].conversationName;
@@ -76,14 +77,19 @@ void DialogPanel::Draw()
 					currentCreatingNodeIsSaved[m] = false;
 					dm.conversations[currentConversation].nodes[m].occupied = false;
 					dm.conversations[currentConversation].nodes[m].text1 = "";
-					dm.conversations[currentConversation].nodes[m].text2 = "";
-					dm.conversations[currentConversation].nodes[m].text3 = "";
 
+					dm.conversations[currentConversation].nodes[m].audioEventName = "";
 				}
 
 				dm.conversations[currentConversation].bubbleImagePath = "";
 				dm.conversations[currentConversation].characterImagePath = "";
 				dm.conversations[currentConversation].conversationName = "";
+				dm.conversations[currentConversation].isInOppositeSide = false;
+				dm.conversations[currentConversation].isRandom = false;
+				dm.conversations[currentConversation].detectsCharacter = false;
+				dm.conversations[currentConversation].group.groupID = "-1";
+				dm.conversations[currentConversation].group.order = "-1";
+				dm.conversations[currentConversation].eventName = "";
 				dm.conversations[currentConversation].nodes[0].occupied = true;
 
 				currentCreationStep = 1;
@@ -95,21 +101,18 @@ void DialogPanel::Draw()
 				if (currentCreatingNodeIsSaved[currentNode] == true) ImGui::TextWrapped("Currently Editing Node # %i", currentNode);
 				ImGui::NewLine();
 
-				ImGui::Text("|<------------ Max Length ------------>|");
-				if (ImGui::InputText("Line 1 text", &dm.conversations[currentConversation].nodes[currentNode].text1))
+				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit.");
+				if (ImGui::InputText("Bubble text", &dm.conversations[currentConversation].nodes[currentNode].text1))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
-				ImGui::Text("|<------------ Max Length ------------>|");
-				if (ImGui::InputText("Line 2 text", &dm.conversations[currentConversation].nodes[currentNode].text2))
+				ImGui::NewLine();
+				if (ImGui::InputText("Audio event name", &dm.conversations[currentConversation].nodes[currentNode].audioEventName))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
 				}
-				ImGui::Text("|<------------ Max Length ------------>|");
-				if (ImGui::InputText("Line 3 text", &dm.conversations[currentConversation].nodes[currentNode].text3))
-				{
-					currentCreatingNodeIsSaved[currentNode] = false;
-				}
+				ImGui::TextWrapped("Note: Leave 'Audio event name' case blank if no audio event should be played. This event is normally used for voice line audio.");
+				ImGui::NewLine();
 
 				ImGui::PushID(currentNode);
 				if (currentNode > 0)
@@ -150,9 +153,7 @@ void DialogPanel::Draw()
 				{
 					dm.SetDialogText(
 						(char*)dm.conversations[currentConversation].nodes[currentNode].text1.c_str(),
-						(char*)dm.conversations[currentConversation].nodes[currentNode].text2.c_str(),
-						(char*)dm.conversations[currentConversation].nodes[currentNode].text3.c_str(),
-						"assets/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
+						"library/Fonts/Jade_Smile.ttf", currentConversation, currentNode);
 					dm.conversations[currentConversation].nodes[currentNode].occupied = true;
 
 					currentCreatingNodeIsSaved[currentNode] = true;
@@ -194,10 +195,16 @@ void DialogPanel::Draw()
 						if (isNodeOccupiedNumTimesFalse == 1)
 						{
 							dm.conversations[currentConversation].nodes[l].text1 = dm.conversations[currentConversation].nodes[l + 1].text1;
-							dm.conversations[currentConversation].nodes[l].text2 = dm.conversations[currentConversation].nodes[l + 1].text2;
-							dm.conversations[currentConversation].nodes[l].text3 = dm.conversations[currentConversation].nodes[l + 1].text3;
+
+							dm.conversations[currentConversation].nodes[l].audioEventName = dm.conversations[currentConversation].nodes[l + 1].audioEventName;
+
 							dm.conversations[currentConversation].nodes[l].occupied = dm.conversations[currentConversation].nodes[l + 1].occupied;
 
+						}
+
+						if (dm.editorConversations[l].occupied == false && isNodeOccupiedNumTimesFalse == 2 && currentNode > 0)
+						{
+							currentNode--;
 						}
 					}
 				}
@@ -211,7 +218,6 @@ void DialogPanel::Draw()
 				}
 				ImGui::PopID();
 			}
-			//ImGui::SameLine();
 
 			if (currentCreationStep == 2)
 			{
@@ -282,6 +288,32 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::Checkbox("Is character on Right?", &dm.conversations[currentConversation].isInOppositeSide);
+				ImGui::TextWrapped("Note: 'Is character on Right?' defines wether the character is standing on the left or right side of the bubble. It will also make bubble appear higher.");
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Conversation Group", &dm.conversations[currentConversation].group.groupID);
+				ImGui::TextWrapped("Note: 'Conversation Group' defines if this conversation belongs to a group. Leave it to '-1' if this conversation should not belong to a group.");
+
+				ImGui::InputText("Group Order", &dm.conversations[currentConversation].group.order);
+				ImGui::TextWrapped("Note: 'Group Order' defines the order conversations will happen in the group starting from '0'. Leave it to '-1' if this conversation does not belong to any group.");
+
+				ImGui::Checkbox("Is Group Order Random?", &dm.conversations[currentConversation].isRandom);
+				ImGui::TextWrapped("Note: 'Is Group Order Random?' will make the dialog manager pick a random conversation from the group the conversations belongs when this current specific dialog is triggered.");
+
+				ImGui::NewLine();
+
+				ImGui::Checkbox("Detects selected character?", &dm.conversations[currentConversation].detectsCharacter);
+				ImGui::TextWrapped("Note: 'Detects selected character?' will replace the bubble and character images with the ones assigned to the current selected character.");
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Event name", &dm.conversations[currentConversation].eventName);
+				ImGui::TextWrapped("Note: 'Event name' will trigger a specific event when the conversation ends if the input written here is correct (see list of event names). Leave it blank if no event should be triggered.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("WARNING, Only Press this button if you finished creating the conversation");
 				if (ImGui::Button("Finish And Save Conversation"))
 				{
@@ -293,8 +325,7 @@ void DialogPanel::Draw()
 						currentCreatingNodeIsSaved[m] = false;
 						dm.editorConversations[currentConversation].nodes[m].occupied = dm.conversations[currentConversation].nodes[m].occupied;
 						dm.editorConversations[currentConversation].nodes[m].text1 = dm.conversations[currentConversation].nodes[m].text1;
-						dm.editorConversations[currentConversation].nodes[m].text2 = dm.conversations[currentConversation].nodes[m].text2;
-						dm.editorConversations[currentConversation].nodes[m].text3 = dm.conversations[currentConversation].nodes[m].text3;
+						dm.editorConversations[currentConversation].nodes[m].audioEventName = dm.conversations[currentConversation].nodes[m].audioEventName;
 
 					}
 
@@ -302,6 +333,13 @@ void DialogPanel::Draw()
 					dm.editorConversations[currentConversation].characterImagePath = dm.conversations[currentConversation].characterImagePath;
 					dm.editorConversations[currentConversation].conversationName = dm.conversations[currentConversation].conversationName;
 					dm.editorConversations[currentConversation].nodes[0].occupied = dm.conversations[currentConversation].nodes[0].occupied;
+
+					dm.editorConversations[currentConversation].isInOppositeSide = dm.conversations[currentConversation].isInOppositeSide;
+					dm.editorConversations[currentConversation].isRandom = dm.conversations[currentConversation].isRandom;
+					dm.editorConversations[currentConversation].detectsCharacter = dm.conversations[currentConversation].detectsCharacter;
+					dm.editorConversations[currentConversation].group.groupID = dm.conversations[currentConversation].group.groupID;
+					dm.editorConversations[currentConversation].group.order = dm.conversations[currentConversation].group.order;
+					dm.editorConversations[currentConversation].eventName = dm.conversations[currentConversation].eventName;
 
 					currentEditingConversationName[currentConversation] = dm.conversations[currentConversation].conversationName;
 
@@ -333,27 +371,22 @@ void DialogPanel::Draw()
 				else if (currentEditingNodeIsSaved[currentEditingNode[i]][i] == false) ImGui::TextWrapped("Node %i (unsaved*):", currentEditingNode[i]);
 				ImGui::NewLine();
 
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit.");
 				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 1 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
+				if (ImGui::InputText("Bubble text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
-				ImGui::Text("|<------------ Max Length ------------>|");
+				ImGui::NewLine();
 				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 2 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text2))
+				if (ImGui::InputText("Audio event name", &dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName))
 				{
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
 				}
 				ImGui::PopID();
-				ImGui::Text("|<------------ Max Length ------------>|");
-				ImGui::PushID(currentEditingNode[i]);
-				if (ImGui::InputText("Line 3 text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text3))
-				{
-					currentEditingNodeIsSaved[currentEditingNode[i]][i] = false;
-				}
-				ImGui::PopID();
+				ImGui::TextWrapped("Note: Leave 'Audio event name' case blank if no audio event should be played. This event is normally used for voice line audio.");
+				ImGui::NewLine();
 				ImGui::PushID(currentEditingNode[i]);
 				if (currentEditingNode[i] > 0)
 				{
@@ -407,7 +440,7 @@ void DialogPanel::Draw()
 
 					int isNodeOccupiedNumTimesFalse = 0;
 
-					for (int l = 0; (l < MAX_CONVERSATIONS) && (isNodeOccupiedNumTimesFalse < 2); l++)
+					for (int l = 0; (l < MAX_CONVERSATION_NODES) && (isNodeOccupiedNumTimesFalse < 2); l++)
 					{
 						if (dm.editorConversations[i].nodes[l].occupied == false)
 						{
@@ -417,8 +450,9 @@ void DialogPanel::Draw()
 						if (isNodeOccupiedNumTimesFalse == 1)
 						{
 							dm.editorConversations[i].nodes[l].text1 = dm.editorConversations[i].nodes[l + 1].text1;
-							dm.editorConversations[i].nodes[l].text2 = dm.editorConversations[i].nodes[l + 1].text2;
-							dm.editorConversations[i].nodes[l].text3 = dm.editorConversations[i].nodes[l + 1].text3;
+
+							dm.editorConversations[i].nodes[l].audioEventName = dm.editorConversations[i].nodes[l + 1].audioEventName;
+
 							dm.editorConversations[i].nodes[l].occupied = dm.editorConversations[i].nodes[l + 1].occupied;
 
 							currentEditingNodeIsSaved[currentEditingNode[i]][l] = currentEditingNodeIsSaved[currentEditingNode[i]][l + 1];
@@ -437,14 +471,12 @@ void DialogPanel::Draw()
 				if (ImGui::Button(" -= SAVE NODE =- "))
 				{
 					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
-					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
-					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
+
+					dm.conversations[i].nodes[currentEditingNode[i]].audioEventName = dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName;
 
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
-						"assets/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
+						"library/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
 
 					currentEditingNodeIsSaved[currentEditingNode[i]][i] = true;
 				}
@@ -505,6 +537,32 @@ void DialogPanel::Draw()
 
 				ImGui::NewLine();
 
+				ImGui::Checkbox("Is character on Right?", &dm.editorConversations[i].isInOppositeSide);
+				ImGui::TextWrapped("Note: 'Is character on Right?' defines wether the character is standing on the left or right side of the bubble. It will also make bubble appear higher.");
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Conversation Group", &dm.editorConversations[i].group.groupID);
+				ImGui::TextWrapped("Note: 'Conversation Group' defines if this conversation belongs to a group. Leave it to '-1' if this conversation should not belong to a group.");
+
+				ImGui::InputText("Group Order", &dm.editorConversations[i].group.order);
+				ImGui::TextWrapped("Note: 'Group Order' defines the order conversations will happen in the group starting from '0'. Leave it to '-1' if this conversation does not belong to any group.");
+
+				ImGui::Checkbox("Is Group Order Random?", &dm.editorConversations[i].isRandom);
+				ImGui::TextWrapped("Note: 'Is Group Order Random?' will make the dialog manager pick a random conversation from the group the conversations belongs when this current specific dialog is triggered.");
+
+				ImGui::NewLine();
+
+				ImGui::Checkbox("Detects selected character?", &dm.editorConversations[i].detectsCharacter);
+				ImGui::TextWrapped("Note: 'Detects selected character?' will replace the bubble and character images with the ones assigned to the current selected character.");
+
+				ImGui::NewLine();
+
+				ImGui::InputText("Event name", &dm.editorConversations[i].eventName);
+				ImGui::TextWrapped("Note: 'Event name' will trigger a specific event when the conversation ends if the input written here is correct (see list of event names). Leave it blank if no event should be triggered.");
+
+				ImGui::NewLine();
+
 				ImGui::TextWrapped("DONR FORGET SAVING!");
 				ImGui::PushID(i);
 				if (ImGui::Button(" ~ Save Conversation ~ "))
@@ -512,20 +570,26 @@ void DialogPanel::Draw()
 					currentEditingNode[i] = 0;
 
 					dm.conversations[i].nodes[currentEditingNode[i]].text1 = dm.editorConversations[i].nodes[currentEditingNode[i]].text1;
-					dm.conversations[i].nodes[currentEditingNode[i]].text2 = dm.editorConversations[i].nodes[currentEditingNode[i]].text2;
-					dm.conversations[i].nodes[currentEditingNode[i]].text3 = dm.editorConversations[i].nodes[currentEditingNode[i]].text3;
+
+					dm.conversations[i].nodes[currentEditingNode[i]].audioEventName = dm.editorConversations[i].nodes[currentEditingNode[i]].audioEventName;
 
 					dm.SetDialogText(
 						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text1.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text2.c_str(),
-						(char*)dm.conversations[i].nodes[currentEditingNode[i]].text3.c_str(),
-						"assets/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
+						"library/Fonts/Jade_Smile.ttf", i, currentEditingNode[i]);
 
 					dm.conversations[i].characterImagePath = dm.editorConversations[i].characterImagePath;
 					dm.SetCharacterImage(dm.conversations[i].characterImagePath.c_str(), i);
 					dm.conversations[i].bubbleImagePath = dm.editorConversations[i].bubbleImagePath;
 					dm.SetDialogBubbleImage(dm.conversations[i].bubbleImagePath.c_str(), i);
 					dm.conversations[i].conversationName = dm.editorConversations[i].conversationName;
+
+					dm.conversations[i].isInOppositeSide = dm.editorConversations[i].isInOppositeSide;
+					dm.conversations[i].isRandom = dm.editorConversations[i].isRandom;
+					dm.conversations[i].detectsCharacter = dm.editorConversations[i].detectsCharacter;
+					dm.conversations[i].group.groupID = dm.editorConversations[i].group.groupID;
+					dm.conversations[i].group.order = dm.editorConversations[i].group.order;
+					dm.conversations[i].eventName = dm.editorConversations[i].eventName;
+
 					dm.SaveAllDialogs();
 
 					saved = 1;
@@ -552,18 +616,21 @@ void DialogPanel::Draw()
 						{
 							dm.conversations[l].bubbleImagePath = dm.conversations[l + 1].bubbleImagePath;
 							dm.conversations[l].characterImagePath = dm.conversations[l + 1].characterImagePath;
-							//dm.conversations[l].characterImgID = dm.conversations[l + 1].characterImgID;
 							dm.conversations[l].conversationName = dm.conversations[l + 1].conversationName;
-							//dm.conversations[l].dialogImgID = dm.conversations[l + 1].dialogImgID;
-							
+
+							dm.conversations[l].isInOppositeSide = dm.conversations[l + 1].isInOppositeSide;
+							dm.conversations[l].isRandom = dm.conversations[l + 1].isRandom;
+							dm.conversations[l].detectsCharacter = dm.conversations[l + 1].detectsCharacter;
+							dm.conversations[l].group.groupID = dm.conversations[l + 1].group.groupID;
+							dm.conversations[l].group.order = dm.conversations[l + 1].group.order;
+							dm.conversations[l].eventName = dm.conversations[l + 1].eventName;
+
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
 								dm.conversations[l].nodes[m].text1 = dm.conversations[l + 1].nodes[m].text1;
-								//dm.conversations[l].nodes[m].text1_imgModeID = dm.conversations[l + 1].nodes[m].text1_imgModeID;
-								dm.conversations[l].nodes[m].text2 = dm.conversations[l + 1].nodes[m].text2;
-								//dm.conversations[l].nodes[m].text2_imgModeID = dm.conversations[l + 1].nodes[m].text2_imgModeID;
-								dm.conversations[l].nodes[m].text3 = dm.conversations[l + 1].nodes[m].text3;
-								//dm.conversations[l].nodes[m].text3_imgModeID = dm.conversations[l + 1].nodes[m].text3_imgModeID;
+
+								dm.conversations[l].nodes[m].audioEventName = dm.conversations[l + 1].nodes[m].audioEventName;
+
 								dm.conversations[l].nodes[m].occupied = dm.conversations[l + 1].nodes[m].occupied;
 
 								currentEditingNodeIsSaved[currentEditingNode[i]][m] = true;
@@ -596,11 +663,19 @@ void DialogPanel::Draw()
 							dm.editorConversations[l].characterImagePath = dm.editorConversations[l + 1].characterImagePath;
 							dm.editorConversations[l].conversationName = dm.editorConversations[l + 1].conversationName;
 
+							dm.editorConversations[l].isInOppositeSide = dm.editorConversations[l + 1].isInOppositeSide;
+							dm.editorConversations[l].isRandom = dm.editorConversations[l + 1].isRandom;
+							dm.editorConversations[l].detectsCharacter = dm.editorConversations[l + 1].detectsCharacter;
+							dm.editorConversations[l].group.groupID = dm.editorConversations[l + 1].group.groupID;
+							dm.editorConversations[l].group.order = dm.editorConversations[l + 1].group.order;
+							dm.editorConversations[l].eventName = dm.editorConversations[l + 1].eventName;
+
 							for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
 							{
 								dm.editorConversations[l].nodes[m].text1 = dm.editorConversations[l + 1].nodes[m].text1;
-								dm.editorConversations[l].nodes[m].text2 = dm.editorConversations[l + 1].nodes[m].text2;
-								dm.editorConversations[l].nodes[m].text3 = dm.editorConversations[l + 1].nodes[m].text3;
+
+								dm.editorConversations[l].nodes[m].audioEventName = dm.editorConversations[l + 1].nodes[m].audioEventName;
+
 								dm.editorConversations[l].nodes[m].occupied = dm.editorConversations[l + 1].nodes[m].occupied;
 
 								currentEditingNodeIsSaved[currentEditingNode[i]][m] = true;
@@ -635,6 +710,11 @@ void DialogPanel::Draw()
 	else
 	{
 		ImGui::TextWrapped("No conversations have been created yet.");
+
+		ImGui::NewLine();
+		ImGui::TextWrapped("WARNING:");
+		ImGui::TextWrapped("If you did create conversations and they are not showing here, reload the engine.");
+
 	}
 	
 	ImGui::End();

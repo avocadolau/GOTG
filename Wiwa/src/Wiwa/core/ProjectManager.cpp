@@ -157,4 +157,19 @@ namespace Wiwa
 
 		return ind;
 	}
+	size_t ProjectManager::getSceneIndexByPath(const char* path)
+	{
+		size_t ind = WI_INVALID_INDEX;
+
+		size_t s = m_SceneList.size();
+
+		for (size_t i = 0; i < s; i++) {
+			if (m_SceneList[i].scene_path== path) {
+				ind = i;
+				break;
+			}
+		}
+
+		return ind;
+	}
 }

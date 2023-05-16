@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.15172433853149414,"u_Color":{"r":0.7991266250610352,"g":0.24776417016983032,"b":0.24776417016983032,"a":1.0},"u_Texture":"assets/textures/t_particle_texture.png"}}

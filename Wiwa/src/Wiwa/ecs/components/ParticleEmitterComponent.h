@@ -8,34 +8,28 @@
 
 namespace Wiwa {
 
-	enum ParticleSimulationSpace
-	{
-		//The simulation depends on the Emitter's transform.
-		LOCAL,
-		//The simulation is independent from the Emitter's transform.
-		WORLD,
-	};
 
 	enum ParticleSpawnVolume
 	{
 		NONE = 0, CUBE = 1, SPHERE = 2
 	};
 
+	struct ColorNode
+	{
+		float m_percentage;
+		glm::vec4 color;
+		ColorNode()
+		{
+			m_percentage = 0.f;
+			color = glm::vec4(1, 1, 1, 1);
+		}
+	};
 
 	struct WI_API ParticleEmitterComponent {
 
 		//Emitter data			----------------------------------------
 		
-		struct ColorNode
-		{
-			float m_percentage;
-			glm::vec4 color;
-			ColorNode()
-			{
-				m_percentage = 0.f;
-				color = glm::vec4(1, 1, 1, 1);
-			}
-		};
+		
 
 		ResourceId m_materialId;
 		char m_materialPath[128];
@@ -94,10 +88,8 @@ namespace Wiwa {
 
 		//transform data
 
-		//Follow emitter options only available on world space.
 
 		//position & translation
-		//bool m_p_followEmitterPosOnlyOnSpawn;
 		bool		m_p_followEmitterPosition;
 		bool		m_p_followEmitterPositionSpawn;
 		glm::vec3	m_p_initialPosition;
@@ -117,10 +109,8 @@ namespace Wiwa {
 		bool m_p_useGravity;
 		float m_p_gravity;
 
-		//glm::vec3 particle_m_initialAcceleration;
-
 		//rotation
-		//bool m_p_followEmitterRotOnlyOnSpawn;
+		
 		bool		m_p_followEmitterRotation;
 		bool		m_p_followEmitterRotationSpawn;
 		glm::vec3	m_p_initialRotation;
@@ -159,20 +149,50 @@ namespace Wiwa {
 		glm::vec3	m_p_maxInitialGrowthVelocity;
 
 
-		ColorNode m_p_colorsOverLifetime[6] = {ColorNode()};
+		ColorNode m_p_colorsOverLifetime[6];
 		int m_colorsUsed;
 
-		bool useAdditiveBlending;
-		
+		bool m_useAdditiveBlending;
+		bool m_p_positionFollowsRotation;
+		bool m_deactivateFaceCulling;
 
+		bool m_p_rangedSpawnDelay;
+		float m_p_spawnDelay;
+		float m_p_minSpawnDelay;
+		float m_p_maxSpawnDelay;
+
+		bool m_stopSizeAtZeroX;
+		bool m_stopSizeAtZeroY;
+		bool m_stopSizeAtZeroZ;
+
+		bool m_p_followEmitterRotationX;	//unused -> leave to avoid corruption?
+		bool m_p_followEmitterRotationY;	//unused -> leave to avoid corruption?
+		bool m_p_followEmitterRotationZ;	//unused -> leave to avoid corruption?
+
+		ColorNode m_newColorsNodes[20] = { ColorNode() }; //--> to fix colors later
+
+		bool m_p_growUniformly;
+		float m_p_uniformGrowthVal;
+		float m_p_minUniformGrowthVal;
+		float m_p_maxUniformGrowthVal;
+
+		bool m_destroyOnFinishActive;
+		
+		bool m_p_uniformStartSize;
+		float m_p_uniformStartSizeVal;
+		float m_p_minUniformStartSizeVal;
+		float m_p_maxUniformStartSizeVal;
+
+		bool m_stopSizeAtZero;
+		bool m_useMultiplyBlending;
+		bool m_destroyActiveParticles;
+
+		
 		// todo					----------------------------------------
 		// 
 		// 
 		// animations
-		// accelerations
-		// data over lifetime
-		// emit particles over a certain time
-		// gravity?
+		// fix colors
 		// 
 
 	};
@@ -183,22 +203,96 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 	REFLECT_MEMBER(m_materialId);
 	REFLECT_MEMBER(m_materialPath);
 	REFLECT_MEMBER(m_mesh);
+	REFLECT_MEMBER(m_meshPath);
+	REFLECT_MEMBER(m_meshChanged);
+	REFLECT_MEMBER(m_materialChanged);
 	REFLECT_MEMBER(m_maxParticles);
+	REFLECT_MEMBER(m_activeParticles);
 	REFLECT_MEMBER(m_loopSpawning);
 	REFLECT_MEMBER(m_spawnRate);
-	//REFLECT_MEMBER(m_spawnDelay);
+
+	REFLECT_MEMBER(m_rangedSpawnAmount);
+	REFLECT_MEMBER(m_spawnAmount);
+	REFLECT_MEMBER(m_minSpawnAmount);
+	REFLECT_MEMBER(m_maxSpawnAmount);
+	REFLECT_MEMBER(m_p_rangedSpawnRate);
+	REFLECT_MEMBER(m_p_minSpawnRate);
+	REFLECT_MEMBER(m_p_maxSpawnRate);
+	REFLECT_MEMBER(m_startActive);
 	REFLECT_MEMBER(m_active);
+	REFLECT_MEMBER(m_activeTimeChanged);
+	REFLECT_MEMBER(m_rangedTimeActive);
+	REFLECT_MEMBER(m_activeOverTime);
+	REFLECT_MEMBER(m_ActiveTimer);
+	REFLECT_MEMBER(m_initialTimeActive);
+	REFLECT_MEMBER(m_minInitialTimeActive);
+	REFLECT_MEMBER(m_maxInitialTimeActive);
+	REFLECT_MEMBER(m_spawnVolume);
+	REFLECT_MEMBER(emitterOwner);
 	REFLECT_MEMBER(m_p_lifeTime);
+	REFLECT_MEMBER(m_p_rangedLifeTime);
+	REFLECT_MEMBER(m_p_minLifeTime);
+	REFLECT_MEMBER(m_p_maxLifeTime);
 	REFLECT_MEMBER(m_billboardActive);
-	//REFLECT_MEMBER(m_p_followEmitterPosOnlyOnSpawn);
+	REFLECT_MEMBER(m_p_followEmitterPosition);
+	REFLECT_MEMBER(m_p_followEmitterPositionSpawn);
 	REFLECT_MEMBER(m_p_initialPosition);
+	REFLECT_MEMBER(m_p_initialPositionSphCenter);
+	REFLECT_MEMBER(m_p_initialPositionSphRadius);
+	REFLECT_MEMBER(m_p_initialPositionBoxA);
+	REFLECT_MEMBER(m_p_initialPositionBoxB);
+	REFLECT_MEMBER(m_p_positionTowardsPoint);
+	REFLECT_MEMBER(m_p_positionTowardsPointPos);
+	REFLECT_MEMBER(m_p_translationTime);
 	REFLECT_MEMBER(m_p_initialVelocity);
-	//REFLECT_MEMBER(m_p_followEmitterRotOnlyOnSpawn);
+	REFLECT_MEMBER(m_p_rangedVelocity);
+	REFLECT_MEMBER(m_p_minVelocity);
+	REFLECT_MEMBER(m_p_maxVelocity);
+	REFLECT_MEMBER(m_p_useGravity);
+	REFLECT_MEMBER(m_p_gravity);
+	REFLECT_MEMBER(m_p_followEmitterRotation);
+	REFLECT_MEMBER(m_p_followEmitterRotationSpawn);
 	REFLECT_MEMBER(m_p_initialRotation);
+	REFLECT_MEMBER(m_p_rangedInitialRotation);
+	REFLECT_MEMBER(m_p_minInitialRotation);
+	REFLECT_MEMBER(m_p_maxInitialRotation);
 	REFLECT_MEMBER(m_p_initialAngularVelocity);
-	//REFLECT_MEMBER(m_p_followEmitterScaleOnlyOnSpawn);
-	REFLECT_MEMBER(m_p_initialScale);
+	REFLECT_MEMBER(m_p_rangedAngularVelocity);
+	REFLECT_MEMBER(m_p_minInitialAngularVelocity);
+	REFLECT_MEMBER(m_p_maxInitialAngularVelocity);
+	REFLECT_MEMBER(m_p_rotateTime);
+	REFLECT_MEMBER(m_p_rotationOverTime);
+	REFLECT_MEMBER(m_p_lifeTime);
+	REFLECT_MEMBER(m_p_rotationOverTimePerStart);
+	REFLECT_MEMBER(m_p_rotationOverTimePerEnd);
+	REFLECT_MEMBER(m_p_rotationOverTimeStart);
+	REFLECT_MEMBER(m_p_rotationOverTimeEnd);
+	REFLECT_MEMBER(m_p_scaleOverTimeStart);
+	REFLECT_MEMBER(m_p_scaleOverTimeEnd);
 	REFLECT_MEMBER(m_p_initialGrowthVelocity);
+	REFLECT_MEMBER(m_p_rangedGrowthVelocity);
+	REFLECT_MEMBER(m_p_minInitialGrowthVelocity);
+	REFLECT_MEMBER(m_p_maxInitialGrowthVelocity);
 	REFLECT_MEMBER(m_p_colorsOverLifetime);
+	REFLECT_MEMBER(m_colorsUsed);
+	REFLECT_MEMBER(m_useAdditiveBlending);
+	REFLECT_MEMBER(m_p_positionFollowsRotation);
+	REFLECT_MEMBER(m_deactivateFaceCulling);
+	REFLECT_MEMBER(m_p_rangedSpawnDelay);
+	REFLECT_MEMBER(m_p_spawnDelay);
+	REFLECT_MEMBER(m_p_minSpawnDelay);
+	REFLECT_MEMBER(m_p_maxSpawnDelay);
+	REFLECT_MEMBER(m_stopSizeAtZeroX);
+	REFLECT_MEMBER(m_stopSizeAtZeroY);
+	REFLECT_MEMBER(m_stopSizeAtZeroZ);
+	REFLECT_MEMBER(m_p_followEmitterRotationX);
+	REFLECT_MEMBER(m_p_followEmitterRotationY);
+	REFLECT_MEMBER(m_p_followEmitterRotationZ);
+	REFLECT_MEMBER(m_newColorsNodes);
+	REFLECT_MEMBER(m_p_growUniformly);
+	REFLECT_MEMBER(m_p_uniformGrowthVal);
+	REFLECT_MEMBER(m_p_minUniformGrowthVal);
+	REFLECT_MEMBER(m_p_maxUniformGrowthVal);
+	REFLECT_MEMBER(m_destroyOnFinishActive);
 
 REFLECTION_END;

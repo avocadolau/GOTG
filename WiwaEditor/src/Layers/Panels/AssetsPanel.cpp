@@ -93,7 +93,7 @@ AssetsPanel::~AssetsPanel()
 void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewatch::Event change_type)
 {	
 	using namespace std::chrono_literals;
-	std::this_thread::sleep_for(500ms);
+	//std::this_thread::sleep_for(500ms);
 	Wiwa::Application::Get().SubmitToMainThread([path, change_type]()
 	{
 		std::filesystem::path assetsPath = "assets";
@@ -101,16 +101,6 @@ void AssetsPanel::OnFolderEvent(const std::filesystem::path& path, const filewat
 
 		if (assetsPath.extension() == ".meta")
 			return;
-
-		if (assetsPath.extension() == ".cs")
-		{
-			if (Wiwa::Time::IsPlaying())
-			{
-				WI_WARN("Scene paused due to script reload!");
-				EditorLayer::Get().StopScene();
-			}
-			EditorLayer::Get().RegenSol();
-		}
 		switch (change_type)
 		{
 		case filewatch::Event::added:
@@ -204,6 +194,8 @@ void AssetsPanel::DeleteFileAssets(std::filesystem::path& assetsPath)
 		extension = ".winavmesh";
 	else if (assetsPath.extension() == ".gset")
 		extension = ".gset";
+	else if (assetsPath.extension() == ".ttf")
+		extension = ".ttf";
 
 	libraryPath.replace_extension(extension);
 	std::filesystem::remove(libraryPath);
@@ -313,6 +305,12 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
 	else if (path.extension() == ".gset") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".ttf") {
 		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
 		std::filesystem::path rp = rpath.remove_filename();
 		std::filesystem::create_directories(rp);

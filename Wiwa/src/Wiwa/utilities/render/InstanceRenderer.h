@@ -20,7 +20,7 @@ namespace Wiwa {
 		std::vector<uint32_t> m_RemovedInstances;
 		std::vector<int> m_Textures;
 
-		VertexInstanceTexture* m_InstanceVertex;
+		std::vector<VertexInstanceTexture> m_InstanceVertex;
 
 		uint32_t m_VAO, m_VBO, m_EBO;
 		uint32_t m_IVBO;
@@ -60,5 +60,7 @@ namespace Wiwa {
 		void SetEnabled(uint32_t instance, bool enabled);
 
 		void RemoveInstance(uint32_t instance);
+
+		void SetPriority(uint32_t instance, int priority);
 	};
 }

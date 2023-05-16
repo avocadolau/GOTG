@@ -31,6 +31,7 @@ void main()
     
     vec4 colorTex = texture2D(u_Texture, offsetTexCoord) * u_Color;
     vec4 colorTransp = texture2D(u_TransparencyTexture, u_Offset + TexCoord);
+    colorTransp.a = u_Color.a;
 
     float grayscale = dot(colorTransp.rgb, vec3(0.299, 0.587, 0.114));
 

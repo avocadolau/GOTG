@@ -234,27 +234,33 @@ namespace Wiwa
 
 	void Renderer2D::UpdateInstancedQuadTexTexture(Scene* scene, InstanceData& id, uint32_t tex_id)
 	{
-		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		InstanceRenderer* instanceRenderer = &scene->GetInstanceRenderer(id.renderer_id);
 
-		int addTexture = instanceRenderer.AddTexture(tex_id);
+		int addTexture = instanceRenderer->AddTexture(tex_id);
 
 		if (addTexture == -1) {
-			VertexInstanceTexture& vtex = instanceRenderer.getInstanceData(id.instance_id);
-			instanceRenderer.RemoveInstance(id.instance_id);
+			VertexInstanceTexture vtex = instanceRenderer->getInstanceData(id.instance_id);
+			instanceRenderer->RemoveInstance(id.instance_id);
 
 			id.renderer_id = getInstanceRenderer(scene, tex_id);
-			instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+			instanceRenderer = &scene->GetInstanceRenderer(id.renderer_id);
 
-			id.instance_id = instanceRenderer.AddInstance(vtex);
+			id.instance_id = instanceRenderer->AddInstance(vtex);
 		}
 
-		instanceRenderer.UpdateInstanceTexture(id.instance_id, tex_id);
+		instanceRenderer->UpdateInstanceTexture(id.instance_id, tex_id);
 	}
 
 	void Renderer2D::UpdateInstancedQuadTexColor(Scene* scene, InstanceData id, const Color4f& color)
 	{
 		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
 		instanceRenderer.UpdateInstanceColor(id.instance_id, color);
+	}
+
+	void Renderer2D::UpdateInstancedQuadTexPriority(Scene* scene, InstanceData id, int priority)
+	{
+		InstanceRenderer& instanceRenderer = scene->GetInstanceRenderer(id.renderer_id);
+		instanceRenderer.SetPriority(id.instance_id, priority);
 	}
 
 	void Renderer2D::UpdateInstancedQuad(Scene* scene, InstanceData id, const Vector2i &position, const Size2i &size, const Color4f &color)
@@ -275,6 +281,7 @@ namespace Wiwa
 		GL(Enable(GL_BLEND));
 		//glBlendEquation(GL_ADD);
 		GL(BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		//glEnable(GL_DEPTH_TEST);
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
 			instanceRenderers[i].Update();
@@ -282,6 +289,8 @@ namespace Wiwa
 		}
 		//glDepthMask(true);
 		GL(Disable(GL_BLEND));
+		//glDisable(GL_DEPTH_TEST);
+        
 		framebuffer.Unbind();
 
 		m_RenderCallsInstancedCount++;

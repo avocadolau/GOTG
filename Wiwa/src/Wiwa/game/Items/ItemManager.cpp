@@ -7,6 +7,16 @@ std::map<std::string, Wiwa::Ability> Wiwa::ItemManager::m_AbilityPool;
 std::map<std::string, Wiwa::PassiveSkill> Wiwa::ItemManager::m_PassiveSkillPool;
 std::map<std::string, Wiwa::Buff> Wiwa::ItemManager::m_BuffPool;
 std::map<std::string, Wiwa::Consumable> Wiwa::ItemManager::m_ConsumablePool;
+std::map<std::string, Wiwa::ShopElement> Wiwa::ItemManager::m_ShopElementPool;
+
+Wiwa::ItemManager::~ItemManager()
+{
+	m_AbilityPool.clear();
+	m_PassiveSkillPool.clear();
+	m_BuffPool.clear();
+	m_ConsumablePool.clear();
+	m_ShopElementPool.clear();
+}
 
 void Wiwa::ItemManager::AddAbility(const Ability& ability)
 {
@@ -48,6 +58,21 @@ void Wiwa::ItemManager::DeleteConsumable(const std::string& name)
 	m_ConsumablePool.erase(name);
 }
 
+void Wiwa::ItemManager::AddShopElement(const ShopElement& shopElement)
+{
+	m_ShopElementPool[shopElement.Name] = shopElement;
+}
+
+void Wiwa::ItemManager::DeleteShopElement(const std::string& name)
+{
+	m_ShopElementPool.erase(name);
+}
+
+void Wiwa::ItemManager::UnlockShopElement(const std::string& name ,bool ret)
+{
+	m_ShopElementPool[name].Unlocked = ret;
+}
+
 void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 {
 	JSONValue actives = doc->AddMemberArray("actives");
@@ -63,6 +88,9 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		activeObj.AddMember("cooldown", active.second.Cooldown);
 		activeObj.AddMember("price", active.second.Price);
 		activeObj.AddMember("type", (int)active.second.AbilityType);
+		activeObj.AddMember("tag_1", (int)active.second.itemTag[0]);
+		activeObj.AddMember("tag_2", (int)active.second.itemTag[1]);
+
 	}
 
 	JSONValue passives = doc->AddMemberArray("passives");
@@ -100,6 +128,34 @@ void Wiwa::ItemManager::Serialize(JSONDocument* doc)
 		consumObj.AddMember("is_egos_help", consumable.second.IsEgosHelp);
 	}
 
+	JSONValue shopElements = doc->AddMemberArray("shop_elements");
+	for (const auto& shopelement : m_ShopElementPool)
+	{
+		JSONValue shop_element = shopElements.PushBackObject();
+		shop_element.AddMember("name", shopelement.second.Name.c_str());
+		shop_element.AddMember("steps", shopelement.second.AmountOfSteps);
+		shop_element.AddMember("current_step", shopelement.second.CurrentStep);
+		JSONValue shopCosts = shop_element.AddMemberArray("costs").PushBackObject();
+		for (int i = 0; i < shopelement.second.AmountOfSteps; i++)
+		{
+			char buffer[100];
+			std::sprintf(buffer, "%s%d", "costs_", i);
+			shopCosts.AddMember(buffer, shopelement.second.Costs.at(i));
+		}
+		JSONValue shopPercents = shop_element.AddMemberArray("percentages").PushBackObject();
+		for (int i = 0; i < shopelement.second.AmountOfSteps; i++)
+		{
+			char buffer[100];
+			std::sprintf(buffer, "%s%d", "percentages_", i);
+			shopPercents.AddMember(buffer, shopelement.second.PercentageIncreases.at(i));
+		}
+		shop_element.AddMember("howard_passive_type", (int)shopelement.second.PassiveBoost);
+		shop_element.AddMember("unlocking_method", (int)shopelement.second.unlockingMethod);
+		shop_element.AddMember("amountToUnlock", shopelement.second.amountForUnlocking);
+		shop_element.AddMember("countForUnlocking", shopelement.second.countForUnlocking);
+
+		shop_element.AddMember("unlocked", (bool)shopelement.second.Unlocked);
+	}
 }
 
 void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
@@ -110,7 +166,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue actives = document["actives"];
 		if (actives.IsArray())
 		{
-			for (size_t i = 0; i < actives.Size(); i++)
+			for (uint32_t i = 0; i < actives.Size(); i++)
 			{
 				Wiwa::Ability ability;
 				ability.Name = actives[i]["name"].as_string();
@@ -122,6 +178,8 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.Cooldown = actives[i]["cooldown"].as_float();
 				ability.Price = actives[i]["price"].as_int();
 				ability.AbilityType = (AbilityType)actives[i]["type"].as_int();
+				ability.itemTag[0] = (ItemTags)actives[i]["tag_1"].as_int();
+				ability.itemTag[1] = (ItemTags)actives[i]["tag_2"].as_int();
 				AddAbility(ability);
 			}
 		}
@@ -131,7 +189,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue passives = document["passives"];
 		if (passives.IsArray())
 		{
-			for (size_t i = 0; i < passives.Size(); i++)
+			for (uint32_t i = 0; i < passives.Size(); i++)
 			{
 				Wiwa::PassiveSkill ability;
 				ability.Name = passives[i]["name"].as_string();
@@ -167,7 +225,7 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 		JSONValue actives = document["consumables"];
 		if (actives.IsArray())
 		{
-			for (size_t i = 0; i < actives.Size(); i++)
+			for (uint32_t i = 0; i < actives.Size(); i++)
 			{
 				Wiwa::Consumable ability;
 				ability.Name = actives[i]["name"].as_string();
@@ -176,6 +234,56 @@ void Wiwa::ItemManager::Deserialize(JSONDocument* doc)
 				ability.BuffPercent = actives[i]["buff_percent"].as_int();
 				ability.IsEgosHelp = actives[i]["is_egos_help"].as_bool();
 				AddConsumable(ability);
+			}
+		}
+	}
+	if (doc->HasMember("shop_elements"))
+	{
+		if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+		{
+			for (uint32_t i = 0; i < shop_elements.Size(); i++)
+			{
+				Wiwa::ShopElement shopElement;
+				if (JSONValue shop_elements = (*doc)["shop_elements"]; shop_elements.IsArray())
+				{
+					Wiwa::ShopElement shopElement;
+					shopElement.Name = shop_elements[i]["name"].as_string();
+					shopElement.AmountOfSteps = shop_elements[i]["steps"].as_int();
+					shopElement.CurrentStep = shop_elements[i]["current_step"].as_int();
+					if (JSONValue shop_element_costs = shop_elements[i]["costs"]; shop_element_costs.IsArray())
+					{
+						for (uint32_t j = 0; j < shop_element_costs.Size(); j++)
+						{
+							for (uint32_t k = 0; k < 5; k++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "costs_", k);
+								if (shop_element_costs[j].HasMember(buffer))
+									shopElement.Costs.push_back(shop_element_costs[j][buffer].as_int());
+							}
+						}
+					}
+					if(JSONValue shop_element_percentages = shop_elements[i]["percentages"]; shop_element_percentages.IsArray())
+					{
+						for (uint32_t j = 0; j < shop_element_percentages.Size(); j++)
+						{
+							for (uint32_t k = 0; k < 5; k++)
+							{
+								char buffer[100];
+								std::sprintf(buffer, "%s%d", "percentages_", k);
+								if (shop_element_percentages[j].HasMember(buffer))
+									shopElement.PercentageIncreases.push_back(shop_element_percentages[j][buffer].as_int());
+							}
+						}
+					}
+					shopElement.PassiveBoost = (HowardElementType)shop_elements[i]["howard_passive_type"].as_int();
+					shopElement.unlockingMethod = (ShopElementUnlockingMethod)shop_elements[i]["unlocking_method"].as_int();
+					shopElement.amountForUnlocking = shop_elements[i]["amountToUnlock"].as_int();
+					shopElement.countForUnlocking = shop_elements[i]["countForUnlocking"].as_int();
+					shopElement.Unlocked = shop_elements[i]["unlocked"].as_bool();
+
+					AddShopElement(shopElement);
+				}
 			}
 		}
 	}
@@ -199,5 +307,10 @@ Wiwa::Buff* Wiwa::ItemManager::GetBuff(const char* name)
 Wiwa::Consumable* Wiwa::ItemManager::GetConsumable(const char* name)
 {
 	return &(*m_ConsumablePool.find(name)).second;
+}
+
+Wiwa::ShopElement* Wiwa::ItemManager::GetShopElement(const char* name)
+{
+	return &(*m_ShopElementPool.find(name)).second;
 }
 

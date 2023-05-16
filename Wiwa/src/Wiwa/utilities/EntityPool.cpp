@@ -7,16 +7,17 @@ namespace Wiwa
 {
     EntityPool::~EntityPool()
     {
-        ReleaseAllPools();
+        ReleasePool();
     }
 
     EntityId EntityPool::GetFromPool()
     {
-        if (!m_Loaded)
-            GameStateManager::s_PoolManager->LoadPool(m_Type, m_Scene);
+       /* if (!m_Loaded)
+            GameStateManager::s_PoolManager->LoadPool(m_Type, m_Scene);*/
 
         // The pool type doesn't exist, create it callin from IncreasePoolSize();
         if (m_DisabledEntities.empty()) {
+            WI_INFO("Pool {} is empty", (int)getType());
             return EntityManager::INVALID_INDEX;
         }
 
@@ -63,6 +64,9 @@ namespace Wiwa
 
     void EntityPool::IncreasePoolSize(const std::vector<EntityId>& new_entities, bool disable)
     {
+        if (Loaded)
+            return;
+
         EntityManager& em = m_Scene->GetEntityManager();
 
         size_t size = new_entities.size();
@@ -87,11 +91,25 @@ namespace Wiwa
             }
         }
 
-        m_Loaded = true;
+        Loaded = true;
     }
 
-    void EntityPool::ReleaseAllPools()
+    void EntityPool::LoadPool(Scene* scene)
     {
+        if (Loaded)
+            return;
+        SetScene(scene);
+        std::vector<EntityId> ids(getMaxSize());
+        for (int i = 0; i < getMaxSize(); i++)
+            ids[i] = scene->GetEntityManager().LoadPrefab(getPath());
+       IncreasePoolSize(ids);
+    }
+
+    void EntityPool::ReleasePool()
+    {
+        if (!Loaded)
+            return;
+
         EntityManager& em = m_Scene->GetEntityManager();
         size_t size = m_DisabledEntities.size();
         for (size_t i = 0; i < size; i++)
@@ -99,7 +117,7 @@ namespace Wiwa
             m_DisabledEntities.pop();
         }
 
-        m_Loaded = false;
+        Loaded = false;
     }
 
     void EntityPool::SetScene(Scene* scene)

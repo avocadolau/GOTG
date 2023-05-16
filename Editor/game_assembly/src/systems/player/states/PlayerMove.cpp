@@ -1,5 +1,5 @@
-#include <wipch.h>
 #include "PlayerMove.h"
+#include <Wiwa/ecs/components/game/Character.h>
 
 Wiwa::PlayerMove::PlayerMove(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id)
@@ -13,11 +13,18 @@ Wiwa::PlayerMove::~PlayerMove()
 void Wiwa::PlayerMove::EnterState()
 {
 	WI_INFO("Player move");
+
 	m_StateMachine->GetAnimator()->Blend("running", true, 0.2f);
+	currentSteptime = runStepTimer;
 }
 
 void Wiwa::PlayerMove::UpdateState()
 {
+	if (!m_StateMachine->GetCharacter()->CanMove)
+	{
+		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
+		return;
+	}
 	if (!m_StateMachine->CanMove())
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
@@ -34,7 +41,15 @@ void Wiwa::PlayerMove::UpdateState()
 		return;
 	}
 
-	m_StateMachine->UpdateMovement();
+	currentSteptime -= Time::GetDeltaTimeSeconds();
+	if (currentSteptime < 0)
+	{
+		m_StateMachine->GetAudio()->PlayAudio("player_walk");
+		currentSteptime = runStepTimer;
+	}
+
+
+	m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
 }
 
 void Wiwa::PlayerMove::ExitState()

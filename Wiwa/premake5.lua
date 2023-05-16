@@ -31,6 +31,7 @@ project "Wiwa"
 		"%{IncludeDirs.Glew}",
 		"%{IncludeDirs.PCG}",
 		"%{IncludeDirs.JSON}",
+		"%{IncludeDirs.NJSON}",
 		"%{IncludeDirs.XML}",
 		"%{IncludeDirs.Optick}",
 		"%{IncludeDirs.assimp}",
@@ -45,7 +46,6 @@ project "Wiwa"
 
 	links
 	{
-		"Wiwa-ScriptCore",
 		"GLFW",
 		"ImGui",
 		"opengl32.lib",
@@ -58,7 +58,8 @@ project "Wiwa"
 		"%{Library.Wwise_MMgr}",
 		"%{Library.Wwise_SMgr}",
 		"%{Library.Wwise_ME}",
-		"%{Library.Wwise_SA}"
+		"%{Library.Wwise_SA}",
+		"%{Library.Wwise_CC}"
 	}
 
 	filter "files:vendor/imguizmo/**.cpp"
@@ -141,3 +142,21 @@ project "Wiwa"
 		runtime "Release"
 		optimize "On"
 		symbols "Off"
+		links
+		{
+			"%{Library.bullet_dynamics_release}",
+			"%{Library.bullet_collision_release}",
+			"%{Library.bullet_linear_math_release}",
+			"%{Library.DebugUtils_release}",
+			"%{Library.Detour_release}",
+			"%{Library.DetourCrowd_release}",
+			"%{Library.DetourTileCache_release}",
+			"%{Library.Recast_release}",
+			"%{Library.opencv_core}",
+			"%{Library.opencv_video}",
+			"%{Library.opencv_videoio}",
+			"%{Library.opencv_highgui}",
+			"%{Library.opencv_imgproc}",
+			"%{Library.opencv_imgcodecs}"
+			
+		}

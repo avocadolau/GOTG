@@ -163,6 +163,7 @@ public:
 				plane.setValue(btScalar(0.), btScalar(0.), btScalar(-1.), -halfExtents.z());
 				break;
 			default:
+				break;
 				btAssert(0);
 		}
 	}

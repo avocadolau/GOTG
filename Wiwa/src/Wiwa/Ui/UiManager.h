@@ -49,7 +49,7 @@ namespace Wiwa
 		//Method for abilities
 		GuiControl* CreateGuiControl_Ability(GuiControlType type, unsigned int id,unsigned int canvas_id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active,bool animated, std::vector<Rect2i> animationRects,float rotation);
 		//Method for videos
-		GuiControl* CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active);
+		GuiControl* CreateGuiControl_Video(GuiControlType type, unsigned int id, unsigned int canvas_id, Rect2i bounds, const char* path, bool active,size_t callbackID);
 
 		void SwapSelectedCanvas(GuiCanvas* canvasToSelect);
 		void DestroyGuiControl(GuiControl* control, GuiCanvas* canvas);
@@ -58,7 +58,7 @@ namespace Wiwa
 		void RemoveControl(GuiControl* control);
 
 		Text* InitFont(const char* path, const char* word);
-		Text* InitFontForDialog(const char* path, char* word);
+		Text* InitFontForDialog(const char* path, char* word, int maxWidth);
 
 		
 		Video* InitVideo(std::string path);
@@ -77,6 +77,7 @@ namespace Wiwa
 	public:
 		std::vector<GuiCanvas*> canvas;
 		std::vector<GuiCanvas*> canvasToDestroy;
+		std::vector<Text*> textToDestroy;
 		float accumulatedTime = 0.0f;
 		float updateMsCycle = 0.0f;
 		bool doLogic = false;

@@ -22,8 +22,18 @@ namespace Wiwa
 		virtual void UnlockCursorImpl() override;
 		virtual float GetAxisImpl(int gamepadIndx, int axis, float deadzone) override;
 		virtual float GetRawAxisImpl(int gamepadIndx, int axis, float deadzone) override;
+		virtual glm::vec2 GetRawJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone) override;
+		virtual glm::vec2 GetJoystickImpl(int gamepadIndx, int axisX, int axisY, float deadzone) override;
 		virtual bool IsButtonPressedImpl(int gamepadIndx, int keycode) override;
 		virtual bool IsButtonReleasedImpl(int gamepadIndx, int keycode) override;
+		virtual void InitImpl() override;
+		glm::vec2 GetLeftDeadzoneImpl() override { return m_LeftDeadzone; }
+		glm::vec2 GetRightDeadzoneImpl() override { return m_RightDeadzone; }
 
+		void InitDeadzone();
+		float GetDeadzone(int axis); 
+	private:
+		glm::vec2 m_LeftDeadzone;
+		glm::vec2 m_RightDeadzone;
 	};
 }

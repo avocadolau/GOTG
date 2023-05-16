@@ -19,11 +19,12 @@ namespace Wiwa {
 			PERSPECTIVE
 		};
 		Math::Frustum frustrum;
-		FrameBuffer* frameBuffer;
-		FrameBuffer* hdrBuffer;
-		BlurBuffer* vBlurBuffer;
-		BlurBuffer* hBlurBuffer;
-		ShadowBuffer* shadowBuffer;
+
+		FrameBuffer* frameBuffer = nullptr;
+		FrameBuffer* hdrBuffer = nullptr;
+		BlurBuffer* vBlurBuffer = nullptr;
+		BlurBuffer* hBlurBuffer = nullptr;
+		ShadowBuffer* shadowBuffer = nullptr;
 
 		bool cull = false;
 		bool drawBoundingBoxes = false;

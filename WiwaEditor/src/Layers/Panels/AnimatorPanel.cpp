@@ -47,7 +47,7 @@ void AnimatorPanel::Draw()
 		SaveOnFile("try");
 	}
 
-	if (m_EntitySet && (m_CurrentID >= 0))
+	if (s_EntitySet && (m_CurrentID >= 0))
 	{
 		const char* entName = em.GetEntityName(m_CurrentID);
 		std::string edit = entName;
@@ -156,14 +156,14 @@ void AnimatorPanel::OnEvent(Wiwa::Event& e)
 bool AnimatorPanel::OnEntityChangeEvent(EntityChangeEvent& e)
 {
 	m_CurrentID = e.GetResourceId();
-	m_EntitySet = true;
+	s_EntitySet = true;
 	return false;
 }
 
 bool AnimatorPanel::OnSceneChangeEvent(Wiwa::SceneChangeEvent& e)
 {
 	m_CurrentID = -1;
-	m_EntitySet = false;
+	s_EntitySet = false;
 	return false;
 }
 

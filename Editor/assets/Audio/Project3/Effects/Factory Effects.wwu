@@ -2,6 +2,13 @@
 <WwiseDocument Type="WorkUnit" ID="{E8613F7D-BAD3-45CD-A3ED-505576F31277}" SchemaVersion="110">
 	<Effects>
 		<WorkUnit Name="Factory Effects" ID="{E8613F7D-BAD3-45CD-A3ED-505576F31277}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Inclusion" Type="bool">
+					<ValueList>
+						<Value>False</Value>
+					</ValueList>
+				</Property>
+			</PropertyList>
 			<ChildrenList>
 				<Folder Name="Compressor" ID="{6D4F6371-ED53-4C90-98DA-0AEB0484548B}" ShortID="64022668">
 					<ChildrenList>
@@ -1984,6 +1991,12 @@
 						</Folder>
 					</ChildrenList>
 				</Folder>
+				<Effect Name="New_RoomVerb_01" ID="{5F19C7B5-DB9B-4F9E-B9CD-9130BB7F74CD}" PluginName="Wwise RoomVerb" CompanyID="0" PluginID="118" PluginType="3">
+					<PropertyList>
+						<Property Name="DecayTime" Type="Real32" Value="7.1"/>
+						<Property Name="Density" Type="Real32" Value="100"/>
+					</PropertyList>
+				</Effect>
 			</ChildrenList>
 		</WorkUnit>
 	</Effects>

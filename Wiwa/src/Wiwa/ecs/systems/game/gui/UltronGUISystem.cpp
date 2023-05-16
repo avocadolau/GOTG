@@ -1,0 +1,95 @@
+#pragma once
+#include "wipch.h"
+#include "UltronGUISystem.h"
+#include <Wiwa/core/Core.h>
+#include <Wiwa/ecs/Systems.h>
+#include <Wiwa/ecs/components/game/Health.h>
+void Wiwa::UltronGUISystem::OnUpdate()
+{
+	if (!bossIsDead)
+	{
+		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		Wiwa::Health* health = em.GetComponent<Health>(m_EntityId);
+		if (introBossFight)
+		{
+			if (!activeIntroCanvas)
+			{
+				m_Scene->SwapPauseActive();
+				gm.canvas.at(0)->SwapActive();
+				gm.canvas.at(6)->SwapActive();
+				activeIntroCanvas = true;
+			}
+			introBossFight = AnimationIntroBoss(gm);
+		}
+		if (!introBossFight && !m_Scene->IsScenePaused())
+		{
+			if (!activeBossCanvas)
+			{
+				gm.canvas.at(6)->SwapActive();
+				gm.canvas.at(5)->SwapActive();
+				gm.canvas.at(0)->SwapActive();
+				maxUltronHealth = health->health;
+				activeBossCanvas = true;
+			}
+			if (activeBossCanvas)
+			{
+				if (gm.getCurrentCanvas() == 0 && !m_CanvasHUD)
+				{
+					gm.canvas.at(5)->SwapActive();
+				}
+				if (gm.getCurrentCanvas() == 0)
+				{
+					m_CanvasHUD = true;
+				}
+				if (gm.getCurrentCanvas() != 0 && m_CanvasHUD)
+				{
+					gm.canvas.at(5)->SwapActive();
+					m_CanvasHUD = false;
+				}
+
+
+				if (health != nullptr)
+				{
+					if (health->health > 0)
+					{
+						gm.canvas.at(5)->controls.at(1)->SetValueForUIbar(health->health, maxUltronHealth);
+					}
+					else
+					{
+						gm.canvas.at(5)->SwapActive();
+						activeBossCanvas = false;
+						bossIsDead = true;
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+bool Wiwa::UltronGUISystem::AnimationIntroBoss(Wiwa::GuiManager& gm)
+{
+	counterIntroAnim += 0.16f;
+	//gm.canvas.at(6)->controls.at(8)->ScaleGUIElement({ 1024.0f,1024.0f }, 10, { 640.0f,640.0f }, GuiControlEasing::SineInOut);
+
+	if (counterIntroAnim <= timeIntroAnim) 
+	{
+		return true;
+	}
+	else if(counterIntroAnim > timeIntroAnim && counterIntroAnim <= timeIntroAnim + 25 && !m_IterationForPause)
+	{
+		m_Scene->SwapPauseActive();
+		m_IterationForPause = true;
+		return true;
+	}
+	else if (counterIntroAnim > timeIntroAnim + 25)
+	{
+		return false;
+	}
+}
+
+void Wiwa::UltronGUISystem::OnCollisionEnter(Object* body1, Object* body2)
+{
+}

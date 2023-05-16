@@ -27,6 +27,7 @@ namespace Wiwa
 		static bool Load(Scene* scene);
 
 		static void Cleanup();
+		static void DeAllocate();
 
 		static void CalcGridSize(const float* minBounds, const float* maxBounds, float cellSize, int* sizeX, int* sizeZ);
 

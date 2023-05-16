@@ -91,12 +91,11 @@ void EditorLayer::OnAttach()
 	m_UiPanel = std::make_unique<UIPanel>(this);
 	m_UiEditorPanel = std::make_unique<UIEditorPanel>(this);
 	m_DialogPanel = std::make_unique<DialogPanel>(this);
-	m_AIMapBakingPanel = std::make_unique<AIMapBakingPanel>(this);
 	m_GameLogPanel = std::make_unique<GameLogPanel>(this);
 	m_InventoryPanel = std::make_unique<InventoryPanel>(this);
-	m_AchievementsPanel = std::make_unique<AchievementsPanel>(this);
 	m_AiPanel = std::make_unique<AIPanel>(this);
 	m_OzzAnimationPanel = std::make_unique<OzzAnimationPanel>(this);
+	m_EnemyPanel = std::make_unique<EnemyPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
 	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
@@ -127,13 +126,12 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_UiEditorPanel.get());
 	m_Panels.push_back(m_DialogPanel.get());
 	m_Panels.push_back(m_AudioPanel.get());
-	m_Panels.push_back(m_AIMapBakingPanel.get());
 	m_Panels.push_back(m_GameLogPanel.get());
 	m_Panels.push_back(m_InventoryPanel.get());
-	m_Panels.push_back(m_AchievementsPanel.get());
 	m_Panels.push_back(m_AiPanel.get());
 	m_Panels.push_back(m_OzzAnimationPanel.get());
 
+	m_Panels.push_back(m_EnemyPanel.get());
 	
 	m_Settings.push_back(m_ProjectPanel.get());
 	m_Settings.push_back(m_About.get());
@@ -235,7 +233,7 @@ void EditorLayer::RegenSolutionThread()
 		return;
 	std::string call = "call tools\\generatesol.bat ";
 	call += s_SolVersion;
-	call += " AppAssembly.sln ";
+	call += " game_assembly/WiwaGameAssembly.sln ";
 	call += s_BuildConf;
 	system(call.c_str());
 	mutex.lock();
@@ -567,6 +565,14 @@ void EditorLayer::MainMenuBar()
 
 			HelpMarker("Enables/Disables the automatic assembly compilation");
 
+			
+
+
+			if (ImGui::MenuItem("Compile"))			
+				system("call tools/buildgameasm.bat");
+			ImGui::SameLine();
+			HelpMarker("Builds the solution with MsBuild, you'll need to firs add it to the PATH env var to compile");
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
@@ -620,33 +626,35 @@ void EditorLayer::MainMenuBar()
 			// Play button
 			if (ImGui::Button(play))
 			{
+				InspectorPanel::s_EntitySet = false;
 				if (!is_playing)
-				{
-					
-						SaveScene();
+				{	
+					SaveScene();
 
-						if (m_OpenedScenePath != "")
-						{
-							Wiwa::Time::Play();
-							Wiwa::Time::Update();
+					if (m_OpenedScenePath != "")
+					{
+						Wiwa::Time::Play();
+						Wiwa::Time::Update();
 
-							m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
-							Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
-							sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
-							sc->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
+						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
+						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+						sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
+						sc->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
 
-							// For debug purposes
-							std::string ex = sc->getName();
-							ex += "_execution";
-							sc->ChangeName(ex.c_str());
+						// For debug purposes
+						std::string ex = sc->getName();
+						ex += "_execution";
+						sc->ChangeName(ex.c_str());
 
-							Wiwa::SceneManager::PlayScene();
-						}
+						Wiwa::SceneManager::PlayScene();
+					}
 				}
 				else
 				{
 					StopScene();
 				}
+
+
 			}
 
 			if (ImGui::Button(ICON_FK_PAUSE))
@@ -719,10 +727,11 @@ void EditorLayer::MainMenuBar()
 			ImGui::Text(buff);
 			ImGui::PopStyleColor();
 			ImGui::Text(ICON_FK_EXCLAMATION_CIRCLE);
-
-			const char *beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
-			ImGui::TextUnformatted(beg, log.Buf.end());
-			
+			if (!log.Buf.empty())
+			{
+				const char* beg = log.Buf.begin() + log.LineOffsets[log.LineOffsets.Size - 2];
+				ImGui::TextUnformatted(beg, log.Buf.end());
+			}
 			
 			ImGui::EndMenuBar();
 		}
@@ -830,6 +839,7 @@ void EditorLayer::OpenScene()
 		LoadScene(filePath);
 
 		WI_INFO("Succesfully opened scene at path {0}", filePath.c_str());
+		InspectorPanel::s_EntitySet = false;
 	}
 }
 

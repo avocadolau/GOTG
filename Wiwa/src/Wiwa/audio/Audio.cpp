@@ -3,21 +3,44 @@
 #include <iostream>
 
 // AK Wwise
+#include <AK/SoundEngine/Common/AkSoundEngine.h>
+#include <AK/IBytes.h>
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
 
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 #include <AK/SoundEngine/Common/IAkStreamMgr.h>
+#include <AK/Tools/Common/AkLock.h>
+#include <AK/Tools/Common/AkMonitorError.h>
 #include <AK/Tools/Common/AkPlatformFuncs.h>
 #include "samples/Win32/AkFilePackageLowLevelIOBlocking.h"
 
-#include <AK/SoundEngine/Common/AkSoundEngine.h>
+
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 #include <AK/SpatialAudio/Common/AkSpatialAudio.h>
 
+#include <AK/SoundEngine/Common/AkMemoryMgr.h>
+#include <AK/SoundEngine/Common/AkModule.h>
+#include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 #include <AK/SoundEngine/Common/AkTypes.h>
+#include <AK/SoundEngine/Common/AkCallback.h>
+#include <AK/SoundEngine/Common/AkQueryParameters.h>
+
+
+
+#ifndef AK_OPTIMIZED
+#include <AK/Comm/AkCommunication.h>
+#endif
+
+
+
+#include <Wiwa/utilities/json/JSONDocument.h>
+
+
 
 #include <Wiwa/utilities/filesystem/FileSystem.h>
+
+
 
 uint32_t Audio::m_InitBank = 0;
 std::vector<Audio::BankData> Audio::m_LoadedBanks;
@@ -26,6 +49,7 @@ bool Audio::m_LoadedProject = false;
 std::string Audio::m_LastErrorMsg = "None";
 std::string Audio::m_InitBankPath = "";
 uint64_t Audio::m_DefaultListener = 0;
+uint64_t Audio::m_WorldListener = 1;
 
 CAkFilePackageLowLevelIOBlocking g_lowLevelIO;
 
@@ -38,6 +62,704 @@ void cb(AkCallbackType type, AkCallbackInfo* info) {
     printf("Cookie: %d\n", *test);
     printf("Time: %f\n", e_info->fDuration);
 }
+
+bool Audio::Init()
+{
+    // Initialize memory manager
+    AkMemSettings memSettings;
+    AK::MemoryMgr::GetDefaultSettings(memSettings);
+
+    if (AK::MemoryMgr::Init(&memSettings) != AK_Success)
+    {
+        printf("Could not create the memory manager.");
+        return false;
+    }
+
+    // Initialize stream manager
+    AkStreamMgrSettings stmSettings;
+    AK::StreamMgr::GetDefaultSettings(stmSettings);
+
+    // Customize the Stream Manager settings here.
+
+
+    if (!AK::StreamMgr::Create(stmSettings))
+    {
+        printf("Could not create the Streaming Manager");
+        return false;
+    }
+
+    //
+
+    // Create a streaming device with blocking low-level I/O handshaking.
+
+    // Note that you can override the default low-level I/O module with your own. 
+
+    //
+
+    AkDeviceSettings deviceSettings;
+    AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
+
+    // Customize the streaming device settings here.
+    
+    CAkDefaultIOHookBlocking lowLevelIO;
+
+    // CAkFilePackageLowLevelIOBlocking::Init() creates a streaming device
+
+    // in the Stream Manager, and registers itself as the File Location Resolver.
+
+    if (g_lowLevelIO.Init(deviceSettings) != AK_Success)
+    {
+        printf("Could not create the streaming device and Low-Level I/O system");
+        return false;
+    }
+
+    // Initialize sound engine
+    AkInitSettings initSettings;
+    AK::SoundEngine::GetDefaultInitSettings(initSettings);
+    //initSettings.bUseLEngineThread = false;
+
+    AkPlatformInitSettings platformInitSettings;
+    AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
+
+    if (AK::SoundEngine::Init(&initSettings, &platformInitSettings) != AK_Success)
+    {
+        printf("Could not initialize the Sound Engine.");
+        return false;
+    }
+
+    // Initialize music engine
+    AkMusicSettings musicInit;
+   
+    AK::MusicEngine::GetDefaultInitSettings(musicInit);
+   
+    if (AK::MusicEngine::Init(&musicInit) != AK_Success)
+    {
+        printf("Could not initialize the Music Engine.");
+        return false;
+    }
+
+    // Initialize spatial audio
+    AkSpatialAudioInitSettings settings; // The constructor fills AkSpatialAudioInitSettings with the recommended default settings. 
+
+    if (AK::SpatialAudio::Init(settings) != AK_Success)
+    {
+        printf("Could not initialize the Spatial Audio.");
+        return false;
+    }
+
+    m_DefaultListener = 20000;
+
+    AKRESULT gres = AK::SoundEngine::RegisterGameObj(m_DefaultListener);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+
+    AK::SoundEngine::SetDefaultListeners(&m_DefaultListener, 1);
+    //gres = AK::SoundEngine::AddDefaultListener(m_DefaultListener);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+    
+    AkSoundPosition position;
+    position.SetPosition(0.0f, 300.0f, 0.0f);
+    position.SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+
+    gres = AK::SoundEngine::SetPosition(m_DefaultListener, position);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+    
+#ifndef AK_OPTIMIZED
+    // Initialize communication.
+    AkCommSettings settingsComm;
+    AK::Comm::GetDefaultInitSettings(settingsComm);
+    AKPLATFORM::SafeStrCpy(settingsComm.szAppNetworkName, "Wiwa", AK_COMM_SETTINGS_MAX_STRING_SIZE);
+    if (AK::Comm::Init(settingsComm) != AK_Success)
+    {
+        AKASSERT(!"Cannot initialize music communication");
+        return false;
+    }
+#endif // AK_OPTIMIZED
+
+    return true;
+}
+
+bool Audio::Update()
+{
+    OPTICK_EVENT("Audio Update");
+
+    AK::SoundEngine::RenderAudio();
+    
+    return true;
+}
+
+bool Audio::Terminate()
+{
+    //AK::SpatialAudio::Term();
+
+    UnloadAllBanks();
+
+    AK::MusicEngine::Term();
+    AK::SoundEngine::Term();
+    AK::Comm::Term();
+    g_lowLevelIO.Term();
+
+    if (AK::IAkStreamMgr::Get())
+        AK::IAkStreamMgr::Get()->Destroy();
+
+    AK::MemoryMgr::Term();
+
+    return true;
+}
+
+bool Audio::LoadProject(const char* init_bnk)
+{
+    if (init_bnk == m_InitBankPath) return true;
+
+    if (!UnloadAllBanks()) return false;
+
+    AKRESULT res = AK::SoundEngine::LoadBank(init_bnk, m_InitBank);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    m_LoadedBanks.clear();
+    m_LoadedEvents.clear();
+
+    m_InitBankPath = init_bnk;
+    m_LoadedProject = true;
+
+    WI_CORE_INFO("Loaded audio project: {}", init_bnk);
+
+    return true;
+}
+
+bool Audio::ReloadProject()
+{
+    if (!   UnloadAllBanks()) return false;
+
+    AKRESULT res = AK::SoundEngine::LoadBank(m_InitBankPath.c_str(), m_InitBank);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    ReloadBanks();
+
+    m_LoadedProject = true;
+
+    return true;
+}
+
+bool Audio::ReloadBanks() {
+    size_t bnk_size = m_LoadedBanks.size();
+
+    for (size_t i = 0; i < bnk_size; i++) {
+        uint32_t id = 0;
+        AKRESULT res = AK::SoundEngine::LoadBank(m_LoadedBanks[i].path.c_str(), id);
+
+        if (res != AK_Success) {
+            setLastError(res);
+
+            // Remove from list
+            m_LoadedBanks.erase(m_LoadedBanks.begin() + i);
+            i--;
+            bnk_size--;
+        }
+    }
+
+    ReloadEvents();
+
+    return true;
+}
+
+bool Audio::ReloadEvents() {
+    size_t event_size = m_LoadedEvents.size();
+
+    for (size_t i = 0; i < event_size; i++) {
+        bool ret = PostEvent(m_LoadedEvents[i].name.c_str());
+
+        if (!ret) {
+            m_LoadedEvents.erase(m_LoadedEvents.begin() + i);
+            i--;
+            event_size--;
+        }
+        else {
+            StopEvent(m_LoadedEvents[i].name.c_str());
+        }
+    }
+    
+    return true;
+}
+
+bool Audio::LoadBank(const char* bank)
+{
+    AkBankID bank_id;
+
+    AKRESULT res = AK::SoundEngine::LoadBank(bank, bank_id);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    std::string filename = Wiwa::FileSystem::GetFileName(bank);
+
+    m_LoadedBanks.emplace_back(BankData{ filename, bank_id, bank });
+
+    WI_CORE_INFO("Loaded audio bank: {}", bank);
+
+    return true;
+}
+
+
+bool Audio::UnloadBank(const char* bank)
+{
+    uint32_t b_id = FindBank(bank);
+
+    if (b_id == INVALID_ID) return true;
+
+    AKRESULT res = AK::SoundEngine::UnloadBank(m_LoadedBanks[b_id].path.c_str(), NULL);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    m_LoadedBanks.erase(m_LoadedBanks.begin() + b_id);
+
+    ReloadEvents();
+
+    return true;
+}
+
+uint32_t Audio::FindEvent(const char* event_name)
+{
+    uint32_t index = INVALID_ID;
+
+    size_t event_size = m_LoadedEvents.size();
+
+    for (size_t i = 0; i < event_size; i++) {
+        if (m_LoadedEvents[i].name == event_name) {
+            index = (uint32_t)i;
+            break;
+        }
+    }
+
+    return index;
+}
+
+uint32_t Audio::FindBank(const char* bank_name)
+{
+    uint32_t index = INVALID_ID;
+
+    size_t bank_size = m_LoadedBanks.size();
+
+    for (size_t i = 0; i < bank_size; i++) {
+        if (m_LoadedBanks[i].name == bank_name) {
+            index = (uint32_t)i;
+            break;
+        }
+    }
+
+    return index;
+}
+
+bool Audio::LoadEvent(const char* event_name)
+{
+    uint32_t ev_id = FindEvent(event_name);
+
+    if (ev_id != INVALID_ID) return true;
+
+    bool res = PostEvent(event_name);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    StopEvent(event_name);
+
+    m_LoadedEvents.emplace_back(EventData{ event_name, AK::SoundEngine::GetIDFromString(event_name) });
+
+    return true;
+}
+
+bool Audio::UnloadEvent(const char* event_name)
+{
+    uint32_t ev_id = FindEvent(event_name);
+
+    if (ev_id == INVALID_ID) return true;
+
+    m_LoadedEvents.erase(m_LoadedEvents.begin() + ev_id);
+
+    return true;
+}
+
+bool Audio::PostEvent(const char* event_name, uint64_t game_object)
+{
+    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object);
+    
+    if (play_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't post event [";
+        m_LastErrorMsg += event_name;
+        m_LastErrorMsg += "]";
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::PostEvent(const char* event_name, uint64_t game_object, uint64_t& event_id)
+{
+    event_id = AK::SoundEngine::PostEvent(event_name, game_object);
+
+    if (event_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't post event [";
+        m_LastErrorMsg += event_name;
+        m_LastErrorMsg += "]";
+        return false;
+    }
+
+    return true;
+}
+
+struct AkCallbackCookie {
+    std::string ev_name;
+    Action<const char*> action;
+};
+
+void PostEventCallback(AkCallbackType type, AkCallbackInfo* cbinfo) {
+    AkEventCallbackInfo* ecbinfo = (AkEventCallbackInfo*)cbinfo;
+    ecbinfo->eventID;
+
+    AkCallbackCookie* cbcookie = (AkCallbackCookie*)cbinfo->pCookie;
+
+    if (type == AkCallbackType::AK_EndOfEvent) {
+        cbcookie->action.execute(cbcookie->ev_name.c_str());
+    }
+
+    delete cbcookie;
+}
+
+void Audio::CancelAudioAllCallback(uint64_t play_id)
+{
+    AK::SoundEngine::CancelEventCallback(play_id);
+}
+
+bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const char*> action, uint64_t& play_id)
+{
+    AkCallbackCookie* cbcookie = new AkCallbackCookie();
+    cbcookie->ev_name = event_name;
+    cbcookie->action = action;
+
+    play_id = AK::SoundEngine::PostEvent(event_name, game_object, AK_EndOfEvent, PostEventCallback, cbcookie);
+
+    if (play_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't post event [";
+        m_LastErrorMsg += event_name;
+        m_LastErrorMsg += "]";
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const char*> action)
+{
+    AkCallbackCookie* cbcookie = new AkCallbackCookie();
+    cbcookie->ev_name = event_name;
+    cbcookie->action = action;
+
+    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object, AK_EndOfEvent, PostEventCallback, cbcookie);
+
+    if (play_id == AK_INVALID_PLAYING_ID) {
+        m_LastErrorMsg = "Couldn't post event [";
+        m_LastErrorMsg += event_name;
+        m_LastErrorMsg += "]";
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::IsEventPlaying(uint64_t event_id)
+{
+    return false;
+}
+
+bool Audio::StopEvent(const char* event_name, uint64_t game_object)
+{
+    AKRESULT res = AK::SoundEngine::ExecuteActionOnEvent(event_name, AK::SoundEngine::AkActionOnEventType::AkActionOnEventType_Stop, game_object);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::StopAllEvents()
+{
+    AK::SoundEngine::StopAll();
+    // Instantly stop them
+    AK::SoundEngine::RenderAudio(true);
+
+    return true;
+}
+
+void Audio::RegisterAsWorldListener(uint64_t go_id)
+{
+    Audio::UnregisterGameObject(m_WorldListener);
+
+    m_WorldListener = go_id;
+
+    AKRESULT gres = AK::SoundEngine::RegisterGameObj(m_WorldListener);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+
+    gres = AK::SoundEngine::AddDefaultListener(m_WorldListener);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+
+    AkSoundPosition position;
+    position.SetPosition(0.0f, 0.0f, 0.0f);
+    position.SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+
+    gres = AK::SoundEngine::SetPosition(m_WorldListener, position);
+
+    if (gres != AK_Success) {
+        setLastError(gres);
+    }
+}
+
+bool Audio::RegisterGameObject(uint64_t go_id)
+{
+    AKRESULT res = AK::SoundEngine::RegisterGameObj(go_id);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::UnregisterGameObject(uint64_t go_id)
+{
+    AKRESULT res = AK::SoundEngine::UnregisterGameObj(go_id);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::SetPositionAndOrientation(uint64_t go_id, const Wiwa::Vector3f& position, const Wiwa::Vector3f& front, const Wiwa::Vector3f& up)
+{
+    AkSoundPosition soundposition;
+    soundposition.SetPosition(position.x, position.y, position.z);
+    soundposition.SetOrientation(front.x, front.y, front.z, up.x, up.y, up.z);
+
+    AKRESULT res = AK::SoundEngine::SetPosition(go_id, soundposition);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::SetPosition(uint64_t go_id, const Wiwa::Vector3f& position)
+{
+    AkSoundPosition soundposition;
+    soundposition.SetPosition(position.x, position.y, position.z);
+
+    AKRESULT res = AK::SoundEngine::SetPosition(go_id, soundposition);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return false;
+}
+
+void Audio::SetWorldListener(uint64_t go_id_emmiter)
+{
+    AK::SoundEngine::SetListeners(go_id_emmiter, &m_WorldListener, 1);
+}
+
+bool Audio::AddDefaultListener(uint64_t go_id)
+{
+    AKRESULT res = AK::SoundEngine::AddDefaultListener(go_id);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::UnregisterAllGameObjects()
+{
+    AKRESULT res = AK::SoundEngine::UnregisterAllGameObj();
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    return true;
+}
+
+bool Audio::UnloadAllBanks()
+{
+    if (!m_LoadedProject) return true;
+
+    AKRESULT res = AK::SoundEngine::ClearBanks();
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+
+    m_LoadedProject = false;
+
+    return true;
+}
+
+
+bool Audio::SetState(uint32_t state_group_id, uint32_t state_id)
+{
+    AKRESULT res = AK::SoundEngine::SetState(state_group_id, state_id);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+    return true;
+}
+
+bool Audio::SetState(const char* state_group_id, const char* state_id)
+{
+    AKRESULT res = AK::SoundEngine::SetState(state_group_id, state_id);
+
+    if (res != AK_Success) {
+        setLastError(res);
+        return false;
+    }
+    return true;
+}
+
+uint32_t Audio::GetIdFromString(const char* name)
+{
+    return  AK::SoundEngine::GetIDFromString(name);
+}
+
+void Audio::ChangeMasterVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("MasterVolume", value);
+}
+
+void Audio::ChangeMusicVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("MusicVolume", value);
+}
+
+void Audio::ChangeSFXVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("EnviromentVolume", value);
+}
+
+void Audio::ChangeDialogVolume(int value)
+{
+    AK::SoundEngine::SetRTPCValue("DialogVolume", value);
+}
+
+void Audio::SetRTPCValue(const char* name, int value)
+{
+    AK::SoundEngine::SetRTPCValue(name, value);
+}
+
+bool Audio::LoadPreset(const char* json_file)
+{
+    Wiwa::JSONDocument doc(json_file);
+
+    if (doc.IsObject())
+    {
+        if (doc.HasMember("init_path"))
+            LoadProject(doc["init_path"].as_string());
+        if (doc.HasMember("banks"))
+        {
+            Wiwa::JSONValue banks = doc["banks"];
+            if (banks.IsArray())
+            {
+                for (uint32_t i = 0; i < banks.Size(); i++)
+                {
+                    LoadBank(banks[i].as_string());
+                }
+            }
+        }
+        if (doc.HasMember("events"))
+        {
+            Wiwa::JSONValue events = doc["events"];
+            if (events.IsArray())
+            {
+                for (uint32_t i = 0; i < events.Size(); i++)
+                {
+                    LoadEvent(events[i].as_string());
+                }
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Audio::SavePreset(const char* filename)
+{
+    if (LoadedProject())
+    {
+       Wiwa::JSONDocument doc;
+       doc.AddMember("init_path", m_InitBankPath.c_str());
+
+       Wiwa::JSONValue banks = doc.AddMemberArray("banks");
+
+       for (auto& bank : GetLoadedBankList())
+       {
+           banks.PushBack(bank.path.c_str());
+       }
+
+       Wiwa::JSONValue events = doc.AddMemberArray("events");
+       
+       for (auto& event : GetLoadedEventList())
+       {
+           events.PushBack(event.name.c_str());
+       }
+
+       doc.save_file(filename);
+       
+       return true;
+    }
+    return false;
+}
+
 
 void Audio::setLastError(int result)
 {
@@ -270,500 +992,5 @@ void Audio::setLastError(int result)
     }
 }
 
-bool Audio::Init()
-{
-    // Initialize memory manager
-    AkMemSettings memSettings;
-    AK::MemoryMgr::GetDefaultSettings(memSettings);
-
-    if (AK::MemoryMgr::Init(&memSettings) != AK_Success)
-    {
-        printf("Could not create the memory manager.");
-        return false;
-    }
-
-    // Initialize stream manager
-    AkStreamMgrSettings stmSettings;
-    AK::StreamMgr::GetDefaultSettings(stmSettings);
-
-    // Customize the Stream Manager settings here.
-
-
-    if (!AK::StreamMgr::Create(stmSettings))
-    {
-        printf("Could not create the Streaming Manager");
-        return false;
-    }
-
-    //
-
-    // Create a streaming device with blocking low-level I/O handshaking.
-
-    // Note that you can override the default low-level I/O module with your own. 
-
-    //
-
-    AkDeviceSettings deviceSettings;
-    AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
-
-    // Customize the streaming device settings here.
-    
-    CAkDefaultIOHookBlocking lowLevelIO;
-
-    // CAkFilePackageLowLevelIOBlocking::Init() creates a streaming device
-
-    // in the Stream Manager, and registers itself as the File Location Resolver.
-
-    if (g_lowLevelIO.Init(deviceSettings) != AK_Success)
-    {
-        printf("Could not create the streaming device and Low-Level I/O system");
-        return false;
-    }
-
-    // Initialize sound engine
-    AkInitSettings initSettings;
-    AK::SoundEngine::GetDefaultInitSettings(initSettings);
-    //initSettings.bUseLEngineThread = false;
-
-    AkPlatformInitSettings platformInitSettings;
-    AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
-
-    if (AK::SoundEngine::Init(&initSettings, &platformInitSettings) != AK_Success)
-    {
-        printf("Could not initialize the Sound Engine.");
-        return false;
-    }
-
-    // Initialize music engine
-    AkMusicSettings musicInit;
-   
-    AK::MusicEngine::GetDefaultInitSettings(musicInit);
-   
-    if (AK::MusicEngine::Init(&musicInit) != AK_Success)
-    {
-        printf("Could not initialize the Music Engine.");
-        return false;
-    }
-
-    // Initialize spatial audio
-    AkSpatialAudioInitSettings settings; // The constructor fills AkSpatialAudioInitSettings with the recommended default settings. 
-
-    if (AK::SpatialAudio::Init(settings) != AK_Success)
-    {
-        printf("Could not initialize the Spatial Audio.");
-        return false;
-    }
-
-    m_DefaultListener = 20000;
-
-    AKRESULT gres = AK::SoundEngine::RegisterGameObj(m_DefaultListener);
-
-    if (gres != AK_Success) {
-        setLastError(gres);
-    }
-
-    AK::SoundEngine::SetDefaultListeners(&m_DefaultListener, 1);
-    //gres = AK::SoundEngine::AddDefaultListener(m_DefaultListener);
-
-    if (gres != AK_Success) {
-        setLastError(gres);
-    }
-
-
-    
-    AkSoundPosition position;
-    position.SetPosition(0.0f, 300.0f, 0.0f);
-    position.SetOrientation(0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
-
-    gres = AK::SoundEngine::SetPosition(m_DefaultListener, position);
-
-    if (gres != AK_Success) {
-        setLastError(gres);
-    }
-
-    return true;
-}
-
-bool Audio::Update()
-{
-    OPTICK_EVENT("Audio Update");
-
-    AK::SoundEngine::RenderAudio();
-    
-    return true;
-}
-
-bool Audio::Terminate()
-{
-    //AK::SpatialAudio::Term();
-
-    AK::MusicEngine::Term();
-    AK::SoundEngine::Term();
-
-    g_lowLevelIO.Term();
-
-    if (AK::IAkStreamMgr::Get())
-        AK::IAkStreamMgr::Get()->Destroy();
-
-    AK::MemoryMgr::Term();
-
-    return true;
-}
-
-bool Audio::LoadProject(const char* init_bnk)
-{
-    if (!UnloadAllBanks()) return false;
-
-    AKRESULT res = AK::SoundEngine::LoadBank(init_bnk, m_InitBank);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    m_LoadedBanks.clear();
-    m_LoadedEvents.clear();
-
-    m_InitBankPath = init_bnk;
-    m_LoadedProject = true;
-
-    WI_CORE_INFO("Loaded audio project: {}", init_bnk);
-
-    return true;
-}
-
-bool Audio::ReloadProject()
-{
-    if (!   UnloadAllBanks()) return false;
-
-    AKRESULT res = AK::SoundEngine::LoadBank(m_InitBankPath.c_str(), m_InitBank);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    ReloadBanks();
-
-    m_LoadedProject = true;
-
-    return true;
-}
-
-bool Audio::ReloadBanks() {
-    size_t bnk_size = m_LoadedBanks.size();
-
-    for (size_t i = 0; i < bnk_size; i++) {
-        uint32_t id = 0;
-        AKRESULT res = AK::SoundEngine::LoadBank(m_LoadedBanks[i].path.c_str(), id);
-
-        if (res != AK_Success) {
-            setLastError(res);
-
-            // Remove from list
-            m_LoadedBanks.erase(m_LoadedBanks.begin() + i);
-            i--;
-            bnk_size--;
-        }
-    }
-
-    ReloadEvents();
-
-    return true;
-}
-
-bool Audio::ReloadEvents() {
-    size_t event_size = m_LoadedEvents.size();
-
-    for (size_t i = 0; i < event_size; i++) {
-        bool ret = PostEvent(m_LoadedEvents[i].name.c_str());
-
-        if (!ret) {
-            m_LoadedEvents.erase(m_LoadedEvents.begin() + i);
-            i--;
-            event_size--;
-        }
-        else {
-            StopEvent(m_LoadedEvents[i].name.c_str());
-        }
-    }
-    
-    return true;
-}
-
-bool Audio::LoadBank(const char* bank)
-{
-    AkBankID bank_id;
-
-    AKRESULT res = AK::SoundEngine::LoadBank(bank, bank_id);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    std::string filename = Wiwa::FileSystem::GetFileName(bank);
-
-    m_LoadedBanks.emplace_back(BankData{ filename, bank_id, bank });
-
-    WI_CORE_INFO("Loaded audio bank: {}", bank);
-
-    return true;
-}
-
-bool Audio::UnloadBank(const char* bank)
-{
-    uint32_t b_id = FindBank(bank);
-
-    if (b_id == INVALID_ID) return true;
-
-    AKRESULT res = AK::SoundEngine::UnloadBank(m_LoadedBanks[b_id].path.c_str(), NULL);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    m_LoadedBanks.erase(m_LoadedBanks.begin() + b_id);
-
-    ReloadEvents();
-
-    return true;
-}
-
-uint32_t Audio::FindEvent(const char* event_name)
-{
-    uint32_t index = INVALID_ID;
-
-    size_t event_size = m_LoadedEvents.size();
-
-    for (size_t i = 0; i < event_size; i++) {
-        if (m_LoadedEvents[i].name == event_name) {
-            index = (uint32_t)i;
-            break;
-        }
-    }
-
-    return index;
-}
-
-uint32_t Audio::FindBank(const char* bank_name)
-{
-    uint32_t index = INVALID_ID;
-
-    size_t bank_size = m_LoadedBanks.size();
-
-    for (size_t i = 0; i < bank_size; i++) {
-        if (m_LoadedBanks[i].name == bank_name) {
-            index = (uint32_t)i;
-            break;
-        }
-    }
-
-    return index;
-}
-
-bool Audio::LoadEvent(const char* event_name)
-{
-    uint32_t ev_id = FindEvent(event_name);
-
-    if (ev_id != INVALID_ID) return true;
-
-    bool res = PostEvent(event_name);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    StopEvent(event_name);
-
-    m_LoadedEvents.emplace_back(EventData{ event_name, AK::SoundEngine::GetIDFromString(event_name) });
-
-    return true;
-}
-
-bool Audio::UnloadEvent(const char* event_name)
-{
-    uint32_t ev_id = FindEvent(event_name);
-
-    if (ev_id == INVALID_ID) return true;
-
-    m_LoadedEvents.erase(m_LoadedEvents.begin() + ev_id);
-
-    return true;
-}
-
-bool Audio::PostEvent(const char* event_name, uint64_t game_object)
-{
-    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object);
-
-    if (play_id == AK_INVALID_PLAYING_ID) {
-        m_LastErrorMsg = "Couldn't post event [";
-        m_LastErrorMsg += event_name;
-        m_LastErrorMsg += "]";
-        return false;
-    }
-
-    return true;
-}
-
-struct AkCallbackCookie {
-    std::string ev_name;
-    Action<const char*> action;
-};
-
-void PostEventCallback(AkCallbackType type, AkCallbackInfo* cbinfo) {
-    AkEventCallbackInfo* ecbinfo = (AkEventCallbackInfo*)cbinfo;
-    ecbinfo->eventID;
-
-    AkCallbackCookie* cbcookie = (AkCallbackCookie*)cbinfo->pCookie;
-
-    if (type == AkCallbackType::AK_EndOfEvent) {
-        cbcookie->action.execute(cbcookie->ev_name.c_str());
-    }
-
-    delete cbcookie;
-}
-
-bool Audio::PostEvent(const char* event_name, uint64_t game_object, Action<const char*> action)
-{
-    AkCallbackCookie* cbcookie = new AkCallbackCookie();
-    cbcookie->ev_name = event_name;
-    cbcookie->action = action;
-
-    AkPlayingID play_id = AK::SoundEngine::PostEvent(event_name, game_object, AK_EndOfEvent, PostEventCallback, cbcookie);
-
-    if (play_id == AK_INVALID_PLAYING_ID) {
-        m_LastErrorMsg = "Couldn't post event [";
-        m_LastErrorMsg += event_name;
-        m_LastErrorMsg += "]";
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::StopEvent(const char* event_name, uint64_t game_object)
-{
-    AKRESULT res = AK::SoundEngine::ExecuteActionOnEvent(event_name, AK::SoundEngine::AkActionOnEventType::AkActionOnEventType_Stop, game_object);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::StopAllEvents()
-{
-    AK::SoundEngine::StopAll();
-
-    // Instantly stop them
-    AK::SoundEngine::RenderAudio(true);
-
-    return true;
-}
-
-bool Audio::RegisterGameObject(uint64_t go_id)
-{
-    AKRESULT res = AK::SoundEngine::RegisterGameObj(go_id);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::UnregisterGameObject(uint64_t go_id)
-{
-    AKRESULT res = AK::SoundEngine::UnregisterGameObj(go_id);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::SetPositionAndOrientation(uint64_t go_id, const Wiwa::Vector3f& position, const Wiwa::Vector3f& front, const Wiwa::Vector3f& up)
-{
-    AkSoundPosition soundposition;
-    soundposition.SetPosition(position.x, position.y, position.z);
-    soundposition.SetOrientation(front.x, front.y, front.z, up.x, up.y, up.z);
-
-    AKRESULT res = AK::SoundEngine::SetPosition(go_id, soundposition);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::SetPosition(uint64_t go_id, const Wiwa::Vector3f& position)
-{
-    AkSoundPosition soundposition;
-    soundposition.SetPosition(position.x, position.y, position.z);
-
-    AKRESULT res = AK::SoundEngine::SetPosition(go_id, soundposition);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return false;
-}
-
-bool Audio::AddDefaultListener(uint64_t go_id)
-{
-    AKRESULT res = AK::SoundEngine::AddDefaultListener(go_id);
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::UnregisterAllGameObjects()
-{
-    AKRESULT res = AK::SoundEngine::UnregisterAllGameObj();
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    return true;
-}
-
-bool Audio::UnloadAllBanks()
-{
-    if (!m_LoadedProject) return true;
-
-    AKRESULT res = AK::SoundEngine::ClearBanks();
-
-    if (res != AK_Success) {
-        setLastError(res);
-        return false;
-    }
-
-    m_LoadedProject = false;
-
-    return true;
-}
-
-void Audio::ChangeMasterVolume(int value)
-{
-    AK::SoundEngine::SetRTPCValue("MasterVolume", value);
-}
 
 

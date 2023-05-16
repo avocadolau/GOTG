@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/bullet/bullet","uniforms":{"u_LifeTime":0.15087050199508667,"u_Time":472.7673645019531,"u_Color":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"u_Texture":"assets/textures/enemy_spawn/t_spawn_05.png","u_TransparencyTexture":"assets/textures/enemy_spawn/t_spawn_05.png"}}

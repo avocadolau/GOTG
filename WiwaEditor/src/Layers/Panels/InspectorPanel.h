@@ -29,11 +29,11 @@ private:
 	void DrawColliderSpehereComponent(byte* data);
 	void DrawColliderCylinderComponent(byte* data);
 	void DrawRayCastComponent(byte* data);
-	void DrawAiAgentComponent(byte* data);
 	void DrawParticleSystemComponent(byte* data);
 	void DrawItemComponent(byte* data);
 	void DrawNavMeshComponent(byte* data);
 	void DrawOzzAnimatorCmp(byte* data);
+	void DrawPlayerSpawnerComponent(byte* data);
 public:
 
 	InspectorPanel(EditorLayer* instance);
@@ -51,10 +51,11 @@ public:
 	inline bool GetCurrentEntity(int& id)
 	{
 		id = m_CurrentID;
-		return m_EntitySet;
+		return s_EntitySet;
 	}
 private:
 	
 	int m_CurrentID = 0;
-	bool m_EntitySet = false;
+public:
+	static bool s_EntitySet;
 };

@@ -19,7 +19,7 @@ void GameLogPanel::Draw()
 {
 	ImGui::Begin(iconName.c_str(), &active);
 	ImGui::TextColored(ImVec4(102, 0, 255, 1), "Panel to check information about room");
-	
+	ImGui::Text("Save file found %i", Wiwa::GameStateManager::s_CanContinue);
 	if (ImGui::CollapsingHeader("Chances"))
 	{
 
@@ -52,13 +52,38 @@ void GameLogPanel::DrawStateInfo()
 
 void GameLogPanel::DrawRoomSpawnersInfo()
 {
-	ImGui::Text("Total spawners: ");
+	ImGui::Text("Has finished: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(0, 0, 200, 1), "%d", Wiwa::GameStateManager::s_TotalSpawners);
+	ImGui::TextColored(ImVec4(0, 0, 200, 1), "%s", Wiwa::GameStateManager::s_HasFinshedRoom ? "true" : "false");
 
-	ImGui::Text("Finished spawners: ");
+	ImGui::Text("Is triggering next: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::s_SpawnersFinished);
+	ImGui::TextColored(ImVec4(0, 0, 200, 1), "%s", Wiwa::GameStateManager::s_PlayerTriggerNext ? "true" : "false");
+
+	ImGui::Text("Enemies active: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
+
+	if (Wiwa::Time::IsPlaying())
+	{
+		ImGui::Text("Approximate total enemies: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());
+	}
+
+	ImGui::Separator();
+
+	ImGui::Text("Current difficulty level: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentRunLevel);
+
+	ImGui::Text("Count of combat rooms: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentCombatRoomsCount);
+
+	ImGui::Text("Count of reward rooms: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentRewardRoomCount);
 }
 
 void GameLogPanel::DrawRoomVariables()
@@ -67,9 +92,15 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::Text("Rooms to boss %d", Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::Text("Rooms to shop %d", Wiwa::GameStateManager::s_RoomsToShop);
 	ImGui::Text("Rooms to end and return tu hub %d", Wiwa::GameStateManager::s_CurrentRoomsCount);
-	ImGui::InputInt("HUB room index", (int*)&Wiwa::GameStateManager::s_IntroductionRoom);
+	ImGui::InputInt("HUB room index", (int*)&Wiwa::GameStateManager::s_HUBRoomIndx);
+	ImGui::InputInt("Boss room index", (int*)&Wiwa::GameStateManager::s_BossRoomIndx);
 	ImGui::InputInt("Rooms to boss", (int*)&Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::InputInt("Rooms to shop", (int*)&Wiwa::GameStateManager::s_RoomsToShop);
+
+	ImGui::InputInt("Next reward", &Wiwa::GameStateManager::s_NextRewardRoomReward);
+	ImGui::InputInt("Left door reward", &Wiwa::GameStateManager::s_DoorsReward[0]);
+	ImGui::InputInt("Right door reward", &Wiwa::GameStateManager::s_DoorsReward[1]);
+
 	ImGui::Separator();
 	ImGui::PushID(0);
 	ImGui::Text("Battle rooms");
@@ -92,7 +123,7 @@ void GameLogPanel::DrawRoomVariables()
 	const char* startCharacter
 		= Wiwa::GameStateManager::s_CurrentCharacter == 0 ? "StarLord" : Wiwa::GameStateManager::s_CurrentCharacter == 1 ? "Rocket" : "None";
 	ImGui::Text("Current character %s", startCharacter);
-	ImGui::InputInt("Start character", &Wiwa::GameStateManager::s_CurrentCharacter);
+	ImGui::InputInt("Start character", (int*)&Wiwa::GameStateManager::s_CurrentCharacter);
 	CLAMP(Wiwa::GameStateManager::s_CurrentCharacter, 0, 1);
 
 	if (ImGui::CollapsingHeader("Current player stats"))

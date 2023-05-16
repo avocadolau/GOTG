@@ -31,6 +31,8 @@ IncludeDirs["ImGuizmo"] = "%{wks.location}/../../Wiwa/vendor/imguizmo"
 IncludeDirs["GLI"] = "%{wks.location}/../../Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/../../Wiwa/vendor/Wwise/include"
 IncludeDirs["bullet"] = "%{wks.location}/../../Wiwa/vendor/bullet/include"
+IncludeDirs["OpenCV"] = "%{wks.location}/../../Wiwa/vendor/opencv-4.7.0/include"
+IncludeDirs["recastnavigation"] = "%{wks.location}/../../Wiwa/vendor/recastnavigation/include"
 
 project "WiwaGame"
 	kind "ConsoleApp"
@@ -57,7 +59,9 @@ project "WiwaGame"
 		"%{IncludeDirs.ImGuizmo}",
 		"%{IncludeDirs.filewatch}",
 		"%{IncludeDirs.Wwise}",
-		"%{IncludeDirs.bullet}"
+		"%{IncludeDirs.bullet}",
+		"%{IncludeDirs.OpenCV}",
+		"%{IncludeDirs.recastnavigation}"
 	}
 
 	links

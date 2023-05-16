@@ -34,17 +34,22 @@
 
 #include <Wiwa/render/RenderManager.h>
 
+#include <Wiwa/utilities/AnimatorManager.h>
+
 #include <Wiwa/core/ProjectManager.h>
 #include <stdlib.h>
 #include <time.h>
 
 #include <Wiwa/utilities/functions/Function.h>
+#include <random>
 
 USE_REFLECTION;
 
 namespace Wiwa
 {
 	Application *Application::s_Instance = nullptr;
+	std::random_device Application::s_Rd;
+	std::mt19937 Application::s_Gen(s_Rd());
 
 	Application::Application(int argc, char **argv)
 	{
@@ -52,7 +57,6 @@ namespace Wiwa
 		struct timespec ts;
 		timespec_get(&ts, TIME_UTC);
 		srand(((unsigned int)ts.tv_nsec));
-
 
 		WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 
@@ -96,6 +100,8 @@ namespace Wiwa
 
 		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
+		Input::Init();
+
 		bool res = Audio::Init();
 
 		if (!res)
@@ -111,8 +117,6 @@ namespace Wiwa
 		LoadGameAssembly();
 
 		WI_CORE_WARN("=======Systems initialized=======");
-
-		
 	}
 
 	void Application::SetHwInfo()
@@ -148,6 +152,8 @@ namespace Wiwa
 	
 		Audio::Terminate();
 		GameStateManager::CleanUp();
+		
+		AnimatorManager::CleanUp();
 
 		delete m_Renderer2D;
 		delete m_Renderer3D;
@@ -180,7 +186,7 @@ namespace Wiwa
 			// Clear main window
 			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+			SceneManager::ModuleInit();
 			//render skybox basically
 			m_Renderer3D->PreUpdate();
 
