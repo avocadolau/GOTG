@@ -127,7 +127,7 @@ namespace Wiwa
 	void BossUltronSecondDashState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)
 	{
 		std::string wallStr = "WALL";
-		if (wallStr == body2->selfTagStr)
+		if (body1->id == enemy->GetEntity() && wallStr == body2->selfTagStr)
 		{
 			m_CollisionWall = true;
 		}
