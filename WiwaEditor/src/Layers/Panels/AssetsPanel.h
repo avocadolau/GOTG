@@ -43,6 +43,10 @@ private:
 	ImTextureID m_PrefabIcon;
 	ImTextureID m_SceneIcon;
 	ImTextureID m_GuiIcon;
+	ImTextureID m_AnimationIcon;
+	ImTextureID m_AnimatorIcon;
+	ImTextureID m_SkeletonIcon;
+	ImTextureID m_MeshIcon;
 	 
 	std::filesystem::path m_CurrentPath;
 	std::filesystem::directory_entry m_SelectedEntry;
