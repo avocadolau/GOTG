@@ -15,6 +15,8 @@
 #include "systems/ai/NavMeshLoadingSystem.h"
 #include "systems/ai/NavAgentSystem.h"
 
+#include "systems/OzzAnimationSystem.h"
+
 // Game systems
 #include "systems/game/wave/WaveSystem.h"
 #include "systems/game/wave/WaveSpawnerSystem.h"

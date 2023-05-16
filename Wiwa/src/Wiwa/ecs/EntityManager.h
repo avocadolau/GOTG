@@ -32,6 +32,10 @@ namespace Wiwa
 			ComponentId c_id;
 			size_t c_index;
 			size_t c_size;
+
+			operator bool() const {
+				return c_id != WI_INVALID_INDEX;
+			}
 		};
 	private:
 		struct componentData
