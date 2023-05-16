@@ -24,7 +24,7 @@ namespace Wiwa
 		playerDistance = glm::vec3(0.0f);
 		interpolatedDashDistance = glm::vec3(0.0f);
 
-		m_PreSmashMarkPath = "assets\\Enemy\\RainProjectile\\ThunderMark_01.wiprefab";
+		m_PreSmashMarkPath = "assets/vfx/prefabs/vfx_finals/Smash/p_boss_smash_01_marker.wiprefab";
 	}
 
 	BossUltronDashState::~BossUltronDashState()
