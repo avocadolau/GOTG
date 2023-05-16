@@ -93,13 +93,40 @@ void OzzAnimationPanel::DrawBody()
 		return;
 	}
 
-	ImGui::Text("Animator file: %s", m_ActiveAnimatorPath.c_str());
+	const char* animator_path = "Not saved.";
+
+	if (m_ActiveAnimatorPath != "") {
+		animator_path = m_ActiveAnimatorPath.c_str();
+	}
+
+	ImGui::Text("Animator file: %s", animator_path);
 
 	if (ImGui::BeginTable("##anim_table", 2, ImGuiTableFlags_Resizable)) {
 		ImGui::TableNextColumn();
 
 		DrawMeshContainer();
 		DrawSkeletonContainer();
+
+		bool blend = m_ActiveAnimator->getBlendOnTransition();
+
+		if (ImGui::Checkbox("Blend on transition", &blend)) {
+			m_ActiveAnimator->setBlendOnTransition(blend);
+		}
+
+		float transtime = m_ActiveAnimator->getTransitionTime();
+
+		if (blend) {
+			
+			if (ImGui::InputFloat("Transition time", &transtime)) {
+				m_ActiveAnimator->setTransitionTime(transtime);
+			}
+		}
+		else {
+			ImGui::BeginDisabled();
+			ImGui::InputFloat("Transition time", &transtime);
+			ImGui::EndDisabled();
+		}
+
 		DrawAnimations();
 
 		ImGui::TableNextColumn();
@@ -154,9 +181,10 @@ void OzzAnimationPanel::DrawMeshContainer()
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".ozz")
+			if (p.extension() == ".mesh")
 			{
-				bool loaded = m_ActiveAnimator->LoadMesh(p.string());
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				bool loaded = m_ActiveAnimator->LoadMesh(libpath);
 
 				if (loaded) {
 					WI_INFO("Loaded ozz mesh {} successfully.", p.string().c_str());
@@ -193,9 +221,10 @@ void OzzAnimationPanel::DrawSkeletonContainer()
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".ozz")
+			if (p.extension() == ".skeleton")
 			{
-				bool loaded = m_ActiveAnimator->LoadSkeleton(p.string());
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				bool loaded = m_ActiveAnimator->LoadSkeleton(libpath);
 
 				if (loaded) {
 					WI_INFO("Loaded ozz skeleton {} successfully.", p.string().c_str());
@@ -310,6 +339,12 @@ void OzzAnimationPanel::DrawAnimations()
 					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Valid") :
 					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid");
 
+				float playback_speed = animation->getPlaybackSpeed();
+
+				if (ImGui::InputFloat("Playback speed", &playback_speed)) {
+					animation->setPlaybackSpeed(playback_speed);
+				}
+
 				switch (a_type) {
 					case Wiwa::AnimationType::AT_PARTIAL_BLEND:
 						DrawPartialBlendingAnimation((Wiwa::OzzAnimationPartialBlending*)animation);
@@ -321,6 +356,9 @@ void OzzAnimationPanel::DrawAnimations()
 						break;
 				}
 
+				if (ImGui::Button("Play")) {
+					m_ActiveAnimator->PlayAnimation(i);
+				}
 				if (ImGui::Button("Delete")) {
 					m_ActiveAnimator->RemoveAnimationAt(i);
 				}
@@ -336,16 +374,32 @@ void OzzAnimationPanel::DrawAnimations()
 void OzzAnimationPanel::DrawPartialBlendingAnimation(Wiwa::OzzAnimationPartialBlending* partial_animation)
 {
 	// Upper body root
-	static int ubr = partial_animation->GetUpperBodyRoot();
-	static int prevubr = ubr;
+	static int ubr = 0;
+	static int prevubr = 0;
 
-	ImGui::InputInt("Upper body root", &ubr);
+	ubr = partial_animation->GetUpperBodyRoot();
+	prevubr = ubr;
+
+	ozz::span<const char* const> bone_names = m_ActiveAnimator->getSkeletonBoneNames();
+
+	if (ImGui::BeginCombo("Upper body root", bone_names[ubr])) {
+		for (int n = 0; n < bone_names.size(); n++)
+		{
+			bool is_selected = (ubr == n); // You can store your selection however you want, outside or inside your objects
+			if (ImGui::Selectable(bone_names[n], is_selected))
+			{
+				ubr = n;
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+			}
+		}
+
+		ImGui::EndCombo();
+	}
 
 	if (ubr != prevubr) {
 		partial_animation->SetUpperBodyRoot(ubr);
 	}
-
-	prevubr = ubr;
 
 	// Lower body animation
 	const char* lower = "No lower animation";
@@ -356,7 +410,6 @@ void OzzAnimationPanel::DrawPartialBlendingAnimation(Wiwa::OzzAnimationPartialBl
 
 	ImGui::Text("Lower body animation");
 	ImGui::PushID("lower_body");
-
 	AssetContainer(lower);
 	if (ImGui::BeginDragDropTarget())
 	{
@@ -366,9 +419,10 @@ void OzzAnimationPanel::DrawPartialBlendingAnimation(Wiwa::OzzAnimationPartialBl
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".ozz")
+			if (p.extension() == ".anim")
 			{
-				partial_animation->LoadLowerAnimation(p.string().c_str());
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				partial_animation->LoadLowerAnimation(libpath.c_str());
 			}
 		}
 
@@ -394,9 +448,10 @@ void OzzAnimationPanel::DrawPartialBlendingAnimation(Wiwa::OzzAnimationPartialBl
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".ozz")
+			if (p.extension() == ".anim")
 			{
-				partial_animation->LoadUpperAnimation(p.string().c_str());
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				partial_animation->LoadUpperAnimation(libpath.c_str());
 			}
 		}
 
@@ -424,9 +479,10 @@ void OzzAnimationPanel::DrawSimpleAnimation(Wiwa::OzzAnimationSimple* simple_ani
 			std::wstring ws(path);
 			std::string pathS(ws.begin(), ws.end());
 			std::filesystem::path p = pathS.c_str();
-			if (p.extension() == ".ozz")
+			if (p.extension() == ".anim")
 			{
-				simple_animation->LoadAnimation(p.string().c_str());
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				simple_animation->LoadAnimation(libpath.c_str());
 			}
 		}
 

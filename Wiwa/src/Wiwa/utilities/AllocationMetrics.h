@@ -4,9 +4,9 @@
 #pragma warning(disable : 4595)
 namespace Wiwa {
 	// Allocation metrics
-	struct WI_API AllocationMetrics {
-		static size_t allocation_count;
-		static size_t bytes_allocated;
+	namespace AllocationMetrics {
+		static size_t allocation_count = 0;
+		static size_t bytes_allocated = 0;
 	};
 }
 

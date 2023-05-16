@@ -31,6 +31,10 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	ResourceId prefabId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/prefab_icon.png");
 	ResourceId sceneId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/scene_icon.png");
 	ResourceId guiId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/canvas_icon.png");
+	ResourceId animatorId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/animator_icon.png");
+	ResourceId animationId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/animation_icon.png");
+	ResourceId skeletonId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/skeleton_icon.png");
+	ResourceId meshId = Wiwa::Resources::LoadNative<Wiwa::Image>("resources/icons/mesh_icon.png");
 
 	m_FolderIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(folderId)->GetTextureId();
 	m_FileIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(fileId)->GetTextureId();
@@ -41,6 +45,10 @@ AssetsPanel::AssetsPanel(EditorLayer* instance)
 	m_PrefabIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(prefabId)->GetTextureId();
 	m_SceneIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(sceneId)->GetTextureId();
 	m_GuiIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(guiId)->GetTextureId();
+	m_AnimatorIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(animatorId)->GetTextureId();
+	m_AnimationIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(animationId)->GetTextureId();
+	m_SkeletonIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(skeletonId)->GetTextureId();
+	m_MeshIcon = (ImTextureID)(intptr_t)Wiwa::Resources::GetResourceById<Wiwa::Image>(meshId)->GetTextureId();
 
 	if (!std::filesystem::exists(s_AssetsPath))
 	{
@@ -316,6 +324,30 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		std::filesystem::create_directories(rp);
 		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
+	else if (path.extension() == ".skeleton") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".mesh") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".anim") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
+	else if (path.extension() == ".ozzanimator") {
+		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
+		std::filesystem::path rp = rpath.remove_filename();
+		std::filesystem::create_directories(rp);
+		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
+	}
 }
 
 void AssetsPanel::Draw()
@@ -389,7 +421,16 @@ void AssetsPanel::Draw()
 					texID = m_SceneIcon;
 				else if (directoryEntry.path().extension() == ".wiGUI")
 					texID = m_GuiIcon;
-				
+				else if (directoryEntry.path().extension() == ".skeleton")
+					texID = m_SkeletonIcon;
+				else if (directoryEntry.path().extension() == ".anim")
+					texID = m_AnimationIcon;
+				else if (directoryEntry.path().extension() == ".wiozzanimator")
+					texID = m_AnimatorIcon;
+				else if (directoryEntry.path().extension() == ".mesh")
+					texID = m_MeshIcon;
+				else if (directoryEntry.path().extension() == ".fbxozz")
+					texID = m_ModelIcon;
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 				if (ImGui::ImageButton(texID, { thumbnailSize, thumbnailSize }))
 				{

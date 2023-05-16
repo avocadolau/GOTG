@@ -33,6 +33,7 @@ IncludeDirs["Wwise"] = "%{wks.location}/../../Wiwa/vendor/Wwise/include"
 IncludeDirs["bullet"] = "%{wks.location}/../../Wiwa/vendor/bullet/include"
 IncludeDirs["OpenCV"] = "%{wks.location}/../../Wiwa/vendor/opencv-4.7.0/include"
 IncludeDirs["recastnavigation"] = "%{wks.location}/../../Wiwa/vendor/recastnavigation/include"
+IncludeDirs["ozz"] = "%{wks.location}/../../Wiwa/vendor/ozz/include"
 
 project "WiwaGameAssembly"
 	kind "SharedLib"
@@ -61,7 +62,8 @@ project "WiwaGameAssembly"
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.bullet}",
 		"%{IncludeDirs.OpenCV}",
-		"%{IncludeDirs.recastnavigation}"
+		"%{IncludeDirs.recastnavigation}",
+		"%{IncludeDirs.ozz}"
 	}
 
 	links

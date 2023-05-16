@@ -73,4 +73,18 @@ namespace Wiwa {
 
 		return true;
 	}
+
+	void OzzAnimationSimple::setTimeRatio(float time_ratio)
+	{
+		controller_.set_time_ratio(time_ratio);
+	}
+	float OzzAnimationSimple::getTimeRatio()
+	{
+		return controller_.time_ratio();
+	}
+
+	void OzzAnimationSimple::OnPlaybackSpeedChange()
+	{
+		controller_.set_playback_speed(m_PlaybackSpeed);
+	}
 }

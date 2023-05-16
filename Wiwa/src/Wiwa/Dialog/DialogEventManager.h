@@ -42,6 +42,10 @@ namespace Wiwa
 		// Called before quitting
 		bool CleanUp();
 
+		void UatuReward(int optionNumber);
+		void AronReward(int optionNumber);
+		void UlanaReward(int optionNumber);
+
 	public:
 
 		Wiwa::Renderer2D::InstanceData choice1Opt1ImgID;

@@ -75,16 +75,16 @@ Wiwa::Skybox::Skybox()
 
 Wiwa::Skybox::~Skybox()
 {
-    glDeleteBuffers(1, &VBO);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteTextures(1, &m_TextureID);
+    GL(DeleteBuffers(1, &VBO));
+    GL(DeleteVertexArrays(1, &VAO));
+    GL(DeleteTextures(1, &m_TextureID));
 }
 
 void Wiwa::Skybox::LoadCubemap(const std::vector<const char*>& faces)
 {
     unsigned int textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+    GL(GenTextures(1, &textureID));
+    GL(BindTexture(GL_TEXTURE_CUBE_MAP, textureID));
 
     int width, height, nrChannels;
     for (unsigned int i = 0; i < faces.size(); i++)
@@ -92,9 +92,9 @@ void Wiwa::Skybox::LoadCubemap(const std::vector<const char*>& faces)
         unsigned char* data = stbi_load(faces[i], &width, &height, &nrChannels, STBI_rgb_alpha);
         if (data)
         {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+            GL(TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data
-            );
+            ));
             stbi_image_free(data);
         }
         else
@@ -103,20 +103,20 @@ void Wiwa::Skybox::LoadCubemap(const std::vector<const char*>& faces)
             stbi_image_free(data);
         }
     }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    GL(TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GL(TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    GL(TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    GL(TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    GL(TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
 
     m_TextureID = textureID;
 }
 
 void Wiwa::Skybox::Render()
 {
-    glBindVertexArray(VAO);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    GL(BindVertexArray(VAO));
+    GL(ActiveTexture(GL_TEXTURE0));
+    GL(BindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID));
+    GL(DrawArrays(GL_TRIANGLES, 0, 36));
+    GL(BindVertexArray(0));
 }

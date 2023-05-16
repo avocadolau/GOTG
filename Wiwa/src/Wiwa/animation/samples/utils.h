@@ -28,6 +28,8 @@
 #ifndef OZZ_SAMPLES_FRAMEWORK_UTILS_H_
 #define OZZ_SAMPLES_FRAMEWORK_UTILS_H_
 
+#include <Wiwa/utilities/functions/Action.h>
+
 #include "ozz/base/containers/vector.h"
 #include "ozz/base/platform.h"
 #include "ozz/base/span.h"
@@ -98,6 +100,13 @@ class PlaybackController {
   void Reset();
 
  private:
+     struct AnimKeyEvent {
+         float time;
+         Action<> action;
+     };
+
+     std::vector<AnimKeyEvent> key_events_;
+     
   // Current animation time ratio, in the unit interval [0,1], where 0 is the
   // beginning of the animation, 1 is the end.
   float time_ratio_;

@@ -36,11 +36,112 @@ namespace Wiwa {
 
 		return index;
 	}
+
+	bool OzzAnimator::_update(float _dt)
+	{
+		AnimationData& a_data = m_AnimationList[m_ActiveAnimationId];
+
+		Wiwa::OzzAnimation* animation = a_data.animation;
+
+		if (!animation->Update(_dt)) return false;
+
+		ozz::vector<ozz::math::SoaTransform>& locals = animation->getLocals();
+
+		// Converts from local space to model space matrices.
+		// Gets the output of the blending stage, and converts it to model space.
+
+		// Setup local-to-model conversion job.
+		ozz::animation::LocalToModelJob ltm_job;
+		ltm_job.skeleton = &m_Skeleton;
+		ltm_job.input = make_span(locals);
+		ltm_job.output = make_span(models_);
+
+		// Run ltm job.
+		if (!ltm_job.Run()) {
+			return false;
+		}
+
+		// Build skinning matrices
+		for (size_t i = 0; i < m_Mesh.joint_remaps.size(); ++i) {
+			skinning_matrices_[i] =
+				models_[m_Mesh.joint_remaps[i]] * m_Mesh.inverse_bind_poses[i];
+		}
+
+		return true;
+	}
+	bool OzzAnimator::_update_blend(float _dt)
+	{
+		float weight_ratio = m_TransitionTimer / m_TransitionTime;
+
+		AnimationData& a_data = m_AnimationList[m_ActiveAnimationId];
+		AnimationData& pa_data = m_AnimationList[m_PrevAnimationId];
+
+		Wiwa::OzzAnimation* animation = a_data.animation;
+		Wiwa::OzzAnimation* prevanimation = pa_data.animation;
+
+		if (!animation->Update(_dt)) return false;
+		if (!prevanimation->Update(_dt)) return false;
+
+		ozz::vector<ozz::math::SoaTransform>& locals = animation->getLocals();
+		ozz::vector<ozz::math::SoaTransform>& prevlocals = prevanimation->getLocals();
+
+		// Prepares blending layers.
+		ozz::animation::BlendingJob::Layer layers[2];
+		layers[0].transform = make_span(locals);
+		layers[0].weight = weight_ratio;
+
+		layers[1].transform = make_span(prevlocals);
+		layers[1].weight = 1.0f - weight_ratio;
+
+		// Setups blending job.
+		ozz::animation::BlendingJob blend_job;
+		blend_job.threshold = m_BlendThreshold;
+		blend_job.layers = layers;
+		blend_job.rest_pose = m_Skeleton.joint_rest_poses();
+		blend_job.output = make_span(blended_locals_);
+
+		// Blends.
+		if (!blend_job.Run()) {
+			return false;
+		}
+
+		// Setup local-to-model conversion job.
+		ozz::animation::LocalToModelJob ltm_job;
+		ltm_job.skeleton = &m_Skeleton;
+		ltm_job.input = make_span(blended_locals_);
+		ltm_job.output = make_span(models_);
+
+		// Run ltm job.
+		if (!ltm_job.Run()) {
+			return false;
+		}
+
+		// Build skinning matrices
+		for (size_t i = 0; i < m_Mesh.joint_remaps.size(); ++i) {
+			skinning_matrices_[i] =
+				models_[m_Mesh.joint_remaps[i]] * m_Mesh.inverse_bind_poses[i];
+		}
+
+		m_TransitionTimer += _dt;
+
+		if (m_TransitionTimer >= m_TransitionTime) {
+			m_UpdateState = US_UPDATE;
+			m_TransitionTimer = 0.0f;
+		}
+
+		return true;
+	}
+
 	OzzAnimator::OzzAnimator() :
 		m_ActiveAnimationId(WI_INVALID_INDEX),
-		m_ActiveAnimation(nullptr),
+		m_PrevAnimationId(WI_INVALID_INDEX),
 		m_LoadedMesh(false),
-		m_LoadedSkeleton(false)
+		m_LoadedSkeleton(false),
+		m_BlendOnTransition(true),
+		m_BlendThreshold(ozz::animation::BlendingJob().threshold),
+		m_TransitionTime(1.0f),
+		m_TransitionTimer(0.0f),
+		m_UpdateState(US_UPDATE)
 	{
 		
 	}
@@ -54,6 +155,13 @@ namespace Wiwa {
 
 			delete anim;
 		}
+	}
+
+	ozz::span<const char* const> OzzAnimator::getSkeletonBoneNames()
+	{
+		if (!m_LoadedSkeleton) return ozz::span<const char* const>();
+
+		return m_Skeleton.joint_names();
 	}
 
 	bool OzzAnimator::LoadMesh(const std::string& path) {
@@ -85,7 +193,11 @@ namespace Wiwa {
 
 			// Allocates runtime buffers.
 			const int num_joints = m_Skeleton.num_joints();
+			const int num_soa_joints = m_Skeleton.num_soa_joints();
+
 			models_.resize(num_joints);
+			// Allocates local space runtime buffers of blended data.
+			blended_locals_.resize(num_soa_joints);
 		}
 
 		return m_LoadedSkeleton;
@@ -147,6 +259,11 @@ namespace Wiwa {
 		delete a_data.animation;
 
 		a_data.animation = nullptr;
+
+		if (m_ActiveAnimationId == index) {
+			m_ActiveAnimationId = WI_INVALID_INDEX;
+			m_ActiveAnimationName = "";
+		}
 	}
 
 	bool OzzAnimator::HasAnimation(const std::string& name)
@@ -154,29 +271,37 @@ namespace Wiwa {
 		return m_AnimationsIndex.find(name) != m_AnimationsIndex.end();
 	}
 
-	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(const std::string& name)
+	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(const std::string& name, float time_ratio)
 	{
-		std::unordered_map<std::string, int>::iterator it = m_AnimationsIndex.find(name);
+		std::unordered_map<std::string, size_t>::iterator it = m_AnimationsIndex.find(name);
 		
 		if (it != m_AnimationsIndex.end()) {
-			m_ActiveAnimationName = it->first;
-			m_ActiveAnimationId = it->second;
-			m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
-
-			return m_ActiveAnimation;
+			return PlayAnimation(it->second, time_ratio);
 		}
 
 		return nullptr;
 	}
 
-	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(size_t anim_id)
+	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(size_t anim_id, float time_ratio)
 	{
 		if (anim_id >= 0 && anim_id < m_AnimationList.size()) {
-			m_ActiveAnimationId = anim_id;
-			m_ActiveAnimationName = m_AnimationList[anim_id].name;
-			m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
+			AnimationData& a_data = m_AnimationList[anim_id];
 
-			return m_ActiveAnimation;
+			if (a_data.animation->getStatus() == OzzAnimation::Status::VALID) {
+				if (m_ActiveAnimationId != WI_INVALID_INDEX) {
+					if (m_BlendOnTransition) {
+						m_UpdateState = US_BLEND;
+						m_PrevAnimationId = m_ActiveAnimationId;
+					}
+				}
+
+				m_ActiveAnimationId = anim_id;
+				m_ActiveAnimationName = a_data.name;
+
+				return &m_AnimationList[m_ActiveAnimationId];
+			}
+
+			return nullptr;
 		}
 
 		return nullptr;
@@ -189,31 +314,16 @@ namespace Wiwa {
 
 	bool OzzAnimator::Update(float _dt)
 	{
-		if (m_ActiveAnimation) {
-			Wiwa::OzzAnimation* animation = m_ActiveAnimation->animation;
-
-			if (!animation->Update(_dt)) return false;
-
-			ozz::vector<ozz::math::SoaTransform>& locals = animation->getLocals();
-
-			// Converts from local space to model space matrices.
-			// Gets the output of the blending stage, and converts it to model space.
-
-			// Setup local-to-model conversion job.
-			ozz::animation::LocalToModelJob ltm_job;
-			ltm_job.skeleton = &m_Skeleton;
-			ltm_job.input = make_span(locals);
-			ltm_job.output = make_span(models_);
-
-			// Run ltm job.
-			if (!ltm_job.Run()) {
-				return false;
-			}
-
-			// Build skinning matrices
-			for (size_t i = 0; i < m_Mesh.joint_remaps.size(); ++i) {
-				skinning_matrices_[i] =
-					models_[m_Mesh.joint_remaps[i]] * m_Mesh.inverse_bind_poses[i];
+		if (m_ActiveAnimationId != WI_INVALID_INDEX) {
+			switch (m_UpdateState) {
+				case US_UPDATE:
+					_update(_dt);
+					break;
+				case US_BLEND:
+					_update_blend(_dt);
+					break;
+				default:
+					break;
 			}
 		}
 
@@ -252,7 +362,9 @@ namespace Wiwa {
 		// Save skeleton mesh
 		animator_doc.AddMember("skeleton", animator->getSkeletonPath().c_str());
 
-		// Save animator skeleton
+		// Save blending settings
+		animator_doc.AddMember("transition_blend", animator->getBlendOnTransition());
+		animator_doc.AddMember("transition_time", animator->getTransitionTime());
 
 		// Save animation list
 		JSONValue animation_list = animator_doc.AddMemberArray("animation_list");
@@ -275,6 +387,7 @@ namespace Wiwa {
 			// Base data
 			anim_obj.AddMember("name", a_data.name.c_str());
 			anim_obj.AddMember("type", (int)a_type);
+			anim_obj.AddMember("playback_speed", anim->getPlaybackSpeed());
 
 			// Specific data
 			switch (a_type) {
@@ -320,6 +433,18 @@ namespace Wiwa {
 
 			if (!animator->LoadSkeleton(skeleton_file)) return animator;
 		}
+
+		if (animator_doc.HasMember("transition_blend")) {
+			bool transition_blend = animator_doc["transition_blend"].as_bool();
+
+			animator->setBlendOnTransition(transition_blend);
+		}
+
+		if (animator_doc.HasMember("transition_time")) {
+			float transition_time = animator_doc["transition_time"].as_float();
+
+			animator->setTransitionTime(transition_time);
+		}
 		
 		if (animator_doc.HasMember("animation_list")) {
 			// Get animation list
@@ -341,10 +466,13 @@ namespace Wiwa {
 				a_data.name = anim_obj["name"].as_string();
 				a_type = (AnimationType)anim_obj["type"].as_int();
 
+				OzzAnimation* animation = nullptr;
+
 				switch (a_type) {
 					case AT_PARTIAL_BLEND:{
 						size_t index = animator->CreatePartialAnimation(a_data.name);
-						OzzAnimationPartialBlending* partial_anim = (OzzAnimationPartialBlending*)animator->getAnimationAt(index).animation;
+						animation = animator->getAnimationAt(index).animation;
+						OzzAnimationPartialBlending* partial_anim = (OzzAnimationPartialBlending*)animation;
 
 						if (anim_obj.HasMember("lower_body_file")) {
 							const char* lower_body_file = anim_obj["lower_body_file"].as_string();
@@ -364,8 +492,8 @@ namespace Wiwa {
 					}break;
 					case AT_SIMPLE: {
 						size_t index = animator->CreateSimpleAnimation(a_data.name);
-
-						OzzAnimationSimple* simple_anim = (OzzAnimationSimple*)animator->getAnimationAt(index).animation;
+						animation = animator->getAnimationAt(index).animation;
+						OzzAnimationSimple* simple_anim = (OzzAnimationSimple*)animation;
 
 						if (anim_obj.HasMember("animation_file")) {
 							const char* anim_file = anim_obj["animation_file"].as_string();
@@ -375,6 +503,12 @@ namespace Wiwa {
 					}break;
 					default:
 						break;
+				}
+
+				if (anim_obj.HasMember("playback_speed")) {
+					float p_speed = anim_obj["playback_speed"].as_float();
+
+					animation->setPlaybackSpeed(p_speed);
 				}
 			}
 		}

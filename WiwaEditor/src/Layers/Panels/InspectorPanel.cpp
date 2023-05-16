@@ -1665,7 +1665,8 @@ void InspectorPanel::DrawOzzAnimatorCmp(byte* data)
 			std::filesystem::path p = pathS.c_str();
 			if (p.extension() == ".wiozzanimator")
 			{
-				strcpy_s(a_cmp->animator_path, p.string().c_str());
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				strcpy_s(a_cmp->animator_path, libpath.c_str());
 			}
 		}
 

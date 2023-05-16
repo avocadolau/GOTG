@@ -231,12 +231,12 @@ namespace Wiwa
 					if (selector == 0)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt1ImgID, { 4500, 4500 }, { 3000, 0, 1500, 1500 });
-
+						UatuReward(1);
 					}
 					else if (selector == 1)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 3000, 1500, 1500, 1500 });
-
+						UatuReward(2);
 					}
 
 					eventFinished = true;
@@ -380,17 +380,17 @@ namespace Wiwa
 					if (selector == 0)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt1ImgID, { 4500, 4500 }, { 3000, 0, 1500, 1500 });
-
+						AronReward(1);
 					}
 					else if (selector == 1)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt2ImgID, { 4500, 4500 }, { 3000, 1500, 1500, 1500 });
-
+						AronReward(2);
 					}
 					else if (selector == 2)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 4500, 4500 }, { 3000, 3000, 1500, 1500 });
-
+						AronReward(3);
 					}
 
 					eventFinished = true;
@@ -526,12 +526,12 @@ namespace Wiwa
 					if (selector == 0)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt1ImgID, { 4500, 4500 }, { 3000, 0, 1500, 1500 });
-
+						UlanaReward(1);
 					}
 					else if (selector == 1)
 					{
 						render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt2ImgID, { 4500, 4500 }, { 3000, 1500, 1500, 1500 });
-
+						UlanaReward(2);
 					}
 
 					eventFinished = true;
@@ -609,5 +609,57 @@ namespace Wiwa
 
 
 		return true;
+	}
+
+	void DialogEventManager::UatuReward(int optionNumber)
+	{
+		if (optionNumber == 1)
+		{
+
+		}
+		else if (optionNumber == 2)
+		{
+
+		}
+	}
+
+	void DialogEventManager::AronReward(int optionNumber)
+	{
+		int randomizerMaxValue = 0;
+		int randomizerResult = 0;
+
+		/*for (int y = 0; (y < MAX_ITEMS); y++)  // <-- Detect max number of available items
+		{
+			randomizerMaxValue++;
+		}*/
+
+		std::random_device rdev;
+		std::mt19937 rgen(rdev());
+		std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
+		randomizerResult = idist(rgen);
+		if (optionNumber == 1)
+		{
+			// items->Give(item->itemnumber = randomizerResult);
+		}
+		else if (optionNumber == 2)
+		{
+
+		}
+		else if (optionNumber == 3)
+		{
+
+		}
+	}
+
+	void DialogEventManager::UlanaReward(int optionNumber)
+	{
+		if (optionNumber == 1)
+		{
+
+		}
+		else if (optionNumber == 2)
+		{
+
+		}
 	}
 }
