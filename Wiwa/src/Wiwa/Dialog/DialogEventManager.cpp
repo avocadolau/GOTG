@@ -42,6 +42,18 @@ namespace Wiwa
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
+		ResourceId textID01 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png");
+		Image* choice1Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID01);
+
+		choice1Opt1ImgID = render.CreateInstancedQuadTex(m_Scene, choice1Opt1Img->GetTextureId(), choice1Opt1Img->GetSize(), { 500,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice1Opt1ImgID);
+
+		ResourceId textID02 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png");
+		Image* choice1Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID02);
+
+		choice1Opt2ImgID = render.CreateInstancedQuadTex(m_Scene, choice1Opt2Img->GetTextureId(), choice1Opt2Img->GetSize(), { 1000,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice1Opt2ImgID);
+
 
 		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
 		Image* choice2Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
@@ -60,6 +72,20 @@ namespace Wiwa
 
 		choice2Opt3ImgID = render.CreateInstancedQuadTex(m_Scene, choice2Opt3Img->GetTextureId(), choice2Opt3Img->GetSize(), { 1300,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		render.DisableInstance(m_Scene, choice2Opt3ImgID);
+
+
+		ResourceId textID11 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png");
+		Image* choice3Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID11);
+
+		choice3Opt1ImgID = render.CreateInstancedQuadTex(m_Scene, choice3Opt1Img->GetTextureId(), choice3Opt1Img->GetSize(), { 500,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice3Opt1ImgID);
+
+		ResourceId textID12 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png");
+		Image* choice3Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID12);
+
+		choice3Opt2ImgID = render.CreateInstancedQuadTex(m_Scene, choice3Opt2Img->GetTextureId(), choice3Opt2Img->GetSize(), { 1000,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+		render.DisableInstance(m_Scene, choice3Opt2ImgID);
+
 
 		eventStarted = false;
 		eventFinished = false;
@@ -105,7 +131,135 @@ namespace Wiwa
 
 			if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Uatu"))
 			{
-				
+				if (eventState == 0)
+				{
+					render.EnableInstance(m_Scene, choice1Opt1ImgID);
+					render.EnableInstance(m_Scene, choice1Opt2ImgID);
+
+					ImgPos1.x = 500;
+					ImgPos1.y = 1100;
+					ImgPos2.x = 1000;
+					ImgPos2.y = 1100;
+					eventStarted = true;
+
+					eventState = 1;
+				}
+
+				if (eventStarted == true)
+				{
+					startTimer1 += Time::GetDeltaTime();
+
+					/*
+						Example:
+
+						currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
+						currentTime++;
+					*/
+					if (startTimer1 <= 450)
+					{
+						ImgPos1.y = EaseBackOut(startTimer1, 1100, 250 - 1100, 450);
+					}
+					if (startTimer1 <= 550 && startTimer1 > 100)
+					{
+						ImgPos2.y = EaseBackOut(startTimer2, 1100, 250 - 1100, 450);
+						startTimer2 += Time::GetDeltaTime();
+					}
+
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice1Opt1ImgID, ImgPos1, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice1Opt2ImgID, ImgPos2, Wiwa::Renderer2D::Pivot::UPLEFT);
+
+					if (startTimer1 > 550)
+					{
+						eventStarted = false;
+					}
+
+				}
+
+				if (selector == 0)
+				{
+					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt1ImgID, { 4500, 4500 }, { 1500, 0, 1500, 1500 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 0, 1500, 1500, 1500 });
+				}
+				else if (selector == 1)
+				{
+					render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt1ImgID, { 4500, 4500 }, { 0, 0, 1500, 1500 });
+					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
+				}
+
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250) // Gamepad DPad reversed?
+				{
+					keyPressTimer = 0;
+
+					selector++;
+
+					if (selector >= 2) selector = 0;
+				}
+
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250) // Gamepad DPad reversed? | GamepadDPadRight does not work?
+				{
+					keyPressTimer = 0;
+
+					selector--;
+
+					if (selector < 0) selector = 1;
+				}
+
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)))
+				{
+					selected = true;
+
+					if (selector == 0)
+					{
+						render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt1ImgID, { 4500, 4500 }, { 3000, 0, 1500, 1500 });
+
+					}
+					else if (selector == 1)
+					{
+						render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 3000, 1500, 1500, 1500 });
+
+					}
+
+					eventFinished = true;
+				}
+
+				if (eventFinished == true)
+				{
+					endTimer1 += Time::GetDeltaTime();
+
+					/*
+						Example:
+
+						currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
+						currentTime++;
+					*/
+					if (endTimer1 <= 450)
+					{
+						ImgPos1.y = EaseBackIn(endTimer1, 250, 1100 - 250, 450);
+					}
+					if (endTimer1 <= 550 && endTimer1 > 100)
+					{
+						ImgPos2.y = EaseBackIn(endTimer2, 250, 1100 - 250, 450);
+						endTimer2 += Time::GetDeltaTime();
+					}
+
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice1Opt1ImgID, ImgPos1, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice1Opt2ImgID, ImgPos2, Wiwa::Renderer2D::Pivot::UPLEFT);
+
+					if (endTimer1 > 550)
+					{
+						ImgPos1.x = 500;
+						ImgPos1.y = 1100;
+						ImgPos2.x = 1000;
+						ImgPos2.y = 1100;
+
+						render.DisableInstance(m_Scene, choice1Opt1ImgID);
+						render.DisableInstance(m_Scene, choice1Opt2ImgID);
+
+						eventState = 2;
+
+						eventFinished = false;
+					}
+				}
 			}
 			else if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Aron"))
 			{
@@ -272,7 +426,135 @@ namespace Wiwa
 			}
 			else if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Ulana"))
 			{
+				if (eventState == 0)
+				{
+					render.EnableInstance(m_Scene, choice3Opt1ImgID);
+					render.EnableInstance(m_Scene, choice3Opt2ImgID);
 
+					ImgPos1.x = 500;
+					ImgPos1.y = 1100;
+					ImgPos2.x = 1000;
+					ImgPos2.y = 1100;
+					eventStarted = true;
+
+					eventState = 1;
+				}
+
+				if (eventStarted == true)
+				{
+					startTimer1 += Time::GetDeltaTime();
+
+					/*
+						Example:
+
+						currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
+						currentTime++;
+					*/
+					if (startTimer1 <= 450)
+					{
+						ImgPos1.y = EaseBackOut(startTimer1, 1100, 250 - 1100, 450);
+					}
+					if (startTimer1 <= 550 && startTimer1 > 100)
+					{
+						ImgPos2.y = EaseBackOut(startTimer2, 1100, 250 - 1100, 450);
+						startTimer2 += Time::GetDeltaTime();
+					}
+
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice3Opt1ImgID, ImgPos1, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice3Opt2ImgID, ImgPos2, Wiwa::Renderer2D::Pivot::UPLEFT);
+
+					if (startTimer1 > 550)
+					{
+						eventStarted = false;
+					}
+
+				}
+
+				if (selector == 0)
+				{
+					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt1ImgID, { 4500, 4500 }, { 1500, 0, 1500, 1500 });
+					render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt2ImgID, { 4500, 4500 }, { 0, 1500, 1500, 1500 });
+				}
+				else if (selector == 1)
+				{
+					render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt1ImgID, { 4500, 4500 }, { 0, 0, 1500, 1500 });
+					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
+				}
+
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250) // Gamepad DPad reversed?
+				{
+					keyPressTimer = 0;
+
+					selector++;
+
+					if (selector >= 2) selector = 0;
+				}
+
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250) // Gamepad DPad reversed? | GamepadDPadRight does not work?
+				{
+					keyPressTimer = 0;
+
+					selector--;
+
+					if (selector < 0) selector = 1;
+				}
+
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)))
+				{
+					selected = true;
+
+					if (selector == 0)
+					{
+						render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt1ImgID, { 4500, 4500 }, { 3000, 0, 1500, 1500 });
+
+					}
+					else if (selector == 1)
+					{
+						render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt2ImgID, { 4500, 4500 }, { 3000, 1500, 1500, 1500 });
+
+					}
+
+					eventFinished = true;
+				}
+
+				if (eventFinished == true)
+				{
+					endTimer1 += Time::GetDeltaTime();
+
+					/*
+						Example:
+
+						currentPositionX = EaseSineIn(currentTime, startPositionX, finalPositionX - startPositionX, duration);
+						currentTime++;
+					*/
+					if (endTimer1 <= 450)
+					{
+						ImgPos1.y = EaseBackIn(endTimer1, 250, 1100 - 250, 450);
+					}
+					if (endTimer1 <= 550 && endTimer1 > 100)
+					{
+						ImgPos2.y = EaseBackIn(endTimer2, 250, 1100 - 250, 450);
+						endTimer2 += Time::GetDeltaTime();
+					}
+
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice3Opt1ImgID, ImgPos1, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render.UpdateInstancedQuadTexPosition(m_Scene, choice3Opt2ImgID, ImgPos2, Wiwa::Renderer2D::Pivot::UPLEFT);
+
+					if (endTimer1 > 550)
+					{
+						ImgPos1.x = 500;
+						ImgPos1.y = 1100;
+						ImgPos2.x = 1000;
+						ImgPos2.y = 1100;
+
+						render.DisableInstance(m_Scene, choice3Opt1ImgID);
+						render.DisableInstance(m_Scene, choice3Opt2ImgID);
+
+						eventState = 2;
+
+						eventFinished = false;
+					}
+				}
 			}
 			else
 			{

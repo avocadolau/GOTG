@@ -44,9 +44,15 @@ namespace Wiwa
 
 	public:
 
+		Wiwa::Renderer2D::InstanceData choice1Opt1ImgID;
+		Wiwa::Renderer2D::InstanceData choice1Opt2ImgID;
+
 		Wiwa::Renderer2D::InstanceData choice2Opt1ImgID;
 		Wiwa::Renderer2D::InstanceData choice2Opt2ImgID;
 		Wiwa::Renderer2D::InstanceData choice2Opt3ImgID;
+
+		Wiwa::Renderer2D::InstanceData choice3Opt1ImgID;
+		Wiwa::Renderer2D::InstanceData choice3Opt2ImgID;
 
 		int selector = 0;
 
