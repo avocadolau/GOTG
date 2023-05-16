@@ -9,8 +9,8 @@ namespace Wiwa {
 	}
 	BlurBuffer::~BlurBuffer()
 	{
-		glDeleteFramebuffers(1, &m_FBO);
-		glDeleteTextures(2, &m_ColorTexture);
+		GL(DeleteFramebuffers(1, &m_FBO));
+		GL(DeleteTextures(2, &m_ColorTexture));
 	}
 	void BlurBuffer::Init(int width, int height)
 	{

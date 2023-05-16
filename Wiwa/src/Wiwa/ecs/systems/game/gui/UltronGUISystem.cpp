@@ -88,6 +88,8 @@ bool Wiwa::UltronGUISystem::AnimationIntroBoss(Wiwa::GuiManager& gm)
 	{
 		return false;
 	}
+
+	return false;
 }
 
 void Wiwa::UltronGUISystem::OnCollisionEnter(Object* body1, Object* body2)

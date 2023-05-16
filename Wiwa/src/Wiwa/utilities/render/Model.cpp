@@ -621,89 +621,50 @@ namespace Wiwa {
 	{
 		if (is_root) return;
 		WI_CORE_INFO("Generating buffers...");
-		glGenBuffers(1, &vbo);
-		glGenBuffers(1, &ebo);
-		glGenVertexArrays(1, &vao);
-		//WI_CORE_INFO("Generating buffers DONE");
+		GL(GenBuffers(1, &vbo));
+		GL(GenBuffers(1, &ebo));
+		GL(GenVertexArrays(1, &vao));
+		
+		GL(BindVertexArray(vao));
 
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
 
-		//WI_CORE_INFO("Binding the vertex array ...");
-		glBindVertexArray(vao);
-		//WI_CORE_INFO("Binding the vertex array DONE");
+		GL(BindBuffer(GL_ARRAY_BUFFER, vbo));
+		GL(BufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(float), vbo_data.data(), GL_STATIC_DRAW));
+		
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo));
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER, ebo_data.size() * sizeof(int), ebo_data.data(), GL_STATIC_DRAW));
 
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
+		
+		GL(EnableVertexAttribArray(POSITION_DATA));
+		GL(VertexAttribPointer(POSITION_DATA, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
+		GL(EnableVertexAttribArray(NORMAL_DATA));
+		GL(VertexAttribPointer(NORMAL_DATA, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
+		GL(EnableVertexAttribArray(TEXTURE_DATA));
+		GL(VertexAttribPointer(TEXTURE_DATA, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));	
 
-		//WI_CORE_INFO("Binding the vertex buffer ...");
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vbo_data.size() * sizeof(float), vbo_data.data(), GL_STATIC_DRAW);
-		//WI_CORE_INFO("Binding the vertex buffer DONE");
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
-		//WI_CORE_INFO("Binding the index buffer ...");
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ebo_data.size() * sizeof(int), ebo_data.data(), GL_STATIC_DRAW);
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-		glEnableVertexAttribArray(POSITION_DATA);
-		glVertexAttribPointer(POSITION_DATA, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(NORMAL_DATA);
-		glVertexAttribPointer(NORMAL_DATA, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(TEXTURE_DATA);
-		glVertexAttribPointer(TEXTURE_DATA, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));	
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
-
-		//if there are bones add bone vertex data
+	
 		if (!bone_data.empty())
 		{
-			glGenBuffers(1, &bonevb);
-			glBindBuffer(GL_ARRAY_BUFFER, bonevb);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(VertexBoneData) * bone_data.size(), bone_data.data(), GL_STATIC_DRAW);
+			GL(GenBuffers(1, &bonevb));
+			GL(BindBuffer(GL_ARRAY_BUFFER, bonevb));
+			GL(BufferData(GL_ARRAY_BUFFER, sizeof(VertexBoneData) * bone_data.size(), bone_data.data(), GL_STATIC_DRAW));
 			
-			if (glGetError() != 0)
-			{
-				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-			}
+
 			//bone location
-			glEnableVertexAttribArray(BONE_DATA);
-			glVertexAttribIPointer(BONE_DATA, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+			GL(EnableVertexAttribArray(BONE_DATA));
+			GL(VertexAttribIPointer(BONE_DATA, MAX_NUM_BONES_PER_VERTEX, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0));
 			//weights location
-			glEnableVertexAttribArray(WEIGHT_DATA);
-			glVertexAttribPointer(WEIGHT_DATA, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),(const GLvoid*)16);
-			if (glGetError() != 0)
-			{
-				WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-			}
+			GL(EnableVertexAttribArray(WEIGHT_DATA));
+			GL(VertexAttribPointer(WEIGHT_DATA, MAX_NUM_BONES_PER_VERTEX, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData),(const GLvoid*)16));
+			
 			if(bonevb == -1)
 			{
 				WI_CORE_ERROR("Error generating bone vertex buffer");
 			}
 		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-
-		if (glGetError() != 0)
-		{
-			WI_CORE_ERROR("Check error {0}", glewGetErrorString(glGetError()));
-		}
+		GL(BindBuffer(GL_ARRAY_BUFFER, 0));
+		GL(BindVertexArray(0));
 
 
 		for (int i = 0; i < vbo_data.size(); i += 8)
@@ -728,23 +689,23 @@ namespace Wiwa {
 			boundingBox.getMax().x, boundingBox.getMin().y, boundingBox.getMin().z,
 		};
 
-		glGenBuffers(1, &bbvbo);
-		glGenBuffers(1, &bbebo);
-		glGenVertexArrays(1, &bbvao);
+		GL(GenBuffers(1, &bbvbo));
+		GL(GenBuffers(1, &bbebo));
+		GL(GenVertexArrays(1, &bbvao));
 
-		glBindVertexArray(bbvao);
-		glBindBuffer(GL_ARRAY_BUFFER, bbvbo);
-		glBufferData(GL_ARRAY_BUFFER, bbvbo_data.size() * sizeof(float), bbvbo_data.data(), GL_STATIC_DRAW);
+		GL(BindVertexArray(bbvao));
+		GL(BindBuffer(GL_ARRAY_BUFFER, bbvbo));
+		GL(BufferData(GL_ARRAY_BUFFER, bbvbo_data.size() * sizeof(float), bbvbo_data.data(), GL_STATIC_DRAW));
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bbebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, bbebo_data.size() * sizeof(int), bbebo_data.data(), GL_STATIC_DRAW);
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, bbebo));
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER, bbebo_data.size() * sizeof(int), bbebo_data.data(), GL_STATIC_DRAW));
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
+		GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+		GL(EnableVertexAttribArray(0));
 
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+		GL(BindBuffer(GL_ARRAY_BUFFER, 0));
+		GL(BindVertexArray(0));
 	}
 
 	Model::Model(const char* file)
@@ -793,13 +754,13 @@ namespace Wiwa {
 			delete model_hierarchy;
 		}
 
-		glDeleteBuffers(1, &vbo);
-		glDeleteBuffers(1, &ebo);
-		glDeleteBuffers(1, &bbvbo);
-		glDeleteBuffers(1, &bbvbo);
+		GL(DeleteBuffers(1, &vbo));
+		GL(DeleteBuffers(1, &ebo));
+		GL(DeleteBuffers(1, &bbvbo));
+		GL(DeleteBuffers(1, &bbvbo));
 
-		glDeleteVertexArrays(1, &vao);
-		glDeleteVertexArrays(1, &bbvao);
+		GL(DeleteVertexArrays(1, &vao));
+		GL(DeleteVertexArrays(1, &bbvao));
 	}
 
 	void Model::Render()
@@ -812,9 +773,9 @@ namespace Wiwa {
 			}
 		}
 		else {
-			glBindVertexArray(vao);
-			glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+			GL(BindVertexArray(vao));
+			GL(DrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, 0));
+			GL(BindVertexArray(0));
 		}
 	}
 
@@ -828,9 +789,9 @@ namespace Wiwa {
 			}
 		}
 		else {
-			glBindVertexArray(bbvao);
-			glDrawElements(GL_LINES, (GLsizei)bbebo_data.size(), GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+			GL(BindVertexArray(bbvao));
+			GL(DrawElements(GL_LINES, (GLsizei)bbebo_data.size(), GL_UNSIGNED_INT, 0));
+			GL(BindVertexArray(0));
 		}
 	}
 

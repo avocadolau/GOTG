@@ -356,6 +356,7 @@ void EditorLayer::MainMenuBar()
 				Wiwa::SceneManager::UnloadScene(m_EditorSceneId);
 
 				m_EditorSceneId = Wiwa::SceneManager::CreateScene();
+				Wiwa::SceneManager::getScene(m_EditorSceneId)->GetCameraManager().CreatePerspectiveCamera(0.1f, 1000.0f);
 				m_EditorScene = Wiwa::SceneManager::getScene(m_EditorSceneId);
 				m_OpenedScenePath = "";
 

@@ -23,9 +23,9 @@ namespace Wiwa {
 
 	RenderManager::~RenderManager()
 	{
-		glDeleteBuffers(1, &m_VBO);
-		glDeleteBuffers(1, &m_EBO);
-		glDeleteVertexArrays(1, &m_VAO);
+		GL(DeleteBuffers(1, &m_VBO));
+		GL(DeleteBuffers(1, &m_EBO));
+		GL(DeleteVertexArrays(1, &m_VAO));
 	}
 
 	void RenderManager::Init(int width, int height)
