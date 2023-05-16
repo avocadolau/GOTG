@@ -33,5 +33,8 @@ namespace Wiwa {
 		void OnSkeletonSet() override;
 
 		bool Update(float _dt) override;
+
+		void setTimeRatio(float time_ratio) override;
+		float getTimeRatio() override;
 	};
 }

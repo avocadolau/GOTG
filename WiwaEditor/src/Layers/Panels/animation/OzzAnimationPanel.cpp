@@ -100,6 +100,27 @@ void OzzAnimationPanel::DrawBody()
 
 		DrawMeshContainer();
 		DrawSkeletonContainer();
+
+		bool blend = m_ActiveAnimator->getBlendOnTransition();
+
+		if (ImGui::Checkbox("Blend on transition", &blend)) {
+			m_ActiveAnimator->setBlendOnTransition(blend);
+		}
+
+		float transtime = m_ActiveAnimator->getTransitionTime();
+
+		if (blend) {
+			
+			if (ImGui::InputFloat("Transition time", &transtime)) {
+				m_ActiveAnimator->setTransitionTime(transtime);
+			}
+		}
+		else {
+			ImGui::BeginDisabled();
+			ImGui::InputFloat("Transition time", &transtime);
+			ImGui::EndDisabled();
+		}
+
 		DrawAnimations();
 
 		ImGui::TableNextColumn();

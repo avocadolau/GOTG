@@ -217,4 +217,16 @@ namespace Wiwa {
         // Init joint weights
         SetupPerJointWeights();
     }
+
+    void OzzAnimationPartialBlending::setTimeRatio(float time_ratio)
+    {
+        for (int i = 0; i < kNumLayers; ++i) {
+            samplers_[i].controller.set_time_ratio(time_ratio);
+        }
+    }
+
+    float OzzAnimationPartialBlending::getTimeRatio()
+    {
+        return samplers_[kLowerBody].controller.time_ratio();
+    }
 }

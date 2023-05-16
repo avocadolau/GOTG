@@ -16,6 +16,19 @@ namespace Wiwa {
 			std::string name;
 		};
 	private:
+		enum UpdateState {
+			US_BLEND,
+			US_UPDATE,
+			US_LAST
+		};
+
+		UpdateState m_UpdateState;
+
+		bool m_BlendOnTransition;
+		float m_BlendThreshold;
+		float m_TransitionTime;
+		float m_TransitionTimer;
+
 		std::string m_MeshPath;
 		ozz::sample::Mesh m_Mesh;
 		bool m_LoadedMesh;
@@ -26,6 +39,7 @@ namespace Wiwa {
 
 		std::string m_ActiveAnimationName;
 		size_t m_ActiveAnimationId;
+		size_t m_PrevAnimationId;
 
 		// Buffer of model space matrices. These are computed by the local-to-model
 		// job after the blending stage.
@@ -35,12 +49,17 @@ namespace Wiwa {
 		// inverse bind pose with the model space matrix.
 		ozz::vector<ozz::math::Float4x4> skinning_matrices_;
 
+		// Buffer of local transforms which stores the blending result.
+		ozz::vector<ozz::math::SoaTransform> blended_locals_;
+
 		std::vector<AnimationData> m_AnimationList;
-		std::unordered_map<std::string, int> m_AnimationsIndex;
+		std::unordered_map<std::string, size_t> m_AnimationsIndex;
 
 		std::vector<size_t> m_RemovedAnimationsIndex;
 
 		size_t _create_anim_impl();
+		bool _update(float _dt);
+		bool _update_blend(float _dt);
 	public:
 		OzzAnimator();
 		~OzzAnimator();
@@ -63,8 +82,14 @@ namespace Wiwa {
 
 		bool HasAnimation(const std::string& name);
 
-		AnimationData* PlayAnimation(const std::string& name);
-		AnimationData* PlayAnimation(size_t anim_id);
+		void setBlendOnTransition(bool blend) { m_BlendOnTransition = blend; }
+		bool getBlendOnTransition() { return m_BlendOnTransition; }
+
+		void setTransitionTime(float time) { m_TransitionTime = time; };
+		float getTransitionTime() { return m_TransitionTime; }
+
+		AnimationData* PlayAnimation(const std::string& name, float time_ratio=0.0f);
+		AnimationData* PlayAnimation(size_t anim_id, float time_ratio=0.0f);
 
 		size_t getAnimationCount() { return m_AnimationList.size(); }
 

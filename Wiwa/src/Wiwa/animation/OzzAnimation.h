@@ -56,6 +56,9 @@ namespace Wiwa {
 
         virtual void OnSkeletonSet() = 0;
 
+        virtual void setTimeRatio(float time_ratio) = 0;
+        virtual float getTimeRatio() = 0;
+
         void SetSkeleton(ozz::animation::Skeleton* skeleton);
 
         Status getStatus() { return m_Status; }
