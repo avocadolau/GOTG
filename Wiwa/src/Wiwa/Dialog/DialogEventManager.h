@@ -53,8 +53,23 @@ namespace Wiwa
 		bool eventStarted = false;
 		bool eventFinished = false;
 
+		bool selected = false;
+
 		int eventState = 2; // 0 = started event, 1 = running event, 2 = finished event
 
 		int keyPressTimer = 0;
+
+		Vector2i ImgPos1 = { 0 }; //Will be controlled with the easings
+		Vector2i ImgPos2 = { 0 }; //Will be controlled with the easings
+		Vector2i ImgPos3 = { 0 }; //Will be controlled with the easings
+
+		int endTimer1 = 0;
+		int endTimer2 = 0;
+		int endTimer3 = 0;
+
+		int startTimer1 = 0;
+		int startTimer2 = 0;
+		int startTimer3 = 0;
+
 	};
 }
