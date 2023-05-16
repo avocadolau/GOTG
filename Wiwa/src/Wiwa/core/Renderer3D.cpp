@@ -215,7 +215,6 @@ namespace Wiwa
 		Shader* outlinedShader = Wiwa::Resources::GetResourceById<Shader>(outlinedShaderId);
 		outlinedShader->Compile("resources/shaders/light/toon_textured_outlined");
 		outlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
-		outlinedShader->addUniform("u_LayeredText", UniformType::Sampler2D);
 		outlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
 		outlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
 		outlinedShader->addUniform("u_ToonLevels", UniformType::Int);
@@ -225,7 +224,21 @@ namespace Wiwa
 		outlinedShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
 		outlinedShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
 		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured_outlined", outlinedShader);
-
+		//toon textured outlined cartoon
+		ResourceId outlinedCartoonShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/toon_textured_outlined_cartoon");
+		Shader* outlineCartoondShader = Wiwa::Resources::GetResourceById<Shader>(outlinedCartoonShaderId);
+		outlineCartoondShader->Compile("resources/shaders/light/toon_textured_outlined_cartoon");
+		outlineCartoondShader->addUniform("u_Texture", UniformType::Sampler2D);
+		outlineCartoondShader->addUniform("u_LayeredText", UniformType::Sampler2D);
+		outlineCartoondShader->addUniform("u_OutlineColor", UniformType::fVec4);
+		outlineCartoondShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		outlineCartoondShader->addUniform("u_ToonLevels", UniformType::Int);
+		outlineCartoondShader->addUniform("u_RimLightPower", UniformType::Float);
+		outlineCartoondShader->addUniform("u_SpecularValue", UniformType::Float);
+		outlineCartoondShader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		outlineCartoondShader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		outlineCartoondShader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/light/toon_textured_outlined_cartoon", outlineCartoondShader);
 
 		ResourceId basecolorShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/light/base_color");
 		Shader* basecolorShader = Wiwa::Resources::GetResourceById<Shader>(basecolorShaderId);
