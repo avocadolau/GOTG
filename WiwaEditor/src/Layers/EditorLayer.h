@@ -37,6 +37,8 @@
 #include "Panels/GameLogPanel.h"
 #include "Panels/InventoryPanel.h"
 #include "Panels/AIPanel.h"
+
+#include "Panels/animation/OzzAnimationPanel.h"
 #include "Panels/EnemyPanel.h"
 
 #include <Wiwa/scene/SceneManager.h>
@@ -93,6 +95,8 @@ private:
 	void LoadPanelConfig();
 	void SavePanelConfig();
 
+	void ImportToOzz(std::string& file);
+
 	void LoadCallback();
 	void SaveCallback();
 
@@ -139,6 +143,8 @@ private:
 	std::unique_ptr<Panel> m_GameLogPanel;
 	std::unique_ptr<Panel> m_InventoryPanel;
 	std::unique_ptr<Panel> m_AiPanel;
+	std::unique_ptr<Panel> m_OzzAnimationPanel;
+
 	std::unique_ptr<Panel> m_EnemyPanel;
 
 	std::vector<Panel *> m_Panels;

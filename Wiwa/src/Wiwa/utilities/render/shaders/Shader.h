@@ -45,7 +45,7 @@ namespace Wiwa {
 		void Delete();
 
 		bool getAllOk() { return m_AllOk; }
-		std::string* getFileData(const char* file);
+		static std::string* getFileData(const char* file);
 
 		//Old shader functions required for 2D renderer
 		unsigned int getUniformLocation(const char* uniform_name);

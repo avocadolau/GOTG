@@ -35,15 +35,16 @@ IncludeDirs["GLI"] = "%{wks.location}/Wiwa/vendor/gli/gli"
 IncludeDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/include"
 IncludeDirs["IconFontCppHeaders"] = "%{wks.location}/WiwaEditor/vendor/IconFontCppHeaders"
 IncludeDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/include"
+IncludeDirs["ozz"] = "%{wks.location}/Wiwa/vendor/ozz/include"
 IncludeDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/include"
 IncludeDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/include"
-
 
 LibraryDirs = {}
 LibraryDirs["Wwise"] = "%{wks.location}/Wiwa/vendor/Wwise/lib/x64_vc170/Debug(StaticCRT)/lib/"
 LibraryDirs["bullet"] = "%{wks.location}/Wiwa/vendor/bullet/lib/"
 LibraryDirs["recastnavigation"] = "%{wks.location}/Wiwa/vendor/recastnavigation/lib"
 LibraryDirs["OpenCV"] = "%{wks.location}/Wiwa/vendor/opencv-4.7.0/lib/"
+
 
 
 Library = {}
@@ -59,6 +60,10 @@ Library["bullet_linear_math_release"] = "%{LibraryDirs.bullet}/LinearMath_vs2010
 Library["bullet_collision_debug"] = "%{LibraryDirs.bullet}/BulletCollision_vs2010_x64_debug.lib"
 Library["bullet_dynamics_debug"] = "%{LibraryDirs.bullet}/BulletDynamics_vs2010_x64_debug.lib"
 Library["bullet_linear_math_debug"] = "%{LibraryDirs.bullet}/LinearMath_vs2010_x64_debug.lib"
+Library["WinSock"] = "Ws2_32.lib"
+Library["WinMM"] = "Winmm.lib"
+Library["Version"] = "Version.lib"
+Library["BCrypt"] = "Bcrypt.lib"
 Library["DebugUtils_debug"] = "%{LibraryDirs.recastnavigation}/debug/DebugUtils.lib"
 Library["DebugUtils_release"] = "%{LibraryDirs.recastnavigation}/release/DebugUtils.lib"
 Library["Detour_debug"] = "%{LibraryDirs.recastnavigation}/debug/Detour.lib"
@@ -107,6 +112,7 @@ group "Dependencies"
 	include "Wiwa/vendor/imgui"
 	include "Wiwa/vendor/Optick"
 	include "Wiwa/vendor/imguizmo"
+	include "Wiwa/vendor/ozz"
 group ""
 
 group "Core"

@@ -6,9 +6,9 @@
 
 namespace Wiwa {
 	RenderLayer RenderManager::m_RenderLayers[MAX_LAYERS];
-	FrameBuffer RenderManager::m_FrameBuffer;
-	Shader RenderManager::m_Shader;
-	Shader RenderManager::m_BlurShader;
+	FrameBuffer* RenderManager::m_FrameBuffer = nullptr;
+	Shader* RenderManager::m_Shader = nullptr;
+	Shader* RenderManager::m_BlurShader = nullptr;
 	uint32_t RenderManager::m_VAO;
 	uint32_t RenderManager::m_VBO;
 	uint32_t RenderManager::m_EBO;
@@ -23,9 +23,9 @@ namespace Wiwa {
 
 	RenderManager::~RenderManager()
 	{
-		glDeleteBuffers(1, &m_VBO);
-		glDeleteBuffers(1, &m_EBO);
-		glDeleteVertexArrays(1, &m_VAO);
+		GL(DeleteBuffers(1, &m_VBO));
+		GL(DeleteBuffers(1, &m_EBO));
+		GL(DeleteVertexArrays(1, &m_VAO));
 	}
 
 	void RenderManager::Init(int width, int height)
@@ -45,36 +45,40 @@ namespace Wiwa {
 		};
 
 		// Generate buffers
-		glGenVertexArrays(1, &m_VAO);
-		glGenBuffers(1, &m_VBO);
-		glGenBuffers(1, &m_EBO);
+		GL(GenVertexArrays(1, &m_VAO));
+		GL(GenBuffers(1, &m_VBO));
+		GL(GenBuffers(1, &m_EBO));
 
-		glBindVertexArray(m_VAO);
+		GL(BindVertexArray(m_VAO));
 
 		// Bind vertices
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		GL(BindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		GL(BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
 
 		// Bind indices
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW));
 
 		// Position attribute
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		GL(EnableVertexAttribArray(0));
+		GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
 
 		// Texture coords
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		GL(EnableVertexAttribArray(1));
+		GL(VertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))));
 
 		// Render objects
-		m_FrameBuffer.Init(width, height);
-		m_BlurShader.Init("resources/shaders/renderlayer/blur");
-		m_Shader.Init("resources/shaders/renderlayer/renderlayer");
+		m_FrameBuffer = new FrameBuffer();
+		m_BlurShader = new Shader();
+		m_Shader = new Shader();
 
-		m_OrthoLoc = m_Shader.getUniformLocation("u_Proj");
-		m_ViewLoc = m_Shader.getUniformLocation("u_View");
-		m_ModelLoc = m_Shader.getUniformLocation("u_Model");
+		m_FrameBuffer->Init(width, height);
+		m_BlurShader->Init("resources/shaders/renderlayer/blur");
+		m_Shader->Init("resources/shaders/renderlayer/renderlayer");
+
+		m_OrthoLoc = m_Shader->getUniformLocation("u_Proj");
+		m_ViewLoc = m_Shader->getUniformLocation("u_View");
+		m_ModelLoc = m_Shader->getUniformLocation("u_Model");
 
 
 
@@ -83,7 +87,7 @@ namespace Wiwa {
 			char Name[128];
 			memset(Name, 0, sizeof(Name));
 			snprintf(Name, sizeof(Name), "u_Bones[%d]", i);
-			m_BoneLocation[i] = m_Shader.getUniformLocation(Name);
+			m_BoneLocation[i] = m_Shader->getUniformLocation(Name);
 		}
 
 		// Init orthographic projection
@@ -101,63 +105,67 @@ namespace Wiwa {
 	{
 		OPTICK_EVENT("Renderer manager Update");
 		// Set viewport
-		glViewport(0, 0, m_FrameBuffer.getWidth(), m_FrameBuffer.getHeight());
+		GL(Viewport(0, 0, m_FrameBuffer->getWidth(), m_FrameBuffer->getHeight()));
 
 		// Bind framebuffer
-		m_FrameBuffer.Bind(false); // No clear so we clear without transparency
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		m_FrameBuffer->Bind(false); // No clear so we clear without transparency
+		GL(ClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+		GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 		// Bind shader
-		m_Shader.Bind();
+		m_Shader->Bind();
 
 		// Set MVP uniforms
-		m_Shader.setUniform(m_OrthoLoc, m_OrthoProj);
-		m_Shader.setUniform(m_ViewLoc, m_View);
-		m_Shader.setUniform(m_ModelLoc, m_Model);
+		m_Shader->setUniform(m_OrthoLoc, m_OrthoProj);
+		m_Shader->setUniform(m_ViewLoc, m_View);
+		m_Shader->setUniform(m_ModelLoc, m_Model);
 
 
 		// Bind VAO
-		glBindVertexArray(m_VAO);
+		GL(BindVertexArray(m_VAO));
 
 		for (int i = 0; i < MAX_LAYERS; i++) {
 			// Take cameras in reverse order for proper drawing order
 			Camera* cam = m_RenderLayers[MAX_LAYERS - i - 1].getCamera();
 			if (cam) {
-				 glBindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture());
+				GL(BindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture()));
 				// Draw elements
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+				GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 			}
 		}
 		
 		// Unbind shader and framebuffer
-		m_Shader.UnBind();
-		m_FrameBuffer.Unbind();
+		m_Shader->UnBind();
+		m_FrameBuffer->Unbind();
 
 		if (m_RenderOnMainWindow) {
 			uint32_t w = Wiwa::Application::Get().GetWindow().GetWidth();
 			uint32_t h = Wiwa::Application::Get().GetWindow().GetHeight();
-			glViewport(0, 0, w, h);
+			GL(Viewport(0, 0, w, h));
 
-			m_Shader.Bind();
+			m_Shader->Bind();
 
-			glBindTexture(GL_TEXTURE_2D, m_FrameBuffer.getColorBufferTexture());
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			GL(BindTexture(GL_TEXTURE_2D, m_FrameBuffer->getColorBufferTexture()));
+			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
-			m_Shader.UnBind();
+			m_Shader->UnBind();
 		}
 
-		glBindVertexArray(0);
+		GL(BindVertexArray(0));
 	}
 
 	void RenderManager::BindVAO()
 	{
-		 glBindVertexArray(m_VAO); 
+		GL(BindVertexArray(m_VAO));
 	}
 
 	void RenderManager::Destroy()
 	{
-		glDeleteVertexArrays(1, &m_VAO);
-		glDeleteBuffers(1, &m_VBO);
-		glDeleteBuffers(1, &m_EBO);
+		GL(DeleteVertexArrays(1, &m_VAO));
+		GL(DeleteBuffers(1, &m_VBO));
+		GL(DeleteBuffers(1, &m_EBO));
+
+		delete m_FrameBuffer;
+		delete m_Shader;
+		delete m_BlurShader;
 	}
 }

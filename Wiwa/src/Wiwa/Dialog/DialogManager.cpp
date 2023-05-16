@@ -65,25 +65,46 @@ namespace Wiwa
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png"))
+		{
+			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png");
+			Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-		ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png");
-		Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
+			continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render.DisableInstance(m_Scene, continueImgID);
+		}
+		else
+		{
+			WI_CRITICAL("UI_SpeechTriangle_01.png Does not exist");
+		}
+		
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png"))
+		{
+			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png");
+			Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
-		continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render.DisableInstance(m_Scene, continueImgID);
+			continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render.DisableInstance(m_Scene, continueImgID2);
+		}
+		else
+		{
+			WI_CRITICAL("UI_SpeechTriangle_02.png Does not exist");
+		}
+		
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_TalkButton01.png"))
+		{
+			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_TalkButton01.png");
+			Image* talkIndicatorImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
 
+			talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+			render.DisableInstance(m_Scene, talkIndicatorImgID);
+		}
+		else
+		{
+			WI_CRITICAL("UI_TalkButton01.png Does not exist");
+		}
 
-		ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png");
-		Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
-
-		continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render.DisableInstance(m_Scene, continueImgID2);
-
-		ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_TalkButton01.png");
-		Image* talkIndicatorImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
-
-		talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-		render.DisableInstance(m_Scene, talkIndicatorImgID);
+		
 
 		characterID = GameStateManager::s_CurrentCharacter;
 

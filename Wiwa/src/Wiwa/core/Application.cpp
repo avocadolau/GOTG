@@ -88,8 +88,9 @@ namespace Wiwa
 		WI_CORE_WARN("=======Initializing systems=======");
 		m_Renderer2D = new Renderer2D();
 		m_Renderer2D->Init();
-
+		
 		m_Renderer3D = new Renderer3D();
+		
 		m_Renderer3D->Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
@@ -151,7 +152,11 @@ namespace Wiwa
 	
 		Audio::Terminate();
 		GameStateManager::CleanUp();
+		
 		AnimatorManager::CleanUp();
+
+		delete m_Renderer2D;
+		delete m_Renderer3D;
 	}
 
 	void Application::Run()
@@ -160,6 +165,8 @@ namespace Wiwa
 		while (m_Running)
 		{
 			OPTICK_FRAME("Application Loop");
+
+			
 
 			if (FinishedImport)
 			{
@@ -184,7 +191,7 @@ namespace Wiwa
 			m_Renderer3D->PreUpdate();
 
 			// Update scene manager
-			SceneManager::ModuleUpdate();
+			SceneManager::ModuleUpdate();			
 
 			// Update audio
 			
@@ -229,6 +236,8 @@ namespace Wiwa
 			// Update main window
 			m_Window->OnUpdate();
 			Time::PostUpdate();
+
+			
 		}
 	}
 

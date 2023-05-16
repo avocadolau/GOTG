@@ -24,6 +24,7 @@ project "WiwaEditor"
 		"%{IncludeDirs.filewatch}",
 		"%{IncludeDirs.IconFontCppHeaders}",
 		"%{IncludeDirs.bullet}",
+		"%{IncludeDirs.ozz}",
 		"%{IncludeDirs.recastnavigation}",
 		"%{IncludeDirs.OpenCV}"
 	}
