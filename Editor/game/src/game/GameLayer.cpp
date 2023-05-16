@@ -174,6 +174,20 @@ void GameLayer::OnImGuiRender()
 
 		ImGui::Separator();
 
+		ImGui::Text("Current difficulty level: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentRunLevel);
+
+		ImGui::Text("Count of combat rooms: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentCombatRoomsCount);
+
+		ImGui::Text("Count of reward rooms: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetEnemyManager().m_CurrentRewardRoomCount);
+
+		ImGui::Separator();
+
 		ImGui::Separator();
 		ImGui::Text("Rooms to boss %i", Wiwa::GameStateManager::s_RoomsToBoss);
 		ImGui::Text("Rooms to shop %i", Wiwa::GameStateManager::s_RoomsToShop);
