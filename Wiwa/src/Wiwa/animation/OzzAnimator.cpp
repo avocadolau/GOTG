@@ -387,6 +387,7 @@ namespace Wiwa {
 			// Base data
 			anim_obj.AddMember("name", a_data.name.c_str());
 			anim_obj.AddMember("type", (int)a_type);
+			anim_obj.AddMember("playback_speed", anim->getPlaybackSpeed());
 
 			// Specific data
 			switch (a_type) {
@@ -465,10 +466,13 @@ namespace Wiwa {
 				a_data.name = anim_obj["name"].as_string();
 				a_type = (AnimationType)anim_obj["type"].as_int();
 
+				OzzAnimation* animation = nullptr;
+
 				switch (a_type) {
 					case AT_PARTIAL_BLEND:{
 						size_t index = animator->CreatePartialAnimation(a_data.name);
-						OzzAnimationPartialBlending* partial_anim = (OzzAnimationPartialBlending*)animator->getAnimationAt(index).animation;
+						animation = animator->getAnimationAt(index).animation;
+						OzzAnimationPartialBlending* partial_anim = (OzzAnimationPartialBlending*)animation;
 
 						if (anim_obj.HasMember("lower_body_file")) {
 							const char* lower_body_file = anim_obj["lower_body_file"].as_string();
@@ -488,8 +492,8 @@ namespace Wiwa {
 					}break;
 					case AT_SIMPLE: {
 						size_t index = animator->CreateSimpleAnimation(a_data.name);
-
-						OzzAnimationSimple* simple_anim = (OzzAnimationSimple*)animator->getAnimationAt(index).animation;
+						animation = animator->getAnimationAt(index).animation;
+						OzzAnimationSimple* simple_anim = (OzzAnimationSimple*)animation;
 
 						if (anim_obj.HasMember("animation_file")) {
 							const char* anim_file = anim_obj["animation_file"].as_string();
@@ -499,6 +503,12 @@ namespace Wiwa {
 					}break;
 					default:
 						break;
+				}
+
+				if (anim_obj.HasMember("playback_speed")) {
+					float p_speed = anim_obj["playback_speed"].as_float();
+
+					animation->setPlaybackSpeed(p_speed);
 				}
 			}
 		}

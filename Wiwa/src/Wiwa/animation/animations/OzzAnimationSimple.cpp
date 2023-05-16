@@ -82,4 +82,9 @@ namespace Wiwa {
 	{
 		return controller_.time_ratio();
 	}
+
+	void OzzAnimationSimple::OnPlaybackSpeedChange()
+	{
+		controller_.set_playback_speed(m_PlaybackSpeed);
+	}
 }

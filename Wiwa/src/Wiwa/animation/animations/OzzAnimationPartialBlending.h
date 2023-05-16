@@ -105,6 +105,8 @@ namespace Wiwa {
 		void setTimeRatio(float time_ratio) override;
 		float getTimeRatio() override;
 
+		void OnPlaybackSpeedChange() override;
+
 		ozz::vector<ozz::math::SoaTransform>& getLocals() override { return blended_locals_; }
 
 		const char* getLowerBodyFile() { return m_LowerBodyFile.c_str(); }

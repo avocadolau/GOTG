@@ -93,7 +93,13 @@ void OzzAnimationPanel::DrawBody()
 		return;
 	}
 
-	ImGui::Text("Animator file: %s", m_ActiveAnimatorPath.c_str());
+	const char* animator_path = "Not saved.";
+
+	if (m_ActiveAnimatorPath != "") {
+		animator_path = m_ActiveAnimatorPath.c_str();
+	}
+
+	ImGui::Text("Animator file: %s", animator_path);
 
 	if (ImGui::BeginTable("##anim_table", 2, ImGuiTableFlags_Resizable)) {
 		ImGui::TableNextColumn();
@@ -332,6 +338,12 @@ void OzzAnimationPanel::DrawAnimations()
 				a_status == Wiwa::OzzAnimation::Status::VALID ?
 					ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Valid") :
 					ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Invalid");
+
+				float playback_speed = animation->getPlaybackSpeed();
+
+				if (ImGui::InputFloat("Playback speed", &playback_speed)) {
+					animation->setPlaybackSpeed(playback_speed);
+				}
 
 				switch (a_type) {
 					case Wiwa::AnimationType::AT_PARTIAL_BLEND:

@@ -229,4 +229,11 @@ namespace Wiwa {
     {
         return samplers_[kLowerBody].controller.time_ratio();
     }
+
+    void OzzAnimationPartialBlending::OnPlaybackSpeedChange()
+    {
+        for (int i = 0; i < kNumLayers; ++i) {
+            samplers_[i].controller.set_playback_speed(m_PlaybackSpeed);
+        }
+    }
 }
