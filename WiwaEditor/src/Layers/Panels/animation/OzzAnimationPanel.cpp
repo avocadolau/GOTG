@@ -347,7 +347,22 @@ void OzzAnimationPanel::DrawPartialBlendingAnimation(Wiwa::OzzAnimationPartialBl
 	ubr = partial_animation->GetUpperBodyRoot();
 	prevubr = ubr;
 
-	ImGui::InputInt("Upper body root", &ubr);
+	ozz::span<const char* const> bone_names = m_ActiveAnimator->getSkeletonBoneNames();
+
+	if (ImGui::BeginCombo("Upper body root", bone_names[ubr])) {
+		for (int n = 0; n < bone_names.size(); n++)
+		{
+			bool is_selected = (ubr == n); // You can store your selection however you want, outside or inside your objects
+			if (ImGui::Selectable(bone_names[n], is_selected))
+			{
+				ubr = n;
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+			}
+		}
+
+		ImGui::EndCombo();
+	}
 
 	if (ubr != prevubr) {
 		partial_animation->SetUpperBodyRoot(ubr);

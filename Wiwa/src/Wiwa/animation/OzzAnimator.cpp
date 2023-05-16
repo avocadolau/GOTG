@@ -55,6 +55,13 @@ namespace Wiwa {
 		}
 	}
 
+	ozz::span<const char* const> OzzAnimator::getSkeletonBoneNames()
+	{
+		if (!m_LoadedSkeleton) return ozz::span<const char* const>();
+
+		return m_Skeleton.joint_names();
+	}
+
 	bool OzzAnimator::LoadMesh(const std::string& path) {
 		m_LoadedMesh = ozz::sample::LoadMesh(path.c_str(), &m_Mesh);
 
