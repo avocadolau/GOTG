@@ -218,6 +218,18 @@ namespace Wiwa {
         SetupPerJointWeights();
     }
 
+    void OzzAnimationPartialBlending::setUpperPlaybackSpeed(float playback_speed)
+    {
+        samplers_[kUpperBody].controller.set_playback_speed(playback_speed);
+    }
+
+    void OzzAnimationPartialBlending::setLowerPlaybackSpeed(float playback_speed)
+    {
+        samplers_[kLowerBody].controller.set_playback_speed(playback_speed);
+
+        m_PlaybackSpeed = playback_speed;
+    }
+
     void OzzAnimationPartialBlending::setTimeRatio(float time_ratio)
     {
         for (int i = 0; i < kNumLayers; ++i) {

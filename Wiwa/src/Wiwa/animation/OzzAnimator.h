@@ -64,47 +64,91 @@ namespace Wiwa {
 		OzzAnimator();
 		~OzzAnimator();
 
-		ozz::span<const char* const> getSkeletonBoneNames();
-
+		// Load mesh function
 		bool LoadMesh(const std::string& path);
-		bool LoadSkeleton(const std::string& path);
 
+		// Check if mesh was loaded
 		bool IsMeshLoaded() { return m_LoadedMesh; }
+
+		// Get loaded mesh path
 		std::string getMeshPath() { return m_MeshPath; }
 
+		// Load skeleton function
+		bool LoadSkeleton(const std::string& path);
+
+		// Check if skeleton was loaded
 		bool IsSkeletonLoaded() { return m_LoadedSkeleton; }
+
+		// Get loaded skeleton path
 		std::string getSkeletonPath() { return m_SkeletonPath; }
 
+		// Get skeleton bone names
+		ozz::span<const char* const> getSkeletonBoneNames();
+
+		// Create simple animation
 		size_t CreateSimpleAnimation(const std::string& name);
+
+		// Create partial animation
 		size_t CreatePartialAnimation(const std::string& name);
 
+		// Remove animation at index
 		void RemoveAnimationAt(size_t index);
 
+		// Check if animation name exists
 		bool HasAnimation(const std::string& name);
 
+		// Set transition blend bool
 		void setBlendOnTransition(bool blend) { m_BlendOnTransition = blend; }
+
+		// Get transition blend bool
 		bool getBlendOnTransition() { return m_BlendOnTransition; }
 
+		// Set transition time for blending
 		void setTransitionTime(float time) { m_TransitionTime = time; };
+
+		// Get transition time for blending
 		float getTransitionTime() { return m_TransitionTime; }
 
+		// Play animation by name
 		AnimationData* PlayAnimation(const std::string& name, float time_ratio=0.0f);
+
+		// Play animation by id
 		AnimationData* PlayAnimation(size_t anim_id, float time_ratio=0.0f);
 
+		// Get total animation count (includes removed animations)
 		size_t getAnimationCount() { return m_AnimationList.size(); }
 
+		// Get animation data at index
 		AnimationData& getAnimationAt(size_t index) { return m_AnimationList[index]; }
 
+		// Get animation index by name
+		size_t getAnimationIndex(const std::string& str);
+
+		// Get active animation ID
 		size_t getActiveAnimationId() { return m_ActiveAnimationId; }
+
+		// Get active animation name
 		std::string getActiveAnimationName() { return m_ActiveAnimationName; }
 
+		// Set upper animation playback speed
+		void setUpperPlaybackSpeed(size_t anim_id, float playback_speed);
+
+		// Set lower animation playback speed
+		void setLowerPlaybackSpeed(size_t anim_id, float playback_speed);
+
+		// Initialize
 		void Init();
 
+		// Update
 		bool Update(float _dt);
 
+		// Render
 		bool Render(Wiwa::Camera* camera, glm::mat4 transform);
 
+		// Static save function
 		static void SaveAnimator(OzzAnimator* animator, const char* filepath);
+
+		// Static load function
 		static OzzAnimator* LoadAnimator(const char* filepath);
 	};
 }

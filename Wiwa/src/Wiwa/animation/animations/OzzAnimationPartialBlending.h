@@ -102,6 +102,9 @@ namespace Wiwa {
 
 		void OnSkeletonSet() override;
 
+		void setUpperPlaybackSpeed(float playback_speed);
+		void setLowerPlaybackSpeed(float playback_speed);
+
 		void setTimeRatio(float time_ratio) override;
 		float getTimeRatio() override;
 

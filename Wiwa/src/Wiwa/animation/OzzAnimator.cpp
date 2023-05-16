@@ -307,6 +307,47 @@ namespace Wiwa {
 		return nullptr;
 	}
 
+	size_t OzzAnimator::getAnimationIndex(const std::string& str)
+	{
+		std::unordered_map<std::string, size_t>::iterator it = m_AnimationsIndex.find(str);
+
+		if (it != m_AnimationsIndex.end()) {
+			return it->second;
+		}
+
+		return WI_INVALID_INDEX;
+	}
+
+	void OzzAnimator::setUpperPlaybackSpeed(size_t anim_id, float playback_speed)
+	{
+		if (anim_id < 0 || anim_id >= m_AnimationList.size()) return;
+
+		AnimationData& a_data = m_AnimationList[anim_id];
+
+		if (!a_data.animation) return;
+
+		if (a_data.animation->getAnimationType() == Wiwa::AnimationType::AT_PARTIAL_BLEND) {
+			OzzAnimationPartialBlending* a_partial = (OzzAnimationPartialBlending*)a_data.animation;
+
+			a_partial->setUpperPlaybackSpeed(playback_speed);
+		}
+	}
+
+	void OzzAnimator::setLowerPlaybackSpeed(size_t anim_id, float playback_speed)
+	{
+		if (anim_id < 0 || anim_id >= m_AnimationList.size()) return;
+
+		AnimationData& a_data = m_AnimationList[anim_id];
+
+		if (!a_data.animation) return;
+
+		if (a_data.animation->getAnimationType() == Wiwa::AnimationType::AT_PARTIAL_BLEND) {
+			OzzAnimationPartialBlending* a_partial = (OzzAnimationPartialBlending*)a_data.animation;
+
+			a_partial->setLowerPlaybackSpeed(playback_speed);
+		}
+	}
+
 	void OzzAnimator::Init()
 	{
 
