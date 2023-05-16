@@ -149,6 +149,10 @@ namespace Wiwa {
 		GL(BindVertexArray(m_VAO));
 
 		for (GLuint i = 0; i < texSize; i++) {
+			if (m_Textures[i] == -1) {
+				WI_ERROR("Tried to bind invalid texture in instance renderer");
+				continue;
+			}
 			GL(BindTextureUnit(i, m_Textures[i]));
 		}
 

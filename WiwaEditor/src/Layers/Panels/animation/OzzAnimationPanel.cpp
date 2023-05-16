@@ -95,29 +95,28 @@ void OzzAnimationPanel::DrawBody()
 
 	ImGui::Text("Animator file: %s", m_ActiveAnimatorPath.c_str());
 
-	DrawMeshContainer();
-	DrawSkeletonContainer();
-	DrawAnimations();
-
-	/*if (ImGui::BeginTable("##anim_table", 2, ImGuiTableFlags_Resizable)) {
+	if (ImGui::BeginTable("##anim_table", 2, ImGuiTableFlags_Resizable)) {
 		ImGui::TableNextColumn();
 
-		
+		DrawMeshContainer();
+		DrawSkeletonContainer();
+		DrawAnimations();
 
 		ImGui::TableNextColumn();
 
 		DrawAnimationViewer();
 
 		ImGui::EndTable();
-	}*/
+	}
 }
 
 void OzzAnimationPanel::DrawAnimationViewer()
 {
-	m_Camera->frameBuffer->Clear({1.0f, 0.5f, 0.5f, 1.0f});
-	
-	// Render animation
+	m_Camera->frameBuffer->Clear({0.1f, 0.1f, 0.1f, 1.0f});
 
+	// Render animation
+	m_ActiveAnimator->Update(Wiwa::Time::GetRealDeltaTimeSeconds());
+	m_ActiveAnimator->Render(m_Camera, m_Transform);
 
 	// ImGui draw
 	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -129,10 +128,6 @@ void OzzAnimationPanel::DrawAnimationViewer()
 	float scale = scales.x < scales.y ? scales.x : scales.y;
 
 	ImVec2 isize = { resolution.w * scale, resolution.h * scale };
-	ImVec2 cpos = ImGui::GetCursorPos();
-	cpos.x = (viewportPanelSize.x - isize.x) / 2;
-
-	ImGui::SetCursorPos(cpos);
 
 	ImTextureID tex = (ImTextureID)(intptr_t)m_Camera->frameBuffer->getColorBufferTexture();
 	ImGui::Image(tex, isize, ImVec2(0, 1), ImVec2(1, 0));
@@ -451,6 +446,13 @@ OzzAnimationPanel::OzzAnimationPanel(EditorLayer* instance)
 	float aratio = size.w / (float)size.h;
 
 	m_Camera->SetPerspective(45.0f, aratio);
+
+	m_Camera->setPosition(glm::vec3(5.0f, 6.5f, 5.0f));
+	m_Camera->lookat({ 0.0f, 2.5f, 0.0f });
+
+	m_Transform = glm::mat4(1.0f);
+
+	m_Transform = glm::scale(m_Transform, glm::vec3(100.0f, 100.0f, 100.0f));
 }
 
 OzzAnimationPanel::~OzzAnimationPanel()

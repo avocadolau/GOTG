@@ -1673,6 +1673,7 @@ void InspectorPanel::DrawOzzAnimatorCmp(byte* data)
 	}
 
 	ImGui::PopID();
+}
 void InspectorPanel::DrawPlayerSpawnerComponent(byte* data)
 {
 	Wiwa::PlayerSpawnerData* spawn = (Wiwa::PlayerSpawnerData*)data;

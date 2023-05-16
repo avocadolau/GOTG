@@ -38,9 +38,11 @@ namespace Wiwa {
 	}
 	OzzAnimator::OzzAnimator() :
 		m_ActiveAnimationId(WI_INVALID_INDEX),
+		m_ActiveAnimation(nullptr),
 		m_LoadedMesh(false),
 		m_LoadedSkeleton(false)
 	{
+		
 	}
 
 	OzzAnimator::~OzzAnimator()
@@ -66,6 +68,10 @@ namespace Wiwa {
 
 			// Allocates skinning matrices.
 			skinning_matrices_.resize(num_skinning_matrices);
+
+			for (size_t i = 0; i < m_Mesh.joint_remaps.size(); ++i) {
+				skinning_matrices_[i] = ozz::math::Float4x4::identity();
+			}
 		}
 
 		return m_LoadedMesh;

@@ -8,6 +8,8 @@
 
 #include <Wiwa/animation/animations/OzzAnimationSimple.h>
 
+#include <glm/glm.hpp>
+
 namespace Wiwa {
 	class Camera;
 }
@@ -17,6 +19,8 @@ class OzzAnimationPanel : public Panel
 private:
 	std::string m_ActiveAnimatorPath;
 	Wiwa::OzzAnimator* m_ActiveAnimator;
+
+	glm::mat4 m_Transform;
 
 	Wiwa::Camera* m_Camera;
 
