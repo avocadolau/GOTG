@@ -43,8 +43,6 @@ namespace Wiwa
 		interpolatedDashDistance = glm::vec3(0.0f);
 		m_MoveUpwardsCounter = 0.0f;
 		m_State = DashState::DASH_INIT;
-		/*animator->Blend("walk", true, 0.2f);*/
-		/*enemy->m_DashTimer = 0;*/
 	}
 
 	void BossUltronDashState::UpdateState(BossUltron* enemy)
@@ -150,7 +148,9 @@ namespace Wiwa
 			Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-			float center_x = 0.0f;
+			SpawnExplosionAfterDash(enemy, selfTr);
+
+			/*float center_x = 0.0f;
 			float center_z = 0.0f;
 			float radius = 8.0f;
 			float angle_increment = 1.0f;
@@ -165,7 +165,7 @@ namespace Wiwa
 				SpawnExplosionAfterDash(enemy, selfTr, x_pos, z_pos);
 
 				current_angle += angle_increment;
-			}
+			}*/
 
 			navAgent->autoRotate = true;
 
@@ -200,7 +200,7 @@ namespace Wiwa
 		
 	}
 
-	void BossUltronDashState::SpawnExplosionAfterDash(BossUltron* enemy, Transform3D* selfTransform, float explosionPositionX, float explosionPositionZ)
+	void BossUltronDashState::SpawnExplosionAfterDash(BossUltron* enemy, Transform3D* selfTransform)
 	{
 		/*if (GameStateManager::s_PoolManager->s_ExplosiveBarrel->getCountDisabled() <= 0)
 			return;*/
@@ -226,9 +226,9 @@ namespace Wiwa
 		if (!explosiveBarrelTr)
 			return;
 
-		explosiveBarrelTr->localPosition.x = Math::GetWorldPosition(selfTransform->worldMatrix).x + explosionPositionX;
+		explosiveBarrelTr->localPosition.x = Math::GetWorldPosition(selfTransform->worldMatrix).x;
 		explosiveBarrelTr->localPosition.y = Math::GetWorldPosition(selfTransform->worldMatrix).y;
-		explosiveBarrelTr->localPosition.z = Math::GetWorldPosition(selfTransform->worldMatrix).z + explosionPositionZ;
+		explosiveBarrelTr->localPosition.z = Math::GetWorldPosition(selfTransform->worldMatrix).z;
 		
 		physSys->CreateBody();
 

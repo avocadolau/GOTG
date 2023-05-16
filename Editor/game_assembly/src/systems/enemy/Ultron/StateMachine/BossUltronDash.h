@@ -21,7 +21,7 @@ namespace Wiwa {
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
-		void SpawnExplosionAfterDash(BossUltron* enemy, Transform3D* selfTransform, float explosionPositionX, float explosionPositionZ);
+		void SpawnExplosionAfterDash(BossUltron* enemy, Transform3D* selfTransform);
 
 	private:
 
