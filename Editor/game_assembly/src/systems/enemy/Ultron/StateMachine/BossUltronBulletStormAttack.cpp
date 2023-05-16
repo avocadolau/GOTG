@@ -195,6 +195,7 @@ namespace Wiwa
 		int numBulletsPerGroup = 3;
 		float degreeStep = 360.0f / numGroups;
 		float groupDegreeStep = 10.0f; // The angle between bullets in a group
+		float radian = 0.0f;
 
 		
 
@@ -203,7 +204,20 @@ namespace Wiwa
 			for (int j = 0; j < numBulletsPerGroup; ++j) 
 			{
 				float directionAngle = i * degreeStep + j * groupDegreeStep;
-				float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+
+				if (m_FirstPatternCounter == 1)
+				{
+					radian = directionAngle * (PI / 100.0f); // Convert degree to radian
+				}
+				else if (m_FirstPatternCounter == 2)
+				{
+					radian = directionAngle * (PI / 140.0f); // Convert degree to radian
+				}
+				else
+				{
+					radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+				}
+				
 				float xDir = cos(radian);
 				float yDir = sin(radian);
 
@@ -290,7 +304,7 @@ namespace Wiwa
 			{
 
 				float directionAngle1 = m_ThirdPatternBulletcounter * degreeStep;
-				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 45; //To get the symmetry attack
+				float directionAngle2 = m_ThirdPatternBulletcounter * degreeStep - 45 + (m_ThirdPatternCounter * 30); //To get the symmetry attack
 
 				float radian1 = directionAngle1 * (PI / 180.0f); // Convert degree to radian
 				float xDir1 = cos(radian1);

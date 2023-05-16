@@ -38,7 +38,6 @@ namespace Wiwa {
 	}
 	OzzAnimator::OzzAnimator() :
 		m_ActiveAnimationId(WI_INVALID_INDEX),
-		m_ActiveAnimation(nullptr),
 		m_LoadedMesh(false),
 		m_LoadedSkeleton(false)
 	{
@@ -147,6 +146,11 @@ namespace Wiwa {
 		delete a_data.animation;
 
 		a_data.animation = nullptr;
+
+		if (m_ActiveAnimationId == index) {
+			m_ActiveAnimationId = WI_INVALID_INDEX;
+			m_ActiveAnimationName = "";
+		}
 	}
 
 	bool OzzAnimator::HasAnimation(const std::string& name)
@@ -161,9 +165,8 @@ namespace Wiwa {
 		if (it != m_AnimationsIndex.end()) {
 			m_ActiveAnimationName = it->first;
 			m_ActiveAnimationId = it->second;
-			m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
 
-			return m_ActiveAnimation;
+			return &m_AnimationList[m_ActiveAnimationId];
 		}
 
 		return nullptr;
@@ -172,11 +175,14 @@ namespace Wiwa {
 	OzzAnimator::AnimationData* OzzAnimator::PlayAnimation(size_t anim_id)
 	{
 		if (anim_id >= 0 && anim_id < m_AnimationList.size()) {
-			m_ActiveAnimationId = anim_id;
-			m_ActiveAnimationName = m_AnimationList[anim_id].name;
-			m_ActiveAnimation = &m_AnimationList[m_ActiveAnimationId];
+			AnimationData& a_data = m_AnimationList[anim_id];
 
-			return m_ActiveAnimation;
+			if (a_data.animation->getStatus() == OzzAnimation::Status::VALID) {
+				m_ActiveAnimationId = anim_id;
+				m_ActiveAnimationName = m_AnimationList[anim_id].name;
+
+				return &m_AnimationList[m_ActiveAnimationId];
+			}
 		}
 
 		return nullptr;
@@ -189,8 +195,10 @@ namespace Wiwa {
 
 	bool OzzAnimator::Update(float _dt)
 	{
-		if (m_ActiveAnimation) {
-			Wiwa::OzzAnimation* animation = m_ActiveAnimation->animation;
+		if (m_ActiveAnimationId != WI_INVALID_INDEX) {
+			AnimationData& a_data = m_AnimationList[m_ActiveAnimationId];
+
+			Wiwa::OzzAnimation* animation = a_data.animation;
 
 			if (!animation->Update(_dt)) return false;
 

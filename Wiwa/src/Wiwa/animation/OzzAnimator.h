@@ -26,7 +26,6 @@ namespace Wiwa {
 
 		std::string m_ActiveAnimationName;
 		size_t m_ActiveAnimationId;
-		AnimationData* m_ActiveAnimation;
 
 		// Buffer of model space matrices. These are computed by the local-to-model
 		// job after the blending stage.

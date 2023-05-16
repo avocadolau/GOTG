@@ -960,17 +960,17 @@ void EditorLayer::ImportToOzz(std::string& file)
 	// Skeleton output path
 	std::filesystem::path skeleton_path = file_path;
 	skeleton_path.replace_filename(filename.string() + "_skeleton");
-	skeleton_path.replace_extension(".ozz");
+	skeleton_path.replace_extension(".skeleton");
 
 	// Animations output path
 	std::filesystem::path anim_out_path = file_path;
 	anim_out_path.replace_filename(filename.string() + "_*");
-	anim_out_path.replace_extension(".ozz");
+	anim_out_path.replace_extension(".anim");
 
 	// Mesh output path
 	std::filesystem::path mesh_out_path = file_path;
 	mesh_out_path.replace_filename(filename.string() + "_mesh");
-	mesh_out_path.replace_extension(".ozz");
+	mesh_out_path.replace_extension(".mesh");
 
 	// === Setup ozz import json config ===
 	Wiwa::JSONDocument anim_import;
