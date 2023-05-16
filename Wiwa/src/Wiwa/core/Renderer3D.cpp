@@ -114,6 +114,7 @@ namespace Wiwa
 		Shader* outlinedShader = Wiwa::Resources::GetResourceById<Shader>(outlinedShaderId);
 		outlinedShader->Compile("resources/shaders/light/toon_textured_outlined");
 		outlinedShader->addUniform("u_Texture", UniformType::Sampler2D);
+		outlinedShader->addUniform("u_LayeredText", UniformType::Sampler2D);
 		outlinedShader->addUniform("u_OutlineColor", UniformType::fVec4);
 		outlinedShader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
 		outlinedShader->addUniform("u_ToonLevels", UniformType::Int);
