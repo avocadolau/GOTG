@@ -100,9 +100,15 @@ void GameLayer::OnImGuiRender()
 	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F2))
 		active = false;
 
+	static bool showFPS = false;
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F3))
+		showFPS = true;
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F4))
+		showFPS = false;
+
 	ImGuiContext* ctx = Wiwa::Application::Get().GetImGuiContext();
 	ImGui::SetCurrentContext(ctx);
-	if (active)
+	if (showFPS)
 	{
 		ImGui::Begin("Stats counter", &active);
 
@@ -129,7 +135,9 @@ void GameLayer::OnImGuiRender()
 
 		ImGui::End();
 
-
+	}
+	if(active)
+	{
 		ImGui::Begin("Game log", &active);
 
 		if (ImGui::CollapsingHeader("Chances"))
