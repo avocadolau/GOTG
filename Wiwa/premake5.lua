@@ -39,6 +39,7 @@ project "Wiwa"
 		"%{IncludeDirs.Wwise}",
 		"%{IncludeDirs.IconFontCppHeaders}",
 		"%{IncludeDirs.bullet}",
+		"%{IncludeDirs.ozz}",
 		"%{IncludeDirs.recastnavigation}",
 		"%{IncludeDirs.OpenCV}"
 	}
@@ -51,6 +52,7 @@ project "Wiwa"
 		"%{wks.location}/Wiwa/vendor/Glew/lib/glew32.lib",
 		"Optick",
 		"ImGuizmo",
+		"ozz",
 		"%{wks.location}/Wiwa/vendor/assimp/lib/x64/release/assimp-vc143-mt.lib",
 		"%{Library.Wwise_SE}",
 		"%{Library.Wwise_MMgr}",
@@ -133,7 +135,6 @@ project "Wiwa"
 			"%{Library.opencv_highgui}",
 			"%{Library.opencv_imgproc}",
 			"%{Library.opencv_imgcodecs}"
-			
 		}
 
 	filter "configurations:Dist"

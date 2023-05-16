@@ -52,23 +52,25 @@ Wiwa::Skybox::Skybox()
          1.0f, -1.0f,  1.0f
     };
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    GL(GenVertexArrays(1, &VAO));
+    GL(GenBuffers(1, &VBO));
 
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+    GL(BindVertexArray(VAO));
+    GL(BindBuffer(GL_ARRAY_BUFFER, VBO));
+    GL(BufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW));
     
-    glEnableVertexAttribArray(0);
+    GL(EnableVertexAttribArray(0));
+    GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    GL(BindBuffer(GL_ARRAY_BUFFER, 0));
+    GL(BindVertexArray(0));
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
     ResourceId skyboxShaderID = Resources::Load<Shader>("resources/shaders/skybox");
     Shader* shader = Resources::GetResourceById<Shader>(skyboxShaderID);
+    
     shader->Compile("resources/shaders/skybox");
     m_Material = new Material(shader);
+
 }
 
 Wiwa::Skybox::~Skybox()

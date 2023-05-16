@@ -3,6 +3,7 @@
 #include <Wiwa/core/Core.h>
 #include <stdint.h>
 #include <Wiwa/utilities/math/Vector3f.h>
+#include <Wiwa/utilities/math/Vector4f.h>
 #include <Wiwa/utilities/containers/List.h>
 #include <glm/glm.hpp>
 
@@ -30,6 +31,7 @@ namespace Wiwa {
 
 
 		void Clear();
+		void Clear(const Vector4f& color);
 
 		inline int getWidth() { return m_Width; }
 		inline int getHeight() { return m_Height; }

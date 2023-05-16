@@ -16,16 +16,17 @@ namespace Wiwa {
 	private:
 		RenderManager();
 		~RenderManager();
-		static FrameBuffer m_FrameBuffer;
-		static FrameBuffer m_ShadowBuffer;
+
+		static FrameBuffer* m_FrameBuffer;
+		static FrameBuffer* m_ShadowBuffer;
 		static glm::mat4 m_OrthoProj;
 		static glm::mat4 m_View;
 		static glm::mat4 m_Model;
 		static uint32_t m_BoneLocation[MAX_BONES];
 		static RenderLayer m_RenderLayers[MAX_LAYERS];
 
-		static Shader m_Shader;
-		static Shader m_BlurShader;
+		static Shader* m_Shader;
+		static Shader* m_BlurShader;
 
 		static uint32_t m_VAO;
 		static uint32_t m_VBO;
@@ -50,7 +51,7 @@ namespace Wiwa {
 		static void SetRenderOnMainWindow(bool render_on_main_window) { m_RenderOnMainWindow = render_on_main_window; }
 
 		// Get color texture
-		static uint32_t getColorTexture() { return m_FrameBuffer.getColorBufferTexture(); }
+		static uint32_t getColorTexture() { return m_FrameBuffer->getColorBufferTexture(); }
 
 		static void BindVAO();
 

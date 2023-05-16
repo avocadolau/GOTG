@@ -15,6 +15,9 @@
 #include <Wiwa/ecs/systems/game/gui/UltronGUISystem.h>
 #include <Wiwa/AI/AI_Crowd.h>
 
+#include <glew.h>
+#include <Wiwa/utilities/Log.h>
+
 namespace Wiwa
 {
 	Scene::Scene()

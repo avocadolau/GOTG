@@ -159,7 +159,8 @@ namespace Wiwa
 			{1.0f, 1.0f},
 			{1.0f, 0.0f},
 			{0.0f, 0.0f},
-			{0.0f, 1.0f}};
+			{0.0f, 1.0f}
+		};
 
 		Color4f color = Color::WHITE;
 
@@ -274,21 +275,22 @@ namespace Wiwa
 		size_t instance_size = instanceRenderers.size();
 
 		FrameBuffer &framebuffer = *m_ActiveCamera.frameBuffer;
-		glViewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight());
+		GL(Viewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight()));
 
 		framebuffer.Bind();
-		glEnable(GL_BLEND);
+		GL(Enable(GL_BLEND));
 		//glBlendEquation(GL_ADD);
+		GL(BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 		//glEnable(GL_DEPTH_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
 			instanceRenderers[i].Update();
 			instanceRenderers[i].Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
 		}
 		//glDepthMask(true);
+		GL(Disable(GL_BLEND));
 		//glDisable(GL_DEPTH_TEST);
-        glDisable(GL_BLEND);
+        
 		framebuffer.Unbind();
 
 		m_RenderCallsInstancedCount++;

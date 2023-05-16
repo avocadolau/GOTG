@@ -11,9 +11,11 @@ subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
 */
+#define BT_NO_SIMD_OPERATOR_OVERLOADS
 
 #ifndef BT_SCALAR_H
 #define BT_SCALAR_H
+
 
 #ifdef BT_MANAGED_CODE
 //Aligned data types not supported in managed code
