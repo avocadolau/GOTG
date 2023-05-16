@@ -47,33 +47,8 @@ namespace Wiwa
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_ThirdPatternAttackTimer += Time::GetDeltaTimeSeconds();
 
-		navAgentPtr->StopAgent();
-		enemy->LookAt(playerTr->localPosition, 30.0f);
-
-		if (IsSecondPatternFinished() == true || IsThirdPatternFinished() == true || IsFirstPatternFinished() == true)
-		{
-			if (m_TimerRoundCooldown >= TIMER_ATTACK)
-			{
-				m_TimerRoundCooldown = 0.0f;
-				m_RoundCounter++;
-
-				if (m_RoundCounter >= NUMBER_OF_ROUNDS)
-				{
-					if (navAgent)
-					{
-						navAgent->autoRotate = true;
-					}
-
-					m_RoundCounter = 0;
-					enemy->SwitchState(enemy->m_MovementState);
-				}
-
-				else
-				{
-					SelectRandomAttack(enemy);
-				}
-			}
-		}
+		/*navAgentPtr->StopAgent();*/
+		enemy->LookAt(playerTr->localPosition, 80.0f);
 
 		if (IsFirstPatternFinished() == false)
 		{
@@ -95,6 +70,51 @@ namespace Wiwa
 		{
 			SpawnThirdPattern(enemy);
 			m_TimerRoundCooldown = 0.0f;
+		}
+
+		if (IsSecondPatternFinished() == true || IsThirdPatternFinished() == true || IsFirstPatternFinished() == true)
+		{
+			if (m_TimerRoundCooldown >= TIMER_ATTACK)
+			{
+				if (m_RoundCounter == 0)
+				{
+					navAgentPtr->SetDestination(glm::vec3(0.0f, 0.0f, 0.0f));
+				}
+
+				m_TimerRoundCooldown = 0.0f;
+				m_RoundCounter++;
+
+				if (m_RoundCounter >= NUMBER_OF_ROUNDS)
+				{
+					if (navAgent)
+					{
+						navAgent->autoRotate = true;
+					}
+
+					m_RoundCounter = 0;
+					enemy->SwitchState(enemy->m_MovementState);
+				}
+
+				else
+				{
+					if (m_RoundCounter == 1)
+					{
+						navAgentPtr->SetDestination(glm::vec3(6.0f, 0.0f, -4.0f));
+					}
+
+					else if (m_RoundCounter == 2)
+					{
+						navAgentPtr->SetDestination(glm::vec3(0.0f, 0.0f, 6.0f));
+					}
+
+					else if (m_RoundCounter == 3)
+					{
+						navAgentPtr->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
+					}
+
+					SelectRandomAttack(enemy);
+				}
+			}
 		}
 	}
 
@@ -211,11 +231,11 @@ namespace Wiwa
 				}
 				else if (m_FirstPatternCounter == 2)
 				{
-					radian = directionAngle * (PI / 140.0f); // Convert degree to radian
+					radian = directionAngle * (PI / 140.0f);
 				}
 				else
 				{
-					radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+					radian = directionAngle * (PI / 180.0f); 
 				}
 				
 				float xDir = cos(radian);
