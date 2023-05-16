@@ -233,5 +233,17 @@ namespace Wiwa
 		physSys->CreateBody();
 
 		explosionSys->EnableExplosion();
+
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		EntityId p_explosion = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/boss_Ultron/p_boss_smash.wiprefab");
+
+		if (p_explosion != EntityManager::INVALID_INDEX)
+		{
+			Transform3D* p_exT = em.GetComponent<Transform3D>(p_explosion);
+			if (p_exT != nullptr)
+			{
+				p_exT->localPosition = explosiveBarrelTr->localPosition;
+			}
+		}
 	}
 }

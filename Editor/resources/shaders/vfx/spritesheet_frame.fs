@@ -16,31 +16,40 @@ uniform float u_Time;
 uniform vec4 u_Color;
 //=====================
 uniform sampler2D u_Texture;
-uniform vec2 u_SpritesheetSize;
-uniform vec2 u_CellSize;
-uniform int u_Index;
+uniform vec2 u_Position;
+uniform float u_Zoom;
+// uniform vec2 u_CellSize;
+// uniform int u_Index;
 
 
 void main()
 {
 
-    int spritesheetW = int(u_SpritesheetSize.x);
-    int spritesheetH = int(u_SpritesheetSize.y);
+    // int spritesheetW = int(u_SpritesheetSize.x);
+    // int spritesheetH = int(u_SpritesheetSize.y);
 
-    int cellW = int(u_CellSize.x);
-    int cellH = int(u_CellSize.y);
+    // int cellW = int(u_CellSize.x);
+    // int cellH = int(u_CellSize.y);
 
-    int spriteColumn = u_Index % spritesheetW;
-    int spriteRow = u_Index / spritesheetW;
+    // int spriteColumn = u_Index % spritesheetW;
+    // int spriteRow = u_Index / spritesheetW;
 
-    vec2 uv = vec2(
-        float(spriteColumn * cellW) / float(spritesheetW * cellW),
-        float(spriteRow * cellH) / float(spritesheetH * cellH)
-    );
+    // vec2 uv = vec2(
+    //     float(spriteColumn * cellW) / float(spritesheetW * cellW),
+    //     float(spriteRow * cellH) / float(spritesheetH * cellH)
+    // );
+
+
+    float zoom = 0;
+
+    if (u_Zoom != 0)
+    {
+        zoom = 1.0f / u_Zoom;
+    }
 
     vec2 uv_;
-    uv_.x = 0.0f + float(cellW) / float(spritesheetW);
-    uv_.y = TexCoord.y / 4 + float(spritesheetW) / 1000;
+    uv_.x = TexCoord.x * zoom + u_Position.x * 0.01f;
+    uv_.y = TexCoord.y * zoom + u_Position.y * 0.01f;
 
     FragColor = texture2D(u_Texture, uv_) * u_Color;
 

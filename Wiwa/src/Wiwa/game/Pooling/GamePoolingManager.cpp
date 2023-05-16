@@ -22,7 +22,7 @@ namespace Wiwa
 
 		s_SimpleBulletsPool = new EntityPool(Pool_Type::SIMPLE_BULLET, 100, "assets\\Enemy\\SimpleBullet\\SimpleBullet_01.wiprefab");
 		s_SentinelExplosion = new EntityPool(Pool_Type::SENTINEL_EXPLOSION, 3, "assets\\Enemy\\Explosions\\SentinelExplosion_01.wiprefab");
-		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,8, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
+		s_ClusterBulletsPool = new EntityPool(Pool_Type::CLUSTER_BULLET,12, "assets\\Enemy\\ClusterBullet\\ClusterBullet_01.wiprefab");
 		s_UltronLaserBeamPool = new EntityPool(Pool_Type::ULTRON_LASER_BEAM, 1, "assets\\Enemy\\UltronLaserBeam\\UltronLaserBeam_01.wiprefab");
 		s_ExplosiveBarrel = new EntityPool(Pool_Type::EXPLOSIVE_BARREL, 6, "assets\\Enemy\\Explosions\\ExplosiveBarrelExplosion_01.wiprefab");
 		s_StarLordBullets = new EntityPool(Pool_Type::STARLORD_BULLET, 25, "assets\\Prefabs\\Bullet\\P_StarLordBullet.wiprefab");

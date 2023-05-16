@@ -179,6 +179,6 @@ void main()
     vec4 colorLight  =  texture(u_Texture,TexCoord)* totalLight;
 
     vec4 layerTex = texture(u_LayeredText,TexCoord);
-
-    FragColor = mix( colorLight + (u_OutlineColor * layerTex.a),colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
+    vec4 mixTex =mix(colorLight,layerTex * u_OutlineColor, layerTex.a *u_OutlineColor.a );
+    FragColor = mix(mixTex, colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
 }

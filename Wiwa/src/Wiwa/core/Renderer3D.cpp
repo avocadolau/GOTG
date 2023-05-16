@@ -457,9 +457,11 @@ namespace Wiwa
 		spriteSheetFrameShader->addUniform("u_Time", UniformType::Float);
 		spriteSheetFrameShader->addUniform("u_Color", UniformType::fVec4);
 		spriteSheetFrameShader->addUniform("u_Texture", UniformType::Sampler2D);
-		spriteSheetFrameShader->addUniform("u_SpritesheetSize", UniformType::fVec2);
-		spriteSheetFrameShader->addUniform("u_CellSize", UniformType::fVec2);
-		spriteSheetFrameShader->addUniform("u_Index", UniformType::Uint);
+		spriteSheetFrameShader->addUniform("u_Position", UniformType::fVec2);
+		spriteSheetFrameShader->addUniform("u_Zoom", UniformType::Float);
+		//spriteSheetFrameShader->addUniform("u_SpritesheetSize", UniformType::fVec2);
+		//spriteSheetFrameShader->addUniform("u_CellSize", UniformType::fVec2);
+		//spriteSheetFrameShader->addUniform("u_Index", UniformType::Uint);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/spritesheet_frame", spriteSheetFrameShader);
 		//===========================================================================================================
