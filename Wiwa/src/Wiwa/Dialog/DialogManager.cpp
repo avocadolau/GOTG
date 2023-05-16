@@ -169,8 +169,8 @@ namespace Wiwa
 			character->CanMove = true;
 		}
 
-		if (((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
-			|| (forceStartConversation == true && forcedDialogHappened == false))
+		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false)
 		{
 			if (collidingWithNpc == true)
 			{
@@ -211,7 +211,7 @@ namespace Wiwa
 			finishedRandomizing = false;
 		}
 
-		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false)
+		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false && triggerEvent == false)
 		{
 			render.EnableInstance(m_Scene, talkIndicatorImgID);
 
