@@ -65,6 +65,7 @@ uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 
 uniform sampler2D u_ShadowMap;
 uniform sampler2D u_Texture;
+uniform sampler2D u_LayeredText;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
 
@@ -177,5 +178,7 @@ void main()
 
     vec4 colorLight  =  texture(u_Texture,TexCoord)* totalLight;
 
-    FragColor = mix(u_OutlineColor, colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
+    vec4 layerTex = texture(u_LayeredText,TexCoord);
+    vec4 mixTex =mix(colorLight,layerTex * u_OutlineColor, layerTex.a *u_OutlineColor.a );
+    FragColor = mix(mixTex, colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
 }
