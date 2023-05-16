@@ -342,7 +342,7 @@ void AssetsPanel::CheckImport(const std::filesystem::path& path)
 		std::filesystem::create_directories(rp);
 		Wiwa::FileSystem::Copy(path.string().c_str(), rpath.string().c_str());
 	}
-	else if (path.extension() == ".ozzanimator") {
+	else if (path.extension() == ".wiozzanimator") {
 		std::filesystem::path rpath = Wiwa::Resources::_assetToLibPath(path.string().c_str());
 		std::filesystem::path rp = rpath.remove_filename();
 		std::filesystem::create_directories(rp);

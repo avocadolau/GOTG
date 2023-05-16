@@ -91,6 +91,5 @@ namespace Wiwa {
 		Wiwa::OzzAnimatorCmp* anim_cmp = GetComponentByIterator<Wiwa::OzzAnimatorCmp>(m_AnimatorIt);
 
 		m_Animator = Wiwa::OzzAnimator::LoadAnimator(anim_cmp->animator_path);
-		m_Animator->PlayAnimation("idle");
 	}
 }
