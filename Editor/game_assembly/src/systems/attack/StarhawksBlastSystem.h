@@ -26,6 +26,8 @@ namespace Wiwa {
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 
+		void SpawnStarhawkBullet(glm::vec3 direction);
+
 	};
 }
 
