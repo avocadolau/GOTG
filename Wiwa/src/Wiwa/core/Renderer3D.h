@@ -107,9 +107,6 @@ namespace Wiwa {
 			size_t size_;
 		};
 		ScratchBuffer scratch_buffer_;
-
-		ozz::unique_ptr<ozz::sample::internal::AmbientShader> ambient_shader;
-		ozz::unique_ptr<ozz::sample::internal::AmbientTexturedShader> ambient_textured_shader;
 	public:
 		Renderer3D();
 		~Renderer3D();
@@ -143,7 +140,7 @@ namespace Wiwa {
 		void RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,
 			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* textureId, const Size2i& srcSize, float colorParticles[4], bool isColorRanged);
 
-		bool RenderOzzSkinnedMesh(Camera* cam, const ozz::sample::Mesh& _mesh, const ozz::span<ozz::math::Float4x4> _skinning_matrices,
+		bool RenderOzzSkinnedMesh(Camera* cam, const ozz::sample::Mesh& _mesh, Material* material, const ozz::span<ozz::math::Float4x4> _skinning_matrices,
 			const ozz::math::Float4x4& _transform);
 
 		void RenderSkybox();

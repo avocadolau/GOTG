@@ -137,6 +137,8 @@ namespace Wiwa {
 		m_PrevAnimationId(WI_INVALID_INDEX),
 		m_LoadedMesh(false),
 		m_LoadedSkeleton(false),
+		m_LoadedMaterial(false),
+		m_MaterialId(WI_INVALID_INDEX),
 		m_BlendOnTransition(true),
 		m_BlendThreshold(ozz::animation::BlendingJob().threshold),
 		m_TransitionTime(1.0f),
@@ -201,6 +203,18 @@ namespace Wiwa {
 		}
 
 		return m_LoadedSkeleton;
+	}
+
+	bool OzzAnimator::LoadMaterial(const std::string& path)
+	{
+		m_MaterialId = Wiwa::Resources::Load<Material>(path.c_str());
+
+		if (m_MaterialId == WI_INVALID_INDEX) return false;
+
+		m_MaterialPath = path;
+		m_LoadedMaterial = true;
+
+		return true;
 	}
 
 	size_t OzzAnimator::CreateSimpleAnimation(const std::string& name)
@@ -307,6 +321,47 @@ namespace Wiwa {
 		return nullptr;
 	}
 
+	size_t OzzAnimator::getAnimationIndex(const std::string& str)
+	{
+		std::unordered_map<std::string, size_t>::iterator it = m_AnimationsIndex.find(str);
+
+		if (it != m_AnimationsIndex.end()) {
+			return it->second;
+		}
+
+		return WI_INVALID_INDEX;
+	}
+
+	void OzzAnimator::setUpperPlaybackSpeed(size_t anim_id, float playback_speed)
+	{
+		if (anim_id < 0 || anim_id >= m_AnimationList.size()) return;
+
+		AnimationData& a_data = m_AnimationList[anim_id];
+
+		if (!a_data.animation) return;
+
+		if (a_data.animation->getAnimationType() == Wiwa::AnimationType::AT_PARTIAL_BLEND) {
+			OzzAnimationPartialBlending* a_partial = (OzzAnimationPartialBlending*)a_data.animation;
+
+			a_partial->setUpperPlaybackSpeed(playback_speed);
+		}
+	}
+
+	void OzzAnimator::setLowerPlaybackSpeed(size_t anim_id, float playback_speed)
+	{
+		if (anim_id < 0 || anim_id >= m_AnimationList.size()) return;
+
+		AnimationData& a_data = m_AnimationList[anim_id];
+
+		if (!a_data.animation) return;
+
+		if (a_data.animation->getAnimationType() == Wiwa::AnimationType::AT_PARTIAL_BLEND) {
+			OzzAnimationPartialBlending* a_partial = (OzzAnimationPartialBlending*)a_data.animation;
+
+			a_partial->setLowerPlaybackSpeed(playback_speed);
+		}
+	}
+
 	void OzzAnimator::Init()
 	{
 
@@ -332,6 +387,8 @@ namespace Wiwa {
 
 	bool OzzAnimator::Render(Wiwa::Camera* camera, glm::mat4 transform)
 	{
+		if (!m_LoadedMesh || !m_LoadedSkeleton || !m_LoadedMaterial) return false;
+
 		bool success = true;
 
 		Wiwa::Renderer3D& r3d = Wiwa::Application::Get().GetRenderer3D();
@@ -344,8 +401,10 @@ namespace Wiwa {
 			}
 		}
 
+		Material* mat = Wiwa::Resources::GetResourceById<Material>(m_MaterialId);
+
 		success &= r3d.RenderOzzSkinnedMesh(camera,
-			m_Mesh, make_span(skinning_matrices_), ozz_transform);
+			m_Mesh,  mat, make_span(skinning_matrices_), ozz_transform);
 
 		return success;
 	}
@@ -358,6 +417,9 @@ namespace Wiwa {
 
 		// Save animator mesh
 		animator_doc.AddMember("mesh", animator->getMeshPath().c_str());
+
+		// Save animator material
+		animator_doc.AddMember("material", animator->getMaterialPath().c_str());
 
 		// Save skeleton mesh
 		animator_doc.AddMember("skeleton", animator->getSkeletonPath().c_str());
@@ -425,13 +487,19 @@ namespace Wiwa {
 		if (animator_doc.HasMember("mesh")) {
 			const char* mesh_file = animator_doc["mesh"].as_string();
 
-			if (!animator->LoadMesh(mesh_file)) return animator;
+			animator->LoadMesh(mesh_file);
+		}
+
+		if (animator_doc.HasMember("material")) {
+			const char* mesh_file = animator_doc["material"].as_string();
+
+			animator->LoadMaterial(mesh_file);
 		}
 
 		if (animator_doc.HasMember("skeleton")) {
 			const char* skeleton_file = animator_doc["skeleton"].as_string();
 
-			if (!animator->LoadSkeleton(skeleton_file)) return animator;
+			animator->LoadSkeleton(skeleton_file);
 		}
 
 		if (animator_doc.HasMember("transition_blend")) {

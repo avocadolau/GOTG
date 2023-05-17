@@ -21,6 +21,8 @@ namespace Wiwa {
 		~Material();
 
 		void Bind();
+		void Bind(uint32_t program_id);
+
 		void UnBind();
 
 		void Load(const char* path);

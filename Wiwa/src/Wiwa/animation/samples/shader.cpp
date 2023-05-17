@@ -663,7 +663,7 @@ void AmbientShader::Bind(const math::Float4x4& _model,
                          GLsizei _pos_offset, GLsizei _normal_stride,
                          GLsizei _normal_offset, GLsizei _color_stride,
                          GLsizei _color_offset) {
-  GL(UseProgram(program()));
+  //GL(UseProgram(program()));
 
   const GLint position_attrib = 1;//attrib(0);
   GL(EnableVertexAttribArray(position_attrib));
@@ -682,7 +682,7 @@ void AmbientShader::Bind(const math::Float4x4& _model,
 
   // Binds mw uniform
   float values[16];
-  const GLint mw_uniform = uniform(0);
+  const GLint mw_uniform = GL(GetUniformLocation(program(), "u_mw"));//uniform(0);
   math::StorePtrU(_model.cols[0], values + 0);
   math::StorePtrU(_model.cols[1], values + 4);
   math::StorePtrU(_model.cols[2], values + 8);
@@ -690,7 +690,7 @@ void AmbientShader::Bind(const math::Float4x4& _model,
   GL(UniformMatrix4fv(mw_uniform, 1, false, values));
 
   // Binds mvp uniform
-  const GLint mvp_uniform = uniform(1);
+  const GLint mvp_uniform = GL(GetUniformLocation(program(), "u_mvp"));//uniform(1);
   math::StorePtrU(_view_proj.cols[0], values + 0);
   math::StorePtrU(_view_proj.cols[1], values + 4);
   math::StorePtrU(_view_proj.cols[2], values + 8);
