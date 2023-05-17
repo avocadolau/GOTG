@@ -81,8 +81,10 @@ namespace Wiwa
 			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png");
 			Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-			continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render.DisableInstance(m_Scene, continueImgID);
+			if (continueImg) {
+				continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				render.DisableInstance(m_Scene, continueImgID);
+			}
 		}
 		else
 		{
@@ -94,8 +96,10 @@ namespace Wiwa
 			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png");
 			Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
-			continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render.DisableInstance(m_Scene, continueImgID2);
+			if (continueImg2) {
+				continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				render.DisableInstance(m_Scene, continueImgID2);
+			}
 		}
 		else
 		{
@@ -107,8 +111,10 @@ namespace Wiwa
 			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_TalkButton01.png");
 			Image* talkIndicatorImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
 
-			talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-			render.DisableInstance(m_Scene, talkIndicatorImgID);
+			if (talkIndicatorImg) {
+				talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				render.DisableInstance(m_Scene, talkIndicatorImgID);
+			}
 		}
 		else
 		{
@@ -628,10 +634,12 @@ namespace Wiwa
 					textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.png");
 					dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-					render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+					if (dialogImg) {
+						conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+						render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 
-					totalLoadNum++;
+						totalLoadNum++;
+					}
 				}
 				else
 				{
@@ -681,10 +689,12 @@ namespace Wiwa
 				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-				conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-				render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+				if (dialogImg) {
+					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 
-				totalLoadNum++;
+					totalLoadNum++;
+				}
 			}
 			else
 			{
@@ -710,10 +720,12 @@ namespace Wiwa
 					textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/UI_Starlord_01.png");
 					characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-					render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+					if (characterImg) {
+						conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+						render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 
-					totalLoadNum++;
+						totalLoadNum++;
+					}
 				}
 				else
 				{
@@ -762,10 +774,12 @@ namespace Wiwa
 				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
 				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-				conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
-				render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+				if (characterImg) {
+					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+					render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 
-				totalLoadNum++;
+					totalLoadNum++;
+				}
 			}
 			else
 			{
