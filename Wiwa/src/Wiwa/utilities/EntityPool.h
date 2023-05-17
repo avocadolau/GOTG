@@ -36,6 +36,8 @@ namespace Wiwa
         STARLORD_BULLET,
         ROCKET_BULLET,
 
+        STARHAWK_BLAST_BULLET,
+
         MAX_POOL
     };
 

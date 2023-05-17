@@ -30,6 +30,7 @@ private:
 
 	void DrawMeshContainer();
 	void DrawSkeletonContainer();
+	void DrawMaterialContainer();
 	void DrawAnimations();
 
 	void DrawPartialBlendingAnimation(Wiwa::OzzAnimationPartialBlending* partial_animation);
