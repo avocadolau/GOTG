@@ -43,7 +43,7 @@ namespace Wiwa
 
 		//TODO: spawn prefab not from the pool
 
-		EntityId m_ExplosionMarkId = em.LoadPrefab("assets\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab");
+		EntityId m_ExplosionMarkId = em.LoadPrefab("library\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab");
 		Transform3D* explosionMarkTr = em.GetComponent<Transform3D>(m_ExplosionMarkId);
 		explosionMarkTr->localPosition = GetComponent<Transform3D>()->localPosition;
 

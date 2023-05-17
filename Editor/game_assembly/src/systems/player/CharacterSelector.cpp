@@ -1,4 +1,5 @@
 #include "CharacterSelector.h"
+#include <Wiwa/ecs/components/ParticleEmitterComponent.h>
 void Wiwa::CharacterSelector::OnAwake()
 {
 	m_Activated = false;
@@ -7,6 +8,30 @@ void Wiwa::CharacterSelector::OnAwake()
 void Wiwa::CharacterSelector::OnInit()
 {
 	m_CanInteract = Wiwa::GameStateManager::s_GameProgression->IsRocketUnlocked();
+
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+	if (Wiwa::GameStateManager::s_CurrentCharacter == STARLORD)
+	{
+		EntityId m_hologramId = em.GetChildByName(m_EntityId, "p_hologram");
+
+		ParticleEmitterComponent* particle = em.GetComponent<ParticleEmitterComponent>(m_hologramId);
+
+		if (!particle)return;
+
+		strcpy(particle->m_meshPath, "library/models/starlord/sk_rocket01b.wimodel");
+		particle->m_meshChanged = true;
+	}
+	else {
+		EntityId m_hologramId = em.GetChildByName(m_EntityId, "p_hologram");
+
+		ParticleEmitterComponent* particle = em.GetComponent<ParticleEmitterComponent>(m_hologramId);
+
+		if (!particle)return;
+		
+		strcpy(particle->m_meshPath, "library/characters/rocket/sm_starlord_01.wimodel");
+		particle->m_meshChanged = true;
+	}
 }
 void Wiwa::CharacterSelector::OnUpdate()
 {
