@@ -32,7 +32,7 @@ namespace Wiwa
 
 	DialogEventManager::~DialogEventManager()
 	{
-		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+		/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
 
@@ -57,7 +57,7 @@ namespace Wiwa
 			render.RemoveInstance(m_Scene, choice3Opt1ImgID);
 
 		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
-			render.RemoveInstance(m_Scene, choice3Opt2ImgID);
+			render.RemoveInstance(m_Scene, choice3Opt2ImgID);*/
 	}
 
 	bool DialogEventManager::Init(Scene* scene)

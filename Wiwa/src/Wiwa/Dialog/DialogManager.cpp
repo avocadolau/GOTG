@@ -32,7 +32,7 @@ namespace Wiwa
 
 	DialogManager::~DialogManager()
 	{
-		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+		/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
 		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png"))
@@ -66,7 +66,7 @@ namespace Wiwa
 			{
 				conversations[l].nodes[m].occupied = false;
 			}
-		}
+		}*/
 	}
 
 	bool DialogManager::Init(Scene* scene)
