@@ -38,7 +38,7 @@
 					</RTPCValueList>
 					<CurrentStateList ShowAll="true">
 						<CurrentStateRef Name="Combat" ID="{77334FC6-E925-4D9B-B69C-0D71B1142486}"/>
-						<CurrentStateRef Name="MainMenu" ID="{35D63DDA-1EA8-48F7-BF05-3A08E6689C8C}"/>
+						<CurrentStateRef Name="Logo" ID="{427A32AA-A920-4A24-94E4-63F9F5E63A3C}"/>
 						<CurrentStateRef Name="Menus" ID="{94D7F000-F4EE-4BB5-899D-199C1F69F737}"/>
 						<CurrentStateRef Name="Low" ID="{A2D984AA-72D7-4F0E-806D-0F5538D04ED6}"/>
 					</CurrentStateList>

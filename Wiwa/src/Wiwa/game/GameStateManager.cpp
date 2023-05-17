@@ -66,6 +66,9 @@ namespace Wiwa
 	int GameStateManager::PrometheanGemsToAdd = 0;
 	int GameStateManager::DamageDivisor = 1;
 	bool GameStateManager::SecondWind = false;
+	bool GameStateManager::s_GodMode = false;
+
+
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
@@ -390,6 +393,11 @@ namespace Wiwa
 
 	void GameStateManager::DamagePlayer(uint32_t damage)
 	{
+		if (s_GodMode)
+		{
+			WI_WARN("Can't take damage, god mode on!");
+			return;
+		}
 		Wiwa::GuiManager& gm = s_CurrentScene->GetGuiManager();
 		Character* character = GetPlayerCharacterComp();
 		damage = damage / DamageDivisor;
@@ -455,8 +463,6 @@ namespace Wiwa
 
 		if (character->Shield <= 0)
 			character->Shield = 0;
-
-
 	}
 
 	void GameStateManager::StartNewRoom()
