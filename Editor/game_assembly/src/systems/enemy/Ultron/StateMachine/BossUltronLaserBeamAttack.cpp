@@ -16,6 +16,7 @@ namespace Wiwa
 	{
 		m_TimerLaser = 0.0f;
 		m_PreSmashMarkPath = "assets/vfx/prefabs/vfx_finals/Smash/p_boss_smash_01_marker.wiprefab";
+		m_LaserProtectionPath = "assets/Enemy/UltronLaserBeam/LaserBeamProtection_01.wiprefab";
 	}
 
 	BossUltronLaserBeamAttackState::~BossUltronLaserBeamAttackState()
@@ -32,6 +33,7 @@ namespace Wiwa
 		m_TimerToStopDash = 0.0f;
 		m_TimerAfterDash = 0.0f;
 		m_MoveUpwardsCounter = 0.0f;
+		m_ActivateLaserProtection = false;
 
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -127,9 +129,20 @@ namespace Wiwa
 				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 
+			if (selfTr->localPosition.y <= 6.0f && m_ActivateLaserProtection == false)
+			{
+				m_LaserProtectionId = em.LoadPrefab(m_LaserProtectionPath);
+				Transform3D* laserProtectionTr = em.GetComponent<Transform3D>(m_LaserProtectionId);
+
+				laserProtectionTr->localPosition.x = centerPoint.x;
+				laserProtectionTr->localPosition.y = 0.2f;
+				laserProtectionTr->localPosition.z = centerPoint.z;
+
+				m_ActivateLaserProtection = true;
+			}
+
 			if (selfTr->localPosition.y <= 0.05f)
 			{
-				WI_INFO("INTERPOLATION DONE");
 				laserState = LaserState::SMASH_EXPLOSION;
 			}
 		}
@@ -154,18 +167,9 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::MOVE_CENTER:
 		{
-			//navAgentPtr->StopAgent();
+			navAgentPtr->StopAgent();
+			navAgentPtr->RemoveAgent();
 
-			//if (m_TimerLaser >= 2.0f)
-			//{
-			//	//ARREGLO-AGENT
-				navAgentPtr->StopAgent();
-				navAgentPtr->RemoveAgent();
-				/*selfTr->localPosition = m_LaserAttackPosition;*/
-
-			//	
-			//	m_TimerLaser = 0.0f;
-			//}
 			m_TimerLaser = 0.0f;
 			laserState = LaserState::PREPARE_LASER;
 		}
@@ -175,7 +179,7 @@ namespace Wiwa
 			/*navAgentPtr->StopAgent();*/
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerLaser >= 2.0f)
+			if (m_TimerLaser >= 1.0f)
 			{
 				laserState = LaserState::LASER_ATTACK;
 				m_TimerLaser = 0.0f;
@@ -199,12 +203,16 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::END_STATE:
 		{
+			
+
 			if (m_TimerLaser >= 1.0f)
 			{
 				/*navAgent->autoRotate = true;
 				navAgentPtr->StopAgent();*/
 				/*agent->StopAgent();
 				agent->RemoveAgent();*/
+
+				em.DestroyEntity(m_LaserProtectionId);
 
 				selfTr->localPosition = GetNewPositionAfterLaser();
 				/*navAgentPtr->SetPosition(GetNewPositionAfterLaser());*/
