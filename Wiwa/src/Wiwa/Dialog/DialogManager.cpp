@@ -34,16 +34,27 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		render.RemoveInstance(m_Scene, continueImgID);
 
-		for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png"))
+			render.RemoveInstance(m_Scene, continueImgID);
+		
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png"))
+			render.RemoveInstance(m_Scene, continueImgID2);
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/UI_TalkButton01.png"))
+			render.RemoveInstance(m_Scene, talkIndicatorImgID);
+
+		if (totalLoadNum >= 3)
 		{
-			render.RemoveInstance(m_Scene, conversations[i].characterImgID);
-			render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
-
-			for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
+			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
 			{
-				render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
+				render.RemoveInstance(m_Scene, conversations[i].characterImgID);
+				render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
+
+				for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
+				{
+					render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
+				}
 			}
 		}
 
@@ -119,6 +130,8 @@ namespace Wiwa
 		//SetCharacterImage("assets/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
 
 		//conversations[0].occupied = true;
+
+		totalLoadNum = 0;
 
 		if (std::filesystem::exists("library"))
 		{
@@ -594,6 +607,8 @@ namespace Wiwa
 		render.DisableInstance(m_Scene, conversations[conversationNumber].nodes[nodeNumber].text1_imgModeID);
 
 		conversations[conversationNumber].nodes[nodeNumber].occupied = true;
+
+		totalLoadNum++;
 	}
 
 	void DialogManager::SetDialogBubbleImage(const char* path, int conversationNumber)
@@ -615,6 +630,8 @@ namespace Wiwa
 
 					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+
+					totalLoadNum++;
 				}
 				else
 				{
@@ -631,6 +648,8 @@ namespace Wiwa
 
 					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+
+					totalLoadNum++;
 				}
 				else
 				{
@@ -646,6 +665,8 @@ namespace Wiwa
 
 					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+
+					totalLoadNum++;
 				}
 				else
 				{
@@ -662,6 +683,8 @@ namespace Wiwa
 
 				conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
+
+				totalLoadNum++;
 			}
 			else
 			{
@@ -689,6 +712,8 @@ namespace Wiwa
 
 					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+
+					totalLoadNum++;
 				}
 				else
 				{
@@ -704,6 +729,8 @@ namespace Wiwa
 
 					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+
+					totalLoadNum++;
 				}
 				else
 				{
@@ -719,6 +746,8 @@ namespace Wiwa
 
 					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+
+					totalLoadNum++;
 				}
 				else
 				{
@@ -735,6 +764,8 @@ namespace Wiwa
 
 				conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
+
+				totalLoadNum++;
 			}
 			else
 			{
