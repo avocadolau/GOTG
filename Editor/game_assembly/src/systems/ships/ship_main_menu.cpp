@@ -66,6 +66,11 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 	}
 
+	if (data->PanToHala)
+	{
+		PanToHala();
+	}
+
 	if (m_SceneChange)
 	{
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
@@ -100,6 +105,13 @@ void Wiwa::ShipMainMenu::PanToCamera()
 		camera->getRotation().z
 	};
 	camera->setRotation(rot);
+}
+
+void Wiwa::ShipMainMenu::PanToHala()
+{
+	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
+	PhysicsSystem* physics = m_Scene->GetEntityManager().GetSystem<PhysicsSystem>(m_EntityId);
+	physics->getBody()->velocity = Math::ToBulletVector3(Math::CalculateForward(GetTransform()) * data->PanVelocity);
 }
 
 void Wiwa::ShipMainMenu::SetPanToCamera(bool ret)

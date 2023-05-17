@@ -16,7 +16,7 @@ namespace Wiwa {
 		virtual void OnUpdate() override;
 
 		void PanToCamera();
-
+		void PanToHala();
 		void SetPanToCamera(bool ret);
 
 		void OnCollisionEnter(Object* body1, Object* body2) override;
