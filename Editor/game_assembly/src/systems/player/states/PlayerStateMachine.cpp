@@ -31,7 +31,6 @@ void Wiwa::PlayerStateMachine::OnAwake()
 {
 	PlayerController::OnAwake();
 	m_CurrentState = m_IdleState;
-	GetAudio()->PlayAudio("player_health");
 }
 
 void Wiwa::PlayerStateMachine::OnInit()
@@ -92,6 +91,15 @@ void Wiwa::PlayerStateMachine::CheckHealth()
 	if (GetCharacter()->Health <= 0 && !Wiwa::GameStateManager::ReturnFanaticEffect())
 	{
 		SwitchState(m_DeathState);
+		// play audio
+		if (GameStateManager::s_CurrentCharacter == STARLORD)
+		{
+			Audio::PostEvent("vo_starlord_death");
+		}
+		else if (GameStateManager::s_CurrentCharacter == ROCKET)
+		{
+			Audio::PostEvent("vo_rocket_death");
+		}
 	}
 }
 

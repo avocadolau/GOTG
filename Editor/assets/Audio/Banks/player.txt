@@ -1,4 +1,5 @@
 Event	ID	Name			Wwise Object Path	Notes
+	215992295	player_health			\Default Work Unit\player\player_health	
 	475445591	vo_starlord_powerup			\Default Work Unit\player\startlord vo\vo_starlord_powerup	
 	521527292	player_hit_shield			\Default Work Unit\player\player_hit_shield	
 	722391850	vo_starlord_complete_run			\Default Work Unit\player\startlord vo\vo_starlord_complete_run	
@@ -18,6 +19,9 @@ Event	ID	Name			Wwise Object Path	Notes
 	4051325399	vo_starlord_heal			\Default Work Unit\player\startlord vo\vo_starlord_heal	
 	4099180457	vo_rocket_hit			\Default Work Unit\player\rocket vo\vo_rocket_hit	
 
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	215992295	player_health			\Default Work Unit\player_health	
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	5404081	vo_rocket_powerup01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_powerup01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_powerup\vo_rocket_powerup01		196614
 	7424031	vo_rocket_room_completed02	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_room_completed02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_complete_run\vo_rocket_room_completed02		199256
@@ -26,6 +30,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	41348199	vo_rocket_death	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_death_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_death\vo_rocket_death		335630
 	49179977	player_dash	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 09 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_dash		396996
 	119658343	vo_starlord_powerup02alt	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_powerup02alt_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_powerup\vo_starlord_powerup02alt		263596
+	174263698	player_health	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\heartbeat_743200E1.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_health		3081756
 	205629044	vo_rocket_spawn	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_spawn_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_spawn		215706
 	209809605	vo_rocket_powerup02alt	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_powerup02alt_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_powerup\vo_rocket_powerup02alt		299222
 	236038091	footstep_concrete_run_07	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_07		51564

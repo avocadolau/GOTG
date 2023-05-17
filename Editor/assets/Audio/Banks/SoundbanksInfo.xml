@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{38657F46-50DB-5BE6-A885-FB872BBBB098}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{1D57F470-73BD-0C6F-92F2-94563163F453}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -218,6 +218,10 @@
 				<File Id="119658343" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup02alt.wav</ShortName>
 					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_powerup02alt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="174263698" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>heartbeat.wav</ShortName>
+					<CachePath>SFX/heartbeat_743200E1.wem</CachePath>
 				</File>
 				<File Id="205629044" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Rocket - Voice Lines\vo_rocket_spawn.wav</ShortName>
@@ -375,6 +379,11 @@
 						<MediaRef Id="892625025"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="215992295" Name="player_health">
+					<MediaRefs>
+						<MediaRef Id="174263698"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="871813740" Name="player_hit">
 					<MediaRefs>
 						<MediaRef Id="712169024"/>
@@ -481,6 +490,9 @@
 					</MediaRefs>
 				</Event>
 			</Events>
+			<GameParameters>
+				<GameParameter Id="215992295" Name="player_health"/>
+			</GameParameters>
 		</SoundBank>
 		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{9F8D5F39-1103-7726-0135-BD94342B58A4}">
 			<ShortName>Init</ShortName>
@@ -942,5 +954,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{3B9F7F7D-D094-8A9B-DD0B-1DC56008B7BD}</FileHash>
+	<FileHash>{95E0CBF4-B6AE-295A-DEE8-A54CFCEFC3EB}</FileHash>
 </SoundBanksInfo>
