@@ -83,8 +83,20 @@ namespace Wiwa {
 		return controller_.time_ratio();
 	}
 
+	bool OzzAnimationSimple::HasFinished()
+	{
+		if (m_Loop) return false;
+
+		return controller_.finished();
+	}
+
 	void OzzAnimationSimple::OnPlaybackSpeedChange()
 	{
 		controller_.set_playback_speed(m_PlaybackSpeed);
+	}
+
+	void OzzAnimationSimple::OnLoopChange()
+	{
+		controller_.set_loop(m_Loop);
 	}
 }

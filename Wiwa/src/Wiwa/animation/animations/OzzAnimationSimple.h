@@ -37,6 +37,9 @@ namespace Wiwa {
 		void setTimeRatio(float time_ratio) override;
 		float getTimeRatio() override;
 
+		bool HasFinished() override;
+
 		void OnPlaybackSpeedChange() override;
+		void OnLoopChange() override;
 	};
 }

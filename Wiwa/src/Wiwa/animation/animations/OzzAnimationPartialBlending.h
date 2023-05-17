@@ -111,7 +111,10 @@ namespace Wiwa {
 		void setTimeRatio(float time_ratio) override;
 		float getTimeRatio() override;
 
+		bool HasFinished() override;
+
 		void OnPlaybackSpeedChange() override;
+		void OnLoopChange() override;
 
 		ozz::vector<ozz::math::SoaTransform>& getLocals() override { return blended_locals_; }
 

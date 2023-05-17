@@ -91,6 +91,9 @@ class PlaybackController {
   // Gets loop mode.
   bool loop() const { return loop_; }
 
+  // Check if finished
+  bool finished() const { return time_ratio_ >= 1.0f; }
+
   // Updates animation time if in "play" state, according to playback speed and
   // given frame time _dt.
   // Returns true if animation has looped during update

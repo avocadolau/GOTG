@@ -386,6 +386,12 @@ void OzzAnimationPanel::DrawAnimations()
 					animation->setPlaybackSpeed(playback_speed);
 				}
 
+				bool loop = animation->getLoop();
+
+				if (ImGui::Checkbox("Loop", &loop)) {
+					animation->setLoop(loop);
+				}
+
 				switch (a_type) {
 					case Wiwa::AnimationType::AT_PARTIAL_BLEND:
 						DrawPartialBlendingAnimation((Wiwa::OzzAnimationPartialBlending*)animation);

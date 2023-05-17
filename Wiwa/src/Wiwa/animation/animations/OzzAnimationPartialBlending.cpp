@@ -252,10 +252,24 @@ namespace Wiwa {
         return samplers_[kLowerBody].controller.time_ratio();
     }
 
+    bool OzzAnimationPartialBlending::HasFinished()
+    {
+        if (m_Loop) return false;
+
+        return samplers_[kLowerBody].controller.finished() && samplers_[kUpperBody].controller.finished();
+    }
+
     void OzzAnimationPartialBlending::OnPlaybackSpeedChange()
     {
         for (int i = 0; i < kNumLayers; ++i) {
             samplers_[i].controller.set_playback_speed(m_PlaybackSpeed);
+        }
+    }
+
+    void OzzAnimationPartialBlending::OnLoopChange()
+    {
+        for (int i = 0; i < kNumLayers; ++i) {
+            samplers_[i].controller.set_loop(m_Loop);
         }
     }
 }

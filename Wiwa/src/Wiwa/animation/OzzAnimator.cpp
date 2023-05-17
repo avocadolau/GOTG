@@ -301,6 +301,8 @@ namespace Wiwa {
 		if (anim_id >= 0 && anim_id < m_AnimationList.size()) {
 			AnimationData& a_data = m_AnimationList[anim_id];
 
+			a_data.animation->setTimeRatio(time_ratio);
+
 			if (a_data.animation->getStatus() == OzzAnimation::Status::VALID) {
 				if (m_ActiveAnimationId != WI_INVALID_INDEX) {
 					if (m_BlendOnTransition) {
@@ -450,6 +452,7 @@ namespace Wiwa {
 			anim_obj.AddMember("name", a_data.name.c_str());
 			anim_obj.AddMember("type", (int)a_type);
 			anim_obj.AddMember("playback_speed", anim->getPlaybackSpeed());
+			anim_obj.AddMember("loop", anim->getLoop());
 
 			// Specific data
 			switch (a_type) {
@@ -577,6 +580,12 @@ namespace Wiwa {
 					float p_speed = anim_obj["playback_speed"].as_float();
 
 					animation->setPlaybackSpeed(p_speed);
+				}
+
+				if (anim_obj.HasMember("loop")) {
+					bool loop = anim_obj["loop"].as_bool();
+
+					animation->setLoop(loop);
 				}
 			}
 		}

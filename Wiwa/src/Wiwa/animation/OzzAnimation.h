@@ -45,8 +45,9 @@ namespace Wiwa {
         ozz::animation::SamplingJob::Context context_;
 
         float m_PlaybackSpeed;
+        bool m_Loop;
     public:
-        OzzAnimation() : m_AnimType(AT_LAST), skeleton_(nullptr), m_Status(INVALID), m_PlaybackSpeed(1.0f) {}
+        OzzAnimation() : m_AnimType(AT_LAST), skeleton_(nullptr), m_Status(INVALID), m_PlaybackSpeed(1.0f), m_Loop(true) {}
 
         AnimationType getAnimationType() { return m_AnimType; }
 
@@ -62,6 +63,12 @@ namespace Wiwa {
         virtual float getTimeRatio() = 0;
 
         virtual void OnPlaybackSpeedChange() = 0;
+        virtual void OnLoopChange() = 0;
+
+        virtual bool HasFinished() = 0;
+
+        void setLoop(bool loop) { m_Loop = loop; OnLoopChange(); }
+        bool getLoop() { return m_Loop; }
 
         void setPlaybackSpeed(float speed) { m_PlaybackSpeed = speed; OnPlaybackSpeedChange(); }
         float getPlaybackSpeed() { return m_PlaybackSpeed; }
