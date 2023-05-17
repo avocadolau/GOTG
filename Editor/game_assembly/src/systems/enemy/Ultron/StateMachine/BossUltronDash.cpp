@@ -8,9 +8,6 @@
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include "../../../../components/attack/Explosion.h"
 
-#define TIMER_GO_UPWARDS 0.01f
-#define TIMER_GO_DOWNWARDS 0.01f
-
 namespace Wiwa
 {
 	BossUltronDashState::BossUltronDashState()

@@ -7,12 +7,15 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../components/enemy/BossMovementPoints.h"
+#include "../../../attack/UltronSmashExplosionSystem.h"
+#include "../../../../components/attack/Explosion.h"
 
 namespace Wiwa
 {
 	BossUltronLaserBeamAttackState::BossUltronLaserBeamAttackState()
 	{
 		m_TimerLaser = 0.0f;
+		m_PreSmashMarkPath = "assets/vfx/prefabs/vfx_finals/Smash/p_boss_smash_01_marker.wiprefab";
 	}
 
 	BossUltronLaserBeamAttackState::~BossUltronLaserBeamAttackState()
@@ -23,6 +26,12 @@ namespace Wiwa
 	void BossUltronLaserBeamAttackState::EnterState(BossUltron* enemy)
 	{
 		m_TimerLaser = 0.0f;
+		m_TimerToRotate = 0.0f;
+		centerPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+		m_TimerDash = 0.0f;
+		m_TimerToStopDash = 0.0f;
+		m_TimerAfterDash = 0.0f;
+		m_MoveUpwardsCounter = 0.0f;
 
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -31,7 +40,7 @@ namespace Wiwa
 		m_AfterLaserBeamPosition.clear();
 		FillPremadePositionAfterLaser(enemy, m_AfterLaserBeamPosition);
 
-		laserState = Wiwa::BossUltronLaserBeamAttackState::LaserState::MOVE_CENTER;
+		laserState = Wiwa::BossUltronLaserBeamAttackState::LaserState::SMASH_INIT;
 	}
 
 	void BossUltronLaserBeamAttackState::UpdateState(BossUltron* enemy)
@@ -41,27 +50,124 @@ namespace Wiwa
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
+		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		m_TimerLaser += Time::GetDeltaTimeSeconds();
-
+		
 		switch (laserState)
 		{
+		case Wiwa::BossUltronLaserBeamAttackState::LaserState::SMASH_INIT:
+		{
+			agent->StopAgent();
+			navAgent->autoRotate = false;
+
+			m_TimerToRotate += Time::GetDeltaTimeSeconds();
+
+			enemy->LookAt(playerTr->localPosition, 80.0f);
+
+			if (m_TimerToRotate >= 1.6f) //Timer to look at player
+			{
+				m_TimerToRotate = 0.0f;
+				m_MoveUpwardsCounter = 0.0f;
+				m_TimerToStopDash = 0.0f;
+				m_UltronJump = false;
+				agent->StopAgent();
+				agent->RemoveAgent();
+
+				laserState = LaserState::SMASH_GO_UP;
+			}
+		}
+		break;
+		case Wiwa::BossUltronLaserBeamAttackState::LaserState::SMASH_GO_UP:
+		{
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
+
+			m_TimerDash += Time::GetDeltaTimeSeconds();
+			m_TimerToStopDash += Time::GetDeltaTimeSeconds();
+
+			if (m_TimerDash >= TIMER_GO_UPWARDS_LASER)
+			{
+				m_TimerDash = 0.0f;
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 1.0f; //Offset for the Smash
+				selfTr->localPosition.y = m_MoveUpwardsCounter;
+			}
+
+			if (m_TimerToStopDash >= 1.2f) //Timer for the Ultron to go up
+			{
+				/*agent->RegisterWithCrowd();
+				agent->SetPosition(playerDistance);
+				agent->StopAgent();
+				agent->RemoveAgent();*/
+
+				selfTr->localPosition.x = centerPoint.x;
+				selfTr->localPosition.z = centerPoint.z;
+
+				m_PreSmashMarkId = em.LoadPrefab(m_PreSmashMarkPath);
+				Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(m_PreSmashMarkId);
+
+				thunderMarkTr->localPosition.x = centerPoint.x;
+				thunderMarkTr->localPosition.y = 0.1f;
+				thunderMarkTr->localPosition.z = centerPoint.z;
+
+				WI_INFO("INTERPOLATION DONE");
+				laserState = LaserState::SMASH_GO_DOWN;
+			}
+		}
+		break;
+		case Wiwa::BossUltronLaserBeamAttackState::LaserState::SMASH_GO_DOWN:
+		{
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
+
+			m_TimerDash += Time::GetDeltaTimeSeconds();
+
+			if (m_TimerDash >= TIMER_GO_DOWNWARDS_LASER)
+			{
+				m_TimerDash = 0.0f;
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter - 1.0f;
+				selfTr->localPosition.y = m_MoveUpwardsCounter;
+			}
+
+			if (selfTr->localPosition.y <= 0.05f)
+			{
+				WI_INFO("INTERPOLATION DONE");
+				laserState = LaserState::SMASH_EXPLOSION;
+			}
+		}
+		break;
+		case Wiwa::BossUltronLaserBeamAttackState::LaserState::SMASH_EXPLOSION:
+		{
+			em.DestroyEntity(m_PreSmashMarkId);
+
+			agent->RegisterWithCrowd();
+			agent->SetPosition(centerPoint);
+			agent->StopAgent();
+
+			Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+
+			SpawnExplosionAfterSmash(enemy, selfTr);
+
+			navAgent->autoRotate = true;
+
+			laserState = LaserState::MOVE_CENTER;
+		}
+		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::MOVE_CENTER:
 		{
-			navAgentPtr->StopAgent();
+			//navAgentPtr->StopAgent();
 
-			glm::vec3 m_LaserAttackPosition = { 0.0f,0.0f,0.0f };
-
-			if (m_TimerLaser >= 2.0f)
-			{
-				//ARREGLO-AGENT
+			//if (m_TimerLaser >= 2.0f)
+			//{
+			//	//ARREGLO-AGENT
 				navAgentPtr->StopAgent();
 				navAgentPtr->RemoveAgent();
-				selfTr->localPosition = m_LaserAttackPosition;
+				/*selfTr->localPosition = m_LaserAttackPosition;*/
 
-				laserState = LaserState::PREPARE_LASER;
-				m_TimerLaser = 0.0f;
-			}	
+			//	
+			//	m_TimerLaser = 0.0f;
+			//}
+			m_TimerLaser = 0.0f;
+			laserState = LaserState::PREPARE_LASER;
 		}
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::PREPARE_LASER:
@@ -69,7 +175,7 @@ namespace Wiwa
 			/*navAgentPtr->StopAgent();*/
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerLaser >= 1.0f)
+			if (m_TimerLaser >= 2.0f)
 			{
 				laserState = LaserState::LASER_ATTACK;
 				m_TimerLaser = 0.0f;
@@ -97,6 +203,9 @@ namespace Wiwa
 			{
 				/*navAgent->autoRotate = true;
 				navAgentPtr->StopAgent();*/
+				/*agent->StopAgent();
+				agent->RemoveAgent();*/
+
 				selfTr->localPosition = GetNewPositionAfterLaser();
 				/*navAgentPtr->SetPosition(GetNewPositionAfterLaser());*/
 				m_TimerLaser = 0.0f;
@@ -218,6 +327,53 @@ namespace Wiwa
 		std::uniform_int_distribution<> disEnemies(0, m_AfterLaserBeamPosition.size() - 1);
 		int randomNum = disEnemies(Application::s_Gen);
 		return m_AfterLaserBeamPosition[randomNum];
+	}
+
+	void BossUltronLaserBeamAttackState::SpawnExplosionAfterSmash(BossUltron* enemy, Transform3D* selfTransform)
+	{
+		/*if (GameStateManager::s_PoolManager->s_ExplosiveBarrel->getCountDisabled() <= 0)
+			return;*/
+
+		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+		EntityId newExplosionId = EntityManager::INVALID_INDEX;
+		newExplosionId = GameStateManager::s_PoolManager->s_SmashExplosionPool->GetFromPool();
+
+		if (newExplosionId == EntityManager::INVALID_INDEX)
+			return;
+
+		UltronSmashExplosionSystem* explosionSys = entityManager.GetSystem<UltronSmashExplosionSystem>(newExplosionId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newExplosionId);
+		physSys->DeleteBody();
+
+		// Set intial positions
+		//Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_TransformIt); //Transform
+		Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
+		Explosion* explosion = (Explosion*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Explosion>(newExplosionId));
+		explosion->isFromPool = true;
+
+		if (!explosionTr)
+			return;
+
+		explosionTr->localPosition.x = Math::GetWorldPosition(selfTransform->worldMatrix).x;
+		explosionTr->localPosition.y = Math::GetWorldPosition(selfTransform->worldMatrix).y;
+		explosionTr->localPosition.z = Math::GetWorldPosition(selfTransform->worldMatrix).z;
+
+		physSys->CreateBody();
+
+		explosionSys->EnableExplosion();
+
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		EntityId p_explosion = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/boss_Ultron/p_boss_smash.wiprefab");
+
+		if (p_explosion != EntityManager::INVALID_INDEX)
+		{
+			Transform3D* p_exT = em.GetComponent<Transform3D>(p_explosion);
+			if (p_exT != nullptr)
+			{
+				p_exT->localPosition = explosionTr->localPosition;
+			}
+		}
 	}
 }
 

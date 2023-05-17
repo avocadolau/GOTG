@@ -2,6 +2,9 @@
 #include "BossUltronBase.h"
 #include "BossUltronMovement.h"
 
+#define TIMER_GO_UPWARDS 0.01f
+#define TIMER_GO_DOWNWARDS 0.01f
+
 namespace Wiwa {
 	class BossUltronDashState : public BossUltronBaseState {
 
