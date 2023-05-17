@@ -164,13 +164,15 @@ namespace Wiwa
 				current_angle += angle_increment;
 			}*/
 
-			navAgent->autoRotate = true;
+			/*navAgent->autoRotate = true;*/
 
 			m_State = DashState::DASH_FINISH;
 		}
 		break;
 		case Wiwa::BossUltronDashState::DashState::DASH_FINISH:
 		{
+			enemy->LookAt(playerTr->localPosition, 60.0f);
+
 			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
 
 			if (m_TimerAfterDash >= 1.0f)
