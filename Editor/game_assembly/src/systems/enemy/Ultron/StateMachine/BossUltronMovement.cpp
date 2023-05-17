@@ -91,8 +91,8 @@ namespace Wiwa
 		{
 			if (!enemy->m_IsSecondPhaseActive)
 			{
-				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;*/
+				//m_NextAttack = GetAttackFromProbabilitesFirstPhase();
+				m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
