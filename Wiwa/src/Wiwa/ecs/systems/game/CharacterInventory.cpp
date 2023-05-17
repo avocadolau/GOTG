@@ -3,6 +3,7 @@
 #include "Wiwa/game/Items/ItemManager.h"
 #include "Wiwa/core/Input.h"
 #include "Wiwa/ecs/components/game/items/Item.h"
+#include "Wiwa/audio/Audio.h"
 
 void Wiwa::CharacterInventory::OnInit()
 {
@@ -95,6 +96,17 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			Consumable* consumable = Wiwa::ItemManager::GetConsumable(item->Name);
 			Wiwa::GameStateManager::s_PlayerInventory->AddConsumable(*consumable);
 			em.DestroyEntity(body2->id);
+		}
+
+
+		// play audio
+		if (GameStateManager::s_CurrentCharacter == STARLORD)
+		{
+			Audio::PostEvent("vo_starlord_powerup");
+		}
+		else if (GameStateManager::s_CurrentCharacter == ROCKET)
+		{
+			Audio::PostEvent("vo_rocket_powerup");
 		}
 	}
 }

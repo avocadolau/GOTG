@@ -908,7 +908,7 @@ namespace Wiwa
 
 		if (material == nullptr)
 		{
-			WI_ERROR("missing material {}",mesh->getModelName());
+			WI_ERROR("missing material {}",mesh->GetParent()->getModelName());
 			return;
 		}
 
