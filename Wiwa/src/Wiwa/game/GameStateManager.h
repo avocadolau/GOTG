@@ -227,5 +227,7 @@ namespace Wiwa
 
 		static bool IsWaveSpawnerFinished(WaveSpawner* waveSpawner);
 		static void EndCombatRoom(WaveSpawner* waveSpawner);
+		
+		static bool s_GodMode;
 	};
 }
