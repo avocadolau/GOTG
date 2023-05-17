@@ -44,6 +44,7 @@ namespace Wiwa {
 
 		bool initiateDash = false;
 		bool m_UltronJump = false;
+		
 
 		float m_MoveUpwardsCounter = 0.0f;
 		float m_MoveDownwardsCounter = 0.0f;
@@ -52,7 +53,12 @@ namespace Wiwa {
 		std::vector<glm::vec3> m_AfterLaserBeamPosition;
 		float m_TimerLaser;
 		glm::vec3 centerPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+
 		const char* m_PreSmashMarkPath;
 		EntityId m_PreSmashMarkId;
+
+		const char* m_LaserProtectionPath;
+		EntityId m_LaserProtectionId;
+		bool m_ActivateLaserProtection = false;
 	};
 }

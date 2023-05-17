@@ -71,7 +71,7 @@ namespace Wiwa
 
 		enemy->LookAt(playerTr->localPosition, 70.0f);
 
-		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 3.0f))
+		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 1.0f))
 		{
 			m_DoAttack = true;
 			navAgentPtr->StopAgent();
@@ -92,7 +92,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::CLUSTER_SHOTS;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
