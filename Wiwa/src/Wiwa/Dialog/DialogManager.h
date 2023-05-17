@@ -130,5 +130,7 @@ namespace Wiwa
 
 		std::string dialogEventToTrigger = "";
 		bool triggerEvent = false;
+
+		int totalLoadNum = 0;
 	};
 }
