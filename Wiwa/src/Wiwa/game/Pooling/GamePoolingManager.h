@@ -24,6 +24,7 @@ namespace Wiwa
         EntityPool* s_StarLordBullets;
         EntityPool* s_RocketBullets;
         EntityPool* s_ZigZagBulletPool;
+        EntityPool* s_StarHawksBlastPool;
 
         EntityPool* s_SentinelExplosion;
         EntityPool* s_ExplosiveBarrel;
