@@ -1276,8 +1276,6 @@ namespace Wiwa
 			processed_vertex_count += part_vertex_count;
 		}
 
-		ozz::math::Float4x4 final_trns = _transform.Scaling({ 100.0f, 100.0f, 100.0f, 0.0f });
-
 		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
 
 		// After processing everything, render

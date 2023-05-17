@@ -61,15 +61,17 @@ namespace Wiwa {
 		CameraManager& man = Wiwa::SceneManager::getActiveScene()->GetCameraManager();
 		size_t cam_count = man.getCameraSize();
 
+		glm::mat4 transform = glm::scale(t3d->worldMatrix, { 100.f, 100.f, 100.f });
+
 		// Render for every camera
 		for (size_t i = 0; i < cam_count; i++) {
 			Camera* cam = man.getCamera(i);
 
 			// Renders skin
-			success &= m_Animator->Render(cam, t3d->worldMatrix);
+			success &= m_Animator->Render(cam, transform);
 		}
 
-		success &= m_Animator->Render(man.editorCamera, t3d->worldMatrix);
+		success &= m_Animator->Render(man.editorCamera, transform);
 
 		if(!success){
 			WI_CORE_ERROR("Error updating partial animation");
