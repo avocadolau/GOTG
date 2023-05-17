@@ -37,6 +37,10 @@ namespace Wiwa {
 		ozz::animation::Skeleton m_Skeleton;
 		bool m_LoadedSkeleton;
 
+		std::string m_MaterialPath;
+		ResourceId m_MaterialId;
+		bool m_LoadedMaterial;
+
 		std::string m_ActiveAnimationName;
 		size_t m_ActiveAnimationId;
 		size_t m_PrevAnimationId;
@@ -78,6 +82,15 @@ namespace Wiwa {
 
 		// Check if skeleton was loaded
 		bool IsSkeletonLoaded() { return m_LoadedSkeleton; }
+
+		// Load material
+		bool LoadMaterial(const std::string& path);
+
+		// Check if material was loaded
+		bool IsMaterialLoaded() { return m_LoadedMaterial; }
+
+		// Get loaded material path
+		std::string getMaterialPath() { return m_MaterialPath; }
 
 		// Get loaded skeleton path
 		std::string getSkeletonPath() { return m_SkeletonPath; }

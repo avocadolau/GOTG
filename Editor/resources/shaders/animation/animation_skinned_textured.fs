@@ -4,7 +4,7 @@ in vec3 v_world_normal;
 in vec4 v_vertex_color;
 in vec2 v_vertex_uv;
 
-uniform sampler2D u_texture;
+uniform sampler2D u_Texture;
 
 out vec4 out_color;
 
@@ -22,5 +22,5 @@ void main() {
   
   vec2 flipuv = vec2(v_vertex_uv.s, 1. - v_vertex_uv.t);
   
-  out_color = ambient * v_vertex_color * texture(u_texture, flipuv);//texture(u_texture, flipuv); //
+  out_color = ambient * v_vertex_color * texture(u_Texture, flipuv);//texture(u_texture, flipuv); //
 }

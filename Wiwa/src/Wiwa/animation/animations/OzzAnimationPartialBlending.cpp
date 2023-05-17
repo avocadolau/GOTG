@@ -223,11 +223,21 @@ namespace Wiwa {
         samplers_[kUpperBody].controller.set_playback_speed(playback_speed);
     }
 
+    float OzzAnimationPartialBlending::getUpperPlaybackSpeed()
+    {
+        return samplers_[kUpperBody].controller.playback_speed();
+    }
+
     void OzzAnimationPartialBlending::setLowerPlaybackSpeed(float playback_speed)
     {
         samplers_[kLowerBody].controller.set_playback_speed(playback_speed);
 
         m_PlaybackSpeed = playback_speed;
+    }
+
+    float OzzAnimationPartialBlending::getLowerPlaybackSpeed()
+    {
+        return samplers_[kLowerBody].controller.playback_speed();
     }
 
     void OzzAnimationPartialBlending::setTimeRatio(float time_ratio)
