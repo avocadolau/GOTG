@@ -57,6 +57,7 @@
 
 #include "systems/TestingSystem.h"
 #include "systems/attack/StarlordUltimateSystem.h"
+#include "systems/attack/StarhawkBlastBulletSystem.h"
 
 #include "systems/triggers/EndRewardRoom.h"
 #include "systems/InitMusic.h"

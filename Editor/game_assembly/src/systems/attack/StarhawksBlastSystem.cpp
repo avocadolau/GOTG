@@ -1,5 +1,8 @@
 #include "StarhawksBlastSystem.h"
 #include "../../components/attack/StarhawkBlast.h"
+#include "../../components/attack/SimpleBullet.h"
+#include "../../systems/attack/StarhawkBlastBulletSystem.h"
+
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -27,22 +30,29 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		StarhawksBlast* starhawksBlast = GetComponentByIterator<StarhawksBlast>(m_StarHawksIt);
-		starhawksBlast->velocity = 200.f;
 		starhawksBlast->damage = 5;
 		EntityId player = GameStateManager::GetPlayerId();
 
 		m_PlayerTransformIt = em.GetComponentIterator<Transform3D>(player);
-		std::vector<EntityId>* children = em.GetEntityChildren(m_EntityId);
 
-		for (size_t i = 0; i < children->size(); i++)
-		{
-			m_ColliderTransformIt.push_back(em.GetComponentIterator<Transform3D>(children->at(i)));
-			/*Mesh * mesh = em.AddComponent<Mesh>(children->at(i));
+		int numGroups = 10;
+		int numBulletsPerGroup = 3;
+		float degreeStep = 360.0f / numGroups;
+		float groupDegreeStep = 10.0f; // The angle between bullets in a group
 
-			mesh->meshId = Resources::Load<Model>("assets/prefabs/victoryshield/planebullet.fbx");
-			mesh->materialId = Resources::Load<Material>("assets/prefabs/victoryshield/defaultmaterial.wimaterial");
-			em.ApplySystem<MeshRenderer>(children->at(i));*/
+		
+		for (int i = 0; i < numGroups; ++i) {
+			for (int j = 0; j < numBulletsPerGroup; ++j) {
+				float directionAngle = i * degreeStep + j * groupDegreeStep;
+				float radian = directionAngle * (PI / 180.0f); // Convert degree to radian
+				float xDir = cos(radian);
+				float yDir = sin(radian);
+
+				glm::vec3 direction(xDir, 0.0f, yDir);
+				SpawnStarhawkBullet(direction);
+			}
 		}
+
 	}
 
 	void StarhawksBlastSystem::OnUpdate()
@@ -54,20 +64,6 @@ namespace Wiwa
 
 		StarhawksBlast* starhawksBlast = GetComponentByIterator<StarhawksBlast>(m_StarHawksIt);
 
-		Wiwa::Transform3D* transfromStarhawksBlast = GetComponentByIterator<Transform3D>(m_StarHawksTransfromIt);
-		Wiwa::Transform3D* transformPlayer = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-		for (size_t i = 0; i < m_ColliderTransformIt.size(); i++)
-		{
-			Wiwa::Transform3D* transformCol = GetComponentByIterator<Transform3D>(m_ColliderTransformIt.at(i));
-			transformCol->localPosition.x = 0.f;
-			transformCol->localPosition.z = 0.f;
-			transformCol->localPosition.y = 0.f;
-		}
-
-		transfromStarhawksBlast->localPosition.x = transformPlayer->localPosition.x;
-		transfromStarhawksBlast->localPosition.z = transformPlayer->localPosition.z;
-		transfromStarhawksBlast->localRotation.y += starhawksBlast->velocity * Time::GetDeltaTimeSeconds();
-		
 		m_Timer += Time::GetDeltaTimeSeconds();
 		if (m_Timer >= starhawksBlast->lifeTime)
 		{
@@ -91,5 +87,44 @@ namespace Wiwa
 			em.DestroyEntity(body2->id);
 		}*/
 	}
+
+	void StarhawksBlastSystem::SpawnStarhawkBullet(glm::vec3 direction)
+	{
+		if (GameStateManager::s_PoolManager->s_StarHawksBlastPool->getCountDisabled() <= 0)
+			return;
+
+		EntityManager& entityManager = m_Scene->GetEntityManager();
+		StarhawksBlast* starhawksBlast = GetComponentByIterator<StarhawksBlast>(m_StarHawksIt);
+		starhawksBlast->damage = 20;
+		GameStateManager::s_PoolManager->SetScene(m_Scene);
+		EntityId newBulletId = EntityManager::INVALID_INDEX;
+		newBulletId = GameStateManager::s_PoolManager->s_StarHawksBlastPool->GetFromPool();
+		if (newBulletId == EntityManager::INVALID_INDEX)
+			return;
+
+		StarhawkBlastBulletSystem* bulletSys = entityManager.GetSystem<StarhawkBlastBulletSystem>(newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
+
+		// Set intial positions
+		Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
+		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+		if (!bulletTr || !playerTr)
+			return;
+
+		bulletTr->localPosition = playerTr->localPosition;
+		bulletTr->localRotation = glm::vec3(0.f,direction.y, 0.f);
+		bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
+
+		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
+
+		bullet->direction = direction;
+		bullet->isFromPool = true;
+		bullet->damage = starhawksBlast->damage;
+		physSys->CreateBody();
+		bulletSys->EnableBullet();
+	}
+
 
 }

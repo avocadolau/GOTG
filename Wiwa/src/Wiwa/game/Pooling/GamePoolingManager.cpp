@@ -31,7 +31,7 @@ namespace Wiwa
 		s_RainProjectilePool = new EntityPool(Pool_Type::RAIN_PROJECTILE, 80, "assets\\Enemy\\RainProjectile\\RainProjectile_01.wiprefab");
 		s_SmashExplosionPool = new EntityPool(Pool_Type::ULTRON_SMASH_EXPLOSION, 12, "assets\\Enemy\\Explosions\\SmashExplosion_01.wiprefab");
 		s_ZigZagBulletPool = new EntityPool(Pool_Type::ZIG_ZAG_BULLET, 40, "assets\\Enemy\\ZigZagBullet\\ZigZagBullet_01.wiprefab");
-
+		s_StarHawksBlastPool = new EntityPool(Pool_Type::STARHAWK_BLAST_BULLET, 40, "assets\\Prefabs\\P_StarHawkBlast.wiprefab");
 		m_HasLoadedAll = false;
 	}
 
@@ -58,6 +58,8 @@ namespace Wiwa
 		delete s_RainProjectilePool;
 		delete s_SmashExplosionPool;
 		delete s_ZigZagBulletPool;
+
+		delete s_StarHawksBlastPool;
 	}
 
 	void GamePoolingManager::SetScene(Scene* scene)
@@ -83,6 +85,7 @@ namespace Wiwa
 		s_RainProjectilePool->SetScene(scene);
 		s_SmashExplosionPool->SetScene(scene);
 		s_ZigZagBulletPool->SetScene(scene);
+		s_StarHawksBlastPool->SetScene(scene);
 	}
 
 
@@ -149,6 +152,9 @@ namespace Wiwa
 			break;
 		case Pool_Type::ZIG_ZAG_BULLET:
 			s_ZigZagBulletPool->LoadPool(scene);
+			break;
+		case Pool_Type::STARHAWK_BLAST_BULLET:
+			s_StarHawksBlastPool->LoadPool(scene);
 			break;
 		default:
 			break;
@@ -218,6 +224,9 @@ namespace Wiwa
 		case Pool_Type::ZIG_ZAG_BULLET:
 			s_ZigZagBulletPool->ReleasePool();
 			break;
+		case Pool_Type::STARHAWK_BLAST_BULLET:
+			s_StarHawksBlastPool->ReleasePool();
+			break;
 		default:
 			break;
 		}
@@ -250,6 +259,8 @@ namespace Wiwa
 		s_SmashExplosionPool->LoadPool(scene);
 		s_ZigZagBulletPool->LoadPool(scene);
 
+		s_StarHawksBlastPool->LoadPool(scene);
+
 		m_HasLoadedAll = true;
 	}
 	void GamePoolingManager::UnloadAllPools()
@@ -277,5 +288,8 @@ namespace Wiwa
 		s_RainProjectilePool->ReleasePool();
 		s_SmashExplosionPool->ReleasePool();
 		s_ZigZagBulletPool->ReleasePool();
+
+		s_StarHawksBlastPool->ReleasePool();
+
 	}
 }

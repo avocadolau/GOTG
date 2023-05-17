@@ -32,7 +32,32 @@ namespace Wiwa
 
 	DialogEventManager::~DialogEventManager()
 	{
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
+
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice1Opt1ImgID);
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice1Opt2ImgID);
+
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice2Opt1ImgID);
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice2Opt2ImgID);
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice2Opt3ImgID);
+
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice3Opt1ImgID);
+
+		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice3Opt2ImgID);
 	}
 
 	bool DialogEventManager::Init(Scene* scene)
