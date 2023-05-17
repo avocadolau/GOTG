@@ -66,6 +66,9 @@ namespace Wiwa
 	int GameStateManager::PrometheanGemsToAdd = 0;
 	int GameStateManager::DamageDivisor = 1;
 	bool GameStateManager::SecondWind = false;
+	bool GameStateManager::s_GodMode = false;
+
+
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
 		s_RoomState = room_state;
@@ -390,6 +393,11 @@ namespace Wiwa
 
 	void GameStateManager::DamagePlayer(uint32_t damage)
 	{
+		if (s_GodMode)
+		{
+			WI_WARN("Can't take damage, god mode on!");
+			return;
+		}
 		Wiwa::GuiManager& gm = s_CurrentScene->GetGuiManager();
 		Character* character = GetPlayerCharacterComp();
 		damage = damage / DamageDivisor;
@@ -401,12 +409,25 @@ namespace Wiwa
 		// The damage from this function doesn't expand to the health
 		// this means that if there's remaining shield the damage doesn't apply
 		// to the health even when this surpases the shield ammount
-
-		// If there's no shield we take damage from the health
+		// 
+		//play voice over audio
+		int random = 1 + (rand() % 100);
+		if (random < 5)
+		{
+			// play audio
+			if (GameStateManager::s_CurrentCharacter == STARLORD)
+			{
+				Audio::PostEvent("vo_startlord_hit");
+			}
+			else if (GameStateManager::s_CurrentCharacter == ROCKET)
+			{
+				Audio::PostEvent("vo_rocket_hit");
+			}
+		}
 
 		MeshRenderer* renderer = s_CurrentScene->GetEntityManager().GetSystem<MeshRenderer>(s_PlayerId);
 
-		
+		// If there's no shield we take damage from the health
 		if (character->Shield <= 0)
 		{
 			character->Health -= damage;
@@ -442,8 +463,6 @@ namespace Wiwa
 
 		if (character->Shield <= 0)
 			character->Shield = 0;
-
-
 	}
 
 	void GameStateManager::StartNewRoom()
@@ -483,6 +502,16 @@ namespace Wiwa
 		}
 		ChangeRoomState(RoomState::STATE_TRANSITIONING);
 		SaveProgression();
+
+		// play audio
+		if (GameStateManager::s_CurrentCharacter == STARLORD)
+		{
+			Audio::PostEvent("vo_starlord_complete_run");
+		}
+		else if (GameStateManager::s_CurrentCharacter == ROCKET)
+		{
+			Audio::PostEvent("vo_rocket_complete_run");
+		}
 	}
 
 	void GameStateManager::LogRoomState()

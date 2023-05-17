@@ -178,6 +178,21 @@ void Wiwa::BossUltronProjectileRainAttackState::SpawnThunderStorm(BossUltron* en
 	physSys->CreateBody();
 
 	bulletSys->EnableBullet();
+
+	EntityId p_laser = entityManager.LoadPrefab("assets/vfx/prefabs/vfx_finals/RainProjectile/p_boss_rain_projectile_01.wiprefab");
+
+	if (p_laser != EntityManager::INVALID_INDEX)
+	{
+		Transform3D* p_laserT = entityManager.GetComponent<Transform3D>(p_laser);
+
+		if (p_laserT != nullptr)
+		{
+			p_laserT->localPosition = thunderPosition;
+			p_laserT->localPosition.y = 0;
+		}
+	}
+	
+
 }
 
 glm::vec3 Wiwa::BossUltronProjectileRainAttackState::RandomPoint()

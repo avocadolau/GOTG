@@ -22,5 +22,11 @@ namespace Wiwa
 		bool m_FirstShoot;
 		float m_audioDelay;
 		float m_currentAudioDelay;
+
+		float footstepTimer = 0.f;
+		float walkStepTimer = 0.62f;
+		float runStepTimer = 0.458f;
+		float stepParticleTimer = 0.0f;
+		float currentSteptime = 0.0f;
 	};
 }

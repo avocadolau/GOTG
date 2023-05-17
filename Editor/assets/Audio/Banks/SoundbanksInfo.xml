@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{49502CFC-CCC8-3171-E92F-9BD6AECC7E07}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{287409F6-C181-015B-21DC-2396C703D12B}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -36,10 +36,6 @@
 				<File Id="389483863" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>01 Prologue.wav</ShortName>
 					<CachePath>SFX/01 Prologue_D79FB2B7.wem</CachePath>
-				</File>
-				<File Id="424263943" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>IntroSceneAudio.wav</ShortName>
-					<CachePath>SFX/IntroSceneAudio_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="446020800" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>clap_130_bpm.wav</ShortName>
@@ -68,6 +64,10 @@
 				<File Id="772738426" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>waa_130_bpm.wav</ShortName>
 					<CachePath>SFX/waa_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="829742781" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Intro Scene.wav</ShortName>
+					<CachePath>SFX/Intro Scene_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="901990650" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>stab_130_bpm.wav</ShortName>
@@ -137,7 +137,7 @@
 								<SwitchContainer>
 									<SwitchValue GroupType="State" GroupId="4227810856" Id="1125500713"/>
 									<MediaRefs>
-										<MediaRef Id="424263943"/>
+										<MediaRef Id="829742781"/>
 									</MediaRefs>
 								</SwitchContainer>
 							</Children>
@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{38657F46-50DB-5BE6-A885-FB872BBBB098}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{EAF096DF-B8FA-1A7A-3EBF-41FB5CD2CAC6}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -482,7 +482,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{9F8D5F39-1103-7726-0135-BD94342B58A4}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{7FDA1F10-A10C-F00F-8183-BB0138700E34}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -942,5 +942,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{3B9F7F7D-D094-8A9B-DD0B-1DC56008B7BD}</FileHash>
+	<FileHash>{8A691363-105B-555A-2A5B-4C571FA68E19}</FileHash>
 </SoundBanksInfo>

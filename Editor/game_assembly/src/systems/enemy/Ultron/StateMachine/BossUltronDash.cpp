@@ -8,9 +8,6 @@
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include "../../../../components/attack/Explosion.h"
 
-#define TIMER_GO_UPWARDS 0.01f
-#define TIMER_GO_DOWNWARDS 0.01f
-
 namespace Wiwa
 {
 	BossUltronDashState::BossUltronDashState()
@@ -167,13 +164,15 @@ namespace Wiwa
 				current_angle += angle_increment;
 			}*/
 
-			navAgent->autoRotate = true;
+			/*navAgent->autoRotate = true;*/
 
 			m_State = DashState::DASH_FINISH;
 		}
 		break;
 		case Wiwa::BossUltronDashState::DashState::DASH_FINISH:
 		{
+			enemy->LookAt(playerTr->localPosition, 60.0f);
+
 			m_TimerAfterDash += Time::GetDeltaTimeSeconds();
 
 			if (m_TimerAfterDash >= 1.0f)
@@ -219,16 +218,16 @@ namespace Wiwa
 
 		// Set intial positions
 		//Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_TransformIt); //Transform
-		Transform3D* explosiveBarrelTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
+		Transform3D* explosionTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newExplosionId));
 		Explosion* explosion = (Explosion*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Explosion>(newExplosionId));
 		explosion->isFromPool = true;
 
-		if (!explosiveBarrelTr)
+		if (!explosionTr)
 			return;
 
-		explosiveBarrelTr->localPosition.x = Math::GetWorldPosition(selfTransform->worldMatrix).x;
-		explosiveBarrelTr->localPosition.y = Math::GetWorldPosition(selfTransform->worldMatrix).y;
-		explosiveBarrelTr->localPosition.z = Math::GetWorldPosition(selfTransform->worldMatrix).z;
+		explosionTr->localPosition.x = Math::GetWorldPosition(selfTransform->worldMatrix).x;
+		explosionTr->localPosition.y = Math::GetWorldPosition(selfTransform->worldMatrix).y;
+		explosionTr->localPosition.z = Math::GetWorldPosition(selfTransform->worldMatrix).z;
 		
 		physSys->CreateBody();
 
@@ -242,7 +241,7 @@ namespace Wiwa
 			Transform3D* p_exT = em.GetComponent<Transform3D>(p_explosion);
 			if (p_exT != nullptr)
 			{
-				p_exT->localPosition = explosiveBarrelTr->localPosition;
+				p_exT->localPosition = explosionTr->localPosition;
 			}
 		}
 	}

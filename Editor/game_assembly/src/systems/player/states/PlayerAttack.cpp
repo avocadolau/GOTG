@@ -83,6 +83,14 @@ void Wiwa::PlayerAttack::UpdateState()
 
 		}
 
+		//audio
+		currentSteptime -= Time::GetDeltaTimeSeconds();
+		if (currentSteptime < 0)
+		{
+			m_StateMachine->GetAudio()->PlayAudio("player_walk");
+			currentSteptime = runStepTimer;
+		}
+
 	}
 	else
 	{

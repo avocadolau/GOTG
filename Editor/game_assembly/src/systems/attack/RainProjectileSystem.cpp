@@ -104,7 +104,7 @@ void Wiwa::RainProjectileSystem::OnCollisionEnter(Object* body1, Object* body2)
 		std::string wallStr = "WALL";
 		if (wallStr == body2->selfTagStr)
 		{
-			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
+			GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
 		}
 
 	}
