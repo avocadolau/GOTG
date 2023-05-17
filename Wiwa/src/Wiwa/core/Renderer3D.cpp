@@ -10,6 +10,7 @@
 #include <Wiwa/utilities/render/animator.h>
 
 #include <Wiwa/ecs/systems/LightSystem.h>
+#include <Wiwa/utilities/render/LightManager.h>
 #include <ozz/geometry/runtime/skinning_job.h>
 
 const uint8_t kDefaultColorsArray[][4] = {
@@ -1275,6 +1276,8 @@ namespace Wiwa
 			processed_vertex_count += part_vertex_count;
 		}
 
+		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
+
 		// After processing everything, render
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 
@@ -1304,6 +1307,7 @@ namespace Wiwa
 		Shader* anim_shader = material->getShader();
 
 		anim_shader->Bind();
+		SetUpLight(anim_shader, camera, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights());
 
 		material->Bind();
 
