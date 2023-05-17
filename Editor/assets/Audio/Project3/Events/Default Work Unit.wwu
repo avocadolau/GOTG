@@ -331,27 +331,6 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="player_health" ID="{17569AE8-553C-4246-8B3B-EBD23A33AB80}">
-							<ChildrenList>
-								<Action Name="" ID="{66263B48-067F-4DF3-96E2-583CDBC22433}" ShortID="618869167">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="player_health" ID="{6897FD48-E109-4ED8-8EC9-96743556B938}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-								<Action Name="" ID="{14C992D5-A28B-4874-A5A9-F6F97A07B06D}" ShortID="410808853">
-									<PropertyList>
-										<Property Name="ActionType" Type="int16" Value="38"/>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="player_health" ID="{AEB3BC33-42AB-4D57-8CDE-C43D3B8C1D91}" WorkUnitID="{02E271C5-C17C-4AA5-B1B0-C26312712607}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
 						<Event Name="player_hit_shield" ID="{6F3303F3-110C-4CD9-9C8C-F1DE20860499}">
 							<ChildrenList>
 								<Action Name="" ID="{22EF2978-8510-4D5A-B36B-28735E6AB418}" ShortID="408270331">

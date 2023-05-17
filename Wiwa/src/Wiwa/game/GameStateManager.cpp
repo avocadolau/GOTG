@@ -455,8 +455,6 @@ namespace Wiwa
 
 		if (character->Shield <= 0)
 			character->Shield = 0;
-
-
 	}
 
 	void GameStateManager::StartNewRoom()
