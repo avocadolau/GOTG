@@ -64,11 +64,13 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			return;
 		}
 
-		if (item->item_type == 0 && GameStateManager::GetRoomType() == "ROOM_SHOP")//ABILITY
+		if (GameStateManager::GetRoomType() == "ROOM_SHOP")//ABILITY
 		{
 			currentItem = item;
+			return;
 		}
-		else if (item->item_type == 0 && GameStateManager::GetRoomType() != "ROOM_SHOP")
+		 
+		if (item->item_type == 0)
 		{
 			Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
 			Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
@@ -82,11 +84,7 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			passive->Use();
 			em.DestroyEntity(body2->id);
 		}
-		else if (item->item_type == 2 && GameStateManager::GetRoomType() == "ROOM_SHOP")//BUFF
-		{
-			currentItem = item;
-		}
-		else if (item->item_type == 2 && GameStateManager::GetRoomType() != "ROOM_SHOP")
+		else if (item->item_type == 2)
 		{
 			Buff* buff = Wiwa::ItemManager::GetBuff(item->Name);
 			Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);

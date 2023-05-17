@@ -1464,7 +1464,7 @@ namespace Wiwa
 		{
 			Camera *cam = cameraManager.getCamera(cameras[i]);
 
-			glUseProgram(0);
+			/*glUseProgram(0);
 			glColor3f(0, 255, 0);
 			glLineWidth(3.0f);
 			glBegin(GL_LINES);
@@ -1509,7 +1509,7 @@ namespace Wiwa
 			glVertex3f((GLfloat)bb_frustum[3].x, (GLfloat)bb_frustum[3].y, (GLfloat)bb_frustum[3].z);
 
 			glEnd();
-			glLineWidth(1.0f);
+			glLineWidth(1.0f);*/
 		}
 		camera->frameBuffer->Unbind();
 	}
