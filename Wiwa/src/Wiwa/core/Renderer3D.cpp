@@ -10,6 +10,7 @@
 #include <Wiwa/utilities/render/animator.h>
 
 #include <Wiwa/ecs/systems/LightSystem.h>
+#include <Wiwa/utilities/render/LightManager.h>
 #include <ozz/geometry/runtime/skinning_job.h>
 
 const uint8_t kDefaultColorsArray[][4] = {
@@ -106,22 +107,20 @@ namespace Wiwa
 		GL(GenBuffers(1, &dynamic_array_bo_));
 		GL(GenBuffers(1, &dynamic_index_bo_));
 
-		// Instantiate ambient rendering shader.
-		ambient_shader = ozz::sample::internal::AmbientShader::Build();
-		if (!ambient_shader) {
-			return false;
-		}
+		ResourceId anim_shader_id = Wiwa::Resources::Load<Shader>("resources/shaders/animation/animation_skinned_textured");
+		Shader* anim_shader = Wiwa::Resources::GetResourceById<Shader>(anim_shader_id);
+		anim_shader->Compile("resources/shaders/animation/animation_skinned_textured");
+		anim_shader->addUniform("u_Texture", UniformType::Sampler2D);
+		anim_shader->addUniform("u_OutlineColor", UniformType::fVec4);
+		anim_shader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
+		anim_shader->addUniform("u_ToonLevels", UniformType::Int);
+		anim_shader->addUniform("u_RimLightPower", UniformType::Float);
+		anim_shader->addUniform("u_SpecularValue", UniformType::Float);
+		anim_shader->addUniform("u_MatAmbientColor", UniformType::fVec4);
+		anim_shader->addUniform("u_MatDiffuseColor", UniformType::fVec4);
+		anim_shader->addUniform("u_MatSpecularColor", UniformType::fVec4);
+		Wiwa::Resources::Import<Shader>("resources/shaders/animation/animation_skinned_textured", anim_shader);
 
-		std::string* vs_data = Shader::getFileData("resources/shaders/animation/animation_skinned_textured.vs");
-		std::string* fs_data = Shader::getFileData("resources/shaders/animation/animation_skinned_textured.fs");
-
-		// Instantiate ambient textured rendering shader.
-		ambient_textured_shader = ozz::sample::internal::AmbientTexturedShader::Build(vs_data->c_str(), fs_data->c_str());
-		if (!ambient_textured_shader) {
-			return false;
-		}
-		delete vs_data;
-		delete fs_data;
 		// ========= END OZZ ANIMATIONS =========
 
 		Size2i &resolution = Application::Get().GetTargetResolution();
@@ -1092,12 +1091,8 @@ namespace Wiwa
 		return buffer_;
 	}
 
-	bool Renderer3D::RenderOzzSkinnedMesh(Camera* camera, const ozz::sample::Mesh& _mesh, const ozz::span<ozz::math::Float4x4> _skinning_matrices, const ozz::math::Float4x4& _transform)
+	bool Renderer3D::RenderOzzSkinnedMesh(Camera* camera, const ozz::sample::Mesh& _mesh, Material* material, const ozz::span<ozz::math::Float4x4> _skinning_matrices, const ozz::math::Float4x4& _transform)
 	{
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
-
-		camera->frameBuffer->Bind(false);
-
 		const int vertex_count = _mesh.vertex_count();
 
 		// Positions and normals are interleaved to improve caching while executing
@@ -1281,7 +1276,13 @@ namespace Wiwa
 			processed_vertex_count += part_vertex_count;
 		}
 
+		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
+
 		// After processing everything, render
+		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+
+		camera->frameBuffer->Bind(false);
+		
 		GL(BindVertexArray(dynamic_vao_));
 		// Updates dynamic vertex buffer with skinned data.
 		GL(BindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_));
@@ -1303,17 +1304,45 @@ namespace Wiwa
 			normals_stride, normals_offset, colors_stride, colors_offset,
 			uvs_stride, uvs_offset);*/
 
-		ambient_textured_shader->Bind(
-			_transform, ozz_mvp, positions_stride, positions_offset,
-			normals_stride, normals_offset, colors_stride, colors_offset,
-			uvs_stride, uvs_offset);
+		Shader* anim_shader = material->getShader();
 
-		ResourceId imgid = Wiwa::Resources::Load<Wiwa::Image>("assets\\Models\\Starlord\\T_StarLordBaseColor_01_C.png");
-		Wiwa::Image* img = Wiwa::Resources::GetResourceById<Wiwa::Image>(imgid);
+		anim_shader->Bind();
+		SetUpLight(anim_shader, camera, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights());
 
-		unsigned int texture_ = img->GetTextureId();
+		material->Bind();
 
-		GL(BindTexture(GL_TEXTURE_2D, texture_));
+		GL(EnableVertexAttribArray(0));
+		GL(VertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, uvs_stride,
+			GL_PTR_OFFSET(uvs_offset)));
+
+		GL(EnableVertexAttribArray(1));
+		GL(VertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, positions_stride,
+			GL_PTR_OFFSET(positions_offset)));
+
+		GL(EnableVertexAttribArray(2));
+		GL(VertexAttribPointer(2, 3, GL_FLOAT, GL_TRUE, normals_stride,
+			GL_PTR_OFFSET(normals_offset)));
+
+		GL(EnableVertexAttribArray(3));
+		GL(VertexAttribPointer(3, 4, GL_UNSIGNED_BYTE, GL_TRUE,
+			colors_stride, GL_PTR_OFFSET(colors_offset)));
+
+		// Binds mw uniform
+		float values[16];
+		const GLint mw_uniform = GL(GetUniformLocation(anim_shader->getID(), "u_mw"));//uniform(0);
+		ozz::math::StorePtrU(_transform.cols[0], values + 0);
+		ozz::math::StorePtrU(_transform.cols[1], values + 4);
+		ozz::math::StorePtrU(_transform.cols[2], values + 8);
+		ozz::math::StorePtrU(_transform.cols[3], values + 12);
+		GL(UniformMatrix4fv(mw_uniform, 1, false, values));
+
+		// Binds mvp uniform
+		const GLint mvp_uniform = GL(GetUniformLocation(anim_shader->getID(), "u_mvp"));//uniform(1);
+		ozz::math::StorePtrU(ozz_mvp.cols[0], values + 0);
+		ozz::math::StorePtrU(ozz_mvp.cols[1], values + 4);
+		ozz::math::StorePtrU(ozz_mvp.cols[2], values + 8);
+		ozz::math::StorePtrU(ozz_mvp.cols[3], values + 12);
+		GL(UniformMatrix4fv(mvp_uniform, 1, false, values));
 
 		// Maps the index dynamic buffer and update it.
 		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, dynamic_index_bo_));
@@ -1332,8 +1361,16 @@ namespace Wiwa
 		GL(BindBuffer(GL_ARRAY_BUFFER, 0));
 		GL(BindTexture(GL_TEXTURE_2D, 0));
 		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-		ambient_textured_shader->Unbind();
+		
+		GL(DisableVertexAttribArray(0));
+		GL(DisableVertexAttribArray(1));
+		GL(DisableVertexAttribArray(2));
+		GL(DisableVertexAttribArray(3));
+
 		GL(BindVertexArray(0));
+
+		anim_shader->UnBind();
+		
 		camera->frameBuffer->Unbind();
 
 		return true;

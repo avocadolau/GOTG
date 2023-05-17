@@ -105,6 +105,7 @@ void OzzAnimationPanel::DrawBody()
 		ImGui::TableNextColumn();
 
 		DrawMeshContainer();
+		DrawMaterialContainer();
 		DrawSkeletonContainer();
 
 		bool blend = m_ActiveAnimator->getBlendOnTransition();
@@ -231,6 +232,46 @@ void OzzAnimationPanel::DrawSkeletonContainer()
 				}
 				else {
 					WI_INFO("Couldn't load ozz skeleton {}.", p.string().c_str());
+				}
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+	ImGui::PopID();
+}
+
+void OzzAnimationPanel::DrawMaterialContainer()
+{
+	// Material file
+	std::string material_label = "No material";
+
+	if (m_ActiveAnimator->IsMaterialLoaded()) {
+		material_label = m_ActiveAnimator->getMaterialPath();
+	}
+
+	ImGui::Text("Material");
+	ImGui::PushID("material");
+
+	AssetContainer(material_label.c_str());
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring ws(path);
+			std::string pathS(ws.begin(), ws.end());
+			std::filesystem::path p = pathS.c_str();
+			if (p.extension() == ".wimaterial")
+			{
+				std::string libpath = Wiwa::Resources::_assetToLibPath(p.string());
+				bool loaded = m_ActiveAnimator->LoadMaterial(libpath);
+
+				if (loaded) {
+					WI_INFO("Loaded material {} successfully.", p.string().c_str());
+				}
+				else {
+					WI_INFO("Couldn't load material skeleton {}.", p.string().c_str());
 				}
 			}
 		}
