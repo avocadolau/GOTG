@@ -25,7 +25,9 @@ namespace Wiwa
 	{
 		m_TimerSecondPhase = 0.0f;
 		m_TimerHealing = 0.0f;
+		m_TimerSpawnerEnemies = 0.0f;
 		m_SpawnEnemies = false;
+		m_SpawnerDestroyed = false;
 
 		m_AfterRegenPosition.clear();
 		FillPremadePositionAfterRegen(enemy, m_AfterRegenPosition);
@@ -81,6 +83,7 @@ namespace Wiwa
 		{
 			m_TimerSecondPhase += Time::GetDeltaTimeSeconds();
 			m_TimerHealing += Time::GetDeltaTimeSeconds();
+			m_TimerSpawnerEnemies += Time::GetDeltaTimeSeconds();
 
 			if (m_TimerHealing >= 1.0f)
 			{
@@ -103,6 +106,12 @@ namespace Wiwa
 				m_SpawnEnemies = false;
 			}
 
+			if (m_TimerSpawnerEnemies >= 10.0f && m_SpawnerDestroyed == false)
+			{
+				em.DestroyEntity(m_SpawnerPrefabId);
+				m_SpawnerDestroyed = true;
+			}
+
 			if (m_TimerSecondPhase >= 24.0f) //Cambiar por num enemigos derrotados
 			{
 				m_TimerSecondPhase = 0.0f;
@@ -115,7 +124,6 @@ namespace Wiwa
 
 			//Destroy wall
 			em.DestroyEntity(m_RegenWallPrefabId);
-			em.DestroyEntity(m_SpawnerPrefabId);
 
 			selfTr->localPosition = GetNewPositionAfterRegen();
 			navAgentPtr->RegisterWithCrowd();
