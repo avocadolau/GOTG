@@ -637,4 +637,8 @@ namespace Wiwa {
 
 		return animator;
 	}
+	ResourceId OzzAnimator::GetMaterial()
+	{
+		return m_MaterialId;
+	}
 }
