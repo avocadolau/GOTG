@@ -2791,6 +2791,91 @@
 										</RandomSequenceContainer>
 									</ChildrenList>
 								</Folder>
+								<Folder Name="attacks" ID="{5A7E7396-9913-42B4-8247-268C9DFDC84A}" ShortID="75671665">
+									<ChildrenList>
+										<RandomSequenceContainer Name="laser" ID="{F4DD3D4D-F672-4624-BDF8-E018CA8EBD28}" ShortID="405621918">
+											<PropertyList>
+												<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
+												<Property Name="RandomAvoidRepeating" Type="bool" Value="False"/>
+												<Property Name="RandomOrSequence" Type="int16" Value="0"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="laserInit" ID="{48D802A9-F901-4511-9DB0-03CBC04BFC65}" ShortID="312967496">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="laserInit" ID="{83B450DD-187B-40FB-8988-3A3D6A7787D6}">
+															<PropertyList>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimEnd" Type="Real64" Value="1.05640825590937"/>
+															</PropertyList>
+															<Language>SFX</Language>
+															<AudioFile>laserInit.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="803103627"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="laserInit" ID="{83B450DD-187B-40FB-8988-3A3D6A7787D6}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}" ShortID="235016737">
+													<PropertyList>
+														<Property Name="Volume" Type="Real64">
+															<ValueList>
+																<Value>-3</Value>
+															</ValueList>
+														</Property>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}">
+															<PropertyList>
+																<Property Name="FadeInDuration" Type="Real64" Value="0.211349494788131"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimEnd" Type="Real64" Value="4.00389876237514"/>
+															</PropertyList>
+															<Language>SFX</Language>
+															<AudioFile>laserThick.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="134196824"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+											<Playlist>
+												<ItemRef Name="laserInit" ID="{48D802A9-F901-4511-9DB0-03CBC04BFC65}"/>
+												<ItemRef Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}"/>
+											</Playlist>
+										</RandomSequenceContainer>
+									</ChildrenList>
+								</Folder>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="npcs" ID="{58D5796F-EDD2-413B-9131-B8A258E84014}" ShortID="134526025">
