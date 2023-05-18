@@ -368,6 +368,17 @@ namespace Wiwa {
 		return WI_INVALID_INDEX;
 	}
 
+	OzzAnimation* OzzAnimator::getActiveAnimation()
+	{
+		OzzAnimation* anim = nullptr;
+
+		if (m_ActiveAnimationId != WI_INVALID_INDEX) {
+			anim = m_AnimationList[m_ActiveAnimationId].animation;
+		}
+
+		return anim;
+	}
+
 	void OzzAnimator::setUpperPlaybackSpeed(size_t anim_id, float playback_speed)
 	{
 		if (anim_id < 0 || anim_id >= m_AnimationList.size()) return;
