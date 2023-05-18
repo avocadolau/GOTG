@@ -11,7 +11,7 @@
 #include "StateMachine/BossUltronProjectileRainAttack.h"
 #include "StateMachine/TransitionSecondPhase.h"
 #include "BossUltron.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 #include <Wiwa/ecs/systems/AudioSystem.h>
@@ -186,7 +186,7 @@ namespace Wiwa
 		EnemySystem::ReceiveDamage(damage);
 
 		Wiwa::EntityManager& em = this->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(this->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(this->GetEntity());
 	/*	Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(this->GetEntity());
 		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(this->GetEntity());
 		Wiwa::Material* mat = renderer->GetMaterial();*/
@@ -198,7 +198,7 @@ namespace Wiwa
 		EntityId hit_1 = em.GetChildByName(this->GetEntity(), "E_Hit_1");
 		EntityId hit_2 = em.GetChildByName(this->GetEntity(), "E_Hit_2");*/
 
-		animator->PlayAnimation("A_hit", false);
+		animator->PlayAnimation("A_hit");
 	}
 
 	void BossUltron::SwitchState(BossUltronBaseState* state)

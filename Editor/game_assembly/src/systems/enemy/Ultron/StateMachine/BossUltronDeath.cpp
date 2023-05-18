@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "BossUltronDeath.h"
 #include "../BossUltron.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
@@ -23,7 +23,7 @@ namespace Wiwa
 	{
 		Wiwa::Scene& em = enemy->getScene();
 		Wiwa::DialogManager& dialogManager = em.GetDialogManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		dialogManager.ForceDialogStart("UltronIsKilled", true);
 		
@@ -42,7 +42,7 @@ namespace Wiwa
 		Wiwa::Scene& ems = enemy->getScene();
 		Wiwa::DialogManager& dialogManager = ems.GetDialogManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//if (animator->HasFinished())
 		//{
 		EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);

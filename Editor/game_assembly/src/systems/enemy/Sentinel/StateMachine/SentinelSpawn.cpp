@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "SentinelSpawn.h"
 #include "../EnemySentinel.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 
@@ -20,7 +20,7 @@ namespace Wiwa
 	void SentinelSpawnState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EntityId currentEnemy = enemy->GetEntity();
 
 		//SentinelParticles - Spawn Particles
@@ -31,14 +31,14 @@ namespace Wiwa
 
 		navAgent->agentSliding = true;
 
-		animator->PlayAnimation("spawn", false); //AnimacionSentinel
+		animator->PlayAnimation("spawn"); //AnimacionSentinel
 	}
 
 	void SentinelSpawnState::UpdateState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

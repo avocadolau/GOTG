@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "BossUltronMovement.h"
 #include "../BossUltron.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../components/enemy/BossMovementPoints.h"
 #include "../../../attack/SimpleBulletSystem.h"
@@ -33,14 +33,15 @@ namespace Wiwa
 	void BossUltronMovementState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//ParticleManager& pman = enemy->getScene().GetParticleManager();
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//EntityId currentEnemy = enemy->GetEntity();
 
-		animator->PlayAnimation("A_walk", true);
+		animator->PlayAnimation("A_walk");
+		animator->getAnimator()->getActiveAnimation()->setLoop(true);
 
 		//pman.EmitBatch(currentEnemy);
 
@@ -79,7 +80,7 @@ namespace Wiwa
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
@@ -518,10 +519,9 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-
-		animator->PlayAnimation("A_attak_bigprojetiles", false);
+		animator->PlayAnimation("A_attak_bigprojetiles");
 
 		if (physSys != nullptr)
 		{

@@ -2,7 +2,7 @@
 #include "MeleePhalanxSpawn.h"
 #include "../EnemyMeleePhalanx.h"
 
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 
@@ -21,22 +21,22 @@ namespace Wiwa
 	void MeleePhalanxSpawnState::EnterState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		EntityId currentEnemy = enemy->GetEntity();
 		audio->PlayAudio("spawn");
-		animator->PlayAnimation("spawn", false);
+		animator->PlayAnimation("spawn");
 	}
 
 	void MeleePhalanxSpawnState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 	
 		navAgent->autoRotate = true;
 
-		if (animator->HasFinished())
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

@@ -144,7 +144,7 @@ namespace Wiwa
 		EnemySystem::ReceiveDamage(damage);
 		SwitchState(m_HitState);
 		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
 
 		EntityId hitR_1 = em.GetChildByName(m_EntityId, "ER_Hit_1");
 		EntityId hitR_2 = em.GetChildByName(m_EntityId, "ER_Hit_2");

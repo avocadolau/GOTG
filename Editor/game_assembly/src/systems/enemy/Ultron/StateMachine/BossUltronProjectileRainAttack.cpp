@@ -4,7 +4,7 @@
 #include "../../../attack/RainProjectileSystem.h"
 #include "../BossUltron.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 Wiwa::BossUltronProjectileRainAttackState::BossUltronProjectileRainAttackState()
@@ -23,9 +23,9 @@ void Wiwa::BossUltronProjectileRainAttackState::EnterState(BossUltron* enemy)
 	m_RainProjectileCounter = 0;
 	m_RainState = ProjectileRainState::PREPARE_RAIN;
 	Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-	//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+	//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 	//ParticleManager& pman = enemy->getScene().GetParticleManager();
-	//Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+	//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 	//EntityId currentEnemy = enemy->GetEntity();
 
 	
