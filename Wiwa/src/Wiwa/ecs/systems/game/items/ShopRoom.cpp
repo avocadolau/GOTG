@@ -22,9 +22,4 @@ void Wiwa::ShopRoom::OnInit()
 		GameStateManager::SpawnShopRandomItem(t3d->position, 2);
 	}
 	counter += GameStateManager::s_BuffChances;
-	if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_NPCRoomChances))
-	{
-		GameStateManager::SpawnShopRandomItem(t3d->position, 1);
-	}
-	counter += GameStateManager::s_NPCRoomChances;
 }

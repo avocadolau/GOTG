@@ -122,6 +122,8 @@ namespace Wiwa
 		int convOrder = -1;
 
 		bool forcedDialogHappened = false;
+		bool alreadyTalkedOnceTriggered = false;
+		bool canNoLongerTalk = false;
 
 		bool finishedRandomizing = false;
 
