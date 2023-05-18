@@ -67,6 +67,7 @@ namespace Wiwa {
         if (!skeleton_) return false;
 
         m_LoadedLower = ozz::sample::LoadAnimation(lower, &samplers_[kLowerBody].animation);
+        samplers_[kLowerBody].controller.set_time_ratio(0.0f);
 
         if (m_LoadedLower) {
             m_LowerBodyFile = lower;
@@ -87,6 +88,7 @@ namespace Wiwa {
         if (!skeleton_) return false;
 
         m_LoadedUpper = ozz::sample::LoadAnimation(upper, &samplers_[kUpperBody].animation);
+        samplers_[kUpperBody].controller.set_time_ratio(0.0f);
 
         if (m_LoadedUpper) {
             m_UpperBodyFile = upper;
