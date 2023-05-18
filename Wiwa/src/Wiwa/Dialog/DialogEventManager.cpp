@@ -32,32 +32,32 @@ namespace Wiwa
 
 	DialogEventManager::~DialogEventManager()
 	{
-		/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
 			render.RemoveInstance(m_Scene, choice1Opt1ImgID);
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
 			render.RemoveInstance(m_Scene, choice1Opt2ImgID);
 
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
 			render.RemoveInstance(m_Scene, choice2Opt1ImgID);
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
 			render.RemoveInstance(m_Scene, choice2Opt2ImgID);
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
 			render.RemoveInstance(m_Scene, choice2Opt3ImgID);
 
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
 			render.RemoveInstance(m_Scene, choice3Opt1ImgID);
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
-			render.RemoveInstance(m_Scene, choice3Opt2ImgID);*/
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
+			render.RemoveInstance(m_Scene, choice3Opt2ImgID);
 	}
 
 	bool DialogEventManager::Init(Scene* scene)
@@ -66,9 +66,9 @@ namespace Wiwa
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png"))
 		{
-			ResourceId textID01 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png");
+			ResourceId textID01 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png");
 			Image* choice1Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID01);
 
 			if (choice1Opt1Img) {
@@ -76,7 +76,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice1Opt1ImgID);
 			}
 
-			ResourceId textID02 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png");
+			ResourceId textID02 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.png");
 			Image* choice1Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID02);
 
 			if (choice1Opt2Img) {
@@ -90,9 +90,9 @@ namespace Wiwa
 		}
 		
 
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png"))
 		{
-			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
+			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
 			Image* choice2Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 			if (choice2Opt1Img) {
@@ -100,7 +100,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice2Opt1ImgID);
 			}
 
-			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
+			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
 			Image* choice2Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
 			if (choice2Opt2Img) {
@@ -108,7 +108,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice2Opt2ImgID);
 			}
 
-			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
+			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.png");
 			Image* choice2Opt3Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
 
 			if (choice2Opt3Img) {
@@ -122,9 +122,9 @@ namespace Wiwa
 		}
 
 		
-		if (std::filesystem::exists("assets/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png"))
 		{
-			ResourceId textID11 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png");
+			ResourceId textID11 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png");
 			Image* choice3Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID11);
 
 			if (choice3Opt1Img) {
@@ -132,7 +132,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice3Opt1ImgID);
 			}
 
-			ResourceId textID12 = Wiwa::Resources::Load<Wiwa::Image>("assets/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png");
+			ResourceId textID12 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.png");
 			Image* choice3Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID12);
 
 			if (choice3Opt2Img) {
