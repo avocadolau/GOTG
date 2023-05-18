@@ -152,6 +152,9 @@ namespace Wiwa
 
 		keyPressRefreshTimer = 0;
 
+		convGroup = -1;
+		convOrder = -1;
+
 		collidingWithNpc = false;
 
 		characterImgPos.x = -50;
