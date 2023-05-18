@@ -11,6 +11,8 @@
 #include "../../../../components/attack/ZigZagBullet.h"
 #include "../../../attack/ClusterBulletSystem.h"
 #include "../../../../components/attack/ClusterBullet.h"
+#include "../../../attack/RainProjectileSystem.h"
+#include "../../../../components/attack/RainProjectile.h"
 
 namespace Wiwa
 {
@@ -19,6 +21,8 @@ namespace Wiwa
 		m_DoAttack = false;
 		currentDestination = glm::vec3(0.0f);
 		m_TimerToAttack = 0.0f;
+
+		m_ThunderMarkPath = "assets\\Enemy\\RainProjectile\\ThunderMark_01.wiprefab";
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -66,6 +70,8 @@ namespace Wiwa
 		m_DoAttack = false;
 		m_ClusterMovementSpawned = false;
 		m_MovementAttackSelected = false;
+		m_ThunderMovementSpawned = false;
+		m_ThunderMovementMarkSpawned = false;
 		m_TimerAttackOnMoving = 0.0f;
 	}
 
@@ -138,28 +144,47 @@ namespace Wiwa
 			if (m_IsMovingAttackSelected == false)
 			{
 				m_SelectMovingRandomAttack = RAND(0, 3);
+				/*m_SelectMovingRandomAttack = 0;*/
+
 				m_IsMovingAttackSelected = true;
 			}
+
+
 
 			switch (m_SelectMovingRandomAttack)
 			{
 			case 0:
 			{
-				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
+				if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
+				{
+					for (int i = 1; i <= 5; ++i) // Number of thunders
+					{
+						EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
+						m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
+						Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
+						glm::vec3 thunderPos = GetPositionAroundPlayer(playerTr->localPosition, 12.0f, i);
+						m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
+						thunderMarkTr->localPosition.x = thunderPos.x;
+						thunderMarkTr->localPosition.y = 0.1f;
+						thunderMarkTr->localPosition.z = thunderPos.z;
+					}
 
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 25);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand3, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand4, 25);
+					m_ThunderMovementMarkSpawned = true;
+				}
 
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand1);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand2);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand4);
-				/*m_IsMovingAttackSelected = false;*/
+				if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
+				{
+					for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
+						em.DestroyEntity(m_ThunderMarkIds[i]);
+						SpawnThunderStormMovement(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
+					}
+
+					// Clear the vectors
+					m_ThunderMarkIds.clear();
+					m_ThunderPositions.clear();
+
+					m_ThunderMovementSpawned = true;
+				}
 			}
 			break;
 			case 1:
@@ -210,95 +235,28 @@ namespace Wiwa
 				break;
 			}
 
-			/*if (m_SelectMovingRandomAttack == 0)
-			{
-				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 25);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand3, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand4, 25);
-
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand1);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand2);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand4);
-				m_IsMovingAttackSelected = false;
-			}
-			if (m_SelectMovingRandomAttack == 1)
-			{
-				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 35);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 10);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand3, 10);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand4, 35);
-
-				SpawnBulletMovement(enemy, selfTr, rotateBulletRightHand1);
-				SpawnBulletMovement(enemy, selfTr, rotateBulletRightHand2);
-				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand4);
-				m_IsMovingAttackSelected = false;
-			}
-			if (m_SelectMovingRandomAttack == 2)
-			{
-				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 25);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand3, 5);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand4, 25);
-
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand1);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand2);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand4);
-				m_IsMovingAttackSelected = false;
-			}
-			if (m_SelectMovingRandomAttack == 3)
-			{
-				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 45);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 25);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand3, 25);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand4, 45);
-
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand1);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulletRightHand2);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnZigZagBulletMovement(enemy, selfTr, rotateBulledLeftHand4);
-				m_IsMovingAttackSelected = false;
-			}*/
-
-			m_TimerAttackOnMoving = 0.0f;
+			/*m_TimerAttackOnMoving = 0.0f;*/
 		}
 
-		if (Math::IsPointNear(currentDestination, selfTr->localPosition, 1.0f))
+		if (selfTr != nullptr)
 		{
-			m_DoAttack = true;
-			navAgentPtr->StopAgent();
-		}
-		else
-		{
-			m_TimerToAttack += Time::GetDeltaTimeSeconds();
-			if (m_TimerToAttack >= 3.0f)
+			if ((m_ThunderMovementMarkSpawned && m_ThunderMovementSpawned) || ((!m_ThunderMovementMarkSpawned && !m_ThunderMovementSpawned)))
 			{
-				m_DoAttack = true;
-				navAgentPtr->StopAgent();
-				m_TimerToAttack = 0.0f;
+				if (Math::IsPointNear(currentDestination, selfTr->localPosition, 1.0f))
+				{
+					m_DoAttack = true;
+					navAgentPtr->StopAgent();
+				}
+				else
+				{
+					m_TimerToAttack += Time::GetDeltaTimeSeconds();
+					if (m_TimerToAttack >= 3.0f)
+					{
+						m_DoAttack = true;
+						navAgentPtr->StopAgent();
+						m_TimerToAttack = 0.0f;
+					}
+				}
 			}
 		}
 
@@ -307,7 +265,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::DASH;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
@@ -601,6 +559,81 @@ namespace Wiwa
 
 				glm::vec3 direction(xDir, 0.0f, yDir);
 				SpawnZigZagBulletMovement(enemy, selfTr, direction);
+			}
+		}
+	}
+
+	glm::vec3 Wiwa::BossUltronMovementState::GetPositionAroundPlayer(const glm::vec3& localPosition, float distance, int index)
+	{
+		// Calculate the offset for the position
+		float offset = distance * 1.2f;
+
+		// Calculate the angle for the position
+		float angle = static_cast<float>(index) * (2.0f * glm::pi<float>()) / 5.0f;
+
+		// Calculate the raw x and z coordinates for the position
+		float x = localPosition.x + offset * std::cos(angle);
+		float z = localPosition.z + offset * std::sin(angle);
+
+		// Define the boundaries of the square region
+		float minX = -29.10f;
+		float maxX = 29.10f;
+		float minZ = -34.58f;
+		float maxZ = 34.58f;
+
+		// Ensure the position is within the square region
+		x = glm::clamp(x, minX, maxX);
+		z = glm::clamp(z, minZ, maxZ);
+
+		// Create and return the new position vector
+		return glm::vec3(x, ALTITUDE_THUNDERSTORM_MOVEMENT, z);
+	}
+
+	void Wiwa::BossUltronMovementState::SpawnThunderStormMovement(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir)
+	{
+		if (GameStateManager::s_PoolManager->s_RainProjectilePool->getCountDisabled() <= 0)
+			return;
+
+		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+		EntityId newBulletId = EntityManager::INVALID_INDEX;
+		newBulletId = GameStateManager::s_PoolManager->s_RainProjectilePool->GetFromPool();
+
+		if (newBulletId == EntityManager::INVALID_INDEX)
+			return;
+
+		RainProjectileSystem* bulletSys = entityManager.GetSystem<RainProjectileSystem>(newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
+
+		// Set intial positions
+		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+		if (!bulletTr || !playerTr)
+			return;
+
+		bulletTr->localPosition = thunderPosition;
+		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
+		RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
+		BossUltron* ultron = (BossUltron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
+
+		bullet->direction = bull_dir;
+
+		physSys->CreateBody();
+
+		bulletSys->EnableBullet();
+
+		EntityId p_laser = entityManager.LoadPrefab("assets/vfx/prefabs/vfx_finals/RainProjectile/p_boss_rain_projectile_01.wiprefab");
+
+		if (p_laser != EntityManager::INVALID_INDEX)
+		{
+			Transform3D* p_laserT = entityManager.GetComponent<Transform3D>(p_laser);
+
+			if (p_laserT != nullptr)
+			{
+				p_laserT->localPosition = thunderPosition;
+				p_laserT->localPosition.y = 0;
 			}
 		}
 	}
