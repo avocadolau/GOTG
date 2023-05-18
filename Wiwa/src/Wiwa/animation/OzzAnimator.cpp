@@ -300,6 +300,7 @@ namespace Wiwa {
 	{
 		if (anim_id >= 0 && anim_id < m_AnimationList.size()) {
 			AnimationData& a_data = m_AnimationList[anim_id];
+			a_data.animation->Play();
 
 			if (anim_id == m_ActiveAnimationId) {
 				if (!a_data.animation->HasFinished() || a_data.animation->getLoop()) {
