@@ -23,6 +23,7 @@ namespace Wiwa {
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 
+		bool colliding = false;
 	};
 }
 

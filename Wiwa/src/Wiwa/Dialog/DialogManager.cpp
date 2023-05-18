@@ -164,6 +164,7 @@ namespace Wiwa
 
 		forcedDialogHappened = false;
 		alreadyTalkedOnceTriggered = false;
+		canNoLongerTalk = false;
 
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
@@ -213,8 +214,13 @@ namespace Wiwa
 			character->CanMove = true;
 		}
 
+		if (alreadyTalkedOnceTriggered == false)
+		{
+			canNoLongerTalk = true;
+		}
+
 		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
-			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && alreadyTalkedOnceTriggered == false)
+			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && canNoLongerTalk == false)
 		{
 			if (collidingWithNpc == true)
 			{
