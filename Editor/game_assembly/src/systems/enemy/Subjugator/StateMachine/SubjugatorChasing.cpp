@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "SubjugatorChasing.h"
 #include "../EnemySubjugator.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 glm::vec3 CalculateOffsetPositionSubjugator(const glm::vec3& playerPosition, int totalEnemies, float radius)
@@ -31,10 +31,10 @@ namespace Wiwa
     void SubjugatorChasingState::EnterState(EnemySubjugator* enemy)
     {
         Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-        Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+        Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
         //offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
-        animator->PlayAnimation("walk", true);
+        animator->PlayAnimation("walk");
 
         //m_HasTargetPoint = false;
         m_TargetPoint = glm::vec3(0.0f, 0.0f, 0.0f);

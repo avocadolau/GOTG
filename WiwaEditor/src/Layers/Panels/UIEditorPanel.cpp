@@ -458,6 +458,7 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 	control->position.y = pos[1];
 	control->position.width = size[0];
 	control->position.height = size[1];
+	control->texturePosition = { originPos[0], originPos[1],originSize[0],originSize[1]};
 	control->audioEventForButton = audioEventForButton.c_str();
 	control->animatedControl = animated;
 	control->rotation = rotation;
@@ -534,6 +535,9 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 		r2d.UpdateInstancedQuadTexClip(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->texture->GetSize(), originTexRect);
 		r2d.UpdateInstancedQuadTexRotation(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, rotation);
 		r2d.UpdateInstancedQuadTexTexture(Wiwa::SceneManager::getActiveScene(), control->id_quad_extra, control->texture->GetTextureId());
+
+		control->extraTexturePosition = originTexRect;
+
 	}
 	break;
 	case Wiwa::GuiControlType::IMAGE:

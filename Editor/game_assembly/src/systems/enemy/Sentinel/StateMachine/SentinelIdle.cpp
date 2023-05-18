@@ -1,7 +1,6 @@
 #include <wipch.h>
 #include "SentinelIdle.h"
 #include "../EnemySentinel.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
@@ -25,7 +24,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		
 
 		/*animator->PlayAnimation("idle", true);*/ //AnimacionSentinel
 

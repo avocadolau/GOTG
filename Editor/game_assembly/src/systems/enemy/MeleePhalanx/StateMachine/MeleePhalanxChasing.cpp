@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "MeleePhalanxChasing.h"
 #include "../EnemyMeleePhalanx.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/audio/Audio.h>
@@ -22,9 +22,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->Blend("walk",true,0.2f);
+		animator->PlayAnimation("walk");
 
 		enemy->m_Timer = 0;
 	}
@@ -36,7 +36,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		float distance = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
@@ -53,7 +53,7 @@ namespace Wiwa
 			agent->SetDestination(offset);
 		}
 		
-		if (animator->HasFinished() )//&& !IsPlaying(enemy->GetEntity())
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished())//&& !IsPlaying(enemy->GetEntity())
 		{
 			
 		}
@@ -68,7 +68,7 @@ namespace Wiwa
 	void MeleePhalanxChasingState::ExitState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//animator->Blend("idle", true, true, 0.5f);
 		//animator->Pause();
 	}

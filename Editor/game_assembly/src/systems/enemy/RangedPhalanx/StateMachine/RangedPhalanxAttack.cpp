@@ -4,7 +4,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <glm/gtx/quaternion.hpp>
 #include "../../../attack/SimpleBulletSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../Components.h"
 
@@ -25,7 +25,7 @@ namespace Wiwa
 	void RangedPhalanxAttackState::EnterState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
@@ -49,7 +49,7 @@ namespace Wiwa
 	void RangedPhalanxAttackState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
@@ -70,7 +70,7 @@ namespace Wiwa
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
 			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
-			animator->PlayAnimation("shot", false);
+			animator->PlayAnimation("shot");
 			audio->PlayAudio("ranged_attack");
 		}
 
