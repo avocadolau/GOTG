@@ -103,6 +103,18 @@ class PlaybackController {
   // Check if finished
   bool finished() const { return time_ratio_ >= 1.0f; }
 
+  // Check if animation is playing
+  bool is_playing() { return play_; }
+
+  // Check if animation is paused
+  bool is_paused() { return !play_; }
+
+  // Play animation
+  void play() { play_ = true; }
+
+  // Stop animation
+  void stop() { play_ = false; }
+
   // Updates animation time if in "play" state, according to playback speed and
   // given frame time _dt.
   // Returns true if animation has looped during update

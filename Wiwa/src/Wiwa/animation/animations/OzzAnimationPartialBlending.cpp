@@ -282,4 +282,16 @@ namespace Wiwa {
     {
         samplers_[kLowerBody].controller.remove_key_event(action);
     }
+    void OzzAnimationPartialBlending::Play()
+    {
+        for (int i = 0; i < kNumLayers; ++i) {
+            samplers_[i].controller.play();
+        }
+    }
+    void OzzAnimationPartialBlending::Stop()
+    {
+        for (int i = 0; i < kNumLayers; ++i) {
+            samplers_[i].controller.stop();
+        }
+    }
 }

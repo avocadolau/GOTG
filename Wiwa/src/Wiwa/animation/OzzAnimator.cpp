@@ -301,6 +301,12 @@ namespace Wiwa {
 		if (anim_id >= 0 && anim_id < m_AnimationList.size()) {
 			AnimationData& a_data = m_AnimationList[anim_id];
 
+			if (anim_id == m_ActiveAnimationId) {
+				if (!a_data.animation->HasFinished() || a_data.animation->getLoop()) {
+					return &a_data;
+				}
+			}
+
 			a_data.animation->setTimeRatio(time_ratio);
 
 			if (a_data.animation->getStatus() == OzzAnimation::Status::VALID) {
@@ -323,6 +329,15 @@ namespace Wiwa {
 		return nullptr;
 	}
 
+	void OzzAnimator::StopAnimation()
+	{
+		if (m_ActiveAnimationId != WI_INVALID_INDEX) {
+			AnimationData& a_data = m_AnimationList[m_ActiveAnimationId];
+
+			a_data.animation->Stop();
+		}
+	}
+
 	OzzAnimation* OzzAnimator::getAnimationByName(const std::string& name)
 	{
 		OzzAnimation* animation = nullptr;
@@ -330,7 +345,7 @@ namespace Wiwa {
 		std::unordered_map<std::string, size_t>::iterator it = m_AnimationsIndex.find(name);
 
 		if (it != m_AnimationsIndex.end()) {
-			return m_AnimationList[it->second].animation;
+			return m_AnimationList[it->second].animation; 
 		}
 
 		return animation;

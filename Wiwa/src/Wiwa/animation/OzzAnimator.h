@@ -128,6 +128,9 @@ namespace Wiwa {
 		// Play animation by id
 		AnimationData* PlayAnimation(size_t anim_id, float time_ratio=0.0f);
 
+		// Stop animation
+		void StopAnimation();
+
 		// Get total animation count (includes removed animations)
 		size_t getAnimationCount() { return m_AnimationList.size(); }
 

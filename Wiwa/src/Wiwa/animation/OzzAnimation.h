@@ -67,6 +67,9 @@ namespace Wiwa {
 
         virtual bool HasFinished() = 0;
 
+        virtual void Play() = 0;
+        virtual void Stop() = 0;
+
         virtual void addKeyAction(Action<> action, float time) = 0;
         virtual void removeKeyAction(Action<> action) = 0;
 

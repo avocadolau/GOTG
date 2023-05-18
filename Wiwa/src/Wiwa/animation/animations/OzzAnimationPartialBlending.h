@@ -119,6 +119,9 @@ namespace Wiwa {
 		void addKeyAction(Action<> action, float time) override;
 		void removeKeyAction(Action<> action) override;
 
+		void Play() override;
+		void Stop() override;
+
 		ozz::vector<ozz::math::SoaTransform>& getLocals() override { return blended_locals_; }
 
 		const char* getLowerBodyFile() { return m_LowerBodyFile.c_str(); }

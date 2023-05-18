@@ -100,6 +100,16 @@ namespace Wiwa {
 		controller_.remove_key_event(action);
 	}
 
+	void OzzAnimationSimple::Play()
+	{
+		controller_.play();
+	}
+
+	void OzzAnimationSimple::Stop()
+	{
+		controller_.stop();
+	}
+
 	void OzzAnimationSimple::OnPlaybackSpeedChange()
 	{
 		controller_.set_playback_speed(m_PlaybackSpeed);
