@@ -39,7 +39,6 @@ namespace Wiwa
 
 		}
 		state = GuiControlState::NORMAL;
-		//canClick = true;
 	}
 
 	GuiSlider::~GuiSlider()
@@ -147,8 +146,7 @@ namespace Wiwa
 			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, { 1.0,1.0,1.0,1.0 });
 			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_extra, { 1.0,1.0,1.0,1.0 });
 		}
-			
-		if (state == GuiControlState::FOCUSED)
+		else if (state == GuiControlState::FOCUSED)
 		{
 			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_normal, { 0.5,0.5,0.5,1.0 });
 			render->UpdateInstancedQuadTexColor(m_Scene, id_quad_extra, { 0.5,0.5,0.5,1.0 });

@@ -16,6 +16,9 @@ void Wiwa::PlayerGUISystem::OnInit()
 		gm.canvas.at(PauseHUD)->controls.at(index_passives)->SetNextFrame(0, &r2d);
 		gm.canvas.at(DeathHUD)->controls.at(index_passives_death)->SetNextFrame(0, &r2d);
 	}
+	gm.canvas.at(OptionsHUD)->controls.at(2)->SetInitialSliderValue(Wiwa::Application::Get().ReturnMusicVolume());
+	gm.canvas.at(OptionsHUD)->controls.at(3)->SetInitialSliderValue(Wiwa::Application::Get().ReturnSFXVolume());
+
 }
 
 void Wiwa::PlayerGUISystem::OnUpdate()
@@ -119,6 +122,8 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		{
 			gm.canvas.at(OptionsHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
+			OnSaveEvent event;
+			Wiwa::Application::Get().OnEvent(event);
 			returnToPauseHUD = false;
 		}
 	}

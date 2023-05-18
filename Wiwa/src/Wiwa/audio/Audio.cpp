@@ -1,6 +1,7 @@
 #include <wipch.h>
 #include "Audio.h"
 #include <iostream>
+#include <Wiwa/core/Application.h>
 
 // AK Wwise
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
@@ -675,16 +676,21 @@ uint32_t Audio::GetIdFromString(const char* name)
 void Audio::ChangeMasterVolume(int value)
 {
     AK::SoundEngine::SetRTPCValue("MasterVolume", value);
+    Wiwa::Application::Get().SetMasterVolume(value);
 }
 
 void Audio::ChangeMusicVolume(int value)
 {
     AK::SoundEngine::SetRTPCValue("MusicVolume", value);
+    Wiwa::Application::Get().SetMusicVolume(value);
+
 }
 
 void Audio::ChangeSFXVolume(int value)
 {
     AK::SoundEngine::SetRTPCValue("EnviromentVolume", value);
+    Wiwa::Application::Get().SetSFXVolume(value);
+
 }
 
 void Audio::ChangeDialogVolume(int value)

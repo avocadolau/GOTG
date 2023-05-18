@@ -531,6 +531,15 @@ namespace Wiwa
 		if (config.HasMember("resizable"))
 			m_Window->SetResizable(config["resizable"].as_bool());
 
+		if (config.HasMember("master_volume"))
+			Audio::ChangeMasterVolume(config["master_volume"].as_int());
+		if (config.HasMember("music_volume"))
+			Audio::ChangeMusicVolume(config["music_volume"].as_int());
+		if (config.HasMember("sfx_volume"))
+			Audio::ChangeSFXVolume(config["sfx_volume"].as_int());
+		if (config.HasMember("dialog_volume"))
+			Audio::ChangeDialogVolume(config["dialog_volume"].as_int());
+
 		if (config.HasMember("project_file"))
 		{
 			ProjectManager::OpenProject(config["project_file"].as_string());
@@ -546,6 +555,10 @@ namespace Wiwa
 		config.AddMember("vsync", m_Window->IsVSync());
 		config.AddMember("fullscreen", m_Window->GetFullScreen());
 		config.AddMember("resizable", m_Window->GetResizable());
+		config.AddMember("master_volume", m_MasterVolume);
+		config.AddMember("music_volume",m_MusicVolume);
+		config.AddMember("sfx_volume", m_SFXVolume);
+
 		config.AddMember("project_file", ProjectManager::GetProjectPath().c_str());
 
 		config.save_file("config/application.json");

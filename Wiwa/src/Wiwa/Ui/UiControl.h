@@ -61,12 +61,6 @@ namespace Wiwa
 		SELECTED
 	};
 
-	enum class GuiEvent
-	{
-		PLAY,
-		TEST,
-	};
-
 	class WI_API GuiControl
 	{
 	protected:
@@ -223,7 +217,6 @@ namespace Wiwa
 			}
 		}
 
-		//Used for abilites,buffs,etc 
 		void SetNextFrame(int value, Wiwa::Renderer2D* r2d)
 		{
 			if (animatedControl)
@@ -502,7 +495,12 @@ namespace Wiwa
 				break;
 			}
 		}
-		
+		void SetInitialSliderValue(float value_desired)
+		{
+			value = value_desired;
+
+			extraPosition.width = ((value * (float)position.width) / 100);
+		}
 		void ScaleGUIElement(Size2f desired_size, float duration, Size2f starting_size,GuiControlEasing easingType)
 		{
 			switch (easingType)
@@ -769,18 +767,17 @@ namespace Wiwa
 		int id;
 		GuiControlType type;
 		GuiControlState state;
-		GuiEvent event;
 
-		std::string text;           // Control text (if required)
-		std::string audioEventForButton;           // Control text (if required)
-		Rect2i position;        // Position and size
+		std::string text;           
+		std::string audioEventForButton;           
+		Rect2i position;        
 		Rect2i texturePosition;        
-		Rect2i extraPosition;	// Position and size for the bar
+		Rect2i extraPosition;	
 		Rect2i extraTexturePosition;        
-		Color4f color = Color::WHITE;        // Tint color
+		Color4f color = Color::WHITE;        
 
 		Image* texture;
-		Image* extraTexture;	// Texture atlas reference
+		Image* extraTexture;	
 
 		Renderer2D::InstanceData id_quad_normal;
 
@@ -800,5 +797,8 @@ namespace Wiwa
 
 		float rotation = 0.0f;
 
+
+
+		float value = 50.0f;
 	};
 }

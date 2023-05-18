@@ -121,6 +121,14 @@ namespace Wiwa
 		inline void SetRenderColor(Vector4f color) { m_RenderColor = color; }
 		inline Vector4f GetRenderColor() { return m_RenderColor; }
 
+		void SetMasterVolume(int value) { m_MasterVolume = value; }
+		void SetMusicVolume(int value) { m_MusicVolume = value; }
+		void SetSFXVolume(int value) { m_SFXVolume = value; }
+
+		int ReturnMasterVolume() { return m_MasterVolume; }
+		int ReturnMusicVolume() { return m_MusicVolume; }
+		int ReturnSFXVolume() { return m_SFXVolume; }
+
 		void OpenDir(const char *url);
 		void Quit();
 
@@ -165,6 +173,10 @@ namespace Wiwa
 
 		LayerStack m_LayerStack;
 		ImGuiLayer *m_ImGuiLayer;
+
+		int m_MasterVolume = 100;
+		int m_MusicVolume = 0;
+		int m_SFXVolume = 0;
 
 		std::vector<std::function<void()>> m_MainThreadQueue;
 		std::mutex m_MainThreadQueueMutex;
