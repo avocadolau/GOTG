@@ -1196,16 +1196,19 @@ namespace Wiwa
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
 		int count = 0;
 
-		// Get the first and only spawner in scene
 		size_t size = 0;
-		Wiwa::WaveSpawner* waveSpawner = nullptr;
-		waveSpawner = em.GetComponents<WaveSpawner>(&size);
-		if (waveSpawner) {
-			if (em.IsComponentRemoved<WaveSpawner>(0))
-				return count;
-			waveSpawner = &waveSpawner[0];
-			if (waveSpawner && waveSpawner->hasTriggered) {
-				count++;
+		Wiwa::WaveSpawner* enemySpawnerList = nullptr;
+		enemySpawnerList = em.GetComponents<WaveSpawner>(&size);
+		if (enemySpawnerList) {
+			for (int i = 0; i < size; i++) {
+				if (em.IsComponentRemoved<WaveSpawner>(i)) {
+				}
+				else {
+					Wiwa::WaveSpawner* waveSpawner = &enemySpawnerList[i];
+					if (waveSpawner && waveSpawner->hasTriggered) {
+						count++;
+					}
+				}
 			}
 		}
 
