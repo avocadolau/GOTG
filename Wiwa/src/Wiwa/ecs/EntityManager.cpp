@@ -841,6 +841,12 @@ namespace Wiwa {
 				eid = id;
 				break;
 			}
+
+			eid = GetChildByName(id, name);
+
+			if (eid != WI_INVALID_INDEX) {
+				break;
+			}
 		}
 
 		return eid;
