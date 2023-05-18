@@ -6,6 +6,7 @@
 #include "../../Editor/game_assembly/src/components/attack/SimpleBullet.h"
 #include "Wiwa/scene/Scene.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
 {
@@ -70,6 +71,10 @@ namespace Wiwa
     {
         Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
         EntityId yondusFin = em.LoadPrefab("assets/Prefabs/YondusFin/YundusFin_01.wiprefab");
+        Transform3D* tr = em.GetComponent<Transform3D>(yondusFin);
+        PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(yondusFin);
+        NavAgentSystem* navAgentSys = em.GetSystem<NavAgentSystem>(yondusFin);
+        *tr = *em.GetComponent<Transform3D>(yondusFin);
     }
 
     void Ability::GrootsSeeds()
