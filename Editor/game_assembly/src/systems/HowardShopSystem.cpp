@@ -3,6 +3,7 @@
 #include <Wiwa/core/Input.h>
 #include <Wiwa/Ui/UiManager.h>
 
+
 namespace Wiwa
 {
 
@@ -21,6 +22,9 @@ namespace Wiwa
 
 	void HowardShopSystem::OnInit()
 	{
+		Wiwa::OzzAnimationSystem* animator = m_Scene->GetEntityManager().GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
+
+		animator->PlayAnimation("idle");
 		m_ReturnToBaseHUD = false;
 		m_ActiveSecondPage = false;
 		m_FirstShopActive = false;
