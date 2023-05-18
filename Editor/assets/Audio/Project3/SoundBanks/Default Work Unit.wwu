@@ -6,6 +6,7 @@
 				<SoundBank Name="player" ID="{E627507A-B8D4-47F9-B6D5-F80AE935642C}">
 					<ObjectInclusionList>
 						<ObjectRef Name="player" ID="{AC918341-D1DF-4688-A71E-04A89CE4E0CB}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="npcs" ID="{F12E07E6-0573-4B32-ACEA-31B460D27432}" WorkUnitID="{12D72E45-8EEB-44F2-8EE9-F8F6B6305D6C}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

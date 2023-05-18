@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{287409F6-C181-015B-21DC-2396C703D12B}">
+		<SoundBank Id="258110631" Type="User" Language="SFX">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -36,6 +36,10 @@
 				<File Id="389483863" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>01 Prologue.wav</ShortName>
 					<CachePath>SFX/01 Prologue_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="424263943" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>IntroSceneAudio.wav</ShortName>
+					<CachePath>SFX/IntroSceneAudio_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="446020800" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>clap_130_bpm.wav</ShortName>
@@ -64,10 +68,6 @@
 				<File Id="772738426" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>waa_130_bpm.wav</ShortName>
 					<CachePath>SFX/waa_130_bpm_D79FB2B7.wem</CachePath>
-				</File>
-				<File Id="829742781" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Intro Scene.wav</ShortName>
-					<CachePath>SFX/Intro Scene_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="901990650" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>stab_130_bpm.wav</ShortName>
@@ -137,7 +137,7 @@
 								<SwitchContainer>
 									<SwitchValue GroupType="State" GroupId="4227810856" Id="1125500713"/>
 									<MediaRefs>
-										<MediaRef Id="829742781"/>
+										<MediaRef Id="424263943"/>
 									</MediaRefs>
 								</SwitchContainer>
 							</Children>
@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{EAF096DF-B8FA-1A7A-3EBF-41FB5CD2CAC6}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{9585AFE0-A84C-859D-7183-471F9689AD0F}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -207,6 +207,10 @@
 					<ShortName>Rocket - Voice Lines\vo_rocket_deathalt.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_deathalt_10C4C929.wem</CachePath>
 				</File>
+				<File Id="40442635" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Aron the Watcher Voice Lines\vo_aron_interaction.wav</ShortName>
+					<CachePath>SFX/Aron the Watcher Voice Lines/vo_aron_interaction_10C4C929.wem</CachePath>
+				</File>
 				<File Id="41348199" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Rocket - Voice Lines\vo_rocket_death.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_death_10C4C929.wem</CachePath>
@@ -214,6 +218,10 @@
 				<File Id="49179977" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 09 Shoot 1.wav</ShortName>
 					<CachePath>SFX/Weapon 09 Shoot 1_10C4C929.wem</CachePath>
+				</File>
+				<File Id="74659350" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Uatu the Watcher Voice Lines\vo_uatu_reward.wav</ShortName>
+					<CachePath>SFX/Uatu the Watcher Voice Lines/vo_uatu_reward_10C4C929.wem</CachePath>
 				</File>
 				<File Id="119658343" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup02alt.wav</ShortName>
@@ -231,6 +239,10 @@
 					<ShortName>footstep_concrete_run_07.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_07_10C4C929.wem</CachePath>
 				</File>
+				<File Id="243002773" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Aron the Watcher Voice Lines\vo_aron_generic.wav</ShortName>
+					<CachePath>SFX/Aron the Watcher Voice Lines/vo_aron_generic_10C4C929.wem</CachePath>
+				</File>
 				<File Id="250945655" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Rocket - Voice Lines\vo_rocket_hit01alt.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_hit01alt_10C4C929.wem</CachePath>
@@ -246,6 +258,10 @@
 				<File Id="290991297" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Rocket - Voice Lines\vo_rocket_healalt.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_healalt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="364055850" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ulana the Watcher Voice Lines\vo_ulana_generic.wav</ShortName>
+					<CachePath>SFX/Ulana the Watcher Voice Lines/vo_ulana_generic_10C4C929.wem</CachePath>
 				</File>
 				<File Id="412971102" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Star-Lord Voice Lines\vo_starlord_room_completed01alt.wav</ShortName>
@@ -271,6 +287,10 @@
 					<ShortName>Rocket - Voice Lines\vo_rocket_room_completed01.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_room_completed01_10C4C929.wem</CachePath>
 				</File>
+				<File Id="508948780" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ulana the Watcher Voice Lines\vo_ulana_interaction.wav</ShortName>
+					<CachePath>SFX/Ulana the Watcher Voice Lines/vo_ulana_interaction_10C4C929.wem</CachePath>
+				</File>
 				<File Id="510247001" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup01.wav</ShortName>
 					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_powerup01_10C4C929.wem</CachePath>
@@ -291,6 +311,10 @@
 					<ShortName>Rocket - Voice Lines\vo_rocket_heal.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_heal_10C4C929.wem</CachePath>
 				</File>
+				<File Id="647999919" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Uatu the Watcher Voice Lines\vo_uatu_interaction.wav</ShortName>
+					<CachePath>SFX/Uatu the Watcher Voice Lines/vo_uatu_interaction_10C4C929.wem</CachePath>
+				</File>
 				<File Id="680197070" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 13 Shoot 1.wav</ShortName>
 					<CachePath>SFX/Weapon 13 Shoot 1_10C4C929.wem</CachePath>
@@ -310,6 +334,18 @@
 				<File Id="714007581" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_12.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_12_10C4C929.wem</CachePath>
+				</File>
+				<File Id="751504147" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Aron the Watcher Voice Lines\vo_aron_reward.wav</ShortName>
+					<CachePath>SFX/Aron the Watcher Voice Lines/vo_aron_reward_10C4C929.wem</CachePath>
+				</File>
+				<File Id="758613286" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Uatu the Watcher Voice Lines\vo_uatu_generic.wav</ShortName>
+					<CachePath>SFX/Uatu the Watcher Voice Lines/vo_uatu_generic_10C4C929.wem</CachePath>
+				</File>
+				<File Id="789428489" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Ulana the Watcher Voice Lines\vo_ulana_reward.wav</ShortName>
+					<CachePath>SFX/Ulana the Watcher Voice Lines/vo_ulana_reward_10C4C929.wem</CachePath>
 				</File>
 				<File Id="794767311" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_08.wav</ShortName>
@@ -407,6 +443,21 @@
 						<MediaRef Id="1056090998"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="1640074935" Name="vo_aron_generic">
+					<MediaRefs>
+						<MediaRef Id="243002773"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3856070368" Name="vo_aron_interaction">
+					<MediaRefs>
+						<MediaRef Id="40442635"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2840152885" Name="vo_aron_reward">
+					<MediaRefs>
+						<MediaRef Id="751504147"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="3095733913" Name="vo_rocket_complete_run">
 					<MediaRefs>
 						<MediaRef Id="7424031"/>
@@ -478,6 +529,36 @@
 					<MediaRefs>
 						<MediaRef Id="259614640"/>
 						<MediaRef Id="608521725"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3252838082" Name="vo_uatu_generic">
+					<MediaRefs>
+						<MediaRef Id="758613286"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1500948605" Name="vo_uatu_interaction">
+					<MediaRefs>
+						<MediaRef Id="647999919"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1466408226" Name="vo_uatu_reward">
+					<MediaRefs>
+						<MediaRef Id="74659350"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="179212224" Name="vo_ulana_generic">
+					<MediaRefs>
+						<MediaRef Id="364055850"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2952727183" Name="vo_ulana_interaction">
+					<MediaRefs>
+						<MediaRef Id="508948780"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3903555336" Name="vo_ulana_reward">
+					<MediaRefs>
+						<MediaRef Id="789428489"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -666,7 +747,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -705,7 +786,7 @@
 			<ShortName>audio_settings</ShortName>
 			<Path>audio_settings.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
+		<SoundBank Id="1551306167" Type="User" Language="SFX">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -749,7 +830,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{4F6C8A63-272C-2AB5-7342-A711653CEAAE}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -909,7 +990,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{11FA7034-8021-10EE-CAF1-E91DED69E08B}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -942,5 +1023,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{8A691363-105B-555A-2A5B-4C571FA68E19}</FileHash>
+	<FileHash>{0A3A1C42-5226-69F7-E4FE-AA6B224E10BD}</FileHash>
 </SoundBanksInfo>
