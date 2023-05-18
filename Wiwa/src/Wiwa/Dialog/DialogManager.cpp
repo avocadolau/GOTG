@@ -851,8 +851,14 @@ namespace Wiwa
 
 
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
-			doc.AddMember(memberNameBubbleImage.c_str(), conversations[i].bubbleImagePath.c_str());
-			doc.AddMember(memberNameCharacterImage.c_str(), conversations[i].characterImagePath.c_str());
+
+			std::filesystem::path libpath2 = Wiwa::Resources::_assetToLibPath(conversations[i].bubbleImagePath).c_str();
+			libpath2.replace_extension(".dds").c_str();
+			doc.AddMember(memberNameBubbleImage.c_str(), libpath2.string().c_str());
+
+			std::filesystem::path libpath3 = Wiwa::Resources::_assetToLibPath(conversations[i].characterImagePath).c_str();
+			libpath3.replace_extension(".dds").c_str();
+			doc.AddMember(memberNameCharacterImage.c_str(), libpath3.string().c_str());
 
 			doc.AddMember(memberNameGroupId.c_str(), conversations[i].group.groupID.c_str());
 			doc.AddMember(memberNameGroupOrder.c_str(),conversations[i].group.order.c_str());
