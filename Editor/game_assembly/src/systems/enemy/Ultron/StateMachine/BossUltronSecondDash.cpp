@@ -4,7 +4,7 @@
 #include "../../../../components/attack/DashEffect.h"
 #include "../../../attack/SecondDashSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
@@ -145,9 +145,9 @@ namespace Wiwa
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 		Wiwa::SecondDashSystem* dashSystem = entityManager.GetSystem<Wiwa::SecondDashSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("A_attak_bigprojetiles", false);
+		animator->PlayAnimation("A_attak_bigprojetiles");
 
 		if (physSys != nullptr)
 		{

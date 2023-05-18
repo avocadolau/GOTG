@@ -15,7 +15,7 @@
 #include "../../components/attack/GrootSeeds.h"
 #include "../../components/attack/StarhawkBlast.h"
 
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../components/attack/Attack.h"

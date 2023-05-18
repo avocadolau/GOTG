@@ -4,7 +4,7 @@
 #include "../../../../components/attack/ClusterBullet.h"
 #include "../../../attack/ClusterBulletSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
@@ -220,9 +220,9 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("A_attak_bigprojetiles", false);
+		animator->PlayAnimation("A_attak_bigprojetiles");
 
 		if (physSys != nullptr)
 		{
