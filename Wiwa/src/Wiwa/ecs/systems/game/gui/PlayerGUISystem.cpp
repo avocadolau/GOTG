@@ -18,6 +18,8 @@ void Wiwa::PlayerGUISystem::OnInit()
 	}
 	gm.canvas.at(OptionsHUD)->controls.at(2)->SetInitialSliderValue(Wiwa::Application::Get().ReturnMusicVolume());
 	gm.canvas.at(OptionsHUD)->controls.at(3)->SetInitialSliderValue(Wiwa::Application::Get().ReturnSFXVolume());
+	gm.canvas.at(OptionsHUD)->controls.at(0)->SetChecked(Wiwa::Application::Get().GetWindow().IsVSync());
+	gm.canvas.at(OptionsHUD)->controls.at(1)->SetChecked(Wiwa::Application::Get().GetWindow().GetFullScreen());
 
 }
 
