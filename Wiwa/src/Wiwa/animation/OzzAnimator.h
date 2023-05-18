@@ -134,6 +134,9 @@ namespace Wiwa {
 		// Get animation data at index
 		AnimationData& getAnimationAt(size_t index) { return m_AnimationList[index]; }
 
+		// Get animation by name
+		OzzAnimation* getAnimationByName(const std::string& name);
+
 		// Get animation index by name
 		size_t getAnimationIndex(const std::string& str);
 

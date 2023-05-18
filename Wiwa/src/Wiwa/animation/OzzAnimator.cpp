@@ -323,6 +323,19 @@ namespace Wiwa {
 		return nullptr;
 	}
 
+	OzzAnimation* OzzAnimator::getAnimationByName(const std::string& name)
+	{
+		OzzAnimation* animation = nullptr;
+
+		std::unordered_map<std::string, size_t>::iterator it = m_AnimationsIndex.find(name);
+
+		if (it != m_AnimationsIndex.end()) {
+			return m_AnimationList[it->second].animation;
+		}
+
+		return animation;
+	}
+
 	size_t OzzAnimator::getAnimationIndex(const std::string& str)
 	{
 		std::unordered_map<std::string, size_t>::iterator it = m_AnimationsIndex.find(str);
