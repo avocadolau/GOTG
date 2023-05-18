@@ -32,8 +32,8 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 
 	PlayerElements(gm, character);
 	HandleCurrentCanvas(gm);
-
-	if (character->Health <= 0 && !deathHud)
+	Wiwa::OzzAnimationSystem* animator = m_Scene->GetEntityManager().GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
+	if (animator->getAnimator()->getAnimationByName("death")->HasFinished() && !deathHud)
 	{
 		if (!GameStateManager::ReturnFanaticEffect())
 		{
