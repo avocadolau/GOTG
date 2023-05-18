@@ -123,6 +123,7 @@ namespace Wiwa
 
 		bool forcedDialogHappened = false;
 		bool alreadyTalkedOnceTriggered = false;
+		bool canNoLongerTalk = false;
 
 		bool finishedRandomizing = false;
 
