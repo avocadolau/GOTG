@@ -17,6 +17,7 @@ namespace Wiwa {
 		if (!skeleton_) return false;
 
 		m_Loaded = ozz::sample::LoadAnimation(file, &animation_);
+		controller_.set_time_ratio(0.0f);
 		
 		if (m_Loaded) {
 			m_AnimationPath = file;

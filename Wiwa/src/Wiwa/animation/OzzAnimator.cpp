@@ -330,12 +330,17 @@ namespace Wiwa {
 		return nullptr;
 	}
 
-	void OzzAnimator::StopAnimation()
+	void OzzAnimator::StopAnimation(bool unbind)
 	{
 		if (m_ActiveAnimationId != WI_INVALID_INDEX) {
 			AnimationData& a_data = m_AnimationList[m_ActiveAnimationId];
 
 			a_data.animation->Stop();
+
+			if (unbind) {
+				m_ActiveAnimationId = WI_INVALID_INDEX;
+				m_ActiveAnimationName = "";
+			}
 		}
 	}
 

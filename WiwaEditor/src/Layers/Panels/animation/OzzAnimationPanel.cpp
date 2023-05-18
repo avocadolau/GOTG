@@ -403,9 +403,22 @@ void OzzAnimationPanel::DrawAnimations()
 						break;
 				}
 
+				float time_ratio = animation->getTimeRatio();
+
+				if (ImGui::SliderFloat("Time", &time_ratio, 0.0f, 1.0f)) {
+					animation->setTimeRatio(time_ratio);
+				}
+
 				if (ImGui::Button("Play")) {
 					m_ActiveAnimator->PlayAnimation(i);
 				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Stop")) {
+					m_ActiveAnimator->StopAnimation(false);
+				}
+
 				if (ImGui::Button("Delete")) {
 					m_ActiveAnimator->RemoveAnimationAt(i);
 				}

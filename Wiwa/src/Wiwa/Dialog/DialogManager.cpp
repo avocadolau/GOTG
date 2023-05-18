@@ -32,7 +32,41 @@ namespace Wiwa
 
 	DialogManager::~DialogManager()
 	{
+		/*Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
+
+
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.dds"))
+			render.RemoveInstance(m_Scene, continueImgID);
 		
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.dds"))
+			render.RemoveInstance(m_Scene, continueImgID2);
+
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_TalkButton01.dds"))
+			render.RemoveInstance(m_Scene, talkIndicatorImgID);
+
+		if (totalLoadNum >= 3)
+		{
+			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
+			{
+				render.RemoveInstance(m_Scene, conversations[i].characterImgID);
+				render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
+
+				for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
+				{
+					render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
+				}
+			}
+		}
+
+		for (int l = 0; l < MAX_CONVERSATIONS; l++)
+		{
+			conversations[l].occupied = false;
+
+			for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
+			{
+				conversations[l].nodes[m].occupied = false;
+			}
+		}*/
 	}
 
 	bool DialogManager::Init(Scene* scene)
@@ -42,9 +76,9 @@ namespace Wiwa
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.dds"))
 		{
-			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png");
+			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.dds");
 			Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 			if (continueImg) {
@@ -54,12 +88,12 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_SpeechTriangle_01.png Does not exist");
+			WI_CRITICAL("UI_SpeechTriangle_01.dds Does not exist");
 		}
 		
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.dds"))
 		{
-			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png");
+			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.dds");
 			Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
 			if (continueImg2) {
@@ -69,12 +103,12 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_SpeechTriangle_02.png Does not exist");
+			WI_CRITICAL("UI_SpeechTriangle_02.dds Does not exist");
 		}
 		
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_TalkButton01.png"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_TalkButton01.dds"))
 		{
-			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_TalkButton01.png");
+			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_TalkButton01.dds");
 			Image* talkIndicatorImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
 
 			if (talkIndicatorImg) {
@@ -84,7 +118,7 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_TalkButton01.png Does not exist");
+			WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 		}
 
 		
@@ -98,8 +132,8 @@ namespace Wiwa
 		//SetDialogText("Surprisingly, some of the collector’s", "inventory of weaponsandgadgets", "has been seen in the vicinity.", "library/Fonts/Jade_Smile.ttf", 0, 2);
 		//SetDialogText("Do not get lost in the labyrinth of", "machinery, Guardian.", "And good luck.", "library/Fonts/Jade_Smile.ttf", 0, 3);
 
-		//SetDialogBubbleImage("library/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.png", 0);
-		//SetCharacterImage("library/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.png", 0);
+		//SetDialogBubbleImage("library/HUD_Images/menus/speech menu/ui_speech_menu_starlord_bubble-01.dds", 0);
+		//SetCharacterImage("library/HUD_Images/menus/speech menu/ui_speech_menu_starlord_withshadows-01.dds", 0);
 
 		//conversations[0].occupied = true;
 
@@ -595,12 +629,13 @@ namespace Wiwa
 		{
 			if (characterID == 0)
 			{
-				if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.png"))
+				if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.dds"))
 				{
-					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.png");
+					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechMenuStarlordBubble_01.dds");
 					dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-					if (dialogImg) {
+					if (dialogImg)
+					{
 						conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 						render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 
@@ -609,15 +644,15 @@ namespace Wiwa
 				}
 				else
 				{
-					WI_CRITICAL("UI_TalkButton01.png Does not exist");
+					WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 				}
 				
 			}
 			else if (characterID == 1)
 			{
-				if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.png"))
+				if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.dds"))
 				{
-					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.png");
+					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechMenuRocketBubble_01.dds");
 					dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -627,14 +662,17 @@ namespace Wiwa
 				}
 				else
 				{
-					WI_CRITICAL("UI_TalkButton01.png Does not exist");
+					WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 				}
 			}
 			else
 			{
 				if (std::filesystem::exists(path))
 				{
-					textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+					std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
+					libpath.replace_extension(".dds").c_str();
+
+					textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 					dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -644,7 +682,7 @@ namespace Wiwa
 				}
 				else
 				{
-					WI_CRITICAL("UI_TalkButton01.png Does not exist");
+					WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 				}
 			}
 		}
@@ -652,10 +690,14 @@ namespace Wiwa
 		{
 			if (std::filesystem::exists(path))
 			{
-				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+				std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
+				libpath.replace_extension(".dds").c_str();
+
+				textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-				if (dialogImg) {
+				if (dialogImg)
+				{
 					conversations[conversationNumber].dialogImgID = render.CreateInstancedQuadTex(m_Scene, dialogImg->GetTextureId(), dialogImg->GetSize(), { 640,100 }, { 1080,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].dialogImgID);
 
@@ -664,7 +706,7 @@ namespace Wiwa
 			}
 			else
 			{
-				WI_CRITICAL("UI_TalkButton01.png Does not exist");
+				WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 			}
 		}
 	}
@@ -681,12 +723,13 @@ namespace Wiwa
 		{
 			if (characterID == 0)
 			{
-				if (std::filesystem::exists("library/HUDImages/Menus/SpeechMenu/UI_Starlord_01.png"))
+				if (std::filesystem::exists("library/HUDImages/Menus/SpeechMenu/UI_Starlord_01.dds"))
 				{
-					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_Starlord_01.png");
+					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_Starlord_01.dds");
 					characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-					if (characterImg) {
+					if (characterImg)
+					{
 						conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 						render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 
@@ -695,14 +738,14 @@ namespace Wiwa
 				}
 				else
 				{
-					WI_CRITICAL("UI_TalkButton01.png Does not exist");
+					WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 				}
 			}
 			else if (characterID == 1)
 			{
-				if (std::filesystem::exists("library/HUDImages/Menus/SpeechMenu/UI_Rocket_01.png"))
+				if (std::filesystem::exists("library/HUDImages/Menus/SpeechMenu/UI_Rocket_01.dds"))
 				{
-					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_Rocket_01.png");
+					textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_Rocket_01.dds");
 					characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -712,14 +755,17 @@ namespace Wiwa
 				}
 				else
 				{
-					WI_CRITICAL("UI_TalkButton01.png Does not exist");
+					WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 				}
 			}
 			else
 			{
 				if (std::filesystem::exists(path))
 				{
-					textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+					std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
+					libpath.replace_extension(".dds").c_str();
+
+					textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 					characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
@@ -729,7 +775,7 @@ namespace Wiwa
 				}
 				else
 				{
-					WI_CRITICAL("UI_TalkButton01.png Does not exist");
+					WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 				}
 			}
 		}
@@ -737,10 +783,14 @@ namespace Wiwa
 		{
 			if (std::filesystem::exists(path))
 			{
-				textID = Wiwa::Resources::Load<Wiwa::Image>(path);
+				std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
+				libpath.replace_extension(".dds").c_str();
+
+				textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-				if (characterImg) {
+				if (characterImg)
+				{
 					conversations[conversationNumber].characterImgID = render.CreateInstancedQuadTex(m_Scene, characterImg->GetTextureId(), characterImg->GetSize(), { -50,100 }, { 1024,1024 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					render.DisableInstance(m_Scene, conversations[conversationNumber].characterImgID);
 
@@ -749,7 +799,7 @@ namespace Wiwa
 			}
 			else
 			{
-				WI_CRITICAL("UI_TalkButton01.png Does not exist");
+				WI_CRITICAL("UI_TalkButton01.dds Does not exist");
 			}
 		}
 	}

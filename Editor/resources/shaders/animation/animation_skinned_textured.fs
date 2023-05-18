@@ -188,7 +188,7 @@ void main() {
 	
 	vec2 flipuv = vec2(v_vertex_uv.s, 1. - v_vertex_uv.t);
 	
-	vec4 color = ambient * v_vertex_color * texture(u_Texture, flipuv);
+	vec4 color = texture(u_Texture, flipuv);//ambient * v_vertex_color * 
 	
 	vec4 colorLight  = color * totalLight;
 	
