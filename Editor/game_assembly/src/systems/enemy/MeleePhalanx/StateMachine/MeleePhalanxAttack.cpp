@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "MeleePhalanxAttack.h"
 #include "../EnemyMeleePhalanx.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/audio/Audio.h>
@@ -21,7 +21,7 @@ namespace Wiwa
 	{
 		enemy->m_Timer = 0;
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem*animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		m_TimerAttackCooldown = 0.0f;
 
 		NavAgent *navAgent = (NavAgent *)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -40,7 +40,7 @@ namespace Wiwa
 	void MeleePhalanxAttackState::UpdateState(EnemyMeleePhalanx *enemy)
 	{
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem *animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem*animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -100,7 +100,7 @@ namespace Wiwa
 	void MeleePhalanxAttackState::GenerateAttack(EnemyMeleePhalanx *enemy)
 	{
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -108,7 +108,7 @@ namespace Wiwa
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 		if (distance <= 3.0f)
 		{
-			animator->Blend("atack", false, 0.2f);
+			animator->PlayAnimation("atack");
 	
 			EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
 			m_SoundCurrentTime = m_SoundTimer;

@@ -146,6 +146,9 @@ namespace Wiwa {
 		// Get active animation ID
 		size_t getActiveAnimationId() { return m_ActiveAnimationId; }
 
+		// Get active animation
+		OzzAnimation* getActiveAnimation();
+
 		// Get active animation name
 		std::string getActiveAnimationName() { return m_ActiveAnimationName; }
 
@@ -169,5 +172,8 @@ namespace Wiwa {
 
 		// Static load function
 		static OzzAnimator* LoadAnimator(const char* filepath);
+
+		// Get animator material
+		ResourceId GetMaterial();
 	};
 }

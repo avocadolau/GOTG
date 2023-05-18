@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "MeleePhalanxHit.h"
 #include "../EnemyMeleePhalanx.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -21,7 +21,7 @@ namespace Wiwa
 	void MeleePhalanxHitState::EnterState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Wiwa::MeshRenderer* renderer= em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
 		Wiwa::Material* mat = renderer->GetMaterial();
@@ -33,15 +33,15 @@ namespace Wiwa
 		EntityId hit_1 = em.GetChildByName(enemy->GetEntity(), "E_Hit_1");
 		EntityId hit_2 = em.GetChildByName(enemy->GetEntity(), "E_Hit_2");
 
-		animator->PlayAnimation("hit", false);
+		animator->PlayAnimation("hit");
 		
 	}
 
 	void MeleePhalanxHitState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}

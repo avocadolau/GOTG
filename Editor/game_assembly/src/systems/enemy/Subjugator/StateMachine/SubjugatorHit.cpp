@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "SubjugatorHit.h"
 #include "../EnemySubjugator.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/components/Mesh.h>
@@ -19,7 +19,7 @@ namespace Wiwa
 	void SubjugatorHitState::EnterState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::MeshRenderer* renderer = em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
 		Wiwa::Material* mat = renderer->GetMaterial();
 
@@ -27,14 +27,14 @@ namespace Wiwa
 		renderer->Update();
 		mat->SetUniformData("u_Hit", false);
 		//SubjugatorParticles - Damage particles for the Subjugator
-		animator->PlayAnimation("hit", false);
+		animator->PlayAnimation("hit");
 	}
 
 	void SubjugatorHitState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
-		if (animator->HasFinished())
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}

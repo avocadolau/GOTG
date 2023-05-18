@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "BossUltronIdle.h"
 #include "../BossUltron.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
@@ -19,7 +19,7 @@ namespace Wiwa
 	void BossUltronIdleState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		EntityId currentEnemy = enemy->GetEntity();
 
@@ -31,7 +31,7 @@ namespace Wiwa
 	void BossUltronIdleState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//if (animator->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
 	}

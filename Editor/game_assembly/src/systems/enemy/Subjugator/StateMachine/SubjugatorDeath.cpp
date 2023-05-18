@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "SubjugatorDeath.h"
 #include "../EnemySubjugator.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
@@ -22,10 +22,10 @@ namespace Wiwa
 	void SubjugatorDeathState::EnterState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		//SubjugatorAudio - Death audio for the Subjugator
-		animator->PlayAnimation("death", false);
+		animator->PlayAnimation("death");
 
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		if (navAgentPtr)
@@ -38,14 +38,14 @@ namespace Wiwa
 	void SubjugatorDeathState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
 		navAgent->autoRotate = false;
 
-		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 			self->hasFinished = true;

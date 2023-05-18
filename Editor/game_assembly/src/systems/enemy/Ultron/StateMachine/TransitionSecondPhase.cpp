@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "TransitionSecondPhase.h"
 #include "../BossUltron.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include <Wiwa/ecs/components/game/Health.h>

@@ -3,7 +3,7 @@
 #include "../EnemyMeleePhalanx.h"
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
@@ -25,12 +25,12 @@ namespace Wiwa
 	void MeleePhalanxDeathState::EnterState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
 		audio->PlayAudio("melee_dead");
-		animator->PlayAnimation("dead", false);
+		animator->PlayAnimation("dead");
 		m_TimerToDie = 0.0f;
 
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -44,14 +44,14 @@ namespace Wiwa
 	void MeleePhalanxDeathState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		navAgentPtr->StopAgent();
 		navAgent->autoRotate = false;
 
-		if (animator->HasFinished() && m_TimerToDie > m_TimeToDie)
+		if (animator->getAnimator()->getActiveAnimation()->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 			self->hasFinished = true;

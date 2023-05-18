@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "MeleePhalanxIdle.h"
 #include "../EnemyMeleePhalanx.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
@@ -25,9 +25,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("idle", true);
+		animator->PlayAnimation("idle");
 
 		if (enemy->m_Timer > 2)
 		{

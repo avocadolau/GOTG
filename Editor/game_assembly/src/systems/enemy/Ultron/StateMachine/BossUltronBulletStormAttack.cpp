@@ -2,7 +2,7 @@
 #include "BossUltronBulletStormAttack.h"
 #include "../BossUltron.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../components/attack/SimpleBullet.h"
 #include "../../../../components/attack/ZigZagBullet.h"
@@ -25,14 +25,15 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent != nullptr)
 		{
 			navAgent->autoRotate = false;
 		}
 
-		animator->PlayAnimation("A_attack_shot", true);
+		animator->PlayAnimation("A_attack_shot");
+		animator->getAnimator()->getActiveAnimation()->setLoop(true);
 	}
 
 	void BossUltronBulletStormAttackState::UpdateState(BossUltron* enemy)

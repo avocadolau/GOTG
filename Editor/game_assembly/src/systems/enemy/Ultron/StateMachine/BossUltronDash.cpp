@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "BossUltronDash.h"
 #include "../BossUltron.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <cmath>
 #include "../../../attack/UltronSmashExplosionSystem.h"
@@ -191,7 +191,7 @@ namespace Wiwa
 	void BossUltronDashState::ExitState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 	}
 
 	void BossUltronDashState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)

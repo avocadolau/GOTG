@@ -18,6 +18,8 @@ void Wiwa::PlayerGUISystem::OnInit()
 	}
 	gm.canvas.at(OptionsHUD)->controls.at(2)->SetInitialSliderValue(Wiwa::Application::Get().ReturnMusicVolume());
 	gm.canvas.at(OptionsHUD)->controls.at(3)->SetInitialSliderValue(Wiwa::Application::Get().ReturnSFXVolume());
+	gm.canvas.at(OptionsHUD)->controls.at(0)->SetChecked(Wiwa::Application::Get().GetWindow().IsVSync());
+	gm.canvas.at(OptionsHUD)->controls.at(1)->SetChecked(Wiwa::Application::Get().GetWindow().GetFullScreen());
 
 }
 
@@ -30,8 +32,8 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 
 	PlayerElements(gm, character);
 	HandleCurrentCanvas(gm);
-
-	if (character->Health <= 0 && !deathHud)
+	Wiwa::OzzAnimationSystem* animator = m_Scene->GetEntityManager().GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
+	if (animator->getAnimator()->getAnimationByName("death")->HasFinished() && !deathHud)
 	{
 		if (!GameStateManager::ReturnFanaticEffect())
 		{

@@ -2,6 +2,7 @@
 #include "BossUltronBase.h"
 
 #define NUMBER_OF_RANDOM_ACTIONS 4
+#define ALTITUDE_THUNDERSTORM_MOVEMENT 30.0f
 
 namespace Wiwa {
 	enum class UltronAttacks
@@ -35,15 +36,20 @@ namespace Wiwa {
 		/*void SpawnBulletZigZagMovement(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);*/
 
 		void SpawnZigZagBulletMovement(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
-
 		void SpawnClusterBulletMovement(BossUltron* enemy, const glm::vec3& bull_dir);
-
 		void SpawnSplashZigZagBullets(BossUltron* enemy);
+		void SpawnThunderStormMovement(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir);
+
+		glm::vec3 GetPositionAroundPlayer(const glm::vec3& localPosition, float distance, int index);
 
 	private:
 		UltronAttacks m_NextAttack;
 		std::vector<glm::vec3> m_PremadePositions;
 		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
+
+		const char* m_ThunderMarkPath;
+		std::vector<EntityId> m_ThunderMarkIds;
+		std::vector<glm::vec3> m_ThunderPositions;
 
 		float m_TimerToAttack = 0.0f;
 		float m_TimerAttackOnMoving = 0.0f;
@@ -54,5 +60,8 @@ namespace Wiwa {
 		bool m_IsMovingAttackSelected = false;
 		bool m_MovementAttackSelected = false;
 		bool m_ClusterMovementSpawned = false;
+		bool m_ThunderMovementMarkSpawned = false;
+		bool m_ThunderMovementSpawned = false;
+		bool m_SplashZigZagMovementSpawned = false;
 	};
 }

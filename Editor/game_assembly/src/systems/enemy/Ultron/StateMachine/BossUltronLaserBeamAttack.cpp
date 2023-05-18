@@ -4,7 +4,7 @@
 #include "../../../../components/attack/UltronLaserBeam.h"
 #include "../../../attack/UltronLaserBeamSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../../components/enemy/BossMovementPoints.h"
 #include "../../../attack/UltronSmashExplosionSystem.h"
@@ -249,9 +249,9 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
-		Wiwa::AnimatorSystem* animator = entityManager.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("A_attak_ray", false);
+		animator->PlayAnimation("A_attak_ray");
 
 		if (newBulletId == EntityManager::INVALID_INDEX)
 			return EntityManager::INVALID_INDEX;

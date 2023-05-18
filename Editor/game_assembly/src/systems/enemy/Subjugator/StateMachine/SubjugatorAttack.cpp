@@ -3,7 +3,7 @@
 #include "../EnemySubjugator.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../../attack/SimpleBulletSystem.h"
 #include "../../../../components/attack/SimpleBullet.h"
@@ -32,7 +32,7 @@ namespace Wiwa
 	void SubjugatorAttackState::EnterState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent) 
@@ -49,7 +49,7 @@ namespace Wiwa
 	void SubjugatorAttackState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
@@ -77,7 +77,7 @@ namespace Wiwa
 		if (m_TimerSyncAnimationBullets > 1.0f / stats->rateOfFire)
 		{
 			//SubjugatorAudio - Shooting audio for the Subjugator
-			animator->PlayAnimation("attack", false);
+			animator->PlayAnimation("attack");
 
 			m_TimerSyncAnimationBullets = 0.0;
 		}
@@ -179,7 +179,7 @@ namespace Wiwa
 	void SubjugatorAttackState::SelectRandomBulletSpawn(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
