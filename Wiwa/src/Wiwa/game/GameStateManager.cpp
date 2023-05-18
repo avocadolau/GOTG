@@ -1194,7 +1194,7 @@ namespace Wiwa
 	int GameStateManager::GetCurrentWaves()
 	{
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		int zero = 0;
+		int count = 0;
 
 		// Get the first and only spawner in scene
 		size_t size = 0;
@@ -1202,14 +1202,14 @@ namespace Wiwa
 		waveSpawner = em.GetComponents<WaveSpawner>(&size);
 		if (waveSpawner) {
 			if (em.IsComponentRemoved<WaveSpawner>(0))
-				return zero;
+				return count;
 			waveSpawner = &waveSpawner[0];
 			if (waveSpawner && waveSpawner->hasTriggered) {
-				return waveSpawner->currentWaveCount;
+				count++;
 			}
 		}
 
-		return zero;
+		return count;
 	}
 
 	bool GameStateManager::IsWaveSpawnerFinished(WaveSpawner* waveSpawner)
