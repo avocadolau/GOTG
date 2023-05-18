@@ -29,6 +29,8 @@ namespace Wiwa
         bool AnimationIntroBoss(Wiwa::GuiManager& gm);
 
         void OnCollisionEnter(Object* body1, Object* body2) override;
+
+        void UpdateBattleName(std::string name,Wiwa::GuiManager& gm);
     };
 }
 

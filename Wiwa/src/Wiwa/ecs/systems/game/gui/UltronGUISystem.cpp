@@ -19,12 +19,17 @@ void Wiwa::UltronGUISystem::OnUpdate()
 				if (Wiwa::GameStateManager::s_CurrentCharacter == 0)
 				{
 					//STARLORD
-					gm.canvas.at(6)->controls.at(3)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/UI_BattleMenuRocket_01.dds", Wiwa::Application::Get().GetRenderer2D());
+					gm.canvas.at(6)->controls.at(3)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/UI_BattleMenuStarlord_01.dds", Wiwa::Application::Get().GetRenderer2D());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(6)->controls.at(3)->id_quad_normal, 1);
+					UpdateBattleName("Starlord",gm);
+
 				}
 				else if (Wiwa::GameStateManager::s_CurrentCharacter == 1)
 				{
 					//ROCKET
-					gm.canvas.at(6)->controls.at(3)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/UI_BattleMenuStarlord_01.dds", Wiwa::Application::Get().GetRenderer2D());
+					gm.canvas.at(6)->controls.at(3)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/UI_BattleMenuRocket_01.dds", Wiwa::Application::Get().GetRenderer2D());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(6)->controls.at(3)->id_quad_normal, 1);
+					UpdateBattleName("Rocket", gm);
 				}
 				m_Scene->SwapPauseActive();
 				gm.canvas.at(0)->SwapActive();
@@ -104,4 +109,14 @@ bool Wiwa::UltronGUISystem::AnimationIntroBoss(Wiwa::GuiManager& gm)
 
 void Wiwa::UltronGUISystem::OnCollisionEnter(Object* body1, Object* body2)
 {
+}
+
+void Wiwa::UltronGUISystem::UpdateBattleName(std::string name,Wiwa::GuiManager& gm)
+{
+	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+	gm.canvas.at(6)->controls.at(0)->text = name.c_str();
+	Text* newText = gm.InitFont("library/Fonts/Jade_Smile.ttf", name.c_str());
+	r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(6)->controls.at(0)->id_quad_normal, 2);
+	r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(6)->controls.at(0)->id_quad_normal, newText->GetTextureId());
+	r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(6)->controls.at(0)->id_quad_normal, newText->GetSize(), { 0,0,512,512 });
 }

@@ -938,6 +938,9 @@ void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
 
 void Wiwa::PlayerGUISystem::HandleWaves(Wiwa::GuiManager& gm)
 {
+	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS")
+		return;
+
 	int total = Wiwa::GameStateManager::GetAproximateTotalEnemies();
 	int current_wave = Wiwa::GameStateManager::GetCurrentWaves();
 	if (total != 0)
