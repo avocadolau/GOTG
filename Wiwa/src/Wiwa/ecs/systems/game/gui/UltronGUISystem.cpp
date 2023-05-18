@@ -16,6 +16,16 @@ void Wiwa::UltronGUISystem::OnUpdate()
 		{
 			if (!activeIntroCanvas)
 			{
+				if (Wiwa::GameStateManager::s_CurrentCharacter == 0)
+				{
+					//STARLORD
+					gm.canvas.at(6)->controls.at(3)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/UI_BattleMenuRocket_01.dds", Wiwa::Application::Get().GetRenderer2D());
+				}
+				else if (Wiwa::GameStateManager::s_CurrentCharacter == 1)
+				{
+					//ROCKET
+					gm.canvas.at(6)->controls.at(3)->SwapToNewTexture("library/hudimages/menus/gameovermenu_02/UI_BattleMenuStarlord_01.dds", Wiwa::Application::Get().GetRenderer2D());
+				}
 				m_Scene->SwapPauseActive();
 				gm.canvas.at(0)->SwapActive();
 				gm.canvas.at(6)->SwapActive();

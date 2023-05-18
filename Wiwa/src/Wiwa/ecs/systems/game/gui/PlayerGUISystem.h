@@ -62,6 +62,8 @@ namespace Wiwa
 
         void OnCollisionExit(Object* body1, Object* body2) override;
 
+        void HandleWaves(Wiwa::GuiManager& gm);
+
     };
 }
 

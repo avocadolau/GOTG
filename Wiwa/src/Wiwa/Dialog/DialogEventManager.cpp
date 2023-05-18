@@ -269,9 +269,10 @@ namespace Wiwa
 					if (selector < 0) selector = 1;
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)))
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 650)
 				{
 					selected = true;
+					keyPressTimer = 0;
 
 					if (selector == 0)
 					{
@@ -418,9 +419,10 @@ namespace Wiwa
 					if (selector < 0) selector = 2;
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)))
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 650)
 				{
 					selected = true;
+					keyPressTimer = 0;
 
 					if (selector == 0)
 					{
@@ -564,9 +566,10 @@ namespace Wiwa
 					if (selector < 0) selector = 1;
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)))
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 650)
 				{
 					selected = true;
+					keyPressTimer = 0;
 
 					if (selector == 0)
 					{

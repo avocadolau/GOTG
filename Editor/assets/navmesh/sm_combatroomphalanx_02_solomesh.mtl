@@ -1,0 +1,123 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl M_Fan
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_AtlasGeneratorsFan.png
+
+newmtl M_Columns_02a2
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_Columns_02b.png
+
+newmtl M_wall
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_EnvironmentWallsPhalanx.png
+
+newmtl M_DarkCover2
+Kd 0 0 0
+Ka 0 0 0
+Ks 0 0 0
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 20
+illum 2
+
+newmtl M_TubeCurved2
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\tubes\T_TexTubeCurvedDifuse_01_C.png
+
+newmtl M_TubeStraight2
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\GitHub\GOTG\Editor\assets\Models\Props\tubes\T_TexTubeStraightDifuse_01_C.png
+
+newmtl mat_holotable
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_Holotable_Base_color.png
+
+newmtl M_PipeLines_01a
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_PipeLines_01b.png
+
+newmtl M_SecondaryDoor_01a2
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_SecondaryDoor_01b.png
+
+newmtl M_MainDoor_01a2
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 36
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_MainDoor_01b.png
+
+newmtl M_Floor
+Kd 1 1 1
+Ka 0 0 0
+Ks 0.400000006 0.400000006 0.400000006
+Ke 0 0 0
+Tf 0 0 0
+d 1
+Ns 25
+illum 2
+map_Kd ..\..\..\..\..\..\..\..\..\..\farre\Documents\1. Uni\1. PROJECT3\props\textures\TEXTURESPHALANX\T_CombatRoomPhalanx_02.png
+

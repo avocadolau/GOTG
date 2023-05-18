@@ -164,6 +164,7 @@ namespace Wiwa
 
 		forcedDialogHappened = false;
 		alreadyTalkedOnceTriggered = false;
+		canNoLongerTalk = false;
 
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
@@ -214,7 +215,7 @@ namespace Wiwa
 		}
 
 		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
-			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && alreadyTalkedOnceTriggered == false)
+			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && canNoLongerTalk == false)
 		{
 			if (collidingWithNpc == true)
 			{
@@ -255,7 +256,7 @@ namespace Wiwa
 			finishedRandomizing = false;
 		}
 
-		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false && triggerEvent == false)
+		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false && triggerEvent == false && canNoLongerTalk == false)
 		{
 			render.EnableInstance(m_Scene, talkIndicatorImgID);
 
@@ -346,6 +347,11 @@ namespace Wiwa
 					actualConversationState = 0;
 				}
 			}
+		}
+
+		if (alreadyTalkedOnceTriggered == true)
+		{
+			canNoLongerTalk = true;
 		}
 
 		keyPressRefreshTimer += Time::GetDeltaTime();

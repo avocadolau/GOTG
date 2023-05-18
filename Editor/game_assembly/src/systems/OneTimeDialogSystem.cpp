@@ -21,12 +21,16 @@ namespace Wiwa
 
 	void OneTimeDialogSystem::OnInit()
 	{
-
+		colliding = false;
 	}
 
 	void OneTimeDialogSystem::OnUpdate()
 	{
-		
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && colliding == true)
+		{
+			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+			_scene->GetDialogManager().alreadyTalkedOnceTriggered = true;
+		}
 	}
 
 	void OneTimeDialogSystem::OnDestroy()
@@ -41,10 +45,7 @@ namespace Wiwa
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			
-			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)))
-			{
-				//_scene->GetDialogManager()
-			}
+			colliding = true;
 		}
 	}
 
@@ -56,7 +57,7 @@ namespace Wiwa
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 
-			// Should do nothing for now...
+			colliding = false;
 		}
 	}
 }
