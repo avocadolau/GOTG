@@ -116,6 +116,9 @@ namespace Wiwa {
 		void OnPlaybackSpeedChange() override;
 		void OnLoopChange() override;
 
+		void addKeyAction(Action<> action, float time) override;
+		void removeKeyAction(Action<> action) override;
+
 		ozz::vector<ozz::math::SoaTransform>& getLocals() override { return blended_locals_; }
 
 		const char* getLowerBodyFile() { return m_LowerBodyFile.c_str(); }

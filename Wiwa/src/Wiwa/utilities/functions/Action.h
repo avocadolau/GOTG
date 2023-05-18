@@ -45,6 +45,11 @@ public:
 		execute(params...);
 	}
 
+	bool operator==(Action<> other) {
+		return obj == other.obj
+			&& getActionPtr() == other.getActionPtr();
+	}
+
 	void* getObj() { return obj; }
 	void* getActionPtr() { return obj == NULL ? func : (void*&)action; }
 };

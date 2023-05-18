@@ -272,4 +272,14 @@ namespace Wiwa {
             samplers_[i].controller.set_loop(m_Loop);
         }
     }
+
+    void OzzAnimationPartialBlending::addKeyAction(Action<> action, float time)
+    {
+        samplers_[kLowerBody].controller.add_key_event(action, time);
+    }
+
+    void OzzAnimationPartialBlending::removeKeyAction(Action<> action)
+    {
+        samplers_[kLowerBody].controller.remove_key_event(action);
+    }
 }

@@ -90,6 +90,16 @@ namespace Wiwa {
 		return controller_.finished();
 	}
 
+	void OzzAnimationSimple::addKeyAction(Action<> action, float time)
+	{
+		controller_.add_key_event(action, time);
+	}
+
+	void OzzAnimationSimple::removeKeyAction(Action<> action)
+	{
+		controller_.remove_key_event(action);
+	}
+
 	void OzzAnimationSimple::OnPlaybackSpeedChange()
 	{
 		controller_.set_playback_speed(m_PlaybackSpeed);

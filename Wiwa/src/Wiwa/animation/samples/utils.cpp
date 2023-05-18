@@ -80,6 +80,7 @@ void PlaybackController::set_time_ratio(float _ratio) {
     // Clamps in the unit interval [0:1].
     time_ratio_ = math::Clamp(0.f, _ratio, 1.f);
   }
+  update_events();
 }
 
 // Gets animation current time.
@@ -88,6 +89,46 @@ float PlaybackController::time_ratio() const { return time_ratio_; }
 // Gets animation time of last update.
 float PlaybackController::previous_time_ratio() const {
   return previous_time_ratio_;
+}
+
+void PlaybackController::update_events()
+{
+    size_t keys_size = key_events_.size();
+
+    for (size_t i = 0; i < keys_size; i++) {
+        AnimKeyEvent& ake = key_events_[i];
+
+        float diff = time_ratio_ - previous_time_ratio_;
+
+        if (time_ratio_ >= ake.time) {
+            //si
+            if (previous_time_ratio_ < ake.time) {
+                ake.action();
+            }
+        }
+        else if (diff < 0) {
+            if (previous_time_ratio_ < ake.time) {
+                ake.action();
+            }
+        }
+    }
+}
+
+void PlaybackController::add_key_event(Action<> action, float time)
+{
+    key_events_.push_back({ action, time });
+}
+
+void PlaybackController::remove_key_event(Action<> action)
+{
+    size_t keys_size = key_events_.size();
+
+    for (size_t i = 0; i < keys_size; i++) {
+        if (key_events_[i].action == action) {
+            key_events_.erase(key_events_.begin() + i);
+            break;
+        }
+    }
 }
 
 void PlaybackController::Reset() {

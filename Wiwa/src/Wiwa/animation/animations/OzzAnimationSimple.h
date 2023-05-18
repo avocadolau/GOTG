@@ -39,6 +39,9 @@ namespace Wiwa {
 
 		bool HasFinished() override;
 
+		void addKeyAction(Action<> action, float time) override;
+		void removeKeyAction(Action<> action) override;
+
 		void OnPlaybackSpeedChange() override;
 		void OnLoopChange() override;
 	};

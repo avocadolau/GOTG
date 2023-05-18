@@ -228,13 +228,13 @@ namespace Wiwa {
 		m_AnimationsIndex[name] = anim_id;
 
 		// Create partial animation
-		OzzAnimationSimple* partial_anim = new OzzAnimationSimple();
-		partial_anim->SetSkeleton(&m_Skeleton);
+		OzzAnimationSimple* simple_anim = new OzzAnimationSimple();
+		simple_anim->SetSkeleton(&m_Skeleton);
 
 		AnimationData& a_data = m_AnimationList[anim_id];
 
 		a_data.name = name;
-		a_data.animation = partial_anim;
+		a_data.animation = simple_anim;
 
 		return anim_id;
 	}
