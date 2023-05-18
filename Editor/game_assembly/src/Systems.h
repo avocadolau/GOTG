@@ -54,6 +54,7 @@
 #include "systems/SkipScene.h"
 #include "systems/SkipIntro.h"
 #include "systems/Reset_HubSystem.h"
+#include "systems/MainMenuUISystem.h"
 
 #include "systems/TestingSystem.h"
 #include "systems/attack/StarlordUltimateSystem.h"
