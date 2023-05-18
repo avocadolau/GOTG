@@ -16,7 +16,7 @@ void Wiwa::PlayerIdle::EnterState()
 {
 	WI_INFO("Player idle");
 
-	m_StateMachine->GetAnimator()->Blend("idle", true, 0.3f);
+	m_StateMachine->GetAnimator()->PlayAnimation("idle");
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 }
 
@@ -41,7 +41,6 @@ void Wiwa::PlayerIdle::UpdateState()
 
 void Wiwa::PlayerIdle::ExitState()
 {
-	m_StateMachine->GetAnimator()->Restart();
 }
 
 void Wiwa::PlayerIdle::OnCollisionEnter(Object* object1, Object* object2)

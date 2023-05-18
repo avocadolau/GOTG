@@ -32,41 +32,7 @@ namespace Wiwa
 
 	DialogManager::~DialogManager()
 	{
-		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
-
-
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.png"))
-			render.RemoveInstance(m_Scene, continueImgID);
 		
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.png"))
-			render.RemoveInstance(m_Scene, continueImgID2);
-
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_TalkButton01.png"))
-			render.RemoveInstance(m_Scene, talkIndicatorImgID);
-
-		if (totalLoadNum >= 3)
-		{
-			for (int i = 0; (i < MAX_CONVERSATIONS) && conversations[i].occupied == true; i++)
-			{
-				render.RemoveInstance(m_Scene, conversations[i].characterImgID);
-				render.RemoveInstance(m_Scene, conversations[i].dialogImgID);
-
-				for (int j = 0; (j < MAX_CONVERSATION_NODES) && conversations[i].nodes[j].occupied == true; j++)
-				{
-					render.RemoveInstance(m_Scene, conversations[i].nodes[j].text1_imgModeID);
-				}
-			}
-		}
-
-		for (int l = 0; l < MAX_CONVERSATIONS; l++)
-		{
-			conversations[l].occupied = false;
-
-			for (int m = 0; m < MAX_CONVERSATION_NODES; m++)
-			{
-				conversations[l].nodes[m].occupied = false;
-			}
-		}
 	}
 
 	bool DialogManager::Init(Scene* scene)

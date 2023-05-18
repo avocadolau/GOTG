@@ -5,6 +5,7 @@
 #include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/audio/Audio.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 
 namespace Wiwa {
 	struct StarLordShooter;
@@ -44,7 +45,7 @@ namespace Wiwa {
 
 		void SetDirection(const float value) { m_Direction = value; }
 
-		AnimatorSystem* GetAnimator();
+		OzzAnimationSystem* GetAnimator();
 		PhysicsSystem* GetPhysics();
 		Transform3D* GetFirePosition(const char* name);
 		AudioSystem* GetAudio();

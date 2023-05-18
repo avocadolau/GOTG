@@ -37,6 +37,11 @@ void Wiwa::PlayerStateMachine::OnInit()
 {
 	PlayerController::OnInit();
 	m_CurrentState->EnterState();
+
+	if (GameStateManager::s_CurrentCharacter == 1)
+	{
+		GetTransform()->localScale = glm::vec3(1.75, 1.75, 1.75);
+	}
 }
 
 void Wiwa::PlayerStateMachine::OnUpdate()

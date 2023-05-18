@@ -13,8 +13,11 @@ Wiwa::PlayerMove::~PlayerMove()
 void Wiwa::PlayerMove::EnterState()
 {
 	WI_INFO("Player move");
-
-	m_StateMachine->GetAnimator()->Blend("running", true, 0.2f);
+	WI_INFO("{}", m_StateMachine->GetInput().length());
+	if(m_StateMachine->GetCharacter()->WalkTreshold <= m_StateMachine->GetInput().length())
+		m_StateMachine->GetAnimator()->PlayAnimation("walk");
+	else
+		m_StateMachine->GetAnimator()->PlayAnimation("running");
 	currentSteptime = runStepTimer;
 }
 
@@ -54,7 +57,6 @@ void Wiwa::PlayerMove::UpdateState()
 
 void Wiwa::PlayerMove::ExitState()
 {
-	m_StateMachine->GetAnimator()->Restart();
 }
 
 void Wiwa::PlayerMove::OnCollisionEnter(Object* object1, Object* object2)

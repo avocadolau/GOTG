@@ -66,10 +66,10 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 	}
 
-	if (data->PanToHala)
+	/*if (data->PanToHala)
 	{
 		PanToHala();
-	}
+	}*/
 
 	if (m_SceneChange)
 	{

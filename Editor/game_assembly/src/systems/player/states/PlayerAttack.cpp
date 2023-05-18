@@ -2,6 +2,7 @@
 #include "../../../components/player/StarLordShooter.h"
 #include <Wiwa/ecs/components/game/Character.h>
 
+
 Wiwa::PlayerAttack::PlayerAttack(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id) {
 	m_ShootTimer = 0.f;
@@ -15,9 +16,8 @@ Wiwa::PlayerAttack::~PlayerAttack() {}
 void Wiwa::PlayerAttack::EnterState()
 {
 	WI_WARN("Player attack");
-	m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
-
-	
+	if(m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "aim")
+		m_StateMachine->GetAnimator()->getAnimator()->PlayAnimation("aim");
 }
 
 void Wiwa::PlayerAttack::UpdateState()
@@ -58,8 +58,8 @@ void Wiwa::PlayerAttack::UpdateState()
 	if (m_StateMachine->CanMove())
 	{
 		// TODO: Partial blending
-		 
-		m_StateMachine->GetAnimator()->PlayAnimation("running", true);
+		 if(m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim")
+			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim");
 		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
 		m_StateMachine->UpdateRotation();
 		float shootDirection = m_StateMachine->GetTransform()->localRotation.y;
@@ -67,19 +67,21 @@ void Wiwa::PlayerAttack::UpdateState()
 		float difference = glm::abs(shootDirection - movementDirection);
 
 		//WI_INFO("Diff angle {}", difference);
-		if (IN_BETWEEN(difference, 170.f, 289.f))
+		if (IN_BETWEEN(difference, 170.f, 289.f)
+			&& m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim_back")
+		{	
+			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim_back");
+		}
+		else if (IN_BETWEEN(difference, 45.0f, 169.f)
+			&& m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim_left")
 		{
-			m_StateMachine->GetAnimator()->PlayAnimation("moonwalk", true);
+			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim_left");
 
 		}
-		else if (IN_BETWEEN(difference, 45.0f, 169.f))
+		else if (IN_BETWEEN(difference, 290.0f, 360.0f)
+			&& m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim_right")
 		{
-			m_StateMachine->GetAnimator()->PlayAnimation("walking_left", true);
-
-		}
-		else if (IN_BETWEEN(difference, 290.0f, 360.0f))
-		{
-			m_StateMachine->GetAnimator()->PlayAnimation("walking_right", true);
+			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim_right");
 
 		}
 
@@ -94,7 +96,8 @@ void Wiwa::PlayerAttack::UpdateState()
 	}
 	else
 	{
-		m_StateMachine->GetAnimator()->PlayAnimation("aiming", true);
+		if (m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "aim")
+			m_StateMachine->GetAnimator()->PlayAnimation("aim");
 		m_StateMachine->UpdateMovement(0.f);
 		m_StateMachine->UpdateRotation();
 	}
@@ -104,7 +107,6 @@ void Wiwa::PlayerAttack::UpdateState()
 
 void Wiwa::PlayerAttack::ExitState()
 {
-	m_StateMachine->GetAnimator()->Restart();
 }
 
 void Wiwa::PlayerAttack::OnCollisionEnter(Object* object1, Object* object2)
@@ -127,12 +129,12 @@ void Wiwa::PlayerAttack::Fire()
 			if (shooter->ShootRight)
 			{
 				spawnPoint = m_StateMachine->GetFirePosition("RightPos");
-				m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
+				//m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
 			}
 			else
 			{
 				spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
-				m_StateMachine->GetAnimator()->Blend("shoot_left", false, 0.1f);
+				//m_StateMachine->GetAnimator()->Blend("shoot_left", false, 0.1f);
 			}
 			shooter->ShootRight = !shooter->ShootRight;
 			m_StateMachine->SpawnStarLordBullet(*spawnPoint, *m_StateMachine->GetCharacter());
@@ -179,7 +181,7 @@ void Wiwa::PlayerAttack::FireStarlordUltimate()
 	Character* character = m_StateMachine->GetCharacter();
 	character->Shield = 0;
 	spawnPoint = m_StateMachine->GetFirePosition("RightPos");
-	m_StateMachine->GetAnimator()->Blend("shoot_right", false, 0.1f);
+	m_StateMachine->GetAnimator()->PlayAnimation("shoot_right");
 	
 	m_StateMachine->SpawnStarLordUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
 	m_StateMachine->GetAudio()->PlayAudio("player_shoot");

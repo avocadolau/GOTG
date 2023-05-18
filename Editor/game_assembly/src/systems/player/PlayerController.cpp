@@ -57,6 +57,8 @@ void Wiwa::PlayerController::OnInit()
 	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARLORD_BULLET, m_Scene);
 	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARHAWK_BLAST_BULLET, m_Scene);
 
+	GetAnimator()->getAnimator()->setTransitionTime(0.1f);
+
 }
 
 void Wiwa::PlayerController::OnDestroy()
@@ -111,9 +113,9 @@ Wiwa::CollisionBody* Wiwa::PlayerController::GetRigidBody()
 
 
 
-Wiwa::AnimatorSystem* Wiwa::PlayerController::GetAnimator()
+Wiwa::OzzAnimationSystem* Wiwa::PlayerController::GetAnimator()
 {
-	return m_Scene->GetEntityManager().GetSystem<Wiwa::AnimatorSystem>(m_EntityId);
+	return m_Scene->GetEntityManager().GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
 }
 
 Wiwa::PhysicsSystem* Wiwa::PlayerController::GetPhysics()
