@@ -758,6 +758,9 @@ namespace Wiwa
 			extraTexturePosition.height = extraTexturePosition.height;
 
 		}
+
+
+		void SetChecked(bool ret) { checked = ret; }
 	public:
 
 		ResourceId textId1;
@@ -800,5 +803,7 @@ namespace Wiwa
 
 
 		float value = 50.0f;
+		bool checked = false;
+
 	};
 }
