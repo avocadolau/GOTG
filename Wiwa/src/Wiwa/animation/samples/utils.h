@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------//
+﻿//----------------------------------------------------------------------------//
 //                                                                            //
 // ozz-animation is hosted at http://github.com/guillaumeblanc/ozz-animation  //
 // and distributed under the MIT License (MIT).                               //
@@ -88,11 +88,32 @@ class PlaybackController {
   // Sets loop modes. If true, animation time is always clamped between 0 and 1.
   void set_loop(bool _loop) { loop_ = _loop; }
 
+  // Checks key events
+  void update_events();
+
+  // Add key event
+  void add_key_event(Action<> action, float time);
+
+  // Remove key event
+  void remove_key_event(Action<> action);
+
   // Gets loop mode.
   bool loop() const { return loop_; }
 
   // Check if finished
   bool finished() const { return time_ratio_ >= 1.0f; }
+
+  // Check if animation is playing
+  bool is_playing() { return play_; }
+
+  // Check if animation is paused
+  bool is_paused() { return !play_; }
+
+  // Play animation
+  void play() { play_ = true; }
+
+  // Stop animation
+  void stop() { play_ = false; }
 
   // Updates animation time if in "play" state, according to playback speed and
   // given frame time _dt.
@@ -104,8 +125,8 @@ class PlaybackController {
 
  private:
      struct AnimKeyEvent {
-         float time;
          Action<> action;
+         float time;
      };
 
      std::vector<AnimKeyEvent> key_events_;

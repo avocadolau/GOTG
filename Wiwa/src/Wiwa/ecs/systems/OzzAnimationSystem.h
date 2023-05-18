@@ -16,6 +16,8 @@ namespace Wiwa {
 
 		void PlayAnimation(const char* name);
 
+		OzzAnimator* getAnimator() { return m_Animator; }
+
 		void OnAwake() override;
 		void OnInit() override;
 		void OnUpdate() override;

@@ -73,8 +73,7 @@ namespace Wiwa {
 	inline ResourceId Resources::Load<Image>(const char* file)
 	{
 		std::filesystem::path file_path = _assetToLibPath(file);
-		if (!std::filesystem::exists(file_path))
-			return -1;
+
 		file_path.replace_extension(".dds");
 		ResourceId position = getResourcePosition(WRT_IMAGE, file_path.string().c_str());
 		size_t size = m_Resources[WRT_IMAGE].size();

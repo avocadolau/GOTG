@@ -11,6 +11,7 @@ namespace Wiwa
 		float PanVelocity;
 		bool PanToCamera;
 		float PanRotationVelocity;
+		bool PanToHala;
 	};
 }
 
@@ -21,4 +22,5 @@ REFLECTION_BEGIN(Wiwa::ShipMainMenuData)
 	REFLECT_MEMBER(PanVelocity)
 	REFLECT_MEMBER(PanToCamera)
 	REFLECT_MEMBER(PanRotationVelocity)
+	REFLECT_MEMBER(PanToHala)
 REFLECTION_END;
