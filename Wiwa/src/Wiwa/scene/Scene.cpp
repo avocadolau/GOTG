@@ -37,7 +37,7 @@ namespace Wiwa
 
 		m_TransitionInstance = r2d.CreateInstancedQuadTex(this, img->GetTextureId(), img->GetSize(), { 0,0 }, { 2000,1080 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 		r2d.UpdateInstancedQuadTexColor(this, m_TransitionInstance, { 0.1f, 0.1f, 0.1f, 1.0f });
-
+		r2d.UpdateInstancedQuadTexPriority(this, m_TransitionInstance, 2);
 		r2d.DisableInstance(this, m_TransitionInstance);
 
 		m_GuiManager = new GuiManager();
