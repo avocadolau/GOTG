@@ -172,5 +172,8 @@ namespace Wiwa {
 
 		// Static load function
 		static OzzAnimator* LoadAnimator(const char* filepath);
+
+		// Get animator material
+		ResourceId GetMaterial();
 	};
 }
