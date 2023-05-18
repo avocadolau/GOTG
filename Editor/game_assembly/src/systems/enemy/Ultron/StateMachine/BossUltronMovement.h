@@ -62,5 +62,6 @@ namespace Wiwa {
 		bool m_ClusterMovementSpawned = false;
 		bool m_ThunderMovementMarkSpawned = false;
 		bool m_ThunderMovementSpawned = false;
+		bool m_SplashZigZagMovementSpawned = false;
 	};
 }

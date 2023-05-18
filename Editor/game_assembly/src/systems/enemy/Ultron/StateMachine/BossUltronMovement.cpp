@@ -73,6 +73,7 @@ namespace Wiwa
 		m_MovementAttackSelected = false;
 		m_ThunderMovementSpawned = false;
 		m_ThunderMovementMarkSpawned = false;
+		m_SplashZigZagMovementSpawned = false;
 		m_TimerAttackOnMoving = 0.0f;
 	}
 
@@ -190,7 +191,7 @@ namespace Wiwa
 			break;
 			case 1:
 			{
-				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+				/*glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
 				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
 				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
 				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -203,7 +204,8 @@ namespace Wiwa
 				SpawnBulletMovement(enemy, selfTr, rotateBulletRightHand1);
 				SpawnBulletMovement(enemy, selfTr, rotateBulletRightHand2);
 				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand4);
+				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand4);*/
+
 				/*m_IsMovingAttackSelected = false;*/
 			}
 			break;
@@ -227,8 +229,11 @@ namespace Wiwa
 			break;
 			case 3:
 			{
-				SpawnSplashZigZagBullets(enemy);
-				/*m_IsMovingAttackSelected = false;*/
+				if (m_SplashZigZagMovementSpawned == false)
+				{
+					SpawnSplashZigZagBullets(enemy);
+					m_SplashZigZagMovementSpawned = true;
+				}
 			}
 			break;
 
@@ -414,6 +419,12 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
+
+		if (newBulletId == EntityManager::INVALID_INDEX)
+		{
+			return;
+		}
+
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
 
 		//WI_INFO("Getting bullet from pool id: {}", newBulletId);
@@ -457,6 +468,12 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ZigZagBulletPool->GetFromPool();
+
+		if (newBulletId == EntityManager::INVALID_INDEX)
+		{
+			return;
+		}
+
 		ZigZagBulletSystem* bulletSys = entityManager.GetSystem<ZigZagBulletSystem>(newBulletId);
 
 		WI_INFO("Getting bullet from pool id: {}", newBulletId);
@@ -494,6 +511,11 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ClusterBulletsPool->GetFromPool();
+
+		if (newBulletId == EntityManager::INVALID_INDEX)
+		{
+			return;
+		}
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
