@@ -20,11 +20,11 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", true);
-		}
+		}*/
 		//SubjugatorParticles - Damage particles for the Subjugator
 		animator->PlayAnimation("hit");
 	}
@@ -43,11 +43,11 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+	/*	Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", false);
-		}
+		}*/
 	}
 
 	void SubjugatorHitState::OnCollisionEnter(EnemySubjugator* enemy, const Object* body1, const Object* body2)

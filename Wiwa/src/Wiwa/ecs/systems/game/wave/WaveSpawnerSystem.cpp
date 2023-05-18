@@ -36,6 +36,10 @@ namespace Wiwa
 
 		if (GameStateManager::GetType() != RoomType::ROOM_BOSS)
 		{
+			if (enemyManager.m_CurrentCombatRoomsCount >= enemyManager.m_SpawnerDataTable.size())
+			{
+				enemyManager.m_CurrentCombatRoomsCount = enemyManager.m_SpawnerDataTable.size() - 1;
+			}
 			const WaveSpawner& data = enemyManager.m_SpawnerDataTable[enemyManager.m_CurrentCombatRoomsCount].waveSpawnData;
 			enemySpawner->maxEnemiesPerWave = data.maxEnemiesPerWave;
 			enemySpawner->minEnemiesPerWave = data.minEnemiesPerWave;

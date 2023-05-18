@@ -28,6 +28,7 @@
 #include "systems/NpcSystem.h"
 #include "systems/ForcedDialogSystem.h"
 #include "systems/CharacterSensitiveDialogSystem.h"
+#include "systems/OneTimeDialogSystem.h"
 
 #include "systems/attack/ClusterBulletSystem.h"
 #include "systems/attack/ZigZagSystem.h"
