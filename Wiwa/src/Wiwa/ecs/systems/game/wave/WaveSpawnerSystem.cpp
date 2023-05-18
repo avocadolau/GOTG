@@ -65,6 +65,9 @@ namespace Wiwa
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		Wave* currentWave = nullptr;
 
+		if (enemySpawner->hasFinished)
+			return;
+
 		m_Action = QueryActiveWaves();
 
 		if (m_TimerForNextWave >= enemySpawner->waveChangeRate)
