@@ -33,10 +33,10 @@ namespace Wiwa
 		switch (GameStateManager::GetType())
 		{
 		case RoomType::ROOM_HUB:
-			m_FOV = 70;
+			m_FOV = 40;
 			break;
 		case RoomType::ROOM_REWARD:
-			m_FOV = 45;
+			m_FOV = 40;
 			break;
 		case RoomType::ROOM_COMBAT:
 			m_FOV = 60;
@@ -77,7 +77,13 @@ namespace Wiwa
 
 
 		glm::vec3 finalpos = playerTr->position + m_CameraOffset;
-		m_Camera->setPosition(finalpos);	
+		m_Camera->setPosition(finalpos);
+
+		if (GameStateManager::GetState() == RoomState::STATE_FINISHED)
+		{
+			m_FOV = 40;
+			m_Camera->setFOV(m_FOV);
+		}
 	}
 
 	void CameraController::OnDestroy()

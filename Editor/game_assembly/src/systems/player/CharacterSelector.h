@@ -20,7 +20,7 @@ class CharacterSelector : public System
 		bool m_CanInteract;
 
 		const char* starlord_path = "library/characters/starlord/sk_starlord01.wimodel";
-		const char* rocket_path = "library/characters/rocket/sk_rocket01b.wimodel";
+		const char* rocket_path = "library/characters/rocket/sk_rocket01.wimodel";
 	};
 }
 REGISTER_SYSTEM(Wiwa::CharacterSelector)
