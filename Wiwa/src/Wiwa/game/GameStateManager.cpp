@@ -1205,7 +1205,7 @@ namespace Wiwa
 				}
 				else {
 					Wiwa::WaveSpawner* waveSpawner = &enemySpawnerList[i];
-					if (waveSpawner && waveSpawner->hasTriggered) {
+					if (waveSpawner) {
 						count++;
 					}
 				}
