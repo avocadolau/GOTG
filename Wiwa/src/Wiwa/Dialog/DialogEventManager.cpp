@@ -22,6 +22,7 @@
 #include <Wiwa/utilities/json/JSONDocument.h>
 
 #include <Wiwa/utilities/easings.h>
+#include <Wiwa/game/Items/ItemManager.h>
 
 namespace Wiwa
 {
@@ -250,7 +251,7 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250) // Gamepad DPad reversed?
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -259,7 +260,7 @@ namespace Wiwa
 					if (selector >= 2) selector = 0;
 				}
 
-				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250) // Gamepad DPad reversed? | GamepadDPadRight does not work?
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -399,7 +400,7 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 4500, 4500 }, { 1500, 3000, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250) // Gamepad DPad reversed?
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -408,7 +409,7 @@ namespace Wiwa
 					if (selector >= 3) selector = 0;
 				}
 
-				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250) // Gamepad DPad reversed? | GamepadDPadRight does not work?
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -545,7 +546,7 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250) // Gamepad DPad reversed?
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -554,7 +555,7 @@ namespace Wiwa
 					if (selector >= 2) selector = 0;
 				}
 
-				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250) // Gamepad DPad reversed? | GamepadDPadRight does not work?
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -657,53 +658,148 @@ namespace Wiwa
 
 	void DialogEventManager::UatuReward(int optionNumber)
 	{
-		if (optionNumber == 1)
-		{
+		Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
 
+		if (optionNumber == 1) // 1000 credits
+		{
+			inventory.AddTokens(1000);
 		}
-		else if (optionNumber == 2)
+		else if (optionNumber == 2) // 100 prometheum
 		{
-
+			inventory.AddTokensHoward(100);
 		}
 	}
 
 	void DialogEventManager::AronReward(int optionNumber)
 	{
-		int randomizerMaxValue = 0;
-		int randomizerResult = 0;
+		Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
 
-		/*for (int y = 0; (y < MAX_ITEMS); y++)  // <-- Detect max number of available items
+		if (optionNumber == 1) // Random active
 		{
-			randomizerMaxValue++;
-		}*/
+			int randomizerMaxValue = 3;
+			int randomizerResult = 0;
 
-		std::random_device rdev;
-		std::mt19937 rgen(rdev());
-		std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
-		randomizerResult = idist(rgen);
-		if (optionNumber == 1)
-		{
-			// items->Give(item->itemnumber = randomizerResult);
+			std::random_device rdev;
+			std::mt19937 rgen(rdev());
+			std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
+			randomizerResult = idist(rgen);
+
+			if (randomizerResult == 0)
+			{
+				inventory.AddAbility(Wiwa::ItemManager::GetAbility("Groot's Seeds"));
+			}
+			else if (randomizerResult == 1)
+			{
+				inventory.AddAbility(Wiwa::ItemManager::GetAbility("Phyla's Quantum Sword"));
+			}
+			else if (randomizerResult == 2)
+			{
+				inventory.AddAbility(Wiwa::ItemManager::GetAbility("Starhawk's Time Blast"));
+			}
+			else if (randomizerResult == 3)
+			{
+				inventory.AddAbility(Wiwa::ItemManager::GetAbility("Yondu's Fin"));
+			}
 		}
-		else if (optionNumber == 2)
+		else if (optionNumber == 2) // Random buff
 		{
+			int randomizerMaxValue = 5;
+			int randomizerResult = 0;
 
+			std::random_device rdev;
+			std::mt19937 rgen(rdev());
+			std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
+			randomizerResult = idist(rgen);
+
+			if (randomizerResult == 0)
+			{
+				inventory.AddBuff(Wiwa::ItemManager::GetBuff("Bug's Leg"));
+			}
+			else if (randomizerResult == 1)
+			{
+				inventory.AddBuff(Wiwa::ItemManager::GetBuff("Charlie-27's Fist"));
+			}
+			else if (randomizerResult == 2)
+			{
+				inventory.AddBuff(Wiwa::ItemManager::GetBuff("Cosmo's Paw"));
+			}
+			else if (randomizerResult == 3)
+			{
+				inventory.AddBuff(Wiwa::ItemManager::GetBuff("Major Victory's Shield"));
+			}
+			else if (randomizerResult == 4)
+			{
+				inventory.AddBuff(Wiwa::ItemManager::GetBuff("Martinex's Thermokinesis"));
+			}
+			else if (randomizerResult == 5)
+			{
+				inventory.AddBuff(Wiwa::ItemManager::GetBuff("Nikki's Touch"));
+			}
 		}
-		else if (optionNumber == 3)
+		else if (optionNumber == 3) // Random passive
 		{
+			int randomizerMaxValue = 9;
+			int randomizerResult = 0;
 
+			std::random_device rdev;
+			std::mt19937 rgen(rdev());
+			std::uniform_int_distribution<int> idist(0, randomizerMaxValue);
+			randomizerResult = idist(rgen);
+
+			if (randomizerResult == 0)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Adam_Warlock_Blessing"));
+			}
+			else if (randomizerResult == 1)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Angela_Crown"));
+			}
+			else if (randomizerResult == 2)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Drax_Belt"));
+			}
+			else if (randomizerResult == 3)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Gamora_Hood"));
+			}
+			else if (randomizerResult == 4)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Ikons_Battery"));
+			}
+			else if (randomizerResult == 5)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Iron_Man_Insurance"));
+			}
+			else if (randomizerResult == 6)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Jack_Flag_Gloves"));
+			}
+			else if (randomizerResult == 7)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Nova_Helmet"));
+			}
+			else if (randomizerResult == 8)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Star_Lord_Walkman"));
+			}
+			else if (randomizerResult == 9)
+			{
+				inventory.AddPassive(*Wiwa::ItemManager::GetPassive("Xandarian_Worldmind"));
+			}
 		}
 	}
 
 	void DialogEventManager::UlanaReward(int optionNumber)
 	{
-		if (optionNumber == 1)
-		{
+		Character* character = GameStateManager::GetPlayerCharacterComp();
 
+		if (optionNumber == 1) // Full HP
+		{
+			character->Health = character->MaxHealth;
 		}
-		else if (optionNumber == 2)
+		else if (optionNumber == 2) // Full Ult-Shield
 		{
-
+			character->Shield = character->MaxShield;
 		}
 	}
 }
