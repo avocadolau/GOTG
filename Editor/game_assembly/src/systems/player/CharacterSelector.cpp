@@ -1,5 +1,6 @@
 #include "CharacterSelector.h"
 #include <Wiwa/ecs/components/ParticleEmitterComponent.h>
+#include <Wiwa/audio/Audio.h>
 void Wiwa::CharacterSelector::OnAwake()
 {
 	m_Activated = false;
@@ -19,7 +20,7 @@ void Wiwa::CharacterSelector::OnInit()
 
 		if (!particle)return;
 
-		strcpy(particle->m_meshPath, "library/models/starlord/sk_rocket01b.wimodel");
+		strcpy(particle->m_meshPath, rocket_path);
 		particle->m_meshChanged = true;
 	}
 	else {
@@ -29,7 +30,7 @@ void Wiwa::CharacterSelector::OnInit()
 
 		if (!particle)return;
 		
-		strcpy(particle->m_meshPath, "library/characters/rocket/sm_starlord_01.wimodel");
+		strcpy(particle->m_meshPath, starlord_path);
 		particle->m_meshChanged = true;
 	}
 }
@@ -61,6 +62,8 @@ void Wiwa::CharacterSelector::OnCollision(Object* obj1, Object* obj2)
 			Wiwa::SceneManager::LoadSceneByIndex(3);
 			Wiwa::GameStateManager::s_CurrentCharacter = Wiwa::GameStateManager::s_CurrentCharacter == STARLORD ? ROCKET : STARLORD;
 			m_Activated = true;
+
+			Audio::PostEvent("character_selection");
 		}
 	}
 }
