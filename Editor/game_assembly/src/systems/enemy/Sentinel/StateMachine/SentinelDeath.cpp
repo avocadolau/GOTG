@@ -3,7 +3,6 @@
 #include "../EnemySentinel.h"
 #include <Wiwa/ecs/components/game/wave/Wave.h>
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
@@ -28,7 +27,7 @@ namespace Wiwa
 	void SentinelDeathState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		
 
 		/*animator->PlayAnimation("atackdeath", false);*/ //AnimacionSentinel
 
@@ -43,7 +42,7 @@ namespace Wiwa
 	void SentinelDeathState::UpdateState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		
 
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		

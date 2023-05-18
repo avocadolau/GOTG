@@ -1,7 +1,7 @@
 #include <wipch.h>
 #include "SentinelChasing.h"
 #include "../EnemySentinel.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
+#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 namespace Wiwa
@@ -20,13 +20,13 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		navAgent->agentSliding = true;
 
-		animator->Blend("walk", true, 0.2f); //AnimacionSentinel
+		animator->PlayAnimation("walk"); //AnimacionSentinel
 
 		enemy->m_TimerSentinel = 0;
 	}
@@ -38,7 +38,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
@@ -50,11 +50,11 @@ namespace Wiwa
 			agent->SetDestination(playerTr->localPosition);
 		}
 
-		if (animator->HasFinished())//&& !IsPlaying(enemy->GetEntity())
-		{
-			//SentinelAudio
-			/*PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);*/
-		}
+		//if (animator->getAnimator()->getActiveAnimation()->HasFinished())//&& !IsPlaying(enemy->GetEntity())
+		//{
+		//	//SentinelAudio
+		//	/*PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);*/
+		//}
 
 
 		if (glm::distance(selfTr->localPosition, playerTr->localPosition) <= enemy->m_RangeOfExplosion)
@@ -66,7 +66,7 @@ namespace Wiwa
 	void SentinelChasingState::ExitState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AnimatorSystem* animator = em.GetSystem<Wiwa::AnimatorSystem>(enemy->GetEntity());
+		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//animator->Blend("idle", true, true, 0.5f);
 		//animator->Pause();
 	}
