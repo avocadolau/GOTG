@@ -140,6 +140,12 @@ namespace Wiwa
 		//Sets the mesh of the Particles the Emitter generates;
 		void SetMesh(const char* meshPath);
 
+		//Sets the timer of the Particles the Emitter generates;
+		void SetTimer(float time);
+
+		//Deactivates all active particles;
+		void DeactivateParticles();
+
 	private:
 
 		void SetEmitterBools(ParticleEmitterComponent* emitter);

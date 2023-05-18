@@ -1,9 +1,9 @@
 #include "UltronLaserBeamSystem.h"
 #include "../../components/attack/UltronLaserBeam.h"
 #include "../../systems/enemy/Ultron/StateMachine/BossUltronLaserBeamAttack.h"
+#include "Wiwa/ecs/systems/ParticleSystem.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
-//#include "Wiwa/ecs/components/game/attack/SimpleBullet.h"
 
 Wiwa::UltronLaserBeamSystem::UltronLaserBeamSystem()
 {
@@ -46,30 +46,42 @@ void Wiwa::UltronLaserBeamSystem::OnUpdate()
 	UltronLaserBeam* bullet = GetComponentByIterator<UltronLaserBeam>(m_LaserIt);
 	Transform3D* laserTr = GetComponent<Transform3D>();
 	Transform3D* enemyTr = GetComponentByIterator<Transform3D>(m_BossTransformIt);
+
 	Transform3D* playerTr = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
-
-	if (m_Timer >= bullet->lifeTime)
-	{
-		GameStateManager::s_PoolManager->s_UltronLaserBeamPool->ReturnToPool(m_EntityId);
-	}
-
-	// Update the laser's position to be in front of the boss
-	float distanceInFront = 1.0f;
-	float laserHalfLength = 20.0f; // Adjust this value based on the actual half length of the laser
-	glm::vec3 bossForward = Math::CalculateForward(enemyTr);
-	laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
-	laserTr->localPosition.y += 2.5f;
-
-	// Update the boss's rotation to face the player
-	glm::vec3 directionToPlayer = glm::normalize(Math::CalculateForward(enemyTr) - enemyTr->localPosition);
-	float angleToPlayer = glm::degrees(atan2(directionToPlayer.x, directionToPlayer.z));
-	enemyTr->localRotation.y = angleToPlayer;
 	
-	// Update the laser's rotation to match the boss's rotation
-	laserTr->localRotation = glm::vec3(-90.0f, angleToPlayer, 0.0f);
+	if (bullet && enemyTr && playerTr)
+	{
 
-	m_Timer += Time::GetDeltaTimeSeconds();
-	m_TimerDamagePerSec += Time::GetDeltaTimeSeconds();
+		if (m_Timer >= bullet->lifeTime)
+		{
+			GameStateManager::s_PoolManager->s_UltronLaserBeamPool->ReturnToPool(m_EntityId);
+		}
+
+		// Update the laser's position to be in front of the boss
+		float distanceInFront = 1.0f;
+		float laserHalfLength = 20.0f; // Adjust this value based on the actual half length of the laser
+		glm::vec3 bossForward = Math::CalculateForward(enemyTr);
+		laserTr->localPosition = enemyTr->localPosition + (bossForward * (distanceInFront + laserHalfLength));
+		laserTr->localPosition.y += 2.5f;
+
+		// Update the boss's rotation to face the player
+		glm::vec3 directionToPlayer = glm::normalize(Math::CalculateForward(enemyTr) - enemyTr->localPosition);
+		float angleToPlayer = glm::degrees(atan2(directionToPlayer.x, directionToPlayer.z));
+		enemyTr->localRotation.y = angleToPlayer;
+
+		// Update the laser's rotation to match the boss's rotation
+		laserTr->localRotation = glm::vec3(-90.0f, angleToPlayer, 0.0f);
+
+		m_Timer += Time::GetDeltaTimeSeconds();
+		m_TimerDamagePerSec += Time::GetDeltaTimeSeconds();
+	}
+	else
+	{
+		if (bullet == nullptr) WI_CORE_ERROR("No m_LaserIt UltronLaserBeam");
+		if (enemyTr == nullptr) WI_CORE_ERROR("No m_BossTransformIt Transform3D");
+		if (playerTr == nullptr) WI_CORE_ERROR("No m_PlayerTransformIt Transform3D");
+	}
+	
 }
 
 void Wiwa::UltronLaserBeamSystem::OnDestroy()
@@ -95,6 +107,7 @@ void Wiwa::UltronLaserBeamSystem::InitLaserBeam()
 {
 	if (!getAwake())
 		System::Awake();
+	
 	/*GameStateManager::s_PoolManager->SetScene(m_Scene);
 	GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();*/
 
@@ -123,6 +136,51 @@ bool Wiwa::UltronLaserBeamSystem::EnableLaser()
 		bullet->InitLaserBeam();
 	}
 	m_Timer = 0.0f;
+	WI_CORE_INFO("LASER ACTIVATED WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+	WI_CORE_INFO("Laser ID: {0}", (int)m_EntityId);
+
+	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+
+	EntityId p_boss_laser_final = em.GetChildByName(m_EntityId, "p_boss_laser_final");
+	WI_CORE_INFO("p_boss_laser_final ID: {0}", (int)p_boss_laser_final);
+
+	if (p_boss_laser_final != EntityManager::INVALID_INDEX)
+	{
+		EntityId p_boss_laser_layer00 = em.GetChildByName(p_boss_laser_final, "p_boss_laser_layer00");
+		WI_CORE_INFO("p_boss_laser_layer00 ID: {0}", (int)p_boss_laser_layer00);
+
+		EntityId p_boss_laser_layer01 = em.GetChildByName(p_boss_laser_final, "p_boss_laser_layer01");
+		WI_CORE_INFO("p_boss_laser_layer01 ID: {0}", (int)p_boss_laser_layer01);
+
+
+		if (p_boss_laser_layer00 != EntityManager::INVALID_INDEX)
+		{
+			ParticleSystem* p_boss_laser_layer00_Sys = em.GetSystem<ParticleSystem>(p_boss_laser_layer00);
+			p_boss_laser_layer00_Sys->SetTimer(0);
+			p_boss_laser_layer00_Sys->DeactivateParticles();
+		}
+		
+		if (p_boss_laser_layer01 != EntityManager::INVALID_INDEX)
+		{
+			ParticleSystem* p_boss_laser_layer01_Sys = em.GetSystem<ParticleSystem>(p_boss_laser_layer00);
+			p_boss_laser_layer01_Sys->SetTimer(0);
+			p_boss_laser_layer01_Sys->DeactivateParticles();
+		}
+
+
+		EntityId p_boss_laser_hit = em.GetChildByName(m_EntityId, "p_boss_laser_hit");
+
+		if (p_boss_laser_hit != EntityManager::INVALID_INDEX)
+		{
+			EntityId p_bullet_plasma = em.GetChildByName(p_boss_laser_hit, "bullet_plasma");
+			EntityId p_bullet_core = em.GetChildByName(p_boss_laser_hit, "bullet_core");
+			EntityId p_bullet_light00 = em.GetChildByName(p_boss_laser_hit, "bullet_light00");
+			EntityId p_bullet_light01 = em.GetChildByName(p_boss_laser_hit, "bullet_light01");
+		}
+	}
+	
+	
 	return true;
 }
 

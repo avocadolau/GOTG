@@ -78,7 +78,13 @@ namespace Wiwa {
 			Audio::Update();
 
 			// Wait to update audio engine thread so we can destroy the system
-			Sleep(30);
+			Sleep(100);
+
+			Audio::Update();
+
+			Audio::CancelAudioAllCallback(play_id);
+			// Wait to update audio engine thread so we can destroy the system
+			Sleep(100);
 
 			Audio::Update();
 		}

@@ -753,6 +753,24 @@ namespace Wiwa {
 			WI_CORE_INFO("Mesh could not be found {0}", meshPath);
 	}
 
+	void ParticleSystem::SetTimer(float time)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		m_SpawnTimer = time;
+	}
+
+	void ParticleSystem::DeactivateParticles()
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+
+		for (unsigned int i = 0; i < m_MaxParticles && !m_Particles.empty(); ++i)
+		{
+			Particle& particle = m_Particles[i];
+			particle.life_time = 0;
+			particle.life_percentage = 0;
+		}
+	}
+
 	void ParticleSystem::OnDestroy()
 	{
 		m_Model = nullptr;

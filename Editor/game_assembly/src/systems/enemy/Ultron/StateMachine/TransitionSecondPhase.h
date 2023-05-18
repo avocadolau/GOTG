@@ -29,8 +29,10 @@ namespace Wiwa {
 		std::vector<glm::vec3> m_AfterRegenPosition;
 
 		bool m_SpawnEnemies = false;
+		bool m_SpawnerDestroyed = false;
 		float m_TimerSecondPhase = 0.0f;
 		float m_TimerHealing = 0.0f;
+		float m_TimerSpawnerEnemies = 0.0f;
 		const char* m_WallPrefabPath;
 		const char* m_EnemySpawnerPath;
 	};
