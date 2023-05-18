@@ -58,8 +58,8 @@ void Wiwa::PlayerAttack::UpdateState()
 	if (m_StateMachine->CanMove())
 	{
 		// TODO: Partial blending
-		 if(m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim")
-			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim");
+		
+		m_StateMachine->GetAnimator()->PlayAnimation("walk_aim");
 		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
 		m_StateMachine->UpdateRotation();
 		float shootDirection = m_StateMachine->GetTransform()->localRotation.y;
@@ -67,19 +67,16 @@ void Wiwa::PlayerAttack::UpdateState()
 		float difference = glm::abs(shootDirection - movementDirection);
 
 		//WI_INFO("Diff angle {}", difference);
-		if (IN_BETWEEN(difference, 170.f, 289.f)
-			&& m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim_back")
+		if (IN_BETWEEN(difference, 170.f, 289.f))
 		{	
 			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim_back");
 		}
-		else if (IN_BETWEEN(difference, 45.0f, 169.f)
-			&& m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim_left")
+		else if (IN_BETWEEN(difference, 45.0f, 169.f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim_left");
 
 		}
-		else if (IN_BETWEEN(difference, 290.0f, 360.0f)
-			&& m_StateMachine->GetAnimator()->getAnimator()->getActiveAnimationName() != "walk_aim_right")
+		else if (IN_BETWEEN(difference, 290.0f, 360.0f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim_right");
 

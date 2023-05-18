@@ -183,7 +183,7 @@ namespace Wiwa {
 		std::filesystem::path p = file;
 		model_hierarchy->name = p.stem().string();
 
-		if (scene->HasAnimations())
+		/*if (scene->HasAnimations())
 		{
 			Animator* animator = new Animator();	
 			WI_INFO("Model {0} has {1} animations", model_name, scene->mNumAnimations);
@@ -197,7 +197,7 @@ namespace Wiwa {
 
 			Animator::SaveWiAnimator(*animator,file);
 			delete animator;
-		}
+		}*/
 
 
 		aiReleaseImport(scene);
