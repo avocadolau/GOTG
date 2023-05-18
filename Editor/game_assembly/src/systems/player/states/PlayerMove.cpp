@@ -15,7 +15,7 @@ void Wiwa::PlayerMove::EnterState()
 	WI_INFO("Player move");
 	WI_INFO("{}", m_StateMachine->GetInput().length());
 	if(m_StateMachine->GetCharacter()->WalkTreshold <= m_StateMachine->GetInput().length())
-		m_StateMachine->GetAnimator()->PlayAnimation("walk");
+		m_StateMachine->GetAnimator()->PlayAnimation("running");
 	else
 		m_StateMachine->GetAnimator()->PlayAnimation("running");
 	currentSteptime = runStepTimer;

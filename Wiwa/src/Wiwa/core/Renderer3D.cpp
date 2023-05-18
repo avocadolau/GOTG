@@ -1569,9 +1569,9 @@ namespace Wiwa
 		}
 		else
 		{
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), glm::vec3(0.0f));
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), 0.0f);
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), 0.0f);
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), glm::vec3(1.0f));
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), 0.5f);
+			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), 0.5f);
 			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::vec3(0.0f));
 		}
 		matShader->setUniform(matShader->getUniformLocation("u_NumPointLights"), (int)pointLights.size());
@@ -1594,7 +1594,7 @@ namespace Wiwa
 			}
 		}
 
-		matShader->setUniform(matShader->getUniformLocation("u_NumSpotLights"), (int)spotLights.size());
+		/*matShader->setUniform(matShader->getUniformLocation("u_NumSpotLights"), (int)spotLights.size());
 		for (size_t i = 0; i < pointLights.size(); i++)
 		{
 			Transform3D *transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
@@ -1614,7 +1614,7 @@ namespace Wiwa
 				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Direction").c_str()), glm::radians(spotLight->Direction));
 				matShader->setUniform(matShader->getUniformLocation(("u_SpotLights[" + num + "].Cuttoff").c_str()), spotLight->Cutoff);
 			}
-		}
+		}*/
 	}
 	void Renderer3D::RenderShadows(Camera *camera, const size_t &directional)
 	{

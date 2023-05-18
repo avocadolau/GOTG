@@ -437,9 +437,16 @@ void AssetsPanel::Draw()
 					if (directoryEntry.path().extension() == ".wimaterial")
 					{
 						ResourceId matId = Wiwa::Resources::Load<Wiwa::Material>(path.string().c_str());
-						MaterialChangeEvent event(matId);
-						Action<Wiwa::Event&> action = { &EditorLayer::OnEvent, instance };
-						action(event);
+						if (matId != (ResourceId)-1)
+						{
+							MaterialChangeEvent event(matId);
+							Action<Wiwa::Event&> action = { &EditorLayer::OnEvent, instance };
+							action(event);
+						}
+						else
+						{
+							WI_INFO("Can't load material");
+						}
 					}
 					m_SelectedEntry = directoryEntry;
 				}

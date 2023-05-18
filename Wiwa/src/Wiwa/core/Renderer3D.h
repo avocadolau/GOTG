@@ -92,6 +92,8 @@ namespace Wiwa {
 		// Dynamic vbo used for indices.
 		GLuint dynamic_index_bo_;
 		
+		
+
 		// Volatile memory buffer that can be used within function scope.
 		// Minimum alignment is 16 bytes.
 		class ScratchBuffer {
