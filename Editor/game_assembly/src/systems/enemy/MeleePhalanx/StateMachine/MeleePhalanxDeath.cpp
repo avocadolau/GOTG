@@ -30,7 +30,7 @@ namespace Wiwa
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
 		audio->PlayAudio("melee_dead");
-		animator->PlayAnimation("dead");
+		animator->PlayAnimation("death");
 		m_TimerToDie = 0.0f;
 
 		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());

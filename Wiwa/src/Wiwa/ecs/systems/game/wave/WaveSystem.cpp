@@ -251,6 +251,10 @@ namespace Wiwa
 	Pool_Type WaveSystem::GetEnemyFromProbabiliteis()
 	{
 		EnemyManager& enemyManager = GameStateManager::GetEnemyManager();
+		if (enemyManager.m_CurrentCombatRoomsCount >= enemyManager.m_SpawnerDataTable.size())
+		{
+			enemyManager.m_CurrentCombatRoomsCount = enemyManager.m_SpawnerDataTable.size() - 1;
+		}
 		const VariantData& data = enemyManager.m_VariantsTable[enemyManager.m_CurrentCombatRoomsCount];
 
 		std::uniform_int_distribution<> disEnemies(1, 100);

@@ -23,12 +23,13 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-		Wiwa::MeshRenderer* renderer= em.GetSystem<Wiwa::MeshRenderer>(enemy->GetEntity());
-		Wiwa::Material* mat = renderer->GetMaterial();
-
-		mat->SetUniformData("u_Hit", true);
-		renderer->Update();
-		mat->SetUniformData("u_Hit", false);
+		
+		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+		if (mat)
+		{
+			mat->SetUniformData("u_Hit", true);
+		}*/
+		
 		audio->PlayAudio("melee_hit");
 		EntityId hit_1 = em.GetChildByName(enemy->GetEntity(), "E_Hit_1");
 		EntityId hit_2 = em.GetChildByName(enemy->GetEntity(), "E_Hit_2");
@@ -49,6 +50,13 @@ namespace Wiwa
 
 	void MeleePhalanxHitState::ExitState(EnemyMeleePhalanx* enemy)
 	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+		if (mat)
+		{
+			mat->SetUniformData("u_Hit", false);
+		}*/
 	}
 
 	void MeleePhalanxHitState::OnCollisionEnter(EnemyMeleePhalanx* enemy, const Object* body1, const Object* body2)
