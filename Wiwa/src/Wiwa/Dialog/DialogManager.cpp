@@ -163,6 +163,7 @@ namespace Wiwa
 		bubbleImgPos.y = 300;
 
 		forcedDialogHappened = false;
+		alreadyTalkedOnceTriggered = false;
 
 		for (int e = 0; e < MAX_CONVERSATIONS && conversations[e].occupied == true; e++)
 		{
@@ -213,7 +214,7 @@ namespace Wiwa
 		}
 
 		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
-			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false)
+			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && alreadyTalkedOnceTriggered == false)
 		{
 			if (collidingWithNpc == true)
 			{
