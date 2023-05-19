@@ -31,7 +31,6 @@ namespace Wiwa
 		static Target m_Target;
 	public:
 		static std::string GetProjectPath() { return m_CurrentProject.string(); }
-		static const char* MakeAbsouleDir(const char* path);
 		static void CreateProject(const char* file);
 		static void OpenProject(const char* file);
 		static bool SaveProject();

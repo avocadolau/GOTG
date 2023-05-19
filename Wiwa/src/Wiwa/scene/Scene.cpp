@@ -197,7 +197,8 @@ namespace Wiwa
 	{
 		m_CameraManager->Update();
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
+		
+		Wiwa::Application::Get().GetRenderer3D().PreUpdate();
 		r2d.UpdateInstanced(this);
 		if(m_GuiManager)
 			m_GuiManager->Draw();

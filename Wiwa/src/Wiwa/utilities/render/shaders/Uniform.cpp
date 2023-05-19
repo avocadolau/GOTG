@@ -35,8 +35,7 @@ namespace Wiwa {
 			break;
 		case Wiwa::UniformType::Float:
 		{
-			GLfloat ptr = *(GLfloat*)m_Data;
-			GL(Uniform1f(m_UniformID, ptr));
+			GL(Uniform1f(m_UniformID, *(GLfloat*)m_Data));
 		}break;
 		case Wiwa::UniformType::fVec2:
 			GL(Uniform2fv(m_UniformID, 1, (GLfloat*)m_Data));
@@ -46,8 +45,7 @@ namespace Wiwa {
 			break;
 		case Wiwa::UniformType::fVec4:
 		{
-			GLfloat* ptr = (GLfloat*)m_Data;
-			GL(Uniform4fv(m_UniformID, 1, ptr));
+			GL(Uniform4fv(m_UniformID, 1, (GLfloat*)m_Data));
 		}break;
 		case Wiwa::UniformType::Mat2:
 			GL(UniformMatrix2fv(m_UniformID, 1, GL_FALSE, (GLfloat*)(m_Data)));

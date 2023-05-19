@@ -63,7 +63,7 @@ uniform PointLight[MAX_POINT_LIGHTS] u_PointLights;
 uniform int u_NumSpotLights;
 uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 uniform vec4 u_Color = vec4(0.0,0.0,0.0,0.0);
-uniform bool u_Hit = false;
+uniform int u_Hit = 0;
 uniform sampler2D u_ShadowMap;
 uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
@@ -192,11 +192,11 @@ void main() {
 	vec4 color = texture(u_Texture, flipuv);//ambient * v_vertex_color * 
 	
 	vec4 colorLight  = color * totalLight;
-	if(u_Hit)
+	if(u_Hit == 1)
     {
         out_color = u_Color;
     }
     else{
-	    out_color = mix(u_OutlineColor, colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal)) ;
+	    out_color = mix(u_OutlineColor, colorLight, smoothstep(u_OutlineSmoothRange.x,u_OutlineSmoothRange.y,dotEyeNormal));
     }
 }

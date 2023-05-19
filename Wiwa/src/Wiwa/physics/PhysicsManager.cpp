@@ -571,6 +571,8 @@ namespace Wiwa {
 		}
 		{
 			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			if (!camera)
+				return;
 			if (camera->drawBoundingBoxes)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());

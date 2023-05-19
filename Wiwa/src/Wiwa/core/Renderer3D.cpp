@@ -112,7 +112,7 @@ namespace Wiwa
 		anim_shader->Compile("resources/shaders/animation/animation_skinned_textured");
 		anim_shader->addUniform("u_Texture", UniformType::Sampler2D);
 		anim_shader->addUniform("u_Color", UniformType::fVec4);
-		anim_shader->addUniform("u_Hit", UniformType::Bool);
+		anim_shader->addUniform("u_Hit", UniformType::Int);
 		anim_shader->addUniform("u_OutlineColor", UniformType::fVec4);
 		anim_shader->addUniform("u_OutlineSmoothRange", UniformType::fVec2);
 		anim_shader->addUniform("u_ToonLevels", UniformType::Int);
