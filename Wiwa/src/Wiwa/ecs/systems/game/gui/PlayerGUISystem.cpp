@@ -938,7 +938,7 @@ void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
 
 void Wiwa::PlayerGUISystem::HandleWaves(Wiwa::GuiManager& gm)
 {
-	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS")
+	/*if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS")
 		return;
 
 	int total = Wiwa::GameStateManager::GetAproximateTotalEnemies();
@@ -953,5 +953,5 @@ void Wiwa::PlayerGUISystem::HandleWaves(Wiwa::GuiManager& gm)
 		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(18)->id_quad_normal, 1);
 		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(18)->id_quad_normal, newText->GetTextureId());
 		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(18)->id_quad_normal, newText->GetSize(), { 0,0,512,512 });
-	}
+	}*/
 }
