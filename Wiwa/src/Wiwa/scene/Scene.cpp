@@ -193,7 +193,7 @@ namespace Wiwa
 	{
 		m_CameraManager->Update();
 
-		Application::Get().GetRenderer3D().RenderSkybox();
+		//Application::Get().GetRenderer3D().RenderSkybox();
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		r2d.UpdateInstanced(this);

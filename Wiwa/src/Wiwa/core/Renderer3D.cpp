@@ -591,7 +591,7 @@ namespace Wiwa
 
 	void Renderer3D::PreUpdate()
 	{
-		RenderSkybox();
+		//RenderSkybox(); Mrmile pointer
 	}
 
 	void Renderer3D::Update()

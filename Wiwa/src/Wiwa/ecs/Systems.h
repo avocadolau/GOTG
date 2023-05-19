@@ -5,7 +5,7 @@
 #include "systems/AudioListenerSystem.h"
 #include "systems/LightSystem.h"
 
-#include "systems/AnimatorSystem.h"
+//#include "systems/AnimatorSystem.h"
 
 #include "systems/ParticleSystem.h"
 
