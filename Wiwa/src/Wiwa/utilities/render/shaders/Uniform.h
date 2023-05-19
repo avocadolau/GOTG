@@ -113,6 +113,7 @@ namespace Wiwa {
 			m_Type = uniform.m_Type;
 			m_UniformID = uniform.m_UniformID;
 			name = uniform.name;
+			return *this;
 		}
 
 

@@ -196,14 +196,6 @@ namespace Wiwa
 	void Scene::ModuleUpdate()
 	{
 		m_CameraManager->Update();
-		std::string myString = "LVL_MainMenu_execution";
-		std::string myString2 = "lvl_mainmenu";
-		if (Wiwa::SceneManager::getActiveScene() != nullptr)
-		{
-			if (myString == Wiwa::SceneManager::getActiveScene()->getName() || myString2 == Wiwa::SceneManager::getActiveScene()->getName())
-				Application::Get().GetRenderer3D().RenderSkybox();
-		}
-			
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		r2d.UpdateInstanced(this);
