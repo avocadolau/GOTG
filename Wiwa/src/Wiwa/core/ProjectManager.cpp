@@ -14,6 +14,16 @@ namespace Wiwa
 	ProjectManager::Target ProjectManager::m_Target;
 	std::vector<ProjectManager::SceneData> ProjectManager::m_SceneList;
 
+	const char* ProjectManager::MakeAbsouleDir(const char* path)
+	{
+		std::string pathStr(path);
+		size_t libraryIndx = pathStr.find("library");
+		size_t size = pathStr.size();
+		std::string ret = pathStr.substr(libraryIndx, size);
+
+		return ret.c_str();
+	}
+
 	void ProjectManager::CreateProject(const char* file)
 	{
 		m_Name = "New project";
@@ -56,7 +66,7 @@ namespace Wiwa
 					JSONValue scene = scene_list[(uint32_t)i];
 					
 					sd.scene_name = scene["name"].as_string();
-					sd.scene_path = scene["path"].as_string();
+					sd.scene_path = MakeAbsouleDir(scene["path"].as_string());
 
 					if (Wiwa::FileSystem::Exists(sd.scene_path.c_str())) {
 						AddScene(sd.scene_name.c_str(), sd.scene_path.c_str());
@@ -87,7 +97,7 @@ namespace Wiwa
 		for (size_t i = 0; i < slsize; i++) {
 			Wiwa::JSONValue scene = scene_list.PushBackObject();
 			scene.AddMember("name", m_SceneList[i].scene_name.c_str());
-			scene.AddMember("path", m_SceneList[i].scene_path.c_str());
+			scene.AddMember("path", MakeAbsouleDir(m_SceneList[i].scene_path.c_str()));
 		}
 
 		proj_file.save_file(m_CurrentProject.string().c_str());
@@ -108,7 +118,7 @@ namespace Wiwa
 
 	void ProjectManager::AddScene(const char* name, const char* path)
 	{
-		std::string p = Wiwa::Resources::_assetToLibPath(path);
+		std::string p = MakeAbsouleDir(Wiwa::Resources::_assetToLibPath(path).c_str());
 
 		SceneData* sdata = getSceneByName(name);
 

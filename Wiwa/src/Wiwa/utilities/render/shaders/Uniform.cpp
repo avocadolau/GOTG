@@ -15,34 +15,38 @@ namespace Wiwa {
 		switch (m_Type)
 		{
 		case Wiwa::UniformType::Bool:
-			GL(Uniform1i(m_UniformID, *static_cast<bool*>(m_Data)));
+			GL(Uniform1i(m_UniformID, *(GLint*)m_Data));
 			break;
 		case Wiwa::UniformType::Int:
-			GL(Uniform1i(m_UniformID, *static_cast<int*>(m_Data)));
+			GL(Uniform1i(m_UniformID, *(GLint*)m_Data));
 			break;
 		case Wiwa::UniformType::Uint:
-			GL(Uniform1ui(m_UniformID, *static_cast<unsigned int*>(m_Data)));
+			GL(Uniform1ui(m_UniformID, *(GLint*)m_Data));
 			break;
 		case Wiwa::UniformType::Float:
-			GL(Uniform1f(m_UniformID, *static_cast<float*>(m_Data)));
-			break;
+		{
+			GLfloat ptr = *(GLfloat*)m_Data;
+			GL(Uniform1f(m_UniformID, ptr));
+		}break;
 		case Wiwa::UniformType::fVec2:
-			GL(Uniform2fv(m_UniformID, 1, static_cast<float*>(m_Data)));
+			GL(Uniform2fv(m_UniformID, 1, (GLfloat*)m_Data));
 			break;
 		case Wiwa::UniformType::fVec3:
-			GL(Uniform3fv(m_UniformID, 1, static_cast<float*>(m_Data)));
+			GL(Uniform3fv(m_UniformID, 1, (GLfloat*)(m_Data)));
 			break;
 		case Wiwa::UniformType::fVec4:
-			GL(Uniform4fv(m_UniformID, 1, static_cast<float*>(m_Data)));
-			break;
+		{
+			GLfloat* ptr = (GLfloat*)m_Data;
+			GL(Uniform4fv(m_UniformID, 1, ptr));
+		}break;
 		case Wiwa::UniformType::Mat2:
-			GL(UniformMatrix2fv(m_UniformID, 1, GL_FALSE, static_cast<float*>(m_Data)));
+			GL(UniformMatrix2fv(m_UniformID, 1, GL_FALSE, (GLfloat*)(m_Data)));
 			break;
 		case Wiwa::UniformType::Mat3:
-			GL(UniformMatrix3fv(m_UniformID, 1, GL_FALSE, static_cast<float*>(m_Data)));
+			GL(UniformMatrix3fv(m_UniformID, 1, GL_FALSE, (GLfloat*)(m_Data)));
 			break;
 		case Wiwa::UniformType::Mat4:
-			GL(UniformMatrix4fv(m_UniformID, 1, GL_FALSE, static_cast<float*>(m_Data)));
+			GL(UniformMatrix4fv(m_UniformID, 1, GL_FALSE, (GLfloat*)(m_Data)));
 			break;
 		case Wiwa::UniformType::Time:
 		{

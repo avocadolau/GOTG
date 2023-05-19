@@ -591,7 +591,7 @@ namespace Wiwa
 
 	void Renderer3D::PreUpdate()
 	{
-		//RenderSkybox(); Mrmile pointer
+		RenderSkybox();
 	}
 
 	void Renderer3D::Update()
@@ -913,7 +913,7 @@ namespace Wiwa
 			return;
 		}
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(clear);
 
@@ -964,12 +964,12 @@ namespace Wiwa
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		//prepare buffers
 
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
+		GL(Enable(GL_DEPTH_TEST));
+		GL(DepthFunc(GL_LESS));
 
 		camera->frameBuffer->Bind(clear);
 		if (!material)
@@ -1020,7 +1020,7 @@ namespace Wiwa
 		/*g /= 255.0f;
 		b /= 255.0f;*/
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(clear);
 
@@ -1059,23 +1059,23 @@ namespace Wiwa
 
 		/*glColor4f(r, g, b ,1);*/
 
-		glDisable(GL_CULL_FACE);
+		GL(Disable(GL_CULL_FACE));
 
 		// make the drawing
-		glBindVertexArray(vao);
+		GL(BindVertexArray(vao));
 
 		// Solution to the material.cpp GL_TEXTURE1 on the void Material::Bind() function
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
+		GL(ActiveTexture(GL_TEXTURE0));
+		GL(BindTexture(GL_TEXTURE_2D, texture->GetTextureId()));
 		//------------------------------
 
-		glDrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, (GLsizei)0);
-		glBindVertexArray(0);
+		GL(DrawElements(GL_TRIANGLES, (GLsizei)ebo_data.size(), GL_UNSIGNED_INT, (GLsizei)0));
+		GL(BindVertexArray(0));
 
 		material->UnBind();
-		glActiveTexture(GL_TEXTURE1);
+		GL(ActiveTexture(GL_TEXTURE1));
 		camera->frameBuffer->Unbind();
-		glEnable(GL_CULL_FACE);
+		GL(Enable(GL_CULL_FACE));
 	}
 
 	Renderer3D::ScratchBuffer::ScratchBuffer() : buffer_(nullptr), size_(0) {}
@@ -1281,7 +1281,7 @@ namespace Wiwa
 		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
 
 		// After processing everything, render
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(false);
 		
@@ -1386,10 +1386,10 @@ namespace Wiwa
 			Camera *camera = cm.getActiveCamera();
 			if (camera)
 			{
-				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+				GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 				camera->frameBuffer->Bind(false);
-				glDepthFunc(GL_ALWAYS);
+				GL(DepthFunc(GL_ALWAYS));
 				Shader* shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
@@ -1397,7 +1397,7 @@ namespace Wiwa
 				shader->setUniform(shader->getViewLoc(), view);
 				m_DefaultSkybox.Render();
 				shader->UnBind();
-				glDepthFunc(GL_LESS);
+				GL(DepthFunc(GL_LESS));
 
 				camera->frameBuffer->Unbind();
 			}
@@ -1406,10 +1406,10 @@ namespace Wiwa
 			Camera *camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 			if (camera)
 			{
-				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+				GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 				camera->frameBuffer->Bind(false);
-				glDepthFunc(GL_ALWAYS);
+				GL(DepthFunc(GL_ALWAYS));
 				Shader *shader = m_DefaultSkybox.m_Material->getShader();
 				shader->Bind();
 				shader->setUniform(shader->getProjLoc(), camera->getProjection());
@@ -1417,7 +1417,7 @@ namespace Wiwa
 				shader->setUniform(shader->getViewLoc(), view);
 				m_DefaultSkybox.Render();
 				shader->UnBind();
-				glDepthFunc(GL_LESS);
+				GL(DepthFunc(GL_LESS));
 
 				camera->frameBuffer->Unbind();
 			}
@@ -1428,25 +1428,25 @@ namespace Wiwa
 		switch (option)
 		{
 		case Wiwa::Renderer3D::DEPTH_TEST:
-			glEnable(GL_DEPTH_TEST);
+			GL(Enable(GL_DEPTH_TEST));
 			break;
 		case Wiwa::Renderer3D::CULL_FACE:
-			glEnable(GL_CULL_FACE);
+			GL(Enable(GL_CULL_FACE));
 			break;
 		case Wiwa::Renderer3D::LIGHTING:
-			glEnable(GL_LIGHTING);
+			GL(Enable(GL_LIGHTING));
 			break;
 		case Wiwa::Renderer3D::COLOR_MATERIAL:
-			glEnable(GL_COLOR_MATERIAL);
+			GL(Enable(GL_COLOR_MATERIAL));
 			break;
 		case Wiwa::Renderer3D::TEXTURE_2D:
-			glEnable(GL_TEXTURE_2D);
+			GL(Enable(GL_TEXTURE_2D));
 			break;
 		case Wiwa::Renderer3D::WIREFRAME:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			GL(PolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 			break;
 		case Wiwa::Renderer3D::GAMMA_CORRECTION:
-			glEnable(GL_FRAMEBUFFER_SRGB);
+			GL(Enable(GL_FRAMEBUFFER_SRGB));
 			break;
 		default:
 			break;
@@ -1457,7 +1457,7 @@ namespace Wiwa
 		switch (option)
 		{
 		case Wiwa::Renderer3D::DEPTH_TEST:
-			glDisable(GL_DEPTH_TEST);
+			GL(Disable(GL_DEPTH_TEST));
 			break;
 		case Wiwa::Renderer3D::CULL_FACE:
 			glDisable(GL_CULL_FACE);
@@ -1490,10 +1490,10 @@ namespace Wiwa
 		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
 		camera->frameBuffer->Bind(false);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(glm::value_ptr(camera->getView()));
+		GL(MatrixMode(GL_PROJECTION));
+		GL(LoadMatrixf(glm::value_ptr(camera->getProjection())));
+		GL(MatrixMode(GL_MODELVIEW));
+		GL(LoadMatrixf(glm::value_ptr(camera->getView())));
 
 		CameraManager &cameraManager = SceneManager::getActiveScene()->GetCameraManager();
 

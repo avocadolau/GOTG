@@ -353,6 +353,7 @@ void EditorLayer::MainMenuBar()
 			ImGui::Separator();
 			if (ImGui::MenuItem(ICON_FK_FILE " New scene", ""))
 			{
+				StopScene();
 				Wiwa::SceneManager::UnloadScene(m_EditorSceneId);
 
 				m_EditorSceneId = Wiwa::SceneManager::CreateScene();
@@ -368,14 +369,17 @@ void EditorLayer::MainMenuBar()
 			}
 			if (ImGui::MenuItem(ICON_FK_FOLDER " Open scene", ""))
 			{
+				StopScene();
 				OpenScene();
 			}
 			if (ImGui::MenuItem(ICON_FK_FLOPPY_O " Save scene", ""))
 			{
+				StopScene();
 				SaveScene();
 			}
 			if (ImGui::MenuItem(ICON_FK_FILES_O " Save scene as..."))
 			{
+				StopScene();
 				SaveSceneAs();
 			}
 
@@ -631,24 +635,7 @@ void EditorLayer::MainMenuBar()
 				if (!is_playing)
 				{	
 					SaveScene();
-
-					if (m_OpenedScenePath != "")
-					{
-						Wiwa::Time::Play();
-						Wiwa::Time::Update();
-
-						m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
-						Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
-						sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
-						sc->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
-
-						// For debug purposes
-						std::string ex = sc->getName();
-						ex += "_execution";
-						sc->ChangeName(ex.c_str());
-
-						Wiwa::SceneManager::PlayScene();
-					}
+					PlayScene();
 				}
 				else
 				{
@@ -741,8 +728,32 @@ void EditorLayer::MainMenuBar()
 	
 }
 
+void EditorLayer::PlayScene()
+{
+
+	if (m_OpenedScenePath != "")
+	{
+		Wiwa::Time::Play();
+		Wiwa::Time::Update();
+
+		m_SimulationSceneId = Wiwa::SceneManager::LoadScene(m_OpenedScenePath.c_str(), Wiwa::SceneManager::LOAD_SEPARATE);
+		Wiwa::Scene* sc = Wiwa::SceneManager::getScene(m_SimulationSceneId);
+		sc->GetEntityManager().AddSystemToWhitelist("MeshRenderer");
+		sc->GetEntityManager().AddSystemToWhitelist("OzzAnimationSystem");
+
+		// For debug purposes
+		std::string ex = sc->getName();
+		ex += "_execution";
+		sc->ChangeName(ex.c_str());
+
+		Wiwa::SceneManager::PlayScene();
+	}
+}
+
 void EditorLayer::StopScene()
 {
+	if (!Wiwa::Time::IsPlaying())
+		return;
 	Wiwa::Time::Stop();
 
 	Audio::StopAllEvents();

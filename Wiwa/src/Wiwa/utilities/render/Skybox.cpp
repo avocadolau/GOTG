@@ -114,9 +114,11 @@ void Wiwa::Skybox::LoadCubemap(const std::vector<const char*>& faces)
 
 void Wiwa::Skybox::Render()
 {
+    GL(DepthMask(GL_FALSE));
     GL(BindVertexArray(VAO));
     GL(ActiveTexture(GL_TEXTURE0));
     GL(BindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID));
     GL(DrawArrays(GL_TRIANGLES, 0, 36));
     GL(BindVertexArray(0));
+    GL(DepthMask(GL_TRUE));
 }

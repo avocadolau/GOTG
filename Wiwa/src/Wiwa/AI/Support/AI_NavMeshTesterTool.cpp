@@ -7,7 +7,6 @@
 #include "DetourNavMeshBuilder.h"
 #include "DetourDebugDraw.h"
 #include "DetourCommon.h"
-#include <glew.h>
 
 #ifdef WIN32
 #	define snprintf _snprintf

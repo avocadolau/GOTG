@@ -194,7 +194,8 @@ void MaterialPanel::RenderUniform(Wiwa::Uniform *uniform)
 						sdata->resource_id = Wiwa::Resources::Load<Wiwa::Image>(p.string().c_str());
 						Wiwa::Image *img = Wiwa::Resources::GetResourceById<Wiwa::Image>(sdata->resource_id);
 						sdata->tex_id = img->GetTextureId();
-						sdata->tex_path = p.string().c_str();
+						std::string path = p.string();
+						memcpy(sdata->tex_path, &path[0], path.size() + 1);
 					}
 				}
 			}

@@ -16,10 +16,10 @@ namespace Wiwa {
 
 	InstanceRenderer::~InstanceRenderer()
 	{
-		glDeleteBuffers(1, &m_VBO);
-		glDeleteBuffers(1, &m_EBO);
-		glDeleteBuffers(1, &m_IVBO);
-		glDeleteVertexArrays(1, &m_VAO);
+		GL(DeleteBuffers(1, &m_VBO));
+		GL(DeleteBuffers(1, &m_EBO));
+		GL(DeleteBuffers(1, &m_IVBO));
+		GL(DeleteVertexArrays(1, &m_VAO));
 
 		m_InstanceVertex.clear();
 	}

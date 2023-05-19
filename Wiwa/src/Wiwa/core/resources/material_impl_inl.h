@@ -101,11 +101,10 @@ namespace Wiwa {
 
 					std::filesystem::path p = _assetToLibPath(sdata->tex_path);
 					p.replace_extension(".dds");
+					std::string strPath = p.string();
 
-					sdata->tex_path = p.string();
+					memcpy(sdata->tex_path, &strPath[0], strPath.size() + 1);
 				}
-
-				//uniforms[i].setData(*sdata, UniformType::Sampler2D);
 			}
 		}
 

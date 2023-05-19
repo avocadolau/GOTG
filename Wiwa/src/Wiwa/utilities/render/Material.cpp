@@ -169,10 +169,10 @@ namespace Wiwa {
 				case Wiwa::UniformType::Sampler2D:
 				{
 					Uniform::SamplerData sdata;
-					sdata.tex_path = p->value.GetString();
-
+					std::string path = p->value.GetString();
+					memcpy(sdata.tex_path, &path[0], path.size() + 1);
 					if (sdata.tex_path != "") {
-						sdata.resource_id = Resources::Load<Image>(sdata.tex_path.c_str());
+						sdata.resource_id = Resources::Load<Image>(sdata.tex_path);
 
 						Image* img = Resources::GetResourceById<Image>(sdata.resource_id);
 						sdata.tex_id = img->GetTextureId();
@@ -579,7 +579,8 @@ namespace Wiwa {
 				case Wiwa::UniformType::Sampler2D:
 				{
 					Uniform::SamplerData sdata;
-					sdata.tex_path = p->value.GetString();
+					std::string path = p->value.GetString();
+					memcpy(sdata.tex_path, &path[0], path.size() + 1);
 
 					uniform->setData(sdata, uniform->getType());
 				}break;

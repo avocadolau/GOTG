@@ -6,15 +6,8 @@
 #include <Wiwa/scene/SceneManager.h>
 #include "../../Utils/EditorUtils.h"
 #include "Wiwa/ecs/components/Mesh.h"
-#include "../vendor/Glew/include/GL/glew.h"
 #include "Wiwa/AI/AI_RecastManager.h"
 #include "Wiwa/ecs/components/ai/NavMesh.h"
-//#include <Wiwa/audio/Audio.h>
-//#include <Wiwa/Platform/Windows/WindowsPlatformUtils.h>
-//#include <Wiwa/utilities/filesystem/FileSystem.h>
-//#include <Wiwa/core/Resources.h>
-
-//#include "glew.h"
 
 AIPanel::AIPanel(EditorLayer* instance)
 	: Panel("AI Panel", ICON_FK_MAGIC, instance)

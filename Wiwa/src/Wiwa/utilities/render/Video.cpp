@@ -13,7 +13,7 @@ namespace Wiwa {
 	Video::~Video()
 	{
 		if (m_TextureId != uint32_t(-1)) {
-			glDeleteTextures(1, &m_TextureId);
+			GL(DeleteTextures(1, &m_TextureId));
 		}
 		m_Cap.release();
 		m_Frame.release();

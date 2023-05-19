@@ -14,7 +14,7 @@ namespace Wiwa {
 	Text::~Text()
 	{
 		if (m_TextureId != uint32_t(-1)) {
-			glDeleteTextures(1, &m_TextureId);
+			GL(DeleteTextures(1, &m_TextureId));
 		}
 	}
 

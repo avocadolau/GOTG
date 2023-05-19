@@ -20,7 +20,7 @@ namespace Wiwa {
 
 	Shader::~Shader()
 	{
-		glDeleteProgram(m_IDprogram);
+		GL(DeleteProgram(m_IDprogram));
 		m_Uniforms.clear();
 	}
 
@@ -133,8 +133,8 @@ namespace Wiwa {
 	void Shader::CompileFiles(const char* vertexShaderSource, const char* fragmentShaderSource, bool hasGS, std::string* geometryShaderSourceStr, bool& retflag)
 	{
 		retflag = true;
-		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		GL(ShaderSource(vertexShader, 1, &vertexShaderSource, NULL));
+		unsigned int vertexShader = GL(CreateShader(GL_VERTEX_SHADER));
+		GL(ShaderSource(vertexShader, 1, &vertexShaderSource, NULL)); 
 		GL(CompileShader(vertexShader));
 
 		int success;

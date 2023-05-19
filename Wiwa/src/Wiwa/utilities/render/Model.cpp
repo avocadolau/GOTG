@@ -118,7 +118,11 @@ namespace Wiwa {
 						if (imported) {
 							ResourceId imgId = Resources::Load<Image>(texture_path.string().c_str());
 							Image* img = Resources::GetResourceById<Image>(imgId);
-							material.SetUniformData("u_Texture", Uniform::SamplerData(img->GetTextureId(), imgId, texture_path.string()));
+							Uniform::SamplerData data;
+							data.tex_id = img->GetTextureId();
+							data.resource_id = imgId;
+							memcpy(data.tex_path, &texture_path.string()[0], texture_path.string().size() + 1);
+							material.SetUniformData("u_Texture", data);
 						}
 						material.SetUniformData("u_ToonLevels", 4);
 					}

@@ -13,17 +13,18 @@ namespace Wiwa {
 // Allocation overloads
 inline void* operator new(size_t size) {
 	
-	if (size <= 0) return NULL;
+	if (size <= 0)
+		return nullptr;
 
 	Wiwa::AllocationMetrics::allocation_count++;
 	Wiwa::AllocationMetrics::bytes_allocated += size;
 
-	return malloc(size);
+	return std::malloc(size);
 }
 
-inline void operator delete(void* memory, size_t size) {
+inline void operator delete(void* memory, size_t size) noexcept {
 	Wiwa::AllocationMetrics::allocation_count--;
 	Wiwa::AllocationMetrics::bytes_allocated -= size;
 
-	free(memory);
+	std::free(memory);
 }

@@ -96,14 +96,14 @@ namespace Wiwa
 
 		Wiwa::Camera* camera = Wiwa::SceneManager::getActiveScene()->GetCameraManager().editorCamera;
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 		camera->frameBuffer->Bind(false);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(glm::value_ptr(camera->getView()));
-		glEnable(GL_CULL_FACE);
+		GL(MatrixMode(GL_PROJECTION));
+		GL(LoadMatrixf(glm::value_ptr(camera->getProjection())));
+		GL(MatrixMode(GL_MODELVIEW));
+		GL(LoadMatrixf(glm::value_ptr(camera->getView())));
+		GL(Enable(GL_CULL_FACE));
 
 		if (m_RecastMesh)
 			m_RecastMesh->handleUpdate(1.0f/60.0f);
@@ -111,9 +111,9 @@ namespace Wiwa
 		if (m_RecastMesh)
 			m_RecastMesh->handleRender();
 
-		glEnd();
+		GL(End());
 		camera->frameBuffer->Unbind();
-		glDisable(GL_CULL_FACE);
+		GL(Disable(GL_CULL_FACE));
 		return true;
 	}
 

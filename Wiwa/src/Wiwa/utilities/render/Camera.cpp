@@ -3,8 +3,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <Wiwa/core/Application.h>
-#include <glew.h>
-#include <gl/GL.h>
 
 namespace Wiwa {
 	const int IND_COUNT = 24;

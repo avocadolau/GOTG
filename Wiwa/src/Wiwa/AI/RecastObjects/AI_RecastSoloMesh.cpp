@@ -179,54 +179,54 @@ void RecastSoloMesh::handleRender()
 		duDebugDrawCompactHeightfieldRegions(&m_dd, *m_chf);
 	if (m_solid && m_drawMode == DRAWMODE_VOXELS)
 	{
-		glEnable(GL_FOG);
+		GL(Enable(GL_FOG));
 		duDebugDrawHeightfieldSolid(&m_dd, *m_solid);
-		glDisable(GL_FOG);
+		GL(Disable(GL_FOG));
 	}
 	if (m_solid && m_drawMode == DRAWMODE_VOXELS_WALKABLE)
 	{
-		glEnable(GL_FOG);
+		GL(Enable(GL_FOG));
 		duDebugDrawHeightfieldWalkable(&m_dd, *m_solid);
-		glDisable(GL_FOG);
+		GL(Disable(GL_FOG));
 	}
 	if (m_cset && m_drawMode == DRAWMODE_RAW_CONTOURS)
 	{
-		glDepthMask(GL_FALSE);
+		GL(DepthMask(GL_FALSE));
 		duDebugDrawRawContours(&m_dd, *m_cset);
-		glDepthMask(GL_TRUE);
+		GL(DepthMask(GL_TRUE));
 	}
 	if (m_cset && m_drawMode == DRAWMODE_BOTH_CONTOURS)
 	{
-		glDepthMask(GL_FALSE);
+		GL(DepthMask(GL_FALSE));
 		duDebugDrawRawContours(&m_dd, *m_cset, 0.5f);
 		duDebugDrawContours(&m_dd, *m_cset);
-		glDepthMask(GL_TRUE);
+		GL(DepthMask(GL_TRUE));
 	}
 	if (m_cset && m_drawMode == DRAWMODE_CONTOURS)
 	{
-		glDepthMask(GL_FALSE);
+		GL(DepthMask(GL_FALSE));
 		duDebugDrawContours(&m_dd, *m_cset);
-		glDepthMask(GL_TRUE);
+		GL(DepthMask(GL_TRUE));
 	}
 	if (m_chf && m_cset && m_drawMode == DRAWMODE_REGION_CONNECTIONS)
 	{
 		duDebugDrawCompactHeightfieldRegions(&m_dd, *m_chf);
 
-		glDepthMask(GL_FALSE);
+		GL(DepthMask(GL_FALSE));
 		duDebugDrawRegionConnections(&m_dd, *m_cset);
-		glDepthMask(GL_TRUE);
+		GL(DepthMask(GL_TRUE));
 	}
 	if (m_pmesh && m_drawMode == DRAWMODE_POLYMESH)
 	{
-		glDepthMask(GL_FALSE);
+		GL(DepthMask(GL_FALSE));
 		duDebugDrawPolyMesh(&m_dd, *m_pmesh);
-		glDepthMask(GL_TRUE);
+		GL(DepthMask(GL_TRUE));
 	}
 	if (m_dmesh && m_drawMode == DRAWMODE_POLYMESH_DETAIL)
 	{
-		glDepthMask(GL_FALSE);
+		GL(DepthMask(GL_FALSE));
 		duDebugDrawPolyMeshDetail(&m_dd, *m_dmesh);
-		glDepthMask(GL_TRUE);
+		GL(DepthMask(GL_TRUE));
 	}
 
 	if (m_geom && m_geom->getMesh())
@@ -236,7 +236,7 @@ void RecastSoloMesh::handleRender()
 		m_tool->handleRender();
 	renderToolStates();
 
-	glDepthMask(GL_TRUE);
+	GL(DepthMask(GL_TRUE));
 }
 
 void RecastSoloMesh::handleRenderOverlay(double* proj, double* model, int* view)

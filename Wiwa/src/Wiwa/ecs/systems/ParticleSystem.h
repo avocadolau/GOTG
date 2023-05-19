@@ -151,7 +151,7 @@ namespace Wiwa
 		void SetEmitterBools(ParticleEmitterComponent* emitter);
 		void FixBool(bool& _bool);
 
-		unsigned int m_VAO;
+		unsigned int m_VAO = -1;
 
 		unsigned int m_LastUsedParticle = 0;
 		
@@ -163,9 +163,9 @@ namespace Wiwa
 
 		std::vector<Particle> m_Particles;
 
-		Material* m_Material;
+		Material* m_Material = nullptr;
 
-		Model* m_Model;
+		Model* m_Model = nullptr;
 	};
 }
 REGISTER_SYSTEM(Wiwa::ParticleSystem);

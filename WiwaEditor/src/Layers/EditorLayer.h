@@ -81,6 +81,7 @@ private:
 	};
 
 	void MainMenuBar();
+	void PlayScene();
 	void OpenCloseAssetsFolder();
 	void SaveProjectAs();
 	void OpenProject();

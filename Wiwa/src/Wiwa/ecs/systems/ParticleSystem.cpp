@@ -809,31 +809,31 @@ namespace Wiwa {
 		
 
 		
-		glEnable(GL_CULL_FACE);
+		GL(Enable(GL_CULL_FACE));
 
 		if (emitter->m_deactivateFaceCulling)
 		{
-			glDisable(GL_CULL_FACE);
+			GL(Disable(GL_CULL_FACE));
 		}
 
 
-		glEnable(GL_BLEND);
-		glDepthMask(GL_FALSE);
+		GL(Enable(GL_BLEND));
+		GL(DepthMask(GL_FALSE));
 		
 	
 		if (emitter->m_useAdditiveBlending)
 		{
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			glBlendEquation(GL_FUNC_ADD);
+			GL(BlendFunc(GL_SRC_ALPHA, GL_ONE));
+			GL(BlendEquation(GL_FUNC_ADD));
 		}
 		else if (emitter->m_useMultiplyBlending)
 		{
-			glBlendFunc(GL_DST_COLOR, GL_ZERO);
-			glBlendEquation(GL_FUNC_ADD);
+			GL(BlendFunc(GL_DST_COLOR, GL_ZERO));
+			GL(BlendEquation(GL_FUNC_ADD));
 		}
 		else {
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBlendEquation(GL_FUNC_ADD);
+			GL(BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+			GL(BlendEquation(GL_FUNC_ADD));
 		}
 
 
@@ -854,9 +854,9 @@ namespace Wiwa {
 			r3d.RenderMesh(m_Model, particle.transform.worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 		}
 
-		glActiveTexture(GL_TEXTURE0);
-		glDepthMask(GL_TRUE);
-		glDisable(GL_BLEND);
+		GL(ActiveTexture(GL_TEXTURE0));
+		GL(DepthMask(GL_TRUE));
+		GL(Disable(GL_BLEND));
 	}
 
 	void ParticleSystem::SetValues(ParticleEmitterComponent settings)
