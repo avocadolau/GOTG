@@ -157,36 +157,36 @@ namespace Wiwa
 			{
 			case 0:
 			{
-				if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
-				{
-					for (int i = 1; i <= 5; ++i) // Number of thunders
-					{
-						EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
-						m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
-						Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
-						glm::vec3 thunderPos = GetPositionAroundPlayer(playerTr->localPosition, 12.0f, i);
-						m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
-						thunderMarkTr->localPosition.x = thunderPos.x;
-						thunderMarkTr->localPosition.y = 0.1f;
-						thunderMarkTr->localPosition.z = thunderPos.z;
-					}
+				//if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
+				//{
+				//	for (int i = 1; i <= 5; ++i) // Number of thunders
+				//	{
+				//		EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
+				//		m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
+				//		Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
+				//		glm::vec3 thunderPos = GetPositionAroundPlayer(playerTr->localPosition, 12.0f, i);
+				//		m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
+				//		thunderMarkTr->localPosition.x = thunderPos.x;
+				//		thunderMarkTr->localPosition.y = 0.1f;
+				//		thunderMarkTr->localPosition.z = thunderPos.z;
+				//	}
 
-					m_ThunderMovementMarkSpawned = true;
-				}
+				//	m_ThunderMovementMarkSpawned = true;
+				//}
 
-				if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
-				{
-					for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
-						em.DestroyEntity(m_ThunderMarkIds[i]);
-						SpawnThunderStormMovement(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
-					}
+				//if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
+				//{
+				//	for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
+				//		em.DestroyEntity(m_ThunderMarkIds[i]);
+				//		SpawnThunderStormMovement(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
+				//	}
 
-					// Clear the vectors
-					m_ThunderMarkIds.clear();
-					m_ThunderPositions.clear();
+				//	// Clear the vectors
+				//	m_ThunderMarkIds.clear();
+				//	m_ThunderPositions.clear();
 
-					m_ThunderMovementSpawned = true;
-				}
+				//	m_ThunderMovementSpawned = true;
+				//}
 			}
 			break;
 			case 1:
@@ -362,7 +362,7 @@ namespace Wiwa
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 20) // 20 % probability
 		{
-			return UltronAttacks::RAIN_PROJECTILE;
+			return UltronAttacks::BULLET_STORM; //Rain
 		}
 		else if (randomNum <= 40) { // 20 % probability
 			return UltronAttacks::LASER_BEAM;
