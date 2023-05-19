@@ -1206,7 +1206,17 @@ namespace Wiwa
 				else {
 					Wiwa::WaveSpawner* waveSpawner = &enemySpawnerList[i];
 					if (waveSpawner) {
-						count++;
+						WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+						if (waveSpawnerSystem) {
+							const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+							for (int i = 0; i < waveIds.size(); i++)
+							{
+								Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+								if (wave) {
+									count++;
+								}
+							}
+						}
 					}
 				}
 			}
