@@ -20,7 +20,7 @@ namespace Wiwa {
 		std::vector<uint32_t> m_RemovedInstances;
 		std::vector<int> m_Textures;
 
-		std::vector<VertexInstanceTexture> m_InstanceVertex;
+		VertexInstanceTexture* m_InstanceVertex;
 
 		uint32_t m_VAO, m_VBO, m_EBO;
 		uint32_t m_IVBO;

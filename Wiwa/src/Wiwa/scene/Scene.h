@@ -52,8 +52,8 @@ namespace Wiwa {
 		EntityManager& GetEntityManager() { return m_EntityManager; }
 		CameraManager& GetCameraManager() { return *m_CameraManager; }
 		PhysicsManager& GetPhysicsManager() { return *m_PhysicsManager; }
-		std::vector<InstanceRenderer>& GetInstanceRenderers() { return m_InstanceRenderers; }
-		InstanceRenderer& GetInstanceRenderer(uint32_t index) { return m_InstanceRenderers[index]; }
+		std::vector<InstanceRenderer*>& GetInstanceRenderers() { return m_InstanceRenderers; }
+		InstanceRenderer* GetInstanceRenderer(uint32_t index) { return m_InstanceRenderers[index]; }
 		LightManager& GetLightManager() { return *m_LightManager; }
 		GuiManager& GetGuiManager() { return *m_GuiManager; }
 		DialogManager& GetDialogManager() { return *m_DialogManager; }
@@ -83,7 +83,7 @@ namespace Wiwa {
 
 		std::vector<std::string> m_AudioBanks;
 	private:
-		std::vector<InstanceRenderer> m_InstanceRenderers;
+		std::vector<InstanceRenderer*> m_InstanceRenderers;
 
 		Renderer2D::InstanceData m_TransitionInstance;
 

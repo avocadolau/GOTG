@@ -70,7 +70,11 @@ namespace Wiwa
 		}
 		RecastManager::DeAllocate();
 
-		m_InstanceRenderers.clear();
+		size_t instance_size = m_InstanceRenderers.size();
+
+		for (size_t i = 0; i < instance_size; i++) {
+			delete m_InstanceRenderers[i];
+		}
 	}
 
 	void Scene::Start()
@@ -264,9 +268,9 @@ namespace Wiwa
 	{
 		uint32_t id = m_InstanceRenderers.size();
 
-		m_InstanceRenderers.emplace_back(40500);
+		m_InstanceRenderers.push_back(new InstanceRenderer(405000));
 
-		m_InstanceRenderers[id].Init("resources/shaders/instanced_tex_color");
+		m_InstanceRenderers[id]->Init("resources/shaders/instanced_tex_color");
 
 		return id;
 	}
