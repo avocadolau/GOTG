@@ -64,7 +64,6 @@ namespace Wiwa {
 #define GL(_f)                     \
     gl##_f;                        \
     { \
-	GLERR; \
 	GLenum error = glGetError(); \
     assert(error == GL_NO_ERROR); }
 #else  // NOT WI_DEBUG

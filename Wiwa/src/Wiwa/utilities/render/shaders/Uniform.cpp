@@ -9,8 +9,18 @@ namespace Wiwa {
 	//Sampler2D x : OpenGL id y: ResourceId to retrieve the path when saving
 	void Uniform::sendToShader(uint16_t shaderProgram, int& textureId)
 	{
-		if (m_UniformID == NULL)
+		if (m_Type == Wiwa::UniformType::Invalid) {
+			//WI_CRITICAL("Invalid uniform [{}]", name.c_str());
+			return;
+		}
+
+		if (m_UniformID == -1)
 			m_UniformID = glGetUniformLocation(shaderProgram, name.c_str());
+
+		if (m_UniformID == -1) {
+			//WI_CRITICAL("Uniform [{}] doesn't exist in program [{}]", name.c_str(), shaderProgram);
+			return;
+		}
 
 		switch (m_Type)
 		{

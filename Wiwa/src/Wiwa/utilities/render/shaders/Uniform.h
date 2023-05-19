@@ -14,7 +14,8 @@ namespace Wiwa {
 		Mat3,
 		Mat4,
 		Time,
-		Sampler2D
+		Sampler2D,
+		Invalid
 	};
 	//struct SamplerData
 	//{
@@ -37,12 +38,12 @@ namespace Wiwa {
 		};
 
 		Uniform()
-			: m_Type(UniformType::Bool), name(), m_Data(nullptr), m_UniformID(NULL)
+			: m_Type(UniformType::Invalid), m_Data(nullptr), m_UniformID(-1)
 		{}
 
 
 		Uniform(std::string name, UniformType type)
-			: m_Type(type), m_Data(nullptr), name(name), m_UniformID(NULL)
+			: m_Type(type), m_Data(nullptr), name(name), m_UniformID(-1)
 		{
 			setEmptyData();
 		}
@@ -137,7 +138,7 @@ namespace Wiwa {
 		UniformType m_Type;
 		byte* m_Data = nullptr;
 		size_t m_DataSize = 0;
-		uint16_t m_UniformID;
+		int m_UniformID;
 	public:
 		std::string name;
 	};
