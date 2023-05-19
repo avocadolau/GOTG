@@ -14,7 +14,9 @@ public:
 
 	~GLCheckerTexture()
 	{
-		GL(DeleteTextures(1, &m_texId));
+		if (m_texId != 0) {
+			GL(DeleteTextures(1, &m_texId));
+		}
 	}
 	void bind()
 	{
