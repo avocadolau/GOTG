@@ -680,7 +680,7 @@ namespace Wiwa
 				if (std::filesystem::exists(path))
 				{
 					std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
-					libpath.replace_extension(".dds").c_str();
+					libpath.replace_extension(".dds");
 
 					textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 					dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
@@ -701,7 +701,7 @@ namespace Wiwa
 			if (std::filesystem::exists(path))
 			{
 				std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
-				libpath.replace_extension(".dds").c_str();
+				libpath.replace_extension(".dds");
 
 				textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 				dialogImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
@@ -853,11 +853,11 @@ namespace Wiwa
 			doc.AddMember(memberNameConversation.c_str(), conversations[i].conversationName.c_str());
 
 			std::filesystem::path libpath2 = Wiwa::Resources::_assetToLibPath(conversations[i].bubbleImagePath).c_str();
-			libpath2.replace_extension(".dds").c_str();
+			libpath2.replace_extension(".dds");
 			doc.AddMember(memberNameBubbleImage.c_str(), libpath2.string().c_str());
 
 			std::filesystem::path libpath3 = Wiwa::Resources::_assetToLibPath(conversations[i].characterImagePath).c_str();
-			libpath3.replace_extension(".dds").c_str();
+			libpath3.replace_extension(".dds");
 			doc.AddMember(memberNameCharacterImage.c_str(), libpath3.string().c_str());
 
 			doc.AddMember(memberNameGroupId.c_str(), conversations[i].group.groupID.c_str());
