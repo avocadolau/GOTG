@@ -400,9 +400,9 @@ namespace Wiwa
 
 		if (actualConversationState == 1)
 		{
-
-			InstanceRenderer& instanceRenderer = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.renderer_id);
-			instanceRenderer.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.instance_id, BLACK);
+			render->UpdateInstancedQuadTexColor(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID, BLACK);
+			/*InstanceRenderer& instanceRenderer = m_Scene->GetInstanceRenderer(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.renderer_id);
+			instanceRenderer.UpdateInstanceColor(conversations[conversationNumber].nodes[currentNode].text1_imgModeID.instance_id, BLACK);*/
 
 			if (((keyPressRefreshTimer / 450) % 2) == 0)
 			{
