@@ -16,7 +16,7 @@
 #include "components/SpotLight.h"
 
 // Animations
-#include "components/AnimatorComponent.h"
+//#include "components/AnimatorComponent.h"
 #include "components/OzzAnimatorCmp.h"
 
 // Physics components
