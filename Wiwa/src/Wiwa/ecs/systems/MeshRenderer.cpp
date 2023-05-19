@@ -22,7 +22,7 @@ namespace Wiwa {
 	{
 		Transform3D* t3d = GetComponent<Transform3D>();
 		Mesh* mesh = GetComponent<Mesh>();
-		AnimatorComponent* animator = GetComponent<AnimatorComponent>();
+		//OzzAnimaor* animator = GetComponent<AnimatorComponent>();
 
 		if (!mesh) return;
 
@@ -47,8 +47,8 @@ namespace Wiwa {
 
 		EntityId parent = eman.GetEntityParent(m_EntityId);
 		Transform3D* parent_t3d = eman.GetComponent<Transform3D>(parent);
-		if (animator == nullptr)
-		{
+		//if (animator == nullptr)
+		//{
 			for (size_t i = 0; i < cameraCount; i++)
 			{
 				CameraId cam_id = cameras[i];
@@ -63,8 +63,8 @@ namespace Wiwa {
 			if(man.editorCamera)
 				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
 		
-		}
-		else if (animator->animator != nullptr)
+		//}
+		/*else if (animator->animator != nullptr)
 		{
 			for (size_t i = 0; i < cameraCount; i++)
 			{
@@ -77,7 +77,7 @@ namespace Wiwa {
 				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), animator->animator->GetFinalBoneMatrices(), false, camera);
 			}
 			r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), animator->animator->GetFinalBoneMatrices(), false, man.editorCamera);
-		}
+		}*/
 		
 	}
 	Material* MeshRenderer::GetMaterial()
