@@ -122,6 +122,11 @@ namespace Wiwa
 		}
 		m_Camera->setRotation(m_CameraRotation);
 		m_CameraDataIt = GetComponentIterator<PlayerCameraData>();
+		if (m_CameraDataIt.c_id)
+		{
+			PlayerCameraData* data = GetComponentByIterator<PlayerCameraData>(m_CameraDataIt);
+			data->ZoomSensitivity = 50;
+		}
 	}
 
 	void CameraController::InitFOV()
@@ -253,10 +258,16 @@ namespace Wiwa
 				if (m_FOV < m_TargetFOV)
 				{
 					m_FOV += data->CombatVelocity * Time::GetDeltaTimeSeconds();
+					// Correct drift
+					if (m_FOV + data->CombatVelocity * Time::GetDeltaTimeSeconds() > m_TargetFOV)
+						m_FOV = m_TargetFOV;
 				}
 				else
 				{
 					m_FOV -= data->CombatVelocity * Time::GetDeltaTimeSeconds();
+					// Correct drift
+					if (m_FOV - data->CombatVelocity * Time::GetDeltaTimeSeconds() < m_TargetFOV)
+						m_FOV = m_TargetFOV;
 				}
 			}
 			CLAMP(m_FOV, data->MinCombatFOV, data->MaxCombatFOV);
