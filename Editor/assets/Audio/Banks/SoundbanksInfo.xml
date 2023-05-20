@@ -990,13 +990,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{3ECE5283-F172-EEE9-F45C-9EB6DE33DC38}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{129230EF-AFCC-3313-EF2C-97E28E2F5CED}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
 				<File Id="282502226" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>synthetic-unease-64408.wav</ShortName>
-					<CachePath>SFX/synthetic-unease-64408_4163FA3D.wem</CachePath>
+					<CachePath>SFX/synthetic-unease-64408_49102B12.wem</CachePath>
 				</File>
 				<File Id="348343627" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 03.wav</ShortName>
@@ -1004,15 +1004,15 @@
 				</File>
 				<File Id="420772858" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>computer-sounds-25541.wav</ShortName>
-					<CachePath>SFX/computer-sounds-25541_597D20A0.wem</CachePath>
+					<CachePath>SFX/computer-sounds-25541_98FDBB49.wem</CachePath>
 				</File>
 				<File Id="622246367" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vantiladores.wav</ShortName>
-					<CachePath>SFX/vantiladores_0160C48D.wem</CachePath>
+					<CachePath>SFX/vantiladores_9D17781E.wem</CachePath>
 				</File>
 				<File Id="673880580" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>hub_enviroment.wav</ShortName>
-					<CachePath>SFX/hub_enviroment_CD746FB1.wem</CachePath>
+					<CachePath>SFX/hub_enviroment_71A7E0EE.wem</CachePath>
 				</File>
 				<File Id="715564319" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 01.wav</ShortName>
@@ -1068,5 +1068,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{74D390CD-82BE-87B3-65C2-0E036B8B13F1}</FileHash>
+	<FileHash>{C0DA684F-8440-80A8-A5E0-4D022F18EF18}</FileHash>
 </SoundBanksInfo>
