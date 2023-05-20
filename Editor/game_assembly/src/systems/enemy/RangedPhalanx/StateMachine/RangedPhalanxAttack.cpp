@@ -6,10 +6,11 @@
 #include "../../../attack/SimpleBulletSystem.h"
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include "../../../../Components.h"
+#include "../../../../components/attack/SimpleBullet.h"
 
 #include <Wiwa/ecs/systems/AudioSystem.h>
-#include "../../../../Systems.h"
+#include <Wiwa/ecs/systems/ParticleSystem.h>
+
 namespace Wiwa
 {
 	RangedPhalanxAttackState::RangedPhalanxAttackState()
