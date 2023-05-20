@@ -19,10 +19,9 @@ namespace Wiwa {
 
 		void SpawnBullet(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const Wiwa::EnemyData* character, const glm::vec3& bull_dir);
 		void SpawnBulletZigZag(EnemySubjugator* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
-		void SelectRandomBulletSpawn(EnemySubjugator* enemy);
+		void SelectRandomBulletSpawn();
 		
-		float m_TimerAttackCooldown = 0.0f;
-
+		EnemySubjugator* m_Enemy = nullptr;
 		int m_SelectRandomAttack = -1;
 		bool m_IsAttackSelected = false;
 
