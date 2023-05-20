@@ -7,11 +7,11 @@ Event	ID	Name			Wwise Object Path	Notes
 	2423740202	hub_enviroment			\Default Work Unit\enviroment\hub_enviroment	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	282502226	hologram	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\synthetic-unease-64408_4163FA3D.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\hologram		1836384
+	282502226	hologram	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\synthetic-unease-64408_49102B12.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\hologram		1836384
 	348343627	Small Explosion 03	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 03		405288
-	420772858	containers	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\computer-sounds-25541_597D20A0.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\containers		1350240
-	622246367	vantiladores	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\vantiladores_0160C48D.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\vantiladores		6374864
-	673880580	hub_enviroment	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\hub_enviroment_CD746FB1.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\hub_enviroment		104680032
+	420772858	containers	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\computer-sounds-25541_98FDBB49.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\containers		1350240
+	622246367	vantiladores	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\vantiladores_9D17781E.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\vantiladores		6386792
+	673880580	hub_enviroment	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\hub_enviroment_71A7E0EE.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\hub_enviroment		104680032
 	715564319	Small Explosion 01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 01		360516
 	852151634	Small Explosion 02	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Small Explosion 02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\explosions\Small Explosion 02		426048
 	947526828	generators	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\generators_CEFFC34F.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\props\generators		1232736
