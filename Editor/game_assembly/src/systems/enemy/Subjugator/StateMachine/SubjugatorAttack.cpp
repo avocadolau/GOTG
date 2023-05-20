@@ -9,6 +9,7 @@
 #include "../../../../components/attack/SimpleBullet.h"
 #include "../../../../components/attack/ZigZagBullet.h"
 #include "../../../attack/ZigZagSystem.h"
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 
 #define ANIMATION_FRAME_TIME 41.66f
@@ -40,7 +41,7 @@ namespace Wiwa
 
 		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 		OzzAnimation* animation = animator->getAnimationByName("atack");
-		animation->addKeyAction({ &SubjugatorAttackState::SelectRandomBulletSpawn, this }, 0.3f);
+		animation->addKeyAction({ &SubjugatorAttackState::SelectRandomBulletSpawn, this }, 0.5f);
 
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 		enemy->m_AnimatorSys->PlayAnimation("atack");
@@ -85,6 +86,10 @@ namespace Wiwa
 			navAgent->autoRotate = true;
 		}
 
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
+		OzzAnimation* animation = animator->getAnimationByName("atack");
+		animation->removeKeyAction({ &SubjugatorAttackState::SelectRandomBulletSpawn, this });
+
 		m_Enemy = nullptr;
 	}
 
@@ -97,6 +102,9 @@ namespace Wiwa
 	{
 		WI_INFO("BULLET POOL ACTIVE SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountActive());
 		WI_INFO("BULLET POOL DISABLED SIZE: {}", GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled());
+
+		if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0 || m_Enemy == nullptr)
+			return;
 
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
@@ -171,6 +179,10 @@ namespace Wiwa
 
 	void SubjugatorAttackState::SelectRandomBulletSpawn()
 	{
+		if (m_Enemy == nullptr)
+			return;
+
+		m_Enemy->m_AudioSys->PlayAudio("ranged_attack");
 		Wiwa::EntityManager& em = m_Enemy->getScene().GetEntityManager();
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(m_Enemy->m_StatsIt);
 
