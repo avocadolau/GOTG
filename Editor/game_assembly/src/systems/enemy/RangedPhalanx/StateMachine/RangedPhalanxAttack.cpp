@@ -26,9 +26,15 @@ namespace Wiwa
 	void RangedPhalanxAttackState::EnterState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+
+
+		//Wiwa::OzzAnimator* animator = em.GetSystem<Wiwa::OzzAnimator>(enemy->GetEntity());
+		//OzzAnimation* animation = animator->getAnimationByName("atack");
+		//
+		//animation->addKeyAction(, );
 
 		// Fire shot
 		//if (m_TimerAttackCooldown == 0.0f)
@@ -49,8 +55,8 @@ namespace Wiwa
 	
 	void RangedPhalanxAttackState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
-		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();		
+		
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
@@ -69,9 +75,9 @@ namespace Wiwa
 			// Play fire anim and fire shot
 			m_TimerAttackCooldown = 0.0f;
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
-
+			
 			SpawnBullet(enemy, gunTr, stats, CalculateForward(*gunTr));
-			animator->PlayAnimation("shot");
+			//animator->PlayAnimation("shot", 0.33f);
 			audio->PlayAudio("ranged_attack");
 		}
 
@@ -110,6 +116,8 @@ namespace Wiwa
 
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		Wiwa::OzzAnimationSystem* anim = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimator* animator = anim->getAnimator();
 		physSys->DeleteBody();
 
 		// Set intial positions
@@ -118,6 +126,8 @@ namespace Wiwa
 
 		if (!bulletTr || !playerTr)
 			return;
+
+		animator->PlayAnimation("shot", 0.33f);
 
 		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);

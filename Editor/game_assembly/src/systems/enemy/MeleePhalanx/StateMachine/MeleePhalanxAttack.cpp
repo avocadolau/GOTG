@@ -21,7 +21,6 @@ namespace Wiwa
 	{
 		enemy->m_Timer = 0;
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem*animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		m_TimerAttackCooldown = 0.0f;
 
 		NavAgent *navAgent = (NavAgent *)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -111,7 +110,8 @@ namespace Wiwa
 		if (distance <= 3.0f)
 		{
 			animator->PlayAnimation("walk");
-			animator->PlayAnimation("atack");			
+			animator->PlayAnimation("atack");	
+			
 	
 			EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
 			m_SoundCurrentTime = m_SoundTimer;
