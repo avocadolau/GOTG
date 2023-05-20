@@ -530,6 +530,17 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="generator" ID="{367A6E8A-6B2C-4AF4-9BF6-F317F4A9BD9F}">
+							<ChildrenList>
+								<Action Name="" ID="{0704384F-0DE3-43F5-BC3C-226F5FF43B45}" ShortID="507821228">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="generators" ID="{B71D0E1E-04F5-456A-8A2C-13F9BBD186DA}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="scene_events" ID="{CF3EC4CC-A394-444D-B20D-63797100419B}" ShortID="339949101">

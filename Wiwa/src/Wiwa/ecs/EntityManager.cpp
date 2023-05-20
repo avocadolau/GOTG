@@ -754,6 +754,15 @@ namespace Wiwa {
 		return c;
 	}
 
+	byte* EntityManager::GetComponentByIterator(ComponentIterator c_it)
+	{
+		if (c_it.c_id == WI_INVALID_INDEX) return NULL;
+		if (c_it.c_id >= m_ComponentIdCount) return NULL;
+		if (c_it.c_index >= m_ComponentsSize[c_it.c_id]) return NULL;
+
+		return m_Components[c_it.c_id] + c_it.c_index * c_it.c_size;
+	}
+
 	EntityManager::ComponentIterator EntityManager::GetComponentIterator(EntityId eid, ComponentHash c_hash)
 	{
 		ComponentIterator c_it = { WI_INVALID_INDEX, WI_INVALID_INDEX };

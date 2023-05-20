@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{9585AFE0-A84C-859D-7183-471F9689AD0F}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -990,7 +990,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{1DD78B1A-3486-F329-2235-C6F8CEC5B2D7}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1006,6 +1006,10 @@
 					<ShortName>Small Explosion 02.wav</ShortName>
 					<CachePath>SFX/Small Explosion 02_10C4C929.wem</CachePath>
 				</File>
+				<File Id="947526828" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>generators.wav</ShortName>
+					<CachePath>SFX/generators_27DA1C63.wem</CachePath>
+				</File>
 				<File Id="1043649091" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 04.wav</ShortName>
 					<CachePath>SFX/Small Explosion 04_10C4C929.wem</CachePath>
@@ -1020,8 +1024,13 @@
 						<MediaRef Id="1043649091"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="334231652" Name="generator">
+					<MediaRefs>
+						<MediaRef Id="947526828"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{0A3A1C42-5226-69F7-E4FE-AA6B224E10BD}</FileHash>
+	<FileHash>{0CB45980-DAF0-74E3-CE59-8E9F4C5D5FA9}</FileHash>
 </SoundBanksInfo>
