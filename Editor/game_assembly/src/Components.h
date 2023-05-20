@@ -25,3 +25,6 @@
 #include "components/props/RewardChestData.h"
 
 #include "components/trigger/RewardRoomData.h"
+
+#include "components/camera/PlayerCameraData.h"
+#include "components/camera/CameraAgent.h"

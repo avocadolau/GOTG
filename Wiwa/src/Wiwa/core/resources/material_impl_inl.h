@@ -88,7 +88,7 @@ namespace Wiwa {
 			if (uniforms[i].getType() == UniformType::Sampler2D) {
 				Uniform::SamplerData* sdata = uniforms[i].getPtrData<Uniform::SamplerData>();
 
-				if (sdata->tex_path != "") {
+				if (sdata->tex_path[0] != '\0') {
 					std::string texpath = sdata->tex_path;
 
 					Resources::SetAssetPath(texpath);

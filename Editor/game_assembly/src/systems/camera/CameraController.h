@@ -7,16 +7,7 @@ namespace Wiwa
 {
 	class  CameraController : public System
 	{
-	private:
-		Camera* m_Camera;
-		EntityId m_PlayerId;
-		EntityManager::ComponentIterator m_PlayerTransformIt;
-		EntityManager::ComponentIterator m_TransformIt;
-
-
-        glm::vec3 m_CameraOffset{ 0, 40.0f, -15.0f };
-        glm::vec3 m_CameraRotation{ 90, -65, 0 };
-        float m_FOV = 60;
+	
 	public:
 		CameraController();
 		~CameraController();
@@ -27,8 +18,14 @@ namespace Wiwa
 
 		void OnUpdate() override;
 
+
 		void OnDestroy() override;
 
+    private:
+        void InitCameraAgents();
+        void InitCamera();
+        void InitFOV();
+        void BattleRoomFinished();
         glm::vec3 CalculateForward(Transform3D transform)
         {
             glm::vec3 rotrad;
@@ -57,6 +54,31 @@ namespace Wiwa
         {
             return rad * 180.0f / PI;
         }
+        float mapValue(float value, float input_min, float input_max, float output_min, float output_max)
+        {
+            // Normalize the value between 0 and 1
+            float normalized_value = (value - input_min) / (input_max - input_min);
+
+            // Map the normalized value to the output range
+            float mapped_value = output_min + (normalized_value * (output_max - output_min));
+
+            return mapped_value;
+        }
+        void UpdateCameraAgents();
+    private:
+        Camera* m_Camera;
+        EntityId m_PlayerId;
+        EntityManager::ComponentIterator m_PlayerTransformIt;
+        EntityManager::ComponentIterator m_TransformIt;
+        EntityManager::ComponentIterator m_CameraDataIt;
+
+
+        std::vector<struct CameraAgent*> m_CameraAgents;
+
+        glm::vec3 m_CameraOffset{ 0, 40.0f, -15.0f };
+        glm::vec3 m_CameraRotation{ 90, -65, 0 };
+        float m_FOV = 60;
+        float m_Velocity = 2.f;
 	};
 }
 REGISTER_SYSTEM(Wiwa::CameraController);

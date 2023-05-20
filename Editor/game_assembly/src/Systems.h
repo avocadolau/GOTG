@@ -64,3 +64,5 @@
 #include "systems/triggers/EndRewardRoom.h"
 #include "systems/InitMusic.h"
 #include "systems/HowardShopSystem.h"
+
+#include "systems/camera/CameraAgentSystem.h"
