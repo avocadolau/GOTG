@@ -55,19 +55,21 @@ namespace Wiwa
 		m_Camera->setPosition(finalpos);
 
 
-		UpdateCameraAgents();
+		
 
 		switch (GameStateManager::GetType())
 		{
 		case RoomType::ROOM_HUB:
 		{
+			UpdateCameraAgentsFarToNear();
 		}break;
 		case RoomType::ROOM_REWARD:
 			m_FOV = 40;
 			break;
 		case RoomType::ROOM_COMBAT:
 		{
-			BattleRoomFinished();
+			UpdateCameraAgentsNearToFar();
+			//BattleRoomFinished();
 		}	break;
 		case RoomType::ROOM_BOSS:
 			m_FOV = 60;
@@ -76,7 +78,7 @@ namespace Wiwa
 			m_FOV = 60;
 			break;
 		default:
-			m_FOV = 60;
+			UpdateCameraAgentsNearToFar();
 			break;
 		}
 	}
@@ -177,39 +179,107 @@ namespace Wiwa
 		}
 	}
 
-	void CameraController::UpdateCameraAgents()
+	void CameraController::UpdateCameraAgentsFarToNear()
 	{
 		Transform3D* playerT3D = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
 
-		float nearDistance = 0;
+		float nearDistance = 100.f;
 		for (size_t i = 0; i < m_CameraAgents.size(); i++)
 		{
-			if (!m_CameraAgents[i])
-				continue;
 			if (!m_CameraAgents[i]->Active)
 				continue;
 
 			float distance = glm::distance(playerT3D->position, m_CameraAgents[i]->Position);
 
-			if (i == 0)
-				nearDistance = distance;
-			else if (distance < nearDistance)
+			if (distance < nearDistance)
 				nearDistance = distance;
 		}
-
+		WI_INFO("Distance {}", nearDistance);
 		PlayerCameraData* data = nullptr;
 		if (m_CameraDataIt.c_id != WI_INVALID_INDEX)
 			data = GetComponentByIterator<PlayerCameraData>(m_CameraDataIt);
 		if (data)
 		{
-			m_FOV = mapValue(nearDistance, 0, 100.f, data->MinCombatFOV, data->MaxCombatFOV);
+			m_TargetFOV = mapValue(nearDistance, 0, data->ZoomSensitivity, data->MinCombatFOV, data->MaxCombatFOV);
+			CLAMP(m_TargetFOV, data->MinCombatFOV, data->MaxCombatFOV);
+		}
+		else
+		{
+			m_TargetFOV = mapValue(nearDistance, 0, 100.f, 40.f, 70.f);
+			CLAMP(m_TargetFOV, 40.f, 70.f);
+		}
+		WI_INFO("Target FOV {}", m_TargetFOV);
+		WI_INFO("FOV {}", m_FOV);
+		if (m_FOV != m_TargetFOV)
+		{
+			if (m_FOV < m_TargetFOV)
+			{
+				m_FOV += m_Velocity * Time::GetDeltaTimeSeconds();
+			}
+			else
+			{
+				m_FOV -= m_Velocity * Time::GetDeltaTimeSeconds();
+			}
+		}
+		CLAMP(m_FOV, data->MinCombatFOV, data->MaxCombatFOV);
+		m_Camera->setFOV(m_FOV);
+	}
+
+	void CameraController::UpdateCameraAgentsNearToFar()
+	{
+		Transform3D* playerT3D = GetComponentByIterator<Transform3D>(m_PlayerTransformIt);
+
+		float farDistance = 0.f;
+		for (size_t i = 0; i < m_CameraAgents.size(); i++)
+		{
+			if (!m_CameraAgents[i]->Active)
+				continue;
+
+			float distance = glm::distance(playerT3D->position, m_CameraAgents[i]->Position);
+
+			if (distance > farDistance)
+				farDistance = distance;
+		}
+		WI_INFO("Distance {}", farDistance);
+		PlayerCameraData* data = nullptr;
+		if (m_CameraDataIt.c_id != WI_INVALID_INDEX)
+			data = GetComponentByIterator<PlayerCameraData>(m_CameraDataIt);
+		if (data)
+		{
+			m_TargetFOV = mapValue(farDistance, 0, data->ZoomSensitivity, data->MinCombatFOV, data->MaxCombatFOV);
+			CLAMP(m_TargetFOV, data->MinCombatFOV, data->MaxCombatFOV);
+			if (m_FOV != m_TargetFOV)
+			{
+				if (m_FOV < m_TargetFOV)
+				{
+					m_FOV += data->CombatVelocity * Time::GetDeltaTimeSeconds();
+				}
+				else
+				{
+					m_FOV -= data->CombatVelocity * Time::GetDeltaTimeSeconds();
+				}
+			}
 			CLAMP(m_FOV, data->MinCombatFOV, data->MaxCombatFOV);
 		}
 		else
 		{
-			m_FOV = mapValue(nearDistance, 0, 100.f, 40.f, 70.f);
-			CLAMP(m_FOV, 40.f, 70.f);
+			m_TargetFOV = mapValue(farDistance, 0, 100.f, 40.f, 70.f);
+			CLAMP(m_TargetFOV, 40.f, 70.f);
+			if (m_FOV != m_TargetFOV)
+			{
+				if (m_FOV < m_TargetFOV)
+				{
+					m_FOV += m_Velocity * Time::GetDeltaTimeSeconds();
+				}
+				else
+				{
+					m_FOV -= m_Velocity * Time::GetDeltaTimeSeconds();
+				}
+			}
+			CLAMP(m_FOV, 40.0f, 70.0f);
 		}
+
+		
 		m_Camera->setFOV(m_FOV);
 	}
 

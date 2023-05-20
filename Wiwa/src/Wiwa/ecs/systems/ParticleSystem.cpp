@@ -172,12 +172,12 @@ namespace Wiwa {
 
 		if (m_Material == nullptr)
 		{
-			WI_ERROR("particle System rquieres a material...");
+			WI_CORE_ERROR("particle System requieres a material...");
 			return;
 		}
 		if (m_Model == nullptr)
 		{
-			WI_ERROR("particle System rquieres a mesh...");
+			WI_CORE_ERROR("particle System requieres a mesh...");
 			return;
 		}
 

@@ -11,50 +11,49 @@ void Wiwa::CameraAgentSystem::OnInit()
 }
 void Wiwa::CameraAgentSystem::OnUpdate()
 {
-	if (m_DataIt.c_id != WI_INVALID_INDEX)
+	if (!getInit())
+		OnInit();
+	if (m_DataIt.c_id == WI_INVALID_INDEX)
 	{
 		m_DataIt = GetComponentIterator<CameraAgent>();
 	}
-	CameraAgent* data = nullptr;
-	data = GetComponentByIterator<CameraAgent>(m_DataIt);
-
-	if (data)
+	if (m_DataIt.c_id != WI_INVALID_INDEX)
 	{
+		CameraAgent* data = GetComponentByIterator<CameraAgent>(m_DataIt);
 		data->Position = Math::GetWorldPosition(GetTransform()->worldMatrix);
+
 	}
 }
 
 bool Wiwa::CameraAgentSystem::OnEnabledFromPool()
 {
-	if (m_DataIt.c_id != WI_INVALID_INDEX)
+	if (!getInit())
+		OnInit();
+	if (m_DataIt.c_id == WI_INVALID_INDEX)
 	{
 		m_DataIt = GetComponentIterator<CameraAgent>();
 	}
-	CameraAgent* data = nullptr;
-	data = GetComponentByIterator<CameraAgent>(m_DataIt);
-
-	if (data)
+	if (m_DataIt.c_id != WI_INVALID_INDEX)
 	{
+		CameraAgent* data = GetComponentByIterator<CameraAgent>(m_DataIt);
 		data->Active = true;
 	}
-
 	return true;
 }
 
 bool Wiwa::CameraAgentSystem::OnDisabledFromPool()
 {
-	if (m_DataIt.c_id != WI_INVALID_INDEX)
+	if (!getInit())
+		OnInit();
+	if (m_DataIt.c_id == WI_INVALID_INDEX)
 	{
 		m_DataIt = GetComponentIterator<CameraAgent>();
 	}
-	CameraAgent* data = nullptr;
-	data = GetComponentByIterator<CameraAgent>(m_DataIt);
-
-	if (data)
+	if (m_DataIt.c_id != WI_INVALID_INDEX)
 	{
+		CameraAgent* data = GetComponentByIterator<CameraAgent>(m_DataIt);
 		data->Active = false;
 	}
-
 	return true;
 }
 
