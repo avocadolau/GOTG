@@ -10,7 +10,6 @@ namespace Wiwa
 {
 	MeleePhalanxAttackState::MeleePhalanxAttackState()
 	{
-		m_TimerAttackCooldown = 0.0f;
 		m_Enemy = nullptr;
 	}
 
@@ -24,7 +23,6 @@ namespace Wiwa
 
 		enemy->m_Timer = 0;
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		m_TimerAttackCooldown = 0.0f;
 
 		NavAgent *navAgent = (NavAgent *)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent)
@@ -62,19 +60,13 @@ namespace Wiwa
 
 		if (distance > 4.0f && hasFinished)
 		{
-			m_TimerAttackCooldown = 0.0f;
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
 		else if (hasFinished)
 		{
 			animator->PlayAnimation("atack");
 			animator->getAnimator()->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
-		
-			// Reset the timer after generating the attack
-			m_TimerAttackCooldown = 0.0f;
 		}
-
-		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds(); // This is in milliseconds
 	}
 
 	void MeleePhalanxAttackState::ExitState(EnemyMeleePhalanx *enemy)
