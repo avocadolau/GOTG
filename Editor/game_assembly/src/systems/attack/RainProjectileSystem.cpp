@@ -7,6 +7,7 @@ Wiwa::RainProjectileSystem::RainProjectileSystem()
 {
 	m_BulletIt = { WI_INVALID_INDEX, WI_INVALID_INDEX };
 	m_Timer = 0.0f;
+	m_TimerCircularThunder = 0.0f;
 	m_DamageHasBeenApplied = false;
 	m_BulletSpeedStored = 1.0f;
 }
@@ -53,30 +54,87 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 
 	RainProjectile* bullet = GetComponentByIterator<RainProjectile>(m_BulletIt);
 	Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+	if (m_EntityId == EntityManager::INVALID_INDEX)
+	{
+		return;
+	}
+
 	Transform3D* transform = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(m_EntityId));
 
-	//if (m_Timer >= RAIN_BULLET_WAITINGTIME)
-	//{
-	//	//WI_INFO("timer Setting velocity");
-	//	bullet->velocity = m_BulletSpeedStored;
-	//}
-	//else
-	//{
-	//	WI_INFO("timer NOT Setting velocity");
-	//}
-
-	if (transform->localPosition.y <= 0.08f)
+	if (transform == nullptr)
 	{
-		transform->localPosition.y = 0.08f;
+		return;
 	}
-
-	if (m_Timer >= bullet->lifeTime)
-	{
-		/*bullet->lifeTime -= RAIN_BULLET_WAITINGTIME;*/
-		GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
-	}
-
+	
 	m_Timer += Time::GetDeltaTimeSeconds();
+	m_TimerCircularThunder += Time::GetDeltaTimeSeconds();
+
+	if (m_CircularThunder)
+	{
+		/*bullet->velocity = 30.0f;*/
+
+		if (m_SpawnCircularThunder == false)
+		{
+			m_CircualrThunderId = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/RainProjectile/p_boss_rain_projectile_01.wiprefab");
+
+			m_SpawnCircularThunder = true;
+		}
+
+		//----------------------
+
+		float startingAngleRadians = glm::radians(m_StartingRotationPoint);
+		
+		// Calculate the angle for the position
+		float angle = ROTATION_SPEED * static_cast<float>(m_TimerCircularThunder) * (2.0f * glm::pi<float>()) + startingAngleRadians;
+
+		// Calculate the raw x and z coordinates for the position
+		transform->localPosition.x = m_CenterPoint.x + m_RotationRadius * std::cos(angle);
+		transform->localPosition.y = 0.1;
+		transform->localPosition.z = m_CenterPoint.z + m_RotationRadius * std::sin(angle);
+
+		//------------------------
+
+		if (m_CircualrThunderId != EntityManager::INVALID_INDEX)
+		{
+			Transform3D* p_laserT = em.GetComponent<Transform3D>(m_CircualrThunderId);
+
+			if (p_laserT != nullptr)
+			{
+				p_laserT->localPosition = transform->localPosition;
+			}
+		}
+
+		if (m_Timer >= bullet->lifeTime)
+		{
+			
+			GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
+		}
+	}
+	else
+	{
+		if (transform->localPosition.y <= 0.08f)
+		{
+			transform->localPosition.y = 0.08f;
+		}
+
+		if (m_Timer >= bullet->lifeTime)
+		{
+			/*bullet->lifeTime -= RAIN_BULLET_WAITINGTIME;*/
+			GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
+		}
+	}
+
+	//if (transform->localPosition.y <= 0.08f)
+	//{
+	//	transform->localPosition.y = 0.08f;
+	//}
+
+	//if (m_Timer >= bullet->lifeTime)
+	//{
+	//	/*bullet->lifeTime -= RAIN_BULLET_WAITINGTIME;*/
+	//	GameStateManager::s_PoolManager->s_RainProjectilePool->ReturnToPool(m_EntityId);
+	//}
 }
 
 void Wiwa::RainProjectileSystem::OnDestroy()
@@ -96,7 +154,6 @@ void Wiwa::RainProjectileSystem::OnCollisionEnter(Object* body1, Object* body2)
 				RainProjectile* bullet = GetComponentByIterator<RainProjectile>(m_BulletIt);
 				GameStateManager::DamagePlayer(bullet->damage);
 
-				//GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 				m_DamageHasBeenApplied = true;
 			}
 		}	
@@ -112,14 +169,33 @@ void Wiwa::RainProjectileSystem::OnCollisionEnter(Object* body1, Object* body2)
 
 bool Wiwa::RainProjectileSystem::EnableBullet()
 {
-	RainProjectile* clusterBullet = GetComponent<RainProjectile>();
-	if (clusterBullet)
+	RainProjectile* rainProjectile = GetComponent<RainProjectile>();
+	if (rainProjectile)
 	{
+		m_CircularThunder = false;
+
 		InitRainProjectileBullet();
 	}
 
 	return true;
-	
+}
+
+bool Wiwa::RainProjectileSystem::EnableCircularThunder(BossUltron* enemy, glm::vec3 centerPoint, float startingPoint, float rotationRadius)
+{
+	RainProjectile* rainProjectile = GetComponent<RainProjectile>();
+	if (rainProjectile)
+	{
+		m_CircularThunder = true;
+
+		InitRainProjectileBullet();
+	}
+
+	BossUltronEnemy = enemy;
+	m_CenterPoint = centerPoint;
+	m_StartingRotationPoint = startingPoint;
+	m_RotationRadius = rotationRadius;
+
+	return true;
 }
 
 bool Wiwa::RainProjectileSystem::OnDisabledFromPool()
@@ -139,7 +215,9 @@ bool Wiwa::RainProjectileSystem::OnDisabledFromPool()
 	//WI_INFO("delete body");
 
 	m_Timer = 0.0f;
+	m_TimerCircularThunder = 0.0f;
 	m_DamageHasBeenApplied = false;
+	m_SpawnCircularThunder = false;
 
 	return true;
 }

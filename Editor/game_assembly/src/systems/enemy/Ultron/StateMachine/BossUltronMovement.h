@@ -3,6 +3,7 @@
 
 #define NUMBER_OF_RANDOM_ACTIONS 4
 #define ALTITUDE_THUNDERSTORM_MOVEMENT 30.0f
+#define ANGLE_OFFSET 30.0f
 
 namespace Wiwa {
 	enum class UltronAttacks
@@ -32,36 +33,51 @@ namespace Wiwa {
 		void FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec);
 		glm::vec3 GetNewPosition();
 
-		void SpawnBulletMovement(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
-		/*void SpawnBulletZigZagMovement(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);*/
+		void MovementAttack(BossUltron* enemy);
 
+		void SpawnBulletMovement(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
 		void SpawnZigZagBulletMovement(BossUltron* enemy, Wiwa::Transform3D* transform, const glm::vec3& bull_dir);
 		void SpawnClusterBulletMovement(BossUltron* enemy, const glm::vec3& bull_dir);
 		void SpawnSplashZigZagBullets(BossUltron* enemy);
 		void SpawnThunderStormMovement(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir);
+		void SpawnThunderStormCircularMovement(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir, float angle, float rotationRadius);
 
+		bool isInsideSquare(const glm::vec3& point);
 		glm::vec3 GetPositionAroundPlayer(const glm::vec3& localPosition, float distance, int index);
+		glm::vec3 GetPositionUpDownLeftRight(const glm::vec3& localPosition, float distance, int index);
 
 	private:
 		UltronAttacks m_NextAttack;
 		std::vector<glm::vec3> m_PremadePositions;
 		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_InitialPlayerPos = glm::vec3(0.0f);
 
 		const char* m_ThunderMarkPath;
 		std::vector<EntityId> m_ThunderMarkIds;
 		std::vector<glm::vec3> m_ThunderPositions;
 
+		std::vector<EntityId> m_CircularThunderMarkIds;
+		std::vector<glm::vec3> m_CircularThunderPositions;
+
+		EntityId m_CircularThunderMarkId1;
+
+		glm::vec3 m_CircularThunderPosition1 = glm::vec3(0.0f);
+
 		float m_TimerToAttack = 0.0f;
 		float m_TimerAttackOnMoving = 0.0f;
 
-		bool m_DoAttack = false;
-
 		int m_SelectMovingRandomAttack = -1;
+
+		bool m_DoAttack = false;
+		bool m_MovementAttackFinished = false;
 		bool m_IsMovingAttackSelected = false;
 		bool m_MovementAttackSelected = false;
 		bool m_ClusterMovementSpawned = false;
 		bool m_ThunderMovementMarkSpawned = false;
+		bool m_CircularThunderMovementMarkSpawned = false;
 		bool m_ThunderMovementSpawned = false;
+		bool m_CircularThunderMovementSpawned = false;
+		bool m_CircularMiddleThunder = false;
 		bool m_SplashZigZagMovementSpawned = false;
 	};
 }

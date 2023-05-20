@@ -56,7 +56,7 @@ namespace Wiwa
 
 			enemy->LookAt(playerTr->localPosition, 100.0f);
 
-			if (m_TimerToLookAtPlayer >= 1.0f) //Time to Look At player
+			if (m_TimerToLookAtPlayer >= 0.1f) //Time to Look At player
 			{
 				agent->StopAgent();
 				navAgent->autoRotate = false;

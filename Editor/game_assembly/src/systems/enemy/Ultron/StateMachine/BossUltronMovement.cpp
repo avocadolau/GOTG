@@ -73,7 +73,11 @@ namespace Wiwa
 		m_MovementAttackSelected = false;
 		m_ThunderMovementSpawned = false;
 		m_ThunderMovementMarkSpawned = false;
+		m_CircularThunderMovementSpawned = false;
+		m_CircularMiddleThunder = false;
+		m_CircularThunderMovementMarkSpawned = false;
 		m_SplashZigZagMovementSpawned = false;
+		m_MovementAttackFinished = false;
 		m_TimerAttackOnMoving = 0.0f;
 	}
 
@@ -94,159 +98,14 @@ namespace Wiwa
 
 		m_TimerAttackOnMoving += Time::GetDeltaTimeSeconds();
 
-		if (!m_DoAttack && m_TimerAttackOnMoving > 1.0f)
+		if (/*!m_DoAttack &&*/ m_TimerAttackOnMoving > 1.0f)
 		{
-			/*if (m_SelectMovingRandomAttack == -1)
-			{
-				m_IsMovingAttackSelected = true;
-				m_SelectMovingRandomAttack = RAND(0, 3);
-			}
-
-			if (m_SelectMovingRandomAttack == 0 && m_IsMovingAttackSelected == false)
-			{
-				int randomNumber123 = rand() % 3;
-				if (randomNumber123 == 0)
-				{
-					randomNumber123 = 3;
-				}
-				m_SelectMovingRandomAttack = randomNumber123;
-				m_IsMovingAttackSelected = true;
-			}
-
-			if (m_SelectMovingRandomAttack == 1 && m_IsMovingAttackSelected == false)
-			{
-				int randomNumber023 = rand() % 3;
-				if (randomNumber023 == 1)
-				{
-					randomNumber023 = 3;
-				}
-				m_SelectMovingRandomAttack = randomNumber023;
-				m_IsMovingAttackSelected = true;
-			}
-
-			if (m_SelectMovingRandomAttack == 2 && m_IsMovingAttackSelected == false)
-			{
-				int randomNumber013 = rand() % 3;
-				if (randomNumber013 == 2)
-				{
-					randomNumber013 = 3;
-				}
-				m_SelectMovingRandomAttack = randomNumber013;
-				m_IsMovingAttackSelected = true;
-			}
-
-			if (m_SelectMovingRandomAttack == 3 && m_IsMovingAttackSelected == false)
-			{
-				int randomNumber012 = rand() % 3;
-
-				m_SelectMovingRandomAttack = randomNumber012;
-				m_IsMovingAttackSelected = true;
-			}*/
-
-			if (m_IsMovingAttackSelected == false)
-			{
-				m_SelectMovingRandomAttack = RAND(0, 3);
-				/*m_SelectMovingRandomAttack = 0;*/
-
-				m_IsMovingAttackSelected = true;
-			}
-
-
-
-			switch (m_SelectMovingRandomAttack)
-			{
-			case 0:
-			{
-				//if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
-				//{
-				//	for (int i = 1; i <= 5; ++i) // Number of thunders
-				//	{
-				//		EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
-				//		m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
-				//		Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
-				//		glm::vec3 thunderPos = GetPositionAroundPlayer(playerTr->localPosition, 12.0f, i);
-				//		m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
-				//		thunderMarkTr->localPosition.x = thunderPos.x;
-				//		thunderMarkTr->localPosition.y = 0.1f;
-				//		thunderMarkTr->localPosition.z = thunderPos.z;
-				//	}
-
-				//	m_ThunderMovementMarkSpawned = true;
-				//}
-
-				//if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
-				//{
-				//	for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
-				//		em.DestroyEntity(m_ThunderMarkIds[i]);
-				//		SpawnThunderStormMovement(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
-				//	}
-
-				//	// Clear the vectors
-				//	m_ThunderMarkIds.clear();
-				//	m_ThunderPositions.clear();
-
-				//	m_ThunderMovementSpawned = true;
-				//}
-			}
-			break;
-			case 1:
-			{
-				/*glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand3 = glm::vec3(0.0f, 0.0f, 0.0f);
-				glm::vec3 rotateBulledLeftHand4 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 35);
-				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 10);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand3, 10);
-				Math::GetLeftRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulledLeftHand4, 35);
-
-				SpawnBulletMovement(enemy, selfTr, rotateBulletRightHand1);
-				SpawnBulletMovement(enemy, selfTr, rotateBulletRightHand2);
-				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand3);
-				SpawnBulletMovement(enemy, selfTr, rotateBulledLeftHand4);*/
-
-				/*m_IsMovingAttackSelected = false;*/
-			}
-			break;
-			case 2:
-			{
-				if (m_ClusterMovementSpawned == false)
-				{
-					glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
-					glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
-
-					Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 45);
-					Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 315);
-
-					SpawnClusterBulletMovement(enemy, rotateBulletRightHand1);
-					SpawnClusterBulletMovement(enemy, rotateBulletRightHand2);
-
-					/*m_IsMovingAttackSelected = false;*/
-					m_ClusterMovementSpawned = true;
-				}
-			}
-			break;
-			case 3:
-			{
-				if (m_SplashZigZagMovementSpawned == false)
-				{
-					SpawnSplashZigZagBullets(enemy);
-					m_SplashZigZagMovementSpawned = true;
-				}
-			}
-			break;
-
-			default:
-				break;
-			}
-
-			/*m_TimerAttackOnMoving = 0.0f;*/
+			MovementAttack(enemy);
 		}
 
 		if (selfTr != nullptr)
 		{
-			if ((m_ThunderMovementMarkSpawned && m_ThunderMovementSpawned) || ((!m_ThunderMovementMarkSpawned && !m_ThunderMovementSpawned)))
+			if (m_MovementAttackFinished)
 			{
 				if (Math::IsPointNear(currentDestination, selfTr->localPosition, 1.0f))
 				{
@@ -271,7 +130,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::DASH;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
@@ -362,7 +221,7 @@ namespace Wiwa
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 20) // 20 % probability
 		{
-			return UltronAttacks::BULLET_STORM; //Rain
+			return UltronAttacks::BULLET_STORM; //ThundersProblem
 		}
 		else if (randomNum <= 40) { // 20 % probability
 			return UltronAttacks::LASER_BEAM;
@@ -612,6 +471,62 @@ namespace Wiwa
 		return glm::vec3(x, ALTITUDE_THUNDERSTORM_MOVEMENT, z);
 	}
 
+	glm::vec3 Wiwa::BossUltronMovementState::GetPositionUpDownLeftRight(const glm::vec3& localPosition, float distance, int index) //Index used to mark up & down
+	{
+		
+		float offset = distance * 1.2f;
+		float angle = static_cast<float>(index) * (2.0f * glm::pi<float>()) / 5.0f;
+
+		if (index == 1) //Calcualte Down
+		{
+			float x = localPosition.x;
+			float z = localPosition.z - offset;
+
+			// Create and return the new position vector
+			return glm::vec3(x, 0.1f, z);
+		}
+		
+		if (index == 2) //Calcualte Up
+		{
+			float x = localPosition.x;
+			float z = localPosition.z + offset;
+
+			// Create and return the new position vector
+			return glm::vec3(x, 0.1f, z);
+		}
+		if (index == 3) //Calcualte Left
+		{
+			float x = localPosition.x - offset;
+			float z = localPosition.z;
+
+			// Create and return the new position vector
+			return glm::vec3(x, 0.1f, z);
+		}
+		if (index == 4) //Calcualte Right
+		{
+			float x = localPosition.x + offset;
+			float z = localPosition.z;
+
+			// Create and return the new position vector
+			return glm::vec3(x, 0.1f, z);
+		}
+	}
+
+	bool Wiwa::BossUltronMovementState::isInsideSquare(const glm::vec3& point) 
+	{
+		float minX = -19.0f;
+		float maxX = 19.0f;
+		float minZ = -19.0f;
+		float maxZ = 19.0f;
+
+		if (point.x >= minX && point.x <= maxX && point.z >= minZ && point.z <= maxZ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	void Wiwa::BossUltronMovementState::SpawnThunderStormMovement(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir)
 	{
 		if (GameStateManager::s_PoolManager->s_RainProjectilePool->getCountDisabled() <= 0)
@@ -640,7 +555,7 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
 		BossUltron* ultron = (BossUltron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
-
+	
 		bullet->direction = bull_dir;
 
 		physSys->CreateBody();
@@ -658,6 +573,209 @@ namespace Wiwa
 				p_laserT->localPosition = thunderPosition;
 				p_laserT->localPosition.y = 0;
 			}
+		}
+	}
+
+	void Wiwa::BossUltronMovementState::SpawnThunderStormCircularMovement(BossUltron* enemy, glm::vec3 thunderPosition, const glm::vec3& bull_dir, float angle, float rotationRadius)
+	{
+		if (GameStateManager::s_PoolManager->s_RainProjectilePool->getCountDisabled() <= 0)
+			return;
+
+		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
+		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
+		EntityId newBulletId = EntityManager::INVALID_INDEX;
+		newBulletId = GameStateManager::s_PoolManager->s_RainProjectilePool->GetFromPool();
+
+		if (newBulletId == EntityManager::INVALID_INDEX)
+			return;
+
+		RainProjectileSystem* bulletSys = entityManager.GetSystem<RainProjectileSystem>(newBulletId);
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+		physSys->DeleteBody();
+
+		// Set intial positions
+		Transform3D* playerTr = (Transform3D*)entityManager.GetComponentByIterator(enemy->m_PlayerTransformIt);
+		Transform3D* bulletTr = (Transform3D*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<Transform3D>(newBulletId));
+
+		if (!bulletTr || !playerTr)
+			return;
+
+		bulletTr->localPosition = thunderPosition;
+		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
+		RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
+		BossUltron* ultron = (BossUltron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
+	
+		bullet->direction = bull_dir;
+
+		/*if (enemy->m_IsCircularThunderActive)
+		{
+			bullet->velocity = 30.0f;
+		}*/
+
+		physSys->CreateBody();
+
+		bulletSys->EnableCircularThunder(enemy, m_InitialPlayerPos, angle, rotationRadius);
+	}
+
+	void Wiwa::BossUltronMovementState::MovementAttack(BossUltron* enemy)
+	{
+		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
+		Transform3D* selfTr = enemy->GetTransform();
+		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
+
+		if (m_IsMovingAttackSelected == false)
+		{
+			bool isPlayerInThunderRange = isInsideSquare(playerTr->localPosition);
+
+			if (isPlayerInThunderRange)
+			{
+				/*m_SelectMovingRandomAttack = RAND(0, 3); //ThundersProblem
+
+				m_IsMovingAttackSelected = true;*/
+
+				m_SelectMovingRandomAttack = RAND(0, 1);
+				m_IsMovingAttackSelected = true;
+			}
+			else
+			{
+				m_SelectMovingRandomAttack = RAND(0, 1);
+				/*m_SelectMovingRandomAttack = 1;*/
+
+				m_IsMovingAttackSelected = true;
+			}
+		}
+
+		switch (m_SelectMovingRandomAttack)
+		{
+		case 0:
+		{
+			if (m_SplashZigZagMovementSpawned == false)
+			{
+				SpawnSplashZigZagBullets(enemy);
+				m_SplashZigZagMovementSpawned = true;
+
+				m_MovementAttackFinished = true;
+			}
+		}
+		break;
+		case 1:
+		{
+			if (m_ClusterMovementSpawned == false)
+			{
+				glm::vec3 rotateBulletRightHand1 = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 rotateBulletRightHand2 = glm::vec3(0.0f, 0.0f, 0.0f);
+
+				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand1, 45);
+				Math::GetRightRotatedFromForward(Math::CalculateForward(selfTr->rotation), rotateBulletRightHand2, 315);
+
+				SpawnClusterBulletMovement(enemy, rotateBulletRightHand1);
+				SpawnClusterBulletMovement(enemy, rotateBulletRightHand2);
+
+				/*m_IsMovingAttackSelected = false;*/
+				m_ClusterMovementSpawned = true;
+
+				m_MovementAttackFinished = true;
+			}
+		}
+		break;
+		case 2:
+		{
+			if (m_CircularThunderMovementMarkSpawned == false && playerTr != nullptr)
+			{
+				m_InitialPlayerPos = playerTr->localPosition;
+
+				for (int i = 1; i <= 4; ++i) // Number of thunders
+				{
+					EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
+					m_CircularThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
+					Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
+					glm::vec3 thunderPos = GetPositionUpDownLeftRight(m_InitialPlayerPos, 11.0f, i);
+					m_CircularThunderPositions.push_back(thunderPos); // Add the position to the vector
+					thunderMarkTr->localPosition.x = thunderPos.x;
+					thunderMarkTr->localPosition.y = 0.1f;
+					thunderMarkTr->localPosition.z = thunderPos.z;
+				}
+
+				
+
+				m_CircularThunderMovementMarkSpawned = true;
+			}
+
+			if (m_CircularThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
+			{
+				for (int i = 0; i < m_CircularThunderMarkIds.size(); ++i)
+				{
+					em.DestroyEntity(m_CircularThunderMarkIds[i]);
+
+					float totalAngle = (90.0f * i) + ANGLE_OFFSET;
+
+					SpawnThunderStormCircularMovement(enemy, m_CircularThunderPositions[i], { 0.0f, -1.0f, 0.0f }, totalAngle, 16.0f);
+				}
+
+				// Clear the vectors
+				m_CircularThunderMarkIds.clear();
+				m_CircularThunderPositions.clear();
+
+				m_CircularThunderMarkId1 = em.LoadPrefab(m_ThunderMarkPath);
+				Transform3D* thunderMarkTr1 = em.GetComponent<Transform3D>(m_CircularThunderMarkId1);
+				m_CircularThunderPosition1 = m_InitialPlayerPos;
+				thunderMarkTr1->localPosition.x = m_CircularThunderPosition1.x;
+				thunderMarkTr1->localPosition.y = 0.1f;
+				thunderMarkTr1->localPosition.z = m_CircularThunderPosition1.z;
+
+				m_CircularThunderMovementSpawned = true;
+			}
+
+			if (m_CircularMiddleThunder == false && m_TimerAttackOnMoving > 3.0f)
+			{
+				em.DestroyEntity(m_CircularThunderMarkId1);
+				SpawnThunderStormCircularMovement(enemy, m_CircularThunderPosition1, { 0.0f, -1.0f, 0.0f }, 0.0f, 0.0f);
+
+				m_CircularMiddleThunder = true;
+
+				m_MovementAttackFinished = true;
+			}
+		}
+		break;
+		case 3:
+		{
+			if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
+			{
+				for (int i = 1; i <= 5; ++i) // Number of thunders
+				{
+					EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
+					m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
+					Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
+					glm::vec3 thunderPos = GetPositionAroundPlayer(playerTr->localPosition, 12.0f, i);
+					m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
+					thunderMarkTr->localPosition.x = thunderPos.x;
+					thunderMarkTr->localPosition.y = 0.1f;
+					thunderMarkTr->localPosition.z = thunderPos.z;
+				}
+
+				m_ThunderMovementMarkSpawned = true;
+			}
+
+			if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
+			{
+				for (int i = 0; i < m_ThunderMarkIds.size(); ++i)
+				{
+					em.DestroyEntity(m_ThunderMarkIds[i]);
+					SpawnThunderStormMovement(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
+				}
+
+				// Clear the vectors
+				m_ThunderMarkIds.clear();
+				m_ThunderPositions.clear();
+
+				m_ThunderMovementSpawned = true;
+				m_MovementAttackFinished = true;
+			}
+		}
+		break;
+
+		default:
+			break;
 		}
 	}
 }
