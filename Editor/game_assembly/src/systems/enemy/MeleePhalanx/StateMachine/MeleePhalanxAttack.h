@@ -12,12 +12,13 @@ namespace Wiwa {
 		void ExitState(EnemyMeleePhalanx* enemy) override;
 		void OnCollisionEnter(EnemyMeleePhalanx* enemy, const Object* body1, const Object* body2) override;
 		
-		void GenerateAttack(EnemyMeleePhalanx* enemy);
+		void GenerateAttack();
 
 		float m_TimerAttackCooldown = 0.0f;
 		float m_SoundTimer = 0.5f;
 		float m_SoundCurrentTime = 0.0f;
 		bool m_PlaySound = false;
+		EnemyMeleePhalanx* m_Enemy;
 	};
 }
 
