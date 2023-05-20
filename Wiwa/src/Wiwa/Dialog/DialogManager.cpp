@@ -76,34 +76,34 @@ namespace Wiwa
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_01.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonY_01.dds"))
 		{
-			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_01.dds");
+			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonY_01.dds");
 			Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 			if (continueImg) {
-				continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1500,870 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, continueImgID);
 			}
 		}
 		else
 		{
-			WI_CRITICAL("UI_SpeechTriangle_01.dds Does not exist");
+			WI_CRITICAL("UI_ButtonY_01.dds Does not exist");
 		}
 		
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_SpeechTriangle_02.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonY_02.dds"))
 		{
-			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_SpeechTriangle_02.dds");
+			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonY_02.dds");
 			Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
 			if (continueImg2) {
-				continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1400,750 }, { 512,512 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+				continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1500,870 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, continueImgID2);
 			}
 		}
 		else
 		{
-			WI_CRITICAL("UI_SpeechTriangle_02.dds Does not exist");
+			WI_CRITICAL("UI_ButtonY_02.dds Does not exist");
 		}
 		
 		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_TalkButton01.dds"))
@@ -413,11 +413,11 @@ namespace Wiwa
 
 					if (conversations[conversationNumber].isInOppositeSide == true)
 					{
-						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID2, { 1200,200 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID2, { 1350,220 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					}
 					else
 					{
-						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID2, { 1400,750 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID2, { 1500,870 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					}
 				}
 			}
@@ -430,11 +430,11 @@ namespace Wiwa
 
 					if (conversations[conversationNumber].isInOppositeSide == true)
 					{
-						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID, { 1200,200 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID, { 1350,220 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					}
 					else
 					{
-						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID, { 1400,750 }, Wiwa::Renderer2D::Pivot::UPLEFT);
+						render->UpdateInstancedQuadTexPosition(m_Scene, continueImgID, { 1500,870 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 					}
 				}
 
