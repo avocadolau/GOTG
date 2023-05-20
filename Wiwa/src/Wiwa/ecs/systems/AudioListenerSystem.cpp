@@ -40,6 +40,9 @@ namespace Wiwa {
 
 		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_Transform);
 
+		if (t3d == nullptr)
+			return;
+
 		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Math::Forward(t3d->worldMatrix), Math::Up(t3d->worldMatrix))) {
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());
 		}

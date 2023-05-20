@@ -52,12 +52,24 @@ namespace Wiwa
 
 		inline glm::vec3 Forward(const glm::mat4& transform)
 		{
+			if (glm::determinant(transform) == 0.0f)
+			{
+				// Handle the case where the matrix is not invertible
+				// Return a default forward vector or an appropriate value for your application
+				return glm::vec3(0.0f, 0.0f, 1.0f);
+			}
 			const glm::mat4 inverted = glm::inverse(transform);
 			return normalize(glm::vec3(inverted[2]));
 		}
 
 		inline glm::vec3 Up(const glm::mat4& transform)
 		{
+			if (glm::determinant(transform) == 0.0f)
+			{
+				// Handle the case where the matrix is not invertible
+				// Return a default forward vector or an appropriate value for your application
+				return glm::vec3(0.0f, 1.0f, 0.0f);
+			}
 			glm::vec3 upVector = glm::vec3(transform[1]);
 			return normalize(upVector);
 		}
