@@ -21,10 +21,7 @@ namespace Wiwa
 	void MeleePhalanxChasingState::EnterState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
-		animator->PlayAnimation("walk");
+		enemy->m_AnimatorSys->PlayAnimation("walk");
 
 		enemy->m_Timer = 0;
 	}
@@ -36,13 +33,9 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
 		float distance = glm::distance(selfTr->localPosition, playerTr->localPosition);
 
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-
-		if (agent != nullptr)
+		if (enemy->m_NavAgentSys != nullptr)
 		{
 			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
@@ -50,10 +43,10 @@ namespace Wiwa
 			offset.x = playerTr->localPosition.x + 1.1f;
 			offset.z = playerTr->localPosition.z + 1.1f;
 
-			agent->SetDestination(offset);
+			enemy->m_NavAgentSys->SetDestination(offset);
 		}
 		
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished())//&& !IsPlaying(enemy->GetEntity())
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())//&& !IsPlaying(enemy->GetEntity())
 		{
 			
 		}
@@ -68,9 +61,8 @@ namespace Wiwa
 	void MeleePhalanxChasingState::ExitState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		//animator->Blend("idle", true, true, 0.5f);
-		//animator->Pause();
+		//enemy->m_AnimatorSys->Blend("idle", true, true, 0.5f);
+		//enemy->m_AnimatorSys->Pause();
 	}
 	
 	void MeleePhalanxChasingState::OnCollisionEnter(EnemyMeleePhalanx* enemy, const Object* body1, const Object* body2)

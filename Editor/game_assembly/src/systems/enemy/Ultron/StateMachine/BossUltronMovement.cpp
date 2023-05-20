@@ -33,29 +33,25 @@ namespace Wiwa
 	void BossUltronMovementState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		//ParticleManager& pman = enemy->getScene().GetParticleManager();
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		//EntityId currentEnemy = enemy->GetEntity();
 
-		animator->PlayAnimation("A_walk");
-		animator->getAnimator()->getActiveAnimation()->setLoop(true);
+		enemy->m_AnimatorSys->PlayAnimation("A_walk");
+		enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);
 
 		//pman.EmitBatch(currentEnemy);
 
-		//animator->PlayAnimation("move", true);
+		//enemy->m_AnimatorSys->PlayAnimation("move", true);
 		m_PremadePositions.clear();
 		FillPremadePosition(enemy, m_PremadePositions);
-		if (navAgentPtr != nullptr)
+		if (enemy->m_NavAgentSys != nullptr)
 		{
 			glm::vec3 newDestination = currentDestination;
 			while (newDestination == currentDestination)
 			{
 				newDestination = GetNewPosition();
 			}
-			navAgentPtr->SetDestination(newDestination);
+			enemy->m_NavAgentSys->SetDestination(newDestination);
 			currentDestination = newDestination;
 		}
 
@@ -84,11 +80,9 @@ namespace Wiwa
 	void BossUltronMovementState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
-		//if (animator->HasFinished())
+		//if (enemy->m_AnimatorSys->HasFinished())
 		//enemy->SwitchState(enemy->m_ChasingState);
 		Transform3D* selfTr = enemy->GetTransform();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
@@ -110,7 +104,7 @@ namespace Wiwa
 				if (Math::IsPointNear(currentDestination, selfTr->localPosition, 1.0f))
 				{
 					m_DoAttack = true;
-					navAgentPtr->StopAgent();
+					enemy->m_NavAgentSys->StopAgent();
 				}
 				else
 				{
@@ -118,7 +112,7 @@ namespace Wiwa
 					if (m_TimerToAttack >= 3.0f)
 					{
 						m_DoAttack = true;
-						navAgentPtr->StopAgent();
+						enemy->m_NavAgentSys->StopAgent();
 						m_TimerToAttack = 0.0f;
 					}
 				}
@@ -147,37 +141,37 @@ namespace Wiwa
 			break;
 			case Wiwa::UltronAttacks::BULLET_STORM: //1 - 2
 			{
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_BulletStormAttackState);
 			}
 			break;
 			case Wiwa::UltronAttacks::LASER_BEAM: //1
 			{
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_LaserBeamAttackState);
 			}
 			break;
 			case Wiwa::UltronAttacks::CLUSTER_SHOTS: //1
 			{
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_ClusterShotsAttackState);
 			}
 			break;
 			case Wiwa::UltronAttacks::DASH: //1 - 2
 			{
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_DashState);
 			}
 			break;
 			case Wiwa::UltronAttacks::SECOND_DASH: //1 - 2
 			{
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_SecondDashState);
 			}
 			break;
 			case Wiwa::UltronAttacks::RAIN_PROJECTILE: //2
 			{
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_ProjectileRain);
 			}
 			break;
@@ -378,9 +372,7 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
-		animator->PlayAnimation("A_attak_bigprojetiles");
+		enemy->m_AnimatorSys->PlayAnimation("A_attak_bigprojetiles");
 
 		if (physSys != nullptr)
 		{

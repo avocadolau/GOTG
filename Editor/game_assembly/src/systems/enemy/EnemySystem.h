@@ -1,6 +1,9 @@
 #pragma once
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/utilities/Reflection.h>
+//#include <Wiwa/ecs/systems/AudioSystem.h>
+//#include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+//#include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 
 namespace Wiwa {
 	class  EnemySystem : public System {
@@ -17,6 +20,10 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_PlayerTransformIt;
 		EntityManager::ComponentIterator m_PlayerStatsIt;
 		SystemHash m_PhysicsSystemHash;
+
+		class NavAgentSystem* m_NavAgentSys = nullptr;
+		class OzzAnimationSystem* m_AnimatorSys = nullptr;
+		class AudioSystem* m_AudioSys = nullptr;
 
 		EntityId m_PlayerId;
 		EntityId m_WaveId = -1;

@@ -22,14 +22,12 @@ namespace Wiwa
 	void SubjugatorDeathState::EnterState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		//SubjugatorAudio - Death audio for the Subjugator
-		animator->PlayAnimation("death");
+		//SubjugatorAudio - Death enemy->m_AudioSys for the Subjugator
+		enemy->m_AnimatorSys->PlayAnimation("death");
 
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		if (navAgentPtr)
-			navAgentPtr->StopAgent();
+		if (enemy->m_NavAgentSys)
+			enemy->m_NavAgentSys->StopAgent();
 
 		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(enemy->GetEntity());
 		physSys->DeleteBody();
@@ -38,14 +36,12 @@ namespace Wiwa
 	void SubjugatorDeathState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		navAgentPtr->StopAgent();
+		enemy->m_NavAgentSys->StopAgent();
 		navAgent->autoRotate = false;
 
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished() && m_TimerToDie > m_TimeToDie)
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 			self->hasFinished = true;

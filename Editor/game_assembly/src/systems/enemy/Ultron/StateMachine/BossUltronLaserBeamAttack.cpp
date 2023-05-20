@@ -36,7 +36,6 @@ namespace Wiwa
 		m_ActivateLaserProtection = false;
 
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
 		m_AfterLaserBeamPosition.clear();
@@ -49,10 +48,8 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		m_TimerLaser += Time::GetDeltaTimeSeconds();
 		
@@ -60,7 +57,7 @@ namespace Wiwa
 		{
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::SMASH_INIT:
 		{
-			agent->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			navAgent->autoRotate = false;
 
 			m_TimerToRotate += Time::GetDeltaTimeSeconds();
@@ -73,8 +70,8 @@ namespace Wiwa
 				m_MoveUpwardsCounter = 0.0f;
 				m_TimerToStopDash = 0.0f;
 				m_UltronJump = false;
-				agent->StopAgent();
-				agent->RemoveAgent();
+				enemy->m_NavAgentSys->StopAgent();
+				enemy->m_NavAgentSys->RemoveAgent();
 
 				laserState = LaserState::SMASH_GO_UP;
 			}
@@ -96,10 +93,10 @@ namespace Wiwa
 
 			if (m_TimerToStopDash >= 1.2f) //Timer for the Ultron to go up
 			{
-				/*agent->RegisterWithCrowd();
-				agent->SetPosition(playerDistance);
-				agent->StopAgent();
-				agent->RemoveAgent();*/
+				/*enemy->m_NavAgentSys->RegisterWithCrowd();
+				enemy->m_NavAgentSys->SetPosition(playerDistance);
+				enemy->m_NavAgentSys->StopAgent();
+				enemy->m_NavAgentSys->RemoveAgent();*/
 
 				selfTr->localPosition.x = centerPoint.x;
 				selfTr->localPosition.z = centerPoint.z;
@@ -151,9 +148,9 @@ namespace Wiwa
 		{
 			em.DestroyEntity(m_PreSmashMarkId);
 
-			agent->RegisterWithCrowd();
-			agent->SetPosition(centerPoint);
-			agent->StopAgent();
+			enemy->m_NavAgentSys->RegisterWithCrowd();
+			enemy->m_NavAgentSys->SetPosition(centerPoint);
+			enemy->m_NavAgentSys->StopAgent();
 
 			Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -167,8 +164,8 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::MOVE_CENTER:
 		{
-			navAgentPtr->StopAgent();
-			navAgentPtr->RemoveAgent();
+			enemy->m_NavAgentSys->StopAgent();
+			enemy->m_NavAgentSys->RemoveAgent();
 
 			m_TimerLaser = 0.0f;
 			laserState = LaserState::PREPARE_LASER;
@@ -176,7 +173,7 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::PREPARE_LASER:
 		{
-			/*navAgentPtr->StopAgent();*/
+			/*enemy->m_NavAgentSys->StopAgent();*/
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
 			if (m_TimerLaser >= 1.0f)
@@ -208,19 +205,19 @@ namespace Wiwa
 			if (m_TimerLaser >= 1.0f)
 			{
 				/*navAgent->autoRotate = true;
-				navAgentPtr->StopAgent();*/
-				/*agent->StopAgent();
-				agent->RemoveAgent();*/
+				enemy->m_NavAgentSys->StopAgent();*/
+				/*enemy->m_NavAgentSys->StopAgent();
+				enemy->m_NavAgentSys->RemoveAgent();*/
 
 				em.DestroyEntity(m_LaserProtectionId);
 
 				selfTr->localPosition = GetNewPositionAfterLaser();
-				/*navAgentPtr->SetPosition(GetNewPositionAfterLaser());*/
+				/*enemy->m_NavAgentSys->SetPosition(GetNewPositionAfterLaser());*/
 				m_TimerLaser = 0.0f;
 
-				navAgentPtr->RegisterWithCrowd();
-				navAgentPtr->SetPosition(selfTr->localPosition);
-				navAgentPtr->StopAgent();
+				enemy->m_NavAgentSys->RegisterWithCrowd();
+				enemy->m_NavAgentSys->SetPosition(selfTr->localPosition);
+				enemy->m_NavAgentSys->StopAgent();
 				enemy->SwitchState(enemy->m_MovementState);	
 			}
 		}
@@ -249,9 +246,8 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
-		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("A_attak_ray");
+		enemy->m_AnimatorSys->PlayAnimation("A_attak_ray");
 
 		if (newBulletId == EntityManager::INVALID_INDEX)
 			return EntityManager::INVALID_INDEX;

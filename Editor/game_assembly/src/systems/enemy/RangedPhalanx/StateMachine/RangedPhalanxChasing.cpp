@@ -31,10 +31,9 @@ namespace Wiwa
 	void RangedPhalanxChasingState::EnterState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
         Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
         //offsetPosition = CalculateOffsetPosition(playerTr->localPosition, 50, enemy->m_RangeOfAttack * 0.8f);
-		animator->PlayAnimation("walk");
+		enemy->m_AnimatorSys->PlayAnimation("walk");
 
         //m_HasTargetPoint = false;
         m_TargetPoint = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -54,17 +53,16 @@ namespace Wiwa
         EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
         
         float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
-        Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-        if (agent != nullptr)
+        if (enemy->m_NavAgentSys != nullptr)
         {
             m_TargetPoint = playerTr->localPosition;
-            agent->SetDestination(m_TargetPoint);
+            enemy->m_NavAgentSys->SetDestination(m_TargetPoint);
         }
 
-        if (distanceToPlayer < stats->range && agent->Raycast(selfTr->localPosition, playerTr->localPosition))
+        if (distanceToPlayer < stats->range && enemy->m_NavAgentSys->Raycast(selfTr->localPosition, playerTr->localPosition))
         {
-            agent->StopAgent();
+            enemy->m_NavAgentSys->StopAgent();
             enemy->SwitchState(enemy->m_AttackingState);
         }
 

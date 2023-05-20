@@ -20,13 +20,11 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		navAgent->agentSliding = true;
 
-		animator->PlayAnimation("walk"); //AnimacionSentinel
+		enemy->m_AnimatorSys->PlayAnimation("walk"); //AnimacionSentinel
 
 		enemy->m_TimerSentinel = 0;
 	}
@@ -38,19 +36,16 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-
-		if (agent != nullptr)
+		if (enemy->m_NavAgentSys != nullptr)
 		{
 			Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-			agent->SetDestination(playerTr->localPosition);
+			enemy->m_NavAgentSys->SetDestination(playerTr->localPosition);
 		}
 
-		//if (animator->getAnimator()->getActiveAnimation()->HasFinished())//&& !IsPlaying(enemy->GetEntity())
+		//if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())//&& !IsPlaying(enemy->GetEntity())
 		//{
 		//	//SentinelAudio
 		//	/*PlaySound(ScriptEngine::CreateString("melee_moving"), enemy->m_PlayerId);*/
@@ -66,9 +61,8 @@ namespace Wiwa
 	void SentinelChasingState::ExitState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		//animator->Blend("idle", true, true, 0.5f);
-		//animator->Pause();
+		//enemy->m_AnimatorSys->Blend("idle", true, true, 0.5f);
+		//enemy->m_AnimatorSys->Pause();
 	}
 
 	void SentinelChasingState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)

@@ -2,7 +2,6 @@
 #include "Wiwa/ecs//Systems.h"
 
 #include <Wiwa/utilities/Reflection.h>
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
 
 namespace Wiwa {
 	class  OneTimeDialogSystem : public System {

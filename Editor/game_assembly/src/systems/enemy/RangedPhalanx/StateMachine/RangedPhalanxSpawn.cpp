@@ -20,22 +20,19 @@ namespace Wiwa
 	void RangedPhalanxSpawnState::EnterState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 
-		audio->PlayAudio("spawn");
+		enemy->m_AudioSys->PlayAudio("spawn");
 		EntityId currentEnemy = enemy->GetEntity();
-		animator->PlayAnimation("spawn");
+		enemy->m_AnimatorSys->PlayAnimation("spawn");
 	}
 
 	void RangedPhalanxSpawnState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		navAgent->autoRotate = true;
-		//if (animator->HasFinished())
+		//if (enemy->m_AnimatorSys->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

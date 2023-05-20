@@ -20,25 +20,22 @@ namespace Wiwa
 	void SentinelSpawnState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EntityId currentEnemy = enemy->GetEntity();
 
 		//SentinelParticles - Spawn Particles
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-		audio->PlayAudio("sentinel_spawn");
+		enemy->m_AudioSys->PlayAudio("sentinel_spawn");
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		navAgent->agentSliding = true;
 
-		animator->PlayAnimation("spawn"); //AnimacionSentinel
+		enemy->m_AnimatorSys->PlayAnimation("spawn"); //AnimacionSentinel
 	}
 
 	void SentinelSpawnState::UpdateState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

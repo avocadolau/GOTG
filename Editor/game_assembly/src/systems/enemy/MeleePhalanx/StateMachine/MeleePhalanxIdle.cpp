@@ -24,10 +24,7 @@ namespace Wiwa
 	void MeleePhalanxIdleState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
-		animator->PlayAnimation("idle");
+		enemy->m_AnimatorSys->PlayAnimation("idle");
 
 		if (enemy->m_Timer > 2)
 		{

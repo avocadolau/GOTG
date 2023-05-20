@@ -26,7 +26,7 @@ namespace Wiwa
 
 		
 
-		/*animator->PlayAnimation("idle", true);*/ //AnimacionSentinel
+		/*enemy->m_AnimatorSys->PlayAnimation("idle", true);*/ //AnimacionSentinel
 
 		if (enemy->m_TimerSentinel > 2)
 		{

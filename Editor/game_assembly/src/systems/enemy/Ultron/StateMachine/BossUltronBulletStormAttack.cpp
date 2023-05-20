@@ -25,22 +25,20 @@ namespace Wiwa
 	void BossUltronBulletStormAttackState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent != nullptr)
 		{
 			navAgent->autoRotate = false;
 		}
 
-		animator->PlayAnimation("A_attack_shot");
-		animator->getAnimator()->getActiveAnimation()->setLoop(true);
+		enemy->m_AnimatorSys->PlayAnimation("A_attack_shot");
+		enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);
 	}
 
 	void BossUltronBulletStormAttackState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
 		m_TimerRoundCooldown += Time::GetDeltaTimeSeconds();
@@ -48,7 +46,7 @@ namespace Wiwa
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_ThirdPatternAttackTimer += Time::GetDeltaTimeSeconds();
 
-		/*navAgentPtr->StopAgent();*/
+		/*enemy->m_NavAgentSys->StopAgent();*/
 		enemy->LookAt(playerTr->localPosition, 80.0f);
 
 		if (IsFirstPatternFinished() == false)
@@ -79,7 +77,7 @@ namespace Wiwa
 			{
 				if (m_RoundCounter == 0)
 				{
-					navAgentPtr->SetDestination(glm::vec3(0.0f, 0.0f, 0.0f));
+					enemy->m_NavAgentSys->SetDestination(glm::vec3(0.0f, 0.0f, 0.0f));
 				}
 
 				m_TimerRoundCooldown = 0.0f;
@@ -100,17 +98,17 @@ namespace Wiwa
 				{
 					if (m_RoundCounter == 1)
 					{
-						navAgentPtr->SetDestination(glm::vec3(6.0f, 0.0f, -4.0f));
+						enemy->m_NavAgentSys->SetDestination(glm::vec3(6.0f, 0.0f, -4.0f));
 					}
 
 					else if (m_RoundCounter == 2)
 					{
-						navAgentPtr->SetDestination(glm::vec3(0.0f, 0.0f, 6.0f));
+						enemy->m_NavAgentSys->SetDestination(glm::vec3(0.0f, 0.0f, 6.0f));
 					}
 
 					else if (m_RoundCounter == 3)
 					{
-						navAgentPtr->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
+						enemy->m_NavAgentSys->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
 					}
 
 					SelectRandomAttack(enemy);

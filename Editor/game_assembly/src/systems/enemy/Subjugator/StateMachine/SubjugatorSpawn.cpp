@@ -19,24 +19,21 @@ namespace Wiwa
 	void SubjugatorSpawnState::EnterState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
 		EntityId currentEnemy = enemy->GetEntity();
 	
 		//SubjugatorParticles - Spawn Particles
-		//SubjugatorAudio - Spawn Audio
-		animator->PlayAnimation("spawn");
+		//SubjugatorAudio - Spawn enemy->m_AudioSys
+		enemy->m_AnimatorSys->PlayAnimation("spawn");
 	}
 
 	void SubjugatorSpawnState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		navAgent->autoRotate = true;
 
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 

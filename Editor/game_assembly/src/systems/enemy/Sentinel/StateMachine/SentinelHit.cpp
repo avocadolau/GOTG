@@ -20,24 +20,20 @@ namespace Wiwa
 	void SentinelHitState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-
-	/*	Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+	/*	Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", true);
 		}*/
 
-		audio->PlayAudio("sentinel_hit");
-		animator->PlayAnimation("hit"); //AnimacionSentinel
+		enemy->m_AudioSys->PlayAudio("sentinel_hit");
+		enemy->m_AnimatorSys->PlayAnimation("hit"); //AnimacionSentinel
 	}
 
 	void SentinelHitState::UpdateState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
@@ -46,8 +42,7 @@ namespace Wiwa
 	void SentinelHitState::ExitState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", false);

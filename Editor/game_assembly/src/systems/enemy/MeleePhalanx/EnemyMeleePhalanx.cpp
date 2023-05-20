@@ -39,7 +39,6 @@ namespace Wiwa
 
 	void EnemyMeleePhalanx::OnInit()
 	{
-
 		if (!getAwake())
 			System::Awake();
 

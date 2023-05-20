@@ -23,23 +23,20 @@ namespace Wiwa
 	void RangedPhalanxHitState::EnterState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", true);
 		}*/
-		animator->PlayAnimation("damage");
+		enemy->m_AnimatorSys->PlayAnimation("damage");
 
-		audio->PlayAudio("ranged_dead");
+		enemy->m_AudioSys->PlayAudio("ranged_dead");
 	}
 
 	void RangedPhalanxHitState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
@@ -48,8 +45,7 @@ namespace Wiwa
 	void RangedPhalanxHitState::ExitState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(animator->getAnimator()->GetMaterial());
+		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", false);

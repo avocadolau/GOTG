@@ -24,31 +24,28 @@ namespace Wiwa
 	void SentinelAttackState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		/*Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);*/
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		navAgent->agentSliding = false;
 
-		animator->PlayAnimation("atackdeath");
+		enemy->m_AnimatorSys->PlayAnimation("atackdeath");
 	}
 
 	void SentinelAttackState::UpdateState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		//Character* stats = (Character*)em.GetComponentByIterator(enemy->m_StatsIt);
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		if (glm::distance(selfTr->localPosition, playerTr->localPosition) < 2.0f)
 		{
 			navAgent->stoppingDistance = 1.0f;
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 		}
 
 		float dt = Time::GetDeltaTimeSeconds();

@@ -46,10 +46,17 @@ namespace Wiwa
 		m_WasSpawnedBySpawner = false;
 
 		m_PhysicsSystemHash = FNV1A_HASH("PhysicsSystem");
+
+		m_NavAgentSys = nullptr;
+		m_AnimatorSys = nullptr;
+		m_AudioSys = nullptr;
 	}
 
 	EnemySystem::~EnemySystem()
 	{
+		m_NavAgentSys = nullptr;
+		m_AnimatorSys = nullptr;
+		m_AudioSys = nullptr;
 	}
 
 	void EnemySystem::OnAwake()
@@ -75,7 +82,13 @@ namespace Wiwa
 		EnemyState* self = GetComponentByIterator<EnemyState>(m_EnemyStateIt);
 		Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
 		AudioSource* audio = GetComponentByIterator<AudioSource>(m_AudioSourceIt);
-	
+
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+
+		m_NavAgentSys = em.GetSystem<Wiwa::NavAgentSystem>(m_EntityId);
+		m_AnimatorSys = em.GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
+		m_AudioSys = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+
 		self->currentRotation = transform->localRotation;
 	}
 

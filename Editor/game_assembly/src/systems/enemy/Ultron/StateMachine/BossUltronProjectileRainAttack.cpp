@@ -23,10 +23,6 @@ void Wiwa::BossUltronProjectileRainAttackState::EnterState(BossUltron* enemy)
 	m_RainProjectileCounter = 0;
 	m_RainState = ProjectileRainState::PREPARE_RAIN;
 	Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-	//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-	//ParticleManager& pman = enemy->getScene().GetParticleManager();
-	//Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-	//EntityId currentEnemy = enemy->GetEntity();
 
 	
 	NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -39,7 +35,7 @@ void Wiwa::BossUltronProjectileRainAttackState::EnterState(BossUltron* enemy)
 
 	//pman.EmitBatch(currentEnemy);
 
-	//animator->PlayAnimation("spawn", false);
+	//enemy->m_AnimatorSys->PlayAnimation("spawn", false);
 }
 
 void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
@@ -54,9 +50,7 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 
 		//Posar anim de preparacio
 
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-
-		navAgentPtr->StopAgent();
+		enemy->m_NavAgentSys->StopAgent();
 
 		m_RainState = ProjectileRainState::RAIN_ATTACK;
 		m_TimerRain = 0.0f;
