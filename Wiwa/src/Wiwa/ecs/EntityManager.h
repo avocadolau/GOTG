@@ -241,7 +241,7 @@ namespace Wiwa
 		template <class T>
 		T* GetComponent(EntityId entityId);
 
-		byte* GetComponentByIterator(ComponentIterator c_it) { return m_Components[c_it.c_id] + c_it.c_index * c_it.c_size; }
+		byte* GetComponentByIterator(ComponentIterator c_it);
 
 		ComponentIterator GetComponentIterator(EntityId eid, ComponentHash c_hash);
 		template<class T>
