@@ -11,6 +11,7 @@ namespace Wiwa
 		m_LastWave = WI_INVALID_INDEX;
 
 		m_HasWave = false;
+		m_SpawnedWavesCounter = 0;
 		m_TimerBetweenWaves = 0.0f;
 		m_TimerForNextWave = 0.0f;
 		m_StopUpdating = false;
@@ -28,7 +29,6 @@ namespace Wiwa
 	void WaveSpawnerSystem::OnInit()
 	{
 		m_EnemySpawnerIt = GetComponentIterator<WaveSpawner>();
-		//m_TransformIt = GetComponentIterator<Transform3D>();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 
 		// Retreive data from enemy manager table
@@ -70,9 +70,8 @@ namespace Wiwa
 
 		m_Action = QueryActiveWaves();
 
-		if (m_TimerForNextWave >= enemySpawner->waveChangeRate)
+		if (m_TimerForNextWave >= enemySpawner->waveChangeRate && m_Action != Wiwa::WaveSpawnerAction::END_SPAWNER)
 		{
-			//WI_INFO("--------- ACTION: SPAWN A WAVE (TIMER) --------- ");
 			m_Action = WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
@@ -108,9 +107,13 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		WaveSpawner* enemySpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		
+		if (m_SpawnedWavesCounter >= enemySpawner->maxWaveCount)
+		{
+			return WaveSpawnerAction::END_SPAWNER;
+		}
+
 		if (enemySpawner->hasTriggered == false)
 		{
-			//WI_INFO("--------- ACTION: SPAWN A WAVE (FIRST) --------- ");
 			return WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
@@ -130,36 +133,13 @@ namespace Wiwa
 		//WI_INFO("Has Had All Waves: {}", HasHadAllWaves(*enemySpawner));
 		//WI_INFO("Has triggered: {}", enemySpawner->hasTriggered);
 
-		if (wavesFinished >= enemySpawner->maxWaveCount && HasHadAllWaves(*enemySpawner) && enemySpawner->hasTriggered)
+		
+		if (wavesFinished == m_WavesIds.size() && wavesFinished < enemySpawner->maxWaveCount)
 		{
-			/*WI_INFO("--------- ACTION: ENDDDDDDDDDDDDDDDDDD --------- ");*/
-			return WaveSpawnerAction::END_SPAWNER;
-		}
-		else if (wavesFinished == m_WavesIds.size() && wavesFinished < enemySpawner->maxWaveCount)
-		{
-			//WI_INFO("--------- ACTION: SPAWN ANOTHER WAVE --------- ");
 			return WaveSpawnerAction::SPAWN_A_WAVE;
 		}
 
 		return WaveSpawnerAction::DO_NOTHING;
-	}
-
-	bool WaveSpawnerSystem::IsWaveFinished(const Wiwa::Wave& wave)
-	{
-		//// Finish terminated waves
-		//if (wave.hasFinished)
-		//{
-		//	m_WavesIts = { WI_INVALID_INDEX, WI_INVALID_INDEX };
-
-		//	Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-		//	Wiwa::EntityManager& em = _scene->GetEntityManager();
-
-		//	// Delete the wave entity entirely
-		//	em.DestroyEntity(m_WavesIds);
-		//	return false;
-		//}
-		//return true;
-		return false;
 	}
 
 	void WaveSpawnerSystem::SpawnWave()
@@ -202,6 +182,7 @@ namespace Wiwa
 		m_HasWave = false;
 		m_TimerForNextWave = 0.0f;
 		m_TimerBetweenWaves = 0.0f;
+		m_SpawnedWavesCounter++;
 	}
 }
 
