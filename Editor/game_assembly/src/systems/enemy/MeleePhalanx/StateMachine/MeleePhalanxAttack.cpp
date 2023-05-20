@@ -30,33 +30,28 @@ namespace Wiwa
 			navAgent->autoRotate = false;
 		}
 
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-
-		navAgentPtr->StopAgent();
+		enemy->m_NavAgentSys->StopAgent();
 		m_SoundCurrentTime = 0.0f;
 
-		Wiwa::OzzAnimationSystem* animatorSys = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = animatorSys->getAnimator();
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 		OzzAnimation* animation = animator->getAnimationByName("atack");
 		animation->addKeyAction({ &MeleePhalanxAttackState::GenerateAttack, this }, 0.6f);
 
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
-		animator->PlayAnimation("atack");
+		enemy->m_AnimatorSys->PlayAnimation("atack");
 		animator->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
 	}
 
 	void MeleePhalanxAttackState::UpdateState(EnemyMeleePhalanx *enemy)
 	{
 		Wiwa::EntityManager &em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(enemy->m_TransformIt);
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		enemy->LookAt(playerTr->localPosition, 30.f);
 		float distance = glm::distance(selfTr->localPosition, playerTr->localPosition);
-		bool hasFinished = animator->getAnimator()->getActiveAnimation()->HasFinished();
+		bool hasFinished = enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished();
 
 		if (distance > 4.0f && hasFinished)
 		{
@@ -64,8 +59,8 @@ namespace Wiwa
 		}
 		else if (hasFinished)
 		{
-			animator->PlayAnimation("atack");
-			animator->getAnimator()->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
+			enemy->m_AnimatorSys->PlayAnimation("atack");
+			enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
 		}
 	}
 
@@ -80,8 +75,7 @@ namespace Wiwa
 
 		m_Enemy = nullptr;
 
-		Wiwa::OzzAnimationSystem* animatorSys = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = animatorSys->getAnimator();
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 		OzzAnimation* animation = animator->getAnimationByName("atack");
 		animation->removeKeyAction({ &MeleePhalanxAttackState::GenerateAttack, this });
 	}
@@ -96,8 +90,6 @@ namespace Wiwa
 			return;
 
 		Wiwa::EntityManager &em = m_Enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(m_Enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_Enemy->GetEntity());
 
 		Transform3D *playerTr = (Transform3D *)em.GetComponentByIterator(m_Enemy->m_PlayerTransformIt);
 		Transform3D *selfTr = (Transform3D *)em.GetComponentByIterator(m_Enemy->m_TransformIt);
@@ -107,7 +99,7 @@ namespace Wiwa
 		if (stats != nullptr && distance <= 3.0f)
 		{
 			GameStateManager::DamagePlayer(stats->damage);
-			audio->PlayAudio("melee_attack");
+			m_Enemy->m_AudioSys->PlayAudio("melee_attack");
 		}
 	}
 }

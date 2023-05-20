@@ -24,7 +24,7 @@ namespace Wiwa
 
 		EntityId currentEnemy = enemy->GetEntity();
 
-		//animator->PlayAnimation("");
+		//enemy->m_AnimatorSys->PlayAnimation("");
 		//play particles
 		//play Animation		
 	}
@@ -32,11 +32,10 @@ namespace Wiwa
 	void BossUltronSpawnState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		
 		// when animation finishes, pass to the movement state
 		
-		/*if (animator->HasFinished())*/
+		/*if (enemy->m_AnimatorSys->HasFinished())*/
 		enemy->SwitchState(enemy->m_MovementState);
 	}
 

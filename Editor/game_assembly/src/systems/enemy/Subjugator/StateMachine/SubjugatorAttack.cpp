@@ -31,8 +31,6 @@ namespace Wiwa
 	void SubjugatorAttackState::EnterState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent) 
 		{
@@ -51,7 +49,6 @@ namespace Wiwa
 		
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* hand1Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand1It);
 		Transform3D* hand2Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand2It);
 		Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);
@@ -70,7 +67,7 @@ namespace Wiwa
 			m_TimerAttackCooldown = 0.0f;
 		}
 
-		if (dist2Player > stats->range || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
+		if (dist2Player > stats->range || enemy->m_NavAgentSys->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
@@ -99,9 +96,7 @@ namespace Wiwa
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
-		Wiwa::OzzAnimationSystem* anim = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = anim->getAnimator();
-
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 
 		WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
@@ -118,8 +113,8 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
 
-		animator->PlayAnimation("walk");
-		animator->PlayAnimation("atack", 0.228f);
+		enemy->m_AnimatorSys->PlayAnimation("walk");
+		enemy->m_AnimatorSys->PlayAnimation("atack");
 
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		Subjugator* subjugator = (Subjugator*)entityManager.GetComponentByIterator(enemy->m_Subjugator);
@@ -143,8 +138,7 @@ namespace Wiwa
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ZigZagBulletPool->GetFromPool();
 		ZigZagBulletSystem* bulletSys = entityManager.GetSystem<ZigZagBulletSystem>(newBulletId);
-		Wiwa::OzzAnimationSystem* anim = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = anim->getAnimator();
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 
 		WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
@@ -161,8 +155,8 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
 
-		animator->PlayAnimation("walk");
-		animator->PlayAnimation("atack", 0.228f);
+		enemy->m_AnimatorSys->PlayAnimation("walk");
+		enemy->m_AnimatorSys->PlayAnimation("atack");
 
 		ZigZagBullet* bullet = (ZigZagBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ZigZagBullet>(newBulletId));
 		Subjugator* subjugator = (Subjugator*)entityManager.GetComponentByIterator(enemy->m_Subjugator);
@@ -178,12 +172,10 @@ namespace Wiwa
 	void SubjugatorAttackState::SelectRandomBulletSpawn(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* hand1Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand1It);
 		Transform3D* hand2Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand2It);
 		Transform3D* hand3Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand3It);

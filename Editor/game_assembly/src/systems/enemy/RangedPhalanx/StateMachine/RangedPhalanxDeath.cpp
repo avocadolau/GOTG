@@ -22,17 +22,13 @@ namespace Wiwa
 	void RangedPhalanxDeathState::EnterState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-
-		audio->PlayAudio("ranged_dead");
+		enemy->m_AudioSys->PlayAudio("ranged_dead");
 		
-		animator->PlayAnimation("death");
+		enemy->m_AnimatorSys->PlayAnimation("death");
 		m_TimerToDie = 0.0f;
 
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		if (navAgentPtr)
-			navAgentPtr->StopAgent();
+		if (enemy->m_NavAgentSys)
+			enemy->m_NavAgentSys->StopAgent();
 
 		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(enemy->GetEntity());
 		physSys->DeleteBody();
@@ -41,14 +37,12 @@ namespace Wiwa
 	void RangedPhalanxDeathState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
-		navAgentPtr->StopAgent();
+		enemy->m_NavAgentSys->StopAgent();
 		navAgent->autoRotate = false;
 
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished() && m_TimerToDie > m_TimeToDie)
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished() && m_TimerToDie > m_TimeToDie)
 		{
 			EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 			self->hasFinished = true;

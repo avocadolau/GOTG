@@ -2,7 +2,6 @@
 #include <Wiwa/ecs/systems/System.h>
 #include <Wiwa/utilities/Reflection.h>
 #include <Wiwa\ecs\systems\PhysicsSystem.h>
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/audio/Audio.h>
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>

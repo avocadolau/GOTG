@@ -46,14 +46,13 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		switch (m_State)
 		{
 		case Wiwa::BossUltronDashState::DashState::DASH_INIT:
 		{
-			agent->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			navAgent->autoRotate = false;
 
 			m_TimerToRotate += Time::GetDeltaTimeSeconds();
@@ -68,8 +67,8 @@ namespace Wiwa
 				m_MoveUpwardsCounter = 0.0f;
 				m_TimerToStopDash = 0.0f;
 				m_UltronJump = false;
-				agent->StopAgent();
-				agent->RemoveAgent();
+				enemy->m_NavAgentSys->StopAgent();
+				enemy->m_NavAgentSys->RemoveAgent();
 
 				playerDistance.x = playerDistance.x + 2.0f;
 				playerDistance.z = playerDistance.z + 2.0f;
@@ -94,10 +93,10 @@ namespace Wiwa
 
 			if (m_TimerToStopDash >= 1.2f) //Timer for the Ultron to go up
 			{
-				/*agent->RegisterWithCrowd();
-				agent->SetPosition(playerDistance);
-				agent->StopAgent();
-				agent->RemoveAgent();*/
+				/*enemy->m_NavAgentSys->RegisterWithCrowd();
+				enemy->m_NavAgentSys->SetPosition(playerDistance);
+				enemy->m_NavAgentSys->StopAgent();
+				enemy->m_NavAgentSys->RemoveAgent();*/
 
 				selfTr->localPosition.x = playerDistance.x;
 				selfTr->localPosition.z = playerDistance.z;
@@ -138,9 +137,9 @@ namespace Wiwa
 		{
 			em.DestroyEntity(m_PreSmashMarkId);
 
-			agent->RegisterWithCrowd();
-			agent->SetPosition(playerDistance);
-			agent->StopAgent();
+			enemy->m_NavAgentSys->RegisterWithCrowd();
+			enemy->m_NavAgentSys->SetPosition(playerDistance);
+			enemy->m_NavAgentSys->StopAgent();
 
 			Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
@@ -191,7 +190,6 @@ namespace Wiwa
 	void BossUltronDashState::ExitState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 	}
 
 	void BossUltronDashState::OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2)

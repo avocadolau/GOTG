@@ -22,7 +22,6 @@ namespace Wiwa
 	void BossUltronClusterShotsAttackState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent != nullptr)
@@ -30,7 +29,7 @@ namespace Wiwa
 			navAgent->autoRotate = false;
 		}
 
-		navAgentPtr->StopAgent();
+		enemy->m_NavAgentSys->StopAgent();
 
 		m_TimerBetweenBullet = 0.0f;
 		m_TimerToLookAtPlayer = 0.0f;
@@ -43,7 +42,6 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		m_TimerBetweenBullet += Time::GetDeltaTimeSeconds();
 		m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
@@ -52,7 +50,7 @@ namespace Wiwa
 		{
 		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::FIRST_ATTACK:
 		{
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
@@ -76,7 +74,7 @@ namespace Wiwa
 		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::SECOND_ATTACK:
 		{
 
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
@@ -99,7 +97,7 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::THIRD_ATTACK:
 		{
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
@@ -122,7 +120,7 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::FOURTH_ATTACK:
 		{
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
@@ -145,7 +143,7 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::FIFTH_ATTACK:
 		{
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
@@ -168,7 +166,7 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronClusterShotsAttackState::ClusterState::SIXTH_ATTACK:
 		{
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->StopAgent();
 			//Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 			Transform3D* gunTr = (Transform3D*)em.GetComponentByIterator(enemy->m_GunTransformIt);
 
@@ -220,9 +218,8 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("A_attak_bigprojetiles");
+		enemy->m_AnimatorSys->PlayAnimation("A_attak_bigprojetiles");
 
 		if (physSys != nullptr)
 		{

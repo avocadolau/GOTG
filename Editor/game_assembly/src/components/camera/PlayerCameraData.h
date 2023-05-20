@@ -12,6 +12,7 @@ namespace Wiwa
 		float MaxCombatFOV;
 		float MinCombatFOV;
 		float CombatVelocity;
+		float ZoomSensitivity;
 	};
 }
 
@@ -22,4 +23,5 @@ REFLECTION_BEGIN(Wiwa::PlayerCameraData)
 	REFLECT_MEMBER(MaxCombatFOV)
 	REFLECT_MEMBER(MinCombatFOV)
 	REFLECT_MEMBER(CombatVelocity)
+	REFLECT_MEMBER(ZoomSensitivity)
 REFLECTION_END;

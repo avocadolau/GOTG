@@ -17,15 +17,13 @@ namespace Wiwa {
 	private:
 		EntityManager::ComponentIterator m_EnemySpawnerIt;
 		std::vector<EntityManager::ComponentIterator> m_WavesIts;
-		//EntityManager::ComponentIterator m_TransformIt;
 		std::vector<EntityId> m_WavesIds;
 		EntityId m_LastWave;
 
+		int m_SpawnedWavesCounter = 0;
 		float m_TimerBetweenWaves = 0.0f;
 		float m_TimerForNextWave = 0.0f;
 		bool m_HasWave = false;
-		/*int maxWavesCounter = 0;
-		int currentWavesCounter = 0;*/
 		bool m_StopUpdating = false;
 		WaveSpawnerAction m_Action = WaveSpawnerAction::DO_NOTHING;
 	public:
@@ -39,8 +37,6 @@ namespace Wiwa {
 		void OnUpdate() override;
 
 		WaveSpawnerAction QueryActiveWaves();
-
-		bool IsWaveFinished(const Wiwa::Wave& wave);
 
 		inline bool HasHadAllWaves(const WaveSpawner& enemySpawner) { return enemySpawner.currentWaveCount >= enemySpawner.maxWaveCount; };
 

@@ -121,7 +121,6 @@ namespace Wiwa
 		EnemySystem::ReceiveDamage(damage);
 		SwitchState(m_HitState);
 		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
 
 		EntityId hit_1 = em.GetChildByName(m_EntityId, "E_Hit_1");
 		EntityId hit_2 = em.GetChildByName(m_EntityId, "E_Hit_2");
@@ -130,7 +129,7 @@ namespace Wiwa
 		pman.EmitBatch(hit_2);
 
 
-		animator->PlayAnimation("hit", false);*/
+		enemy->m_AnimatorSys->PlayAnimation("hit", false);*/
 		//PlaySound(ScriptEngine::CreateString("melee_hit"), m_PlayerId);
 	}
 

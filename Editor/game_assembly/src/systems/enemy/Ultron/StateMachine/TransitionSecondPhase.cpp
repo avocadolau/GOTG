@@ -38,13 +38,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		Health* stats = (Health*)em.GetComponentByIterator(enemy->m_Health);
-
-		
-		
 
 		switch (m_SecondPhaseState)
 		{
@@ -52,8 +48,8 @@ namespace Wiwa
 		{
 			glm::vec3 m_CenterPositionBoss = { 0.0f, 7.0f,0.0f };
 			glm::vec3 m_CenterPositionRegenWall = { 0.0f, 13.0f,0.0f };
-			navAgentPtr->StopAgent();
-			navAgentPtr->RemoveAgent();
+			enemy->m_NavAgentSys->StopAgent();
+			enemy->m_NavAgentSys->RemoveAgent();
 			selfTr->localPosition = m_CenterPositionBoss;
 
 			m_RegenWallPrefabId = em.LoadPrefab(m_WallPrefabPath);
@@ -126,9 +122,9 @@ namespace Wiwa
 			em.DestroyEntity(m_RegenWallPrefabId);
 
 			selfTr->localPosition = GetNewPositionAfterRegen();
-			navAgentPtr->RegisterWithCrowd();
-			navAgentPtr->SetPosition(selfTr->localPosition);
-			navAgentPtr->StopAgent();
+			enemy->m_NavAgentSys->RegisterWithCrowd();
+			enemy->m_NavAgentSys->SetPosition(selfTr->localPosition);
+			enemy->m_NavAgentSys->StopAgent();
 
 			enemy->SwitchState(enemy->m_MovementState);
 		}

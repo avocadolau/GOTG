@@ -144,7 +144,6 @@ namespace Wiwa
 		EnemySystem::ReceiveDamage(damage);
 		SwitchState(m_HitState);
 		/*Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
 
 		EntityId hitR_1 = em.GetChildByName(m_EntityId, "ER_Hit_1");
 		EntityId hitR_2 = em.GetChildByName(m_EntityId, "ER_Hit_2");
@@ -152,7 +151,7 @@ namespace Wiwa
 		pman.EmitBatch(hitR_1);
 		pman.EmitBatch(hitR_2);
 
-		animator->PlayAnimation("damage", false);*/
+		enemy->m_AnimatorSys->PlayAnimation("damage", false);*/
 	}
 
 	void EnemySubjugator::SwitchState(SubjugatorBaseState* state)

@@ -22,15 +22,13 @@ namespace Wiwa
 	void BossUltronSecondDashState::EnterState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 		if (navAgent != nullptr)
 		{
 			navAgent->autoRotate = false;
 		}
 
-		navAgentPtr->StopAgent();
+		enemy->m_NavAgentSys->StopAgent();
 
 		m_SpawnDashEffect = true;
 		m_CollisionWall = false;
@@ -45,7 +43,6 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
 
 		switch (m_SecondDashState)
@@ -58,7 +55,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 0.1f) //Time to Look At player
 			{
-				agent->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 				navAgent->autoRotate = false;
 
 				m_TimerToLookAtPlayer = 0.0f;
@@ -77,12 +74,12 @@ namespace Wiwa
 			//First Play Animation
 			if (m_SpawnDashEffect)
 			{
-				agent->StopAgent();
+				enemy->m_NavAgentSys->StopAgent();
 
 				SpawnDashEffect(enemy, CalculateForward(*gunTr));
 
 				/*glm::vec3 outOfScene = glm::vec3(100.0f, 100.0f, 100.0f);*/
-				agent->RemoveAgent();
+				enemy->m_NavAgentSys->RemoveAgent();
 
 				selfTr->localPosition.x = 100.0f;
 	
@@ -98,8 +95,8 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronSecondDashState::SecondDashState::END_DASH:
 		{
-			/*agent->RegisterWithCrowd();
-			agent->StopAgent();*/
+			/*enemy->m_NavAgentSys->RegisterWithCrowd();
+			enemy->m_NavAgentSys->StopAgent();*/
 			navAgent->autoRotate = true;
 
 		/*	m_TimerAfterDash += Time::GetDeltaTimeSeconds();
@@ -145,9 +142,8 @@ namespace Wiwa
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 		Wiwa::SecondDashSystem* dashSystem = entityManager.GetSystem<Wiwa::SecondDashSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		Wiwa::OzzAnimationSystem* animator = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 
-		animator->PlayAnimation("A_attak_bigprojetiles");
+		enemy->m_AnimatorSys->PlayAnimation("A_attak_bigprojetiles");
 
 		if (physSys != nullptr)
 		{

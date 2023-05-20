@@ -28,16 +28,14 @@ namespace Wiwa
 		m_Enemy = enemy;
 
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 
-		Wiwa::OzzAnimationSystem* animatorSys = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = animatorSys->getAnimator();
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 		OzzAnimation* animation = animator->getAnimationByName("shot");
 		animation->addKeyAction({ &RangedPhalanxAttackState::SpawnBullet, this }, 0.3f);
 
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
-		animator->PlayAnimation("shot");
+		enemy->m_AnimatorSys->PlayAnimation("shot");
 		animator->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
 
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
@@ -50,25 +48,23 @@ namespace Wiwa
 	void RangedPhalanxAttackState::UpdateState(EnemyRangedPhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();		
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
-		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
 		enemy->LookAt(playerTr->localPosition, ROTATION_SPEED);
 
-		bool hasFinished = animator->getAnimator()->getActiveAnimation()->HasFinished();
-		if ((dist2Player > stats->range || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false) && hasFinished)
+		bool hasFinished = enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished();
+		if ((dist2Player > stats->range || enemy->m_NavAgentSys->Raycast(selfTr->localPosition, playerTr->localPosition) == false) && hasFinished)
 		{
 			enemy->SwitchState(enemy->m_ChasingState);
 		}
 		else if (hasFinished)
 		{
-			animator->PlayAnimation("shot");
-			animator->getAnimator()->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
+			enemy->m_AnimatorSys->PlayAnimation("shot");
+			enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setPlaybackSpeed(stats->rateOfFire);
 		}
 	}
 	
@@ -80,8 +76,7 @@ namespace Wiwa
 			navAgent->autoRotate = true;
 		}
 
-		Wiwa::OzzAnimationSystem* animatorSys = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = animatorSys->getAnimator();
+		Wiwa::OzzAnimator* animator = enemy->m_AnimatorSys->getAnimator();
 		OzzAnimation* animation = animator->getAnimationByName("shot");
 		animation->removeKeyAction({ &RangedPhalanxAttackState::SpawnBullet, this });
 
@@ -99,8 +94,7 @@ namespace Wiwa
 			return;
 
 		Wiwa::EntityManager& em = m_Enemy->getScene().GetEntityManager();
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_Enemy->GetEntity());
-		audio->PlayAudio("ranged_attack");
+		m_Enemy->m_AudioSys->PlayAudio("ranged_attack");
 
 		Wiwa::EntityManager& entityManager = m_Enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&m_Enemy->getScene());
@@ -111,9 +105,7 @@ namespace Wiwa
 			return;
 
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
-		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		Wiwa::OzzAnimationSystem* anim = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(m_Enemy->GetEntity());
-		Wiwa::OzzAnimator* animator = anim->getAnimator();
+		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);		
 		physSys->DeleteBody();
 
 		// Set intial positions
@@ -123,8 +115,6 @@ namespace Wiwa
 
 		if (!bulletTr || !playerTr)
 			return;
-
-		animator->PlayAnimation("shot", 0.33f);
 
 		bulletTr->localPosition = Math::GetWorldPosition(gunTr->worldMatrix);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);

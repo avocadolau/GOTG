@@ -1,6 +1,5 @@
 #pragma once
 #include "PlayerStateMachine.h"
-#include <Wiwa/ecs/systems/AnimatorSystem.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include <LinearMath/btVector3.h>
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>

@@ -64,7 +64,8 @@ namespace Wiwa
 
             return mapped_value;
         }
-        void UpdateCameraAgents();
+        void UpdateCameraAgentsFarToNear();
+        void UpdateCameraAgentsNearToFar();
     private:
         Camera* m_Camera;
         EntityId m_PlayerId;
@@ -75,10 +76,12 @@ namespace Wiwa
 
         std::vector<struct CameraAgent*> m_CameraAgents;
 
-        glm::vec3 m_CameraOffset{ 0, 40.0f, -15.0f };
-        glm::vec3 m_CameraRotation{ 90, -65, 0 };
-        float m_FOV = 60;
+        glm::vec3 m_CameraOffset{ 0.f, 40.0f, -15.0f };
+        glm::vec3 m_CameraRotation{ 90.f, -65.f, 0.f };
+        float m_FOV = 60.f;
         float m_Velocity = 2.f;
+        float m_TargetFOV = 60.f;
+        
 	};
 }
 REGISTER_SYSTEM(Wiwa::CameraController);

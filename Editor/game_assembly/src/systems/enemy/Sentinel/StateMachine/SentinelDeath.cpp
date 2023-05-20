@@ -29,11 +29,10 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		
 
-		/*animator->PlayAnimation("atackdeath", false);*/ //AnimacionSentinel
+		/*enemy->m_AnimatorSys->PlayAnimation("atackdeath", false);*/ //AnimacionSentinel
 
-		Wiwa::NavAgentSystem* navAgentPtr = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
-		if (navAgentPtr)
-			navAgentPtr->StopAgent();
+		if (enemy->m_NavAgentSys)
+			enemy->m_NavAgentSys->StopAgent();
 
 		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(enemy->GetEntity());
 		physSys->DeleteBody();
@@ -43,11 +42,9 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		
-
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
-		audio->PlayAudio("explosion");
+		enemy->m_AudioSys->PlayAudio("explosion");
 
 		//Sentinel Explosion
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());

@@ -21,22 +21,18 @@ namespace Wiwa
 	void MeleePhalanxSpawnState::EnterState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
-		Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(enemy->GetEntity());
 		EntityId currentEnemy = enemy->GetEntity();
-		audio->PlayAudio("spawn");
-		animator->PlayAnimation("spawn");
+		enemy->m_AudioSys->PlayAudio("spawn");
+		enemy->m_AnimatorSys->PlayAnimation("spawn");
 	}
 
 	void MeleePhalanxSpawnState::UpdateState(EnemyMeleePhalanx* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		NavAgent* navAgent = (NavAgent*)em.GetComponentByIterator(enemy->m_NavAgentIt);
-	
 		navAgent->autoRotate = true;
 
-		if (animator->getAnimator()->getActiveAnimation()->HasFinished())
+		if (enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished())
 			enemy->SwitchState(enemy->m_ChasingState);
 	}
 
