@@ -990,13 +990,29 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{1DD78B1A-3486-F329-2235-C6F8CEC5B2D7}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{3ECE5283-F172-EEE9-F45C-9EB6DE33DC38}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
+				<File Id="282502226" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>synthetic-unease-64408.wav</ShortName>
+					<CachePath>SFX/synthetic-unease-64408_4163FA3D.wem</CachePath>
+				</File>
 				<File Id="348343627" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 03.wav</ShortName>
 					<CachePath>SFX/Small Explosion 03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="420772858" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>computer-sounds-25541.wav</ShortName>
+					<CachePath>SFX/computer-sounds-25541_597D20A0.wem</CachePath>
+				</File>
+				<File Id="622246367" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vantiladores.wav</ShortName>
+					<CachePath>SFX/vantiladores_0160C48D.wem</CachePath>
+				</File>
+				<File Id="673880580" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>hub_enviroment.wav</ShortName>
+					<CachePath>SFX/hub_enviroment_CD746FB1.wem</CachePath>
 				</File>
 				<File Id="715564319" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 01.wav</ShortName>
@@ -1008,7 +1024,7 @@
 				</File>
 				<File Id="947526828" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>generators.wav</ShortName>
-					<CachePath>SFX/generators_27DA1C63.wem</CachePath>
+					<CachePath>SFX/generators_CEFFC34F.wem</CachePath>
 				</File>
 				<File Id="1043649091" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 04.wav</ShortName>
@@ -1016,6 +1032,11 @@
 				</File>
 			</Media>
 			<Events>
+				<Event Id="319140489" Name="containers">
+					<MediaRefs>
+						<MediaRef Id="420772858"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="13776098" Name="explosion">
 					<MediaRefs>
 						<MediaRef Id="348343627"/>
@@ -1029,8 +1050,23 @@
 						<MediaRef Id="947526828"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="2272427828" Name="hologram">
+					<MediaRefs>
+						<MediaRef Id="282502226"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2423740202" Name="hub_enviroment">
+					<MediaRefs>
+						<MediaRef Id="673880580"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2361307803" Name="ventiladores">
+					<MediaRefs>
+						<MediaRef Id="622246367"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{0CB45980-DAF0-74E3-CE59-8E9F4C5D5FA9}</FileHash>
+	<FileHash>{74D390CD-82BE-87B3-65C2-0E036B8B13F1}</FileHash>
 </SoundBanksInfo>

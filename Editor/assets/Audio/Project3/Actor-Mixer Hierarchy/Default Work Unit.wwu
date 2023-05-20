@@ -2257,6 +2257,202 @@
 										<ActiveSource Name="generators" ID="{4FA61C11-0D04-48A4-9A9F-B40359452EF3}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<Sound Name="hub_enviroment" ID="{479A986B-F6A3-4EA6-8763-A546AC1E17F9}" ShortID="843465894">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="hub_enviroment" ID="{B1DCCC5A-3FB8-48B6-B367-B93DE725DE61}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="7.01132253548714"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="11.3952191255445"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>hub_enviroment.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="673880580"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="hub_enviroment" ID="{B1DCCC5A-3FB8-48B6-B367-B93DE725DE61}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="shop_interaction" ID="{5201486E-E13B-4BE1-B78E-59D1FCF0E358}" ShortID="551168985">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="shop_interaction" ID="{78E933E3-D267-4EA1-B940-1525EE332C7B}">
+											<Language>SFX</Language>
+											<AudioFile>shop_interaction.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="439665324"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="shop_interaction" ID="{78E933E3-D267-4EA1-B940-1525EE332C7B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="spaceship-cruising-ufo-7176" ID="{D5C3A39B-2A43-4049-AE42-7EF0EF470163}" ShortID="461243459">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="spaceship-cruising-ufo-7176" ID="{527F70D2-52B3-41E0-BAC1-A277CC646905}">
+											<Language>SFX</Language>
+											<AudioFile>spaceship-cruising-ufo-7176.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="809721720"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="spaceship-cruising-ufo-7176" ID="{527F70D2-52B3-41E0-BAC1-A277CC646905}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="hologram" ID="{82A68817-0BFA-41FF-AD9B-58D24B424B50}" ShortID="906634085">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-15</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="synthetic-unease-64408" ID="{DA371FF7-EB61-4552-A164-3041EC7FE091}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.893428518351424"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="1.43490034765532"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>synthetic-unease-64408.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="282502226"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="synthetic-unease-64408" ID="{DA371FF7-EB61-4552-A164-3041EC7FE091}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="vantiladores" ID="{D5239940-C275-4B22-8AF7-C731DE65FD89}" ShortID="417265098">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="vantiladores" ID="{3F4D95D2-E03E-4F17-A07C-41A6CD83533D}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="1.31865799739922"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="2.82569570871261"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="66.4038491547464"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>vantiladores.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="622246367"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="vantiladores" ID="{3F4D95D2-E03E-4F17-A07C-41A6CD83533D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="containers" ID="{C23E39CB-3002-4BE6-B722-574833876D8A}" ShortID="82732805">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-6</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="computer-sounds-25541" ID="{F4AF7527-E6CC-4172-AE3D-6B7E15355FCE}">
+											<PropertyList>
+												<Property Name="FadeInDuration" Type="Real64" Value="0.844322469982848"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="1.59215094339623"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+											</PropertyList>
+											<Language>SFX</Language>
+											<AudioFile>computer-sounds-25541.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="420772858"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="computer-sounds-25541" ID="{F4AF7527-E6CC-4172-AE3D-6B7E15355FCE}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="scene_events" ID="{855DD408-CD47-483D-AFAF-9DF6E3924BE0}" ShortID="609606422">

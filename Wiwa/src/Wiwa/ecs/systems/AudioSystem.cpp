@@ -59,9 +59,6 @@ namespace Wiwa {
 		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_Transform);		
 
 		if (!Audio::SetPositionAndOrientation(m_EntityId, t3d->position, Math::Forward(t3d->worldMatrix), glm::vec3(0,1,0))) {
-			WI_INFO("position: {0} {1} {2} ", t3d->position.x, t3d->position.y, t3d->position.z);
-			WI_INFO("forward: {0} {1} {2} ", Math::Forward(t3d->worldMatrix).x, Math::Forward(t3d->worldMatrix).y, Math::Forward(t3d->worldMatrix).z);
-			WI_INFO("up: {0} {1} {2} ", Math::Up(t3d->worldMatrix).x, Math::Up(t3d->worldMatrix).y, Math::Up(t3d->worldMatrix).z);
 			WI_CORE_ERROR("Audio couldn't set position [{}]", Audio::GetLastError());
 		}
 	}
