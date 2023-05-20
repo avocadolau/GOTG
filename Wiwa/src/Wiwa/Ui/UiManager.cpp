@@ -445,6 +445,8 @@ namespace Wiwa
 		ascent = (int)round(ascent * scale);
 		descent = (int)round(descent * scale);
 
+		bool forceNewLine = false;
+		int nextWordChars = 0;
 		int i;
 		for (i = 0; i < strlen(word); ++i)
 		{
@@ -456,11 +458,14 @@ namespace Wiwa
 			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
 
 			/* check if we need to wrap to the next line */
-			if (lineWidth + (int)roundf(ax * scale) >= maxWidth)
+			if (lineWidth + (int)roundf(ax * scale) >= maxWidth || forceNewLine == true)
 			{
+				
 				y_extra += l_h;
 				x = 0;
 				lineWidth = 0;
+
+				forceNewLine = false;
 			}
 
 			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
@@ -477,6 +482,28 @@ namespace Wiwa
 			/* advance x */
 			x += (int)roundf(ax * scale);
 			lineWidth += roundf(ax * scale);
+
+
+			if (word[i] == 32)
+			{
+				int j = 1;
+				nextWordChars = 0;
+
+				for (j = 1; word[i + j] != 32 && i + j < strlen(word); j++)
+				{
+					int ax2;
+					int lsb2;
+					stbtt_GetCodepointHMetrics(&info, word[i + j], &ax2, &lsb2);
+
+					nextWordChars += roundf(ax2 * scale);
+				}
+
+				if (lineWidth + nextWordChars >= maxWidth)
+				{
+					forceNewLine = true;
+				}
+			}
+
 
 			/* add kerning */
 			int kern;

@@ -81,7 +81,8 @@ namespace Wiwa
 			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonY_01.dds");
 			Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
-			if (continueImg) {
+			if (continueImg)
+			{
 				continueImgID = render.CreateInstancedQuadTex(m_Scene, continueImg->GetTextureId(), continueImg->GetSize(), { 1500,870 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, continueImgID);
 			}
@@ -96,7 +97,8 @@ namespace Wiwa
 			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonY_02.dds");
 			Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
-			if (continueImg2) {
+			if (continueImg2)
+			{
 				continueImgID2 = render.CreateInstancedQuadTex(m_Scene, continueImg2->GetTextureId(), continueImg2->GetSize(), { 1500,870 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, continueImgID2);
 			}
@@ -111,7 +113,8 @@ namespace Wiwa
 			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_TalkButton01.dds");
 			Image* talkIndicatorImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
 
-			if (talkIndicatorImg) {
+			if (talkIndicatorImg)
+			{
 				talkIndicatorImgID = render.CreateInstancedQuadTex(m_Scene, talkIndicatorImg->GetTextureId(), talkIndicatorImg->GetSize(), { 800,750 }, { 256,256 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, talkIndicatorImgID);
 			}
