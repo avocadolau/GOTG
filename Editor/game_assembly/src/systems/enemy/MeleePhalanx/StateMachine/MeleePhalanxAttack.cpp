@@ -61,17 +61,19 @@ namespace Wiwa
 			m_TimerAttackCooldown = 0.0f;
 		}
 		m_SoundCurrentTime += Time::GetDeltaTimeSeconds();
-		WI_INFO("m_SoundCurrentTime: {}", m_SoundCurrentTime);
-		WI_INFO("m_PlaySound: {}", m_PlaySound);
+		//WI_INFO("m_SoundCurrentTime: {}", m_SoundCurrentTime);
+		//WI_INFO("m_PlaySound: {}", m_PlaySound);
 
 		if (m_SoundCurrentTime >= m_SoundTimer && m_PlaySound)
 		{	
-			WI_INFO("attack!!!!!!!!!!!!!!!!!!!: {}", m_PlaySound);
+			//WI_INFO("attack!!!!!!!!!!!!!!!!!!!: {}", m_PlaySound);
 			// make damage here when the animation is hitting
 			EnemyData* selfStats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
 			if (selfStats != nullptr)
 			{
-				WI_INFO("Melee damage: {}", selfStats->damage);
+				//WI_INFO("Melee damage: {}", selfStats->damage);
+				animator->PlayAnimation("walk");
+				animator->PlayAnimation("atack");
 				GameStateManager::DamagePlayer(selfStats->damage);
 			}
 			
@@ -108,7 +110,8 @@ namespace Wiwa
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
 		if (distance <= 3.0f)
 		{
-			animator->PlayAnimation("atack");
+			animator->PlayAnimation("walk");
+			animator->PlayAnimation("atack");			
 	
 			EntityId pe_hurt = em.GetChildByName(enemy->m_PlayerId, "PE_Hurt");
 			m_SoundCurrentTime = m_SoundTimer;
