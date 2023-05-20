@@ -18,7 +18,6 @@ namespace Wiwa
 	SubjugatorAttackState::SubjugatorAttackState()
 	{
 		m_TimerAttackCooldown = 0.0f;
-		m_TimerSyncAnimationBullets = 0.0f;
 		m_ChangeShoot = false;
 		m_SelectRandomAttack = -1;
 		m_IsAttackSelected = false;
@@ -41,7 +40,6 @@ namespace Wiwa
 		}
 
 		m_TimerAttackCooldown = -0.3f;
-		m_TimerSyncAnimationBullets = 0.0f;
 		m_SelectRandomAttack = -1;
 		m_IsAttackSelected = false;
 	}
@@ -49,9 +47,8 @@ namespace Wiwa
 	void SubjugatorAttackState::UpdateState(EnemySubjugator* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::OzzAnimationSystem* animator = em.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(enemy->m_StatsIt);
-
+		
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 		Wiwa::NavAgentSystem* agent = em.GetSystem<Wiwa::NavAgentSystem>(enemy->GetEntity());
@@ -65,21 +62,12 @@ namespace Wiwa
 		enemy->LookAt(playerTr->localPosition, 30.f);
 
 		m_TimerAttackCooldown += Time::GetDeltaTimeSeconds();
-		m_TimerSyncAnimationBullets += Time::GetDeltaTime();
-
+		
 		if (m_TimerAttackCooldown > 1.0f / stats->rateOfFire)
 		{
-			SelectRandomBulletSpawn(enemy);
+			SelectRandomBulletSpawn(enemy);			
 
 			m_TimerAttackCooldown = 0.0f;
-		}
-
-		if (m_TimerSyncAnimationBullets > 1.0f / stats->rateOfFire)
-		{
-			//SubjugatorAudio - Shooting audio for the Subjugator
-			animator->PlayAnimation("attack");
-
-			m_TimerSyncAnimationBullets = 0.0;
 		}
 
 		if (dist2Player > stats->range || agent->Raycast(selfTr->localPosition, playerTr->localPosition) == false)
@@ -111,6 +99,9 @@ namespace Wiwa
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
 		SimpleBulletSystem* bulletSys = entityManager.GetSystem<SimpleBulletSystem>(newBulletId);
+		Wiwa::OzzAnimationSystem* anim = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimator* animator = anim->getAnimator();
+
 
 		WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
@@ -126,6 +117,9 @@ namespace Wiwa
 		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
+
+		animator->PlayAnimation("walk");
+		animator->PlayAnimation("atack", 0.228f);
 
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
 		Subjugator* subjugator = (Subjugator*)entityManager.GetComponentByIterator(enemy->m_Subjugator);
@@ -149,6 +143,8 @@ namespace Wiwa
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_ZigZagBulletPool->GetFromPool();
 		ZigZagBulletSystem* bulletSys = entityManager.GetSystem<ZigZagBulletSystem>(newBulletId);
+		Wiwa::OzzAnimationSystem* anim = entityManager.GetSystem<Wiwa::OzzAnimationSystem>(enemy->GetEntity());
+		Wiwa::OzzAnimator* animator = anim->getAnimator();
 
 		WI_INFO("Getting bullet from pool id: {}", newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
@@ -164,6 +160,9 @@ namespace Wiwa
 		bulletTr->localPosition = Math::GetWorldPosition(transform->worldMatrix);
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		bulletTr->localScale = transform->localScale;
+
+		animator->PlayAnimation("walk");
+		animator->PlayAnimation("atack", 0.228f);
 
 		ZigZagBullet* bullet = (ZigZagBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<ZigZagBullet>(newBulletId));
 		Subjugator* subjugator = (Subjugator*)entityManager.GetComponentByIterator(enemy->m_Subjugator);

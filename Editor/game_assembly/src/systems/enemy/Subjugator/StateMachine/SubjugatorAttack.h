@@ -22,7 +22,6 @@ namespace Wiwa {
 		void SelectRandomBulletSpawn(EnemySubjugator* enemy);
 		
 		float m_TimerAttackCooldown = 0.0f;
-		float m_TimerSyncAnimationBullets = 0.0f;
 
 		int m_SelectRandomAttack = -1;
 		bool m_IsAttackSelected = false;
