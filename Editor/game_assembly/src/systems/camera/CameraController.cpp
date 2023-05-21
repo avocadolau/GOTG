@@ -125,7 +125,8 @@ namespace Wiwa
 		if (m_CameraDataIt.c_id)
 		{
 			PlayerCameraData* data = GetComponentByIterator<PlayerCameraData>(m_CameraDataIt);
-			data->ZoomSensitivity = 50;
+			data->ZoomSensitivity = 50.f;
+			data->CombatVelocity = 10.f;
 		}
 	}
 
