@@ -70,7 +70,7 @@ namespace Wiwa
 	private:
 		static RoomType s_RoomType;
 		static RoomState s_RoomState;
-
+		static int s_CurrentWave;
 		static void ChangeRoomState(RoomState room_state);
 
 	public:
@@ -171,6 +171,10 @@ namespace Wiwa
 		static void SetFanaticEffect(bool ret) { FanaticEffect = ret; }
 		static void IncrementPrometheanGems(int amount) { PrometheanGemsToAdd += amount; }
 		static bool ReturnFanaticEffect() { return FanaticEffect; }
+
+		static void IncrementCurrentWave() { s_CurrentWave += 1; }
+		static int GetCurrentWave() { return s_CurrentWave; }
+		static void ResetWave() { s_CurrentWave = 0; }
 	public:
 		static DefaultCharacterSettings s_CharacterSettings[2];
 		static EntityManager::ComponentIterator s_CharacterStats;
@@ -222,9 +226,7 @@ namespace Wiwa
 		public:
 		static int GetActiveEnemies();
 		static int GetAproximateTotalEnemies();
-		static int GetTotalWaves();
-		static int GetCurrentWaves();
-
+		
 		static bool IsWaveSpawnerFinished(WaveSpawner* waveSpawner);
 		static void EndCombatRoom(WaveSpawner* waveSpawner);
 		

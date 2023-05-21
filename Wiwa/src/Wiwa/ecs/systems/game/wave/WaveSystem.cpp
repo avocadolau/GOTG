@@ -39,7 +39,7 @@ namespace Wiwa
 
 		WaveSpawner* spawner = GetComponentByIterator<WaveSpawner>(m_SpawnerIt);
 		GetSpawnPoints(m_Points);
-
+		Wiwa::GameStateManager::IncrementCurrentWave();
 		Audio::PostEvent("wave_start");
 	}
 

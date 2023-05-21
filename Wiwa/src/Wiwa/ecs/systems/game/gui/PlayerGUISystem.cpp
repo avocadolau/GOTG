@@ -32,7 +32,11 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 
 	PlayerElements(gm, character);
 	HandleCurrentCanvas(gm);
-	HandleWaves(gm);
+	if (CurrentWave != Wiwa::GameStateManager::GetCurrentWave())
+	{
+		HandleWaves(gm);
+		CurrentWave = Wiwa::GameStateManager::GetCurrentWave();
+	}
 
 	Wiwa::OzzAnimationSystem* animator = m_Scene->GetEntityManager().GetSystem<Wiwa::OzzAnimationSystem>(m_EntityId);
 	if (animator->getAnimator()->getAnimationByName("death")->HasFinished() && !deathHud)
@@ -938,20 +942,15 @@ void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
 
 void Wiwa::PlayerGUISystem::HandleWaves(Wiwa::GuiManager& gm)
 {
-	/*if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS")
+	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS")
 		return;
 
-	int total = Wiwa::GameStateManager::GetAproximateTotalEnemies();
-	int current_wave = Wiwa::GameStateManager::GetCurrentWaves();
-	if (total != 0)
-	{
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-		std::string my_string = std::to_string(current_wave);
+		std::string my_string = std::to_string(Wiwa::GameStateManager::GetCurrentWave());
 
 		gm.canvas.at(CanvasHUD)->controls.at(18)->text = my_string.c_str();
 		Text* newText = gm.InitFont("library/Fonts/Jade_Smile.ttf", my_string.c_str());
 		r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(18)->id_quad_normal, 1);
 		r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(18)->id_quad_normal, newText->GetTextureId());
 		r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(CanvasHUD)->controls.at(18)->id_quad_normal, newText->GetSize(), { 0,0,512,512 });
-	}*/
 }

@@ -20,8 +20,8 @@ namespace Wiwa
     {
         Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
         EntityId playerId = em.GetEntityByName("StarLord");
-
-        if (playerId != EntityManager::INVALID_INDEX)
+        EntityId playerId2 = em.GetEntityByName("Rocket");
+        if (playerId != EntityManager::INVALID_INDEX || playerId2 != EntityManager::INVALID_INDEX)
         {
 
             EntityId pe_healing = em.LoadPrefab("assets/vfx/prefabs/p_player_use.wiprefab");
@@ -69,12 +69,11 @@ namespace Wiwa
 
     void Ability::YondusFin()
     {
-        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-        EntityId yondusFin = em.LoadPrefab("assets/Prefabs/YondusFin/YundusFin_01.wiprefab");
-        Transform3D* tr = em.GetComponent<Transform3D>(yondusFin);
-        PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(yondusFin);
-        NavAgentSystem* navAgentSys = em.GetSystem<NavAgentSystem>(yondusFin);
-        *tr = *em.GetComponent<Transform3D>(yondusFin);
+        if (Wiwa::GameStateManager::GetActiveEnemies() > 0)
+        {
+            Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+            EntityId yondusFin = em.LoadPrefab("assets/Prefabs/YondusFin/YundusFin_01.wiprefab");
+        }
     }
 
     void Ability::GrootsSeeds()

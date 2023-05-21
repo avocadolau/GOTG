@@ -25,6 +25,7 @@ namespace Wiwa
 
         bool shopActive = false;
         bool buyItem = false;
+        int CurrentWave = 0;
         size_t lastCoins = -1;
         size_t lastPromethiumGems = -1;
         Ability** abilitiesList;
