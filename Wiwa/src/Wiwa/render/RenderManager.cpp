@@ -101,6 +101,13 @@ namespace Wiwa {
 		m_Model = glm::scale(m_Model, glm::vec3((float)width, (float)height, 1.0f));
 	}
 
+	void RenderManager::ClearCameraLayers()
+	{
+		for (int i = 0; i < MAX_LAYERS; i++) {
+			m_RenderLayers[i].setCamera(NULL);
+		}
+	}
+
 	void RenderManager::Update()
 	{
 		OPTICK_EVENT("Renderer manager Update");

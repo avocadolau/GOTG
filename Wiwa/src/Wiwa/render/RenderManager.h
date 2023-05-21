@@ -44,6 +44,9 @@ namespace Wiwa {
 		// Set camera to specific layer
 		static void SetLayerCamera(uint32_t layer_id, Camera* cam) { m_RenderLayers[layer_id].setCamera(cam); }
 
+		// Clear all camera layers
+		static void ClearCameraLayers();
+
 		// Render all layers into one framebuffer
 		static void Update();
 
