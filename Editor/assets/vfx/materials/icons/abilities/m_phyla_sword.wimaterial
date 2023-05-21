@@ -1,1 +1,0 @@
-{"shader":"library/resources/shaders/vfx/spritesheet_frame","uniforms":{"u_LifeTime":0.02610647678375244,"u_Time":1257.723876953125,"u_Color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_Texture":"library/textures/icons/t_abilities_spsh.dds","u_Position":{"x":0.0,"y":101.0},"u_Zoom":4.0}}

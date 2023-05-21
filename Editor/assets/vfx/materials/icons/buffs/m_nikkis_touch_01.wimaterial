@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/spritesheet_frame","uniforms":{"u_LifeTime":0.5634013414382935,"u_Time":3972.27685546875,"u_Color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_Texture":"assets/textures/icons/t_bufficons_sp.png","u_Position":{"x":25.0,"y":25.0},"u_Zoom":4.0}}

@@ -109,7 +109,7 @@ namespace Wiwa
 						ParticleSystem* sys_p_hurt = entityManager.GetSystem<ParticleSystem>(p_hurt);
 
 						if (sys_p_hurt != nullptr)
-							sys_p_hurt->EmitParticleBatch(1);
+							sys_p_hurt->EmitParticleBatch();
 						
 					}
 				}

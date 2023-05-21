@@ -835,6 +835,15 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	ImGui::PopItemWidth();
 
+
+	std::string spawnTimer = "Spawn Timer: " + std::to_string(emitter->m_spawnTimer);
+
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 1, 1));
+	ImGui::Text(spawnTimer.c_str());
+	ImGui::PopStyleColor();
+
+	ImGui::Dummy(ImVec2(0, 4));
+
 	ImGui::Dummy(ImVec2(0, 4));
 
 	ImGui::Checkbox("##m_loopSpawning", &emitter->m_loopSpawning);
@@ -926,28 +935,103 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::SameLine();
 	ImGui::Text("Use Billboarding");
 
+
 	ImGui::Dummy(ImVec2(0, 4));
 
+	if (emitter->m_billboardActive)
+	{
+		ParticleTab();
+		ImGui::Text("Lock Axis");
+		ImGui::SameLine();
+		HelpMarker("Locks selected Axis from any other rotation more than the billboarding");
+		ParticleTab();
+		ImGui::Text("X:");
+		ImGui::SameLine();
+		ImGui::Checkbox("##m_billboardLockAxisX", &emitter->m_billboardLockAxisX);
+		ImGui::SameLine();
+		ImGui::Text(" Y:");
+		ImGui::SameLine();
+		ImGui::Checkbox("##m_billboardLockAxisY", &emitter->m_billboardLockAxisY);
+		ImGui::SameLine();
+		ImGui::Text(" Z:");
+		ImGui::SameLine();
+		ImGui::Checkbox("##m_billboardLockAxisZ", &emitter->m_billboardLockAxisZ);
+
+	}
+	ImGui::Dummy(ImVec2(0, 8));
+
 	//lifetime
-	ImGui::Checkbox("##m_p_rangedLifeTime", &emitter->m_p_rangedLifeTime);
-	ImGui::SameLine();
+	
+	if (!emitter->m_permanentParticles)
+	{
+		ImGui::Checkbox("##m_p_rangedLifeTime", &emitter->m_p_rangedLifeTime);
+		ImGui::SameLine();
+	}
 	ImGui::Text("Life Time");
 
-	if (emitter->m_p_rangedLifeTime)
+	if (!emitter->m_permanentParticles)
 	{
-		ImGui::PushItemWidth(46.f);
+		if (emitter->m_p_rangedLifeTime)
+		{
+			ImGui::PushItemWidth(46.f);
 
-		ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::SameLine();
+			ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
+		else
+		{
+			ImGui::PushItemWidth(100.0f);
+			ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::PopItemWidth();
+		}
 		ImGui::SameLine();
-		ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
-		ImGui::PopItemWidth();
+		ImGui::Checkbox("##m_permanentParticles", &emitter->m_permanentParticles);
+		ImGui::SameLine();
+		ImGui::Text("Permanent");
 	}
-	else
+	
+	if (emitter->m_permanentParticles)
 	{
-		ImGui::PushItemWidth(100.0f);
-		ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
-		ImGui::PopItemWidth();
+		ImGui::Checkbox("##m_permanentParticles", &emitter->m_permanentParticles);
+		ImGui::SameLine();
+		ImGui::Text("Permanent");
+	
+		ImGui::Checkbox("##m_cycleLifeTime", &emitter->m_cycleLifeTime);
+		ImGui::SameLine();
+		ImGui::Text("Cycle LifeTime");
+		ImGui::SameLine();
+		HelpMarker("The Life Time keep counting, but it will restart once ended. This will affect variables dependent on the Life Time.");
+
+		if (emitter->m_cycleLifeTime)
+		{
+			if (emitter->m_p_rangedLifeTime)
+			{
+				ImGui::PushItemWidth(46.f);
+
+				ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::SameLine();
+				ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::PopItemWidth();
+			}
+			else
+			{
+				ImGui::PushItemWidth(100.0f);
+				ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::PopItemWidth();
+			}
+
+		}
+		ImGui::Dummy(ImVec2(0, 4));
+
 	}
+
+	
+
+
+	
+
 	ImGui::Dummy(ImVec2(0, 4));
 
 	if (ImGui::TreeNode("Position & Translation"))
@@ -1510,6 +1594,16 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
 		ImGui::Dummy(ImVec2(0, 4));
 
+		if (emitter->m_permanentParticles && emitter->m_cycleLifeTime)
+		{
+			ImGui::Checkbox("##m_cycleColors", &emitter->m_cycleColors);
+			ImGui::SameLine();
+			ImGui::Text("Cycle Colors");
+			ImGui::SameLine();
+			HelpMarker("Available due to 'Cycle Life Time'. Colors will cycle along with the Life Time");
+			ImGui::Dummy(ImVec2(0, 4));
+
+		}
 
 		if (ImGui::Button("Sort Colors by Percentage"))
 		{

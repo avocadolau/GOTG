@@ -33,6 +33,7 @@ namespace Wiwa {
 		emitter->m_materialChanged = false;
 
 		m_SpawnTimer = 0;
+		emitter->m_spawnTimer = 0;
 		m_SpawnedOnce = false;
 		
 		m_AvailableParticles = emitter->m_maxParticles;
@@ -62,13 +63,11 @@ namespace Wiwa {
 
 		if (m_Model == nullptr)
 		{
-			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
-			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
+			WI_CORE_ERROR("ParticleSystem: Error loading Material at path:'{}'", emitter->m_materialPath);
 		}
 		if (m_Material == nullptr)
 		{
-			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
-			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
+			WI_CORE_ERROR("ParticleSystem: Error loading mesh at path:'{}'", emitter->m_meshPath);
 		}
 
 
@@ -83,7 +82,7 @@ namespace Wiwa {
 
 			m_SpawnTimer = emitter->m_p_spawnDelay;
 		}
-
+		emitter->m_spawnTimer = m_SpawnTimer;
 
 		if (emitter->m_activeOverTime)
 		{
@@ -106,6 +105,7 @@ namespace Wiwa {
 		}
 		if (m_SpawnTimer == 0 && (emitter->m_active || emitter->m_activeOverTime))
 			SpawnParticleSet();
+
 	}
 	void ParticleSystem::OnAwake()
 	{
@@ -141,7 +141,7 @@ namespace Wiwa {
 
 			m_SpawnTimer = emitter->m_p_spawnDelay;
 		}
-
+		emitter->m_spawnTimer = m_SpawnTimer;
 
 		if (emitter->m_activeOverTime)
 		{
@@ -170,16 +170,7 @@ namespace Wiwa {
 	void ParticleSystem::OnUpdate()
 	{
 
-		if (m_Material == nullptr)
-		{
-			WI_CORE_ERROR("particle System requieres a material...");
-			return;
-		}
-		if (m_Model == nullptr)
-		{
-			WI_CORE_ERROR("particle System requieres a mesh...");
-			return;
-		}
+		
 
 
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
@@ -242,8 +233,12 @@ namespace Wiwa {
 				emitter->m_ActiveTimer -= dt;
 			}
 
-			if (m_SpawnTimer > 0)
-			m_SpawnTimer -= dt;
+			if ((m_SpawnTimer > 0 && !emitter->m_permanentParticles) || 
+				(m_SpawnTimer > 0 && (emitter->m_permanentParticles && emitter->m_cycleLifeTime)))
+			{
+				m_SpawnTimer -= dt;
+				emitter->m_spawnTimer = m_SpawnTimer;
+			}
 
 
 
@@ -345,7 +340,11 @@ namespace Wiwa {
 			{
 				/*if (!Time::IsPaused())*/
 				{
-					UpdateParticleLife(particle, dt);
+					if (!emitter->m_permanentParticles || (emitter->m_permanentParticles && emitter->m_cycleLifeTime))
+					{
+						UpdateParticleLife(particle, dt);
+
+					}
 
 					activeParticles++;
 
@@ -377,8 +376,9 @@ namespace Wiwa {
 						color = particle.color = emitter->m_p_colorsOverLifetime[0].color;
 					}
 
-
-					Uniform* u_color = m_Material->getUniform("u_Color");
+					if (m_Material)
+					{
+						Uniform* u_color = m_Material->getUniform("u_Color");
 					if (u_color != nullptr)
 						u_color->setData(color, UniformType::fVec4);
 
@@ -389,6 +389,8 @@ namespace Wiwa {
 					Uniform* u_Time = m_Material->getUniform("u_Time");
 					if (u_Time != nullptr)
 						u_Time->setData(Wiwa::Time::GetRealTimeSinceStartup(), UniformType::Float);
+					}
+					
 
 
 					//calculate everything
@@ -506,16 +508,13 @@ namespace Wiwa {
 								particle.life_percentage - emitter->m_p_rotationOverTimePerStart * 0.01f,
 								emitter->m_p_rotationOverTimePerEnd * 0.01f - emitter->m_p_rotationOverTimePerStart * 0.01f
 							);
-							//WI_CORE_INFO("[{0}] interpolating ", particle.life_percentage);
 						}
 						else if (particle.life_percentage < emitter->m_p_rotationOverTimePerStart * 0.01f)
 						{
-							//WI_CORE_INFO("[{0}] clamp to start rotation", particle.life_percentage);
 							particle.transform.localRotation = emitter->m_p_rotationOverTimeStart;
 						}
 						else if (particle.life_percentage > emitter->m_p_rotationOverTimePerEnd * 0.01f)
 						{
-							//WI_CORE_INFO("[{0}] clamp to end rotation", particle.life_percentage);
 							particle.transform.localRotation = emitter->m_p_rotationOverTimeEnd;
 
 						}
@@ -587,9 +586,8 @@ namespace Wiwa {
 						cameraId = cm.getActiveCameraId();
 						Wiwa::Camera* cam = cm.getCamera(cameraId);
 
-						//fix rotation
+
 						glm::mat4 rotationMatrix = cam->getView();
-						glm::mat4 billboardMatrix = glm::inverse(rotationMatrix);
 
 						glm::vec3 rotationRad = glm::vec3(0, 0, 0);
 						rotationRad.x = -glm::asin(rotationMatrix[1][2]);
@@ -600,14 +598,24 @@ namespace Wiwa {
 
 						//transform = billboardMatrix * transform;
 
+						
+
 						transform = glm::rotate(transform, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-						transform = glm::rotate(transform, particle.transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+						transform = glm::rotate(transform, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
 						transform = glm::rotate(transform, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+
+						if (!emitter->m_billboardLockAxisY)
+						transform = glm::rotate(transform, glm::radians(particle.transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+						if (!emitter->m_billboardLockAxisZ)
+							transform = glm::rotate(transform, glm::radians(particle.transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+						if (!emitter->m_billboardLockAxisX)
+							transform = glm::rotate(transform, glm::radians(particle.transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 
 						//debug
 						rotationRad.x = glm::degrees(glm::asin(rotationMatrix[1][2]));
 						rotationRad.y = glm::degrees(glm::atan(rotationMatrix[0][2], rotationMatrix[2][2]));
 						rotationRad.z = glm::degrees(glm::atan(rotationMatrix[1][0], rotationMatrix[1][1]));
+						
 						transform = glm::scale(transform, particle.transform.scale);
 
 						//pass transformation matrix
@@ -657,7 +665,12 @@ namespace Wiwa {
 				}
 				WI_CORE_INFO("===================");*/
 
-				Render(particle);
+				if (m_Model != nullptr && m_Material != nullptr)
+					Render(particle);
+			}
+			else if (emitter->m_permanentParticles && emitter->m_cycleLifeTime)
+			{
+			SetParticleLifeTime(particle, particle.life_time_start);
 			}
 		}
 
@@ -1146,14 +1159,17 @@ namespace Wiwa {
 		FixBool(emitter->m_stopSizeAtZeroX);
 		FixBool(emitter->m_stopSizeAtZeroY);
 		FixBool(emitter->m_stopSizeAtZeroZ);
-		FixBool(emitter->m_p_followEmitterRotationX);
-		FixBool(emitter->m_p_followEmitterRotationY);
-		FixBool(emitter->m_p_followEmitterRotationZ);
+		FixBool(emitter->m_billboardLockAxisX);
+		FixBool(emitter->m_billboardLockAxisY);
+		FixBool(emitter->m_billboardLockAxisZ);
 		FixBool(emitter->m_p_growUniformly);
 		FixBool(emitter->m_destroyOnFinishActive);
 		FixBool(emitter->m_p_uniformStartSize);
 		FixBool(emitter->m_useMultiplyBlending);
 		FixBool(emitter->m_destroyActiveParticles);
+		FixBool(emitter->m_permanentParticles);
+		FixBool(emitter->m_cycleLifeTime);
+		FixBool(emitter->m_cycleColors);
 	}
 
 	void ParticleSystem::FixBool(bool& _bool)

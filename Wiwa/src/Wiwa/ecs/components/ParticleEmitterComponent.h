@@ -165,9 +165,9 @@ namespace Wiwa {
 		bool m_stopSizeAtZeroY;
 		bool m_stopSizeAtZeroZ;
 
-		bool m_p_followEmitterRotationX;	//unused -> leave to avoid corruption?
-		bool m_p_followEmitterRotationY;	//unused -> leave to avoid corruption?
-		bool m_p_followEmitterRotationZ;	//unused -> leave to avoid corruption?
+		bool m_billboardLockAxisX;
+		bool m_billboardLockAxisY;
+		bool m_billboardLockAxisZ;
 
 		ColorNode m_newColorsNodes[20] = { ColorNode() }; //--> to fix colors later
 
@@ -186,6 +186,10 @@ namespace Wiwa {
 		bool m_stopSizeAtZero;
 		bool m_useMultiplyBlending;
 		bool m_destroyActiveParticles;
+		bool m_permanentParticles;
+		bool m_cycleLifeTime;
+		bool m_cycleColors;
+		float m_spawnTimer;
 
 		
 		// todo					----------------------------------------
@@ -285,14 +289,18 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 	REFLECT_MEMBER(m_stopSizeAtZeroX);
 	REFLECT_MEMBER(m_stopSizeAtZeroY);
 	REFLECT_MEMBER(m_stopSizeAtZeroZ);
-	REFLECT_MEMBER(m_p_followEmitterRotationX);
-	REFLECT_MEMBER(m_p_followEmitterRotationY);
-	REFLECT_MEMBER(m_p_followEmitterRotationZ);
+	REFLECT_MEMBER(m_billboardLockAxisX);
+	REFLECT_MEMBER(m_billboardLockAxisY);
+	REFLECT_MEMBER(m_billboardLockAxisZ);
 	REFLECT_MEMBER(m_newColorsNodes);
 	REFLECT_MEMBER(m_p_growUniformly);
 	REFLECT_MEMBER(m_p_uniformGrowthVal);
 	REFLECT_MEMBER(m_p_minUniformGrowthVal);
 	REFLECT_MEMBER(m_p_maxUniformGrowthVal);
 	REFLECT_MEMBER(m_destroyOnFinishActive);
+	REFLECT_MEMBER(m_permanentParticles);
+	REFLECT_MEMBER(m_cycleLifeTime);
+	REFLECT_MEMBER(m_cycleColors);
+	REFLECT_MEMBER(m_spawnTimer);
 
 REFLECTION_END;
