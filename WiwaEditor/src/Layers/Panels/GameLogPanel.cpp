@@ -98,15 +98,20 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::InputInt("Boss room index", (int*)&Wiwa::GameStateManager::s_BossRoomIndx);
 	ImGui::InputInt("Rooms to boss", (int*)&Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::InputInt("Rooms to shop", (int*)&Wiwa::GameStateManager::s_RoomsToShop);
-
 	ImGui::InputInt("Next reward", &Wiwa::GameStateManager::s_NextRewardRoomReward);
 	ImGui::InputInt("Left door reward", &Wiwa::GameStateManager::s_DoorsReward[0]);
 	ImGui::InputInt("Right door reward", &Wiwa::GameStateManager::s_DoorsReward[1]);
+	ImGui::Checkbox("Set phalanx rooms", &Wiwa::GameStateManager::s_CanPhalanxRooms);
 
 	ImGui::Separator();
 	ImGui::PushID(0);
 	ImGui::Text("Battle rooms");
+	ImGui::Text("Kree rooms");
 	VectorEdit(Wiwa::GameStateManager::s_CombatRooms);
+	ImGui::PopID();
+	ImGui::PushID(420);
+	ImGui::Text("Phalanx rooms");
+	VectorEdit(Wiwa::GameStateManager::s_PhalanxRooms);
 	ImGui::PopID();
 	ImGui::Separator();
 	ImGui::PushID(1);
