@@ -298,7 +298,7 @@ namespace Wiwa
 
 		s_RoomsToBoss = 10;
 		s_RoomsToShop = 5;
-		s_CanPhalanxRooms = true;
+		s_CanPhalanxRooms = false;
 	}
 
 	void GameStateManager::InitPlayerData()
