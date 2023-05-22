@@ -65,7 +65,7 @@ namespace Wiwa
             return mapped_value;
         }
         void UpdateCameraAgentsFarToNear();
-        void UpdateCameraAgentsNearToFar();
+        void UpdateCameraAgentsNearToFar(float minFOV, float maxFOV);
     private:
         Camera* m_Camera;
         EntityId m_PlayerId;

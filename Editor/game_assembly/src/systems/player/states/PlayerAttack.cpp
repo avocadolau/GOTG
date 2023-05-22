@@ -55,9 +55,8 @@ void Wiwa::PlayerAttack::UpdateState()
 		if(GameStateManager::s_CurrentCharacter == 0)
 			FireStarlordUltimate();
 		else if (GameStateManager::s_CurrentCharacter == 1)
-		{
-			//TODO : Rocket
-		}
+			FireRocketUltimate();
+
 	}
 
 	if (m_StateMachine->CanMove())
@@ -69,7 +68,7 @@ void Wiwa::PlayerAttack::UpdateState()
 		float difference = glm::abs(shootDirection - movementDirection);
 
 		//WI_INFO("Diff angle {}", difference);
-		if (IN_BETWEEN(difference, 0.f, 170.f))
+		if (IN_BETWEEN(difference, 0.f, 45.f))
 		{
 			m_StateMachine->GetAnimator()->PlayAnimation("walk_aim");
 		}
@@ -198,6 +197,6 @@ void Wiwa::PlayerAttack::FireRocketUltimate()
 	spawnPoint = m_StateMachine->GetFirePosition("FirePos");
 	m_StateMachine->GetAnimator()->PlayAnimation("ultimate");
 
-	m_StateMachine->SpawnRocketUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
+	m_StateMachine->SpawnStarLordUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
 	m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 }
