@@ -60,6 +60,8 @@ namespace Wiwa
 
 		Text* InitFont(const char* path, const char* word);
 		Text* InitFontForDialog(const char* path, char* word, int maxWidth);
+		int ComputeX_DialogOffset(const char* path, char* word, int maxWidth, int charPos);
+		int ComputeY_DialogOffset(const char* path, char* word, int maxWidth);
 
 		
 		Video* InitVideo(std::string path);

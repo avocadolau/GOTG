@@ -24,7 +24,8 @@ namespace Wiwa
 
 		bool canClick = true;
 
-		bool clicked = false;
+		bool clickedLeft = false;
+		bool clickedRight = false;
 
 	};
 }
