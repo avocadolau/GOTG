@@ -1260,7 +1260,7 @@ namespace Wiwa
 	bool GameStateManager::IsWaveSpawnerFinished(WaveSpawner* waveSpawner)
 	{
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		if (waveSpawner && !waveSpawner->hasFinished) {
+		if (waveSpawner) {
 			// Check for all the active waves in that spawner.
 			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
 			if (waveSpawnerSystem) {
