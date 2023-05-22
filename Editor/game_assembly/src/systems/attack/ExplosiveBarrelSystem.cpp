@@ -2,6 +2,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 #include "../../components/attack/Explosion.h"
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -98,8 +99,10 @@ namespace Wiwa
 	bool ExplosiveBarrelSystem::EnableExplosion()
 	{
 		Explosion* explosiveBarrel = GetComponent<Explosion>();
+		AudioSystem* audio = GetEntityManager().GetSystem<AudioSystem>(m_EntityId);
 		if (explosiveBarrel)
 		{
+			audio->PlayAudio("explosion");
 			InitExplosion();
 			/*GetTransform()->localPosition = pos;*/
 		}

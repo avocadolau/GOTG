@@ -66,3 +66,4 @@
 #include "systems/HowardShopSystem.h"
 
 #include "systems/camera/CameraAgentSystem.h"
+#include "systems/gui/PopUpItem.h"

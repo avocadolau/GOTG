@@ -31,8 +31,8 @@ namespace Wiwa
 			navAgent->autoRotate = false;
 		}
 
-		enemy->m_AnimatorSys->PlayAnimation("A_attack_shot");
-		enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);
+		/*enemy->m_AnimatorSys->PlayAnimation("A_attack_shot");
+		enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);*/
 	}
 
 	void BossUltronBulletStormAttackState::UpdateState(BossUltron* enemy)
@@ -111,6 +111,7 @@ namespace Wiwa
 						enemy->m_NavAgentSys->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
 					}
 
+					enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 					SelectRandomAttack(enemy);
 				}
 			}

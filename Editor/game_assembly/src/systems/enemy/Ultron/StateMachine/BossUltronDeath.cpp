@@ -32,7 +32,7 @@ namespace Wiwa
 
 		//pman.EmitBatch(currentEnemy);
 
-		//enemy->m_AnimatorSys->PlayAnimation("spawn", false);
+		enemy->m_AnimatorSys->PlayAnimation("death");
 	}
 
 	void BossUltronDeathState::UpdateState(BossUltron* enemy)

@@ -34,8 +34,6 @@ void Wiwa::BossUltronProjectileRainAttackState::EnterState(BossUltron* enemy)
 	//EntityId currentEnemy = enemy->GetEntity();
 
 	//pman.EmitBatch(currentEnemy);
-
-	//enemy->m_AnimatorSys->PlayAnimation("spawn", false);
 }
 
 void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
@@ -49,6 +47,8 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 		//WI_INFO("Prepare rain");
 
 		//Posar anim de preparacio
+
+		enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
 
 		enemy->m_NavAgentSys->StopAgent();
 
@@ -86,6 +86,8 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 
 			if (m_TimerThundersMark >= 1.1f)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+
 				for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
 					em.DestroyEntity(m_ThunderMarkIds[i]);
 					SpawnThunderStorm(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });

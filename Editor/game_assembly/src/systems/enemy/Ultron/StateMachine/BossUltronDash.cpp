@@ -39,6 +39,9 @@ namespace Wiwa
 		playerDistance = glm::vec3(0.0f);
 		interpolatedDashDistance = glm::vec3(0.0f);
 		m_MoveUpwardsCounter = 0.0f;
+
+		enemy->m_AnimatorSys->PlayAnimation("jumpsky");
+
 		m_State = DashState::DASH_INIT;
 	}
 
@@ -61,7 +64,7 @@ namespace Wiwa
 
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerToRotate >= 1.6f) //Timer to look at player
+			if (m_TimerToRotate >= 1.2f) //Timer to look at player
 			{
 				m_TimerToRotate = 0.0f;
 				m_MoveUpwardsCounter = 0.0f;
@@ -87,17 +90,13 @@ namespace Wiwa
 			if (m_TimerDash >= TIMER_GO_UPWARDS)
 			{
 				m_TimerDash = 0.0f;
-				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 1.0f; //Offset for the Smash
+				m_MoveUpwardsCounter = m_MoveUpwardsCounter + 1.0f;
 				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 
 			if (m_TimerToStopDash >= 1.2f) //Timer for the Ultron to go up
 			{
-				/*enemy->m_NavAgentSys->RegisterWithCrowd();
-				enemy->m_NavAgentSys->SetPosition(playerDistance);
-				enemy->m_NavAgentSys->StopAgent();
-				enemy->m_NavAgentSys->RemoveAgent();*/
-
+				
 				selfTr->localPosition.x = playerDistance.x;
 				selfTr->localPosition.z = playerDistance.z;
 
@@ -137,6 +136,8 @@ namespace Wiwa
 		{
 			em.DestroyEntity(m_PreSmashMarkId);
 
+			enemy->m_AnimatorSys->PlayAnimation("smash");
+
 			enemy->m_NavAgentSys->RegisterWithCrowd();
 			enemy->m_NavAgentSys->SetPosition(playerDistance);
 			enemy->m_NavAgentSys->StopAgent();
@@ -145,25 +146,6 @@ namespace Wiwa
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
 			SpawnExplosionAfterDash(enemy, selfTr);
-
-			/*float center_x = 0.0f;
-			float center_z = 0.0f;
-			float radius = 8.0f;
-			float angle_increment = 1.0f;
-			float current_angle = 0.0f;
-			int numberOfExplosion = 6;
-
-			for (int i = 0; i < numberOfExplosion; i++)
-			{
-				float x_pos = center_x + radius * cos(current_angle);
-				float z_pos = center_z + radius * sin(current_angle);
-
-				SpawnExplosionAfterDash(enemy, selfTr, x_pos, z_pos);
-
-				current_angle += angle_increment;
-			}*/
-
-			/*navAgent->autoRotate = true;*/
 
 			m_State = DashState::DASH_FINISH;
 		}
