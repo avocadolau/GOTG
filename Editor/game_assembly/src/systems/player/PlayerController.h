@@ -60,6 +60,7 @@ namespace Wiwa {
 
 	public:
 		bool IsDashing;
+		bool IsDead = false;
 	private:
 		glm::vec2 GetMovementInput();
 		glm::vec2 GetShootingInput();
