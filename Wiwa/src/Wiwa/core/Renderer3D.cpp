@@ -325,6 +325,16 @@ namespace Wiwa
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/justtexture", justTextureShader);
 
+		ResourceId justTextureAlphaShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/justtextureAlpha");
+		Shader* justTextureAlphaShader = Wiwa::Resources::GetResourceById<Shader>(justTextureAlphaShaderId);
+		justTextureAlphaShader->Compile("resources/shaders/vfx/justtextureAlpha");
+
+		justTextureAlphaShader->addUniform("u_LifeTime", UniformType::Float);
+		justTextureAlphaShader->addUniform("u_Color", UniformType::fVec4);
+		justTextureAlphaShader->addUniform("u_Texture", UniformType::Sampler2D);
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/justtextureAlpha", justTextureAlphaShader);
+
 		ResourceId impactShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/shot_impact");
 		Shader* impactShader = Wiwa::Resources::GetResourceById<Shader>(impactShaderId);
 		impactShader->Compile("resources/shaders/vfx/shot_impact");
@@ -486,7 +496,7 @@ namespace Wiwa
 		flamesShader->addUniform("u_LifeTime", UniformType::Float);
 		flamesShader->addUniform("u_Time", UniformType::Float);
 		flamesShader->addUniform("u_Color", UniformType::fVec4);
-		flamesShader->addUniform("u_FresnelColor", UniformType::fVec2);
+		flamesShader->addUniform("u_FresnelColor", UniformType::fVec4);
 		flamesShader->addUniform("u_FresnelRange", UniformType::fVec2);
 		flamesShader->addUniform("u_CameraPosition", UniformType::fVec3);
 		flamesShader->addUniform("u_Texture", UniformType::Sampler2D);

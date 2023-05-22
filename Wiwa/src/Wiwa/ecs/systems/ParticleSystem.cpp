@@ -402,9 +402,19 @@ namespace Wiwa {
 					}
 					else
 					{
+						glm::vec3 resultantVel = particle.velocity;
+						
+						if (emitter->m_p_followEmitterRotation)
+						{
+							glm::vec3 rotationVelRad = glm::radians(particle.transform.localRotation);
 
-						particle.transform.localPosition += particle.velocity * dt;
+							resultantVel = glm::rotate(resultantVel, rotationVelRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+							resultantVel = glm::rotate(resultantVel, rotationVelRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+							resultantVel = glm::rotate(resultantVel, rotationVelRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
+						}
+
+						particle.transform.localPosition += resultantVel * dt;
 					}
 
 					if (emitter->m_p_useGravity)
@@ -545,17 +555,7 @@ namespace Wiwa {
 
 
 
-					/*if (emitter->m_p_followEmitterPosition)
-					{
-						orginalPos = (t3d->position + particle.transform.localPosition);
-
-
-					}
-					else
-					{
-						orginalPos = particle.transform.localPosition;
-
-					}*/
+					
 					orginalPos = particle.transform.localPosition;
 
 					if (emitter->m_p_positionFollowsRotation)
@@ -670,7 +670,7 @@ namespace Wiwa {
 			}
 			else if (emitter->m_permanentParticles && emitter->m_cycleLifeTime)
 			{
-			SetParticleLifeTime(particle, particle.life_time_start);
+				SetParticleLifeTime(particle, particle.life_time_start);
 			}
 		}
 
@@ -1011,7 +1011,21 @@ namespace Wiwa {
 		}
 		else
 		{
-			particle.velocity = emitter->m_p_initialVelocity;
+
+			if (emitter->m_p_followEmitterRotationSpawn)
+			{
+				glm::vec3 rotatedVel;
+				glm::vec3 rotationVelRad = glm::radians(emitter->m_p_initialVelocity);
+
+				rotatedVel = glm::rotate(rotatedVel, rotationVelRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+				rotatedVel = glm::rotate(rotatedVel, rotationVelRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+				rotatedVel = glm::rotate(rotatedVel, rotationVelRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+				particle.velocity = rotatedVel;
+
+			}
+			else
+				particle.velocity = emitter->m_p_initialVelocity;
 		}
 
 		//initial angular velocity
