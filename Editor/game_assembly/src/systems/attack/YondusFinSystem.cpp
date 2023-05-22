@@ -64,7 +64,7 @@ namespace Wiwa
 				return;
 
 			waveSpawner = &waveSpawner[0];
-			if (waveSpawner && !waveSpawner->hasFinished){
+			if (waveSpawner){
 
 				// Check for all the active waves in that spawner.
 				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
