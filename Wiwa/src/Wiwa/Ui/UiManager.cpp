@@ -435,9 +435,17 @@ namespace Wiwa
 
 		char* word = _word;
 
-		int x = 0;
-		int y_extra = 0;
+		int X_offset = 0;
+		X_offset = ComputeX_DialogOffset(path, _word, maxWidth, 0);
+		int Y_offset = 0;
+		Y_offset = ComputeY_DialogOffset(path, _word, maxWidth);
+
+		int x = 0 + X_offset;
+		int y_extra = 64 - Y_offset;
 		int lineWidth = 0;
+
+		if (x < 0 || x > 950) x = 950;
+		if (y_extra < 0) y_extra = 0;
 
 		int ascent, descent, lineGap;
 		stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
@@ -460,9 +468,10 @@ namespace Wiwa
 			/* check if we need to wrap to the next line */
 			if (lineWidth + (int)roundf(ax * scale) >= maxWidth || forceNewLine == true)
 			{
-				
+				X_offset = ComputeX_DialogOffset(path, _word, maxWidth, i);
+
 				y_extra += l_h;
-				x = 0;
+				x = 0 + X_offset;
 				lineWidth = 0;
 
 				forceNewLine = false;
@@ -519,6 +528,261 @@ namespace Wiwa
 		free(bitmap);
 		textToDestroy.push_back(text);
 		return text;
+	}
+
+	int GuiManager::ComputeX_DialogOffset(const char* path, char* _word, int maxWidth, int charPos)
+	{
+		/* load font file */
+		long size2;
+		byte* fontBuffer2;
+
+		//Extracted from https://github.com/justinmeiners/stb-truetype-example/blob/master/main.c
+		//Read the fontFile lines 19 to 27
+		FILE* fontFile2 = fopen(path, "rb");
+		if (!fontFile2)
+		{
+			WI_CORE_CRITICAL("Seems like font at {} doesn't exist", path);
+			return 0;
+		}
+		fseek(fontFile2, 0, SEEK_END);
+		size2 = ftell(fontFile2);
+		fseek(fontFile2, 0, SEEK_SET);
+
+		fontBuffer2 = (byte*)malloc(size2);
+
+		fread(fontBuffer2, size2, 1, fontFile2);
+		fclose(fontFile2);
+
+
+		/* prepare font */
+		stbtt_fontinfo info2;
+		if (!stbtt_InitFont(&info2, fontBuffer2, 0))
+		{
+			WI_CORE_ERROR("Failed to load font at {}", path);
+			return 0;
+		}
+
+		int b_w2 = 1024; /* bitmap width */
+		int b_h2 = 1024; /* bitmap height */
+		int l_h2 = 64; /* line height */
+
+		/* create a bitmap for the phrase */
+		byte* bitmap2 = (byte*)calloc(b_w2 * b_h2, sizeof(unsigned char));
+
+		/* calculate font scaling */
+		float scale2 = stbtt_ScaleForPixelHeight(&info2, (float)l_h2);
+
+		char* word2 = _word;
+
+		int x2 = 0;
+		int y_extra2 = 0;
+		int lineWidth2 = 0;
+
+		int ascent2, descent2, lineGap2;
+		stbtt_GetFontVMetrics(&info2, &ascent2, &descent2, &lineGap2);
+
+		ascent2 = (int)round(ascent2 * scale2);
+		descent2 = (int)round(descent2 * scale2);
+
+		bool forceNewLine2 = false;
+		int nextWordChars2 = 0;
+
+		int X_offset = 0;
+
+		for (int a = 0 + charPos; a < strlen(word2); ++a)
+		{
+			/* how wide is this character */
+			int ax2;
+			int lsb2;
+			stbtt_GetCodepointHMetrics(&info2, word2[a], &ax2, &lsb2);
+			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
+
+			/* check if we need to wrap to the next line */
+			if (lineWidth2 + (int)roundf(ax2 * scale2) >= maxWidth || forceNewLine2 == true)
+			{
+				X_offset = (maxWidth / 2) - (lineWidth2 / 2);
+
+				return X_offset;
+
+				y_extra2 += l_h2;
+				x2 = 0;
+				lineWidth2 = 0;
+
+				forceNewLine2 = false;
+			}
+
+			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
+			int c_x12, c_y12, c_x22, c_y22;
+			stbtt_GetCodepointBitmapBox(&info2, word2[a], scale2, scale2, &c_x12, &c_y12, &c_x22, &c_y22);
+
+			/* compute y (different characters have different heights) */
+			int y2 = ascent2 + c_y12 + y_extra2;
+
+			/* render character (stride and offset is important here) */ //NOT HERE
+			/*int byteOffset = (int)(x + roundf(lsb * scale) + (y * b_w));
+			stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);*/
+
+			/* advance x */
+			x2 += (int)roundf(ax2 * scale2);
+			lineWidth2 += roundf(ax2 * scale2);
+
+
+			if (word2[a] == 32)
+			{
+				int b = 1;
+				nextWordChars2 = 0;
+
+				for (b = 1; word2[a + b] != 32 && a + b < strlen(word2); b++)
+				{
+					int ax2;
+					int lsb2;
+					stbtt_GetCodepointHMetrics(&info2, word2[a + b], &ax2, &lsb2);
+
+					nextWordChars2 += roundf(ax2 * scale2);
+				}
+
+				if (lineWidth2 + nextWordChars2 >= maxWidth)
+				{
+					forceNewLine2 = true;
+				}
+			}
+
+
+			/* add kerning */
+			int kern2;
+			kern2 = stbtt_GetCodepointKernAdvance(&info2, word2[a], word2[a + 1]);
+			x2 += (int)roundf(kern2 * scale2);
+		}
+
+		X_offset = (maxWidth / 2) - (lineWidth2 / 2);
+
+		return X_offset;
+	}
+
+	int GuiManager::ComputeY_DialogOffset(const char* path, char* _word, int maxWidth)
+	{
+		/* load font file */
+		long size2;
+		byte* fontBuffer2;
+
+		//Extracted from https://github.com/justinmeiners/stb-truetype-example/blob/master/main.c
+		//Read the fontFile lines 19 to 27
+		FILE* fontFile2 = fopen(path, "rb");
+		if (!fontFile2)
+		{
+			WI_CORE_CRITICAL("Seems like font at {} doesn't exist", path);
+			return 0;
+		}
+		fseek(fontFile2, 0, SEEK_END);
+		size2 = ftell(fontFile2);
+		fseek(fontFile2, 0, SEEK_SET);
+
+		fontBuffer2 = (byte*)malloc(size2);
+
+		fread(fontBuffer2, size2, 1, fontFile2);
+		fclose(fontFile2);
+
+
+		/* prepare font */
+		stbtt_fontinfo info2;
+		if (!stbtt_InitFont(&info2, fontBuffer2, 0))
+		{
+			WI_CORE_ERROR("Failed to load font at {}", path);
+			return 0;
+		}
+
+		int b_w2 = 1024; /* bitmap width */
+		int b_h2 = 1024; /* bitmap height */
+		int l_h2 = 64; /* line height */
+
+		/* create a bitmap for the phrase */
+		byte* bitmap2 = (byte*)calloc(b_w2 * b_h2, sizeof(unsigned char));
+
+		/* calculate font scaling */
+		float scale2 = stbtt_ScaleForPixelHeight(&info2, (float)l_h2);
+
+		char* word2 = _word;
+
+		int x2 = 0;
+		int y_extra2 = 0;
+		int lineWidth2 = 0;
+
+		int ascent2, descent2, lineGap2;
+		stbtt_GetFontVMetrics(&info2, &ascent2, &descent2, &lineGap2);
+
+		ascent2 = (int)round(ascent2 * scale2);
+		descent2 = (int)round(descent2 * scale2);
+
+		bool forceNewLine2 = false;
+		int nextWordChars2 = 0;
+
+		int Y_offset = 0;
+
+		for (int a = 0; a < strlen(word2); ++a)
+		{
+			/* how wide is this character */
+			int ax2;
+			int lsb2;
+			stbtt_GetCodepointHMetrics(&info2, word2[a], &ax2, &lsb2);
+			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
+
+			/* check if we need to wrap to the next line */
+			if (lineWidth2 + (int)roundf(ax2 * scale2) >= maxWidth || forceNewLine2 == true)
+			{
+
+				y_extra2 += l_h2;
+				x2 = 0;
+				lineWidth2 = 0;
+
+				forceNewLine2 = false;
+			}
+
+			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
+			int c_x12, c_y12, c_x22, c_y22;
+			stbtt_GetCodepointBitmapBox(&info2, word2[a], scale2, scale2, &c_x12, &c_y12, &c_x22, &c_y22);
+
+			/* compute y (different characters have different heights) */
+			int y2 = ascent2 + c_y12 + y_extra2;
+
+			/* render character (stride and offset is important here) */ //NOT HERE
+			/*int byteOffset = (int)(x + roundf(lsb * scale) + (y * b_w));
+			stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);*/
+
+			/* advance x */
+			x2 += (int)roundf(ax2 * scale2);
+			lineWidth2 += roundf(ax2 * scale2);
+
+
+			if (word2[a] == 32)
+			{
+				int b = 1;
+				nextWordChars2 = 0;
+
+				for (b = 1; word2[a + b] != 32 && a + b < strlen(word2); b++)
+				{
+					int ax2;
+					int lsb2;
+					stbtt_GetCodepointHMetrics(&info2, word2[a + b], &ax2, &lsb2);
+
+					nextWordChars2 += roundf(ax2 * scale2);
+				}
+
+				if (lineWidth2 + nextWordChars2 >= maxWidth)
+				{
+					forceNewLine2 = true;
+				}
+			}
+
+
+			/* add kerning */
+			int kern2;
+			kern2 = stbtt_GetCodepointKernAdvance(&info2, word2[a], word2[a + 1]);
+			x2 += (int)roundf(kern2 * scale2);
+		}
+
+		Y_offset = y_extra2 / 2;
+
+		return Y_offset;
 	}
 
 	Video* GuiManager::InitVideo(std::string path)
