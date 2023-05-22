@@ -26,7 +26,7 @@ void Wiwa::EndRewardRoom::OnUpdate()
 	if (!m_Activated)
 		return;
 
-	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)
+	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY)
 		|| Wiwa::Input::IsKeyPressed(Key::Enter))
 	{
 		RewardRoomData* data = GetComponentByIterator<RewardRoomData>(m_DataIt);
