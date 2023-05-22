@@ -345,6 +345,7 @@ namespace Wiwa
 					character->WalkTreshold = characterDoc["walk_threshold"].as_float();
 			}
 		}
+		s_PlayerInventory->Clear();
 		//LoadPlayerAchievements(&doc);
 	}
 
@@ -615,11 +616,12 @@ namespace Wiwa
 			s_RoomsToBoss--;
 			s_RoomsToShop--;
 
-			if (s_RoomsToShop == 0)
+			if (s_RoomsToShop <= 0)
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_SHOP");
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
+				s_RoomsToShop = 5;
 				s_CanPhalanxRooms = true;
 				LoadRandomRoom(s_ShopRooms);
 			}
@@ -633,7 +635,7 @@ namespace Wiwa
 		}
 		case Wiwa::RoomType::ROOM_SHOP:
 		{
-			if (s_RoomsToBoss == 0)
+			if (s_RoomsToBoss <= 0)
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);

@@ -233,8 +233,7 @@ namespace Wiwa {
 				emitter->m_ActiveTimer -= dt;
 			}
 
-			if ((m_SpawnTimer > 0 && !emitter->m_permanentParticles) || 
-				(m_SpawnTimer > 0 && (emitter->m_permanentParticles && emitter->m_cycleLifeTime)))
+			if (m_SpawnTimer > 0 )
 			{
 				m_SpawnTimer -= dt;
 				emitter->m_spawnTimer = m_SpawnTimer;

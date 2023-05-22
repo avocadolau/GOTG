@@ -1,1 +1,1 @@
-{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.0992898941040039,"u_Color":{"r":1.0,"g":0.0,"b":0.0,"a":0.9007101058959961},"u_Texture":"assets/textures/hurt/t_blood_03.png"}}
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":1.012691617012024,"u_Color":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"u_Texture":"assets/textures/onomatopoeia/t_particles_argh_01.png"}}
