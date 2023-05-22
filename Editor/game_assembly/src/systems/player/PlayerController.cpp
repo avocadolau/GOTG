@@ -84,6 +84,8 @@ void Wiwa::PlayerController::OnUpdate()
 
 	if (!IsDashing && GetCharacter()->CanMove)
 		SetPlayerRotation(GetDirection());
+
+	GetTransform()->localPosition.y = 0.f;
 }
 
 Wiwa::StarLordShooter* Wiwa::PlayerController::GetStarLord()
@@ -344,6 +346,7 @@ void Wiwa::PlayerController::SpawnRocketUltimate(Transform3D& transform, const C
 	Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
 	audio->PlayAudio("explosion");
 
+	//Sentinel Explosion
 	EntityId newBulletId = em.LoadPrefab("assets\\Prefabs\\StarlordUltimate\\P_StarLordUltimateBullet.wiprefab");
 	StarLordBulletSystem* bulletSys = em.GetSystem<StarLordBulletSystem>(newBulletId);
 
@@ -361,6 +364,20 @@ void Wiwa::PlayerController::SpawnRocketUltimate(Transform3D& transform, const C
 	bulletTr->localRotation = glm::vec3(0.f, playerTr->localRotation.y + 90.0f, 0.f);
 	bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
 
+	//std::string ptemp = "px: " + std::to_string(playerTr->localPosition.x) + " py: " + std::to_string(playerTr->localPosition.y) + " pz: " + std::to_string(playerTr->localPosition.z);
+	//std::string temp = "x: " + std::to_string(bulletTr->localPosition.x) + " y: " + std::to_string(bulletTr->localPosition.y) + " z: " + std::to_string(bulletTr->localPosition.z);
+
+	//WI_CORE_INFO(ptemp.c_str());
+	//WI_CORE_INFO(temp.c_str());
+
+	SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
+
+	bullet->direction = Math::Vec3FromAngle(m_Direction);
+	bullet->damage = 50;
+	bullet->isFromPool = false;
+
+	physSys->CreateBody();
+	bulletSys->EnableBullet();
 
 	//emit left muzzle
 	EntityId shotMuzzleLeft = em.GetChildByName(m_EntityId, "p_muzzleLeft");
@@ -376,22 +393,6 @@ void Wiwa::PlayerController::SpawnRocketUltimate(Transform3D& transform, const C
 	{
 		sys_shotMuzzleLeftImpact->EmitParticleBatch(1);
 		sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
-	}
-
-	//emit right muzzle
-	EntityId shotMuzzleRight = em.GetChildByName(m_EntityId, "p_muzzleRight");
-	EntityId shotMuzzleRightImpact = em.GetChildByName(shotMuzzleRight, "vfx_impact");
-	EntityId shotMuzzleRightFlash = em.GetChildByName(shotMuzzleRight, "vfx_flash");
-
-	em.SetActive(shotMuzzleRight, true);
-
-	ParticleSystem* sys_shotMuzzleRightImpact = em.GetSystem<ParticleSystem>(shotMuzzleRightImpact);
-	ParticleSystem* sys_shotMuzzleRightFlash = em.GetSystem<ParticleSystem>(shotMuzzleRightFlash);
-
-	if (sys_shotMuzzleRightImpact != nullptr && sys_shotMuzzleRightFlash != nullptr)
-	{
-		sys_shotMuzzleRightImpact->EmitParticleBatch(1);
-		sys_shotMuzzleRightFlash->EmitParticleBatch(1);
 	}
 }
 
