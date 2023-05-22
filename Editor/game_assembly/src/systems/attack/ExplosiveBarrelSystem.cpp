@@ -83,18 +83,6 @@ namespace Wiwa
 			}
 		}
 	}
-	/*void ExplosiveBarrelSystem::OnCollision(Object* body1, Object* body2)
-	{
-		if (body1->id == m_EntityId)
-		{
-			std::string playerStr = "PLAYER";
-			if (playerStr == body2->selfTagStr)
-			{
-				ExplosiveBarrel* explosiveBarrel = GetComponentByIterator<ExplosiveBarrel>(m_ExplosiveBarrelIt);
-				GameStateManager::DamagePlayer(explosiveBarrel->damage);
-			}
-		}
-	}*/
 
 	bool ExplosiveBarrelSystem::EnableExplosion()
 	{
@@ -102,9 +90,9 @@ namespace Wiwa
 		AudioSystem* audio = GetEntityManager().GetSystem<AudioSystem>(m_EntityId);
 		if (explosiveBarrel)
 		{
-			audio->PlayAudio("explosion");
+			if (audio)
+				audio->PlayAudio("explosion");
 			InitExplosion();
-			/*GetTransform()->localPosition = pos;*/
 		}
 		m_Timer = 0.0f;
 		return true;
