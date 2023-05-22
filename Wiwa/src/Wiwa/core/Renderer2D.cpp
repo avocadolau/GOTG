@@ -111,6 +111,11 @@ namespace Wiwa
 		return tclip;
 	}
 
+	void Renderer2D::BindCamera()
+	{
+		RenderManager::SetLayerCamera(1, &m_ActiveCamera);
+	}
+
 	bool Renderer2D::Init()
 	{
 		Window &window = Application::Get().GetWindow();
@@ -120,7 +125,7 @@ namespace Wiwa
 		m_ActiveCamera.SetOrthographic(resolution.w, resolution.h);
 		m_ActiveCamera.setPosition({0.0f, 0.0f, 3.0f});
 
-		RenderManager::SetLayerCamera(1, &m_ActiveCamera);
+		BindCamera();
 
 		WI_CORE_INFO("Renderer2D initialized");
 		return true;

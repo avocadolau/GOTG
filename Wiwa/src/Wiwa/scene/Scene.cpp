@@ -49,7 +49,7 @@ namespace Wiwa
 
 		m_PhysicsManager->InitWorld();
 
-
+		Wiwa::Application::Get().GetRenderer2D().BindCamera();
 	}
 
 	Scene::~Scene()
