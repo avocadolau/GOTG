@@ -1,1 +1,43 @@
-{"shader":"library/resources/shaders/vfx/flames","uniforms":{"u_LifeTime":0.916175901889801,"u_Time":163.94927978515625,"u_Color":{"r":0.624454140663147,"g":1.0,"b":0.9754008650779724,"a":1.0},"u_FresnelColor":{"x":0.0,"y":0.0},"u_FresnelRange":{"x":0.0,"y":0.0},"u_CameraPosition":{"x":0.0,"y":0.0,"z":0.0},"u_Texture":"assets/textures/trail_texture.png","u_Texture_Velocity":{"x":-1.5,"y":0.0},"u_TranspTexture":"assets/textures/trail_texture.png","u_TranspMask":"assets/textures/t_bullet_trail_fade.png","u_TranspTex_Velocity":{"x":-1.5,"y":0.0},"u_TranspTexMask_Velocity":{"x":0.0,"y":0.0}}}
+{
+    "shader": "library/resources/shaders/vfx/flames",
+    "uniforms": {
+        "u_LifeTime": 0.916175901889801,
+        "u_Time": 163.94927978515625,
+        "u_Color": {
+            "r": 0.624454140663147,
+            "g": 1.0,
+            "b": 0.9754008650779724,
+            "a": 1.0
+        },
+        "u_FresnelColor": {
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0,
+            "a": 0.0
+        },
+        "u_FresnelRange": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "u_CameraPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "u_Texture": "assets/textures/trail_texture.png",
+        "u_Texture_Velocity": {
+            "x": -1.5,
+            "y": 0.0
+        },
+        "u_TranspTexture": "assets/textures/trail_texture.png",
+        "u_TranspMask": "assets/textures/t_bullet_trail_fade.png",
+        "u_TranspTex_Velocity": {
+            "x": -1.5,
+            "y": 0.0
+        },
+        "u_TranspTexMask_Velocity": {
+            "x": 0.0,
+            "y": 0.0
+        }
+    }
+}
