@@ -8,7 +8,7 @@
 #include "../../../../components/attack/ZigZagBullet.h"
 #include "../../../attack/SimpleBulletSystem.h"
 #include "../../../attack/ZigZagSystem.h"
-
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -111,6 +111,7 @@ namespace Wiwa
 						enemy->m_NavAgentSys->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
 					}
 
+					enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 					enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 					SelectRandomAttack(enemy);
 				}
