@@ -63,11 +63,11 @@ namespace Wiwa {
 
 		if (m_Model == nullptr)
 		{
-			WI_CORE_ERROR("ParticleSystem: Error loading Material at path:'{}'", emitter->m_materialPath);
+			WI_CORE_ERROR("ParticleSystem: Error loading Mesh at path:'{0}', Entity id: {1}", emitter->m_meshPath, (int)m_EntityId);
 		}
 		if (m_Material == nullptr)
 		{
-			WI_CORE_ERROR("ParticleSystem: Error loading mesh at path:'{}'", emitter->m_meshPath);
+			WI_CORE_ERROR("ParticleSystem: Error loading Material at path:'{0}, Entity id: {1}'", emitter->m_materialPath, (int)m_EntityId);
 		}
 
 
@@ -103,7 +103,7 @@ namespace Wiwa {
 			}
 
 		}
-		if (m_SpawnTimer == 0 && (emitter->m_active || emitter->m_activeOverTime))
+		if (m_SpawnTimer <= 0 && (emitter->m_active || emitter->m_activeOverTime))
 			SpawnParticleSet();
 
 	}
@@ -162,7 +162,7 @@ namespace Wiwa {
 			}
 
 		}
-		if (m_SpawnTimer == 0 && (emitter->m_active || emitter->m_activeOverTime))
+		if (m_SpawnTimer <= 0 && (emitter->m_active || emitter->m_activeOverTime))
 			SpawnParticleSet();
 
 		return true;
@@ -336,7 +336,7 @@ namespace Wiwa {
 		{
 			Particle& particle = m_Particles[i];
 
-			if (particle.life_time > 0.0f)
+			if (particle.life_time >= 0.0f)
 			{
 				/*if (!Time::IsPaused())*/
 				{
