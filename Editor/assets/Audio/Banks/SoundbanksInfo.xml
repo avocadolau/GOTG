@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{A41BCFD3-CA2D-3DEE-24BF-D522C7494303}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{01B016CD-9D94-AE09-1E6A-75DCC7E144F5}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -830,13 +830,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{F57E897A-26D0-E7F0-29A4-E5EA594C522D}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{569502A6-6A4A-0142-7B59-12AAC082D342}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
 				<File Id="32142556" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_normal_bullet.wav</ShortName>
-					<CachePath>SFX/boss_normal_bullet_B3D038AC.wem</CachePath>
+					<CachePath>SFX/boss_normal_bullet_F9DB59C6.wem</CachePath>
 				</File>
 				<File Id="131081328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit04.wav</ShortName>
@@ -844,7 +844,7 @@
 				</File>
 				<File Id="134196824" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>laserThick.wav</ShortName>
-					<CachePath>SFX/laserThick_6221EAFC.wem</CachePath>
+					<CachePath>SFX/laserThick_8E1D11BF.wem</CachePath>
 				</File>
 				<File Id="143564780" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit01alt.wav</ShortName>
@@ -880,7 +880,7 @@
 				</File>
 				<File Id="432546607" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterball_xplosion.wav</ShortName>
-					<CachePath>SFX/boss_clusterball_xplosion_24037D34.wem</CachePath>
+					<CachePath>SFX/boss_clusterball_xplosion_EA80777F.wem</CachePath>
 				</File>
 				<File Id="574236853" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack01.wav</ShortName>
@@ -912,7 +912,7 @@
 				</File>
 				<File Id="924070845" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterBall_shoot.wav</ShortName>
-					<CachePath>SFX/boss_clusterBall_shoot_595E7227.wem</CachePath>
+					<CachePath>SFX/boss_clusterBall_shoot_29421B4D.wem</CachePath>
 				</File>
 				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
@@ -936,7 +936,7 @@
 				</File>
 				<File Id="1069540054" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_smash01.wav</ShortName>
-					<CachePath>SFX/boss_smash01_B6663E92.wem</CachePath>
+					<CachePath>SFX/boss_smash01_B59F9D10.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -1122,5 +1122,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{B09106F1-9C9D-36C9-93E8-70F3BE9624B6}</FileHash>
+	<FileHash>{F823A413-4F11-7CDC-4ABE-1406D9CE264C}</FileHash>
 </SoundBanksInfo>

@@ -143,12 +143,67 @@
 																					<Local>
 																						<MusicClip Name="Norman Greenbaum Spirit In The Sky" ID="{1D2E08DB-3AA4-46E4-873B-20E0BBFB48EE}">
 																							<PropertyList>
-																								<Property Name="EndTrimOffset" Type="Real64" Value="237493.708333333"/>
+																								<Property Name="BeginTrimOffset" Type="Real64" Value="50501.8258758034"/>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="58501.8258758034"/>
 																								<Property Name="FadeInMode" Type="int16" Value="0"/>
 																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																								<Property Name="PlayAt" Type="Real64" Value="-50501.8258758034"/>
 																							</PropertyList>
 																							<AudioSourceRef Name="Norman Greenbaum Spirit In The Sky" ID="{5EDD4B6E-C4E7-482A-A77D-57D7AC42BAA3}"/>
 																							<PropertyCurveList>
+																								<PropertyCurve PropertyName="Highpass">
+																									<Curve Name="" ID="{ECB5CF17-DFCB-4E5B-8AFA-0D2EAD0E0E1E}">
+																										<PropertyList>
+																											<Property Name="Flags" Type="int32" Value="1"/>
+																										</PropertyList>
+																										<PointList>
+																											<Point>
+																												<XPos>50.50183</XPos>
+																												<YPos>0</YPos>
+																												<Flags>5</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>58.50183</XPos>
+																												<YPos>0</YPos>
+																												<Flags>37</Flags>
+																											</Point>
+																										</PointList>
+																									</Curve>
+																								</PropertyCurve>
+																								<PropertyCurve PropertyName="Lowpass">
+																									<Curve Name="" ID="{375186C0-86F9-43FA-96E9-528B3F45C6F3}">
+																										<PropertyList>
+																											<Property Name="Flags" Type="int32" Value="1"/>
+																										</PropertyList>
+																										<PointList>
+																											<Point>
+																												<XPos>50.50183</XPos>
+																												<YPos>0.35286</YPos>
+																												<Flags>5</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>53.68634</XPos>
+																												<YPos>-0.20165</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>55.06767</XPos>
+																												<YPos>-0.209</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>55.14474</XPos>
+																												<YPos>-0.35292</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>58.50183</XPos>
+																												<YPos>-100</YPos>
+																												<Flags>37</Flags>
+																											</Point>
+																										</PointList>
+																									</Curve>
+																								</PropertyCurve>
 																								<PropertyCurve PropertyName="Volume">
 																									<Curve Name="" ID="{3B93D127-D66D-4D9A-B7D9-69982902A243}">
 																										<PropertyList>
@@ -156,23 +211,23 @@
 																										</PropertyList>
 																										<PointList>
 																											<Point>
-																												<XPos>0</XPos>
-																												<YPos>0</YPos>
+																												<XPos>50.50183</XPos>
+																												<YPos>-10.54094</YPos>
 																												<Flags>5</Flags>
 																											</Point>
 																											<Point>
-																												<XPos>4.18754</XPos>
-																												<YPos>0</YPos>
+																												<XPos>52.50536</XPos>
+																												<YPos>-6.00217</YPos>
 																												<Flags>0</Flags>
 																											</Point>
 																											<Point>
-																												<XPos>16.15197</XPos>
-																												<YPos>-2.36482</YPos>
+																												<XPos>55.07483</XPos>
+																												<YPos>-6.03572</YPos>
 																												<Flags>0</Flags>
 																											</Point>
 																											<Point>
-																												<XPos>237.493708333333</XPos>
-																												<YPos>-2.2535</YPos>
+																												<XPos>58.50183</XPos>
+																												<YPos>-96.3</YPos>
 																												<Flags>37</Flags>
 																											</Point>
 																										</PointList>
@@ -245,7 +300,7 @@
 									<PropertyList>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-13</Value>
+												<Value>-10</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
