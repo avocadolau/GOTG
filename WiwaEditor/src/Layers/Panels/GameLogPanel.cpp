@@ -62,12 +62,13 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0, 0, 200, 1), "%s", Wiwa::GameStateManager::s_PlayerTriggerNext ? "true" : "false");
 
-	ImGui::Text("Enemies active: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
-
+	
 	if (Wiwa::Time::IsPlaying())
 	{
+		ImGui::Text("Enemies active: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
+
 		ImGui::Text("Approximate total enemies: ");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());

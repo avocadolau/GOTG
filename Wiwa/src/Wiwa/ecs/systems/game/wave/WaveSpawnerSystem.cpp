@@ -149,7 +149,6 @@ namespace Wiwa
 
 		WaveSpawner* wavesSpawner = GetComponentByIterator<WaveSpawner>(m_EnemySpawnerIt);
 		wavesSpawner->currentWaveCount += 1;
-		wavesSpawner->hasTriggered = true;
 		if (wavesSpawner->hasFinished || m_StopUpdating)
 			return;
 
@@ -183,6 +182,8 @@ namespace Wiwa
 		m_TimerForNextWave = 0.0f;
 		m_TimerBetweenWaves = 0.0f;
 		m_SpawnedWavesCounter++;
+
+		wavesSpawner->hasTriggered = true;
 	}
 }
 
