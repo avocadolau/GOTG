@@ -843,7 +843,7 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CORE_WARN("Couldn't open file \"{0}\".", scene_path);
+			WI_CORE_WARN("Couldn't open scene file \"{0}\".", scene_path);
 		}
 
 		scene_file.Close();
