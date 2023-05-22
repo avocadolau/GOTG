@@ -12,6 +12,7 @@
 namespace Wiwa {
 	using ResourceId = size_t;
 	class Shader;
+	
 	class WI_API Material
 	{
 	public:

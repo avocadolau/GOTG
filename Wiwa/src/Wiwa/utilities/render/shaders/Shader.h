@@ -17,7 +17,27 @@ namespace Wiwa {
 		UniformType type;
 		uint32_t location;
 	};
-
+	struct PointLightUniform
+	{
+		uint32_t BaseColor;
+		uint32_t BaseAmbientIntensity;
+		uint32_t BaseDiffuseIntensity;
+		uint32_t LocalPos;
+		uint32_t AttenConstant;
+		uint32_t AttenLinear;
+		uint32_t AttenExp;
+	};
+	struct LightUniformLocations
+	{
+		uint32_t CameraLoc;
+		uint32_t DirectionalLightBC;
+		uint32_t DirectionalLightBaseAmbientIntensity;
+		uint32_t DirectionalLightBaseDiffuseIntensity;
+		uint32_t DirectionalLightDirection;
+		uint32_t NumPointLights;
+		PointLightUniform PointLights[32];
+	};
+	
 	class WI_API Shader
 	{
 	public:
@@ -97,6 +117,8 @@ namespace Wiwa {
 		std::vector<Material*>& getRefs() { return m_MatRefs; }
 
 		State getState() const { return m_CompileState; }
+
+		LightUniformLocations LightLocations;
 	protected:
 		uint32_t m_IDprogram;
 		bool m_AllOk;
@@ -113,6 +135,8 @@ namespace Wiwa {
 		uint32_t m_Proj;
 		uint32_t m_UCamera;
 		uint32_t m_BoneLocation;
+
+
 	};
 
 	template<>
