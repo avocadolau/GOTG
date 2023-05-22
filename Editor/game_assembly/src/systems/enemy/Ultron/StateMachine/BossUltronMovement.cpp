@@ -13,6 +13,7 @@
 #include "../../../../components/attack/ClusterBullet.h"
 #include "../../../attack/RainProjectileSystem.h"
 #include "../../../../components/attack/RainProjectile.h"
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -373,6 +374,8 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
+
+		enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 		enemy->m_AnimatorSys->PlayAnimation("bigprojectiles_attack");
 
 		if (physSys != nullptr)
@@ -403,7 +406,7 @@ namespace Wiwa
 
 		physSys->CreateBody();
 
-		clusterSystem->EnableBullet();
+		clusterSystem->EnableBullet(enemy);
 	}
 
 	void BossUltronMovementState::SpawnSplashZigZagBullets(BossUltron* enemy)
@@ -466,7 +469,7 @@ namespace Wiwa
 
 	glm::vec3 Wiwa::BossUltronMovementState::GetPositionUpDownLeftRight(const glm::vec3& localPosition, float distance, int index) //Index used to mark up & down
 	{
-		
+
 		float offset = distance * 1.2f;
 		float angle = static_cast<float>(index) * (2.0f * glm::pi<float>()) / 5.0f;
 
@@ -478,7 +481,7 @@ namespace Wiwa
 			// Create and return the new position vector
 			return glm::vec3(x, 0.1f, z);
 		}
-		
+
 		if (index == 2) //Calcualte Up
 		{
 			float x = localPosition.x;
@@ -505,7 +508,7 @@ namespace Wiwa
 		}
 	}
 
-	bool Wiwa::BossUltronMovementState::isInsideSquare(const glm::vec3& point) 
+	bool Wiwa::BossUltronMovementState::isInsideSquare(const glm::vec3& point)
 	{
 		float minX = -19.0f;
 		float maxX = 19.0f;
@@ -548,7 +551,7 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
 		BossUltron* ultron = (BossUltron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
-	
+
 		bullet->direction = bull_dir;
 
 		physSys->CreateBody();
@@ -597,7 +600,7 @@ namespace Wiwa
 		bulletTr->localRotation = glm::vec3(-90.0f, 0.0f, playerTr->localRotation.y + 90.0f);
 		RainProjectile* bullet = (RainProjectile*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<RainProjectile>(newBulletId));
 		BossUltron* ultron = (BossUltron*)entityManager.GetComponentByIterator(enemy->m_Ultron);
-	
+
 		bullet->direction = bull_dir;
 
 		/*if (enemy->m_IsCircularThunderActive)
@@ -643,6 +646,7 @@ namespace Wiwa
 		{
 			if (m_SplashZigZagMovementSpawned == false)
 			{
+				enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 
 				SpawnSplashZigZagBullets(enemy);
@@ -676,6 +680,7 @@ namespace Wiwa
 		{
 			if (m_CircularThunderMovementMarkSpawned == false && playerTr != nullptr)
 			{
+				enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
 
 				m_InitialPlayerPos = playerTr->localPosition;
@@ -692,7 +697,7 @@ namespace Wiwa
 					thunderMarkTr->localPosition.z = thunderPos.z;
 				}
 
-				
+
 
 				m_CircularThunderMovementMarkSpawned = true;
 			}
