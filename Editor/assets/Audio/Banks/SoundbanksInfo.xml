@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{DC54FE5E-4E1B-C6CE-C464-231499E58875}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{A41BCFD3-CA2D-3DEE-24BF-D522C7494303}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{25919A0C-FF0C-3788-3833-0700F4651C1B}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -747,7 +747,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -782,11 +782,11 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1484330123" Type="User" Language="SFX" Hash="{317C9ABB-EA68-BB3B-0252-3E40FD6E13CE}">
+		<SoundBank Id="1484330123" Type="User" Language="SFX">
 			<ShortName>audio_settings</ShortName>
 			<Path>audio_settings.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
+		<SoundBank Id="1551306167" Type="User" Language="SFX">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -830,7 +830,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{1C872B67-1ECF-CAAB-1EB7-91A64A99EAC9}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -1044,7 +1044,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{B965CD49-2EDA-9584-B7A6-FB63109B7065}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1122,5 +1122,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{5E93307C-3CB3-78F0-8B2F-8F505C30CC0A}</FileHash>
+	<FileHash>{BCFF22B6-0D01-6A72-1A09-FA35963FCAC7}</FileHash>
 </SoundBanksInfo>
