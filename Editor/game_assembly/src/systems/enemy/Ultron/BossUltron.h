@@ -22,15 +22,10 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_Ultron;
 
 		float m_Timer;
-
 		int m_MinimumPath = 0;
 		int m_MaxHealth = 0;
-
 		bool m_IsSecondPhaseActive = false;
-		bool m_DoHitSound = false;
-
 		glm::vec3 m_SceneCenterPos = glm::vec3(0.0f);
-
 	public:
 		BossUltron();
 		~BossUltron();

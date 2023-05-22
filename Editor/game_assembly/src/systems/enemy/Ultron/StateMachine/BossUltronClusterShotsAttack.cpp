@@ -6,7 +6,6 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
-#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -234,8 +233,6 @@ namespace Wiwa
 
 		/*enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");*/
 
-		enemy->m_AudioSys->PlayAudio("boss_cluster_ball");
-
 		if (physSys != nullptr)
 		{
 			physSys->DeleteBody();
@@ -264,7 +261,7 @@ namespace Wiwa
 		
 		physSys->CreateBody();
 
-		clusterSystem->EnableBullet(enemy);
+		clusterSystem->EnableBullet();
 		
 		return true;
 	}

@@ -67,3 +67,5 @@
 
 #include "systems/camera/CameraAgentSystem.h"
 #include "systems/gui/PopUpItem.h"
+
+#include "systems/hub/TargetSystem.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include <Wiwa/ecs/systems/System.h>
-#include "../enemy/Ultron/BossUltron.h"
+
 #include <Wiwa/utilities/Reflection.h>
 
 #define LITTLE_BULLETS_NUMBER 14
@@ -15,9 +15,6 @@ namespace Wiwa {
 		bool m_NotCollidingPlayer = true;
 
 		bool m_HasBlown = true;
-
-		BossUltron* BossUltronCluster;
-
 	public:
 		ClusterBulletSystem();
 		~ClusterBulletSystem();
@@ -39,7 +36,7 @@ namespace Wiwa {
 		void BlowClusterBullet02(EntityId bulletId);
 
 		//bool OnEnabledFromPool();
-		bool EnableBullet(BossUltron* enemy);
+		bool EnableBullet();
 		bool OnDisabledFromPool();
 	};
 }

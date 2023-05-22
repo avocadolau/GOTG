@@ -13,7 +13,6 @@
 #include "../../../../components/attack/ClusterBullet.h"
 #include "../../../attack/RainProjectileSystem.h"
 #include "../../../../components/attack/RainProjectile.h"
-#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -126,7 +125,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::BULLET_STORM;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
@@ -374,8 +373,6 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-
-		enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 		enemy->m_AnimatorSys->PlayAnimation("bigprojectiles_attack");
 
 		if (physSys != nullptr)
@@ -406,7 +403,7 @@ namespace Wiwa
 
 		physSys->CreateBody();
 
-		clusterSystem->EnableBullet(enemy);
+		clusterSystem->EnableBullet();
 	}
 
 	void BossUltronMovementState::SpawnSplashZigZagBullets(BossUltron* enemy)
@@ -646,7 +643,6 @@ namespace Wiwa
 		{
 			if (m_SplashZigZagMovementSpawned == false)
 			{
-				enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 
 				SpawnSplashZigZagBullets(enemy);
@@ -680,7 +676,6 @@ namespace Wiwa
 		{
 			if (m_CircularThunderMovementMarkSpawned == false && playerTr != nullptr)
 			{
-				enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
 
 				m_InitialPlayerPos = playerTr->localPosition;

@@ -183,12 +183,7 @@ namespace Wiwa
 
 		EnemySystem::ReceiveDamage(damage);
 
-		std::uniform_int_distribution<> audioHitSound(1, 100);
-		int randomNum = audioHitSound(Application::s_Gen);
-		if (randomNum <= 20) // 20 % probability
-		{
-			m_AudioSys->PlayAudio("vo_boss_hit");
-		}
+		Wiwa::EntityManager& em = this->getScene().GetEntityManager();
 
 		m_AnimatorSys->PlayAnimation("hit");
 	}

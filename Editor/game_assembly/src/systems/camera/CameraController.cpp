@@ -206,7 +206,7 @@ namespace Wiwa
 			data = GetComponentByIterator<PlayerCameraData>(m_CameraDataIt);
 		if (data)
 		{
-			m_TargetFOV = mapValue(nearDistance, 0, 100.f, data->MinCombatFOV, data->MaxCombatFOV);
+			m_TargetFOV = mapValue(nearDistance, 0, data->ZoomSensitivity, data->MinCombatFOV, data->MaxCombatFOV);
 			CLAMP(m_TargetFOV, data->MinCombatFOV, data->MaxCombatFOV);
 		}
 		else
