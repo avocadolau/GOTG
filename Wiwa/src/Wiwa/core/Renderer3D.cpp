@@ -478,6 +478,28 @@ namespace Wiwa
 		//spriteSheetFrameShader->addUniform("u_Index", UniformType::Uint);
 
 		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/spritesheet_frame", spriteSheetFrameShader);
+
+		ResourceId flamesShaderId = Wiwa::Resources::Load<Shader>("resources/shaders/vfx/flames");
+		Shader* flamesShader = Wiwa::Resources::GetResourceById<Shader>(flamesShaderId);
+		flamesShader->Compile("resources/shaders/vfx/flames");
+
+		flamesShader->addUniform("u_LifeTime", UniformType::Float);
+		flamesShader->addUniform("u_Time", UniformType::Float);
+		flamesShader->addUniform("u_Color", UniformType::fVec4);
+		flamesShader->addUniform("u_FresnelColor", UniformType::fVec2);
+		flamesShader->addUniform("u_FresnelRange", UniformType::fVec2);
+		flamesShader->addUniform("u_CameraPosition", UniformType::fVec3);
+		flamesShader->addUniform("u_Texture", UniformType::Sampler2D);
+		flamesShader->addUniform("u_Texture_Velocity", UniformType::fVec2);
+		flamesShader->addUniform("u_TranspTexture", UniformType::Sampler2D);
+		flamesShader->addUniform("u_TranspMask", UniformType::Sampler2D);
+		flamesShader->addUniform("u_TranspTex_Velocity", UniformType::fVec2);
+		flamesShader->addUniform("u_TranspTexMask_Velocity", UniformType::fVec2);
+
+
+
+		Wiwa::Resources::Import<Shader>("resources/shaders/vfx/flames", flamesShader);
+
 		//===========================================================================================================
 
 		// Normal Display Shader
