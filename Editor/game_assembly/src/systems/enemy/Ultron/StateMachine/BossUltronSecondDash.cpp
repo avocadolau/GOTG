@@ -36,6 +36,8 @@ namespace Wiwa
 		m_TimerAfterDash = 0.0f;
 		m_TimerOfDashAction = 0.0f;
 
+		enemy->m_AnimatorSys->PlayAnimation("dash");
+
 		m_SecondDashState = Wiwa::BossUltronSecondDashState::SecondDashState::PREPARE_DASH;
 	}
 
@@ -51,9 +53,9 @@ namespace Wiwa
 		{
 			m_TimerToLookAtPlayer += Time::GetDeltaTimeSeconds();
 
-			enemy->LookAt(playerTr->localPosition, 100.0f);
+			enemy->LookAt(playerTr->localPosition, 300.0f);
 
-			if (m_TimerToLookAtPlayer >= 0.1f) //Time to Look At player
+			if (m_TimerToLookAtPlayer >= 0.4f) //Time to Look At player
 			{
 				enemy->m_NavAgentSys->StopAgent();
 				navAgent->autoRotate = false;
@@ -143,7 +145,7 @@ namespace Wiwa
 		Wiwa::SecondDashSystem* dashSystem = entityManager.GetSystem<Wiwa::SecondDashSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 
-		enemy->m_AnimatorSys->PlayAnimation("A_attak_bigprojetiles");
+		/*enemy->m_AnimatorSys->PlayAnimation("dash");*/
 
 		if (physSys != nullptr)
 		{

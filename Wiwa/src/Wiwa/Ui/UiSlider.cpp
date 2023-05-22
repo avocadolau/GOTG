@@ -82,7 +82,7 @@ namespace Wiwa
 					//RIGHT
 					if (Wiwa::Input::IsButtonPressed(0, 12))
 					{
-						clicked = true;
+						clickedRight = true;
 						extraPosition.width += 1;
 						if (extraPosition.width >= position.width)
 						{
@@ -92,10 +92,20 @@ namespace Wiwa
 						}
 
 					}
+					if (clickedRight && Wiwa::Input::IsButtonReleased(0, 12))
+					{
+						clickedRight = false;
+
+						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
+						{
+							Audio::PostEvent(audioEventForButton.c_str());
+						}
+
+					}
 					//LEFT
 					if (Wiwa::Input::IsButtonPressed(0, 14))
 					{
-						clicked = true;
+						clickedLeft = true;
 						extraPosition.width -= 1;
 						if (extraPosition.width <= 0)
 						{
@@ -104,7 +114,17 @@ namespace Wiwa
 						}
 
 					}
-					if (clicked)
+					if (clickedLeft && Wiwa::Input::IsButtonReleased(0, 14))
+					{
+						clickedLeft = false;
+
+						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
+						{
+							Audio::PostEvent(audioEventForButton.c_str());
+						}
+
+					}
+					if (clickedLeft || clickedRight)
 					{
 						value = (((float)extraPosition.width / (float)position.width) * 100);
 						float params = value;
@@ -115,16 +135,7 @@ namespace Wiwa
 							function_name.execute(params);
 						}
 					}
-					if (clicked && (Wiwa::Input::IsButtonReleased(0, 14) || Wiwa::Input::IsButtonReleased(0,12)) )
-					{
-						clicked = false;
-						
-						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
-						{
-							Audio::PostEvent(audioEventForButton.c_str());
-						}
-						
-					}
+					
 				}
 			}
 		}

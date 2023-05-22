@@ -26,17 +26,30 @@ namespace Wiwa
 
 		//enemy->m_AnimatorSys->PlayAnimation("");
 		//play particles
-		//play Animation		
+		//play Animation
+
+		m_TimerSpawn = 0.0f;
+	
+		enemy->m_AnimatorSys->PlayAnimation("entrance");
 	}
 
 	void BossUltronSpawnState::UpdateState(BossUltron* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		
-		// when animation finishes, pass to the movement state
-		
-		/*if (enemy->m_AnimatorSys->HasFinished())*/
-		enemy->SwitchState(enemy->m_MovementState);
+
+		m_TimerSpawn += Time::GetRealDeltaTimeSeconds();
+
+		glm::vec3 centerPosition = glm::vec3(0.0f);
+
+		enemy->m_NavAgentSys->SetDestination(centerPosition);
+
+		if (m_TimerSpawn > 2.0f)
+		{
+			// when animation finishes, pass to the movement state
+		    /*if (enemy->m_AnimatorSys->HasFinished())*/
+
+			enemy->SwitchState(enemy->m_MovementState);
+		}
 	}
 
 	void BossUltronSpawnState::ExitState(BossUltron* enemy)
