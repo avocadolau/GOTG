@@ -59,6 +59,8 @@ namespace Wiwa
 		static Vector2f CalculateScreenGlPos(const Vector2i &position, const Size2i &size, Pivot pivot);
 		static TextureClip CalculateTextureClip(const Rect2i &rect, const Size2i &texSize);
 
+		void BindCamera();
+
 		bool Init();
 		void Update();
 
