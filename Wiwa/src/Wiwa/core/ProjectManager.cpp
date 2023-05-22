@@ -113,7 +113,8 @@ namespace Wiwa
 	{
 		std::string p = Wiwa::Resources::_assetToLibPath(path).c_str();
 		std::filesystem::path pathR(p);
-		pathR = std::filesystem::relative(std::filesystem::current_path());
+		
+		pathR = std::filesystem::relative(pathR, std::filesystem::current_path());
 		SceneData* sdata = getSceneByName(name);
 
 		if (!sdata) {
