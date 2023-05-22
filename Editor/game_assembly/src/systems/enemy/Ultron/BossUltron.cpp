@@ -71,8 +71,6 @@ namespace Wiwa
 		Ultron* ultron = GetComponentByIterator<Ultron>(m_Ultron);
 		EnemyManager& manager = GameStateManager::GetEnemyManager();
 		*ultron = manager.m_UltronData;
-
-		
 	}
 
 	void BossUltron::OnInit()
@@ -187,7 +185,7 @@ namespace Wiwa
 
 		Wiwa::EntityManager& em = this->getScene().GetEntityManager();
 
-		m_AnimatorSys->PlayAnimation("A_hit");
+		m_AnimatorSys->PlayAnimation("hit");
 	}
 
 	void BossUltron::SwitchState(BossUltronBaseState* state)

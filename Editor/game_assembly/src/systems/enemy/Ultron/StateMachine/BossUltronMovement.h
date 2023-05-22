@@ -51,6 +51,7 @@ namespace Wiwa {
 		std::vector<glm::vec3> m_PremadePositions;
 		glm::vec3 currentDestination = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_InitialPlayerPos = glm::vec3(0.0f);
+		glm::vec3 m_InitialPlayerPosCenterThunders = glm::vec3(0.0f);
 
 		const char* m_ThunderMarkPath;
 		std::vector<EntityId> m_ThunderMarkIds;
@@ -76,6 +77,7 @@ namespace Wiwa {
 		bool m_ThunderMovementMarkSpawned = false;
 		bool m_CircularThunderMovementMarkSpawned = false;
 		bool m_ThunderMovementSpawned = false;
+		bool m_ThunderMiddleSpawned = false;
 		bool m_CircularThunderMovementSpawned = false;
 		bool m_CircularMiddleThunder = false;
 		bool m_SplashZigZagMovementSpawned = false;
