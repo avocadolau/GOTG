@@ -162,6 +162,76 @@
 										</Action>
 									</ChildrenList>
 								</Event>
+								<Event Name="boss_cluster_ball" ID="{8F91DF84-BC50-4AFC-B7AC-BC1076C61275}">
+									<ChildrenList>
+										<Action Name="" ID="{16AD3D20-F11F-4D8C-9338-9A066964267D}" ShortID="1070306876">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="cluster_ball" ID="{7C011009-2B6E-4299-A4BA-2D1EC1ED5C5A}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="boss_cluster_ball_exp" ID="{92725EAE-F20F-419E-AA76-1009B43E9ABC}">
+									<ChildrenList>
+										<Action Name="" ID="{499EEA0C-FE63-4DC3-808F-E8C340999B45}" ShortID="513677325">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="cluster_ball_explosion" ID="{B3A04584-278C-49BC-8D0B-1011DB64EAD1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="boss_laser" ID="{AEBD4BBF-28EA-4781-923E-703CE36070D5}">
+									<ChildrenList>
+										<Action Name="" ID="{E5EDF7F0-7192-46BA-A2F8-4EC207F2C3B5}" ShortID="453333101">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="boss_smash_impact" ID="{B8254D4A-BE5A-4BAA-9663-9F7C4EC0D7C8}">
+									<ChildrenList>
+										<Action Name="" ID="{D9F87311-11FB-4283-AF34-4B020201F2EA}" ShortID="161832293">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="smash" ID="{C911BA39-583C-4352-A5A4-0789C8FA0C9D}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="boss_normal_shoot" ID="{BC5EE9F7-8B05-4F5F-9FC7-73B2464B3717}">
+									<ChildrenList>
+										<Action Name="" ID="{2DC8BAA1-60C5-42DA-897B-1892651AE11F}" ShortID="5305090">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="normal_bullet" ID="{8D1A7209-7506-42DA-B70F-3C5EBFF7FDF3}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="subjugator" ID="{42D485A4-DEE0-4BA7-949C-727A207D967D}" ShortID="391837673">
+							<ChildrenList>
+								<Event Name="subjugator_attack" ID="{2E51F3DB-C773-47D5-A490-2B679D729ADB}">
+									<ChildrenList>
+										<Action Name="" ID="{5589C119-5BC4-4203-A789-769621AEE8F5}" ShortID="564418302">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="subjugator_attack" ID="{66B3D591-EDE6-4509-B5EE-9080E19EA5AD}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
 					</ChildrenList>

@@ -2017,7 +2017,7 @@
 										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>7</Value>
+												<Value>11</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2774,14 +2774,50 @@
 						<Folder Name="subjugator" ID="{EE739681-A740-4294-BB73-AD72790020D6}" ShortID="37821874">
 							<ChildrenList>
 								<Sound Name="subjugator_attack" ID="{66B3D591-EDE6-4509-B5EE-9080E19EA5AD}" ShortID="67452226">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="Pitch" Type="int32">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{6E774C06-7864-4F44-AFDD-33EC0608DA10}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="200"/>
+															<Property Name="Min" Type="Real64" Value="-200"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-15</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="shoots" ID="{ABB774B1-6B93-490A-88FB-26521E10AA1A}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+										</Reference>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="jubjugator_shoot" ID="{B9882B56-06C8-4F4C-A948-344874C97B4A}">
+											<Language>SFX</Language>
+											<AudioFile>jubjugator_shoot.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="689284067"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="jubjugator_shoot" ID="{B9882B56-06C8-4F4C-A948-344874C97B4A}" Platform="Linked"/>
+									</ActiveSourceList>
 								</Sound>
 							</ChildrenList>
 						</Folder>
@@ -3138,13 +3174,19 @@
 								</Folder>
 								<Folder Name="attacks" ID="{5A7E7396-9913-42B4-8247-268C9DFDC84A}" ShortID="75671665">
 									<ChildrenList>
-										<RandomSequenceContainer Name="laser" ID="{F4DD3D4D-F672-4624-BDF8-E018CA8EBD28}" ShortID="405621918">
+										<Sound Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}" ShortID="235016737">
 											<PropertyList>
-												<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
-												<Property Name="RandomAvoidRepeating" Type="bool" Value="False"/>
-												<Property Name="RandomOrSequence" Type="int16" Value="0"/>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-10</Value>
+													</ValueList>
+												</Property>
 											</PropertyList>
 											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="shoots" ID="{ABB774B1-6B93-490A-88FB-26521E10AA1A}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
 												<Reference Name="Conversion">
 													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 												</Reference>
@@ -3153,72 +3195,164 @@
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
-												<Sound Name="laserInit" ID="{48D802A9-F901-4511-9DB0-03CBC04BFC65}" ShortID="312967496">
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<AudioFileSource Name="laserInit" ID="{83B450DD-187B-40FB-8988-3A3D6A7787D6}">
-															<PropertyList>
-																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-																<Property Name="TrimEnd" Type="Real64" Value="1.05640825590937"/>
-															</PropertyList>
-															<Language>SFX</Language>
-															<AudioFile>laserInit.wav</AudioFile>
-															<MediaIDList>
-																<MediaID ID="803103627"/>
-															</MediaIDList>
-														</AudioFileSource>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="laserInit" ID="{83B450DD-187B-40FB-8988-3A3D6A7787D6}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
-												<Sound Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}" ShortID="235016737">
+												<AudioFileSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}">
 													<PropertyList>
-														<Property Name="Volume" Type="Real64">
-															<ValueList>
-																<Value>-3</Value>
-															</ValueList>
-														</Property>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.211349494788131"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="4.00389876237514"/>
 													</PropertyList>
-													<ReferenceList>
-														<Reference Name="Conversion">
-															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
-														</Reference>
-														<Reference Name="OutputBus">
-															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
-														</Reference>
-													</ReferenceList>
-													<ChildrenList>
-														<AudioFileSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}">
-															<PropertyList>
-																<Property Name="FadeInDuration" Type="Real64" Value="0.211349494788131"/>
-																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-																<Property Name="TrimEnd" Type="Real64" Value="4.00389876237514"/>
-															</PropertyList>
-															<Language>SFX</Language>
-															<AudioFile>laserThick.wav</AudioFile>
-															<MediaIDList>
-																<MediaID ID="134196824"/>
-															</MediaIDList>
-														</AudioFileSource>
-													</ChildrenList>
-													<ActiveSourceList>
-														<ActiveSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}" Platform="Linked"/>
-													</ActiveSourceList>
-												</Sound>
+													<Language>SFX</Language>
+													<AudioFile>laserThick.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="134196824"/>
+													</MediaIDList>
+												</AudioFileSource>
 											</ChildrenList>
-											<Playlist>
-												<ItemRef Name="laserInit" ID="{48D802A9-F901-4511-9DB0-03CBC04BFC65}"/>
-												<ItemRef Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}"/>
-											</Playlist>
-										</RandomSequenceContainer>
+											<ActiveSourceList>
+												<ActiveSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="cluster_ball" ID="{7C011009-2B6E-4299-A4BA-2D1EC1ED5C5A}" ShortID="143246932">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-7</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="shoots" ID="{ABB774B1-6B93-490A-88FB-26521E10AA1A}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="boss_clusterball_xplosion" ID="{425B789C-A26F-4782-8D2F-871E5D90442E}">
+													<Language>SFX</Language>
+													<AudioFile>boss_clusterball_xplosion.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="442668840"/>
+													</MediaIDList>
+												</AudioFileSource>
+												<AudioFileSource Name="boss_clusterBall_shoot" ID="{4383B78F-B4BD-4F2D-BD76-551A8D035EE4}">
+													<Language>SFX</Language>
+													<AudioFile>boss_clusterBall_shoot.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="924070845"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="boss_clusterBall_shoot" ID="{4383B78F-B4BD-4F2D-BD76-551A8D035EE4}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="smash" ID="{C911BA39-583C-4352-A5A4-0789C8FA0C9D}" ShortID="953178846">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-5</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="shoots" ID="{ABB774B1-6B93-490A-88FB-26521E10AA1A}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="boss_smash" ID="{993B173C-FD62-472B-93CA-7611152A3447}">
+													<Language>SFX</Language>
+													<AudioFile>boss_smash.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="171834229"/>
+													</MediaIDList>
+												</AudioFileSource>
+												<AudioFileSource Name="boss_smash01" ID="{CAAF54B0-E17D-4705-9B4B-74173853D9AE}">
+													<Language>SFX</Language>
+													<AudioFile>boss_smash01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="1069540054"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="boss_smash01" ID="{CAAF54B0-E17D-4705-9B4B-74173853D9AE}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="cluster_ball_explosion" ID="{B3A04584-278C-49BC-8D0B-1011DB64EAD1}" ShortID="597452486">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="shoots" ID="{ABB774B1-6B93-490A-88FB-26521E10AA1A}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="boss_clusterball_xplosion" ID="{ADBFDA2E-61B6-470B-9621-DAC8485B6643}">
+													<Language>SFX</Language>
+													<AudioFile>boss_clusterball_xplosion.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="442668840"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="boss_clusterball_xplosion" ID="{ADBFDA2E-61B6-470B-9621-DAC8485B6643}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="normal_bullet" ID="{8D1A7209-7506-42DA-B70F-3C5EBFF7FDF3}" ShortID="263454316">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-8</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="shoots" ID="{ABB774B1-6B93-490A-88FB-26521E10AA1A}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="boss_normal_bullet" ID="{0494C869-23C9-4D78-863F-33DD2531AA1A}">
+													<Language>SFX</Language>
+													<AudioFile>boss_normal_bullet.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="32142556"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="boss_normal_bullet" ID="{0494C869-23C9-4D78-863F-33DD2531AA1A}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
 									</ChildrenList>
 								</Folder>
 							</ChildrenList>

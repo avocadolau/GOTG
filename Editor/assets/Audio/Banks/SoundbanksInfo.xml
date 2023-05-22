@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{DC54FE5E-4E1B-C6CE-C464-231499E58875}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{25919A0C-FF0C-3788-3833-0700F4651C1B}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -747,7 +747,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -782,11 +782,11 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1484330123" Type="User" Language="SFX">
+		<SoundBank Id="1484330123" Type="User" Language="SFX" Hash="{317C9ABB-EA68-BB3B-0252-3E40FD6E13CE}">
 			<ShortName>audio_settings</ShortName>
 			<Path>audio_settings.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX">
+		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -830,13 +830,21 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{1C872B67-1ECF-CAAB-1EB7-91A64A99EAC9}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
+				<File Id="32142556" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_normal_bullet.wav</ShortName>
+					<CachePath>SFX/boss_normal_bullet_10C4C929.wem</CachePath>
+				</File>
 				<File Id="131081328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit04.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="134196824" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>laserThick.wav</ShortName>
+					<CachePath>SFX/laserThick_FDAA48B6.wem</CachePath>
 				</File>
 				<File Id="143564780" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit01alt.wav</ShortName>
@@ -870,6 +878,10 @@
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
 				</File>
+				<File Id="442668840" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_clusterball_xplosion.wav</ShortName>
+					<CachePath>SFX/boss_clusterball_xplosion_10C4C929.wem</CachePath>
+				</File>
 				<File Id="574236853" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack01.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack01_10C4C929.wem</CachePath>
@@ -882,6 +894,10 @@
 					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_BAC76913.wem</CachePath>
 				</File>
+				<File Id="689284067" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>jubjugator_shoot.wav</ShortName>
+					<CachePath>SFX/jubjugator_shoot_10C4C929.wem</CachePath>
+				</File>
 				<File Id="723172612" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit03.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit03_10C4C929.wem</CachePath>
@@ -893,6 +909,10 @@
 				<File Id="863695100" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack02.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="924070845" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_clusterBall_shoot.wav</ShortName>
+					<CachePath>SFX/boss_clusterBall_shoot_10C4C929.wem</CachePath>
 				</File>
 				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
@@ -914,8 +934,37 @@
 					<ShortName>Ultron Voice Lines\vo_ultron_death02.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_death02_10C4C929.wem</CachePath>
 				</File>
+				<File Id="1069540054" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>boss_smash01.wav</ShortName>
+					<CachePath>SFX/boss_smash01_10C4C929.wem</CachePath>
+				</File>
 			</Media>
 			<Events>
+				<Event Id="1129806451" Name="boss_cluster_ball">
+					<MediaRefs>
+						<MediaRef Id="924070845"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3694695863" Name="boss_cluster_ball_exp">
+					<MediaRefs>
+						<MediaRef Id="442668840"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="386697530" Name="boss_laser">
+					<MediaRefs>
+						<MediaRef Id="134196824"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1066332852" Name="boss_normal_shoot">
+					<MediaRefs>
+						<MediaRef Id="32142556"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="708642152" Name="boss_smash_impact">
+					<MediaRefs>
+						<MediaRef Id="1069540054"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="1353242594" Name="melee_attack">
 					<MediaRefs>
 						<MediaRef Id="254107624"/>
@@ -961,6 +1010,11 @@
 						<MediaRef Id="346607997"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="3495288916" Name="subjugator_attack">
+					<MediaRefs>
+						<MediaRef Id="689284067"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="858825023" Name="vo_boss_attack">
 					<MediaRefs>
 						<MediaRef Id="233384674"/>
@@ -990,7 +1044,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{129230EF-AFCC-3313-EF2C-97E28E2F5CED}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{B965CD49-2EDA-9584-B7A6-FB63109B7065}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1068,5 +1122,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{C0DA684F-8440-80A8-A5E0-4D022F18EF18}</FileHash>
+	<FileHash>{5E93307C-3CB3-78F0-8B2F-8F505C30CC0A}</FileHash>
 </SoundBanksInfo>

@@ -105,7 +105,8 @@ namespace Wiwa
 
 		if (GameStateManager::s_PoolManager->s_SimpleBulletsPool->getCountDisabled() <= 0 || m_Enemy == nullptr)
 			return;
-
+		m_Enemy->m_AudioSys->PlayAudio("subjugator_attack");
+	
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		GameStateManager::s_PoolManager->SetScene(&enemy->getScene());
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_SimpleBulletsPool->GetFromPool();
