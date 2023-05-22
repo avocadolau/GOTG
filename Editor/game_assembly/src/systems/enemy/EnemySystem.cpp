@@ -254,22 +254,12 @@ namespace Wiwa
 				break;
 			}*/
 			GameStateManager::GetPlayerInventory().AddTokens(statsSelf->creditsDrop);
-			Character* player = GameStateManager::GetPlayerCharacterComp();
+			Character* player = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Character>(GameStateManager::GetPlayerId());
 			// As in the GDD for each enemy the player kills the shield regenerates
 			// TODO: Change with a stats
 			if (player)
 			{
-				if (Wiwa::GameStateManager::s_CurrentCharacter == 0)
-				{
-					//STARLORD
-					player->Shield += 2;
-				}
-				else if (Wiwa::GameStateManager::s_CurrentCharacter == 1)
-				{
-					//ROCKET
-					player->Shield += 1;
-				}
-
+				player->Shield += player->ShieldRegeration;
 				if (player->Shield >= player->MaxShield)
 					player->Shield = player->MaxShield;
 			}

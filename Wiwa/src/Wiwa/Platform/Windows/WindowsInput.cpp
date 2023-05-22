@@ -165,7 +165,7 @@ namespace Wiwa
 			float input = state.axes[axis];
 			float abs = glm::abs(input);
 
-			if (abs < deadzone + 0.1f)
+			if (abs < deadzone + 0.3f)
 			{
 				return 0.f;
 			}

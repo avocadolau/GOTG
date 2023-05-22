@@ -15,7 +15,6 @@ void Wiwa::PlayerDeath::EnterState()
 	m_StateMachine->GetAnimator()->PlayAnimation("death");
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection());
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
-	m_StateMachine->IsDead = true;
 	// TODO: Particles 
 }
 

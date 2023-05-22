@@ -49,8 +49,7 @@ void Wiwa::PlayerStateMachine::OnUpdate()
 
 	PlayerController::OnUpdate();
 	m_CurrentState->UpdateState();
-	if(!IsDead)
-		CheckHealth();
+	CheckHealth();
 	DashCooldown();
 }
 

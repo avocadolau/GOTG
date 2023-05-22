@@ -621,7 +621,6 @@ namespace Wiwa
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
 				s_CanPhalanxRooms = true;
-				s_RoomsToShop = 5;
 				LoadRandomRoom(s_ShopRooms);
 			}
 			break;
@@ -634,7 +633,7 @@ namespace Wiwa
 		}
 		case Wiwa::RoomType::ROOM_SHOP:
 		{
-			if (s_RoomsToBoss <= 0)
+			if (s_RoomsToBoss == 0)
 			{
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
 				GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
@@ -1261,7 +1260,7 @@ namespace Wiwa
 	bool GameStateManager::IsWaveSpawnerFinished(WaveSpawner* waveSpawner)
 	{
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		if (waveSpawner) {
+		if (waveSpawner && !waveSpawner->hasFinished) {
 			// Check for all the active waves in that spawner.
 			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
 			if (waveSpawnerSystem) {

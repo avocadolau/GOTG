@@ -187,7 +187,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{25919A0C-FF0C-3788-3833-0700F4651C1B}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -747,7 +747,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -782,11 +782,11 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1484330123" Type="User" Language="SFX" Hash="{317C9ABB-EA68-BB3B-0252-3E40FD6E13CE}">
+		<SoundBank Id="1484330123" Type="User" Language="SFX">
 			<ShortName>audio_settings</ShortName>
 			<Path>audio_settings.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
+		<SoundBank Id="1551306167" Type="User" Language="SFX">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -830,13 +830,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{F57E897A-26D0-E7F0-29A4-E5EA594C522D}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
 				<File Id="32142556" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_normal_bullet.wav</ShortName>
-					<CachePath>SFX/boss_normal_bullet_B3D038AC.wem</CachePath>
+					<CachePath>SFX/boss_normal_bullet_10C4C929.wem</CachePath>
 				</File>
 				<File Id="131081328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit04.wav</ShortName>
@@ -844,7 +844,7 @@
 				</File>
 				<File Id="134196824" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>laserThick.wav</ShortName>
-					<CachePath>SFX/laserThick_6221EAFC.wem</CachePath>
+					<CachePath>SFX/laserThick_FDAA48B6.wem</CachePath>
 				</File>
 				<File Id="143564780" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit01alt.wav</ShortName>
@@ -878,9 +878,9 @@
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
 				</File>
-				<File Id="432546607" Language="SFX" Streaming="false" Location="Memory">
+				<File Id="442668840" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterball_xplosion.wav</ShortName>
-					<CachePath>SFX/boss_clusterball_xplosion_24037D34.wem</CachePath>
+					<CachePath>SFX/boss_clusterball_xplosion_10C4C929.wem</CachePath>
 				</File>
 				<File Id="574236853" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack01.wav</ShortName>
@@ -912,7 +912,7 @@
 				</File>
 				<File Id="924070845" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterBall_shoot.wav</ShortName>
-					<CachePath>SFX/boss_clusterBall_shoot_595E7227.wem</CachePath>
+					<CachePath>SFX/boss_clusterBall_shoot_10C4C929.wem</CachePath>
 				</File>
 				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
@@ -936,7 +936,7 @@
 				</File>
 				<File Id="1069540054" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_smash01.wav</ShortName>
-					<CachePath>SFX/boss_smash01_B6663E92.wem</CachePath>
+					<CachePath>SFX/boss_smash01_10C4C929.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -947,7 +947,7 @@
 				</Event>
 				<Event Id="3694695863" Name="boss_cluster_ball_exp">
 					<MediaRefs>
-						<MediaRef Id="432546607"/>
+						<MediaRef Id="442668840"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="386697530" Name="boss_laser">
@@ -1044,7 +1044,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{B965CD49-2EDA-9584-B7A6-FB63109B7065}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1122,5 +1122,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{B09106F1-9C9D-36C9-93E8-70F3BE9624B6}</FileHash>
+	<FileHash>{BCFF22B6-0D01-6A72-1A09-FA35963FCAC7}</FileHash>
 </SoundBanksInfo>
