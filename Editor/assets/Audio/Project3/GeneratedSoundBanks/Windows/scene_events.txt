@@ -1,0 +1,10 @@
+Event	ID	Name			Wwise Object Path	Notes
+	142118675	wave_start			\Default Work Unit\scene_events\wave_start	
+	1137411260	combat_start			\Default Work Unit\scene_events\combat_start	
+	2772308904	game_pause			\Default Work Unit\scene_events\game_pause	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	282638874	wave_start	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\wave_start _10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\scene_events\wave_start		774240
+	444663328	s_game_pause	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\s_game_pause_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\scene_events\s_game_pause		227464
+	846270693	combat_start	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\mixkit-sci-fi-artificial-intelligence-speaks-291_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\scene_events\combat_start		356244
+

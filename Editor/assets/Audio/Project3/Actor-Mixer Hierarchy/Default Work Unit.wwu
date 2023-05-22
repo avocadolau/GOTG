@@ -3197,9 +3197,10 @@
 											<ChildrenList>
 												<AudioFileSource Name="laserThick" ID="{59122E05-DA78-47A3-BB8D-6E2E38BC4935}">
 													<PropertyList>
-														<Property Name="FadeInDuration" Type="Real64" Value="0.211349494788131"/>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.163513684685806"/>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.498859162495673"/>
 														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-														<Property Name="TrimEnd" Type="Real64" Value="4.00389876237514"/>
+														<Property Name="TrimEnd" Type="Real64" Value="5.50047624986216"/>
 													</PropertyList>
 													<Language>SFX</Language>
 													<AudioFile>laserThick.wav</AudioFile>
@@ -3241,6 +3242,11 @@
 													</MediaIDList>
 												</AudioFileSource>
 												<AudioFileSource Name="boss_clusterBall_shoot" ID="{4383B78F-B4BD-4F2D-BD76-551A8D035EE4}">
+													<PropertyList>
+														<Property Name="LoopBegin" Type="Real64" Value="0.811343394077448"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.811343394077448"/>
+													</PropertyList>
 													<Language>SFX</Language>
 													<AudioFile>boss_clusterBall_shoot.wav</AudioFile>
 													<MediaIDList>
@@ -3281,6 +3287,11 @@
 													</MediaIDList>
 												</AudioFileSource>
 												<AudioFileSource Name="boss_smash01" ID="{CAAF54B0-E17D-4705-9B4B-74173853D9AE}">
+													<PropertyList>
+														<Property Name="LoopBegin" Type="Real64" Value="0.821602541287018"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.821602541287018"/>
+													</PropertyList>
 													<Language>SFX</Language>
 													<AudioFile>boss_smash01.wav</AudioFile>
 													<MediaIDList>
@@ -3309,10 +3320,15 @@
 											</ReferenceList>
 											<ChildrenList>
 												<AudioFileSource Name="boss_clusterball_xplosion" ID="{ADBFDA2E-61B6-470B-9621-DAC8485B6643}">
+													<PropertyList>
+														<Property Name="FadeInDuration" Type="Real64" Value="0.0744304171412301"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.184117347665148"/>
+													</PropertyList>
 													<Language>SFX</Language>
 													<AudioFile>boss_clusterball_xplosion.wav</AudioFile>
 													<MediaIDList>
-														<MediaID ID="442668840"/>
+														<MediaID ID="432546607"/>
 													</MediaIDList>
 												</AudioFileSource>
 											</ChildrenList>
@@ -3342,6 +3358,11 @@
 											</ReferenceList>
 											<ChildrenList>
 												<AudioFileSource Name="boss_normal_bullet" ID="{0494C869-23C9-4D78-863F-33DD2531AA1A}">
+													<PropertyList>
+														<Property Name="LoopBegin" Type="Real64" Value="0.107913202353835"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimBegin" Type="Real64" Value="0.107913202353835"/>
+													</PropertyList>
 													<Language>SFX</Language>
 													<AudioFile>boss_normal_bullet.wav</AudioFile>
 													<MediaIDList>
