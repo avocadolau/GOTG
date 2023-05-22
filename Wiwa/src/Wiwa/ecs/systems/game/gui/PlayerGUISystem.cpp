@@ -942,7 +942,7 @@ void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
 
 void Wiwa::PlayerGUISystem::HandleWaves(Wiwa::GuiManager& gm)
 {
-	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS" || Wiwa::GameStateManager::GetActiveEnemies() == 0)
+	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS" || Wiwa::GameStateManager::GetRoomType() == "ROOM_HUB")
 		return;
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
