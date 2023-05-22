@@ -72,7 +72,11 @@ namespace Wiwa
         if (Wiwa::GameStateManager::GetActiveEnemies() > 0)
         {
             Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-            EntityId yondusFin = em.LoadPrefab("assets/Prefabs/YondusFin/YundusFin_01.wiprefab");
+            EntityId yondusFin = em.LoadPrefab("assets\\Prefabs\\YondusFin\\YundusFin_01.wiprefab");
+            Transform3D* tr = em.GetComponent<Transform3D>(yondusFin);
+            PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(yondusFin);
+            NavAgentSystem* navAgentSys = em.GetSystem<NavAgentSystem>(yondusFin);
+            *tr = *em.GetComponent<Transform3D>(GameStateManager::GetPlayerId());
         }
     }
 
