@@ -29,7 +29,7 @@ namespace Wiwa
 	bool GameStateManager::debug = true;
 	
 	int GameStateManager::s_RoomsToShop = 5;
-	int GameStateManager::s_RoomsToBoss = 5;
+	int GameStateManager::s_RoomsToBoss = 10;
 
 	SceneId GameStateManager::s_BossRoomIndx;
 	SceneId GameStateManager::s_HUBRoomIndx;
