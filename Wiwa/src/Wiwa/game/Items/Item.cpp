@@ -28,7 +28,11 @@ namespace Wiwa
 
             if (pe_healing != EntityManager::INVALID_INDEX)
             {
-                em.SetParent(pe_healing, playerId);
+                if (playerId != EntityManager::INVALID_INDEX)
+                    em.SetParent(pe_healing, playerId);
+
+                if (playerId2 != EntityManager::INVALID_INDEX)
+                    em.SetParent(pe_healing, playerId2);
                 //WI_CORE_INFO("spawning regeneartion particle");
 
             }
