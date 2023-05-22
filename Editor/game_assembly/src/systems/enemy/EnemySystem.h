@@ -29,9 +29,9 @@ namespace Wiwa {
 		EntityId m_WaveId = -1;
 		bool m_WasSpawnedBySpawner = false;
 
-		float previousSpeed = 0.0f;
-
-		float timerSlow = 0.0f;
+		float m_TimerSlow = 0.0f;
+		float m_SlowPercentage = 0.0f;
+		float m_PreviousSpeed = 0.0f;
 	public:
 		EnemySystem();
 		~EnemySystem();
@@ -59,6 +59,8 @@ namespace Wiwa {
 		void RotateTo(const glm::vec3& target);
 
 		void SetStatsFromTable();
+
+		void SlowForTime(float time, int percentage);
 	};
 }
 
