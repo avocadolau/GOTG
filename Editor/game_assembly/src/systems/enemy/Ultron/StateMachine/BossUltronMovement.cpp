@@ -209,6 +209,7 @@ namespace Wiwa
 		else if (randomNum <= 100) { // 25% probability
 			return UltronAttacks::DASH;
 		}
+		return UltronAttacks::NONE;
 	}
 
 	UltronAttacks BossUltronMovementState::GetAttackFromProbabilitesSecondPhase()
@@ -234,6 +235,7 @@ namespace Wiwa
 		else if (randomNum <= 100) { // 15 % probability
 			return UltronAttacks::BULLET_STORM;
 		}
+		return UltronAttacks::NONE;
 	}
 
 	void BossUltronMovementState::FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec)
@@ -506,6 +508,8 @@ namespace Wiwa
 			// Create and return the new position vector
 			return glm::vec3(x, 0.1f, z);
 		}
+
+		return glm::vec3(0.f, 0.f, 0.f);
 	}
 
 	bool Wiwa::BossUltronMovementState::isInsideSquare(const glm::vec3& point)
