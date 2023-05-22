@@ -78,6 +78,7 @@ namespace Wiwa
 		static bool s_CanPassNextRoom;
 		static bool s_PlayerTriggerNext;
 		static bool debug;
+		static bool s_GameOver;
 
 		// Save & Load Overall Player Progression inside the run
 		static void SaveProgression();

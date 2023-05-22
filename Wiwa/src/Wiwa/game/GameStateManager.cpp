@@ -24,6 +24,7 @@ namespace Wiwa
 	bool GameStateManager::s_HasFinshedRoom = false;
 	bool GameStateManager::s_CanPassNextRoom = false;
 	bool GameStateManager::s_PlayerTriggerNext = false;
+	bool GameStateManager::s_GameOver = false;
 
 	bool GameStateManager::debug = true;
 	
@@ -443,7 +444,12 @@ namespace Wiwa
 			Audio::PostEvent("player_hit");
 			if (character->Health <= 0 && !FanaticEffect)
 			{
-				Audio::PostEvent("player_dead");
+				if (!s_GameOver)
+				{
+					Audio::PostEvent("player_dead");
+					s_GameOver = true;
+				}
+
 				Die();
 			}
 			return;
@@ -479,6 +485,7 @@ namespace Wiwa
 			s_HasFinshedRoom = true;
 			s_CanPassNextRoom = true;
 		}
+		s_GameOver = false;
 	}
 
 	void GameStateManager::SetPlayerId(EntityId id, Scene* scene)
