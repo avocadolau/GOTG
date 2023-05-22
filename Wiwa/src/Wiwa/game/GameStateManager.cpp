@@ -345,6 +345,7 @@ namespace Wiwa
 					character->WalkTreshold = characterDoc["walk_threshold"].as_float();
 			}
 		}
+		s_PlayerInventory->Clear();
 		//LoadPlayerAchievements(&doc);
 	}
 

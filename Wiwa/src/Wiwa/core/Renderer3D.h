@@ -31,6 +31,11 @@
 #include <Wiwa/animation/samples/shader.h>
 
 namespace Wiwa {
+	struct LightUniformLocations
+	{
+
+	};
+
 	class WI_API Renderer3D {
 	public:
 		enum Options
