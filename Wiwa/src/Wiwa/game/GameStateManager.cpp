@@ -1037,8 +1037,9 @@ namespace Wiwa
 		name.copy(item->Name, 128);
 		item->Name[name.size()] = '\0';
 	}
-	void GameStateManager::SpawnItem(glm::vec3 position, uint8_t type, const char* name)
+	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
 	{
+		
 		std::string_view newName;
 		switch (type)
 		{
@@ -1069,12 +1070,10 @@ namespace Wiwa
 		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
 		
 		Item* item = em.GetComponent<Item>(id);
-		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+		Transform3D* t3d = (Transform3D*)em.GetComponentByIterator(transform);
 
-
-		WI_CORE_INFO("Spawning item at {}x{}y{}z", position.x, position.y, position.z);
-		
-		t3d->localPosition = position;
+		Transform3D* tr = em.GetComponent<Transform3D>(id);
+		*tr = *t3d;
 
 		item->item_type = type;
 		for (uint32_t i = 0; i < 128; i++)

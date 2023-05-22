@@ -50,6 +50,10 @@ namespace Wiwa
 		m_NavAgentSys = nullptr;
 		m_AnimatorSys = nullptr;
 		m_AudioSys = nullptr;
+
+		m_TimerSlow = 0.0f;
+		m_PreviousSpeed = 0.0f;
+		m_SlowPercentage = 1.0f;
 	}
 
 	EnemySystem::~EnemySystem()
@@ -90,33 +94,36 @@ namespace Wiwa
 		m_AudioSys = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
 
 		self->currentRotation = transform->localRotation;
+
+		NavAgent* agent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
+		if (agent)
+			m_PreviousSpeed = agent->maxSpeed;
 	}
 
 	void EnemySystem::OnUpdate()
 	{
 		EnemyData* stats = GetComponentByIterator<EnemyData>(m_StatsIt);
+		NavAgent* agent = GetComponentByIterator<NavAgent>(m_NavAgentIt);
 
 		if (Input::IsKeyPressed(Wiwa::Key::M))
 		{
 			ReceiveDamage(100000);
 		}
 
-		/*Transform3D* transform = GetComponentByIterator<Transform3D>(m_TransformIt);
-		transform->localPosition.y = 0.0f;*/
-		
-		////SLOWED LOGIC
-		//if (stats->Slowed)
-		//{
-		//	stats->CounterSlowed += Time::GetDeltaTimeSeconds();
-		//}
+		if (m_TimerSlow > 0.0f)
+		{
+			// Slowed if has timer
+			if (agent)
+				agent->maxSpeed = m_PreviousSpeed * m_SlowPercentage;
 
-		//if (stats->CounterSlowed >= timerSlow && stats->Slowed)
-		//{
-		//	stats->Slowed = false;
-		//	stats->CounterSlowed = 0.0f;
-		//	/*AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
-		//	statsSelf->speed = previousSpeed;*/
-		//}
+			m_TimerSlow -= Time::GetDeltaTimeSeconds();
+		}
+		else
+		{
+			// Normal speed if no slow debuff
+			if (agent)
+				agent->maxSpeed = m_PreviousSpeed;
+		}
 	}
 
 	void EnemySystem::OnDestroy()
@@ -273,23 +280,23 @@ namespace Wiwa
 				// Healing pills
 				if (chances <= 50)
 				{
-					GameStateManager::SpawnItem(t3d->localPosition, 3, "Healing Pills");
+					GameStateManager::SpawnItem(m_TransformIt, 3, "Healing Pills");
 				}
 				else if (IN_BETWEEN(chances, 51, 75))
 				{
-					GameStateManager::SpawnItem(t3d->localPosition, 3, "Medkit");
+					GameStateManager::SpawnItem(m_TransformIt, 3, "Medkit");
 				}
 				else if (IN_BETWEEN(chances, 76, 85))
 				{
-					GameStateManager::SpawnItem(t3d->localPosition, 3, "Shield Booster");
+					GameStateManager::SpawnItem(m_TransformIt, 3, "Shield Booster");
 				}
 				else if (IN_BETWEEN(chances, 86, 95))
 				{
-					GameStateManager::SpawnItem(t3d->localPosition, 3, "First Aid Kit");
+					GameStateManager::SpawnItem(m_TransformIt, 3, "First Aid Kit");
 				}
 				else if (IN_BETWEEN(chances, 96, 100))
 				{
-					GameStateManager::SpawnItem(t3d->localPosition, 3, "Ego's Help");
+					GameStateManager::SpawnItem(m_TransformIt, 3, "Ego's Help");
 				}
 			}
 		}
@@ -495,5 +502,12 @@ namespace Wiwa
 		{
 			health->health = stats->health;
 		}
+	}
+
+	// Time in seconds and percentage in 0 and 1 scale
+	void EnemySystem::SlowForTime(float time, int percentage)
+	{
+		m_TimerSlow = time;
+		m_SlowPercentage = percentage;
 	}
 }

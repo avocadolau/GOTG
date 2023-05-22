@@ -36,7 +36,7 @@ namespace Wiwa
 	bool GuiManager::Init(Scene* scene)
 	{
 		m_Scene = scene;
-		
+		font = "library/Fonts/CarterOne_Regular.ttf";
 		//InitFont("assets/arial.ttf");
 		//Test remove once done
 		//InitFont("assets/arial.ttf","prueba1");
@@ -300,7 +300,7 @@ namespace Wiwa
 	}
 	Text* GuiManager::InitFont(const char* path, const char* _word)
 	{
-		
+		path = font;
 		/* load font file */
 		long size;
 		byte* fontBuffer;

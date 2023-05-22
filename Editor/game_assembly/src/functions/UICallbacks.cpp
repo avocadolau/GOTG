@@ -41,8 +41,8 @@ Resume_PauseGame_ Resume_PauseGame()
 {
 	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 	gm.canvas.at(1)->SwapActive();
-	Wiwa::SceneManager::PauseCurrentScene();
 	gm.canvas.at(0)->SwapActive();
+	Wiwa::SceneManager::PauseCurrentScene();
 	return Resume_PauseGame_();
 }
 
