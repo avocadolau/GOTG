@@ -38,6 +38,8 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
+		enemy->m_AnimatorSys->PlayAnimation("jumpsky");
+
 		m_AfterLaserBeamPosition.clear();
 		FillPremadePositionAfterLaser(enemy, m_AfterLaserBeamPosition);
 
@@ -148,6 +150,8 @@ namespace Wiwa
 		{
 			em.DestroyEntity(m_PreSmashMarkId);
 
+			enemy->m_AnimatorSys->PlayAnimation("smash");
+
 			enemy->m_NavAgentSys->RegisterWithCrowd();
 			enemy->m_NavAgentSys->SetPosition(centerPoint);
 			enemy->m_NavAgentSys->StopAgent();
@@ -164,6 +168,8 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::MOVE_CENTER:
 		{
+			enemy->m_AnimatorSys->PlayAnimation("ray_anticipation");
+
 			enemy->m_NavAgentSys->StopAgent();
 			enemy->m_NavAgentSys->RemoveAgent();
 
@@ -247,7 +253,7 @@ namespace Wiwa
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
 
-		enemy->m_AnimatorSys->PlayAnimation("A_attak_ray");
+		enemy->m_AnimatorSys->PlayAnimation("ray_attack");
 
 		if (newBulletId == EntityManager::INVALID_INDEX)
 			return EntityManager::INVALID_INDEX;

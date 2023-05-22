@@ -36,8 +36,8 @@ namespace Wiwa
 
 		//EntityId currentEnemy = enemy->GetEntity();
 
-		enemy->m_AnimatorSys->PlayAnimation("A_walk");
-		enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);
+		enemy->m_AnimatorSys->PlayAnimation("walking");
+		/*enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);*/
 
 		//pman.EmitBatch(currentEnemy);
 
@@ -71,6 +71,7 @@ namespace Wiwa
 		m_ThunderMovementMarkSpawned = false;
 		m_CircularThunderMovementSpawned = false;
 		m_CircularMiddleThunder = false;
+		m_ThunderMiddleSpawned = false;
 		m_CircularThunderMovementMarkSpawned = false;
 		m_SplashZigZagMovementSpawned = false;
 		m_MovementAttackFinished = false;
@@ -88,7 +89,7 @@ namespace Wiwa
 		Transform3D* playerTr = (Transform3D*)em.GetComponentByIterator(enemy->m_PlayerTransformIt);
 		float distanceToPlayer = glm::distance(playerTr->localPosition, selfTr->localPosition);
 
-		enemy->LookAt(playerTr->localPosition, 70.0f);
+		enemy->LookAt(playerTr->localPosition, 80.0f);
 
 		m_TimerAttackOnMoving += Time::GetDeltaTimeSeconds();
 
@@ -124,7 +125,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::LASER_BEAM;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::BULLET_STORM;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
@@ -215,7 +216,7 @@ namespace Wiwa
 		int randomNum = disEnemies(Application::s_Gen);
 		if (randomNum <= 20) // 20 % probability
 		{
-			return UltronAttacks::BULLET_STORM; //ThundersProblem
+			return UltronAttacks::RAIN_PROJECTILE; //ThundersProblem
 		}
 		else if (randomNum <= 40) { // 20 % probability
 			return UltronAttacks::LASER_BEAM;
@@ -372,7 +373,7 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-		enemy->m_AnimatorSys->PlayAnimation("A_attak_bigprojetiles");
+		enemy->m_AnimatorSys->PlayAnimation("bigprojectiles_attack");
 
 		if (physSys != nullptr)
 		{
@@ -619,14 +620,13 @@ namespace Wiwa
 		{
 			bool isPlayerInThunderRange = isInsideSquare(playerTr->localPosition);
 
-			if (isPlayerInThunderRange)
+			if (isPlayerInThunderRange && enemy->m_IsSecondPhaseActive)
 			{
-				/*m_SelectMovingRandomAttack = RAND(0, 3); //ThundersProblem
-
-				m_IsMovingAttackSelected = true;*/
-
-				m_SelectMovingRandomAttack = RAND(0, 1);
+				m_SelectMovingRandomAttack = RAND(2, 3); //ThundersProblem
 				m_IsMovingAttackSelected = true;
+
+				/*m_SelectMovingRandomAttack = RAND(0, 1);
+				m_IsMovingAttackSelected = true;*/
 			}
 			else
 			{
@@ -643,6 +643,8 @@ namespace Wiwa
 		{
 			if (m_SplashZigZagMovementSpawned == false)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+
 				SpawnSplashZigZagBullets(enemy);
 				m_SplashZigZagMovementSpawned = true;
 
@@ -674,6 +676,8 @@ namespace Wiwa
 		{
 			if (m_CircularThunderMovementMarkSpawned == false && playerTr != nullptr)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
+
 				m_InitialPlayerPos = playerTr->localPosition;
 
 				for (int i = 1; i <= 4; ++i) // Number of thunders
@@ -695,6 +699,8 @@ namespace Wiwa
 
 			if (m_CircularThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+
 				for (int i = 0; i < m_CircularThunderMarkIds.size(); ++i)
 				{
 					em.DestroyEntity(m_CircularThunderMarkIds[i]);
@@ -720,6 +726,8 @@ namespace Wiwa
 
 			if (m_CircularMiddleThunder == false && m_TimerAttackOnMoving > 3.0f)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+
 				em.DestroyEntity(m_CircularThunderMarkId1);
 				SpawnThunderStormCircularMovement(enemy, m_CircularThunderPosition1, { 0.0f, -1.0f, 0.0f }, 0.0f, 0.0f);
 
@@ -733,12 +741,16 @@ namespace Wiwa
 		{
 			if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
+
+				m_InitialPlayerPosCenterThunders = playerTr->localPosition;
+
 				for (int i = 1; i <= 5; ++i) // Number of thunders
 				{
 					EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
 					m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
 					Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
-					glm::vec3 thunderPos = GetPositionAroundPlayer(playerTr->localPosition, 12.0f, i);
+					glm::vec3 thunderPos = GetPositionAroundPlayer(m_InitialPlayerPosCenterThunders, 12.0f, i);
 					m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
 					thunderMarkTr->localPosition.x = thunderPos.x;
 					thunderMarkTr->localPosition.y = 0.1f;
@@ -748,8 +760,10 @@ namespace Wiwa
 				m_ThunderMovementMarkSpawned = true;
 			}
 
-			if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
+			if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f && playerTr != nullptr)
 			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+
 				for (int i = 0; i < m_ThunderMarkIds.size(); ++i)
 				{
 					em.DestroyEntity(m_ThunderMarkIds[i]);
@@ -761,6 +775,36 @@ namespace Wiwa
 				m_ThunderPositions.clear();
 
 				m_ThunderMovementSpawned = true;
+
+				for (int i = 1; i <= 5; ++i) // Number of thunders
+				{
+					EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
+					m_ThunderMarkIds.push_back(thunderMarkId); // Add the ID to the vector
+					Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
+					glm::vec3 thunderPos = GetPositionAroundPlayer(m_InitialPlayerPosCenterThunders, 6.0f, i);
+					m_ThunderPositions.push_back(thunderPos); // Add the position to the vector
+					thunderMarkTr->localPosition.x = thunderPos.x;
+					thunderMarkTr->localPosition.y = 0.1f;
+					thunderMarkTr->localPosition.z = thunderPos.z;
+				}
+			}
+
+			if (m_ThunderMiddleSpawned == false && m_TimerAttackOnMoving > 3.0f)
+			{
+				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+
+				for (int i = 0; i < m_ThunderMarkIds.size(); ++i)
+				{
+					em.DestroyEntity(m_ThunderMarkIds[i]);
+					SpawnThunderStormMovement(enemy, m_ThunderPositions[i], { 0.0f, -1.0f, 0.0f });
+				}
+
+				// Clear the vectors
+				m_ThunderMarkIds.clear();
+				m_ThunderPositions.clear();
+
+				m_ThunderMiddleSpawned = true;
+
 				m_MovementAttackFinished = true;
 			}
 		}

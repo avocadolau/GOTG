@@ -64,7 +64,7 @@ namespace Wiwa
 		Transform3D* hand4Tr = (Transform3D*)em.GetComponentByIterator(enemy->m_Hand4It);
 
 		float dist2Player = glm::distance(selfTr->localPosition, playerTr->localPosition);
-		enemy->LookAt(playerTr->localPosition, 30.f);
+		enemy->LookAt(playerTr->localPosition, 60.f);
 		bool hasFinished = enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->HasFinished();
 
 		if (dist2Player > stats->range || enemy->m_NavAgentSys->Raycast(selfTr->localPosition, playerTr->localPosition) == false && hasFinished)
