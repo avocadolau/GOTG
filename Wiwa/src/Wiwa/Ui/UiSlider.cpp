@@ -82,6 +82,7 @@ namespace Wiwa
 					//RIGHT
 					if (Wiwa::Input::IsButtonPressed(0, 12))
 					{
+						clicked = true;
 						extraPosition.width += 1;
 						if (extraPosition.width >= position.width)
 						{
@@ -94,6 +95,7 @@ namespace Wiwa
 					//LEFT
 					if (Wiwa::Input::IsButtonPressed(0, 14))
 					{
+						clicked = true;
 						extraPosition.width -= 1;
 						if (extraPosition.width <= 0)
 						{
@@ -102,26 +104,26 @@ namespace Wiwa
 						}
 
 					}
-					if (Wiwa::Input::IsButtonPressed(0, 0))
+					if (clicked)
 					{
-						state = GuiControlState::PRESSED;
-						clicked = true;
-					}
-					if (clicked && Wiwa::Input::IsButtonReleased(0, 0))
-					{
-						clicked = false;
 						value = (((float)extraPosition.width / (float)position.width) * 100);
 						float params = value;
 						WI_INFO(value);
-						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
-						{
-							Audio::PostEvent(audioEventForButton.c_str());
-						}
 						if (callback)
 						{
 							Action<float>function_name = callback->func;
 							function_name.execute(params);
 						}
+					}
+					if (clicked && (Wiwa::Input::IsButtonReleased(0, 14) || Wiwa::Input::IsButtonReleased(0,12)) )
+					{
+						clicked = false;
+						
+						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
+						{
+							Audio::PostEvent(audioEventForButton.c_str());
+						}
+						
 					}
 				}
 			}

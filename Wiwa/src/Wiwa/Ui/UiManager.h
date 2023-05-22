@@ -18,6 +18,7 @@ namespace Wiwa
 	{
 	private:
 		Scene* m_Scene;
+		const char* font;
 	public:
 
 		// Constructor

@@ -703,7 +703,7 @@ void Wiwa::PlayerGUISystem::HandlePlayerStatistics(int max_Health, int max_Shiel
 	gm.canvas.at(DeathHUD)->controls.at(7)->text = maxShieldString.c_str();
 	gm.canvas.at(PauseHUD)->controls.at(10)->text = maxShieldString.c_str();
 
-	std::string rangeString = std::to_string(range);
+	std::string rangeString = std::to_string((int)range);
 	gm.canvas.at(DeathHUD)->controls.at(8)->text = rangeString.c_str();
 	gm.canvas.at(PauseHUD)->controls.at(11)->text = rangeString.c_str();
 
@@ -711,11 +711,11 @@ void Wiwa::PlayerGUISystem::HandlePlayerStatistics(int max_Health, int max_Shiel
 	gm.canvas.at(DeathHUD)->controls.at(9)->text = attackString.c_str();
 	gm.canvas.at(PauseHUD)->controls.at(12)->text = attackString.c_str();
 
-	std::string speedString = std::to_string(speed);
+	std::string speedString = std::to_string((int)speed);
 	gm.canvas.at(DeathHUD)->controls.at(10)->text = speedString.c_str();
 	gm.canvas.at(PauseHUD)->controls.at(13)->text = speedString.c_str();
 
-	std::string rateOfFireString = std::to_string(rateOfFire);
+	std::string rateOfFireString = std::to_string((int)rateOfFire);
 	gm.canvas.at(DeathHUD)->controls.at(11)->text = rateOfFireString.c_str();
 	gm.canvas.at(PauseHUD)->controls.at(14)->text = rateOfFireString.c_str();
 
@@ -942,7 +942,7 @@ void Wiwa::PlayerGUISystem::OnCollisionExit(Object* body1, Object* body2)
 
 void Wiwa::PlayerGUISystem::HandleWaves(Wiwa::GuiManager& gm)
 {
-	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS")
+	if (Wiwa::GameStateManager::GetRoomType() == "ROOM_BOSS" || Wiwa::GameStateManager::GetActiveEnemies() == 0)
 		return;
 
 		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
