@@ -4,7 +4,7 @@
 #include "../../components/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
-
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 Wiwa::ClusterBulletSystem::ClusterBulletSystem()
 {
@@ -71,11 +71,12 @@ void Wiwa::ClusterBulletSystem::OnUpdate()
 
 		if (randomValue == 0)
 		{
-
+			BossUltronCluster->m_AudioSys->PlayAudio("boss_cluster_ball_exp");
 			BlowClusterBullet01(m_EntityId);
 		}
 		else
 		{
+			BossUltronCluster->m_AudioSys->PlayAudio("boss_cluster_ball_exp");
 			BlowClusterBullet02(m_EntityId);
 		}
 
@@ -87,10 +88,12 @@ void Wiwa::ClusterBulletSystem::OnUpdate()
 		int pattern = Math::RandomRange(0, 1);
 		if (pattern == 0)
 		{
+			BossUltronCluster->m_AudioSys->PlayAudio("boss_cluster_ball_exp");
 			BlowClusterBullet01(m_EntityId);
 		}
 		else
 		{
+			BossUltronCluster->m_AudioSys->PlayAudio("boss_cluster_ball_exp");
 			BlowClusterBullet02(m_EntityId);
 		}
 		GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
@@ -217,13 +220,15 @@ void Wiwa::ClusterBulletSystem::BlowClusterBullet02(EntityId bulletId)
 	}
 }
 
-bool Wiwa::ClusterBulletSystem::EnableBullet()
+bool Wiwa::ClusterBulletSystem::EnableBullet(BossUltron* enemy)
 {
 	ClusterBullet* clusterBullet = GetComponent<ClusterBullet>();
 	if (clusterBullet)
 	{
 		InitClusterBullet();
 	}
+
+	BossUltronCluster = enemy;
 
 	return true;
 }

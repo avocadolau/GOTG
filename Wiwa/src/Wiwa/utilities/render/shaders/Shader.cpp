@@ -226,6 +226,25 @@ namespace Wiwa {
 		m_View = GL(GetUniformLocation(m_IDprogram, "u_View"));
 		m_UCamera = GL(GetUniformLocation(m_IDprogram, "u_CameraPosition"));
 		m_BoneLocation = GL(GetUniformLocation(m_IDprogram, "u_Bones"));
+
+		LightLocations.CameraLoc = GL(GetUniformLocation(m_IDprogram, "u_CameraPosition"));
+		LightLocations.DirectionalLightBC = GL(GetUniformLocation(m_IDprogram, "u_DirectionalLight.Base.Color"));
+		LightLocations.DirectionalLightBaseAmbientIntensity = GL(GetUniformLocation(m_IDprogram, "u_DirectionalLight.Base.AmbientIntensity"));
+		LightLocations.DirectionalLightBaseDiffuseIntensity = GL(GetUniformLocation(m_IDprogram, "u_DirectionalLight.Base.DiffuseIntensity"));
+		LightLocations.DirectionalLightDirection = GL(GetUniformLocation(m_IDprogram, "u_DirectionalLight.Direction"));
+		LightLocations.NumPointLights = GL(GetUniformLocation(m_IDprogram, "u_NumPointLights"));
+
+		for (size_t i = 0; i < 32; i++)
+		{
+			std::string num = std::to_string(i);
+			LightLocations.PointLights[i].BaseColor = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Base.Color").c_str()));
+			LightLocations.PointLights[i].BaseAmbientIntensity = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Base.AmbientIntensity").c_str()));
+			LightLocations.PointLights[i].BaseDiffuseIntensity = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Base.DiffuseIntensity").c_str()));
+			LightLocations.PointLights[i].LocalPos = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].LocalPos").c_str()));
+			LightLocations.PointLights[i].AttenConstant = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Atten.Constant").c_str()));
+			LightLocations.PointLights[i].AttenLinear = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Atten.Linear").c_str()));
+			LightLocations.PointLights[i].AttenExp = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Atten.Exp").c_str()));
+		}
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)

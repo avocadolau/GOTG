@@ -7,6 +7,7 @@
 #include "../../../attack/UltronSmashExplosionSystem.h"
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
 #include "../../../../components/attack/Explosion.h"
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -144,6 +145,8 @@ namespace Wiwa
 
 			Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 			Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
+
+			enemy->m_AudioSys->PlayAudio("boss_smash_impact");
 
 			SpawnExplosionAfterDash(enemy, selfTr);
 
