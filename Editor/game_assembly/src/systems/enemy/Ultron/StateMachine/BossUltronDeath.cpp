@@ -6,6 +6,7 @@
 #include <Wiwa/ecs/components/game/enemy/Enemy.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include <Wiwa/Dialog/DialogManager.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -31,7 +32,7 @@ namespace Wiwa
 		//EntityId currentEnemy = enemy->GetEntity();
 
 		//pman.EmitBatch(currentEnemy);
-
+		enemy->m_AudioSys->PlayAudio("vo_boss_death");
 		enemy->m_AnimatorSys->PlayAnimation("death");
 	}
 

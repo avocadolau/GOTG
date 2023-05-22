@@ -9,6 +9,7 @@
 #include "../../../../components/enemy/BossMovementPoints.h"
 #include "../../../attack/UltronSmashExplosionSystem.h"
 #include "../../../../components/attack/Explosion.h"
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -151,6 +152,7 @@ namespace Wiwa
 			em.DestroyEntity(m_PreSmashMarkId);
 
 			enemy->m_AnimatorSys->PlayAnimation("smash");
+			enemy->m_AudioSys->PlayAudio("boss_smash_impact");
 
 			enemy->m_NavAgentSys->RegisterWithCrowd();
 			enemy->m_NavAgentSys->SetPosition(centerPoint);
@@ -184,6 +186,7 @@ namespace Wiwa
 
 			if (m_TimerLaser >= 1.0f)
 			{
+				enemy->m_AudioSys->PlayAudio("boss_laser");
 				laserState = LaserState::LASER_ATTACK;
 				m_TimerLaser = 0.0f;
 			}

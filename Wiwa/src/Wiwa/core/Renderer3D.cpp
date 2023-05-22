@@ -1586,27 +1586,20 @@ namespace Wiwa
 	}
 	void Renderer3D::SetUpLight(Wiwa::Shader *matShader, Wiwa::Camera *camera, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights)
 	{
-		matShader->setUniform(matShader->getUniformLocation("u_CameraPosition"), camera->getPosition());
+		matShader->setUniform(matShader->LightLocations.CameraLoc, camera->getPosition());
 		if (directional != -1)
 		{
 			DirectionalLight *dirLight = SceneManager::getActiveScene()->GetEntityManager().GetComponent<DirectionalLight>(directional);
 			Transform3D *transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(directional);
 			if (dirLight && transform)
 			{
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), dirLight->Color);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), dirLight->AmbientIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), dirLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::radians(transform->localRotation));
+				matShader->setUniform(matShader->LightLocations.DirectionalLightBC, dirLight->Color);
+				matShader->setUniform(matShader->LightLocations.DirectionalLightBaseAmbientIntensity, dirLight->AmbientIntensity);
+				matShader->setUniform(matShader->LightLocations.DirectionalLightBaseDiffuseIntensity, dirLight->DiffuseIntensity);
+				matShader->setUniform(matShader->LightLocations.DirectionalLightDirection, glm::radians(transform->localRotation));
 			}
 		}
-		else
-		{
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.Color"), glm::vec3(1.0f));
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.AmbientIntensity"), 0.5f);
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Base.DiffuseIntensity"), 0.5f);
-			matShader->setUniform(matShader->getUniformLocation("u_DirectionalLight.Direction"), glm::vec3(0.0f));
-		}
-		matShader->setUniform(matShader->getUniformLocation("u_NumPointLights"), (int)pointLights.size());
+		matShader->setUniform(matShader->LightLocations.NumPointLights, (int)pointLights.size());
 		for (size_t i = 0; i < pointLights.size(); i++)
 		{
 			Transform3D *transform = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(pointLights[i]);
@@ -1616,13 +1609,13 @@ namespace Wiwa
 			if (transform && pointLight)
 			{
 
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.Color").c_str()), pointLight->Color);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.AmbientIntensity").c_str()), pointLight->AmbientIntensity);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Base.DiffuseIntensity").c_str()), pointLight->DiffuseIntensity);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].LocalPos").c_str()), transform->position);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Constant").c_str()), pointLight->Constant);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Linear").c_str()), pointLight->Linear);
-				matShader->setUniform(matShader->getUniformLocation(("u_PointLights[" + num + "].Atten.Exp").c_str()), pointLight->Exp);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].BaseColor, pointLight->Color);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].BaseAmbientIntensity, pointLight->AmbientIntensity);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].BaseDiffuseIntensity, pointLight->DiffuseIntensity);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].LocalPos, transform->position);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].AttenConstant, pointLight->Constant);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].AttenLinear, pointLight->Linear);
+				matShader->setUniform(matShader->LightLocations.PointLights[i].AttenExp, pointLight->Exp);
 			}
 		}
 

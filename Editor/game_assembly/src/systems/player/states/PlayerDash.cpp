@@ -64,23 +64,16 @@ void Wiwa::PlayerDash::EnterState()
 void Wiwa::PlayerDash::UpdateState()
 {
 	float distance = Math::Distance(m_TargetPoint, m_StateMachine->GetTransform()->position);
-	WI_INFO("Distance {}", distance);
 
 	if (distance <= 0.5f)
 	{
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
-	WI_INFO("Dash timer {} ", m_DashTimer);
 	m_DashTimer += Time::GetDeltaTimeSeconds();
 
 	if (m_DashTimer >= m_MaxDashTime)
 	{
-		if (m_StateMachine->CanMove())
-		{
-			m_StateMachine->SwitchState(m_StateMachine->m_MoveState);
-			return;
-		}
 		m_StateMachine->SwitchState(m_StateMachine->m_IdleState);
 		return;
 	}
