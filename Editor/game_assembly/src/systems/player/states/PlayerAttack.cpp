@@ -52,14 +52,16 @@ void Wiwa::PlayerAttack::UpdateState()
 	}
 	else if (m_StateMachine->CanUltimate() && character->Shield >= character->MaxShield)
 	{
-		FireStarlordUltimate();
+		if(GameStateManager::s_CurrentCharacter == 0)
+			FireStarlordUltimate();
+		else if (GameStateManager::s_CurrentCharacter == 1)
+		{
+			//TODO : Rocket
+		}
 	}
 
 	if (m_StateMachine->CanMove())
 	{
-		// TODO: Partial blending
-		
-		
 		m_StateMachine->UpdateMovement(m_StateMachine->GetCharacter()->Speed);
 		m_StateMachine->UpdateRotation();
 		float shootDirection = m_StateMachine->GetTransform()->localRotation.y;
@@ -182,8 +184,20 @@ void Wiwa::PlayerAttack::FireStarlordUltimate()
 	Character* character = m_StateMachine->GetCharacter();
 	character->Shield = 0;
 	spawnPoint = m_StateMachine->GetFirePosition("RightPos");
-	m_StateMachine->GetAnimator()->PlayAnimation("shoot_right");
+	m_StateMachine->GetAnimator()->PlayAnimation("ultimate");
 	
 	m_StateMachine->SpawnStarLordUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
+	m_StateMachine->GetAudio()->PlayAudio("player_shoot");
+}
+
+void Wiwa::PlayerAttack::FireRocketUltimate()
+{
+	Transform3D* spawnPoint;
+	Character* character = m_StateMachine->GetCharacter();
+	character->Shield = 0;
+	spawnPoint = m_StateMachine->GetFirePosition("FirePos");
+	m_StateMachine->GetAnimator()->PlayAnimation("ultimate");
+
+	m_StateMachine->SpawnRocketUltimate(*spawnPoint, *m_StateMachine->GetCharacter());
 	m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 }

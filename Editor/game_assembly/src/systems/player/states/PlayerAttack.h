@@ -16,6 +16,7 @@ namespace Wiwa
 
 		void Fire();
 		void FireStarlordUltimate();
+		void FireRocketUltimate();
 	private:
 		float m_ShootTimer;
 		glm::vec2 m_MousePos;

@@ -62,12 +62,13 @@ void GameLogPanel::DrawRoomSpawnersInfo()
 	ImGui::SameLine();
 	ImGui::TextColored(ImVec4(0, 0, 200, 1), "%s", Wiwa::GameStateManager::s_PlayerTriggerNext ? "true" : "false");
 
-	ImGui::Text("Enemies active: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
-
+	
 	if (Wiwa::Time::IsPlaying())
 	{
+		ImGui::Text("Enemies active: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetActiveEnemies());
+
 		ImGui::Text("Approximate total enemies: ");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(255, 0, 0, 1), "%d", Wiwa::GameStateManager::GetAproximateTotalEnemies());
@@ -98,15 +99,20 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::InputInt("Boss room index", (int*)&Wiwa::GameStateManager::s_BossRoomIndx);
 	ImGui::InputInt("Rooms to boss", (int*)&Wiwa::GameStateManager::s_RoomsToBoss);
 	ImGui::InputInt("Rooms to shop", (int*)&Wiwa::GameStateManager::s_RoomsToShop);
-
 	ImGui::InputInt("Next reward", &Wiwa::GameStateManager::s_NextRewardRoomReward);
 	ImGui::InputInt("Left door reward", &Wiwa::GameStateManager::s_DoorsReward[0]);
 	ImGui::InputInt("Right door reward", &Wiwa::GameStateManager::s_DoorsReward[1]);
+	ImGui::Checkbox("Set phalanx rooms", &Wiwa::GameStateManager::s_CanPhalanxRooms);
 
 	ImGui::Separator();
 	ImGui::PushID(0);
 	ImGui::Text("Battle rooms");
+	ImGui::Text("Kree rooms");
 	VectorEdit(Wiwa::GameStateManager::s_CombatRooms);
+	ImGui::PopID();
+	ImGui::PushID(420);
+	ImGui::Text("Phalanx rooms");
+	VectorEdit(Wiwa::GameStateManager::s_PhalanxRooms);
 	ImGui::PopID();
 	ImGui::Separator();
 	ImGui::PushID(1);

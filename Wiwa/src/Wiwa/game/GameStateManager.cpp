@@ -39,7 +39,9 @@ namespace Wiwa
 	SceneId GameStateManager::s_LastRewardRoom;
 	SceneId GameStateManager::s_LastShopRoom;
 	
+	bool GameStateManager::s_CanPhalanxRooms = false;
 	std::vector<int> GameStateManager::s_CombatRooms;
+	std::vector<int> GameStateManager::s_PhalanxRooms;
 	std::vector<int> GameStateManager::s_RewardRooms;
 	std::vector<int> GameStateManager::s_ShopRooms;
 	
@@ -603,8 +605,11 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
+			if(s_CanPhalanxRooms)
+				LoadRandomRoom(s_PhalanxRooms);
+			else
+				LoadRandomRoom(s_CombatRooms);
 
-			LoadRandomRoom(s_CombatRooms);
 			s_EnemyManager->m_CurrentCombatRoomsCount++;
 
 			s_RoomsToBoss--;
@@ -615,7 +620,7 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_SHOP");
 				GameStateManager::SetRoomType(RoomType::ROOM_SHOP);
 				GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-				
+				s_CanPhalanxRooms = true;
 				LoadRandomRoom(s_ShopRooms);
 			}
 			break;
@@ -639,7 +644,7 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-				LoadRandomRoom(s_CombatRooms);
+				LoadRandomRoom(s_PhalanxRooms);
 				s_EnemyManager->m_CurrentCombatRoomsCount++;
 			}
 			break;
@@ -716,6 +721,12 @@ namespace Wiwa
 		{
 			std::string indx = std::to_string(i);
 			combatRooms.PushBack(s_CombatRooms[i]);
+		}
+		JSONValue phalanxRooms = doc.AddMemberArray("phalanx");
+		for (size_t i = 0; i < s_PhalanxRooms.size(); i++)
+		{
+			std::string indx = std::to_string(i);
+			phalanxRooms.PushBack(s_PhalanxRooms[i]);
 		}
 		JSONValue rewardRooms = doc.AddMemberArray("reward");
 		for (size_t i = 0; i < s_RewardRooms.size(); i++)
@@ -800,7 +811,18 @@ namespace Wiwa
 				}
 			}
 		}
+		if (doc.HasMember("phalanx")) {
 
+			JSONValue scene_list = doc["phalanx"];
+
+			if (scene_list.IsArray()) {
+				size_t size = scene_list.Size();
+				for (size_t i = 0; i < size; i++) {
+					JSONValue scene = scene_list[(uint32_t)i];
+					s_PhalanxRooms.push_back(scene.as_int());
+				}
+			}
+		}
 		if (doc.HasMember("reward")) {
 
 			JSONValue scene_list = doc["reward"];
@@ -1130,7 +1152,7 @@ namespace Wiwa
 			if (em.IsComponentRemoved<WaveSpawner>(0))
 				return 0;
 			waveSpawner = &waveSpawner[0];
-			if (waveSpawner && !waveSpawner->hasFinished && waveSpawner->hasTriggered) {
+			if (waveSpawner && waveSpawner->hasTriggered) {
 				// Check for all the active waves in that spawner.
 				WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
 				if (waveSpawnerSystem) {

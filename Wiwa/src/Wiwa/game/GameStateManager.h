@@ -191,7 +191,9 @@ namespace Wiwa
 		static SceneId s_LastCombatRoom;
 		static SceneId s_LastRewardRoom;
 		static SceneId s_LastShopRoom;
+		static bool s_CanPhalanxRooms;
 		static std::vector<int> s_CombatRooms;
+		static std::vector<int> s_PhalanxRooms;
 		static std::vector<int> s_RewardRooms;
 		static std::vector<int> s_ShopRooms;
 		static int s_CurrentRoomsCount;
