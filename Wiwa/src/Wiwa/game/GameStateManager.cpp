@@ -295,6 +295,10 @@ namespace Wiwa
 		s_EnemyManager->m_CurrentCombatRoomsCount = 0;
 		s_EnemyManager->ResetDifficulty();
 		s_EnemyManager->Serialize();
+
+		s_RoomsToBoss = 10;
+		s_RoomsToShop = 5;
+		s_CanPhalanxRooms = true;
 	}
 
 	void GameStateManager::InitPlayerData()
