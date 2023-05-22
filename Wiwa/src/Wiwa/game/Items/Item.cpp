@@ -174,11 +174,11 @@ namespace Wiwa
         case PassiveType::RANGE:
             {
                 //
-                Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+               /* Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
                 EntityId newBulletId = EntityManager::INVALID_INDEX;
                 newBulletId = GameStateManager::s_PoolManager->s_StarLordBullets->GetFromPool();
                 SimpleBullet* bullet = (SimpleBullet*)em.GetComponentByIterator(em.GetComponentIterator<SimpleBullet>(newBulletId));
-                bullet->lifeTime += (int)((float)bullet->lifeTime * buffPercent);
+                bullet->lifeTime += (int)((float)bullet->lifeTime * buffPercent);*/
             }
             break;
         }
