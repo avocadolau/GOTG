@@ -9,6 +9,7 @@
 #include <Wiwa/utilities/filesystem/FileSystem.h>
 #include <Wiwa/game/GameStateManager.h>
 #include <vector>
+#include <Wiwa/utilities/containers/Memory.h>
 
 typedef size_t SceneId;
 
@@ -19,10 +20,10 @@ namespace Wiwa {
 		static SceneId m_ActiveScene;
 		static std::vector<SceneId> m_RemovedSceneIds;
 
-		static void LoadEntity(File& scene_file, EntityId parent, EntityManager& em, bool is_parent);
+		static void LoadEntity(Memory& scene_data, EntityId parent, EntityManager& em, bool is_parent);
 		static void SaveEntity(File& scene_file, EntityId eid, EntityManager& em);
 
-		static bool _loadSceneImpl(Scene* scene, File& scene_file);
+		static bool _loadSceneImpl(Scene* scene, Memory& scene_data);
 
 		SceneManager();
 

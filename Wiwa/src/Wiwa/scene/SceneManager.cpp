@@ -103,16 +103,16 @@ namespace Wiwa
 		return scene_id;
 	}
 
-	void SceneManager::LoadEntity(File &scene_file, EntityId parent, EntityManager &em, bool is_parent)
+	void SceneManager::LoadEntity(Memory& scene_data, EntityId parent, EntityManager &em, bool is_parent)
 	{
 		size_t e_name_len;
 		char *e_name_c;
 		std::string e_name;
 
 		// Read entity name
-		scene_file.Read(&e_name_len, sizeof(size_t));
+		scene_data.Read(&e_name_len, sizeof(size_t));
 		e_name_c = new char[e_name_len];
-		scene_file.Read(e_name_c, e_name_len);
+		scene_data.Read(e_name_c, e_name_len);
 		e_name = e_name_c;
 		delete[] e_name_c;
 
@@ -130,7 +130,7 @@ namespace Wiwa
 		size_t component_size;
 
 		// Read component count
-		scene_file.Read(&component_size, sizeof(size_t));
+		scene_data.Read(&component_size, sizeof(size_t));
 
 		// For each component in entity
 		for (size_t i = 0; i < component_size; i++)
@@ -140,10 +140,10 @@ namespace Wiwa
 			byte *data;
 
 			// Read component hash, size and data
-			scene_file.Read(&c_hash, sizeof(size_t));
-			scene_file.Read(&c_size, sizeof(size_t));
+			scene_data.Read(&c_hash, sizeof(size_t));
+			scene_data.Read(&c_size, sizeof(size_t));
 			data = new byte[c_size];
-			scene_file.Read(data, c_size);
+			scene_data.Read(data, c_size);
 
 			byte *component = em.AddComponent(eid, c_hash, data);
 			delete[] data;
@@ -167,14 +167,14 @@ namespace Wiwa
 		size_t system_count;
 
 		// Read system count
-		scene_file.Read(&system_count, sizeof(size_t));
+		scene_data.Read(&system_count, sizeof(size_t));
 
 		if (system_count > 0)
 		{
 			SystemHash *system_hashes = new SystemHash[system_count];
 
 			// Read system hashes
-			scene_file.Read(system_hashes, system_count * sizeof(SystemHash));
+			scene_data.Read(system_hashes, system_count * sizeof(SystemHash));
 
 			for (size_t i = 0; i < system_count; i++)
 			{
@@ -186,11 +186,11 @@ namespace Wiwa
 		size_t children_size;
 
 		// Read children size (size >= 0)
-		scene_file.Read(&children_size, sizeof(size_t));
+		scene_data.Read(&children_size, sizeof(size_t));
 
 		for (size_t i = 0; i < children_size; i++)
 		{
-			LoadEntity(scene_file, eid, em, false);
+			LoadEntity(scene_data, eid, em, false);
 		}
 	}
 
@@ -251,7 +251,7 @@ namespace Wiwa
 		}
 	}
 
-	bool SceneManager::_loadSceneImpl(Scene *scene, File &scene_file)
+	bool SceneManager::_loadSceneImpl(Scene *scene, Memory& scene_data)
 	{
 		// Load GuiControls
 		GuiManager &gm = scene->GetGuiManager();
@@ -259,20 +259,20 @@ namespace Wiwa
 		{
 			std::vector<GuiCanvas*>& canvas = gm.ReturnCanvas();
 			size_t canvas_count;
-			scene_file.Read(&canvas_count, sizeof(size_t));
+			scene_data.Read(&canvas_count, sizeof(size_t));
 			for (size_t i = 0; i < canvas_count; i++)
 			{
 				int id_canvas;
 				bool active_canvas;
 
-				scene_file.Read(&id_canvas, sizeof(int));
-				scene_file.Read(&active_canvas, 1);
+				scene_data.Read(&id_canvas, sizeof(int));
+				scene_data.Read(&active_canvas, 1);
 
 				gm.CreateGuiCanvas(id_canvas, active_canvas);
 
 				std::vector<GuiControl*>& controls = canvas.at(i)->controls;
 				size_t controls_count;
-				scene_file.Read(&controls_count, sizeof(size_t));
+				scene_data.Read(&controls_count, sizeof(size_t));
 				//controls.resize(controls_count);
 				for (size_t j = 0; j < controls_count; j++)
 				{
@@ -310,51 +310,51 @@ namespace Wiwa
 					size_t animRectsSize;
 					std::vector<Rect2i> animRects;
 
-					scene_file.Read(&id, sizeof(int));
-					scene_file.Read(&active, 1);
-					scene_file.Read(&guiType, sizeof(GuiControlType));
-					scene_file.Read(&state, sizeof(GuiControlState));
-					scene_file.Read(&position, sizeof(Rect2i));
-					scene_file.Read(&rotation, sizeof(float));
-					scene_file.Read(&callbackID, sizeof(int));
-					scene_file.Read(&animated, 1);
-					scene_file.Read(&animSpeed, sizeof(float));
-					scene_file.Read(&animRectsSize, sizeof(size_t));
+					scene_data.Read(&id, sizeof(int));
+					scene_data.Read(&active, 1);
+					scene_data.Read(&guiType, sizeof(GuiControlType));
+					scene_data.Read(&state, sizeof(GuiControlState));
+					scene_data.Read(&position, sizeof(Rect2i));
+					scene_data.Read(&rotation, sizeof(float));
+					scene_data.Read(&callbackID, sizeof(int));
+					scene_data.Read(&animated, 1);
+					scene_data.Read(&animSpeed, sizeof(float));
+					scene_data.Read(&animRectsSize, sizeof(size_t));
 
 					for (size_t counterForRects = 0; counterForRects < animRectsSize; counterForRects++)
 					{
 						Rect2i helperRect;
-						scene_file.Read(&helperRect, sizeof(Rect2i));
+						scene_data.Read(&helperRect, sizeof(Rect2i));
 						animRects.push_back(helperRect);
 					}
 
-					scene_file.Read(&extraPosition, sizeof(Rect2i));
+					scene_data.Read(&extraPosition, sizeof(Rect2i));
 
-					scene_file.Read(&textGuiLen, sizeof(size_t));
+					scene_data.Read(&textGuiLen, sizeof(size_t));
 					textGui_c = new char[textGuiLen];
-					scene_file.Read(textGui_c, textGuiLen);
+					scene_data.Read(textGui_c, textGuiLen);
 					text = textGui_c;
 					delete[] textGui_c;
-					scene_file.Read(&audioEventGuiLen, sizeof(size_t));
+					scene_data.Read(&audioEventGuiLen, sizeof(size_t));
 					audioEventGui_c = new char[audioEventGuiLen];
-					scene_file.Read(audioEventGui_c, audioEventGuiLen);
+					scene_data.Read(audioEventGui_c, audioEventGuiLen);
 					audioEvent = audioEventGui_c;
 					delete[] audioEventGui_c;
 
-					scene_file.Read(&textureGui_len, sizeof(size_t));
+					scene_data.Read(&textureGui_len, sizeof(size_t));
 					textureGui_c = new char[textureGui_len];
-					scene_file.Read(textureGui_c, textureGui_len);
+					scene_data.Read(textureGui_c, textureGui_len);
 					textureGui = textureGui_c;
 					delete[] textureGui_c;
 
-					scene_file.Read(&extraTextureGui_len, sizeof(size_t));
+					scene_data.Read(&extraTextureGui_len, sizeof(size_t));
 					extraTextureGui_c = new char[extraTextureGui_len];
-					scene_file.Read(extraTextureGui_c, extraTextureGui_len);
+					scene_data.Read(extraTextureGui_c, extraTextureGui_len);
 					extraTextureGui = extraTextureGui_c;
 					delete[] extraTextureGui_c;
 
-					scene_file.Read(&texturePosition, sizeof(Rect2i));
-					scene_file.Read(&extraTexturePosition, sizeof(Rect2i));
+					scene_data.Read(&texturePosition, sizeof(Rect2i));
+					scene_data.Read(&extraTexturePosition, sizeof(Rect2i));
 
 
 
@@ -398,7 +398,7 @@ namespace Wiwa
 		size_t camera_count;
 
 		// Read camera count
-		scene_file.Read(&camera_count, sizeof(size_t));
+		scene_data.Read(&camera_count, sizeof(size_t));
 		for (size_t i = 0; i < camera_count; i++)
 		{
 			Wiwa::Camera::CameraType camtype;
@@ -411,22 +411,22 @@ namespace Wiwa
 			bool is_active;
 
 			// Read camera active
-			scene_file.Read(&is_active, 1);
+			scene_data.Read(&is_active, 1);
 
 			// Read camera type
-			scene_file.Read(&camtype, sizeof(Wiwa::Camera::CameraType));
+			scene_data.Read(&camtype, sizeof(Wiwa::Camera::CameraType));
 
 			// Read camera FOV
-			scene_file.Read(&fov, sizeof(float));
+			scene_data.Read(&fov, sizeof(float));
 
 			// Read camera aspect ratio
-			scene_file.Read(&ar, sizeof(float));
+			scene_data.Read(&ar, sizeof(float));
 
 			// Write camera near plane distance
-			scene_file.Read(&nplane, sizeof(float));
+			scene_data.Read(&nplane, sizeof(float));
 
 			// Write camera far plane distance
-			scene_file.Read(&fplane, sizeof(float));
+			scene_data.Read(&fplane, sizeof(float));
 
 			CameraId cam_id = -1;
 
@@ -445,19 +445,19 @@ namespace Wiwa
 			Camera *camera = cm.getCamera(cam_id);
 
 			// Read camera cull
-			scene_file.Read(&camera->cull, 1);
+			scene_data.Read(&camera->cull, 1);
 
 			// Read camera draw BB
-			scene_file.Read(&camera->drawBoundingBoxes, 1);
+			scene_data.Read(&camera->drawBoundingBoxes, 1);
 
 			// Read camera draw frustums
-			scene_file.Read(&camera->drawFrustrums, 1);
+			scene_data.Read(&camera->drawFrustrums, 1);
 
 			// Read camera position
-			scene_file.Read(&pos, sizeof(Vector3f));
+			scene_data.Read(&pos, sizeof(Vector3f));
 
 			// Read camera rotation
-			scene_file.Read(glm::value_ptr(rot), sizeof(glm::vec3));
+			scene_data.Read(glm::value_ptr(rot), sizeof(glm::vec3));
 
 			camera->setPosition(pos);
 			camera->setRotation(rot);
@@ -467,18 +467,18 @@ namespace Wiwa
 		bool loaded_audio;
 
 		// Save if audio loaded
-		scene_file.Read(&loaded_audio, sizeof(bool));
+		scene_data.Read(&loaded_audio, sizeof(bool));
 
 		if (loaded_audio)
 		{
 			size_t n_len;
 			std::string project_path;
 
-			scene_file.Read(&n_len, sizeof(size_t));
+			scene_data.Read(&n_len, sizeof(size_t));
 
 			project_path.resize(n_len - 1);
 
-			scene_file.Read(&project_path[0], n_len);
+			scene_data.Read(&project_path[0], n_len);
 
 			Audio::LoadProject(project_path.c_str());
 
@@ -486,7 +486,7 @@ namespace Wiwa
 			std::string bank_path;
 
 			// Save bank size
-			scene_file.Read(&bank_size, sizeof(size_t));
+			scene_data.Read(&bank_size, sizeof(size_t));
 
 			if (bank_size > 0)
 			{
@@ -494,11 +494,11 @@ namespace Wiwa
 				{
 					size_t n_size;
 
-					scene_file.Read(&n_size, sizeof(size_t));
+					scene_data.Read(&n_size, sizeof(size_t));
 
 					bank_path.resize(n_size - 1);
 
-					scene_file.Read(&bank_path[0], n_size);
+					scene_data.Read(&bank_path[0], n_size);
 
 					Audio::LoadBank(bank_path.c_str());
 				}
@@ -508,18 +508,18 @@ namespace Wiwa
 			std::string event_path;
 
 			// Save event size
-			scene_file.Read(&event_size, sizeof(size_t));
+			scene_data.Read(&event_size, sizeof(size_t));
 
 			if (event_size > 0)
 			{
 				for (size_t i = 0; i < event_size; i++)
 				{
 					size_t n_size;
-					scene_file.Read(&n_size, sizeof(size_t));
+					scene_data.Read(&n_size, sizeof(size_t));
 
 					event_path.resize(n_size - 1);
 
-					scene_file.Read(&event_path[0], n_size);
+					scene_data.Read(&event_path[0], n_size);
 
 					Audio::LoadEvent(event_path.c_str());
 				}
@@ -533,15 +533,15 @@ namespace Wiwa
 		size_t p_entity_count;
 
 		// Read total entity count
-		scene_file.Read(&entity_count, sizeof(size_t));
+		scene_data.Read(&entity_count, sizeof(size_t));
 		// Read parent entity count
-		scene_file.Read(&p_entity_count, sizeof(size_t));
+		scene_data.Read(&p_entity_count, sizeof(size_t));
 
 		em.ReserveEntities(entity_count);
 
 		for (size_t i = 0; i < p_entity_count; i++)
 		{
-			LoadEntity(scene_file, i, em, true);
+			LoadEntity(scene_data, i, em, true);
 		}
 
 		isLoadingScene = false;
@@ -817,8 +817,10 @@ namespace Wiwa
 			sceneid = m_ActiveScene;
 		}
 
-		File scene_file = FileSystem::Open(scene_path, FileSystem::OM_IN | FileSystem::OM_BINARY);
-		if (scene_file.IsOpen())
+		sbyte* memblock = nullptr;
+		size_t size = FileSystem::ReadAll(scene_path, &memblock);
+
+		if (memblock)
 		{
 			Scene* sc = m_Scenes[sceneid];
 			std::filesystem::path path = scene_path;
@@ -830,7 +832,9 @@ namespace Wiwa
 			// Load Physics Manager json Data
 			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
-			_loadSceneImpl(sc, scene_file);
+			Memory scene_data(memblock, size);
+
+			_loadSceneImpl(sc, scene_data);
 
 			sc->ChangeName(path.filename().stem().string().c_str());
 
@@ -846,7 +850,7 @@ namespace Wiwa
 			WI_CORE_WARN("Couldn't open scene file \"{0}\".", scene_path);
 		}
 
-		scene_file.Close();
+		delete[] memblock;
 
 		return sceneid;
 	}
