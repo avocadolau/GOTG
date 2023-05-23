@@ -68,6 +68,16 @@ namespace Wiwa
                 StarhawksBlast();
             }
             break;
+        case AbilityType::CAPTAINS_UNIVERSE:
+            {
+
+            }
+            break;
+        case AbilityType::MANTIS_TELEPATHIC_THRUST:
+            {
+
+            }
+            break;
         }
     }
 
@@ -100,6 +110,18 @@ namespace Wiwa
     {
         Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
         EntityId starHawksBlast = em.LoadPrefab("assets/Prefabs/StarHawksBlast.wiprefab");
+    }
+
+    void Ability::CaptainsUniverse()
+    {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId CaptainsUniverse = em.LoadPrefab("assets/Prefabs/PhylasSword.wiprefab");
+    }
+
+    void Ability::MantisTelepathicThrust()
+    {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId MantisTelepathicThrust = em.LoadPrefab("assets/Prefabs/PhylasSword.wiprefab");
     }
 
     void PassiveSkill::Use()
