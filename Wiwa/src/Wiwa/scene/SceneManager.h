@@ -24,6 +24,7 @@ namespace Wiwa {
 		static void SaveEntity(File& scene_file, EntityId eid, EntityManager& em);
 
 		static bool _loadSceneImpl(Scene* scene, Memory& scene_data);
+		static bool _saveSceneImpl(Scene* scene, Memory& scene_data);
 
 		SceneManager();
 

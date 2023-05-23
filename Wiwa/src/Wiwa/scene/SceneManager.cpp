@@ -850,8 +850,6 @@ namespace Wiwa
 			WI_CORE_WARN("Couldn't open scene file \"{0}\".", scene_path);
 		}
 
-		delete[] memblock;
-
 		return sceneid;
 	}
 
