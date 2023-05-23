@@ -56,8 +56,8 @@ namespace Wiwa {
 		m_ImageSize.h = videoHeight;
 
 		m_FrameTime = int(1000 / GetFrameRate()); 
-		m_LastTime = glfwGetTime(); 
-
+		m_LastTime = Time::GetDeltaTimeSeconds();
+		
 		return true;
 	}
 

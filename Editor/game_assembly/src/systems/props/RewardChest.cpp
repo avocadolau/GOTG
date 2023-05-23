@@ -50,11 +50,11 @@ void Wiwa::RewardChest::OnUpdate()
 
 	if (m_ActiveAnim)
 	{
-		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY))
 		{
 			m_Interacted = true;
 		}
-		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_Interacted)
+		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadY) && m_Interacted)
 		{
 			Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 			data->Active = true;

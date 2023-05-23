@@ -89,7 +89,7 @@ namespace Wiwa
 				}
 				else
 				{
-					stats->health = stats->health + 20.0f;
+					stats->health = stats->health + 30.0f;
 				}
 
 				m_TimerHealing = 0.0f;
@@ -108,7 +108,7 @@ namespace Wiwa
 				m_SpawnerDestroyed = true;
 			}
 
-			if (m_TimerSecondPhase >= 24.0f) //Cambiar por num enemigos derrotados
+			if (m_TimerSecondPhase >= 20.0f) //Cambiar por num enemigos derrotados
 			{
 				m_TimerSecondPhase = 0.0f;
 				m_SecondPhaseState = SecondPhaseState::END_STATE;

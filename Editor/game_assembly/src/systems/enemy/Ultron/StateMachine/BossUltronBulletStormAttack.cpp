@@ -54,6 +54,7 @@ namespace Wiwa
 		{
 			if (m_FirstPatternAttackTimer > 0.6f)
 			{
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 				SpawnFirstPattern(enemy);
 				m_FirstPatternAttackTimer = 0.0f;
 			}
@@ -62,12 +63,26 @@ namespace Wiwa
 
 		if (IsSecondPatternFinished() == false)
 		{
+			std::uniform_int_distribution<> audioHitSound(1, 100);
+			int randomNum = audioHitSound(Application::s_Gen);
+			if (randomNum <= 5) // 20 % probability
+			{
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+			}
+		
 			SpawnSecondPattern(enemy);
 			m_TimerRoundCooldown = 0.0f;
 		}
 
 		if (IsThirdPatternFinished() == false)
 		{
+			std::uniform_int_distribution<> audioHitSound(1, 100);
+			int randomNum = audioHitSound(Application::s_Gen);
+			if (randomNum <= 5) // 20 % probability
+			{
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+			}
+
 			SpawnThirdPattern(enemy);
 			m_TimerRoundCooldown = 0.0f;
 		}
@@ -112,7 +127,7 @@ namespace Wiwa
 						enemy->m_NavAgentSys->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
 					}
 
-					enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+					/*enemy->m_AudioSys->PlayAudio("boss_normal_shoot");*/
 					enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 					SelectRandomAttack(enemy);
 				}

@@ -33,6 +33,7 @@ namespace Wiwa
 			r2d.DisableInstance(m_Scene, id_quad_normal);
 
 		}
+		Time::SetTargetFPS(26);
 		video_res->Replay();
 
 		this->rotation = rotation;

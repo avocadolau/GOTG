@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/spritesheet_frame","uniforms":{"u_LifeTime":0.6170860528945923,"u_Time":1009.4922485351563,"u_Color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_Texture":"assets/textures/icons/t_passiveicons_sp.png","u_Position":{"x":0.0,"y":50.0},"u_Zoom":4.0}}

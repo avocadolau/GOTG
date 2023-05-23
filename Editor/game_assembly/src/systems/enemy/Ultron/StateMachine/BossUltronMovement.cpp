@@ -209,6 +209,8 @@ namespace Wiwa
 		else if (randomNum <= 100) { // 25% probability
 			return UltronAttacks::DASH;
 		}
+
+		return UltronAttacks::NONE;
 	}
 
 	UltronAttacks BossUltronMovementState::GetAttackFromProbabilitesSecondPhase()
@@ -234,6 +236,7 @@ namespace Wiwa
 		else if (randomNum <= 100) { // 15 % probability
 			return UltronAttacks::BULLET_STORM;
 		}
+		return UltronAttacks::NONE;
 	}
 
 	void BossUltronMovementState::FillPremadePosition(BossUltron* enemy, std::vector<glm::vec3>& vec)
@@ -506,6 +509,8 @@ namespace Wiwa
 			// Create and return the new position vector
 			return glm::vec3(x, 0.1f, z);
 		}
+
+		return glm::vec3(0.f, 0.f, 0.f);
 	}
 
 	bool Wiwa::BossUltronMovementState::isInsideSquare(const glm::vec3& point)
@@ -647,6 +652,7 @@ namespace Wiwa
 			if (m_SplashZigZagMovementSpawned == false)
 			{
 				enemy->m_AudioSys->PlayAudio("vo_boss_attack");
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 
 				SpawnSplashZigZagBullets(enemy);
@@ -705,6 +711,7 @@ namespace Wiwa
 			if (m_CircularThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f)
 			{
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 
 				for (int i = 0; i < m_CircularThunderMarkIds.size(); ++i)
 				{
@@ -732,7 +739,7 @@ namespace Wiwa
 			if (m_CircularMiddleThunder == false && m_TimerAttackOnMoving > 3.0f)
 			{
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
-
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 				em.DestroyEntity(m_CircularThunderMarkId1);
 				SpawnThunderStormCircularMovement(enemy, m_CircularThunderPosition1, { 0.0f, -1.0f, 0.0f }, 0.0f, 0.0f);
 
@@ -746,6 +753,7 @@ namespace Wiwa
 		{
 			if (m_ThunderMovementMarkSpawned == false && playerTr != nullptr)
 			{
+				enemy->m_AudioSys->PlayAudio("vo_boss_attack");
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
 
 				m_InitialPlayerPosCenterThunders = playerTr->localPosition;
@@ -768,6 +776,7 @@ namespace Wiwa
 			if (m_ThunderMovementSpawned == false && m_TimerAttackOnMoving > 2.0f && playerTr != nullptr)
 			{
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 
 				for (int i = 0; i < m_ThunderMarkIds.size(); ++i)
 				{
@@ -797,6 +806,7 @@ namespace Wiwa
 			if (m_ThunderMiddleSpawned == false && m_TimerAttackOnMoving > 3.0f)
 			{
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
 
 				for (int i = 0; i < m_ThunderMarkIds.size(); ++i)
 				{

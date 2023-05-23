@@ -10,6 +10,7 @@
 #include <opencv2/videoio.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui.hpp>
+#include <Wiwa/utilities/time/Time.h>
 
 namespace Wiwa {
 	class WI_API Video {
@@ -42,7 +43,7 @@ namespace Wiwa {
 
 		bool HasFinished() { return m_Frame.empty(); }
 
-		double GetFrameRate() { return m_Cap.get(cv::CAP_PROP_FPS); }
+		double GetFrameRate() { return Time::GetTargetFPS(); }
 		unsigned char* cvMat2TexInput(cv::Mat& img);
 
 		static void WriteVideo(const char* destination, Video* video);
