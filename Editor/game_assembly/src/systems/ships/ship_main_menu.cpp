@@ -30,6 +30,8 @@ void Wiwa::ShipMainMenu::OnInit()
 {
 	ShipMainMenuData* data = GetComponentByIterator<ShipMainMenuData>(m_ShipDataIt);
 	data->PanToCamera = false;
+	Time::SetTargetFPS(60);
+
 }
 
 void Wiwa::ShipMainMenu::OnUpdate()
