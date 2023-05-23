@@ -138,7 +138,7 @@ void Wiwa::PlayerAttack::Fire()
 				spawnPoint = m_StateMachine->GetFirePosition("LeftPos"); ;
 				//m_StateMachine->GetAnimator()->Blend("shoot_left", false, 0.1f);
 			}
-			shooter->ShootRight = !shooter->ShootRight;
+  			shooter->ShootRight = !shooter->ShootRight;
 			m_StateMachine->SpawnStarLordBullet(*spawnPoint, *m_StateMachine->GetCharacter());
 			m_StateMachine->GetAudio()->PlayAudio("player_shoot");
 			
