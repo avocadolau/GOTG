@@ -26,7 +26,8 @@ GoToMilanoHub_ GoToMilanoHub()
 
 GoMainMenu_ GoMainMenu()
 {
-	Wiwa::SceneManager::ChangeSceneByIndex(3);
+	Wiwa::SceneManager::ChangeSceneByIndex(2);
+	Wiwa::GameStateManager::ResetWave();
 	Wiwa::GameMusicManager::MainMenu();
 	return GoMainMenu_::hola;
 }
@@ -188,5 +189,12 @@ AddRecoveryHealth_ AddRecoveryHealth()
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
 	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery health"));
 	return AddRecoveryHealth_();
+}
+
+GoToHub_ GoToHub()
+{
+	Wiwa::GameStateManager::ResetWave();
+	Wiwa::SceneManager::ChangeSceneByIndex(3);
+	return GoToHub_();
 }
 
