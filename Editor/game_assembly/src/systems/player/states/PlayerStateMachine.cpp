@@ -93,7 +93,7 @@ void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 
 void Wiwa::PlayerStateMachine::CheckHealth()
 {
-	if (GetCharacter()->Health <= 0 && !Wiwa::GameStateManager::ReturnFanaticEffect())
+	if (GetCharacter()->Health <= 0 && !Wiwa::GameStateManager::ReturnFanaticEffect() && m_CurrentState != m_DeathState)
 	{
 		SwitchState(m_DeathState);
 		// play audio
