@@ -23,6 +23,7 @@ namespace Wiwa
 		void AddBuff(const Buff* buff) const;
 		void AddShopPassive(const ShopElement& shopElement);
 		void AddPassive(const PassiveSkill& skill);
+		void PushBackPassive(const PassiveSkill& skill);
 		void AddConsumable(const Consumable& consumable);
 
 		void Update();

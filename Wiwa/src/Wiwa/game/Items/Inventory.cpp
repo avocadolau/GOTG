@@ -174,7 +174,7 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 				passive.Description = passives[i]["description"].as_string();
 				passive.Icon = (ResourceId)passives[i]["icon"].as_int();
 				passive.PassiveType = (PassiveType)passives[i]["type"].as_int();
-				AddPassive(passive);
+				PushBackPassive(passive);
 			}
 		}
 	}
@@ -336,6 +336,10 @@ void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
 	m_PassiveSkill.back().Use();
 }
 
+void Wiwa::Inventory::PushBackPassive(const PassiveSkill& skill)
+{
+	m_PassiveSkill.emplace_back(skill);
+}
 void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
 {
 	m_Consumable = consumable;
