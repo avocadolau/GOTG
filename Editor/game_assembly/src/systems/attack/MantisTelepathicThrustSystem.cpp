@@ -34,7 +34,7 @@ namespace Wiwa
 			strcpy(attack->attackType, "MANTIS_TELEPATHIC_THRUST");
 		}
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-		mantisTelepathicThrust->damage = Wiwa::ItemManager::GetAbility("Mantis Telepathic Thrust")->Damage;
+		mantisTelepathicThrust->damage = Wiwa::ItemManager::GetAbility("Manti's Telepathic Thrust")->Damage;
 		mantisTelepathicThrust->lifeTime = 5.0f;
 
 		EntityId player = GameStateManager::GetPlayerId();
@@ -46,6 +46,7 @@ namespace Wiwa
 
 		mantisTelepathicThrustTransform->localPosition = playerTransform->localPosition;
 
+		mantisTelepathicThrustTransform->localScale *= Wiwa::ItemManager::GetAbility("Manti's Telepathic Thrust")->Area;
 		mantisTelepathicThrustTransform->localPosition.y = 0.1f;
 	}
 
@@ -85,5 +86,15 @@ namespace Wiwa
 
 	void MantisTelepathicThrustSystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
+		std::string enemyStr = "ENEMY";
+
+		if (body1->id == m_EntityId && body2->selfTagStr == enemyStr)
+		{
+			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
+			Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(body2->id)->getBody();
+			Wiwa::Transform3D* tr = em.GetComponent<Transform3D>(body2->id);
+			physicsManager.SetVelocity(obj, glm::normalize(Math::CalculateForward(tr)) * 50.0f * -1.0f);
+		}
 	}
 }

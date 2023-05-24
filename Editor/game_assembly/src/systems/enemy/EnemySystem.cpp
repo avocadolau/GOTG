@@ -24,6 +24,8 @@
 #include <Wiwa/ecs/components/game/Character.h>
 #include "MeleePhalanx/EnemyMeleePhalanx.h"
 #include "../../components/attack/YondusFin.h"
+#include "../../components/attack/CaptainsUniverseEnergy.h"
+#include "../../components/attack/MantisTelepathicThrust.h"
 
 namespace Wiwa
 {
@@ -217,24 +219,22 @@ namespace Wiwa
 				std::string captainsUniverseStr = "CAPTAINS_UNIVERSE";
 				if (captainsUniverseStr == attackStr)
 				{
-					//TODO system
-					/*StarhawksBlast* starhawks = GetComponentByIterator<StarhawksBlast>(em.GetComponentIterator<YondusFin>(body2->id));
-					if (starhawks != nullptr)
+					CaptainsUniverseEnergy* captainUniverse = GetComponentByIterator<CaptainsUniverseEnergy>(em.GetComponentIterator<CaptainsUniverseEnergy>(body2->id));
+					if (captainUniverse != nullptr)
 					{
 						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-						ReceiveDamage(starhawks->damage);
-					}*/
+						ReceiveDamage(captainUniverse->damage);
+					}
 				}
 				std::string mantisTelepathicThrustStr = "MANTIS_TELEPATHIC_THRUST";
 				if (mantisTelepathicThrustStr == attackStr)
 				{
-					//TODO system
-					/*StarhawksBlast* starhawks = GetComponentByIterator<StarhawksBlast>(em.GetComponentIterator<YondusFin>(body2->id));
-					if (starhawks != nullptr)
+					MantisTelepathicThrust* mantisTelepathicThrust = GetComponentByIterator<MantisTelepathicThrust>(em.GetComponentIterator<MantisTelepathicThrust>(body2->id));
+					if (mantisTelepathicThrust != nullptr)
 					{
 						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-						ReceiveDamage(starhawks->damage);
-					}*/
+						ReceiveDamage(mantisTelepathicThrust->damage);
+					}
 				}
 			}
 		}

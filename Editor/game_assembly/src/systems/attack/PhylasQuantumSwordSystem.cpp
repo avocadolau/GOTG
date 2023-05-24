@@ -37,7 +37,7 @@ namespace Wiwa
 
 		PhylasSword->damage = Wiwa::ItemManager::GetAbility("Phyla's Quantum Sword")->Damage;
 		PhylasSword->lifeTime = 30.0f;
-		PhylasSword->velocity = 30.0f;
+		PhylasSword->velocity = 80.0f;
 		
 		EntityId player = Wiwa::GameStateManager::GetPlayerId();
 		Transform3D* playerTransform = em.GetComponent<Transform3D>(player);

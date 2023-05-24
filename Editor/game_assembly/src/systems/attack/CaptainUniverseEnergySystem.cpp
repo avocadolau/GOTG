@@ -36,7 +36,7 @@ namespace Wiwa
 		Transform3D* captainUniverseTransform = em.GetComponent<Transform3D>(m_EntityId);
 		captainUniverse->damage = Wiwa::ItemManager::GetAbility("Captain Universe's Energy")->Damage;
 		captainUniverse->lifeTime = 30.0f;
-		captainUniverse->velocity = 30.0f;
+		captainUniverse->velocity = Wiwa::ItemManager::GetAbility("Captain Universe's Energy")->Range;
 
 		EntityId player = Wiwa::GameStateManager::GetPlayerId();
 		Transform3D* playerTransform = em.GetComponent<Transform3D>(player);
@@ -82,7 +82,7 @@ namespace Wiwa
 	void CaptainsUniverseEnergySystem::SetExplosion()
 	{
 		EntityManager& em = GetEntityManager();
-		EntityId explosionId = em.LoadPrefab("assets\\Prefabs\\StarlordUltimate\\P_StarLordUltimateExplosion.wiprefab");
+		EntityId explosionId = em.LoadPrefab("assets/Prefabs/AbilitiesPrefabs/P_CaptainUniverse_Explosion.wiprefab");
 		Transform3D* selfTr = GetTransform();
 		Transform3D* explosionTr = (Transform3D*)em.GetComponentByIterator(GetComponentIterator<Transform3D>(explosionId));
 
