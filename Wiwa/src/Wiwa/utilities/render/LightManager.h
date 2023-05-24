@@ -27,8 +27,8 @@ namespace Wiwa {
 		// Set to -1 if there's no directional lights
 		inline void SetDirectionalLight(size_t light) { m_DirectionalLight = light; }
 		inline size_t GetDirectionalLight() { return m_DirectionalLight; }
-	private:
 
+	private:
 		std::vector<size_t> m_PointLights;
 		std::vector<size_t> m_SpotLights;
 		size_t m_DirectionalLight = -1;

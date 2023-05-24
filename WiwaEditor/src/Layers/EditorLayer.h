@@ -40,6 +40,7 @@
 
 #include "Panels/animation/OzzAnimationPanel.h"
 #include "Panels/EnemyPanel.h"
+#include "Panels/ShadowsPanel.h"
 
 #include <Wiwa/scene/SceneManager.h>
 
@@ -147,6 +148,7 @@ private:
 	std::unique_ptr<Panel> m_OzzAnimationPanel;
 
 	std::unique_ptr<Panel> m_EnemyPanel;
+	std::unique_ptr<Panel> m_ShadowsPanel;
 
 	std::vector<Panel *> m_Panels;
 	std::vector<Panel *> m_Settings;

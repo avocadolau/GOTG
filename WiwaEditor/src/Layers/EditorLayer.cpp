@@ -96,6 +96,7 @@ void EditorLayer::OnAttach()
 	m_AiPanel = std::make_unique<AIPanel>(this);
 	m_OzzAnimationPanel = std::make_unique<OzzAnimationPanel>(this);
 	m_EnemyPanel = std::make_unique<EnemyPanel>(this);
+	m_ShadowsPanel = std::make_unique<ShadowsPanel>(this);
 
 	m_AnimatorPanel = std::make_unique <AnimatorPanel>(this);
 	m_AnimationPanel = std::make_unique<AnimationPanel>(this);
@@ -130,6 +131,7 @@ void EditorLayer::OnAttach()
 	m_Panels.push_back(m_InventoryPanel.get());
 	m_Panels.push_back(m_AiPanel.get());
 	m_Panels.push_back(m_OzzAnimationPanel.get());
+	m_Panels.push_back(m_ShadowsPanel.get());
 
 	m_Panels.push_back(m_EnemyPanel.get());
 	

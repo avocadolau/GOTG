@@ -225,7 +225,6 @@ namespace Wiwa {
 		m_Proj = GL(GetUniformLocation(m_IDprogram, "u_Proj"));
 		m_View = GL(GetUniformLocation(m_IDprogram, "u_View"));
 		m_UCamera = GL(GetUniformLocation(m_IDprogram, "u_CameraPosition"));
-		m_BoneLocation = GL(GetUniformLocation(m_IDprogram, "u_Bones"));
 
 		LightLocations.CameraLoc = GL(GetUniformLocation(m_IDprogram, "u_CameraPosition"));
 		LightLocations.DirectionalLightBC = GL(GetUniformLocation(m_IDprogram, "u_DirectionalLight.Base.Color"));
@@ -245,6 +244,9 @@ namespace Wiwa {
 			LightLocations.PointLights[i].AttenLinear = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Atten.Linear").c_str()));
 			LightLocations.PointLights[i].AttenExp = GL(GetUniformLocation(m_IDprogram, ("u_PointLights[" + num + "].Atten.Exp").c_str()));
 		}
+
+		LightLocations.DirLightMVP = GL(GetUniformLocation(m_IDprogram, "u_LightMVP"));
+		LightLocations.DirLightPos = GL(GetUniformLocation(m_IDprogram, "u_LightPos"));
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)
@@ -441,11 +443,6 @@ namespace Wiwa {
 		GL(UniformMatrix4fv(m_Model, 1, GL_FALSE, glm::value_ptr(model)));
 		GL(UniformMatrix4fv(m_View, 1, GL_FALSE, glm::value_ptr(view)));
 		GL(UniformMatrix4fv(m_Proj, 1, GL_FALSE, glm::value_ptr(proj)));
-	}
-
-	void Shader::SetBoneTransform(const std::vector<glm::mat4>& transform)
-	{
-		GL(UniformMatrix4fv(m_BoneLocation,(GLsizei)transform.size(), GL_FALSE, glm::value_ptr(transform[0])));
 	}
 
 	void Shader::SetCameraPos(const glm::vec3& position)

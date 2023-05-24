@@ -29,6 +29,9 @@ namespace Wiwa {
 	};
 	struct LightUniformLocations
 	{
+		uint32_t DirLightMVP;
+		uint32_t DirLightPos;
+
 		uint32_t CameraLoc;
 		uint32_t DirectionalLightBC;
 		uint32_t DirectionalLightBaseAmbientIntensity;
@@ -85,7 +88,7 @@ namespace Wiwa {
 		void setUniformType(const char* name, const UniformType type);
 		void setUniformName(const char* oldName, const char* newName);
 		void SetMVP(const glm::mat4& model, const glm::mat4& view, const glm::mat4& proj);
-		void SetBoneTransform(const std::vector<glm::mat4>& transform);
+
 		void SetCameraPos(const glm::vec3& position);
 		UniformField* getUniform(const char* name);
 		
@@ -134,7 +137,6 @@ namespace Wiwa {
 		uint32_t m_View;
 		uint32_t m_Proj;
 		uint32_t m_UCamera;
-		uint32_t m_BoneLocation;
 
 
 	};

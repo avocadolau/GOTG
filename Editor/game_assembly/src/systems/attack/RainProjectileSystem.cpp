@@ -90,7 +90,7 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 
 		// Calculate the raw x and z coordinates for the position
 		transform->localPosition.x = m_CenterPoint.x + m_RotationRadius * std::cos(angle);
-		transform->localPosition.y = 0.1;
+		transform->localPosition.y = 0.1f;
 		transform->localPosition.z = m_CenterPoint.z + m_RotationRadius * std::sin(angle);
 
 		//------------------------

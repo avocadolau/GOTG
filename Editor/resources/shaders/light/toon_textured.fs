@@ -8,9 +8,6 @@ in vec3 Normal;
 in vec3 LocalPos;
 in vec4 LightSpacePos;
 
-
-
-
 struct BaseLight
 {
     vec3 Color;
@@ -63,22 +60,40 @@ uniform sampler2D u_ShadowMap;
 uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
+uniform vec3 u_LightPos;
 
-float CalcShadowFactor()
+float CalcShadowFactor(vec3 position,vec3 direction)
 {
-    vec3 projCoords = LightSpacePos.xyz / LightSpacePos.w;
-    vec2 UVCoords;
-    UVCoords.x = 0.5 * projCoords.x + 0.5;
-    UVCoords.y = 0.5 * projCoords.y + 0.5;
-    float z = 0.5 * projCoords.z + 0.5;
-    float depth = texture(u_ShadowMap, UVCoords).x;
+     vec3 projCoords = LightSpacePos.xyz / LightSpacePos.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(u_ShadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // calculate bias (based on depth map resolution and slope)
+    vec3 normal = normalize(Normal);
+    vec3 lightDir = normalize(position - LocalPos);
+    float bias = 0.005;
+    // check whether current frag pos is in shadow
+    // float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+    // PCF
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(u_ShadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
 
-    float bias = 0.0025;
-
-    if(depth + bias < z)
-        return 0.5;
-    else
-        return 1.0;
+   if(projCoords.z > 1.0)
+        shadow = 0.0;
+    
+    return shadow;
 }
 
 float CalcRimLightFactor(vec3 pixelToCamera, vec3 normal)
@@ -92,6 +107,8 @@ float CalcRimLightFactor(vec3 pixelToCamera, vec3 normal)
 
 vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal, float shadowFactor)
 {
+    vec3 color = texture2D(u_Texture, TexCoord.xy).rgb;
+
     vec4 ambientColor = vec4(light.Color, 1.0f) * light.AmbientIntensity * u_MatAmbientColor;
 
     float diffuseFactor = dot(normal, -direction);
@@ -112,12 +129,12 @@ vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal, float shado
         rimColor = diffuseColor * rimFactor;
     }
 
-    return (ambientColor + shadowFactor * (diffuseColor + specularColor + rimColor));
+    return (ambientColor + (1 - shadowFactor)  * (diffuseColor + specularColor + rimColor)) * vec4(color, 1.0);
 }
 
 vec4 CalcDirectionalLight(vec3 normal)
 {
-    float shadowFactor = CalcShadowFactor();
+    float shadowFactor = CalcShadowFactor(u_LightPos, u_DirectionalLight.Direction);
     return CalcLightInternal(u_DirectionalLight.Base, u_DirectionalLight.Direction, normal, shadowFactor);
 }
 
@@ -156,16 +173,15 @@ void main()
 
     vec4 totalLight = CalcDirectionalLight(normal);
     
-    for(int i = 0; i < u_NumPointLights; i++)
-    {
-        totalLight += CalcPointLight(u_PointLights[i], normal);
-    }
+    // for(int i = 0; i < u_NumPointLights; i++)
+    // {
+    //     totalLight += CalcPointLight(u_PointLights[i], normal);
+    // }
 
-    for(int i = 0; i < u_NumSpotLights; i++)
-    {
-        totalLight += CalcSpotLight(u_SpotLights[i], normal);
-    }
+    // for(int i = 0; i < u_NumSpotLights; i++)
+    // {
+    //     totalLight += CalcSpotLight(u_SpotLights[i], normal);
+    // }
 
-    FragColor = texture2D(u_Texture, TexCoord.xy) *
-                totalLight;
+    FragColor = totalLight;
 }
