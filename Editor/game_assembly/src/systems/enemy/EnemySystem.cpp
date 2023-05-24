@@ -182,6 +182,60 @@ namespace Wiwa
 						return;
 					ReceiveDamage(yondusFin->damage);
 				}
+				std::string phylasSwordStr = "PHYLAS_QUANTUM_SWORD";
+				if (phylasSwordStr == attackStr)
+				{
+					PhylasQuantumSword* phylasSword = GetComponentByIterator<PhylasQuantumSword>(em.GetComponentIterator<PhylasQuantumSword>(body2->id));
+					if (phylasSword != nullptr)
+					{
+						ReceiveDamage(phylasSword->damage);
+					}
+				}
+
+				std::string grootSeedsStr = "GROOTS_SEEDS";
+				if (grootSeedsStr == attackStr)
+				{
+					GrootSeeds* grootSeeds = GetComponentByIterator<GrootSeeds>(em.GetComponentIterator<GrootSeeds>(body2->id));
+					if (grootSeeds != nullptr)
+					{
+						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
+						SlowForTime(2, 0.4f);
+						ReceiveDamage(grootSeeds->damage);
+					}
+				}
+
+				std::string starhawksBlastStr = "STARHAWKS_BLAST";
+				if (starhawksBlastStr == attackStr)
+				{
+					StarhawksBlast* starhawks = GetComponentByIterator<StarhawksBlast>(em.GetComponentIterator<StarhawksBlast>(body2->id));
+					if (starhawks != nullptr)
+					{
+						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
+						ReceiveDamage(starhawks->damage);
+					}
+				}
+				std::string captainsUniverseStr = "CAPTAINS_UNIVERSE";
+				if (captainsUniverseStr == attackStr)
+				{
+					//TODO system
+					/*StarhawksBlast* starhawks = GetComponentByIterator<StarhawksBlast>(em.GetComponentIterator<YondusFin>(body2->id));
+					if (starhawks != nullptr)
+					{
+						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
+						ReceiveDamage(starhawks->damage);
+					}*/
+				}
+				std::string mantisTelepathicThrustStr = "MANTIS_TELEPATHIC_THRUST";
+				if (mantisTelepathicThrustStr == attackStr)
+				{
+					//TODO system
+					/*StarhawksBlast* starhawks = GetComponentByIterator<StarhawksBlast>(em.GetComponentIterator<YondusFin>(body2->id));
+					if (starhawks != nullptr)
+					{
+						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
+						ReceiveDamage(starhawks->damage);
+					}*/
+				}
 			}
 		}
 
@@ -192,48 +246,6 @@ namespace Wiwa
 			Wiwa::EntityManager& em = _scene->GetEntityManager();
 			Wiwa::Explosion* explosion = em.GetComponent<Wiwa::Explosion>(body2->id);
 			ReceiveDamage(explosion->damage);
-		}
-
-		std::string phylasSword = "PHYLAS_QUANTUM_SWORD";
-		if (body1->id == m_EntityId && phylasSword == body2->selfTagStr)
-		{
-			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::PhylasQuantumSword* phylasSword = nullptr;
-			phylasSword = em.GetComponent<Wiwa::PhylasQuantumSword>(body2->id);
-			if (phylasSword != nullptr)
-			{
-				ReceiveDamage(phylasSword->damage);
-			}
-		}
-
-		std::string groot_seeds = "GROOTS_SEEDS";
-		if (body1->id == m_EntityId && groot_seeds == body2->selfTagStr)
-		{
-			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::GrootSeeds* grootSeeds = nullptr;
-			grootSeeds = em.GetComponent<Wiwa::GrootSeeds>(body2->id);
-			if (grootSeeds != nullptr)
-			{
-				EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-				//statsSelf->Speed -= 2.0f;
-				ReceiveDamage(grootSeeds->damage);
-			}
-		}
-
-		std::string starhawks_blast = "STARHAWKS_BLAST";
-		if (body1->id == m_EntityId && starhawks_blast == body2->selfTagStr)
-		{
-			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-			Wiwa::EntityManager& em = _scene->GetEntityManager();
-			Wiwa::StarhawksBlast* starhawks = nullptr;
-			starhawks = em.GetComponent<Wiwa::StarhawksBlast>(body2->id);
-			if (starhawks != nullptr)
-			{
-				EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-				ReceiveDamage(starhawks->damage);
-			}
 		}
 	}
 
@@ -505,7 +517,7 @@ namespace Wiwa
 	}
 
 	// Time in seconds and percentage in 0 and 1 scale
-	void EnemySystem::SlowForTime(float time, int percentage)
+	void EnemySystem::SlowForTime(float time, float percentage)
 	{
 		m_TimerSlow = time;
 		m_SlowPercentage = percentage;

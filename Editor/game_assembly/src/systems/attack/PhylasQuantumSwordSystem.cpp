@@ -1,6 +1,7 @@
 #include "PhylasQuantumSwordSystem.h"
 #include "../../components/attack/PhylasQuantumSword.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "../../components/attack/Attack.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 namespace Wiwa
@@ -28,6 +29,12 @@ namespace Wiwa
 		PhylasQuantumSword* PhylasSword = GetComponent<PhylasQuantumSword>();
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Transform3D* PhylasSwordTransform = em.GetComponent<Transform3D>(m_EntityId);
+		Attack* attack = GetComponentByIterator<Attack>(GetComponentIterator<Attack>(m_EntityId));
+		if (attack)
+		{
+			strcpy(attack->attackType, "PHYLAS_QUANTUM_SWORD");
+		}
+
 		PhylasSword->damage = Wiwa::ItemManager::GetAbility("Phyla's Quantum Sword")->Damage;
 		PhylasSword->lifeTime = 30.0f;
 		PhylasSword->velocity = 30.0f;
