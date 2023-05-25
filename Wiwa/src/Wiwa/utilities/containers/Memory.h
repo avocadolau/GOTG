@@ -14,6 +14,21 @@ namespace Wiwa {
 
 		Memory(void* block, size_t size) : m_MemoryBlock((sbyte*)block), m_MemorySize(size), m_PointIndex(0){}
 
+		~Memory() {
+			delete[] m_MemoryBlock;
+		}
+
+		sbyte* getBlock() { return m_MemoryBlock; }
+
+		void Alloc(size_t size){
+			delete[] m_MemoryBlock;
+
+			m_MemorySize = size;
+			m_PointIndex = 0;
+
+			m_MemoryBlock = new sbyte[size];
+		}
+
 		void Write(void* data, size_t size) {
 			memcpy(m_MemoryBlock + size, data, size);
 		}

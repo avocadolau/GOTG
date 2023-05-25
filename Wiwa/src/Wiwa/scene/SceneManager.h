@@ -11,6 +11,8 @@
 #include <vector>
 #include <Wiwa/utilities/containers/Memory.h>
 
+#include <thread>
+
 typedef size_t SceneId;
 
 namespace Wiwa {
@@ -24,6 +26,7 @@ namespace Wiwa {
 		static void SaveEntity(File& scene_file, EntityId eid, EntityManager& em);
 
 		static bool _loadSceneImpl(Scene* scene, Memory& scene_data);
+		static bool _saveSceneImpl(Scene* scene, Memory& scene_data);
 
 		SceneManager();
 
@@ -33,6 +36,8 @@ namespace Wiwa {
 		static bool m_LoadScene;
 		static std::string m_LoadPath;
 		static int m_LoadFlags;
+		static std::atomic<bool> m_LoadedScene;
+		static std::thread m_LoadThread;
 	public:
 		enum LoadFlags {
 			// Unloads current scene

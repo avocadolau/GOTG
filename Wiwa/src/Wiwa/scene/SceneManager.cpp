@@ -25,6 +25,9 @@ namespace Wiwa
 
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
+	std::atomic<bool> SceneManager::m_LoadedScene = false;
+	std::thread SceneManager::m_LoadThread;
+
 	void SceneManager::Awake()
 	{
 		m_Scenes[m_ActiveScene]->Awake();
@@ -43,22 +46,18 @@ namespace Wiwa
 	void SceneManager::ModuleInit()
 	{
 	
-		if (m_LoadScene) {
-			m_ActiveScene = LoadScene(m_LoadPath.c_str(), m_LoadFlags);
-			GameMusicManager::OnSceneChage(m_LoadPath.c_str());
-			m_LoadScene = false;
-		}
+		
 	}
 
 	void SceneManager::ModuleUpdate()
 	{
 		OPTICK_EVENT("Scene Update");
 
-		/*if (m_LoadScene) {
-			LoadScene(m_LoadPath.c_str(), m_LoadFlags);
-			GameMusicManager::OnSceneChage(m_ActiveScene);
+		if (m_LoadScene) {
+			m_ActiveScene = LoadScene(m_LoadPath.c_str(), m_LoadFlags);
+			GameMusicManager::OnSceneChage(m_LoadPath.c_str());
 			m_LoadScene = false;
-		}*/
+		}
 
 		m_Scenes[m_ActiveScene]->ModuleUpdate();
 
@@ -549,6 +548,11 @@ namespace Wiwa
 		return true;
 	}
 
+	bool SceneManager::_saveSceneImpl(Scene* scene, Memory& scene_data)
+	{
+		return false;
+	}
+
 	void SceneManager::SaveScene(SceneId scene_id, const char *scene_path)
 	{
 		File scene_file = FileSystem::Open(scene_path, FileSystem::OM_OUT | FileSystem::OM_BINARY);
@@ -849,8 +853,6 @@ namespace Wiwa
 		{
 			WI_CORE_WARN("Couldn't open scene file \"{0}\".", scene_path);
 		}
-
-		delete[] memblock;
 
 		return sceneid;
 	}
