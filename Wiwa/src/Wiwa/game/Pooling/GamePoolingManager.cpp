@@ -31,7 +31,7 @@ namespace Wiwa
 		s_RainProjectilePool = new EntityPool(Pool_Type::RAIN_PROJECTILE, 80, "assets\\Enemy\\RainProjectile\\RainProjectile_01.wiprefab");
 		s_SmashExplosionPool = new EntityPool(Pool_Type::ULTRON_SMASH_EXPLOSION, 12, "assets\\Enemy\\Explosions\\SmashExplosion_01.wiprefab");
 		s_ZigZagBulletPool = new EntityPool(Pool_Type::ZIG_ZAG_BULLET, 40, "assets\\Enemy\\ZigZagBullet\\ZigZagBullet_01.wiprefab");
-		s_StarHawksBlastPool = new EntityPool(Pool_Type::STARHAWK_BLAST_BULLET, 40, "assets\\Prefabs\\P_StarHawkBlast.wiprefab");
+		s_StarHawksBlastPool = new EntityPool(Pool_Type::STARHAWK_BLAST_BULLET, 40, "assets\\Prefabs\\AbilitiesPrefabs\\P_StarHawkBlast.wiprefab");
 		m_HasLoadedAll = false;
 	}
 
