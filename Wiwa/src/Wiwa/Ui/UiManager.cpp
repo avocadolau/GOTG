@@ -466,7 +466,7 @@ namespace Wiwa
 			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
 
 			/* check if we need to wrap to the next line */
-			if (lineWidth + (int)roundf(ax * scale) >= maxWidth || forceNewLine == true)
+			if (lineWidth + (int)roundf(ax * scale) >= maxWidth || forceNewLine == true || word[i] == 124)
 			{
 				X_offset = ComputeX_DialogOffset(path, _word, maxWidth, i);
 
@@ -598,7 +598,7 @@ namespace Wiwa
 			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
 
 			/* check if we need to wrap to the next line */
-			if (lineWidth2 + (int)roundf(ax2 * scale2) >= maxWidth || forceNewLine2 == true)
+			if (lineWidth2 + (int)roundf(ax2 * scale2) >= maxWidth || forceNewLine2 == true || word2[a] == 124)
 			{
 				X_offset = (maxWidth / 2) - (lineWidth2 / 2);
 
