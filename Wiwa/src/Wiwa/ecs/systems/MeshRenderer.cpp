@@ -57,12 +57,36 @@ namespace Wiwa {
 				if (camera->cull && !camera->frustrum.IsBoxVisible(mod->boundingBox.getMin(), mod->boundingBox.getMax()))
 					return;
 
-				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+				r3d.RenderMesh(
+					mod,
+					t3d->worldMatrix,
+					mat,
+					lman.GetDirectionalLight(),
+					lman.GetPointLights(),
+					lman.GetSpotLights(),
+					mesh->castShadows,
+					mesh->shadowRecieve,
+					false,
+					camera,
+					camera->cull
+				);
 			}
 			//add animator render on both
-			if(man.editorCamera)
-				r3d.RenderMesh(mod, t3d->worldMatrix, mat, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
-		
+			if (man.editorCamera)
+			{
+				r3d.RenderMesh(
+					mod,
+					t3d->worldMatrix,
+					mat,
+					lman.GetDirectionalLight(),
+					lman.GetPointLights(),
+					lman.GetSpotLights(),
+					mesh->castShadows,
+					mesh->shadowRecieve,
+					false,
+					man.editorCamera
+				);
+			}
 		//}
 		/*else if (animator->animator != nullptr)
 		{

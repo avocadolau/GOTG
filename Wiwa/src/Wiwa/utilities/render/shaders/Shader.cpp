@@ -247,6 +247,7 @@ namespace Wiwa {
 
 		LightLocations.DirLightMVP = GL(GetUniformLocation(m_IDprogram, "u_LightMVP"));
 		LightLocations.DirLightPos = GL(GetUniformLocation(m_IDprogram, "u_LightPos"));
+		LightLocations.RecieveShadows = GL(GetUniformLocation(m_IDprogram, "u_RecieveShadows"));
 	}
 
 	bool Shader::LoadFromWiasset(const char* filename)

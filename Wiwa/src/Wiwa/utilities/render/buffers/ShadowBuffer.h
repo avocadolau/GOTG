@@ -4,7 +4,7 @@
 
 namespace Wiwa
 {
-	class ShadowBuffer
+	class WI_API ShadowBuffer
 	{
 	private:
 		uint32_t m_DBO = 0;
@@ -19,6 +19,7 @@ namespace Wiwa
 		
 		void Init(uint32_t width = 2048, uint32_t height = 2048);
 
+		void RegenShadowMap(uint32_t width, uint32_t height);
 		void Bind(bool clear = true);
 		void Unbind();
 

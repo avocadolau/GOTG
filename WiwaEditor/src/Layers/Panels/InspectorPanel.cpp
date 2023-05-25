@@ -337,6 +337,9 @@ void InspectorPanel::DrawMeshComponent(byte *data)
 	ImGui::Text("Material at: ");
 	ImGui::SameLine();
 	ImGui::Text(mat->getMaterialPath());
+
+	ImGui::Checkbox("Cast shadows", &mesh->castShadows);
+	ImGui::Checkbox("Recieve shadows", &mesh->shadowRecieve);
 	ImGui::PopID();
 }
 

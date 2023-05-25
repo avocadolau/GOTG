@@ -1,8 +1,16 @@
 #include <wipch.h>
 #include "LightManager.h"
+#include "Wiwa/ecs/components/Transform3D.h"
+#include "Wiwa/ecs/EntityManager.h"
+#include "Wiwa/scene/SceneManager.h"
+#include "Wiwa/utilities/render/Camera.h"
 
 Wiwa::LightManager::LightManager()
 {
+	m_LightProj = glm::mat4(1.f);
+	m_LightView = glm::mat4(1.f);
+	m_LightMVP = glm::mat4(1.f);
+	m_LightPos = glm::vec3(0.f);
 }
 
 Wiwa::LightManager::~LightManager()
@@ -25,6 +33,26 @@ void Wiwa::LightManager::RemovePointLight(size_t light)
 			m_PointLights.erase(m_PointLights.begin() + i);
 			break;
 		}
+	}
+}
+
+void Wiwa::LightManager::Update(Camera* camera)
+{
+	Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(m_DirectionalLight);
+	if (lightTrans)
+	{
+		glm::vec3 direction;
+		direction.x = cos(glm::radians(-lightTrans->rotation.y)) * cos(glm::radians(-lightTrans->rotation.x));
+		direction.y = sin(glm::radians(-lightTrans->rotation.x));
+		direction.z = sin(glm::radians(-lightTrans->rotation.y)) * cos(glm::radians(-lightTrans->rotation.x));
+
+		glm::vec3 front = glm::normalize(direction);
+		lightTrans->localPosition = camera->getPosition();
+		m_LightPos = camera->getPosition();
+		m_LightView = glm::lookAt(lightTrans->localPosition, lightTrans->localPosition + front, glm::vec3(0.f, 1.0f, 0.0f));
+		m_LightProj = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 100.f);
+
+		m_LightMVP = m_LightProj * m_LightView;
 	}
 }
 

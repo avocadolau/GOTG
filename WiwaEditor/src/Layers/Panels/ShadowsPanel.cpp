@@ -16,7 +16,6 @@ ShadowsPanel::~ShadowsPanel()
 void ShadowsPanel::Draw()
 {
 
-
 	ImGui::Begin(iconName.c_str(), &active);
 	float zoom = 1.f / m_ZoomLevel;
 	ImGui::Image(
@@ -27,8 +26,16 @@ void ShadowsPanel::Draw()
 		}
 	);
 
-	ImGui::SliderFloat("Zoom", &m_ZoomLevel, 0.5f, 1.f, "%.1f");
-
+	ImGui::SliderFloat("Zoom", &m_ZoomLevel, 0.1f, 0.5f, "%.1f");
+	glm::ivec2 size =
+	{
+		Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->shadowBuffer->GetWidth(),
+		Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->shadowBuffer->GetHeight()
+	};
+	if (ImGui::DragInt2("Shadow map res", glm::value_ptr(size), 1.f, 64, 2048))
+	{
+		Wiwa::SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->shadowBuffer->RegenShadowMap(size.x, size.y);
+	}
 	ImGui::End();
 }
 

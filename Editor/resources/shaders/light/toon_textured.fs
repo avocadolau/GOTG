@@ -61,6 +61,7 @@ uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
 uniform vec3 u_LightPos;
+uniform int u_RecieveShadows;
 
 float CalcShadowFactor(vec3 position,vec3 direction)
 {
@@ -134,7 +135,23 @@ vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal, float shado
 
 vec4 CalcDirectionalLight(vec3 normal)
 {
-    float shadowFactor = CalcShadowFactor(u_LightPos, u_DirectionalLight.Direction);
+    float shadowFactor = 0;
+    switch(u_RecieveShadows)
+    {
+    case 0:
+    {
+        shadowFactor = 0;
+    }
+    break;
+    case 1:
+    {
+        shadowFactor = CalcShadowFactor(u_LightPos, u_DirectionalLight.Direction);
+    }
+    break;
+    default:
+    break;
+    }
+
     return CalcLightInternal(u_DirectionalLight.Base, u_DirectionalLight.Direction, normal, shadowFactor);
 }
 
@@ -173,15 +190,15 @@ void main()
 
     vec4 totalLight = CalcDirectionalLight(normal);
     
-    // for(int i = 0; i < u_NumPointLights; i++)
-    // {
-    //     totalLight += CalcPointLight(u_PointLights[i], normal);
-    // }
+    for(int i = 0; i < u_NumPointLights; i++)
+    {
+        totalLight += CalcPointLight(u_PointLights[i], normal);
+    }
 
-    // for(int i = 0; i < u_NumSpotLights; i++)
-    // {
-    //     totalLight += CalcSpotLight(u_SpotLights[i], normal);
-    // }
+    for(int i = 0; i < u_NumSpotLights; i++)
+    {
+        totalLight += CalcSpotLight(u_SpotLights[i], normal);
+    }
 
     FragColor = totalLight;
 }

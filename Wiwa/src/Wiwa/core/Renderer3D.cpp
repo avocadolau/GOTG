@@ -897,8 +897,14 @@ namespace Wiwa
 
 
 	void Renderer3D::RenderMesh(Model *mesh, const glm::mat4 &transform, Material *material, const size_t &directional,
-								const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, bool clear, Camera *camera, bool cull)
+	    const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights, bool castShadows,
+		bool shadowRecieve, bool clear, Camera *camera, bool cull)
 	{
+
+		if (!camera)
+		{
+			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+		}
 		//Set up color buffer
 		Shader *matShader = material->getShader();
 
@@ -907,7 +913,8 @@ namespace Wiwa
 			WI_ERROR("missing material {}",mesh->GetParent()->getModelName());
 			return;
 		}
-		RenderShadows(camera, directional, mesh, matShader, transform);
+		
+		RenderShadows(camera, directional, mesh, matShader, transform, castShadows, shadowRecieve);
 
 		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
@@ -922,7 +929,6 @@ namespace Wiwa
 
 		camera->shadowBuffer->BindTexture();
 		material->Bind(GL_TEXTURE1);
-
 		mesh->Render();
 
 		material->UnBind();
@@ -1549,51 +1555,39 @@ namespace Wiwa
 			}
 		}*/
 	}
-	void Renderer3D::RenderShadows(Camera *camera, const size_t &directional, Model* mesh, Shader* matShader, const glm::mat4& transform)
+	void Renderer3D::RenderShadows(Camera *camera, const size_t &directional,
+		Model* mesh, Shader* matShader, const glm::mat4& transform, bool castShadow, bool recieveShadow)
 	{
 
 		if (!camera)
 		{
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
-		// Setting the shadow map buffer
 
-		Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(directional);
-		
-
-		camera->shadowBuffer->Bind(false);
-		if (lightTrans)
+		LightManager& lman = SceneManager::getActiveScene()->GetLightManager();
+		if (castShadow)
 		{
-			glm::vec3 direction;
-			direction.x = cos(glm::radians(-lightTrans->rotation.y)) * cos(glm::radians(-lightTrans->rotation.x));
-			direction.y = sin(glm::radians(-lightTrans->rotation.x));
-			direction.z = sin(glm::radians(-lightTrans->rotation.y)) * cos(glm::radians(-lightTrans->rotation.x));
 
-			glm::vec3 front = glm::normalize(direction);
-
-			lightTrans->localPosition = camera->getPosition();
-
-			glm::mat4 view = glm::lookAt(lightTrans->localPosition, lightTrans->localPosition + front, glm::vec3(0.f, 1.0f, 0.0f));
-			glm::mat4 projection = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, 0.1f, 100.f);
+			camera->shadowBuffer->Bind(false);
 
 			m_DepthShader->Bind();
-			m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, projection);
-			m_DepthShader->setUniform(m_DepthShaderUniforms.View, view);
+			m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, lman.GetDirectionalProj());
+			m_DepthShader->setUniform(m_DepthShaderUniforms.View, lman.GetDirectionalView());
 
 			m_DepthShader->setUniform(m_DepthShaderUniforms.Model, transform);
-		
+
 			glCullFace(GL_FRONT);
 			mesh->Render();
 			glCullFace(GL_BACK); // don't forget to reset original culling face
 			m_DepthShader->UnBind();
 			camera->shadowBuffer->Unbind();
-
-		
-			glm::mat4 lightMVP = projection * view;
-
-			matShader->setUniform(matShader->LightLocations.DirLightMVP, lightMVP);
-			matShader->setUniform(matShader->LightLocations.DirLightPos, lightTrans->position);
-
+		}
+		int recieve = recieveShadow ? 1 : 0;
+		matShader->setUniform(matShader->LightLocations.RecieveShadows, recieve);
+		if (recieveShadow)
+		{
+			matShader->setUniform(matShader->LightLocations.DirLightMVP, lman.GetDirectionalMVP());
+			matShader->setUniform(matShader->LightLocations.DirLightPos, lman.GetDirectionalPos());
 		}
 	}
 }

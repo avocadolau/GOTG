@@ -31,7 +31,7 @@ namespace Wiwa {
 	{
 		uint32_t DirLightMVP;
 		uint32_t DirLightPos;
-
+		uint32_t RecieveShadows;
 		uint32_t CameraLoc;
 		uint32_t DirectionalLightBC;
 		uint32_t DirectionalLightBaseAmbientIntensity;
