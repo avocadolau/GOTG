@@ -55,7 +55,7 @@ void Wiwa::PlayerController::OnInit()
 	m_DashEnable = true;
 	IsDashing = false;
 	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARLORD_BULLET, m_Scene);
-	GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARHAWK_BLAST_BULLET, m_Scene);
+	//GameStateManager::s_PoolManager->LoadPool(Pool_Type::STARHAWK_BLAST_BULLET, m_Scene);
 
 	GetAnimator()->getAnimator()->setTransitionTime(0.1f);
 
@@ -64,7 +64,7 @@ void Wiwa::PlayerController::OnInit()
 void Wiwa::PlayerController::OnDestroy()
 {
 	GameStateManager::s_PoolManager->UnloadPool(Pool_Type::STARLORD_BULLET);
-	GameStateManager::s_PoolManager->UnloadPool(Pool_Type::STARHAWK_BLAST_BULLET);
+	//GameStateManager::s_PoolManager->UnloadPool(Pool_Type::STARHAWK_BLAST_BULLET);
 
 	GameStateManager::SetPlayerId(WI_INVALID_INDEX, nullptr);
 }

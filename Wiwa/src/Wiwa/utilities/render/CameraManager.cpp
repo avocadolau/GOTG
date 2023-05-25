@@ -4,6 +4,8 @@
 #include <Wiwa/core/Renderer3D.h>
 #include <Wiwa/physics/PhysicsManager.h>
 #include <Wiwa/scene/SceneManager.h>
+#include <Wiwa/utilities/render/LightManager.h>
+
 namespace Wiwa {
 	Camera* CameraManager::editorCamera = nullptr;
 	CameraManager::CameraManager()
@@ -29,10 +31,12 @@ namespace Wiwa {
 	}
 	void CameraManager::Update()
 	{
+		LightManager& lman = SceneManager::getActiveScene()->GetLightManager();
 		if (editorCamera)
 		{
 			editorCamera->frameBuffer->Clear();
 			editorCamera->shadowBuffer->Clear();
+			lman.Update(editorCamera);
 			if (editorCamera->drawFrustrums)
 			{
 				Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
@@ -45,6 +49,8 @@ namespace Wiwa {
 			CameraId cam_id = m_CamerasAlive[i];
 			m_Cameras[cam_id]->frameBuffer->Clear();
 			m_Cameras[cam_id]->shadowBuffer->Clear();
+			lman.Update(m_Cameras[cam_id]);
+
 			if (m_Cameras[cam_id]->drawFrustrums)
 			{
 				Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();

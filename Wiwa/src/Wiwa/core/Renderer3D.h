@@ -132,13 +132,38 @@ namespace Wiwa {
 		void RenderMesh(Model* mesh, const glm::vec3& position, const glm::vec3 & rotation, const glm::vec3 & scale, const size_t& directional,
 			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear = false, Camera* camera = NULL, bool cull = false);
 
-		void RenderMesh(Model* mesh, const glm::mat4& transform, Material* material, const size_t& directional,
-			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, bool clear = false, Camera* camera = NULL, bool cull = false);
+		void RenderMesh(
+			Model* mesh,
+			const glm::mat4& transform,
+			Material* material,
+			const size_t& directional,
+			const std::vector<size_t>& pointLights,
+			const std::vector<size_t>& spotLights,
+			bool castShadows = false,
+			bool shadowRecieve = false,
+			bool clear = false,
+			Camera* camera = NULL,
+			bool cull = false
+		);
 		
 		
-		void SetUpLight(Wiwa::Shader* matShader, Wiwa::Camera* camera, const size_t& directional, const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights);
+		void SetUpLight(
+			Wiwa::Shader* matShader,
+			Wiwa::Camera* camera,
+			const size_t& directional,
+			const std::vector<size_t>& pointLights,
+			const std::vector<size_t>& spotLights
+		);
 		
-		void RenderShadows(Camera* camera, const size_t& directional, Model* mesh, Shader* matShader, const glm::mat4& transform);
+		void RenderShadows(
+			Camera* camera,
+			const size_t& directional,
+			Model* mesh,
+			Shader* matShader,
+			const glm::mat4& transform,
+			bool castShadow,
+			bool recieveShadow
+		);
 
 		void RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,
 			const std::vector<size_t>& pointLights, const std::vector<size_t>& spotLights, Material* material, bool clear, Camera* camera, bool cull, Image* textureId, const Size2i& srcSize, float colorParticles[4], bool isColorRanged);

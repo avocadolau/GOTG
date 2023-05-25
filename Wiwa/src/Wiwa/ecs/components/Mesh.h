@@ -13,6 +13,8 @@ namespace Wiwa {
 		size_t modelIndex;
 		char mesh_path[128];
 		char mat_path[128];
+		bool castShadows;
+		bool shadowRecieve;
 	};
 }
 
@@ -23,4 +25,6 @@ WI_REFLECTION_BEGIN(Wiwa::Mesh)
 	WI_REFLECT_MEMBER(modelIndex)
 	WI_REFLECT_MEMBER(mesh_path)
 	WI_REFLECT_MEMBER(mat_path)
+	WI_REFLECT_MEMBER(castShadows)
+	WI_REFLECT_MEMBER(shadowRecieve)
 WI_REFLECTION_END;

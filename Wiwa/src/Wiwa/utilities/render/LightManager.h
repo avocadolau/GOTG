@@ -3,6 +3,7 @@
 #include <Wiwa/core/Core.h>
 
 namespace Wiwa {
+	class Camera;
 	class WI_API LightManager
 	{
 	public:
@@ -13,6 +14,9 @@ namespace Wiwa {
 
 		void AddPointLight(size_t light);
 		void RemovePointLight(size_t light);
+
+
+		void Update(Camera* camera);
 
 		void AddSpotLight(size_t light);
 		void RemoveSpotLight(size_t light);
@@ -27,10 +31,17 @@ namespace Wiwa {
 		// Set to -1 if there's no directional lights
 		inline void SetDirectionalLight(size_t light) { m_DirectionalLight = light; }
 		inline size_t GetDirectionalLight() { return m_DirectionalLight; }
-
+		inline const glm::mat4& GetDirectionalView() { return m_LightView; }
+		inline const glm::mat4& GetDirectionalProj() { return m_LightProj; }
+		inline const glm::mat4& GetDirectionalMVP() { return m_LightMVP; }
+		inline const glm::vec3& GetDirectionalPos() { return m_LightPos; }
 	private:
 		std::vector<size_t> m_PointLights;
 		std::vector<size_t> m_SpotLights;
 		size_t m_DirectionalLight = -1;
+		glm::mat4 m_LightView;
+		glm::mat4 m_LightProj;
+		glm::mat4 m_LightMVP;
+		glm::vec3 m_LightPos;
 	};
 }

@@ -55,6 +55,31 @@ void Wiwa::ShadowBuffer::Init(uint32_t width, uint32_t height)
 	
 }
 
+void Wiwa::ShadowBuffer::RegenShadowMap(uint32_t width, uint32_t height)
+{
+	m_ShadowHeight = height;
+	m_ShadowWidth = width;
+
+	GL(DeleteTextures(1, &m_ShadowMap));
+
+	GL(GenTextures(1, &m_ShadowMap));
+	GL(BindTexture(GL_TEXTURE_2D, m_ShadowMap));
+	GL(TexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_ShadowHeight, m_ShadowWidth, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL));
+	GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+	GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
+	GL(TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GL(TexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
+
+	GL(BindFramebuffer(GL_FRAMEBUFFER, m_DBO));
+	GL(FramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ShadowMap, 0));
+	GL(DrawBuffer(GL_NONE));
+	GL(ReadBuffer(GL_NONE));
+	GL(Clear(GL_DEPTH_BUFFER_BIT));
+	GL(BindFramebuffer(GL_DRAW_FRAMEBUFFER, 0));
+}
+
 void Wiwa::ShadowBuffer::Bind(bool clear)
 {
 	GL(Viewport(0, 0, m_ShadowWidth, m_ShadowHeight));

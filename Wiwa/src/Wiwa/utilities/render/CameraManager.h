@@ -17,7 +17,6 @@ namespace Wiwa{
 		 std::vector<CameraId> m_RemovedCameras;
 
 		 CameraId m_ActiveCamera;
-
 	public:
 		static Camera* editorCamera;
 	public:
