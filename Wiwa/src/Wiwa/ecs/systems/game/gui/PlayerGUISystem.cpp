@@ -264,20 +264,6 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 					case AbilityType::YONDUS_FIN:
 						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 						{
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
-							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(3, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(3, &r2d);
-						}
-						else
-						{
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
-							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(4, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(4, &r2d);
-						}
-						break;
-					case AbilityType::GROOTS_SEEDS:
-						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
-						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(5, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(5, &r2d);
@@ -289,7 +275,35 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(6, &r2d);
 						}
 						break;
+					case AbilityType::GROOTS_SEEDS:
+						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
+						{
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(3, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(3, &r2d);
+						}
+						else
+						{
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(4, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(4, &r2d);
+						}
+						break;
 					case AbilityType::PHYLAS_QUANTUM_SWORD:
+						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
+						{
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(1, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(1, &r2d);
+						}
+						else
+						{
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(2, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(2, &r2d);
+						}
+						break;
+					case AbilityType::STARHAWKS_BLAST:
 						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
@@ -303,18 +317,32 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(8, &r2d);
 						}
 						break;
-					case AbilityType::STARHAWKS_BLAST:
+					case AbilityType::CAPTAINS_UNIVERSE:
 						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 						{
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
-							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(1, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(1, &r2d);
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(11, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(11, &r2d);
 						}
 						else
 						{
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
-							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(2, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(2, &r2d);
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(12, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(12, &r2d);
+						}
+						break;
+					case AbilityType::MANTIS_TELEPATHIC_THRUST:
+						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
+						{
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(9, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(9, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(9, &r2d);
+						}
+						else
+						{
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(10, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(10, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(10, &r2d);
 						}
 						break;
 					default:
@@ -516,149 +544,6 @@ void Wiwa::PlayerGUISystem::PlayerElements(Wiwa::GuiManager& gm, Character* char
 	lastPromethiumGems = Wiwa::GameStateManager::GetPlayerInventory().GetTokensHoward();
 
 
-}
-
-void Wiwa::PlayerGUISystem::PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm)
-{
-	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
-	
-	for (int i = 0; i < 2; i++)
-	{
-		int index = i + 5;
-		if (buff[i] != nullptr)
-		{
-			switch (buff[i]->buffType)
-			{
-			case BuffType::NIKKIS_TOUCH:
-				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
-				}
-				break;
-			case BuffType::MARTINEX_THERMOKINESIS:
-				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
-				}
-				break;
-			case BuffType::MAJOR_VICTORY_SHIELD:
-				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(6, &r2d);
-				}
-				break;
-			case BuffType::CHARLIE27_FIST:
-				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(8, &r2d);
-				}
-				break;
-			case BuffType::COSMOS_PAW:
-				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(9, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(10, &r2d);
-				}
-				break;
-			case BuffType::BUGS_LEGS:
-				if (buff[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
-				}
-				break;
-			default:
-				break;
-			}
-
-		}
-		else
-		{
-			gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
-		}
-	}
-	
-
-	for (int i = 0; i < 2; i++)
-	{
-		int index = i + 7;
-		if (ability[i] != nullptr)
-		{
-			switch (ability[i]->AbilityType)
-			{
-			case AbilityType::YONDUS_FIN:
-				if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
-				}
-				break;
-			case AbilityType::GROOTS_SEEDS:
-				if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(6, &r2d);
-				}
-				break;
-			case AbilityType::PHYLAS_QUANTUM_SWORD:
-				if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(8, &r2d);
-				}
-				break;
-			case AbilityType::STARHAWKS_BLAST:
-				if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
-				}
-				else
-				{
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
-				}
-				break;
-			default:
-				break;
-			}
-		}
-		else
-		{
-			gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
-		}
-	}
-	
 }
 
 void Wiwa::PlayerGUISystem::Coins(uint32_t coins, Wiwa::GuiManager& gm)

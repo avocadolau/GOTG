@@ -23,7 +23,9 @@ namespace Wiwa
 		YONDUS_FIN,
 		GROOTS_SEEDS,
 		PHYLAS_QUANTUM_SWORD,
-		STARHAWKS_BLAST
+		STARHAWKS_BLAST,
+		CAPTAINS_UNIVERSE,
+		MANTIS_TELEPATHIC_THRUST
 	};
 	enum class BuffType
 	{
@@ -139,6 +141,8 @@ namespace Wiwa
 		void GrootsSeeds();
 		void PhylasQuantumSword();
 		void StarhawksBlast();
+		void CaptainsUniverse();
+		void MantisTelepathicThrust();
 	};
 
 

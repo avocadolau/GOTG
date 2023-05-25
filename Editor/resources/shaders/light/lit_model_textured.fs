@@ -53,9 +53,15 @@ uniform PointLight[MAX_POINT_LIGHTS] u_PointLights;
 uniform int u_NumSpotLights = 0;
 uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 
+uniform sampler2D u_ShadowMap;
 uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    
+}
 
 vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal)
 {

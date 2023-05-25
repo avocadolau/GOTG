@@ -1,6 +1,7 @@
 #include "GrootSeedsSystem.h"
 #include "../../components/attack/GrootSeeds.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "../../components/attack/Attack.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 namespace Wiwa
@@ -27,6 +28,11 @@ namespace Wiwa
 	{
 		GrootSeeds* grootSeeds = GetComponentByIterator<GrootSeeds>(m_GrootSeedsIt);
 		Transform3D* grootSeedsTransform = GetComponentByIterator<Transform3D>(m_GrootSeedsTransformIt);
+		Attack* attack = GetComponentByIterator<Attack>(GetComponentIterator<Attack>(m_EntityId));
+		if (attack)
+		{
+			strcpy(attack->attackType, "GROOTS_SEEDS");
+		}
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		grootSeeds->damage = Wiwa::ItemManager::GetAbility("Groot's Seeds")->Damage;
 		grootSeeds->lifeTime = 5.0f;

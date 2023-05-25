@@ -11,6 +11,8 @@
 #include "components/attack/GrootSeeds.h"
 #include "components/attack/VictoryShield.h"
 #include "components/attack/StarhawkBlast.h"
+#include "components/attack/CaptainsUniverseEnergy.h"
+#include "components/attack/MantisTelepathicThrust.h"
 
 #include "components/attack/ClusterBullet.h"
 #include "components/attack/UltronLaserBeam.h"

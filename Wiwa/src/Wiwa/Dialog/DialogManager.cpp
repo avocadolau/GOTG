@@ -776,7 +776,7 @@ namespace Wiwa
 				if (std::filesystem::exists(path))
 				{
 					std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
-					libpath.replace_extension(".dds").c_str();
+					libpath.replace_extension(".dds");
 
 					textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 					characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
@@ -797,7 +797,7 @@ namespace Wiwa
 			if (std::filesystem::exists(path))
 			{
 				std::filesystem::path libpath = Wiwa::Resources::_assetToLibPath(path).c_str();
-				libpath.replace_extension(".dds").c_str();
+				libpath.replace_extension(".dds");
 
 				textID = Wiwa::Resources::Load<Wiwa::Image>(libpath.string().c_str());
 				characterImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);

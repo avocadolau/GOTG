@@ -2,7 +2,7 @@
 #include "../../components/attack/StarhawkBlast.h"
 #include "../../components/attack/SimpleBullet.h"
 #include "../../systems/attack/StarhawkBlastBulletSystem.h"
-
+#include "../../components/attack/Attack.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -101,7 +101,6 @@ namespace Wiwa
 		newBulletId = GameStateManager::s_PoolManager->s_StarHawksBlastPool->GetFromPool();
 		if (newBulletId == EntityManager::INVALID_INDEX)
 			return;
-
 		StarhawkBlastBulletSystem* bulletSys = entityManager.GetSystem<StarhawkBlastBulletSystem>(newBulletId);
 		PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
 		physSys->DeleteBody();
@@ -118,7 +117,7 @@ namespace Wiwa
 		bulletTr->localScale = glm::vec3(0.1f, 0.1f, 0.1f);
 
 		SimpleBullet* bullet = (SimpleBullet*)entityManager.GetComponentByIterator(entityManager.GetComponentIterator<SimpleBullet>(newBulletId));
-
+	
 		bullet->direction = direction;
 		bullet->isFromPool = true;
 		bullet->damage = starhawksBlast->damage;

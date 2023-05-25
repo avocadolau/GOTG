@@ -656,6 +656,9 @@ namespace Wiwa
 
 		X_offset = (maxWidth / 2) - (lineWidth2 / 2);
 
+		free(fontBuffer2);
+		free(bitmap2);
+
 		return X_offset;
 	}
 
@@ -781,6 +784,9 @@ namespace Wiwa
 		}
 
 		Y_offset = y_extra2 / 2;
+
+		free(fontBuffer2);
+		free(bitmap2);
 
 		return Y_offset;
 	}

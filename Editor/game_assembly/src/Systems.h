@@ -22,6 +22,8 @@
 #include "systems/attack/StarhawksBlastSystem.h"
 #include "systems/attack/PhylasQuantumSwordSystem.h"
 #include "systems/attack/GrootSeedsSystem.h"
+#include "systems/attack/CaptainUniverseEnergySystem.h"
+#include "systems/attack/MantisTelepathicThrustSystem.h"
 
 #include "systems/camera/CameraController.h"
 

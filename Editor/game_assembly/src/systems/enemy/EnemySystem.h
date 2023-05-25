@@ -60,7 +60,7 @@ namespace Wiwa {
 
 		void SetStatsFromTable();
 
-		void SlowForTime(float time, int percentage);
+		void SlowForTime(float time, float percentage);
 	};
 }
 

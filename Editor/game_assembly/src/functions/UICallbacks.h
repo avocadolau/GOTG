@@ -26,6 +26,8 @@ enum class AddDevourer_ { hola };
 enum class AddFanatic_ { hola };
 enum class AddRecoveryHealth_ { hola };
 
+enum class GoToHub_ { hola };
+
 // Declare
 GoToMilanoHub_ GoToMilanoHub();
 
@@ -77,6 +79,8 @@ AddFanatic_ AddFanatic();
 
 AddRecoveryHealth_ AddRecoveryHealth();
 
+GoToHub_ GoToHub();
+
 //// Register
 REGISTER_FUNCTION(GoToMilanoHub);
 REGISTER_FUNCTION(GoMainMenu);
@@ -104,3 +108,4 @@ REGISTER_FUNCTION(AddRecoveryShield);
 REGISTER_FUNCTION(AddDevourer);
 REGISTER_FUNCTION(AddFanatic);
 REGISTER_FUNCTION(AddRecoveryHealth);
+REGISTER_FUNCTION(GoToHub);

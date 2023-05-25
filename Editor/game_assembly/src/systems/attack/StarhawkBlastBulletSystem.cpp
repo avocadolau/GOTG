@@ -4,6 +4,7 @@
 #include <Wiwa/utilities/EntityPool.h>
 #include "../../components/attack/Attack.h"
 #include "../../Systems.h"
+#include <Wiwa/game/Items/ItemManager.h>
 
 namespace Wiwa
 {
@@ -50,7 +51,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
-
+		bullet->damage = 300;
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 
@@ -110,17 +111,6 @@ namespace Wiwa
 		{
 			transform->localPosition.y = 3000.0f;
 		}
-
-		//SimpleBullet* bullet = GetComponent<SimpleBullet>();
-		//
-		//if (bullet)
-		//{
-		//	bullet->direction = glm::vec3(0.0f);
-		//	bullet->lifeTime = 0.0f;
-		//	bullet->velocity = 0.0f;
-		//}
-
-		//CollisionBody* collisionBody = GetComponent<CollisionBody>();
 
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 

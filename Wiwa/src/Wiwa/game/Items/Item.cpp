@@ -68,6 +68,16 @@ namespace Wiwa
                 StarhawksBlast();
             }
             break;
+        case AbilityType::CAPTAINS_UNIVERSE:
+            {
+                CaptainsUniverse();
+            }
+            break;
+        case AbilityType::MANTIS_TELEPATHIC_THRUST:
+            {
+                MantisTelepathicThrust();
+            }
+            break;
         }
     }
 
@@ -93,13 +103,25 @@ namespace Wiwa
     void Ability::PhylasQuantumSword()
     {
         Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-        EntityId phylasSword = em.LoadPrefab("assets/Prefabs/PhylasSword.wiprefab");
+        EntityId phylasSword = em.LoadPrefab("assets/Prefabs/AbilitiesPrefabs/PhylasSword.wiprefab");
     }
 
     void Ability::StarhawksBlast()
     {
         Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-        EntityId starHawksBlast = em.LoadPrefab("assets/Prefabs/StarHawksBlast.wiprefab");
+        EntityId starHawksBlast = em.LoadPrefab("assets/Prefabs/AbilitiesPrefabs/StarHawksBlast.wiprefab");
+    }
+
+    void Ability::CaptainsUniverse()
+    {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId CaptainsUniverse = em.LoadPrefab("assets/Prefabs/AbilitiesPrefabs/CaptainUniverseEnergy.wiprefab");
+    }
+
+    void Ability::MantisTelepathicThrust()
+    {
+        Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
+        EntityId MantisTelepathicThrust = em.LoadPrefab("assets/Prefabs/AbilitiesPrefabs/MantisTelepathicThrust.wiprefab");
     }
 
     void PassiveSkill::Use()
@@ -201,7 +223,7 @@ namespace Wiwa
         case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
             {
                  Wiwa::EntityManager& em = GameStateManager::GetCurrentScene()->GetEntityManager();
-                 EntityId shieldId = em.LoadPrefab("assets/Prefabs/VictoryShield.wiprefab");   
+                 EntityId shieldId = em.LoadPrefab("assets/Prefabs/AbilitiesPrefabs/VictoryShield.wiprefab");   
             }
             break;
         case Wiwa::BuffType::NIKKIS_TOUCH:

@@ -50,8 +50,6 @@ namespace Wiwa
         void HandleActivePassives(std::vector<PassiveSkill> PassiveSkills, Wiwa::GuiManager& gm);
         void PlayerElements(Wiwa::GuiManager& gm, Character* character);
 
-        void PauseElementsUpdate(Ability** ability, Buff** buff, Wiwa::GuiManager& gm);
-
         void Coins(uint32_t coins, Wiwa::GuiManager& gm);
         void PromethiumGems(uint32_t promethiumGems, Wiwa::GuiManager& gm);
 

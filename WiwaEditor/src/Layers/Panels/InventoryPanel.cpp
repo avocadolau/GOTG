@@ -539,6 +539,8 @@ void InventoryPanel::DrawAbilityPool(int& id)
 			"Groot's seeds",
 			"Phylas Quantum Sword",
 			"StarHawks blast",
+			"Captain Universe's Energy",
+			"Mantis Telepathic Thrust"
 		};
 		const char* tags[] =
 		{
@@ -610,7 +612,7 @@ void InventoryPanel::DrawAbilityPool(int& id)
 				const char* currentItem = types[(int)ability->AbilityType];
 				if (ImGui::BeginCombo("##type", currentItem))
 				{
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 6; i++)
 					{
 						bool isSelected = (currentItem == types[i]);
 						if (ImGui::Selectable(types[i], isSelected))
