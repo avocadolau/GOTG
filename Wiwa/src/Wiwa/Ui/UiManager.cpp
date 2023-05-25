@@ -476,6 +476,10 @@ namespace Wiwa
 
 				forceNewLine = false;
 			}
+			/*else if (word[i] == 124)
+			{
+				y_extra += l_h;
+			}*/
 
 			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
 			int c_x1, c_y1, c_x2, c_y2;
@@ -589,6 +593,8 @@ namespace Wiwa
 
 		int X_offset = 0;
 
+		bool stopWidth = false;
+
 		for (int a = 0 + charPos; a < strlen(word2); ++a)
 		{
 			/* how wide is this character */
@@ -598,7 +604,7 @@ namespace Wiwa
 			/* (Note that each Codepoint call has an alternative Glyph version which caches the work required to lookup the character word[i].) */
 
 			/* check if we need to wrap to the next line */
-			if (lineWidth2 + (int)roundf(ax2 * scale2) >= maxWidth || forceNewLine2 == true || word2[a] == 124)
+			if (lineWidth2 + (int)roundf(ax2 * scale2) >= maxWidth || forceNewLine2 == true)
 			{
 				X_offset = (maxWidth / 2) - (lineWidth2 / 2);
 
@@ -624,8 +630,9 @@ namespace Wiwa
 
 			/* advance x */
 			x2 += (int)roundf(ax2 * scale2);
-			lineWidth2 += roundf(ax2 * scale2);
+			if(stopWidth == false) lineWidth2 += roundf(ax2 * scale2);
 
+			if (word2[a + 1] == 124) stopWidth = true;
 
 			if (word2[a] == 32)
 			{
