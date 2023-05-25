@@ -259,7 +259,7 @@ namespace Wiwa
 
 		std::uniform_int_distribution<> disEnemies(1, 100);
 		int randomNum = disEnemies(Application::s_Gen);
-		if (randomNum <= 45) // 45% probability
+		if (randomNum <= 35) // 35% probability
 		{
 			int randomNum2 = disEnemies(Application::s_Gen);
 			if (randomNum2 <= 33.33f && data.list.at("MELEE_PHALANX_GENERIC"))
@@ -277,7 +277,7 @@ namespace Wiwa
 			else
 				return GetEnemyFromProbabiliteis();
 		}
-		else if (randomNum <= 80) { // 35% probability
+		else if (randomNum <= 90) { // 45% probability
 			int randomNum2 = disEnemies(Application::s_Gen);
 			if (randomNum2 <= 33.33f && data.list.at("RANGED_PHALANX_GENERIC"))
 			{
@@ -294,10 +294,10 @@ namespace Wiwa
 			else
 				return GetEnemyFromProbabiliteis();
 		}
-		else if (randomNum <= 95) { // 15% probability
+		else if (randomNum <= 95) { // 5% probability
 			return Pool_Type::SENTINEL;
 		}
-		else { // 5% probability
+		else { 
 			int randomNum2 = disEnemies(Application::s_Gen);
 			if (randomNum2 <= 50 && data.list.at("SUBJUGATOR"))
 			{
