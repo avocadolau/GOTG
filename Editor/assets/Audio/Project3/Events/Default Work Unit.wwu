@@ -622,17 +622,6 @@
 								</Action>
 							</ChildrenList>
 						</Event>
-						<Event Name="hub_enviroment" ID="{B9A305F3-B283-49A6-9790-58D071809B39}">
-							<ChildrenList>
-								<Action Name="" ID="{F6138EE8-4D91-4C75-B8F0-37028463F70C}" ShortID="415717915">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="hub_enviroment" ID="{479A986B-F6A3-4EA6-8763-A546AC1E17F9}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
 						<Event Name="ventiladores" ID="{2FC4A508-B743-4009-BE88-DADEBBBDE6C7}">
 							<ChildrenList>
 								<Action Name="" ID="{AB29DB3A-0615-4B71-A04F-78605814E8CB}" ShortID="951023002">

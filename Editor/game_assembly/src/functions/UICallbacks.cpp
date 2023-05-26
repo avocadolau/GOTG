@@ -20,7 +20,7 @@ GoToMilanoHub_ GoToMilanoHub()
 	Wiwa::ShipMainMenu* ship = em.GetSystem<Wiwa::ShipMainMenu>(shipID);
 	ship->SetPanToCamera(true);
 	gm.canvas.at(0)->SwapActive();
-	Wiwa::GameMusicManager::MainHub();
+	Wiwa::GameMusicManager::StartGame();
 	return GoToMilanoHub_::hola;
 }
 

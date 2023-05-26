@@ -20,6 +20,7 @@ namespace  Wiwa {
 		void static Intro();
 		void static Outro();
 		void static MainMenu();
+		void static StartGame();
 		void static GameOver();
 		//game states
 		void static MainHub();

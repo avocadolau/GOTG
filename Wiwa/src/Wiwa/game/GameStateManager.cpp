@@ -291,6 +291,7 @@ namespace Wiwa
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
+		GameMusicManager::MainHub();
 
 		s_EnemyManager->m_CurrentCombatRoomsCount = 0;
 		s_EnemyManager->ResetDifficulty();

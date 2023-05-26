@@ -20,12 +20,12 @@ namespace Wiwa
 	void SentinelHitState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-	/*	Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
+		Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", true);
-		}*/
-
+		}
+		enemy->m_AnimatorSys->Update();
 		enemy->m_AudioSys->PlayAudio("sentinel_hit");
 		enemy->m_AnimatorSys->PlayAnimation("hit"); //AnimacionSentinel
 	}
@@ -42,11 +42,11 @@ namespace Wiwa
 	void SentinelHitState::ExitState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		/*Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
+		Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
 		if (mat)
 		{
 			mat->SetUniformData("u_Hit", false);
-		}*/
+		}
 	}
 
 	void SentinelHitState::OnCollisionEnter(EnemySentinel* enemy, const Object* body1, const Object* body2)

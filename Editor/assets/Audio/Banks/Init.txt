@@ -20,6 +20,7 @@ State	ID	Name	State Group			Notes
 	556785088	Logo	MenuScene			
 	748895195	None	MenuScene			
 	1125500713	Intro	MenuScene			
+	1521187885	StartGame	MenuScene			
 	3604647259	MainMenu	MenuScene			
 	4158285989	GameOver	MenuScene			
 	4184794294	Outro	MenuScene			

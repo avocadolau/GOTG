@@ -77,6 +77,11 @@ namespace Wiwa
 		Audio::SetState("MenuScene", "MainMenu");
 		Audio::SetState("MusicState", "Menus");
 	}
+	void GameMusicManager::StartGame()
+	{
+		Audio::SetState("MenuScene", "StartGame");
+		Audio::SetState("MusicState", "Menus");
+	}
 	void GameMusicManager::GameOver()
 	{
 		Audio::SetState("MenuScene", "GameOver");

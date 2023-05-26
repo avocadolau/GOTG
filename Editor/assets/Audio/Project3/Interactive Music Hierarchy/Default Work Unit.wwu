@@ -4,6 +4,9 @@
 		<WorkUnit Name="Default Work Unit" ID="{82A5D2E7-7775-4044-B8A5-0A016CEAE3BD}" PersistMode="Standalone">
 			<ChildrenList>
 				<MusicSwitchContainer Name="gotg_music" ID="{4BF02AE6-96FD-461C-ACBF-15A2E5CD0EA2}" ShortID="585884978">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="1"/>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -96,9 +99,9 @@
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<MusicSegment Name="Norman Greenbaum Spirit In The Sky" ID="{1482D267-2D87-4FB0-8E1B-290524141C9D}" ShortID="300250736">
+										<MusicSegment Name="hub_enviroment" ID="{2F92D803-4104-413F-A7A7-25C4CAD86618}" ShortID="336711829">
 											<PropertyList>
-												<Property Name="EndPosition" Type="Real64" Value="238344.807256236"/>
+												<Property Name="EndPosition" Type="Real64" Value="593423.673469388"/>
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Conversion">
@@ -109,23 +112,23 @@
 												</Reference>
 											</ReferenceList>
 											<ChildrenList>
-												<MusicTrack Name="Norman Greenbaum Spirit In The Sky" ID="{581F76B5-BA03-4136-9D4F-0B854CB4DF65}" ShortID="706723927">
+												<MusicTrack Name="hub_enviroment" ID="{041DB6AC-CBF5-48FA-830D-3EAEC05BECB2}" ShortID="875436132">
 													<ReferenceList>
 														<Reference Name="OutputBus">
 															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 														</Reference>
 													</ReferenceList>
 													<ChildrenList>
-														<AudioFileSource Name="Norman Greenbaum Spirit In The Sky" ID="{5EDD4B6E-C4E7-482A-A77D-57D7AC42BAA3}">
+														<AudioFileSource Name="hub_enviroment" ID="{B4C88A4F-6173-4C1C-9C4D-65754B2367A6}">
 															<Language>SFX</Language>
-															<AudioFile>Norman Greenbaum Spirit In The Sky.wav</AudioFile>
+															<AudioFile>hub_enviroment.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="314088076"/>
+																<MediaID ID="182594743"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
 													<TransitionList>
-														<MusicTransition Name="Root" ID="{F3F071E4-CADB-46B1-9EF7-9862ECED2761}">
+														<MusicTransition Name="Root" ID="{55CE5F34-1F31-4079-B848-3158499D4217}">
 															<PropertyList>
 																<Property Name="IsFolder" Type="bool" Value="True"/>
 															</PropertyList>
@@ -136,109 +139,18 @@
 														<ObjectList Name="Sequences">
 															<Reference>
 																<Local>
-																	<MusicTrackSequence Name="" ID="{21906049-F17F-4ECC-A034-869FEE6798E1}">
+																	<MusicTrackSequence Name="" ID="{0020A098-CEE1-4E70-8923-AFF31430731C}">
 																		<ObjectLists>
 																			<ObjectList Name="Clips">
 																				<Reference>
 																					<Local>
-																						<MusicClip Name="Norman Greenbaum Spirit In The Sky" ID="{1D2E08DB-3AA4-46E4-873B-20E0BBFB48EE}">
+																						<MusicClip Name="hub_enviroment" ID="{D4DB48BE-DD3F-4447-B874-D980E802B1FA}">
 																							<PropertyList>
-																								<Property Name="BeginTrimOffset" Type="Real64" Value="50501.8258758034"/>
-																								<Property Name="EndTrimOffset" Type="Real64" Value="58501.8258758034"/>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="593423.673469388"/>
 																								<Property Name="FadeInMode" Type="int16" Value="0"/>
 																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
-																								<Property Name="PlayAt" Type="Real64" Value="-50501.8258758034"/>
 																							</PropertyList>
-																							<AudioSourceRef Name="Norman Greenbaum Spirit In The Sky" ID="{5EDD4B6E-C4E7-482A-A77D-57D7AC42BAA3}"/>
-																							<PropertyCurveList>
-																								<PropertyCurve PropertyName="Highpass">
-																									<Curve Name="" ID="{ECB5CF17-DFCB-4E5B-8AFA-0D2EAD0E0E1E}">
-																										<PropertyList>
-																											<Property Name="Flags" Type="int32" Value="1"/>
-																										</PropertyList>
-																										<PointList>
-																											<Point>
-																												<XPos>50.50183</XPos>
-																												<YPos>0</YPos>
-																												<Flags>5</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>58.50183</XPos>
-																												<YPos>0</YPos>
-																												<Flags>37</Flags>
-																											</Point>
-																										</PointList>
-																									</Curve>
-																								</PropertyCurve>
-																								<PropertyCurve PropertyName="Lowpass">
-																									<Curve Name="" ID="{375186C0-86F9-43FA-96E9-528B3F45C6F3}">
-																										<PropertyList>
-																											<Property Name="Flags" Type="int32" Value="1"/>
-																										</PropertyList>
-																										<PointList>
-																											<Point>
-																												<XPos>50.50183</XPos>
-																												<YPos>-91.05511</YPos>
-																												<Flags>5</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>51.42524</XPos>
-																												<YPos>2.06285</YPos>
-																												<Flags>0</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>53.68634</XPos>
-																												<YPos>-0.20165</YPos>
-																												<Flags>0</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>55.06767</XPos>
-																												<YPos>-0.209</YPos>
-																												<Flags>0</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>55.06867</XPos>
-																												<YPos>-0.35292</YPos>
-																												<Flags>0</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>58.50183</XPos>
-																												<YPos>-100</YPos>
-																												<Flags>37</Flags>
-																											</Point>
-																										</PointList>
-																									</Curve>
-																								</PropertyCurve>
-																								<PropertyCurve PropertyName="Volume">
-																									<Curve Name="" ID="{3B93D127-D66D-4D9A-B7D9-69982902A243}">
-																										<PropertyList>
-																											<Property Name="Flags" Type="int32" Value="3"/>
-																										</PropertyList>
-																										<PointList>
-																											<Point>
-																												<XPos>50.50183</XPos>
-																												<YPos>-96.3</YPos>
-																												<Flags>5</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>52.50536</XPos>
-																												<YPos>-6.00217</YPos>
-																												<Flags>0</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>55.10281</XPos>
-																												<YPos>-5.84839</YPos>
-																												<Flags>0</Flags>
-																											</Point>
-																											<Point>
-																												<XPos>58.50183</XPos>
-																												<YPos>-96.3</YPos>
-																												<Flags>37</Flags>
-																											</Point>
-																										</PointList>
-																									</Curve>
-																								</PropertyCurve>
-																							</PropertyCurveList>
+																							<AudioSourceRef Name="hub_enviroment" ID="{B4C88A4F-6173-4C1C-9C4D-65754B2367A6}"/>
 																						</MusicClip>
 																					</Local>
 																				</Reference>
@@ -255,15 +167,15 @@
 												<ObjectList Name="Cues">
 													<Reference>
 														<Local>
-															<MusicCue Name="Entry Cue" ID="{1E99073D-FDF2-4443-A8C7-40F3221C1F54}"/>
+															<MusicCue Name="Entry Cue" ID="{CAFC29FF-774C-4D7F-86FA-633EEEADB6B4}"/>
 														</Local>
 													</Reference>
 													<Reference>
 														<Local>
-															<MusicCue Name="Exit Cue" ID="{00CD9A88-C472-4A75-92A9-1B8F13F8F980}">
+															<MusicCue Name="Exit Cue" ID="{285DA870-DBEF-4649-A1F6-8A7AE8B26DB8}">
 																<PropertyList>
 																	<Property Name="CueType" Type="int16" Value="1"/>
-																	<Property Name="TimeMs" Type="Real64" Value="8000"/>
+																	<Property Name="TimeMs" Type="Real64" Value="593423.673469388"/>
 																</PropertyList>
 															</MusicCue>
 														</Local>
@@ -290,14 +202,6 @@
 											<PropertyList>
 												<Property Name="LoopCount" Type="int16" Value="0"/>
 											</PropertyList>
-											<ChildrenList>
-												<MusicPlaylistItem Name="" ID="{12850B39-6E20-4F46-B46A-F1411D77C72E}" ShortID="115662191">
-													<PropertyList>
-														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
-													</PropertyList>
-													<SegmentRef Name="Norman Greenbaum Spirit In The Sky" ID="{1482D267-2D87-4FB0-8E1B-290524141C9D}"/>
-												</MusicPlaylistItem>
-											</ChildrenList>
 										</MusicPlaylistItem>
 									</Playlist>
 								</MusicPlaylistContainer>
@@ -3050,6 +2954,209 @@
 										</MusicPlaylistItem>
 									</Playlist>
 								</MusicPlaylistContainer>
+								<MusicPlaylistContainer Name="start_game" ID="{9BB09434-A561-43C7-A041-A8AA60A962D0}" ShortID="138025063">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicSegment Name="Norman Greenbaum Spirit In The Sky" ID="{87713C7F-AAA6-48DB-B224-0748B3F8AA82}" ShortID="445095346">
+											<PropertyList>
+												<Property Name="EndPosition" Type="Real64" Value="238344.807256236"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<MusicTrack Name="Norman Greenbaum Spirit In The Sky" ID="{62221FCF-D5F8-4088-8385-AFA1A801C097}" ShortID="462540869">
+													<ReferenceList>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="Norman Greenbaum Spirit In The Sky" ID="{970B29BF-9060-47FA-B29F-471C27659F35}">
+															<Language>SFX</Language>
+															<AudioFile>Norman Greenbaum Spirit In The Sky.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="314088076"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<TransitionList>
+														<MusicTransition Name="Root" ID="{AE786AF6-252B-4FAA-9961-14BA6BC8353C}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</TransitionList>
+													<ObjectLists>
+														<ObjectList Name="Sequences">
+															<Reference>
+																<Local>
+																	<MusicTrackSequence Name="" ID="{570830D9-44E2-48AB-9A48-F2E5E380EDCA}">
+																		<ObjectLists>
+																			<ObjectList Name="Clips">
+																				<Reference>
+																					<Local>
+																						<MusicClip Name="Norman Greenbaum Spirit In The Sky" ID="{AFAF4FE8-5481-47C8-A073-42528682F7FF}">
+																							<PropertyList>
+																								<Property Name="BeginTrimOffset" Type="Real64" Value="50501.8258758034"/>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="58501.8258758034"/>
+																								<Property Name="FadeInMode" Type="int16" Value="0"/>
+																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																								<Property Name="PlayAt" Type="Real64" Value="-50501.8258758034"/>
+																							</PropertyList>
+																							<AudioSourceRef Name="Norman Greenbaum Spirit In The Sky" ID="{970B29BF-9060-47FA-B29F-471C27659F35}"/>
+																							<PropertyCurveList>
+																								<PropertyCurve PropertyName="Highpass">
+																									<Curve Name="" ID="{9495CC08-A29D-47C2-ADD4-737A00A2F2E0}">
+																										<PropertyList>
+																											<Property Name="Flags" Type="int32" Value="1"/>
+																										</PropertyList>
+																										<PointList>
+																											<Point>
+																												<XPos>50.50183</XPos>
+																												<YPos>0</YPos>
+																												<Flags>5</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>58.50183</XPos>
+																												<YPos>0</YPos>
+																												<Flags>37</Flags>
+																											</Point>
+																										</PointList>
+																									</Curve>
+																								</PropertyCurve>
+																								<PropertyCurve PropertyName="Lowpass">
+																									<Curve Name="" ID="{F087F954-C740-4FF7-8C04-7B6A0D4B2201}">
+																										<PropertyList>
+																											<Property Name="Flags" Type="int32" Value="1"/>
+																										</PropertyList>
+																										<PointList>
+																											<Point>
+																												<XPos>50.50183</XPos>
+																												<YPos>-91.05511</YPos>
+																												<Flags>5</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>51.42524</XPos>
+																												<YPos>2.06285</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>53.68634</XPos>
+																												<YPos>-0.20165</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>55.06767</XPos>
+																												<YPos>-0.209</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>55.06867</XPos>
+																												<YPos>-0.35292</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>58.50183</XPos>
+																												<YPos>-100</YPos>
+																												<Flags>37</Flags>
+																											</Point>
+																										</PointList>
+																									</Curve>
+																								</PropertyCurve>
+																								<PropertyCurve PropertyName="Volume">
+																									<Curve Name="" ID="{0100E959-2E9B-47C9-82BE-517CB92D6BE4}">
+																										<PropertyList>
+																											<Property Name="Flags" Type="int32" Value="3"/>
+																										</PropertyList>
+																										<PointList>
+																											<Point>
+																												<XPos>50.50183</XPos>
+																												<YPos>-96.3</YPos>
+																												<Flags>5</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>52.50536</XPos>
+																												<YPos>-6.00217</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>55.10281</XPos>
+																												<YPos>-5.84839</YPos>
+																												<Flags>0</Flags>
+																											</Point>
+																											<Point>
+																												<XPos>58.50183</XPos>
+																												<YPos>-96.3</YPos>
+																												<Flags>37</Flags>
+																											</Point>
+																										</PointList>
+																									</Curve>
+																								</PropertyCurve>
+																							</PropertyCurveList>
+																						</MusicClip>
+																					</Local>
+																				</Reference>
+																			</ObjectList>
+																		</ObjectLists>
+																	</MusicTrackSequence>
+																</Local>
+															</Reference>
+														</ObjectList>
+													</ObjectLists>
+												</MusicTrack>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Cues">
+													<Reference>
+														<Local>
+															<MusicCue Name="Entry Cue" ID="{12E8CB94-7B8C-42DB-A1F5-D7CACA33522E}"/>
+														</Local>
+													</Reference>
+													<Reference>
+														<Local>
+															<MusicCue Name="Exit Cue" ID="{3FEA1705-B0CE-4DF1-A8AE-BA4FC4153574}">
+																<PropertyList>
+																	<Property Name="CueType" Type="int16" Value="1"/>
+																	<Property Name="TimeMs" Type="Real64" Value="8000"/>
+																</PropertyList>
+															</MusicCue>
+														</Local>
+													</Reference>
+												</ObjectList>
+											</ObjectLists>
+										</MusicSegment>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{B4E4A193-BC91-457D-9EFC-46EA59400F93}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{EF3FE0F1-4DBD-402A-9E6B-1CAD6EA3C19B}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<Playlist>
+										<MusicPlaylistItem Name="" ID="{ED391F5F-FC09-4849-91BC-C60486C9D935}" ShortID="561740823"/>
+									</Playlist>
+								</MusicPlaylistContainer>
 							</ChildrenList>
 							<TransitionList>
 								<MusicTransition Name="Root" ID="{DF3D79F3-17E6-4DFD-9105-3DAC5B60808F}">
@@ -3152,6 +3259,14 @@
 										<AudioNodeRef Name="outro" ID="{B6C26CAC-0FC5-4EF4-91ED-0CDF108BE552}" WorkUnitID="{82A5D2E7-7775-4044-B8A5-0A016CEAE3BD}" Platform="Linked"/>
 									</AudioNodeInfo>
 								</Entry>
+								<Entry>
+									<Path>
+										<PathElementRef Name="StartGame" ID="{182212AC-3C9B-49F1-91A9-377A895E1E21}"/>
+									</Path>
+									<AudioNodeInfo>
+										<AudioNodeRef Name="start_game" ID="{9BB09434-A561-43C7-A041-A8AA60A962D0}" WorkUnitID="{82A5D2E7-7775-4044-B8A5-0A016CEAE3BD}" Platform="Linked"/>
+									</AudioNodeInfo>
+								</Entry>
 							</EntryList>
 						</MusicSwitchContainer>
 					</ChildrenList>
@@ -3188,7 +3303,7 @@
 											<MusicFade Name="Source Fade-out" ID="{C0CF3CF5-8DCC-491B-81CB-0F898D4431C4}">
 												<PropertyList>
 													<Property Name="FadeOffset" Type="Real64" Value="1"/>
-													<Property Name="FadeTime" Type="Real64" Value="3"/>
+													<Property Name="FadeTime" Type="Real64" Value="4"/>
 													<Property Name="FadeType" Type="int16" Value="1"/>
 												</PropertyList>
 											</MusicFade>
@@ -3196,9 +3311,9 @@
 										<DestinationFadeIn>
 											<MusicFade Name="Destination Fade-in" ID="{1F5002F8-66EB-46E6-A574-50BFC4B9B76E}">
 												<PropertyList>
-													<Property Name="FadeCurve" Type="int16" Value="7"/>
-													<Property Name="FadeOffset" Type="Real64" Value="-2"/>
-													<Property Name="FadeTime" Type="Real64" Value="3"/>
+													<Property Name="FadeCurve" Type="int16" Value="8"/>
+													<Property Name="FadeOffset" Type="Real64" Value="-3.5"/>
+													<Property Name="FadeTime" Type="Real64" Value="4"/>
 												</PropertyList>
 											</MusicFade>
 										</DestinationFadeIn>

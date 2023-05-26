@@ -35,6 +35,7 @@
 						<State Name="MainMenu" ID="{35D63DDA-1EA8-48F7-BF05-3A08E6689C8C}"/>
 						<State Name="GameOver" ID="{23A34FEC-6952-43CD-AB72-7A6230C4C10E}"/>
 						<State Name="Outro" ID="{6F5CBE62-C718-4D7C-9417-826FD0312F8B}"/>
+						<State Name="StartGame" ID="{182212AC-3C9B-49F1-91A9-377A895E1E21}"/>
 					</ChildrenList>
 				</StateGroup>
 			</ChildrenList>

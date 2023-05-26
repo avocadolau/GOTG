@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{F607438B-7B42-0383-DCF4-63BE226FECC4}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -20,6 +20,10 @@
 				<File Id="160840083" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>logo_130_bpms.wav</ShortName>
 					<CachePath>SFX/logo_130_bpms_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="182594743" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>hub_enviroment.wav</ShortName>
+					<CachePath>SFX/hub_enviroment_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="203794371" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>rides_130_bpm.wav</ShortName>
@@ -108,7 +112,7 @@
 								<SwitchContainer>
 									<SwitchValue GroupType="State" GroupId="1992536912" Id="646625282"/>
 									<MediaRefs>
-										<MediaRef Id="314088076"/>
+										<MediaRef Id="182594743"/>
 									</MediaRefs>
 								</SwitchContainer>
 							</Children>
@@ -138,6 +142,12 @@
 									<SwitchValue GroupType="State" GroupId="4227810856" Id="1125500713"/>
 									<MediaRefs>
 										<MediaRef Id="424263943"/>
+									</MediaRefs>
+								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="4227810856" Id="1521187885"/>
+									<MediaRefs>
+										<MediaRef Id="314088076"/>
 									</MediaRefs>
 								</SwitchContainer>
 							</Children>
@@ -180,6 +190,7 @@
 						<State Id="556785088" Name="Logo"/>
 						<State Id="748895195" Name="None"/>
 						<State Id="1125500713" Name="Intro"/>
+						<State Id="1521187885" Name="StartGame"/>
 						<State Id="3604647259" Name="MainMenu"/>
 						<State Id="4158285989" Name="GameOver"/>
 						<State Id="4184794294" Name="Outro"/>
@@ -187,7 +198,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{25919A0C-FF0C-3788-3833-0700F4651C1B}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -626,6 +637,7 @@
 						<State Id="556785088" Name="Logo"/>
 						<State Id="748895195" Name="None"/>
 						<State Id="1125500713" Name="Intro"/>
+						<State Id="1521187885" Name="StartGame"/>
 						<State Id="3604647259" Name="MainMenu"/>
 						<State Id="4158285989" Name="GameOver"/>
 						<State Id="4184794294" Name="Outro"/>
@@ -747,7 +759,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -782,11 +794,11 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1484330123" Type="User" Language="SFX">
+		<SoundBank Id="1484330123" Type="User" Language="SFX" Hash="{317C9ABB-EA68-BB3B-0252-3E40FD6E13CE}">
 			<ShortName>audio_settings</ShortName>
 			<Path>audio_settings.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="1551306167" Type="User" Language="SFX">
+		<SoundBank Id="1551306167" Type="User" Language="SFX" Hash="{E0E7E830-857A-AA23-B07E-7BD97DC2386D}">
 			<ShortName>ui</ShortName>
 			<Path>ui.bnk</Path>
 			<Media>
@@ -830,13 +842,13 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{9D158C51-6BE9-D3D7-34CD-0B8DD28F1D54}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{69818127-E4C2-9708-9778-A4EB53C8256C}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
 				<File Id="32142556" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_normal_bullet.wav</ShortName>
-					<CachePath>SFX/boss_normal_bullet_BC28886E.wem</CachePath>
+					<CachePath>SFX/boss_normal_bullet_A48EC28B.wem</CachePath>
 				</File>
 				<File Id="131081328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit04.wav</ShortName>
@@ -912,7 +924,7 @@
 				</File>
 				<File Id="924070845" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterBall_shoot.wav</ShortName>
-					<CachePath>SFX/boss_clusterBall_shoot_9A1BF57F.wem</CachePath>
+					<CachePath>SFX/boss_clusterBall_shoot_2ADB799A.wem</CachePath>
 				</File>
 				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
@@ -936,7 +948,7 @@
 				</File>
 				<File Id="1069540054" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_smash01.wav</ShortName>
-					<CachePath>SFX/boss_smash01_DCD233AC.wem</CachePath>
+					<CachePath>SFX/boss_smash01_71CAAF7D.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
@@ -1044,7 +1056,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{0211143B-8798-E476-E52D-0A36657297EA}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1063,10 +1075,6 @@
 				<File Id="622246367" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vantiladores.wav</ShortName>
 					<CachePath>SFX/vantiladores_9D17781E.wem</CachePath>
-				</File>
-				<File Id="673880580" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>hub_enviroment.wav</ShortName>
-					<CachePath>SFX/hub_enviroment_71A7E0EE.wem</CachePath>
 				</File>
 				<File Id="715564319" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small Explosion 01.wav</ShortName>
@@ -1109,11 +1117,6 @@
 						<MediaRef Id="282502226"/>
 					</MediaRefs>
 				</Event>
-				<Event Id="2423740202" Name="hub_enviroment">
-					<MediaRefs>
-						<MediaRef Id="673880580"/>
-					</MediaRefs>
-				</Event>
 				<Event Id="2361307803" Name="ventiladores">
 					<MediaRefs>
 						<MediaRef Id="622246367"/>
@@ -1122,5 +1125,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{54270B7C-B3C3-EDAB-E152-544857D8C241}</FileHash>
+	<FileHash>{7275AFC9-A7F3-E14D-B6D5-418C849EE091}</FileHash>
 </SoundBanksInfo>
