@@ -15,6 +15,7 @@ namespace Wiwa
         bool releasingShop = false;
         Character lastCharacter;
         Item* currentItem;
+        EntityId currentItemShopId;
     public:
         CharacterInventory() = default;
         virtual ~CharacterInventory() = default;
@@ -31,6 +32,7 @@ namespace Wiwa
 
         Item* GetCurrentShopItem() { return currentItem; }
 
+        EntityId GetShopItemId() { return currentItemShopId; }
         bool PlayerUpdated();
     };
 }

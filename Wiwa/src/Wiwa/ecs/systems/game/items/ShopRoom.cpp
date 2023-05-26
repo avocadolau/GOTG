@@ -4,22 +4,9 @@
 
 void Wiwa::ShopRoom::OnInit()
 {
-	uint32_t randomNum = RAND(0, 100);
-	uint32_t counter = 0;
+	uint32_t randomNum = RAND(0, 2);
+	WI_INFO(randomNum);
 	Transform3D* t3d = SceneManager::getActiveScene()->GetEntityManager().GetComponent<Transform3D>(m_EntityId);
-	if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
-	{
-		GameStateManager::SpawnShopRandomItem(t3d->position, 0);
-	}
-	counter += GameStateManager::s_ActiveSkillChances;
-	if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_PassiveSkillChances))
-	{
-		GameStateManager::SpawnShopRandomItem(t3d->position, 1);
-	}
-	counter += GameStateManager::s_PassiveSkillChances;
-	if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_BuffChances))
-	{
-		GameStateManager::SpawnShopRandomItem(t3d->position, 2);
-	}
-	counter += GameStateManager::s_BuffChances;
+	GameStateManager::SpawnShopRandomItem(t3d->position, randomNum,m_EntityId);
+	
 }

@@ -68,6 +68,8 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		if (GameStateManager::GetRoomType() == "ROOM_SHOP")//ABILITY
 		{
 			currentItem = item;
+			currentItemShopId = body2->id;
+
 			return;
 		}
 		 

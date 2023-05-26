@@ -151,7 +151,7 @@ namespace Wiwa
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
-		static void SpawnShopRandomItem(glm::vec3 position, uint8_t type);
+		static void SpawnShopRandomItem(glm::vec3 position, uint8_t type,EntityId shopItem);
 		/// <summary>
 		/// Spawns a given item of a given type in a given location
 		/// </summary>

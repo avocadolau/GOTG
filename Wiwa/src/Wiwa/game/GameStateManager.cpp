@@ -974,7 +974,7 @@ namespace Wiwa
 		name.copy(item->Name, 128);		
 		item->Name[name.size()] = '\0';
 	}
-	void GameStateManager::SpawnShopRandomItem(glm::vec3 position, uint8_t type)
+	void GameStateManager::SpawnShopRandomItem(glm::vec3 position, uint8_t type,EntityId shopItem)
 	{
 		uint32_t itemRand;
 		std::string name;
@@ -983,7 +983,7 @@ namespace Wiwa
 		{
 		case 0:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size() -1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetAbilities())
 			{
@@ -994,7 +994,7 @@ namespace Wiwa
 		}break;
 		case 1:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size() -1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetSkills())
 			{
@@ -1005,22 +1005,11 @@ namespace Wiwa
 		}break;
 		case 2:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size());
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetBuffs().size() -1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetBuffs())
 			{
-				if (i == itemRand)
-					name = ability.second.Name;
-				i++;
-			}
-		}break;
-		case 3:
-		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetConsumables().size());
-			int randomNum = itemRandom(Application::s_Gen);
-			for (const auto& ability : ItemManager::GetConsumables())
-			{
-				if (i == itemRand)
+				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
@@ -1032,10 +1021,10 @@ namespace Wiwa
 		}break;
 		}
 		EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
-		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
+		em.AddComponent<Item>(shopItem);
 
-		Item* item = em.GetComponent<Item>(id);
-		Transform3D* t3d = em.GetComponent<Transform3D>(id);
+		Item* item = em.GetComponent<Item>(shopItem);
+		Transform3D* t3d = em.GetComponent<Transform3D>(shopItem);
 
 		t3d->localPosition = position;
 		item->item_type = type;

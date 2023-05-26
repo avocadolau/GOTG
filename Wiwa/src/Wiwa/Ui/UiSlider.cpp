@@ -78,9 +78,7 @@ namespace Wiwa
 						void* params[] = { &value };
 						callback->Execute(params);
 					}*/
-
-					//RIGHT
-					if (Wiwa::Input::IsButtonPressed(0, 12))
+					if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f)
 					{
 						clickedRight = true;
 						extraPosition.width += 1;
@@ -88,22 +86,10 @@ namespace Wiwa
 						{
 							extraTexturePosition.width = extraPosition.width;
 							extraPosition.width = position.width;
-							
+
 						}
-
 					}
-					if (clickedRight && Wiwa::Input::IsButtonReleased(0, 12))
-					{
-						clickedRight = false;
-
-						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
-						{
-							Audio::PostEvent(audioEventForButton.c_str());
-						}
-
-					}
-					//LEFT
-					if (Wiwa::Input::IsButtonPressed(0, 14))
+					else if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x < -0.5f)
 					{
 						clickedLeft = true;
 						extraPosition.width -= 1;
@@ -112,17 +98,15 @@ namespace Wiwa
 							extraTexturePosition.width = extraPosition.width;
 							extraPosition.width = 0;
 						}
-
 					}
-					if (clickedLeft && Wiwa::Input::IsButtonReleased(0, 14))
+					else
 					{
 						clickedLeft = false;
-
-						if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
+						clickedRight = false;
+						/*if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 						{
 							Audio::PostEvent(audioEventForButton.c_str());
-						}
-
+						}*/
 					}
 					if (clickedLeft || clickedRight)
 					{

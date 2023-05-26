@@ -53,47 +53,60 @@ namespace Wiwa
 
 	void GuiCanvas::InputController()
 	{
-		if (Wiwa::Input::IsButtonPressed(0, 13))
-		{
-			DpadUp = true;
-		}
-		if (Wiwa::Input::IsButtonPressed(0, 11))
-		{
-			DpadDown = true;
-		}
-		if (Wiwa::Input::IsButtonReleased(0, 13) && DpadUp)
-		{
-			DpadUp = false;
-			idGuiSelected++;
-			if (idGuiSelected >= controlsForSelection.size())
-			{
-				idGuiSelected = 0;
-			}
-			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
-			{
-				Audio::PostEvent("pause_sound");
-			}
-		}
-		if (Wiwa::Input::IsButtonReleased(0, 11) && DpadDown)
-		{
-			DpadDown = false;
-			idGuiSelected--;
-			if (idGuiSelected <= -1)
-			{
-				idGuiSelected = controlsForSelection.size() - 1;
-			}
-			if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
-			{
-				Audio::PostEvent("pause_sound");
-			}
-		}
-		if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
-		{
-			
-			SelectElement(idGuiSelected);
+		timer += 0.16f;
 
+		if (timer >= MaxTimeBetweenChanges)
+		{
+			if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y > 0.5f)
+			{
+				DpadUp = true;
+			}
+			else if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y < -0.5f)
+			{
+				DpadDown = true;
+			}
+			else
+			{
+				DpadDown = false;
+				DpadUp = false;
+			}
+			if (DpadUp)
+			{
+				DpadUp = false;
+				idGuiSelected++;
+				if (idGuiSelected >= controlsForSelection.size())
+				{
+					idGuiSelected = 0;
+				}
+				if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+				{
+					Audio::PostEvent("pause_sound");
+				}
+			}
+			if (DpadDown)
+			{
+				DpadDown = false;
+				idGuiSelected--;
+				if (idGuiSelected <= -1)
+				{
+					idGuiSelected = controlsForSelection.size() - 1;
+				}
+				if (Audio::FindEvent("pause_sound") != Audio::INVALID_ID)
+				{
+					Audio::PostEvent("pause_sound");
+				}
+			}
+			if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
+			{
+
+				SelectElement(idGuiSelected);
+
+			}
+
+
+
+
+			timer = 0.0f;
 		}
-
-
 	}
 }

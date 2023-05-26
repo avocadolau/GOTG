@@ -147,8 +147,10 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			{
 				Audio::PostEvent("action_accepted");
 			}
+			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 			characterInventory->ShopElement(characterInventory->GetCurrentShopItem());
 			buyItem = false;
+			em.DestroyEntity(characterInventory->GetShopItemId());
 		}
 	}
 }
