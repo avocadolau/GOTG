@@ -357,6 +357,15 @@ namespace Wiwa
 		{
 			self->hasFinished = true;
 		}
+
+		// Resetting anim to not blend death and spawn
+		if (m_AnimatorSys)
+		{
+			OzzAnimation* anim = m_AnimatorSys->getAnimator()->getActiveAnimation();
+			if (anim)
+				anim->setTimeRatio(0.0f);
+		}
+			
 		return true;
 	}
 
