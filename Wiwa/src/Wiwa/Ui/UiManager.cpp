@@ -476,10 +476,6 @@ namespace Wiwa
 
 				forceNewLine = false;
 			}
-			/*else if (word[i] == 124)
-			{
-				y_extra += l_h;
-			}*/
 
 			/* get bounding box for character (may be offset to account for chars that dip above or below the line) */
 			int c_x1, c_y1, c_x2, c_y2;

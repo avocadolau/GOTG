@@ -101,7 +101,7 @@ void DialogPanel::Draw()
 				if (currentCreatingNodeIsSaved[currentNode] == true) ImGui::TextWrapped("Currently Editing Node # %i", currentNode);
 				ImGui::NewLine();
 
-				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit.");
+				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit. To force a jump in line write the following char on text: | ");
 				if (ImGui::InputText("Bubble text", &dm.conversations[currentConversation].nodes[currentNode].text1))
 				{
 					currentCreatingNodeIsSaved[currentNode] = false;
@@ -371,7 +371,7 @@ void DialogPanel::Draw()
 				else if (currentEditingNodeIsSaved[currentEditingNode[i]][i] == false) ImGui::TextWrapped("Node %i (unsaved*):", currentEditingNode[i]);
 				ImGui::NewLine();
 
-				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit.");
+				ImGui::TextWrapped("Text is wrapped so it will jump lines automatically. But be careful not to write more than 4 lines or you will surpass the text buble's height limit. To force a jump in line write the following char on text: | ");
 				ImGui::PushID(currentEditingNode[i]);
 				if (ImGui::InputText("Bubble text", &dm.editorConversations[i].nodes[currentEditingNode[i]].text1))
 				{
