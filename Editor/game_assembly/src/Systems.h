@@ -71,3 +71,4 @@
 #include "systems/gui/PopUpItem.h"
 
 #include "systems/hub/TargetSystem.h"
+#include "systems/triggers/RewardRoomDisplay.h"

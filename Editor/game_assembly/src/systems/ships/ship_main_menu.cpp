@@ -82,6 +82,7 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadY) && m_GlFWeskk)
 		{
+			Wiwa::GameStateManager::RandomizeRewardRoom();
 			Wiwa::SceneManager::ChangeSceneByIndex(4);
 			m_GlFWeskk = false;
 		}
