@@ -67,7 +67,7 @@ namespace Wiwa {
 		~PhysicsManager();
 
 		// Init & Delete World
-		bool InitWorld();
+		bool InitWorld(Scene* scene);
 
 		bool StepSimulation();
 
@@ -139,6 +139,7 @@ namespace Wiwa {
 		float RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world);
 
 	private:
+		Scene* m_Scene;
 		bool m_Debug;
 		bool m_HasBeenInit;
 		btCollisionWorld* m_World;

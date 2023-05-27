@@ -47,7 +47,7 @@ namespace Wiwa
 		m_DialogEventManager = new DialogEventManager();
 		m_DialogEventManager->Init(this);
 
-		m_PhysicsManager->InitWorld();
+		m_PhysicsManager->InitWorld(this);
 
 		Wiwa::Application::Get().GetRenderer2D().BindCamera();
 	}

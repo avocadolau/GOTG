@@ -18,6 +18,7 @@
 namespace Wiwa {
 	PhysicsManager::PhysicsManager()
 	{
+		m_Scene = nullptr;
 		m_HasBeenInit = false;
 		m_Collision_conf = new btDefaultCollisionConfiguration();
 		m_Dispatcher = new btCollisionDispatcher(m_Collision_conf);
@@ -34,6 +35,7 @@ namespace Wiwa {
 		m_Debug_draw->lineDisplayShaderUniforms.Model = m_Debug_draw->lineDisplayShader->getUniformLocation("u_Model");
 		m_Debug_draw->lineDisplayShaderUniforms.View = m_Debug_draw->lineDisplayShader->getUniformLocation("u_View");
 		m_Debug_draw->lineDisplayShaderUniforms.Projection = m_Debug_draw->lineDisplayShader->getUniformLocation("u_Proj");
+
 	}
 
 	PhysicsManager::~PhysicsManager()
@@ -44,10 +46,13 @@ namespace Wiwa {
 		delete m_Dispatcher;
 		delete m_Collision_conf;
 		delete m_filterCallback;
+
+		m_Scene = nullptr;
 	}
 
-	bool PhysicsManager::InitWorld()
+	bool PhysicsManager::InitWorld(Scene* scene)
 	{
+		m_Scene = scene;
 		m_Debug = true;
 		m_HasBeenInit = true;
 
@@ -81,7 +86,7 @@ namespace Wiwa {
 
 	bool PhysicsManager::ResolveContacts()
 	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 
 		int numManifolds = m_World->getDispatcher()->getNumManifolds();
 		for (int i = 0; i < numManifolds; i++)
@@ -201,7 +206,7 @@ namespace Wiwa {
 	{
 		// Set the position offset
 		// Get the position from the engine
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{
@@ -219,7 +224,7 @@ namespace Wiwa {
 
 	bool PhysicsManager::UpdatePhysicsToEngine()
 	{
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		// Physics to Engine
 		for (std::list<Object*>::iterator item = m_CollObjects.begin(); item != m_CollObjects.end(); item++)
 		{/*
@@ -430,7 +435,7 @@ namespace Wiwa {
 		collision_object->setUserPointer((Object*)myObjData);
 		collision_object->setUserIndex2(1);
 
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
 		myObjData->parentId = entityManager.GetEntityParent(id);
 		myObjData->parentTransformIt = entityManager.GetComponentIterator<Wiwa::Transform3D>(myObjData->parentId);
 		myObjData->transformIt = entityManager.GetComponentIterator<Wiwa::Transform3D>(id);
@@ -716,8 +721,8 @@ namespace Wiwa {
 		if (m_BodiesToLog.empty())
 			return false;
 
-		Wiwa::EntityManager& entityManager = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
-		const char* name = Wiwa::SceneManager::getActiveScene()->getName();
+		Wiwa::EntityManager& entityManager = m_Scene->GetEntityManager();
+		const char* name = m_Scene->getName();
 		//WI_INFO("SCENE {} World has total of {} bodies", name, m_CollObjects.size());
 		int num = 0;
 		for (std::list<Object*>::iterator item = m_BodiesToLog.begin(); item != m_BodiesToLog.end(); item++)
