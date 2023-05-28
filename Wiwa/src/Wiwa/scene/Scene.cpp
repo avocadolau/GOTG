@@ -28,6 +28,7 @@ namespace Wiwa
 		m_EntityManager.SetScene(this);
 		m_CameraManager = new CameraManager();
 		m_LightManager = new LightManager();
+		m_LightManager->SetScene(this);
 		m_PhysicsManager = new PhysicsManager();
 
 		uint32_t imgid = Resources::LoadNative<Wiwa::Image>("resources/images/transitions/transision.png");
@@ -186,6 +187,7 @@ namespace Wiwa
 				r2d.DisableInstance(this, m_TransitionInstance);
 
 				SceneManager::LoadSceneByIndex(m_SceneToChange, m_SceneChangeFlags);
+				m_CurrentState = SCENE_LOADING_SCREEN;
 			}
 			break;
 		case SCENE_LOADING_SCREEN:

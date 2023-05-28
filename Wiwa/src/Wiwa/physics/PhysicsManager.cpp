@@ -556,7 +556,7 @@ namespace Wiwa {
 	void PhysicsManager::DebugDrawWorld()
 	{
 		{
-			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+			Camera* camera = m_Scene->GetCameraManager().editorCamera;
 			if (camera->drawBoundingBoxes)
 			{
 				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
@@ -574,7 +574,7 @@ namespace Wiwa {
 			}
 		}
 		{
-			Camera* camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
+			Camera* camera = m_Scene->GetCameraManager().getActiveCamera();
 			if (!camera)
 				return;
 			if (camera->drawBoundingBoxes)
@@ -631,7 +631,7 @@ namespace Wiwa {
 
 	void PhysicsManager::RayTest(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
-		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		Camera* camera = m_Scene->GetCameraManager().editorCamera;
 
 		if (camera->drawBoundingBoxes)
 		{
@@ -663,7 +663,7 @@ namespace Wiwa {
 
 	float PhysicsManager::RayTestWalls(const btVector3& ray_from_world, const btVector3& ray_to_world)
 	{
-		Camera* camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
+		Camera* camera = m_Scene->GetCameraManager().editorCamera;
 
 		if (camera->drawBoundingBoxes)
 		{

@@ -36,9 +36,14 @@ void Wiwa::LightManager::RemovePointLight(size_t light)
 	}
 }
 
+void Wiwa::LightManager::SetScene(Scene* scene)
+{
+	m_Scene = scene;
+}
+
 void Wiwa::LightManager::Update(Camera* camera)
 {
-	Wiwa::Transform3D* lightTrans = Wiwa::SceneManager::getActiveScene()->GetEntityManager().GetComponent<Wiwa::Transform3D>(m_DirectionalLight);
+	Wiwa::Transform3D* lightTrans = m_Scene->GetEntityManager().GetComponent<Wiwa::Transform3D>(m_DirectionalLight);
 	if (lightTrans)
 	{
 		glm::vec3 direction;

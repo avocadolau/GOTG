@@ -103,7 +103,6 @@ namespace Wiwa {
 	private:
 		Object* AddBodyInternal(size_t id, btCollisionObject* collision_object, btCollisionShape* collision_shape, Wiwa::CollisionBody& rigid_body);
 	public:
-
 		// Manipulate bodies
 		bool SetVelocity(Object* body, const glm::vec3 velocity);
 

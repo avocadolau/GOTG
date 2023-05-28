@@ -4,6 +4,7 @@
 
 namespace Wiwa {
 	class Camera;
+	class Scene;
 	class WI_API LightManager
 	{
 	public:
@@ -15,6 +16,7 @@ namespace Wiwa {
 		void AddPointLight(size_t light);
 		void RemovePointLight(size_t light);
 
+		void SetScene(Scene* scene);
 
 		void Update(Camera* camera);
 
@@ -36,6 +38,8 @@ namespace Wiwa {
 		inline const glm::mat4& GetDirectionalMVP() { return m_LightMVP; }
 		inline const glm::vec3& GetDirectionalPos() { return m_LightPos; }
 	private:
+		Scene* m_Scene;
+
 		std::vector<size_t> m_PointLights;
 		std::vector<size_t> m_SpotLights;
 		size_t m_DirectionalLight = -1;
