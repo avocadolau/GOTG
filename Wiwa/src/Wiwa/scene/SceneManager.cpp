@@ -898,6 +898,7 @@ namespace Wiwa
 		m_ActiveScene = sceneId;
 
 		Wiwa::RenderManager::SetLayerCamera(0, getScene(sceneId)->GetCameraManager().getActiveCamera());
+		Wiwa::Application::Get().GetRenderer2D().BindCamera();
 
 		if (init) {
 			m_Scenes[sceneId]->Awake();
