@@ -1,1 +1,1 @@
-{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.0,"u_Color":{"r":0.0,"g":0.908297061920166,"b":1.0,"a":1.0},"u_Texture":"assets/textures/t_character_marker.png"}}
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.0,"u_Color":{"r":0.0,"g":0.908297061920166,"b":1.0,"a":1.0},"u_Texture":"assets/textures/t_character_marker02.png"}}

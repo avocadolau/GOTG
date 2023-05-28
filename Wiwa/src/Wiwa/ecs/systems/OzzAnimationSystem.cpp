@@ -9,6 +9,8 @@
 #include <Wiwa/utilities/render/Material.h>
 
 #include <Wiwa/ecs/components/OzzAnimatorCmp.h>
+#include <Wiwa/ecs/components/HitComponent.h>
+
 
 #include <Wiwa/ecs/EntityManager.h>
 #include <Wiwa/utilities/render/CameraManager.h>
@@ -52,6 +54,18 @@ namespace Wiwa {
 		if (!m_TransformIt || !m_AnimatorIt) return;
 		if (!m_Animator) return;
 
+		if (m_HitIt)
+		{
+			Wiwa::HitComponent* hit = GetComponentByIterator<Wiwa::HitComponent>(m_HitIt);
+
+			Wiwa::Material* mat = Wiwa::Resources::GetResourceById<Material>(m_Animator->GetMaterial());
+			if (mat)
+			{
+				mat->SetUniformData("u_Hit", hit->Hit);
+				WI_INFO("hit: {0}", hit->Hit);
+			}
+		}
+
 		Wiwa::Transform3D* t3d = GetComponentByIterator<Wiwa::Transform3D>(m_TransformIt);
 
 		float dt = Time::GetDeltaTime() / 1000.0f;
@@ -87,6 +101,7 @@ namespace Wiwa {
 	{
 		m_TransformIt = GetComponentIterator<Wiwa::Transform3D>();
 		m_AnimatorIt = GetComponentIterator<Wiwa::OzzAnimatorCmp>();
+		m_HitIt = GetComponentIterator<Wiwa::HitComponent>();
 
 		if (!m_TransformIt || !m_AnimatorIt) return;
 

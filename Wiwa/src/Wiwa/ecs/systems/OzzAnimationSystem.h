@@ -10,6 +10,7 @@ namespace Wiwa {
 		OzzAnimator* m_Animator;
 		EntityManager::ComponentIterator m_TransformIt;
 		EntityManager::ComponentIterator m_AnimatorIt;
+		EntityManager::ComponentIterator m_HitIt;
 	public:
 		OzzAnimationSystem();
 		~OzzAnimationSystem();
