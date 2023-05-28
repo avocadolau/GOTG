@@ -43,6 +43,8 @@
 #include "components/game/enemy/Subjugator.h"
 #include "components/game/enemy/Ultron.h"
 
+#include "components/HitComponent.h"
+
 // Ai components
 #include "components/MapAI.h"
 #include "components/ai/NavMesh.h"
