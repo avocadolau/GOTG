@@ -95,7 +95,7 @@ namespace Wiwa
 				selfTr->localPosition.y = m_MoveUpwardsCounter;
 			}
 
-			if (m_TimerToStopDash >= 1.2f) //Timer for the Ultron to go up
+			if (m_TimerToStopDash >= 0.6f) //Timer for the Ultron to go up
 			{
 				
 				selfTr->localPosition.x = playerDistance.x;
