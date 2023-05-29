@@ -22,8 +22,10 @@ namespace Wiwa {
 		void OnAwake() override;
 		void OnInit() override;
 		void OnUpdate() override;
-
+	
 		void OnDestroy() override;
+
+		void OnEnabledFromPool() override;
 
 		void OnSystemAdded() override;
 	};

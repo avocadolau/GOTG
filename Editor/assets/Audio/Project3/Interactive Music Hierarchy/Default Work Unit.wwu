@@ -202,6 +202,14 @@
 											<PropertyList>
 												<Property Name="LoopCount" Type="int16" Value="0"/>
 											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{20595579-0AA5-472C-B665-144CDE5F5BF6}" ShortID="37625352">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<SegmentRef Name="hub_enviroment" ID="{2F92D803-4104-413F-A7A7-25C4CAD86618}"/>
+												</MusicPlaylistItem>
+											</ChildrenList>
 										</MusicPlaylistItem>
 									</Playlist>
 								</MusicPlaylistContainer>
@@ -3154,7 +3162,16 @@
 										</MusicTransition>
 									</TransitionList>
 									<Playlist>
-										<MusicPlaylistItem Name="" ID="{ED391F5F-FC09-4849-91BC-C60486C9D935}" ShortID="561740823"/>
+										<MusicPlaylistItem Name="" ID="{ED391F5F-FC09-4849-91BC-C60486C9D935}" ShortID="561740823">
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{02288F9C-AC87-4505-8476-6E5E8B333C3F}" ShortID="735889387">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<SegmentRef Name="Norman Greenbaum Spirit In The Sky" ID="{87713C7F-AAA6-48DB-B224-0748B3F8AA82}"/>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
 									</Playlist>
 								</MusicPlaylistContainer>
 							</ChildrenList>

@@ -9,7 +9,6 @@
 							<ChildrenList>
 								<Sound Name="phalanx_melee_attack" ID="{3764DF50-C258-449D-9434-D16F104342A1}" ShortID="325610447">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-9</Value>
@@ -42,7 +41,6 @@
 								</Sound>
 								<Sound Name="phalanx_melee_death" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" ShortID="732399785">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -88,7 +86,6 @@
 								</Sound>
 								<Sound Name="phalanx_melee_hit" ID="{608ADDD0-93F4-4684-9310-CCC7E1B778A4}" ShortID="100705267">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -134,7 +131,6 @@
 								</Sound>
 								<Sound Name="phalanx_melee_spawn" ID="{B5DF3ABB-4670-43A1-9151-88EEC400E6EC}" ShortID="178843995">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -189,7 +185,6 @@
 							<ChildrenList>
 								<Sound Name="phalanx_ranged_death" ID="{39ED648E-FC14-403A-8B96-3F753E9B9852}" ShortID="412219418">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -235,7 +230,6 @@
 								</Sound>
 								<Sound Name="phalanx_ranged_hit" ID="{0B08FC8C-1FA0-4998-8EDC-D2CD5CD44FD4}" ShortID="1032561662">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -286,7 +280,6 @@
 								</Sound>
 								<Sound Name="phalanx_ranged_attack" ID="{C64ADEA5-BB6F-4CDB-A83E-A774844F3AD1}" ShortID="93923488">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -738,6 +731,9 @@
 												</Property>
 											</PropertyList>
 											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
 												<Reference Name="Conversion">
 													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 												</Reference>
@@ -1825,7 +1821,7 @@
 							<ChildrenList>
 								<RandomSequenceContainer Name="barrel_explosion" ID="{1100DA39-0E45-4BE3-9151-9E5666028B55}" ShortID="363715288">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
 										<Property Name="RandomOrSequence" Type="int16" Value="0"/>
 									</PropertyList>
@@ -2014,7 +2010,7 @@
 								</RandomSequenceContainer>
 								<RandomSequenceContainer Name="explosions" ID="{4923C52D-993E-42E7-B866-C47637F1C317}" ShortID="904487592">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>11</Value>
@@ -2260,6 +2256,9 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="shop_interaction" ID="{5201486E-E13B-4BE1-B78E-59D1FCF0E358}" ShortID="551168985">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -2282,6 +2281,9 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="spaceship-cruising-ufo-7176" ID="{D5C3A39B-2A43-4049-AE42-7EF0EF470163}" ShortID="461243459">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -2305,7 +2307,7 @@
 								</Sound>
 								<Sound Name="hologram" ID="{82A68817-0BFA-41FF-AD9B-58D24B424B50}" ShortID="906634085">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
@@ -2344,7 +2346,7 @@
 								</Sound>
 								<Sound Name="vantiladores" ID="{D5239940-C275-4B22-8AF7-C731DE65FD89}" ShortID="417265098">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
@@ -2384,7 +2386,7 @@
 								</Sound>
 								<Sound Name="containers" ID="{C23E39CB-3002-4BE6-B722-574833876D8A}" ShortID="82732805">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
@@ -2664,7 +2666,7 @@
 							<ChildrenList>
 								<Sound Name="sentinel_hit" ID="{B7D5C983-87D7-40CF-A77A-EF1F68EB945A}" ShortID="1061724965">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-4</Value>
@@ -2704,7 +2706,7 @@
 								</Sound>
 								<Sound Name="sentinel_spawn" ID="{643507BC-03DF-4159-B80A-40A70810DCA5}" ShortID="509573937">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-4</Value>
@@ -2741,7 +2743,7 @@
 							<ChildrenList>
 								<Sound Name="subjugator_attack" ID="{66B3D591-EDE6-4509-B5EE-9080E19EA5AD}" ShortID="67452226">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -3142,7 +3144,7 @@
 									<ChildrenList>
 										<Sound Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}" ShortID="235016737">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-10</Value>
@@ -3181,7 +3183,7 @@
 										</Sound>
 										<Sound Name="cluster_ball" ID="{7C011009-2B6E-4299-A4BA-2D1EC1ED5C5A}" ShortID="143246932">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-7</Value>
@@ -3226,7 +3228,7 @@
 										</Sound>
 										<Sound Name="smash" ID="{C911BA39-583C-4352-A5A4-0789C8FA0C9D}" ShortID="953178846">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-5</Value>
@@ -3271,7 +3273,7 @@
 										</Sound>
 										<Sound Name="cluster_ball_explosion" ID="{B3A04584-278C-49BC-8D0B-1011DB64EAD1}" ShortID="597452486">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Attenuation">
@@ -3304,7 +3306,7 @@
 										</Sound>
 										<Sound Name="normal_bullet" ID="{8D1A7209-7506-42DA-B70F-3C5EBFF7FDF3}" ShortID="263454316">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-8</Value>
