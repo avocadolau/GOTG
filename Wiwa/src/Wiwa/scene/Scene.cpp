@@ -187,12 +187,7 @@ namespace Wiwa
 				r2d.DisableInstance(this, m_TransitionInstance);
 
 				SceneManager::LoadSceneByIndex(m_SceneToChange, m_SceneChangeFlags);
-				m_CurrentState = SCENE_LOADING_SCREEN;
 			}
-			break;
-		case SCENE_LOADING_SCREEN:
-			UpdateLoadingScreen();
-			RenderLoadingScreen();
 			break;
 		default:
 			break;
@@ -319,13 +314,5 @@ namespace Wiwa
 
 		r2d.UpdateInstancedQuadTexClip(this, m_TransitionInstance, { 256,256 }, { 0,0,w,256 });
 		r2d.UpdateInstancedQuadTexSize(this, m_TransitionInstance, { 0,0 }, size, Wiwa::Renderer2D::Pivot::UPLEFT);
-	}
-	void Scene::UpdateLoadingScreen()
-	{
-
-	}
-	void Scene::RenderLoadingScreen()
-	{
-
 	}
 }

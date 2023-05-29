@@ -25,8 +25,7 @@ namespace Wiwa {
 		enum State {
 			SCENE_ENTERING,
 			SCENE_LOOP,
-			SCENE_LEAVING,
-			SCENE_LOADING_SCREEN
+			SCENE_LEAVING
 		};
 
 
@@ -71,9 +70,6 @@ namespace Wiwa {
 		void RenderEnter();
 		virtual void RenderLoop() {}
 		void RenderLeave();
-
-		void UpdateLoadingScreen();
-		void RenderLoadingScreen();
 
 		size_t mMaxTimeEntering, mMaxTimeLeaving = 0;
 
