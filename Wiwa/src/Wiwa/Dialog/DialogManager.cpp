@@ -893,7 +893,7 @@ namespace Wiwa
 		}
 
 		std::string path = "config/conversations";
-		path += ".wiconversation";
+		path += ".json";
 		doc.save_file(path.c_str());
 	}
 
@@ -903,7 +903,7 @@ namespace Wiwa
 		bool breakConversationsLoop = false;
 		bool breakNodesLoop = false;
 
-		Wiwa::JSONDocument doc("config/conversations.wiconversation");
+		Wiwa::JSONDocument doc("config/conversations.json");
 		if (doc.IsObject())
 		{
 			for (int i = 0; (i < MAX_CONVERSATIONS) && breakConversationsLoop == false; i++)
@@ -996,7 +996,7 @@ namespace Wiwa
 			}
 		}
 
-		doc.save_file("config/conversations.wiconversation");
+		doc.save_file("config/conversations.json");
 	}
 	
 }

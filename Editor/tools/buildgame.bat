@@ -23,7 +23,7 @@ copy "..\config\game_tags_physics.json" %config_path%
 copy "..\config\player_run.json" %config_path%
 copy "..\config\player_progression.json" %config_path%
 copy "..\config\enemy_data.json" %config_path%
-copy "..\config\conversations.wiconversation" %config_path%
+copy "..\config\conversations.json" %config_path%
 
 md %lib_path%
 

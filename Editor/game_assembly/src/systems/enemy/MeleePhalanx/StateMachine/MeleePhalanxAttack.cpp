@@ -96,7 +96,7 @@ namespace Wiwa
 		EnemyData* stats = (EnemyData*)em.GetComponentByIterator(m_Enemy->m_StatsIt);
 
 		float distance = glm::distance(playerTr->localPosition, selfTr->localPosition);
-		if (stats != nullptr && distance <= 3.0f)
+		if (stats != nullptr && distance <= 7.0f)
 		{
 			GameStateManager::DamagePlayer(stats->damage);
 			m_Enemy->m_AudioSys->PlayAudio("melee_attack");
