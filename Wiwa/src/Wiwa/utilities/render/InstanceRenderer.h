@@ -38,6 +38,9 @@ namespace Wiwa {
 
 		void GenerateBuffers();
 
+		void Bind();
+		void Unbind();
+
 		void Init(const char* shader_path);
 		void Update();
 		void Render(glm::mat4& proj, glm::mat4& view);

@@ -114,6 +114,16 @@ namespace Wiwa {
 		GL(VertexAttribDivisor(12, 1));
 	}
 
+	void InstanceRenderer::Bind()
+	{
+		GL(BindVertexArray(m_VAO));
+	}
+
+	void InstanceRenderer::Unbind()
+	{
+		GL(BindVertexArray(0));
+	}
+
 	void InstanceRenderer::Init(const char* shader_path)
 	{
 		Application& app = Application::Get();
@@ -142,7 +152,6 @@ namespace Wiwa {
 
 	void InstanceRenderer::Update()
 	{
-		GL(BindVertexArray(m_VAO));
 		GL(BindBuffer(GL_ARRAY_BUFFER, m_IVBO));
 		GL(BufferSubData(GL_ARRAY_BUFFER, 0, sizeof(VertexInstanceTexture) * m_InstanceCount, m_InstanceVertex));
 	}
@@ -155,7 +164,6 @@ namespace Wiwa {
 
 		GLuint texSize = static_cast<GLuint>(m_Textures.size());
 
-		GL(BindVertexArray(m_VAO));
 		for (GLuint i = 0; i < texSize; i++) {
 
 			if (m_Textures[i] == -1) {

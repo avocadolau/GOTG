@@ -289,8 +289,12 @@ namespace Wiwa
 		//glEnable(GL_DEPTH_TEST);
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
+			instanceRenderers[i]->Bind();
+
 			instanceRenderers[i]->Update();
 			instanceRenderers[i]->Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
+
+			instanceRenderers[i]->Unbind();
 		}
 		//glDepthMask(true);
 		GL(Disable(GL_BLEND));
