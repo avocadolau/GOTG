@@ -4,6 +4,7 @@
 #include <Wiwa/utilities/Reflection.h>
 struct ItemCharaceristics {
 	std::string itemName;
+	std::string itemDescription;
 	Wiwa::ItemType type;
 };
 namespace Wiwa {
@@ -14,6 +15,7 @@ namespace Wiwa {
 		bool m_PopOut;
 		float m_TimerAnim;
 		float m_TimerIn;
+		float m_TimerOut;
 		ItemCharaceristics item;
 	public:
 		PopUpItem();

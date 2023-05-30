@@ -77,15 +77,14 @@ namespace Wiwa
 
 		int getCurrentCanvas();
 
+		const char* GetCurrentPrefabWiGui() { return PrefabWiGui.c_str(); }
+		void SetCurrentPrefabWiGui(const char* currentPrefab);
+
 	public:
 		std::vector<GuiCanvas*> canvas;
 		std::vector<GuiCanvas*> canvasToDestroy;
 		std::vector<Text*> textToDestroy;
-		float accumulatedTime = 0.0f;
-		float updateMsCycle = 0.0f;
-		bool doLogic = false;
-
-		Image* texture;
-
+	private:
+		std::string PrefabWiGui = "";
 	};
 }

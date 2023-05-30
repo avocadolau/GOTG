@@ -15,6 +15,10 @@ UIPanel::UIPanel(EditorLayer* instance)
 	size = glm::ivec2(0.f);
 	originPos = glm::ivec2(0.f);
 	originSize = glm::ivec2(0.f);
+
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+
+	currentWiPrefabScene = gm.GetCurrentPrefabWiGui();
 }
 
 UIPanel::~UIPanel()
@@ -28,9 +32,20 @@ void UIPanel::Draw()
 	ImGui::Begin(iconName.c_str(), &active);
 	
 	ImGui::Text("UI creator panel");
+	ImGui::InputText("current wiPrefab", &currentWiPrefabScene);
+	ImGui::NewLine();
+	ImGui::PushID("SaveSceneWiGui");
+	if (ImGui::Button("Save sceneWiGui"))
+	{
+		std::filesystem::path file = "assets/saved_wiGUI";
+		file /= currentWiPrefabScene.c_str();
+		file += ".wiGUI";
+		gm.SetCurrentPrefabWiGui(file.string().c_str());
+	}
+	ImGui::PopID();
 	ImGui::NewLine();
 	ImGui::InputText("name for GUI", (char*)nameSavingWiGUI.c_str(), 64);
-	ImGui::SameLine();
+	ImGui::NewLine();
 	ImGui::PushID("saveGUI");
 	if (ImGui::Button("Save GUI"))
 	{

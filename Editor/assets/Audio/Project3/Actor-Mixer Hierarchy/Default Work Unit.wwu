@@ -9,7 +9,6 @@
 							<ChildrenList>
 								<Sound Name="phalanx_melee_attack" ID="{3764DF50-C258-449D-9434-D16F104342A1}" ShortID="325610447">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-9</Value>
@@ -42,7 +41,6 @@
 								</Sound>
 								<Sound Name="phalanx_melee_death" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" ShortID="732399785">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -88,7 +86,6 @@
 								</Sound>
 								<Sound Name="phalanx_melee_hit" ID="{608ADDD0-93F4-4684-9310-CCC7E1B778A4}" ShortID="100705267">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -134,7 +131,6 @@
 								</Sound>
 								<Sound Name="phalanx_melee_spawn" ID="{B5DF3ABB-4670-43A1-9151-88EEC400E6EC}" ShortID="178843995">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -189,7 +185,6 @@
 							<ChildrenList>
 								<Sound Name="phalanx_ranged_death" ID="{39ED648E-FC14-403A-8B96-3F753E9B9852}" ShortID="412219418">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -235,7 +230,6 @@
 								</Sound>
 								<Sound Name="phalanx_ranged_hit" ID="{0B08FC8C-1FA0-4998-8EDC-D2CD5CD44FD4}" ShortID="1032561662">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -286,7 +280,6 @@
 								</Sound>
 								<Sound Name="phalanx_ranged_attack" ID="{C64ADEA5-BB6F-4CDB-A83E-A774844F3AD1}" ShortID="93923488">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -334,52 +327,6 @@
 						</Folder>
 						<Folder Name="player" ID="{369A82C9-82A0-4ACC-A7A9-40E90A07FD68}" ShortID="909339562">
 							<ChildrenList>
-								<Sound Name="bullet_hit" ID="{4C7035E1-9236-43CB-9340-6872F7C3B629}" ShortID="194556234">
-									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="1"/>
-										<Property Name="Pitch" Type="int32">
-											<ModifierList>
-												<ModifierInfo>
-													<Modifier Name="" ID="{18424686-23A7-48A4-A516-FCC6D632EA5C}">
-														<PropertyList>
-															<Property Name="Enabled" Type="bool" Value="True"/>
-															<Property Name="Max" Type="Real64" Value="200"/>
-															<Property Name="Min" Type="Real64" Value="-200"/>
-														</PropertyList>
-													</Modifier>
-												</ModifierInfo>
-											</ModifierList>
-										</Property>
-										<Property Name="Volume" Type="Real64">
-											<ValueList>
-												<Value>-6</Value>
-											</ValueList>
-										</Property>
-									</PropertyList>
-									<ReferenceList>
-										<Reference Name="Attenuation">
-											<ObjectRef Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
-										</Reference>
-										<Reference Name="Conversion">
-											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
-										</Reference>
-										<Reference Name="OutputBus">
-											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
-										</Reference>
-									</ReferenceList>
-									<ChildrenList>
-										<AudioFileSource Name="bullet_hit" ID="{A9F405CA-25D7-42CA-9A8F-3E6922C49443}">
-											<Language>SFX</Language>
-											<AudioFile>project III sounds\player\bullet_hit.wav</AudioFile>
-											<MediaIDList>
-												<MediaID ID="944440038"/>
-											</MediaIDList>
-										</AudioFileSource>
-									</ChildrenList>
-									<ActiveSourceList>
-										<ActiveSource Name="bullet_hit" ID="{A9F405CA-25D7-42CA-9A8F-3E6922C49443}" Platform="Linked"/>
-									</ActiveSourceList>
-								</Sound>
 								<Sound Name="palyer_hit" ID="{039EA729-BA8E-4740-815C-B8115ED0A564}" ShortID="456536316">
 									<PropertyList>
 										<Property Name="3DSpatialization" Type="int16" Value="2"/>
@@ -738,6 +685,9 @@
 												</Property>
 											</PropertyList>
 											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="atenuation_curve" ID="{1BE90779-9ECD-4677-834A-8F28F8A9ADC1}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
 												<Reference Name="Conversion">
 													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 												</Reference>
@@ -763,9 +713,9 @@
 								<RandomSequenceContainer Name="player_shoot" ID="{8AD4699B-AFE2-4FB6-B30A-BA53480B4F4B}" ShortID="866307643">
 									<PropertyList>
 										<Property Name="3DSpatialization" Type="int16" Value="2"/>
-										<Property Name="Volume" Type="Real64">
+										<Property Name="MakeUpGain" Type="Real64">
 											<ValueList>
-												<Value>-2</Value>
+												<Value>4</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -1819,13 +1769,238 @@
 										</RandomSequenceContainer>
 									</ChildrenList>
 								</Folder>
+								<Sound Name="rocket_shot" ID="{3FF8F164-6242-45A2-98DD-BA574F66A763}" ShortID="587296827">
+									<PropertyList>
+										<Property Name="Lowpass" Type="int16">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{DC82FDD5-97B4-49F6-B096-1F2E38D5EEAE}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="10"/>
+															<Property Name="Min" Type="Real64" Value="-10"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Pitch" Type="int32">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{FC7024E8-405B-4000-8895-C164F983BAC4}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="200"/>
+															<Property Name="Min" Type="Real64" Value="-200"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="rocket_shot" ID="{559242D3-6083-4123-888F-8EBB7CD0954C}">
+											<Language>SFX</Language>
+											<AudioFile>rocket_shot.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="240802095"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="rocket_shot" ID="{559242D3-6083-4123-888F-8EBB7CD0954C}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<RandomSequenceContainer Name="rocket_bullet_hit" ID="{007427C8-D917-4867-BEA3-CCB3D72D44AB}" ShortID="766791520">
+									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{527ADFE6-A1D7-4547-8223-40519C45EE96}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="200"/>
+															<Property Name="Min" Type="Real64" Value="-200"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="bullet_hit" ID="{8D9487D8-8814-4B0A-914B-F7A0D857ADE1}" ShortID="387231472">
+									<PropertyList>
+										<Property Name="Pitch" Type="int32">
+											<ModifierList>
+												<ModifierInfo>
+													<Modifier Name="" ID="{01BB82B0-B882-4FA7-8B9F-55BB5BFBE1FC}">
+														<PropertyList>
+															<Property Name="Enabled" Type="bool" Value="True"/>
+															<Property Name="Max" Type="Real64" Value="200"/>
+															<Property Name="Min" Type="Real64" Value="-200"/>
+														</PropertyList>
+													</Modifier>
+												</ModifierInfo>
+											</ModifierList>
+										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-13</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="starlord_gun_hit00" ID="{BDC8D887-E739-482A-921F-B9306683414B}" ShortID="546417808">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="starlord_gun_hit00" ID="{FC37CCDB-AD38-452F-AD5D-331E6DD70473}">
+													<PropertyList>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.430528317152103"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.430528317152103"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>starlord_gun_hit00.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="574588636"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="starlord_gun_hit00" ID="{FC37CCDB-AD38-452F-AD5D-331E6DD70473}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="starlord_gun_hit01" ID="{27283258-18C9-48B0-93D7-8706F638E593}" ShortID="192157700">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="starlord_gun_hit01" ID="{76FFEEC2-917C-4198-9CF6-3F29B2780F00}">
+													<PropertyList>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.340453782362459"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.340453782362459"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>starlord_gun_hit01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="307154887"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="starlord_gun_hit01" ID="{76FFEEC2-917C-4198-9CF6-3F29B2780F00}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="rocket_gun_hit00" ID="{A5CE18EC-E773-4DA5-9126-6A230F379A07}" ShortID="967925101">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="rocket_gun_hit00" ID="{C4F3993D-4ED4-4DEB-B96B-F1EC32DC6D0C}">
+													<PropertyList>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.351849947988901"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.351849947988901"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>rocket_gun_hit00.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="505590668"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="rocket_gun_hit00" ID="{C4F3993D-4ED4-4DEB-B96B-F1EC32DC6D0C}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="rocket_gun_hit01" ID="{4D97E0F0-BD7A-45E4-8FCB-ADBD1A103E52}" ShortID="351505354">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="rocket_gun_hit01" ID="{D32D964D-24BA-4812-B1FC-D43995B0BF6B}">
+													<PropertyList>
+														<Property Name="FadeOutDuration" Type="Real64" Value="0.426737170596391"/>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.426737170596391"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>rocket_gun_hit01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="744405068"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="rocket_gun_hit01" ID="{D32D964D-24BA-4812-B1FC-D43995B0BF6B}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="props" ID="{84AC5DAC-9BF0-4738-845B-9E22EC658643}" ShortID="294272627">
 							<ChildrenList>
 								<RandomSequenceContainer Name="barrel_explosion" ID="{1100DA39-0E45-4BE3-9151-9E5666028B55}" ShortID="363715288">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
 										<Property Name="RandomOrSequence" Type="int16" Value="0"/>
 									</PropertyList>
@@ -2014,7 +2189,7 @@
 								</RandomSequenceContainer>
 								<RandomSequenceContainer Name="explosions" ID="{4923C52D-993E-42E7-B866-C47637F1C317}" ShortID="904487592">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>11</Value>
@@ -2260,6 +2435,9 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="shop_interaction" ID="{5201486E-E13B-4BE1-B78E-59D1FCF0E358}" ShortID="551168985">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -2282,6 +2460,9 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="spaceship-cruising-ufo-7176" ID="{D5C3A39B-2A43-4049-AE42-7EF0EF470163}" ShortID="461243459">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -2305,7 +2486,7 @@
 								</Sound>
 								<Sound Name="hologram" ID="{82A68817-0BFA-41FF-AD9B-58D24B424B50}" ShortID="906634085">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
@@ -2344,7 +2525,7 @@
 								</Sound>
 								<Sound Name="vantiladores" ID="{D5239940-C275-4B22-8AF7-C731DE65FD89}" ShortID="417265098">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
@@ -2384,7 +2565,7 @@
 								</Sound>
 								<Sound Name="containers" ID="{C23E39CB-3002-4BE6-B722-574833876D8A}" ShortID="82732805">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
@@ -2664,7 +2845,7 @@
 							<ChildrenList>
 								<Sound Name="sentinel_hit" ID="{B7D5C983-87D7-40CF-A77A-EF1F68EB945A}" ShortID="1061724965">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-4</Value>
@@ -2704,7 +2885,7 @@
 								</Sound>
 								<Sound Name="sentinel_spawn" ID="{643507BC-03DF-4159-B80A-40A70810DCA5}" ShortID="509573937">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
 												<Value>-4</Value>
@@ -2741,7 +2922,7 @@
 							<ChildrenList>
 								<Sound Name="subjugator_attack" ID="{66B3D591-EDE6-4509-B5EE-9080E19EA5AD}" ShortID="67452226">
 									<PropertyList>
-										<Property Name="3DSpatialization" Type="int16" Value="2"/>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
 										<Property Name="Pitch" Type="int32">
 											<ModifierList>
 												<ModifierInfo>
@@ -3142,7 +3323,7 @@
 									<ChildrenList>
 										<Sound Name="laserThick" ID="{DD3422DE-8E60-4AC2-B8A0-B7541C83DD7C}" ShortID="235016737">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-10</Value>
@@ -3181,7 +3362,7 @@
 										</Sound>
 										<Sound Name="cluster_ball" ID="{7C011009-2B6E-4299-A4BA-2D1EC1ED5C5A}" ShortID="143246932">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-7</Value>
@@ -3226,7 +3407,7 @@
 										</Sound>
 										<Sound Name="smash" ID="{C911BA39-583C-4352-A5A4-0789C8FA0C9D}" ShortID="953178846">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-5</Value>
@@ -3271,7 +3452,7 @@
 										</Sound>
 										<Sound Name="cluster_ball_explosion" ID="{B3A04584-278C-49BC-8D0B-1011DB64EAD1}" ShortID="597452486">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Attenuation">
@@ -3304,7 +3485,7 @@
 										</Sound>
 										<Sound Name="normal_bullet" ID="{8D1A7209-7506-42DA-B70F-3C5EBFF7FDF3}" ShortID="263454316">
 											<PropertyList>
-												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="3DSpatialization" Type="int16" Value="1"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
 														<Value>-8</Value>

@@ -926,9 +926,15 @@ namespace Wiwa
 		matShader->SetMVP(transform, camera->getView(), camera->getProjection());
 
 		SetUpLight(matShader, camera, directional, pointLights, spotLights);
-
-		camera->shadowBuffer->BindTexture();
-		material->Bind(GL_TEXTURE1);
+		if (shadowRecieve)
+		{
+			camera->shadowBuffer->BindTexture();
+			material->Bind(GL_TEXTURE1);
+		}
+		else
+		{
+			material->Bind();
+		}
 		mesh->Render();
 
 		material->UnBind();
