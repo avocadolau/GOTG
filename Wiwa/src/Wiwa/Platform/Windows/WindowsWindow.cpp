@@ -62,7 +62,12 @@ namespace Wiwa {
 
 		//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, 1);
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		m_HiddenWindow = glfwCreateWindow(640, 480, "", nullptr, m_Window);
+
 		glfwMakeContextCurrent(m_Window);
+		
 		GLenum status = glewInit();
 
 		WI_CORE_INFO("Using Glew {0}", glewGetString(GLEW_VERSION));
@@ -187,6 +192,27 @@ namespace Wiwa {
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
 	}
+
+	void WindowsWindow::Bind()
+	{
+		glfwMakeContextCurrent(m_Window);
+	}
+
+	void WindowsWindow::BindExtra()
+	{
+		glfwMakeContextCurrent(m_HiddenWindow);
+	}
+
+	void WindowsWindow::Unbind()
+	{
+		glfwMakeContextCurrent(NULL);
+	}
+
+	void WindowsWindow::UnbindExtra()
+	{
+		glfwMakeContextCurrent(NULL);
+	}
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		if (enabled)

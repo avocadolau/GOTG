@@ -9,6 +9,7 @@ namespace Wiwa {
 	{
 	private:
 		GLFWwindow* m_Window;
+		GLFWwindow* m_HiddenWindow;
 
 		struct WindowData
 		{
@@ -38,6 +39,12 @@ namespace Wiwa {
 		inline uint32_t GetHeight() const override { return m_Data.Height; }
 		inline bool GetFullScreen() const override { return m_Fullscreen; }
 		inline bool GetResizable() const override { return m_Resizable; }
+
+		void Bind() override;
+		void BindExtra() override;
+
+		void Unbind() override;
+		void UnbindExtra() override;
 
 		//Window attributes 
 		virtual void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; };

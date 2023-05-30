@@ -81,6 +81,17 @@ namespace Wiwa {
 		Clear();
 	}
 
+	void CameraManager::GenerateBuffers()
+	{
+		size_t cameraCount = m_CamerasAlive.size();
+		for (size_t i = 0; i < cameraCount; i++)
+		{
+			CameraId cam_id = m_CamerasAlive[i];
+			
+			m_Cameras[cam_id]->GenerateBuffers();
+		}
+	}
+
 	size_t CameraManager::CreateCamera()
 	{
 		Camera* cam = new Camera();
@@ -109,12 +120,12 @@ namespace Wiwa {
 
 		return cameraId;
 	}
-	size_t CameraManager::CreatePerspectiveCamera(const float fov, const float aspectRatio, const float nearPlaneDistance, const float farPlaneDistance)
+	size_t CameraManager::CreatePerspectiveCamera(const float fov, const float aspectRatio, const float nearPlaneDistance, const float farPlaneDistance, bool genbuffers)
 	{
 		CameraId cameraId = CreateCamera();
 
 		Camera* cam = getCamera(cameraId);
-		cam->SetPerspective(fov, aspectRatio, nearPlaneDistance, farPlaneDistance);
+		cam->SetPerspective(fov, aspectRatio, nearPlaneDistance, farPlaneDistance, genbuffers);
 		
 		return cameraId;
 	}

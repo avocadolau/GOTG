@@ -38,6 +38,10 @@ namespace Wiwa {
 		static int m_LoadFlags;
 		static std::atomic<bool> m_LoadedScene;
 		static std::thread m_LoadThread;
+		static std::thread m_LoadScreenThread;
+
+		static void LoadSceneJob(Wiwa::Scene* scene, Wiwa::Memory& scene_data);
+		static void LoadingScreenJob();
 	public:
 		enum LoadFlags {
 			// Unloads current scene

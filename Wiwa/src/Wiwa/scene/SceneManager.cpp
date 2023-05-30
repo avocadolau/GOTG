@@ -27,6 +27,7 @@ namespace Wiwa
 
 	std::atomic<bool> SceneManager::m_LoadedScene = false;
 	std::thread SceneManager::m_LoadThread;
+	std::thread SceneManager::m_LoadScreenThread;
 
 	void SceneManager::Awake()
 	{
@@ -83,6 +84,7 @@ namespace Wiwa
 	SceneId SceneManager::CreateScene()
 	{
 		Scene *sc = new Scene();
+		sc->Start();
 
 		SceneId scene_id;
 
@@ -431,7 +433,7 @@ namespace Wiwa
 
 			if (camtype == Wiwa::Camera::CameraType::PERSPECTIVE)
 			{
-				cam_id = cm.CreatePerspectiveCamera(fov, ar, nplane, fplane);
+				cam_id = cm.CreatePerspectiveCamera(fov, ar, nplane, fplane, false);
 			}
 			else
 			{
@@ -551,6 +553,44 @@ namespace Wiwa
 	bool SceneManager::_saveSceneImpl(Scene* scene, Memory& scene_data)
 	{
 		return false;
+	}
+
+	void SceneManager::LoadSceneJob(Wiwa::Scene* scene, Wiwa::Memory& scene_data)
+	{
+		// Bind extra context for loading
+		Wiwa::Application::Get().GetWindow().BindExtra();
+
+		std::filesystem::path path = m_LoadPath;
+
+		scene->ChangeName(path.filename().stem().string().c_str());
+
+		scene->GetEntityManager().SetInitSystemsOnApply(!(m_LoadFlags & LOAD_NO_INIT));
+		scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+		scene->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
+
+		// Load Physics Manager json Data
+		scene->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
+
+		// Load actual scene
+		_loadSceneImpl(scene, scene_data);
+
+		// Unbind extra context
+		Wiwa::Application::Get().GetWindow().UnbindExtra();
+
+		m_LoadedScene = true;
+	}
+
+	void SceneManager::LoadingScreenJob()
+	{
+		// Bind context to this thread
+		Wiwa::Application::Get().GetWindow().Bind();
+
+		while (!m_LoadedScene) {
+			std::cout << "Loading..." << std::endl;
+		}
+
+		// Unbind context from this thread
+		Wiwa::Application::Get().GetWindow().Unbind();
 	}
 
 	void SceneManager::SaveScene(SceneId scene_id, const char *scene_path)
@@ -826,21 +866,34 @@ namespace Wiwa
 
 		if (memblock)
 		{
-			Scene* sc = m_Scenes[sceneid];
-			std::filesystem::path path = scene_path;
-
-			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
-
-			// Load Physics Manager json Data
-			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
+			m_LoadFlags = flags;
+			m_LoadPath = scene_path;
 
 			Memory scene_data(memblock, size);
 
-			_loadSceneImpl(sc, scene_data);
+			Scene* sc = m_Scenes[sceneid];
 
-			sc->ChangeName(path.filename().stem().string().c_str());
+			Wiwa::Resources::setGenBuffersOnLoad(false);
+
+			// Unbind from main thread
+			Wiwa::Application::Get().GetWindow().Unbind();
+
+
+			// Begin loading scene in jobs
+			m_LoadedScene = false;
+			m_LoadThread = std::thread(&SceneManager::LoadSceneJob, sc, scene_data);
+			m_LoadScreenThread = std::thread(&SceneManager::LoadingScreenJob);
+			
+			// Wait till loaded
+			m_LoadThread.join();
+			m_LoadScreenThread.join();
+
+			// Re-bind window to main thread
+			Wiwa::Application::Get().GetWindow().Bind();
+
+			Wiwa::Resources::setGenBuffersOnLoad(true);
+
+			sc->Start();
 
 			if (flags & LOAD_SEPARATE)
 			{

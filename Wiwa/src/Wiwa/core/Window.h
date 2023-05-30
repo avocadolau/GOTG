@@ -33,6 +33,18 @@ namespace Wiwa {
 		virtual bool GetFullScreen() const = 0;
 		virtual bool GetResizable() const = 0;
 
+		// Binds window to current thread
+		virtual void Bind() = 0;
+
+		// Binds extra context to current thread
+		virtual void BindExtra() = 0;
+
+		// Unbinds window from current thread
+		virtual void Unbind() = 0;
+
+		// Unbinds extra context from current thread
+		virtual void UnbindExtra() = 0;
+
 		//Window atributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;

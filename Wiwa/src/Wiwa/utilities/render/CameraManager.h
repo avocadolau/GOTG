@@ -27,6 +27,8 @@ namespace Wiwa{
 		void Clear();
 		void CleanUp();
 
+		void GenerateBuffers();
+
 		void setActiveCamera(CameraId cameraId) { m_ActiveCamera = cameraId; RenderManager::SetLayerCamera(0, m_Cameras[cameraId]); }
 
 		CameraId getActiveCameraId() { return m_ActiveCamera; }
@@ -35,7 +37,7 @@ namespace Wiwa{
 		size_t getCameraSize() { return m_CamerasAlive.size(); }
 
 		size_t CreateCamera();
-		size_t CreatePerspectiveCamera(const float fov, const float aspectRatio, const float nearPlaneDistance = 0.1f, const float farPlaneDistance = 100.0f);
+		size_t CreatePerspectiveCamera(const float fov, const float aspectRatio, const float nearPlaneDistance = 0.1f, const float farPlaneDistance = 100.0f, bool genbuffers=true);
 		void DestroyCamera(CameraId cameraId);
 		Camera* getCamera(CameraId cameraId) { return m_Cameras[cameraId]; }
 		std::vector<CameraId>& getCameras() { return m_CamerasAlive; }

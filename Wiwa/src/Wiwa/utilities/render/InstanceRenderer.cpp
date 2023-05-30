@@ -10,7 +10,11 @@
 #include <glew.h>
 
 namespace Wiwa {
-	InstanceRenderer::InstanceRenderer(uint32_t maxInstances) : m_MaxInstances(maxInstances)
+	InstanceRenderer::InstanceRenderer(uint32_t maxInstances) :
+		m_MaxInstances(maxInstances),
+		m_InstanceCount(0),
+		m_InstanceVertex(nullptr),
+		m_GeneratedBuffers(false)
 	{
 	}
 
@@ -24,23 +28,11 @@ namespace Wiwa {
 		delete[] m_InstanceVertex;
 	}
 
-	void InstanceRenderer::Init(const char* shader_path)
+	void InstanceRenderer::GenerateBuffers()
 	{
-		Application& app = Application::Get();
+		if (m_GeneratedBuffers) return;
 
-		// Load shader
-		// TODO: Use shader pipeline
-		//m_InstanceShaderId = Resources::Load<Shader>(shader_path);
-		//m_InstanceShader = new Shader();//Resources::GetResourceById<Shader>(m_InstanceShaderId);
-		m_InstanceShader.Init(shader_path);
-
-		m_InstanceShader.Bind();
-		uint32_t texs_id = GL(GetUniformLocation(m_InstanceShader.getID(), "u_Textures"));
-
-		// Set samplers id
-		int samplers[MAX_INSTANCE_TEXTURES];
-		for (int i = 0; i < MAX_INSTANCE_TEXTURES; i++) samplers[i] = i;
-		GL(Uniform1iv(texs_id, MAX_INSTANCE_TEXTURES, samplers));
+		m_GeneratedBuffers = true;
 
 		// Vertex quad	
 		float verticesInstancedTexture[] = {
@@ -120,13 +112,30 @@ namespace Wiwa {
 		GL(EnableVertexAttribArray(12));
 		GL(VertexAttribPointer(12, 1, GL_FLOAT, GL_FALSE, sizeof(VertexInstanceTexture), (void*)(19 * sizeof(float))));
 		GL(VertexAttribDivisor(12, 1));
+	}
+
+	void InstanceRenderer::Init(const char* shader_path)
+	{
+		Application& app = Application::Get();
+
+		// Load shader
+		// TODO: Use shader pipeline
+		//m_InstanceShaderId = Resources::Load<Shader>(shader_path);
+		//m_InstanceShader = new Shader();//Resources::GetResourceById<Shader>(m_InstanceShaderId);
+		m_InstanceShader.Init(shader_path);
+
+		m_InstanceShader.Bind();
+		uint32_t texs_id = GL(GetUniformLocation(m_InstanceShader.getID(), "u_Textures"));
+
+		// Set samplers id
+		int samplers[MAX_INSTANCE_TEXTURES];
+		for (int i = 0; i < MAX_INSTANCE_TEXTURES; i++) samplers[i] = i;
+		GL(Uniform1iv(texs_id, MAX_INSTANCE_TEXTURES, samplers));
 
 		m_InstanceVertex = new VertexInstanceTexture[m_MaxInstances];
 
 		m_OrthoLocation = m_InstanceShader.getUniformLocation("u_Proj");
 		m_ViewLocation = m_InstanceShader.getUniformLocation("u_View");
-
-		m_InstanceCount = 0;
 
 		m_InstanceShader.UnBind();
 	}
