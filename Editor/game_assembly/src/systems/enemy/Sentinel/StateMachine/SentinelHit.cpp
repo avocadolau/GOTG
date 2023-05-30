@@ -6,6 +6,7 @@
 #include <Wiwa/ecs/systems/MeshRenderer.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/components/Mesh.h>
+#include <Wiwa/ecs/components/HitComponent.h>
 #include <Wiwa/utilities/render/Material.h>
 namespace Wiwa
 {
@@ -20,12 +21,11 @@ namespace Wiwa
 	void SentinelHitState::EnterState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
-		if (mat)
+		Wiwa::HitComponent* hc = em.GetComponent<HitComponent>(enemy->GetEntity());
+		if (hc)
 		{
-			mat->SetUniformData("u_Hit", true);
+			hc->Hit = true;
 		}
-		enemy->m_AnimatorSys->Update();
 		enemy->m_AudioSys->PlayAudio("sentinel_hit");
 		enemy->m_AnimatorSys->PlayAnimation("hit"); //AnimacionSentinel
 	}
@@ -42,10 +42,10 @@ namespace Wiwa
 	void SentinelHitState::ExitState(EnemySentinel* enemy)
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
-		Wiwa::Material* mat = Resources::GetResourceById<Material>(enemy->m_AnimatorSys->getAnimator()->GetMaterial());
-		if (mat)
+		Wiwa::HitComponent* hc = em.GetComponent<HitComponent>(enemy->GetEntity());
+		if (hc)
 		{
-			mat->SetUniformData("u_Hit", false);
+			hc->Hit = false;
 		}
 	}
 

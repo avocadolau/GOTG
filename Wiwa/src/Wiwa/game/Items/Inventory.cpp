@@ -410,7 +410,7 @@ void Wiwa::Inventory::Update()
 				else
 					m_Buffs[1]->CurrentTime += Time::GetDeltaTimeSeconds();
 
-				if (Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
+				if (Input::IsKeyPressed(Key::F) || Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY))
 				{
 					WI_CORE_INFO("Buff 2 activated");
 					UseBuff(1);

@@ -19,7 +19,7 @@ void Wiwa::EndRoomTrigger::OnUpdate()
 	if (!m_Activated)
 		return;
 
-	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY)
+	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)
 		|| Wiwa::Input::IsKeyPressed(Key::Enter))
 	{
 		GameStateManager::setPlayerTriggerNextRoom(true);
