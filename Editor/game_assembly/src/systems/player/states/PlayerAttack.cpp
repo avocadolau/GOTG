@@ -56,7 +56,6 @@ void Wiwa::PlayerAttack::UpdateState()
 			FireStarlordUltimate();
 		else if (GameStateManager::s_CurrentCharacter == 1)
 			FireRocketUltimate();
-
 	}
 
 	if (m_StateMachine->CanMove())

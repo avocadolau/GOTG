@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{F607438B-7B42-0383-DCF4-63BE226FECC4}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{AA08BDDA-3AC1-65D9-C46E-3AAEFE365A06}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -198,7 +198,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{25919A0C-FF0C-3788-3833-0700F4651C1B}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{7C44AD22-A560-B6E7-92D7-EA5A46860F8C}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -842,7 +842,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{69818127-E4C2-9708-9778-A4EB53C8256C}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{DDF0E1E9-45B3-D68D-E437-961EFE4189A2}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -1056,7 +1056,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{0211143B-8798-E476-E52D-0A36657297EA}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{39532A47-191F-D636-4F22-B369C6A72815}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1125,5 +1125,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{7275AFC9-A7F3-E14D-B6D5-418C849EE091}</FileHash>
+	<FileHash>{8B90BB22-5AA7-C00A-E686-C13548C8CFA9}</FileHash>
 </SoundBanksInfo>

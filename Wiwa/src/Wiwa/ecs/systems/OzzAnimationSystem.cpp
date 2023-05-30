@@ -21,6 +21,7 @@ namespace Wiwa {
 	{
 		m_TransformIt = { WI_INVALID_INDEX, WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_AnimatorIt = { WI_INVALID_INDEX, WI_INVALID_INDEX, WI_INVALID_INDEX };
+		m_HitIt = { WI_INVALID_INDEX, WI_INVALID_INDEX, WI_INVALID_INDEX };
 		m_Animator = nullptr;
 	}
 
@@ -62,7 +63,6 @@ namespace Wiwa {
 			if (mat)
 			{
 				mat->SetUniformData("u_Hit", hit->Hit);
-				WI_INFO("hit: {0}", hit->Hit);
 			}
 		}
 

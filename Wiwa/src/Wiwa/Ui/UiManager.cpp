@@ -37,9 +37,6 @@ namespace Wiwa
 	{
 		m_Scene = scene;
 		font = "library/Fonts/CarterOne_Regular.ttf";
-		//InitFont("assets/arial.ttf");
-		//Test remove once done
-		//InitFont("assets/arial.ttf","prueba1");
 		return true;
 	}
 
@@ -812,9 +809,10 @@ namespace Wiwa
 	
 	void GuiManager::LoadWiUI(const char* path)
 	{
-		if (!Wiwa::FileSystem::Exists(path)) return;
-
-		File file = Wiwa::FileSystem::Open(path, FileSystem::OM_IN | FileSystem::OM_BINARY);
+		 std::string _libPath = Wiwa::Resources::_assetToLibPath(path);
+		if (!Wiwa::FileSystem::Exists(_libPath.c_str())) return;
+		
+		File file = Wiwa::FileSystem::Open(_libPath.c_str(), FileSystem::OM_IN | FileSystem::OM_BINARY);
 
 		if (file.IsOpen()) {
 			_loadGUIImpl(file);
@@ -838,6 +836,14 @@ namespace Wiwa
 				return canvaSelected;
 			}
 		}		
+	}
+	void GuiManager::SetCurrentPrefabWiGui(const char* currentPrefab)
+	{
+		if (currentPrefab != NULL)
+		{
+			std::string prefab = currentPrefab;
+			PrefabWiGui = prefab;
+		}
 	}
 	bool GuiManager::_loadGUIImpl(Wiwa::File& File)
 	{

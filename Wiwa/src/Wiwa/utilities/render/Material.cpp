@@ -176,7 +176,14 @@ namespace Wiwa {
 
 						Image* img = Resources::GetResourceById<Image>(sdata.resource_id);
 						sdata.tex_id = img->GetTextureId();
-
+						
+						uniform->setData(sdata, uniform->getType());
+						
+					}
+					else
+					{
+						sdata.tex_id = -1;
+						sdata.resource_id = -1;
 						uniform->setData(sdata, uniform->getType());
 					}
 				}break;

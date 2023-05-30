@@ -137,11 +137,11 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 	}
 	else if (CurrentHUD == ShopHUD)
 	{
-		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY))
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 		{
 			buyItem = true;
 		}
-		if (buyItem && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadY))
+		if (buyItem && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA))
 		{
 			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
 			{
