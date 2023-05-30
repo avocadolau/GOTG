@@ -63,11 +63,13 @@ namespace Wiwa {
 		}break;
 		case Wiwa::UniformType::Sampler2D:
 		{
-			GL(ActiveTexture(textureId));
-			GL(BindTexture(GL_TEXTURE_2D, ((SamplerData*)m_Data)->tex_id));
-			GL(Uniform1i(m_UniformID, textureId - GL_TEXTURE0));
-			textureId++;
-
+			if (((SamplerData*)m_Data)->tex_id > 0)
+			{
+				GL(ActiveTexture(textureId));
+				GL(BindTexture(GL_TEXTURE_2D, ((SamplerData*)m_Data)->tex_id));
+				GL(Uniform1i(m_UniformID, textureId - GL_TEXTURE0));
+				textureId++;
+			}
 		}break;
 		default:
 			break;
@@ -112,8 +114,12 @@ namespace Wiwa {
 			setData(0.0f, m_Type);
 			break;
 		case Wiwa::UniformType::Sampler2D:
-			setData(SamplerData{}, m_Type);
-			break;
+		{
+			SamplerData data;
+			data.tex_id = -1;
+			data.resource_id = -1;
+			setData(data, m_Type);
+		}break;
 		default:
 			break;
 		}

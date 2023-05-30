@@ -32,7 +32,7 @@ namespace Wiwa {
 	public:
 
 		struct SamplerData {
-			uint32_t tex_id;
+			size_t tex_id;
 			size_t resource_id;
 			char tex_path[256];
 		};
