@@ -552,6 +552,28 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Event Name="rocket_shot" ID="{2E28DC9B-B07A-4027-B1F3-944C9A0D7D2B}">
+							<ChildrenList>
+								<Action Name="" ID="{697C69B5-0040-4E87-88B7-6F59F3FE580E}" ShortID="112199397">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="rocket_shot" ID="{3FF8F164-6242-45A2-98DD-BA574F66A763}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="bullet_hit" ID="{EDBEC698-31EC-4EA7-8828-14D323D82A67}">
+							<ChildrenList>
+								<Action Name="" ID="{713A2F7D-DF00-42AA-A22B-30B05F33D577}" ShortID="382333887">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="bullet_hit" ID="{8D9487D8-8814-4B0A-914B-F7A0D857ADE1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">

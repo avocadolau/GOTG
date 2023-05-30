@@ -1,6 +1,7 @@
 #include "StarLordBullet.h"
 #include "../../components/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "Wiwa/ecs/systems/AudioSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 #include "../../components/attack/Attack.h"
 
@@ -23,7 +24,6 @@ namespace Wiwa
 	{
 		m_AttackIt = GetComponentIterator<Attack>();
 		m_BulletIt = GetComponentIterator<SimpleBullet>();
-
 		Attack* attack = GetComponentByIterator<Attack>(m_AttackIt);
 		if (attack)
 		{
@@ -87,6 +87,17 @@ namespace Wiwa
 				SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 				GameStateManager::DamagePlayer(bullet->damage);
 			}*/
+			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			Wiwa::AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+			if (audio)
+			{
+				audio->PlayAudio("bullet_hit");
+			}
+			else {
+				WI_ERROR("Couldn't get audio system: starlord bullet");
+			}
+
+
 			SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 			if (bullet->isFromPool)
 				GameStateManager::s_PoolManager->s_StarLordBullets->ReturnToPool(m_EntityId);
