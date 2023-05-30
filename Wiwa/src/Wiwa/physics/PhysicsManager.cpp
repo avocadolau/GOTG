@@ -559,7 +559,7 @@ namespace Wiwa {
 			Camera* camera = m_Scene->GetCameraManager().editorCamera;
 			if (camera->drawBoundingBoxes)
 			{
-				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+				GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 				camera->frameBuffer->Bind(false);
 
 				m_Debug_draw->lineDisplayShader->Bind();
@@ -579,7 +579,7 @@ namespace Wiwa {
 				return;
 			if (camera->drawBoundingBoxes)
 			{
-				glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+				GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 				camera->frameBuffer->Bind(false);
 
 				m_Debug_draw->lineDisplayShader->Bind();
@@ -635,7 +635,7 @@ namespace Wiwa {
 
 		if (camera->drawBoundingBoxes)
 		{
-			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+			GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 			camera->frameBuffer->Bind(false);
 			m_Debug_draw->lineDisplayShader->Bind();
 			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
@@ -667,7 +667,7 @@ namespace Wiwa {
 
 		if (camera->drawBoundingBoxes)
 		{
-			glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+			GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 			camera->frameBuffer->Bind(false);
 			m_Debug_draw->lineDisplayShader->Bind();
 			m_Debug_draw->lineDisplayShader->setUniformMat4(m_Debug_draw->lineDisplayShaderUniforms.Model, glm::mat4(1.0f));
@@ -738,9 +738,9 @@ namespace Wiwa {
 
 DebugDrawer::~DebugDrawer()
 {
-	glDeleteVertexArrays(1, &m_Vao);
-	glDeleteBuffers(1, &m_Vbo);
-	glDeleteBuffers(1, &m_Ebo);
+	GL(DeleteVertexArrays(1, &m_Vao));
+	GL(DeleteBuffers(1, &m_Vbo));
+	GL(DeleteBuffers(1, &m_Ebo));
 }
 
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
@@ -789,37 +789,38 @@ int DebugDrawer::getDebugMode() const
 void DebugDrawer::Render()
 {
 	if (!m_Initialized) {
-		glGenBuffers(1, &m_Vbo);
-		glGenBuffers(1, &m_Ebo);
-		glGenVertexArrays(1, &m_Vao);
-		glBindVertexArray(m_Vao);
-		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBindVertexArray(0);
+		GL(GenBuffers(1, &m_Vbo));
+		GL(GenBuffers(1, &m_Ebo));
+		GL(GenVertexArrays(1, &m_Vao));
+		GL(BindVertexArray(m_Vao));
+		GL(BindBuffer(GL_ARRAY_BUFFER, m_Vbo));
+		GL(EnableVertexAttribArray(0));
+		GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0));
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo));
+		GL(BindVertexArray(0));
 		m_Initialized = true;
 		m_Dirty = true;
 	}
 
 
 	if (m_Dirty) {
-		glBindVertexArray(m_Vao);
-		glBindBuffer(GL_ARRAY_BUFFER, m_Vbo);
-		glBufferData(GL_ARRAY_BUFFER, m_LineVertices.size() * sizeof(GLfloat), m_LineVertices.data(), GL_DYNAMIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_LineIndices.size() * sizeof(GLuint), m_LineIndices.data(), GL_DYNAMIC_DRAW);
+		GL(BindVertexArray(m_Vao));
+		GL(BindBuffer(GL_ARRAY_BUFFER, m_Vbo));
+		GL(BufferData(GL_ARRAY_BUFFER, m_LineVertices.size() * sizeof(GLfloat), m_LineVertices.data(), GL_DYNAMIC_DRAW));
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ebo));
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER, m_LineIndices.size() * sizeof(GLuint), m_LineIndices.data(), GL_DYNAMIC_DRAW));
+		GL(BindVertexArray(0));
 		m_NumIndices = m_LineIndices.size();
 		m_LineVertices.clear();
 		m_LineIndices.clear();
 		m_Dirty = false;
 	}
 
-	glBindVertexArray(m_Vao);
-	glEnableVertexAttribArray(0);
-	glDrawElements(GL_LINES, m_NumIndices, GL_UNSIGNED_INT, 0);
-	glDisableVertexAttribArray(0);
-	glBindVertexArray(0);
+	GL(BindVertexArray(m_Vao));
+	GL(EnableVertexAttribArray(0));
+	GL(DrawElements(GL_LINES, m_NumIndices, GL_UNSIGNED_INT, 0));
+	GL(DisableVertexAttribArray(0));
+	GL(BindVertexArray(0));
 }
 
 

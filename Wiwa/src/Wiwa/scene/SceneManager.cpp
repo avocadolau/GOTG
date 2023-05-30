@@ -11,6 +11,8 @@
 #include <Wiwa/AI/AI_Crowd.h>
 #include <Wiwa/game/GameMusicManager.h>
 
+#include <glew.h>
+
 namespace Wiwa
 {
 	std::vector<Scene *> SceneManager::m_Scenes;
@@ -258,18 +260,18 @@ namespace Wiwa
 		GuiManager &gm = scene->GetGuiManager();
 		if (&gm)
 		{
-			const char* text;
 			char* textGui_c;
 			size_t textGuiLen;
 			scene_data.Read(&textGuiLen, sizeof(size_t));
-			textGui_c = new char[textGuiLen];
-			scene_data.Read(textGui_c, textGuiLen);
-			text = textGui_c;
-			delete[] textGui_c;
 
-			gm.SetCurrentPrefabWiGui(text);
-			if (text != NULL)
-				gm.LoadWiUI(text);
+			if (textGuiLen > 0) {
+				textGui_c = new char[textGuiLen];
+				scene_data.Read(textGui_c, textGuiLen);
+
+				gm.SetCurrentPrefabWiGui(textGui_c);
+
+				gm.LoadWiUI(textGui_c);
+			}
 		}
 		
 		//if (&gm)
@@ -602,7 +604,15 @@ namespace Wiwa
 		Wiwa::Application::Get().GetWindow().Bind();
 
 		while (!m_LoadedScene) {
+			// Clear screen
+			GL(ClearColor(0.1f, 0.1f, 0.1f, 0.1f));
+			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+			// Render loading screen
 			std::cout << "Loading..." << std::endl;
+
+			// Swap buffers
+			Wiwa::Application::Get().GetWindow().OnUpdate();
 		}
 
 		// Unbind context from this thread

@@ -730,7 +730,7 @@ namespace Wiwa
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(clear);
 
@@ -785,7 +785,7 @@ namespace Wiwa
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(clear);
 
@@ -850,7 +850,7 @@ namespace Wiwa
 			camera = SceneManager::getActiveScene()->GetCameraManager().getActiveCamera();
 		}
 
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(clear);
 
@@ -1412,22 +1412,22 @@ namespace Wiwa
 			GL(Disable(GL_DEPTH_TEST));
 			break;
 		case Wiwa::Renderer3D::CULL_FACE:
-			glDisable(GL_CULL_FACE);
+			GL(Disable(GL_CULL_FACE));
 			break;
 		case Wiwa::Renderer3D::LIGHTING:
-			glDisable(GL_LIGHTING);
+			GL(Disable(GL_LIGHTING));
 			break;
 		case Wiwa::Renderer3D::COLOR_MATERIAL:
-			glDisable(GL_COLOR_MATERIAL);
+			GL(Disable(GL_COLOR_MATERIAL));
 			break;
 		case Wiwa::Renderer3D::TEXTURE_2D:
-			glDisable(GL_TEXTURE_2D);
+			GL(Disable(GL_TEXTURE_2D));
 			break;
 		case Wiwa::Renderer3D::WIREFRAME:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			GL(PolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 			break;
 		case Wiwa::Renderer3D::GAMMA_CORRECTION:
-			glDisable(GL_FRAMEBUFFER_SRGB);
+			GL(Disable(GL_FRAMEBUFFER_SRGB));
 			break;
 		default:
 			break;
@@ -1439,7 +1439,7 @@ namespace Wiwa
 	void Renderer3D::RenderFrustrums()
 	{
 		Camera *camera = SceneManager::getActiveScene()->GetCameraManager().editorCamera;
-		glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 		camera->frameBuffer->Bind(false);
 
 		/*GL(MatrixMode(GL_PROJECTION));
@@ -1582,9 +1582,9 @@ namespace Wiwa
 
 			m_DepthShader->setUniform(m_DepthShaderUniforms.Model, transform);
 
-			glCullFace(GL_FRONT);
+			GL(CullFace(GL_FRONT));
 			mesh->Render();
-			glCullFace(GL_BACK); // don't forget to reset original culling face
+			GL(CullFace(GL_BACK)); // don't forget to reset original culling face
 			m_DepthShader->UnBind();
 			camera->shadowBuffer->Unbind();
 		}

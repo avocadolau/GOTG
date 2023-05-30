@@ -184,8 +184,9 @@ namespace Wiwa
 
 			Time::Update();
 			// Clear main window
-			glClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
+			GL(ClearColor(m_RenderColor.r, m_RenderColor.g, m_RenderColor.b, m_RenderColor.a));
+			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 			
 			// Update scene manager
 			SceneManager::ModuleUpdate();

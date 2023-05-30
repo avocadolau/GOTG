@@ -116,6 +116,10 @@ namespace Wiwa {
 
 	void InstanceRenderer::Bind()
 	{
+		if (!m_GeneratedBuffers) {
+			GenerateBuffers();
+		}
+
 		GL(BindVertexArray(m_VAO));
 	}
 
