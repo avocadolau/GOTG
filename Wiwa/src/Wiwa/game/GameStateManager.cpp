@@ -676,10 +676,17 @@ namespace Wiwa
 
 	int GameStateManager::RandomizeRewardRoom()
 	{
+		uint32_t lastRoom = 0;
 		for (size_t i = 0; i < 2; i++)
 		{
 			std::uniform_int_distribution<> dist(0,  100);
-			uint32_t randomNum = dist(Application::s_Gen);
+			
+			uint32_t randomNum = 0;
+			do {
+				randomNum = dist(Application::s_Gen);
+			} while (randomNum == lastRoom);
+			
+			lastRoom = randomNum;
 			uint32_t counter = 0;
 			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
 				s_DoorsReward[i] = 0;
