@@ -25,7 +25,6 @@ namespace Wiwa {
 	
 		void OnDestroy() override;
 
-		void OnEnabledFromPool() override;
 
 		void OnSystemAdded() override;
 	};

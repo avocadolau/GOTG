@@ -97,14 +97,14 @@ namespace Wiwa {
 		if (m_Animator) delete m_Animator;
 	}
 
-	bool OzzAnimationSystem::OnEnabledFromPool()
+	/*bool OzzAnimationSystem::OnEnabledFromPool()
 	{
 		m_TransformIt = GetComponentIterator<Wiwa::Transform3D>();
 		m_AnimatorIt = GetComponentIterator<Wiwa::OzzAnimatorCmp>();
 		m_HitIt = GetComponentIterator<Wiwa::HitComponent>();
 
 		return true;
-	}
+	}*/
 
 	void OzzAnimationSystem::OnSystemAdded()
 	{

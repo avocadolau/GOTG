@@ -72,4 +72,7 @@ public:
 	float animSpeed = 0;
 	std::vector<Wiwa::Rect2i> animationRects;
 	EditorLayer* m_Instance;
+
+
+	std::string currentWiPrefabScene;
 };

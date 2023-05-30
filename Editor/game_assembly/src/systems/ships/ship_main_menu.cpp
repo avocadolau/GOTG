@@ -75,12 +75,12 @@ void Wiwa::ShipMainMenu::OnUpdate()
 
 	if (m_SceneChange)
 	{
-		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadY))
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA))
 		{
 			m_GlFWeskk = true;
 			WI_INFO("PRESSED");
 		}
-		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadY) && m_GlFWeskk)
+		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
 		{
 			Wiwa::GameStateManager::RandomizeRewardRoom();
 			Wiwa::SceneManager::ChangeSceneByIndex(4);
