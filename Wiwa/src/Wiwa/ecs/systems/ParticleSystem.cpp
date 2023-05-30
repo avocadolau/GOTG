@@ -858,12 +858,32 @@ namespace Wiwa {
 
 			if (camera->cull && !camera->frustrum.IsBoxVisible(m_Model->boundingBox.getMin(), m_Model->boundingBox.getMax()))
 				return;
-			r3d.RenderMesh(m_Model, particle.transform.worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+			r3d.RenderMesh(
+				m_Model,
+				particle.transform.worldMatrix, m_Material,
+				lman.GetDirectionalLight(),
+				lman.GetPointLights(),
+				lman.GetSpotLights(),
+				false,
+				true,
+				false, 
+				camera
+			);
 			
 		}
 		if (man.editorCamera)
 		{
-			r3d.RenderMesh(m_Model, particle.transform.worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
+			r3d.RenderMesh(
+				m_Model, 
+				particle.transform.worldMatrix, m_Material, 
+				lman.GetDirectionalLight(),
+				lman.GetPointLights(),
+				lman.GetSpotLights(),
+				false,
+				true,
+				false,
+				man.editorCamera
+			);
 		}
 
 		GL(ActiveTexture(GL_TEXTURE0));
