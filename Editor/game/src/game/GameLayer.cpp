@@ -73,6 +73,7 @@ void GameLayer::OnAttach()
 	Wiwa::Time::SetTargetFPS(60);
 	Wiwa::Time::SetTimeScale(1);
 	Wiwa::Application::Get().GetWindow().SetVSync(false);
+	Wiwa::Application::Get().GetWindow().SetFullScreen(true);
 	Wiwa::Application::Get().UnloadSceneResources = true;
 	Wiwa::Application::Get().FinishedImport = true;
 
