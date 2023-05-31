@@ -3,6 +3,17 @@
 
 namespace Wiwa {
 	class BossUltronDeathState : public BossUltronBaseState {
+
+		enum class DeathState {
+			DEATH_INIT,
+			DEATH_INIT_EXPLOSION_1,
+			DEATH_INIT_EXPLOSION_2,
+			DEATH_INIT_EXPLOSION_3,
+			DEATH_EXPLOSIONS,
+			DEATH_TALK,
+			DEATH_FINISH
+		};
+
 	public:
 		BossUltronDeathState();
 		~BossUltronDeathState();
@@ -12,7 +23,23 @@ namespace Wiwa {
 		void ExitState(BossUltron* enemy) override;
 		void OnCollisionEnter(BossUltron* enemy, const Object* body1, const Object* body2) override;
 
-		const float m_TimeToDie = 6.0f;
-		float m_TimerToDie;
+	private:
+
+		EntityId SpawnRandomExplosion(BossUltron* enemy);
+
+		glm::vec3 GetExplosionPosition(const glm::vec3& center, float distance, float maxDistance);
+
+		DeathState m_DeathState;
+
+		const char* m_DeathExplosionPath1;
+		const char* m_DeathExplosionPath2;
+		const char* m_DeathExplosionPath3;
+
+		std::vector<EntityId> m_DeathExplosionIds;
+
+		EntityId m_DeathExplosionId;
+	
+		float m_TimerDeathExplosions = 0.0f;
+		float m_DeathTimer = 0.0f;
 	};
 }

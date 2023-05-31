@@ -39,10 +39,6 @@ void Wiwa::RainProjectileSystem::InitRainProjectileBullet()
 
 	physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 
-	/*m_BulletSpeedStored = bullet->velocity;
-	bullet->lifeTime += RAIN_BULLET_WAITINGTIME;
-
-	bullet->velocity = 0.0f;*/
 }
 
 void Wiwa::RainProjectileSystem::OnUpdate()
