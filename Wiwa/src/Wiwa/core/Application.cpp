@@ -100,6 +100,8 @@ namespace Wiwa
 
 		RenderManager::Init(m_TargetResolution.w, m_TargetResolution.h);
 
+		SceneManager::ModuleInit();
+
 		Input::Init();
 
 		bool res = Audio::Init();
