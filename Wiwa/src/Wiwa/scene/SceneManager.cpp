@@ -28,6 +28,7 @@ namespace Wiwa
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
 	std::atomic<bool> SceneManager::m_LoadedScene = false;
+	std::atomic<int> SceneManager::m_LoadingProgress = 0;
 	std::thread SceneManager::m_LoadThread;
 	std::thread SceneManager::m_LoadScreenThread;
 
@@ -273,6 +274,8 @@ namespace Wiwa
 			}
 		}
 
+		m_LoadingProgress += 1; // 2
+
 		isLoadingScene = true;
 
 		// Load cameras
@@ -345,6 +348,8 @@ namespace Wiwa
 			camera->setRotation(rot);
 		}
 
+		m_LoadingProgress += 2; // 4
+
 		// Load audio
 		bool loaded_audio;
 
@@ -408,6 +413,8 @@ namespace Wiwa
 			}
 		}
 
+		m_LoadingProgress += 3; // 7		
+
 		// Load entities
 		EntityManager &em = scene->GetEntityManager();
 
@@ -425,6 +432,8 @@ namespace Wiwa
 		{
 			LoadEntity(scene_data, i, em, true);
 		}
+
+		m_LoadingProgress += 5; // 12
 
 		isLoadingScene = false;
 
@@ -452,6 +461,8 @@ namespace Wiwa
 		// Load Physics Manager json Data
 		scene->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
+		m_LoadingProgress += 1;
+
 		// Load actual scene
 		_loadSceneImpl(scene, scene_data);
 
@@ -467,12 +478,15 @@ namespace Wiwa
 		Wiwa::Application::Get().GetWindow().Bind();
 
 		while (!m_LoadedScene) {
-			// Clear screen
-			GL(ClearColor(0.1f, 0.1f, 0.1f, 0.1f));
-			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
 			// Render loading screen
-			
+			int progress = m_LoadingProgress;
+
+			float progperc = progress / 12.0f;
+			float color = 1.0f - progperc;
+
+			// Clear screen
+			GL(ClearColor(color, color, color, 1.0f));
+			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 			// Swap buffers
 			Wiwa::Application::Get().GetWindow().OnUpdate();
@@ -779,6 +793,7 @@ namespace Wiwa
 
 			// Begin loading scene in jobs
 			m_LoadedScene = false;
+			m_LoadingProgress = 0;
 			m_LoadThread = std::thread(&SceneManager::LoadSceneJob, sc, scene_data);
 			m_LoadScreenThread = std::thread(&SceneManager::LoadingScreenJob);
 			

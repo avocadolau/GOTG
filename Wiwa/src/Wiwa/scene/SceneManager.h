@@ -37,6 +37,7 @@ namespace Wiwa {
 		static std::string m_LoadPath;
 		static int m_LoadFlags;
 		static std::atomic<bool> m_LoadedScene;
+		static std::atomic<int> m_LoadingProgress;
 		static std::thread m_LoadThread;
 		static std::thread m_LoadScreenThread;
 
