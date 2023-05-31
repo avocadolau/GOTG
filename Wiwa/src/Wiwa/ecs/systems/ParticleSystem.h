@@ -147,11 +147,7 @@ namespace Wiwa
 		void DeactivateParticles();
 
 		//Restart the emitter;
-		void RestartEmitter()
-		{
-			DeactivateParticles();
-			SetTimer(0);
-		}
+		void RestartEmitter(float timer = 0.f);
 
 	private:
 
