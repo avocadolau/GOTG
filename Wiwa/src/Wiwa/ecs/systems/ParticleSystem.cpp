@@ -818,6 +818,23 @@ namespace Wiwa {
 		}
 	}
 
+	void ParticleSystem::RestartEmitter(float timer)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		
+		DeactivateParticles();
+		SetTimer(timer);
+
+		if (emitter->m_rangedTimeActive)
+		{
+			emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+		}
+		else
+		{
+			emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+		}
+	}
+
 	void ParticleSystem::OnDestroy()
 	{
 		m_Model = nullptr;
