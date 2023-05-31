@@ -1,1 +1,1 @@
-{"shader":"library/resources/shaders/vfx/justtexturealpha","uniforms":{"u_LifeTime":0.8768324851989746,"u_Color":{"r":0.9924700856208801,"g":0.9924700856208801,"b":0.9924700856208801,"a":0.12316751480102539},"u_Texture":"assets/textures/t_circle.png"}}
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":0.03672713041305542,"u_Color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_Texture":"library/textures/t_stepdash_base.dds"}}
