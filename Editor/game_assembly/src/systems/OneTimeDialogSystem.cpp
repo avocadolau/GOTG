@@ -26,7 +26,7 @@ namespace Wiwa
 
 	void OneTimeDialogSystem::OnUpdate()
 	{
-		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && colliding == true)
+		if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && colliding == true)
 		{
 			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
 			_scene->GetDialogManager().alreadyTalkedOnceTriggered = true;
