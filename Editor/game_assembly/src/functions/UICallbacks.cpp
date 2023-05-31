@@ -198,3 +198,9 @@ GoToHub_ GoToHub()
 	return GoToHub_();
 }
 
+GoToOutro_ GoToOutro()
+{
+	Wiwa::SceneManager::ChangeSceneByIndex(20);
+	return GoToOutro_();
+}
+
