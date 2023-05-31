@@ -20,6 +20,12 @@ namespace Wiwa {
 	private:
 		static std::vector<Scene*> m_Scenes;
 		static SceneId m_ActiveScene;
+		static Shader* m_Helper_Shader;
+		static Image* m_Image_Transition;
+		static uint32_t m_VAO;
+		static uint32_t m_VBO;
+		static uint32_t m_EBO;
+
 		static std::vector<SceneId> m_RemovedSceneIds;
 
 		static void LoadEntity(Memory& scene_data, EntityId parent, EntityManager& em, bool is_parent);
