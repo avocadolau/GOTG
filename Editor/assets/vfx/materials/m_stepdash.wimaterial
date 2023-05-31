@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexturealpha","uniforms":{"u_LifeTime":0.8768324851989746,"u_Color":{"r":0.9924700856208801,"g":0.9924700856208801,"b":0.9924700856208801,"a":0.12316751480102539},"u_Texture":"assets/textures/t_circle.png"}}
