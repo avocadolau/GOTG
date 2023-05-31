@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/justtexture","uniforms":{"u_LifeTime":1.0393329858779907,"u_Color":{"r":0.0,"g":0.0,"b":0.0,"a":0.0},"u_Texture":"assets/textures/t_fuzz_fing.png"}}
