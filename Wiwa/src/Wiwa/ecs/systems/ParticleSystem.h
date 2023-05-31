@@ -146,6 +146,13 @@ namespace Wiwa
 		//Deactivates all active particles;
 		void DeactivateParticles();
 
+		//Restart the emitter;
+		void RestartEmitter()
+		{
+			DeactivateParticles();
+			SetTimer(0);
+		}
+
 	private:
 
 		void SetEmitterBools(ParticleEmitterComponent* emitter);

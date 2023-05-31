@@ -335,7 +335,7 @@ namespace Wiwa {
 		{
 			Particle& particle = m_Particles[i];
 
-			if (particle.life_time > 0.0f)
+			if (particle.life_time > 0.0f || emitter->m_permanentParticles)
 			{
 				/*if (!Time::IsPaused())*/
 				{
@@ -351,7 +351,7 @@ namespace Wiwa {
 
 					if (emitter->m_useNewColorNodes)
 					{
-						if (emitter->m_newColorsUsed > 1)
+						if (emitter->m_newColorsUsed > 1 && emitter->m_newColorsUsed <= 20)
 						{
 							/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
 							WI_CORE_INFO(perc.c_str());*/
@@ -380,7 +380,7 @@ namespace Wiwa {
 					}
 					else
 					{
-						if (emitter->m_colorsUsed > 1)
+						if (emitter->m_colorsUsed > 1 && emitter->m_colorsUsed <= 4)
 						{
 							/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
 							WI_CORE_INFO(perc.c_str());*/
