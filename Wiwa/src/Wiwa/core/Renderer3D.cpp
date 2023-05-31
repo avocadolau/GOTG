@@ -1245,6 +1245,7 @@ namespace Wiwa
 
 		// Build mvp for object
 		glm::mat4 glm_mvp = camera->getProjection() * camera->getView();
+
 		ozz::math::Float4x4 ozz_mvp;
 
 		for (int i = 0; i < 4; i++) {
