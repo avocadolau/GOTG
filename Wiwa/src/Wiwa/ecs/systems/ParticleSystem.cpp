@@ -335,7 +335,7 @@ namespace Wiwa {
 		{
 			Particle& particle = m_Particles[i];
 
-			if (particle.life_time >= 0.0f)
+			if (particle.life_time > 0.0f)
 			{
 				/*if (!Time::IsPaused())*/
 				{
@@ -348,32 +348,67 @@ namespace Wiwa {
 					activeParticles++;
 
 					glm::vec4 color(0);
-					if (emitter->m_colorsUsed > 1)
+
+					if (emitter->m_useNewColorNodes)
 					{
-						/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
-						WI_CORE_INFO(perc.c_str());*/
-
-						for (size_t j = 0; j < emitter->m_colorsUsed - 1; j++)
+						if (emitter->m_newColorsUsed > 1)
 						{
-							if (particle.life_percentage >= emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f &&
-								particle.life_percentage < emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f)
-							{
-								/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
-								WI_CORE_INFO(cid.c_str());*/
+							/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
+							WI_CORE_INFO(perc.c_str());*/
 
-								color = particle.color = InterpolateVec4(
-									emitter->m_p_colorsOverLifetime[j].color,
-									emitter->m_p_colorsOverLifetime[j + 1].color,
-									particle.life_percentage - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f,
-									emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f
-								);
+							for (size_t j = 0; j < emitter->m_newColorsUsed - 1; j++)
+							{
+								if (particle.life_percentage >= emitter->m_newColorsNodes[j].m_percentage * 0.01f &&
+									particle.life_percentage < emitter->m_newColorsNodes[j + 1].m_percentage * 0.01f)
+								{
+									/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
+									WI_CORE_INFO(cid.c_str());*/
+
+									color = particle.color = InterpolateVec4(
+										emitter->m_newColorsNodes[j].color,
+										emitter->m_newColorsNodes[j + 1].color,
+										particle.life_percentage - emitter->m_newColorsNodes[j].m_percentage * 0.01f,
+										emitter->m_newColorsNodes[j + 1].m_percentage * 0.01f - emitter->m_newColorsNodes[j].m_percentage * 0.01f
+									);
+								}
 							}
+						}
+						else
+						{
+							color = particle.color = emitter->m_newColorsNodes[0].color;
 						}
 					}
 					else
 					{
-						color = particle.color = emitter->m_p_colorsOverLifetime[0].color;
+						if (emitter->m_colorsUsed > 1)
+						{
+							/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
+							WI_CORE_INFO(perc.c_str());*/
+
+							for (size_t j = 0; j < emitter->m_colorsUsed - 1; j++)
+							{
+								if (particle.life_percentage >= emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f &&
+									particle.life_percentage < emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f)
+								{
+									/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
+									WI_CORE_INFO(cid.c_str());*/
+
+									color = particle.color = InterpolateVec4(
+										emitter->m_p_colorsOverLifetime[j].color,
+										emitter->m_p_colorsOverLifetime[j + 1].color,
+										particle.life_percentage - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f,
+										emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f
+									);
+								}
+							}
+						}
+						else
+						{
+							color = particle.color = emitter->m_p_colorsOverLifetime[0].color;
+						}
 					}
+
+					
 
 					if (m_Material)
 					{
@@ -1192,9 +1227,9 @@ namespace Wiwa {
 		FixBool(emitter->m_stopSizeAtZeroX);
 		FixBool(emitter->m_stopSizeAtZeroY);
 		FixBool(emitter->m_stopSizeAtZeroZ);
-		FixBool(emitter->m_billboardLockAxisX);
-		FixBool(emitter->m_billboardLockAxisY);
-		FixBool(emitter->m_billboardLockAxisZ);
+		FixBool(emitter->m_billboardLockAxisX, true);
+		FixBool(emitter->m_billboardLockAxisY, true);
+		FixBool(emitter->m_billboardLockAxisZ, true);
 		FixBool(emitter->m_p_growUniformly);
 		FixBool(emitter->m_destroyOnFinishActive);
 		FixBool(emitter->m_p_uniformStartSize);
@@ -1203,12 +1238,13 @@ namespace Wiwa {
 		FixBool(emitter->m_permanentParticles);
 		FixBool(emitter->m_cycleLifeTime);
 		FixBool(emitter->m_cycleColors);
+		FixBool(emitter->m_useNewColorNodes);
 	}
 
-	void ParticleSystem::FixBool(bool& _bool)
+	void ParticleSystem::FixBool(bool& _bool, bool value)
 	{
 		if ((int)_bool < 0 || (int)_bool > 1)
-			_bool = false;
+			_bool = value;
 	}
 
 	

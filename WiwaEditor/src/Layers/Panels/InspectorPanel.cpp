@@ -689,6 +689,8 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::Text("Emitter Parameters");
 	ImGui::Separator();
 
+	int max_int_val = std::numeric_limits<int>::max();
+	float max_float_val = std::numeric_limits<float>::max();
 
 	//set mesh
 	ImGui::Text("Particle Mesh Type");
@@ -762,6 +764,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 	if (emitter->m_activeOverTime)
 	{
+
 		std::string activeTime = "Time Active: " + std::to_string(emitter->m_ActiveTimer);
 
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 1, 1));
@@ -809,10 +812,10 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::PushItemWidth(46.f);
 
 			
-			if (ImGui::DragFloat("##m_minInitialTimeActive", &emitter->m_minInitialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f"))
+			if (ImGui::DragFloat("##m_minInitialTimeActive", &emitter->m_minInitialTimeActive, 0.05f, 0.0f, max_float_val, "%.2f"))
 				emitter->m_activeTimeChanged = true;
 			ImGui::SameLine();
-			if (ImGui::DragFloat("##m_maxInitialTimeActive", &emitter->m_maxInitialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f")) 
+			if (ImGui::DragFloat("##m_maxInitialTimeActive", &emitter->m_maxInitialTimeActive, 0.05f, 0.0f, max_float_val, "%.2f"))
 				emitter->m_activeTimeChanged = true;
 			ImGui::PopItemWidth();
 
@@ -823,7 +826,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::Dummy(ImVec2(38, 0));
 			ImGui::SameLine();
 			ImGui::PushItemWidth(100.0f);
-			if (ImGui::DragFloat("##m_initialTimeActive", &emitter->m_initialTimeActive, 0.05f, 0.0f, 0.0f, "%.2f")) emitter->m_activeTimeChanged = true;
+			if (ImGui::DragFloat("##m_initialTimeActive", &emitter->m_initialTimeActive, 0.05f, 0.0f, max_float_val, "%.2f")) emitter->m_activeTimeChanged = true;
 			ImGui::PopItemWidth();
 		}
 
@@ -834,7 +837,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	ImGui::Text("Max Particles");
 	ImGui::PushItemWidth(100.0f);
 
-	ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, 0.0f, "%.2f");
+	ImGui::DragInt("##m_maxParticles", &emitter->m_maxParticles, 0.05f, 0.0f, max_int_val, "%.2f");
 
 	ImGui::PopItemWidth();
 
@@ -865,9 +868,9 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ParticleTab();
 			ImGui::PushItemWidth(46.f);
 
-			ImGui::DragFloat("##m_p_minSpawnRate", &emitter->m_p_minSpawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_minSpawnRate", &emitter->m_p_minSpawnRate, 0.05f, 0.0f, max_float_val, "%.2f");
 			ImGui::SameLine();
-			ImGui::DragFloat("##m_p_maxSpawnRate", &emitter->m_p_maxSpawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_maxSpawnRate", &emitter->m_p_maxSpawnRate, 0.05f, 0.0f, max_float_val, "%.2f");
 			ImGui::PopItemWidth();
 		}
 		else
@@ -876,7 +879,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			ImGui::SameLine();
 			ImGui::PushItemWidth(100.0f);
 
-			ImGui::DragFloat("##m_spawnRate", &emitter->m_spawnRate, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_spawnRate", &emitter->m_spawnRate, 0.05f, 0.0f, max_float_val, "%.2f");
 			ImGui::PopItemWidth();
 		}
 	}
@@ -890,15 +893,15 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 	{
 		ImGui::PushItemWidth(46.f);
 
-		ImGui::DragFloat("##m_p_minSpawnDelay", &emitter->m_p_minSpawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##m_p_minSpawnDelay", &emitter->m_p_minSpawnDelay, 0.05f, 0.0f, max_float_val, "%.2f");
 		ImGui::SameLine();
-		ImGui::DragFloat("##m_p_maxSpawnDelay", &emitter->m_p_maxSpawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##m_p_maxSpawnDelay", &emitter->m_p_maxSpawnDelay, 0.05f, 0.0f, max_float_val, "%.2f");
 		ImGui::PopItemWidth();
 	}
 	else
 	{
 		ImGui::PushItemWidth(100.0f);
-		ImGui::DragFloat("##m_p_spawnDelay", &emitter->m_p_spawnDelay, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("##m_p_spawnDelay", &emitter->m_p_spawnDelay, 0.05f, 0.0f, max_float_val, "%.2f");
 		ImGui::PopItemWidth();
 	}
 	ImGui::Dummy(ImVec2(0, 4));
@@ -912,9 +915,9 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 
 		ImGui::PushItemWidth(46.f);
 
-		ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragInt("##m_minSpawnAmount", &emitter->m_minSpawnAmount, 0.05f, 0.0f, max_int_val, "%.2f");
 		ImGui::SameLine();
-		ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragInt("##m_maxSpawnAmount", &emitter->m_maxSpawnAmount, 0.05f, 0.0f, max_int_val, "%.2f");
 		ImGui::PopItemWidth();
 	}
 	else
@@ -923,7 +926,7 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		ImGui::SameLine();
 		ImGui::PushItemWidth(100.0f);
 
-		ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragInt("##m_spawnAmount", &emitter->m_spawnAmount, 0.05f, 0.0f, max_int_val, "%.2f");
 		ImGui::PopItemWidth();
 	}
 	
@@ -978,15 +981,15 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		{
 			ImGui::PushItemWidth(46.f);
 
-			ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, max_float_val, "%.2f");
 			ImGui::SameLine();
-			ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, max_float_val, "%.2f");
 			ImGui::PopItemWidth();
 		}
 		else
 		{
 			ImGui::PushItemWidth(100.0f);
-			ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, max_float_val, "%.2f");
 			ImGui::PopItemWidth();
 		}
 		ImGui::SameLine();
@@ -1013,15 +1016,15 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 			{
 				ImGui::PushItemWidth(46.f);
 
-				ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat("##m_p_minLifeTime", &emitter->m_p_minLifeTime, 0.05f, 0.0f, max_float_val, "%.2f");
 				ImGui::SameLine();
-				ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat("##m_p_maxLifeTime", &emitter->m_p_maxLifeTime, 0.05f, 0.0f, max_float_val, "%.2f");
 				ImGui::PopItemWidth();
 			}
 			else
 			{
 				ImGui::PushItemWidth(100.0f);
-				ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, 0.0f, "%.2f");
+				ImGui::DragFloat("##m_p_lifeTime", &emitter->m_p_lifeTime, 0.05f, 0.0f, max_float_val, "%.2f");
 				ImGui::PopItemWidth();
 			}
 
@@ -1573,154 +1576,321 @@ void InspectorPanel::DrawParticleSystemComponent(byte* data)
 		
 		ImGui::Dummy(ImVec2(0, 12));
 
-		if (emitter->m_colorsUsed < 1)
-		{
-			emitter->m_colorsUsed = 1;
-		}
-		if (emitter->m_colorsUsed >= 20)
-		{
-			emitter->m_colorsUsed = 20;
-		}
-
-		ImGui::Text("Colors:");
-
-		//todo: add delete color and duplicate color
-		ImGui::Dummy(ImVec2(0, 8));
-		ImGui::Text("Colors over lifetime:");
+		ImGui::Checkbox("##m_useNewColorNodes", &emitter->m_useNewColorNodes);
 		ImGui::SameLine();
-		ImGui::PushItemWidth(100.0f);
-		ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 128.0f, "%.2f");
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-		if (ImGui::Button("+") && emitter->m_colorsUsed < 128) emitter->m_colorsUsed++;
-		ImGui::SameLine();
-		if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
-		ImGui::Dummy(ImVec2(0, 4));
+		ImGui::Text("Use New Color System");
 
-		if (emitter->m_permanentParticles && emitter->m_cycleLifeTime)
+		
+
+		if (emitter->m_useNewColorNodes)
 		{
-			ImGui::Checkbox("##m_cycleColors", &emitter->m_cycleColors);
+			ImGui::Text("Max. colors available: 20");
+			ImGui::Dummy(ImVec2(0, 8));
+			if (emitter->m_newColorsUsed < 1)
+			{
+				emitter->m_newColorsUsed = 1;
+			}
+			if (emitter->m_newColorsUsed >= 20)
+			{
+				emitter->m_newColorsUsed = 20;
+			}
+
+			ImGui::Text("Colors:");
+
+			//todo: add delete color and duplicate color
+			ImGui::Dummy(ImVec2(0, 8));
+			ImGui::Text("Colors over lifetime:");
 			ImGui::SameLine();
-			ImGui::Text("Cycle Colors");
+			ImGui::PushItemWidth(100.0f);
+			ImGui::DragInt("##m_colorNodes", &emitter->m_newColorsUsed, 0.1f, 1.0f, 20, "%.2f");
+			ImGui::PopItemWidth();
 			ImGui::SameLine();
-			HelpMarker("Available due to 'Cycle Life Time'. Colors will cycle along with the Life Time");
+			if (ImGui::Button("+") && emitter->m_newColorsUsed < 20) emitter->m_newColorsUsed++;
+			ImGui::SameLine();
+			if (ImGui::Button("-") && emitter->m_newColorsUsed > 1) emitter->m_newColorsUsed--;
 			ImGui::Dummy(ImVec2(0, 4));
 
-		}
+			if (emitter->m_permanentParticles && emitter->m_cycleLifeTime)
+			{
+				ImGui::Checkbox("##m_cycleColors", &emitter->m_cycleColors);
+				ImGui::SameLine();
+				ImGui::Text("Cycle Colors");
+				ImGui::SameLine();
+				HelpMarker("Available due to 'Cycle Life Time'. Colors will cycle along with the Life Time");
+				ImGui::Dummy(ImVec2(0, 4));
 
-		if (ImGui::Button("Sort Colors by Percentage"))
-		{
-			for (int i = 0; i < emitter->m_colorsUsed; i++) {
-				int minIndex = i;
-				for (int j = i + 1; j < emitter->m_colorsUsed; j++) {
-					if (emitter->m_p_colorsOverLifetime[j].m_percentage < emitter->m_p_colorsOverLifetime[minIndex].m_percentage) {
-						minIndex = j;
+			}
+
+			if (ImGui::Button("Sort Colors by Percentage"))
+			{
+				for (int i = 0; i < emitter->m_newColorsUsed; i++) {
+					int minIndex = i;
+					for (int j = i + 1; j < emitter->m_newColorsUsed; j++) {
+						if (emitter->m_newColorsNodes[j].m_percentage < emitter->m_newColorsNodes[minIndex].m_percentage) {
+							minIndex = j;
+						}
 					}
+					auto temp = emitter->m_newColorsNodes[i];
+					emitter->m_newColorsNodes[i] = emitter->m_newColorsNodes[minIndex];
+					emitter->m_newColorsNodes[minIndex] = temp;
 				}
-				auto temp = emitter->m_p_colorsOverLifetime[i];
-				emitter->m_p_colorsOverLifetime[i] = emitter->m_p_colorsOverLifetime[minIndex];
-				emitter->m_p_colorsOverLifetime[minIndex] = temp;
 			}
-		}
 
-		if (ImGui::Button("Reset unused Colors"))
-		{
-			for (size_t i = emitter->m_colorsUsed; i < 128; i++)
+			if (ImGui::Button("Reset unused Colors"))
 			{
-				emitter->m_p_colorsOverLifetime[i].m_percentage = 0;
-				emitter->m_p_colorsOverLifetime[i].color = glm::vec4(0, 0, 0, 1);
+				for (size_t i = emitter->m_newColorsUsed; i < 20; i++)
+				{
+					emitter->m_newColorsNodes[i].m_percentage = 0;
+					emitter->m_newColorsNodes[i].color = glm::vec4(0, 0, 0, 1);
+				}
+			}
+
+			ImGui::Dummy(ImVec2(0, 4));
+
+
+			for (size_t i = 0; i < emitter->m_newColorsUsed; i++)
+			{
+				std::string colorCodePercentage = "##colorCodePer_" + std::to_string(i);
+				std::string colorCode = "##colorCode_" + std::to_string(i);
+
+				ImGui::Text("At");
+				ImGui::SameLine();
+				ImGui::PushItemWidth(75);
+				ImGui::DragFloat(colorCodePercentage.c_str(), &emitter->m_newColorsNodes[i].m_percentage, 0.1f, 0.0f, 100.0f, "%.2f");
+				ImGui::PopItemWidth();
+				ImGui::SameLine();
+				ImGui::Text("%% use");
+				ImGui::SameLine();
+				//ImGui::ColorEdit4(colorCode.c_str(), &emitter->m_newColorsNodes[i].color.x);
+
+
+				ImVec4 imCol = {
+					emitter->m_newColorsNodes[i].color.x,
+					emitter->m_newColorsNodes[i].color.y,
+					emitter->m_newColorsNodes[i].color.z,
+					emitter->m_newColorsNodes[i].color.w };
+
+				ImVec4 temp = ImVec4(0.2, 0.8, 0.4, 1);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, imCol);
+
+				float bordergrey = 0.75f;
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(bordergrey, bordergrey, bordergrey, 1));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.25));
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
+
+				std::string colorCodePickerPopup = "##colorCodePickerPopup_" + std::to_string(i);
+
+				if (ImGui::Button(colorCode.c_str(), ImVec2(75, 20)))
+				{
+					ImGui::OpenPopup(colorCodePickerPopup.c_str());
+				}
+
+				// Display a color picker inside a popup
+				if (ImGui::BeginPopup(colorCodePickerPopup.c_str()))
+				{
+					std::string colorCodePicker = "##colorCodePicker_" + std::to_string(i);
+					ImGui::ColorPicker4(colorCodePicker.c_str(), (float*)&emitter->m_newColorsNodes[i].color.x);
+					ImGui::EndPopup();
+				}
+				ImGui::PopStyleColor(3);
+				ImGui::PopStyleVar();
+				ImGui::SameLine();
+				std::string colorCodeAlpha = "##colorCodeAlpha_" + std::to_string(i);
+
+
+				ImGui::Text("A:", i);
+				ImGui::SameLine();
+				ImGui::PushItemWidth(50);
+				ImGui::DragFloat(colorCodeAlpha.c_str(), &emitter->m_newColorsNodes[i].color.w, 0.01f, 0.0f, 1.0f, "%.2f");
+				ImGui::PopItemWidth();
+
+				ImGui::SameLine();
+				std::string colorCodeDuplicate = "++##colorCodeDuplicate_" + std::to_string(i);
+				if (ImGui::Button(colorCodeDuplicate.c_str()) && emitter->m_newColorsUsed < 20)
+				{
+					emitter->m_newColorsUsed++;
+					for (size_t j = emitter->m_newColorsUsed; j > i; j--)
+					{
+						emitter->m_newColorsNodes[j + 1].m_percentage = emitter->m_newColorsNodes[j].m_percentage;
+						emitter->m_newColorsNodes[j + 1].color = emitter->m_newColorsNodes[j].color;
+					}
+					emitter->m_newColorsNodes[i + 1].m_percentage = emitter->m_newColorsNodes[i].m_percentage;
+					emitter->m_newColorsNodes[i + 1].color = emitter->m_newColorsNodes[i].color;
+				}
+
+				ImGui::SameLine();
+
+				std::string colorCodeDelete = "-##colorCodeDelete_" + std::to_string(i);
+				if (ImGui::Button(colorCodeDelete.c_str()) && emitter->m_newColorsUsed > 1)
+				{
+					for (size_t j = i + 1; j < emitter->m_newColorsUsed; j++)
+					{
+						emitter->m_newColorsNodes[j - 1].m_percentage = emitter->m_newColorsNodes[j].m_percentage;
+						emitter->m_newColorsNodes[j - 1].color = emitter->m_newColorsNodes[j].color;
+					}
+					emitter->m_newColorsNodes[emitter->m_newColorsUsed - 1].m_percentage = 0;
+					emitter->m_newColorsNodes[emitter->m_newColorsUsed - 1].color = glm::vec4(0, 0, 0, 1);
+					emitter->m_newColorsUsed--;
+				}
 			}
 		}
-
-		ImGui::Dummy(ImVec2(0, 4));
-
-
-		for (size_t i = 0; i < emitter->m_colorsUsed; i++)
+		else
 		{
-			std::string colorCodePercentage = "##colorCodePer_" + std::to_string(i);
-			std::string colorCode = "##colorCode_" + std::to_string(i);
+			ImGui::Text("Max. colors available: 4");
+			ImGui::Dummy(ImVec2(0, 8));
 
-			ImGui::Text("At");
+			if (emitter->m_colorsUsed < 1)
+			{
+				emitter->m_colorsUsed = 1;
+			}
+			if (emitter->m_colorsUsed >= 4)
+			{
+				emitter->m_colorsUsed = 4;
+			}
+
+			ImGui::Text("Colors:");
+
+			//todo: add delete color and duplicate color
+			ImGui::Dummy(ImVec2(0, 8));
+			ImGui::Text("Colors over lifetime:");
 			ImGui::SameLine();
-			ImGui::PushItemWidth(75);
-			ImGui::DragFloat(colorCodePercentage.c_str(), &emitter->m_p_colorsOverLifetime[i].m_percentage, 0.1f, 0.0f, 100.0f, "%.2f");
+			ImGui::PushItemWidth(100.0f);
+			ImGui::DragInt("##m_colorNodes", &emitter->m_colorsUsed, 0.1f, 1.0f, 4, "%.2f");
 			ImGui::PopItemWidth();
 			ImGui::SameLine();
-			ImGui::Text("%% use");
+			if (ImGui::Button("+") && emitter->m_colorsUsed < 4) emitter->m_colorsUsed++;
 			ImGui::SameLine();
-			//ImGui::ColorEdit4(colorCode.c_str(), &emitter->m_p_colorsOverLifetime[i].color.x);
+			if (ImGui::Button("-") && emitter->m_colorsUsed > 1) emitter->m_colorsUsed--;
+			ImGui::Dummy(ImVec2(0, 4));
 
-
-			ImVec4 imCol = {
-				emitter->m_p_colorsOverLifetime[i].color.x,
-				emitter->m_p_colorsOverLifetime[i].color.y,
-				emitter->m_p_colorsOverLifetime[i].color.z,
-				emitter->m_p_colorsOverLifetime[i].color.w };
-
-			ImVec4 temp = ImVec4(0.2, 0.8, 0.4, 1);
-
-			ImGui::PushStyleColor(ImGuiCol_Button, imCol);
-
-			float bordergrey = 0.75f;
-			ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(bordergrey, bordergrey, bordergrey, 1));
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.25));
-			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
-
-			std::string colorCodePickerPopup = "##colorCodePickerPopup_" + std::to_string(i);
-
-			if (ImGui::Button(colorCode.c_str(), ImVec2(75, 20)))
+			if (emitter->m_permanentParticles && emitter->m_cycleLifeTime)
 			{
-				ImGui::OpenPopup(colorCodePickerPopup.c_str());
+				ImGui::Checkbox("##m_cycleColors", &emitter->m_cycleColors);
+				ImGui::SameLine();
+				ImGui::Text("Cycle Colors");
+				ImGui::SameLine();
+				HelpMarker("Available due to 'Cycle Life Time'. Colors will cycle along with the Life Time");
+				ImGui::Dummy(ImVec2(0, 4));
+
 			}
 
-			// Display a color picker inside a popup
-			if (ImGui::BeginPopup(colorCodePickerPopup.c_str()))
+			if (ImGui::Button("Sort Colors by Percentage"))
 			{
-				std::string colorCodePicker = "##colorCodePicker_" + std::to_string(i);
-				ImGui::ColorPicker4(colorCodePicker.c_str(), (float*)&emitter->m_p_colorsOverLifetime[i].color.x);
-				ImGui::EndPopup();
-			}
-			ImGui::PopStyleColor(3);
-			ImGui::PopStyleVar();
-			ImGui::SameLine();
-			std::string colorCodeAlpha = "##colorCodeAlpha_" + std::to_string(i);
-
-
-			ImGui::Text("A:", i);
-			ImGui::SameLine();
-			ImGui::PushItemWidth(50);
-			ImGui::DragFloat(colorCodeAlpha.c_str(), &emitter->m_p_colorsOverLifetime[i].color.w, 0.01f, 0.0f, 1.0f, "%.2f");
-			ImGui::PopItemWidth();
-
-			ImGui::SameLine();
-			std::string colorCodeDuplicate = "++##colorCodeDuplicate_" + std::to_string(i);
-			if (ImGui::Button(colorCodeDuplicate.c_str()))
-			{
-				emitter->m_colorsUsed++;
-				for (size_t j = emitter->m_colorsUsed; j > i; j--)
-				{
-					emitter->m_p_colorsOverLifetime[j + 1].m_percentage = emitter->m_p_colorsOverLifetime[j].m_percentage;
-					emitter->m_p_colorsOverLifetime[j + 1].color = emitter->m_p_colorsOverLifetime[j].color;
+				for (int i = 0; i < emitter->m_colorsUsed; i++) {
+					int minIndex = i;
+					for (int j = i + 1; j < emitter->m_colorsUsed; j++) {
+						if (emitter->m_p_colorsOverLifetime[j].m_percentage < emitter->m_p_colorsOverLifetime[minIndex].m_percentage) {
+							minIndex = j;
+						}
+					}
+					auto temp = emitter->m_p_colorsOverLifetime[i];
+					emitter->m_p_colorsOverLifetime[i] = emitter->m_p_colorsOverLifetime[minIndex];
+					emitter->m_p_colorsOverLifetime[minIndex] = temp;
 				}
-				emitter->m_p_colorsOverLifetime[i + 1].m_percentage = emitter->m_p_colorsOverLifetime[i].m_percentage;
-				emitter->m_p_colorsOverLifetime[i + 1].color = emitter->m_p_colorsOverLifetime[i].color;
 			}
 
-			ImGui::SameLine();
-
-			std::string colorCodeDelete = "-##colorCodeDelete_" + std::to_string(i);
-			if (ImGui::Button(colorCodeDelete.c_str()))
+			if (ImGui::Button("Reset unused Colors"))
 			{
-				for (size_t j = i + 1; j < emitter->m_colorsUsed; j++)
+				for (size_t i = emitter->m_colorsUsed; i < 4; i++)
 				{
-					emitter->m_p_colorsOverLifetime[j - 1].m_percentage = emitter->m_p_colorsOverLifetime[j].m_percentage;
-					emitter->m_p_colorsOverLifetime[j - 1].color = emitter->m_p_colorsOverLifetime[j].color;
+					emitter->m_p_colorsOverLifetime[i].m_percentage = 0;
+					emitter->m_p_colorsOverLifetime[i].color = glm::vec4(0, 0, 0, 1);
 				}
-				emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].m_percentage = 0;
-				emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].color = glm::vec4(0, 0, 0, 1);
-				emitter->m_colorsUsed--;
+			}
+
+			ImGui::Dummy(ImVec2(0, 4));
+
+
+			for (size_t i = 0; i < emitter->m_colorsUsed; i++)
+			{
+				std::string colorCodePercentage = "##colorCodePer_" + std::to_string(i);
+				std::string colorCode = "##colorCode_" + std::to_string(i);
+
+				ImGui::Text("At");
+				ImGui::SameLine();
+				ImGui::PushItemWidth(75);
+				ImGui::DragFloat(colorCodePercentage.c_str(), &emitter->m_p_colorsOverLifetime[i].m_percentage, 0.1f, 0.0f, 100.0f, "%.2f");
+				ImGui::PopItemWidth();
+				ImGui::SameLine();
+				ImGui::Text("%% use");
+				ImGui::SameLine();
+				//ImGui::ColorEdit4(colorCode.c_str(), &emitter->m_p_colorsOverLifetime[i].color.x);
+
+
+				ImVec4 imCol = {
+					emitter->m_p_colorsOverLifetime[i].color.x,
+					emitter->m_p_colorsOverLifetime[i].color.y,
+					emitter->m_p_colorsOverLifetime[i].color.z,
+					emitter->m_p_colorsOverLifetime[i].color.w };
+
+				ImVec4 temp = ImVec4(0.2, 0.8, 0.4, 1);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, imCol);
+
+				float bordergrey = 0.75f;
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(bordergrey, bordergrey, bordergrey, 1));
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1, 1, 1, 0.25));
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2);
+
+				std::string colorCodePickerPopup = "##colorCodePickerPopup_" + std::to_string(i);
+
+				if (ImGui::Button(colorCode.c_str(), ImVec2(75, 20)))
+				{
+					ImGui::OpenPopup(colorCodePickerPopup.c_str());
+				}
+
+				// Display a color picker inside a popup
+				if (ImGui::BeginPopup(colorCodePickerPopup.c_str()))
+				{
+					std::string colorCodePicker = "##colorCodePicker_" + std::to_string(i);
+					ImGui::ColorPicker4(colorCodePicker.c_str(), (float*)&emitter->m_p_colorsOverLifetime[i].color.x);
+					ImGui::EndPopup();
+				}
+				ImGui::PopStyleColor(3);
+				ImGui::PopStyleVar();
+				ImGui::SameLine();
+				std::string colorCodeAlpha = "##colorCodeAlpha_" + std::to_string(i);
+
+
+				ImGui::Text("A:", i);
+				ImGui::SameLine();
+				ImGui::PushItemWidth(50);
+				ImGui::DragFloat(colorCodeAlpha.c_str(), &emitter->m_p_colorsOverLifetime[i].color.w, 0.01f, 0.0f, 1.0f, "%.2f");
+				ImGui::PopItemWidth();
+
+				ImGui::SameLine();
+				std::string colorCodeDuplicate = "++##colorCodeDuplicate_" + std::to_string(i);
+				if (ImGui::Button(colorCodeDuplicate.c_str()) && emitter->m_colorsUsed < 4)
+				{
+					emitter->m_colorsUsed++;
+					for (size_t j = emitter->m_colorsUsed; j > i; j--)
+					{
+						emitter->m_p_colorsOverLifetime[j + 1].m_percentage = emitter->m_p_colorsOverLifetime[j].m_percentage;
+						emitter->m_p_colorsOverLifetime[j + 1].color = emitter->m_p_colorsOverLifetime[j].color;
+					}
+					emitter->m_p_colorsOverLifetime[i + 1].m_percentage = emitter->m_p_colorsOverLifetime[i].m_percentage;
+					emitter->m_p_colorsOverLifetime[i + 1].color = emitter->m_p_colorsOverLifetime[i].color;
+				}
+
+				ImGui::SameLine();
+
+				std::string colorCodeDelete = "-##colorCodeDelete_" + std::to_string(i);
+				if (ImGui::Button(colorCodeDelete.c_str()) && emitter->m_colorsUsed > 1)
+				{
+					for (size_t j = i + 1; j < emitter->m_colorsUsed; j++)
+					{
+						emitter->m_p_colorsOverLifetime[j - 1].m_percentage = emitter->m_p_colorsOverLifetime[j].m_percentage;
+						emitter->m_p_colorsOverLifetime[j - 1].color = emitter->m_p_colorsOverLifetime[j].color;
+					}
+					emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].m_percentage = 0;
+					emitter->m_p_colorsOverLifetime[emitter->m_colorsUsed - 1].color = glm::vec4(0, 0, 0, 1);
+					emitter->m_colorsUsed--;
+				}
 			}
 		}
+
+		
 		ImGui::TreePop();
 
 		

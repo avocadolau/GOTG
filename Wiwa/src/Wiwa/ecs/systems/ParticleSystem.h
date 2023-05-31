@@ -149,7 +149,7 @@ namespace Wiwa
 	private:
 
 		void SetEmitterBools(ParticleEmitterComponent* emitter);
-		void FixBool(bool& _bool);
+		void FixBool(bool& _bool, bool value = false);
 
 		unsigned int m_VAO = -1;
 
