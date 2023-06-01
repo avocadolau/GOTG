@@ -930,14 +930,16 @@ namespace Wiwa
 		{
 			camera->shadowBuffer->BindTexture();
 			material->Bind(GL_TEXTURE1);
+			mesh->Render();
+			material->UnBind(GL_TEXTURE1);
 		}
 		else
 		{
 			material->Bind();
+			mesh->Render();
+			material->UnBind();
 		}
-		mesh->Render();
-
-		material->UnBind();
+		
 
 		// Debug
 
@@ -1025,7 +1027,6 @@ namespace Wiwa
 		GL(BindVertexArray(0));
 
 		material->UnBind();
-		GL(ActiveTexture(GL_TEXTURE1));
 		camera->frameBuffer->Unbind();
 		GL(Enable(GL_CULL_FACE));
 	}
@@ -1236,7 +1237,8 @@ namespace Wiwa
 		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(false);
-		
+		Shader* anim_shader = material->getShader();
+		anim_shader->Bind();
 		GL(BindVertexArray(dynamic_vao_));
 		// Updates dynamic vertex buffer with skinned data.
 		GL(BindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_));
@@ -1259,9 +1261,9 @@ namespace Wiwa
 			normals_stride, normals_offset, colors_stride, colors_offset,
 			uvs_stride, uvs_offset);*/
 
-		Shader* anim_shader = material->getShader();
+	
 
-		anim_shader->Bind();
+		
 		SetUpLight(anim_shader, camera, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights());
 
 		material->Bind();
@@ -1324,7 +1326,7 @@ namespace Wiwa
 
 		GL(BindVertexArray(0));
 
-		anim_shader->UnBind();
+		material->UnBind();
 		
 		camera->frameBuffer->Unbind();
 

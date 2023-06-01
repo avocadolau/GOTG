@@ -24,7 +24,7 @@ namespace Wiwa {
 		void Bind(int id = 0x84C0);
 		void Bind(uint32_t program_id, int id = 0x84C0);
 
-		void UnBind();
+		void UnBind(int id = 0x84C0);
 
 		void Load(const char* path);
 		void Save(const char* path);

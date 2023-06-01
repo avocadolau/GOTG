@@ -76,7 +76,7 @@ void GameLayer::OnAttach()
 	Wiwa::Application::Get().GetWindow().SetFullScreen(true);
 	Wiwa::Application::Get().UnloadSceneResources = true;
 	Wiwa::Application::Get().FinishedImport = true;
-
+	Wiwa::Input::LockCursor();
 }
 
 void GameLayer::OnDetach()
