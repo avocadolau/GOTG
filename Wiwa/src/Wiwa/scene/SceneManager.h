@@ -20,11 +20,9 @@ namespace Wiwa {
 	private:
 		static std::vector<Scene*> m_Scenes;
 		static SceneId m_ActiveScene;
-		static Shader* m_Helper_Shader;
-		static Image* m_Image_Transition;
-		static uint32_t m_VAO;
-		static uint32_t m_VBO;
-		static uint32_t m_EBO;
+
+		static InstanceRenderer m_InstanceRenderer;
+		static size_t m_ProgressBar;
 
 		static std::vector<SceneId> m_RemovedSceneIds;
 

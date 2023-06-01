@@ -19,15 +19,11 @@ namespace Wiwa
 	SceneId SceneManager::m_ActiveScene = -1;
 	bool SceneManager::m_PlayScene = true;
 	bool SceneManager::isLoadingScene = false;
-	Shader* SceneManager::m_Helper_Shader = nullptr;
-	Image* SceneManager::m_Image_Transition;
+
 	// For loading inside systems
 	bool SceneManager::m_LoadScene = false;
 	std::string SceneManager::m_LoadPath = "";
 	int SceneManager::m_LoadFlags = 0;
-	uint32_t SceneManager::m_VAO = 0;
-	uint32_t SceneManager::m_VBO = 0;
-	uint32_t SceneManager::m_EBO = 0;
 
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
@@ -35,6 +31,9 @@ namespace Wiwa
 	std::atomic<int> SceneManager::m_LoadingProgress = 0;
 	std::thread SceneManager::m_LoadThread;
 	std::thread SceneManager::m_LoadScreenThread;
+
+	InstanceRenderer SceneManager::m_InstanceRenderer(10);
+	size_t SceneManager::m_ProgressBar = WI_INVALID_INDEX;
 
 	void SceneManager::Awake()
 	{
@@ -53,48 +52,20 @@ namespace Wiwa
 
 	void SceneManager::ModuleInit()
 	{
-		m_Helper_Shader = new Shader();
-		m_Helper_Shader->Init("resources/shaders/renderlayer/renderlayer");
-		m_Image_Transition = Wiwa::Resources::GetResourceById<Image>(Wiwa::Resources::Load<Wiwa::Image>("library/hudimages/hud/ui_locationsandwavecounter01.dds"));
+		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
 
+		ResourceId progress_bar_id = Resources::Load<Wiwa::Image>("");
 
-		// Quad vertices
-		float vertices[] = {
-			// Positions			// Texture coords
-			0.5f,  0.5f, 0.0f,		1.0f, 1.0f, // Top right -> 1.0f, 1.0f
-			0.5f, -0.5f, 0.0f,		1.0f, 0.0f, // Bottom right -> 1.0f, 0.0f
-		   -0.5f, -0.5f, 0.0f,		0.0f, 0.0f, // Bottom left -> 0.0f, 0.0f
-		   -0.5f,  0.5f, 0.0f,		0.0f, 1.0f  // Top left -> 0.0f, 1.0f
+		Image* progress_bar_img = Resources::GetResourceById<Image>(progress_bar_id);
+		Size2i size = progress_bar_img->GetSize();
+		Rect2i clip = {
+			0, 0, 
+			size.w, size.h
 		};
 
-		// Quad indices
-		unsigned int indexes[] = {
-			0, 1, 3, 1, 2, 3
-		};
+		TextureClip tclip = Renderer2D::CalculateTextureClip(clip, size);
 
-		GL(GenVertexArrays(1, &m_VAO));
-		GL(GenBuffers(1, &m_VBO));
-		GL(GenBuffers(1, &m_EBO));
-
-		GL(BindVertexArray(m_VAO));
-
-		// Bind vertices
-		GL(BindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		GL(BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
-
-		// Bind indices
-		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW));
-
-		// Position attribute
-		GL(EnableVertexAttribArray(0));
-		GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
-
-		// Texture coords
-		GL(EnableVertexAttribArray(1));
-		GL(VertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))));
-
-		GL(BindVertexArray(0));
+		m_ProgressBar = m_InstanceRenderer.AddInstance(progress_bar_img->GetTextureId(), { 0,0 }, size, Wiwa::Color::WHITE, tclip, Renderer2D::Pivot::UPLEFT);
 	}
 
 	void SceneManager::ModuleUpdate()
@@ -521,7 +492,10 @@ namespace Wiwa
 	{
 		// Bind context to this thread
 		Wiwa::Application::Get().GetWindow().Bind();
-		
+
+		bool romw = Wiwa::RenderManager::GetRenderOnMainWindow();
+
+		Wiwa::RenderManager::SetRenderOnMainWindow(true);
 
 		while (!m_LoadedScene) {
 
@@ -534,22 +508,14 @@ namespace Wiwa
 
 			float progperc = progress / 12.0f;
 
-			uint32_t w = Wiwa::Application::Get().GetWindow().GetWidth();
-			uint32_t h = Wiwa::Application::Get().GetWindow().GetHeight();
-			GL(Viewport(0, 0, w, h));
-			
-			GL(BindVertexArray(m_VAO));
-			m_Helper_Shader->Bind();
-
-			GL(BindTexture(GL_TEXTURE_2D, m_Image_Transition->GetTextureId()));
-			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-
-			m_Helper_Shader->UnBind();
-			GL(BindVertexArray(0));
+			Wiwa::Application::Get().GetRenderer2D().RenderInstanced(m_InstanceRenderer);
+			Wiwa::RenderManager::UpdateSingle(1);
 
 			// Swap buffers
 			Wiwa::Application::Get().GetWindow().OnUpdate();
 		}
+
+		Wiwa::RenderManager::SetRenderOnMainWindow(romw);
 
 		// Unbind context from this thread
 		Wiwa::Application::Get().GetWindow().Unbind();
@@ -577,97 +543,6 @@ namespace Wiwa
 				scene_file.Write(prefab, textGuiLen);
 			}
 
-			//if (&gm)
-			//{
-			//	std::vector<GuiCanvas*>& canvas = gm.ReturnCanvas();
-			//	size_t canvas_count = canvas.size();
-
-			//	// Save GuiControl count
-			//	scene_file.Write(&canvas_count, sizeof(size_t));
-
-			//	for (size_t i = 0; i < canvas_count; i++)
-			//	{
-			//		GuiCanvas* canva = canvas.at(i);
-
-			//		int id_canvas = canva->id;
-			//		bool active_canvas = canva->active;
-
-			//		scene_file.Write(&id_canvas, sizeof(int));
-			//		scene_file.Write(&active_canvas, 1);
-
-			//		size_t controls_count = canvas.at(i)->controls.size();
-			//		scene_file.Write(&controls_count, sizeof(size_t));
-			//		for (size_t j = 0; j < controls_count; j++)
-			//		{
-			//			GuiControl* control = canvas.at(i)->controls.at(j);
-
-			//			int id = control->id;
-			//			bool active = control->GetActive();
-			//			GuiControlType guiType = control->GetType();
-			//			GuiControlState guiState = control->GetState();
-			//			Rect2i position = control->GetPosition();
-			//			float rotation = control->rotation;
-			//			int callbackID = control->callbackID;
-			//			Rect2i texturePosition = control->texturePosition;
-			//			Rect2i extraTexturePosition = control->extraTexturePosition;
-
-			//			const char* textureGui;
-			//			if (guiType != GuiControlType::VIDEO) textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId1);
-			//			if (guiType == GuiControlType::VIDEO) textureGui = Wiwa::Resources::getResourcePathById<Wiwa::Video>(control->textId1);
-			//			const char* extraTextureGui = Wiwa::Resources::getResourcePathById<Wiwa::Image>(control->textId2);
-
-			//			size_t textureGui_len = strlen(textureGui) + 1;
-			//			size_t extraTextureGui_len = strlen(extraTextureGui) + 1;
-
-			//			const char* text = control->text.c_str();
-			//			const char* audioEvent = control->audioEventForButton.c_str();
-
-			//			size_t textGuiLen = strlen(text) + 1;
-			//			size_t audioEventGuiLen = strlen(audioEvent) + 1;
-
-			//			bool animated = control->animatedControl;
-			//			float animSpeed = control->animSpeed;
-			//			size_t animRectsSize = control->positionsForAnimations.size();
-			//			std::vector<Rect2i> animRects = control->positionsForAnimations;
-
-			//			scene_file.Write(&id, sizeof(int));
-			//			scene_file.Write(&active, 1);
-			//			scene_file.Write(&guiType, sizeof(GuiControlType));
-			//			scene_file.Write(&guiState, sizeof(GuiControlState));
-			//			scene_file.Write(&position, sizeof(Rect2i));
-			//			scene_file.Write(&rotation, sizeof(float));
-			//			scene_file.Write(&callbackID, sizeof(int));
-
-			//			scene_file.Write(&animated, 1);
-			//			scene_file.Write(&animSpeed, sizeof(float));
-			//			scene_file.Write(&animRectsSize, sizeof(size_t));
-
-			//			for (size_t counterForRects = 0; counterForRects < animRectsSize; counterForRects++)
-			//			{
-			//				scene_file.Write(&animRects.at(counterForRects), sizeof(Rect2i));
-			//			}
-
-			//			Rect2i extraPosition = control->GetExtraPosition();
-			//			scene_file.Write(&extraPosition, sizeof(Rect2i));
-
-			//			scene_file.Write(&textGuiLen, sizeof(size_t));
-			//			scene_file.Write(text, textGuiLen);
-
-			//			scene_file.Write(&audioEventGuiLen, sizeof(size_t));
-			//			scene_file.Write(audioEvent, audioEventGuiLen);
-
-			//			// Save texture
-			//			scene_file.Write(&textureGui_len, sizeof(size_t));
-			//			scene_file.Write(textureGui, textureGui_len);
-			//			// Save extraTexture
-			//			scene_file.Write(&extraTextureGui_len, sizeof(size_t));
-			//			scene_file.Write(extraTextureGui, extraTextureGui_len);
-
-			//			scene_file.Write(&texturePosition, sizeof(Rect2i));
-			//			scene_file.Write(&extraTexturePosition, sizeof(Rect2i));
-			//		}
-			//	}
-			//}
 			// Iterate through all controls
 
 			// Save cameras

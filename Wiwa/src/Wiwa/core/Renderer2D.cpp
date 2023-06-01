@@ -306,4 +306,25 @@ namespace Wiwa
 
 
 	}
+
+	void Renderer2D::RenderInstanced(InstanceRenderer& instanceRenderer)
+	{
+		FrameBuffer& framebuffer = *m_ActiveCamera.frameBuffer;
+		GL(Viewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight()));
+
+		framebuffer.Bind();
+		GL(Enable(GL_BLEND));
+		GL(BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+		instanceRenderer.Bind();
+
+		instanceRenderer.Update();
+		instanceRenderer.Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
+
+		instanceRenderer.Unbind();
+
+		GL(Disable(GL_BLEND));
+
+		framebuffer.Unbind();
+	}
 }
