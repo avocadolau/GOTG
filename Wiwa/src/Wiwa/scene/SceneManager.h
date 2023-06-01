@@ -23,6 +23,9 @@ namespace Wiwa {
 
 		static InstanceRenderer m_InstanceRenderer;
 		static size_t m_ProgressBar;
+		static size_t m_ProgressBarFilling;
+		static size_t m_BackGround;
+
 
 		static std::vector<SceneId> m_RemovedSceneIds;
 
