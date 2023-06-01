@@ -5,6 +5,7 @@
 #include "../BossUltron.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 
 Wiwa::BossUltronProjectileRainAttackState::BossUltronProjectileRainAttackState()
@@ -175,18 +176,36 @@ void Wiwa::BossUltronProjectileRainAttackState::SpawnThunderStorm(BossUltron* en
 
 	bulletSys->EnableBullet();
 
-	EntityId p_laser = entityManager.LoadPrefab("assets/vfx/prefabs/vfx_finals/RainProjectile/p_boss_rain_projectile_01.wiprefab");
+	//emit left muzzle
+	EntityId rainproj = entityManager.GetChildByName(newBulletId, "p_boss_rain_projectile_01");
+	EntityId layer0 = entityManager.GetChildByName(rainproj, "p_boss_laser_layer00");
+	EntityId layer1 = entityManager.GetChildByName(rainproj, "p_boss_laser_layer01");
+	EntityId core = entityManager.GetChildByName(rainproj, "bullet_core");
+	EntityId ground = entityManager.GetChildByName(rainproj, "p_ground");
+	EntityId sphere = entityManager.GetChildByName(rainproj, "p_sphere");
 
-	if (p_laser != EntityManager::INVALID_INDEX)
-	{
-		Transform3D* p_laserT = entityManager.GetComponent<Transform3D>(p_laser);
+	ParticleSystem* p_sys = nullptr;
 
-		if (p_laserT != nullptr)
-		{
-			p_laserT->localPosition = thunderPosition;
-			p_laserT->localPosition.y = 0;
-		}
-	}
+
+	if (layer0 != EntityManager::INVALID_INDEX)
+		p_sys = entityManager.GetSystem<ParticleSystem>(layer0);
+	if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found layer0");
+
+	if (layer1 != EntityManager::INVALID_INDEX)
+		p_sys = entityManager.GetSystem<ParticleSystem>(layer1);
+	if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found layer1");
+
+	if (core != EntityManager::INVALID_INDEX)
+		p_sys = entityManager.GetSystem<ParticleSystem>(core);
+	if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found core");
+
+	if (ground != EntityManager::INVALID_INDEX)
+		p_sys = entityManager.GetSystem<ParticleSystem>(ground);
+	if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found ground");
+
+	if (sphere != EntityManager::INVALID_INDEX)
+		p_sys = entityManager.GetSystem<ParticleSystem>(sphere);
+	if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found sphere");
 	
 
 }

@@ -1,0 +1,1 @@
+{"shader":"library/resources/shaders/vfx/spritesheet_frame","uniforms":{"u_LifeTime":0.0,"u_Time":1669.297119140625,"u_Color":{"r":1.0,"g":1.0,"b":1.0,"a":1.0},"u_Texture":"assets/textures/icons/t_door_icons_00.png","u_Position":{"x":33.33300018310547,"y":0.0},"u_Zoom":3.0}}

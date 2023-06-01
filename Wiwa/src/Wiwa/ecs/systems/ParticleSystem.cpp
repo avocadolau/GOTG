@@ -34,7 +34,7 @@ namespace Wiwa {
 
 		m_SpawnTimer = 0;
 		emitter->m_spawnTimer = 0;
-		m_SpawnedOnce = false;
+		m_AlreadySpawned = false;
 		
 		m_AvailableParticles = emitter->m_maxParticles;
 
@@ -116,55 +116,7 @@ namespace Wiwa {
 	}
 	bool ParticleSystem::OnEnabledFromPool()
 	{
-		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
-
-		if (m_Model == nullptr)
-		{
-			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
-			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
-		}
-		if (m_Material == nullptr)
-		{
-			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
-			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
-		}
-
-
-
-		if (emitter->m_p_rangedSpawnDelay)
-		{
-			m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
-
-		}
-		else
-		{
-
-			m_SpawnTimer = emitter->m_p_spawnDelay;
-		}
-		emitter->m_spawnTimer = m_SpawnTimer;
-
-		if (emitter->m_activeOverTime)
-		{
-			if (emitter->m_startActive)
-			{
-				if (emitter->m_rangedTimeActive)
-				{
-					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
-				}
-				else
-				{
-					emitter->m_ActiveTimer = emitter->m_initialTimeActive + emitter->m_p_spawnDelay;
-				}
-			}
-			else
-			{
-				emitter->m_ActiveTimer = 0;
-			}
-
-		}
-		if (m_SpawnTimer <= 0 && (emitter->m_active || emitter->m_activeOverTime))
-			SpawnParticleSet();
-
+		RestartEmitter();
 		return true;
 	}
 	void ParticleSystem::OnUpdate()
@@ -279,7 +231,7 @@ namespace Wiwa {
 
 				if (m_SpawnTimer <= 0 && emitter->m_ActiveTimer > 0)
 				{
-					if (!m_SpawnedOnce)
+					if (!m_AlreadySpawned)
 						SpawnParticleSet();
 
 					if (emitter->m_loopSpawning)
@@ -293,7 +245,7 @@ namespace Wiwa {
 					}
 					else
 					{
-						m_SpawnedOnce = true;
+						m_AlreadySpawned = true;
 					}
 					
 				}
@@ -304,16 +256,26 @@ namespace Wiwa {
 			}
 			else
 			{
-				if (m_SpawnTimer <= 0 && emitter->m_loopSpawning)
+				if (m_SpawnTimer <= 0)
 				{
-					SpawnParticleSet();
-
-					m_SpawnTimer = emitter->m_spawnRate;
-
-					if (emitter->m_p_rangedSpawnRate)
+					if (!m_AlreadySpawned)
 					{
-						m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+						SpawnParticleSet();
+						m_AlreadySpawned = true;
 					}
+						
+
+					if (emitter->m_loopSpawning)
+					{
+						m_SpawnTimer = emitter->m_spawnRate;
+
+						if (emitter->m_p_rangedSpawnRate)
+						{
+							m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+							m_AlreadySpawned = true;
+						}
+					}
+					
 				}
 
 				
@@ -823,7 +785,11 @@ namespace Wiwa {
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		
 		DeactivateParticles();
-		SetTimer(timer);
+
+		if (timer == 0)
+			SpawnParticleSet();
+		else
+			SetTimer(timer);
 
 		if (emitter->m_rangedTimeActive)
 		{
@@ -832,6 +798,28 @@ namespace Wiwa {
 		else
 		{
 			emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+		}
+
+		m_AlreadySpawned = false;
+	}
+
+	void ParticleSystem::SetColor(int index, glm::vec4 color)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		
+		if (emitter->m_useNewColorNodes)
+		{
+			if (index >= 0 && index < 20)
+			{
+				emitter->m_newColorsNodes[index].color = color;
+			}
+		}
+		else
+		{
+			if (index >= 0 && index < 4)
+			{
+				emitter->m_newColorsNodes[index].color = color;
+			}
 		}
 	}
 

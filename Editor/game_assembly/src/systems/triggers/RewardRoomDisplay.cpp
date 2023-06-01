@@ -24,22 +24,22 @@ namespace Wiwa
 			{
 			case 0: // Active
 			{
-				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\items\\p_item_Active.wiprefab");
+				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_active.wiprefab");
 			}
 			break;
 			case 1: // Passive
 			{
-				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\items\\p_item_Passive.wiprefab");
+				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_passive.wiprefab");
 			}
 			break;
 			case 2: // Buff
 			{
-				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\items\\p_item_Buff.wiprefab");
+				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_buff.wiprefab");
 			}
 			break;
 			case 3: // NPC room
 			{
-				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\items\\p_item_Shield.wiprefab");
+				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_utau.wiprefab");
 			}
 			break;
 			default:
@@ -50,7 +50,8 @@ namespace Wiwa
 			{
 				Transform3D* tr = em.GetComponent<Transform3D>(particleId);
 				*tr = *GetTransform();
-				tr->localPosition.y += 5;
+				tr->localPosition.y += 7;
+				tr->localPosition.z += 2;
 			}
 		}
 	}

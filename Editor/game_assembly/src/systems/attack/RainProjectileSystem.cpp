@@ -1,6 +1,7 @@
 #include "RainProjectileSystem.h"
 #include "../../components/attack/RainProjectile.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "Wiwa/ecs/systems/ParticleSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 
 Wiwa::RainProjectileSystem::RainProjectileSystem()
@@ -72,7 +73,36 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 
 		if (m_SpawnCircularThunder == false)
 		{
-			m_CircualrThunderId = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/RainProjectile/p_boss_rain_projectile_01.wiprefab");
+			//emit left muzzle
+			EntityId rainproj = em.GetChildByName(m_EntityId, "p_boss_rain_projectile_01");
+			EntityId layer0 = em.GetChildByName(rainproj, "p_boss_laser_layer00");
+			EntityId layer1 = em.GetChildByName(rainproj, "p_boss_laser_layer01");
+			EntityId core = em.GetChildByName(rainproj, "bullet_core");
+			EntityId ground = em.GetChildByName(rainproj, "p_ground");
+			EntityId sphere = em.GetChildByName(rainproj, "p_sphere");
+
+			ParticleSystem* p_sys = nullptr;
+
+
+			if (layer0 != EntityManager::INVALID_INDEX)
+				p_sys = em.GetSystem<ParticleSystem>(layer0);
+			if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found layer0");
+
+			if (layer1 != EntityManager::INVALID_INDEX)
+				p_sys = em.GetSystem<ParticleSystem>(layer1);
+			if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found layer1");
+
+			if (core != EntityManager::INVALID_INDEX)
+				p_sys = em.GetSystem<ParticleSystem>(core);
+			if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found core");
+
+			if (ground != EntityManager::INVALID_INDEX)
+				p_sys = em.GetSystem<ParticleSystem>(ground);
+			if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found ground");
+
+			if (sphere != EntityManager::INVALID_INDEX)
+				p_sys = em.GetSystem<ParticleSystem>(sphere);
+			if (p_sys != nullptr) p_sys->RestartEmitter(0.1f); else WI_CORE_ERROR("not found sphere");
 
 			m_SpawnCircularThunder = true;
 		}
@@ -91,7 +121,7 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 
 		//------------------------
 
-		if (m_CircualrThunderId != EntityManager::INVALID_INDEX)
+		/*if (m_CircualrThunderId != EntityManager::INVALID_INDEX)
 		{
 			Transform3D* p_laserT = em.GetComponent<Transform3D>(m_CircualrThunderId);
 
@@ -99,7 +129,7 @@ void Wiwa::RainProjectileSystem::OnUpdate()
 			{
 				p_laserT->localPosition = transform->localPosition;
 			}
-		}
+		}*/
 
 		if (m_Timer >= bullet->lifeTime)
 		{
