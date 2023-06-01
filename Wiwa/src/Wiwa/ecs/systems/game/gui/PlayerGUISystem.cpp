@@ -151,6 +151,14 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			characterInventory->ShopElement(characterInventory->GetCurrentShopItem());
 			buyItem = false;
 			em.DestroyEntity(characterInventory->GetShopItemId());
+			gm.canvas.at(ShopHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
+		}
+
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
+		{
+			gm.canvas.at(ShopHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
 		}
 	}
 }

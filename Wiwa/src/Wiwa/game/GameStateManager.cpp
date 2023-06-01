@@ -1039,6 +1039,18 @@ namespace Wiwa
 
 		name.copy(item->Name, 128);
 		item->Name[name.size()] = '\0';
+
+		switch (item->item_type)
+		{
+		case (int)ItemType::ABILITY:
+			break;
+		case (int)ItemType::BUFF:
+			break;
+		case (int)ItemType::PASSIVE:
+			break;
+		default:
+			break;
+		}
 	}
 	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
 	{
