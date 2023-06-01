@@ -2,6 +2,7 @@
 #include "../../components/attack/SimpleBullet.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include "Wiwa/ecs/systems/AudioSystem.h"
+#include "Wiwa/ecs/systems/ParticleSystem.h"
 #include <Wiwa/utilities/EntityPool.h>
 #include "../../components/attack/Attack.h"
 
@@ -115,16 +116,32 @@ namespace Wiwa
 			}
 			else
 			{
-				//EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_playerbullethit_enemy.wiprefab");
+				EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_playerbullethit_wall.wiprefab");
+				
+				if (lapsus != EntityManager::INVALID_INDEX)
+				{
+					Transform3D* tlapsus = em.GetComponent<Transform3D>(lapsus);
+					Transform3D* tbulletplayer = em.GetComponent<Transform3D>(m_EntityId);
+				
+					if (tlapsus != nullptr)
+					{
+						tlapsus->localPosition = tbulletplayer->localPosition;
+						tlapsus->rotation = tbulletplayer->rotation;
+						tlapsus->localRotation = tbulletplayer->localRotation;
+					}
+				}
+
+				//EntityId lapsus = em.GetChildByName(m_EntityId,"p_playerbullethit_wall");
 				//
 				//if (lapsus != EntityManager::INVALID_INDEX)
 				//{
-				//	Transform3D* tlapsus = em.GetComponent<Transform3D>(lapsus);
-				//	Transform3D* tbulletplayer = em.GetComponent<Transform3D>(m_EntityId);
+				//	ParticleSystem* plapsus = em.GetSystem<ParticleSystem>(lapsus);
 				//
-				//	if (tlapsus != nullptr)
+				//	if (plapsus != nullptr)
 				//	{
-				//		tlapsus->localPosition = tbulletplayer->localPosition;
+				//		plapsus->SetActive(true);
+				//		plapsus->EmitParticleBatch();	
+				//		plapsus->SetActive(false);
 				//	}
 				//}
 			}
