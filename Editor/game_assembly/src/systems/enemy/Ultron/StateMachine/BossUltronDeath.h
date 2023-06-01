@@ -34,10 +34,11 @@ namespace Wiwa {
 		const char* m_DeathExplosionPath1;
 		const char* m_DeathExplosionPath2;
 		const char* m_DeathExplosionPath3;
+		const char* m_DeathExplosionPath4;
 
 		std::vector<EntityId> m_DeathExplosionIds;
 
-		EntityId m_DeathExplosionId;
+		EntityId m_FinalDeathExplosionId;
 	
 		float m_TimerDeathExplosions = 0.0f;
 		float m_DeathTimer = 0.0f;

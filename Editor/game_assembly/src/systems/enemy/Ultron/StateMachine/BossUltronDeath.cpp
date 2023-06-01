@@ -15,6 +15,7 @@ namespace Wiwa
 		m_DeathExplosionPath1 = "assets/Enemy/Explosions/DeathExplosions_01.wiprefab";
 		m_DeathExplosionPath2 = "assets/Enemy/Explosions/DeathExplosions_02.wiprefab";
 		m_DeathExplosionPath3 = "assets/Enemy/Explosions/DeathExplosions_03.wiprefab";
+		m_DeathExplosionPath4 = "assets/vfx/prefabs/vfx_finals/boss_Ultron/p_boss_death_explosion.wiprefab";
 	}
 
 	BossUltronDeathState::~BossUltronDeathState()
@@ -42,7 +43,6 @@ namespace Wiwa
 		Wiwa::DialogManager& dialogManager = ems.GetDialogManager();
 		EnemyState* self = (EnemyState*)em.GetComponentByIterator(enemy->m_EnemyStateIt);
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(em.GetComponentIterator<Transform3D>(enemy->GetEntity()));
-
 		
 		self->hasFinished = true;
 
@@ -68,6 +68,9 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronDeathState::DeathState::DEATH_INIT_EXPLOSION_1:
 		{
+			
+			enemy->m_AudioSys->PlayAudio("explosion");
+
 			for (int i = 0; i <= 6; ++i)
 			{
 
@@ -87,6 +90,8 @@ namespace Wiwa
 			
 			if (m_TimerDeathExplosions > 1.0f)
 			{
+				enemy->m_AudioSys->PlayAudio("explosion");
+
 				for (int i = 0; i <= 12; ++i)
 				{
 					EntityId explosionId = SpawnRandomExplosion(enemy);
@@ -106,6 +111,8 @@ namespace Wiwa
 
 			if (m_TimerDeathExplosions > 1.0f)
 			{
+				enemy->m_AudioSys->PlayAudio("explosion");
+
 				for (int i = 0; i <= 4; ++i)
 				{
 					EntityId explosionId = SpawnRandomExplosion(enemy);
@@ -136,6 +143,7 @@ namespace Wiwa
 
 			if (m_DeathTimer > 2.0f)
 			{
+
 				m_TimerDeathExplosions = 0.0f;
 
 				Wiwa::DialogManager& dialogManager = ems.GetDialogManager();
@@ -154,6 +162,8 @@ namespace Wiwa
 			{
 				if (m_TimerDeathExplosions > 2.0f)
 				{
+					enemy->m_AudioSys->PlayAudio("explosion");
+
 					EntityId explosionId = SpawnRandomExplosion(enemy);
 					m_DeathExplosionIds.push_back(explosionId); // Add the ID to the vector
 					Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
@@ -167,8 +177,14 @@ namespace Wiwa
 
 			if (dialogManager.actualConversationState == 2) // when dialog ends
 			{
+				//Spawn big final explosion
+				m_FinalDeathExplosionId = em.LoadPrefab(m_DeathExplosionPath4);
+			    Transform3D* explosionTr = em.GetComponent<Transform3D>(m_FinalDeathExplosionId);
+			    explosionTr->localPosition = selfTr->localPosition;
+
+				m_DeathTimer = 0.0f;
+
 				m_DeathState = DeathState::DEATH_FINISH;
-				/*em.DestroyEntity(enemy->GetEntity());*/
 			}
 		}
 		break;
@@ -197,18 +213,20 @@ namespace Wiwa
 			//------------------------------------
 
 
-			//for (int i = 1; i <= 8; ++i)
-			//{
-			//	EntityId thunderMarkId = em.LoadPrefab(m_DeathExplosionPath1);
-			//	m_DeathExplosionIds.push_back(thunderMarkId); // Add the ID to the vector
-			//	Transform3D* thunderMarkTr = em.GetComponent<Transform3D>(thunderMarkId);
-			//	thunderMarkTr->localPosition = GetExplosionPosition(selfTr->localPosition, -3.0f, 3.0f);
-			//}
+			/*m_DeathExplosionId = em.LoadPrefab(m_DeathExplosionPath1);
+			Transform3D* explosionTr = em.GetComponent<Transform3D>(m_DeathExplosionId);
+
+			explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, -2.0f, 2.0f);*/
 
 			//-----------------------------------
 
-			m_DeathExplosionIds.clear();
-			em.DestroyEntity(enemy->GetEntity());
+			m_DeathTimer += Time::GetDeltaTimeSeconds();
+
+			if (m_DeathTimer > 2.0f)
+			{
+				m_DeathExplosionIds.clear();
+				em.DestroyEntity(enemy->GetEntity());
+			}
 		}
 		break;
 		default:
