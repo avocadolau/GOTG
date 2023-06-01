@@ -289,8 +289,12 @@ namespace Wiwa
 		//glEnable(GL_DEPTH_TEST);
 		//glDepthMask(false);
 		for (size_t i = 0; i < instance_size; i++) {
+			instanceRenderers[i]->Bind();
+
 			instanceRenderers[i]->Update();
 			instanceRenderers[i]->Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
+
+			instanceRenderers[i]->Unbind();
 		}
 		//glDepthMask(true);
 		GL(Disable(GL_BLEND));
@@ -301,5 +305,26 @@ namespace Wiwa
 		m_RenderCallsInstancedCount++;
 
 
+	}
+
+	void Renderer2D::RenderInstanced(InstanceRenderer& instanceRenderer)
+	{
+		FrameBuffer& framebuffer = *m_ActiveCamera.frameBuffer;
+		GL(Viewport(0, 0, framebuffer.getWidth(), framebuffer.getHeight()));
+
+		framebuffer.Bind();
+		GL(Enable(GL_BLEND));
+		GL(BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+		instanceRenderer.Bind();
+
+		instanceRenderer.Update();
+		instanceRenderer.Render(m_ActiveCamera.getProjection(), m_ActiveCamera.getView());
+
+		instanceRenderer.Unbind();
+
+		GL(Disable(GL_BLEND));
+
+		framebuffer.Unbind();
 	}
 }

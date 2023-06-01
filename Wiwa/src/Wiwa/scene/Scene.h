@@ -28,7 +28,6 @@ namespace Wiwa {
 			SCENE_LEAVING
 		};
 
-
 		void Start();
 
 		void Awake();

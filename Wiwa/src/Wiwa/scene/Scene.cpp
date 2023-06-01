@@ -80,6 +80,15 @@ namespace Wiwa
 
 	void Scene::Start()
 	{
+		m_CameraManager->GenerateBuffers();
+
+		size_t instance_count = m_InstanceRenderers.size();
+
+		for (size_t i = 0; i < instance_count; i++) {
+			m_InstanceRenderers[i]->GenerateBuffers();
+		}
+
+		Wiwa::Resources::GenerateAllBuffers();
 	}
 
 	void Scene::Awake()

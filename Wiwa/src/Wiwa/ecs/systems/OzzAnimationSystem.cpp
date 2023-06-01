@@ -68,7 +68,7 @@ namespace Wiwa {
 
 		Wiwa::Transform3D* t3d = GetComponentByIterator<Wiwa::Transform3D>(m_TransformIt);
 
-		float dt = Time::GetDeltaTime() / 1000.0f;
+		float dt = Time::GetDeltaTime() * 0.001f;
 
 		bool success = m_Animator->Update(dt);
 

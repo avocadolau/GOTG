@@ -97,6 +97,7 @@ namespace Wiwa {
 		Resources();
 
 		static std::vector<Resource*> m_Resources[WRT_LAST];
+		static bool m_GenBuffersOnLoad;
 
 		static void PushResource(ResourceType rt, const char* file, void* rsc, bool isNative = false);
 		static ResourceId getResourcePosition(ResourceType rt, const char* file);
@@ -118,8 +119,8 @@ namespace Wiwa {
 		static void _import_model_impl(const char* origin, const char* destination, ModelSettings* settings);
 		static void _import_animation_impl(const char* origin, const char* destination);
 		static bool _check_import_impl(const char* file, const char* extension);
-	
 	public:
+		static void setGenBuffersOnLoad(bool gen_buffers) { m_GenBuffersOnLoad = gen_buffers; }
 		static bool _preparePath(std::string path);
 		static std::string _assetToLibPath(std::string path);
 		static std::filesystem::path _import_path_impl(const std::filesystem::path& path, const char* extension);
@@ -141,6 +142,8 @@ namespace Wiwa {
 			}
 			_toLower(file_path);
 		}
+
+		static void GenerateAllBuffers();
 
 
 		static void _toLower(std::string& path);

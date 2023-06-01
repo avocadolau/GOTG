@@ -30,9 +30,16 @@ namespace Wiwa {
 
 		uint32_t m_OrthoLocation;
 		uint32_t m_ViewLocation;
+
+		bool m_GeneratedBuffers;
 	public:
 		InstanceRenderer(uint32_t maxInstances);
 		~InstanceRenderer();
+
+		void GenerateBuffers();
+
+		void Bind();
+		void Unbind();
 
 		void Init(const char* shader_path);
 		void Update();

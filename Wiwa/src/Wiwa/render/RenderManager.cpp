@@ -160,6 +160,54 @@ namespace Wiwa {
 		GL(BindVertexArray(0));
 	}
 
+	void RenderManager::UpdateSingle(size_t layer_id)
+	{
+		// Set viewport
+		GL(Viewport(0, 0, m_FrameBuffer->getWidth(), m_FrameBuffer->getHeight()));
+
+		// Bind framebuffer
+		m_FrameBuffer->Bind(false); // No clear so we clear without transparency
+		GL(ClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+		GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		// Bind shader
+		m_Shader->Bind();
+
+		// Set MVP uniforms
+		m_Shader->setUniform(m_OrthoLoc, m_OrthoProj);
+		m_Shader->setUniform(m_ViewLoc, m_View);
+		m_Shader->setUniform(m_ModelLoc, m_Model);
+
+
+		// Bind VAO
+		GL(BindVertexArray(m_VAO));
+
+		Camera* cam = m_RenderLayers[layer_id].getCamera();
+		if (cam) {
+			GL(BindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture()));
+			// Draw elements
+			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+		}
+
+		// Unbind shader and framebuffer
+		m_Shader->UnBind();
+		m_FrameBuffer->Unbind();
+
+		if (m_RenderOnMainWindow) {
+			uint32_t w = Wiwa::Application::Get().GetWindow().GetWidth();
+			uint32_t h = Wiwa::Application::Get().GetWindow().GetHeight();
+			GL(Viewport(0, 0, w, h));
+
+			m_Shader->Bind();
+
+			GL(BindTexture(GL_TEXTURE_2D, m_FrameBuffer->getColorBufferTexture()));
+			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+
+			m_Shader->UnBind();
+		}
+
+		GL(BindVertexArray(0));
+	}
+
 	void RenderManager::BindVAO()
 	{
 		GL(BindVertexArray(m_VAO));
