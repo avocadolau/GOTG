@@ -1040,17 +1040,27 @@ namespace Wiwa
 		name.copy(item->Name, 128);
 		item->Name[name.size()] = '\0';
 
+		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
+		Transform3D* t3d_particle = nullptr;
 		switch (item->item_type)
 		{
 		case (int)ItemType::ABILITY:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Active.wiprefab");
 			break;
 		case (int)ItemType::BUFF:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Buff.wiprefab");
 			break;
 		case (int)ItemType::PASSIVE:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Passive.wiprefab");
 			break;
 		default:
 			break;
 		}
+
+		t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+		*t3d_particle = *t3d;
+		em.SetParent(prefabParticle, shopItem);
+		t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
 	}
 	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
 	{
