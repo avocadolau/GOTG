@@ -253,8 +253,8 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight ||
-					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight) ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 

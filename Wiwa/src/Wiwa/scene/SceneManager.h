@@ -20,6 +20,13 @@ namespace Wiwa {
 	private:
 		static std::vector<Scene*> m_Scenes;
 		static SceneId m_ActiveScene;
+
+		static InstanceRenderer m_InstanceRenderer;
+		static size_t m_ProgressBar;
+		static size_t m_ProgressBarFilling;
+		static size_t m_BackGround;
+
+
 		static std::vector<SceneId> m_RemovedSceneIds;
 
 		static void LoadEntity(Memory& scene_data, EntityId parent, EntityManager& em, bool is_parent);
@@ -37,7 +44,12 @@ namespace Wiwa {
 		static std::string m_LoadPath;
 		static int m_LoadFlags;
 		static std::atomic<bool> m_LoadedScene;
+		static std::atomic<int> m_LoadingProgress;
 		static std::thread m_LoadThread;
+		static std::thread m_LoadScreenThread;
+
+		static void LoadSceneJob(Wiwa::Scene* scene, Wiwa::Memory& scene_data);
+		static void LoadingScreenJob();
 	public:
 		enum LoadFlags {
 			// Unloads current scene

@@ -112,6 +112,30 @@ namespace Wiwa {
 		updateView();
 	}
 
+	void Camera::GenerateBuffers()
+	{
+		if (generatedBuffers) return;
+
+		generatedBuffers = true;
+
+		if (m_CameraType == CameraType::PERSPECTIVE) {
+			Size2i res = Application::Get().GetTargetResolution();
+			//this buffer will have two color attatchements. 2 textures in a Fbo
+			frameBuffer = new FrameBuffer();
+			frameBuffer->Init(res.w, res.h, 2, true);
+			//frameBuffer->Init(res.w, res.h);
+
+			vBlurBuffer = new BlurBuffer();
+			vBlurBuffer->Init(res.w, res.h);
+
+			hBlurBuffer = new BlurBuffer();
+			hBlurBuffer->Init(res.w, res.h);
+
+			shadowBuffer = new ShadowBuffer();
+			shadowBuffer->Init();
+		}
+	}
+
 	glm::vec3 Camera::ScreenToWorlPosition(glm::vec2 screenPos, float intersection_Y)
 	{
 	
@@ -164,7 +188,7 @@ namespace Wiwa {
 
 	
 
-	void Camera::SetPerspective(const float fov, const float aspectRatio, const float nearPlaneDistance, const float farPlaneDistance)
+	void Camera::SetPerspective(const float fov, const float aspectRatio, const float nearPlaneDistance, const float farPlaneDistance, bool genbuffers)
 	{
 		m_CameraType = CameraType::PERSPECTIVE;
 		m_FOV = fov;
@@ -174,21 +198,26 @@ namespace Wiwa {
 		m_NearPlaneDist = nearPlaneDistance;
 		m_FarPlaneDist = farPlaneDistance;
 		UpdateFrustrum();
-		Size2i res = Application::Get().GetTargetResolution();
 
-		//this buffer will have two color attatchements. 2 textures in a Fbo
-		frameBuffer = new FrameBuffer();
-		frameBuffer->Init(res.w, res.h, 2,true);
-		//frameBuffer->Init(res.w, res.h);
+		if (genbuffers) {
+			GenerateBuffers();
+		}
 
-		vBlurBuffer = new BlurBuffer();
-		vBlurBuffer->Init(res.w,res.h);
+		//Size2i res = Application::Get().GetTargetResolution();
 
-		hBlurBuffer = new BlurBuffer();
-		hBlurBuffer->Init(res.w, res.h);
+		////this buffer will have two color attatchements. 2 textures in a Fbo
+		//frameBuffer = new FrameBuffer();
+		//frameBuffer->Init(res.w, res.h, 2,true);
+		////frameBuffer->Init(res.w, res.h);
 
-		shadowBuffer = new ShadowBuffer();
-		shadowBuffer->Init();
+		//vBlurBuffer = new BlurBuffer();
+		//vBlurBuffer->Init(res.w,res.h);
+
+		//hBlurBuffer = new BlurBuffer();
+		//hBlurBuffer->Init(res.w, res.h);
+
+		//shadowBuffer = new ShadowBuffer();
+		//shadowBuffer->Init();
 	}
 
 	void Camera::UpdateFrustrum()

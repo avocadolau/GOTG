@@ -208,7 +208,7 @@ namespace Wiwa {
 		return true;
 	}
 
-	void Model::getWiMeshFromFile(const char* file)
+	void Model::getWiMeshFromFile(const char* file, bool genBuffers)
 	{
 		is_root = true;
 
@@ -293,8 +293,11 @@ namespace Wiwa {
 			
 				//hold reference to root
 				model->parent = this;
-	
-				model->generateBuffers();
+				
+				if (genBuffers) {
+					model->generateBuffers();
+				}
+
 				models.push_back(model);
 			}
 		}
@@ -621,9 +624,27 @@ namespace Wiwa {
 		return h;
 	}
 
-	void Model::generateBuffers()
+	void Model::GenerateAllBuffers()
 	{
+		generateBuffers(true);
+	}
+
+	void Model::generateBuffers(bool genchildren)
+	{
+		if (generatedBuffers) return;
+
+		generatedBuffers = true;
+
+		if (genchildren) {
+			size_t msize = models.size();
+
+			for (size_t i = 0; i < msize; i++) {
+				models[i]->generateBuffers(true);
+			}
+		}
+
 		if (is_root) return;
+
 		WI_CORE_INFO("Generating buffers...");
 		GL(GenBuffers(1, &vbo));
 		GL(GenBuffers(1, &ebo));
@@ -713,7 +734,8 @@ namespace Wiwa {
 	}
 
 	Model::Model(const char* file)
-		: ebo(0), vbo(0), vao(0)
+		: ebo(0), vbo(0), vao(0),
+		generatedBuffers(false)
 	{
 		is_root = true;
 		model_hierarchy = NULL;
@@ -804,9 +826,9 @@ namespace Wiwa {
 		getMeshFromFile(file, settings);
 	}
 
-	void Model::LoadWiMesh(const char* file)
+	void Model::LoadWiMesh(const char* file, bool genBuffers)
 	{
-		getWiMeshFromFile(file);
+		getWiMeshFromFile(file, genBuffers);
 	}
 
 	void Model::LoadMeshBones(unsigned int meshIndex,const aiMesh* mesh)

@@ -408,13 +408,13 @@ namespace Wiwa
         if (!camera->drawBoundingBoxes)
             return;
 
-        glViewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight());
+        GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
         camera->frameBuffer->Bind(false);
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(glm::value_ptr(camera->getProjection()));
-        glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(glm::value_ptr(camera->getView()));
+        GL(MatrixMode(GL_PROJECTION));
+        GL(LoadMatrixf(glm::value_ptr(camera->getProjection())));
+        GL(MatrixMode(GL_MODELVIEW));
+        GL(LoadMatrixf(glm::value_ptr(camera->getView())));
 
         DrawAgent();
 

@@ -29,6 +29,7 @@ namespace Wiwa {
 		bool cull = false;
 		bool drawBoundingBoxes = false;
 		bool drawFrustrums = true;
+		bool generatedBuffers = false;
 	private:
 		float m_FOV;
 		CameraType m_CameraType;
@@ -64,9 +65,10 @@ namespace Wiwa {
 		void setPosition(const glm::vec3 position);
 		void setFront(const glm::vec3 front);
 
+		void GenerateBuffers();
+
 		glm::vec3 ScreenToWorlPosition(glm::vec2 screenPos, float intersection_Y);
 		glm::vec2 GetNormalizedScreenPos(glm::vec2 screenPos);
-
 
 		inline glm::vec3 getPosition() { return m_CameraPos; }
 		inline glm::vec3 getFront() { return m_CameraFront; }
@@ -77,7 +79,7 @@ namespace Wiwa {
 
 		inline void setRotation(const glm::vec3 rot);
 		void lookat(const glm::vec3 position);
-		void SetPerspective(const float fov, const float aspectRatio, const float nearPlaneDistance=0.1f, const float farPlaneDistance=100.0f);
+		void SetPerspective(const float fov, const float aspectRatio, const float nearPlaneDistance=0.1f, const float farPlaneDistance=100.0f, bool genbuffers=true);
 		void UpdateFrustrum();
 		void SetOrthographic(const int width, const int height, const float nearPlaneDistance=0.1f, const float farPlaneDistance=100.0f);
 
