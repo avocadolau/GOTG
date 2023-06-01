@@ -267,18 +267,16 @@ namespace Wiwa {
 
 					if (emitter->m_loopSpawning)
 					{
+						m_AlreadySpawned = false;
+
 						m_SpawnTimer = emitter->m_spawnRate;
 
 						if (emitter->m_p_rangedSpawnRate)
 						{
 							m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
-							m_AlreadySpawned = false;
 						}
 					}
-					
 				}
-
-				
 			}
 
 
