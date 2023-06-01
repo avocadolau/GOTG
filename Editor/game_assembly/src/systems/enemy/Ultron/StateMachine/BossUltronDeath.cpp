@@ -71,11 +71,10 @@ namespace Wiwa
 			
 			enemy->m_AudioSys->PlayAudio("explosion");
 
-			for (int i = 0; i <= 6; ++i)
+			for (int i = 0; i <= 2; ++i)
 			{
 
 				EntityId explosionId = SpawnRandomExplosion(enemy);
-				m_DeathExplosionIds.push_back(explosionId); // Add the ID to the vector
 				Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
 				explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, 0.0f, 6.0f);
 			}
@@ -92,10 +91,9 @@ namespace Wiwa
 			{
 				enemy->m_AudioSys->PlayAudio("explosion");
 
-				for (int i = 0; i <= 12; ++i)
+				for (int i = 0; i <= 3; ++i)
 				{
 					EntityId explosionId = SpawnRandomExplosion(enemy);
-					m_DeathExplosionIds.push_back(explosionId); // Add the ID to the vector
 					Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
 					explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, -6.0f, 2.0f);
 				}
@@ -113,10 +111,9 @@ namespace Wiwa
 			{
 				enemy->m_AudioSys->PlayAudio("explosion");
 
-				for (int i = 0; i <= 4; ++i)
+				for (int i = 0; i <= 1; ++i)
 				{
 					EntityId explosionId = SpawnRandomExplosion(enemy);
-					m_DeathExplosionIds.push_back(explosionId); // Add the ID to the vector
 					Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
 					explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, -4.0f, 4.0f);
 				}
@@ -165,7 +162,6 @@ namespace Wiwa
 					enemy->m_AudioSys->PlayAudio("explosion");
 
 					EntityId explosionId = SpawnRandomExplosion(enemy);
-					m_DeathExplosionIds.push_back(explosionId); // Add the ID to the vector
 					Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
 					explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, -1.0f, 1.0f);
 
@@ -224,7 +220,6 @@ namespace Wiwa
 
 			if (m_DeathTimer > 2.0f)
 			{
-				m_DeathExplosionIds.clear();
 				em.DestroyEntity(enemy->GetEntity());
 			}
 		}
