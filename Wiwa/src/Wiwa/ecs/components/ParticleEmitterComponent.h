@@ -190,6 +190,8 @@ namespace Wiwa {
 		bool m_cycleLifeTime;
 		bool m_cycleColors;
 		float m_spawnTimer;
+		bool m_useNewColorNodes;
+		int m_newColorsUsed;
 
 		
 		// todo					----------------------------------------
@@ -302,5 +304,7 @@ REFLECTION_BEGIN(Wiwa::ParticleEmitterComponent)
 	REFLECT_MEMBER(m_cycleLifeTime);
 	REFLECT_MEMBER(m_cycleColors);
 	REFLECT_MEMBER(m_spawnTimer);
+	REFLECT_MEMBER(m_useNewColorNodes);
+	REFLECT_MEMBER(m_newColorsUsed);
 
 REFLECTION_END;

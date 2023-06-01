@@ -34,6 +34,7 @@ namespace Wiwa {
 		bool IsThirdPatternFinished();
 
 		float m_TimerRoundCooldown = 0.0f;
+		float m_TimerSound = 0.0f;
 		int m_RoundCounter = 0;
 		int m_SelectRandomAttack = 0;
 		bool m_IsAttackSelected = false;

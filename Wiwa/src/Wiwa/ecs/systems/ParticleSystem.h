@@ -146,10 +146,16 @@ namespace Wiwa
 		//Deactivates all active particles;
 		void DeactivateParticles();
 
+		//Restart the emitter;
+		void RestartEmitter(float timer = 0.f);
+
+		//Set color of a certain node. Uses the current color system of the emitter;
+		void SetColor(int index, glm::vec4 color);
+
 	private:
 
 		void SetEmitterBools(ParticleEmitterComponent* emitter);
-		void FixBool(bool& _bool);
+		void FixBool(bool& _bool, bool value = false);
 
 		unsigned int m_VAO = -1;
 
@@ -159,7 +165,7 @@ namespace Wiwa
 
 		float m_SpawnTimer;
 
-		bool m_SpawnedOnce;
+		bool m_AlreadySpawned;
 
 		std::vector<Particle> m_Particles;
 

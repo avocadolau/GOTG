@@ -76,9 +76,9 @@ namespace Wiwa
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
 
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonY_01.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonA_01.dds"))
 		{
-			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonY_01.dds");
+			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonA_01.dds");
 			Image* continueImg = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 			if (continueImg)
@@ -89,12 +89,12 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_ButtonY_01.dds Does not exist");
+			WI_CRITICAL("UI_ButtonA_01.dds Does not exist");
 		}
 		
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonY_02.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonA_02.dds"))
 		{
-			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonY_02.dds");
+			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/UI_ButtonA_02.dds");
 			Image* continueImg2 = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
 			if (continueImg2)
@@ -105,7 +105,7 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_ButtonY_02.dds Does not exist");
+			WI_CRITICAL("UI_ButtonA_02.dds Does not exist");
 		}
 		
 		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_TalkButton01.dds"))
@@ -217,7 +217,7 @@ namespace Wiwa
 			character->CanMove = true;
 		}
 
-		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
 			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && canNoLongerTalk == false)
 		{
 			if (collidingWithNpc == true)
@@ -576,7 +576,7 @@ namespace Wiwa
 				}
 			}
 
-			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(0, 3)) && (keyPressRefreshTimer > 850 && firstTime == false && endTime == false))
+			if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && (keyPressRefreshTimer > 850 && firstTime == false && endTime == false))
 			{
 				render->DisableInstance(m_Scene, conversations[conversationNumber].nodes[currentNode].text1_imgModeID);
 				Audio::StopWorldEvent(conversations[conversationNumber].nodes[currentNode].audioEventName.c_str());

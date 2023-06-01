@@ -34,7 +34,7 @@ namespace Wiwa {
 
 		m_SpawnTimer = 0;
 		emitter->m_spawnTimer = 0;
-		m_SpawnedOnce = false;
+		m_AlreadySpawned = false;
 		
 		m_AvailableParticles = emitter->m_maxParticles;
 
@@ -116,55 +116,7 @@ namespace Wiwa {
 	}
 	bool ParticleSystem::OnEnabledFromPool()
 	{
-		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
-
-		if (m_Model == nullptr)
-		{
-			ResourceId meshid = Wiwa::Resources::Load<Model>(emitter->m_meshPath);
-			m_Model = Wiwa::Resources::GetResourceById<Model>(meshid);
-		}
-		if (m_Material == nullptr)
-		{
-			ResourceId matid = Wiwa::Resources::Load<Material>(emitter->m_materialPath);
-			m_Material = Wiwa::Resources::GetResourceById<Material>(matid);
-		}
-
-
-
-		if (emitter->m_p_rangedSpawnDelay)
-		{
-			m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnDelay, emitter->m_p_maxSpawnDelay);
-
-		}
-		else
-		{
-
-			m_SpawnTimer = emitter->m_p_spawnDelay;
-		}
-		emitter->m_spawnTimer = m_SpawnTimer;
-
-		if (emitter->m_activeOverTime)
-		{
-			if (emitter->m_startActive)
-			{
-				if (emitter->m_rangedTimeActive)
-				{
-					emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
-				}
-				else
-				{
-					emitter->m_ActiveTimer = emitter->m_initialTimeActive + emitter->m_p_spawnDelay;
-				}
-			}
-			else
-			{
-				emitter->m_ActiveTimer = 0;
-			}
-
-		}
-		if (m_SpawnTimer <= 0 && (emitter->m_active || emitter->m_activeOverTime))
-			SpawnParticleSet();
-
+		RestartEmitter();
 		return true;
 	}
 	void ParticleSystem::OnUpdate()
@@ -279,7 +231,7 @@ namespace Wiwa {
 
 				if (m_SpawnTimer <= 0 && emitter->m_ActiveTimer > 0)
 				{
-					if (!m_SpawnedOnce)
+					if (!m_AlreadySpawned)
 						SpawnParticleSet();
 
 					if (emitter->m_loopSpawning)
@@ -293,7 +245,7 @@ namespace Wiwa {
 					}
 					else
 					{
-						m_SpawnedOnce = true;
+						m_AlreadySpawned = true;
 					}
 					
 				}
@@ -304,16 +256,26 @@ namespace Wiwa {
 			}
 			else
 			{
-				if (m_SpawnTimer <= 0 && emitter->m_loopSpawning)
+				if (m_SpawnTimer <= 0)
 				{
-					SpawnParticleSet();
-
-					m_SpawnTimer = emitter->m_spawnRate;
-
-					if (emitter->m_p_rangedSpawnRate)
+					if (!m_AlreadySpawned)
 					{
-						m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+						SpawnParticleSet();
+						m_AlreadySpawned = true;
 					}
+						
+
+					if (emitter->m_loopSpawning)
+					{
+						m_SpawnTimer = emitter->m_spawnRate;
+
+						if (emitter->m_p_rangedSpawnRate)
+						{
+							m_SpawnTimer = Wiwa::Math::RandomRange(emitter->m_p_minSpawnRate, emitter->m_p_maxSpawnRate);
+							m_AlreadySpawned = false;
+						}
+					}
+					
 				}
 
 				
@@ -335,7 +297,7 @@ namespace Wiwa {
 		{
 			Particle& particle = m_Particles[i];
 
-			if (particle.life_time >= 0.0f)
+			if (particle.life_time > 0.0f || emitter->m_permanentParticles)
 			{
 				/*if (!Time::IsPaused())*/
 				{
@@ -348,32 +310,67 @@ namespace Wiwa {
 					activeParticles++;
 
 					glm::vec4 color(0);
-					if (emitter->m_colorsUsed > 1)
+
+					if (emitter->m_useNewColorNodes)
 					{
-						/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
-						WI_CORE_INFO(perc.c_str());*/
-
-						for (size_t j = 0; j < emitter->m_colorsUsed - 1; j++)
+						if (emitter->m_newColorsUsed > 1 && emitter->m_newColorsUsed <= 20)
 						{
-							if (particle.life_percentage >= emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f &&
-								particle.life_percentage < emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f)
-							{
-								/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
-								WI_CORE_INFO(cid.c_str());*/
+							/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
+							WI_CORE_INFO(perc.c_str());*/
 
-								color = particle.color = InterpolateVec4(
-									emitter->m_p_colorsOverLifetime[j].color,
-									emitter->m_p_colorsOverLifetime[j + 1].color,
-									particle.life_percentage - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f,
-									emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f
-								);
+							for (size_t j = 0; j < emitter->m_newColorsUsed - 1; j++)
+							{
+								if (particle.life_percentage >= emitter->m_newColorsNodes[j].m_percentage * 0.01f &&
+									particle.life_percentage < emitter->m_newColorsNodes[j + 1].m_percentage * 0.01f)
+								{
+									/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
+									WI_CORE_INFO(cid.c_str());*/
+
+									color = particle.color = InterpolateVec4(
+										emitter->m_newColorsNodes[j].color,
+										emitter->m_newColorsNodes[j + 1].color,
+										particle.life_percentage - emitter->m_newColorsNodes[j].m_percentage * 0.01f,
+										emitter->m_newColorsNodes[j + 1].m_percentage * 0.01f - emitter->m_newColorsNodes[j].m_percentage * 0.01f
+									);
+								}
 							}
+						}
+						else
+						{
+							color = particle.color = emitter->m_newColorsNodes[0].color;
 						}
 					}
 					else
 					{
-						color = particle.color = emitter->m_p_colorsOverLifetime[0].color;
+						if (emitter->m_colorsUsed > 1 && emitter->m_colorsUsed <= 4)
+						{
+							/*std::string perc = "particle life percentage: " + std::to_string(particle.life_percentage);
+							WI_CORE_INFO(perc.c_str());*/
+
+							for (size_t j = 0; j < emitter->m_colorsUsed - 1; j++)
+							{
+								if (particle.life_percentage >= emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f &&
+									particle.life_percentage < emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f)
+								{
+									/*std::string cid = std::to_string(j) + " Color id: " + std::to_string(j);
+									WI_CORE_INFO(cid.c_str());*/
+
+									color = particle.color = InterpolateVec4(
+										emitter->m_p_colorsOverLifetime[j].color,
+										emitter->m_p_colorsOverLifetime[j + 1].color,
+										particle.life_percentage - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f,
+										emitter->m_p_colorsOverLifetime[j + 1].m_percentage * 0.01f - emitter->m_p_colorsOverLifetime[j].m_percentage * 0.01f
+									);
+								}
+							}
+						}
+						else
+						{
+							color = particle.color = emitter->m_p_colorsOverLifetime[0].color;
+						}
 					}
+
+					
 
 					if (m_Material)
 					{
@@ -783,6 +780,49 @@ namespace Wiwa {
 		}
 	}
 
+	void ParticleSystem::RestartEmitter(float timer)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		
+		DeactivateParticles();
+
+		if (timer == 0)
+			SpawnParticleSet();
+		else
+			SetTimer(timer);
+
+		if (emitter->m_rangedTimeActive)
+		{
+			emitter->m_ActiveTimer = Wiwa::Math::RandomRange(emitter->m_minInitialTimeActive, emitter->m_maxInitialTimeActive);
+		}
+		else
+		{
+			emitter->m_ActiveTimer = emitter->m_initialTimeActive;
+		}
+
+		m_AlreadySpawned = false;
+	}
+
+	void ParticleSystem::SetColor(int index, glm::vec4 color)
+	{
+		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		
+		if (emitter->m_useNewColorNodes)
+		{
+			if (index >= 0 && index < 20)
+			{
+				emitter->m_newColorsNodes[index].color = color;
+			}
+		}
+		else
+		{
+			if (index >= 0 && index < 4)
+			{
+				emitter->m_newColorsNodes[index].color = color;
+			}
+		}
+	}
+
 	void ParticleSystem::OnDestroy()
 	{
 		m_Model = nullptr;
@@ -858,12 +898,32 @@ namespace Wiwa {
 
 			if (camera->cull && !camera->frustrum.IsBoxVisible(m_Model->boundingBox.getMin(), m_Model->boundingBox.getMax()))
 				return;
-			r3d.RenderMesh(m_Model, particle.transform.worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, camera);
+			r3d.RenderMesh(
+				m_Model,
+				particle.transform.worldMatrix, m_Material,
+				lman.GetDirectionalLight(),
+				lman.GetPointLights(),
+				lman.GetSpotLights(),
+				false,
+				true,
+				false, 
+				camera
+			);
 			
 		}
 		if (man.editorCamera)
 		{
-			r3d.RenderMesh(m_Model, particle.transform.worldMatrix, m_Material, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights(), false, man.editorCamera);
+			r3d.RenderMesh(
+				m_Model, 
+				particle.transform.worldMatrix, m_Material, 
+				lman.GetDirectionalLight(),
+				lman.GetPointLights(),
+				lman.GetSpotLights(),
+				false,
+				true,
+				false,
+				man.editorCamera
+			);
 		}
 
 		GL(ActiveTexture(GL_TEXTURE0));
@@ -1172,9 +1232,9 @@ namespace Wiwa {
 		FixBool(emitter->m_stopSizeAtZeroX);
 		FixBool(emitter->m_stopSizeAtZeroY);
 		FixBool(emitter->m_stopSizeAtZeroZ);
-		FixBool(emitter->m_billboardLockAxisX);
-		FixBool(emitter->m_billboardLockAxisY);
-		FixBool(emitter->m_billboardLockAxisZ);
+		FixBool(emitter->m_billboardLockAxisX, true);
+		FixBool(emitter->m_billboardLockAxisY, true);
+		FixBool(emitter->m_billboardLockAxisZ, true);
 		FixBool(emitter->m_p_growUniformly);
 		FixBool(emitter->m_destroyOnFinishActive);
 		FixBool(emitter->m_p_uniformStartSize);
@@ -1183,12 +1243,13 @@ namespace Wiwa {
 		FixBool(emitter->m_permanentParticles);
 		FixBool(emitter->m_cycleLifeTime);
 		FixBool(emitter->m_cycleColors);
+		FixBool(emitter->m_useNewColorNodes);
 	}
 
-	void ParticleSystem::FixBool(bool& _bool)
+	void ParticleSystem::FixBool(bool& _bool, bool value)
 	{
 		if ((int)_bool < 0 || (int)_bool > 1)
-			_bool = false;
+			_bool = value;
 	}
 
 	

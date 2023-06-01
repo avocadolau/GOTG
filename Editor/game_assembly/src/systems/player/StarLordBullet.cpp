@@ -97,6 +97,37 @@ namespace Wiwa
 				WI_ERROR("Couldn't get audio system: starlord bullet");
 			}
 
+			std::string tagStr = "ENEMY";
+			if (tagStr == body2->selfTagStr)
+			{				
+				EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_playerbullethit_enemy.wiprefab");
+				
+				if (lapsus != EntityManager::INVALID_INDEX)
+				{
+					Transform3D* tlapsus = em.GetComponent<Transform3D>(lapsus);
+					Transform3D* tbulletplayer = em.GetComponent<Transform3D>(m_EntityId);
+
+					if (tlapsus != nullptr)
+					{
+						tlapsus->localPosition = tbulletplayer->localPosition;
+					}
+				}
+			}
+			else
+			{
+				//EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_playerbullethit_enemy.wiprefab");
+				//
+				//if (lapsus != EntityManager::INVALID_INDEX)
+				//{
+				//	Transform3D* tlapsus = em.GetComponent<Transform3D>(lapsus);
+				//	Transform3D* tbulletplayer = em.GetComponent<Transform3D>(m_EntityId);
+				//
+				//	if (tlapsus != nullptr)
+				//	{
+				//		tlapsus->localPosition = tbulletplayer->localPosition;
+				//	}
+				//}
+			}
 
 			SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(m_BulletIt);
 			if (bullet->isFromPool)

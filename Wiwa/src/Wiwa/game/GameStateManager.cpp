@@ -73,6 +73,49 @@ namespace Wiwa
 
 	int GameStateManager::s_CurrentWave = 0;
 
+	static std::vector<SceneId> activeScenesKree;
+	static std::vector<SceneId> deactiveScenesKree;
+
+	static std::vector<SceneId> activeScenesPhalanx;
+	static std::vector<SceneId> deactiveScenesPhalanx;
+
+	int LoadRandomCombatRoom(bool isPhalanx)
+	{
+		if (isPhalanx)
+		{
+			if (activeScenesPhalanx.empty())
+			{
+				for (auto& scene : deactiveScenesPhalanx)
+				{
+					activeScenesPhalanx.emplace_back(scene);
+				}
+				deactiveScenesPhalanx.clear();
+			}
+			std::uniform_int_distribution<> dist(0, activeScenesPhalanx.size() - 1);
+			int nextRoom = dist(Application::s_Gen);
+			SceneId id = activeScenesPhalanx[nextRoom];
+			activeScenesPhalanx.erase(activeScenesPhalanx.begin() + nextRoom);
+			deactiveScenesPhalanx.push_back(id);
+			SceneManager::ChangeSceneByIndex(id);
+			return nextRoom;
+		}
+
+		if (activeScenesKree.empty())
+		{
+			for (auto& scene : deactiveScenesKree)
+			{
+				activeScenesKree.emplace_back(scene);
+			}
+			deactiveScenesKree.clear();
+		}
+		std::uniform_int_distribution<> dist(0, activeScenesKree.size() - 1);
+		int nextRoom = dist(Application::s_Gen);
+		SceneId id = activeScenesKree[nextRoom];
+		activeScenesKree.erase(activeScenesKree.begin() + nextRoom);
+		deactiveScenesKree.push_back(id);
+		SceneManager::ChangeSceneByIndex(id);
+		return nextRoom;
+	}
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -300,6 +343,19 @@ namespace Wiwa
 		s_RoomsToBoss = 10;
 		s_RoomsToShop = 5;
 		s_CanPhalanxRooms = false;
+
+
+		for (auto& scene : s_CombatRooms)
+		{
+			activeScenesKree.emplace_back(scene);
+		}
+		for (auto& scene : s_PhalanxRooms)
+		{
+			activeScenesPhalanx.emplace_back(scene);
+		}
+
+		deactiveScenesKree.clear();
+		deactiveScenesPhalanx.clear();
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -590,7 +646,7 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-			LoadRandomRoom(s_CombatRooms);
+			LoadRandomCombatRoom(false);
 			RandomizeRewardRoom();
 			break;
 		}
@@ -611,10 +667,7 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			if(s_CanPhalanxRooms)
-				LoadRandomRoom(s_PhalanxRooms);
-			else
-				LoadRandomRoom(s_CombatRooms);
+			LoadRandomCombatRoom(s_CanPhalanxRooms);
 
 			s_EnemyManager->m_CurrentCombatRoomsCount++;
 
@@ -651,7 +704,7 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-				LoadRandomRoom(s_PhalanxRooms);
+				LoadRandomCombatRoom(true);
 				s_EnemyManager->m_CurrentCombatRoomsCount++;
 			}
 			break;
@@ -676,10 +729,17 @@ namespace Wiwa
 
 	int GameStateManager::RandomizeRewardRoom()
 	{
+		uint32_t lastRoom = 0;
 		for (size_t i = 0; i < 2; i++)
 		{
 			std::uniform_int_distribution<> dist(0,  100);
-			uint32_t randomNum = dist(Application::s_Gen);
+			
+			uint32_t randomNum = 0;
+			do {
+				randomNum = dist(Application::s_Gen);
+			} while (randomNum == lastRoom);
+			
+			lastRoom = randomNum;
 			uint32_t counter = 0;
 			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
 				s_DoorsReward[i] = 0;
@@ -1032,6 +1092,28 @@ namespace Wiwa
 
 		name.copy(item->Name, 128);
 		item->Name[name.size()] = '\0';
+
+		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
+		Transform3D* t3d_particle = nullptr;
+		switch (item->item_type)
+		{
+		case (int)ItemType::ABILITY:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Active.wiprefab");
+			break;
+		case (int)ItemType::BUFF:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Buff.wiprefab");
+			break;
+		case (int)ItemType::PASSIVE:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Passive.wiprefab");
+			break;
+		default:
+			break;
+		}
+
+		t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+		*t3d_particle = *t3d;
+		em.SetParent(prefabParticle, shopItem);
+		t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
 	}
 	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
 	{

@@ -46,6 +46,7 @@ namespace Wiwa
 		m_FirstPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_SecondPatternAttackTimer += Time::GetDeltaTimeSeconds();
 		m_ThirdPatternAttackTimer += Time::GetDeltaTimeSeconds();
+		m_TimerSound += Time::GetDeltaTimeSeconds();
 
 		/*enemy->m_NavAgentSys->StopAgent();*/
 		enemy->LookAt(playerTr->localPosition, 80.0f);
@@ -63,11 +64,17 @@ namespace Wiwa
 
 		if (IsSecondPatternFinished() == false)
 		{
-			std::uniform_int_distribution<> audioHitSound(1, 100);
-			int randomNum = audioHitSound(Application::s_Gen);
-			if (randomNum <= 5) // 20 % probability
+			//std::uniform_int_distribution<> audioHitSound(1, 100);
+			//int randomNum = audioHitSound(Application::s_Gen);
+			//if (randomNum <= 5) // 20 % probability
+			//{
+			//	enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+			//}
+
+			if (m_TimerSound > 0.5f)
 			{
 				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+				m_TimerSound = 0.0f;
 			}
 		
 			SpawnSecondPattern(enemy);
@@ -76,11 +83,17 @@ namespace Wiwa
 
 		if (IsThirdPatternFinished() == false)
 		{
-			std::uniform_int_distribution<> audioHitSound(1, 100);
-			int randomNum = audioHitSound(Application::s_Gen);
-			if (randomNum <= 5) // 20 % probability
+			//std::uniform_int_distribution<> audioHitSound(1, 100);
+			//int randomNum = audioHitSound(Application::s_Gen);
+			//if (randomNum <= 5) // 20 % probability
+			//{
+			//	enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+			//}
+
+			if (m_TimerSound > 0.5f)
 			{
 				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+				m_TimerSound = 0.0f;
 			}
 
 			SpawnThirdPattern(enemy);

@@ -67,33 +67,35 @@ namespace Wiwa
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_final.dds"))
 		{
-			ResourceId textID01 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.dds");
+			ResourceId textID01 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_final.dds");
 			Image* choice1Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID01);
 
-			if (choice1Opt1Img) {
+			if (choice1Opt1Img)
+			{
 				choice1Opt1ImgID = render.CreateInstancedQuadTex(m_Scene, choice1Opt1Img->GetTextureId(), choice1Opt1Img->GetSize(), { 500,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, choice1Opt1ImgID);
 			}
 
-			ResourceId textID02 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_v1.dds");
+			ResourceId textID02 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/uatu_reward_menu_final.dds");
 			Image* choice1Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID02);
 
-			if (choice1Opt2Img) {
+			if (choice1Opt2Img)
+			{
 				choice1Opt2ImgID = render.CreateInstancedQuadTex(m_Scene, choice1Opt2Img->GetTextureId(), choice1Opt2Img->GetSize(), { 1000,250 }, { 400,400 }, Wiwa::Renderer2D::Pivot::UPLEFT);
 				render.DisableInstance(m_Scene, choice1Opt2ImgID);
 			}
 		}
 		else
 		{
-			WI_CRITICAL("UI_TalkButton01.dds Does not exist");
+			WI_CRITICAL("uatu_reward_menu_final.dds Does not exist");
 		}
 		
 
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_final.dds"))
 		{
-			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.dds");
+			ResourceId textID = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_final.dds");
 			Image* choice2Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID);
 
 			if (choice2Opt1Img)
@@ -102,7 +104,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice2Opt1ImgID);
 			}
 
-			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.dds");
+			ResourceId textID2 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_final.dds");
 			Image* choice2Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID2);
 
 			if (choice2Opt2Img)
@@ -111,7 +113,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice2Opt2ImgID);
 			}
 
-			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_v1.dds");
+			ResourceId textID3 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/aron_reward_menu_final.dds");
 			Image* choice2Opt3Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID3);
 
 			if (choice2Opt3Img)
@@ -122,13 +124,13 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_TalkButton01.dds Does not exist");
+			WI_CRITICAL("aron_reward_menu_final.dds Does not exist");
 		}
 
 		
-		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.dds"))
+		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_final.dds"))
 		{
-			ResourceId textID11 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.dds");
+			ResourceId textID11 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_final.dds");
 			Image* choice3Opt1Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID11);
 
 			if (choice3Opt1Img)
@@ -137,7 +139,7 @@ namespace Wiwa
 				render.DisableInstance(m_Scene, choice3Opt1ImgID);
 			}
 
-			ResourceId textID12 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_v1.dds");
+			ResourceId textID12 = Wiwa::Resources::Load<Wiwa::Image>("library/HUDImages/Menus/SpeechMenu/Choice_menu/ulana_reward_menu_final.dds");
 			Image* choice3Opt2Img = Wiwa::Resources::GetResourceById<Wiwa::Image>(textID12);
 
 			if (choice3Opt2Img)
@@ -148,7 +150,7 @@ namespace Wiwa
 		}
 		else
 		{
-			WI_CRITICAL("UI_TalkButton01.dds Does not exist");
+			WI_CRITICAL("ulana_reward_menu_final.dds Does not exist");
 		}
 
 
@@ -251,7 +253,8 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice1Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f)) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -260,7 +263,8 @@ namespace Wiwa
 					if (selector >= 2) selector = 0;
 				}
 
-				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft) ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x < -0.5f) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -269,7 +273,7 @@ namespace Wiwa
 					if (selector < 0) selector = 1;
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 650)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && keyPressTimer > 650)
 				{
 					selected = true;
 					keyPressTimer = 0;
@@ -401,7 +405,8 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice2Opt3ImgID, { 4500, 4500 }, { 1500, 3000, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight) ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -410,7 +415,8 @@ namespace Wiwa
 					if (selector >= 3) selector = 0;
 				}
 
-				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft) ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x < -0.5f) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -419,7 +425,7 @@ namespace Wiwa
 					if (selector < 0) selector = 2;
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 650)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && keyPressTimer > 650)
 				{
 					selected = true;
 					keyPressTimer = 0;
@@ -548,7 +554,8 @@ namespace Wiwa
 					if (selected == false) render.UpdateInstancedQuadTexClip(m_Scene, choice3Opt2ImgID, { 4500, 4500 }, { 1500, 1500, 1500, 1500 });
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadRight) ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -557,7 +564,8 @@ namespace Wiwa
 					if (selector >= 2) selector = 0;
 				}
 
-				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft)) && keyPressTimer > 250)
+				if ((Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadDPadLeft) ||
+					Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x < -0.5f) && keyPressTimer > 250)
 				{
 					keyPressTimer = 0;
 
@@ -566,7 +574,7 @@ namespace Wiwa
 					if (selector < 0) selector = 1;
 				}
 
-				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(0, 3)) && keyPressTimer > 650)
+				if ((Wiwa::Input::IsKeyPressed(Wiwa::Key::Enter) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && keyPressTimer > 650)
 				{
 					selected = true;
 					keyPressTimer = 0;
