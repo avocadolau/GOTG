@@ -87,6 +87,7 @@ namespace Wiwa
 		void UpdateInstancedQuad(Scene* scene, InstanceData id, const Vector2i &position, const Size2i &size, const Color4f &color);
 
 		void UpdateInstanced(Scene *scene);
+		void RenderInstanced(InstanceRenderer& instanceRenderer);
 
 		// Getters
 		uint32_t getRenderInstancedCalls() { return m_RenderCallsInstancedCount; }

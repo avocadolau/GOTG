@@ -1,9 +1,9 @@
-#include "Wiwa/ecs//Systems.h"
+#include "Wiwa/ecs/Systems.h"
 
 #include <Wiwa/utilities/Reflection.h>
 
 namespace Wiwa {
-	class  MainMenuUISystem : public System {
+	class MainMenuUISystem : public System {
 	public:
 
 	public:

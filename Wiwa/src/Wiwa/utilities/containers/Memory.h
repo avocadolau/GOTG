@@ -15,7 +15,7 @@ namespace Wiwa {
 		Memory(void* block, size_t size) : m_MemoryBlock((sbyte*)block), m_MemorySize(size), m_PointIndex(0){}
 
 		~Memory() {
-			delete[] m_MemoryBlock;
+			//delete[] m_MemoryBlock;
 		}
 
 		sbyte* getBlock() { return m_MemoryBlock; }

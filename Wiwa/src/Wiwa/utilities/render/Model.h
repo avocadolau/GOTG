@@ -172,6 +172,8 @@ namespace Wiwa {
 	public:
 		bool showNormals = false;
 		Math::AABB boundingBox;
+
+		void GenerateAllBuffers();
 	private:
 		std::string m_ModelPath;
 		glm::mat4 globalInverseTransform;
@@ -207,13 +209,14 @@ namespace Wiwa {
 		ModelHierarchy* model_hierarchy;
 		Model* parent;
 
-		void generateBuffers();
+		void generateBuffers(bool genchildren=false);
 
 	private:
 		unsigned int vao, vbo, ebo, bbvao, bbvbo, bbebo, bonevb;
+		bool generatedBuffers;
 
 		bool getMeshFromFile(const char* file, ModelSettings* settings, bool gen_buffers=true);
-		void getWiMeshFromFile(const char* file);
+		void getWiMeshFromFile(const char* file, bool genBuffers=true);
 		int GetBoneId(const aiBone* pBone);
 
 		Model* loadmesh(const aiMesh* mesh);
@@ -268,7 +271,7 @@ namespace Wiwa {
 		std::map<std::string, BoneInfo> GetBoneMap() { return m_BoneInfoMap; }
 
 		void LoadMesh(const char* file, ModelSettings* settings);
-		void LoadWiMesh(const char* file);
+		void LoadWiMesh(const char* file, bool genBuffers=true);
 
 		void GetBoneTransforms(float timeInSeconds,std::vector<glm::mat4>& transforms);
 

@@ -49,8 +49,13 @@ namespace Wiwa {
 		// Render all layers into one framebuffer
 		static void Update();
 
+		// Render single camera into framebuffer
+		static void UpdateSingle(size_t layer_id);
+
 		// Set if it should render the output to the main window
 		static void SetRenderOnMainWindow(bool render_on_main_window) { m_RenderOnMainWindow = render_on_main_window; }
+
+		static bool GetRenderOnMainWindow() { return m_RenderOnMainWindow; }
 
 		// Get color texture
 		static uint32_t getColorTexture() { return m_FrameBuffer->getColorBufferTexture(); }

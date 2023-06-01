@@ -56,9 +56,12 @@ namespace Wiwa {
 #endif
 
 #define GLERR \
+		{ \
         GLuint glerr;\
-        while((glerr = glGetError()) != GL_NO_ERROR)\
-            fprintf(stderr, "%s:%d glGetError() = 0x%04x\n", __FILE__, __LINE__, glerr);
+        while((glerr = glGetError()) != GL_NO_ERROR){\
+            fprintf(stderr, "%s:%d glGetError() = 0x%04x\n", __FILE__, __LINE__, glerr); \
+			assert(glerr == GL_NO_ERROR);	\
+		}}
 
 #ifdef WI_DEBUG
 #define GL(_f)                     \

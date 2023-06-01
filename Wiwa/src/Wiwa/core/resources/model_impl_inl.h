@@ -64,7 +64,7 @@ namespace Wiwa {
 		if (position == size) {
 			Model* model = new Model(NULL);
 			
-			model->LoadWiMesh(file_path.string().c_str());
+			model->LoadWiMesh(file_path.string().c_str(), m_GenBuffersOnLoad);
 
 			PushResource(WRT_MODEL, file_path.string().c_str(), model);
 

@@ -11,9 +11,11 @@
 #include <Wiwa/AI/AI_Crowd.h>
 #include <Wiwa/game/GameMusicManager.h>
 
+#include <glew.h>
+
 namespace Wiwa
 {
-	std::vector<Scene *> SceneManager::m_Scenes;
+	std::vector<Scene*> SceneManager::m_Scenes;
 	SceneId SceneManager::m_ActiveScene = -1;
 	bool SceneManager::m_PlayScene = true;
 	bool SceneManager::isLoadingScene = false;
@@ -26,7 +28,15 @@ namespace Wiwa
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
 	std::atomic<bool> SceneManager::m_LoadedScene = false;
+	std::atomic<int> SceneManager::m_LoadingProgress = 0;
 	std::thread SceneManager::m_LoadThread;
+	std::thread SceneManager::m_LoadScreenThread;
+
+	InstanceRenderer SceneManager::m_InstanceRenderer(10);
+	size_t SceneManager::m_ProgressBar = WI_INVALID_INDEX;
+	size_t SceneManager::m_ProgressBarFilling = WI_INVALID_INDEX;
+	size_t SceneManager::m_BackGround = WI_INVALID_INDEX;
+
 
 	void SceneManager::Awake()
 	{
@@ -45,8 +55,45 @@ namespace Wiwa
 
 	void SceneManager::ModuleInit()
 	{
-	
-		
+		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
+
+		ResourceId background_image_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/front.png");
+
+		Image* background_img = Resources::GetResourceById<Image>(background_image_id);
+		Size2i size_background = { 2048,2048 };
+		Rect2i clip_background = {
+			0, 0, 
+			size_background.w, size_background.h
+		};
+
+		TextureClip tclip_background = Renderer2D::CalculateTextureClip(clip_background, size_background);
+
+		ResourceId progress_bar_id = Resources::Load<Wiwa::Image>("assets/HudImages/menus/OptionsMenu/UI_SettingsBars_01.png");
+
+		Image* progress_bar_img = Resources::GetResourceById<Image>(progress_bar_id);
+		Size2i size_progress_bar = { 794,256 };
+		Rect2i clip_progress_bar = {
+			0, 0,
+			size_progress_bar.w, size_progress_bar.h
+		};
+
+		TextureClip tclip_progress_bar = Renderer2D::CalculateTextureClip(clip_progress_bar, {1048,1048});
+
+		ResourceId progress_bar_fill_id = Resources::Load<Wiwa::Image>("assets/HudImages/menus/OptionsMenu/UI_SettingsBars_01.png");
+
+		Image* progress_bar_fill_img = Resources::GetResourceById<Image>(progress_bar_fill_id);
+		Size2i size_fill = { 794,256 };
+		Rect2i clip_fill = {
+			0, 256,
+			size_fill.w, size_fill.h
+		};
+
+		TextureClip tclip_progress_bar_fill = Renderer2D::CalculateTextureClip(clip_fill, { 1048,1048 });
+
+		m_ProgressBar = m_InstanceRenderer.AddInstance(progress_bar_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar, Renderer2D::Pivot::UPLEFT);
+		m_ProgressBarFilling = m_InstanceRenderer.AddInstance(progress_bar_fill_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar_fill, Renderer2D::Pivot::UPLEFT);
+		m_BackGround = m_InstanceRenderer.AddInstance(background_img->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background, Renderer2D::Pivot::UPLEFT);
+
 	}
 
 	void SceneManager::ModuleUpdate()
@@ -82,7 +129,8 @@ namespace Wiwa
 
 	SceneId SceneManager::CreateScene()
 	{
-		Scene *sc = new Scene();
+		Scene* sc = new Scene();
+		sc->Start();
 
 		SceneId scene_id;
 
@@ -102,10 +150,10 @@ namespace Wiwa
 		return scene_id;
 	}
 
-	void SceneManager::LoadEntity(Memory& scene_data, EntityId parent, EntityManager &em, bool is_parent)
+	void SceneManager::LoadEntity(Memory& scene_data, EntityId parent, EntityManager& em, bool is_parent)
 	{
 		size_t e_name_len;
-		char *e_name_c;
+		char* e_name_c;
 		std::string e_name;
 
 		// Read entity name
@@ -136,7 +184,7 @@ namespace Wiwa
 		{
 			ComponentHash c_hash;
 			size_t c_size;
-			byte *data;
+			byte* data;
 
 			// Read component hash, size and data
 			scene_data.Read(&c_hash, sizeof(size_t));
@@ -144,14 +192,14 @@ namespace Wiwa
 			data = new byte[c_size];
 			scene_data.Read(data, c_size);
 
-			byte *component = em.AddComponent(eid, c_hash, data);
+			byte* component = em.AddComponent(eid, c_hash, data);
 			delete[] data;
 
 			size_t mesh_hash = em.GetComponentType(em.GetComponentId<Mesh>())->hash;
 
 			if (c_hash == mesh_hash)
 			{
-				Mesh *mesh = (Mesh *)component;
+				Mesh* mesh = (Mesh*)component;
 
 				size_t meshpath_size = strlen(mesh->mesh_path);
 				if (meshpath_size > 0)
@@ -170,7 +218,7 @@ namespace Wiwa
 
 		if (system_count > 0)
 		{
-			SystemHash *system_hashes = new SystemHash[system_count];
+			SystemHash* system_hashes = new SystemHash[system_count];
 
 			// Read system hashes
 			scene_data.Read(system_hashes, system_count * sizeof(SystemHash));
@@ -193,16 +241,16 @@ namespace Wiwa
 		}
 	}
 
-	void SceneManager::SaveEntity(File &scene_file, EntityId eid, EntityManager &em)
+	void SceneManager::SaveEntity(File& scene_file, EntityId eid, EntityManager& em)
 	{
-		const char *e_name = em.GetEntityName(eid);
+		const char* e_name = em.GetEntityName(eid);
 		size_t e_name_len = strlen(e_name) + 1;
 
 		// Save entity name
 		scene_file.Write(&e_name_len, sizeof(size_t));
 		scene_file.Write(e_name, e_name_len);
 
-		std::map<ComponentId, size_t> &components = em.GetEntityComponents(eid);
+		std::map<ComponentId, size_t>& components = em.GetEntityComponents(eid);
 		std::map<ComponentId, size_t>::iterator c_it;
 		size_t component_size = components.size();
 
@@ -213,9 +261,9 @@ namespace Wiwa
 		for (c_it = components.begin(); c_it != components.end(); c_it++)
 		{
 			ComponentId c_id = c_it->first;
-			const Type *c_type = em.GetComponentType(c_id);
+			const Type* c_type = em.GetComponentType(c_id);
 			size_t c_size = c_type->size;
-			byte *c_data = em.GetComponent(eid, c_id, c_size);
+			byte* c_data = em.GetComponent(eid, c_id, c_size);
 
 			// Save component hash, size and data
 			scene_file.Write(&c_type->hash, sizeof(size_t));
@@ -224,7 +272,7 @@ namespace Wiwa
 		}
 
 		// Save entity systems
-		const std::vector<SystemHash> &system_list = em.GetEntitySystemHashes(eid);
+		const std::vector<SystemHash>& system_list = em.GetEntitySystemHashes(eid);
 		size_t system_count = system_list.size();
 
 		// Save system count
@@ -237,7 +285,7 @@ namespace Wiwa
 		}
 
 		// Check for child entities
-		std::vector<EntityId> *children = em.GetEntityChildren(eid);
+		std::vector<EntityId>* children = em.GetEntityChildren(eid);
 		size_t children_size = children->size();
 
 		// Save children size (size >= 0)
@@ -250,28 +298,32 @@ namespace Wiwa
 		}
 	}
 
-	bool SceneManager::_loadSceneImpl(Scene *scene, Memory& scene_data)
+	bool SceneManager::_loadSceneImpl(Scene* scene, Memory& scene_data)
 	{
 		// Load GuiControls
-		GuiManager &gm = scene->GetGuiManager();
+		GuiManager& gm = scene->GetGuiManager();
 		if (&gm)
 		{
 			char* textGui_c;
 			size_t textGuiLen;
 			scene_data.Read(&textGuiLen, sizeof(size_t));
-			textGui_c = new char[textGuiLen];
-			scene_data.Read(textGui_c, textGuiLen);
 
-			gm.SetCurrentPrefabWiGui(textGui_c);
-			if (textGuiLen > 0)
+			if (textGuiLen > 0) {
+				textGui_c = new char[textGuiLen];
+				scene_data.Read(textGui_c, textGuiLen);
+
+				gm.SetCurrentPrefabWiGui(textGui_c);
+
 				gm.LoadWiUI(textGui_c);
+			}
 		}
 
+		m_LoadingProgress += 1; // 2
 
 		isLoadingScene = true;
 
 		// Load cameras
-		CameraManager &cm = scene->GetCameraManager();
+		CameraManager& cm = scene->GetCameraManager();
 		size_t camera_count;
 
 		// Read camera count
@@ -309,7 +361,7 @@ namespace Wiwa
 
 			if (camtype == Wiwa::Camera::CameraType::PERSPECTIVE)
 			{
-				cam_id = cm.CreatePerspectiveCamera(fov, ar, nplane, fplane);
+				cam_id = cm.CreatePerspectiveCamera(fov, ar, nplane, fplane, false);
 			}
 			else
 			{
@@ -319,7 +371,7 @@ namespace Wiwa
 			if (is_active)
 				cm.setActiveCamera(cam_id);
 
-			Camera *camera = cm.getCamera(cam_id);
+			Camera* camera = cm.getCamera(cam_id);
 
 			// Read camera cull
 			scene_data.Read(&camera->cull, 1);
@@ -339,6 +391,8 @@ namespace Wiwa
 			camera->setPosition(pos);
 			camera->setRotation(rot);
 		}
+
+		m_LoadingProgress += 2; // 4
 
 		// Load audio
 		bool loaded_audio;
@@ -403,8 +457,10 @@ namespace Wiwa
 			}
 		}
 
+		m_LoadingProgress += 3; // 7		
+
 		// Load entities
-		EntityManager &em = scene->GetEntityManager();
+		EntityManager& em = scene->GetEntityManager();
 
 		size_t entity_count;
 		size_t p_entity_count;
@@ -421,6 +477,8 @@ namespace Wiwa
 			LoadEntity(scene_data, i, em, true);
 		}
 
+		m_LoadingProgress += 5; // 12
+
 		isLoadingScene = false;
 
 		return true;
@@ -431,19 +489,96 @@ namespace Wiwa
 		return false;
 	}
 
-	void SceneManager::SaveScene(SceneId scene_id, const char *scene_path)
+	void SceneManager::LoadSceneJob(Wiwa::Scene* scene, Wiwa::Memory& scene_data)
+	{
+		// Bind extra context for loading
+		Wiwa::Application::Get().GetWindow().BindExtra();
+
+		std::filesystem::path path = m_LoadPath;
+
+		scene->ChangeName(path.filename().stem().string().c_str());
+
+		scene->GetEntityManager().SetInitSystemsOnApply(!(m_LoadFlags & LOAD_NO_INIT));
+		scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+		scene->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
+
+		// Load Physics Manager json Data
+		scene->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
+
+		m_LoadingProgress += 1;
+
+		// Load actual scene
+		_loadSceneImpl(scene, scene_data);
+
+		// Unbind extra context
+		Wiwa::Application::Get().GetWindow().UnbindExtra();
+
+		m_LoadedScene = true;
+	}
+
+	void SceneManager::LoadingScreenJob()
+	{
+		// Bind context to this thread
+		Wiwa::Application::Get().GetWindow().Bind();
+
+		bool romw = Wiwa::RenderManager::GetRenderOnMainWindow();
+
+		Wiwa::RenderManager::SetRenderOnMainWindow(true);
+
+		while (!m_LoadedScene) {
+
+			// Clear screen
+			GL(ClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+			// Render loading screen
+			int progress = m_LoadingProgress;
+
+			float progperc = progress / 12.0f;
+			Size2i size = { 794,256 };
+			Rect2i clip = {
+				0, 256,
+				size.w*progperc, size.h
+			};
+
+			TextureClip tclip = Renderer2D::CalculateTextureClip(clip, {1048,1048});
+			m_InstanceRenderer.UpdateInstanceSize(m_ProgressBarFilling, { 600,800 }, { (int)(794 * progperc),256 },Wiwa::Renderer2D::Pivot::UPLEFT);
+			m_InstanceRenderer.UpdateInstanceClip(m_ProgressBarFilling,tclip);
+			Wiwa::Application::Get().GetRenderer2D().RenderInstanced(m_InstanceRenderer);
+			Wiwa::RenderManager::UpdateSingle(1);
+
+			// Swap buffers
+			Wiwa::Application::Get().GetWindow().OnUpdate();
+		}
+
+		/*void SetValueForUIbar(float valueHealth, float valueMaxHealth)
+		{
+			if (type == GuiControlType::BAR)
+			{
+				float proportion = valueHealth / valueMaxHealth;
+				position.width = (int)(proportion * extraPosition.width);
+				texturePosition.width = position.width;
+			}
+		}*/
+		Wiwa::RenderManager::SetRenderOnMainWindow(romw);
+
+		// Unbind context from this thread
+		Wiwa::Application::Get().GetWindow().Unbind();
+	}
+
+	void SceneManager::SaveScene(SceneId scene_id, const char* scene_path)
 	{
 		File scene_file = FileSystem::Open(scene_path, FileSystem::OM_OUT | FileSystem::OM_BINARY);
 
 		if (scene_file.IsOpen())
 		{
-			Scene *sc = m_Scenes[scene_id];
+			Scene* sc = m_Scenes[scene_id];
 
 			// Save scene data
 			// TODO: Save scene info??
 			// Scene name, etc
 			// Save GuiControls
-			GuiManager &gm = sc->GetGuiManager();
+			GuiManager& gm = sc->GetGuiManager();
 			if (&gm)
 			{
 				const char* prefab = gm.GetCurrentPrefabWiGui();
@@ -454,10 +589,10 @@ namespace Wiwa
 			}
 
 			// Iterate through all controls
-			
+
 			// Save cameras
-			CameraManager &cm = sc->GetCameraManager();
-			std::vector<CameraId> &cameras = cm.getCameras();
+			CameraManager& cm = sc->GetCameraManager();
+			std::vector<CameraId>& cameras = cm.getCameras();
 			size_t camera_count = cameras.size();
 
 			// Save camera count
@@ -468,7 +603,7 @@ namespace Wiwa
 			for (size_t i = 0; i < camera_count; i++)
 			{
 				CameraId cam_id = cameras[i];
-				Camera *camera = cm.getCamera(cam_id);
+				Camera* camera = cm.getCamera(cam_id);
 
 				Wiwa::Camera::CameraType camtype = camera->GetCameraType();
 				float fov = camera->getFOV();
@@ -530,7 +665,7 @@ namespace Wiwa
 				scene_file.Write(&n_len, sizeof(size_t));
 				scene_file.Write(project_path.data(), n_len);
 
-				const std::vector<Audio::BankData> &bank_list = Audio::GetLoadedBankList();
+				const std::vector<Audio::BankData>& bank_list = Audio::GetLoadedBankList();
 
 				size_t bank_size = bank_list.size();
 
@@ -548,7 +683,7 @@ namespace Wiwa
 					}
 				}
 
-				const std::vector<Audio::EventData> &event_list = Audio::GetLoadedEventList();
+				const std::vector<Audio::EventData>& event_list = Audio::GetLoadedEventList();
 
 				size_t event_size = event_list.size();
 
@@ -568,8 +703,8 @@ namespace Wiwa
 			}
 
 			// Save entities
-			EntityManager &em = sc->GetEntityManager();
-			std::vector<EntityId> *pentities = em.GetParentEntitiesAlive();
+			EntityManager& em = sc->GetEntityManager();
+			std::vector<EntityId>* pentities = em.GetParentEntitiesAlive();
 			size_t p_entity_count = pentities->size();
 
 			size_t entity_count = em.GetEntityCount();
@@ -596,7 +731,7 @@ namespace Wiwa
 		scene_file.Close();
 	}
 
-	SceneId SceneManager::LoadScene(const char *scene_path, int flags)
+	SceneId SceneManager::LoadScene(const char* scene_path, int flags)
 	{
 		if (!FileSystem::Exists(scene_path))
 			return -1;
@@ -622,21 +757,35 @@ namespace Wiwa
 
 		if (memblock)
 		{
-			Scene* sc = m_Scenes[sceneid];
-			std::filesystem::path path = scene_path;
-
-			sc->GetEntityManager().SetInitSystemsOnApply(!(flags & LOAD_NO_INIT));
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-			sc->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
-
-			// Load Physics Manager json Data
-			sc->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
+			m_LoadFlags = flags;
+			m_LoadPath = scene_path;
 
 			Memory scene_data(memblock, size);
 
-			_loadSceneImpl(sc, scene_data);
+			Scene* sc = m_Scenes[sceneid];
 
-			sc->ChangeName(path.filename().stem().string().c_str());
+			Wiwa::Resources::setGenBuffersOnLoad(false);
+
+			// Unbind from main thread
+			Wiwa::Application::Get().GetWindow().Unbind();
+
+
+			// Begin loading scene in jobs
+			m_LoadedScene = false;
+			m_LoadingProgress = 0;
+			m_LoadThread = std::thread(&SceneManager::LoadSceneJob, sc, scene_data);
+			m_LoadScreenThread = std::thread(&SceneManager::LoadingScreenJob);
+
+			// Wait till loaded
+			m_LoadThread.join();
+			m_LoadScreenThread.join();
+
+			// Re-bind window to main thread
+			Wiwa::Application::Get().GetWindow().Bind();
+
+			Wiwa::Resources::setGenBuffersOnLoad(true);
+
+			sc->Start();
 
 			if (flags & LOAD_SEPARATE)
 			{
@@ -655,8 +804,8 @@ namespace Wiwa
 
 	void SceneManager::LoadSceneByIndex(size_t scene_index, int flags)
 	{
-		ProjectManager::SceneData &sd = ProjectManager::getSceneDataAt(scene_index);
-		
+		ProjectManager::SceneData& sd = ProjectManager::getSceneDataAt(scene_index);
+
 		m_LoadScene = true;
 		m_LoadPath = sd.scene_path;
 		m_LoadFlags = flags;
@@ -702,7 +851,7 @@ namespace Wiwa
 		}
 
 		SceneChangeEvent event(sceneId);
-		Action<Wiwa::Event &> act = {&Application::OnEvent, &Application::Get()};
+		Action<Wiwa::Event&> act = { &Application::OnEvent, &Application::Get() };
 		act(event);
 	}
 
@@ -714,7 +863,7 @@ namespace Wiwa
 	}
 
 	void SceneManager::ChangeSceneByIndex(SceneId sceneId, int flags)
-	{	
+	{
 		WI_INFO("ChangeSceneByIndex() with sceneId: {}", sceneId);
 		m_Scenes[m_ActiveScene]->ChangeScene(sceneId, flags);
 	}
@@ -723,4 +872,5 @@ namespace Wiwa
 	{
 		m_Scenes[m_ActiveScene]->SwapPauseActive();
 	}
+
 }

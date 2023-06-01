@@ -356,7 +356,7 @@ namespace Wiwa {
 			}
 		}
 	}
-
+#include <glew.h>
 	void EntityManager::Update()
 	{
 		// Apply systems in pool

@@ -13,6 +13,7 @@
 
 namespace Wiwa {
 	std::vector<Resources::Resource*> Resources::m_Resources[Resources::WRT_LAST];
+	bool Resources::m_GenBuffersOnLoad = true;
 
 	Resources::Resources()
 	{
@@ -86,6 +87,19 @@ namespace Wiwa {
 		}
 
 		return true;
+	}
+
+	void Resources::GenerateAllBuffers()
+	{
+		// Generate all buffers for model
+		size_t modelssize = m_Resources[WRT_MODEL].size();
+
+		for (size_t i = 0; i < modelssize; i++) {
+			Resource* rsc = m_Resources[WRT_MODEL][i];
+			Model* model = (Model*)rsc->resource;
+
+			model->GenerateAllBuffers();
+		}
 	}
 
 	void Resources::_toLower(std::string& path)
