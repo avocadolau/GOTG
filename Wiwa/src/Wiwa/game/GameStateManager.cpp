@@ -73,6 +73,49 @@ namespace Wiwa
 
 	int GameStateManager::s_CurrentWave = 0;
 
+	static std::vector<SceneId> activeScenesKree;
+	static std::vector<SceneId> deactiveScenesKree;
+
+	static std::vector<SceneId> activeScenesPhalanx;
+	static std::vector<SceneId> deactiveScenesPhalanx;
+
+	int LoadRandomCombatRoom(bool isPhalanx)
+	{
+		if (isPhalanx)
+		{
+			if (activeScenesPhalanx.empty())
+			{
+				for (auto& scene : deactiveScenesPhalanx)
+				{
+					activeScenesPhalanx.emplace_back(scene);
+				}
+				deactiveScenesPhalanx.clear();
+			}
+			std::uniform_int_distribution<> dist(0, activeScenesPhalanx.size() - 1);
+			int nextRoom = dist(Application::s_Gen);
+			SceneId id = activeScenesPhalanx[nextRoom];
+			activeScenesPhalanx.erase(activeScenesPhalanx.begin() + nextRoom);
+			deactiveScenesPhalanx.push_back(id);
+			SceneManager::ChangeSceneByIndex(id);
+			return nextRoom;
+		}
+
+		if (activeScenesKree.empty())
+		{
+			for (auto& scene : deactiveScenesKree)
+			{
+				activeScenesKree.emplace_back(scene);
+			}
+			deactiveScenesKree.clear();
+		}
+		std::uniform_int_distribution<> dist(0, activeScenesKree.size() - 1);
+		int nextRoom = dist(Application::s_Gen);
+		SceneId id = activeScenesKree[nextRoom];
+		activeScenesKree.erase(activeScenesKree.begin() + nextRoom);
+		deactiveScenesKree.push_back(id);
+		SceneManager::ChangeSceneByIndex(id);
+		return nextRoom;
+	}
 
 	void GameStateManager::ChangeRoomState(RoomState room_state)
 	{
@@ -300,6 +343,19 @@ namespace Wiwa
 		s_RoomsToBoss = 10;
 		s_RoomsToShop = 5;
 		s_CanPhalanxRooms = false;
+
+
+		for (auto& scene : s_CombatRooms)
+		{
+			activeScenesKree.emplace_back(scene);
+		}
+		for (auto& scene : s_PhalanxRooms)
+		{
+			activeScenesPhalanx.emplace_back(scene);
+		}
+
+		deactiveScenesKree.clear();
+		deactiveScenesPhalanx.clear();
 	}
 
 	void GameStateManager::InitPlayerData()
@@ -590,7 +646,7 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-			LoadRandomRoom(s_CombatRooms);
+			LoadRandomCombatRoom(false);
 			RandomizeRewardRoom();
 			break;
 		}
@@ -611,10 +667,7 @@ namespace Wiwa
 			WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 			GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 			GameStateManager::SetRoomState(RoomState::STATE_FINISHED);
-			if(s_CanPhalanxRooms)
-				LoadRandomRoom(s_PhalanxRooms);
-			else
-				LoadRandomRoom(s_CombatRooms);
+			LoadRandomCombatRoom(s_CanPhalanxRooms);
 
 			s_EnemyManager->m_CurrentCombatRoomsCount++;
 
@@ -651,7 +704,7 @@ namespace Wiwa
 				WI_INFO("ROOM STATE: NEXT ROOM ROOM_COMBAT");
 				GameStateManager::SetRoomType(RoomType::ROOM_COMBAT);
 				GameStateManager::SetRoomState(RoomState::STATE_STARTED);
-				LoadRandomRoom(s_PhalanxRooms);
+				LoadRandomCombatRoom(true);
 				s_EnemyManager->m_CurrentCombatRoomsCount++;
 			}
 			break;
