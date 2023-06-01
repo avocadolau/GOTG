@@ -198,7 +198,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{7C44AD22-A560-B6E7-92D7-EA5A46860F8C}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{0F1E184C-17CD-0A24-1832-838408988B4F}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -250,6 +250,10 @@
 					<ShortName>footstep_concrete_run_07.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_07_10C4C929.wem</CachePath>
 				</File>
+				<File Id="240802095" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>rocket_shot.wav</ShortName>
+					<CachePath>SFX/rocket_shot_10C4C929.wem</CachePath>
+				</File>
 				<File Id="243002773" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Aron the Watcher Voice Lines\vo_aron_generic.wav</ShortName>
 					<CachePath>SFX/Aron the Watcher Voice Lines/vo_aron_generic_10C4C929.wem</CachePath>
@@ -285,6 +289,10 @@
 				<File Id="433002560" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>footstep_concrete_run_03.wav</ShortName>
 					<CachePath>SFX/footstep_concrete_run_03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="447125529" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Bullet-Impact-Sheetrock-02.wav</ShortName>
+					<CachePath>SFX/Bullet-Impact-Sheetrock-02_10C4C929.wem</CachePath>
 				</File>
 				<File Id="481157629" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Star-Lord Voice Lines\vo_starlord_room_completed01.wav</ShortName>
@@ -412,6 +420,11 @@
 				</File>
 			</Media>
 			<Events>
+				<Event Id="384143791" Name="bullet_hit">
+					<MediaRefs>
+						<MediaRef Id="447125529"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="2394582229" Name="player_dash">
 					<MediaRefs>
 						<MediaRef Id="49179977"/>
@@ -452,6 +465,11 @@
 						<MediaRef Id="964798513"/>
 						<MediaRef Id="1009229958"/>
 						<MediaRef Id="1056090998"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2078288224" Name="rocket_shot">
+					<MediaRefs>
+						<MediaRef Id="240802095"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="1640074935" Name="vo_aron_generic">
@@ -759,7 +777,7 @@
 				</AcousticTexture>
 			</AcousticTextures>
 		</SoundBank>
-		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{7CF945C1-26A6-D12D-BB1B-A0FF45E59FB7}">
+		<SoundBank Id="1407938113" Type="User" Language="SFX" Hash="{2F06D129-A5B5-A859-3A2F-585CD93B427C}">
 			<ShortName>scene_events</ShortName>
 			<Path>scene_events.bnk</Path>
 			<Media>
@@ -1056,7 +1074,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{39532A47-191F-D636-4F22-B369C6A72815}">
+		<SoundBank Id="3909959462" Type="User" Language="SFX" Hash="{736226F8-2C35-2FF4-FE9A-F6758BADF724}">
 			<ShortName>enviroment</ShortName>
 			<Path>enviroment.bnk</Path>
 			<Media>
@@ -1125,5 +1143,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{8B90BB22-5AA7-C00A-E686-C13548C8CFA9}</FileHash>
+	<FileHash>{D06ED64F-37F4-4D84-A48A-14179D35D390}</FileHash>
 </SoundBanksInfo>
