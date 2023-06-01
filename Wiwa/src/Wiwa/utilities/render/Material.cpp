@@ -676,8 +676,19 @@ namespace Wiwa {
 		}
 	}
 
-	void Material::UnBind()
+	void Material::UnBind(int id)
 	{
+		int texureId = id;
+		for (size_t i = 0; i < m_Uniforms.size(); i++)
+		{
+			if (m_Uniforms[i].getType() == UniformType::Sampler2D)
+			{
+				GL(ActiveTexture(texureId));
+				GL(BindTexture(GL_TEXTURE_2D, 0));
+				texureId++;
+			}
+		}
+
 		m_Shader->UnBind();
 	}
 
