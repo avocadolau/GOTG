@@ -54,6 +54,17 @@ void Wiwa::ShipMainMenu::OnUpdate()
 			gm.canvas.at(0)->SwapActive();
 			m_GLFWeskk2 = false;
 		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::Backspace))
+		{
+			m_GLFWeskk2 = true;
+		}
+		if (Wiwa::Input::IsKeyReleased(Key::Backspace) && m_GLFWeskk2)
+		{
+			gm.canvas.at(1)->SwapActive();
+			gm.canvas.at(0)->SwapActive();
+			m_GLFWeskk2 = false;
+		}
 	}
 	
 	
@@ -81,6 +92,18 @@ void Wiwa::ShipMainMenu::OnUpdate()
 			WI_INFO("PRESSED");
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
+		{
+			Wiwa::GameStateManager::RandomizeRewardRoom();
+			Wiwa::SceneManager::ChangeSceneByIndex(4);
+			m_GlFWeskk = false;
+		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::Space))
+		{
+			m_GlFWeskk = true;
+			WI_INFO("PRESSED");
+		}
+		if (Wiwa::Input::IsKeyReleased(Key::Space) && m_GlFWeskk)
 		{
 			Wiwa::GameStateManager::RandomizeRewardRoom();
 			Wiwa::SceneManager::ChangeSceneByIndex(4);

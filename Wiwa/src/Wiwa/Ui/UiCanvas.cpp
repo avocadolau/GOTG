@@ -70,6 +70,11 @@ namespace Wiwa
 				DpadDown = false;
 				DpadUp = false;
 			}
+
+			if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Up))
+			{
+				DpadUp = true;
+			}
 			if (DpadUp)
 			{
 				DpadUp = false;
@@ -82,6 +87,10 @@ namespace Wiwa
 				{
 					Audio::PostEvent("pause_sound");
 				}
+			}
+			if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Down))
+			{
+				DpadDown = true;
 			}
 			if (DpadDown)
 			{

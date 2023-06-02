@@ -78,7 +78,7 @@ namespace Wiwa
 						void* params[] = { &value };
 						callback->Execute(params);
 					}*/
-					if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f)
+					if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x > 0.5f || Wiwa::Input::IsKeyPressed(Wiwa::Key::Right))
 					{
 						clickedRight = true;
 						extraPosition.width += 1;
@@ -89,7 +89,7 @@ namespace Wiwa
 
 						}
 					}
-					else if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x < -0.5f)
+					else if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).x < -0.5f || Wiwa::Input::IsKeyPressed(Wiwa::Key::Left))
 					{
 						clickedLeft = true;
 						extraPosition.width -= 1;
@@ -103,10 +103,6 @@ namespace Wiwa
 					{
 						clickedLeft = false;
 						clickedRight = false;
-						/*if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
-						{
-							Audio::PostEvent(audioEventForButton.c_str());
-						}*/
 					}
 					if (clickedLeft || clickedRight)
 					{

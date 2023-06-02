@@ -77,19 +77,27 @@ namespace Wiwa
 		}
 		if (state == GuiControlState::FOCUSED)
 		{
-			/*if (Wiwa::Input::IsMouseButtonPressed(0))
+			if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Space))
 			{
 				state = GuiControlState::PRESSED;
 				clicked = true;
 			}
-			if (Wiwa::Input::IsMouseButtonReleased(0) && clicked)
+			if (Wiwa::Input::IsKeyReleased(Wiwa::Key::Space) && clicked)
 			{
 				clicked = false;
-				Audio::PostEvent("character_selection");
+				if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
+				{
+					Audio::PostEvent(audioEventForButton.c_str());
+				}
 				if (callback)
-					callback->Execute();
-			}*/
+				{
+					Action<>function_name = callback->func;
+					function_name.execute();
+				}
+			}
+
 			SetNextFrame(1, &r2d_1);
+
 			if (Wiwa::Input::IsButtonPressed(0, 0))
 			{
 				state = GuiControlState::PRESSED;

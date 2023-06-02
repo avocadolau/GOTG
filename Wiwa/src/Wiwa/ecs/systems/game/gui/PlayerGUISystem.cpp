@@ -104,6 +104,24 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			pauseGame = false;
 			
 		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::Escape))
+		{
+			pauseGame = true;
+		}
+		if (Wiwa::Input::IsKeyReleased(Key::Escape) && pauseGame)
+		{
+			if (Audio::FindEvent("game_pause") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("game_pause");
+			}
+
+			gm.canvas.at(CanvasHUD)->SwapActive();
+			gm.canvas.at(PauseHUD)->SwapActive();
+			m_Scene->SwapPauseActive();
+			pauseGame = false;
+
+		}
 	}
 	else if (CurrentHUD == PauseHUD)
 	{
@@ -119,6 +137,19 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			returnToHUD = false;
 			
 		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::Backspace))
+		{
+			returnToHUD = true;
+		}
+		if (returnToHUD && Wiwa::Input::IsKeyReleased(Key::Backspace))
+		{
+			gm.canvas.at(PauseHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
+			m_Scene->SwapPauseActive();
+			returnToHUD = false;
+
+		}
 	}
 	else if (CurrentHUD == OptionsHUD)
 	{
@@ -127,6 +158,19 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			returnToPauseHUD = true;
 		}
 		if (returnToPauseHUD && Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB))
+		{
+			gm.canvas.at(OptionsHUD)->SwapActive();
+			gm.canvas.at(PauseHUD)->SwapActive();
+			OnSaveEvent event;
+			Wiwa::Application::Get().OnEvent(event);
+			returnToPauseHUD = false;
+		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::Backspace))
+		{
+			returnToPauseHUD = true;
+		}
+		if (returnToPauseHUD && Wiwa::Input::IsKeyReleased(Key::Backspace))
 		{
 			gm.canvas.at(OptionsHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
@@ -156,6 +200,31 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		}
 
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
+		{
+			gm.canvas.at(ShopHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
+		}
+
+
+		if (Wiwa::Input::IsKeyPressed(Key::Space))
+		{
+			buyItem = true;
+		}
+		if (buyItem && Wiwa::Input::IsKeyReleased(Key::Space))
+		{
+			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
+			{
+				Audio::PostEvent("action_accepted");
+			}
+			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
+			characterInventory->ShopElement(characterInventory->GetCurrentShopItem());
+			buyItem = false;
+			em.DestroyEntity(characterInventory->GetShopItemId());
+			gm.canvas.at(ShopHUD)->SwapActive();
+			gm.canvas.at(CanvasHUD)->SwapActive();
+		}
+
+		if (Wiwa::Input::IsKeyPressed(Key::Escape))
 		{
 			gm.canvas.at(ShopHUD)->SwapActive();
 			gm.canvas.at(CanvasHUD)->SwapActive();

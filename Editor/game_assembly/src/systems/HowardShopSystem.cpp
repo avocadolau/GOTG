@@ -51,11 +51,37 @@ namespace Wiwa
 				m_FirstShopActive = false;
 			}
 
+			if (Wiwa::Input::IsKeyPressed(Key::Backslash))
+			{
+				m_ReturnToBaseHUD = true;
+			}
+			if (Wiwa::Input::IsKeyReleased(Key::Backslash) && m_ReturnToBaseHUD)
+			{
+				gm.canvas.at(7)->SwapActive();
+				gm.canvas.at(0)->SwapActive();
+				character->CanMove = true;
+				m_ReturnToBaseHUD = false;
+				m_FirstShopActive = false;
+			}
+
 			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadRigthBumper))
 			{
 				m_ActiveSecondPage = true;
 			}
 			if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadRigthBumper) && m_ActiveSecondPage)
+			{
+				gm.canvas.at(7)->SwapActive();
+				gm.canvas.at(8)->SwapActive();
+				m_ActiveSecondPage = false;
+				m_FirstShopActive = false;
+				m_SecondShopActive = true;
+			}
+
+			if (Wiwa::Input::IsKeyPressed(Key::Right))
+			{
+				m_ActiveSecondPage = true;
+			}
+			if (Wiwa::Input::IsKeyReleased(Key::Right) && m_ActiveSecondPage)
 			{
 				gm.canvas.at(7)->SwapActive();
 				gm.canvas.at(8)->SwapActive();
@@ -83,11 +109,38 @@ namespace Wiwa
 
 			}
 
+			if (Wiwa::Input::IsKeyPressed(Key::Left))
+			{
+				m_ActiveSecondPage = true;
+			}
+			if (Wiwa::Input::IsKeyReleased(Key::Left) && m_ActiveSecondPage)
+			{
+				gm.canvas.at(8)->SwapActive();
+				gm.canvas.at(7)->SwapActive();
+				m_ActiveSecondPage = false;
+				m_SecondShopActive = false;
+				m_FirstShopActive = true;
+
+			}
+
 			if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
 			{
 				m_ReturnToBaseHUD = true;
 			}
 			if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadB) && m_ReturnToBaseHUD)
+			{
+				gm.canvas.at(8)->SwapActive();
+				gm.canvas.at(0)->SwapActive();
+				character->CanMove = true;
+				m_ReturnToBaseHUD = false;
+				m_SecondShopActive = false;
+			}
+
+			if (Wiwa::Input::IsKeyPressed(Key::Backslash))
+			{
+				m_ReturnToBaseHUD = true;
+			}
+			if (Wiwa::Input::IsKeyReleased(Key::Backslash) && m_ReturnToBaseHUD)
 			{
 				gm.canvas.at(8)->SwapActive();
 				gm.canvas.at(0)->SwapActive();
