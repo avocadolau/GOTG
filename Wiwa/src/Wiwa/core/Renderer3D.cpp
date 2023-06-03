@@ -1262,9 +1262,11 @@ namespace Wiwa
 	
 
 		
+		RenderShadows(camera, lman.GetDirectionalLight(), NULL, anim_shader, glm::mat4(1.0f), false, true);
 		SetUpLight(anim_shader, camera, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights());
+		camera->shadowBuffer->BindTexture();
 
-		material->Bind();
+		material->Bind(GL_TEXTURE1);
 
 		GL(EnableVertexAttribArray(0));
 		GL(VertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, uvs_stride,
@@ -1324,8 +1326,9 @@ namespace Wiwa
 
 		GL(BindVertexArray(0));
 
-		material->UnBind();
-		
+		material->UnBind(GL_TEXTURE1);
+		camera->shadowBuffer->UnbindTexture();
+
 		camera->frameBuffer->Unbind();
 
 		return true;
