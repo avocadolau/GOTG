@@ -929,17 +929,15 @@ namespace Wiwa
 		if (shadowRecieve)
 		{
 			camera->shadowBuffer->BindTexture();
-			material->Bind(GL_TEXTURE1);
-			mesh->Render();
-			material->UnBind(GL_TEXTURE1);
-		}
-		else
-		{
-			material->Bind();
-			mesh->Render();
-			material->UnBind();
 		}
 		
+		material->Bind(GL_TEXTURE1);
+		mesh->Render();
+		material->UnBind(GL_TEXTURE1);
+
+		if (shadowRecieve) {
+			camera->shadowBuffer->UnbindTexture();
+		}
 
 		// Debug
 

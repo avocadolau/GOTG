@@ -32,7 +32,7 @@ namespace Wiwa
 	std::thread SceneManager::m_LoadThread;
 	std::thread SceneManager::m_LoadScreenThread;
 
-	InstanceRenderer SceneManager::m_InstanceRenderer(10);
+	InstanceRenderer* SceneManager::m_InstanceRenderer = nullptr;
 	size_t SceneManager::m_ProgressBar = WI_INVALID_INDEX;
 	size_t SceneManager::m_ProgressBarFilling = WI_INVALID_INDEX;
 	size_t SceneManager::m_BackGround = WI_INVALID_INDEX;
@@ -55,7 +55,9 @@ namespace Wiwa
 
 	void SceneManager::ModuleInit()
 	{
-		m_InstanceRenderer.Init("resources/shaders/instanced_tex_color");
+		m_InstanceRenderer = new InstanceRenderer(10);
+
+		m_InstanceRenderer->Init("resources/shaders/instanced_tex_color");
 
 		ResourceId background_image_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/front.png");
 
@@ -90,9 +92,9 @@ namespace Wiwa
 
 		TextureClip tclip_progress_bar_fill = Renderer2D::CalculateTextureClip(clip_fill, { 1048,1048 });
 
-		m_ProgressBar = m_InstanceRenderer.AddInstance(progress_bar_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar, Renderer2D::Pivot::UPLEFT);
-		m_ProgressBarFilling = m_InstanceRenderer.AddInstance(progress_bar_fill_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar_fill, Renderer2D::Pivot::UPLEFT);
-		m_BackGround = m_InstanceRenderer.AddInstance(background_img->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background, Renderer2D::Pivot::UPLEFT);
+		m_ProgressBar = m_InstanceRenderer->AddInstance(progress_bar_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar, Renderer2D::Pivot::UPLEFT);
+		m_ProgressBarFilling = m_InstanceRenderer->AddInstance(progress_bar_fill_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar_fill, Renderer2D::Pivot::UPLEFT);
+		m_BackGround = m_InstanceRenderer->AddInstance(background_img->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background, Renderer2D::Pivot::UPLEFT);
 
 	}
 
@@ -125,6 +127,7 @@ namespace Wiwa
 		}
 
 		delete CameraManager::editorCamera;
+		delete m_InstanceRenderer;
 	}
 
 	SceneId SceneManager::CreateScene()
@@ -542,9 +545,9 @@ namespace Wiwa
 			};
 
 			TextureClip tclip = Renderer2D::CalculateTextureClip(clip, {1048,1048});
-			m_InstanceRenderer.UpdateInstanceSize(m_ProgressBarFilling, { 600,800 }, { (int)(794 * progperc),256 },Wiwa::Renderer2D::Pivot::UPLEFT);
-			m_InstanceRenderer.UpdateInstanceClip(m_ProgressBarFilling,tclip);
-			Wiwa::Application::Get().GetRenderer2D().RenderInstanced(m_InstanceRenderer);
+			m_InstanceRenderer->UpdateInstanceSize(m_ProgressBarFilling, { 600,800 }, { (int)(794 * progperc),256 },Wiwa::Renderer2D::Pivot::UPLEFT);
+			m_InstanceRenderer->UpdateInstanceClip(m_ProgressBarFilling,tclip);
+			Wiwa::Application::Get().GetRenderer2D().RenderInstanced(*m_InstanceRenderer);
 			Wiwa::RenderManager::UpdateSingle(1);
 
 			// Swap buffers

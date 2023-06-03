@@ -64,7 +64,7 @@ uniform int u_NumSpotLights;
 uniform SpotLight[MAX_SPOT_LIGHTS] u_SpotLights;
 uniform vec4 u_Color = vec4(0.0,0.0,0.0,0.0);
 uniform int u_Hit = 0;
-//uniform sampler2D u_ShadowMap;
+uniform sampler2D u_ShadowMap;
 uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;

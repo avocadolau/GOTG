@@ -24,6 +24,7 @@ namespace Wiwa
 		void Unbind();
 
 		void BindTexture();
+		void UnbindTexture();
 
 		void Clear();
 
