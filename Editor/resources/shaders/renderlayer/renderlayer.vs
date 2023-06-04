@@ -1,14 +1,13 @@
 #version 330 core
-#extension GL_ARB_explicit_uniform_location : enable
 
 layout (location = 0) in vec3 l_Pos;
 layout (location = 1) in vec2 l_TexCoord;
 
 out vec2 s_TexCoord;
 
-layout(location = 2)uniform mat4 u_Model;
-layout(location = 3)uniform mat4 u_View;
-layout(location = 4)uniform mat4 u_Proj;
+uniform mat4 u_Model;
+uniform mat4 u_View;
+uniform mat4 u_Proj;
 
 void main()
 {	

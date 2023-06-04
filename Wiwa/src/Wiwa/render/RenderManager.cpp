@@ -134,6 +134,7 @@ namespace Wiwa {
 			// Take cameras in reverse order for proper drawing order
 			Camera* cam = m_RenderLayers[MAX_LAYERS - i - 1].getCamera();
 			if (cam) {
+				GL(ActiveTexture(GL_TEXTURE0));
 				GL(BindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture()));
 				// Draw elements
 				GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
@@ -141,23 +142,21 @@ namespace Wiwa {
 		}
 		
 		// Unbind shader and framebuffer
-		m_Shader->UnBind();
 		m_FrameBuffer->Unbind();
+		
 
 		if (m_RenderOnMainWindow) {
 			uint32_t w = Wiwa::Application::Get().GetWindow().GetWidth();
 			uint32_t h = Wiwa::Application::Get().GetWindow().GetHeight();
 			GL(Viewport(0, 0, w, h));
 
-			m_Shader->Bind();
-
+			GL(ActiveTexture(GL_TEXTURE0));
 			GL(BindTexture(GL_TEXTURE_2D, m_FrameBuffer->getColorBufferTexture()));
 			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-
-			m_Shader->UnBind();
 		}
 
 		GL(BindVertexArray(0));
+		m_Shader->UnBind();
 	}
 
 	void RenderManager::UpdateSingle(size_t layer_id)
@@ -183,6 +182,8 @@ namespace Wiwa {
 
 		Camera* cam = m_RenderLayers[layer_id].getCamera();
 		if (cam) {
+			
+			GL(ActiveTexture(GL_TEXTURE0));
 			GL(BindTexture(GL_TEXTURE_2D, cam->frameBuffer->getColorBufferTexture()));
 			// Draw elements
 			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
@@ -199,6 +200,7 @@ namespace Wiwa {
 
 			m_Shader->Bind();
 
+			GL(ActiveTexture(GL_TEXTURE0));
 			GL(BindTexture(GL_TEXTURE_2D, m_FrameBuffer->getColorBufferTexture()));
 			GL(DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
