@@ -18,6 +18,7 @@ namespace Wiwa {
 		void OnCollisionEnter(Object* body1, Object* body2) override;
 		void OnCollisionExit(Object* body1, Object* body2) override;
 		bool m_Activated = false;
+		float m_Timer = 0.0f;
 	};
 }
 

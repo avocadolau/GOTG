@@ -20,7 +20,7 @@ class EndRewardRoom : public System
 	private:
 		EntityManager::ComponentIterator m_DataIt;
 		bool m_Activated = false;
-
+		float m_Timer = 0.0f;
 	};
 }
 REGISTER_SYSTEM(Wiwa::EndRewardRoom)

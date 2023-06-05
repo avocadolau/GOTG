@@ -3,6 +3,7 @@
 Wiwa::EndRoomTrigger::EndRoomTrigger()
 {
 	m_Activated = false;
+	m_Timer = 0.0f;
 }
 
 Wiwa::EndRoomTrigger::~EndRoomTrigger()
@@ -24,6 +25,14 @@ void Wiwa::EndRoomTrigger::OnUpdate()
 	{
 		GameStateManager::setPlayerTriggerNextRoom(true);
 	}
+
+	if (m_Timer >= 2.0f)
+	{
+		GameStateManager::setPlayerTriggerNextRoom(false);
+		m_Timer = 0.0f;
+	}
+
+	m_Timer += Time::GetDeltaTimeSeconds();
 }
 
 void Wiwa::EndRoomTrigger::OnCollisionEnter(Object* body1, Object* body2)

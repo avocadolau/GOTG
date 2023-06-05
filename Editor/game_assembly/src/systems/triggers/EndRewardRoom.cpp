@@ -4,6 +4,7 @@
 void Wiwa::EndRewardRoom::OnAwake()
 {
 	m_Activated = false;
+	m_Timer = 0.0f;
 }
 void Wiwa::EndRewardRoom::OnInit()
 {
@@ -20,6 +21,14 @@ void Wiwa::EndRewardRoom::OnUpdate()
 		GameStateManager::setPlayerTriggerNextRoom(true);
 		GameStateManager::s_NextRewardRoomReward = data->num;
 	}
+
+	if (m_Timer >= 2.0f)
+	{
+		GameStateManager::setPlayerTriggerNextRoom(false);
+		m_Timer = 0.0f;
+	}
+
+	m_Timer += Time::GetDeltaTimeSeconds();
 }
 
 void Wiwa::EndRewardRoom::OnDestroy()
