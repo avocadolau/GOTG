@@ -1343,6 +1343,7 @@ namespace Wiwa
 			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
 			if (waveSpawnerSystem) {
 				const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+				int count = 0;
 				for (int i = 0; i < waveIds.size(); i++)
 				{
 					Wave* wave = em.GetComponent<Wave>(waveIds[i]);
@@ -1354,8 +1355,27 @@ namespace Wiwa
 			}
 		}
 		
-		if (waveSpawner->hasFinished)
-			return true;
+		if (waveSpawner && waveSpawner->hasTriggered) {
+			WaveSpawnerSystem* waveSpawnerSystem = em.GetSystem<WaveSpawnerSystem>(waveSpawner->entityId);
+			if (waveSpawnerSystem) {
+				const std::vector<EntityId>& waveIds = waveSpawnerSystem->getWaveIds();
+				int count = 0;
+				for (int i = 0; i < waveIds.size(); i++)
+				{
+					Wave* wave = em.GetComponent<Wave>(waveIds[i]);
+					if (wave) {
+						if (!wave->hasFinished)
+							return false;
+						else
+							count += 1;
+					}
+				}
+
+				if (waveSpawner->hasFinished && count == waveIds.size())
+					return true;
+			}
+		}
+	
 
 		return false;
 	}
