@@ -113,8 +113,38 @@ namespace Wiwa
 						
 					}
 				}
-				
 
+				EntityId lapsus = entityManager.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_enemybullethit_player.wiprefab");
+
+				if (lapsus != EntityManager::INVALID_INDEX)
+				{
+					Transform3D* tlapsus = entityManager.GetComponent<Transform3D>(lapsus);
+					Transform3D* tbulletplayer = entityManager.GetComponent<Transform3D>(m_EntityId);
+
+					if (tlapsus != nullptr)
+					{
+						tlapsus->localPosition = tbulletplayer->localPosition;
+					}
+				}
+			}
+
+			playerStr = "WALL";
+
+			if (playerStr == body2->selfTagStr)
+			{
+				Wiwa::EntityManager& entityManager = getScene().GetEntityManager();
+				EntityId lapsus = entityManager.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_enemybullethit_wall.wiprefab");
+
+				if (lapsus != EntityManager::INVALID_INDEX)
+				{
+					Transform3D* tlapsus = entityManager.GetComponent<Transform3D>(lapsus);
+					Transform3D* tbulletplayer = entityManager.GetComponent<Transform3D>(m_EntityId);
+
+					if (tlapsus != nullptr)
+					{
+						tlapsus->localPosition = tbulletplayer->localPosition;
+					}
+				}
 			}
 
 			GameStateManager::s_PoolManager->s_SimpleBulletsPool->ReturnToPool(m_EntityId);
