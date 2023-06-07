@@ -323,20 +323,25 @@ void Wiwa::PlayerController::SpawnStarLordUltimate(Transform3D& transform, const
 	}
 	
 	//emit right muzzle
+	
 	EntityId shotMuzzleRight = em.GetChildByName(m_EntityId, "p_muzzleRight");
-	EntityId shotMuzzleRightImpact = em.GetChildByName(shotMuzzleRight, "vfx_impact");
-	EntityId shotMuzzleRightFlash = em.GetChildByName(shotMuzzleRight, "vfx_flash");
-
-	em.SetActive(shotMuzzleRight, true);
-
-	ParticleSystem* sys_shotMuzzleRightImpact = em.GetSystem<ParticleSystem>(shotMuzzleRightImpact);
-	ParticleSystem* sys_shotMuzzleRightFlash = em.GetSystem<ParticleSystem>(shotMuzzleRightFlash);
-
-	if (sys_shotMuzzleRightImpact != nullptr && sys_shotMuzzleRightFlash != nullptr)
+	if (shotMuzzleRight != WI_INVALID_INDEX)
 	{
-		sys_shotMuzzleRightImpact->EmitParticleBatch(1);
-		sys_shotMuzzleRightFlash->EmitParticleBatch(1);
+		EntityId shotMuzzleRightImpact = em.GetChildByName(shotMuzzleRight, "vfx_impact");
+		EntityId shotMuzzleRightFlash = em.GetChildByName(shotMuzzleRight, "vfx_flash");
+
+		em.SetActive(shotMuzzleRight, true);
+
+		ParticleSystem* sys_shotMuzzleRightImpact = em.GetSystem<ParticleSystem>(shotMuzzleRightImpact);
+		ParticleSystem* sys_shotMuzzleRightFlash = em.GetSystem<ParticleSystem>(shotMuzzleRightFlash);
+
+		if (sys_shotMuzzleRightImpact != nullptr && sys_shotMuzzleRightFlash != nullptr)
+		{
+			sys_shotMuzzleRightImpact->EmitParticleBatch(1);
+			sys_shotMuzzleRightFlash->EmitParticleBatch(1);
+		}
 	}
+	
 }
 
 void Wiwa::PlayerController::SpawnRocketUltimate(Transform3D& transform, const Character& character)
