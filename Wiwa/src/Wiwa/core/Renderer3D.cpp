@@ -914,7 +914,7 @@ namespace Wiwa
 			return;
 		}
 		
-		RenderShadows(camera, directional, mesh, matShader, transform, castShadows, shadowRecieve);
+		RenderShadows(camera, mesh, matShader, transform, castShadows, shadowRecieve);
 
 		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
@@ -1228,6 +1228,35 @@ namespace Wiwa
 			// Some more vertices were processed.
 			processed_vertex_count += part_vertex_count;
 		}
+		
+
+		// ========================= RENDERING =====================================
+
+		// Build mvp for object
+		glm::mat4 glm_mvp = camera->getProjection() * camera->getView();
+		glm::mat4 transform_mat = glm::mat4(1.f);
+
+		ozz::math::Float4x4 ozz_mvp;
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				// m128_f32 for float4x4
+				ozz_mvp.cols[i].m128_f32[j] = glm_mvp[i][j]; 
+				transform_mat[i][j] = _transform.cols[i].m128_f32[j];
+			}
+		}
+
+
+		Shader* anim_shader = material->getShader();
+
+		RenderShadowsOzz(
+			camera,
+			_mesh,
+			anim_shader,
+			transform_mat,
+			vbo_size,
+			vbo_map
+			);
 
 		LightManager& lman = Wiwa::SceneManager::getActiveScene()->GetLightManager();
 
@@ -1235,7 +1264,6 @@ namespace Wiwa
 		GL(Viewport(0, 0, camera->frameBuffer->getWidth(), camera->frameBuffer->getHeight()));
 
 		camera->frameBuffer->Bind(false);
-		Shader* anim_shader = material->getShader();
 		anim_shader->Bind();
 		GL(BindVertexArray(dynamic_vao_));
 		// Updates dynamic vertex buffer with skinned data.
@@ -1243,26 +1271,8 @@ namespace Wiwa
 		GL(BufferData(GL_ARRAY_BUFFER, vbo_size, nullptr, GL_STREAM_DRAW));
 		GL(BufferSubData(GL_ARRAY_BUFFER, 0, vbo_size, vbo_map));
 
-		// Build mvp for object
-		glm::mat4 glm_mvp = camera->getProjection() * camera->getView();
-
-		ozz::math::Float4x4 ozz_mvp;
-
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				// m128_f32 for float4x4
-				ozz_mvp.cols[i].m128_f32[j] = glm_mvp[i][j];
-			}
-		}
-
-		/*WI_INFO("Pos: s({}) off({}) Normals: s({}) off({}) Colors: s({}) off({}) Uvs: s({}) off({})", positions_stride, positions_offset,
-			normals_stride, normals_offset, colors_stride, colors_offset,
-			uvs_stride, uvs_offset);*/
-
-	
-
 		
-		RenderShadows(camera, lman.GetDirectionalLight(), NULL, anim_shader, glm::mat4(1.0f), false, true);
+
 		SetUpLight(anim_shader, camera, lman.GetDirectionalLight(), lman.GetPointLights(), lman.GetSpotLights());
 		camera->shadowBuffer->BindTexture();
 
@@ -1565,8 +1575,8 @@ namespace Wiwa
 			}
 		}*/
 	}
-	void Renderer3D::RenderShadows(Camera *camera, const size_t &directional,
-		Model* mesh, Shader* matShader, const glm::mat4& transform, bool castShadow, bool recieveShadow)
+	void Renderer3D::RenderShadows(Camera *camera, Model* mesh,
+		Shader* matShader, const glm::mat4& transform, bool castShadow, bool recieveShadow)
 	{
 
 		if (!camera)
@@ -1599,5 +1609,63 @@ namespace Wiwa
 			matShader->setUniform(matShader->LightLocations.DirLightMVP, lman.GetDirectionalMVP());
 			matShader->setUniform(matShader->LightLocations.DirLightPos, lman.GetDirectionalPos());
 		}
+	}
+	void Renderer3D::RenderShadowsOzz(
+		Camera* camera,
+		const ozz::sample::Mesh& mesh,
+		Shader* matShader,
+		const glm::mat4& transform,
+		const size_t vbo_size,
+		void* vbo_map
+	)
+	{
+		LightManager& lman = SceneManager::getActiveScene()->GetLightManager();
+
+		camera->shadowBuffer->Bind(false);
+
+		m_DepthShader->Bind();
+		m_DepthShader->setUniform(m_DepthShaderUniforms.Projection, lman.GetDirectionalProj());
+		m_DepthShader->setUniform(m_DepthShaderUniforms.View, lman.GetDirectionalView());
+
+		m_DepthShader->setUniform(m_DepthShaderUniforms.Model, transform);
+
+		GL(CullFace(GL_FRONT));
+
+
+		GL(BindVertexArray(dynamic_vao_));
+		// Updates dynamic vertex buffer with skinned data.
+		GL(BindBuffer(GL_ARRAY_BUFFER, dynamic_array_bo_));
+		GL(BufferData(GL_ARRAY_BUFFER, vbo_size, nullptr, GL_STREAM_DRAW));
+		GL(BufferSubData(GL_ARRAY_BUFFER, 0, vbo_size, vbo_map));
+
+		GL(EnableVertexAttribArray(0));
+		GL(VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3,
+			GL_PTR_OFFSET(0)));
+
+		GL(BindBuffer(GL_ELEMENT_ARRAY_BUFFER, dynamic_index_bo_));
+		const ozz::sample::Mesh::TriangleIndices& indices = mesh.triangle_indices;
+
+		GL(BufferData(GL_ELEMENT_ARRAY_BUFFER,
+			indices.size() * sizeof(ozz::sample::Mesh::TriangleIndices::value_type),
+			array_begin(indices), GL_STREAM_DRAW));
+
+		// Draws the mesh.
+		static_assert(sizeof(ozz::sample::Mesh::TriangleIndices::value_type) == 2,
+			"Expects 2 bytes indices.");
+		GL(DrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()),
+			GL_UNSIGNED_SHORT, 0));
+
+		// Unbinds.
+		GL(BindBuffer(GL_ARRAY_BUFFER, 0));
+		
+		GL(CullFace(GL_BACK)); // don't forget to reset original culling face
+
+		
+		m_DepthShader->UnBind();
+		camera->shadowBuffer->Unbind();
+
+		matShader->setUniform(matShader->LightLocations.DirLightMVP, lman.GetDirectionalMVP());
+		matShader->setUniform(matShader->LightLocations.DirLightPos, lman.GetDirectionalPos());
+
 	}
 }

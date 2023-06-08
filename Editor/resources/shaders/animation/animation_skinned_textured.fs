@@ -69,17 +69,8 @@ uniform sampler2D u_Texture;
 uniform float u_SpecularValue;
 uniform vec3 u_CameraPosition;
 uniform vec3 u_LightPos;
-uniform int u_RecieveShadows;
 
 out vec4 out_color;
-
-vec4 GetAmbient(vec3 _world_normal) {
-  vec3 normal = normalize(_world_normal);
-  vec3 alpha = (normal + 1.) * .5;
-  vec2 bt = mix(vec2(.3, .7), vec2(.4, .8), alpha.xz);
-  vec3 ambient = mix(vec3(bt.x, .3, bt.x), vec3(bt.y, .8, bt.y), alpha.y);
-  return vec4(ambient, 1.);
-}
 
 float CalcShadowFactor(vec3 position,vec3 direction)
 {
@@ -146,27 +137,14 @@ vec4 CalcLightInternal(BaseLight light, vec3 direction, vec3 normal, float shado
         rimColor = diffuseColor * rimFactor;
     }
 
-    return (ambientColor + shadowFactor * (diffuseColor + specularColor + rimColor));
+    return (ambientColor + (1 - shadowFactor)  * (diffuseColor + specularColor + rimColor));
 }
 
 vec4 CalcDirectionalLight(vec3 normal)
 {
-    float shadowFactor = 0;
-    switch(u_RecieveShadows)
-    {
-    case 0:
-    {
-        shadowFactor = 0;
-    }
-    break;
-    case 1:
-    {
-        shadowFactor = CalcShadowFactor(u_LightPos, u_DirectionalLight.Direction);
-    }
-    break;
-    default:
-    break;
-    }
+    
+    float shadowFactor = CalcShadowFactor(u_LightPos, u_DirectionalLight.Direction);
+
     return CalcLightInternal(u_DirectionalLight.Base, u_DirectionalLight.Direction, normal, shadowFactor);
 }
 
@@ -200,7 +178,6 @@ vec4 CalcSpotLight(SpotLight light, vec3 normal)
 }
 
 void main() {
-	vec4 ambient = GetAmbient(v_world_normal);
   
 	vec3 normal = normalize(Normal);
 
@@ -211,15 +188,10 @@ void main() {
         totalLight += CalcPointLight(u_PointLights[i], normal);
     }
 
-    for(int i = 0; i < u_NumSpotLights; i++)
-    {
-        totalLight += CalcSpotLight(u_SpotLights[i], normal);
-    }
-	
 	vec3 dir = u_CameraPosition - LocalPos;
 	
 	float dotEyeNormal = dot(normalize(dir),normalize(Normal));
-    dotEyeNormal =abs(dotEyeNormal);
+    dotEyeNormal = abs(dotEyeNormal);
 	
 	vec2 flipuv = vec2(v_vertex_uv.s, 1. - v_vertex_uv.t);
 	

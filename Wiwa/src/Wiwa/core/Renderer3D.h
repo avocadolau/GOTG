@@ -157,12 +157,20 @@ namespace Wiwa {
 		
 		void RenderShadows(
 			Camera* camera,
-			const size_t& directional,
 			Model* mesh,
 			Shader* matShader,
 			const glm::mat4& transform,
 			bool castShadow,
 			bool recieveShadow
+		);
+
+		void RenderShadowsOzz(
+			Camera* camera,
+			const ozz::sample::Mesh& mesh,
+			Shader* matShader,
+			const glm::mat4& transform,
+			const size_t vbo_size,
+			void* vbo_map
 		);
 
 		void RenderQuad(unsigned int vao, std::vector<int> ebo_data, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, const size_t& directional,

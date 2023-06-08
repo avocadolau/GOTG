@@ -93,6 +93,7 @@ void Wiwa::ShadowBuffer::Bind(bool clear)
 
 void Wiwa::ShadowBuffer::Unbind()
 {
+	GL(ActiveTexture(GL_TEXTURE0));
 	GL(BindTexture(GL_TEXTURE_2D, 0));
 	GL(BindFramebuffer(GL_FRAMEBUFFER, 0));
 }

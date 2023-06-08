@@ -52,12 +52,7 @@ namespace Wiwa
 	std::mt19937 Application::s_Gen(s_Rd());
 
 	Application::Application(int argc, char **argv)
-	{
-		//Set up random seed
-		struct timespec ts;
-		timespec_get(&ts, TIME_UTC);
-		srand(((unsigned int)ts.tv_nsec));
-
+	{		
 		WI_CORE_ASSERT(!s_Instance, "Application already exists!");
 
 		REFLECTION_REGISTER();
@@ -75,9 +70,8 @@ namespace Wiwa
 
 		m_TargetResolution = {1920, 1080};
 
-		std::string name = "Wiwa Engine: ";
-		name += ProjectManager::GetProjectName();
-		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name.c_str())));
+		
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps("Guardians of the Galaxy: Battle for the Universe")));
 		m_Window->SetEventCallback({&Application::OnEvent, this});
 
 		int min, major, rev;

@@ -285,6 +285,23 @@ namespace Wiwa {
 		SortParticleSystems();
 		//update by systems
 
+		// Update ozz animation systems second
+		std::map<SystemHash, std::vector<System*>>::iterator ozz_animations = m_SystemsByHash.find(FNV1A_HASH("OzzAnimationSystem"));
+
+		if (ozz_animations != m_SystemsByHash.end()) {
+			std::vector<System*>& ozz_animation_list = ozz_animations->second;
+
+			size_t size = ozz_animation_list.size();
+
+			for (size_t i = 0; i < size; i++) {
+				System* s = ozz_animation_list[i];
+
+				if (!s) continue;
+
+				s->Update();
+			}
+		}
+
 		// Update mesh renderers first
 		std::map<SystemHash, std::vector<System*>>::iterator meshes = m_SystemsByHash.find(FNV1A_HASH("MeshRenderer"));
 
@@ -302,22 +319,9 @@ namespace Wiwa {
 			}
 		}
 
-		// Update ozz animation systems second
-		std::map<SystemHash, std::vector<System*>>::iterator ozz_animations = m_SystemsByHash.find(FNV1A_HASH("OzzAnimationSystem"));
+		
 
-		if (ozz_animations != m_SystemsByHash.end()) {
-			std::vector<System*>& ozz_animation_list = ozz_animations->second;
-
-			size_t size = ozz_animation_list.size();
-
-			for (size_t i = 0; i < size; i++) {
-				System* s = ozz_animation_list[i];
-
-				if (!s) continue;
-
-				s->Update();
-			}
-		}
+		
 
 		// Update particle systems after previous renders
 		std::map<SystemHash, std::vector<System*>>::iterator particles = m_SystemsByHash.find(FNV1A_HASH("ParticleSystem"));

@@ -29,14 +29,17 @@ namespace Wiwa {
 		}
 		m_ActiveCamera = -1;
 	}
+	static bool lastFrameClear = false;
 	void CameraManager::Update()
 	{
 		LightManager& lman = SceneManager::getActiveScene()->GetLightManager();
 		if (editorCamera)
 		{
 			editorCamera->frameBuffer->Clear();
-			editorCamera->shadowBuffer->Clear();
-			lman.Update(editorCamera);
+
+			if(lastFrameClear)
+				editorCamera->shadowBuffer->Clear();
+				
 			if (editorCamera->drawFrustrums)
 			{
 				Wiwa::Application::Get().GetRenderer3D().RenderFrustrums();
@@ -48,7 +51,10 @@ namespace Wiwa {
 		{
 			CameraId cam_id = m_CamerasAlive[i];
 			m_Cameras[cam_id]->frameBuffer->Clear();
-			m_Cameras[cam_id]->shadowBuffer->Clear();
+
+			if (lastFrameClear)
+				m_Cameras[cam_id]->shadowBuffer->Clear();
+
 			lman.Update(m_Cameras[cam_id]);
 
 			if (m_Cameras[cam_id]->drawFrustrums)
@@ -56,6 +62,8 @@ namespace Wiwa {
 				Wiwa::SceneManager::getActiveScene()->GetPhysicsManager().DebugDrawWorld();
 			}
 		}
+
+		lastFrameClear = !lastFrameClear;
 	}
 	void CameraManager::Clear()
 	{
