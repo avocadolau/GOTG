@@ -10,6 +10,7 @@
 #include <Wiwa/ecs/systems/game/wave/WaveSpawnerSystem.h>
 #include <Wiwa/game/GameMusicManager.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 
 namespace Wiwa
 {
@@ -1115,25 +1116,91 @@ namespace Wiwa
 
 		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
 		Transform3D* t3d_particle = nullptr;
+		ParticleSystem* particle_sytem = nullptr;
+
 		switch (item->item_type)
 		{
 		case (int)ItemType::ABILITY:
 			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Active.wiprefab");
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, shopItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (name.compare("Captain Universe's Energy"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_capitain_universe_energy_01.wimaterial");
+			if (name.compare("Groot's Seeds"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_groots_seeds_01.wimaterial");
+			if (name.compare("Manti's Telepathic Thrust"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_mantis_telepathic_thrust_01.wimaterial");
+			if (name.compare("Phyla's Quantum Sword"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_phylas_sword.wimaterial");
+			if (name.compare("Starhawk's Time Blast"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_starhawks_time_blast_01.wimaterial");
+			if (name.compare("Yondu's Fin"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_yondus_fin_01.wimaterial");
+
 			break;
 		case (int)ItemType::BUFF:
 			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Buff.wiprefab");
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, shopItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (name.compare("Bug's Leg"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_bugs_legs_01.wimaterial");
+			if (name.compare("Charlie-27's Fist"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_charlie_27s_fist_01.wimaterial");
+			if (name.compare("Cosmo's Paw"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_cosmos_paw_01.wimaterial");
+			if (name.compare("Major Victory's Shield"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_major_victory_shield_01.wimaterial");
+			if (name.compare("Martinex's Thermokinesis"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_martinex_thermokinesis_01.wimaterial");
+			if (name.compare("Nikki's Touch"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_nikkis_touch_01.wimaterial");
+
 			break;
 		case (int)ItemType::PASSIVE:
 			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Passive.wiprefab");
+			
+
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, shopItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (name.compare("Adam_Warlock_Blessing"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_adam_warlock_staff_00_a.wimaterial");
+			if (name.compare("Angela_Crown"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_angelas_crown_00_a.wimaterial");
+			if (name.compare("Drax_Belt"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_drax_belt_00_a.wimaterial");
+			if (name.compare("Gamora_Hood"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_gamoras_hood_00_a.wimaterial");
+			if (name.compare("Ikons_Battery"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ikons_battery_00_a.wimaterial");
+			if (name.compare("Iron_Man_Insurance"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ironman_insurance_00_a.wimaterial");
+			if (name.compare("Jack_Flag_Gloves"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_jack_gloves_00_a.wimaterial");
+			if (name.compare("Nova_Helmet"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_nova_helmet_00_a.wimaterial");
+			if (name.compare("Star_Lord_Walkman"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_starlords_walkman_00_a.wimaterial");
+			if (name.compare("Xandarian_Worldmind"))
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_xandarian_worldmind_00_a.wimaterial");
 			break;
 		default:
 			break;
 		}
-
-		t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
-		*t3d_particle = *t3d;
-		em.SetParent(prefabParticle, shopItem);
-		t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+		
 	}
 	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
 	{
