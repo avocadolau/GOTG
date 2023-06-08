@@ -13,7 +13,7 @@ namespace Wiwa {
 		int MaxShield;
 		int ShieldMultiplier;
 		int Shield;
-		int ShieldRegeration;
+		int ShieldRegeneration;
 		int ShieldRegenerationMult;
 
 		int Damage;

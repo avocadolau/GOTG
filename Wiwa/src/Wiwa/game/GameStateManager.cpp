@@ -138,6 +138,8 @@ namespace Wiwa
 			doc.AddMember("health", character->Health);
 			doc.AddMember("max_shield", character->MaxShield);
 			doc.AddMember("shield", character->Shield);
+			doc.AddMember("shield_regeneration", character->ShieldRegeneration);
+			doc.AddMember("shield_regeneration_mult", character->ShieldRegenerationMult);
 			doc.AddMember("damage", character->Damage);
 			doc.AddMember("rof", character->RateOfFire);
 			doc.AddMember("speed", character->Speed);
@@ -177,6 +179,10 @@ namespace Wiwa
 				character->MaxShield = doc["max_shield"].as_int();
 			if (doc.HasMember("shield"))
 				character->Shield = doc["shield"].as_int();
+			if (doc.HasMember("shield_regeneration"))
+				character->ShieldRegeneration = doc["shield_regeneration"].as_int();
+			if (doc.HasMember("shield_regeneration_mult"))
+				character->ShieldRegeneration = doc["shield_regeneration_mult"].as_int();
 			if (doc.HasMember("damage"))
 				character->Damage = doc["damage"].as_int();
 			if (doc.HasMember("rof"))
@@ -282,7 +288,8 @@ namespace Wiwa
 		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
 		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
 		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
-
+		starlord.AddMember("shield_regeneration", s_CharacterSettings[0].ShieldRegeneration);
+		starlord.AddMember("shield_regeneration_mult", s_CharacterSettings[0].ShieldRegenerationMult);
 
 		JSONValue rocket = doc.AddMemberObject("rocket");
 		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
@@ -294,6 +301,8 @@ namespace Wiwa
 		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
 		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
 		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
+		rocket.AddMember("shield_regeneration", s_CharacterSettings[1].ShieldRegeneration);
+		rocket.AddMember("shield_regeneration_mult", s_CharacterSettings[1].ShieldRegenerationMult);
 
 		// TODO: Reset all progression
 
@@ -390,6 +399,10 @@ namespace Wiwa
 				character->Shield = character->MaxShield;
 				if (characterDoc.HasMember("shield"))
 					character->Shield = characterDoc["shield"].as_int();
+				if (characterDoc.HasMember("shield_regeneration"))
+					character->ShieldRegeneration = characterDoc["shield_regeneration"].as_int();
+				if (characterDoc.HasMember("shield_regeneration_mult"))
+					character->ShieldRegenerationMult = characterDoc["shield_regeneration_mult"].as_int();
 				if (characterDoc.HasMember("damage"))
 					character->Damage = characterDoc["damage"].as_int();
 				if (characterDoc.HasMember("rof"))
@@ -818,7 +831,8 @@ namespace Wiwa
 		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
 		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
 		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
-
+		starlord.AddMember("shield_regeneration", s_CharacterSettings[0].ShieldRegeneration);
+		starlord.AddMember("shield_regeneration_mult", s_CharacterSettings[0].ShieldRegenerationMult);
 
 		JSONValue rocket = doc.AddMemberObject("rocket");
 		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
@@ -830,6 +844,8 @@ namespace Wiwa
 		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
 		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
 		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
+		rocket.AddMember("shield_regeneration", s_CharacterSettings[1].ShieldRegeneration);
+		rocket.AddMember("shield_regeneration_mult", s_CharacterSettings[1].ShieldRegenerationMult);
 
 		doc.AddMember("gamepad_deadzone", s_GamepadDeadzone);
 		doc.AddMember("current_character", s_CurrentCharacter);
@@ -928,6 +944,8 @@ namespace Wiwa
 			s_CharacterSettings[0].DashDistance = starlord["dash_distance"].as_float();
 			s_CharacterSettings[0].DashCoolDown = starlord["dash_cooldown"].as_float();
 			s_CharacterSettings[0].WalkTreshold = starlord["walk_threshold"].as_float();
+			s_CharacterSettings[0].ShieldRegeneration = starlord["shield_regeneration"].as_int();
+			s_CharacterSettings[0].ShieldRegenerationMult = starlord["shield_regeneration_mult"].as_int();
 		}
 
 		if (doc.HasMember("rocket"))
@@ -942,6 +960,8 @@ namespace Wiwa
 			s_CharacterSettings[1].DashDistance = rocket["dash_distance"].as_float();
 			s_CharacterSettings[1].DashCoolDown = rocket["dash_cooldown"].as_float();
 			s_CharacterSettings[1].WalkTreshold = rocket["walk_threshold"].as_float();
+			s_CharacterSettings[1].ShieldRegeneration = rocket["shield_regeneration"].as_int();
+			s_CharacterSettings[1].ShieldRegenerationMult = rocket["shield_regeneration_mult"].as_int();
 		}
 		if (doc.HasMember("gamepad_deadzone"))
 			s_GamepadDeadzone = doc["gamepad_deadzone"].as_float();

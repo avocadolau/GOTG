@@ -8,7 +8,9 @@
         "dash_speed": 4.0,
         "dash_distance": 10.0,
         "dash_cooldown": 0.5,
-        "walk_threshold": 0.5
+        "walk_threshold": 0.5,
+		"shield_regeneration" : 2,
+		"shield_regeneration_mult" : 2
     },
     "rocket": {
         "max_health": 70,
@@ -19,6 +21,8 @@
         "dash_speed": 4.0,
         "dash_distance": 10.0,
         "dash_cooldown": 0.5,
-        "walk_threshold": 0.5
+        "walk_threshold": 0.5,
+		"shield_regeneration" : 2,
+		"shield_regeneration_mult" : 2
     }
 }

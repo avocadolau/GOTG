@@ -148,6 +148,9 @@ void GameLogPanel::DrawRoomVariables()
 					ImGui::Text("Health %i", character->Health);
 					ImGui::Text("Max Shield %i", character->MaxShield);
 					ImGui::Text("Shield %i", character->Shield);
+					ImGui::Text("Shield Regeneration %i", character->ShieldRegeneration);
+					ImGui::Text("Shield Regeneration Mult %i", character->ShieldRegenerationMult);
+					ImGui::Text("Shield %i", character->Shield);
 					ImGui::Text("Damage %i", character->Damage);
 					ImGui::Text("Rate of fire %f", character->RateOfFire);
 					ImGui::Text("Speed %f", character->Speed);
@@ -176,6 +179,10 @@ void GameLogPanel::DrawRoomVariables()
 		ImGui::InputFloat("Dash speed", &Wiwa::GameStateManager::s_CharacterSettings[0].DashSpeed);
 		ImGui::InputFloat("Dash cooldown", &Wiwa::GameStateManager::s_CharacterSettings[0].DashCoolDown);
 		ImGui::InputFloat("Walk threshold", &Wiwa::GameStateManager::s_CharacterSettings[0].WalkTreshold);
+
+		ImGui::InputInt("shield regeneration", &Wiwa::GameStateManager::s_CharacterSettings[0].ShieldRegeneration);
+		ImGui::InputInt("shield regeneration mult", &Wiwa::GameStateManager::s_CharacterSettings[0].ShieldRegenerationMult);
+
 		ImGui::PopID();
 	}
 
@@ -191,6 +198,10 @@ void GameLogPanel::DrawRoomVariables()
 		ImGui::InputFloat("Dash speed", &Wiwa::GameStateManager::s_CharacterSettings[1].DashSpeed);
 		ImGui::InputFloat("Dash cooldown", &Wiwa::GameStateManager::s_CharacterSettings[1].DashCoolDown);
 		ImGui::InputFloat("Walk threshold", &Wiwa::GameStateManager::s_CharacterSettings[1].WalkTreshold);
+
+		ImGui::InputInt("shield regeneration", &Wiwa::GameStateManager::s_CharacterSettings[1].ShieldRegeneration);
+		ImGui::InputInt("shield regeneration mult", &Wiwa::GameStateManager::s_CharacterSettings[1].ShieldRegenerationMult);
+
 		ImGui::PopID();
 	}
 
