@@ -670,7 +670,7 @@ namespace Wiwa {
 	void Material::Bind(uint32_t program_id, int id)
 	{
 		int texureId = id;
-		for (size_t i = 0; i < m_Uniforms.size(); i++)
+		for (uint32_t i = 0; i < m_Uniforms.size(); i++)
 		{
 			m_Uniforms[i].sendToShader(program_id, texureId);
 		}

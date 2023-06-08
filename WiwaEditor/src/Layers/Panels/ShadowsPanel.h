@@ -11,5 +11,5 @@ public:
 	void Draw() override;
 	void Update() override;
 private:
-	float m_ZoomLevel = 0.5f;
+	float m_ZoomLevel = 0.1f;
 };

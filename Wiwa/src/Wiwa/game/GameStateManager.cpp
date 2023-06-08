@@ -1037,7 +1037,7 @@ namespace Wiwa
 	}
 	void GameStateManager::SpawnShopRandomItem(glm::vec3 position, uint8_t type,EntityId shopItem)
 	{
-		uint32_t itemRand;
+
 		std::string name;
 		int i = 0;
 		switch (type)

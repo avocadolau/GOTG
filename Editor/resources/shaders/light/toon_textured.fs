@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 const int MAX_POINT_LIGHTS = 32;
 const int MAX_SPOT_LIGHTS = 32;
 out vec4 FragColor;

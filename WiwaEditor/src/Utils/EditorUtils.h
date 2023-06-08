@@ -75,7 +75,7 @@ void CreateScriptFile(const char* filePath, const char* name);
 
 inline void VectorEdit(std::vector<int>& vector)
 {
-	for (size_t i = 0; i < vector.size(); i++)
+	for (uint32_t i = 0; i < vector.size(); i++)
 	{
 		ImGui::PushID(i);
 		ImGui::InputInt("", &vector[i]);
