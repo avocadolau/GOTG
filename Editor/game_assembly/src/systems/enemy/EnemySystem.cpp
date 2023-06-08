@@ -251,7 +251,7 @@ namespace Wiwa
 
 	void EnemySystem::ReceiveDamage(int damage)
 	{
-		WI_INFO("Enemy hit by: {} damage", damage);
+		//WI_INFO("Enemy hit by: {} damage", damage);
 		Health* health = GetComponentByIterator<Health>(m_Health);
 		EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
 
@@ -271,9 +271,21 @@ namespace Wiwa
 			// TODO: Change with a stats
 			if (player)
 			{
+
+				float playerShield = player->Shield;
+
 				player->Shield += player->ShieldRegeration;
 				if (player->Shield >= player->MaxShield)
 					player->Shield = player->MaxShield;
+
+
+				WI_CORE_INFO("player->Shield {0}", player->Shield);
+				WI_CORE_INFO("player->ShieldRegeration {0}", player->ShieldRegeration);
+
+				if (player->Shield != playerShield && player->Shield == player->MaxShield)
+				{
+					WI_CORE_INFO("Ulti charged");
+				}
 			}
 			// Spawn an item
 			uint32_t chances = RAND(0, 100);
