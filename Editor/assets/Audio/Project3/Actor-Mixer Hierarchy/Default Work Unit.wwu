@@ -146,7 +146,7 @@
 										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-12</Value>
+												<Value>-15</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -295,7 +295,7 @@
 										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-3</Value>
+												<Value>-6</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -1808,6 +1808,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="rocket_shot" ID="{559242D3-6083-4123-888F-8EBB7CD0954C}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.141176470588236"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.331372549019608"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>rocket_shot.wav</AudioFile>
 											<MediaIDList>
@@ -1866,7 +1871,7 @@
 										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-5</Value>
+												<Value>-9</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2099,9 +2104,9 @@
 								<RandomSequenceContainer Name="explosions" ID="{4923C52D-993E-42E7-B866-C47637F1C317}" ShortID="904487592">
 									<PropertyList>
 										<Property Name="3DSpatialization" Type="int16" Value="1"/>
-										<Property Name="Volume" Type="Real64">
+										<Property Name="MakeUpGain" Type="Real64">
 											<ValueList>
-												<Value>11</Value>
+												<Value>9</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2224,7 +2229,7 @@
 										</Property>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-5</Value>
+												<Value>-11</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2244,12 +2249,12 @@
 																			<XPos>0</XPos>
 																			<YPos>0</YPos>
 																			<Flags>5</Flags>
+																			<SegmentShape>Exp2</SegmentShape>
 																		</Point>
 																		<Point>
-																			<XPos>14</XPos>
-																			<YPos>0</YPos>
+																			<XPos>44.32535</XPos>
+																			<YPos>-200</YPos>
 																			<Flags>0</Flags>
-																			<SegmentShape>Exp2</SegmentShape>
 																		</Point>
 																		<Point>
 																			<XPos>100</XPos>
@@ -2399,7 +2404,7 @@
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-8</Value>
+												<Value>-10</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2438,7 +2443,7 @@
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-11</Value>
+												<Value>-7</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2478,7 +2483,7 @@
 										<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-15</Value>
+												<Value>-16</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -3362,6 +3367,11 @@
 										<Sound Name="cluster_ball_explosion" ID="{B3A04584-278C-49BC-8D0B-1011DB64EAD1}" ShortID="597452486">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="1"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-11</Value>
+													</ValueList>
+												</Property>
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Attenuation">
