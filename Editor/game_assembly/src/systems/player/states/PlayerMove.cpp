@@ -12,8 +12,8 @@ Wiwa::PlayerMove::~PlayerMove()
 
 void Wiwa::PlayerMove::EnterState()
 {
-	WI_INFO("Player move");
-	WI_INFO("{}", m_StateMachine->GetInput().length());
+	/*WI_INFO("Player move");
+	WI_INFO("{}", m_StateMachine->GetInput().length());*/
 	if(m_StateMachine->GetCharacter()->WalkTreshold <= m_StateMachine->GetInput().length())
 		m_StateMachine->GetAnimator()->PlayAnimation("running");
 	else

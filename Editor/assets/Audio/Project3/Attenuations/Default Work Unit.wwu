@@ -107,12 +107,13 @@
 											<XPos>0</XPos>
 											<YPos>0</YPos>
 											<Flags>5</Flags>
+											<SegmentShape>Exp2</SegmentShape>
 										</Point>
 										<Point>
-											<XPos>9.2167275</XPos>
-											<YPos>0</YPos>
+											<XPos>40.10088</XPos>
+											<YPos>-200</YPos>
 											<Flags>0</Flags>
-											<SegmentShape>Exp2</SegmentShape>
+											<SegmentShape>Log2</SegmentShape>
 										</Point>
 										<Point>
 											<XPos>75</XPos>

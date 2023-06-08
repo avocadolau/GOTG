@@ -274,7 +274,7 @@ namespace Wiwa
 			if (distance > farDistance)
 				farDistance = distance;
 		}
-		WI_INFO("Distance {}", farDistance);
+		//WI_INFO("Distance {}", farDistance);
 		PlayerCameraData* data = nullptr;
 		if (m_CameraDataIt.c_id != WI_INVALID_INDEX)
 			data = GetComponentByIterator<PlayerCameraData>(m_CameraDataIt);
