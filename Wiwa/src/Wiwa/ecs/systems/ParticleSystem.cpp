@@ -1068,21 +1068,22 @@ namespace Wiwa {
 		}
 		else
 		{
+			particle.velocity = emitter->m_p_initialVelocity;
 
-			if (emitter->m_p_followEmitterRotationSpawn)
-			{
-				glm::vec3 rotatedVel;
-				glm::vec3 rotationVelRad = glm::radians(emitter->m_p_initialVelocity);
+			
+		}
 
-				rotatedVel = glm::rotate(rotatedVel, rotationVelRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
-				rotatedVel = glm::rotate(rotatedVel, rotationVelRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
-				rotatedVel = glm::rotate(rotatedVel, rotationVelRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+		if (emitter->m_p_followEmitterRotationSpawn)
+		{
+			glm::vec3 rotatedVel = particle.velocity;
+			glm::vec3 rotationVelRad = glm::radians(emitter->m_p_initialVelocity);
 
-				particle.velocity = rotatedVel;
+			rotatedVel = glm::rotate(rotatedVel, rotationVelRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+			rotatedVel = glm::rotate(rotatedVel, rotationVelRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+			rotatedVel = glm::rotate(rotatedVel, rotationVelRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-			}
-			else
-				particle.velocity = emitter->m_p_initialVelocity;
+			particle.velocity = rotatedVel;
+
 		}
 
 		//initial angular velocity
