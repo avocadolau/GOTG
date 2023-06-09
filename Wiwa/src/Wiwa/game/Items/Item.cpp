@@ -433,7 +433,7 @@ namespace Wiwa
             MaxHealthInc = player->MaxHealth * buffPercent;
             break;
         case Wiwa::HowardElementType::SHIELD_FAN:
-            player->ShieldRegeration += player->ShieldRegeration * buffPercent;
+            player->ShieldRegeneration += player->ShieldRegeneration * buffPercent;
             break;
         case Wiwa::HowardElementType::RECOVERY_SHIELD:
             player->Shield += player->MaxShield * buffPercent;
@@ -510,7 +510,7 @@ namespace Wiwa
             player->MaxHealth -= MaxHealthInc;
             break;
         case Wiwa::HowardElementType::SHIELD_FAN:
-            player->ShieldRegeration -= ShieldRegenInc;
+            player->ShieldRegeneration -= ShieldRegenInc;
             break;
         case Wiwa::HowardElementType::RECOVERY_SHIELD:
             //TODO: MAKE IT WORK

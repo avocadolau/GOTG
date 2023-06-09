@@ -32,6 +32,9 @@ namespace Wiwa
 		float DashSpeed;
 		float DashCoolDown;
 		float WalkTreshold;
+
+		int ShieldRegeneration;
+		int ShieldRegenerationMult;
 	};
 
 	enum class RoomType

@@ -85,7 +85,7 @@ void Wiwa::PlayerStateMachine::UpdateRotation()
 
 void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 {
-	WI_INFO("Changing state");
+	//WI_INFO("Changing state");
 	m_CurrentState->ExitState();
 	m_CurrentState = state;
 	m_CurrentState->EnterState();
@@ -117,7 +117,7 @@ void Wiwa::PlayerStateMachine::DashCooldown()
 		if (m_CooldownTimer <= 0)
 		{
 			SetDashEnable(true);
-			WI_INFO("Dash enabled");
+			//WI_INFO("Dash enabled");
 		}
 	}
 }

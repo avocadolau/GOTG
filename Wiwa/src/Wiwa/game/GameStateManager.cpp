@@ -10,6 +10,7 @@
 #include <Wiwa/ecs/systems/game/wave/WaveSpawnerSystem.h>
 #include <Wiwa/game/GameMusicManager.h>
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 
 namespace Wiwa
 {
@@ -138,6 +139,8 @@ namespace Wiwa
 			doc.AddMember("health", character->Health);
 			doc.AddMember("max_shield", character->MaxShield);
 			doc.AddMember("shield", character->Shield);
+			doc.AddMember("shield_regeneration", character->ShieldRegeneration);
+			doc.AddMember("shield_regeneration_mult", character->ShieldRegenerationMult);
 			doc.AddMember("damage", character->Damage);
 			doc.AddMember("rof", character->RateOfFire);
 			doc.AddMember("speed", character->Speed);
@@ -177,6 +180,10 @@ namespace Wiwa
 				character->MaxShield = doc["max_shield"].as_int();
 			if (doc.HasMember("shield"))
 				character->Shield = doc["shield"].as_int();
+			if (doc.HasMember("shield_regeneration"))
+				character->ShieldRegeneration = doc["shield_regeneration"].as_int();
+			if (doc.HasMember("shield_regeneration_mult"))
+				character->ShieldRegeneration = doc["shield_regeneration_mult"].as_int();
 			if (doc.HasMember("damage"))
 				character->Damage = doc["damage"].as_int();
 			if (doc.HasMember("rof"))
@@ -282,7 +289,8 @@ namespace Wiwa
 		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
 		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
 		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
-
+		starlord.AddMember("shield_regeneration", s_CharacterSettings[0].ShieldRegeneration);
+		starlord.AddMember("shield_regeneration_mult", s_CharacterSettings[0].ShieldRegenerationMult);
 
 		JSONValue rocket = doc.AddMemberObject("rocket");
 		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
@@ -294,6 +302,8 @@ namespace Wiwa
 		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
 		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
 		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
+		rocket.AddMember("shield_regeneration", s_CharacterSettings[1].ShieldRegeneration);
+		rocket.AddMember("shield_regeneration_mult", s_CharacterSettings[1].ShieldRegenerationMult);
 
 		// TODO: Reset all progression
 
@@ -390,6 +400,10 @@ namespace Wiwa
 				character->Shield = character->MaxShield;
 				if (characterDoc.HasMember("shield"))
 					character->Shield = characterDoc["shield"].as_int();
+				if (characterDoc.HasMember("shield_regeneration"))
+					character->ShieldRegeneration = characterDoc["shield_regeneration"].as_int();
+				if (characterDoc.HasMember("shield_regeneration_mult"))
+					character->ShieldRegenerationMult = characterDoc["shield_regeneration_mult"].as_int();
 				if (characterDoc.HasMember("damage"))
 					character->Damage = characterDoc["damage"].as_int();
 				if (characterDoc.HasMember("rof"))
@@ -818,7 +832,8 @@ namespace Wiwa
 		starlord.AddMember("dash_distance", s_CharacterSettings[0].DashDistance);
 		starlord.AddMember("dash_cooldown", s_CharacterSettings[0].DashCoolDown);
 		starlord.AddMember("walk_threshold", s_CharacterSettings[0].WalkTreshold);
-
+		starlord.AddMember("shield_regeneration", s_CharacterSettings[0].ShieldRegeneration);
+		starlord.AddMember("shield_regeneration_mult", s_CharacterSettings[0].ShieldRegenerationMult);
 
 		JSONValue rocket = doc.AddMemberObject("rocket");
 		rocket.AddMember("max_health", s_CharacterSettings[1].MaxHealth);
@@ -830,6 +845,8 @@ namespace Wiwa
 		rocket.AddMember("dash_distance", s_CharacterSettings[1].DashDistance);
 		rocket.AddMember("dash_cooldown", s_CharacterSettings[1].DashCoolDown);
 		rocket.AddMember("walk_threshold", s_CharacterSettings[1].WalkTreshold);
+		rocket.AddMember("shield_regeneration", s_CharacterSettings[1].ShieldRegeneration);
+		rocket.AddMember("shield_regeneration_mult", s_CharacterSettings[1].ShieldRegenerationMult);
 
 		doc.AddMember("gamepad_deadzone", s_GamepadDeadzone);
 		doc.AddMember("current_character", s_CurrentCharacter);
@@ -928,6 +945,8 @@ namespace Wiwa
 			s_CharacterSettings[0].DashDistance = starlord["dash_distance"].as_float();
 			s_CharacterSettings[0].DashCoolDown = starlord["dash_cooldown"].as_float();
 			s_CharacterSettings[0].WalkTreshold = starlord["walk_threshold"].as_float();
+			s_CharacterSettings[0].ShieldRegeneration = starlord["shield_regeneration"].as_int();
+			s_CharacterSettings[0].ShieldRegenerationMult = starlord["shield_regeneration_mult"].as_int();
 		}
 
 		if (doc.HasMember("rocket"))
@@ -942,6 +961,8 @@ namespace Wiwa
 			s_CharacterSettings[1].DashDistance = rocket["dash_distance"].as_float();
 			s_CharacterSettings[1].DashCoolDown = rocket["dash_cooldown"].as_float();
 			s_CharacterSettings[1].WalkTreshold = rocket["walk_threshold"].as_float();
+			s_CharacterSettings[1].ShieldRegeneration = rocket["shield_regeneration"].as_int();
+			s_CharacterSettings[1].ShieldRegenerationMult = rocket["shield_regeneration_mult"].as_int();
 		}
 		if (doc.HasMember("gamepad_deadzone"))
 			s_GamepadDeadzone = doc["gamepad_deadzone"].as_float();
@@ -1034,6 +1055,150 @@ namespace Wiwa
 
 		name.copy(item->Name, 128);		
 		item->Name[name.size()] = '\0';
+		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
+		Transform3D* t3d_particle = nullptr;
+		ParticleSystem* particle_sytem = nullptr;
+
+		switch (item->item_type)
+		{
+		case (int)ItemType::ABILITY:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Active.wiprefab");
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, childItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (strcmp(name.c_str(), "Captain Universe's Energy") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_capitain_universe_energy_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Groot's Seeds") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_groots_seeds_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Manti's Telepathic Thrust") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_mantis_telepathic_thrust_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Phyla's Quantum Sword") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_phylas_sword.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Starhawk's Time Blast") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_starhawks_time_blast_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Yondu's Fin") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_yondus_fin_01.wimaterial");
+
+			}
+
+			break;
+		case (int)ItemType::BUFF:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Buff.wiprefab");
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, childItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (strcmp(name.c_str(), "Bug's Leg") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_bugs_legs_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Charlie-27's Fist") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_charlie_27s_fist_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Cosmo's Paw") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_cosmos_paw_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Major Victory's Shield") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_major_victory_shield_01.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Martinex's Thermokinesis") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_martinex_thermokinesis_01.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Nikki's Touch") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_nikkis_touch_01.wimaterial");
+
+			}
+
+			break;
+		case (int)ItemType::PASSIVE:
+			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Passive.wiprefab");
+
+
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, childItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (strcmp(name.c_str(), "Adam_Warlock_Blessing") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_adam_warlock_staff_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Angela_Crown") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_angelas_crown_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Drax_Belt") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_drax_belt_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Gamora_Hood") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_gamoras_hood_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Ikons_Battery") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ikons_battery_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Iron_Man_Insurance") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ironman_insurance_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Jack_Flag_Gloves") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_jack_gloves_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Nova_Helmet") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_nova_helmet_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Star_Lord_Walkman") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_starlords_walkman_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Xandarian_Worldmind") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_xandarian_worldmind_00_a.wimaterial");
+
+			}
+			break;
+		default:
+			break;
+		}
 	}
 	void GameStateManager::SpawnShopRandomItem(glm::vec3 position, uint8_t type,EntityId shopItem)
 	{
@@ -1095,25 +1260,149 @@ namespace Wiwa
 
 		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
 		Transform3D* t3d_particle = nullptr;
+		ParticleSystem* particle_sytem = nullptr;
+
 		switch (item->item_type)
 		{
 		case (int)ItemType::ABILITY:
 			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Active.wiprefab");
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, shopItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (strcmp(name.c_str(), "Captain Universe's Energy") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_capitain_universe_energy_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Groot's Seeds") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_groots_seeds_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Manti's Telepathic Thrust") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_mantis_telepathic_thrust_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Phyla's Quantum Sword") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_phylas_sword.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Starhawk's Time Blast") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_starhawks_time_blast_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Yondu's Fin") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_yondus_fin_01.wimaterial");
+
+			}
+
 			break;
 		case (int)ItemType::BUFF:
 			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Buff.wiprefab");
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, shopItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (strcmp(name.c_str(), "Bug's Leg") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_bugs_legs_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Charlie-27's Fist") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_charlie_27s_fist_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Cosmo's Paw") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_cosmos_paw_01.wimaterial");
+			}
+			else if (strcmp(name.c_str(), "Major Victory's Shield") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_major_victory_shield_01.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Martinex's Thermokinesis") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_martinex_thermokinesis_01.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Nikki's Touch") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_nikkis_touch_01.wimaterial");
+
+			}
+
 			break;
 		case (int)ItemType::PASSIVE:
 			prefabParticle = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/items/p_item_Passive.wiprefab");
+			
+
+			t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
+			*t3d_particle = *t3d;
+			em.SetParent(prefabParticle, shopItem);
+			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
+
+			if (strcmp(name.c_str(), "Adam_Warlock_Blessing") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_adam_warlock_staff_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Angela_Crown") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_angelas_crown_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Drax_Belt") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_drax_belt_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Gamora_Hood") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_gamoras_hood_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Ikons_Battery") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ikons_battery_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Iron_Man_Insurance") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ironman_insurance_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Jack_Flag_Gloves") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_jack_gloves_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Nova_Helmet") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_nova_helmet_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Star_Lord_Walkman") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_starlords_walkman_00_a.wimaterial");
+
+			}
+			else if (strcmp(name.c_str(), "Xandarian_Worldmind") == 0)
+			{
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_xandarian_worldmind_00_a.wimaterial");
+
+			}
 			break;
 		default:
 			break;
 		}
-
-		t3d_particle = em.GetComponent<Transform3D>(prefabParticle);
-		*t3d_particle = *t3d;
-		em.SetParent(prefabParticle, shopItem);
-		t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
+		
 	}
 	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
 	{
