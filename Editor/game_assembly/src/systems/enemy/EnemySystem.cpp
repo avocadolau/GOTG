@@ -16,6 +16,7 @@
 #include "../../components/attack/StarhawkBlast.h"
 
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/systems/AudioSystem.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
 #include "../../components/attack/Attack.h"
@@ -285,6 +286,57 @@ namespace Wiwa
 				if (player->Shield != playerShield && player->Shield == player->MaxShield)
 				{
 					WI_CORE_INFO("Ulti charged");
+
+					EntityManager& em = m_Scene->GetEntityManager();
+
+
+					EntityId player_ = GameStateManager::GetPlayerId();
+					ParticleSystem* p_sys = nullptr;
+					if (player_ != EntityManager::INVALID_INDEX)
+					{
+
+						EntityId p_ulti_ready_floor = em.GetChildByName(player_, "p_ulti_ready_floor");
+
+						if (p_ulti_ready_floor != EntityManager::INVALID_INDEX)
+						{
+							p_sys = em.GetSystem<ParticleSystem>(p_ulti_ready_floor);
+
+							if (p_sys != nullptr)
+							{
+								p_sys->SetActive(true);
+							}
+						}
+
+						EntityId p_ulti_ready_flash = em.GetChildByName(player_, "p_ulti_ready_flash");
+
+						if (p_ulti_ready_flash != EntityManager::INVALID_INDEX)
+						{
+							EntityId p_ulti_ready_marker_00 = em.GetChildByName(p_ulti_ready_flash, "p_ulti_ready_marker_00");
+							EntityId p_ulti_ready_marker_01 = em.GetChildByName(p_ulti_ready_flash, "p_ulti_ready_marker_01");
+
+							if (p_ulti_ready_marker_00 != EntityManager::INVALID_INDEX)
+							{
+								p_sys = em.GetSystem<ParticleSystem>(p_ulti_ready_marker_00);
+
+								if (p_sys != nullptr)
+								{
+									p_sys->EmitParticleBatch();
+								}
+							}
+
+							if (p_ulti_ready_marker_01 != EntityManager::INVALID_INDEX)
+							{
+								p_sys = em.GetSystem<ParticleSystem>(p_ulti_ready_marker_01);
+
+								if (p_sys != nullptr)
+								{
+									p_sys->EmitParticleBatch();
+								}
+							}
+						}
+
+						
+					}
 				}
 			}
 			// Spawn an item

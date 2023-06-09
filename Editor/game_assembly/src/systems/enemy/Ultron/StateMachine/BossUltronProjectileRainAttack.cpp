@@ -10,7 +10,7 @@
 
 Wiwa::BossUltronProjectileRainAttackState::BossUltronProjectileRainAttackState()
 {
-	m_ThunderMarkPath = "assets\\Enemy\\RainProjectile\\ThunderMark_01.wiprefab";
+	m_ThunderMarkPath = "assets\\Enemy\\RainProjectile\\p_boss_storm_marker.wiprefab";
 }
 
 Wiwa::BossUltronProjectileRainAttackState::~BossUltronProjectileRainAttackState()
