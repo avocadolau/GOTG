@@ -34,7 +34,7 @@ namespace Wiwa
 		 int id;
 
 		 int idGuiSelected = 0;
-
+		 bool updateSelected = false;
 		 bool DpadUp = false;
 		 bool DpadDown = false;
 

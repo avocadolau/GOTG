@@ -22,8 +22,9 @@ namespace Wiwa {
 		static SceneId m_ActiveScene;
 
 		static InstanceRenderer* m_InstanceRenderer;
-		static size_t m_ProgressBar;
-		static size_t m_ProgressBarFilling;
+		static size_t m_ProgressDot1;
+		static size_t m_ProgressDot2;
+		static size_t m_ProgressDot3;
 		static size_t m_BackGround;
 
 

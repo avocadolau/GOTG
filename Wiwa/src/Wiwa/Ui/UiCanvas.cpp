@@ -49,6 +49,7 @@ namespace Wiwa
 			}
 		}
 		
+
 	}
 
 	void GuiCanvas::InputController()
@@ -59,10 +60,12 @@ namespace Wiwa
 		{
 			if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y > 0.5f)
 			{
+				updateSelected = true;
 				DpadUp = true;
 			}
 			else if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y < -0.5f)
 			{
+				updateSelected = true;
 				DpadDown = true;
 			}
 			else
@@ -107,14 +110,8 @@ namespace Wiwa
 			}
 			if (idGuiSelected > -1 && idGuiSelected < controlsForSelection.size())
 			{
-
 				SelectElement(idGuiSelected);
-
 			}
-
-
-
-
 			timer = 0.0f;
 		}
 	}

@@ -33,8 +33,9 @@ namespace Wiwa
 	std::thread SceneManager::m_LoadScreenThread;
 
 	InstanceRenderer* SceneManager::m_InstanceRenderer = nullptr;
-	size_t SceneManager::m_ProgressBar = WI_INVALID_INDEX;
-	size_t SceneManager::m_ProgressBarFilling = WI_INVALID_INDEX;
+	size_t SceneManager::m_ProgressDot1 = WI_INVALID_INDEX;
+	size_t SceneManager::m_ProgressDot2 = WI_INVALID_INDEX;
+	size_t SceneManager::m_ProgressDot3 = WI_INVALID_INDEX;
 	size_t SceneManager::m_BackGround = WI_INVALID_INDEX;
 
 
@@ -58,8 +59,12 @@ namespace Wiwa
 		m_InstanceRenderer = new InstanceRenderer(10);
 
 		m_InstanceRenderer->Init("resources/shaders/instanced_tex_color");
+		ResourceId background_image_id = WI_INVALID_INDEX;
+		if(Wiwa::GameStateManager::s_CurrentCharacter == 0)
+			background_image_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/UI_LoadingScreen_01a.png");
+		if(Wiwa::GameStateManager::s_CurrentCharacter == 1)
+			background_image_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/UI_LoadingScreen_01b.png");
 
-		ResourceId background_image_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/front.png");
 
 		Image* background_img = Resources::GetResourceById<Image>(background_image_id);
 		Size2i size_background = { 2048,2048 };
@@ -70,31 +75,26 @@ namespace Wiwa
 
 		TextureClip tclip_background = Renderer2D::CalculateTextureClip(clip_background, size_background);
 
-		ResourceId progress_bar_id = Resources::Load<Wiwa::Image>("assets/HudImages/menus/OptionsMenu/UI_SettingsBars_01.png");
+		ResourceId progress_dot_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/UI_LoadingDot_01.png");
 
-		Image* progress_bar_img = Resources::GetResourceById<Image>(progress_bar_id);
-		Size2i size_progress_bar = { 794,256 };
-		Rect2i clip_progress_bar = {
+		Image* progress_dot_img = Resources::GetResourceById<Image>(progress_dot_id);
+		Size2i size_dot = { 64,64 };
+		Rect2i clip_dot = {
 			0, 0,
-			size_progress_bar.w, size_progress_bar.h
+			size_dot.w, size_dot.h
 		};
 
-		TextureClip tclip_progress_bar = Renderer2D::CalculateTextureClip(clip_progress_bar, {1048,1048});
+		TextureClip tclip_dot1 = Renderer2D::CalculateTextureClip(clip_dot, size_dot);
 
-		ResourceId progress_bar_fill_id = Resources::Load<Wiwa::Image>("assets/HudImages/menus/OptionsMenu/UI_SettingsBars_01.png");
-
-		Image* progress_bar_fill_img = Resources::GetResourceById<Image>(progress_bar_fill_id);
-		Size2i size_fill = { 794,256 };
-		Rect2i clip_fill = {
-			0, 256,
-			size_fill.w, size_fill.h
-		};
-
-		TextureClip tclip_progress_bar_fill = Renderer2D::CalculateTextureClip(clip_fill, { 1048,1048 });
-
-		m_ProgressBar = m_InstanceRenderer->AddInstance(progress_bar_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar, Renderer2D::Pivot::UPLEFT);
-		m_ProgressBarFilling = m_InstanceRenderer->AddInstance(progress_bar_fill_img->GetTextureId(), { 600,800 }, { 794,256 }, Wiwa::Color::WHITE, tclip_progress_bar_fill, Renderer2D::Pivot::UPLEFT);
+		m_ProgressDot1 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1600,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
+		m_ProgressDot2 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1700,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
+		m_ProgressDot3 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1800,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
 		m_BackGround = m_InstanceRenderer->AddInstance(background_img->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background, Renderer2D::Pivot::UPLEFT);
+
+		m_InstanceRenderer->DisableInstance(m_ProgressDot1);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot2);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot3);
+
 
 	}
 
@@ -527,42 +527,37 @@ namespace Wiwa
 		bool romw = Wiwa::RenderManager::GetRenderOnMainWindow();
 
 		Wiwa::RenderManager::SetRenderOnMainWindow(true);
-
+		int progress = 0;
 		while (!m_LoadedScene) {
 
 			// Clear screen
 			GL(ClearColor(0.1f, 0.1f, 0.1f, 1.0f));
 			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
+			progress++;
 			// Render loading screen
-			int progress = m_LoadingProgress;
+			/*int progress = m_LoadingProgress;
 
-			float progperc = progress / 12.0f;
-			Size2i size = { 794,256 };
-			Rect2i clip = {
-				0, 256,
-				size.w*progperc, size.h
-			};
-
-			TextureClip tclip = Renderer2D::CalculateTextureClip(clip, {1048,1048});
-			m_InstanceRenderer->UpdateInstanceSize(m_ProgressBarFilling, { 600,800 }, { (int)(794 * progperc),256 },Wiwa::Renderer2D::Pivot::UPLEFT);
-			m_InstanceRenderer->UpdateInstanceClip(m_ProgressBarFilling,tclip);
+			float progperc = progress / 12.0f;*/
+			
+			if (progress > 0 && progress <=20)
+				m_InstanceRenderer->EnableInstance(m_ProgressDot1);
+			if(progress>20 && progress <= 40)
+				m_InstanceRenderer->EnableInstance(m_ProgressDot2);
+			if (progress>40 && progress <= 60)
+				m_InstanceRenderer->EnableInstance(m_ProgressDot3);
+			
 			Wiwa::Application::Get().GetRenderer2D().RenderInstanced(*m_InstanceRenderer);
 			Wiwa::RenderManager::UpdateSingle(1);
-
+			if (progress>60)
+			{
+				m_InstanceRenderer->DisableInstance(m_ProgressDot1);
+				m_InstanceRenderer->DisableInstance(m_ProgressDot2);
+				m_InstanceRenderer->DisableInstance(m_ProgressDot3);
+				progress = 0;
+			}
 			// Swap buffers
 			Wiwa::Application::Get().GetWindow().OnUpdate();
 		}
-
-		/*void SetValueForUIbar(float valueHealth, float valueMaxHealth)
-		{
-			if (type == GuiControlType::BAR)
-			{
-				float proportion = valueHealth / valueMaxHealth;
-				position.width = (int)(proportion * extraPosition.width);
-				texturePosition.width = position.width;
-			}
-		}*/
 		Wiwa::RenderManager::SetRenderOnMainWindow(romw);
 
 		// Unbind context from this thread

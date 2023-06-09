@@ -2,7 +2,7 @@
 #include <Wiwa/game/GameStateManager.h>
 #include <Wiwa/core/Input.h>
 #include <Wiwa/Ui/UiManager.h>
-
+#include <Wiwa/game/Items/ItemManager.h>
 
 namespace Wiwa
 {
@@ -32,6 +32,16 @@ namespace Wiwa
 	}
 
 	void HowardShopSystem::OnUpdate()
+	{
+		HandleCanvasShops();
+		HandleTextPerButton();
+	}
+
+	void HowardShopSystem::OnDestroy()
+	{
+	}
+
+	void HowardShopSystem::HandleCanvasShops()
 	{
 		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 		Wiwa::Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
@@ -149,11 +159,66 @@ namespace Wiwa
 				m_SecondShopActive = false;
 			}
 		}
-
 	}
 
-	void HowardShopSystem::OnDestroy()
+	void HowardShopSystem::HandleTextPerButton()
 	{
+		Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
+		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+
+		if (m_FirstShopActive && gm.canvas.at(7)->updateSelected)
+		{
+			size_t canvasSize = gm.canvas.at(7)->controlsForSelection.size();
+			for (int i = 0; i < canvasSize; i++)
+			{
+				if (gm.canvas.at(7)->controlsForSelection.at(i)->GetState() == GuiControlState::FOCUSED)
+				{
+					Wiwa::ShopElement* shopElement = Wiwa::ItemManager::GetShopElement(itemsPerPage1[i]);
+
+					//CHANGE ALL TEXTS IN CORELATION WITH THE SHOP ELEMENT
+					// 16 => COST 17=> CURRENT STEP 19 => ALL STEPS
+					std::string cost = std::to_string(shopElement->Costs.at(shopElement->CurrentStep-1));
+					gm.canvas.at(7)->controls.at(16)->text = cost;
+					Text* newTextCoins = gm.InitFont("library/Fonts/Jade_Smile.ttf", cost.c_str());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(7)->controls.at(16)->id_quad_normal, 1);
+					r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(7)->controls.at(16)->id_quad_normal, newTextCoins->GetTextureId());
+					r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(7)->controls.at(16)->id_quad_normal, newTextCoins->GetSize(), { 0,0,512,512 });
+
+					std::string currentStep = std::to_string(shopElement->CurrentStep-1);
+					gm.canvas.at(7)->controls.at(17)->text = currentStep;
+					Text* newTextCurrentStep = gm.InitFont("library/Fonts/Jade_Smile.ttf", currentStep.c_str());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(7)->controls.at(17)->id_quad_normal, 1);
+					r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(7)->controls.at(17)->id_quad_normal, newTextCurrentStep->GetTextureId());
+					r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(7)->controls.at(17)->id_quad_normal, newTextCurrentStep->GetSize(), { 0,0,512,512 });
+
+					std::string allSteps = std::to_string(shopElement->AmountOfSteps);
+					gm.canvas.at(7)->controls.at(19)->text = allSteps;
+					Text* newTextAllSteps = gm.InitFont("library/Fonts/Jade_Smile.ttf", allSteps.c_str());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(7)->controls.at(19)->id_quad_normal, 1);
+					r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(7)->controls.at(19)->id_quad_normal, newTextAllSteps->GetTextureId());
+					r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(7)->controls.at(19)->id_quad_normal, newTextAllSteps->GetSize(), { 0,0,512,512 });
+
+					gm.canvas.at(7)->updateSelected = false;
+				}
+				else
+				{
+				}
+			}
+			
+		}
+		else if (m_SecondShopActive && gm.canvas.at(8)->updateSelected)
+		{
+			size_t canvasSize = gm.canvas.at(8)->controlsForSelection.size();
+			for (int i = 0; i < canvasSize; i++)
+			{
+				if (gm.canvas.at(8)->controlsForSelection.at(i)->GetState() == GuiControlState::FOCUSED)
+				{
+				}
+				else
+				{
+				}
+			}
+		}
 	}
 
 	void HowardShopSystem::OnCollisionEnter(Object* body1, Object* body2)
