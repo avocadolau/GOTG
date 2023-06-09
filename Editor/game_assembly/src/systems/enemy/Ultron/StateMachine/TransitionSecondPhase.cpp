@@ -14,6 +14,7 @@ namespace Wiwa
 	{
 		m_WallPrefabPath = "assets\\Enemy\\Ultron\\UltronRegenWall_01.wiprefab";
 		m_EnemySpawnerPath = "assets\\Enemy\\WaveSpawner\\UltronWaveSpawner_01.wiprefab";
+		m_RegenPath = "assets/vfx/prefabs/vfx_finals/boss_Ultron/p_boss_regen.wiprefab";
 	}
 
 	BossUltronSecondPhaseState::~BossUltronSecondPhaseState()
@@ -59,6 +60,10 @@ namespace Wiwa
 			PhysicsSystem* physSysWallRegen = em.GetSystem<PhysicsSystem>(m_RegenWallPrefabId);
 			physSysWallRegen->DeleteBody();
 
+			/*enemy->m_AnimatorSys->PlayAnimation("walking");*/
+
+			selfTr->localRotation = glm::vec3(0.0f, 180.0f, 0.0f);
+
 			if (!regenWallPrefabTr || !playerTr)
 				return;
 
@@ -71,6 +76,14 @@ namespace Wiwa
 			m_TimerSecondPhase = 0.0f;
 
 			m_SpawnEnemies = true;
+
+			//Particle Regeneration
+			m_RegenPrefabId = em.LoadPrefab(m_RegenPath);
+			Transform3D* regenTr = em.GetComponent<Transform3D>(m_RegenPrefabId);
+			regenTr->localPosition.x = selfTr->localPosition.x;
+			regenTr->localPosition.y = selfTr->localPosition.y + 8.0f;
+			regenTr->localPosition.z = selfTr->localPosition.z;
+
 
 			m_SecondPhaseState = SecondPhaseState::REGENERATE;
 		}
