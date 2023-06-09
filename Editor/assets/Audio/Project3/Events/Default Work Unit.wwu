@@ -574,6 +574,76 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Folder Name="abilities" ID="{44AEC8F9-8EE7-4E7A-8D96-F46D875FB8C6}" ShortID="643061192">
+							<ChildrenList>
+								<Event Name="groot_seed" ID="{3D7294DC-9B3C-4EB9-93A9-1B046B0CFC24}">
+									<ChildrenList>
+										<Action Name="" ID="{E7FC39C3-E87B-4F3D-BEC3-0295BE1185C4}" ShortID="830388878">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Groot_s Seeds" ID="{F479615A-44D0-42E3-AA5B-D75D70EA688B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="phyla_sword" ID="{FA8EEE63-B7D5-47C6-913F-37E7D46FE9E4}">
+									<ChildrenList>
+										<Action Name="" ID="{88CC8F0A-E7CE-4406-A045-6D07DB79673D}" ShortID="592782187">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Phyla_s Sword" ID="{DA09BFF5-D3AC-45AD-9234-B841B4393C00}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="starhawk" ID="{0E6D90BA-40BB-44F5-BB97-6A446ED18B5A}">
+									<ChildrenList>
+										<Action Name="" ID="{2BA2EB18-9465-4070-B3B6-0167DDC5F149}" ShortID="341182117">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Starhawk_s Time Blast" ID="{320B5C0D-C952-4AEC-9EEB-0D30BF2EDB06}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="yondus_fin" ID="{12B3D61D-3292-4002-824E-E05A1E59696B}">
+									<ChildrenList>
+										<Action Name="" ID="{73F65746-6FCF-4B81-B485-3F2EDF6EE2E6}" ShortID="51464690">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Yondu_s Fin" ID="{D5435458-4340-41F9-BF9E-D73C325E5B7A}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="captain_universe" ID="{06A02EF7-143D-48D7-B6C8-AC0106F18E4E}">
+									<ChildrenList>
+										<Action Name="" ID="{7181A355-A998-4D68-BD98-35783B172B78}" ShortID="829114374">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Captain Universe_s Energy" ID="{234F9682-DEDD-45E2-8403-8FC66E481BF1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="mantis" ID="{D197A094-677C-40BC-84EC-873CB31E581B}">
+									<ChildrenList>
+										<Action Name="" ID="{B34F90C2-1D81-4D1B-A710-E57AD7ACE22B}" ShortID="511541516">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Mantis_ Telepathic Blast" ID="{C769DB5E-F593-40A3-8333-51BAB337BA86}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="music" ID="{598A0335-8B64-462B-826F-0B47DFAFE9AD}" ShortID="1070886920">

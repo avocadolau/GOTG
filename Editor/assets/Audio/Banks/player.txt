@@ -1,5 +1,6 @@
 Event	ID	Name			Wwise Object Path	Notes
 	179212224	vo_ulana_generic			\Default Work Unit\npcs\ulana\vo_ulana_generic	
+	376839513	yondus_fin			\Default Work Unit\player\abilities\yondus_fin	
 	384143791	bullet_hit			\Default Work Unit\player\bullet_hit	
 	475445591	vo_starlord_powerup			\Default Work Unit\player\startlord vo\vo_starlord_powerup	
 	521527292	player_hit_shield			\Default Work Unit\player\player_hit_shield	
@@ -7,21 +8,26 @@ Event	ID	Name			Wwise Object Path	Notes
 	871813740	player_hit			\Default Work Unit\player\player_hit	
 	1003499174	vo_starlord_spawn			\Default Work Unit\player\startlord vo\vo_starlord_spawn	
 	1133938312	vo_rocket_death			\Default Work Unit\player\rocket vo\vo_rocket_death	
+	1380145447	captain_universe			\Default Work Unit\player\abilities\captain_universe	
 	1425247012	vo_rocket_heal			\Default Work Unit\player\rocket vo\vo_rocket_heal	
 	1466408226	vo_uatu_reward			\Default Work Unit\npcs\uatu\vo_uatu_reward	
 	1500948605	vo_uatu_interaction			\Default Work Unit\npcs\uatu\vo_uatu_interaction	
 	1640074935	vo_aron_generic			\Default Work Unit\npcs\aaron\vo_aron_generic	
 	1711574905	vo_starlord_death			\Default Work Unit\player\startlord vo\vo_starlord_death	
+	2054046332	groot_seed			\Default Work Unit\player\abilities\groot_seed	
 	2078288224	rocket_shot			\Default Work Unit\player\rocket_shot	
 	2147561130	player_walk			\Default Work Unit\player\player_walk	
 	2226114503	player_dead			\Default Work Unit\player\player_dead	
 	2394582229	player_dash			\Default Work Unit\player\player_dash	
 	2840152885	vo_aron_reward			\Default Work Unit\npcs\aaron\vo_aron_reward	
 	2952727183	vo_ulana_interaction			\Default Work Unit\npcs\ulana\vo_ulana_interaction	
+	3062257725	phyla_sword			\Default Work Unit\player\abilities\phyla_sword	
 	3095733913	vo_rocket_complete_run			\Default Work Unit\player\rocket vo\vo_rocket_complete_run	
 	3252838082	vo_uatu_generic			\Default Work Unit\npcs\uatu\vo_uatu_generic	
+	3429408513	mantis			\Default Work Unit\player\abilities\mantis	
 	3710617558	vo_startlord_hit			\Default Work Unit\player\startlord vo\vo_startlord_hit	
 	3828780779	vo_rocket_spawn			\Default Work Unit\player\rocket vo\vo_rocket_spawn	
+	3847045934	starhawk			\Default Work Unit\player\abilities\starhawk	
 	3847142362	vo_rocket_powerup			\Default Work Unit\player\rocket vo\vo_rocket_powerup	
 	3856070368	vo_aron_interaction			\Default Work Unit\npcs\aaron\vo_aron_interaction	
 	3903555336	vo_ulana_reward			\Default Work Unit\npcs\ulana\vo_ulana_reward	
@@ -38,6 +44,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	41348199	vo_rocket_death	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_death_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_death\vo_rocket_death		335630
 	49179977	player_dash	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 09 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_dash		396996
 	74659350	vo_uatu_reward	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Uatu the Watcher Voice Lines\vo_uatu_reward_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\npcs\Uatu the Watcher Voice Lines\vo_uatu_reward		227890
+	110892170	Phyla_s Sword	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Phyla_s Sword_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\abilities\Phyla_s Sword		452444
 	119658343	vo_starlord_powerup02alt	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_powerup02alt_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_powerup\vo_starlord_powerup02alt		263596
 	205629044	vo_rocket_spawn	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_spawn_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_spawn		215706
 	209809605	vo_rocket_powerup02alt	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_powerup02alt_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_powerup\vo_rocket_powerup02alt		299222
@@ -55,6 +62,8 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	447125529	Bullet-Impact-Sheetrock-02	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Bullet-Impact-Sheetrock-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\bullet_hit\Bullet-Impact-Sheetrock-02		407212
 	481157629	vo_starlord_room_completed01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_room_completed01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_complete_run\vo_starlord_room_completed01		119144
 	484613134	vo_starlord_completed02	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_completed02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_complete_run\vo_starlord_completed02		409516
+	486058183	Captain Universe_s Energy	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Captain Universe_s Energy_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\abilities\Captain Universe_s Energy		689408
+	500085402	Groot_s Seeds	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Groot_s Seeds_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\abilities\Groot_s Seeds		369348
 	500509315	vo_rocket_room_completed01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_room_completed01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_complete_run\vo_rocket_room_completed01		187906
 	508948780	vo_ulana_interaction	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Ulana the Watcher Voice Lines\vo_ulana_interaction_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\npcs\Ulana the Watcher Voice Lines\vo_ulana_interaction		209396
 	510247001	vo_starlord_powerup01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_powerup01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_powerup\vo_starlord_powerup01		118732
@@ -63,6 +72,9 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	617015282	vo_starlord_death	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_death_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_death		327104
 	618280537	vo_rocket_heal	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Rocket - Voice Lines\vo_rocket_heal_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Rocket - Voice Lines\vo_rocket_heal\vo_rocket_heal		321766
 	647999919	vo_uatu_interaction	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Uatu the Watcher Voice Lines\vo_uatu_interaction_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\npcs\Uatu the Watcher Voice Lines\vo_uatu_interaction		208194
+	652728490	Yondu_s Fin	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Yondu_s Fin_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\abilities\Yondu_s Fin		133984
+	653169687	Mantis_ Telepathic Blast	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Mantis_ Telepathic Blast_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\abilities\Mantis_ Telepathic Blast		662312
+	669208810	Starhawk_s Time Blast	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Starhawk_s Time Blast_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\abilities\Starhawk_s Time Blast		309724
 	680197070	Weapon 13 Shoot 1	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Weapon 13 Shoot 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_shoot\Weapon 13 Shoot 1		296640
 	690801981	vo_starlord_heal	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\Star-Lord Voice Lines\vo_starlord_heal_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\Star-Lord Voice Lines\vo_starlord_heal		278298
 	699504966	footstep_concrete_run_01	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\footstep_concrete_run_01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\project III sounds\player\player_walk\footstep_concrete_run_01		44828
