@@ -545,6 +545,25 @@ namespace Wiwa
 				renderer->Update();
 				renderer->GetMaterial()->SetUniformData("u_Hit", false);
 			}
+
+			EntityId player_ = GameStateManager::GetPlayerId();
+			ParticleSystem* p_sys = nullptr;
+			if (player_ != EntityManager::INVALID_INDEX)
+			{
+				EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
+
+				EntityId p_ulti_ready_floor = em.GetChildByName(player_, "p_ulti_ready_floor");
+
+				if (p_ulti_ready_floor != EntityManager::INVALID_INDEX)
+				{
+					p_sys = em.GetSystem<ParticleSystem>(p_ulti_ready_floor);
+
+					if (p_sys != nullptr)
+					{
+						p_sys->SetActive(false);
+					}
+				}
+			}
 		}
 
 		if (character->Shield <= 0)
