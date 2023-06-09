@@ -71,7 +71,7 @@ namespace Wiwa
 			
 			enemy->m_AudioSys->PlayAudio("explosion");
 
-			for (int i = 0; i <= 2; ++i)
+			for (int i = 0; i <= 6; ++i)
 			{
 
 				EntityId explosionId = SpawnRandomExplosion(enemy);
@@ -91,7 +91,7 @@ namespace Wiwa
 			{
 				enemy->m_AudioSys->PlayAudio("explosion");
 
-				for (int i = 0; i <= 3; ++i)
+				for (int i = 0; i <= 12; ++i)
 				{
 					EntityId explosionId = SpawnRandomExplosion(enemy);
 					Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
@@ -111,7 +111,7 @@ namespace Wiwa
 			{
 				enemy->m_AudioSys->PlayAudio("explosion");
 
-				for (int i = 0; i <= 1; ++i)
+				for (int i = 0; i <= 4; ++i)
 				{
 					EntityId explosionId = SpawnRandomExplosion(enemy);
 					Transform3D* explosionTr = em.GetComponent<Transform3D>(explosionId);
@@ -186,36 +186,6 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronDeathState::DeathState::DEATH_FINISH:
 		{
-			/*m_DeathTimer += Time::GetDeltaTimeSeconds();
-			m_TimerDeathExplosions += Time::GetDeltaTimeSeconds();
-
-			if (m_TimerDeathExplosions > 0.5f)
-			{
-				m_TimerDeathExplosions = 0.0f;
-				m_DeathExplosionId = em.LoadPrefab(m_DeathExplosionPath);
-				Transform3D* explosionTr = em.GetComponent<Transform3D>(m_DeathExplosionId);
-			}
-
-			if (m_DeathTimer > 4.0f)
-			{
-				em.DestroyEntity(enemy->GetEntity());
-			}*/
-
-			/*m_DeathExplosionId = em.LoadPrefab(m_DeathExplosionPath);
-			Transform3D* explosionTr = em.GetComponent<Transform3D>(m_DeathExplosionId);
-
-			explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, -2.0f, 2.0f);*/
-
-			//------------------------------------
-
-
-			/*m_DeathExplosionId = em.LoadPrefab(m_DeathExplosionPath1);
-			Transform3D* explosionTr = em.GetComponent<Transform3D>(m_DeathExplosionId);
-
-			explosionTr->localPosition = GetExplosionPosition(selfTr->localPosition, -2.0f, 2.0f);*/
-
-			//-----------------------------------
-
 			m_DeathTimer += Time::GetDeltaTimeSeconds();
 
 			if (m_DeathTimer > 2.0f)

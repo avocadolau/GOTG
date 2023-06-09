@@ -26,6 +26,7 @@ namespace Wiwa {
 		SecondPhaseState m_SecondPhaseState;
 		EntityId m_RegenWallPrefabId;
 		EntityId m_SpawnerPrefabId;
+		EntityId m_RegenPrefabId;
 		std::vector<glm::vec3> m_AfterRegenPosition;
 
 		bool m_SpawnEnemies = false;
@@ -35,5 +36,6 @@ namespace Wiwa {
 		float m_TimerSpawnerEnemies = 0.0f;
 		const char* m_WallPrefabPath;
 		const char* m_EnemySpawnerPath;
+		const char* m_RegenPath;
 	};
 }
