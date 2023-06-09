@@ -274,13 +274,13 @@ namespace Wiwa
 
 				float playerShield = player->Shield;
 
-				player->Shield += player->ShieldRegeration;
+				player->Shield += player->ShieldRegeneration;
 				if (player->Shield >= player->MaxShield)
 					player->Shield = player->MaxShield;
 
 
-				WI_CORE_INFO("player->Shield {0}", player->Shield);
-				WI_CORE_INFO("player->ShieldRegeration {0}", player->ShieldRegeration);
+				//WI_CORE_INFO("player->Shield {0}", player->Shield);
+				//WI_CORE_INFO("player->ShieldRegeration {0}", player->ShieldRegeration);
 
 				if (player->Shield != playerShield && player->Shield == player->MaxShield)
 				{
