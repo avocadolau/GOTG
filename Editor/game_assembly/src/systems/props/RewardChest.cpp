@@ -56,6 +56,18 @@ void Wiwa::RewardChest::OnUpdate()
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_Interacted)
 		{
+			Wiwa::EntityManager& em = this->getScene().GetEntityManager();
+
+			EntityId ChestParticlePrefabId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_openchest.wiprefab");
+			if (ChestParticlePrefabId != WI_INVALID_INDEX)
+			{
+				Transform3D* ChestparticleTr = em.GetComponent<Transform3D>(ChestParticlePrefabId);
+				ChestparticleTr->localPosition.x = -19.30;
+				ChestparticleTr->localPosition.y = 2.0f;
+				ChestparticleTr->localPosition.z = 25.50;
+			}
+			
+
 			Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 			data->Active = true;
 			m_Scene->GetEntityManager().GetSystem<PhysicsSystem>(m_ColliderPreActive)->DeleteBody();
