@@ -1129,18 +1129,31 @@ namespace Wiwa
 
 			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
 
-			if (strcmp(name.c_str(), "Captain Universe's Energy"))
+			if (strcmp(name.c_str(), "Captain Universe's Energy") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_capitain_universe_energy_01.wimaterial");
-			if (strcmp(name.c_str(), "Groot's Seeds"))
+			}
+			else if (strcmp(name.c_str(), "Groot's Seeds") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_groots_seeds_01.wimaterial");
-			if (strcmp(name.c_str(), "Manti's Telepathic Thrust"))
+			}
+			else if (strcmp(name.c_str(), "Manti's Telepathic Thrust") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_mantis_telepathic_thrust_01.wimaterial");
-			if (strcmp(name.c_str(), "Phyla's Quantum Sword"))
+			}
+			else if (strcmp(name.c_str(), "Phyla's Quantum Sword") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_phylas_sword.wimaterial");
-			if (strcmp(name.c_str(), "Starhawk's Time Blast"))
+			}
+			else if (strcmp(name.c_str(), "Starhawk's Time Blast") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_starhawks_time_blast_01.wimaterial");
-			if (strcmp(name.c_str(), "Yondu's Fin"))
+			}
+			else if (strcmp(name.c_str(), "Yondu's Fin") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/abilities/m_yondus_fin_01.wimaterial");
+
+			}
 
 			break;
 		case (int)ItemType::BUFF:
@@ -1152,18 +1165,33 @@ namespace Wiwa
 
 			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
 
-			if (strcmp(name.c_str(), "Bug's Leg"))
+			if (strcmp(name.c_str(), "Bug's Leg") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_bugs_legs_01.wimaterial");
-			if (strcmp(name.c_str(), "Charlie-27's Fist"))
+			}
+			else if (strcmp(name.c_str(), "Charlie-27's Fist") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_charlie_27s_fist_01.wimaterial");
-			if (strcmp(name.c_str(), "Cosmo's Paw"))
+			}
+			else if (strcmp(name.c_str(), "Cosmo's Paw") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_cosmos_paw_01.wimaterial");
-			if (strcmp(name.c_str(), "Major Victory's Shield"))
+			}
+			else if (strcmp(name.c_str(), "Major Victory's Shield") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_major_victory_shield_01.wimaterial");
-			if (strcmp(name.c_str(), "Martinex's Thermokinesis"))
+
+			}
+			else if (strcmp(name.c_str(), "Martinex's Thermokinesis") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_martinex_thermokinesis_01.wimaterial");
-			if (strcmp(name.c_str(), "Nikki's Touch"))
+
+			}
+			else if (strcmp(name.c_str(), "Nikki's Touch") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/buffs/m_nikkis_touch_01.wimaterial");
+
+			}
 
 			break;
 		case (int)ItemType::PASSIVE:
@@ -1176,26 +1204,56 @@ namespace Wiwa
 			t3d_particle->localPosition = { 0.0f,0.0f,0.0f };
 			particle_sytem = em.GetSystem<ParticleSystem>(em.GetChildByName(prefabParticle, "icon"));
 
-			if (strcmp(name.c_str(), "Adam_Warlock_Blessing"))
+			if (strcmp(name.c_str(), "Adam_Warlock_Blessing") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_adam_warlock_staff_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Angela_Crown"))
+
+			}
+			else if (strcmp(name.c_str(), "Angela_Crown") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_angelas_crown_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Drax_Belt"))
+
+			}
+			else if (strcmp(name.c_str(), "Drax_Belt") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_drax_belt_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Gamora_Hood"))
+
+			}
+			else if (strcmp(name.c_str(), "Gamora_Hood") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_gamoras_hood_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Ikons_Battery"))
+
+			}
+			else if (strcmp(name.c_str(), "Ikons_Battery") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ikons_battery_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Iron_Man_Insurance"))
+
+			}
+			else if (strcmp(name.c_str(), "Iron_Man_Insurance") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_ironman_insurance_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Jack_Flag_Gloves"))
+
+			}
+			else if (strcmp(name.c_str(), "Jack_Flag_Gloves") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_jack_gloves_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Nova_Helmet"))
+
+			}
+			else if (strcmp(name.c_str(), "Nova_Helmet") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_nova_helmet_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Star_Lord_Walkman"))
+
+			}
+			else if (strcmp(name.c_str(), "Star_Lord_Walkman") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_starlords_walkman_00_a.wimaterial");
-			if (strcmp(name.c_str(), "Xandarian_Worldmind"))
+
+			}
+			else if (strcmp(name.c_str(), "Xandarian_Worldmind") == 0)
+			{
 				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_xandarian_worldmind_00_a.wimaterial");
+
+			}
 			break;
 		default:
 			break;
