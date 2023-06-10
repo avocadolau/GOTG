@@ -54,13 +54,15 @@ namespace Wiwa {
 		glm::vec3 m_InitialPlayerPosCenterThunders = glm::vec3(0.0f);
 
 		const char* m_ThunderMarkPath;
+		const char* m_MiddleThunderMarkPath;
+
+		EntityId m_MiddleThunderMarkId;
+		EntityId m_CircularThunderMarkId1;
+
 		std::vector<EntityId> m_ThunderMarkIds;
 		std::vector<glm::vec3> m_ThunderPositions;
-
 		std::vector<EntityId> m_CircularThunderMarkIds;
 		std::vector<glm::vec3> m_CircularThunderPositions;
-
-		EntityId m_CircularThunderMarkId1;
 
 		glm::vec3 m_CircularThunderPosition1 = glm::vec3(0.0f);
 
