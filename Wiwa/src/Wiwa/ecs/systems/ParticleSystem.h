@@ -132,7 +132,7 @@ namespace Wiwa
 		void EmitParticleBatch();
 
 		//Sets the Active state of the Emitter.
-		void SetActive(bool active);
+		void SetActive(bool active, bool forceDeactivateParticles = false);
 
 		//Sets the material of the Particles the Emitter generates;
 		void SetMaterial(const char* materialPath);

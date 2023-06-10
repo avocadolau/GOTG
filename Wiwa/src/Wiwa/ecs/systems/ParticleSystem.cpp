@@ -730,10 +730,13 @@ namespace Wiwa {
 		SpawnParticleSet();
 	}
 
-	void ParticleSystem::SetActive(bool active)
+	void ParticleSystem::SetActive(bool active, bool forceDeactivateParticles)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
 		emitter->m_active = active;
+
+		if (forceDeactivateParticles)
+			DeactivateParticles();
 	}
 
 	void ParticleSystem::SetMaterial(const char* materialPath)
