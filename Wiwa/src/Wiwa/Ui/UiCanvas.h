@@ -39,6 +39,6 @@ namespace Wiwa
 		 bool DpadDown = false;
 
 		 float timer = 0.0f;
-		 float MaxTimeBetweenChanges= 0.8f;
+		 float MaxTimeBetweenChanges= 1.6f;
 	};
 }

@@ -174,9 +174,6 @@ namespace Wiwa
 				if (gm.canvas.at(7)->controlsForSelection.at(i)->GetState() == GuiControlState::FOCUSED)
 				{
 					Wiwa::ShopElement* shopElement = Wiwa::ItemManager::GetShopElement(itemsPerPage1[i]);
-
-					//CHANGE ALL TEXTS IN CORELATION WITH THE SHOP ELEMENT
-					// 16 => COST 17=> CURRENT STEP 19 => ALL STEPS
 					int currentStepValue = shopElement->CurrentStep;
 					if (shopElement->Costs.size() > currentStepValue)
 					{
@@ -189,7 +186,7 @@ namespace Wiwa
 					}
 					else
 					{
-						std::string cost = "REACHED MAX LEVEL";
+						std::string cost = "MAX LEVEL";
 						gm.canvas.at(7)->controls.at(16)->text = cost;
 						Text* newTextCoins = gm.InitFont("library/Fonts/Jade_Smile.ttf", cost.c_str());
 						r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(7)->controls.at(16)->id_quad_normal, 1);
@@ -211,9 +208,6 @@ namespace Wiwa
 					r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(7)->controls.at(19)->id_quad_normal, newTextAllSteps->GetTextureId());
 					r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(7)->controls.at(19)->id_quad_normal, newTextAllSteps->GetSize(), { 0,0,512,512 });
 				}
-				else
-				{
-				}
 			}
 			
 		}
@@ -224,9 +218,40 @@ namespace Wiwa
 			{
 				if (gm.canvas.at(8)->controlsForSelection.at(i)->GetState() == GuiControlState::FOCUSED)
 				{
-				}
-				else
-				{
+					Wiwa::ShopElement* shopElement = Wiwa::ItemManager::GetShopElement(itemsPerPage2[i]);
+					int currentStepValue = shopElement->CurrentStep;
+					if (shopElement->Costs.size() > currentStepValue)
+					{
+						std::string cost = std::to_string(shopElement->Costs.at(currentStepValue));
+						gm.canvas.at(8)->controls.at(10)->text = cost;
+						Text* newTextCoins = gm.InitFont("library/Fonts/Jade_Smile.ttf", cost.c_str());
+						r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(8)->controls.at(10)->id_quad_normal, 1);
+						r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(8)->controls.at(10)->id_quad_normal, newTextCoins->GetTextureId());
+						r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(8)->controls.at(10)->id_quad_normal, newTextCoins->GetSize(), { 0,0,512,512 });
+					}
+					else
+					{
+						std::string cost = "MAX LEVEL";
+						gm.canvas.at(8)->controls.at(10)->text = cost;
+						Text* newTextCoins = gm.InitFont("library/Fonts/Jade_Smile.ttf", cost.c_str());
+						r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(8)->controls.at(10)->id_quad_normal, 1);
+						r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(8)->controls.at(10)->id_quad_normal, newTextCoins->GetTextureId());
+						r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(8)->controls.at(10)->id_quad_normal, newTextCoins->GetSize(), { 0,0,512,512 });
+					}
+
+					std::string currentStep = std::to_string(currentStepValue);
+					gm.canvas.at(8)->controls.at(11)->text = currentStep;
+					Text* newTextCurrentStep = gm.InitFont("library/Fonts/Jade_Smile.ttf", currentStep.c_str());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(8)->controls.at(11)->id_quad_normal, 1);
+					r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(8)->controls.at(11)->id_quad_normal, newTextCurrentStep->GetTextureId());
+					r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(8)->controls.at(11)->id_quad_normal, newTextCurrentStep->GetSize(), { 0,0,512,512 });
+
+					std::string allSteps = std::to_string(shopElement->AmountOfSteps);
+					gm.canvas.at(8)->controls.at(13)->text = allSteps;
+					Text* newTextAllSteps = gm.InitFont("library/Fonts/Jade_Smile.ttf", allSteps.c_str());
+					r2d.UpdateInstancedQuadTexPriority(m_Scene, gm.canvas.at(8)->controls.at(13)->id_quad_normal, 1);
+					r2d.UpdateInstancedQuadTexTexture(m_Scene, gm.canvas.at(8)->controls.at(13)->id_quad_normal, newTextAllSteps->GetTextureId());
+					r2d.UpdateInstancedQuadTexClip(m_Scene, gm.canvas.at(8)->controls.at(13)->id_quad_normal, newTextAllSteps->GetSize(), { 0,0,512,512 });
 				}
 			}
 		}
