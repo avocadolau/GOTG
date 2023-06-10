@@ -1279,7 +1279,7 @@ namespace Wiwa
 		{
 		case 0:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size() -1);
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size() - 1);
 			int randomNum = itemRandom(Application::s_Gen);
 			for (const auto& ability : ItemManager::GetAbilities())
 			{
@@ -1290,14 +1290,15 @@ namespace Wiwa
 		}break;
 		case 1:
 		{
-			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetSkills().size() -1);
+			std::uniform_int_distribution<> itemRandom(0, ItemManager::GetAbilities().size() - 1);
 			int randomNum = itemRandom(Application::s_Gen);
-			for (const auto& ability : ItemManager::GetSkills())
+			for (const auto& ability : ItemManager::GetAbilities())
 			{
 				if (i == randomNum)
 					name = ability.second.Name;
 				i++;
 			}
+
 		}break;
 		case 2:
 		{
@@ -1324,6 +1325,8 @@ namespace Wiwa
 
 		t3d->localPosition = position;
 		item->item_type = type;
+		if (item->item_type == 1)
+			item->item_type = 0;
 
 		name.copy(item->Name, 128);
 		item->Name[name.size()] = '\0';
