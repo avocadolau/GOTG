@@ -52,7 +52,7 @@ namespace Wiwa
 		{
 			enemy->m_NavAgentSys->StopAgentAndVelocity();
 
-			enemy->m_AudioSys->PlayAudio("vo_boss_death");
+			/*enemy->m_AudioSys->PlayAudio("vo_boss_death");*/
 			enemy->m_AnimatorSys->PlayAnimation("death");
 
 			//for (int i = 0; i <= 6; ++i)

@@ -15,6 +15,7 @@ namespace Wiwa
 		m_WallPrefabPath = "assets\\Enemy\\Ultron\\UltronRegenWall_01.wiprefab";
 		m_EnemySpawnerPath = "assets\\Enemy\\WaveSpawner\\UltronWaveSpawner_01.wiprefab";
 		m_RegenPath = "assets/vfx/prefabs/vfx_finals/boss_Ultron/p_boss_regen.wiprefab";
+		/*m_SecondPhasePath = "assets/vfx/prefabs/vfx_finals/boss_Ultron/ultron_second_phase.wiprefab";*/
 	}
 
 	BossUltronSecondPhaseState::~BossUltronSecondPhaseState()
@@ -47,7 +48,7 @@ namespace Wiwa
 		{
 		case Wiwa::BossUltronSecondPhaseState::SecondPhaseState::MOVE_CENTER:
 		{
-			glm::vec3 m_CenterPositionBoss = { 0.0f, 7.0f,0.0f };
+			glm::vec3 m_CenterPositionBoss = { 0.0f, 6.0f,0.0f };
 			glm::vec3 m_CenterPositionRegenWall = { 0.0f, 13.0f,0.0f };
 			enemy->m_NavAgentSys->StopAgent();
 			enemy->m_NavAgentSys->RemoveAgent();
@@ -60,7 +61,7 @@ namespace Wiwa
 			PhysicsSystem* physSysWallRegen = em.GetSystem<PhysicsSystem>(m_RegenWallPrefabId);
 			physSysWallRegen->DeleteBody();
 
-			/*enemy->m_AnimatorSys->PlayAnimation("walking");*/
+			enemy->m_AnimatorSys->PlayAnimation("walking");
 
 			selfTr->localRotation = glm::vec3(0.0f, 180.0f, 0.0f);
 
@@ -81,7 +82,7 @@ namespace Wiwa
 			m_RegenPrefabId = em.LoadPrefab(m_RegenPath);
 			Transform3D* regenTr = em.GetComponent<Transform3D>(m_RegenPrefabId);
 			regenTr->localPosition.x = selfTr->localPosition.x;
-			regenTr->localPosition.y = selfTr->localPosition.y + 8.0f;
+			regenTr->localPosition.y = selfTr->localPosition.y + 9.0f;
 			regenTr->localPosition.z = selfTr->localPosition.z;
 
 
@@ -121,7 +122,7 @@ namespace Wiwa
 				m_SpawnerDestroyed = true;
 			}
 
-			if (m_TimerSecondPhase >= 20.0f) //Cambiar por num enemigos derrotados
+			if (m_TimerSecondPhase >= 20.0f)
 			{
 				m_TimerSecondPhase = 0.0f;
 				m_SecondPhaseState = SecondPhaseState::END_STATE;
@@ -138,6 +139,11 @@ namespace Wiwa
 			enemy->m_NavAgentSys->RegisterWithCrowd();
 			enemy->m_NavAgentSys->SetPosition(selfTr->localPosition);
 			enemy->m_NavAgentSys->StopAgent();
+
+			////Create Second Phase Particle
+			//enemy->m_SecondPhaseId = em.LoadPrefab(m_SecondPhasePath);
+			//Transform3D* secondPhaseTr = em.GetComponent<Transform3D>(enemy->m_SecondPhaseId);
+			//secondPhaseTr->localPosition = selfTr->localPosition;
 
 			enemy->SwitchState(enemy->m_MovementState);
 		}

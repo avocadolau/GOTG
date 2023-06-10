@@ -21,11 +21,17 @@ namespace Wiwa {
 		EntityManager::ComponentIterator m_GunTransformIt;
 		EntityManager::ComponentIterator m_Ultron;
 
+		EntityId m_SecondPhaseId;
+
 		float m_Timer;
 		int m_MinimumPath = 0;
 		int m_MaxHealth = 0;
 		bool m_IsSecondPhaseActive = false;
+
 		glm::vec3 m_SceneCenterPos = glm::vec3(0.0f);
+
+		const char* m_SecondPhasePath;
+
 	public:
 		BossUltron();
 		~BossUltron();

@@ -40,6 +40,8 @@ namespace Wiwa
 		m_Timer = 0.0f;
 		m_MaxHealth = 0;
 		m_SceneCenterPos = glm::vec3(0.0f);
+
+		m_SecondPhasePath = "assets/vfx/prefabs/vfx_finals/boss_Ultron/ultron_second_phase.wiprefab";
 	}
 
 	BossUltron::~BossUltron()
@@ -104,18 +106,33 @@ namespace Wiwa
 		m_CurrentState->UpdateState(this);
 		m_Timer += Time::GetDeltaTimeSeconds();
 
+		Wiwa::EntityManager& em = this->getScene().GetEntityManager();
+		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(this->m_TransformIt);
 		Health* stats = GetComponentByIterator<Health>(m_Health);
 
 		if (stats->health <= (m_MaxHealth * 0.5f) && m_IsSecondPhaseActive == false)
 		{
 			m_IsSecondPhaseActive = true;
+
+			//Create Second Phase Particle
+			m_SecondPhaseId = em.LoadPrefab(m_SecondPhasePath);
+
 			SwitchState(m_TransitionSecondPhaseState);
+		}
+
+		if (m_IsSecondPhaseActive && stats->health > 0)
+		{
+			Transform3D* secondPhaseTr = em.GetComponent<Transform3D>(m_SecondPhaseId);
+			secondPhaseTr->localPosition = selfTr->localPosition;
 		}
 
 		if (stats->health <= 0 && m_CurrentState != m_DeathState)
 		{
+			em.DestroyEntity(m_SecondPhaseId);
+
 			SwitchState(m_DeathState);
 		}
+
 	}
 
 	void BossUltron::OnDestroy()

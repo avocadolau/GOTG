@@ -114,8 +114,41 @@ namespace Wiwa
 			std::string playerStr = "PLAYER";
 			if (playerStr == body2->selfTagStr)
 			{
+				Wiwa::EntityManager& em = getScene().GetEntityManager();
 				ZigZagBullet* bullet = GetComponentByIterator<ZigZagBullet>(m_BulletIt);
 				GameStateManager::DamagePlayer(bullet->damage);
+
+				EntityId zigzagHitPlayer = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_enemybullethit_player.wiprefab");
+
+				if (zigzagHitPlayer != EntityManager::INVALID_INDEX)
+				{
+					Transform3D* zigzagHitPlayerTr = em.GetComponent<Transform3D>(zigzagHitPlayer);
+					Transform3D* bulletPlayerTr = em.GetComponent<Transform3D>(m_EntityId);
+
+					if (zigzagHitPlayerTr != nullptr)
+					{
+						zigzagHitPlayerTr->localPosition = bulletPlayerTr->localPosition;
+					}
+				}
+			}
+
+			std::string wallStr = "WALL";
+
+			if (wallStr == body2->selfTagStr)
+			{
+				Wiwa::EntityManager& entityManager = getScene().GetEntityManager();
+				EntityId zigzagHitWall = entityManager.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_enemybullethit_wall.wiprefab");
+
+				if (zigzagHitWall != EntityManager::INVALID_INDEX)
+				{
+					Transform3D* zigzagHitWallTr = entityManager.GetComponent<Transform3D>(zigzagHitWall);
+					Transform3D* bulletWallTr = entityManager.GetComponent<Transform3D>(m_EntityId);
+
+					if (zigzagHitWallTr != nullptr)
+					{
+						zigzagHitWallTr->localPosition = bulletWallTr->localPosition;
+					}
+				}
 			}
 
 			GameStateManager::s_PoolManager->s_ZigZagBulletPool->ReturnToPool(m_EntityId);

@@ -113,14 +113,44 @@ void Wiwa::ClusterBulletSystem::OnCollisionEnter(Object* body1, Object* body2)
 		std::string playerStr = "PLAYER";
 		if (playerStr == body2->selfTagStr)
 		{
+			Wiwa::EntityManager& em = getScene().GetEntityManager();
+
 			m_NotCollidingPlayer = false;
 			ClusterBullet* bullet = GetComponentByIterator<ClusterBullet>(m_BulletIt);
 			GameStateManager::DamagePlayer(bullet->damage);
+
+			EntityId clusterHitPlayer = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_cluster_hit.wiprefab");
+
+			if (clusterHitPlayer != EntityManager::INVALID_INDEX)
+			{
+				Transform3D* clusterHitPlayerTr = em.GetComponent<Transform3D>(clusterHitPlayer);
+				Transform3D* bulletPlayerTr = em.GetComponent<Transform3D>(m_EntityId);
+
+				if (clusterHitPlayerTr != nullptr)
+				{
+					clusterHitPlayerTr->localPosition = bulletPlayerTr->localPosition;
+				}
+			}
 
 			GameStateManager::s_PoolManager->s_ClusterBulletsPool->ReturnToPool(m_EntityId);
 		}
 		else
 		{
+			Wiwa::EntityManager& em = getScene().GetEntityManager();
+
+			EntityId clusterHitPlayer = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_cluster_hit.wiprefab");
+
+			if (clusterHitPlayer != EntityManager::INVALID_INDEX)
+			{
+				Transform3D* clusterHitPlayerTr = em.GetComponent<Transform3D>(clusterHitPlayer);
+				Transform3D* bulletPlayerTr = em.GetComponent<Transform3D>(m_EntityId);
+
+				if (clusterHitPlayerTr != nullptr)
+				{
+					clusterHitPlayerTr->localPosition = bulletPlayerTr->localPosition;
+				}
+			}
+
 			m_CollisionByWall = true;
 		}		
 	}
