@@ -22,13 +22,12 @@ extern "C" {
 
 extern Wiwa::Application* Wiwa::CreateApplication(int argc, char** argv);
 
+#ifdef WI_DIST
 #include <Windows.h>
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR lpCmdLine, INT nCmdShow)
-{
-	FreeConsole();
-	
+{	
 	Wiwa::Log::Init();
 	WI_CORE_INFO("Initialized Log!");
 
@@ -39,4 +38,20 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	return 0;
 }
+#else
+int main(int argc, char** argcv)
+{
+	Wiwa::Log::Init();
+	WI_CORE_INFO("Initialized Log!");
+
+	auto app = Wiwa::CreateApplication(0, nullptr);
+	app->Run();
+
+	delete app;
+
+	return 0;
+}
+
+#endif // WI_DIST
+
 #endif // WI_PLATFORM_WINDOWS
