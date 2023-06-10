@@ -9,6 +9,7 @@
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include <Wiwa/ecs/components/ai/NavAgent.h>
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include "../enemy/EnemySystem.h"
 #include "../enemy/MeleePhalanx/EnemyMeleePhalanx.h"
 #include "../enemy/RangedPhalanx/EnemyRangedPhalanx.h"
@@ -125,6 +126,10 @@ namespace Wiwa
 			m_EnemiesIds[j + 1] = m_EnemiesIds[i];
 			m_EnemiesStateIt[j + 1] = m_EnemiesStateIt[i];
 		}
+
+		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+		if (audio)
+			audio->PlayAudio("yondus_fin");
 	}
 
 	void YondusFinSystem::OnUpdate()

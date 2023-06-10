@@ -1,6 +1,7 @@
 #include "PhylasQuantumSwordSystem.h"
 #include "../../components/attack/PhylasQuantumSword.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "Wiwa/ecs/systems/AudioSystem.h"
 #include "../../components/attack/Attack.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -50,6 +51,11 @@ namespace Wiwa
 		PhylasSwordTransform->localScale.x = 1.0f;
 		PhylasSwordTransform->localScale.z = 1.0f;
 		PhylasSwordTransform->localScale.y = 1.0f;
+
+
+		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+		if (audio)
+			audio->PlayAudio("phyla_sword");
 	}
 
 	void PhylasQuantumSwordSystem::OnUpdate()

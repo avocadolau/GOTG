@@ -3,7 +3,9 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include "../../components/attack/Attack.h"
+
 
 namespace Wiwa
 {
@@ -43,6 +45,13 @@ namespace Wiwa
 		captainUniverse->direction = Math::CalculateForward(playerTransform);
 		captainUniverseTransform->localRotation = playerTransform->localRotation;
 		captainUniverseTransform->localPosition = playerTransform->localPosition;
+
+
+
+		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+		if (audio)
+			audio->PlayAudio("captain_universe");
+
 	}
 
 	void CaptainsUniverseEnergySystem::OnUpdate()
