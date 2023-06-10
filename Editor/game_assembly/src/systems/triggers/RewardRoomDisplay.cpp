@@ -46,6 +46,15 @@ namespace Wiwa
 				break;
 			}
 
+			if (GameStateManager::s_RoomsToShop == 0)
+			{
+				// particleId shop particle
+			}
+			else if (GameStateManager::s_RoomsToBoss == 0)
+			{
+				// particleId boss particle
+			}
+
 			if (particleId != EntityManager::INVALID_INDEX)
 			{
 				Transform3D* tr = em.GetComponent<Transform3D>(particleId);
