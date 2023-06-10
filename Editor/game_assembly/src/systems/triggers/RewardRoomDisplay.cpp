@@ -46,7 +46,7 @@ namespace Wiwa
 				break;
 			}
 
-			if (GameStateManager::s_RoomsToShop == 0)
+			if (GameStateManager::s_RoomsToShop == 1)
 			{
 				// particleId shop particle
 				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_shop.wiprefab");
