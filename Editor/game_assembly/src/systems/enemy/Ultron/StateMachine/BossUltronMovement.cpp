@@ -24,7 +24,8 @@ namespace Wiwa
 		currentDestination = glm::vec3(0.0f);
 		m_TimerToAttack = 0.0f;
 
-		m_ThunderMarkPath = "assets\\Enemy\\RainProjectile\\ThunderMark_01.wiprefab";
+		m_ThunderMarkPath = "assets\\Enemy\\RainProjectile\\p_boss_storm_marker.wiprefab";
+		m_MiddleThunderMarkPath = "assets/vfx/prefabs/vfx_finals/boss_Ultron/p_boss_circular_thunder.wiprefab";
 	}
 
 	BossUltronMovementState::~BossUltronMovementState()
@@ -127,7 +128,7 @@ namespace Wiwa
 			if (!enemy->m_IsSecondPhaseActive)
 			{
 				m_NextAttack = GetAttackFromProbabilitesFirstPhase();
-				/*m_NextAttack = Wiwa::UltronAttacks::RAIN_PROJECTILE;*/
+				/*m_NextAttack = Wiwa::UltronAttacks::SECOND_DASH;*/
 			}
 
 			if (enemy->m_IsSecondPhaseActive)
@@ -649,7 +650,7 @@ namespace Wiwa
 
 			if (isPlayerInThunderRange && enemy->m_IsSecondPhaseActive)
 			{
-				m_SelectMovingRandomAttack = RAND(2, 3); //ThundersProblem
+				m_SelectMovingRandomAttack = RAND(2, 3);
 				m_IsMovingAttackSelected = true;
 
 				/*m_SelectMovingRandomAttack = RAND(0, 1);
@@ -658,8 +659,6 @@ namespace Wiwa
 			else
 			{
 				m_SelectMovingRandomAttack = RAND(0, 1);
-				/*m_SelectMovingRandomAttack = 1;*/
-
 				m_IsMovingAttackSelected = true;
 			}
 		}
@@ -710,6 +709,11 @@ namespace Wiwa
 
 				m_InitialPlayerPos = playerTr->localPosition;
 
+				m_MiddleThunderMarkId = em.LoadPrefab(m_MiddleThunderMarkPath);
+				Transform3D* middleThunderMarkTr = em.GetComponent<Transform3D>(m_MiddleThunderMarkId);
+				middleThunderMarkTr->localPosition = m_InitialPlayerPos;
+
+
 				for (int i = 1; i <= 4; ++i) // Number of thunders
 				{
 					EntityId thunderMarkId = em.LoadPrefab(m_ThunderMarkPath);
@@ -731,6 +735,8 @@ namespace Wiwa
 			{
 				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
 				enemy->m_AudioSys->PlayAudio("boss_normal_shoot");
+
+				em.DestroyEntity(m_MiddleThunderMarkId);
 
 				for (int i = 0; i < m_CircularThunderMarkIds.size(); ++i)
 				{
