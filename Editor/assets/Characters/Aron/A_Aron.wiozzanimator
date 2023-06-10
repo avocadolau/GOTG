@@ -1,0 +1,1 @@
+{"mesh":"library/characters/uatu/sk_uatu03_mesh.mesh","material":"library/characters/aron/m_aron.wimaterial","skeleton":"library/characters/uatu/sk_uatu03_skeleton.skeleton","transition_blend":true,"transition_time":1.0,"animation_list":[{"name":"idle","type":1,"playback_speed":1.0,"loop":true,"animation_file":"library/characters/uatu/sk_uatu03_idle.anim"}]}
