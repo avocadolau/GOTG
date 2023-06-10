@@ -460,7 +460,18 @@ void Wiwa::PlayerController::SpawnStarLordUltimate(Transform3D& transform, const
 			sys_shotMuzzleRightFlash->EmitParticleBatch(1);
 		}
 	}
-	
+
+	EntityId ultiReady = em.GetChildByName(m_EntityId, "p_ulti_ready_floor");
+
+	if (ultiReady != WI_INVALID_INDEX)
+	{
+		ParticleSystem* sys_ultiReady = em.GetSystem<ParticleSystem>(ultiReady);
+
+		if (sys_ultiReady != nullptr)
+		{
+			sys_ultiReady->SetActive(false);
+		}
+	}	
 }
 
 void Wiwa::PlayerController::SpawnRocketUltimate(Transform3D& transform, const Character& character)
