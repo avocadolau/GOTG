@@ -161,7 +161,7 @@ namespace Wiwa
 		/// <param name="position"></param>
 		/// <param name="type">0 == ability, 1 == passive, 2 == buff, 3 == consumable</param>
 		/// <param name="name"></param>
-		static void SpawnItem(const Transform3D& transform, uint8_t type, const char* name);
+		static void SpawnItem(glm::vec3 position, uint8_t type, const char* name);
 
 		WI_HARD_INL static struct Transform3D *GetPlayerTransform();
 		WI_HARD_INL static Inventory &GetPlayerInventory() { return *s_PlayerInventory; }

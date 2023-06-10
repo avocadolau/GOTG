@@ -284,53 +284,51 @@ void Wiwa::PlayerGUISystem::CooldownState(Buff** buff, Wiwa::GuiManager& gm)
 {
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
+	
 	for (int i = 0; i < 2; i++)
 	{
-		
-		for (int i = 0; i < 2; i++)
+		if (buff != nullptr)
 		{
-			if (buff != nullptr)
+			if (buff[i] != nullptr)
 			{
-				if (buff[i] != nullptr)
+				if (!buff[i]->IsActive)
 				{
-					if (!buff[i]->IsActive)
+					if (buff[i]->CurrentTime >= buff[i]->Cooldown)
 					{
-						if (buff[i]->CurrentTime >= buff[i]->Cooldown)
-						{
-							buff[i]->CooldownState = CooldownState::FULLY_CHARGED;
-							int index = i + 13;
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
-						}
-						else if (buff[i]->CurrentTime < buff[i]->Cooldown && buff[i]->CurrentTime >= buff[i]->Cooldown / 2)
-						{
-							buff[i]->CooldownState = CooldownState::MEDIUM_CHARGE;
-							int index = i + 13;
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
-						}
-						else if (buff[i]->CurrentTime < buff[i]->Cooldown / 2 && buff[i]->CurrentTime > 0)
-						{
-							buff[i]->CooldownState = CooldownState::STARTING_CHARGE;
-							int index = i + 13;
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
-						}
-						else if (buff[i]->CurrentTime < 0.0f)
-						{
-							buff[i]->CooldownState = CooldownState::NO_CHARGED;
-							int index = i + 13;
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
-						}
+						buff[i]->CooldownState = CooldownState::FULLY_CHARGED;
+						int index = i + 13;
+						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
 					}
-					else if(buff[i]->IsActive)
+					else if (buff[i]->CurrentTime < buff[i]->Cooldown && buff[i]->CurrentTime >= buff[i]->Cooldown / 2)
+					{
+						buff[i]->CooldownState = CooldownState::MEDIUM_CHARGE;
+						int index = i + 13;
+						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+					}
+					else if (buff[i]->CurrentTime < buff[i]->Cooldown / 2 && buff[i]->CurrentTime > 0)
+					{
+						buff[i]->CooldownState = CooldownState::STARTING_CHARGE;
+						int index = i + 13;
+						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+					}
+					else if (buff[i]->CurrentTime < 0.0f)
 					{
 						buff[i]->CooldownState = CooldownState::NO_CHARGED;
 						int index = i + 13;
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
 					}
+				}
+				else if(buff[i]->IsActive)
+				{
+					buff[i]->CooldownState = CooldownState::NO_CHARGED;
+					int index = i + 13;
+					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+				}
 					
-				}					
-			}
+			}					
 		}
 	}
+	
 	
 }
 
