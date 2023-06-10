@@ -179,6 +179,8 @@ namespace Wiwa
 		//DialogManager* dm = Wiwa::Application::Get();
 		Wiwa::Scene * _scene = (Wiwa::Scene*)m_Scene;
 
+		Wiwa::GuiManager& ui = m_Scene->GetGuiManager(); // 0 == se dibuja; 0 != no se dibuja
+
 		if (_scene->GetDialogManager().triggerEvent == true && eventState == 2)
 		{
 			startTimer1 = 0;
@@ -193,7 +195,7 @@ namespace Wiwa
 			selected = false;
 		}
 
-		if (eventState != 2)
+		if (eventState != 2 && ui.getCurrentCanvas() == 0)
 		{
 
 			if (!strcmp(_scene->GetDialogManager().dialogEventToTrigger.c_str(), "Choice_Uatu"))

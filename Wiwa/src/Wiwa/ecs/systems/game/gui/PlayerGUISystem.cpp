@@ -4,6 +4,8 @@
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Input.h"
 #include "Wiwa/audio/Audio.h"
+#include <Wiwa/Dialog/DialogManager.h>
+#include <Wiwa/Dialog/DialogEventManager.h>
 
 void Wiwa::PlayerGUISystem::OnInit()
 {
@@ -83,11 +85,14 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 {
 	CharacterInventory* characterInventory = m_Scene->GetEntityManager().GetSystem<CharacterInventory>(m_EntityId);
+	Wiwa::DialogManager& dm = m_Scene->GetDialogManager();
+	Wiwa::DialogEventManager& dEm = m_Scene->GetDialogEventManager();
+
 	CurrentHUD = gm.getCurrentCanvas();
 
 	if (CurrentHUD == CanvasHUD)
 	{
-		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart))
+		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart) && dm.actualConversationState == 2 && dEm.eventState == 2)
 		{
 			pauseGame = true;
 		}
@@ -105,7 +110,7 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			
 		}
 
-		if (Wiwa::Input::IsKeyPressed(Key::Escape))
+		if (Wiwa::Input::IsKeyPressed(Key::Escape) && dm.actualConversationState == 2 && dEm.eventState == 2)
 		{
 			pauseGame = true;
 		}
@@ -230,6 +235,7 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			gm.canvas.at(CanvasHUD)->SwapActive();
 		}
 	}
+
 }
 
 void Wiwa::PlayerGUISystem::DeathHud(Wiwa::GuiManager& gm)
@@ -754,6 +760,7 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 		std::string ability_Area = std::to_string(ability->Area);
 		gm.canvas.at(ShopHUD)->controls.at(8)->text = ability_Area.c_str();
 
+
 		//TODO: Do description with wrappedText
 		Text* abilityNameText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_name.c_str());
 		Text* abilityPriceText = gm.InitFont("library/Fonts/Jade_Smile.ttf", ability_price.c_str());
@@ -817,6 +824,7 @@ void Wiwa::PlayerGUISystem::ShopElementsHUD(Item* currentItem, Wiwa::GuiManager&
 
 		std::string buff_Area = std::to_string(buff->RoFInc);
 		gm.canvas.at(ShopHUD)->controls.at(8)->text = buff_Area.c_str();
+
 
 		Text* buffNameText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_name.c_str());
 		Text* buffPriceText = gm.InitFont("library/Fonts/Jade_Smile.ttf", buff_price.c_str());
