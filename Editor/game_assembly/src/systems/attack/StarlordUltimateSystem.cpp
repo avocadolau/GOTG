@@ -32,13 +32,13 @@ namespace Wiwa
 		explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, 90.0f);
 		explosionTr->localScale = selfTr->localScale;
 
-		EntityId explosionVfxId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_ExplosionStarlordUlti.wiprefab");
+		/*EntityId explosionVfxId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_ExplosionStarlordUlti.wiprefab");
 		Transform3D* explosionVfxTr = (Transform3D*)em.GetComponentByIterator(GetComponentIterator<Transform3D>(explosionVfxId));
 
 		*explosionVfxTr = *selfTr;
 		explosionVfxTr->localPosition = Math::GetWorldPosition(selfTr->worldMatrix);
 		explosionVfxTr->localRotation = glm::vec3(-90.0f, 0.0f, 90.0f);
-		explosionVfxTr->localScale = selfTr->localScale;
+		explosionVfxTr->localScale = selfTr->localScale;*/
 
 		PhysicsSystem* physSys = em.GetSystem<PhysicsSystem>(explosionId);
 		physSys->ForceSetPosition(Math::GetWorldPosition(explosionTr->worldMatrix));

@@ -323,22 +323,20 @@ void Wiwa::PlayerController::SpawnRocketBullet(Transform3D& transform, const Cha
 		sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
 	}
 
-
-
 	EntityId p_bullet_Starlord = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord");
-	if (p_bullet_Starlord != EntityManager::INVALID_INDEX) 
+	if (p_bullet_Starlord != EntityManager::INVALID_INDEX)
 		entityManager.SetActive(p_bullet_Starlord, false);
 
 	EntityId p_bullet_Starlord_martinex = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord_martinex");
-	if (p_bullet_Starlord_martinex != EntityManager::INVALID_INDEX) 
+	if (p_bullet_Starlord_martinex != EntityManager::INVALID_INDEX)
 		entityManager.SetActive(p_bullet_Starlord_martinex, false);
 
 	EntityId p_bullet_Starlord_nikki = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord_nikki");
-	if (p_bullet_Starlord_nikki != EntityManager::INVALID_INDEX) 
+	if (p_bullet_Starlord_nikki != EntityManager::INVALID_INDEX)
 		entityManager.SetActive(p_bullet_Starlord_nikki, false);
-		
-	EntityId p_bullet_Charlie_27 = entityManager.GetChildByName(m_EntityId, "p_bullet_Charlie_27");
-	if (p_bullet_Charlie_27 != EntityManager::INVALID_INDEX) 
+
+	EntityId p_bullet_Charlie_27 = entityManager.GetChildByName(newBulletId, "p_bullet_Charlie_27");
+	if (p_bullet_Charlie_27 != EntityManager::INVALID_INDEX)
 		entityManager.SetActive(p_bullet_Charlie_27, false);
 
 
@@ -376,7 +374,7 @@ void Wiwa::PlayerController::SpawnRocketBullet(Transform3D& transform, const Cha
 		}
 	}
 
-		
+
 	if (!someBuffActive)
 	{
 		if (p_bullet_Starlord != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord, true);

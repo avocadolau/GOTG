@@ -49,10 +49,12 @@ namespace Wiwa
 			if (GameStateManager::s_RoomsToShop == 0)
 			{
 				// particleId shop particle
+				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_shop.wiprefab");
 			}
 			else if (GameStateManager::s_RoomsToBoss == 0)
 			{
 				// particleId boss particle
+				particleId = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\doors\\p_door_boss.wiprefab");
 			}
 
 			if (particleId != EntityManager::INVALID_INDEX)
