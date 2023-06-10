@@ -405,7 +405,7 @@ namespace Wiwa
 
     void ShopElement::Use()
     {
-        const float buffPercent = ((float)PercentageIncreases.at(CurrentStep-1) / 100.f);
+        const float buffPercent = ((float)PercentageIncreases.at(CurrentStep) / 100.f);
         Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();
         Character* player = GetPlayerComp();
         int newDropChance = 0;

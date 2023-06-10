@@ -60,13 +60,15 @@ namespace Wiwa
 		{
 			if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y > 0.5f)
 			{
-				updateSelected = true;
 				DpadUp = true;
+				this->updateSelected = true;
+
 			}
 			else if (Wiwa::Input::GetRawJoystick(Wiwa::Gamepad::GamePad1, Wiwa::Gamepad::LeftX, Wiwa::Gamepad::LeftY, Wiwa::GameStateManager::s_GamepadDeadzone).y < -0.5f)
 			{
-				updateSelected = true;
 				DpadDown = true;
+				this->updateSelected = true;
+
 			}
 			else
 			{
@@ -77,6 +79,8 @@ namespace Wiwa
 			if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Up))
 			{
 				DpadUp = true;
+				this->updateSelected = true;
+
 			}
 			if (DpadUp)
 			{
@@ -94,6 +98,8 @@ namespace Wiwa
 			if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Down))
 			{
 				DpadDown = true;
+				this->updateSelected = true;
+
 			}
 			if (DpadDown)
 			{
@@ -113,6 +119,10 @@ namespace Wiwa
 				SelectElement(idGuiSelected);
 			}
 			timer = 0.0f;
+		}
+		else if (timer < MaxTimeBetweenChanges)
+		{
+			this->updateSelected = false;
 		}
 	}
 }

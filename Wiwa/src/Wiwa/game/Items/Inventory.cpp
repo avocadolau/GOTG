@@ -7,6 +7,7 @@
 #include "Wiwa/scene/SceneManager.h"
 #include "Wiwa/core/Application.h"
 #include <Wiwa/ecs/components/game/items/Item.h>
+#include <Wiwa/game/Items/ItemManager.h>
 
 #define MAX_ABILITIES 2
 #define MAX_BUFFS 2
@@ -296,9 +297,19 @@ void Wiwa::Inventory::AddBuff(const Buff* buff) const
 
 void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 {
+	
 	if (CheckIfShopPassiveAlreadyImplemented(shopElement.Name))
 	{
-		m_ShopPassives.at(GetShopPassiveIndex(shopElement)).AugmentStep();
+		for (int i = 0; i < m_ShopPassives.size(); i++)
+		{
+			if (m_ShopPassives.at(i).Name == shopElement.Name)
+			{
+				m_ShopPassives.at(i).AugmentStep();
+				Wiwa::ItemManager::GetShopElement(shopElement.Name.c_str())->AugmentStep();
+				break;
+			}	
+		}
+		
 	}
 	else if (!CheckIfShopPassiveAlreadyImplemented(shopElement.Name))
 	{
@@ -327,6 +338,8 @@ void Wiwa::Inventory::AddShopPassive(const ShopElement& shopElement)
 			m_ShopPassives.back().Use();
 			break;
 		}
+		Wiwa::ItemManager::GetShopElement(shopElement.Name.c_str())->AugmentStep();
+		m_ShopPassives.back().AugmentStep();
 	}
 }
 
@@ -466,7 +479,7 @@ bool Wiwa::Inventory::CheckIfShopPassiveAlreadyImplemented(std::string name)
 {
 	for (int i = 0; i < m_ShopPassives.size(); i++)
 	{
-		if (m_ShopPassives.at(i).Name == name)
+		if (strcmp(m_ShopPassives.at(i).Name.c_str(), name.c_str()) == 0)
 		{
 			return true;
 		}

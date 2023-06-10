@@ -117,77 +117,143 @@ GoToVideo_ GoToIntroLoreVideo()
 AddHealthCapacitor_ AddHealthCapacitor()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Health Capacitor"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Health Capacitor")->Costs.at(Wiwa::ItemManager::GetShopElement("Health Capacitor")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Health Capacitor"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddHealthCapacitor_();
 }
 
 AddNanooBoost_ AddNanooBoost()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Nano Boost"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Nano Boost")->Costs.at(Wiwa::ItemManager::GetShopElement("Nano Boost")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Nano Boost"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddNanooBoost_();
 }
 
 AddEasyTrigger_ AddEasyTrigger()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Easy Trigger"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Easy Trigger")->Costs.at(Wiwa::ItemManager::GetShopElement("Easy Trigger")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Easy Trigger"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddEasyTrigger_();
 }
 
 AddFancyBoots_ AddFancyBoots()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Fancy Boots"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Fancy Boots")->Costs.at(Wiwa::ItemManager::GetShopElement("Fancy Boots")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Fancy Boots"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddFancyBoots_();
 }
 
 AddLethalShooter_ AddLethalShooter()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Lethal shooter"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Lethal shooter")->Costs.at(Wiwa::ItemManager::GetShopElement("Lethal shooter")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Lethal shooter"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddLethalShooter_();
 }
 
 AddShieldFan_ AddShieldFan()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Shield Fan"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Shield Fan")->Costs.at(Wiwa::ItemManager::GetShopElement("Shield Fan")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Shield Fan"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddShieldFan_();
 }
 
 AddNanoMachines_ AddNanoMachines()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Nanomachines"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Nanomachines")->Costs.at(Wiwa::ItemManager::GetShopElement("Nanomachines")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Nanomachines"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddNanoMachines_();
 }
 
 AddRecoveryShield_ AddRecoveryShield()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery Shield"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Recovery Shield")->Costs.at(Wiwa::ItemManager::GetShopElement("Recovery Shield")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery Shield"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddRecoveryShield_();
 }
 
 AddDevourer_ AddDevourer()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Devourer"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Devourer")->Costs.at(Wiwa::ItemManager::GetShopElement("Devourer")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Devourer"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddDevourer_();
 }
 
 AddFanatic_ AddFanatic()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Fanatic"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Fanatic")->Costs.at(Wiwa::ItemManager::GetShopElement("Fanatic")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Fanatic"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddFanatic_();
 }
 
 AddRecoveryHealth_ AddRecoveryHealth()
 {
 	Wiwa::Inventory& inventory = Wiwa::GameStateManager::GetPlayerInventory();
-	inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery health"));
+	size_t tokensHoward = inventory.GetTokensHoward();
+	size_t currentCost = Wiwa::ItemManager::GetShopElement("Recovery health")->Costs.at(Wiwa::ItemManager::GetShopElement("Recovery health")->CurrentStep);
+	if (tokensHoward >= currentCost)
+	{
+		inventory.AddShopPassive(*Wiwa::ItemManager::GetShopElement("Recovery health"));
+		inventory.SubstractTokensHoward(currentCost);
+	}
 	return AddRecoveryHealth_();
 }
 

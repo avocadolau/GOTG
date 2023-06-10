@@ -28,7 +28,8 @@ namespace Wiwa
 		static void AddConsumable(const Consumable& consumable);
 		static void DeleteConsumable(const std::string& name);
 
-		static void AddShopElement(const ShopElement& consumable);
+		static void AddShopElement(const ShopElement& shopElement);
+		static void AugmentShopElement(const std::string& name);
 		static void DeleteShopElement(const std::string& name);
 		static void UnlockShopElement(const std::string& name, bool ret);
 

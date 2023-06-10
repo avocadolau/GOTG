@@ -776,8 +776,6 @@ void InventoryPanel::DrawShopElementPool(int& id)
 
 				if (shopElement->CurrentStep > shopElement->AmountOfSteps)
 					shopElement->CurrentStep = shopElement->AmountOfSteps;
-				if (shopElement->CurrentStep <= 0)
-					shopElement->CurrentStep = 1;
 
 				ImGui::TableNextColumn();
 				ImGui::PushID("Costs");
