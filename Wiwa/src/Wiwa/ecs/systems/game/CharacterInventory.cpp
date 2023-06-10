@@ -76,28 +76,42 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 		if (item->item_type == 0)
 		{
 			Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
-			Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
-			em.DestroyEntity(body2->id);
+			if (ability)
+			{
+
+
+				Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
+				em.DestroyEntity(body2->id);
+			}
 
 		}
 		else if (item->item_type == 1)//PASSIVE
 		{
 			PassiveSkill* passive = Wiwa::ItemManager::GetPassive(item->Name);
-			Wiwa::GameStateManager::s_PlayerInventory->AddPassive(*passive);
-			passive->Use();
-			em.DestroyEntity(body2->id);
+			if (passive)
+			{
+				Wiwa::GameStateManager::s_PlayerInventory->AddPassive(*passive);
+				passive->Use();
+				em.DestroyEntity(body2->id);
+			}
 		}
 		else if (item->item_type == 2)
 		{
 			Buff* buff = Wiwa::ItemManager::GetBuff(item->Name);
-			Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);
-			em.DestroyEntity(body2->id);
+			if (buff)
+			{
+				Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);
+				em.DestroyEntity(body2->id);
+			}
 		}
 		else if (item->item_type == 3)//CONSUMABLE
 		{
 			Consumable* consumable = Wiwa::ItemManager::GetConsumable(item->Name);
-			Wiwa::GameStateManager::s_PlayerInventory->AddConsumable(*consumable);
-			em.DestroyEntity(body2->id);
+			if (consumable)
+			{
+				Wiwa::GameStateManager::s_PlayerInventory->AddConsumable(*consumable);
+				em.DestroyEntity(body2->id);
+			}
 		}
 
 

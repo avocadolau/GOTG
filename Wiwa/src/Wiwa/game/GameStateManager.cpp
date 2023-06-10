@@ -1473,7 +1473,7 @@ namespace Wiwa
 		}
 		
 	}
-	void GameStateManager::SpawnItem(Wiwa::EntityManager::ComponentIterator transform, uint8_t type, const char* name)
+	void GameStateManager::SpawnItem(const Transform3D& transform, uint8_t type, const char* name)
 	{
 		
 		std::string_view newName;
@@ -1506,10 +1506,8 @@ namespace Wiwa
 		EntityId id = em.LoadPrefab("assets/Prefabs/Item.wiprefab");
 		
 		Item* item = em.GetComponent<Item>(id);
-		Transform3D* t3d = (Transform3D*)em.GetComponentByIterator(transform);
-
 		Transform3D* tr = em.GetComponent<Transform3D>(id);
-		*tr = *t3d;
+		*tr = transform;
 
 		item->item_type = type;
 		for (uint32_t i = 0; i < 128; i++)
