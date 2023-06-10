@@ -38,7 +38,7 @@ namespace Wiwa
 
 		PhylasSword->damage = Wiwa::ItemManager::GetAbility("Phyla's Quantum Sword")->Damage;
 		PhylasSword->lifeTime = 30.0f;
-		PhylasSword->velocity = 80.0f;
+		PhylasSword->velocity = 40.0f;
 		
 		EntityId player = Wiwa::GameStateManager::GetPlayerId();
 		Transform3D* playerTransform = em.GetComponent<Transform3D>(player);
@@ -48,9 +48,9 @@ namespace Wiwa
 		PhylasSwordTransform->localPosition.z = playerTransform->localPosition.z;
 		PhylasSwordTransform->localPosition.y = playerTransform->localPosition.y;
 
-		PhylasSwordTransform->localScale.x = 1.0f;
-		PhylasSwordTransform->localScale.z = 1.0f;
-		PhylasSwordTransform->localScale.y = 1.0f;
+		PhylasSwordTransform->localScale.x = 1.5f;
+		PhylasSwordTransform->localScale.z = 1.5f;
+		PhylasSwordTransform->localScale.y = 1.5f;
 
 
 		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
