@@ -181,6 +181,8 @@ void Wiwa::PlayerAttack::FireStarlordUltimate()
 	Transform3D* spawnPoint;
 	Character* character = m_StateMachine->GetCharacter();
 	character->Shield = 0;
+	character->ShieldRegeneration = 2;
+	character->ShieldRegenerationMult = 1;
 	spawnPoint = m_StateMachine->GetFirePosition("RightPos");
 	m_StateMachine->GetAnimator()->PlayAnimation("ultimate");
 	
@@ -193,6 +195,8 @@ void Wiwa::PlayerAttack::FireRocketUltimate()
 	Transform3D* spawnPoint;
 	Character* character = m_StateMachine->GetCharacter();
 	character->Shield = 0;
+	character->ShieldRegeneration = 2;
+	character->ShieldRegenerationMult = 1;
 	spawnPoint = m_StateMachine->GetFirePosition("FirePos");
 	m_StateMachine->GetAnimator()->PlayAnimation("ultimate");
 
