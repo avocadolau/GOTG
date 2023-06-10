@@ -291,7 +291,8 @@ namespace Wiwa
 		//WI_INFO("Enemy hit by: {} damage", damage);
 		Health* health = GetComponentByIterator<Health>(m_Health);
 		EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-
+		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
+		glm::vec3 itemSpawnPos = t3d->localPosition;
 		health->health = health->health - damage;
 		if (health->health <= 0)
 		{
@@ -311,7 +312,7 @@ namespace Wiwa
 
 				float playerShield = player->Shield;
 
-				player->Shield += player->ShieldRegeneration;
+				player->Shield += 2;
 				if (player->Shield >= player->MaxShield)
 					player->Shield = player->MaxShield;
 
@@ -386,34 +387,33 @@ namespace Wiwa
 				// Shield booster 10% = 76 - 85
 				// First aid kit 10% = 86 - 95
 				// Ego's help 5% = 96 - 100
-				Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
 				uint32_t counter = 0;
 				// Healing pills
 				if (IS_DROP_RATE(chances, counter, 50))
 				{
-					GameStateManager::SpawnItem(*t3d, 3, "Healing Pills");
+					GameStateManager::SpawnItem(itemSpawnPos, 3, "Healing Pills");
 				}
 				counter += 50;
 				if (IS_DROP_RATE(chances, counter, 75))
 				{
-					GameStateManager::SpawnItem(*t3d, 3, "Medkit");
+					GameStateManager::SpawnItem(itemSpawnPos, 3, "Medkit");
 				}
 
 				counter += 25;
 				if (IS_DROP_RATE(chances, counter, 85))
 				{
-					GameStateManager::SpawnItem(*t3d, 3, "Shield Booster");
+					GameStateManager::SpawnItem(itemSpawnPos, 3, "Shield Booster");
 				}
 
 				counter += 10;
 				if (IS_DROP_RATE(chances, counter, 95))
 				{
-					GameStateManager::SpawnItem(*t3d, 3, "First Aid Kit");
+					GameStateManager::SpawnItem(itemSpawnPos, 3, "First Aid Kit");
 				}
 				counter += 10;
 				if (IS_DROP_RATE(chances, counter, 100))
 				{
-					GameStateManager::SpawnItem(*t3d, 3, "Ego's Help");
+					GameStateManager::SpawnItem(itemSpawnPos, 3, "Ego's Help");
 				}
 				counter += 5;
 			}
