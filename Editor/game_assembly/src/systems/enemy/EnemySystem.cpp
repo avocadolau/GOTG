@@ -312,7 +312,7 @@ namespace Wiwa
 
 				float playerShield = player->Shield;
 
-				player->Shield += player->ShieldRegeneration;
+				player->Shield += 2;
 				if (player->Shield >= player->MaxShield)
 					player->Shield = player->MaxShield;
 
