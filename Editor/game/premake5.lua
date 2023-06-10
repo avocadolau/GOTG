@@ -35,7 +35,6 @@ IncludeDirs["OpenCV"] = "%{wks.location}/../../Wiwa/vendor/opencv-4.7.0/include"
 IncludeDirs["recastnavigation"] = "%{wks.location}/../../Wiwa/vendor/recastnavigation/include"
 
 project "WiwaGame"
-	kind "WindowedApp"
 	language "C++"
 
 	targetdir ("%{wks.location}/bin/%{prj.name}")
@@ -88,18 +87,20 @@ project "WiwaGame"
 
 	filter "configurations:Debug"
 		defines "WI_DEBUG"
+		kind "ConsoleApp"
 		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "WI_RELEASE"
 		runtime "Release"
-
+		kind "ConsoleApp"
 		symbols "On"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "WI_DIST"
+		kind "WindowedApp"
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
