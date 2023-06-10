@@ -1252,17 +1252,17 @@ namespace Wiwa
 			}
 			else if (strcmp(name.c_str(), "Nova_Helmet") == 0)
 			{
-				particle_sytem->SetMaterial("library/vfx/materials/icons/passives/m_nova_helmet_00_a.wimaterial");
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_nova_helmet_00_b.wimaterial");
 
 			}
 			else if (strcmp(name.c_str(), "Star_Lord_Walkman") == 0)
 			{
-				particle_sytem->SetMaterial("library/vfx/materials/icons/passives/m_starlords_walkman_00_a.wimaterial");
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_starlords_walkman_00_b.wimaterial");
 
 			}
 			else if (strcmp(name.c_str(), "Xandarian_Worldmind") == 0)
 			{
-				particle_sytem->SetMaterial("library/vfx/materials/icons/passives/m_xandarian_worldmind_00_a.wimaterial");
+				particle_sytem->SetMaterial("assets/vfx/materials/icons/passives/m_xandarian_worldmind_00_b.wimaterial");
 
 			}
 			break;
