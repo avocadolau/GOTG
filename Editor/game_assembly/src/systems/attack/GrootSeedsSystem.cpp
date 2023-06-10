@@ -1,6 +1,7 @@
 #include "GrootSeedsSystem.h"
 #include "../../components/attack/GrootSeeds.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
+#include "Wiwa/ecs/systems/AudioSystem.h"
 #include "../../components/attack/Attack.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
@@ -51,6 +52,9 @@ namespace Wiwa
 		//grootSeedsTransform->localScale.x = 10.0f;
 		//grootSeedsTransform->localScale.z = 10.0f;
 
+		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+		if(audio)
+			audio->PlayAudio("groot_seed");
 
 	}
 

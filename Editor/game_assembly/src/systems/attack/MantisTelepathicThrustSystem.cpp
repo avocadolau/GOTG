@@ -3,6 +3,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 #include "../../components/attack/Attack.h"
 
 namespace Wiwa
@@ -48,6 +49,10 @@ namespace Wiwa
 
 		mantisTelepathicThrustTransform->localScale *= Wiwa::ItemManager::GetAbility("Manti's Telepathic Thrust")->Area;
 		mantisTelepathicThrustTransform->localPosition.y = 0.1f;
+
+		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+		if (audio)
+			audio->PlayAudio("mantis");
 	}
 
 	void MantisTelepathicThrustSystem::OnUpdate()

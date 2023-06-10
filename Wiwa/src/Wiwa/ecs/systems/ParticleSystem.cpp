@@ -968,7 +968,7 @@ namespace Wiwa {
 		{
 			case Wiwa::ParticleSpawnVolume::NONE:
 			{
-				initPosition = emitter->m_p_initialPosition + followSpawnPos/*+ t3d->position*/;
+				initPosition = emitter->m_p_initialPosition/*+ t3d->position*/;
 			}
 			break;
 			case Wiwa::ParticleSpawnVolume::CUBE:
@@ -977,7 +977,7 @@ namespace Wiwa {
 				float y = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.y, emitter->m_p_initialPositionBoxB.y);
 				float z = Wiwa::Math::RandomRange(emitter->m_p_initialPositionBoxA.z, emitter->m_p_initialPositionBoxB.z);
 
-				initPosition = emitter->m_p_initialPosition + followSpawnPos /*+ t3d->position*/ + glm::vec3(x, y, z);
+				initPosition = emitter->m_p_initialPosition /*+ t3d->position*/ + glm::vec3(x, y, z);
 			}
 			break;
 			case Wiwa::ParticleSpawnVolume::SPHERE:
@@ -989,13 +989,13 @@ namespace Wiwa {
 				float z = Wiwa::Math::RandomRange(1.0f,-1.0f);
 
 
-				initPosition = emitter->m_p_initialPosition + followSpawnPos /*t3d->position*/ + emitter->m_p_initialPositionSphCenter + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
+				initPosition = emitter->m_p_initialPosition/*t3d->position*/ + emitter->m_p_initialPositionSphCenter + glm::normalize(glm::vec3(x, y, z)) * Wiwa::Math::RandomRange(0.0f, emitter->m_p_initialPositionSphRadius);
 
 			}
 			break;
 			default:
 			{
-				initPosition = emitter->m_p_initialPosition + followSpawnPos/*+ t3d->position*/;
+				initPosition = emitter->m_p_initialPosition/*+ t3d->position*/;
 
 			}
 			break;
@@ -1014,6 +1014,20 @@ namespace Wiwa {
 		{
 			initRotation = emitter->m_p_initialRotation + followSpawnRot /*+ t3d->localRotation*/;
 		}
+
+		if (emitter->m_p_followEmitterRotationSpawn)
+		{
+			glm::vec3 rotationRad = glm::radians(initRotation);
+			glm::vec3 orginalPos = initPosition;
+
+			orginalPos = glm::rotate(orginalPos, rotationRad.x, glm::vec3(1.0f, 0.0f, 0.0f));
+			orginalPos = glm::rotate(orginalPos, rotationRad.y, glm::vec3(0.0f, 1.0f, 0.0f));
+			orginalPos = glm::rotate(orginalPos, rotationRad.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			initPosition = orginalPos;
+		}
+
+		initPosition += followSpawnPos;
 		
 
 		//initial scale
