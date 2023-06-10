@@ -22,7 +22,7 @@ void Wiwa::PlayerDeath::EnterState()
 
 	EntityManager em = m_StateMachine->GetEntityManager();
 	
-	EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\player_abduction\\p_playerabduction.wiprefab");
+	EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\player_abduction\\p_playerabduction_.wiprefab");
 	
 	if (lapsus != EntityManager::INVALID_INDEX)
 	{

@@ -211,6 +211,64 @@ void Wiwa::PlayerController::SpawnStarLordBullet(Transform3D& transform, const C
 			sys_shotMuzzleRightFlash->EmitParticleBatch(1);
 		}
 	}
+
+	EntityId p_bullet_Starlord = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord");
+	if (p_bullet_Starlord != EntityManager::INVALID_INDEX)
+		entityManager.SetActive(p_bullet_Starlord, false);
+
+	EntityId p_bullet_Starlord_martinex = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord_martinex");
+	if (p_bullet_Starlord_martinex != EntityManager::INVALID_INDEX)
+		entityManager.SetActive(p_bullet_Starlord_martinex, false);
+
+	EntityId p_bullet_Starlord_nikki = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord_nikki");
+	if (p_bullet_Starlord_nikki != EntityManager::INVALID_INDEX)
+ 		entityManager.SetActive(p_bullet_Starlord_nikki, false);
+
+	EntityId p_bullet_Charlie_27 = entityManager.GetChildByName(newBulletId, "p_bullet_Charlie_27");
+	if (p_bullet_Charlie_27 != EntityManager::INVALID_INDEX)
+		entityManager.SetActive(p_bullet_Charlie_27, false);
+
+
+	Wiwa::Inventory& inv = Wiwa::GameStateManager::GetPlayerInventory();
+
+	Wiwa::Buff** bufflist = inv.GetBuffs();
+
+	bool someBuffActive = false;
+	if (bufflist != nullptr)
+	{
+		for (size_t i = 0; i < 2; i++)
+		{
+			if (bufflist[i] != nullptr)
+			{
+				if (bufflist[i]->buffType == Wiwa::BuffType::MARTINEX_THERMOKINESIS && bufflist[i]->IsActive)
+				{
+					someBuffActive = true;
+					if (p_bullet_Starlord_martinex != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord_martinex, true);
+				}
+
+				if (bufflist[i]->buffType == Wiwa::BuffType::NIKKIS_TOUCH && bufflist[i]->IsActive)
+				{
+					someBuffActive = true;
+					if (p_bullet_Starlord_nikki != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord_nikki, true);
+
+				}
+
+				if (bufflist[i]->buffType == Wiwa::BuffType::CHARLIE27_FIST && bufflist[i]->IsActive)
+				{
+					someBuffActive = true;
+					if (p_bullet_Charlie_27 != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Charlie_27, true);
+
+				}
+			}
+		}
+	}
+
+
+	if (!someBuffActive)
+	{
+		if (p_bullet_Starlord != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord, true);
+	}
+
 }
 
 void Wiwa::PlayerController::SpawnRocketBullet(Transform3D& transform, const Character& character)
@@ -264,6 +322,67 @@ void Wiwa::PlayerController::SpawnRocketBullet(Transform3D& transform, const Cha
 		sys_shotMuzzleLeftImpact->EmitParticleBatch(1);
 		sys_shotMuzzleLeftFlash->EmitParticleBatch(1);
 	}
+
+
+
+	EntityId p_bullet_Starlord = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord");
+	if (p_bullet_Starlord != EntityManager::INVALID_INDEX) 
+		entityManager.SetActive(p_bullet_Starlord, false);
+
+	EntityId p_bullet_Starlord_martinex = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord_martinex");
+	if (p_bullet_Starlord_martinex != EntityManager::INVALID_INDEX) 
+		entityManager.SetActive(p_bullet_Starlord_martinex, false);
+
+	EntityId p_bullet_Starlord_nikki = entityManager.GetChildByName(newBulletId, "p_bullet_Starlord_nikki");
+	if (p_bullet_Starlord_nikki != EntityManager::INVALID_INDEX) 
+		entityManager.SetActive(p_bullet_Starlord_nikki, false);
+		
+	EntityId p_bullet_Charlie_27 = entityManager.GetChildByName(m_EntityId, "p_bullet_Charlie_27");
+	if (p_bullet_Charlie_27 != EntityManager::INVALID_INDEX) 
+		entityManager.SetActive(p_bullet_Charlie_27, false);
+
+
+	Wiwa::Inventory& inv = Wiwa::GameStateManager::GetPlayerInventory();
+
+	Wiwa::Buff** bufflist = inv.GetBuffs();
+
+	bool someBuffActive = false;
+	if (bufflist != nullptr)
+	{
+		for (size_t i = 0; i < 2; i++)
+		{
+			if (bufflist[i] != nullptr)
+			{
+				if (bufflist[i]->buffType == Wiwa::BuffType::MARTINEX_THERMOKINESIS && bufflist[i]->IsActive)
+				{
+					someBuffActive = true;
+					if (p_bullet_Starlord_martinex != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord_martinex, true);
+				}
+
+				if (bufflist[i]->buffType == Wiwa::BuffType::NIKKIS_TOUCH && bufflist[i]->IsActive)
+				{
+					someBuffActive = true;
+					if (p_bullet_Starlord_nikki != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord_nikki, true);
+
+				}
+
+				if (bufflist[i]->buffType == Wiwa::BuffType::CHARLIE27_FIST && bufflist[i]->IsActive)
+				{
+					someBuffActive = true;
+					if (p_bullet_Charlie_27 != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Charlie_27, true);
+
+				}
+			}
+		}
+	}
+
+		
+	if (!someBuffActive)
+	{
+		if (p_bullet_Starlord != EntityManager::INVALID_INDEX) entityManager.SetActive(p_bullet_Starlord, true);
+	}
+
+
 }
 
 void Wiwa::PlayerController::SpawnStarLordUltimate(Transform3D& transform, const Character& character)

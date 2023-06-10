@@ -137,11 +137,13 @@ namespace Wiwa
 
 	void EnemySystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
+		Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
+		Wiwa::EntityManager& em = _scene->GetEntityManager();
+
 		std::string playerBulletStr = "PLAYER_ATTACK";
 		if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 		{
-			Wiwa::Scene* _scene = (Wiwa::Scene*)m_Scene;
-			Wiwa::EntityManager& em = _scene->GetEntityManager();
+			
 			//BulletComponent* bullet = em.GetComponent<BulletComponent>(body2->id);
 
 			//MARTINEX THERMOKINESIS
@@ -201,6 +203,7 @@ namespace Wiwa
 						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
 						SlowForTime(2, 0.4f);
 						ReceiveDamage(grootSeeds->damage);
+
 					}
 				}
 
@@ -243,6 +246,44 @@ namespace Wiwa
 			Wiwa::Explosion* explosion = em.GetComponent<Wiwa::Explosion>(body2->id);
 			ReceiveDamage(explosion->damage);
 		}
+
+
+		//check player buffs
+
+		Wiwa::Inventory& inv = Wiwa::GameStateManager::GetPlayerInventory();
+
+		Wiwa::Buff** bufflist = inv.GetBuffs();
+
+		bool someBuffActive = false;
+		if (bufflist != nullptr)
+		{
+			for (size_t i = 0; i < 2; i++)
+			{
+				if (bufflist[i] != nullptr)
+				{
+					if (bufflist[i]->buffType == Wiwa::BuffType::MARTINEX_THERMOKINESIS && bufflist[i]->IsActive)
+					{
+						EntityId ice = em.LoadPrefab("assets/vfx/prefabs/vfx_finals/buffs/p_martinex_floor.wiprefab");
+						em.SetParent(ice, m_EntityId);
+					}
+
+					if (bufflist[i]->buffType == Wiwa::BuffType::NIKKIS_TOUCH && bufflist[i]->IsActive)
+					{
+
+					}
+
+					if (bufflist[i]->buffType == Wiwa::BuffType::CHARLIE27_FIST && bufflist[i]->IsActive)
+					{
+
+					}
+				}
+			}
+		}
+
+		
+
+
+
 	}
 
 	void EnemySystem::ReceiveDamage(int damage)
