@@ -77,7 +77,7 @@ namespace Wiwa
 							break;
 
 						Wave* wave = em.GetComponent<Wave>(waveIds[i]);
-						if (wave && !wave->hasFinished) {
+						if (wave && wave->currentEnemiesAlive > 0) {
 
 							// Store all the enemies alive in that wave
 							WaveSystem* waveSystem = em.GetSystem<WaveSystem>(waveIds[i]);
@@ -169,6 +169,7 @@ namespace Wiwa
 		}
 
 		if (agentSys && m_EnemiesTransformIt.size() > 0) {
+			agentSys->m_RotationValue = 60.0f;
 			agentSys->SetDestination(currentEnemyPosition);
 		}
 

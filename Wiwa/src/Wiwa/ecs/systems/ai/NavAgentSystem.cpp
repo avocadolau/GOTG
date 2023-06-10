@@ -23,6 +23,7 @@ namespace Wiwa
         //m_AgentParams.separationWeight = 1;
         m_PreviousVelocity = 0.0f;
         m_PreviousAcceleration = 0.0f;
+        m_RotationValue = 30.0f;
     }
 
     NavAgentSystem::~NavAgentSystem()
@@ -284,7 +285,7 @@ namespace Wiwa
 
             float distance = glm::distance(m_CurrentPos, nextPos);
 
-            float timeToRotate = distance / 30.0f;
+            float timeToRotate = distance / m_RotationValue;
             float tRot = glm::clamp(Time::GetDeltaTimeSeconds() / timeToRotate, 0.0f, 1.0f);
 
             // Calculate the forward vector from the current position to the target position

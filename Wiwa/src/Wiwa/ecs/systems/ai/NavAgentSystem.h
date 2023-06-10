@@ -47,6 +47,10 @@ namespace Wiwa
         bool OnEnabledFromPool() override;
 
         bool OnDisabledFromPool() override;
+
+        int getAgentIndex() const { return m_AgentIndex; };
+        float m_RotationValue;
+
     private:
         void Render();
         void DrawAgent();
@@ -56,7 +60,6 @@ namespace Wiwa
         glm::vec3 m_CurrentPos;
         float m_PreviousVelocity;
         float m_PreviousAcceleration;
-        //glm::vec3 m_CurrentVel;
         dtCrowdAgentParams m_AgentParams;
         EntityManager::ComponentIterator m_NavAgentIt;
 
