@@ -262,7 +262,8 @@ namespace Wiwa
             {
                 const float buffPercent = ((float)BuffPercent / 100.f);
                 RoFInc = ((float)player->RateOfFire * buffPercent);
-                
+                MovSpeedInc = ((float)player->Speed * buffPercent);
+                player->Speed += MovSpeedInc;
                 player->RateOfFire += RoFInc;
             }
             break;
@@ -317,6 +318,7 @@ namespace Wiwa
         case Wiwa::BuffType::BUGS_LEGS:
         {
             player->RateOfFire -= RoFInc;
+            player->Speed -= MovSpeedInc;
         }
         break;
         case Wiwa::BuffType::CHARLIE27_FIST:
