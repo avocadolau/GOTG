@@ -25,7 +25,9 @@ namespace Wiwa {
 		static size_t m_ProgressDot1;
 		static size_t m_ProgressDot2;
 		static size_t m_ProgressDot3;
-		static size_t m_BackGround;
+		static size_t m_BackGround_Starlord;
+		static size_t m_BackGround_Rocket;
+
 
 
 		static std::vector<SceneId> m_RemovedSceneIds;
