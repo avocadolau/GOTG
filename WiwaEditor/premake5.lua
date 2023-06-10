@@ -1,5 +1,5 @@
 project "WiwaEditor"
-	kind "ConsoleApp"
+	kind "WindowedApp"
 	language "C++"
 
 	targetdir ("%{wks.location}/bin/".. outputdir .. "/%{prj.name}")

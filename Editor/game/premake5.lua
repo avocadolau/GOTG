@@ -35,7 +35,7 @@ IncludeDirs["OpenCV"] = "%{wks.location}/../../Wiwa/vendor/opencv-4.7.0/include"
 IncludeDirs["recastnavigation"] = "%{wks.location}/../../Wiwa/vendor/recastnavigation/include"
 
 project "WiwaGame"
-	kind "ConsoleApp"
+	kind "WindowedApp"
 	language "C++"
 
 	targetdir ("%{wks.location}/bin/%{prj.name}")
