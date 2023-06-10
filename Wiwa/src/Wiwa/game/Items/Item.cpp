@@ -188,10 +188,9 @@ namespace Wiwa
                     {
                         if (playerCurrentAbilities[i] != nullptr)
                         {
-                            if (playerCurrentAbilities[i]->itemTag[0] == ItemTags::PROJECTILE || playerCurrentAbilities[i]->itemTag[1] == ItemTags::PROJECTILE)
-                            {
-                                playerCurrentAbilities[i]->Damage += (int)((float)playerCurrentAbilities[i]->Damage * buffPercent);
-                            }
+                           
+                            playerCurrentAbilities[i]->Damage += (int)((float)playerCurrentAbilities[i]->Damage * buffPercent);
+                            
                         }
                     }
                 }
