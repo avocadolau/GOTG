@@ -199,6 +199,8 @@ namespace Wiwa
 		static std::vector<int> s_PhalanxRooms;
 		static std::vector<int> s_RewardRooms;
 		static std::vector<int> s_ShopRooms;
+		static std::vector<int> s_WatcherRooms;
+
 		static int s_CurrentRoomsCount;
 
 		static EntityId s_PlayerId;

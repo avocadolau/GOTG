@@ -74,6 +74,8 @@ namespace Wiwa
 
 	int GameStateManager::s_CurrentWave = 0;
 
+	std::vector<int> GameStateManager::s_WatcherRooms;
+
 	static std::vector<SceneId> activeScenesKree;
 	static std::vector<SceneId> deactiveScenesKree;
 
@@ -753,6 +755,16 @@ namespace Wiwa
 
 	int GameStateManager::LoadRandomRoom(const std::vector<int>& roomPool)
 	{
+		if (s_NextRewardRoomReward == 3) // Watcher
+		{
+			std::uniform_int_distribution<> dist(0, s_WatcherRooms.size() - 1);
+
+			int nextRoom = dist(Application::s_Gen);
+			SceneId id = s_WatcherRooms[nextRoom];
+			SceneManager::ChangeSceneByIndex(id);
+			return nextRoom;
+		}
+
 		std::uniform_int_distribution<> dist(0, roomPool.size() - 1);
 		int nextRoom = dist(Application::s_Gen);
 		SceneId id = roomPool[nextRoom];
@@ -857,6 +869,13 @@ namespace Wiwa
 		{
 			std::string indx = std::to_string(i);
 			shopRooms.PushBack(s_ShopRooms[i]);
+		}
+
+		JSONValue watcherRooms = doc.AddMemberArray("watchers");
+		for (size_t i = 0; i < s_WatcherRooms.size(); i++)
+		{
+			std::string indx = std::to_string(i);
+			watcherRooms.PushBack(s_WatcherRooms[i]);
 		}
 
 		JSONValue starlord = doc.AddMemberObject("starlord");
@@ -966,6 +985,19 @@ namespace Wiwa
 				for (size_t i = 0; i < size; i++) {
 					JSONValue scene = scene_list[(uint32_t)i];
 					s_ShopRooms.push_back(scene.as_int());
+				}
+			}
+		}
+
+		if (doc.HasMember("watchers")) {
+
+			JSONValue scene_list = doc["watchers"];
+
+			if (scene_list.IsArray()) {
+				size_t size = scene_list.Size();
+				for (size_t i = 0; i < size; i++) {
+					JSONValue scene = scene_list[(uint32_t)i];
+					s_WatcherRooms.push_back(scene.as_int());
 				}
 			}
 		}

@@ -126,6 +126,12 @@ void GameLogPanel::DrawRoomVariables()
 	ImGui::PopID();
 	ImGui::Separator();
 
+	ImGui::PushID(3);
+	ImGui::Text("Watcher rooms");
+	VectorEdit(Wiwa::GameStateManager::s_WatcherRooms);
+	ImGui::PopID();
+	ImGui::Separator();
+
 	ImGui::Text("Current player id %i", Wiwa::GameStateManager::s_PlayerId);
 
 	const char* startCharacter
