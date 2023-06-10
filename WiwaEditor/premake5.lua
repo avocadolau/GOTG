@@ -1,5 +1,5 @@
 project "WiwaEditor"
-	kind "ConsoleApp"
+	
 	language "C++"
 
 	targetdir ("%{wks.location}/bin/".. outputdir .. "/%{prj.name}")
@@ -55,18 +55,20 @@ project "WiwaEditor"
 
 	filter "configurations:Debug"
 		defines "WI_DEBUG"
+		kind "ConsoleApp"
 		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "WI_RELEASE"
 		runtime "Release"
-
+		kind "ConsoleApp"
 		symbols "On"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "WI_DIST"
+		kind "WindowedApp"
 		runtime "Release"
 		symbols "Off"
 		optimize "On"

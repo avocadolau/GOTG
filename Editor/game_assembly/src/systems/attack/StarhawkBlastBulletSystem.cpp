@@ -51,7 +51,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		Wiwa::Object* obj = em.GetSystem<Wiwa::PhysicsSystem>(m_EntityId)->getBody();
 		Wiwa::PhysicsManager& physicsManager = m_Scene->GetPhysicsManager();
-		bullet->damage = 300;
+		bullet->damage = Wiwa::ItemManager::GetAbility("Starhawk's Time Blast")->Damage;
 		physicsManager.SetVelocity(obj, glm::normalize(bullet->direction) * bullet->velocity);
 		//Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 

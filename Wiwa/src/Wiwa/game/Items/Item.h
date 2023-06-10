@@ -199,7 +199,7 @@ namespace Wiwa
 		int ShieldInc;
 		float RoFInc;
 		int AttackDmgInc;
-
+		float MovSpeedInc;
 
 		CooldownState CooldownState;
 

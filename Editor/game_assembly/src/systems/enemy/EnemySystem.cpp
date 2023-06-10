@@ -14,6 +14,7 @@
 #include "../../components/attack/PhylasQuantumSword.h"
 #include "../../components/attack/GrootSeeds.h"
 #include "../../components/attack/StarhawkBlast.h"
+#include "../../components/attack/StarhawkBlast.h"
 
 #include <Wiwa/ecs/systems/OzzAnimationSystem.h>
 #include <Wiwa/ecs/systems/ParticleSystem.h>
@@ -27,6 +28,7 @@
 #include "../../components/attack/YondusFin.h"
 #include "../../components/attack/CaptainsUniverseEnergy.h"
 #include "../../components/attack/MantisTelepathicThrust.h"
+#include <Wiwa/game/Items/ItemManager.h>
 
 namespace Wiwa
 {
@@ -150,14 +152,9 @@ namespace Wiwa
 			{
 				if (listBuffs[i] != nullptr)
 				{
-					if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive && !stats->Slowed)
+					if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive)
 					{
-						/*AgentAI* statsSelf = GetComponentByIterator<AgentAI>(m_AgentIt);
-						const float buffPercent = ((float)listBuffs[i]->BuffPercent / 100.f);
-						previousSpeed = statsSelf->speed;
-						timerSlow = listBuffs[i]->Duration;
-						statsSelf->speed = statsSelf->speed * buffPercent;
-						stats->Slowed = true;*/
+						SlowForTime(2, 0.4f);
 						break;
 					}
 				}
@@ -210,12 +207,10 @@ namespace Wiwa
 				std::string starhawksBlastStr = "STARHAWKS_BLAST";
 				if (starhawksBlastStr == attackStr)
 				{
-					StarhawksBlast* starhawks = GetComponentByIterator<StarhawksBlast>(em.GetComponentIterator<StarhawksBlast>(body2->id));
-					if (starhawks != nullptr)
-					{
-						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-						ReceiveDamage(starhawks->damage);
-					}
+					SimpleBullet* bullet = GetComponentByIterator<SimpleBullet>(em.GetComponentIterator<SimpleBullet>(body2->id));
+					if (!bullet)
+						return;
+					ReceiveDamage(bullet->damage);
 				}
 				std::string captainsUniverseStr = "CAPTAINS_UNIVERSE";
 				if (captainsUniverseStr == attackStr)

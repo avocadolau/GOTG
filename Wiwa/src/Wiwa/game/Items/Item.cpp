@@ -218,6 +218,28 @@ namespace Wiwa
             return;
         }
         IsActive = true;
+
+        Wiwa::EntityManager& em = SceneManager::getActiveScene()->GetEntityManager();       
+        EntityId playerId = GameStateManager::GetPlayerId();
+
+        EntityId pe_healing = em.LoadPrefab("assets/vfx/prefabs/p_player_use_buff.wiprefab");
+
+        if (pe_healing != EntityManager::INVALID_INDEX)
+        {
+            if (playerId != EntityManager::INVALID_INDEX)
+                em.SetParent(pe_healing, playerId);
+
+            //if (playerId2 != EntityManager::INVALID_INDEX)
+            //    em.SetParent(pe_healing, playerId2);
+            //WI_CORE_INFO("spawning regeneartion particle");
+
+        }
+        else
+        {
+            WI_CORE_INFO("Failed Spawning Use Particles");
+
+        }
+
         switch (buffType)
         {
         case Wiwa::BuffType::MAJOR_VICTORY_SHIELD:
@@ -262,7 +284,8 @@ namespace Wiwa
             {
                 const float buffPercent = ((float)BuffPercent / 100.f);
                 RoFInc = ((float)player->RateOfFire * buffPercent);
-                
+                MovSpeedInc = ((float)player->Speed * buffPercent);
+                player->Speed += MovSpeedInc;
                 player->RateOfFire += RoFInc;
             }
             break;
@@ -317,6 +340,7 @@ namespace Wiwa
         case Wiwa::BuffType::BUGS_LEGS:
         {
             player->RateOfFire -= RoFInc;
+            player->Speed -= MovSpeedInc;
         }
         break;
         case Wiwa::BuffType::CHARLIE27_FIST:

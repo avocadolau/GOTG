@@ -1,4 +1,5 @@
 #include "PlayerDeath.h"
+#include "Wiwa/ecs/systems/ParticleSystem.h"
 
 Wiwa::PlayerDeath::PlayerDeath(PlayerStateMachine* stateMachine, EntityId id)
 	: PlayerBaseState(stateMachine, id)
@@ -16,6 +17,23 @@ void Wiwa::PlayerDeath::EnterState()
 	m_StateMachine->SetPlayerRotation(m_StateMachine->GetDirection());
 	m_StateMachine->GetPhysics()->getBody()->velocity = btVector3(0.f, 0.f, 0.f);
 	// TODO: Particles 
+
+	//EntityManager em = m_StateMachine->GetEntityManager();
+	//
+	//EntityId lapsus = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\player_abduction\\p_playerabduction.wiprefab");
+	//
+	//if (lapsus != EntityManager::INVALID_INDEX)
+	//{
+	//	Transform3D* tlapsus = em.GetComponent<Transform3D>(lapsus);
+	//	Transform3D* tplayer = em.GetComponent<Transform3D>(this->m_Id);
+	//
+	//	if (tlapsus != nullptr)
+	//	{
+	//		tlapsus->localPosition = tplayer->localPosition;
+	//		tlapsus->localPosition.x -= 1.5f;
+	//	}
+	//}
+
 }
 
 void Wiwa::PlayerDeath::UpdateState()

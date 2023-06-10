@@ -85,7 +85,9 @@ namespace Wiwa
 
 	void CaptainsUniverseEnergySystem::OnCollisionEnter(Object* body1, Object* body2)
 	{
+		Wiwa::EntityManager& em = m_Scene->GetEntityManager();
 		SetExplosion();
+		em.DestroyEntity(m_EntityId);
 	}
 
 	void CaptainsUniverseEnergySystem::SetExplosion()
