@@ -23,6 +23,8 @@
 
 #include <Wiwa/utilities/easings.h>
 
+
+
 namespace Wiwa
 {
 	DialogManager::DialogManager()
@@ -74,7 +76,6 @@ namespace Wiwa
 		m_Scene = scene;
 
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
-
 
 		if (std::filesystem::exists("library/HudImages/Menus/SpeechMenu/UI_ButtonA_01.dds"))
 		{
@@ -204,6 +205,8 @@ namespace Wiwa
 	{
 		Renderer2D& render = Wiwa::Application::Get().GetRenderer2D();
 
+		Wiwa::GuiManager& ui = m_Scene->GetGuiManager(); // 0 == se dibuja; 0 != no se dibuja
+
 		characterID = GameStateManager::s_CurrentCharacter;
 
 		Character* character = GameStateManager::GetPlayerCharacterComp();
@@ -217,8 +220,8 @@ namespace Wiwa
 			character->CanMove = true;
 		}
 
-		if ((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
-			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && canNoLongerTalk == false)
+		if (((((Wiwa::Input::IsKeyPressed(Wiwa::Key::Space) || Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)) && actualConversationState != 1 && keyPressRefreshTimer > 120 && collidingWithNpc == true)
+			|| (forceStartConversation == true && forcedDialogHappened == false)) && triggerEvent == false && canNoLongerTalk == false) && ui.getCurrentCanvas() == 0)
 		{
 			if (collidingWithNpc == true)
 			{
@@ -259,13 +262,13 @@ namespace Wiwa
 			finishedRandomizing = false;
 		}
 
-		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false && triggerEvent == false && canNoLongerTalk == false)
+		if (collidingWithNpc == true && actualConversationState == 2 && talkIndicatorImgEnabled == false && triggerEvent == false && canNoLongerTalk == false && ui.getCurrentCanvas() == 0)
 		{
 			render.EnableInstance(m_Scene, talkIndicatorImgID);
 
 			talkIndicatorImgEnabled = true;
 		}
-		else if ((actualConversationState != 2 && talkIndicatorImgEnabled == true) || collidingWithNpc == false)
+		else if ((actualConversationState != 2 && talkIndicatorImgEnabled == true) || collidingWithNpc == false || ui.getCurrentCanvas() != 0)
 		{
 			render.DisableInstance(m_Scene, talkIndicatorImgID);
 
@@ -278,7 +281,7 @@ namespace Wiwa
 			{
 				if (!strcmp(conversations[i].conversationName.c_str(), conversationToPlayName.c_str()) && conversations[i].isRandom == false)
 				{
-					UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
+					if (ui.getCurrentCanvas() == 0) UpdateConversation(i, &Wiwa::Application::Get().GetRenderer2D());
 					forceStartConversation = false;
 
 					if (std::stoi(conversations[i].group.groupID) != -1 && actualConversationState == 2)
@@ -327,7 +330,7 @@ namespace Wiwa
 					{
 						if (!strcmp(conversations[j].conversationName.c_str(), conversationToPlayName.c_str()))
 						{
-							UpdateConversation(j, &Wiwa::Application::Get().GetRenderer2D());
+							if(ui.getCurrentCanvas() == 0) UpdateConversation(j, &Wiwa::Application::Get().GetRenderer2D());
 						}
 					}
 
