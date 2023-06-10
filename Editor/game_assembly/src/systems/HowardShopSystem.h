@@ -15,6 +15,8 @@ namespace Wiwa {
 		const char* itemsPerPage1[7] = { "Health Capacitor","Nano Boost","Easy Trigger","Fancy Boots",
 		"Lethal shooter", "Shield Fan", "Nanomachines" };
 
+		const char* itemsPerPage2[4] = { "Recovery Shield","Devourer","Fanatic","Recovery Health"};
+
 	public:
 		HowardShopSystem();
 		~HowardShopSystem();

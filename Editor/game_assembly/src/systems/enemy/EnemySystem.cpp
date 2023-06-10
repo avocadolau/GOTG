@@ -27,6 +27,7 @@
 #include "../../components/attack/YondusFin.h"
 #include "../../components/attack/CaptainsUniverseEnergy.h"
 #include "../../components/attack/MantisTelepathicThrust.h"
+#include <Wiwa/game/Items/ItemManager.h>
 
 namespace Wiwa
 {
@@ -214,7 +215,7 @@ namespace Wiwa
 					if (starhawks != nullptr)
 					{
 						EnemyData* statsSelf = GetComponentByIterator<EnemyData>(m_StatsIt);
-						ReceiveDamage(starhawks->damage);
+						ReceiveDamage(Wiwa::ItemManager::GetAbility("Starhawk's Time Blast")->Damage);
 					}
 				}
 				std::string captainsUniverseStr = "CAPTAINS_UNIVERSE";
