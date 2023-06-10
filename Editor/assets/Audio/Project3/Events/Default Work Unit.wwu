@@ -12,7 +12,7 @@
 										<Action Name="" ID="{7B598B8E-95D1-4516-993C-443EB6BBA2D4}" ShortID="479478646">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_melee_death" ID="{62E76A8C-7722-40F2-9EE6-2E9C7E963FBE}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+													<ObjectRef Name="phalanx_melee_death" ID="{5CDAE654-47EF-4905-B8FD-9BCF4C755191}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -34,7 +34,7 @@
 										<Action Name="" ID="{A21B1EE6-8601-4B14-A549-90A5BE46681E}" ShortID="673213382">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_melee_hit" ID="{608ADDD0-93F4-4684-9310-CCC7E1B778A4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+													<ObjectRef Name="phalanx_melee_hit" ID="{CB9E243F-60D0-4D42-8089-6B10FCF717B6}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -49,7 +49,7 @@
 										<Action Name="" ID="{5BE5F319-492E-45B3-BE2E-7380E4F0ED32}" ShortID="450156588">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_ranged_hit" ID="{0B08FC8C-1FA0-4998-8EDC-D2CD5CD44FD4}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+													<ObjectRef Name="phalanx_ranged_hit" ID="{C55DA8DA-8154-4E0A-A0FD-E018DBEFD8C2}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -60,7 +60,7 @@
 										<Action Name="" ID="{54A5AAC5-6472-48CD-99BD-81782705BA17}" ShortID="1049476448">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="phalanx_ranged_death" ID="{39ED648E-FC14-403A-8B96-3F753E9B9852}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+													<ObjectRef Name="phalanx_ranged_death" ID="{EA0678FD-4533-4E15-A351-CAF63E05A092}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -97,7 +97,7 @@
 										<Action Name="" ID="{18035887-7401-497F-A87B-41C0C64D2D5D}" ShortID="785035317">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="sentinel_spawn" ID="{643507BC-03DF-4159-B80A-40A70810DCA5}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+													<ObjectRef Name="sentinel_spawn" ID="{AB03FF70-A191-4910-A2DE-29573FF12ADE}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>

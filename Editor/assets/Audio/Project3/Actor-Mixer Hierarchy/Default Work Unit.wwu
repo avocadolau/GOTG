@@ -179,6 +179,209 @@
 										<ActiveSource Name="phalanx_melee_spawn" ID="{A0072677-6777-44C1-88AB-93010E865C3F}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<Folder Name="new Audios" ID="{CA1EA956-34BA-4F15-9E4B-FA7AFA5B9BBC}" ShortID="922886446">
+									<ChildrenList>
+										<RandomSequenceContainer Name="phalanx_melee_death" ID="{5CDAE654-47EF-4905-B8FD-9BCF4C755191}" ShortID="121176620">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-3</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="enviroment" ID="{B354E5A1-F7C9-4497-A68F-D2095DB34244}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_phalanx02_death01" ID="{3F634D38-4F71-484B-8CAC-06640AD34EF3}" ShortID="889381219">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_death01" ID="{8C64F3B8-4C9C-48EF-9FCB-081AA485E618}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_death01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="405614476"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_death01" ID="{8C64F3B8-4C9C-48EF-9FCB-081AA485E618}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx02_death02" ID="{2C287D1F-486D-4F71-BEBF-C0A7FA4743E3}" ShortID="90454938">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_death02" ID="{8EFE7A89-B329-49C0-BB33-ED8758E1621A}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_death02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="337278033"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_death02" ID="{8EFE7A89-B329-49C0-BB33-ED8758E1621A}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx02_death03" ID="{5CFE390F-D5A9-47B6-B08B-8AEAE36C3A84}" ShortID="352093045">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_death03" ID="{F7883839-C88A-4103-ADF3-C14D66A62C47}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_death03.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="611891721"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_death03" ID="{F7883839-C88A-4103-ADF3-C14D66A62C47}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
+										<RandomSequenceContainer Name="phalanx_melee_hit" ID="{CB9E243F-60D0-4D42-8089-6B10FCF717B6}" ShortID="195148645">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="enviroment" ID="{B354E5A1-F7C9-4497-A68F-D2095DB34244}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_phalanx02_hit01" ID="{824110D8-37CE-40FE-AF2D-F45225343746}" ShortID="377437378">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_hit01" ID="{9FD6C984-59AB-4451-A093-953843EBDD19}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_hit01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="536524637"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_hit01" ID="{9FD6C984-59AB-4451-A093-953843EBDD19}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx02_hit02" ID="{251C1D73-E03B-4332-879D-BE2D0DB874DE}" ShortID="693418219">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_hit02" ID="{4BCE5613-C3E8-449A-8EAB-427E8EFBB943}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_hit02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="149837127"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_hit02" ID="{4BCE5613-C3E8-449A-8EAB-427E8EFBB943}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx02_hit03" ID="{3C41C295-1F65-4300-B089-39D7EE66FC7A}" ShortID="974579463">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_hit03" ID="{2369726B-542D-4066-AFEC-DF8B8F3E875E}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_hit03.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="248845082"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_hit03" ID="{2369726B-542D-4066-AFEC-DF8B8F3E875E}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx02_hit04" ID="{B28837AA-C920-439F-8AC6-81288AD97BB0}" ShortID="880487942">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_hit04" ID="{5D56E19D-AE8B-4BAB-B393-9380A8BA5213}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_hit04.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="935376756"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_hit04" ID="{5D56E19D-AE8B-4BAB-B393-9380A8BA5213}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
+									</ChildrenList>
+								</Folder>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="phalanx_ranged" ID="{F66AA282-6841-4929-A882-1C8711C06B16}" ShortID="154426645">
@@ -323,6 +526,249 @@
 										<ActiveSource Name="Sci Fi Explosion 07" ID="{A45CD487-2AAF-4017-AD36-6A48405897F9}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<Folder Name="New Audios" ID="{01A064B4-CED0-4377-9450-026A81F53310}" ShortID="228176795">
+									<ChildrenList>
+										<RandomSequenceContainer Name="phalanx_ranged_death" ID="{EA0678FD-4533-4E15-A351-CAF63E05A092}" ShortID="572575489">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="enviroment" ID="{B354E5A1-F7C9-4497-A68F-D2095DB34244}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_phalanx01_death01" ID="{548F7E87-3239-44CA-AD5E-60F899EBE48F}" ShortID="8705863">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_death01" ID="{04C8C3B0-C7D3-4D24-9284-4F12532CE67C}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_death01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="1015323904"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_death01" ID="{04C8C3B0-C7D3-4D24-9284-4F12532CE67C}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_death02" ID="{CF2F04A2-270B-4ECD-B4D3-FA3E66869D5C}" ShortID="319457021">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_death02" ID="{65244B16-D600-4336-A1D7-46CF36B70C9F}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_death02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="1047127182"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_death02" ID="{65244B16-D600-4336-A1D7-46CF36B70C9F}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_death03" ID="{0FFADBAB-8CE6-466A-88FD-4A07F2854E0F}" ShortID="63054197">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_death03" ID="{ECB9CB99-F948-4E68-B90A-E64F5417CCB4}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_death03.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="182229679"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_death03" ID="{ECB9CB99-F948-4E68-B90A-E64F5417CCB4}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_death04" ID="{08F5CD79-BFEB-4376-B638-FA38653C49B9}" ShortID="438588235">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_death04" ID="{F4478344-FC36-48C7-A0BB-6799EEECD1D7}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_death04.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="950260257"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_death04" ID="{F4478344-FC36-48C7-A0BB-6799EEECD1D7}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
+										<RandomSequenceContainer Name="phalanx_ranged_hit" ID="{C55DA8DA-8154-4E0A-A0FD-E018DBEFD8C2}" ShortID="1017111746">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="enviroment" ID="{B354E5A1-F7C9-4497-A68F-D2095DB34244}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_phalanx01_hit01" ID="{21577A42-4E04-422E-9481-F2797DAB4C9E}" ShortID="1054855190">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_hit01" ID="{B0E60AA5-0B90-4EC6-98F9-AFB6042FFD00}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_hit01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="684000331"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_hit01" ID="{B0E60AA5-0B90-4EC6-98F9-AFB6042FFD00}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_hit02" ID="{699E7000-9F07-4956-886A-AC9959FA0E80}" ShortID="437995508">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_hit02" ID="{B6F37350-9505-45E6-BD41-690D60E9F984}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_hit02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="377792045"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_hit02" ID="{B6F37350-9505-45E6-BD41-690D60E9F984}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_hit03" ID="{B28E8AC5-98BF-48ED-BE69-29D23397A5A8}" ShortID="587055472">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_hit03" ID="{A885E8B3-F990-4682-B6BD-5E8E1254B265}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_hit03.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="236665109"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_hit03" ID="{A885E8B3-F990-4682-B6BD-5E8E1254B265}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_hit04" ID="{0DE725C6-09C4-4BA3-9C60-E98480261C45}" ShortID="729628320">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_hit04" ID="{3681342F-A7CA-4071-858D-3CABDBF089EF}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_hit04.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="1063701881"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_hit04" ID="{3681342F-A7CA-4071-858D-3CABDBF089EF}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_hit05" ID="{5344A621-D7CB-4F1B-A0AB-44078A8EED50}" ShortID="64186279">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_hit05" ID="{5EE24E8D-EE95-48FE-86A3-761620480815}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_hit05.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="490304946"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_hit05" ID="{5EE24E8D-EE95-48FE-86A3-761620480815}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
+									</ChildrenList>
+								</Folder>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="player" ID="{369A82C9-82A0-4ACC-A7A9-40E90A07FD68}" ShortID="909339562">
@@ -2830,6 +3276,77 @@
 										<ActiveSource Name="mixkit-sci-fi-confirmation-914" ID="{6EE98E9D-F7F1-4B1E-8527-56F5E50B9625}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<Folder Name="new audios" ID="{08BACB5D-8994-45D8-AD40-E4C16110B108}" ShortID="1043488508">
+									<ChildrenList>
+										<RandomSequenceContainer Name="sentinel_spawn" ID="{AB03FF70-A191-4910-A2DE-29573FF12ADE}" ShortID="429542809">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="enviroment" ID="{B354E5A1-F7C9-4497-A68F-D2095DB34244}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_sentinel_spawn01" ID="{1C78E0C3-FB7A-489D-B301-8144C3481FF5}" ShortID="70118649">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_sentinel_spawn01" ID="{6D184583-04A5-4C7C-BD0E-288ED5774608}">
+															<Language>SFX</Language>
+															<AudioFile>vo_sentinel_spawn01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="979360609"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_sentinel_spawn01" ID="{6D184583-04A5-4C7C-BD0E-288ED5774608}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_sentinel_spawn02" ID="{9A12C191-E9AC-4C78-BD2B-7A62341405A8}" ShortID="939942692">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_sentinel_spawn02" ID="{AAF6093C-7EBB-48AF-AC80-B4E3489FABA9}">
+															<Language>SFX</Language>
+															<AudioFile>vo_sentinel_spawn02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="606663918"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_sentinel_spawn02" ID="{AAF6093C-7EBB-48AF-AC80-B4E3489FABA9}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
+									</ChildrenList>
+								</Folder>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="subjugator" ID="{EE739681-A740-4294-BB73-AD72790020D6}" ShortID="37821874">
