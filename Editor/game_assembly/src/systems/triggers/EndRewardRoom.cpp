@@ -17,9 +17,12 @@ void Wiwa::EndRewardRoom::OnUpdate()
 	if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadA)
 		|| Wiwa::Input::IsKeyPressed(Key::Enter))
 	{
-		RewardRoomData* data = GetComponentByIterator<RewardRoomData>(m_DataIt);
+		RewardRoomData* data = GetComponent<RewardRoomData>();
 		GameStateManager::setPlayerTriggerNextRoom(true);
-		GameStateManager::s_NextRewardRoomReward = data->num;
+		if(data->isLeft)
+			GameStateManager::s_NextRewardRoomReward = GameStateManager::s_DoorsReward[0];
+		else
+			GameStateManager::s_NextRewardRoomReward = GameStateManager::s_DoorsReward[1];
 	}
 
 	if (m_Timer >= 2.0f)

@@ -773,19 +773,37 @@ namespace Wiwa
 			} while (randomNum == lastRoom);
 			
 			lastRoom = randomNum;
+			
 			uint32_t counter = 0;
+
 			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_ActiveSkillChances))
+			{
 				s_DoorsReward[i] = 0;
+				continue;
+			}
 			counter += GameStateManager::s_ActiveSkillChances;
+			
 			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_PassiveSkillChances))
+			{
 				s_DoorsReward[i] = 1;
+				continue;
+			}
 			counter += GameStateManager::s_PassiveSkillChances;
+			
 			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_BuffChances))
+			{
 				s_DoorsReward[i] = 2;
+				continue;
+			}
 			counter += GameStateManager::s_BuffChances;
+			
 			if (IS_DROP_RATE(randomNum, counter, GameStateManager::s_NPCRoomChances))
+			{
 				s_DoorsReward[i] = 3;
-			counter += GameStateManager::s_NPCRoomChances;
+				continue;
+			}
+
+			s_DoorsReward[i] = 0;
 		}
 		return 0;
 	}
