@@ -102,12 +102,12 @@ namespace Wiwa
 			{
 				state = GuiControlState::PRESSED;
 				SetNextFrame(2, &r2d_1);
-				clicked = true;
+				pressedGamepad = true;
 			}
-			if (clicked && Wiwa::Input::IsButtonReleased(0, 0))
+			if (pressedGamepad && Wiwa::Input::IsButtonReleased(0, 0))
 			{
 				
-				clicked = false;
+				pressedGamepad = false;
 				if (Audio::FindEvent(audioEventForButton.c_str()) != Audio::INVALID_ID)
 				{
 					Audio::PostEvent(audioEventForButton.c_str());

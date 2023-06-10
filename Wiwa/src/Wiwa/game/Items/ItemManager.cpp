@@ -63,6 +63,11 @@ void Wiwa::ItemManager::AddShopElement(const ShopElement& shopElement)
 	m_ShopElementPool[shopElement.Name] = shopElement;
 }
 
+void Wiwa::ItemManager::AugmentShopElement(const std::string& name)
+{
+	m_ShopElementPool[name].AugmentStep();
+}
+
 void Wiwa::ItemManager::DeleteShopElement(const std::string& name)
 {
 	m_ShopElementPool.erase(name);
