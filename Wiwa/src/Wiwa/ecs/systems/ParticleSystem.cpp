@@ -18,6 +18,12 @@ namespace Wiwa {
 	void ParticleSystem::OnSystemAdded()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		SetEmitterBools(emitter);
 
 		Transform3D* t3d = GetComponent<Transform3D>();
@@ -121,11 +127,11 @@ namespace Wiwa {
 	}
 	void ParticleSystem::OnUpdate()
 	{
-
-		
-
-
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			return;
+		}
 		float dt = Time::GetDeltaTime() * 0.001;
 
 		if (emitter->m_meshChanged)
@@ -733,6 +739,11 @@ namespace Wiwa {
 	void ParticleSystem::SetActive(bool active, bool forceDeactivateParticles)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		emitter->m_active = active;
 
 		if (forceDeactivateParticles)
@@ -742,6 +753,11 @@ namespace Wiwa {
 	void ParticleSystem::SetMaterial(const char* materialPath)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 
 		if (emitter == nullptr) return;
 
@@ -752,6 +768,11 @@ namespace Wiwa {
 	void ParticleSystem::SetMesh(const char* meshPath)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 
 		ResourceId meshid = Wiwa::Resources::Load<Model>(meshPath);
 		
@@ -764,12 +785,22 @@ namespace Wiwa {
 	void ParticleSystem::SetTimer(float time)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		m_SpawnTimer = time;
 	}
 
 	void ParticleSystem::DeactivateParticles()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 
 		for (unsigned int i = 0; i < m_MaxParticles && !m_Particles.empty(); ++i)
 		{
@@ -782,6 +813,11 @@ namespace Wiwa {
 	void ParticleSystem::RestartEmitter(float timer)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		
 		DeactivateParticles();
 
@@ -805,6 +841,11 @@ namespace Wiwa {
 	void ParticleSystem::SetColor(int index, glm::vec4 color)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		
 		if (emitter->m_useNewColorNodes)
 		{
@@ -828,6 +869,11 @@ namespace Wiwa {
 		m_Material = nullptr;
 
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		emitter->m_ActiveTimer = 0;
 	}
 
@@ -847,6 +893,12 @@ namespace Wiwa {
 	void ParticleSystem::Render(Particle& particle)
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
+
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		Renderer3D& r3d = Application::Get().GetRenderer3D();
@@ -952,6 +1004,12 @@ namespace Wiwa {
 	{
 
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
+
 		Transform3D* t3d = GetComponent<Transform3D>();
 
 		glm::vec3 initPosition(0, 0, 0);
@@ -1169,6 +1227,12 @@ namespace Wiwa {
 	void ParticleSystem::SpawnParticleSet()
 	{
 		ParticleEmitterComponent* emitter = GetComponent<ParticleEmitterComponent>();
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
+
 		int spawnAmount = 0;
 
 		if (emitter->m_rangedSpawnAmount)
@@ -1215,6 +1279,11 @@ namespace Wiwa {
 
 	void ParticleSystem::SetEmitterBools(ParticleEmitterComponent* emitter)
 	{
+		if (emitter == nullptr)
+		{
+			WI_CORE_ERROR("No ParticleEmitterComponent detected in Entity: {0}", (int)m_EntityId);
+			return;
+		}
 		FixBool(emitter->m_meshChanged);
 		FixBool(emitter->m_materialChanged);
 		FixBool(emitter->m_loopSpawning);
