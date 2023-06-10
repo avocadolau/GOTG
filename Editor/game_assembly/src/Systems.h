@@ -72,3 +72,5 @@
 
 #include "systems/hub/TargetSystem.h"
 #include "systems/triggers/RewardRoomDisplay.h"
+
+#include "systems/PlayFirstAnimation.h"
