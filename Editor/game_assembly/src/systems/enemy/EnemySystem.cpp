@@ -335,8 +335,8 @@ namespace Wiwa
 				}
 			}
 			// Spawn an item
-			uint32_t chances = RAND(0, 100);
-			
+			std::uniform_int_distribution<> dist(0, 100);
+			uint32_t chances = dist(Wiwa::Application::s_Gen);
 			if (chances <= (uint)GameStateManager::s_EnemyDropChances)
 			{
 				// Chances 09/04/2023 (all inclusive)
@@ -345,30 +345,36 @@ namespace Wiwa
 				// Shield booster 10% = 76 - 85
 				// First aid kit 10% = 86 - 95
 				// Ego's help 5% = 96 - 100
-				chances = RAND(1, 100);
 				Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
-				
+				uint32_t counter = 0;
 				// Healing pills
-				if (chances <= 50)
+				if (IS_DROP_RATE(chances, counter, 50))
 				{
-					GameStateManager::SpawnItem(m_TransformIt, 3, "Healing Pills");
+					GameStateManager::SpawnItem(*t3d, 3, "Healing Pills");
 				}
-				else if (IN_BETWEEN(chances, 51, 75))
+				counter += 50;
+				if (IS_DROP_RATE(chances, counter, 75))
 				{
-					GameStateManager::SpawnItem(m_TransformIt, 3, "Medkit");
+					GameStateManager::SpawnItem(*t3d, 3, "Medkit");
 				}
-				else if (IN_BETWEEN(chances, 76, 85))
+
+				counter += 25;
+				if (IS_DROP_RATE(chances, counter, 85))
 				{
-					GameStateManager::SpawnItem(m_TransformIt, 3, "Shield Booster");
+					GameStateManager::SpawnItem(*t3d, 3, "Shield Booster");
 				}
-				else if (IN_BETWEEN(chances, 86, 95))
+
+				counter += 10;
+				if (IS_DROP_RATE(chances, counter, 95))
 				{
-					GameStateManager::SpawnItem(m_TransformIt, 3, "First Aid Kit");
+					GameStateManager::SpawnItem(*t3d, 3, "First Aid Kit");
 				}
-				else if (IN_BETWEEN(chances, 96, 100))
+				counter += 10;
+				if (IS_DROP_RATE(chances, counter, 100))
 				{
-					GameStateManager::SpawnItem(m_TransformIt, 3, "Ego's Help");
+					GameStateManager::SpawnItem(*t3d, 3, "Ego's Help");
 				}
+				counter += 5;
 			}
 		}
 	}
