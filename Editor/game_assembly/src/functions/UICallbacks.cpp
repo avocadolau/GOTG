@@ -13,6 +13,7 @@
 
 GoToMilanoHub_ GoToMilanoHub()
 {
+	Wiwa::GameStateManager::s_CanContinue = false;
 	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
 	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
 	EntityId parentID = em.GetEntityByName("Parent");
@@ -268,5 +269,19 @@ GoToOutro_ GoToOutro()
 {
 	Wiwa::SceneManager::ChangeSceneByIndex(20);
 	return GoToOutro_();
+}
+
+Continue_ Continue()
+{
+	Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+	Wiwa::GuiManager& gm = Wiwa::SceneManager::getActiveScene()->GetGuiManager();
+	EntityId parentID = em.GetEntityByName("Parent");
+	EntityId shipID = em.GetChildByName(parentID, "Ship");
+	Wiwa::ShipMainMenu* ship = em.GetSystem<Wiwa::ShipMainMenu>(shipID);
+	ship->SetPanToCamera(true);
+	gm.canvas.at(0)->SwapActive();
+	Wiwa::GameMusicManager::StartGame();
+	Wiwa::GameStateManager::Continue();
+	return Continue_();
 }
 

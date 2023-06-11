@@ -231,7 +231,6 @@ void Wiwa::Inventory::Deserialize(JSONDocument* doc)
 	if (doc->HasMember("tokens_howard")) {
 		m_Tokens_Howard = (*doc)["tokens_howard"].as_int();
 	}
-
 }
 
 void Wiwa::Inventory::InitGame()
@@ -352,6 +351,13 @@ void Wiwa::Inventory::AddPassive(const PassiveSkill& skill)
 void Wiwa::Inventory::PushBackPassive(const PassiveSkill& skill)
 {
 	m_PassiveSkill.emplace_back(skill);
+}
+void Wiwa::Inventory::UseAllPassives()
+{
+	for (size_t i = 0; i < m_PassiveSkill.size(); i++)
+	{
+		m_PassiveSkill.at(i).Use();
+	}
 }
 void Wiwa::Inventory::AddConsumable(const Consumable& consumable)
 {
