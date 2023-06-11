@@ -548,5 +548,4 @@ void Wiwa::Inventory::Clear()
 		m_ShopPassives.clear();
 
 	m_Tokens = 0;
-	m_Tokens_Howard = 0;
 }
