@@ -97,18 +97,8 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronSecondDashState::SecondDashState::END_DASH:
 		{
-			/*enemy->m_NavAgentSys->RegisterWithCrowd();
-			enemy->m_NavAgentSys->StopAgent();*/
+			
 			navAgent->autoRotate = true;
-
-		/*	m_TimerAfterDash += Time::GetDeltaTimeSeconds();
-
-			if (m_TimerAfterDash >= 0.5f)
-			{
-				WI_INFO("Dash DONE");
-				m_TimerAfterDash = 0.0f;
-				enemy->SwitchState(enemy->m_MovementState);
-			}*/
 
 			m_TimerAfterDash = 0.0f;
 			enemy->SwitchState(enemy->m_MovementState);

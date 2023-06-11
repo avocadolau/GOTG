@@ -36,7 +36,7 @@ namespace Wiwa
 		m_TimerToLookAtPlayer = 0.0f;
 		m_AlreadyShot = false;
 
-		enemy->m_AnimatorSys->PlayAnimation("shotonearm_anticipation");
+		enemy->m_AnimatorSys->PlayAnimation("onearm_together");
 
 		clusterState = Wiwa::BossUltronClusterShotsAttackState::ClusterState::FIRST_ATTACK;
 	}
@@ -61,7 +61,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("onearm_together");*/
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 				m_AlreadyShot = true;
 			}
@@ -86,7 +86,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("onearm_together");*/
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 				m_AlreadyShot = true;
 			}
@@ -110,7 +110,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("onearm_together");*/
 
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 				m_AlreadyShot = true;
@@ -135,7 +135,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("onearm_together");*/
 
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 				m_AlreadyShot = true;
@@ -160,7 +160,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("onearm_together");*/
 
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 				m_AlreadyShot = true;
@@ -185,7 +185,7 @@ namespace Wiwa
 
 			if (m_TimerToLookAtPlayer >= 1.0f && m_AlreadyShot == false)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("onearm_together");*/
 
 				SpawnClusterBullet(enemy, CalculateForward(*gunTr));
 				m_AlreadyShot = true;
@@ -231,8 +231,6 @@ namespace Wiwa
 
 		Wiwa::ClusterBulletSystem* clusterSystem = entityManager.GetSystem<Wiwa::ClusterBulletSystem>(newBulletId);
 		Wiwa::PhysicsSystem* physSys = entityManager.GetSystem<PhysicsSystem>(newBulletId);
-
-		/*enemy->m_AnimatorSys->PlayAnimation("shotonearm_attack");*/
 
 		enemy->m_AudioSys->PlayAudio("boss_cluster_ball");
 

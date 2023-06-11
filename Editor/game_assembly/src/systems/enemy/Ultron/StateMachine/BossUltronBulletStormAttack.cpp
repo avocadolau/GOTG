@@ -31,9 +31,6 @@ namespace Wiwa
 		{
 			navAgent->autoRotate = false;
 		}
-
-		/*enemy->m_AnimatorSys->PlayAnimation("A_attack_shot");
-		enemy->m_AnimatorSys->getAnimator()->getActiveAnimation()->setLoop(true);*/
 	}
 
 	void BossUltronBulletStormAttackState::UpdateState(BossUltron* enemy)
@@ -127,21 +124,23 @@ namespace Wiwa
 				{
 					if (m_RoundCounter == 1)
 					{
+						enemy->m_AnimatorSys->PlayAnimation("idle");
 						enemy->m_NavAgentSys->SetDestination(glm::vec3(6.0f, 0.0f, -4.0f));
 					}
 
 					else if (m_RoundCounter == 2)
 					{
+						enemy->m_AnimatorSys->PlayAnimation("idle");
 						enemy->m_NavAgentSys->SetDestination(glm::vec3(0.0f, 0.0f, 6.0f));
 					}
 
 					else if (m_RoundCounter == 3)
 					{
+						enemy->m_AnimatorSys->PlayAnimation("idle");
 						enemy->m_NavAgentSys->SetDestination(glm::vec3(-6.0f, 0.0f, -4.0f));
 					}
 
-					/*enemy->m_AudioSys->PlayAudio("boss_normal_shoot");*/
-					enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+					
 					SelectRandomAttack(enemy);
 				}
 			}
@@ -246,8 +245,6 @@ namespace Wiwa
 		float degreeStep = 360.0f / numGroups;
 		float groupDegreeStep = 10.0f; // The angle between bullets in a group
 		float radian = 0.0f;
-
-		
 
 		for (int i = 0; i < numGroups; ++i) 
 		{
@@ -413,14 +410,17 @@ namespace Wiwa
 
 		if (m_SelectRandomAttack == 1)
 		{
+			enemy->m_AnimatorSys->PlayAnimation("normal_together");
 			SpawnFirstPattern(enemy);
 		}
 		if (m_SelectRandomAttack == 2)
 		{
+			/*enemy->m_AnimatorSys->PlayAnimation("normal_together_3");*/
 			SpawnSecondPattern(enemy);
 		}
 		if (m_SelectRandomAttack == 3)
 		{
+			/*enemy->m_AnimatorSys->PlayAnimation("normal_together_3");*/
 			SpawnThirdPattern(enemy);
 		}
 	}

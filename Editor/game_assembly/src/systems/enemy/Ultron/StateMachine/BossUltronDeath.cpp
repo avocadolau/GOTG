@@ -176,7 +176,9 @@ namespace Wiwa
 				//Spawn big final explosion
 				m_FinalDeathExplosionId = em.LoadPrefab(m_DeathExplosionPath4);
 			    Transform3D* explosionTr = em.GetComponent<Transform3D>(m_FinalDeathExplosionId);
-			    explosionTr->localPosition = selfTr->localPosition;
+			    explosionTr->localPosition.x = selfTr->localPosition.x;
+				explosionTr->localPosition.y = selfTr->localPosition.y;
+				explosionTr->localPosition.z = selfTr->localPosition.z - 4.0f;
 
 				m_DeathTimer = 0.0f;
 

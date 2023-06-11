@@ -49,7 +49,8 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 
 		//Posar anim de preparacio
 
-		enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");
+		/*enemy->m_AnimatorSys->PlayAnimation("fiveshot_anticipation");*/
+		enemy->m_AnimatorSys->PlayAnimation("bulletrain_together");
 
 		enemy->m_NavAgentSys->StopAgent();
 
@@ -87,7 +88,8 @@ void Wiwa::BossUltronProjectileRainAttackState::UpdateState(BossUltron* enemy)
 
 			if (m_TimerThundersMark >= 1.1f)
 			{
-				enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");
+				/*enemy->m_AnimatorSys->PlayAnimation("fiveshot_attack");*/
+				enemy->m_AnimatorSys->PlayAnimation("bulletrain_together");
 
 				for (int i = 0; i < m_ThunderMarkIds.size(); ++i) {
 					em.DestroyEntity(m_ThunderMarkIds[i]);

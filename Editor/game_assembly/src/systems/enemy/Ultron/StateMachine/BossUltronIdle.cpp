@@ -23,7 +23,6 @@ namespace Wiwa
 
 		//pman.EmitBatch(currentEnemy);
 
-		//enemy->m_AnimatorSys->PlayAnimation("spawn", false);
 	}
 
 	void BossUltronIdleState::UpdateState(BossUltron* enemy)

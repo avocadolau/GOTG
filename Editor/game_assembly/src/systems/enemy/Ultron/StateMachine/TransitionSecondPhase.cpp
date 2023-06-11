@@ -61,7 +61,7 @@ namespace Wiwa
 			PhysicsSystem* physSysWallRegen = em.GetSystem<PhysicsSystem>(m_RegenWallPrefabId);
 			physSysWallRegen->DeleteBody();
 
-			enemy->m_AnimatorSys->PlayAnimation("walking");
+			enemy->m_AnimatorSys->PlayAnimation("idle");
 
 			selfTr->localRotation = glm::vec3(0.0f, 180.0f, 0.0f);
 

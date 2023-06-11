@@ -83,5 +83,7 @@ namespace Wiwa {
 		bool m_CircularThunderMovementSpawned = false;
 		bool m_CircularMiddleThunder = false;
 		bool m_SplashZigZagMovementSpawned = false;
+		bool m_SplashZigZagAnimation = false;
+		bool m_DoubleClusterAnimation = false;
 	};
 }

@@ -41,7 +41,7 @@ namespace Wiwa
 		interpolatedDashDistance = glm::vec3(0.0f);
 		m_MoveUpwardsCounter = 0.0f;
 
-		enemy->m_AnimatorSys->PlayAnimation("jumpsky");
+		enemy->m_AnimatorSys->PlayAnimation("smash_up_2");
 
 		m_State = DashState::DASH_INIT;
 	}
@@ -137,7 +137,7 @@ namespace Wiwa
 		{
 			em.DestroyEntity(m_PreSmashMarkId);
 
-			enemy->m_AnimatorSys->PlayAnimation("smash");
+			enemy->m_AnimatorSys->PlayAnimation("smash_down");
 
 			enemy->m_NavAgentSys->RegisterWithCrowd();
 			enemy->m_NavAgentSys->SetPosition(playerDistance);

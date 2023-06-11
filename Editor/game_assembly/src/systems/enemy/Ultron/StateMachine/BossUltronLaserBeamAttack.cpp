@@ -39,7 +39,7 @@ namespace Wiwa
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		Transform3D* selfTr = (Transform3D*)em.GetComponentByIterator(enemy->m_TransformIt);
 
-		enemy->m_AnimatorSys->PlayAnimation("jumpsky");
+		enemy->m_AnimatorSys->PlayAnimation("smash_up");
 
 		m_AfterLaserBeamPosition.clear();
 		FillPremadePositionAfterLaser(enemy, m_AfterLaserBeamPosition);
@@ -151,7 +151,7 @@ namespace Wiwa
 		{
 			em.DestroyEntity(m_PreSmashMarkId);
 
-			enemy->m_AnimatorSys->PlayAnimation("smash");
+			enemy->m_AnimatorSys->PlayAnimation("smash_down");
 			enemy->m_AudioSys->PlayAudio("boss_smash_impact");
 
 			enemy->m_NavAgentSys->RegisterWithCrowd();
@@ -170,10 +170,10 @@ namespace Wiwa
 		break;
 		case Wiwa::BossUltronLaserBeamAttackState::LaserState::MOVE_CENTER:
 		{
-			enemy->m_AnimatorSys->PlayAnimation("ray_anticipation");
-
 			enemy->m_NavAgentSys->StopAgent();
 			enemy->m_NavAgentSys->RemoveAgent();
+
+			enemy->m_AnimatorSys->PlayAnimation("ray_together");
 
 			m_TimerLaser = 0.0f;
 			laserState = LaserState::PREPARE_LASER;
@@ -184,8 +184,9 @@ namespace Wiwa
 			/*enemy->m_NavAgentSys->StopAgent();*/
 			enemy->LookAt(playerTr->localPosition, 80.0f);
 
-			if (m_TimerLaser >= 1.0f)
+			if (m_TimerLaser >= 1.5f)
 			{
+				
 				enemy->m_AudioSys->PlayAudio("boss_laser");
 				laserState = LaserState::LASER_ATTACK;
 				m_TimerLaser = 0.0f;
@@ -255,8 +256,6 @@ namespace Wiwa
 		Wiwa::EntityManager& entityManager = enemy->getScene().GetEntityManager();
 		EntityId newBulletId = GameStateManager::s_PoolManager->s_UltronLaserBeamPool->GetFromPool();
 		//entityManager.RemoveSystem(newBulletId, physicsSystemHash);
-
-		enemy->m_AnimatorSys->PlayAnimation("ray_attack");
 
 		if (newBulletId == EntityManager::INVALID_INDEX)
 			return EntityManager::INVALID_INDEX;
