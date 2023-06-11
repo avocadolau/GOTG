@@ -54,7 +54,7 @@ void Wiwa::EndRoomTrigger::OnCollisionExit(Object* body1, Object* body2)
 	if (body1->id == m_EntityId && playerBulletStr == body2->selfTagStr)
 	{
 		gm.canvas.at(9)->SwapActive();
-		m_Activated = true;
+		m_Activated = false;
 	}
 	GameStateManager::setPlayerTriggerNextRoom(false);
 }

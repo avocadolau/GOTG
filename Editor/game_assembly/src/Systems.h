@@ -75,3 +75,4 @@
 
 #include "systems/PlayFirstAnimation.h"
 #include "systems/ContinueLoading.h"
+#include "systems/triggers/InitBossRoom.h"

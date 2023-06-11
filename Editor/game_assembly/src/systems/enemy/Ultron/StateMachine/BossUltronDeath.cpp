@@ -193,6 +193,9 @@ namespace Wiwa
 			if (m_DeathTimer > 2.0f)
 			{
 				em.DestroyEntity(enemy->GetEntity());
+
+				GameStateManager::s_HasFinshedRoom = true;
+				GameStateManager::setCanPassNextRoom(true);
 			}
 		}
 		break;
