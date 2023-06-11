@@ -6,6 +6,7 @@
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/game/Items/ItemManager.h>
 #include <Wiwa/ecs/systems/MeshRenderer.h>
+#include <Wiwa/ecs/systems/AudioSystem.h>
 
 namespace Wiwa
 {
@@ -52,7 +53,9 @@ namespace Wiwa
 				SpawnStarhawkBullet(direction);
 			}
 		}
-
+		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
+		if (audio)
+			audio->PlayAudio("starhawk");
 	}
 
 	void StarhawksBlastSystem::OnUpdate()
