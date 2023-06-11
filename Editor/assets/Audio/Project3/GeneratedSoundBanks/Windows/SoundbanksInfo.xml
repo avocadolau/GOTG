@@ -198,7 +198,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{B41EE122-0309-BCC9-5F4D-71B22AEAC58C}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -914,7 +914,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{F1B1AFFA-4CB8-6A03-F3B9-E58759B423E9}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -1262,5 +1262,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{72EB7A8C-B114-182C-F012-AF1CB48BD081}</FileHash>
+	<FileHash>{369CAB4F-96F1-2E69-1648-0A76739FC310}</FileHash>
 </SoundBanksInfo>
