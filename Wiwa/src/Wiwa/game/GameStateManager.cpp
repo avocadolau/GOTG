@@ -352,6 +352,8 @@ namespace Wiwa
 	{
 		if (debug)
 			WI_INFO("GAME STATE: InitHub()");
+
+		Application::Get().GetRenderer3D().EnableSkybox(true);
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
