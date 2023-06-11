@@ -72,8 +72,9 @@
     "mantis",
     "phyla_sword",
     "starhawk",
-    "yondus_fin"
-
+    "yondus_fin",
+    "ranged_spawn",
+    "melee_spawn"
   ],
     "init_path": "library\\audio\\banks\\init.bnk"
 }

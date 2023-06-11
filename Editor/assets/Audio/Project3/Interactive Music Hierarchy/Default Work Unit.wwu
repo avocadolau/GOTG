@@ -2876,11 +2876,11 @@
 														</Reference>
 													</ReferenceList>
 													<ChildrenList>
-														<AudioFileSource Name="IntroSceneAudio" ID="{7D5D5477-EF99-4BFC-80BC-57DF7AB24576}">
+														<AudioFileSource Name="(Only Audio) GotGB4tU Intro Scene - FINAL VERSION" ID="{450FF8BE-02BB-4D93-8DBA-3F5174DDE7C4}">
 															<Language>SFX</Language>
-															<AudioFile>IntroSceneAudio.wav</AudioFile>
+															<AudioFile>(Only Audio) GotGB4tU Intro Scene - FINAL VERSION.wav</AudioFile>
 															<MediaIDList>
-																<MediaID ID="424263943"/>
+																<MediaID ID="927170838"/>
 															</MediaIDList>
 														</AudioFileSource>
 													</ChildrenList>
@@ -2901,13 +2901,13 @@
 																			<ObjectList Name="Clips">
 																				<Reference>
 																					<Local>
-																						<MusicClip Name="IntroSceneAudio" ID="{9B9A1448-79EA-493C-96EE-BA5CEA5B36C8}">
+																						<MusicClip Name="(Only Audio) GotGB4tU Intro Scene - FINAL VERSION" ID="{7FA0E5CF-A10D-4DED-A156-5A50ACF7EA66}">
 																							<PropertyList>
-																								<Property Name="EndTrimOffset" Type="Real64" Value="59359.2970521542"/>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="63797.052154195"/>
 																								<Property Name="FadeInMode" Type="int16" Value="0"/>
 																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
 																							</PropertyList>
-																							<AudioSourceRef Name="IntroSceneAudio" ID="{7D5D5477-EF99-4BFC-80BC-57DF7AB24576}"/>
+																							<AudioSourceRef Name="(Only Audio) GotGB4tU Intro Scene - FINAL VERSION" ID="{450FF8BE-02BB-4D93-8DBA-3F5174DDE7C4}"/>
 																						</MusicClip>
 																					</Local>
 																				</Reference>
@@ -2932,7 +2932,7 @@
 															<MusicCue Name="Exit Cue" ID="{03F0193D-C381-4E54-85A3-E32F7D83DF5C}">
 																<PropertyList>
 																	<Property Name="CueType" Type="int16" Value="1"/>
-																	<Property Name="TimeMs" Type="Real64" Value="4965.51020408163"/>
+																	<Property Name="TimeMs" Type="Real64" Value="64000"/>
 																</PropertyList>
 															</MusicCue>
 														</Local>

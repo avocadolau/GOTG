@@ -424,6 +424,73 @@
 												</Sound>
 											</ChildrenList>
 										</RandomSequenceContainer>
+										<RandomSequenceContainer Name="phalanx_melee_spawn" ID="{31A2911F-03FD-4363-8A1F-1140AB8B9B31}" ShortID="542237157">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="Spawners" ID="{E4D2E369-3F72-4241-8E9C-42E0BC644A4F}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_phalanx02_spawn01" ID="{EC534FFE-7CB7-4D6A-81A9-879303A07DEB}" ShortID="317721963">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_spawn01" ID="{D359E1AA-4780-481E-8954-8E4ADBE58489}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_spawn01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="220825023"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_spawn01" ID="{D359E1AA-4780-481E-8954-8E4ADBE58489}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx02_spawn02" ID="{BE29ED68-45E7-4931-B378-6930E99F2A4E}" ShortID="141754213">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx02_spawn02" ID="{EE661622-6939-4651-9526-17C59F5B92C9}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx02_spawn02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="42867233"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx02_spawn02" ID="{EE661622-6939-4651-9526-17C59F5B92C9}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
 									</ChildrenList>
 								</Folder>
 							</ChildrenList>
@@ -864,6 +931,73 @@
 													</ChildrenList>
 													<ActiveSourceList>
 														<ActiveSource Name="vo_phalanx01_hit05" ID="{5EE24E8D-EE95-48FE-86A3-761620480815}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+											</ChildrenList>
+										</RandomSequenceContainer>
+										<RandomSequenceContainer Name="phalanx_ranged_spawn" ID="{BA6789F1-2349-4BDA-B1A2-AFC1ADC4C30B}" ShortID="665554835">
+											<PropertyList>
+												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-4</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Attenuation">
+													<ObjectRef Name="Spawners" ID="{E4D2E369-3F72-4241-8E9C-42E0BC644A4F}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+												</Reference>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<Sound Name="vo_phalanx01_spawn01" ID="{5444818A-5BC8-4F4A-9E88-F5A3D1FD87DA}" ShortID="287425366">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_spawn01" ID="{E0431BB3-AF3C-4CD8-8AED-E43EF4EFEBDC}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_spawn01.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="796902273"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_spawn01" ID="{E0431BB3-AF3C-4CD8-8AED-E43EF4EFEBDC}" Platform="Linked"/>
+													</ActiveSourceList>
+												</Sound>
+												<Sound Name="vo_phalanx01_spawn02" ID="{0FE17BD0-1DFF-401C-B642-7878645C28D5}" ShortID="1027917035">
+													<ReferenceList>
+														<Reference Name="Conversion">
+															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+														</Reference>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="vo_phalanx01_spawn02" ID="{8F9BD047-31D8-4A77-A4E2-16BA03CD2E12}">
+															<Language>SFX</Language>
+															<AudioFile>vo_phalanx01_spawn02.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="503577850"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<ActiveSourceList>
+														<ActiveSource Name="vo_phalanx01_spawn02" ID="{8F9BD047-31D8-4A77-A4E2-16BA03CD2E12}" Platform="Linked"/>
 													</ActiveSourceList>
 												</Sound>
 											</ChildrenList>
@@ -3390,7 +3524,7 @@
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Attenuation">
-													<ObjectRef Name="enviroment" ID="{B354E5A1-F7C9-4497-A68F-D2095DB34244}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
+													<ObjectRef Name="Spawners" ID="{E4D2E369-3F72-4241-8E9C-42E0BC644A4F}" WorkUnitID="{524F4200-A673-4096-953E-5F376B1AE716}"/>
 												</Reference>
 												<Reference Name="Conversion">
 													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
