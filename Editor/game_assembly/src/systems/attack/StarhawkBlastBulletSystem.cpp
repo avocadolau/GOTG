@@ -62,9 +62,7 @@ namespace Wiwa
 		//	physSystem->DeactivateBody();
 		//}
 
-		AudioSystem* audio = em.GetSystem<Wiwa::AudioSystem>(m_EntityId);
-		if (audio)
-			audio->PlayAudio("starhawk");
+
 	}
 
 	void StarhawkBlastBulletSystem::OnUpdate()
