@@ -41,7 +41,9 @@ namespace Wiwa
 
 			m_ExplosionMarkId = em.LoadPrefab(m_ExplosionMarkPath);
 			Transform3D* explosionMarkTr = em.GetComponent<Transform3D>(m_ExplosionMarkId);
-			explosionMarkTr->localPosition = selfTr->localPosition;
+			explosionMarkTr->localPosition.x = selfTr->localPosition.x;
+			explosionMarkTr->localPosition.y = selfTr->localPosition.y + 0.1f;
+			explosionMarkTr->localPosition.z = selfTr->localPosition.z;
 
 			//Destroy the barrel
 			em.DestroyEntity(m_EntityId);
