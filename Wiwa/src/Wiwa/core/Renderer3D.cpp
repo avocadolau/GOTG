@@ -606,6 +606,7 @@ namespace Wiwa
 		"resources/images/skybox/main_menu/back.png" };
 		m_DefaultSkybox.LoadCubemap(main_menu);
 
+		SkyboxEnabled = true;
 
 
 		// Init orthographic projection
@@ -1346,6 +1347,10 @@ namespace Wiwa
 
 	void Renderer3D::RenderSkybox()
 	{
+
+		if (!SkyboxEnabled)
+			return;
+
 		{
 			Scene* scene = SceneManager::getActiveScene();
 			CameraManager& cm = scene->GetCameraManager();
@@ -1518,6 +1523,11 @@ namespace Wiwa
 		}
 		camera->frameBuffer->Unbind();
 	}
+	void Renderer3D::EnableSkybox(bool enabled)
+	{
+		SkyboxEnabled = enabled;
+	}
+
 	void Renderer3D::SetUpLight(Wiwa::Shader *matShader, Wiwa::Camera *camera, const size_t &directional, const std::vector<size_t> &pointLights, const std::vector<size_t> &spotLights)
 	{
 		matShader->setUniform(matShader->LightLocations.CameraLoc, camera->getPosition());

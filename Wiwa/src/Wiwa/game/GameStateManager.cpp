@@ -12,6 +12,7 @@
 #include <Wiwa/ecs/systems/game/wave/WaveSystem.h>
 #include <Wiwa/ecs/systems/ParticleSystem.h>
 #include <Wiwa/ecs/systems/PhysicsSystem.h>
+#include <Wiwa/core/Renderer3D.h>
 
 namespace Wiwa
 {
@@ -328,6 +329,8 @@ namespace Wiwa
 		StartNewRoom();
 		RandomizeRewardRoom();
 		s_PlayerTriggerNext = false;
+
+		Application::Get().GetRenderer3D().EnableSkybox(false);
 	}
 
 	void GameStateManager::EndRun()
@@ -338,6 +341,8 @@ namespace Wiwa
 
 		s_PlayerInventory->Clear();
 		s_GameProgression->Clear();
+
+		Application::Get().GetRenderer3D().EnableSkybox(true);
 	}
 
 	void GameStateManager::InitHub()

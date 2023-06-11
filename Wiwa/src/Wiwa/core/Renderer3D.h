@@ -111,6 +111,8 @@ namespace Wiwa {
 			size_t size_;
 		};
 		ScratchBuffer scratch_buffer_;
+
+		bool SkyboxEnabled;
 	public:
 		Renderer3D();
 		~Renderer3D();
@@ -181,6 +183,7 @@ namespace Wiwa {
 
 		void RenderSkybox();
 
+		void EnableSkybox(bool enabled);
 
 		void Close();
 
@@ -194,5 +197,6 @@ namespace Wiwa {
 		glm::mat4 GetPersProjection() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getProjection(); }
 
 		glm::mat4 GetView() { return SceneManager::getActiveScene()->GetCameraManager().getActiveCamera()->getView(); }
+
 	};
 }
