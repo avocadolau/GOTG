@@ -53,6 +53,8 @@ namespace Wiwa {
 
 		static void LoadSceneJob(Wiwa::Scene* scene, Wiwa::Memory& scene_data);
 		static void LoadingScreenJob();
+		static void ReLoadTransition();
+
 	public:
 		enum LoadFlags {
 			// Unloads current scene
@@ -112,6 +114,7 @@ namespace Wiwa {
 
 		// Unload a scene id
 		static void UnloadScene(SceneId scene_id, bool unload_resources=true);
+
 
 		static bool isLoadingScene;
 	};

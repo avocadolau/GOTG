@@ -60,55 +60,7 @@ namespace Wiwa
 		m_InstanceRenderer = new InstanceRenderer(10);
 
 		m_InstanceRenderer->Init("resources/shaders/instanced_tex_color");
-		ResourceId background_image_id_starlord = WI_INVALID_INDEX;
-		ResourceId background_image_id_rocket = WI_INVALID_INDEX;
-
-		background_image_id_starlord = Resources::Load<Wiwa::Image>("assets/HudImages/transition/UI_LoadingScreen_01a.png");
-		background_image_id_rocket = Resources::Load<Wiwa::Image>("assets/HudImages/transition/UI_LoadingScreen_01b.png");
-
-
-		Image* background_img_starlord = Resources::GetResourceById<Image>(background_image_id_starlord);
-		Size2i size_background_starlord = { 2048,2048 };
-		Rect2i clip_background_starlord = {
-			0, 0, 
-			size_background_starlord.w, size_background_starlord.h
-		};
-
-		TextureClip tclip_background_starlord = Renderer2D::CalculateTextureClip(clip_background_starlord, size_background_starlord);
-
-		Image* background_img_rocket = Resources::GetResourceById<Image>(background_image_id_rocket);
-		Size2i size_background_rocket = { 2048,2048 };
-		Rect2i clip_background_rocket = {
-			0, 0,
-			size_background_rocket.w, size_background_rocket.h
-		};
-
-		TextureClip tclip_background_rocket = Renderer2D::CalculateTextureClip(clip_background_rocket, size_background_rocket);
-
-		ResourceId progress_dot_id = Resources::Load<Wiwa::Image>("assets/HudImages/transition/UI_LoadingDot_01.png");
-
-		Image* progress_dot_img = Resources::GetResourceById<Image>(progress_dot_id);
-		Size2i size_dot = { 64,64 };
-		Rect2i clip_dot = {
-			0, 0,
-			size_dot.w, size_dot.h
-		};
-
-		TextureClip tclip_dot1 = Renderer2D::CalculateTextureClip(clip_dot, size_dot);
-
-		m_ProgressDot1 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1600,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
-		m_ProgressDot2 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1700,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
-		m_ProgressDot3 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1800,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
-		m_BackGround_Starlord = m_InstanceRenderer->AddInstance(background_img_starlord->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background_starlord, Renderer2D::Pivot::UPLEFT);
-		m_BackGround_Rocket = m_InstanceRenderer->AddInstance(background_img_rocket->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background_rocket, Renderer2D::Pivot::UPLEFT);
-
-		m_InstanceRenderer->DisableInstance(m_BackGround_Starlord);
-		m_InstanceRenderer->DisableInstance(m_BackGround_Rocket);
-		m_InstanceRenderer->DisableInstance(m_ProgressDot1);
-		m_InstanceRenderer->DisableInstance(m_ProgressDot2);
-		m_InstanceRenderer->DisableInstance(m_ProgressDot3);
-
-
+		ReLoadTransition();
 	}
 
 	void SceneManager::ModuleUpdate()
@@ -118,6 +70,7 @@ namespace Wiwa
 		if (m_LoadScene) {
 			m_ActiveScene = LoadScene(m_LoadPath.c_str(), m_LoadFlags);
 			GameMusicManager::OnSceneChage(m_LoadPath.c_str());
+
 			m_LoadScene = false;
 		}
 
@@ -569,15 +522,14 @@ namespace Wiwa
 			
 			Wiwa::Application::Get().GetRenderer2D().RenderInstanced(*m_InstanceRenderer);
 			Wiwa::RenderManager::UpdateSingle(1);
-			if (m_LoadingProgress >12)
-			{
-				m_InstanceRenderer->DisableInstance(m_ProgressDot1);
-				m_InstanceRenderer->DisableInstance(m_ProgressDot2);
-				m_InstanceRenderer->DisableInstance(m_ProgressDot3);
-			}
 			// Swap buffers
 			Wiwa::Application::Get().GetWindow().OnUpdate();
 		}
+
+		m_InstanceRenderer->DisableInstance(m_ProgressDot1);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot2);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot3);
+
 		Wiwa::RenderManager::SetRenderOnMainWindow(romw);
 
 		// Unbind context from this thread
@@ -854,6 +806,57 @@ namespace Wiwa
 		m_Scenes[scene_id] = nullptr;
 
 		m_RemovedSceneIds.push_back(scene_id);
+	}
+
+	void SceneManager::ReLoadTransition()
+	{
+		ResourceId background_image_id_starlord = WI_INVALID_INDEX;
+		ResourceId background_image_id_rocket = WI_INVALID_INDEX;
+
+		background_image_id_starlord = Resources::LoadNative<Wiwa::Image>("resources/images/transitions/UI_LoadingScreen_01a.png");
+		background_image_id_rocket = Resources::LoadNative<Wiwa::Image>("resources/images/transitions/UI_LoadingScreen_01b.png");
+
+
+		Image* background_img_starlord = Resources::GetResourceById<Image>(background_image_id_starlord);
+		Size2i size_background_starlord = { 2048,2048 };
+		Rect2i clip_background_starlord = {
+			0, 0,
+			size_background_starlord.w, size_background_starlord.h
+		};
+
+		TextureClip tclip_background_starlord = Renderer2D::CalculateTextureClip(clip_background_starlord, size_background_starlord);
+
+		Image* background_img_rocket = Resources::GetResourceById<Image>(background_image_id_rocket);
+		Size2i size_background_rocket = { 2048,2048 };
+		Rect2i clip_background_rocket = {
+			0, 0,
+			size_background_rocket.w, size_background_rocket.h
+		};
+
+		TextureClip tclip_background_rocket = Renderer2D::CalculateTextureClip(clip_background_rocket, size_background_rocket);
+
+		ResourceId progress_dot_id = Resources::LoadNative<Wiwa::Image>("resources/images/transitions/UI_LoadingDot_01.png");
+
+		Image* progress_dot_img = Resources::GetResourceById<Image>(progress_dot_id);
+		Size2i size_dot = { 64,64 };
+		Rect2i clip_dot = {
+			0, 0,
+			size_dot.w, size_dot.h
+		};
+
+		TextureClip tclip_dot1 = Renderer2D::CalculateTextureClip(clip_dot, size_dot);
+
+		m_ProgressDot1 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1600,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
+		m_ProgressDot2 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1700,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
+		m_ProgressDot3 = m_InstanceRenderer->AddInstance(progress_dot_img->GetTextureId(), { 1800,890 }, { 64,64 }, Wiwa::Color::WHITE, tclip_dot1, Renderer2D::Pivot::UPLEFT);
+		m_BackGround_Starlord = m_InstanceRenderer->AddInstance(background_img_starlord->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background_starlord, Renderer2D::Pivot::UPLEFT);
+		m_BackGround_Rocket = m_InstanceRenderer->AddInstance(background_img_rocket->GetTextureId(), { 0,0 }, { 2048,2048 }, Wiwa::Color::WHITE, tclip_background_rocket, Renderer2D::Pivot::UPLEFT);
+
+		m_InstanceRenderer->DisableInstance(m_BackGround_Starlord);
+		m_InstanceRenderer->DisableInstance(m_BackGround_Rocket);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot1);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot2);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot3);
 	}
 
 	void SceneManager::SetScene(SceneId sceneId, bool init)
