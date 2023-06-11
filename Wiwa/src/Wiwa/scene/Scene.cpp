@@ -127,7 +127,8 @@ namespace Wiwa
 				m_TransitionTimer = 0;
 
 				m_CurrentState = SCENE_LOOP;
-				
+				SceneManager::FixSceneLoading();
+
 				Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 				r2d.DisableInstance(this, m_TransitionInstance);
@@ -190,9 +191,8 @@ namespace Wiwa
 			
 			if (m_TransitionTimer >= mMaxTimeLeaving) {
 				m_TransitionTimer = 0;
-
+				SceneManager::FixSceneLoading();
 				Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
 				r2d.DisableInstance(this, m_TransitionInstance);
 
 				SceneManager::LoadSceneByIndex(m_SceneToChange, m_SceneChangeFlags);

@@ -494,6 +494,12 @@ namespace Wiwa
 
 		Wiwa::RenderManager::SetRenderOnMainWindow(true);
 
+		m_InstanceRenderer->DisableInstance(m_BackGround_Rocket);
+		m_InstanceRenderer->DisableInstance(m_BackGround_Starlord);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot1);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot2);
+		m_InstanceRenderer->DisableInstance(m_ProgressDot3);
+
 		while (!m_LoadedScene) {
 			if (GameStateManager::s_CurrentCharacter == 0)
 			{
@@ -808,6 +814,17 @@ namespace Wiwa
 		m_RemovedSceneIds.push_back(scene_id);
 	}
 
+	void SceneManager::FixSceneLoading()
+	{
+		if (GameStateManager::s_CurrentCharacter == 0)
+		{
+			m_InstanceRenderer->EnableInstance(m_BackGround_Starlord);
+		}
+		else if (GameStateManager::s_CurrentCharacter == 1)
+		{
+			m_InstanceRenderer->EnableInstance(m_BackGround_Rocket);
+		}
+	}
 	void SceneManager::ReLoadTransition()
 	{
 		ResourceId background_image_id_starlord = WI_INVALID_INDEX;
