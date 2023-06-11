@@ -207,9 +207,10 @@ namespace Wiwa
 		if (randomNum <= 20) // 20 % probability
 		{
 			m_AudioSys->PlayAudio("vo_boss_hit");
+			m_AnimatorSys->PlayAnimation("hit");
 		}
 
-		m_AnimatorSys->PlayAnimation("hit");
+		
 	}
 
 	void BossUltron::SwitchState(BossUltronBaseState* state)
