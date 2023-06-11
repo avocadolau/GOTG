@@ -732,7 +732,7 @@ namespace Wiwa
 		}
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
-			SceneManager::ChangeSceneByIndex(s_HUBRoomIndx);
+			SceneManager::ChangeSceneByIndex(20);
 			//SceneManager::LoadSceneByIndex(s_HUBRoomIndx);
 			break;
 		}
