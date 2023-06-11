@@ -21,7 +21,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 
-		enemy->m_AudioSys->PlayAudio("spawn");
+		enemy->m_AudioSys->PlayAudio("ranged_spawn");
 		EntityId currentEnemy = enemy->GetEntity();
 		enemy->m_AnimatorSys->PlayAnimation("spawn");
 	}

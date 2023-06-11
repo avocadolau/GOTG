@@ -22,7 +22,7 @@ namespace Wiwa
 	{
 		Wiwa::EntityManager& em = enemy->getScene().GetEntityManager();
 		EntityId currentEnemy = enemy->GetEntity();
-		enemy->m_AudioSys->PlayAudio("spawn");
+		enemy->m_AudioSys->PlayAudio("melee_spawn");
 		enemy->m_AnimatorSys->PlayAnimation("spawn");
 	}
 

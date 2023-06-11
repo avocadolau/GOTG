@@ -40,6 +40,17 @@
 										</Action>
 									</ChildrenList>
 								</Event>
+								<Event Name="melee_spawn" ID="{E3C21203-461C-437E-ACC9-6D29E248AF46}">
+									<ChildrenList>
+										<Action Name="" ID="{9BB26B87-5161-4E27-BEC1-A4FF228B2E7B}" ShortID="393879483">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="phalanx_melee_spawn" ID="{31A2911F-03FD-4363-8A1F-1140AB8B9B31}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="ranged" ID="{59D66D52-1936-4559-9003-739179050936}" ShortID="204451734">
@@ -72,6 +83,17 @@
 											<ReferenceList>
 												<Reference Name="Target">
 													<ObjectRef Name="phalanx_ranged_attack" ID="{C64ADEA5-BB6F-4CDB-A83E-A774844F3AD1}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="ranged_spawn" ID="{F2299759-FAB6-4413-8FD0-4F7F293D57BB}">
+									<ChildrenList>
+										<Action Name="" ID="{532DBD2D-9F9F-42CE-BF97-2565289E60B7}" ShortID="947986614">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="phalanx_ranged_spawn" ID="{BA6789F1-2349-4BDA-B1A2-AFC1ADC4C30B}" WorkUnitID="{23BED1FE-4C17-40E7-AB20-3A0CD789AC19}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
