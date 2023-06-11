@@ -213,6 +213,13 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_death01" ID="{8C64F3B8-4C9C-48EF-9FCB-081AA485E618}">
+															<PropertyList>
+																<Property Name="FadeInDuration" Type="Real64" Value="0.0439907704654895"/>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.226238248108233"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.261849824199342"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.68918873729267"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_death01.wav</AudioFile>
 															<MediaIDList>
@@ -235,6 +242,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_death02" ID="{8EFE7A89-B329-49C0-BB33-ED8758E1621A}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.274725980279752"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.490945501796224"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.99460979897577"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_death02.wav</AudioFile>
 															<MediaIDList>
@@ -257,6 +270,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_death03" ID="{F7883839-C88A-4103-ADF3-C14D66A62C47}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.966746827944661"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.211030281026268"/>
+																<Property Name="TrimEnd" Type="Real64" Value="1.17777710897093"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_death03.wav</AudioFile>
 															<MediaIDList>
@@ -301,6 +320,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_hit01" ID="{9FD6C984-59AB-4451-A093-953843EBDD19}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.21163373589136"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.436961419399221"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.648595155290581"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_hit01.wav</AudioFile>
 															<MediaIDList>
@@ -323,6 +348,13 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_hit02" ID="{4BCE5613-C3E8-449A-8EAB-427E8EFBB943}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.0908994496675077"/>
+																<Property Name="LoopBegin" Type="Real64" Value="0.751986356340289"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.535480394404953"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.695793969273103"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_hit02.wav</AudioFile>
 															<MediaIDList>
@@ -345,6 +377,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_hit03" ID="{2369726B-542D-4066-AFEC-DF8B8F3E875E}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.100450966903615"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.185834288771689"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.36999439476165"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_hit03.wav</AudioFile>
 															<MediaIDList>
@@ -367,6 +405,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx02_hit04" ID="{5D56E19D-AE8B-4BAB-B393-9380A8BA5213}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.281264236031492"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.218160080511605"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.499424316543098"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx02_hit04.wav</AudioFile>
 															<MediaIDList>
@@ -420,6 +464,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="phalanx_ranged_death(No sabemos)" ID="{8A31DDFB-62F2-469B-B2EF-20D8DEB02D71}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="1.68833646418539"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="1.68833646418539"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos).wav</AudioFile>
 											<MediaIDList>
@@ -466,9 +515,9 @@
 									<ChildrenList>
 										<AudioFileSource Name="phalanx_ranged_hit" ID="{FCD5F372-23BF-40EF-8B29-A4B3F01F1CFC}">
 											<PropertyList>
-												<Property Name="FadeOutDuration" Type="Real64" Value="0.630695312499999"/>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.330925541253287"/>
 												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
-												<Property Name="TrimEnd" Type="Real64" Value="0.691690990691489"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.403078631140927"/>
 											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</AudioFile>
@@ -555,6 +604,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_death01" ID="{04C8C3B0-C7D3-4D24-9284-4F12532CE67C}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.458830543453337"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.154138385691355"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.706168883283651"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_death01.wav</AudioFile>
 															<MediaIDList>
@@ -577,6 +632,13 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_death02" ID="{65244B16-D600-4336-A1D7-46CF36B70C9F}">
+															<PropertyList>
+																<Property Name="FadeInDuration" Type="Real64" Value="0.041099136283727"/>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.507574333104029"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.189056026905144"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.976104486738517"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_death02.wav</AudioFile>
 															<MediaIDList>
@@ -599,6 +661,13 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_death03" ID="{ECB9CB99-F948-4E68-B90A-E64F5417CCB4}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.789011184998344"/>
+																<Property Name="LoopBegin" Type="Real64" Value="1.35471731763867"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.172689240490204"/>
+																<Property Name="TrimEnd" Type="Real64" Value="1.15820887156361"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_death03.wav</AudioFile>
 															<MediaIDList>
@@ -621,6 +690,10 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_death04" ID="{F4478344-FC36-48C7-A0BB-6799EEECD1D7}">
+															<PropertyList>
+																<Property Name="LoopBegin" Type="Real64" Value="1.16320756579785"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_death04.wav</AudioFile>
 															<MediaIDList>
@@ -666,6 +739,11 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_hit01" ID="{B0E60AA5-0B90-4EC6-98F9-AFB6042FFD00}">
+															<PropertyList>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.234026663099697"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.421247993579454"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_hit01.wav</AudioFile>
 															<MediaIDList>
@@ -688,6 +766,11 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_hit02" ID="{B6F37350-9505-45E6-BD41-690D60E9F984}">
+															<PropertyList>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.273949909551836"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.553462253815384"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_hit02.wav</AudioFile>
 															<MediaIDList>
@@ -710,6 +793,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_hit03" ID="{A885E8B3-F990-4682-B6BD-5E8E1254B265}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.213447476368825"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.154435527019797"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.367883003388622"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_hit03.wav</AudioFile>
 															<MediaIDList>
@@ -732,6 +821,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_hit04" ID="{3681342F-A7CA-4071-858D-3CABDBF089EF}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.296816097225407"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.258729075900023"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.55554517312543"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_hit04.wav</AudioFile>
 															<MediaIDList>
@@ -754,6 +849,12 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_phalanx01_hit05" ID="{5EE24E8D-EE95-48FE-86A3-761620480815}">
+															<PropertyList>
+																<Property Name="FadeOutDuration" Type="Real64" Value="0.254967069224694"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.0696855333893857"/>
+																<Property Name="TrimEnd" Type="Real64" Value="0.324652602614079"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_phalanx01_hit05.wav</AudioFile>
 															<MediaIDList>
@@ -4183,7 +4284,7 @@
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -4200,12 +4301,19 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Groot_s Seeds" ID="{F479615A-44D0-42E3-AA5B-D75D70EA688B}" ShortID="450432681">
+									<PropertyList>
+										<Property Name="MakeUpGain" Type="Real64">
+											<ValueList>
+												<Value>3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -4227,7 +4335,7 @@
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -4249,7 +4357,7 @@
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -4271,7 +4379,7 @@
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
@@ -4293,7 +4401,7 @@
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
 										</Reference>
 										<Reference Name="OutputBus">
-											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+											<ObjectRef Name="Enviromental" ID="{006AFEB5-84C9-4358-B368-07554B020416}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
