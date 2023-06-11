@@ -914,7 +914,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{F1B1AFFA-4CB8-6A03-F3B9-E58759B423E9}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{43281F8A-44A5-57AC-0DA2-9964DF830A59}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
@@ -936,11 +936,11 @@
 				</File>
 				<File Id="149837127" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_hit02.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_hit02_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_hit02_654D6F75.wem</CachePath>
 				</File>
 				<File Id="182229679" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_death03.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_death03_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_death03_6E7978CE.wem</CachePath>
 				</File>
 				<File Id="233384674" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack03.wav</ShortName>
@@ -948,7 +948,7 @@
 				</File>
 				<File Id="236665109" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_hit03.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_hit03_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_hit03_D9774B77.wem</CachePath>
 				</File>
 				<File Id="241674995" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Sci Fi Explosion 07.wav</ShortName>
@@ -956,7 +956,7 @@
 				</File>
 				<File Id="248845082" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_hit03.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_hit03_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_hit03_78AF7389.wem</CachePath>
 				</File>
 				<File Id="254107624" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_attack.wav</ShortName>
@@ -964,7 +964,7 @@
 				</File>
 				<File Id="337278033" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_death02.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_death02_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_death02_DF91336A.wem</CachePath>
 				</File>
 				<File Id="346607997" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_spawn.wav</ShortName>
@@ -976,11 +976,11 @@
 				</File>
 				<File Id="377792045" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_hit02.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_hit02_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_hit02_94674210.wem</CachePath>
 				</File>
 				<File Id="405614476" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_death01.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_death01_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_death01_E1AA53C0.wem</CachePath>
 				</File>
 				<File Id="432546607" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterball_xplosion.wav</ShortName>
@@ -988,11 +988,11 @@
 				</File>
 				<File Id="490304946" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_hit05.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_hit05_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_hit05_A9CD13F3.wem</CachePath>
 				</File>
 				<File Id="536524637" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_hit01.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_hit01_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_hit01_8D3AC37A.wem</CachePath>
 				</File>
 				<File Id="574236853" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack01.wav</ShortName>
@@ -1004,11 +1004,11 @@
 				</File>
 				<File Id="611891721" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_death03.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_death03_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_death03_1B223C5E.wem</CachePath>
 				</File>
 				<File Id="684000331" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_hit01.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_hit01_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_hit01_246DA543.wem</CachePath>
 				</File>
 				<File Id="689284067" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>jubjugator_shoot.wav</ShortName>
@@ -1028,7 +1028,7 @@
 				</File>
 				<File Id="935376756" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx02_hit04.wav</ShortName>
-					<CachePath>SFX/vo_phalanx02_hit04_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx02_hit04_632EFC15.wem</CachePath>
 				</File>
 				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
@@ -1052,7 +1052,7 @@
 				</File>
 				<File Id="1015323904" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_death01.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_death01_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_death01_EAF1F72E.wem</CachePath>
 				</File>
 				<File Id="1024819660" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit01.wav</ShortName>
@@ -1060,7 +1060,7 @@
 				</File>
 				<File Id="1047127182" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_death02.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_death02_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_death02_FF3B6392.wem</CachePath>
 				</File>
 				<File Id="1061623375" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_death02.wav</ShortName>
@@ -1068,7 +1068,7 @@
 				</File>
 				<File Id="1063701881" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>vo_phalanx01_hit04.wav</ShortName>
-					<CachePath>SFX/vo_phalanx01_hit04_10C4C929.wem</CachePath>
+					<CachePath>SFX/vo_phalanx01_hit04_9663137F.wem</CachePath>
 				</File>
 				<File Id="1069540054" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_smash01.wav</ShortName>
@@ -1262,5 +1262,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{72EB7A8C-B114-182C-F012-AF1CB48BD081}</FileHash>
+	<FileHash>{0A2138B6-85A7-1DB2-63F5-D7834E82D6EF}</FileHash>
 </SoundBanksInfo>
