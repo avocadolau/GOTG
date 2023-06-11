@@ -120,6 +120,7 @@ namespace Wiwa
 			ugs = nullptr;
 			UpdateEnter();
 			RenderEnter();
+			SceneManager::FixSceneLoading();
 
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
 			
@@ -127,7 +128,6 @@ namespace Wiwa
 				m_TransitionTimer = 0;
 
 				m_CurrentState = SCENE_LOOP;
-				SceneManager::FixSceneLoading();
 
 				Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
@@ -186,12 +186,12 @@ namespace Wiwa
 
 			UpdateLeave();
 			RenderLeave();
+			SceneManager::FixSceneLoading();
 
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
 			
 			if (m_TransitionTimer >= mMaxTimeLeaving) {
 				m_TransitionTimer = 0;
-				SceneManager::FixSceneLoading();
 				Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 				r2d.DisableInstance(this, m_TransitionInstance);
 
