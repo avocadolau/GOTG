@@ -1337,8 +1337,8 @@ namespace Wiwa
 
 		GL(BindVertexArray(0));
 
-		material->UnBind(GL_TEXTURE1);
 		camera->shadowBuffer->UnbindTexture();
+		material->UnBind(GL_TEXTURE1);
 
 		camera->frameBuffer->Unbind();
 
