@@ -120,6 +120,7 @@ namespace Wiwa
 			ugs = nullptr;
 			UpdateEnter();
 			RenderEnter();
+			SceneManager::FixSceneLoading();
 
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
 			
@@ -127,7 +128,7 @@ namespace Wiwa
 				m_TransitionTimer = 0;
 
 				m_CurrentState = SCENE_LOOP;
-				
+
 				Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 				r2d.DisableInstance(this, m_TransitionInstance);
@@ -185,14 +186,13 @@ namespace Wiwa
 
 			UpdateLeave();
 			RenderLeave();
+			SceneManager::FixSceneLoading();
 
 			m_TransitionTimer += (size_t)Wiwa::Time::GetRealDeltaTime();
 			
 			if (m_TransitionTimer >= mMaxTimeLeaving) {
 				m_TransitionTimer = 0;
-
 				Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
-
 				r2d.DisableInstance(this, m_TransitionInstance);
 
 				SceneManager::LoadSceneByIndex(m_SceneToChange, m_SceneChangeFlags);
@@ -281,21 +281,21 @@ namespace Wiwa
 	void Scene::UpdateEnter()
 	{
 		
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		/*Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		r2d.EnableInstance(this, m_TransitionInstance);
+		r2d.EnableInstance(this, m_TransitionInstance);*/
 	}
 
 	void Scene::UpdateLeave()
 	{
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		/*Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
-		r2d.EnableInstance(this, m_TransitionInstance);
+		r2d.EnableInstance(this, m_TransitionInstance);*/
 	}
 
 	void Scene::RenderEnter()
 	{
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		/*Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		float perc = m_TransitionTimer / (float)mMaxTimeEntering;
 		int w = (int)(256.f * (1.0f - perc));
@@ -306,12 +306,12 @@ namespace Wiwa
 		};
 
 		r2d.UpdateInstancedQuadTexClip(this, m_TransitionInstance, { 256,256 }, { 0,0,w,256 });
-		r2d.UpdateInstancedQuadTexSize(this, m_TransitionInstance, {0,0}, size, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexSize(this, m_TransitionInstance, {0,0}, size, Wiwa::Renderer2D::Pivot::UPLEFT);*/
 	}
 
 	void Scene::RenderLeave()
 	{
-		Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
+		/*Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 
 		float perc = m_TransitionTimer / (float)mMaxTimeLeaving;
 		int w = (int)(256.f * perc);
@@ -322,6 +322,6 @@ namespace Wiwa
 		};
 
 		r2d.UpdateInstancedQuadTexClip(this, m_TransitionInstance, { 256,256 }, { 0,0,w,256 });
-		r2d.UpdateInstancedQuadTexSize(this, m_TransitionInstance, { 0,0 }, size, Wiwa::Renderer2D::Pivot::UPLEFT);
+		r2d.UpdateInstancedQuadTexSize(this, m_TransitionInstance, { 0,0 }, size, Wiwa::Renderer2D::Pivot::UPLEFT);*/
 	}
 }

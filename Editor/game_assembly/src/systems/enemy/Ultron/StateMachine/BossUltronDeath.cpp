@@ -178,7 +178,7 @@ namespace Wiwa
 			    Transform3D* explosionTr = em.GetComponent<Transform3D>(m_FinalDeathExplosionId);
 			    explosionTr->localPosition.x = selfTr->localPosition.x;
 				explosionTr->localPosition.y = selfTr->localPosition.y;
-				explosionTr->localPosition.z = selfTr->localPosition.z - 4.0f;
+				explosionTr->localPosition.z = selfTr->localPosition.z;
 
 				m_DeathTimer = 0.0f;
 
@@ -193,6 +193,9 @@ namespace Wiwa
 			if (m_DeathTimer > 2.0f)
 			{
 				em.DestroyEntity(enemy->GetEntity());
+
+				GameStateManager::s_HasFinshedRoom = true;
+				GameStateManager::setCanPassNextRoom(true);
 			}
 		}
 		break;

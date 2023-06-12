@@ -24,6 +24,7 @@ namespace Wiwa
 		void AddShopPassive(const ShopElement& shopElement);
 		void AddPassive(const PassiveSkill& skill);
 		void PushBackPassive(const PassiveSkill& skill);
+		void UseAllPassives();
 		void AddConsumable(const Consumable& consumable);
 
 		void Update();

@@ -74,3 +74,5 @@
 #include "systems/triggers/RewardRoomDisplay.h"
 
 #include "systems/PlayFirstAnimation.h"
+#include "systems/ContinueLoading.h"
+#include "systems/triggers/InitBossRoom.h"

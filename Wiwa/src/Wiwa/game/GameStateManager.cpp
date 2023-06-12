@@ -310,6 +310,7 @@ namespace Wiwa
 		rocket.AddMember("shield_regeneration_mult", s_CharacterSettings[1].ShieldRegenerationMult);
 
 		// TODO: Reset all progression
+		s_PlayerInventory->Clear();
 
 		doc.save_file("config/player_data.json");
 	}
@@ -318,6 +319,9 @@ namespace Wiwa
 	{
 		if (!s_CanContinue)
 			return false;
+
+		JSONDocument doc("config/player_data.json");
+		s_PlayerInventory->Deserialize(&doc);
 
 		return true;
 	}
@@ -340,15 +344,16 @@ namespace Wiwa
 		SetRoomType(RoomType::NONE);
 
 		s_PlayerInventory->Clear();
-		s_GameProgression->Clear();
-
 		Application::Get().GetRenderer3D().EnableSkybox(true);
+
 	}
 
 	void GameStateManager::InitHub()
 	{
 		if (debug)
 			WI_INFO("GAME STATE: InitHub()");
+
+		Application::Get().GetRenderer3D().EnableSkybox(true);
 		SetRoomType(RoomType::ROOM_HUB);
 		SetRoomState(RoomState::STATE_FINISHED);
 		InitPlayerData();
@@ -428,7 +433,6 @@ namespace Wiwa
 					character->WalkTreshold = characterDoc["walk_threshold"].as_float();
 			}
 		}
-		s_PlayerInventory->Clear();
 		//LoadPlayerAchievements(&doc);
 	}
 
@@ -728,7 +732,7 @@ namespace Wiwa
 		}
 		case Wiwa::RoomType::ROOM_BOSS:
 		{
-			SceneManager::ChangeSceneByIndex(s_HUBRoomIndx);
+			SceneManager::ChangeSceneByIndex(20);
 			//SceneManager::LoadSceneByIndex(s_HUBRoomIndx);
 			break;
 		}

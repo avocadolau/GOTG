@@ -448,6 +448,12 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 					gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
 				}
 			}
+			else
+			{
+				gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
+				gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(0, &r2d);
+				gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
+			}
 		}
 	
 }
@@ -564,6 +570,12 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 				gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
 			}
 		}
+		else
+		{
+			gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
+			gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(0, &r2d);
+			gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
+			}
 	}
 }
 
