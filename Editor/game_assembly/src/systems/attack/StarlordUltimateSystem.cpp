@@ -28,7 +28,9 @@ namespace Wiwa
 		Transform3D* explosionTr = (Transform3D*)em.GetComponentByIterator(GetComponentIterator<Transform3D>(explosionId));
 
 		*explosionTr = *selfTr;
-		explosionTr->localPosition = Math::GetWorldPosition(selfTr->worldMatrix);
+		glm::vec3 newPos = Math::GetWorldPosition(selfTr->worldMatrix);
+		newPos.y = 0.1f;
+		explosionTr->localPosition = newPos;
 		explosionTr->localRotation = glm::vec3(-90.0f, 0.0f, 90.0f);
 		explosionTr->localScale = selfTr->localScale;
 
