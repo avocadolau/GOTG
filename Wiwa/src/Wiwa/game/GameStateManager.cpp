@@ -252,15 +252,6 @@ namespace Wiwa
 						WI_INFO("End combat room");
 						EndCombatRoom(spawner);
 					}
-
-					if (Input::IsKeyPressed(Key::F5))
-					{
-						WI_INFO("Changing to boss");
-						EndCurrentRoom();
-						WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
-						GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
-						SceneManager::LoadSceneByIndex(s_BossRoomIndx);
-					}
 				}
 			}
 			s_HasFinshedRoom = isFinished;
@@ -472,6 +463,15 @@ namespace Wiwa
 		if (Input::IsKeyPressed(Key::D5)) // Hala scene
 		{
 			SceneManager::ChangeSceneByIndex(1);
+		}
+
+		if (Input::IsKeyPressed(Key::F5))
+		{
+			WI_INFO("Changing to boss");
+			EndCurrentRoom();
+			WI_INFO("ROOM STATE: NEXT ROOM ROOM_BOSS");
+			GameStateManager::SetRoomType(RoomType::ROOM_BOSS);
+			SceneManager::LoadSceneByIndex(s_BossRoomIndx);
 		}
 	}
 
