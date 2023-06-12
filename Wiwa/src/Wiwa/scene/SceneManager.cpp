@@ -28,9 +28,12 @@ namespace Wiwa
 	std::vector<SceneId> SceneManager::m_RemovedSceneIds;
 
 	std::atomic<bool> SceneManager::m_LoadedScene = false;
+	std::atomic<bool> SceneManager::m_UnloadedScene = false;
 	std::atomic<int> SceneManager::m_LoadingProgress = 0;
 	std::thread SceneManager::m_LoadThread;
 	std::thread SceneManager::m_LoadScreenThread;
+	Scene* SceneManager::m_SceneLoading = nullptr;
+	SceneId SceneManager::m_SceneLoadingId = -1;
 
 	InstanceRenderer* SceneManager::m_InstanceRenderer = nullptr;
 	size_t SceneManager::m_ProgressDot1 = WI_INVALID_INDEX;
@@ -458,26 +461,28 @@ namespace Wiwa
 		return false;
 	}
 
-	void SceneManager::LoadSceneJob(Wiwa::Scene* scene, Wiwa::Memory& scene_data)
+	void SceneManager::LoadSceneJob(Wiwa::Memory& scene_data)
 	{
+		while (!m_UnloadedScene);
+
 		// Bind extra context for loading
 		Wiwa::Application::Get().GetWindow().BindExtra();
 
 		std::filesystem::path path = m_LoadPath;
 
-		scene->ChangeName(path.filename().stem().string().c_str());
+		m_SceneLoading->ChangeName(path.filename().stem().string().c_str());
 
-		scene->GetEntityManager().SetInitSystemsOnApply(!(m_LoadFlags & LOAD_NO_INIT));
-		scene->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
-		scene->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
+		m_SceneLoading->GetEntityManager().SetInitSystemsOnApply(!(m_LoadFlags & LOAD_NO_INIT));
+		m_SceneLoading->GetEntityManager().AddSystemToWhitelist<Wiwa::MeshRenderer>();
+		m_SceneLoading->GetEntityManager().AddSystemToWhitelist<Wiwa::ParticleSystem>();
 
 		// Load Physics Manager json Data
-		scene->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
+		m_SceneLoading->GetPhysicsManager().OnLoad(path.filename().stem().string().c_str());
 
 		m_LoadingProgress += 1;
 
 		// Load actual scene
-		_loadSceneImpl(scene, scene_data);
+		_loadSceneImpl(m_SceneLoading, scene_data);
 
 		// Unbind extra context
 		Wiwa::Application::Get().GetWindow().UnbindExtra();
@@ -487,6 +492,7 @@ namespace Wiwa
 
 	void SceneManager::LoadingScreenJob()
 	{
+
 		// Bind context to this thread
 		Wiwa::Application::Get().GetWindow().Bind();
 
@@ -500,17 +506,47 @@ namespace Wiwa
 		m_InstanceRenderer->DisableInstance(m_ProgressDot2);
 		m_InstanceRenderer->DisableInstance(m_ProgressDot3);
 
+		if (GameStateManager::s_CurrentCharacter == 0)
+		{
+			m_InstanceRenderer->DisableInstance(m_BackGround_Rocket);
+			m_InstanceRenderer->EnableInstance(m_BackGround_Starlord);
+		}
+		else if (GameStateManager::s_CurrentCharacter == 1)
+		{
+			m_InstanceRenderer->DisableInstance(m_BackGround_Starlord);
+			m_InstanceRenderer->EnableInstance(m_BackGround_Rocket);
+		}
+
+		GL(ClearColor(0.1f, 0.1f, 0.1f, 1.0f));
+		GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+		Wiwa::Application::Get().GetRenderer2D().RenderInstanced(*m_InstanceRenderer);
+		Wiwa::RenderManager::UpdateSingle(1);
+		// Swap buffers
+		Wiwa::Application::Get().GetWindow().OnUpdate();
+
+		if (m_LoadFlags & UNLOAD_CURRENT)
+		{
+			UnloadScene(m_ActiveScene, m_LoadFlags & UNLOAD_RESOURCES);
+		}
+		SceneId sceneid = -1;
+
+		if (m_LoadFlags & LOAD_SEPARATE)
+		{
+			sceneid = CreateScene();
+		}
+		else if (m_LoadFlags & LOAD_APPEND)
+		{
+			sceneid = m_ActiveScene;
+		}
+		
+		m_SceneLoading = m_Scenes[sceneid];
+		m_SceneLoadingId = sceneid;
+		
+		m_UnloadedScene = true;
+
 		while (!m_LoadedScene) {
-			if (GameStateManager::s_CurrentCharacter == 0)
-			{
-				m_InstanceRenderer->DisableInstance(m_BackGround_Rocket);
-				m_InstanceRenderer->EnableInstance(m_BackGround_Starlord);
-			}
-			else if (GameStateManager::s_CurrentCharacter == 1)
-			{
-				m_InstanceRenderer->DisableInstance(m_BackGround_Starlord);
-				m_InstanceRenderer->EnableInstance(m_BackGround_Rocket);
-			}
+			
 			// Clear screen
 			GL(ClearColor(0.1f, 0.1f, 0.1f, 1.0f));
 			GL(Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -712,22 +748,6 @@ namespace Wiwa
 		if (!FileSystem::Exists(scene_path))
 			return -1;
 
-		SceneId sceneid = -1;
-
-		if (flags & UNLOAD_CURRENT)
-		{
-			UnloadScene(m_ActiveScene, flags & UNLOAD_RESOURCES);
-		}
-
-		if (flags & LOAD_SEPARATE)
-		{
-			sceneid = CreateScene();
-		}
-		else if (flags & LOAD_APPEND)
-		{
-			sceneid = m_ActiveScene;
-		}
-
 		sbyte* memblock = nullptr;
 		size_t size = FileSystem::ReadAll(scene_path, &memblock);
 
@@ -738,7 +758,7 @@ namespace Wiwa
 
 			Memory scene_data(memblock, size);
 
-			Scene* sc = m_Scenes[sceneid];
+			
 
 			Wiwa::Resources::setGenBuffersOnLoad(false);
 
@@ -748,8 +768,9 @@ namespace Wiwa
 
 			// Begin loading scene in jobs
 			m_LoadedScene = false;
+			m_UnloadedScene = false;
 			m_LoadingProgress = 0;
-			m_LoadThread = std::thread(&SceneManager::LoadSceneJob, sc, scene_data);
+			m_LoadThread = std::thread(&SceneManager::LoadSceneJob, scene_data);
 			m_LoadScreenThread = std::thread(&SceneManager::LoadingScreenJob);
 
 			// Wait till loaded
@@ -761,11 +782,11 @@ namespace Wiwa
 
 			Wiwa::Resources::setGenBuffersOnLoad(true);
 
-			sc->Start();
+			m_SceneLoading->Start();
 
 			if (flags & LOAD_SEPARATE)
 			{
-				SetScene(sceneid, !(flags & LOAD_NO_INIT));
+				SetScene(m_SceneLoadingId, !(flags & LOAD_NO_INIT));
 			}
 
 			WI_CORE_INFO("Loaded scene in file \"{0}\" successfully!", scene_path);
@@ -775,7 +796,7 @@ namespace Wiwa
 			WI_CORE_WARN("Couldn't open scene file \"{0}\".", scene_path);
 		}
 
-		return sceneid;
+		return m_SceneLoadingId;
 	}
 
 	void SceneManager::LoadSceneByIndex(size_t scene_index, int flags)

@@ -73,10 +73,10 @@ void GameLayer::OnAttach()
 	Wiwa::Time::SetTargetFPS(60);
 	Wiwa::Time::SetTimeScale(1);
 	Wiwa::Application::Get().GetWindow().SetVSync(false);
-	Wiwa::Application::Get().GetWindow().SetFullScreen(false);
+	Wiwa::Application::Get().GetWindow().SetFullScreen(true);
 	Wiwa::Application::Get().UnloadSceneResources = true;
 	Wiwa::Application::Get().FinishedImport = true;
-	Wiwa::Input::LockCursor();
+	//Wiwa::Input::LockCursor();
 }
 
 void GameLayer::OnDetach()
@@ -96,22 +96,18 @@ void GameLayer::OnImGuiRender()
 
 	static bool active = false;
 
-	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F1))
-		active = true;
-	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F2))
-		active = false;
 
 	static bool showFPS = false;
-	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F3))
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::D3))
 		showFPS = true;
-	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::F4))
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::D4))
 		showFPS = false;
 
 	ImGuiContext* ctx = Wiwa::Application::Get().GetImGuiContext();
 	ImGui::SetCurrentContext(ctx);
 	if (showFPS)
 	{
-		ImGui::Begin("Stats counter", &active);
+		ImGui::Begin("Stats counter", &active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
 		ImGui::Text("Game time since startup %.2fs", Wiwa::Time::GetTime());
 		ImGui::Text("Game delta time %.2fms", Wiwa::Time::GetDeltaTime());
