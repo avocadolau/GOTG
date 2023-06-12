@@ -93,6 +93,7 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadA) && m_GlFWeskk)
 		{
+			Wiwa::GameStateManager::SaveProgression();
 			Wiwa::GameStateManager::RandomizeRewardRoom();
 			Wiwa::SceneManager::ChangeSceneByIndex(4);
 			m_GlFWeskk = false;
@@ -105,6 +106,7 @@ void Wiwa::ShipMainMenu::OnUpdate()
 		}
 		if (Wiwa::Input::IsKeyReleased(Key::Space) && m_GlFWeskk)
 		{
+			Wiwa::GameStateManager::SaveProgression();
 			Wiwa::GameStateManager::RandomizeRewardRoom();
 			Wiwa::SceneManager::ChangeSceneByIndex(4);
 			m_GlFWeskk = false;
