@@ -1,0 +1,1 @@
+{"mesh":"library/characters/groot/sk_groot01_mesh.mesh","material":"library/characters/groot/mat_groot01.wimaterial","skeleton":"library/characters/groot/sk_groot01_skeleton.skeleton","transition_blend":true,"transition_time":1.0,"animation_list":[{"name":"idle","type":1,"playback_speed":1.0,"loop":true,"animation_file":"library/characters/groot/sk_groot01_idle.anim"}]}
