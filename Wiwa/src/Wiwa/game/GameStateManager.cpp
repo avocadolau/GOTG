@@ -468,6 +468,11 @@ namespace Wiwa
 			
 		s_PlayerInventory->Update();
 		s_GameProgression->Update();
+
+		if (Input::IsKeyPressed(Key::D5)) // Hala scene
+		{
+			SceneManager::ChangeSceneByIndex(1);
+		}
 	}
 
 	void GameStateManager::Die()
