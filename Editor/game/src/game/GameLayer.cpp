@@ -73,7 +73,7 @@ void GameLayer::OnAttach()
 	Wiwa::Time::SetTargetFPS(60);
 	Wiwa::Time::SetTimeScale(1);
 	Wiwa::Application::Get().GetWindow().SetVSync(false);
-	Wiwa::Application::Get().GetWindow().SetFullScreen(true);
+	Wiwa::Application::Get().GetWindow().SetFullScreen(false);
 	Wiwa::Application::Get().UnloadSceneResources = true;
 	Wiwa::Application::Get().FinishedImport = true;
 	Wiwa::Input::LockCursor();
@@ -137,6 +137,22 @@ void GameLayer::OnImGuiRender()
 		ImGui::End();
 
 	}
+	
+
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::D1))
+		Wiwa::GameStateManager::s_GodMode = true;
+	
+	if (Wiwa::Input::IsKeyPressed(Wiwa::Key::D2))
+		Wiwa::GameStateManager::s_GodMode = false;
+
+	if (Wiwa::GameStateManager::s_GodMode)
+	{
+		static bool acitvate = true;
+		ImGui::Begin("GOD MODE!", &acitvate, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Text("GOD MODE ON!");
+		ImGui::End();
+	}
+
 	if(active)
 	{
 		ImGui::Begin("Game log", &active);
