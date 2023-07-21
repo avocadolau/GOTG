@@ -1,4 +1,4 @@
-# Guardians of the Galaxy
+# Guardians of the Galaxy: Battle for the Universe
 
 ![banner (1)](https://github.com/PixelPlaygroundStudio/GOTG/assets/59049844/9e60bc0c-6552-45df-a836-964fb31dd1c1)
 
