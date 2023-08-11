@@ -67,6 +67,8 @@ public:
 	std::string pathForExtraAsset;
 	std::string nameSavingWiGUI;
 	std::string audioEventForButton;
+	std::string audioEventFocused;
+	std::string audioEventSelected;
 
 	bool animated = false;
 	float animSpeed = 0;

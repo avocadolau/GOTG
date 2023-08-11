@@ -59,6 +59,8 @@ public:
 	std::string pathForAsset;
 	std::string pathForExtraAsset;
 	std::string audioEventForButton;
+	std::string audioEventSelected;
+	std::string audioEventFocused;
 	std::string text;
 
 	bool animated;

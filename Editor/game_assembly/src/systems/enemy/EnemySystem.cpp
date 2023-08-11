@@ -150,14 +150,17 @@ namespace Wiwa
 			Character* stats = GetComponentByIterator<Character>(m_StatsIt);
 			Inventory& player = Wiwa::GameStateManager::GetPlayerInventory();
 			Buff** listBuffs = player.GetBuffs();
-			for (int i = 0; i < 2; i++)
+			if (listBuffs)
 			{
-				if (listBuffs[i] != nullptr)
+				for (int i = 0; i < 2; i++)
 				{
-					if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive)
+					if (listBuffs[i] != nullptr)
 					{
-						SlowForTime(2, 0.4f);
-						break;
+						if (listBuffs[i]->buffType == BuffType::MARTINEX_THERMOKINESIS && listBuffs[i]->IsActive)
+						{
+							SlowForTime(2, 0.4f);
+							break;
+						}
 					}
 				}
 			}

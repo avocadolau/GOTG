@@ -89,12 +89,10 @@ namespace Wiwa
 		void SetTexture(Image* tex)
 		{
 			texture = tex;
-
 		}
 		void SetSliderTexture(Image* tex)
 		{
 			extraTexture = tex;
-
 		}
 		bool GetActive()
 		{
@@ -772,7 +770,9 @@ namespace Wiwa
 		GuiControlState state;
 
 		std::string text;           
-		std::string audioEventForButton;           
+		std::string audioEventForButton;
+		std::string audioEventFocused;
+		std::string audioEventSelected;
 		Rect2i position;        
 		Rect2i texturePosition;        
 		Rect2i extraPosition;	
@@ -793,14 +793,13 @@ namespace Wiwa
 
 		//THINGS FOR ANIMATIONS
 		std::vector<Rect2i> positionsForAnimations;
+		Rect2i startPos;
 		bool animatedControl = false; 
 		size_t framesAnimation;
 		float animSpeed;
 		float timeForAnim = 0.0f;
-
 		float rotation = 0.0f;
-
-
+		float currentAnimTime =0.0f;
 
 		float value = 50.0f;
 		bool checked = false;

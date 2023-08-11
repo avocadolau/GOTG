@@ -369,6 +369,8 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
 			ImGui::InputText("audio event:", &audioEventForButton);
+			ImGui::InputText("audio selected:", &audioEventSelected);
+			ImGui::InputText("audio focused:", &audioEventFocused);
 			CallbackElements(control);
 			ImGui::Text("Animations");
 			ImGui::Checkbox("animated", &animated);
@@ -379,6 +381,8 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			ImGui::DragInt2("origin position", originPos);
 			ImGui::DragInt2("origin size", originSize);
 			ImGui::InputText("audio event:", &audioEventForButton);
+			ImGui::InputText("audio selected:", &audioEventSelected);
+			ImGui::InputText("audio focused:", &audioEventFocused);
 			VectorEdit(animationRects);
 			CallbackElements(control);
 			AssetContainerPath();
@@ -399,6 +403,8 @@ void UIEditorPanel::OpenEditGuiControl(Wiwa::GuiControl* control)
 			ImGui::DragInt2("origin position slider", extraOriginPos);
 			ImGui::DragInt2("origin size slider", extraOriginSize);
 			ImGui::InputText("audio event:", &audioEventForButton);
+			ImGui::InputText("audio selected:", &audioEventSelected);
+			ImGui::InputText("audio focused:", &audioEventFocused);
 			CallbackElements(control);
 			AssetContainerPath();
 			AssetContainerExtraPath();
@@ -460,6 +466,8 @@ void UIEditorPanel::UpdateElements(Wiwa::GuiControl* control, Wiwa::GuiControlTy
 	control->position.height = size[1];
 	control->texturePosition = { originPos[0], originPos[1],originSize[0],originSize[1]};
 	control->audioEventForButton = audioEventForButton.c_str();
+	control->audioEventFocused = audioEventFocused.c_str();
+	control->audioEventSelected = audioEventSelected.c_str();
 	control->animatedControl = animated;
 	control->rotation = rotation;
 	if (control->animatedControl)

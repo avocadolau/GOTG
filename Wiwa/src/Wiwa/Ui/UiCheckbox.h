@@ -23,7 +23,5 @@ namespace Wiwa
 
 		bool clicked = false;
 		bool pressedGamepad = false;
-
-
 	};
 }

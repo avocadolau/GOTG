@@ -11,6 +11,7 @@ namespace Wiwa
 	GuiButton::GuiButton(Scene* scene, unsigned int id, Rect2i bounds,const char* path, const char* extraPath, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active,bool animated, float animFrames, std::vector<Rect2i> animationRects, float rotation) : GuiControl(scene, GuiControlType::BUTTON, id)
 	{
 		this->position = bounds;
+		startPos = bounds;
 		texturePosition = boundsOriginTex;
 		name = "Button";
 		m_Scene = scene;
@@ -44,6 +45,9 @@ namespace Wiwa
 		
 		state = GuiControlState::NORMAL;
 		canClick = true;
+
+
+
 	}
 
 	GuiButton::~GuiButton()
@@ -54,6 +58,7 @@ namespace Wiwa
 	bool GuiButton::Update()
 	{
 		Wiwa::Renderer2D& r2d_1 = Wiwa::Application::Get().GetRenderer2D();
+
 		if (state != GuiControlState::DISABLED)
 		{
 			
@@ -70,6 +75,8 @@ namespace Wiwa
 			if (state == GuiControlState::NORMAL)
 			{
 				SetNextFrame(0, &r2d_1);
+
+				position = startPos;
 			}
 
 			//state = GuiControlState::FOCUSED;
@@ -77,6 +84,16 @@ namespace Wiwa
 		}
 		if (state == GuiControlState::FOCUSED)
 		{
+			if (!Focused)
+			{
+				//play on focused sound 
+				if (Audio::FindEvent(audioEventFocused.c_str()) != Audio::INVALID_ID)
+				{
+					Audio::PostEvent(audioEventFocused.c_str());
+				}
+				Focused = !Focused;
+			}
+
 			if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Space))
 			{
 				state = GuiControlState::PRESSED;
@@ -118,6 +135,13 @@ namespace Wiwa
 					function_name.execute();
 				}
 			}
+			currentAnimTime += Time::GetDeltaTime();
+
+
+		}
+		else {
+			Focused = false;
+			currentAnimTime = 0;
 		}
 		return false;
 	}
@@ -127,9 +151,7 @@ namespace Wiwa
 		
 		render->UpdateInstancedQuadTexSize(m_Scene, id_quad_normal, { position.x,position.y }, { position.width,position.height }, Wiwa::Renderer2D::Pivot::CENTER);
 		render->UpdateInstancedQuadTexPosition(m_Scene, id_quad_normal, { position.x,position.y }, Wiwa::Renderer2D::Pivot::CENTER);
-		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);
-
-	
+		render->UpdateInstancedQuadTexRotation(m_Scene, id_quad_normal, rotation);	
 		//HandleAnim(render);
 		return false;
 	}

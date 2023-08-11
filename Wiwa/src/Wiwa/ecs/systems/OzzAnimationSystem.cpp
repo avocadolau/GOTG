@@ -62,7 +62,7 @@ namespace Wiwa {
 			Wiwa::Material* mat = Wiwa::Resources::GetResourceById<Material>(m_Animator->GetMaterial());
 			if (mat)
 			{
-				mat->SetUniformData("u_Hit", hit->Hit);
+				mat->SetUniformData("u_Hit", (int) hit->Hit);
 			}
 		}
 

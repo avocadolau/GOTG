@@ -49,7 +49,7 @@ namespace Wiwa
 
 		return canvas_;
 	}
-	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, float framesAnim, std::vector<Rect2i> animRects,float rotation)
+	GuiControl* GuiManager::CreateGuiControl_Simple(GuiControlType type, unsigned int id, Rect2i bounds,const char* path,const char* extraPath,unsigned int canvas_id,int callbackID, Rect2i boundsOriginTex, const char* audioEventName, const char* audioNameFocused, const char* audioNameSelected, bool active, bool animated, float framesAnim, std::vector<Rect2i> animRects,float rotation)
 	{
 		GuiControl* control = nullptr;
 	
@@ -57,6 +57,8 @@ namespace Wiwa
 			{
 			case GuiControlType::BUTTON:
 				control = new GuiButton(m_Scene, id, bounds, path, extraPath,callbackID, boundsOriginTex,audioEventName,active,animated,framesAnim,animRects,rotation);
+				control->audioEventFocused = audioNameFocused;
+				control->audioEventSelected = audioNameSelected;
 				break;
 			case GuiControlType::CHECKBOX:
 				control = new GuiCheckbox(m_Scene, id, bounds, path,callbackID, boundsOriginTex, audioEventName, active,animated,animRects, rotation);
@@ -891,9 +893,19 @@ namespace Wiwa
 				std::string text;
 				size_t textGuiLen;
 				char* textGui_c;
+
 				std::string audioEvent;
 				size_t audioEventGuiLen;
 				char* audioEventGui_c;
+
+				std::string audioFocused = "empty";
+				size_t audioFocusedGuiLen;
+				char* audioFocusedGui_c;
+
+				std::string audioSelected = "empty";
+				size_t audioSelectedGuiLen;
+				char* audioSelectedGui_c;
+
 
 				bool animated;
 				float animSpeed;
@@ -925,11 +937,25 @@ namespace Wiwa
 				File.Read(textGui_c, textGuiLen);
 				text = textGui_c;
 				delete[] textGui_c;
+
 				File.Read(&audioEventGuiLen, sizeof(size_t));
 				audioEventGui_c = new char[audioEventGuiLen];
 				File.Read(audioEventGui_c, audioEventGuiLen);
 				audioEvent = audioEventGui_c;
 				delete[] audioEventGui_c;
+
+				File.Read(&audioFocusedGuiLen, sizeof(size_t));
+				audioFocusedGui_c = new char[audioFocusedGuiLen];
+				File.Read(audioFocusedGui_c, audioFocusedGuiLen);
+				audioFocused = audioFocusedGui_c;
+				delete[] audioFocusedGui_c;
+
+				File.Read(&audioSelectedGuiLen, sizeof(size_t));
+				audioSelectedGui_c = new char[audioSelectedGuiLen];
+				File.Read(audioSelectedGui_c, audioSelectedGuiLen);
+				audioSelected= audioSelectedGui_c;
+				delete[] audioSelectedGui_c;
+
 
 				File.Read(&textureGui_len, sizeof(size_t));
 				textureGui_c = new char[textureGui_len];
@@ -949,13 +975,13 @@ namespace Wiwa
 				switch (guiType)
 				{
 				case Wiwa::GuiControlType::BUTTON:
-					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(),active,animated,animSpeed,animRects,rotation);
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(),audioFocused.c_str(),audioSelected.c_str(),active,animated,animSpeed,animRects,rotation);
 					break;
 				case Wiwa::GuiControlType::TEXT:
 					control = CreateGuiControl_Text(guiType, id, position, text.c_str(), canvas.at(i)->id, active, rotation);
 					break;
 				case Wiwa::GuiControlType::CHECKBOX:
-					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects, rotation);
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), audioFocused.c_str(), audioSelected.c_str(), active, animated, animSpeed, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::SLIDER:
 					control = CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active, rotation);
@@ -964,7 +990,7 @@ namespace Wiwa
 					control = CreateGuiControl(guiType, id, position, textureGui.c_str(), extraTextureGui.c_str(), extraPosition, canvas.at(i)->id, callbackID, texturePosition, extraTexturePosition, audioEvent.c_str(), active, rotation);
 					break;
 				case Wiwa::GuiControlType::IMAGE:
-					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), active, animated, animSpeed, animRects, rotation);
+					control = CreateGuiControl_Simple(guiType, id, position, textureGui.c_str(), nullptr, canvas.at(i)->id, callbackID, texturePosition, audioEvent.c_str(), audioFocused.c_str(), audioSelected.c_str(), active, animated, animSpeed, animRects, rotation);
 					break;
 				case Wiwa::GuiControlType::ABILITY:
 					control = CreateGuiControl_Ability(guiType, id,canvas.at(i)->id, position, textureGui.c_str(), callbackID, texturePosition, active, animated, animRects, rotation);
@@ -1034,9 +1060,13 @@ namespace Wiwa
 
 				const char* text = control->text.c_str();
 				const char* audioEvent = control->audioEventForButton.c_str();
+				const char* audioFocused = control->audioEventFocused.c_str();
+				const char* audioSelected = control->audioEventSelected.c_str();
 
 				size_t textGuiLen = strlen(text) + 1;
 				size_t audioEventGuiLen = strlen(audioEvent) + 1;
+				size_t audioFocuseGuiLen = strlen(audioFocused) + 1;
+				size_t audioSelectedGuiLen = strlen(audioSelected) + 1;
 
 				bool animated = control->animatedControl;
 				float animSpeed = control->animSpeed;
@@ -1066,8 +1096,15 @@ namespace Wiwa
 				File.Write(&textGuiLen, sizeof(size_t));
 				File.Write(text, textGuiLen);
 
+				//save audio
 				File.Write(&audioEventGuiLen, sizeof(size_t));
 				File.Write(audioEvent, audioEventGuiLen);
+
+				File.Write(&audioFocuseGuiLen, sizeof(size_t));
+				File.Write(audioFocused, audioFocuseGuiLen);
+
+				File.Write(&audioSelectedGuiLen, sizeof(size_t));
+				File.Write(audioSelected, audioSelectedGuiLen);
 
 				// Save texture
 				File.Write(&textureGui_len, sizeof(size_t));

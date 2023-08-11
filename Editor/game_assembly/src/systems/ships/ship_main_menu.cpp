@@ -41,8 +41,23 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	
 	Wiwa::GuiManager& gm = m_Scene->GetGuiManager();
 
+	int currentCanvas = gm.getCurrentCanvas();
 	
-	if (gm.getCurrentCanvas() == 1)
+	//main menu
+	if (currentCanvas == 0)
+	{
+
+		for (int i = 0; i < gm.canvas.at(currentCanvas)->controls.size(); i++)
+		{
+			if (gm.canvas.at(currentCanvas)->controls[i]->GetState() == Wiwa::GuiControlState::FOCUSED)
+			{
+				gm.canvas.at(currentCanvas)->controls[i]->position.y += sin(m_Time) *0.9* Time::GetDeltaTime();		
+				break;
+			}
+		}
+	}
+	//settings
+	if (currentCanvas == 1)
 	{
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadB))
 		{
