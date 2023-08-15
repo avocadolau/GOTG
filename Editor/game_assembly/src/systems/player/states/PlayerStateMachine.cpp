@@ -93,8 +93,6 @@ void Wiwa::PlayerStateMachine::SwitchState(PlayerBaseState* state)
 
 void Wiwa::PlayerStateMachine::CheckHealth()
 {
-	// Chincheta
-	return;
 	if (GetCharacter()->Health <= 0 && !Wiwa::GameStateManager::ReturnFanaticEffect() && m_CurrentState != m_DeathState)
 	{
 		SwitchState(m_DeathState);

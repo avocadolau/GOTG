@@ -9,6 +9,7 @@ namespace Wiwa
 	GuiText::GuiText(Scene* scene, unsigned int id, Rect2i bounds, const char* string_text, bool active, float rotation) : GuiControl(scene, GuiControlType::TEXT, id)
 	{
 		this->position = bounds;
+		startPos = bounds;
 		name = "Text";
 		text = string_text;
 		this->active = active;

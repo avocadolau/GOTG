@@ -10,6 +10,7 @@ namespace Wiwa
 	GuiImage::GuiImage(Scene* scene, unsigned int id, Rect2i bounds, const char* path, size_t callbackID, Rect2i boundsOriginTex, bool active, bool animated, float animFrames, std::vector<Rect2i> animationRects, float rotation) : GuiControl(scene, GuiControlType::IMAGE, id)
 	{
 		this->position = bounds;
+		startPos = bounds;
 		this->texture = texture;
 		texturePosition = boundsOriginTex;
 		name = "Image";

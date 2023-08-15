@@ -48,8 +48,7 @@ namespace Wiwa
 				controlsForSelection.at(i)->state = Wiwa::GuiControlState::NORMAL;
 			}
 		}
-		
-
+	
 	}
 
 	void GuiCanvas::InputController()

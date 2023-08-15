@@ -22,6 +22,10 @@ void Wiwa::MainMenuUISystem::OnInit()
 	gm.canvas.at(1)->controls.at(1)->SetChecked(Wiwa::Application::Get().GetWindow().GetFullScreen());
 }
 
+void Wiwa::MainMenuUISystem::OnUpdate()
+{
+}
+
 void Wiwa::MainMenuUISystem::OnDestroy()
 {
 }

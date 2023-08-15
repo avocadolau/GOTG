@@ -10,6 +10,7 @@ namespace Wiwa
 	GuiCheckbox::GuiCheckbox(Scene* scene, unsigned int id, Rect2i bounds,const char* path, size_t callbackID, Rect2i boundsOriginTex, const char* audioEventName, bool active, bool animated, std::vector<Rect2i> animationRects, float rotation) : GuiControl(scene, GuiControlType::CHECKBOX, id)
 	{
 		this->position = bounds;
+		startPos = bounds;
 		texturePosition = boundsOriginTex;
 		name = "Checkbox";
 		m_Scene = scene;
@@ -61,8 +62,23 @@ namespace Wiwa
 			{
 				state = GuiControlState::FOCUSED;
 			}
+
+			if(state == GuiControlState::NORMAL)
+			{
+				position = startPos;
+			}
+
 			if (state == GuiControlState::FOCUSED)
 			{
+				if (!Focused)
+				{
+					//play on focused sound 
+					if (Audio::FindEvent(audioEventFocused.c_str()) != Audio::INVALID_ID)
+					{
+						Audio::PostEvent(audioEventFocused.c_str());
+					}
+					Focused = !Focused;
+				}
 				if (Wiwa::Input::IsKeyPressed(Wiwa::Key::Space))
 				{
 					state = GuiControlState::PRESSED;

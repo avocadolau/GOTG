@@ -800,9 +800,10 @@ namespace Wiwa
 		float timeForAnim = 0.0f;
 		float rotation = 0.0f;
 		float currentAnimTime =0.0f;
+		bool Animating = false;
 
 		float value = 50.0f;
 		bool checked = false;
-
+		bool Focused = false;
 	};
 }

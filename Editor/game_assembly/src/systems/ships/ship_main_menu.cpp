@@ -46,12 +46,14 @@ void Wiwa::ShipMainMenu::OnUpdate()
 	//main menu
 	if (currentCanvas == 0)
 	{
-
+		GuiControl* control;
 		for (int i = 0; i < gm.canvas.at(currentCanvas)->controls.size(); i++)
 		{
 			if (gm.canvas.at(currentCanvas)->controls[i]->GetState() == Wiwa::GuiControlState::FOCUSED)
 			{
-				gm.canvas.at(currentCanvas)->controls[i]->position.y += sin(m_Time) *0.9* Time::GetDeltaTime();		
+				control = gm.canvas.at(currentCanvas)->controls[i];
+				control->position.width = control->startPos.width + control->startPos.width * 0.1;
+				control->position.height = control->startPos.height + control->startPos.height * 0.1;
 				break;
 			}
 		}

@@ -22,7 +22,16 @@ void Wiwa::PlayerGUISystem::OnInit()
 	gm.canvas.at(OptionsHUD)->controls.at(3)->SetInitialSliderValue(Wiwa::Application::Get().ReturnSFXVolume());
 	gm.canvas.at(OptionsHUD)->controls.at(0)->SetChecked(Wiwa::Application::Get().GetWindow().IsVSync());
 	gm.canvas.at(OptionsHUD)->controls.at(1)->SetChecked(Wiwa::Application::Get().GetWindow().GetFullScreen());
+	m_CurrentTime = 0;
+	//frequency of the animation movement
+	m_Frequency = .001f;
 
+	////init start scale values here because its not working in the constructor
+	for (int i = 0; i < gm.canvas.at(CanvasHUD)->controls.size(); i++)
+	{
+		GuiControl* control = gm.canvas.at(CanvasHUD)->controls[i];
+		control->startPos = control->position;
+	}
 }
 
 void Wiwa::PlayerGUISystem::OnUpdate()
@@ -31,7 +40,7 @@ void Wiwa::PlayerGUISystem::OnUpdate()
 	Character* character = Wiwa::GameStateManager::GetPlayerCharacterComp();
 	Wiwa::Renderer2D& r2d = Wiwa::Application::Get().GetRenderer2D();
 	CharacterInventory* characterInventory = m_Scene->GetEntityManager().GetSystem<CharacterInventory>(m_EntityId);
-
+	m_CurrentTime += Time::GetDeltaTime();
 	PlayerElements(gm, character);
 	HandleCurrentCanvas(gm);
 	if (CurrentWave != Wiwa::GameStateManager::GetCurrentWave())
@@ -258,7 +267,11 @@ void Wiwa::PlayerGUISystem::CooldownState(Ability** ability,Wiwa::GuiManager& gm
 				{
 					ability[i]->CooldownState = CooldownState::FULLY_CHARGED;
 					int index = i + 15;
-					gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)ability[i]->CooldownState, &r2d);
+					GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+					//control->SetNextFrame((int)ability[i]->CooldownState, &r2d);
+					//control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+					//control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
+
 				}
 				else if (ability[i]->CurrentTime < ability[i]->Cooldown && ability[i]->CurrentTime >= ability[i]->Cooldown / 2)
 				{
@@ -303,7 +316,11 @@ void Wiwa::PlayerGUISystem::CooldownState(Buff** buff, Wiwa::GuiManager& gm)
 					{
 						buff[i]->CooldownState = CooldownState::FULLY_CHARGED;
 						int index = i + 13;
-						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->SetNextFrame((int)buff[i]->CooldownState, &r2d);
+						//control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						//control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
+					
 					}
 					else if (buff[i]->CurrentTime < buff[i]->Cooldown && buff[i]->CurrentTime >= buff[i]->Cooldown / 2)
 					{
@@ -358,13 +375,16 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(5, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(5, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(5, &r2d);						
 						}
 						else
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(6, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(6, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(6, &r2d);
+							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 						}
 						break;
 					case AbilityType::GROOTS_SEEDS:
@@ -379,6 +399,9 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(4, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(4, &r2d);
+							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 						}
 						break;
 					case AbilityType::PHYLAS_QUANTUM_SWORD:
@@ -387,12 +410,16 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(1, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(1, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(1, &r2d);
+
 						}
 						else
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(2, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(2, &r2d);
+							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 						}
 						break;
 					case AbilityType::STARHAWKS_BLAST:
@@ -401,12 +428,16 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(7, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(7, &r2d);
+						
 						}
 						else
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(8, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(8, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(8, &r2d);
+							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 						}
 						break;
 					case AbilityType::CAPTAINS_UNIVERSE:
@@ -415,12 +446,16 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(11, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(11, &r2d);
+						
 						}
 						else
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(12, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(12, &r2d);
+							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 						}
 						break;
 					case AbilityType::MANTIS_TELEPATHIC_THRUST:
@@ -429,12 +464,16 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(9, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(9, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(9, &r2d);
+						
 						}
 						else
 						{
 							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(10, &r2d);
 							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(10, &r2d);
 							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(10, &r2d);
+							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 						}
 						break;
 					default:
@@ -486,6 +525,9 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(2, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(2, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(2, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 					}
 					break;
 				case BuffType::MARTINEX_THERMOKINESIS:
@@ -494,12 +536,16 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(3, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(3, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(3, &r2d);
+					
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(4, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(4, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(4, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 					}
 					break;
 				case BuffType::MAJOR_VICTORY_SHIELD:
@@ -508,12 +554,16 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(5, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(5, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(5, &r2d);
+					
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(6, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(6, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(6, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 					}
 					break;
 				case BuffType::CHARLIE27_FIST:
@@ -522,12 +572,16 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(7, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(7, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(7, &r2d);
+					
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(8, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(8, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(8, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 					}
 					break;
 				case BuffType::COSMOS_PAW:
@@ -536,12 +590,16 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(9, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(9, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(9, &r2d);
+					
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(10, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(10, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(10, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 					}
 					break;
 				case BuffType::BUGS_LEGS:
@@ -550,12 +608,16 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(11, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(11, &r2d);
+					
 					}
 					else
 					{
 						gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
 						gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(12, &r2d);
 						gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(12, &r2d);
+						GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
+						control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
+						control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));
 					}
 					break;
 				default:
@@ -575,7 +637,7 @@ void Wiwa::PlayerGUISystem::HandleActiveBuffs(Buff** buff, Wiwa::GuiManager& gm)
 			gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(0, &r2d);
 			gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(0, &r2d);
 			gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(0, &r2d);
-			}
+		}
 	}
 }
 

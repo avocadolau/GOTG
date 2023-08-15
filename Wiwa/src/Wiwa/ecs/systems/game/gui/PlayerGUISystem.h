@@ -31,6 +31,9 @@ namespace Wiwa
         Ability** abilitiesList;
         Buff** buffsList;
         std::vector<PassiveSkill> passives;
+
+        float m_CurrentTime;
+        float m_Frequency;
     public:
         PlayerGUISystem() = default;
         virtual ~PlayerGUISystem() = default;

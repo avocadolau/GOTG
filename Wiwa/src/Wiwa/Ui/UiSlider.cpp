@@ -11,6 +11,7 @@ namespace Wiwa
 	GuiSlider::GuiSlider(Scene* scene, unsigned int id, Rect2i bounds, Rect2i sliderBounds, const char* path, const char* slider_path, size_t callbackID, Rect2i boundsOriginTex, Rect2i sliderOriginTex, const char* audioEventName, bool active) : GuiControl(scene, GuiControlType::SLIDER, id)
 	{
 		this->position = bounds;
+		startPos = bounds;
 		this->extraPosition = sliderBounds;
 		texturePosition = boundsOriginTex;
 		extraTexturePosition = sliderOriginTex;
@@ -62,8 +63,25 @@ namespace Wiwa
 				{
 					state = GuiControlState::FOCUSED;
 				}
+
+
+				if (state == GuiControlState::NORMAL)
+				{
+					position = startPos;
+				}
+
+
 				if (state == GuiControlState::FOCUSED)
 				{
+					if (!Focused)
+					{
+						//play on focused sound 
+						if (Audio::FindEvent(audioEventFocused.c_str()) != Audio::INVALID_ID)
+						{
+							Audio::PostEvent(audioEventFocused.c_str());
+						}
+						Focused = !Focused;
+					}
 					/*if (Wiwa::Input::IsMouseButtonPressed(0))
 					{
 						state = GuiControlState::PRESSED;
