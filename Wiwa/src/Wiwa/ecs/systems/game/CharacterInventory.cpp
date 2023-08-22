@@ -21,7 +21,6 @@ void Wiwa::CharacterInventory::OnUpdate()
 	if (shopActive)
 	{
 		ShopElement(currentItem);
-		shopActive = false;
 	}
 }
 
@@ -51,6 +50,12 @@ void Wiwa::CharacterInventory::ShopElement(Item* item)
 
 }
 
+void Wiwa::CharacterInventory::SetCurrentItem(Item* item, EntityId goID)
+{
+	currentItem = item;
+	currentItemShopId = goID;
+}
+
 void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 {
 	std::string tag_item = "ITEM";
@@ -65,11 +70,10 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			return;
 		}
 
+		//check if it is in the room shop, then exit.
+		// the shop is activated from PlayerGUISystem
 		if (GameStateManager::GetRoomType() == "ROOM_SHOP")//ABILITY
 		{
-			currentItem = item;
-			currentItemShopId = body2->id;
-
 			return;
 		}
 		 
@@ -83,7 +87,6 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 				Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
 				em.DestroyEntity(body2->id);
 			}
-
 		}
 		else if (item->item_type == 1)//PASSIVE
 		{
@@ -125,6 +128,15 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			Audio::PostEvent("vo_rocket_powerup");
 		}
 	}
+}
+
+void Wiwa::CharacterInventory::OnCollisionExit(Object* body1, Object* body2)
+{
+}
+
+void Wiwa::CharacterInventory::SetShopActive(bool active)
+{
+	shopActive = active;
 }
 
 bool Wiwa::CharacterInventory::PlayerUpdated()

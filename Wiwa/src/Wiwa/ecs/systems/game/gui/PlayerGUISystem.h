@@ -22,6 +22,7 @@ namespace Wiwa
         bool returnToPauseHUD = false;
         bool pauseGame = false;
         bool shopHUD = false;
+        bool updateShopHUD = false;
 
         bool shopActive = false;
         bool buyItem = false;
@@ -65,6 +66,9 @@ namespace Wiwa
         void OnCollisionExit(Object* body1, Object* body2) override;
 
         void HandleWaves(Wiwa::GuiManager& gm);
+
+        void EnableShopUI();
+        void DisableShopUI();
 
     };
 }

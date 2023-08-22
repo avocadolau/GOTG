@@ -26,7 +26,12 @@ namespace Wiwa
 
         void ShopElement(Item* item);
 
+        void SetCurrentItem(Item* item, EntityId goID);
+
         void OnCollisionEnter(Object* body1, Object* body2) override;
+        void OnCollisionExit(Object* body1, Object* body2) override;
+
+        void SetShopActive(bool active);
 
         bool GetShopActive() { return shopActive; }
 
