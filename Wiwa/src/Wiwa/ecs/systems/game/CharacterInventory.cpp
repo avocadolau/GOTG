@@ -18,10 +18,10 @@ void Wiwa::CharacterInventory::OnInit()
 
 void Wiwa::CharacterInventory::OnUpdate()
 {
-	if (shopActive)
-	{
-		ShopElement(currentItem);
-	}
+	//if (shopActive && )
+	//{
+	//	ShopElement(currentItem);
+	//}
 }
 
 void Wiwa::CharacterInventory::ShopElement(Item* item)
@@ -82,8 +82,6 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			Ability* ability = Wiwa::ItemManager::GetAbility(item->Name);
 			if (ability)
 			{
-
-
 				Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
 				em.DestroyEntity(body2->id);
 			}
