@@ -91,6 +91,7 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 			PassiveSkill* passive = Wiwa::ItemManager::GetPassive(item->Name);
 			if (passive)
 			{
+				// use add passive stats and remove entity
 				Wiwa::GameStateManager::s_PlayerInventory->AddPassive(*passive);
 				passive->Use();
 				em.DestroyEntity(body2->id);
@@ -114,7 +115,7 @@ void Wiwa::CharacterInventory::OnCollisionEnter(Object* body1, Object* body2)
 				em.DestroyEntity(body2->id);
 			}
 		}
-
+		 
 
 		// play audio
 		if (GameStateManager::s_CurrentCharacter == STARLORD)

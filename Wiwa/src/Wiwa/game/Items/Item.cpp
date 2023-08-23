@@ -7,6 +7,7 @@
 #include "Wiwa/scene/Scene.h"
 #include "Wiwa/ecs/systems/PhysicsSystem.h"
 #include <Wiwa/ecs/systems/ai/NavAgentSystem.h>
+#include <Wiwa/ecs/systems/ParticleSystem.h>
 
 namespace Wiwa
 {
@@ -207,6 +208,101 @@ namespace Wiwa
             }
             break;
         }
+        DisplayStats();
+    }
+    void PassiveSkill::DisplayStats()
+    {
+        EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
+        Transform3D* t3dParticle = nullptr;
+        Wiwa::ParticleSystem* particleSytem = nullptr;
+
+        ////spawn passive stats
+        Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+        prefabParticle = em.LoadPrefab("library/vfx/prefabs/p_passiveStats.wiprefab");
+
+        //set pos
+        t3dParticle = em.GetComponent<Transform3D>(prefabParticle);
+        t3dParticle->localPosition = Wiwa::GameStateManager::GetPlayerTransform()->localPosition;
+
+        particleSytem = em.GetSystem<ParticleSystem>(prefabParticle);
+
+
+        Wiwa::GuiManager& gm = GameStateManager::GetCurrentScene()->GetGuiManager();
+        Material* material = particleSytem->GetMaterial();
+        Uniform* u_Tex = material->getUniform("u_Texture");
+        Text* text = nullptr;
+        std::string textCom;
+        std::string valueS;
+        //generate new texture for the material 
+        //write text to a texture and pass the texture to the shader
+        switch (PassiveType)
+        {
+        case Wiwa::PassiveType::ATTACK:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% DMG";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { 1,.1,.1,1 });
+            particleSytem->SetColor(1, { 1,.1,.1,1 });
+            break;
+        case Wiwa::PassiveType::HEALTH:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% HP";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { .1,1,.1,1 });
+            particleSytem->SetColor(1, { .1,1,.1,1 });
+            break;
+        case Wiwa::PassiveType::MOVEMENT:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% MOV";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { .1,.1,1,1 });
+            particleSytem->SetColor(1, { .1,.1,1,1 });
+            break;
+        case Wiwa::PassiveType::RANGE:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% RNG";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { 1,.9,0,1 });
+            particleSytem->SetColor(1, { 1,.9,0,1 });
+            break;
+        case Wiwa::PassiveType::ROF:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% ROF";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { .4,0,1,1 });
+            particleSytem->SetColor(1, { .4,0,1,1 });
+            break;
+        case Wiwa::PassiveType::BUFF:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% BUFF";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { 1,.5,0,1 });
+            particleSytem->SetColor(1, { 1,.5,0,1 });
+            break;
+        case Wiwa::PassiveType::PROJECTILE:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% PRJC";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { 1,0,.4,1 });
+            particleSytem->SetColor(1, { 1,0,.4,1 });
+            break;
+        case Wiwa::PassiveType::SHIELD_CHARGE:
+            valueS = std::to_string(BuffPercent);
+            textCom = "+" + valueS + "% DEF";
+            text = gm.InitFontForDialog("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textCom.c_str()), 950);
+            particleSytem->SetColor(0, { 0,1,.6,1 });
+            particleSytem->SetColor(1, { 0,1,.6,1 });
+            break;
+        }
+
+        //clear particle uniform
+        u_Tex->setEmptyData();
+
+        //apply the data
+        Wiwa::Uniform::SamplerData sdata;
+        sdata.tex_id = text->GetTextureId();
+        sdata.resource_id = -1;
+        u_Tex->setData(sdata, UniformType::Sampler2D);
     }
     void Buff::Use()
     {

@@ -152,6 +152,9 @@ namespace Wiwa
 		//Set color of a certain node. Uses the current color system of the emitter;
 		void SetColor(int index, glm::vec4 color);
 
+		//returns the material the particle system is using
+		Material* GetMaterial() { return m_Material; }
+
 	private:
 
 		void SetEmitterBools(ParticleEmitterComponent* emitter);

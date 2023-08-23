@@ -175,6 +175,7 @@ namespace Wiwa
 		{}
 
 		void Use();
+		void DisplayStats();
 	};
 
 	struct Buff
