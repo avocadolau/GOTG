@@ -63,6 +63,7 @@ namespace Wiwa {
 		void SlowForTime(float time, float percentage);
 
 		void DisplayStats(glm::vec3 position,std::string text, glm::vec4 color);
+		void DisplayGold(glm::vec3 position,std::string text, glm::vec4 color);
 	};
 }
 

@@ -313,7 +313,7 @@ namespace Wiwa
 			//gold
 
 			std::string goldText = "+" + std::to_string(statsSelf->creditsDrop) + "g";
-			DisplayStats(t3d->localPosition, goldText, { 1,.9,0,1 });
+			DisplayGold(t3d->localPosition, goldText, { 1,.9,0,1 });
 
 
 			GameStateManager::GetPlayerInventory().AddTokens(statsSelf->creditsDrop);
@@ -680,6 +680,39 @@ namespace Wiwa
 		particleSytem->SetColor(0, color);
 		particleSytem->SetColor(1, color);
 		
+		//clear particle uniform
+		//u_Tex->setEmptyData();
+
+		//apply the data
+		Wiwa::Uniform::SamplerData sdata;
+		sdata.tex_id = text->GetTextureId();
+		sdata.resource_id = -1;
+		u_Tex->setData(sdata, UniformType::Sampler2D);
+	}
+	void EnemySystem::DisplayGold(glm::vec3 position, std::string textToDisplay, glm::vec4 color)
+	{
+		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
+		Transform3D* t3dParticle = nullptr;
+		Wiwa::ParticleSystem* particleSytem = nullptr;
+
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		prefabParticle = em.LoadPrefab("library/vfx/prefabs/p_gold.wiprefab");
+
+		//set pos
+		t3dParticle = em.GetComponent<Transform3D>(prefabParticle);
+		t3dParticle->localPosition = position;
+
+		particleSytem = em.GetSystem<ParticleSystem>(prefabParticle);
+
+
+		Wiwa::GuiManager& gm = GameStateManager::GetCurrentScene()->GetGuiManager();
+		Material* material = particleSytem->GetMaterial();
+		Uniform* u_Tex = material->getUniform("u_Texture");
+		Text* text = nullptr;
+		text = gm.InitFont("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textToDisplay.c_str()));
+		particleSytem->SetColor(0, color);
+		particleSytem->SetColor(1, color);
+
 		//clear particle uniform
 		//u_Tex->setEmptyData();
 
