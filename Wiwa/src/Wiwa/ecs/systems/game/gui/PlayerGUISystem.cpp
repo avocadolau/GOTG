@@ -435,16 +435,16 @@ void Wiwa::PlayerGUISystem::HandleActiveAbilities(Ability** ability, Wiwa::GuiMa
 					case AbilityType::CAPTAINS_UNIVERSE:
 						if (ability[i]->CooldownState != CooldownState::FULLY_CHARGED)
 						{
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
-							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(12, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(12, &r2d);
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(11, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(11, &r2d);
 						
 						}
 						else
 						{
-							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(11, &r2d);
-							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(11, &r2d);
-							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(11, &r2d);
+							gm.canvas.at(CanvasHUD)->controls.at(index)->SetNextFrame(12, &r2d);
+							gm.canvas.at(PauseHUD)->controls.at(index_pause)->SetNextFrame(12, &r2d);
+							gm.canvas.at(DeathHUD)->controls.at(index_death)->SetNextFrame(12, &r2d);
 							GuiControl* control = gm.canvas.at(CanvasHUD)->controls.at(index);
 							control->position.width = control->startPos.width + (control->startPos.width * .1f * sin(m_CurrentTime * m_Frequency));
 							control->position.height = control->startPos.height + (control->startPos.height * .1f * sin(m_CurrentTime * m_Frequency));

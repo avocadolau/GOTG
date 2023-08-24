@@ -29,6 +29,7 @@
 #include "../../components/attack/CaptainsUniverseEnergy.h"
 #include "../../components/attack/MantisTelepathicThrust.h"
 #include <Wiwa/game/Items/ItemManager.h>
+#include <Wiwa/utilities/render/shaders/Uniform.h>
 
 namespace Wiwa
 {
@@ -297,6 +298,7 @@ namespace Wiwa
 		Transform3D* t3d = GetComponentByIterator<Transform3D>(m_TransformIt);
 		glm::vec3 itemSpawnPos = t3d->localPosition;
 		health->health = health->health - damage;
+
 		if (health->health <= 0)
 		{
 			// Notify the player and spawn an item
@@ -306,6 +308,14 @@ namespace Wiwa
 			default:
 				break;
 			}*/
+
+
+			//gold
+
+			std::string goldText = "+" + std::to_string(statsSelf->creditsDrop) + "g";
+			DisplayStats(t3d->localPosition, goldText, { 1,.9,0,1 });
+
+
 			GameStateManager::GetPlayerInventory().AddTokens(statsSelf->creditsDrop);
 			Character* player = GameStateManager::GetCurrentScene()->GetEntityManager().GetComponent<Character>(GameStateManager::GetPlayerId());
 			// As in the GDD for each enemy the player kills the shield regenerates
@@ -379,6 +389,7 @@ namespace Wiwa
 					}
 				}
 			}
+
 			// Spawn an item
 			std::uniform_int_distribution<> dist(0, 100);
 			uint32_t chances = dist(Wiwa::Application::s_Gen);
@@ -420,6 +431,11 @@ namespace Wiwa
 				}
 				counter += 5;
 			}
+		}else {
+
+			std::string text = std::to_string(damage);
+
+			DisplayStats(t3d->localPosition, text, { 1,0,0,1 });
 		}
 	}
 
@@ -639,5 +655,38 @@ namespace Wiwa
 	{
 		m_TimerSlow = time;
 		m_SlowPercentage = percentage;
+	}
+	void EnemySystem::DisplayStats(glm::vec3 position, std::string textToDisplay, glm::vec4 color)
+	{
+		EntityId prefabParticle = Wiwa::EntityManager::INVALID_INDEX;
+		Transform3D* t3dParticle = nullptr;
+		Wiwa::ParticleSystem* particleSytem = nullptr;
+
+		Wiwa::EntityManager& em = Wiwa::SceneManager::getActiveScene()->GetEntityManager();
+		prefabParticle = em.LoadPrefab("library/vfx/prefabs/p_enemyStats.wiprefab");
+
+		//set pos
+		t3dParticle = em.GetComponent<Transform3D>(prefabParticle);
+		t3dParticle->localPosition = position;
+
+		particleSytem = em.GetSystem<ParticleSystem>(prefabParticle);
+
+
+		Wiwa::GuiManager& gm = GameStateManager::GetCurrentScene()->GetGuiManager();
+		Material* material = particleSytem->GetMaterial();
+		Uniform* u_Tex = material->getUniform("u_Texture");
+		Text* text = nullptr;
+		text = gm.InitFont("library/Fonts/CarterOne_Regular.ttf", const_cast<char*>(textToDisplay.c_str()));
+		particleSytem->SetColor(0, color);
+		particleSytem->SetColor(1, color);
+		
+		//clear particle uniform
+		//u_Tex->setEmptyData();
+
+		//apply the data
+		Wiwa::Uniform::SamplerData sdata;
+		sdata.tex_id = text->GetTextureId();
+		sdata.resource_id = -1;
+		u_Tex->setData(sdata, UniformType::Sampler2D);
 	}
 }
