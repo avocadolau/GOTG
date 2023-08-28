@@ -27,6 +27,7 @@ namespace  Wiwa {
 		void static Combat();
 		void static Rewad();
 		void static Shop();
+		void static Boss();
 
 		void static UpdateCombatIntesity(int n_enemies);
 

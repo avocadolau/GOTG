@@ -100,9 +100,11 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 
 	if (CurrentHUD == CanvasHUD)
 	{
+
 		if (Wiwa::Input::IsButtonPressed(Gamepad::GamePad1, Key::GamepadStart) && dm.actualConversationState == 2 && dEm.eventState == 2)
 		{
 			pauseGame = true;
+
 		}
 		if (Wiwa::Input::IsButtonReleased(Gamepad::GamePad1, Key::GamepadStart) && pauseGame)
 		{
@@ -110,17 +112,18 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			{
 				Audio::PostEvent("game_pause");
 			}
-
+			Wiwa::Application::Get().GetRenderer3D().EnableSkybox(true);
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
 			m_Scene->SwapPauseActive();
+
 			pauseGame = false;
-			
 		}
 
 		if (Wiwa::Input::IsKeyPressed(Key::Escape) && dm.actualConversationState == 2 && dEm.eventState == 2)
 		{
 			pauseGame = true;
+			Wiwa::Application::Get().GetRenderer3D().EnableSkybox(pauseGame);
 		}
 		if (Wiwa::Input::IsKeyReleased(Key::Escape) && pauseGame)
 		{
@@ -128,13 +131,14 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			{
 				Audio::PostEvent("game_pause");
 			}
-
+			Wiwa::Application::Get().GetRenderer3D().EnableSkybox(true);
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			gm.canvas.at(PauseHUD)->SwapActive();
 			m_Scene->SwapPauseActive();
 			pauseGame = false;
-
 		}
+
+
 	}
 	else if (CurrentHUD == PauseHUD)
 	{
@@ -148,7 +152,7 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			m_Scene->SwapPauseActive();
 			returnToHUD = false;
-			
+			Wiwa::Application::Get().GetRenderer3D().EnableSkybox(false);
 		}
 
 		if (Wiwa::Input::IsKeyPressed(Key::Backspace))
@@ -161,7 +165,7 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 			gm.canvas.at(CanvasHUD)->SwapActive();
 			m_Scene->SwapPauseActive();
 			returnToHUD = false;
-
+			Wiwa::Application::Get().GetRenderer3D().EnableSkybox(false);
 		}
 	}
 	else if (CurrentHUD == OptionsHUD)
@@ -225,16 +229,26 @@ void Wiwa::PlayerGUISystem::HandleCurrentCanvas(Wiwa::GuiManager& gm)
 		}
 		if (buyItem && Wiwa::Input::IsKeyReleased(Key::Space))
 		{
-			if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
-			{
-				Audio::PostEvent("action_accepted");
-			}
+
 			Wiwa::EntityManager& em = m_Scene->GetEntityManager();
-			characterInventory->ShopElement(characterInventory->GetCurrentShopItem());
-			buyItem = false;
-			em.DestroyEntity(characterInventory->GetShopItemId());
-			gm.canvas.at(ShopHUD)->SwapActive();
-			gm.canvas.at(CanvasHUD)->SwapActive();
+			if (characterInventory->ShopElement(characterInventory->GetCurrentShopItem()))
+			{
+				if (Audio::FindEvent("action_accepted") != Audio::INVALID_ID)
+				{
+					Audio::PostEvent("action_accepted");
+				}
+				em.DestroyEntity(characterInventory->GetShopItemId());
+			}
+			else {
+				if (Audio::FindEvent("action_denied") != Audio::INVALID_ID)
+				{
+					Audio::PostEvent("action_denied");
+				}
+				buyItem = false;
+				gm.canvas.at(ShopHUD)->SwapActive();
+				gm.canvas.at(CanvasHUD)->SwapActive();
+			}
+
 		}
 
 		if (Wiwa::Input::IsKeyPressed(Key::Escape))

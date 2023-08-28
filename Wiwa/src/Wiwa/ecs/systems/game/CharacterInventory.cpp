@@ -24,7 +24,7 @@ void Wiwa::CharacterInventory::OnUpdate()
 	//}
 }
 
-void Wiwa::CharacterInventory::ShopElement(Item* item)
+bool Wiwa::CharacterInventory::ShopElement(Item* item)
 {
 	size_t currentTokens = Wiwa::GameStateManager::GetPlayerInventory().GetTokens();
 	if (item->item_type == 0)
@@ -35,6 +35,7 @@ void Wiwa::CharacterInventory::ShopElement(Item* item)
 		{
 			Wiwa::GameStateManager::GetPlayerInventory().SubstractTokens(ability->Price);
 			Wiwa::GameStateManager::s_PlayerInventory->AddAbility(ability);
+			return true;
 		}
 	}
 	if (item->item_type == 2)
@@ -45,8 +46,10 @@ void Wiwa::CharacterInventory::ShopElement(Item* item)
 		{
 			Wiwa::GameStateManager::GetPlayerInventory().SubstractTokens(buff->Price);
 			Wiwa::GameStateManager::s_PlayerInventory->AddBuff(buff);
+			return true;
 		}
 	}
+	return false;
 
 }
 

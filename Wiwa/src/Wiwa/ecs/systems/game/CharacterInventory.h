@@ -24,7 +24,7 @@ namespace Wiwa
 
         void OnUpdate() override;
 
-        void ShopElement(Item* item);
+        bool ShopElement(Item* item);
 
         void SetCurrentItem(Item* item, EntityId goID);
 

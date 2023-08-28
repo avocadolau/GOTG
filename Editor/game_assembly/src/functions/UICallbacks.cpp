@@ -8,6 +8,7 @@
 #include <Wiwa/game/GameMusicManager.h>
 #include <Wiwa/game/Items/Inventory.h>
 #include <Wiwa/game/Items/ItemManager.h>
+#include <Wiwa/core/Renderer3D.h>
 #include "../systems/ships/ship_main_menu.h"
 #include <iostream>
 
@@ -22,6 +23,7 @@ GoToMilanoHub_ GoToMilanoHub()
 	ship->SetPanToCamera(true);
 	gm.canvas.at(0)->SwapActive();
 	Wiwa::GameMusicManager::StartGame();
+	Wiwa::Application::Get().GetRenderer3D().EnableSkybox(true);
 	return GoToMilanoHub_::hola;
 }
 
@@ -30,6 +32,7 @@ GoMainMenu_ GoMainMenu()
 	Wiwa::SceneManager::ChangeSceneByIndex(2);
 	Wiwa::GameStateManager::ResetWave();
 	Wiwa::GameMusicManager::MainMenu();
+	Wiwa::Application::Get().GetRenderer3D().EnableSkybox(true);
 	return GoMainMenu_::hola;
 }
 
@@ -262,12 +265,15 @@ GoToHub_ GoToHub()
 {
 	Wiwa::GameStateManager::ResetWave();
 	Wiwa::SceneManager::ChangeSceneByIndex(3);
+	Wiwa::GameMusicManager::MainHub();
+	Wiwa::Application::Get().GetRenderer3D().EnableSkybox(true);
 	return GoToHub_();
 }
 
 GoToOutro_ GoToOutro()
 {
 	Wiwa::SceneManager::ChangeSceneByIndex(20);
+	Wiwa::GameMusicManager::Outro();
 	return GoToOutro_();
 }
 

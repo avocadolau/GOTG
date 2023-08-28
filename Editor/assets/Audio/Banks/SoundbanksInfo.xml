@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{6631B7A5-3A02-1AFF-7690-F5FABAB61324}">
+		<SoundBank Id="258110631" Type="User" Language="SFX" Hash="{4230B118-F045-5D1B-68D0-85221A52FED7}">
 			<ShortName>game_music</ShortName>
 			<Path>game_music.bnk</Path>
 			<Media>
@@ -41,10 +41,6 @@
 					<ShortName>01 Prologue.wav</ShortName>
 					<CachePath>SFX/01 Prologue_D79FB2B7.wem</CachePath>
 				</File>
-				<File Id="424263943" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>IntroSceneAudio.wav</ShortName>
-					<CachePath>SFX/IntroSceneAudio_D79FB2B7.wem</CachePath>
-				</File>
 				<File Id="446020800" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>clap_130_bpm.wav</ShortName>
 					<CachePath>SFX/clap_130_bpm_D79FB2B7.wem</CachePath>
@@ -73,9 +69,21 @@
 					<ShortName>waa_130_bpm.wav</ShortName>
 					<CachePath>SFX/waa_130_bpm_D79FB2B7.wem</CachePath>
 				</File>
+				<File Id="782531788" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>beat-thinkofme.mix.wav</ShortName>
+					<CachePath>SFX/beat-thinkofme.mix_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="870815053" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>17 Legions Of Chaos.wav</ShortName>
+					<CachePath>SFX/17 Legions Of Chaos_D79FB2B7.wem</CachePath>
+				</File>
 				<File Id="901990650" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>stab_130_bpm.wav</ShortName>
 					<CachePath>SFX/stab_130_bpm_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="927170838" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>(Only Audio) GotGB4tU Intro Scene - FINAL VERSION.wav</ShortName>
+					<CachePath>SFX/(Only Audio) GotGB4tU Intro Scene - FINAL VERSION_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="998287055" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>chill_130_bpm.wav</ShortName>
@@ -115,6 +123,12 @@
 										<MediaRef Id="182594743"/>
 									</MediaRefs>
 								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="1992536912" Id="1560169506"/>
+									<MediaRefs>
+										<MediaRef Id="870815053"/>
+									</MediaRefs>
+								</SwitchContainer>
 							</Children>
 						</SwitchContainer>
 						<SwitchContainer>
@@ -141,7 +155,13 @@
 								<SwitchContainer>
 									<SwitchValue GroupType="State" GroupId="4227810856" Id="1125500713"/>
 									<MediaRefs>
-										<MediaRef Id="424263943"/>
+										<MediaRef Id="927170838"/>
+									</MediaRefs>
+								</SwitchContainer>
+								<SwitchContainer>
+									<SwitchValue GroupType="State" GroupId="4227810856" Id="4184794294"/>
+									<MediaRefs>
+										<MediaRef Id="782531788"/>
 									</MediaRefs>
 								</SwitchContainer>
 								<SwitchContainer>
@@ -181,6 +201,7 @@
 						<State Id="251412225" Name="Shop"/>
 						<State Id="646625282" Name="Hub"/>
 						<State Id="748895195" Name="None"/>
+						<State Id="1560169506" Name="Boss"/>
 						<State Id="1873057832" Name="Reward"/>
 						<State Id="2764240573" Name="Combat"/>
 					</States>
@@ -198,7 +219,7 @@
 				</StateGroup>
 			</StateGroups>
 		</SoundBank>
-		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{3990D163-63B8-0225-7B0D-F6D65DB186A0}">
+		<SoundBank Id="1069431850" Type="User" Language="SFX" Hash="{240E25C5-27B5-8468-D564-7C0921F22CE0}">
 			<ShortName>player</ShortName>
 			<Path>player.bnk</Path>
 			<Media>
@@ -233,6 +254,10 @@
 				<File Id="74659350" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Uatu the Watcher Voice Lines\vo_uatu_reward.wav</ShortName>
 					<CachePath>SFX/Uatu the Watcher Voice Lines/vo_uatu_reward_10C4C929.wem</CachePath>
+				</File>
+				<File Id="110892170" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Phyla_s Sword.wav</ShortName>
+					<CachePath>SFX/Phyla_s Sword_10C4C929.wem</CachePath>
 				</File>
 				<File Id="119658343" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Star-Lord Voice Lines\vo_starlord_powerup02alt.wav</ShortName>
@@ -302,6 +327,14 @@
 					<ShortName>Star-Lord Voice Lines\vo_starlord_completed02.wav</ShortName>
 					<CachePath>SFX/Star-Lord Voice Lines/vo_starlord_completed02_10C4C929.wem</CachePath>
 				</File>
+				<File Id="486058183" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Captain Universe_s Energy.wav</ShortName>
+					<CachePath>SFX/Captain Universe_s Energy_10C4C929.wem</CachePath>
+				</File>
+				<File Id="500085402" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Groot_s Seeds.wav</ShortName>
+					<CachePath>SFX/Groot_s Seeds_10C4C929.wem</CachePath>
+				</File>
 				<File Id="500509315" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Rocket - Voice Lines\vo_rocket_room_completed01.wav</ShortName>
 					<CachePath>SFX/Rocket - Voice Lines/vo_rocket_room_completed01_10C4C929.wem</CachePath>
@@ -333,6 +366,18 @@
 				<File Id="647999919" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Uatu the Watcher Voice Lines\vo_uatu_interaction.wav</ShortName>
 					<CachePath>SFX/Uatu the Watcher Voice Lines/vo_uatu_interaction_10C4C929.wem</CachePath>
+				</File>
+				<File Id="652728490" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Yondu_s Fin.wav</ShortName>
+					<CachePath>SFX/Yondu_s Fin_10C4C929.wem</CachePath>
+				</File>
+				<File Id="653169687" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Mantis_ Telepathic Blast.wav</ShortName>
+					<CachePath>SFX/Mantis_ Telepathic Blast_10C4C929.wem</CachePath>
+				</File>
+				<File Id="669208810" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Starhawk_s Time Blast.wav</ShortName>
+					<CachePath>SFX/Starhawk_s Time Blast_10C4C929.wem</CachePath>
 				</File>
 				<File Id="680197070" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Weapon 13 Shoot 1.wav</ShortName>
@@ -425,6 +470,26 @@
 						<MediaRef Id="447125529"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="1380145447" Name="captain_universe">
+					<MediaRefs>
+						<MediaRef Id="486058183"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2054046332" Name="groot_seed">
+					<MediaRefs>
+						<MediaRef Id="500085402"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3429408513" Name="mantis">
+					<MediaRefs>
+						<MediaRef Id="653169687"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3062257725" Name="phyla_sword">
+					<MediaRefs>
+						<MediaRef Id="110892170"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="2394582229" Name="player_dash">
 					<MediaRefs>
 						<MediaRef Id="49179977"/>
@@ -470,6 +535,11 @@
 				<Event Id="2078288224" Name="rocket_shot">
 					<MediaRefs>
 						<MediaRef Id="240802095"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3847045934" Name="starhawk">
+					<MediaRefs>
+						<MediaRef Id="669208810"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="1640074935" Name="vo_aron_generic">
@@ -590,9 +660,14 @@
 						<MediaRef Id="789428489"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="376839513" Name="yondus_fin">
+					<MediaRefs>
+						<MediaRef Id="652728490"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{7FDA1F10-A10C-F00F-8183-BB0138700E34}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{4F4E5779-50D5-9012-16BE-6E4C434F38A5}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -646,6 +721,7 @@
 						<State Id="251412225" Name="Shop"/>
 						<State Id="646625282" Name="Hub"/>
 						<State Id="748895195" Name="None"/>
+						<State Id="1560169506" Name="Boss"/>
 						<State Id="1873057832" Name="Reward"/>
 						<State Id="2764240573" Name="Combat"/>
 					</States>
@@ -860,13 +936,17 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{EACCCA4F-02F8-EC5D-1E8E-2BBA1748E73A}">
+		<SoundBank Id="2242381963" Type="User" Language="SFX" Hash="{7FB6299A-EC15-7C28-3ADE-9E4B85E5537E}">
 			<ShortName>enemies</ShortName>
 			<Path>enemies.bnk</Path>
 			<Media>
 				<File Id="32142556" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_normal_bullet.wav</ShortName>
 					<CachePath>SFX/boss_normal_bullet_A48EC28B.wem</CachePath>
+				</File>
+				<File Id="42867233" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_spawn02.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_spawn02_10C4C929.wem</CachePath>
 				</File>
 				<File Id="131081328" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit04.wav</ShortName>
@@ -880,21 +960,41 @@
 					<ShortName>Ultron Voice Lines\vo_ultron_hit01alt.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit01alt_10C4C929.wem</CachePath>
 				</File>
-				<File Id="146913874" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_hit_10C4C929.wem</CachePath>
+				<File Id="149837127" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_hit02.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_hit02_0CDBAB13.wem</CachePath>
+				</File>
+				<File Id="182229679" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_death03.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_death03_97E6A627.wem</CachePath>
+				</File>
+				<File Id="220825023" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_spawn01.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_spawn01_10C4C929.wem</CachePath>
 				</File>
 				<File Id="233384674" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack03.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack03_10C4C929.wem</CachePath>
 				</File>
+				<File Id="236665109" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_hit03.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_hit03_8033BD41.wem</CachePath>
+				</File>
 				<File Id="241674995" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Sci Fi Explosion 07.wav</ShortName>
 					<CachePath>SFX/Sci Fi Explosion 07_10C4C929.wem</CachePath>
 				</File>
+				<File Id="248845082" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_hit03.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_hit03_8944C3E5.wem</CachePath>
+				</File>
 				<File Id="254107624" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_attack.wav</ShortName>
 					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_attack_10C4C929.wem</CachePath>
+				</File>
+				<File Id="337278033" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_death02.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_death02_8C4E8D05.wem</CachePath>
 				</File>
 				<File Id="346607997" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>project III sounds\phalanx_melee\phalanx_melee_spawn.wav</ShortName>
@@ -904,25 +1004,45 @@
 					<ShortName>Sci-Fi Explosion 20.wav</ShortName>
 					<CachePath>SFX/Sci-Fi Explosion 20_10C4C929.wem</CachePath>
 				</File>
-				<File Id="395295600" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_melee\phalanx_melee_death(no sabemos).wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_melee/phalanx_melee_death(no sabemos)_10C4C929.wem</CachePath>
+				<File Id="377792045" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_hit02.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_hit02_B11C7D02.wem</CachePath>
+				</File>
+				<File Id="405614476" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_death01.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_death01_55B5CD3B.wem</CachePath>
 				</File>
 				<File Id="432546607" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_clusterball_xplosion.wav</ShortName>
 					<CachePath>SFX/boss_clusterball_xplosion_7F56867A.wem</CachePath>
 				</File>
+				<File Id="490304946" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_hit05.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_hit05_537F1EDC.wem</CachePath>
+				</File>
+				<File Id="503577850" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_spawn02.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_spawn02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="536524637" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_hit01.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_hit01_4549A197.wem</CachePath>
+				</File>
 				<File Id="574236853" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack01.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_attack01_10C4C929.wem</CachePath>
 				</File>
-				<File Id="606851917" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_death(No sabemos).wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_death(No sabemos)_10C4C929.wem</CachePath>
+				<File Id="606663918" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_sentinel_spawn02.wav</ShortName>
+					<CachePath>SFX/vo_sentinel_spawn02_46AA2B61.wem</CachePath>
 				</File>
-				<File Id="669719075" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>project III sounds\phalanx_ranged\phalanx_ranged_hit.wav</ShortName>
-					<CachePath>SFX/project III sounds/phalanx_ranged/phalanx_ranged_hit_BAC76913.wem</CachePath>
+				<File Id="611891721" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_death03.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_death03_9C049845.wem</CachePath>
+				</File>
+				<File Id="684000331" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_hit01.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_hit01_B1F36D1C.wem</CachePath>
 				</File>
 				<File Id="689284067" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>jubjugator_shoot.wav</ShortName>
@@ -932,9 +1052,9 @@
 					<ShortName>Ultron Voice Lines\vo_ultron_hit03.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit03_10C4C929.wem</CachePath>
 				</File>
-				<File Id="858162241" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>mixkit-sci-fi-confirmation-914.wav</ShortName>
-					<CachePath>SFX/mixkit-sci-fi-confirmation-914_10C4C929.wem</CachePath>
+				<File Id="796902273" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_spawn01.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_spawn01_10C4C929.wem</CachePath>
 				</File>
 				<File Id="863695100" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_attack02.wav</ShortName>
@@ -944,9 +1064,17 @@
 					<ShortName>boss_clusterBall_shoot.wav</ShortName>
 					<CachePath>SFX/boss_clusterBall_shoot_2ADB799A.wem</CachePath>
 				</File>
+				<File Id="935376756" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx02_hit04.wav</ShortName>
+					<CachePath>SFX/vo_phalanx02_hit04_01298D76.wem</CachePath>
+				</File>
 				<File Id="941542944" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit02.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="950260257" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_death04.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_death04_10C4C929.wem</CachePath>
 				</File>
 				<File Id="958892231" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_spawn.wav</ShortName>
@@ -956,13 +1084,29 @@
 					<ShortName>Ultron Voice Lines\vo_ultron_death01.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_death01_10C4C929.wem</CachePath>
 				</File>
+				<File Id="979360609" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_sentinel_spawn01.wav</ShortName>
+					<CachePath>SFX/vo_sentinel_spawn01_F09C5AFA.wem</CachePath>
+				</File>
+				<File Id="1015323904" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_death01.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_death01_90DF9B7F.wem</CachePath>
+				</File>
 				<File Id="1024819660" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_hit01.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_hit01_10C4C929.wem</CachePath>
 				</File>
+				<File Id="1047127182" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_death02.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_death02_22A21CC9.wem</CachePath>
+				</File>
 				<File Id="1061623375" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Ultron Voice Lines\vo_ultron_death02.wav</ShortName>
 					<CachePath>SFX/Ultron Voice Lines/vo_ultron_death02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1063701881" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>vo_phalanx01_hit04.wav</ShortName>
+					<CachePath>SFX/vo_phalanx01_hit04_377C78D6.wem</CachePath>
 				</File>
 				<File Id="1069540054" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>boss_smash01.wav</ShortName>
@@ -1002,12 +1146,23 @@
 				</Event>
 				<Event Id="3947834608" Name="melee_dead">
 					<MediaRefs>
-						<MediaRef Id="395295600"/>
+						<MediaRef Id="337278033"/>
+						<MediaRef Id="405614476"/>
+						<MediaRef Id="611891721"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="1255748329" Name="melee_hit">
 					<MediaRefs>
-						<MediaRef Id="146913874"/>
+						<MediaRef Id="149837127"/>
+						<MediaRef Id="248845082"/>
+						<MediaRef Id="536524637"/>
+						<MediaRef Id="935376756"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3572954923" Name="melee_spawn">
+					<MediaRefs>
+						<MediaRef Id="42867233"/>
+						<MediaRef Id="220825023"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="445652775" Name="ranged_attack">
@@ -1017,12 +1172,25 @@
 				</Event>
 				<Event Id="2801386309" Name="ranged_dead">
 					<MediaRefs>
-						<MediaRef Id="606851917"/>
+						<MediaRef Id="182229679"/>
+						<MediaRef Id="950260257"/>
+						<MediaRef Id="1015323904"/>
+						<MediaRef Id="1047127182"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="169915878" Name="ranged_hit">
 					<MediaRefs>
-						<MediaRef Id="669719075"/>
+						<MediaRef Id="236665109"/>
+						<MediaRef Id="377792045"/>
+						<MediaRef Id="490304946"/>
+						<MediaRef Id="684000331"/>
+						<MediaRef Id="1063701881"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1012419472" Name="ranged_spawn">
+					<MediaRefs>
+						<MediaRef Id="503577850"/>
+						<MediaRef Id="796902273"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="1557725171" Name="sentinel_hit">
@@ -1032,7 +1200,8 @@
 				</Event>
 				<Event Id="3096654377" Name="sentinel_spawn">
 					<MediaRefs>
-						<MediaRef Id="858162241"/>
+						<MediaRef Id="606663918"/>
+						<MediaRef Id="979360609"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="71202558" Name="spawn">
@@ -1143,5 +1312,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{ACF2B9D2-148E-C056-EA9F-CED836E442ED}</FileHash>
+	<FileHash>{2F9BDC61-C084-6278-336C-B2695F719FFD}</FileHash>
 </SoundBanksInfo>

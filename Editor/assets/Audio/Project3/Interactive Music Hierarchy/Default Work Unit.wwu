@@ -17,13 +17,6 @@
 					</ReferenceList>
 					<ChildrenList>
 						<MusicSwitchContainer Name="game_play" ID="{A0658847-6864-4C15-9BAA-CDD399126B0E}" ShortID="60916573">
-							<PropertyList>
-								<Property Name="Volume" Type="Real64">
-									<ValueList>
-										<Value>-2</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -222,7 +215,7 @@
 									<PropertyList>
 										<Property Name="Volume" Type="Real64">
 											<ValueList>
-												<Value>-15</Value>
+												<Value>-10</Value>
 											</ValueList>
 										</Property>
 									</PropertyList>
@@ -2251,6 +2244,130 @@
 										</MusicPlaylistItem>
 									</Playlist>
 								</MusicPlaylistContainer>
+								<MusicPlaylistContainer Name="boss" ID="{4909F9C0-4732-45F2-9287-9100C5263C78}" ShortID="663116918">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicSegment Name="17 Legions Of Chaos" ID="{0667ADCF-CAB3-4216-95DF-91F4A571A258}" ShortID="1048534262">
+											<PropertyList>
+												<Property Name="EndPosition" Type="Real64" Value="112000"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<MusicTrack Name="17 Legions Of Chaos" ID="{32AA714A-1121-49A0-9B26-CB71E58A80F9}" ShortID="509687486">
+													<ReferenceList>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="17 Legions Of Chaos" ID="{A7A8BE30-548A-4DE2-859E-2120FC53CD1E}">
+															<Language>SFX</Language>
+															<AudioFile>17 Legions Of Chaos.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="870815053"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<TransitionList>
+														<MusicTransition Name="Root" ID="{82CDD711-0D39-4893-B297-F28786831C3E}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</TransitionList>
+													<ObjectLists>
+														<ObjectList Name="Sequences">
+															<Reference>
+																<Local>
+																	<MusicTrackSequence Name="" ID="{D17623DD-2A8E-46B1-8F68-6F4662415616}">
+																		<ObjectLists>
+																			<ObjectList Name="Clips">
+																				<Reference>
+																					<Local>
+																						<MusicClip Name="17 Legions Of Chaos" ID="{090AA2BD-CFD9-42BF-A1FA-260F853AA8D0}">
+																							<PropertyList>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="112000"/>
+																								<Property Name="FadeInMode" Type="int16" Value="0"/>
+																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																							</PropertyList>
+																							<AudioSourceRef Name="17 Legions Of Chaos" ID="{A7A8BE30-548A-4DE2-859E-2120FC53CD1E}"/>
+																						</MusicClip>
+																					</Local>
+																				</Reference>
+																			</ObjectList>
+																		</ObjectLists>
+																	</MusicTrackSequence>
+																</Local>
+															</Reference>
+														</ObjectList>
+													</ObjectLists>
+												</MusicTrack>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Cues">
+													<Reference>
+														<Local>
+															<MusicCue Name="Entry Cue" ID="{F0BBAE2D-C231-4329-9FB8-E5C0C04D2283}"/>
+														</Local>
+													</Reference>
+													<Reference>
+														<Local>
+															<MusicCue Name="Exit Cue" ID="{FB3F8D20-A591-46E7-96E7-034D3AB89965}">
+																<PropertyList>
+																	<Property Name="CueType" Type="int16" Value="1"/>
+																	<Property Name="TimeMs" Type="Real64" Value="112000"/>
+																</PropertyList>
+															</MusicCue>
+														</Local>
+													</Reference>
+												</ObjectList>
+											</ObjectLists>
+										</MusicSegment>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{F39DE1A7-EA9C-4F28-9977-2BB03B0D0DC4}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{58D1AA43-78BE-4484-A683-38FDCFD71D5D}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<Playlist>
+										<MusicPlaylistItem Name="" ID="{8828EA82-4DB1-4F14-B5A1-0A1639C74D78}" ShortID="152168449">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{BDB30E6C-4415-44BE-AF7A-4F06001059DC}" ShortID="91537259">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<SegmentRef Name="17 Legions Of Chaos" ID="{0667ADCF-CAB3-4216-95DF-91F4A571A258}"/>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
+									</Playlist>
+								</MusicPlaylistContainer>
 							</ChildrenList>
 							<TransitionList>
 								<MusicTransition Name="Root" ID="{5E4773E6-BE11-41B8-8E4E-8D7AB7B62184}">
@@ -2337,6 +2454,14 @@
 									</Path>
 									<AudioNodeInfo>
 										<AudioNodeRef Name="shop" ID="{3B64F604-8028-408B-BC0C-25EDE6D39DC6}" WorkUnitID="{82A5D2E7-7775-4044-B8A5-0A016CEAE3BD}" Platform="Linked"/>
+									</AudioNodeInfo>
+								</Entry>
+								<Entry>
+									<Path>
+										<PathElementRef Name="Boss" ID="{60D85D78-37F5-45ED-BF15-4E4FD9881F86}"/>
+									</Path>
+									<AudioNodeInfo>
+										<AudioNodeRef Name="boss" ID="{4909F9C0-4732-45F2-9287-9100C5263C78}" WorkUnitID="{82A5D2E7-7775-4044-B8A5-0A016CEAE3BD}" Platform="Linked"/>
 									</AudioNodeInfo>
 								</Entry>
 							</EntryList>
@@ -2829,6 +2954,92 @@
 											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<MusicSegment Name="beat-thinkofme_mix" ID="{F516122B-7640-40EA-94C4-E520C72226F2}" ShortID="564572362">
+											<PropertyList>
+												<Property Name="EndPosition" Type="Real64" Value="134944.648526077"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<MusicTrack Name="beat-thinkofme_mix" ID="{FB0EC5CF-F885-4CDF-87EE-CB25FB5C5AD5}" ShortID="345392031">
+													<ReferenceList>
+														<Reference Name="OutputBus">
+															<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{415185EB-4348-43B4-9F10-7696F31FD1FF}"/>
+														</Reference>
+													</ReferenceList>
+													<ChildrenList>
+														<AudioFileSource Name="beat-thinkofme_mix" ID="{8C5FDBF0-1FB6-4C57-8A9A-03AF525CE0A4}">
+															<Language>SFX</Language>
+															<AudioFile>beat-thinkofme.mix.wav</AudioFile>
+															<MediaIDList>
+																<MediaID ID="782531788"/>
+															</MediaIDList>
+														</AudioFileSource>
+													</ChildrenList>
+													<TransitionList>
+														<MusicTransition Name="Root" ID="{1E6C2C64-11A3-4312-A42C-850976A0F5AF}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</TransitionList>
+													<ObjectLists>
+														<ObjectList Name="Sequences">
+															<Reference>
+																<Local>
+																	<MusicTrackSequence Name="" ID="{A28AC858-D283-4F65-9B85-0D0AF1B496DF}">
+																		<ObjectLists>
+																			<ObjectList Name="Clips">
+																				<Reference>
+																					<Local>
+																						<MusicClip Name="beat-thinkofme_mix" ID="{66FD6E79-470E-47BF-8B38-03E7FD3F2544}">
+																							<PropertyList>
+																								<Property Name="EndTrimOffset" Type="Real64" Value="134944.648526077"/>
+																								<Property Name="FadeInMode" Type="int16" Value="0"/>
+																								<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																							</PropertyList>
+																							<AudioSourceRef Name="beat-thinkofme_mix" ID="{8C5FDBF0-1FB6-4C57-8A9A-03AF525CE0A4}"/>
+																						</MusicClip>
+																					</Local>
+																				</Reference>
+																			</ObjectList>
+																		</ObjectLists>
+																	</MusicTrackSequence>
+																</Local>
+															</Reference>
+														</ObjectList>
+													</ObjectLists>
+												</MusicTrack>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Cues">
+													<Reference>
+														<Local>
+															<MusicCue Name="Entry Cue" ID="{867491CB-AC5D-41B1-A63A-9926BBC72BA5}"/>
+														</Local>
+													</Reference>
+													<Reference>
+														<Local>
+															<MusicCue Name="Exit Cue" ID="{471C23B8-A151-4918-ABE9-AF61680D477D}">
+																<PropertyList>
+																	<Property Name="CueType" Type="int16" Value="1"/>
+																	<Property Name="TimeMs" Type="Real64" Value="134944.648526077"/>
+																</PropertyList>
+															</MusicCue>
+														</Local>
+													</Reference>
+												</ObjectList>
+											</ObjectLists>
+										</MusicSegment>
+									</ChildrenList>
 									<TransitionList>
 										<MusicTransition Name="Root" ID="{E74BEB83-ABEF-4C1F-B113-A146671DFD52}">
 											<PropertyList>
@@ -2843,7 +3054,16 @@
 										</MusicTransition>
 									</TransitionList>
 									<Playlist>
-										<MusicPlaylistItem Name="" ID="{99576D21-20B2-4D4A-9BFB-72DDEE9D8C92}" ShortID="905779946"/>
+										<MusicPlaylistItem Name="" ID="{99576D21-20B2-4D4A-9BFB-72DDEE9D8C92}" ShortID="905779946">
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{B65DACE8-59FC-4D9B-88B9-6CA3F645CDB5}" ShortID="931539659">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<SegmentRef Name="beat-thinkofme_mix" ID="{F516122B-7640-40EA-94C4-E520C72226F2}"/>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
 									</Playlist>
 								</MusicPlaylistContainer>
 								<MusicPlaylistContainer Name="intro" ID="{76613DF6-B9E7-4994-9B30-C9747666C737}" ShortID="342620159">

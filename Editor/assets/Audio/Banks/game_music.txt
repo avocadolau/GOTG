@@ -13,6 +13,7 @@ State	ID	Name	State Group			Notes
 	251412225	Shop	RoomType			
 	646625282	Hub	RoomType			
 	748895195	None	RoomType			
+	1560169506	Boss	RoomType			
 	1873057832	Reward	RoomType			
 	2764240573	Combat	RoomType			
 	556785088	Logo	MenuScene			
@@ -51,6 +52,8 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	694303710	07 Whispers Of The Dead	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\07 Whispers Of The Dead_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\main_menu\07 Whispers Of The Dead\07 Whispers Of The Dead		15993696
 	753465857	arp_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\arp_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\arp_130_bpm		4233692
 	772738426	waa_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\waa_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\waa_130_bpm		4233692
+	782531788	beat-thinkofme_mix	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\beat-thinkofme.mix_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\outro\beat-thinkofme_mix\beat-thinkofme_mix		23804332
+	870815053	17 Legions Of Chaos	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\17 Legions Of Chaos_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\boss\17 Legions Of Chaos\17 Legions Of Chaos		19756896
 	901990650	stab_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\stab_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\stab_130_bpm		3908032
 	927170838	IntroSceneAudio	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\(Only Audio) GotGB4tU Intro Scene - FINAL VERSION_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\menus\intro\intro\IntroSceneAudio		11253896
 	998287055	chill_130_bpm	C:\Users\allen\Documents\GitHub\GOTG\Editor\assets\Audio\Project3\.cache\Windows\SFX\chill_130_bpm_D79FB2B7.wem		\Interactive Music Hierarchy\Default Work Unit\gotg_music\game_play\combat\muisc\chill_130_bpm		3582372

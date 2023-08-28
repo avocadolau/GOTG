@@ -118,6 +118,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="phalanx_melee_hit" ID="{6387F9BE-8A84-4F25-809A-12E9E2739773}">
+											<PropertyList>
+												<Property Name="FadeOutDuration" Type="Real64" Value="0.113917100694444"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimEnd" Type="Real64" Value="0.215628797743056"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>project III sounds\phalanx_melee\phalanx_melee_hit.wav</AudioFile>
 											<MediaIDList>
@@ -186,7 +191,7 @@
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>-3</Value>
+														<Value>-7</Value>
 													</ValueList>
 												</Property>
 											</PropertyList>
@@ -293,7 +298,7 @@
 											<PropertyList>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>-4</Value>
+														<Value>-9</Value>
 													</ValueList>
 												</Property>
 											</PropertyList>
@@ -429,7 +434,7 @@
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>-4</Value>
+														<Value>-9</Value>
 													</ValueList>
 												</Property>
 											</PropertyList>
@@ -647,6 +652,11 @@
 										<RandomSequenceContainer Name="phalanx_ranged_death" ID="{EA0678FD-4533-4E15-A351-CAF63E05A092}" ShortID="572575489">
 											<PropertyList>
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>-5</Value>
+													</ValueList>
+												</Property>
 											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Attenuation">
@@ -779,7 +789,7 @@
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>-4</Value>
+														<Value>-8</Value>
 													</ValueList>
 												</Property>
 											</PropertyList>
@@ -940,7 +950,7 @@
 												<Property Name="3DSpatialization" Type="int16" Value="2"/>
 												<Property Name="Volume" Type="Real64">
 													<ValueList>
-														<Value>-4</Value>
+														<Value>-7</Value>
 													</ValueList>
 												</Property>
 											</PropertyList>
@@ -3500,6 +3510,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="mixkit-sci-fi-confirmation-914" ID="{6EE98E9D-F7F1-4B1E-8527-56F5E50B9625}">
+											<PropertyList>
+												<Property Name="LoopBegin" Type="Real64" Value="0.105555869623935"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.105555869623935"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>mixkit-sci-fi-confirmation-914.wav</AudioFile>
 											<MediaIDList>
@@ -3545,6 +3560,11 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_sentinel_spawn01" ID="{6D184583-04A5-4C7C-BD0E-288ED5774608}">
+															<PropertyList>
+																<Property Name="LoopBegin" Type="Real64" Value="0.133915050784857"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.133915050784857"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_sentinel_spawn01.wav</AudioFile>
 															<MediaIDList>
@@ -3567,6 +3587,11 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="vo_sentinel_spawn02" ID="{AAF6093C-7EBB-48AF-AC80-B4E3489FABA9}">
+															<PropertyList>
+																<Property Name="LoopBegin" Type="Real64" Value="0.64139408672056"/>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.64139408672056"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>vo_sentinel_spawn02.wav</AudioFile>
 															<MediaIDList>
@@ -4413,6 +4438,13 @@
 						<Folder Name="abilities" ID="{49DC7185-1297-466C-981C-0775D8810DE5}" ShortID="977198382">
 							<ChildrenList>
 								<Sound Name="Captain Universe_s Energy" ID="{234F9682-DEDD-45E2-8403-8FC66E481BF1}" ShortID="524374438">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -4441,6 +4473,11 @@
 												<Value>3</Value>
 											</ValueList>
 										</Property>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-4</Value>
+											</ValueList>
+										</Property>
 									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
@@ -4464,6 +4501,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Mantis_ Telepathic Blast" ID="{C769DB5E-F593-40A3-8333-51BAB337BA86}" ShortID="669370435">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -4486,6 +4530,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Phyla_s Sword" ID="{DA09BFF5-D3AC-45AD-9234-B841B4393C00}" ShortID="770174109">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -4508,6 +4559,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Starhawk_s Time Blast" ID="{320B5C0D-C952-4AEC-9EEB-0D30BF2EDB06}" ShortID="967163920">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-7</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>
@@ -4530,6 +4588,13 @@
 									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Yondu_s Fin" ID="{D5435458-4340-41F9-BF9E-D73C325E5B7A}" ShortID="30343682">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>-3</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
 									<ReferenceList>
 										<Reference Name="Conversion">
 											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{C2060D36-1470-4D9E-A384-57CDAB146376}"/>

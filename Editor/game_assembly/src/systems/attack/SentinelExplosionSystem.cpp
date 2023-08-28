@@ -46,7 +46,7 @@ namespace Wiwa
 		EntityId m_ExplosionMarkId = em.LoadPrefab("library\\Enemy\\Explosions\\ExplosionRemnants_01.wiprefab");
 		Transform3D* explosionMarkTr = em.GetComponent<Transform3D>(m_ExplosionMarkId);
 		explosionMarkTr->localPosition = GetComponent<Transform3D>()->localPosition;
-
+		explosionMarkTr->localPosition.y = 0.15;
 		//EntityId explosion_prefab = em.LoadPrefab("assets\\vfx\\prefabs\\vfx_finals\\p_explosion_remnants.wiprefab");
 		//Wiwa::Transform3D* t3d = em.GetComponent<Transform3D>(explosion_prefab);
 		//glm::vec3 position = GetTransform()->worldMatrix[3];

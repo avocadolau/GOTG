@@ -71,6 +71,7 @@ namespace Wiwa
 	{
 		Audio::SetState("MenuScene", "Outro");
 		Audio::SetState("MusicState", "Menus");
+		Audio::SetState("RoomType", "None");
 	}
 	void GameMusicManager::MainMenu()
 	{
@@ -109,6 +110,12 @@ namespace Wiwa
 		Audio::SetState("RoomType", "Shop");
 		Audio::SetState("MusicState", "GamePlay");
 	}
+	void GameMusicManager::Boss()
+	{
+		Audio::SetState("RoomType", "Boss");
+		Audio::SetState("MusicState", "GamePlay");
+	}
+
 	void GameMusicManager::OnSceneChage(const char* scene_path)
 	{
 		uint32_t id = Wiwa::ProjectManager::getSceneIndexByPath(scene_path);
@@ -126,6 +133,12 @@ namespace Wiwa
 			break;
 		case 3:
 			//hub is made on new game
+			break;
+		case 19:
+			Boss();
+			break;
+		case 20:
+			Outro();
 			break;
 
 		default:
